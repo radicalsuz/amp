@@ -12,7 +12,7 @@
 
 ob_start();
 
-print $_SYSTEM['DOCUMENT_ROOT'];
+print $_SERVER['DOCUMENT_ROOT'];
 
 require_once( 'AMP/Auth/Handler.inc.php' );
 require_once( 'AMP/BaseDB.php' );
