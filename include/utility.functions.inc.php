@@ -39,7 +39,7 @@ if (!function_exists( 'array_intersect_key' ) ) {
 
             $arrays =& func_get_args();
 
-            for ($idx = 0; $idx $numArgs; $idx++) {
+            for ($idx = 0; $idx < $numArgs; $idx++) {
                 if (! is_array($arrays[$idx])) {
                     trigger_error('Parameter ' . ($idx+1) . ' is not an array', E_USER_ERROR);
                     return false;
