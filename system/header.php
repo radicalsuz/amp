@@ -354,7 +354,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 <table border="0" cellpadding="15" cellspacing="0" width="100%" align="center"> 
 <tr><td>
 <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center"> 
-<tr bordercolor="#FFFFFF" bgcolor="#006699" valign="top">
+<tr bordercolor="#FFFFFF" bgcolor="#dedede" valign="top">
      <td colspan="4" class="pagetitle">
  
        <table width="100%" border="0">
@@ -395,7 +395,7 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
       </td>
   </tr>
   <tr> 
-    <td bgcolor="#CCCCCC" width="160" valign="top"> <table width="160" border="0" cellspacing="10" cellpadding="0">
+    <td bgcolor="#dedede" width="160" valign="top"> <table width="160" border="0" cellspacing="10" cellpadding="0">
         <tr>
           <td valign="top">
 	
