@@ -1,7 +1,8 @@
 <?php 
 function magpienav($url,$num_items=NULL,$title=NULL,$html1=NULL,$html2=NULL,$html3=NULL,$html4=NULL,$html5=NULL) {
+	global $base_path;
 
-	define('MAGPIE_DIR', 'includes/magpierss/');
+	define('MAGPIE_DIR', $base_path.'includes/magpierss/');
     require_once(MAGPIE_DIR.'rss_fetch.inc');
 
     $rss = fetch_rss( $url );
