@@ -47,21 +47,21 @@ style1=[			// style1 is an array of properties. You can have as many property ar
 "",		// Top Bar image (Leave this blank to disable)
 "#006666",			// Menu Header Font Color (Leave blank if headers are not needed)
 "",			// Menu Header Background Color (Leave blank if headers are not needed)
-"black",				// Menu Item Separator Color
+"#006699",				// Menu Item Separator Color
 ]
 
 style2=[			// style1 is an array of properties. You can have as many property arrays as you need. This means that menus can have their own style.
-"black",				// Mouse Off Font Color
-"#cccccc",			// Mouse Off Background Color
+"#006699",			// Mouse Off Font Color
+"#dedede",			// Mouse Off Background Color
 "",			// Mouse On Font Color
-"#cccccc",			// Mouse On Background Color
-"black",			// Menu Border Color 
+"#dedede",			// Mouse On Background Color
+"#006699",			// Menu Border Color 
 12,					// Font Size in pixels
 "normal",			// Font Style (italic or normal)
 "bold",				// Font Weight (bold or normal)
 "Arial",	// Font Name
 5,					// Menu Item Padding
-"arrow.gif",		// Sub Menu Image (Leave this blank if not needed)
+"images/arrow.gif",		// Sub Menu Image (Leave this blank if not needed)
 ,					// 3D Border & Separator bar
 "",			// 3D High Color
 "",			// 3D Low Color
@@ -77,7 +77,7 @@ style2=[			// style1 is an array of properties. You can have as many property ar
 
 addmenu(menu=[		// This is the array that contains your menu properties and details
 "mainmenu",			// Menu Name - This is needed in order for the menu to be called
-65,					// Menu Top - The Top position of the menu in pixels
+76,					// Menu Top - The Top position of the menu in pixels
 0,				// Menu Left - The Left position of the menu in pixels
 ,					// Menu Width - Menus width in pixels
 0,					// Menu Border Width 
@@ -100,12 +100,12 @@ style1,				// Properties Array - this is set higher up, as above
 
 ,"<?php no_wh('Content')?>","show-menu=Content","","Content",1
 ,"<?php no_wh('Docs and Images')?>","show-menu=Docs","","Docs and Images",1
-,"<?php no_wh('Modules')?>","show-menu=Modules","","Modules",1
+,"<?php no_wh('Tools')?>","show-menu=Modules","","Modules",1
 ,"<?php no_wh('Navigation')?>","show-menu=Nav","","Navigation",1
 ,"<?php no_wh('User Data')?>","show-menu=User Data","","User Data",1
 ,"<?php no_wh('Site Template')?>","show-menu=Template","","Template",1
 ,"<?php no_wh('Settings')?>","show-menu=Settings","","Settings",1
-,"<?php no_wh('Help')?>","show-menu=Help","","Help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",1
+,"<?php no_wh('Help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')?>","show-menu=Help","","Help",1
 
 ])
 
