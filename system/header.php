@@ -401,6 +401,7 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
 	  <a href="redirect.php?action=list" class="side">Page Redirection</a><br>
       <a href="sysvar.php" class="side">System Settings</a><br> 
       <a href="wizard_setup.php" class="side">Setup Wizard</a><br>
+      <a href="rssfeed.php?action=list" class="side">RSS Feeds</a><br>
 	  <?php if ($userper[52] == 1){}} ?>
     <a href="flushcache.php" class="side">Reset Cahce</a><br>
 	<!--<a href="protect.php" class="side">Add Redirect</a><br> -->
