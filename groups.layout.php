@@ -9,14 +9,14 @@ if (!function_exists('groups_layout_display')) {
 		$html .= $start;
 
 		$html .= "<span class =\"eventtitle\"> \n";
-		if ($Web_Page && ($Web_Page != 'http://')) {
+		if (($Web_Page != NULL) && ($Web_Page != 'http://')) {
 			 $html .= '<a href="'.$Web_Page.'" target="_blank" class ="eventtitle" >';
 			 $endlink = "</a>";
 		}
-		//else if ($Details) {
+		else {
 			 $html .= '<a href="groups.php?gid='.$id.'" class ="eventtitle" >';
 			 $endlink = "</a>";
-		//}
+		}
 		$html .= $Organization.$endlink."</span><br>";
 		
 		if ($City && $State) {
