@@ -21,6 +21,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     if ( $udm->admin ) $admin = true;
 
     $frmName    = $udm->name;
+
     $frmMethod  = ( isset( $options['frmMethod'] ) ) ?
                     $options['frmMethod'] : 'post';
     $frmAction  = ( isset( $options['frmAction'] ) ) ?
