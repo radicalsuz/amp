@@ -41,7 +41,7 @@ function nav_menu_dd($type){
 	while (!$R->EOF) {
 
 		$html .= '<li><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>';
-		if (($type == $R->Fields("id")) || ( nav_subs($R->Fields("id") )) {
+		if ( ($type == $R->Fields("id")) || (nav_subs($R->Fields("id") ))) {
 			$html .= nav_subs($R->Fields("id"),$R->Fields("listtype"));
 		}
 		$R->MoveNext();
