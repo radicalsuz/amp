@@ -32,6 +32,28 @@ if ( $sub ) {
     $udm->doPlugin( 'AMP', 'save_admin' );
 }
 
+//A shortcut for copying UDM, modules, permissions, etc
+$copy_button="<script type=\"text/javascript\">
+function getCopyName () {
+	var copyname=prompt('Please enter a name for the new module:');
+	var copyform=document.forms['".$udm->name."'];	
+	if (copyname> '' ) { //do nothing if no search name is entered
+		if (copyname==copyform.elements['core_name'].value) {
+			alert ('Please choose a different name to prevent confusion.');
+		} else {
+			copyform.action='modinput4_copy.php';
+			copyform.elements['core_name'].value=copyname; 
+			copyform.submit();
+		}
+	} else return false;
+}
+</script>
+<table width=\"100%\"><TR><TD align=\"right\">
+<form name=\"copy_structure\" action=\"modinput4_copy.php?modin=".$udm->instance."\" method=\"POST\"><input name=\"UDM_copy_name\" type=\"hidden\" value=''>
+<span style=\"text-align:right\"><a href=\"#\" onClick=\"getCopyName();\">Copy this Module</A></span></form></td></tr></table>"; 
+
+
+
 /* Now Output the Form.
 
    Any necessary changes to the form should have been registered
@@ -48,6 +70,8 @@ include("header.php");
 
 print "<h2>Add/Edit " . $udm->name . "</h2>";
 print $udm->output();
+print $copy_button;
+
 
 include("footer.php"); 
 
