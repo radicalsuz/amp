@@ -7,12 +7,12 @@ include("includes/base.php");
 include("includes/moduleintro.php");  
 
 function vg_postition($can,$pos,$reason=NULL) {
-		$position = "<p><b>Candidate/Ballot Item</b>:&nbsp;$can<br><b>Position:</b>&nbsp;$pos<br><b>Reason:</b>&nbsp;$reason</p>";
+		$position = "<p><i>Candidate/Ballot Item</i>:&nbsp;<B>$can</b><br><i>Position:</i>&nbsp;<B>$pos</B><br><i>Reason:</i>&nbsp;$reason</p><BR>";
 		return $position;
 }
 
 function vg_list($id,$state,$name,$city,$date,$intro) {
-	$layout = "<p><span class= eventtitle><a href='voterguide.php?detail=$id' class=>$name</a> <b>$city, $state, $date</span> </b><br> $intro</p>";
+	$layout = "<p><span class='eventtitle'><a href='voterguide.php?detail=$id' class='vguidelink1'>$name</a><BR> <b>$city, $state<BR> $date</span> </b><br> $intro<br><center><span style='text-align: center; font-style:italic;'><a href='voterguide.php?detail=$id' class='vguidelink2'>view guide</a></span></center><P>&nbsp;<P>";
 	return $layout;
 }
 
@@ -20,7 +20,7 @@ function vg_list($id,$state,$name,$city,$date,$intro) {
 
 function vg_detail($R) { 
 	global $dbcon;
-	$L= $dbcon->Execute("select * from voterguide where guide_id =".$_GET['detail']);
+	$L= $dbcon->Execute("select * from voterguide where guide_id =".$_GET['detail']." ORDER BY textorder");
 	echo "<P class=title>".$R->Fields("custom1")."<br><span class=subtitle>".$R->Fields("custom2").", ".$R->Fields("State").", ".$R->Fields("custom3")."</span></p>";
 	//echo "<table width=\"100%\" border=\"0\"><tr><td align=\"right\">";
 	if ($R->Fields("MI")) {echo "<a href ='downloads/".$R->Fields("MI")."'>Download the Voter Guide as a PDF</a><br>"; }
@@ -53,10 +53,13 @@ else {
 	$sql = "select id, State, custom1, custom2, custom3, custom4 from userdata where publish =1 and modin =52 $where order by State asc";
 	$d=$dbcon->CacheExecute("$sql")or DIE($sql.$dbcon->ErrorMsg());
 	echo $statetitle;
-	if ($d->RecordCount() ==0) {echo "<p>There are no voter guides in this area. Why don't you <a href=\"voterguide_add.php?modin=52\">create one</a>...?";}
 	while (!$d->EOF) {
 		echo vg_list($d->Fields("id"),$d->Fields("State"),$d->Fields("custom1"),$d->Fields("custom2"),$d->Fields("custom3"),$d->Fields("custom4"),$d->Fields("custom5"));
 		$d->MoveNext();
+	}
+	if ($d->RecordCount() ==0) {echo "<p>There are no voter guides in this area. Why don't you <a href=\"voterguide_add.php?modin=52\">create one</a>...?&nbsp;--&nbsp;&nbsp;<a href=\"article.php?id=34\">(how?)</a>";} 
+	else {
+		echo "<p><a href=\"voterguide_add.php?modin=52\">Create a local voter guide</a>&nbsp;--&nbsp;&nbsp;<a href=\"article.php?id=34\">(how?)</a></P>";
 	}
 }
 

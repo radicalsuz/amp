@@ -39,32 +39,32 @@ if ( $sub ) {
 
     // Save only if submitted data is present, and the 	user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
-    $udm->saveUser();
+   if( $udm->saveUser()) {
 		if ($_POST['can']) {
-		$i=0;
-		if (!$uid) {
-			$guide_id =$dbcon->Insert_ID();
-		} else {$guide_id =$uid;}
-		$del_guide=$dbcon->Execute("delete from voterguide where guide_id = $guide_id"); 
+			$i=0;
+			if (!$uid) {
+				$guide_id =$dbcon->Insert_ID();
+			} else {$guide_id =$uid;}
+			$del_guide=$dbcon->Execute("delete from voterguide where guide_id = $guide_id"); 
 
-		while ($i <= 40){ 
-			if ($_POST['can'][$i]) {
-				$guide_sql="INSERT INTO voterguide (item,reason,position,guide_id) VALUES ('".addslashes($_POST['can'][$i])."','".addslashes($_POST['reason'][$i])."','".addslashes($_POST['stance'][$i])."','$guide_id')";
-				//DIE( $guide_sql);
-				$add_guide=$dbcon->Execute($guide_sql) or DIE("Could not insert guide record".$dbcon->ErrorMsg());
-			}
-			$i++;
-		}		
-	}
-
-
+			while ($i <= 55){ 
+				if ($_POST['can'][$i]) {
+					$guide_sql="INSERT INTO voterguide (item,reason,position,guide_id, textorder) VALUES (".$dbcon->qstr($_POST['can'][$i]).", ".$dbcon->qstr($_POST['reason'][$i]).",".$dbcon->qstr($_POST['stance'][$i]).",'$guide_id', '".$_POST['textorder'][$i]."')";
+					//DIE( $guide_sql);
+					$add_guide=$dbcon->Execute($guide_sql) or DIE("Could not insert guide record".$dbcon->ErrorMsg());
+				}
+				$i++;
+			}		
+		}
+		header ("Location:modinput4_data.php?modin=52&editlink=voterguide.php");
+   }
 } elseif ( !$sub && $uid ) {
 
     // Fetch the user data for $uid if there is no submitted data
     // and the user is authenticated.
     $udm->getUser( $uid ); 
 
-	$my_slate_sql="Select * from voterguide where guide_id=".$uid;
+	$my_slate_sql="Select * from voterguide where guide_id=".$uid." ORDER BY textorder";
 	$my_slate = $dbcon->Execute($my_slate_sql) or DIE("Could not get guide record".$dbcon->ErrorMsg());
 	$i = 0;
 	while (!$my_slate->EOF){
@@ -86,7 +86,7 @@ if ( $sub ) {
 	</tr>
 
 	<tr>
-		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Reasons</b><br><textarea name="reason['.$i.']" cols="65">'.$my_slate->Fields("reason").'</textarea></td></tr></table></td>
+		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Reasons</b><br><textarea name="reason['.$i.']" cols="65">'.$my_slate->Fields("reason").'</textarea><input name="textorder['.$i.']" type="hidden" value="'.$i.'"></td></tr></table></td>
 	</tr>
 	<tr>';
 		$my_slate->MoveNext();
@@ -98,7 +98,7 @@ if ( $sub ) {
 
 if (!$slate_html) {
 	$i = 0;
-	while ($i <= 40){
+	while ($i <= 55){
 		$slate_html .= '	<tr>
 		<td align="left" valign="top" class="form_label_col"><b>Candidate/Ballot Item</b></td>
 		<td valign="top" align="left" class="form_data_col"><input name="can['.$i.']" type="text" size="40" /></td>
@@ -117,7 +117,7 @@ if (!$slate_html) {
 	</tr>
 
 	<tr>
-		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Reasons</b><br><textarea name="reason['.$i.']" cols="45"></textarea></td></tr></table></td>
+		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Reasons</b><br><textarea name="reason['.$i.']" cols="45"></textarea><input name="textorder['.$i.']" type="hidden" value="'.$i.'"></td></tr></table></td>
 	</tr>
 	<tr>';
 		$i++;
@@ -126,7 +126,17 @@ if (!$slate_html) {
 
 
 $insert_html = $slate_html;
+$upload_script="<script type=\"text/javascript\">
 
+function showUploadWindow (pform, pfield) {
+
+
+	url  = 'http://".$_SERVER['SERVER_NAME']."/custom/upload_popup.php?pform='+pform+'&pfield='+pfield;
+	
+	hWnd = window.open( url, 'recordWindow', 'height=175,width=300,scrollbars=no,menubar=no,toolbar=no,resizeable=no,location=no,status=no' );
+	
+}
+</script>";
 	 
 /* Now Output the Form.
 
@@ -145,6 +155,7 @@ $mod_id = $udm->modTemplateID;
 
 require_once( 'header.php' );
 
+print $upload_script;
 print "<h2>Add/Edit " . $udm->name . "</h2>";
 print "<center><table width='400'><tr><td>";
 $udm->showForm = true;

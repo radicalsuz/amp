@@ -13,16 +13,18 @@ require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 
+set_error_handler( 'e' );
+
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
 $udm->admin = true;
-$udm->authorized = true;
 
 $modidselect=$dbcon->Execute("SELECT id from modules where userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
 $modid=$modidselect->Fields("id");
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+$udm->authorized = true;
 $udm->uid = $uid;
 
 // Was data submitted via the web?
@@ -31,15 +33,16 @@ $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
 // Fetch or save user data.
 if ( $sub ) {
 
+print "Trying to save....";
     // Save only if submitted data is present, and the user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
     $udm->saveUser();
+    $udm->showForm = true;
 
 } elseif ( !$sub && $uid ) {
 
     // Fetch the user data for $uid if there is no submitted data
     // and the user is authenticated.
-    $udm->submitted = false;
     $udm->getUser( $uid ); 
 
 }
@@ -61,8 +64,6 @@ $mod_id = $udm->modTemplateID;
 require_once( 'header.php' );
 
 print "<h2>Add/Edit " . $udm->name . "</h2>";
-
-$udm->showForm = true;
 print $udm->output();
 
 // Append the footer and clean up.

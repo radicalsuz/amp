@@ -42,93 +42,112 @@ if ( $uid ) {
 
 }
 
-// Fetch or save user data.
-if ( ( !$uid || $auth ) && $sub ) {
-
-    // Save only if submitted data is present, and the user is
-    // authenticated, or if the submission is anonymous (i.e., !$uid)
- 	
-    $udm->saveUser();
-		if ($_POST['can']) {
-		$i=0;
-		if (!$uid) {
-			$guide_id =$dbcon->Insert_ID();
-		} else {$guide_id =$uid;}
-		//$del_guide=$dbcon->Execute("delete from voterguide where $guide_id = $guide_id"); 
-
-		while ($i <= 40){ 
-			if ($_POST['can'][$i]) {
-				$guide_sql="INSERT INTO voterguide (item,reason,position,guide_id) VALUES ('".addslashes($_POST['can'][$i])."','".addslashes($_POST['reason'][$i])."','".addslashes($_POST['stance'][$i])."','$guide_id')";
-				//DIE( $guide_sql);
-				$add_guide=$dbcon->Execute($guide_sql) or DIE("Could not insert guide record".$dbcon->ErrorMsg());
-			}
-			$i++;
-		}		
+function return_stance_selectbox($which, $selected=NULL) {
+	$output="<select name=\"stance[".$which."]\"><option value=''>Select One</option>";
+	
+	$optionlist="Yes,No,Hell Yeah,No Way,No Endorsement";
+	$optionset=split(",", $optionlist);
+	foreach ($optionset as $current_option) {
+		$output.="<option value=\"".$current_option."\"";
+		if ($current_option==$selected) {
+			$output.=" selected";
+		}
+		$output.=">$current_option</option>";
 	}
-
-
-
-
-} elseif ( $uid && $auth && !$sub ) {
-
-    // Fetch the user data for $uid if there is no submitted data
-    // and the user is authenticated.
-    $udm->getUser( $uid ); 
-	$my_slate_sql="Select * from voterguide where guide_id=".$uid;
-	$my_slate = $dbcon->Execute($my_slate_sql) or DIE("Could not get guide record".$dbcon->ErrorMsg());
-	$i = 0;
-	while (!$my_slate->EOF){
-		$slate_html .= '	<tr>
-		<td align="left" valign="top" class="form_label_col"><b>Candidate/Ballot Item (e.g. "John Kerry for President" or "Prop 66")</b></td>
-		<td valign="top" align="left" class="form_data_col"><input name="can['.$i.']" type="text" size="40" value="'.$my_slate->Fields("item").'" /></td>
-	</tr>
-	<tr>
-		<td align="left" valign="top" class="form_label_col"><b>Your Position</b></td>
-		<td valign="top" align="left" class="form_data_col"><select name="stance['.$i.']">
-	<option >'.$my_slate->Fields("position").'</option>
-
-	<option value="Yes">Yes</option>
-	<option value="No"> No</option>
-	<option value="Hell Yeah"> Hell Yeah</option>
-	<option value="No Way"> No Way</option>
-	<option value="No Endorsement">No Endorsement</option>
-</select></td>
-	</tr>
-
-	<tr>
-		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Why?</b><br><textarea name="reason['.$i.']" cols="65">'.$my_slate->Fields("reason").'</textarea></td></tr></table></td>
-	</tr>
-	<tr>';
-		$my_slate->MoveNext();
-		$i++;
-	}
-
-
+	$output.="</select>";
+	return $output;
 
 }
 
-if (!$slate_html) {
+
+
+// Fetch or save user data.
+if ( ( !$uid || $auth ) && $sub ) {
+    // Save only if submitted data is present, and the user is
+    // authenticated, or if the submission is anonymous (i.e., !$uid)
+ 	
+	if ($udm->saveUser()) { // check to see if save was successful - no form errors
+		$udm->showForm=FALSE;
+
+		if ($_POST['can']) {
+			$i=0;
+			if (!$uid) {
+				$guide_id =$dbcon->Insert_ID();
+			} else {$guide_id =$uid;}
+			$del_guide=$dbcon->Execute("delete from voterguide where $guide_id = $guide_id"); 
+
+			while ($i <= 55){ 
+				if ($_POST['can'][$i]) {
+					$guide_sql="INSERT INTO voterguide (item,reason,position,guide_id, textorder ) VALUES (".$dbcon->qstr($_POST['can'][$i]).", ".$dbcon->qstr($_POST['reason'][$i]).",".$dbcon->qstr($_POST['stance'][$i]).",'$guide_id', '".$_POST['textorder'][$i]."')";
+				//DIE( $guide_sql);
+					$add_guide=$dbcon->Execute($guide_sql) or DIE("Could not insert guide record".$dbcon->ErrorMsg());
+				}
+				$i++;
+			}		
+		}
+	} else { //save wasn't successful, show form with errors
+		$udm->showForm=TRUE;
+		$i=0;
+		while($i<=55) {
+			$slate_html .= '	<tr>
+		<td align="left" valign="top" class="form_label_col"><b>Candidate/Ballot Item (e.g. "John Kerry for President" or "Prop 66")</b></td>
+		<td valign="top" align="left" class="form_data_col"><input name="can['.$i.']" type="text" size="40" value="'.$_POST['can'][$i].'" /></td>
+	</tr>
+	<tr>
+		<td align="left" valign="top" class="form_label_col"><b>Your Position</b></td>
+		<td valign="top" align="left" class="form_data_col">'.return_stance_selectbox($i, $_POST['stance'][$i]).'</td>
+	</tr>
+
+	<tr>
+		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Why?</b><br><textarea name="reason['.$i.']" cols="65">'.$_POST[reason][$i].'</textarea>
+		<input name="textorder['.$i.']" type="hidden" value="'.$i.'"></td></tr></table></td>
+	</tr>
+	<tr>';
+		$i++;
+		}
+	}
+
+} elseif ( $uid && $auth && !$sub ) {
+    // Fetch the user data for $uid if there is no submitted data
+    // and the user is authenticated.
+	$udm->getUser( $uid ); 
+	$udm->showForm=TRUE;
+	$my_slate_sql="Select * from voterguide where guide_id=".$uid." ORDER BY textorder";
+	$my_slate = $dbcon->GetArray($my_slate_sql) or DIE("Could not get guide record".$dbcon->ErrorMsg());
 	$i = 0;
-	while ($i <= 40){
+	while ($i<=55){
+		if (!isset($myslate[$i])) {$myslate[$i]=array('item'=>'', 'stance'=>'', 'reason'=>'', 'textorder'=>$i);}
+		$slate_html .= '	<tr>
+		<td align="left" valign="top" class="form_label_col"><b>Candidate/Ballot Item (e.g. "John Kerry for President" or "Prop 66")</b></td>
+		<td valign="top" align="left" class="form_data_col"><input name="can['.$i.']" type="text" size="40" value="'.$my_slate[$i]['item'].'" /></td>
+	</tr>
+	<tr>
+		<td align="left" valign="top" class="form_label_col"><b>Your Position</b></td>
+		<td valign="top" align="left" class="form_data_col">'.return_stance_selectbox($i, $myslate[$i]['stance']).'</td>
+	</tr>
+
+	<tr>
+		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Why?</b><br><textarea name="reason['.$i.']" cols="65">'.$my_slate[$i]['reason'].'</textarea>
+		<input name="textorder['.$i.']" type="hidden" value="'.$myslate[$i]['textorder'].'"></td></tr></table></td>
+	</tr>
+	<tr>';
+		$i++;
+	}
+} else { //create a blank slate
+	$udm->showForm=TRUE;
+	$i = 0;
+	while ($i <= 55){
 		$slate_html .= '	<tr>
 		<td align="left" valign="top" class="form_label_col"><b>Candidate/Ballot Item (e.g. "John Kerry for President" or "Prop 66")</b></td>
 		<td valign="top" align="left" class="form_data_col"><input name="can['.$i.']" type="text" size="40" /></td>
 	</tr>
 	<tr>
 		<td align="left" valign="top" class="form_label_col"><b>Your Position</b></td>
-		<td valign="top" align="left" class="form_data_col"><select name="stance['.$i.']">
-	<option value="">Select one</option>
-
-	<option value="Yes">Yes</option>
-	<option value="No"> No</option>
-	<option value="Hell Yeah"> Hell Yeah</option>
-	<option value="No Way"> No Way</option>
-	<option value="No Endorsement">No Endorsement</option>
-</select></td>
+		<td valign="top" align="left" class="form_data_col">'.return_stance_selectbox($i).'</td>
 	</tr>
 
 	<tr>
-		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Why?</b><br><textarea name="reason['.$i.']" cols="45"></textarea></td></tr></table></td>
+		<td align="left" valign="top" colspan="2"><table class="form_span_col"><tr><td><b>Why?</b><br><textarea name="reason['.$i.']" cols="45"></textarea><input name="textorder['.$i.']" type="hidden" value="'.$i.'"></td></tr></table></td>
 	</tr>
 	<tr>';
 		$i++;
@@ -156,8 +175,8 @@ $mod_id = $udm->modTemplateID;
 require_once( 'AMP/BaseTemplate.php' );
 require_once( 'includes/moduleintro.php' );
 
-$udm->showForm = true;
 $volform= $udm->output();
+if ($udm->showForm==TRUE) {
 $submitspot=strpos($volform, "input name=\"btnUdmSubmit\"");
 $insertpoint = strpos(substr($volform, $submitspot-200, 200), "<tr>");
 $form_footer=substr($volform, $submitspot-200+$insertpoint);
@@ -169,7 +188,7 @@ print $volform;
 print $insert_html;
 print $form_footer;
 #print "</td></tr></table></center>";
-
+}
 #print $debug_html;
 
 // Append the footer and clean up.
