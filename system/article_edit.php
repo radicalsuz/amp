@@ -25,7 +25,7 @@ function file_list($file){
 		}
 	}
 	ksort($fileArr);
-	reset($fileArr);
+	//reset($fileArr);
 	return $fileArr;
 } 
  
