@@ -40,10 +40,10 @@ function geo_getdata($address) {
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
 
-   <geo:Point rdf:nodeID="aid12112551">
-       <geo:lat>37.752402</geo:lat>
-       <geo:long>-122.416702</geo:long>
-   </geo:Point>
+   <geo nodeID="aid12112551">
+       <lat>37.752402</lat>
+       <long>-122.416702</long>
+   </geo>
 </rdf:RDF>';
 
     $options = array(
