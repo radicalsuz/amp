@@ -10,7 +10,7 @@
  *****/
 
 //ob_start();
-require_once( 'AMP/UserData.php' );
+require_once( 'AMP/UserDataInput.php' );
 require_once( 'utility.functions.inc.php');
 
 require("Connections/freedomrising.php");
@@ -19,13 +19,9 @@ $modidselect=$dbcon->Execute("SELECT id from modules where userdatamodid=$modin"
 $modid=$modidselect->Fields("id");
 
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserData( $dbcon, $_REQUEST[ 'modin' ], true );
+$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ], true );
 $udm->doPlugin( "QuickForm", "build_admin" );
 $mod_id = $udm->modTemplateID;
-
-// User ID.
-$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
-$udm->uid = $uid;
 
 // Was data submitted via the web?
 $sub = isset($_REQUEST['btnUdmSubmit']);

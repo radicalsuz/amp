@@ -9,12 +9,12 @@
  *
  *****/
 
-require_once( 'AMP/UserData.php' );
+require_once( 'AMP/UserDataInput.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserData( $dbcon, $_REQUEST[ 'modin' ] );
+$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
 $udm->admin = true;
 $udm->authorized = true;
 

@@ -9,7 +9,7 @@
  *
  *****/
 
-require_once( 'AMP/UserData.php' );
+require_once( 'AMP/UserDataInput.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 require_once('AMP/UserDataSearch.php');
@@ -19,7 +19,7 @@ require_once('AMP/UserDataSearch.php');
 if (!isset($_REQUEST[modin])){ $modin=3;} else {$modin=$_REQUEST[modin];}
 
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserData( $dbcon, $modin );
+$udm = new UserDataInput( $dbcon, $modin );
 $udm->admin = true;
 
 $modidselect=$dbcon->Execute("SELECT id from modules where publish=1 and userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
