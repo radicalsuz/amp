@@ -32,7 +32,7 @@ class UserData {
     // Store raw (database-backed) module definition.
     var $_module_def;
     var $instance;
-    var $submitted = true;
+    var $submitted;
 
     // Templating information for AMP
     var $modTemplateID;
@@ -94,6 +94,7 @@ class UserData {
         $dbcon->SetFetchMode( ADODB_FETCH_ASSOC );
 
         $this->instance( $instance );
+        $this->submitted = true;
 
         $this->admin = $admin;
 
@@ -250,7 +251,9 @@ class UserData {
                 if ( !array_search( $name, $fields ) ) continue;
             }
 
-            if ( isset( $fDef[ 'values' ] ) ) {
+            if ( isset( $fDef[ 'value' ] ) ) {
+                $retarray[ $name ] = $fDef[ 'value' ];
+            } elseif ( isset( $fDef[ 'values' ] ) ) {
                 $retarray[ $name ] = $fDef['values'];
             }
 
