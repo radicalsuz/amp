@@ -2,7 +2,7 @@
 $modid=38;
 require("Connections/freedomrising.php");
 
-if (!$MM_Message) {header ("Location: articlelist.php");}
+if (!$MM_Message) {header ("Location: amp_alerts.php");}
 
 else {
 $new=$dbcon->Execute("SELECT * from message where toid = $ID order by date desc") or DIE($dbcon->ErrorMsg());
