@@ -49,11 +49,13 @@ $go= false;
 $myURI = $dbcon->qstr(substr($_SERVER['REQUEST_URI'], 1));
 $R=$dbcon->Execute("select * from redirect where publish =1 and old=$myURI") or DIE('404 query'.$dbcon->ErrorMsg());
 
-die(AMP_LOCAL_PATH . "/custom/" . $myURI );
+$myURI2 = str_replace("'", "", "$myURI");
+//die(AMP_LOCAL_PATH . "/custom/" . $myURI2 );
+if ( file_exists( AMP_LOCAL_PATH . "/custom/" . $myURI2 ) ) { 
+	include( AMP_LOCAL_PATH . "/custom/" . $myURI2 );
 
-if ( file_exists( AMP_LOCAL_PATH . "/custom/" . $myURI ) ) { 
-	include( AMP_LOCAL_PATH . "/custom/" . $myURI );
 }
+
 
 	else {
 	
