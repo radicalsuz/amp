@@ -356,60 +356,40 @@ for(i=1; i<t; i++) document.forms[1][i].checked=document.forms[1][7].checked;
 		
 		</div>
 
-        <table width="100%" border="0" align="center">
-          <tr class="intitle"> 
-            <td>&nbsp;</td>
-            <td><b><a href="article_list.php?sorder=id&<?php echo $MM_keepURL ?>" class="intitle">ID</a></b></td>
-            <td><b><a href="article_list.php?sorder=title&<?php echo $MM_keepURL ?>" class="intitle">title</a> 
-              </b></td>
-            <td><b><a href="article_list.php?sorder=type&<?php echo $MM_keepURL ?>" class="intitle">section</a></b></td>
-            <td><b><a href="article_list.php?sorder=date&<?php echo $MM_keepURL ?>" class="intitle">date 
-              </a></b></td>
-            <td><b><a href="article_list.php?sorder=pageorder<?php echo $MM_keepURL ?>" class="intitle">order</a></b></td>
-            <td><b><a href="article_list.php?sorder=class&<?php echo $MM_keepURL ?>" class="intitle">class</a></b></td>
-            <td><b><a href="article_list.php?sorder=publish&<?php echo $MM_keepURL ?>" class="intitle">status</a></b></td>
-            <td>&nbsp;</td>
-          </tr>
-          <?php 
-		  $i =0;
-		  while (!$Recordset1->EOF){ 
-   $i++;
-  $bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
-   
-?>
-          <tr bordercolor="#333333" bgcolor="<?php echo $bgcolor; ?>" 
-onMouseover="this.bgColor='#CCFFCC'" onMouseout="this.bgColor='<?php echo $bgcolor; ?>'"> 
-            <td><?php  if ($userper[98]){ ?><input type="checkbox" name="id[]" value="<?php echo $Recordset1->Fields("id")?>"><?php } ?> </td>
-            <td><a href="<?php if ($class==2) {echo "article_fpedit.php";} else { echo "article_edit.php"; } ?>?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>"><?php echo $Recordset1->Fields("id")?></a>&nbsp;</td>
-            <td ><a href="<?php if ($class==2) {echo "article_fpedit.php";} else { echo "article_edit.php"; } ?>?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id")."&t=".$track ?>"> 
-              <?php echo $Recordset1->Fields("title")?> </a><br> </td>
-            <td> 
-              <?php if ($Recordset1->Fields("type")!= ("none"))
-			 {echo $Recordset1->Fields("type");}?>
-            </td>
-            <td><font size="-2"> 
-              <?php 
-		echo  DateConvertOut($Recordset1->Fields("date"));	//$time= DoTimeStamp($Recordset1->Fields("updated"), ("n/j/y") );
-			// echo $time;
-			?>
-              </font> </td>
-			  
-            <td><input name="order[<?php echo $Recordset1->Fields("id")?>]" type="text"  maxlength="3"  style="width: 29px;"value = "<?php echo $Recordset1->Fields("pageorder");	?>" ></td>
-            <td> 
-              <?php if ($Recordset1->Fields("class")!= ("none")) {echo $Recordset1->Fields("class");}?>
-            </td>
-            <td> 
-              <?php if (($Recordset1->Fields("publish")) == "1") { echo "live";} else { echo "draft";}  ?>
-            </td>
-            <td><a href="<?php if ($class==2) {echo "article_fpedit.php";} else { echo "article_edit.php"; } ?>?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id")."&t=".$track ?>"><img src="images/edit.png" width="16" height="16" border=0></a>&nbsp;<a href="../article.php?id=<?php echo $Recordset1->Fields("id")?>&preview=1" target="_blank"><img src="images/view.jpg" width="16" height="16" border=0></a>&nbsp;<img src="images/delete.png" width="16" height="16"></td>
-          </tr>
-          <?php
-  
-  $Recordset1->MoveNext();
+	<div class='list_table'> 
+		<table class='list_table'>
+			<tr class="intitle"> 
+            	<td>&nbsp;</td>
+            	<td><b><a href="article_list.php?sorder=id&<?php echo $MM_keepURL ?>" class="intitle">ID</a></b></td>
+            	<td><b><a href="article_list.php?sorder=title&<?php echo $MM_keepURL ?>" class="intitle">title</a></b></td>
+      	      <td><b><a href="article_list.php?sorder=type&<?php echo $MM_keepURL ?>" class="intitle">section</a></b></td>
+        	    <td><b><a href="article_list.php?sorder=date&<?php echo $MM_keepURL ?>" class="intitle">date</a></b></td>
+            	<td><b><a href="article_list.php?sorder=pageorder<?php echo $MM_keepURL ?>" class="intitle">order</a></b></td>
+            	<td><b><a href="article_list.php?sorder=class&<?php echo $MM_keepURL ?>" class="intitle">class</a></b></td>
+            	<td><b><a href="article_list.php?sorder=publish&<?php echo $MM_keepURL ?>" class="intitle">status</a></b></td>
+            	<td>&nbsp;</td>
+			</tr><?php 
+$i =0;
+while (!$Recordset1->EOF){ 
+	$i++;
+	$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
+?>			<tr bordercolor="#333333" bgcolor="<?php echo $bgcolor; ?>" onMouseover="this.bgColor='#CCFFCC'" onMouseout="this.bgColor='<?php echo $bgcolor; ?>'"> 
+            	<td><?php  if ($userper[98]){ ?><input type="checkbox" name="id[]" value="<?php echo $Recordset1->Fields("id")?>"><?php } ?></td>
+            	<td><a href="<?php if ($class==2) {echo "article_fpedit.php";} else { echo "article_edit.php"; } ?>?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>"><?php echo $Recordset1->Fields("id")?></a>&nbsp;</td>
+            	<td><a href="<?php if ($class==2) {echo "article_fpedit.php";} else { echo "article_edit.php"; } ?>?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id")."&t=".$track ?>"><?php echo $Recordset1->Fields("title")?></a><br></td>
+            	<td><?php if ($Recordset1->Fields("type")!= ("none")) {echo $Recordset1->Fields("type");}?></td>
+            	<td><font size="-2"><?php echo  DateConvertOut($Recordset1->Fields("date"));?></font></td>
+            	<td><input name="order[<?php echo $Recordset1->Fields("id")?>]" type="text"  maxlength="3"  style="width: 29px;"value = "<?php echo $Recordset1->Fields("pageorder");	?>" ></td>
+            	<td><?php if ($Recordset1->Fields("class")!= ("none")) {echo $Recordset1->Fields("class");}?></td>
+            	<td><?php if (($Recordset1->Fields("publish")) == "1") { echo "live";} else { echo "draft";}  ?></td>
+            	<td><a href="<?php if ($class==2) {echo "article_fpedit.php";} else { echo "article_edit.php"; } ?>?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id")."&t=".$track ?>"><img src="images/edit.png" width="16" height="16" border=0></a>&nbsp;<a href="../article.php?id=<?php echo $Recordset1->Fields("id")?>&preview=1" target="_blank"><img src="images/view.jpg" width="16" height="16" border=0></a>&nbsp;<img src="images/delete.png" width="16" height="16"></td>
+			</tr>
+<?php
+	$Recordset1->MoveNext();
 }
 ?>
-        </table>
-  </form>
+		</table>
+	</div>
+</form>
 <p> 
- <?php include ("footer.php");?>
-
+<?php include ("footer.php");?>

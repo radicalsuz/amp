@@ -169,6 +169,11 @@ text-align: center;
 	margin-right: auto;
 }
 
+
+.list_table tr {
+	height: 20px;
+}
+
 /* label text in forms */
 .name {
 	font-size: 11px;

@@ -245,20 +245,19 @@ function select_type_tree($id = 0,$y=0,$selcode)
 			$typeid = $result[$x]["id"];
 			$i++;
 			$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
-			echo "<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
-			echo "<td> <div align='center'><A HREF='type_edit.php?id=".$result[$x]["id"]."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
-			echo "<td>".$this->depth2($y).$result[$x]["type"]."</td>";
-			echo "<td>".$result[$x]["id"]."</td>";
+			echo "\n		<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
+			echo "\n			<td> <div align='center'><A HREF='type_edit.php?id=".$result[$x]["id"]."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
+			echo "\n			<td>".$this->depth2($y).$result[$x]["type"]."</td>";
+			echo "\n			<td>".$result[$x]["id"]."</td>";
 			if ($result[$x]["usenav"]) {$status ='live';} else {$status ='draft';}
-			echo "<td>".$status."</td>";
-			echo '<td><input name="order['.$result[$x]["id"].'type="text" value="'.$result[$x]["textorder"].'" size="2"></td>';
+			echo "\n			<td>".$status."</td>";
+			echo "\n			<td><input name=\"order[".$result[$x]["id"]."]\" type=\"text\" value=\"".$result[$x]["textorder"]."\" size=2></td>";
 			//echo '<td><div align="right"><A HREF="type_nav_edit.php?id="'.$result[$x]["id"].'">Edit</A></div></td>';
 			//echo '<td><div align="right"><A HREF="typelist_nav_edit.php?id="'.$result[$x]["id"].'">Edit</A></div></td>';
-			echo '</tr>';
+			echo "\n		</tr>";
 			$this->section_type_tree_edit($result[$x]["id"],$y);
 			$y--;	
 		}
-		echo "</option>";
 	}
 	
 	function depth2($depth) {
