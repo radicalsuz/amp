@@ -22,6 +22,8 @@ function geo_getdata($address) {
 		$result = $req->getResponseHeader();
 	}
 
+    $result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result;
+
 print "<pre>";
     $xmlparse = new XML_Unserializer;
     $parse_result = $xmlparse->unserialize( $result );
