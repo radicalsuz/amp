@@ -4,17 +4,19 @@ require_once( 'Modules/diaRequest.inc.php' );
 
 function udm_DIAlist_save ( &$udm, $options ) {
 
-    if ( $this->uselists ) {
+    if ( $udm->uselists ) {
 
         $diaRequest = new diaRequest( $options[ 'orgCode' ] );
 
-        foreach ( array_keys( $this->lists ) as $list_id ) {
+        foreach ( array_keys( $udm->lists ) as $list_id ) {
             $list_fields[] = 'list_' . $list_id;
         }
 
         $listValues = $udm->form->exportValues( $list_fields );
 
-        foreach ( $listValues as $listid => $value ) {
+        foreach ( $listValues as $listField => $value ) {
+
+            $listid = substr( $listField, 5 );
 
             if ( $value ) {
                 // nasty-ass hack. change this by adding a "result data" object

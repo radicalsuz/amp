@@ -1,5 +1,7 @@
 <?php
 
+require_once( 'HTTP/Request.php' );
+
 class diaRequest {
 
     var $org_id;
@@ -15,24 +17,27 @@ class diaRequest {
 
     }
 
-    function addSupporter ( $email, $info = null ) {
+    function addSupporter ( $email, $info = array() ) {
 
         $info[ 'Email' ] = $email;
 
         $supporter_id = $this->process( "supporter", $info );
 
         // nasty-ass hack. See DIAlist/save.inc.php.
-        $GLOBALS['diaSupporter'] = $supporter_id;
+        $GLOBALS['diaSupporter'] = trim( $supporter_id );
         return $supporter_id;
 
     }
 
-    function linkSupporter ( $list, $supporter_id ) {
-        
-        $data[ 'linkKey' ] = $list;
-        $data[ 'supporter_Key' ] = $supporter_id;
+    function linkSupporter ( $list, $supporter ) {
 
-        return $this->process( "link", $data );
+        $data = array();
+        
+        $data[ 'link' ] = 'groups';
+        $data[ 'linkKey' ] = $list;
+        $data[ 'key' ] = $supporter;
+
+        return $this->process( "supporter", $data );
 
     }
 
@@ -47,16 +52,20 @@ class diaRequest {
 
     function process ( $table, $data ) {
 
+        $req =& new HTTP_Request( $this->api_url );
+        $req->setMethod( HTTP_REQUEST_METHOD_GET );
+
         foreach ( $data as $key => $val ) {
-            $req_str .= "&" . urlencode($key) . "=" . urlencode($val);
+            $req->addQueryString( $key, $val );
         }
 
-        $req_url = $this->api_url . "?org=" . $this->org_id  . "&table=" . $table  . $req_str;
+        $req->addQueryString( 'org', trim( $this->org_id ) );
+        $req->addQueryString( 'table', $table );
 
-        $req = fopen( $req_url, "rb" );
-
-        while (!feof($req)) {
-            $out .= fread($req, 8192);
+        if ( !PEAR::isError( $req->sendRequest() ) ) {
+            $out = $req->getResponseBody();
+        } else {
+            $out = null;
         }
 
         return $out;
