@@ -13,6 +13,10 @@ To Do:
  else{
    $Recordset1=$dbcon->CacheExecute("SELECT * FROM articles WHERE id = $MM_id and publish=1") or DIE($dbcon->ErrorMsg());}
     if ($Recordset1->RecordCount() == 0) {header ("Location: index.php");}
+	
+if ($Recordset1->Fields("linkover") == 1){
+  $goodbye = $Recordset1->Fields("link");
+   header ("Location: $goodbye") ;}
 
 ?>
 <table width="100%" class="text"><tr><td>

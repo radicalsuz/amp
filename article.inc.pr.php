@@ -17,6 +17,9 @@ if ($preview==1) {
 if ($Recordset1->RecordCount() == 0) {
 	header ("Location: index.php");
 }
+if ($Recordset1->Fields("linkover") == 1){
+  $goodbye = $Recordset1->Fields("link");
+   header ("Location: $goodbye") ;}
 
 $Recordset1_numRows=0;
 $Recordset1__totalRows=$Recordset1->RecordCount();
