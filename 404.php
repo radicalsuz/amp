@@ -8,7 +8,12 @@ the user to search page if no matches are found.*/
 include_once("AMP/BaseDB.php");
 
 // Check for a custom handler.
-$customHandler = AMP_LOCAL_PATH . "/custom" . $_SERVER['REQUEST_URI'];
+$uri = $_SERVER['REQUEST_URI'];
+$pos = strpos( $uri, '?' );
+$PHP_SELF = $_SERVER['PHP_SELF'] = substr( $uri, 1, ($pos) ? $pos - 1 : strlen( $uri ) - 1 );
+
+$customHandler = AMP_LOCAL_PATH . "/custom/" . $_SERVER['PHP_SELF'];
+
 if (file_exists($customHandler)) { 
 
 	include( $customHandler );
