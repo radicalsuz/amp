@@ -66,7 +66,7 @@
   if (isset($MM_delete) && (isset($MM_recordId))) {
     $MM_editQuery = "delete from " . $MM_editTable . " where " . $MM_editColumn . " = " . $MM_recordId;
     if ($MM_abortEdit!=1) {
-      $queryrs = $dbcon->Execute($MM_editQuery) or DIE($dbcon->ErrorMsg());
+      $queryrs = $dbcon->Execute($MM_editQuery) or DIE( "Couldn't execute $MM_editQuery: " . $dbcon->ErrorMsg());
       if ($MM_editRedirectUrl) {
         header ("Location: $MM_editRedirectUrl");
       }		 
@@ -123,7 +123,7 @@ if (isset($MM_insert)) {
   $MM_editQuery = "insert into " . $MM_editTable . " (" . $MM_tableValues . ") values (" . $MM_dbValues . ")";
   if ($MM_abortEdit!=1) {
     // execute the insert
-    $queryrs = $dbcon->Execute($MM_editQuery) or DIE($dbcon->ErrorMsg());
+    $queryrs = $dbcon->Execute($MM_editQuery) or DIE( "Couldn't execute $MM_editQuery: " . $dbcon->ErrorMsg());
     if ($MM_editRedirectUrl) {
     	  header ("Location: $MM_editRedirectUrl");		
     }
@@ -186,7 +186,7 @@ if (isset($WF_update) && (isset($MM_recordId))) {
 	if ($MM_abortEdit != 1)
 	{
 		// execute the insert
-		$queryrs = $dbcon->Execute($MM_editQuery) or DIE($dbcon->ErrorMsg());
+		$queryrs = $dbcon->Execute($MM_editQuery) or DIE( "Couldn't execute $MM_editQuery: " . $dbcon->ErrorMsg());
 		if ($MM_editRedirectUrl) 
 		{
 			header ("Location: $MM_editRedirectUrl");
@@ -244,7 +244,7 @@ if (isset($WF_insert)) {
   $MM_editQuery = "insert into " . $MM_editTable . " (" . $MM_tableValues . ") values (" . $MM_dbValues . ")";
   if ($MM_abortEdit!=1) {
     // execute the insert
-    $queryrs = $dbcon->Execute($MM_editQuery) or DIE($dbcon->ErrorMsg());
+    $queryrs = $dbcon->Execute($MM_editQuery) or DIE( "Couldn't execute $$MM_editQuery: " . $dbcon->ErrorMsg());
   
   }
 }
