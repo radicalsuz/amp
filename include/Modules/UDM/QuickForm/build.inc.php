@@ -16,7 +16,7 @@ $GLOBALS['regionObj'] = new Region();
 
 function udm_QuickForm_build ( &$udm, $options = null ) {
 
-	if ( $udm->admin ) $admin = true;
+    if ( $udm->admin ) $admin = true;
 
     $frmName    = $udm->name;
     $frmMethod  = ( isset( $options['frmMethod'] ) ) ?
@@ -115,7 +115,7 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
     }
 
     if ( isset( $size ) && $size && ( $type == 'text' ) ) {
-	    if ($size > 40) $size = 40;
+        if ($size > 40) $size = 40;
         $fRef =& $form->getElement( $name );
         $fRef->setSize( $size );
     }
@@ -133,20 +133,33 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
         if ( isset( $rows ) ) $fRef->setRows( $rows );
         if ( isset( $cols ) ) $fRef->setCols( $cols );
     }
-	
-	//OUTPUT TEMPLATE MODIFICATIONS
-	//Default output template (with classes defined)
-	$renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required --><b>{label}</b></td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td>\n\t</tr>");
 
-	if ($type=='checkbox') {
-		$renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->{element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t<b>{label}</b></td>\n\t</tr>", $name);
+    if ( isset( $defaults ) && ( $type == 'checkbox' ) ) {
 
-	}
-	//textareas have a table they sit within for CSS-controlled positioning
-	if ($type=='textarea') {
-		$renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\"><tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required --><b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td></tr></table></td>\n\t</tr>", $name);
+        $fRef =& $form->getElement( $name );
+        if ( $defaults == "1" ) {
+            $fRef->setChecked( true );
+            $fRef->setText( false );
+        } else {
+            $fRef->setChecked( false );
+        }
 
-	}
+    }
+    
+    //OUTPUT TEMPLATE MODIFICATIONS
+    //Default output template (with classes defined)
+    $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required --><b>{label}</b></td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td>\n\t</tr>");
+
+    if ($type=='checkbox') {
+        $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->{element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t<b>{label}</b></td>\n\t</tr>", $name);
+
+    }
+
+    //textareas have a table they sit within for CSS-controlled positioning
+    if ($type=='textarea') {
+        $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\"><tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required --><b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td></tr></table></td>\n\t</tr>", $name);
+    }
+
     if ( isset( $field_def[ 'required' ] ) && $field_def[ 'required' ] )
         $form->addRule( $name, $label . ' is required.', 'required' );
     
