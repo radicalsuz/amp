@@ -433,10 +433,10 @@ style1,				// Properties Array - this is set higher up, as above
 	,
 	,
 	
-	,"View Module Intro Text","moduletext_list.php",,,1
-	,"Add Module Intro Text","moduletext_edit.php",,,1
-	,"Add Module","module_edit.php",,,1
-	,"Edit Module Settings","module_list.php",,,1
+	,"View Module Intro Text","module_header.php?action=list",,,1
+	,"Add Module Intro Text","module_hedear.php",,,1
+	,"Add Module","module.php",,,1
+	,"Edit Module Settings","module.php?action=list",,,1
 
 
 		])	

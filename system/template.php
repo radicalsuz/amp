@@ -1,5 +1,5 @@
 <?php
-$modid = "";
+$modid = "31";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
