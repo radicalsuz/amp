@@ -24,9 +24,11 @@ function file_list($file){
 			$fileArr[$file_name] = $file_name;
 		}
 	}
-	ksort($fileArr);
-	//reset($fileArr);
-	return $fileArr;
+	$keys = array_keys($fileArr);
+  	natsort($keys);
+	foreach ($keys as $k)
+   		$fileArr2[$k] = $fileArr[$k];
+	return $fileArr2;
 } 
  
 if ($userper[2] or  $userper[1] ) { } else { header ("Location: index.php"); }
