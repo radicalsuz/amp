@@ -21,16 +21,14 @@ function file_list($file){
 	while ($file_name = readdir($dir))
 	{
 		if (($file_name !=".") && ($file_name != "..")) {
-			#Get file modification date...
-			$fName = "$dir_name/$file_name";
-			$fTime = filemtime($fName);
 			$fileArr[$file_name] = $file_name;
-			//$fileArr[$file_name][Date] = $fTime;    
 		}
 	}
-
+	ksort($fileArr);
+	reset($fileArr);
 	return $fileArr;
-}  
+} 
+ 
 if ($userper[2] or  $userper[1] ) { } else { header ("Location: index.php"); }
 if (isset($preview)) {header ("Location: ../article.php?id=$id&preview=1");} 
 
@@ -505,10 +503,14 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td colspan="2" valign="top"><?php echo helpme("Attached Document"); ?> 
               Attached Document</td>
           </tr>
+		  <?php		$filelist = file_list('downloads/'); 
+		$Doc = & new Select('doc',$filelist,$r->Fields("doc"));
+		echo $buildform->add_row('Document Name', $Gal);
+ ?>
+
           <tr> 
-            <td valign="top"><span align="left" class="name">Document Name</span></td>
-            <td> <input name="doc" size="50" value="<?php echo $r->Fields("doc")?>" > 
-              <br> <span class="text"><a href="docdir.php" target="_blank">view 
+            <td valign="top"><</td>
+            <td><span class="text"><a href="docdir.php" target="_blank">view 
               documents</a> | <a href="doc_upload.php" target="_blank">upload 
               document</a> </span></td>
           </tr>
