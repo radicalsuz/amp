@@ -1,6 +1,25 @@
 <?php
 
-function udm_AMPlist_add_subscriber () {
+function udm_AMPlist_getOptions ( &$udm ) {
+
+    $lists_rs = $udm->dbcon->Execute( "SELECT id, name FROM lists ORDER BY name ASC" )
+        or die( "Couldn't obtain list information: " . $udm->dbcon->ErrorMsg() );
+
+    $lists[ '' ] = 'none';
+    while ( $row = $lists_rs->FetchRow() ) {
+        $lists[ $row[ 'id' ] ] = $row[ 'name' ];
+    }
+
+    $options = array( 'listID' => array( 'label' => 'Mailing List',
+                                         'type' => 'select',
+                                         'values' => $lists )
+                    );
+
+    return $options;
+
+}
+
+function udm_AMPlist_add_subscriber ( &$udm, $options = null ) {
 
 	$dbcon = $udm->dbcon;
 	$uid = $udm->uid;

@@ -29,40 +29,6 @@ if ( !function_exists( 'file_exists_incpath' ) ) {
     }
 }
 
-if (!function_exists( 'array_intersect_key' ) ) {
-
-    function array_intersect_key() {
-
-        $numArgs = func_num_args();
-
-        if (2 <= $numArgs) {
-
-            $arrays =& func_get_args();
-
-            for ($idx = 0; $idx < $numArgs; $idx++) {
-                if (! is_array($arrays[$idx])) {
-                    trigger_error('Parameter ' . ($idx+1) . ' is not an array', E_USER_ERROR);
-                    return false;
-                }
-            }
-
-            foreach ($arrays[0] as $key => $val) {
-                for ($idx = 1; $idx < $numArgs; $idx++) {
-                    if (! array_key_exists($key, $arrays[$idx])) {
-                        unset($arrays[0][$key]);
-                    }
-                }
-            }
-
-            return $arrays[0];
-        }
-
-        trigger_error('Not enough parameters; two arrays expected', E_USER_ERROR);
-        return false;
-    }
-
-}
-
 if ( !function_exists( 'ampredirect' ) ) {
 
     function ampredirect($url) {
