@@ -116,10 +116,10 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
        if (!isset($field_def['enabled']) || $field_def['enabled'] != 1) return false;
     }
 
-    $type     = (isset($field_def['type']))   ? $field_def['type'] : null;
+    $type     = (isset($field_def['type']))   ? $field_def['type']     : null;
     $label    = (isset($field_def['label']))  ? $field_def[ 'label'  ] : null;
     $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
-    $size     = (isset($field_def['size']))   ? $field_def[ 'size' ] : null;
+    $size     = (isset($field_def['size']))   ? $field_def[ 'size' ]   : null;
 
     $renderer =& $form->defaultRenderer();
 
@@ -159,7 +159,8 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     }
 
     // Add a default blank value to the select array.
-    if ( $type  == 'select' && is_array( $defaults ) ) $defaults = array('' => 'Select one') + $defaults;
+    if ( $type == 'select' && is_array( $defaults ) ) $defaults = array('' => 'Select one') + $defaults;
+    if ( $type == 'header' && (strlen($defaults) > 0) ) $label = $defaults;
     
     $form->addElement( $type, $name, $label, $defaults );
 
