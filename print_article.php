@@ -1,10 +1,7 @@
 <?php
  
 $mod_id=1;
-include("sysfiles.php");
-#include("includes/base.php");
-#include("includes/moduleintro.php");
-  //require_once("Connections/functions.php");
+require_once("sysfiles.php");
 $MM_id = $id;
 ?>	
 <html>
