@@ -15,6 +15,7 @@ function magpienav($url,$num_items=NULL,$title=NULL,$html1=NULL,$html2=NULL,$htm
 		$title = $item['title'];
 		$shownav.= $html3."<a href=$href class=sidelist>$title</a>".$html4;
 	}
+	$shownav.= $html5;
 	return $shownav;
 }
 
