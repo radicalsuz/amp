@@ -80,7 +80,7 @@ $nav_link .= '<ul class=side>';
 
 for ($x=0; $x<sizeof($sys_nav[$modid]); $x++) {
 	if ($sys_nav[$modid][$x]['title']) {
-		$nav_link .= '<li class ="sidetitle">'.$sys_nav[$modid][$x]['title'].'</li>';
+		$nav_link .= '</ul><p class ="sidetitle">'.$sys_nav[$modid][$x]['title'].'</p><ul class=side>';
 	} else 
 		$nav_link .= '<li><a href="'.$sys_nav[$modid][$x]['link'].'" >'.$sys_nav[$modid][$x]['name'].'</a></li>';
 }
