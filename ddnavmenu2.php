@@ -9,7 +9,7 @@ To Do:
 *********************/ 
 
  $navtop=$dbcon->CacheExecute("SELECT id, type, image, useimage  FROM articletype WHERE parent = 2 and usenav =1")or DIE($dbcon->ErrorMsg()); ?>
-<SCRIPT language=JavaScript src="Connections/milo_menu_src.js" type=text/javascript></SCRIPT>
+<SCRIPT language=JavaScript src="scripts/milo_menu_src.js" type=text/javascript></SCRIPT>
 <SCRIPT language=JavaScript>
 _menuCloseDelay=500           // The time delay for menus to remain visible on mouse out
 _menuOpenDelay=150            // The time delay before menus open on mouse over

@@ -9,8 +9,7 @@ To Do:  make multiple var pages send
 
 *********************/ 
 $modid = 22;
-require_once("adodb/adodb.inc.php");
-require_once("Connections/freedomrising.php");
+include("AMP/BaseDB.php");
 if (isset($modid)){
 $modinstance = $dbcon->CacheExecute("SELECT * from module_control where modid = $modid") or DIE($dbcon->ErrorMsg());
 while (!$modinstance->EOF) {

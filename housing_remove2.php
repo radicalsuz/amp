@@ -8,41 +8,30 @@ To Do:  declare POST vars
 *********************/ 
 
 $modid = 3;
-$mod_id = 19;
-include("sysfiles.php");
-include("header.php"); 
-include("dropdown.php"); 
-?><?php
-  // *** Edit Operations: declare Tables
-  $MM_editAction = $PHP_SELF;
-  if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
-  }
+$intro_id = 19;
+include("AMP/BaseDB.php");
+include("AMP/BaseTemplate.php");
+include("AMP/BaseModuleIntro.php");  
 
-  $MM_abortEdit = 0;
-  $MM_editQuery = "";
-?><?php
-  // *** Update Record: set variables
+if (isset($_POST["MM_update"]) && (isset($_POST["MM_recordId"]))) {
   
-  if (isset($MM_update) && (isset($MM_recordId))) {
-  
-//    $MM_editConnection = $MM_freedomrising_STRING;
     $MM_editTable  = "housing";
     $MM_editColumn = "id";
-    $MM_recordId = "" . $MM_recordId . "";
+    $MM_recordId = $_POST["MM_recordId"] ;
     $MM_editRedirectUrl = "housing.php";
     $MM_fieldsStr = "publish|value";
     $MM_columnsStr = "publish|none,none,NULL";
-     require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php"); }
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
+}
 
 $called__MMColParam = "1";
-if (isset($HTTP_GET_VARS["email"]))
-  {$called__MMColParam = $HTTP_GET_VARS["email"];}
+if (isset($_GET["email"])){
+	$called__MMColParam = $_GET["email"];
+}
 
-   $called=$dbcon->Execute("SELECT *  FROM housing  WHERE email = '" . ($called__MMColParam) . "'") or DIE($dbcon->ErrorMsg());
-   $called_numRows=0;
-   $called__totalRows=$called->RecordCount();
+$called=$dbcon->Execute("SELECT *  FROM housing  WHERE email = '" . ($called__MMColParam) . "'") or DIE($dbcon->ErrorMsg());
+
 ?>
 
 <form ACTION="<?php echo $MM_editAction?>" METHOD="POST" name="form1">
@@ -56,8 +45,6 @@ if (isset($HTTP_GET_VARS["email"]))
   <input type="hidden" name="MM_update" value="true">
   <input type="hidden" name="MM_recordId" value="<?php echo $called->Fields("id") ?>">
 </form>
-
 <?php
-  $called->Close();
+include("AMP/BaseFooter.php"); 
 ?>
-<?php include("footer.php"); ?>

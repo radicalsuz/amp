@@ -7,11 +7,11 @@ CSS: text, form
 To Do: 
 *********************/ 
 $modid = 3;
-$mod_id = 8;
+$intro_id = 8;
 
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
-include("includes/moduleintro.php"); 
+include("AMP/BaseModuleIntro.php");  
 
 
 $housing=$dbcon->CacheExecute("SELECT *  FROM userdata  Where  custom1='Have Housing' and custom19 =1 and modin= 11 ORDER BY id DESC") or DIE($dbcon->ErrorMsg());
@@ -89,4 +89,4 @@ $nhousing=$dbcon->CacheExecute("SELECT *  FROM userdata  Where   custom1='Need H
 </table>
 <?php  $nhousing->MoveNext(); }?><br><br><br>
 <?php 
-include("footer.php");?>
+include("AMP/BaseFooter.php");?>

@@ -10,8 +10,9 @@ To Do:
 
 $mod_id = 57;
 $modid = 1;
-include("sysfiles.php");
-include("header.php");
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 
 //$bydate= $_GET[bydate];
 //$caltype = $caltype;
@@ -261,4 +262,4 @@ else {
   $event->Close();
   $revent->Close();
    
- include("footer.php"); ?>
+ include("AMP/BaseFooter.php"); ?>

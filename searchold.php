@@ -9,8 +9,9 @@
 */
  
  $mod_id = 40;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 require('search/config/config.php');
 require('search/libs/utils.php');
 
@@ -130,4 +131,4 @@ if ($config['debug'])
 /* End of Main */
 
 ?>
-<?php include ("footer.php");?>
+<?php include ("AMP/BaseFooter.php");?>

@@ -1,11 +1,12 @@
- <?php  //include_once "Connections/jpcache-sql.php"; 
+ <?php  // 
 
 if  (isset($HTTP_GET_VARS["mod"])) {$mod_id = $mod ; }
 else {$mod_id = 41;}
  if ($HTTP_GET_VARS["thank"] == ("1")) { 
 	  $mod_id = 49 ;}
-include("sysfiles.php");
-include("header.php"); ?>
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); ?>
 <?php
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
@@ -31,8 +32,8 @@ include("header.php"); ?>
 $emailtext = " Title = $title \nSubitle = $subtitle \nTitle = $article \nAuthor = $author \n Source = $source \nContact = $contact \n ";
 	mail ( "$MM_email_usersubmit", "user submited article", "$emailtext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
   
-  require ("Connections/insetstuff.php");
-require ("Connections/dataactions.php");
+  require ("DBConnections/insetstuff.php");
+require ("DBConnections/dataactions.php");
 
    }
   
@@ -99,6 +100,6 @@ require ("Connections/dataactions.php");
  
 	 
 
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php"); ?>
 
 

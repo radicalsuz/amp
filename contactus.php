@@ -6,22 +6,20 @@ Description:  sends email to $MM_email_contact
 To Do: declare post vars
 
 *********************/ 
- include_once "Connections/jpcache-sql.php"; 
 $modid =17;
-$mod_id = 52;
-if ($_POST[thank] == ("1")) { 
-	  $mod_id = 53 ;}
-include("sysfiles.php");
-include("header.php");
+$intro_id = 52;
+if ($_POST["thank"] == ("1")) { 
+	  $mod_id = 53 ;
+}
+include("AMP/BaseDB.php");
+include("AMP/BaseTemplate.php");
+include("AMP/BaseModuleIntro.php");  
 
-if ($send == 1) {    
- mail ( "$MM_email_contact", "$subject", "$message", "From: $email \nX-Mailer: My PHP Script\n");
-//
+if ( ($_POST["send"] == 1) && ($MM_email_contact) ) {    
+	mail ( $MM_email_contact, $_POST["subject"], $_POST["message"], "From: ".$_POST["email"]." \nX-Mailer: My PHP Script\n");
 }
 
-	
-
- if ($_POST[thank] == ($null)) { ?>
+if ($_POST["thank"] == (NULL)) { ?>
 <form method="post" action="<?php $PHP_SELF."?thank=1" ; ?>"><table width="100%" border="0" cellspacing="0" cellpadding="5" class="form">
   <tr> 
     <td valign="top">Your E-Mail:</td>
@@ -46,4 +44,5 @@ if ($send == 1) {
 <?php
 }
  
- include("footer.php"); ?>
+include("AMP/BaseFooter.php");
+?>

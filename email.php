@@ -11,11 +11,12 @@ To Do:  declare  post vars
 
 *********************/ 
 
- //include_once "Connections/jpcache-sql.php"; 
+ // 
 $mod_id = 20;
 $modid=9;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 
  ##################get the list of lists ########################
  $lists=$dbcon->Execute("SELECT * FROM lists where publish=1 ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
@@ -73,8 +74,8 @@ if (isset($MM_insert)){
    $MM_fieldsStr = "lastname|value|firstname|value|organization|value|select|value|email|value|phone|value|fax|value|web|value|address1|value|address2|value|city|value|state|value|zip|value|country|value|description|value|html|value|student|value";
    $MM_columnsStr = "lastname|',none,''|firstname|',none,''|organization|',none,''|type|',none,''|email|',none,''|phone|',none,''|fax|',none,''|url|',none,''|address1|',none,''|address2|',none,''|city|',none,''|state|',none,''|zip|',none,''|country|',none,''|description|',none,''|html|none,1,0|student|none,1,0";
 
-  require ("Connections/insetstuff.php");
-  require ("Connections/dataactions.php");
+  require ("DBConnections/insetstuff.php");
+  require ("DBConnections/dataactions.php");
   
   
  $newrec=$dbcon->Execute("SELECT id FROM email ORDER BY id desc LIMIT 1") or DIE($dbcon->ErrorMsg());  
@@ -88,8 +89,8 @@ $listid = $lists->Fields("id");
  $MM_editTable  = "subscription";
   $MM_fieldsStr = "recid|value|listid|value";
    $MM_columnsStr = "userid|none,none,NULL|listid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
 	}
 	
 	$Repeat1__index++;
@@ -107,8 +108,8 @@ if  (isset($MM_update)){  //start update
 	$MM_recordId = "" . $MM_recordId . "";
    $MM_fieldsStr = "lastname|value|firstname|value|organization|value|select|value|email|value|phone|value|fax|value|web|value|address1|value|address2|value|city|value|state|value|zip|value|country|value|description|value|html|value|student|value";
    $MM_columnsStr = "lastname|',none,''|firstname|',none,''|organization|',none,''|type|',none,''|email|',none,''|phone|',none,''|fax|',none,''|url|',none,''|address1|',none,''|address2|',none,''|city|',none,''|state|',none,''|zip|',none,''|country|',none,''|description|',none,''|html|none,1,0|student|none,1,0";
-   require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+   require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
 
 $userid= $MM_recordId;
 $MM_update = ($null);
@@ -123,8 +124,8 @@ while (($Repeat1__numRows-- != 0) && (!$lists->EOF))
 	$MM_editTable  = "subscription";
   $MM_fieldsStr = "listid|value|userid|value";
    $MM_columnsStr = "listid|none,none,NULL|userid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");}
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");}
 
 
 	if ($instance == ($null)) { //start delete
@@ -137,8 +138,8 @@ $supvar= "b".$listid;
   $MM_editColumn = "id";  
 $MM_editTable  = "subscription";
   
-	require ("Connections/insetstuff.php");
-   require ("Connections/dataactions.php");}
+	require ("DBConnections/insetstuff.php");
+   require ("DBConnections/dataactions.php");}
 }//end deletet	
 	 
 	
@@ -296,7 +297,7 @@ $instance=$dbcon->Execute("SELECT id FROM subscription WHERE userid = ".$Records
  if ($HTTP_GET_VARS["thank"] == ("1")) { ?>
 <?php 
 	  $mod_id = 24 ;
-	  include("module.inc.php"); ?>
+	  include("AMP/BaseModuleIntro.php"); ?>
 <?php } //end thank you
 	  
  ############# thank you 2###############
@@ -312,4 +313,4 @@ $instance=$dbcon->Execute("SELECT id FROM subscription WHERE userid = ".$Records
 
  $state->Close();
   $Recordset1->Close();?>
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php"); ?>

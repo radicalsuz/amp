@@ -12,8 +12,9 @@ else {
 
 $modid=40;
 
-include("includes/base.php");
-include("includes/moduleintro.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 include_once("includes/dbfunctions.php"); 
 require($base_path."includes/volfunctions.php");
 //require($base_path."includes/diaemailfunctions.php");
@@ -28,8 +29,8 @@ if ((($_POST[MM_update]) && ($_POST[MM_recordId])) or ($_POST[MM_insert]) or (($
 	$MM_fieldsStr = "Title|value|Last_Name|value|Suffix|value|First_Name|value|MI|value|Company|value|Notes|value|Email|value|Phone|value|Cell_Phone|value|Phone_Provider|value|Work_Phone|value|Pager|value|Home_Fax|value|WebPage|value|Street|value|City|value|State|value|Zip|value|Country|value|timestamp|value|Work_Fax|value|Street_2|value|Street_3|value|custom1|value|custom2|value|custom3|value|custom4|value|custom5|value|custom6|value|custom7|value|custom8|value|custom9|value|custom10|value|custom11|value|custom12|value|custom13|value|custom14|value|custom15|value|custom16|value|custom17|value|custom18|value|custom19|value|custom20|value|modinid|value|publish|value|region|value|occupation|value|Email|value";
 	
 	$MM_columnsStr = "Title|',none,''|Last_Name|',none,''|Suffix|',none,''|First_Name|',none,''|MI|',none,''|Company|',none,''|Notes|',none,''|Email|',none,''|Phone|',none,''|Cell_Phone|',none,''|Phone_Provider|',none,''|Work_Phone|',none,''|Pager|',none,''|Home_Fax|',none,''|Web_Page|',none,''|Street|',none,''|City|',none,''|State|',none,''|Zip|',none,''|Country|',none,''|timestamp|',none,''|Work_Fax|',none,''|Street_2|',none,''|Street_3|',none,''|custom1|',none,''|custom2|',none,''|custom3|',none,''|custom4|',none,''|custom5|',none,''|custom6|',none,''|custom7|',none,''|custom8|',none,''|custom9|',none,''|custom10|',none,''|custom11|',none,''|custom12|',none,''|custom13|',none,''|custom14|',none,''|custom15|',none,''|custom16|',none,''|custom17|',none,''|custom18|',none,''|custom19|',none,''|custom20|',none,''|modin|',none,''|publish|',none,''|region|',none,''|occupation|',none,''|pemail|',none,''";
-	require ("Connections/insetstuff.php");
-	require ("Connections/dataactions.php");
+	require ("DBConnections/insetstuff.php");
+	require ("DBConnections/dataactions.php");
 	if ($_POST[custom12] && $_POST[MM_insert]) {
 	  $supporter = array('Title' => $Title, 'Last_Name' => $Last_Name, 'Suffix' => $Suffix, 'First_Name' => $First_Name, 'MI' => $MI, 'Company' => $Company, 'Notes' => $Notes, 'Email' => $Email, 'Phone' => $Phone, 'Cell_Phone' => $Cell_Phone, 'Phone_Provider' => $Phone_Provider, 'Work_Phone' => $Work_Phone, 'Pager' => $Pager, 'Home_Fax' => $Home_Fax, 'WebPage' => $WebPage, 'Street' => $Street, 'City' => $City, 'State' => $State, 'Zip' => $Zip, 'Country' => $Country,  'Work_Fax' => $Work_Fax, 'Street_2' => $Street_2, 'Street_3' => $Street_3, 'occupation' => $occupation    );
 	
@@ -265,4 +266,4 @@ echo "</form>";
  
  }
 
-include("footer.php"); ?>
+include("AMP/BaseFooter.php"); ?>

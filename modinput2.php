@@ -1,8 +1,7 @@
 <?php 
 
 
-  require_once("adodb/adodb.inc.php");
-  require_once("Connections/freedomrising.php");
+include("AMP/BaseDB.php");
   include_once("dropdown.php");
   
 //get instance of the custom input module and define $mod_id	 
@@ -80,9 +79,8 @@ function customfields ($fieldtext,$fieldname,$fielddata,$pub) {
 			echo "</td> </tr>"; } 
 	} 
 //build template		
-  require_once("Connections/modhierarchy.php");  
-  require_once("Connections/templateassign.php");
-  include_once("header.php"); 
+include("AMP/BaseTemplate.php");
+include("AMP/BaseModuleIntro.php");
   
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
@@ -113,8 +111,8 @@ if ( !$emailck->Fields("id") ) {
    $MM_editTable  = "email";
    $MM_fieldsStr = "EmailAddress|value|LastName|value|FirstName|value|Organization|value |html|value|Phone|value|WebPage|value|Address|value|Address2|value|City|value|State|value|PostalCode|value|Country|value|Fax|value";
    $MM_columnsStr = "email|',none,''|lastname|',none,''|firstname|',none,''|organization|',none,''|html|none,1,0|phone|',none,''|url|',none,''|address1|',none,''|address2|',none,''|city|',none,''|state|',none,''|zip|',none,''|country|',none,''|fax|',none,''";
-  require ("Connections/insetstuff.php");
-  require ("Connections/dataactions.php");
+  require ("DBConnections/insetstuff.php");
+  require ("DBConnections/dataactions.php");
   
   
  $newrec=$dbcon->Execute("SELECT id FROM email ORDER BY id desc LIMIT 1") or DIE($dbcon->ErrorMsg());  
@@ -128,8 +126,8 @@ if ( !$emailck->Fields("id")) {
  $MM_editTable  = "subscription";
   $MM_fieldsStr = "recid|value|listid|value";
    $MM_columnsStr = "userid|none,none,NULL|listid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
 	}}
 	if ($_POST[list2]) {
 $listid = $_POST[listid2]; 
@@ -138,8 +136,8 @@ if ( !$emailck->Fields("id")) {
  $MM_editTable  = "subscription";
   $MM_fieldsStr = "recid|value|listid|value";
    $MM_columnsStr = "userid|none,none,NULL|listid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
 	}	}
 	if ($_POST[list3]) {
 $listid = $_POST[listid3]; 
@@ -148,8 +146,8 @@ if ( !$emailck->Fields("id")) {
  $MM_editTable  = "subscription";
   $MM_fieldsStr = "recid|value|listid|value";
    $MM_columnsStr = "userid|none,none,NULL|listid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
 	}}	
 
 	} 
@@ -207,8 +205,8 @@ if (emailisvalid($mailto)) {mail ( "$mailto", "$subject",
 		\nPlease visit ".$Web_url."system/moddata.php?modin=$modin&id=$idval to publish", 
 		"From: $MM_email_from\nX-Mailer: My PHP Script\n"); }
 		$recent->close();}
-  require ("Connections/insetstuff.php");
-   require ("Connections/dataactions.php");
+  require ("DBConnections/insetstuff.php");
+   require ("DBConnections/dataactions.php");
     
 	//insert into contacts database
 	 $MM_editTable  = "contacts2";
@@ -217,8 +215,8 @@ if (emailisvalid($mailto)) {mail ( "$mailto", "$subject",
 	 $enteredby= $customfields->Fields("enteredby");
 	 $MM_fieldsStr = "Organization|value|FirstName|value|LastName|value|EmailAddress|value|Phone|value|Fax|value|WebPage|value|Address|value|Address2|value|City|value|State|value|PostalCode|value|Country|value|notes|value|source|value|enteredby|value";
 	 $MM_columnsStr = "Company|',none,''|FirstName|',none,''|LastName|',none,''|EmailAddress|',none,''|BusinessPhone|',none,''|BusinessFax|',none,''|WebPage|',none,''|BusinessStreet|',none,''|BusinessStreet2|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|notes|',none,''|source|none,none,NULL|enteredby|none,none,NULL";
-	  require ("Connections/insetstuff.php");
- require ("Connections/dataactions.php");
+	  require ("DBConnections/insetstuff.php");
+ require ("DBConnections/dataactions.php");
 
 
    }
@@ -413,8 +411,8 @@ if (emailisvalid($mailto)) {mail ( "$mailto", "$subject",
 	  
 	   if ($HTTP_GET_VARS["thank"] == ("1")) {
       	 // $mod_id = $customfields->Fields("modidresponse") ;
-	 // include("module.inc.php"); 
+	 // include("AMP/BaseModuleIntro.php"); 
       } //end thank you
 
- include_once("footer.php"); 
+ include_once("AMP/BaseFooter.php"); 
 ?>

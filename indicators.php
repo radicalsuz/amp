@@ -1,8 +1,9 @@
 <?php
 $modid =101;
 $mod_id = 100 ;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 
 
 $Recordset1=$dbcon->Execute("SELECT * FROM neip WHERE id = $_GET[id] ") or DIE($dbcon->ErrorMsg());
@@ -189,4 +190,4 @@ $Recordset1=$dbcon->Execute("SELECT * FROM neip WHERE id = $_GET[id] ") or DIE($
       <td><?php echo $Recordset1->Fields("action_implications");?></textarea></td>
     </tr>
   </table>
-  <?php include("footer.php");?>
+  <?php include("AMP/BaseFooter.php");?>

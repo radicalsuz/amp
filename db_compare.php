@@ -123,6 +123,6 @@ Enter master database template for comparison:<BR>
 #$dbcon->cacheSecs = $cacheSecs;
 	
 #INCLUDE FUNCTIONS
-#require ($base_path."Connections/functions.php");
+
 
 ?>

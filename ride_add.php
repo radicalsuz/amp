@@ -1,8 +1,9 @@
 <?php 
 $modid = 2;
 $mod_id = 5;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 include("dropdown.php"); 
 
   // *** Edit Operations: declare Tables
@@ -33,8 +34,8 @@ if (isset($MM_insert)){
 $messagetext2 = "\nPlease visit ".$Web_url."ride_confirm.php?email=$email to confirm your ride board posting./n/n Information: $phone, $email, $departingform, $depaturedate, $returningto, $retundate, $numpeople, $ride, $comments ";
  mail ( "$email", "confirm your ride board posting", "$messagetext2", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); }
 
-     require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php"); } 
+     require ("DBConnections/insetstuff.php"); 
+require ("DBConnections/dataactions.php"); } 
 
 ?>
      <form name="rieinput" action="<?php echo $MM_editAction?>" method="POST"> 
@@ -100,4 +101,4 @@ require ("Connections/dataactions.php"); }
             </form>
             
         
- <?php include("footer.php"); ?>     
+ <?php include("AMP/BaseFooter.php"); ?>     

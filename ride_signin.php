@@ -11,9 +11,9 @@ $modid = 100;
 $mod_id = 64;
 #$modinid=52;
 ob_start();
-include("includes/base.php");
-include("includes/moduleintro.php");  
-
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 
 function getid($uid) {
 	global $dbcon,$board, $modinid;
@@ -182,5 +182,5 @@ If you have not used the ride board before, <a href="ride_add_offer.php">click h
 	#header ("Location: ".$Web_url."rides.php?uid=".$user->Fields("uniqueid"));
 }
 ob_end_flush();		
-include("footer.php"); 
+include("AMP/BaseFooter.php"); 
 ?>

@@ -4,9 +4,9 @@ $modid = 100;
 $mod_id = 62;
 #$modinid=52;
 
-include("includes/base.php");
-
-include("includes/moduleintro.php");  
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 include("dropdown.php"); 
 $board="ride";
 
@@ -47,8 +47,8 @@ if ($MM_insert||$MM_update){
 	# echo $dbcon->ErrorMsg();
 #}
 
-require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php"); 
+require ("DBConnections/insetstuff.php"); 
+require ("DBConnections/dataactions.php"); 
 
 ob_end_flush();
 }
@@ -125,7 +125,7 @@ if($_POST[pemail]) { //load form POST vars
       <td align="right" class="form"><div align="left"  class="bodygreystrong">I am willing to Organize a Bus</div></td><td> <input type="radio" name="ride" value="org"<?php if ($ride=="org") echo " CHECKED";?>> </td></tr>
       </table>
     </center>
-<P>&nbsp;<P>
+<P><P>
 	</td>
 	</tr>
     <tr> 
@@ -201,4 +201,4 @@ if($_POST[pemail]) { //load form POST vars
 			</form>
             
   </center>      
- <?php include("footer.php"); ?>     
+ <?php include("AMP/BaseFooter.php"); ?>     

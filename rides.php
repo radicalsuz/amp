@@ -3,8 +3,9 @@
 $mod_id = 63;
 $modid = 100;
 ob_start();
-include("includes/base.php");
-include("includes/moduleintro.php");  
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 include("dropdown.php"); 
 $board="ride";
 $confirmcolor="#F389A9";
@@ -147,4 +148,4 @@ if ($have__totalRows>0) {
 }  $have->Close();
  } 
  ob_end_flush();
- include("footer.php"); ?>
+ include("AMP/BaseFooter.php"); ?>

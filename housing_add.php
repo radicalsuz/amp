@@ -14,44 +14,37 @@ To Do:  	declare POST vars
 				
 *********************/ 
 $modid = 3;
-$mod_id = 6;
-include("sysfiles.php");
-include("header.php"); 
-include("dropdown.php"); 
+$intro_id = 6;
+include("AMP/BaseDB.php");
+include("AMP/BaseTemplate.php");
+include("AMP/BaseModuleIntro.php");  
 
-  // *** Edit Operations: declare Tables
-  $MM_editAction = $PHP_SELF;
-  if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
-  }
 
-  $MM_abortEdit = 0;
-  $MM_editQuery = "";
-?><?php
-// *** Insert Record: set Variables
-
-if (isset($MM_insert)){
-
-   // $MM_editConnection = MM_freedomrising_STRING;
+if (isset($_POST["MM_insert"])){
    $MM_editTable  = "housing";
    $MM_fieldsStr = "firstname|value|lastname|value|email|value|phone|value|avalible|value|beds|value|floor|value|tents|value|access|value|location|value|transport|value|parking|value|cooking|value|children|value|smoking|value|info|value|publish|value|board|value";
    $MM_columnsStr = "firstname|',none,''|lastname|',none,''|email|',none,''|phone|',none,''|avalible|',none,''|beds|',none,''|floor|',none,''|tents|',none,''|access|',none,''|location|',none,''|transport|',none,''|parking|',none,''|cooking|',none,''|children|',none,''|smoking|',none,''|info|',none,''|publish|',none,''|board|none,none,none";
- //Mail to admin for confirmation
- if ($confirm == "admin") {
-  $MM_editRedirectUrl = "housing_confirm.php?step=admin"; 
-  $messagetext = "$firstname $lastname has added a posting to the ride board\n Information:$firstname, $Lastname,  $email, $phone,  $avalible, $beds, $floor,  $tents,  $access,  $location, $transport, $parking, $cooking, $children, $smoking, $info \n\nPlease visit ".$Web_url."housing_confirm.php?email=$email to publish";
-   mail ( "$MM_email_housing", "new housing board posting", "$messagetext", "From: $MM_email_from\nX-Mailer: My PHP Script\n");  }
+   
+//Mail to admin for confirmation
+ 	if ($confirm == "admin") {
+  		$MM_editRedirectUrl = "housing_confirm.php?step=admin"; 
+  		$messagetext = $_POST["firstname"]. ' ' .$_POST["lastname"]. " has added a posting to the ride board\n Information:$firstname, $Lastname,  $email, $phone,  $avalible, $beds, $floor,  $tents,  $access,  $location, $transport, $parking, $cooking, $children, $smoking, $info \n\nPlease visit ".$Web_url."housing_confirm.php?email=".$_POST["email"]." to publish";
+   		if ($MM_email_housing) {
+			mail ( $MM_email_housing, "new housing board posting", "$messagetext", "From: $MM_email_from\nX-Mailer: My PHP Script\n");  
+		}
+	}
+
 //Mail to poster for confirmation
- 
-if ($confirm == "poster") { 
- $MM_editRedirectUrl = "housing_confirm.php?step=email";
- $messagetext2 = "\nPlease visit ".$Web_url."housing_confirm.php?email=$email to confirm your housing board posting./n/n Information:$firstname, $Lastname/n  $email/n $phone/n  $avalible/n $beds/n $floor/n  $tents/n  $access/n  $location/n $transport/n $parking/n $cooking/n $children/n $smoking/n $info ";
-   mail ( "$email", "confirm your housing board posting", "$messagetext2", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); }
-
-     require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php"); }
-
-
+	if ($confirm == "poster") { 
+		$MM_editRedirectUrl = "housing_confirm.php?step=email";
+		$messagetext2 = "\nPlease visit ".$Web_url."housing_confirm.php?email=".$_POST["email"]." to confirm your housing board posting./n/n Information:$firstname, $Lastname/n  $email/n $phone/n  $avalible/n $beds/n $floor/n  $tents/n  $access/n  $location/n $transport/n $parking/n $cooking/n $children/n $smoking/n $info ";
+	   if ($_POST["email"]) {
+		   mail ( $_POST["email"], "confirm your housing board posting", "$messagetext2", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
+		}
+	}
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
+}
 
 ?>
       <table width="100%" border="0" cellspacing="0" cellpadding="15">
@@ -155,4 +148,4 @@ require ("Connections/dataactions.php"); }
                       </td>
         </tr>
       </table>
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php");  ?>

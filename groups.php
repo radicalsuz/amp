@@ -27,16 +27,16 @@ To Do:  write better sql
 $modid = 5;
 $mod_id = 58;
 
-//include("includes/base.php");
-//include("includes/moduleintro.php");  
-include("sysfiles.php");
+
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
 
 if (!$_REQUEST[in]) {$modinin =2; }
 else {$modinin = $_REQUEST[in];
 if ($_REQUEST[modid]) {$modid = $_REQUEST[modid]; }
 if ($_REQUEST[mod_id]) {$mod_id = $_REQUEST[mod_id]; }
 }
-include("header.php"); 
+include("AMP/BaseModuleIntro.php"); 
 
 
 //Construct SQL
@@ -324,4 +324,4 @@ include ("$groupslayout");
 }
 
 #############################################################
- include("footer.php"); ?>
+ include("AMP/BaseFooter.php"); ?>

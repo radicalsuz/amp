@@ -18,15 +18,15 @@ function email_is_valid($email) {
 	);
 }			
 
-$emailsubject = $_POST[emailsubject];
-$_POST[emailsubject] =NULL;
-$emailto = $_POST[emailto];
-$_POST[emailto] =NULL;
+$emailsubject = $_POST["emailsubject"];
+$_POST["emailsubject"] =NULL;
+$emailto = $_POST["emailto"];
+$_POST["emailto"] =NULL;
 $emailfrom = $_POST[emailfrom];
-$_POST[emailfrom] =NULL;
+$_POST["emailfrom"] =NULL;
 $redirect = $_POST["redirect"];
-$_POST[redirect] =NULL;
-$_POST[Submit] = NULL;
+$_POST["redirect"] =NULL;
+$_POST["Submit"] = NULL;
 #remove above variables from the Post array
 //$_POST[]
 # parse array with varaible names as subject and vale

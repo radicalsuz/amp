@@ -6,8 +6,9 @@ $enteredby =2;
 if (isset($MM_insert)){$mod_id = 24;}
 elseif ($p=="subscribe"){ $mod_id = 20; }
 else { $mod_id = 20; }
-include("sysfiles.php");
-include("header.php");
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 
 
  // *** Edit Operations: declare Tables
@@ -60,16 +61,16 @@ if ($emailck->Fields("id") == NULL){
    $MM_fieldsStr = "lastname|value|firstname|value|organization|value|select|value|email|value|phone|value|fax|value|web|value|address1|value|address2|value|city|value|State|value|zip|value|country|value|notes|value|html|value|student|value";
    $MM_columnsStr = "lastname|',none,''|firstname|',none,''|organization|',none,''|type|',none,''|email|',none,''|phone|',none,''|fax|',none,''|url|',none,''|address1|',none,''|address2|',none,''|city|',none,''|state|',none,''|zip|',none,''|country|',none,''|description|',none,''|html|none,1,0|student|none,1,0";
 
-  require ("Connections/insetstuff.php");
-  require ("Connections/dataactions.php");
+  require ("DBConnections/insetstuff.php");
+  require ("DBConnections/dataactions.php");
  } */
 
 $MM_editTable  = "contacts2";
   ##add sourceid and enteredby and date enetered
    $MM_fieldsStr = "firstname|value|email|value|lastname|value|organization|value|address|value|address2|value|city|value|state|value|zip|value|country|value|phone|value|fax|value|website|value|enteredby|value|sourceid|value|notes|value";
    $MM_columnsStr = "FirstName|',none,''|EmailAddress|',none,''|LastName|',none,''|Company|',none,''|BusinessStreet|',none,''|BusinessStreet2|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|BusinessPhone|',none,''|BusinessFax|',none,''|WebPage|',none,''|enteredby|',none,''|source|',none,''|notes|',none,''";
-   require ("Connections/insetstuff.php");
-   require ("Connections/dataactions.php");
+   require ("DBConnections/insetstuff.php");
+   require ("DBConnections/dataactions.php");
 
  
    }// end insert
@@ -242,4 +243,4 @@ function addFieldToCheck(value,name) {
 <?php }
 
  
- include("footer.php"); ?>
+ include("AMP/BaseFooter.php"); ?>

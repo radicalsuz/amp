@@ -1,8 +1,9 @@
 <?php
 $modid =101;
 $mod_id = 101 ;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 
 $R=$dbcon->Execute("SELECT id, question FROM neip  ") or DIE($dbcon->ErrorMsg());
 echo "<br><br>";
@@ -12,4 +13,4 @@ while (!$R->EOF) {
 	
 }
 
-include("footer.php");?>
+include("AMP/BaseFooter.php");?>

@@ -1,13 +1,9 @@
 <?php
+$intro_id = 13;
+include("AMP/BaseDB.php");
+include("AMP/BaseTemplate.php");
+include("AMP/BaseModuleIntro.php");  
 
-$mod_id = 13;
-include("sysfiles.php");
-include("header.php");
-#include("includes/base.php");
-#include("includes/moduleintro.php"); 
-
+echo $obj->print_full_menu_tree($MX_top); 
+include("AMP/BaseFooter.php"); 
 ?>
-
-
-<?php echo $obj->print_full_menu_tree($MX_top); ?>
-<?php include("footer.php"); ?>

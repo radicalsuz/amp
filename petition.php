@@ -6,41 +6,49 @@
 # required fields
 #  response pages 
 
+# modinput2 needs to be changed to modinput 4 and not break
+
 $modid = 7;
 $mod_id = 42;
-include("sysfiles.php");
-include("header.php"); 
+include_once("AMP/BaseDB.php");
+include_once("AMP/BaseTemplate.php");
+include_once("AMP/BaseModuleIntro.php");  
 
- $petitontx=$dbcon->Execute("SELECT * FROM petition where id = $pid") or DIE($dbcon->ErrorMsg());
+
+
+$petitontx=$dbcon->Execute("SELECT * FROM petition where id = ".$_GET["pid"]) or DIE("could not find petition".$dbcon->ErrorMsg());
 $petmod  =  $petitontx->Fields("udmid");
-$ptct= $dbcon->CacheExecute("SELECT  COUNT(DISTINCT id) FROM moduserdata u where u.modinid = $petmod and u.field19 = 1 order by u.id desc ") or DIE($dbcon->ErrorMsg());
+$_GET["modin"]=$petmod;
+$ptct= $dbcon->CacheExecute("SELECT  COUNT(DISTINCT id) FROM userdata  where modin = $petmod and custom19 = 1 order by id desc ") or DIE("could not get count".$dbcon->ErrorMsg());
 $count = $ptct->fields[0];
 if ($petitontx->Fields("datestarted") !="0000-00-00" or $petitontx->Fields("datestarted") != NULL ){
 $petition_started = DoDate($petitontx->Fields("datestarted"),"M, j Y");}
 if ($petitontx->Fields("dateended") !="0000-00-00" or $petitontx->Fields("dateended") != NULL){
 $petition_ends= DoDate($petitontx->Fields("dateended"),"M, j Y");}
+
 function progressBox() {
 	global   $petition_started,  $petition_ends, $count ;
 	echo "<table cellpadding=0 cellspacing=0 border=1 align=center bgcolor=\"#CCCCCC\" width=\"100%\"><tr><td>";
 	echo "\n\t<table border=0 cellspacing=0 cellpadding=0 width=\"100%\"><tr>";
 	if  ($petition_started){
-	echo "\n\t\t<td align=center class=form><small><B>Posted:<br>$petition_started</B></small></td>";}
-	
+		echo "\n\t\t<td align=center class=form><small><B>Posted:<br>$petition_started</B></small></td>";
+	}
 	if  ($petition_ends){
-	echo "\n\t\t<td align=center class=form><B><small>Petition Ends:<br>$petition_ends</small></B></td>";}
+		echo "\n\t\t<td align=center class=form><B><small>Petition Ends:<br>$petition_ends</small></B></td>";
+	}
 	echo "\n\t\t<td align=center class=form><small><B>Petition Signatures:&nbsp; $count</b></small></td>";
 	echo "\n\t</tr></table>";
 	echo "</td></tr></table>";
 }
 
- if ($_GET[pthank] ) { ?>
- <p>Thank you for signing this petition.</p><p></p><p></p>
- <?php }
+if ($_GET["pthank"] ) { 
+	echo "<p>Thank you for signing this petition.</p><p></p><p></p>";
+}
 
-  if ($_GET[signers] or $_GET[pthank]  ) {
-  if (!$_GET[offset]) {$offset= 0;}
-  else {$offset=$_GET[offset];}
-$pdif=$dbcon->CacheExecute("SELECT u.FirstName, u.LastName, u.Organization, u.notes, u.City,  s.state as State FROM moduserdata u, states s  where s.id=u.State  and u.modinid = $petmod and u.field19 = 1 order by u.id desc  Limit $offset, 25") or DIE($dbcon->ErrorMsg());
+if ($_GET["signers"] or $_GET["pthank"]  ) {
+	if (!$_GET["offset"]) {$offset= 0;}
+  	else {$offset=$_GET["offset"];}
+	$pdif=$dbcon->CacheExecute("SELECT First_Name, Last_Name, Company,Notes, City,  State  FROM userdata  where  modin = $petmod and u.custom19 = 1 order by .id desc  Limit $offset, 25") or DIE("could not find signers".$dbcon->ErrorMsg());
 ?>
 <a name="namelist"></a>
 <p class="title">Recent Petition Signers</p>
@@ -54,10 +62,10 @@ $pdif=$dbcon->CacheExecute("SELECT u.FirstName, u.LastName, u.Organization, u.no
   </tr>
   <?php while (!$pdif->EOF) { ?>
   <tr> 
-    <td class="text"><?php echo trim($pdif->Fields("FirstName"));?> <?php echo trim($pdif->Fields("LastName"));?></td>
-    <td class="text"><?php echo $pdif->Fields("Organization");?></td>
+    <td class="text"><?php echo trim($pdif->Fields("First_Name"));?> <?php echo trim($pdif->Fields("Last_Name"));?></td>
+    <td class="text"><?php echo $pdif->Fields("Company");?></td>
     <td class="text"><?php echo $pdif->Fields("City");?> <?php echo $pdif->Fields("State");?></td>
-    <td class="text"><?php echo $pdif->Fields("notes");?></td>
+    <td class="text"><?php echo $pdif->Fields("Notes");?></td>
   </tr>
   <?php  $pdif->MoveNext();}
   if ($count > 25) {
@@ -66,21 +74,20 @@ $pdif=$dbcon->CacheExecute("SELECT u.FirstName, u.LastName, u.Organization, u.no
     <td class="text"></td>
     <td class="text"></td>
     <td class="text"></td>
-    <td class="text"><a href="petition.php?pid=<?php echo $_GET[pid];?>&signers=1&offset=<?php echo ($offset + 25) ; ?>#namelist">Next 
+    <td class="text"><a href="petition.php?pid=<?php echo $_GET["pid"];?>&signers=1&offset=<?php echo ($offset + 25) ; ?>#namelist">Next 
       Page</a></td>
   </tr><?php } ?>
 
   
 </table>
-<P><a href="petition.php?pid=<?php echo $_GET[pid];?>">Sign the Petition</a></P>
+<P><a href="petition.php?pid=<?php echo $_GET["pid"];?>">Sign the Petition</a></P>
 <?php
-  echo "<br><br>";
-  }
-if(!$inputSubmit){
+	echo "<br><br>";
+}
 
-progressBox();
-echo "<P align=center><a href=\"petition.php?pid=".$_GET[pid]."&signers=1\">View Signatures</a></p>";
-  
+if(!$inputSubmit){
+	progressBox();
+	echo "<P align=center><a href=\"petition.php?pid=".$_GET["pid"]."&signers=1\">View Signatures</a></p>";
 ?>
       <p class="title"> 
         <?php echo $petitontx->Fields("title")?>
@@ -108,16 +115,12 @@ echo "<P align=center><a href=\"petition.php?pid=".$_GET[pid]."&signers=1\">View
 
  //recentSignatures(); 
 
- if (!$_GET[pthank] ) {
-$modin =$petmod  ;
+	if (!$_GET[pthank] ) {
+		$modin =$petmod  ;
 ?><p class="title">Sign Petition</p><?php
-include ("modinput2.php" );
+		include ("modinput4.php" );
+	}
 }
- }
 
-
-
-
-
-include_once("footer.php");
+include_once("AMP/BaseFooter.php");
 ?>

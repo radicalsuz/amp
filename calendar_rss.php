@@ -6,10 +6,9 @@ Description:  generates rss feed from calendar
 To Do:  make work, it is busted
 
 *********************/ 
- require_once("adodb/adodb.inc.php");
-require_once("Connections/freedomrising.php");?>
+include("AMP/BaseDB.php");
 
-<?php  $event=$dbcon->CacheExecute("SELECT calendar.*, states.statename, eventtype.name  FROM calendar LEFT JOIN states ON states.id = calendar.lstate left join eventtype on calendar.typeid=eventtype.id WHERE publish=1 and calendar.date > CURDATE()-1  order by calendar.date asc") or DIE($dbcon->ErrorMsg());
+ $event=$dbcon->CacheExecute("SELECT calendar.*, states.statename, eventtype.name  FROM calendar LEFT JOIN states ON states.id = calendar.lstate left join eventtype on calendar.typeid=eventtype.id WHERE publish=1 and calendar.date > CURDATE()-1  order by calendar.date asc") or DIE($dbcon->ErrorMsg());
  ?>
 <?php
    $Repeat2__numRows = 4;

@@ -4,8 +4,9 @@ $mod_id = 60;}
 else {$mod_id = 59;}
  $modid=40;
 
-include("sysfiles.php");
-include("header.php");
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
  
  ##################get the list of lists ########################
  $skill=$dbcon->Execute("SELECT * FROM vol_skill ORDER BY  orderby asc") or DIE($dbcon->ErrorMsg());
@@ -27,8 +28,8 @@ include("header.php");
    $MM_editTable  = "vol_people";
      $MM_fieldsStr = "last_name|value|first_name|value|email|value|city|value|state|value|zip|value|hood|value|address|value|phone|value|phone2|value|phone3|value|organization|value|notes|value|officenotes|value|avalibility|value|otherinterest|value|com1|value|com2|value|com3|value|mon_d|value|mon_n|value|tues_d|value|tues_n|value|wen_d|value|wen_n|value|thur_d|value|thur_n|value|fri_d|value|fri_n|value|sat_d|value|sat_n|value|sun_d|value|sun_n|value";
    $MM_columnsStr = "last_name|',none,''|first_name|',none,''|email|',none,''|city|',none,''|state|',none,''|zip|',none,''|hood|',none,''|address|',none,''|phone|',none,''|phone2|',none,''|phone3|',none,''|organization|',none,''|notes|',none,''|officenotes|',none,''|avalibility|',none,''|otherinterest|',none,''|com1|',none,''|com2|',none,''|com3|',none,''|mon_d|',none,''|mon_n|',none,''|tues_d|',none,''|tues_n|',none,''|wen_d|',none,''|wen_n|',none,''|thur_d|',none,''|thur_n|',none,''|fri_d|',none,''|fri_n|',none,''|sat_d|',none,''|sat_n|',none,''|sun_d|',none,''|sun_n|',none,''";
-  require ("Connections/insetstuff.php");
-  require ("Connections/dataactions.php");
+  require ("DBConnections/insetstuff.php");
+  require ("DBConnections/dataactions.php");
   
   
  $newrec=$dbcon->Execute("SELECT id FROM vol_people ORDER BY id desc LIMIT 1") or DIE($dbcon->ErrorMsg());  
@@ -42,8 +43,8 @@ $skillid = $skill->Fields("id");
  $MM_editTable  = "vol_relskill";
   $MM_fieldsStr = "personid|value|skillid|value";
    $MM_columnsStr = "personid|none,none,NULL|skillid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
 	}
 	
 	$Repeat1__index++;
@@ -58,8 +59,8 @@ $interestid = $interest->Fields("id");
  $MM_editTable  = "vol_relinterest";
   $MM_fieldsStr = "personid|value|interestid|value";
    $MM_columnsStr = "personid|none,none,NULL|interestid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
 	}
 	
 	$Repeat2__index++;
@@ -80,8 +81,8 @@ if  (isset($MM_update)){  //start update
    $MM_columnsStr = "last_name|',none,''|first_name|',none,''|email|',none,''|city|',none,''|state|',none,''|zip|',none,''|hood|',none,''|address|',none,''|phone|',none,''|phone2|',none,''|phone3|',none,''|organization|',none,''|notes|',none,''|officenotes|',none,''|avalibility|',none,''|otherinterest|',none,''|com1|',none,''|com2|',none,''|com3|',none,''|mon_d|',none,''|mon_n|',none,''|tues_d|',none,''|tues_n|',none,''|wen_d|',none,''|wen_n|',none,''|thur_d|',none,''|thur_n|',none,''|fri_d|',none,''|fri_n|',none,''|sat_d|',none,''|sat_n|',none,''|sun_d|',none,''|sun_n|',none,''";
    
 
-   require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+   require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");
 
 $personid= $MM_recordId;
 $MM_update = NULL;
@@ -97,8 +98,8 @@ while  (!$skill->EOF)
 	$MM_editTable  = "vol_relskill";
   $MM_fieldsStr = "skillid|value|personid|value";
    $MM_columnsStr = "skillid|none,none,NULL|personid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");}
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");}
 
 
 	if ($instance == (NULL)) { //start delete
@@ -111,8 +112,8 @@ $supvar= "b".$skillid;
   $MM_editColumn = "id";  
 $MM_editTable  = "vol_relskill";
   
-	require ("Connections/insetstuff.php");
-   require ("Connections/dataactions.php");}
+	require ("DBConnections/insetstuff.php");
+   require ("DBConnections/dataactions.php");}
 }//end deletet	
 	 
 	
@@ -133,8 +134,8 @@ while  (!$interest->EOF)
 	$MM_editTable  = "vol_relinterest";
   $MM_fieldsStr = "interestid|value|personid|value";
    $MM_columnsStr = "interestid|none,none,NULL|personid|none,none,NULL"; 
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");}
+	require ("DBConnections/insetstuff.php");
+    require ("DBConnections/dataactions.php");}
 
 
 	if ($instance2 == (NULL)) { //start delete
@@ -147,8 +148,8 @@ $supvar2= "c".$interestid;
   $MM_editColumn = "id";  
 $MM_editTable  = "vol_relinterest";
   
-	require ("Connections/insetstuff.php");
-   require ("Connections/dataactions.php");}
+	require ("DBConnections/insetstuff.php");
+   require ("DBConnections/dataactions.php");}
 }//end deletet	
 	 
 	
@@ -490,4 +491,4 @@ $instance=$dbcon->Execute("SELECT id FROM vol_relskill WHERE personid = ".$Recor
  if ($HTTP_GET_VARS["thank"] == ("1")) { 
  } //end thank you
 
- include("footer.php"); ?>
+ include("AMP/BaseFooter.php"); ?>

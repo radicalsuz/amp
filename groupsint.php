@@ -14,11 +14,12 @@ To Do:  write better sql
 				search box
 
 *********************/ 
- include_once "Connections/jpcache-sql.php";
+ 
 $modid = 5;
 $mod_id = 58;
-include("sysfiles.php");
-include("header.php"); ?>
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); ?>
 <?php
 if ($web_publish == 1){
 $webok = "and moduserdata.field5 = 1";}
@@ -176,4 +177,4 @@ while (!$dbcountry2->EOF)
 }}
 
 
- include("footer.php"); ?>
+ include("AMP/BaseFooter.php"); ?>

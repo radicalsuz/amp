@@ -1,8 +1,9 @@
 <?php
 $modid = 2;
 $mod_id = 5;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 include("dropdown.php"); 
 
   $MM_editAction = $PHP_SELF;
@@ -21,8 +22,8 @@ include("dropdown.php");
     $MM_editRedirectUrl = "ride.php";
     $MM_fieldsStr = "publish|value";
     $MM_columnsStr = "publish|none,none,NULL";
-   require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php"); }
+   require ("DBConnections/insetstuff.php"); 
+require ("DBConnections/dataactions.php"); }
 
 $called__MMColParam = "1";
 if (isset($HTTP_GET_VARS["email"]))
@@ -69,4 +70,4 @@ An e-mail has been sent to your e-mail account with insturctions on how to confi
   $called->Close();
 ?>
 
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php"); ?>

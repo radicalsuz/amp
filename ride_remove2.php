@@ -1,8 +1,9 @@
 <?php
 $modid = 2;
 $mod_id = 19;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 include("dropdown.php"); 
 ?><?php
   // *** Edit Operations: declare Tables
@@ -25,8 +26,8 @@ include("dropdown.php");
     $MM_editRedirectUrl = "ride.php";
     $MM_fieldsStr = "publish|value";
     $MM_columnsStr = "publish|none,none,NULL";
-     require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php"); }
+     require ("DBConnections/insetstuff.php"); 
+require ("DBConnections/dataactions.php"); }
 
 $called__MMColParam = "1";
 if (isset($HTTP_GET_VARS["email"]))
@@ -52,4 +53,4 @@ if (isset($HTTP_GET_VARS["email"]))
 <?php
   $called->Close();
 ?>
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php"); ?>

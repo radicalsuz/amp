@@ -1,8 +1,9 @@
 <?php
 $modid = 2;
 $mod_id = 19;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 include("dropdown.php"); 
 ?><?php
   // *** Edit Operations: declare Tables
@@ -69,4 +70,4 @@ $messagetext = "To remove your listing simply visit this page ".$Web_url."ride_r
 <?php
   $emails->Close();
 ?>
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php"); ?>

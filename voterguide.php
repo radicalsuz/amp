@@ -3,8 +3,9 @@
 $modid = 109;
 $mod_id = 74;
 
-include("includes/base.php");
-include("includes/moduleintro.php");  
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 
 function vg_postition($can,$pos,$reason=NULL) {
 		$position = "<p><i>Candidate/Ballot Item</i>:&nbsp;<B>$can</b><br><i>Position:</i>&nbsp;<B>$pos</B><br><i>Reason:</i>&nbsp;$reason</p><BR>";
@@ -63,5 +64,5 @@ else {
 	}
 }
 
- include("footer.php"); 
+ include("AMP/BaseFooter.php"); 
 ?>

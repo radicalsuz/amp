@@ -7,12 +7,13 @@ CSS: text, form
 To Do:  declare post vars, verify the required fields
 
 *********************/ 
- include_once "Connections/jpcache-sql.php"; 
+  
 
 $mod_id = 15;
 $modid=1;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 include("dropdown.php"); ?>
 
 <?php
@@ -36,8 +37,8 @@ if (isset($MM_insert)){
    $MM_editRedirectUrl = "calendar.php";
    $MM_fieldsStr = "type|value|startdate|value|time|value|event|value|description|value|longdescription|value|organization|value|contact|value|email|value|phone1|value|url|value|location|value|city|value|lstate|value|lcountry|value|laddress|value|lzip|value|fname2|value|lname2|value|organization2|value|address2|value|city2|value|state2|value|zip2|value|country2|value|email2|value|phone2|value|endorse|value|publish|value|repeat|value|student|value";
    $MM_columnsStr = "typeid|none,none,NULL|date|',none,NULL|time|',none,''|event|',none,''|shortdesc|',none,''|fulldesc|',none,''|org|',none,''|contact1|',none,''|email1|',none,''|phone1|',none,''|url|',none,''|location|',none,''|lcity|',none,''|lstate|',none,''|lcountry|',none,''|laddress|',none,''|lzip|',none,''|fname2|',none,''|lname2|',none,''|orgaznization2|',none,''|address2|',none,''|city2|',none,''|state2|',none,''|zip2|',none,''|country2|',none,''|email2|',none,''|phone2|',none,''|endorse|',none,''|publish|none,none,NULL|repeat|none,1,0|student|none,1,0";
- require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php");
+ require ("DBConnections/insetstuff.php"); 
+require ("DBConnections/dataactions.php");
   
   }
 
@@ -236,9 +237,9 @@ function MM_validateForm() { //v4.0
 	  <?php if ($HTTP_GET_VARS["thank"] == ("1")) { ?>
       <?php 
 	  $mod_id = 51 ;
-	  include("module.inc.php"); ?>
+	  include("AMP/BaseModuleIntro.php"); ?>
       <?php } //end thank you
   $state->Close();
   $eventtype->Close();
 ?>
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php"); ?>

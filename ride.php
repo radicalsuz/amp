@@ -3,7 +3,7 @@ $mod_id = 7;
 $modid = 2;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
-include("includes/moduleintro.php");  
+include("AMP/BaseModuleIntro.php");  
 
 $have=$dbcon->CacheExecute("SELECT *  FROM userdata  Where custom6 = 'Have a Ride to Offer' and  custom9='1' and modin=10  ORDER BY custom1 ASC") or DIE($dbcon->ErrorMsg());
 

@@ -1,8 +1,7 @@
-<?php  include_once  "Connections/jpcache-sql.php"; 
+<?php   
 
 
-  require_once("adodb/adodb.inc.php");
-  require_once("Connections/freedomrising.php");
+include("AMP/BaseDB.php");
   
 //get instance of the custom input module and define $mod_id	 
 	 $modin = $HTTP_GET_VARS[modin];
@@ -54,9 +53,8 @@
 	} 
 
 //build template		
-  require_once("Connections/modhierarchy.php");  
-  require_once("Connections/templateassign.php");
-  include("header.php"); 
+ include("AMP/BaseTemplate.php");
+  include("AMP/BaseModuleIntro.php"); 
   
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
@@ -112,8 +110,8 @@ mail ( "$mailto", "$subject",
 		\nPlease visit ".$Web_url."system/moddata.php?modin=$modin&id=$idval to publish", 
 		"From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
 		$recent->close();}
-  require ("Connections/insetstuff.php");
-   require ("Connections/dataactions.php");
+  require ("DBConnections/insetstuff.php");
+   require ("DBConnections/dataactions.php");
     
 	//insert into contacts database
 	 $MM_editTable  = "contacts2";
@@ -122,8 +120,8 @@ mail ( "$mailto", "$subject",
 	 $enteredby= $customfields->Fields("enteredby");
 	 $MM_fieldsStr = "Organization|value|FirstName|value|LastName|value|EmailAddress|value|Phone|value|Fax|value|WebPage|value|Address|value|Address2|value|City|value|State|value|PostalCode|value|Country|value|notes|value|source|value|enteredby|value";
 	 $MM_columnsStr = "Company|',none,''|FirstName|',none,''|LastName|',none,''|EmailAddress|',none,''|BusinessPhone|',none,''|BusinessFax|',none,''|WebPage|',none,''|BusinessStreet|',none,''|BusinessStreet2|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|notes|',none,''|source|none,none,NULL|enteredby|none,none,NULL";
-	  require ("Connections/insetstuff.php");
- require ("Connections/dataactions.php");
+	  require ("DBConnections/insetstuff.php");
+ require ("DBConnections/dataactions.php");
 
 
    }
@@ -243,8 +241,8 @@ mail ( "$mailto", "$subject",
 	  
 	   if ($HTTP_GET_VARS["thank"] == ("1")) {
       	 // $mod_id = $customfields->Fields("modidresponse") ;
-	 // include("module.inc.php"); 
+	 // include("AMP/BaseModuleIntro.php"); 
       } //end thank you
 
- include("footer.php"); 
+ include("AMP/BaseFooter.php"); 
 ?>

@@ -105,4 +105,4 @@ if ($navtop3->RecordCount() != 0) {
 
 dumpmenus()
 </script>
-<SCRIPT language=JavaScript src="Connections/mmenu.js" type=text/javascript></SCRIPT>
+<SCRIPT language=JavaScript src="scripts/mmenu.js" type=text/javascript></SCRIPT>

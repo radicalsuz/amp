@@ -9,8 +9,9 @@ if  (isset($HTTP_GET_VARS["mod"])) {
 }
 
 
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 
 $obj = new Menu; 
 // *** Edit Operations: declare Tables
@@ -35,8 +36,8 @@ if (isset($MM_insert)) {
 //	$emailtext = " Title = $title \nSubitle = $subtitle \nTitle = $article \nAuthor = $author \n Source = $source \nContact = $contact \n ";
 //	mail ( "$MM_email_usersubmit", "user submited article", "$emailtext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
   
-	require ("Connections/insetstuff.php");
-	require ("Connections/dataactions.php");
+	require ("DBConnections/insetstuff.php");
+	require ("DBConnections/dataactions.php");
 
 }
   
@@ -93,6 +94,6 @@ if ($HTTP_GET_VARS["thank"] == ($null)) { ?>
 
 //end if not thank you 
 
-include("footer.php");
+include("AMP/BaseFooter.php");
 
 ?>

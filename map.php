@@ -1,5 +1,5 @@
 <html>
-<head><?php  $filename = $_GET[file]; ?>
+<head><?php  $filename = $_GET["file"]; ?>
 <script>
 <!--
 function goState(id) {

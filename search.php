@@ -1,9 +1,11 @@
 <?php
-$mod_id = 40;
+$intro_id = 40;
 $modid = 19;
-include("sysfiles.php");
-include("header.php");
-$obj = new Menu;
+include("AMP/BaseDB.php");
+include("AMP/BaseTemplate.php");
+include("AMP/BaseModuleIntro.php");  
+
+//$obj = new Menu;
 				
   $day = (60 * 60 * 24);
 $yesterday =date('Y-m-d',( time() - $day));
@@ -189,4 +191,4 @@ $i++;
 
  <?php $searchx->MoveNext(); }  }
  
- include ("footer.php");?>
+include ("AMP/BaseFooter.php");?>

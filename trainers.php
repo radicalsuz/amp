@@ -1,8 +1,9 @@
- <?php  include_once  "Connections/jpcache-sql.php"; 
+ <?php   
 $modid=13;
 $mod_id = 43;
-include("sysfiles.php");
-include("header.php"); ?>
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); ?>
 <?php
 $areacalled__MMColParam = $HTTP_GET_VARS["area"];
 if  ((isset($HTTP_GET_VARS["area"])) && (($HTTP_GET_VARS["area"]) != "national")) {
@@ -127,4 +128,4 @@ if ($groups->Fields("notes") != ($null)) { echo "<b>Other Information:</b> ".$gr
   $area->Close();
 ?>
 
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php"); ?>

@@ -12,8 +12,8 @@ if ($_GET[mod_id]) {$mod_id = $_GET[mod_id]; }
 
  
 if ($fileinfo->Fields("noincludes") != '1' ){
-	include("AMP/BaseTemplate.php");
-	include("includes/moduleintro.php"); 
+	include("AMP/BaseTemplate.php"); 
+	include("AMP/BaseModuleIntro.php");
 }
 
 include ($file);

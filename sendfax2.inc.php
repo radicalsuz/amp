@@ -18,8 +18,8 @@ $MM_editRedirectUrl =  "http://www.congressmerge.com/onlinedb/cgi-bin//addrseek.
    $MM_columnsStr = "firstname|',none,''|lastname|',none,''|address|',none,''|city|',none,''|zip|',none,''|email|',none,''|phone|',none,''|actionid|',none,''|state|',none,''";
 
 
- require ("Connections/insetstuff.php");
-  require ("Connections/dataactions.php");
+ require ("DBConnections/insetstuff.php");
+  require ("DBConnections/dataactions.php");
   
    }
 

@@ -1,7 +1,8 @@
 <?php
  
 $mod_id=1;
-require_once("sysfiles.php");
+include("AMP/BaseDB.php");
+include("AMP/BaseTemplate.php");
 $MM_id = $id;
 ?>	
 <html>
@@ -52,13 +53,13 @@ $calledrcd=$dbcon->CacheExecute("SELECT articles.author, articles.".$MX_type.", 
  	 {$MM_class = $HTTP_GET_VARS["class"];	 }
      
     if ($HTTP_GET_VARS["list"] != NULL) 
-                   {include ("list.inc.php");}
+                   {include ("AMP/List/list.inc.php");}
 				   
 			     elseif (($MM_class == 3) or ($MM_class == 4))
 				 	{
 					 if ($newsreplace != NULL)
 				{include("$newsreplace"); }
-				else{ include("article.inc.news.php");} 
+				else{ include("AMP/Article/article.inc.news.php");} 
 			 }
 					
 								
@@ -66,19 +67,19 @@ $calledrcd=$dbcon->CacheExecute("SELECT articles.author, articles.".$MX_type.", 
 						{
 					 if ($newsreplace != NULL)
 				{include("$prreplace"); }
-				else{ include("article.inc.pr.php");} 
+				else{ include("AMP/Article/article.inc.pr.php");} 
 			 }
 					
 					
 				elseif ($HTTP_GET_VARS["region"] != NULL)
 					{ $MM_region = $HTTP_GET_VARS["region"] ;
-					include ("list.region.php");}
+					include ("AMP/List/list.region.php");}
 			     //elseif ($MM_class == 2)
 					//{header ("Location: index.php");}
 			 else {
 			 if ($articlereplace != NULL)
 				{include("$articlereplace"); }
-				else{ include("article.inc.php");} 
+				else{ include("AMP/Article/article.inc.php");} 
 			 }?>
    </td></tr></table>
 </body>

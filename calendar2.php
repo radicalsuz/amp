@@ -7,11 +7,12 @@ CSS: go, title, text, eventsubtitle, eventtitle,
 To Do: 
 
 *********************/ 
-include_once "Connections/jpcache-sql.php";
+
 $mod_id = 57;
 $modid = 27;
-include("sysfiles.php");
-include("header.php");
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 
 //$bydate= $_GET[bydate];
 //$caltype = $caltype;
@@ -261,4 +262,4 @@ else {
   $event->Close();
   $revent->Close();
    
- include("footer.php"); ?>
+ include("AMP/BaseFooter.php"); ?>

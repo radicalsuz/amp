@@ -13,8 +13,9 @@ To Do:  declare  post vars
 
 $mod_id = 20;
 $modid=9;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
          
  // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
@@ -45,8 +46,8 @@ mail ( "$sendemail","" ,"" , "From: $email\nX-Mailer: My PHP Script\n");}
 
 
 
-  require ("Connections/insetstuff.php");
-  require ("Connections/dataactions.php");}
+  require ("DBConnections/insetstuff.php");
+  require ("DBConnections/dataactions.php");}
   }
   header ("Location: email.php?thank=1");
   }
@@ -125,7 +126,7 @@ mail ( "$sendemail","" ,"" , "From: $email\nX-Mailer: My PHP Script\n");}
            if ($HTTP_GET_VARS["thank"] == ("1")) { ?>
 <?php 
 	  $mod_id = 24 ;
-	  include("module.inc.php"); ?>
+	  include("AMP/BaseModuleIntro.php"); ?>
 <?php } //end thank you
- include("footer.php"); ?>
+ include("AMP/BaseFooter.php"); ?>
 

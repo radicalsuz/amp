@@ -10,8 +10,9 @@ To Do:  declare post vars, verify the required fields
 
 $mod_id = 15;
 $modid=1;
-include("sysfiles.php");
-include("header.php"); 
+include("AMP/BaseDB.php"); 
+include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php"); 
 include("dropdown.php"); ?>
 
 <?php
@@ -37,8 +38,8 @@ if (isset($MM_insert)){
    $MM_columnsStr = "typeid|none,none,NULL|date|',none,NULL|time|',none,''|event|',none,''|shortdesc|',none,''|fulldesc|',none,''|org|',none,''|contact1|',none,''|email1|',none,''|phone1|',none,''|url|',none,''|location|',none,''|lcity|',none,''|lstate|',none,''|lcountry|',none,''|laddress|',none,''|lzip|',none,''|fname2|',none,''|lname2|',none,''|orgaznization2|',none,''|address2|',none,''|city2|',none,''|state2|',none,''|zip2|',none,''|country2|',none,''|email2|',none,''|phone2|',none,''|endorse|',none,''|publish|none,none,NULL|repeat|none,1,0|student|none,1,0|region|',none,''";
  
     
- require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php");
+ require ("DBConnections/insetstuff.php"); 
+require ("DBConnections/dataactions.php");
 $recent=$dbcon->Execute("SELECT id FROM calendar order by id desc LIMIT 1") or DIE($dbcon->ErrorMsg());
  $idval= $recent->Fields("id");
  $recent->Close();
@@ -57,8 +58,8 @@ $recent=$dbcon->Execute("SELECT id FROM calendar order by id desc LIMIT 1") or D
    $MM_fieldsStr = "fname2|value|lname2|value|organization2|value|address2|value|city2|value|state2|value|zip2|value|country2|value|email2|value|phone2|value|source|value|enteredby|value|classid|value";
  
    $MM_columnsStr = "FirstName|',none,''|LastName|',none,''|Company|',none,''|BusinessStreet|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|EmailAddress|',none,''|BusinessPhone|',none,''|source|none,none,NULL|enteredby|none,none,NULL|classid|none,none,NULL";
-   require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php"); }
+   require ("DBConnections/insetstuff.php"); 
+require ("DBConnections/dataactions.php"); }
   
   }
 
@@ -346,9 +347,9 @@ function MM_validateForm() { //v4.0
 	  <?php if ($HTTP_GET_VARS["thank"] == ("1")) { ?>
       <?php 
 	  $mod_id = 51 ;
-	  include("module.inc.php"); ?>
+	  include("AMP/BaseModuleIntro.php"); ?>
       <?php } //end thank you
   $state->Close();
   $eventtype->Close();
 ?>
-<?php include("footer.php"); ?>
+<?php include("AMP/BaseFooter.php"); ?>
