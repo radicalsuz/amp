@@ -23,7 +23,7 @@ while ( $row = $attr_rs->FetchRow() ) {
 }
 
 while ( $row = $list_rs->FetchRow() ) {
-    $subdata[ 'user' ][ $row[ 'userid' ]['lists'][] = $row[ 'listid' ];
+    $subdata[ 'user' ][ $row[ 'userid' ] ]['lists'][] = $row[ 'listid' ];
 }
 
 $serializer = new XML_Serializer();
