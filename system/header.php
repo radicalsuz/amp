@@ -379,7 +379,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 
 </style>
 
-    <?php include("Connections/ddnav.php")?>
+    <?php include("Connections/ddnav.php"); ?>
 </head>
 
 <body <?= ($browser_mo) ? 'onload="initEditor()"' : '' ?>>
@@ -389,10 +389,10 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
  
                 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#006699">
                     <tr id="header"> 
-                        <td><nobr><img src="images/amp-megaphone.png" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> Administration</span></nobr> </td>
+                        <td><nobr><img src="images/amp-megaphone.png" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?= $Web_url ?>" class="toptitle"><?= $SiteName ?></a> Administration</span></nobr> </td>
                         <td align="right" valign="middle" bgcolor="#006699" class="toplinks"> 
         
-<p class = "toplinks">Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'standard');" class="toplinks">Advanced</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class=name >
+<p class = "toplinks">Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?= $cookiename ?>'); setCookie('<?= $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?= $cookiename ?>'); setCookie('<?= $cookiename ?>', 'standard');" class="toplinks">Advanced</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class=name >
                 <option value="index.php">Select Tool</option>
 				 <option value="index.php">&nbsp;&nbsp;---------</option>
 <?php
@@ -414,11 +414,13 @@ while (!$headernav->EOF) {
 </tr>
   <tr> 
     <td bgcolor="#dedede" width="160" valign="top"> 
-	<?php echo $nav_link; ?>
-	     <?php // $perid=$headerinst->Fields("perid");
-			   //if ($userper["$perid"] == 1 && $modid != 19) { }?>
-          <?php // if ($userper[10] == 1){{} ?>
-          <?php //if ($userper[53] == 1){{} ?>
+	<?= $nav_link ?>
+	     <?php
+               // $perid=$headerinst->Fields("perid");
+			   //if ($userper["$perid"] == 1 && $modid != 19) { }
+               // if ($userper[10] == 1){{}
+               //if ($userper[53] == 1){{}
+          ?>
           <p align="center" class="side_banner">AMP TOOLS</p>
           &nbsp;&nbsp;&nbsp;<select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid"class=name >
                 <option value="index.php">Select Tool</option>
@@ -435,7 +437,9 @@ while (!$headernav->EOF) {
 } 
 ?>
              </select>
-      <?php //if ($userper[10] == 1){}} ?>
+      <?php
+           //if ($userper[10] == 1){}}
+      ?>
       
 <br><br>
          </td>
@@ -445,7 +449,6 @@ while (!$headernav->EOF) {
 	<div><fieldset  style=" border: 1px solid grey; margin:20px; padding-top:10px; padding-left:10px; padding-right:10px; padding-bottom:10px;">
 	
 	
-	<? 
-			
-	
-} ?>
+<?php 
+}
+?>

@@ -22,10 +22,9 @@ if (isset($_GET["id"]))
 	  {$Recordset1__MMColParam = $_GET["id"];}
     	$Recordset1=$dbcon->Execute("SELECT * FROM neip WHERE id = $Recordset1__MMColParam ") or DIE($dbcon->ErrorMsg());
 
-?>
-<?php include ("header.php"); 
+include ("header.php"); 
 
-if ($_GET[action] != 'list') { ?>?>
+if ($_GET[action] != 'list') { ?>
 
 <form name="form1" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -243,4 +242,5 @@ if ($_GET[action] != 'list') { ?>?>
 </table>
 <?php 
 }
-include ("footer.php"); ?>
+include ("footer.php");
+?>
