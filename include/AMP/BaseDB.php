@@ -53,7 +53,7 @@ if ( AMP_LOCAL_PATH ) {
 if (file_exists_incpath( 'SiteConfig.inc.php' )) {
 
     // This form is preferred.
-    require_once('SiteConfig.inc.php');
+    require('SiteConfig.inc.php');
 
     if ( !defined('AMP_DB_HOST') ||
             !defined('AMP_DB_USER') ||
@@ -68,7 +68,7 @@ if (file_exists_incpath( 'SiteConfig.inc.php' )) {
 } elseif (file_exists_incpath( 'config.php' )) {
 
     // Included for backwards-compatibility.
-    require_once('config.php');
+    require('config.php');
 
     if (isset($MM_HOSTNAME) && isset($MM_USERNAME) && isset($MM_PASSWORD) && isset($MM_DATABASE)) {
 
