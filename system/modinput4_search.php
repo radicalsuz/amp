@@ -12,7 +12,7 @@
 require_once( 'AMP/UserData.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
-require_once('udm_list.inc.php');
+require_once('AMP/UserDataSearch.php');
 
 #set_error_handler( 'e' );
 //Set default Search Mode to Email Alert Module
@@ -30,44 +30,55 @@ $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
 
 // Was data submitted via the web?
 $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
+$adv=(is_array($_REQUEST['UDM_Search_Options']));
 
 // Search user data.
-if ( $sub ) {
-	//Search form has been submitted, assemble SQL query
+if ( $sub || $adv) {
+	//Simple Search form has been submitted, assemble SQL query
 	
 	$usersearch= &new UserList;
 	$fieldnames=array_keys($udm->fields);
+	$search_set_count=0;$search_set_start=0;
+	/*
 	if(!isset($_REQUEST['AMP_search_count'])) {$search_set_count=0;$search_set_start=0;}
 	else {
 		$search_set_count=$_REQUEST['AMP_search_count']++;
 		$search_set_start=$search_set_count;
 		
 	}
-	
-	foreach ($fieldnames as $searchfield) {
-		 if ($_POST[$searchfield] == "EMPTY") {
-			 $search_set_count++;
-			$usersearch->setLogic("OR", $search_set_count, 'internal');
-			$usersearch->addCriteria($searchfield, "=", "''", $search_set_count);
-			$usersearch->addCriteria("IsNull(".$searchfield.")", "", "", $search_set_count);}
-		elseif ($_POST[$searchfield]  == "NOT EMPTY"){
-			$search_set_count++;
-			#$usersearch->setLogic("OR", $search_set_count, 'internal');
-			$usersearch->addCriteria("!IsNull(".$searchfield.")", "", "", $search_set_count);
-			$usersearch->addCriteria($searchfield, "!=", "''", $search_set_count);}
-		elseif ($_POST[$searchfield] != NULL) {
-			$usersearch->addCriteria($searchfield, "LIKE ", "'%".$_POST[$searchfield]."%'");
+	*/
+	if (!$adv) {
+		foreach ($fieldnames as $searchfield) {
+			 if ($_POST[$searchfield] == "EMPTY") {
+				 $search_set_count++;
+				#$usersearch->setLogic("OR", $search_set_count, 'internal');
+				$usersearch->addCriteria($searchfield, "=", "''", $search_set_count, "OR");
+				$usersearch->addCriteria("IsNull(".$searchfield.")", "", "", $search_set_count, "AND");}
+			elseif ($_POST[$searchfield]  == "NOT EMPTY"){
+				$search_set_count++;
+				#$usersearch->setLogic("OR", $search_set_count, 'internal');
+				$usersearch->addCriteria("!IsNull(".$searchfield.")", "", "", $search_set_count);
+				$usersearch->addCriteria($searchfield, "!=", "''", $search_set_count);}
+			elseif ($_POST[$searchfield] != NULL) {
+				$usersearch->addCriteria($searchfield, "LIKE ", "%".$_POST[$searchfield]."%");
+			}
 		}
-	}
-	//NEED GLOBAL PHONE/FAX SEARCH
-	#if ($_POST[phone]  != NULL){$sql7.= " (userdata.Phone LIKE '%".$_POST[phone]."%' or userdata.Cell_Phone LIKE '%$phone%' or userdata.Work_Phone LIKE '%$phone%') AND  ";}
+		//NEED GLOBAL PHONE/FAX SEARCH
+		#if ($_POST[phone]  != NULL){$sql7.= " (userdata.Phone LIKE '%".$_POST[phone]."%' or userdata.Cell_Phone LIKE '%$phone%' or userdata.Work_Phone LIKE '%$phone%') AND  ";}
+		$search_set=array();
+		for ($i=$search_set_start; $i<=$search_set_count; $i++){
+				$search_set[$i]=$i;
+			}
+		} else {  //Advanced Search was submitted
+		$search_set_count=0;			
+		echo "Advanced Search array found<BR>";
+		$usersearch->readAdvSearch($_REQUEST['UDM_Search_Options']); 		
+		
 
-	$usersearch->addModule($modin);
-	$search_set=array();
-	for ($i=$search_set_start; $i<=$search_set_count; $i++){
-		$search_set[$i]=$i;
+
 	}
-	$usersearch->setupSearch($search_set_count, $search_set);
+	$usersearch->addModule($modin);
+	$usersearch->setupSearch($dbcon);
 	$usersearch->runSearch($dbcon);
 	$insert_html="<input type=\"hidden\" name=\"AMP_search_count\" value=\"$search_set_count\">";
 	
@@ -101,6 +112,7 @@ if ( $sub ) {
 		//alert(which+'/'+whatkind);
 		}
 	}
+	
 	</script>";
 
 	print $usersearch->tab_navs();
@@ -120,6 +132,10 @@ if ( $sub ) {
 	print "</center>";
 	print "</div>";
 	
+	printf($div_header_html,"Advanced Search");
+	print $usersearch->advSearchForm($udm);
+	print "</div>";
+
 	$show_div_footer=TRUE;
 	printf($div_header_html,"Add Search");
 
@@ -160,7 +176,8 @@ if ( $sub ) {
 
 	print "<h2>Search " . $udm->name . "</h2>";
 	print "<center><table width='400'><tr><td><p class=\"bodytext\">Enter your criteria in the fields below.</p>";
-	$search_form = $udm->output();
+	$form_options['no_validate']=1;
+	$search_form = $udm->output("html", $form_options);
 	$submitspot = strpos($search_form, "input name=\"btnUdmSubmit\"");
 	$insertpoint = strpos(substr($search_form, $submitspot-200, 200), "<tr>");
 	$form_footer = substr($search_form, $submitspot-200+$insertpoint);
