@@ -2,19 +2,29 @@
 function magpienav($url,$num_items=NULL,$title=NULL,$html1=NULL,$html2=NULL,$html3=NULL,$html4=NULL,$html5=NULL) {
 	global $base_path;
 
+
 	define('MAGPIE_DIR', $base_path.'includes/magpie/');
     require_once(MAGPIE_DIR.'rss_fetch.inc');
 
+    $error_level_tmp = error_reporting();
+    error_reporting( E_ERROR );
     $rss = fetch_rss( $url );
-    if (!$num_items) {$num_items=5;}
-	$items = array_slice($rss->items, 0, $num_items);
-	if (!$title) {$title = $rss->channel['title'];}
-    $shownav.= $html1.$title.$html2;
-    foreach ($items as $item) {
+    error_reporting( $error_level_tmp );
+
+
+    if ( $rss ) {
+        if (!$num_items) {$num_items=5;}
+        $items = array_slice($rss->items, 0, $num_items);
+        if (!$title) {$title = $rss->channel['title'];}
+        $shownav.= $html1.$title.$html2;
+        foreach ($items as $item) {
     	$href = $item['link'];
 		$title = $item['title'];
 		$shownav.= $html3."<a href=$href class=sidelist>$title</a>".$html4;
 	}
+    } else {
+        $shownav .= $html1 . $html2;
+    }
 	$shownav.= $html5;
 	return $shownav;
 }
