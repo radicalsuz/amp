@@ -75,7 +75,7 @@ function nav_css($class=NULL) {
 	return $output;
 }
 // get information about the module
-if ($modid !=NULL) {
+if (isset($modid) && $modid !=NULL) {
 	$headerinst = $dbcon->Execute("SELECT * FROM modules where id=" . $dbcon->qstr($modid)) or DIE("could not load module information in header: " . $dbcon->ErrorMsg());
 	$mod_navs = $dbcon->Execute("SELECT * FROM module_navs where module_id=" . $dbcon->qstr($modid)) or DIE("could not load module navigation information in header".$dbcon->ErrorMsg());
 	$header_title = $headerinst->Fields("name");
@@ -111,7 +111,7 @@ if (isset($sys_nav[$mod_name])) {
 
 }
 
-if ($header_udm == 1) {
+if (isset($header_udm) && $header_udm == 1) {
     if (!isset($sys_nav[$mod_name])) {
         $nav_link .= '<p class="side_banner">' . $headerinst->Fields('name') . '</p>';
         $nav_link .= "\n    <ul class=side>";
@@ -123,7 +123,7 @@ if ($header_udm == 1) {
 	$nav_link .= "\n		<li ".nav_css("form")." ><a href='modinput4_edit.php?modin=".$header_udmid."' >Form Settings</a></li>";
 	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy Form Template</a></li>";
 }
-if ($modid != 19 && $modid != 31 && $modid != 30 && ($modid)) {
+if (isset($modid) && $modid != 19 && $modid != 31 && $modid != 30 && $modid) {
 	$nav_link .= "\n		<li ".nav_css("page")."><a href='module_header_list.php?modid=".$modid."' >Pages</a></li>";
 	$nav_link .= "\n		<li ".nav_css("settings")."><a href='module_control_list.php?modid=".$modid."' >Settings</a></li>";
 }

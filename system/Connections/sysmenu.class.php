@@ -40,8 +40,8 @@ var $table;
 		}
 		$result = $this->query($query);
 		$count = 0;
-		while ($row = mysql_fetch_array($result))
-		{
+        $children = Array();
+		while ($row = mysql_fetch_array($result)) {
 			$children[$count]["id"] = $row["id"];	
 			$children[$count]["type"] = $row["type"];	
 			$children[$count]["usenav"] = $row["usenav"];
@@ -169,6 +169,7 @@ var $table;
 	function print_menu_tree_java($id = 0,$y=0) {
 	
 		$result = $this->get_children($id,1);	
+        $o = "";
 		for ($x=0; $x<sizeof($result); $x++) {
 			$typeid = $result[$x]["id"];
 			$check = $this->get_children($typeid,1);

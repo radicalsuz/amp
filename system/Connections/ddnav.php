@@ -11,12 +11,12 @@ function nav_item($var=NULL) {
 	
 	if (!$var) {
 			$output =",\"\",\"\",,,1 ";
-	} elseif ($var['nav']){
+	} elseif (isset($var['nav']) && $var['nav']){
 		$output = ",\"".$var['nav']."\",\"".$var['link']."\",,,1 ";
 	} else {
 		$output = ",\"".$var['name']."\",\"".$var['link']."\",,,1 ";
 	}
-	if ($var['per']) {
+	if (isset($var['per']) && $var['per']) {
 		if ($userper[$var['per']]) {
 			return $output;
 		}

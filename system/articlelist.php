@@ -16,7 +16,7 @@ $allclass=$dbcon->Execute("SELECT distinct class.id, class.class FROM class left
         </tr>
         <tr> 
           <td><div align="left"> 
-              <form action="article_list.php?<?php echo $keep ;?>" method="post" name="form2" class="name">
+              <form action="article_list.php" method="post" name="form2" class="name">
                 <strong>Search By </strong><br/>
                 <input name="sid" type="text" id="id" value="ID" size="5" class="name">
                 <input name="stitle" type="text" id="title" value="Title" size="25" class="name">
