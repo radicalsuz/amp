@@ -74,7 +74,6 @@ if (isset($HTTP_GET_VARS["id"]))
           <tr> 
             <td colspan="2" valign="top"><input type="submit" name="<?php if (empty($HTTP_GET_VARS["id"])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"> 
               <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> 
-              <input type="submit" name="preview" value="Preview" onclick="return confirmSubmit('Please save this record first or all changes will be lost\nPress OK to continue or CANCEL to return and save you work')"> 
               <input type="hidden" name="class" value="2"> <input type="hidden" name="type" value="1"> 
               <input type="hidden" name="subtype" value="1"> <input type="hidden" name="catagory" value="1"></td>
           </tr>
@@ -223,7 +222,7 @@ if (isset($HTTP_GET_VARS["id"]))
           </tr>
           <td colspan="2" valign="top"><input type="submit" name="<?php if (empty($HTTP_GET_VARS["id"])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"> 
             <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> 
-            <input type="submit" name="preview" value="Preview" onclick="return confirmSubmit('Please save this record first or all changes will be lost\nPress OK to continue or CANCEL to return and save you work')"></td>
+            </td>
           </tr>
         </table>
               
