@@ -278,7 +278,7 @@ if (!$_GET[gal]) {
 		if (file_exists($daimg) && ($galimage)) { 
 			echo '<a href="gallery.php?gal=' 
 					. $gallerys->Fields("id") 
-					. '"><img src="img/pic/' 
+					. '"><img src="img/thumb/' 
 					. $galimage 
 					. '"></a>';         
 		} 
@@ -302,7 +302,7 @@ elseif ($photo->Fields("img") == NULL) {
 
 /* OR DISPLAY A SPECIFIC GALLERY */
 elseif ($fullgal == 1) {
-	## fullgallery set to 1 in module control then show entire gallery
+	## fullgallery -set to 1 in module control then show entire gallery
 	if (!$dir) { 
 		$dir = "thumb"; 
 	}	
@@ -346,7 +346,7 @@ elseif ($fullgal == 1) {
 } 
 ####LIST OF PHOTOS #####
 else {
-## fullgallery set to 2 in module control then show one picture at a time
+## fullgallery - when set to 2 in module control then show one picture at a time
  	if (!$dir) {$dir="pic";}?>
 						
  <table width="100%" border="0" cellspacing="0" cellpadding="25">
