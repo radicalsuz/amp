@@ -26,6 +26,10 @@ class UserDataPlugin {
     // (e.g., for sending emails to multiple people, or other myriad hacks)
     var $plugin_instance;
 
+    // The field prefix is the text used by the UserData object
+    // to distinguish data from separate plugins
+    var $_field_prefix;
+    
     // The executed flag should be set upon sucessful execution of the plugin.
     // This is to prevent multiple runs of the plugin.
     var $executed;
@@ -235,13 +239,82 @@ class UserDataPlugin {
      *****/
 
     function getData ( $fields = null ) {
-        return $this->udm->getData( $fields );
+        
+        //Filter returned data for items with the appropriate plugin field
+        //prefix
+        if ($this->_field_prefix) {
+
+            $data=$this->udm->getData();
+            $prefix=$this->_field_prefix.'_';
+
+            if (isset($fields)) {
+
+                foreach ($fields as $key=>$value) {
+                    $returnData[$value]=
+                        (isset($data[$prefix.$value])?
+                            $data[$prefix.$value]
+                            :NULL);
+                }
+
+            } else {
+
+                foreach ($data as $key=>$value) {
+
+                    if (substr($key, $prefix)===0) {
+                        $returnData[substr($key, strlen($prefix))]=$value;
+                    }
+                }
+            }
+            $data=$returnData;
+
+        } else {
+
+            $data=$this->udm->getData( $fields );
+
+        }
+
+
+        
+        return $data; 
     }
+    
 
     function setData ( $data ) {
+        if ($this->_field_prefix) {
+
+            foreach ($data as $key=>$value) {
+                $plugin_data[$this->_field_prefix.'_'.$key]=$value;
+            }
+
+            $data=$plugin_data;
+        }
+
         return $this->udm->setData( $data );
     }
 
+    function getOptions( $options=null ) {
+        if (!isset($options)) $options = array_keys($this->options);
+        
+        if (is_array($options)) {
+
+            foreach ( $options as $option_name ) {
+                $option_def=$this->options[$option_name];
+
+                if (isset($option_def['value'])) {
+                    $return_options[$option_name]=$option_value['value'];
+                } else {
+
+                    if (isset($option_def['default'])) {
+                        $return_options[$option_name]=$option_def['default'];
+                    }
+                }
+            }
+        }
+        if (!isset ($return_options)) return false;
+
+        return $return_options;
+    }
+        
     function setOptions ( $options ) {
 
         foreach ( $options as $option_name => $option_value ) {

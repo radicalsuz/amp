@@ -27,6 +27,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
         $qf_fields   = array_keys( $this->udm->form->exportValues() );
 
         $save_fields = array_intersect( $db_fields, $qf_fields );
+        $this->_field_prefix="";
 
         return $save_fields;
 

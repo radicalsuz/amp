@@ -25,6 +25,7 @@ class UserDataPlugin_Read_AMP extends UserDataPlugin {
     function execute ( $options = null ) {
 
         $dbcon = $this->udm->dbcon;
+        $this->_field_prefix="";
 
         // Check for the existence of a userid.
         if (!isset( $options['_userid'] ) &&

@@ -25,7 +25,7 @@ class UserDataPlugin_Save extends UserDataPlugin {
             return false;
         }
 
-        // Deletegate permissions. Note that the UDM will only return data that
+        // Delegate permissions. Note that the UDM will only return data that
         // the user has permissions to save.
         //
         // Since this data comes from the form, it's a good idea to stick to

@@ -312,7 +312,6 @@ class UserData {
             if (!isset($this->fields[$fname])) continue;
 
             $this->fields[$fname]['value']=$fvalue;
-            print $fname.": ".$fvalue."<BR>";
         }
     }
 
@@ -326,7 +325,7 @@ class UserData {
      *
      *****/
 
-    function getData( $fields ) {
+    function getData( $fields=null ) {
 
         if (!$this->form)       return false;
 
@@ -478,12 +477,13 @@ class UserData {
             return false;
         }
 
-        // Add the plugin to our repratoire.
+        // Add the plugin to our repertoire.
         $plugin =& new $plugin_class( $this );
         $actions[$namespace] =& $plugin;
 
         // Add the fields from the plugin. Prefix with the plugin name.
-        $this->registerFields( $plugin->fields, "plugin_$namespace" );
+        $plugin->_field_prefix="plugin_$namespace"; 
+        $this->registerFields( $plugin->fields, $plugin->_field_prefix );
 
         return $plugin;
 
