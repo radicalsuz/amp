@@ -1,7 +1,7 @@
 <?php
 
 if($MM_haveMaster){
-	require_once("adodb/adodb.inc.php");
+	require_once("../adodb/adodb.inc.php");
 	require_once( 'db_compare.inc2.php');
 
 	$master_template=new dbDefinition;
@@ -184,7 +184,7 @@ if($MM_haveMaster){
 <HTML>
 <HEAD><TITLE="DB Compare Tool"></HEAD>
 <BODY BGCOLOR=#FFFFFF>
-<FORM name = "compare" action="db_compare_local3.php" method="GET">
+<FORM name = "compare" action="db_compare.php" method="GET">
 Enter master database template for comparison:<BR>
 <INPUT type="text" name="master_dbname" size="20" value="victoria">
 <INPUT type="hidden" name="MM_haveMaster" value="1">
