@@ -18,9 +18,9 @@ $allclass=$dbcon->Execute("SELECT distinct class.id, class.class FROM class left
           <td class="banner">Content</td>
         </tr>
         <tr> 
-          <td ><div align="left"> 
+          <td><div align="left"> 
               <form action="article_list.php?<?php echo $keep ;?>" method="post" name="form2" class="name">
-                <strong>Search By </strong><br>
+                <strong>Search By </strong><br/>
                 <input name="sid" type="text" id="id" value="ID" size="5" class="name">
                 <input name="stitle" type="text" id="title" value="Title" size="25" class="name">
                 <input name="sauthor" type="text" id="author" value="Author" size="20" class="name">
@@ -32,8 +32,7 @@ $allclass=$dbcon->Execute("SELECT distinct class.id, class.class FROM class left
                 before you start your search. You may only search one field at 
                 a time. 
               </form>
-              <p><a href="article_list.php"><strong><font size="3" face="Verdana, Arial, Helvetica, sans-serif">View 
-                All Content</font></strong></a></p>
+              <p style="margin-bottom: 1ex;"><a href="article_list.php"><strong><big>View All Content</big></strong></a></p>
             </div></td>
         </tr>
         <tr class="intitle"> 
@@ -60,7 +59,7 @@ echo preg_replace( "/(.*)\]([^\]])*$/", "\$1\$2", $obj->print_menu_tree_java($MX
         <td>&nbsp;</td>
         </tr>
         <tr class="intitle"> 
-          <td>View by Class</td>
+          <td class="intitle">View by Class</td>
         </tr>
         <tr> 
           <td><table width="100%" border="0" cellspacing="2" cellpadding="0">

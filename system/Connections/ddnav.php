@@ -1,16 +1,30 @@
 <?php
+
 function no_wh($text) {
 	$t = str_replace('','&nbsp;',$text);
 	echo '<nobr>'.$t.'</nobr>';
 }
 
-
 ?>
-<SCRIPT language=JavaScript>
-menunum=0;menus=new Array();_d=document;function addmenu(){menunum++;menus[menunum]=menu;}function dumpmenus(){mt="<scr"+"ipt language=javascript>";for(a=1;a<menus.length;a++){mt+=" menu"+a+"=menus["+a+"];"}mt+="<\/scr"+"ipt>";_d.write(mt)}
-//Please leave the above line intact. The above also needs to be enabled if it not already enabled unless this file is part of a multi pack.
+<script language="JavaScript">
+menunum=0;
+menus=new Array();
+_d=document;
 
+function addmenu() {
+		menunum++;
+		menus[menunum]=menu;
+}
 
+function dumpmenus() {
+		mt="<script language=javascript>";
+		for(a=1;a<menus.length;a++) {
+				mt+=" menu"+a+"=menus["+a+"];"
+		}
+		// weird string concat is for syntax highlighting in php.
+		mt+='</sc'+'ript>';
+		_d.write(mt);
+}
 
 ////////////////////////////////////
 // Editable properties START here //
@@ -73,11 +87,9 @@ style2=[			// style1 is an array of properties. You can have as many property ar
 "black",				// Menu Item Separator Color
 ]
 
-
-
 addmenu(menu=[		// This is the array that contains your menu properties and details
 "mainmenu",			// Menu Name - This is needed in order for the menu to be called
-76,					// Menu Top - The Top position of the menu in pixels
+68,					// Menu Top - The Top position of the menu in pixels
 0,				// Menu Left - The Left position of the menu in pixels
 ,					// Menu Width - Menus width in pixels
 0,					// Menu Border Width 
@@ -196,7 +208,6 @@ style1,				// Properties Array - this is set higher up, as above
 	,
 	,
 	,
-	
 	,"View/Edit Design Template","template.php?action=list",,,1
 	,"Add Design Template","template.php",,,1
 	,"Edit Standard CSS","css_edit.php",,,1
@@ -225,7 +236,6 @@ style1,				// Properties Array - this is set higher up, as above
 	,
 	,
 	,
-	
 	,"Advocacy Modules","show-menu=Advocacy",,,1
 	,"Email Tools","lists/admin",,,1
 	,"Calendar","calendar_gxlist.php",,,1
@@ -261,7 +271,6 @@ style1,				// Properties Array - this is set higher up, as above
 	,
 	,
 	,
-	
 	,"Web Actions","sendfax_list.php",,,1
 	,"Petitions","petition_list.php",,,1
 	,"Endorsements","modinput4_data.php?modin=1",,,1
@@ -572,11 +581,23 @@ style1,				// Properties Array - this is set higher up, as above
 	,"System Users","user_list.php",,,1
 	,"System Settings","sysvar.php",,,1
 	,"Setup Wizard","wizard_setup.php",,,1
-	,"Reset Cahce","flushcache.php",,,1
+	,"Reset Cache","flushcache.php",,,1
 	,"Logout","logout.php",,,1
 		])
 	
 dumpmenus()
-</script>
-<SCRIPT language=JavaScript src="../Connections/mmenu.js" type=text/javascript></SCRIPT>
 
+</script>
+<script language="JavaScript" src="../Connections/mmenu.js" type=text/javascript></script>
+
+<script language="JavaScript">
+var menuOne = document.getElementById('menu1');
+menuOne.style.height='28px';
+
+for ( var i = 0; i < 7; i++ ) {
+		var hsepHnd = document.getElementById('hsep'+i);
+		var helHnd = document.getElementById('hel'+i);
+		hsepHnd.style.height='28px';
+		helHnd.style.height='28px';
+}
+</script>
