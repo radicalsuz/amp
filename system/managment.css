@@ -1,3 +1,216 @@
+/* ELEMENTS */
+h2 { 	
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #006666;	
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #006666;
+	background: url('images/banner-bg.png') top left repeat-x;
+	padding: 3px 7px;
+	text-shadow: 2px 2px 2px black;;
+}
+
+a {  font-weight: normal; color: #003399}
+
+A:HOVER {
+	color : #0033FF;
+	text-decoration : none;
+}
+
+body {
+		padding: 0;
+		margin: 0;
+		font-family: Verdana, "Trebuchet MS", Helvetica, sans-serif
+}
+
+p, td, select {
+	font-size: 10px;
+	text-align: left;
+	font-family: Verdana, "Trebuchet MS", Helvetica, sans-serif
+
+}
+
+/* HEADER CLASSES */
+
+/* id class for the header */
+.header {
+	font-size: 10px;
+	font-weight: bold;
+}
+#header {
+	background: url('images/header-bg.png') top left repeat-x;
+}
+
+/* the site name in the header */
+.toptitle {
+	color : #FFFFFF; font-size: 22px; font-weight: bold; 
+	text-decoration : none;
+	text-shadow: 2px 2px 3px black;
+}
+
+/* id for the site name in the header */
+#pagetitle {
+    font-size: 14px;
+	font-weight: bold;
+	color: #000000;
+	border-bottom: 2px solid #AAAAAA;
+	border-top: 4px solid #003060;
+}
+
+/* "navigation display" links */
+.toplinks {
+	color : #cccccc;
+	text-align: right;
+	font-size: 10px;
+	font-weight: bold;
+}
+A.toplinks {
+	text-decoration : none;
+}
+
+/* id for the drop down menu */
+#navlinks {
+		background: url('images/menu-bg.png') top left repeat-x;
+		height: 26px;
+		border-top: 2px solid #eeeeee;
+}
+
+/* select jump menu */
+#navlinks {
+		
+}
+
+/* SIDE BAR CLASSES */
+
+
+/* id for the sidebar */
+
+p.side, a.side {
+	font-size: 9px;
+	text-align: left;
+	text-decoration : none;
+	margin-left: 7px;
+}
+
+ul.side {
+		margin: 0;
+		padding: 0;
+}
+
+ul.side li {
+		list-style: none;
+		padding: 1px 0 1px 10px;
+		margin: 0;
+		font-size: 9px;
+		text-align: left;
+}
+
+ul.side li a {
+		text-decoration: none;
+}
+
+ul.side li:hover {
+		background-color: #d0d0d0;
+}
+
+/* black text in list that breaks up ul */
+.sidetitle {
+	color : #000000;
+	text-align: left;
+	font-size: 12px;
+	font-weight: bold;
+	border-color: #FFFFFF;
+	margin-bottom: 20px;
+	margin-top: 25px;
+}
+
+
+/* side title for section */
+.side_banner {
+	font-size: 11px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #006666;
+	background: url('images/side-banner-bg.png') top left repeat-x;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+
+/* CONTENT LAYOOUT CLASSES */
+
+/* top blue header for table layout */
+.intitle {
+	font-size: 12px;
+	font-weight: bold;
+	color: White;
+	background-color : #006699;
+	background: url('images/intitle-bg.png') top left repeat-x;
+	padding: 2px 4px;
+	text-shadow: 2px 2px 1px black;
+}
+
+/* label text in forms */
+.name {
+	font-size: 11px;
+}
+
+.text {
+	font-size: 10px;
+	font-family: "Times New Roman", Times, serif; 
+}
+
+.text2 {
+	font-size: 14px;
+	font-family: "Times New Roman", Times, serif; 
+}
+
+.red {
+	color: #CC0000;
+}
+
+.banner {
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #006666;
+	background: url('images/banner-bg.png') top left repeat-x;
+	padding: 3px 7px;
+	text-shadow: 2px 2px 2px black;;
+} 
+
+.main {
+	display: table;	
+	width: 100%;
+}
+.doc_info {
+	font-size: 18px;
+	color: #006666;
+	text-align: center;
+	vertical-align: middle;
+	font-weight: bold;
+}
+
+.small {  
+	font-size: 9px; 
+	font-weight: normal;
+}
+
+/* FOOTER CLASSES*/
+
+p#footer {
+		text-align: center;
+		padding-top: 1ex;
+		font-size: small;
+		color: #444444;
+}
+
+/* TAB DISPLAY */
 
 ul#topnav {
 	margin:0 0 22px;
@@ -44,204 +257,4 @@ ul#topnav a {
 	border-right: 1px solid #777;
 	padding: 0.2em 1em 0.2em 35px;
 	margin: 0 4px 0 0;
-}
-
-.toptitle {
-	color : #FFFFFF; font-size: 22px; font-weight: bold; 
-	text-decoration : none;
-	text-shadow: 2px 2px 3px black;
-}
-
-.toplinks {
-	color : #cccccc;
-	text-align: right;
-	font-size: 10px;
-	font-weight: bold;
-	text-decoration : none;
-
-}
-A.toplinks {
-	color : #cccccc;
-	text-align: right;
-	font-size: 10px;
-	font-weight: bold;
-	text-decoration : none;
-
-}
-
-.sidetitle {
-	color : #000000;
-	text-align: left;
-	font-size: 12px;
-	font-weight: bold;
-	border-color: #FFFFFF;
-	padding-left: 10px;
-	margin-bottom: 3px;
-}
-
-#sidebar {
-		padding: 0;
-		margin: 0;
-		vertical-align: top;
-}
-
-ul.side {
-		margin: 0;
-		padding: 0;
-}
-
-ul.side li {
-		list-style: none;
-		padding: 1px 0 1px 10px;
-		margin: 0;
-		font-size: 9px;
-		text-align: left;
-}
-
-ul.side li a {
-		text-decoration: none;
-}
-
-ul.side li:hover {
-		background-color: #d0d0d0;
-}
-
-
-/* deprecated. */
-p.side, a.side {
-	font-size: 9px;
-	text-align: left;
-	text-decoration : none;
-	padding-left: 10px;
-}
-
-h2 { 	
-	font-size: 18px;
-	font-weight: bold;
-	color: #FFFFFF;
-	background-color: #006666;
-	padding-bottom: 3px;
-	padding-left: 7px;
-	padding-top: 3px;
-}
-A:HOVER {
-	color : #0033FF;
-	text-decoration : none;
-}
-.intitle {
-	font-size: 12px;
-	font-weight: bold;
-	color: White;
-	background-color : #006699;
-	background: url('images/intitle-bg.png') top left repeat-x;
-	padding: 2px 4px;
-	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
-	text-shadow: 2px 2px 1px black;
-}
-
-.name {
-	font-size: 10px;
-	font-weight: normal;
-	color: #000000;
-; font-variant: normal; text-transform: none}
-.text {
-	font-size: 10px;
-; font-family: "Times New Roman", Times, serif; color: #000000}
-.text2 {
-	font-size: 14px;
-; font-family: "Times New Roman", Times, serif; color: #000000}
-.red {
-	color: #CC0000;
-}
-a {  font-weight: normal; color: #003399}
-.header {
-	font-size: 10px;
-	font-weight: bold;
-}
-
-#pagetitle {
-    font-size: 14px;
-		font-weight: bold;
-		color: #000000;
-		border-bottom: 2px solid #AAAAAA;
-	  border-top: 4px solid #003060;
-}
-
-#header {
-		background: url('images/header-bg.png') top left repeat-x;
-		font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
-}
-
-#navlinks {
-		background: url('images/menu-bg.png') top left repeat-x;
-		height: 26px;
-		border-top: 2px solid #eeeeee;
-}
-
-.side_banner {
-	font-size: 11px;
-	font-weight: bold;
-	color: #FFFFFF;
-	background-color: #006666;
-	background: url('images/side-banner-bg.png') top left repeat-x;
-	padding-bottom: 3px;
-	padding-top: 3px;
-	text-transform: uppercase;
-	text-align: center;
-	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
-}
-
-.banner {
-	font-size: 18px;
-	font-weight: bold;
-	color: #FFFFFF;
-	background-color: #006666;
-	background: url('images/banner-bg.png') top left repeat-x;
-	padding: 3px 7px;
-	text-shadow: 2px 2px 2px black;;
-	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
-} 
-
-
-.main {
-	display: table;	
-	width: 100%;
-}
-.doc_info {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 18px;
-	color: #006666;
-	text-align: center;
-	vertical-align: middle;
-	font-weight: bold;
-}
-
-.small {  font-size: 9px; font-weight: normal}
-
-#side_list ul {
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-}
-li.side_title {
-	font-size: 12px;
-	color: #000000;
-	margin-bottom: 5px;
-	margin-top: 25px;
-	margin-left: 7px;
-	font-weight: bold;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-}
-
-p#footer {
-		text-align: center;
-		padding-top: 1ex;
-		font-size: small;
-		color: #444444;
-}
-
-body {
-		padding: 0;
-		margin: 0;
-		font-family: Verdana, "Trebuchet MS", Helvetica, sans-serif
 }
