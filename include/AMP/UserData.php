@@ -175,7 +175,7 @@ class UserData {
 
     }
 
-	function getResults ( $type = null ) {
+    function getResults ( $type = null ) {
 
         $retarray = array();
 
@@ -347,22 +347,24 @@ class UserData {
      *
      *****/
 
-    function tryPlugin( $namespace, $action, $options = null ) {
+    function tryPlugin( $namespace, $action, $options = array() ) {
 
         $func_a = array( 'udm', $namespace, $action );
         $func = join( '_', $func_a );
 
         if ( function_exists( $func ) ) {
-			if ( is_array( $this->plugins[$action][$namespace] ) ) {
-                if (isset($options)) {
-					$options = $this->plugins[$action][$namespace] + $options;
-				} else {
-					$options=$this->plugins[$action][$namespace];
-				}
-            }
+
+            // If there are options passed from the plugin, join those with the
+            // options passed to this function.
+    		if ( is_array( $this->plugins[$action][$namespace] ) )
+                $options = $this->plugins[$action][$namespace] + $options;
+
             return $func( &$this, $options );
+
         } else {
+
             return false;
+
         }
 
     }
