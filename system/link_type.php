@@ -6,14 +6,15 @@ require_once("Connections/sysmenu.class.php");
 $obj = new SysMenu; 
 $buildform = new BuildForm;
 
-$table = "links";
-$listtitle ="Links";
-$listsql ="select id, url, linkname, publish from $table  ";
-$orderby =" order by linkname asc  ";
-$fieldsarray=array( 'Link Name'=>'linkname',
-					'URL'=>'url',
-					'Status'=>'publish');
-$filename="links.php";
+$table = "linktype";
+$listtitle ="Link Type";
+$listsql ="select id, name, publish from $table  ";
+$orderby =" order by name asc  ";
+$fieldsarray=array( 'Type Name'=>'name',
+					'ID'=>'id',
+					'Publish'=>'publish');
+$filename="link_type.php";
+
 
 ob_start();
 // insert, update, delete
@@ -23,8 +24,8 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
     $MM_recordId = $_POST['MM_recordId'];
     $MM_editRedirectUrl = $filename."?action=list";
 	$MM_editColumn = "id";
-	$MM_fieldsStr = "";
-    $MM_columnsStr = ""; //|$delim,$altVal,$emptyVal|  |',none,''|
+	$MM_fieldsStr = "name|value|publish|value";
+    $MM_columnsStr = "name|',none,''|publish|',none,''"; //|$delim,$altVal,$emptyVal|  |',none,''|
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
     ob_end_flush();	
@@ -40,24 +41,8 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 //build form
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Add/Edit '.$listtitle, 'banner');
+$html .= addfield('name','Link Type','text',$R->Fields("name"));
 $html .= addfield('publish','Publish','checkbox',$R->Fields("publish"));
-$html .= addfield('linkname','Name','text',$R->Fields("linkname"));
-$html .= addfield('description','Description','textarea',$R->Fields("description"));
-
-$link_options = makelistarray($L,'id','name','Select Link Type');
-$Link = & new Select('linktype',$link_options,$R->Fields("linktype"));
-$html .=  $buildform->add_row('Link Type', $Link);
-
-$Type = & new Select('reltype[]', $obj->select_type_tree2(0),'','true');
-$html .=  $buildform->add_row('Related Sections', $Type);
-
-$html .= addfield('url','','text',$R->Fields("url"));
-$html .= addfield('image','Thumbnail','text',$R->Fields("image"));
-$html .=  $buildform->add_row('', '<a href="imgdir.php" target="_blank">view images</a>&nbsp;|&nbsp;<a href="imgup.php" target="_blank">upload image</a>');
-
-
-
-
 
 $html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id->fetch());
 $html .= $buildform->end_table();

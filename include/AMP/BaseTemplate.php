@@ -4,7 +4,7 @@ if ( !function_exists( 'buildheader' ) ) {
 		
     function buildheader() {
         
-        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $_GET, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url,$css;
+        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $_GET, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url, $extra_header, $css;
         $htmlheader .= "<html>
         <head>
         <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">";
@@ -31,7 +31,6 @@ if ( !function_exists( 'buildheader' ) ) {
         $htmlheader.="<meta http-equiv=\"Description\" content=\"$meta_description\">" .
                      "<meta name=\"Keywords\" content=\"$meta_content\">" .
                      "<link rel=\"Search\" href=\"/search.php\">";
-
         if ( file_exists( $AmpPath . "img/favicon.ico" ) ) {
             $htmlheader .= '<link rel="icon" href="' . $AmpPath . 'img/favicon.ico" type="image/x-icon" />';
         }
@@ -43,10 +42,11 @@ if ( !function_exists( 'buildheader' ) ) {
         for ($i=0;  $i<count($allsheets);$i++) {
                 $htmlheader.="<link href=\"".$Web_url.trim($allsheets[$i])."\" rel=\"stylesheet\" type=\"text/css\">";
         }
-
-        $htmlheader.="<script language=\"JavaScript\" src=\"".$Web_url."scripts/functions.js\"></script>
-        </head>";
-
+		if ($extra_header) {
+			$htmlheader.=$extra_header;
+		}
+        $htmlheader.="<script language=\"JavaScript\" src=\"".$Web_url."scripts/functions.js\"></script>\n";
+		$htmlheader.= "</head>\n"
         return $htmlheader;
 
     }
@@ -145,6 +145,7 @@ $NAV_IMG_PATH = $settemplate->Fields("imgpath");
 $NAV_REPEAT = $settemplate->Fields("repeat");
 $htmltemplate =$settemplate->Fields("header2");	
 if (!$css) {   $css = $settemplate->Fields("css");}
+$extra_header = $settemplate->Fields("extra_header");
 
 $lNAV_HTML_1 = $settemplate->Fields("lnav3");		//heading row
 $lNAV_HTML_2 = $settemplate->Fields("lnav4");		//close heading row

@@ -1,4 +1,5 @@
 <?php   
+header("modinput4.php?".$_SERVER['QUERY_STRING']);
 
 
 include("AMP/BaseDB.php");

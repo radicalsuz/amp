@@ -12,7 +12,7 @@
  *
  */
 
-require_once("config.php");
+require_once("FeedOnFeeds/config.php");
 
 define('MAGPIE_CACHE_AGE', 60*15);
 define('MAGPIE_USER_AGENT', 'FeedOnFeeds/0.1.7 (+http://minutillo.com/steve/feedonfeeds/)');
@@ -21,11 +21,11 @@ define('MAGPIE_CACHE_DIR', FOF_CACHE_DIR);
 // surpress magpie's warnings, we'll handle those ourselves
 error_reporting(E_ERROR);
 
-require_once('magpierss/rss_fetch.inc');
-require_once('magpierss/rss_utils.inc');
+require_once('FeedOnFeeds/magpierss/rss_fetch.inc');
+require_once('FeedOnFeeds/magpierss/rss_utils.inc');
 
-$fof_connection = mysql_connect(FOF_DB_HOST, FOF_DB_USER, FOF_DB_PASS) or die("Cannot connect to database.  Check your configuration.  Mysql says: <b>" . mysql_error());
-mysql_select_db(FOF_DB_DBNAME, $fof_connection) or die("Cannot select database.  Check your configuration.  Mysql says: " . mysql_error());
+$fof_connection = mysql_connect(AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS) or die("Cannot connect to database.  Check your configuration.  Mysql says: <b>" . mysql_error());
+mysql_select_db(AMP_DB_NAME, $fof_connection) or die("Cannot select database.  Check your configuration.  Mysql says: " . mysql_error());
 
 if(!$installing) is_writable( FOF_CACHE_DIR ) or die("Cache directory is not writable or does not exist.  Have you run <a href=\"install.php\"><code>install.php</code></a>?");
 

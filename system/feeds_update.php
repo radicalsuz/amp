@@ -4,7 +4,7 @@ $modid = "45";
 
 require("Connections/freedomrising.php");
 
-include_once("feedonfeeds/init.php");
+include_once("FeedOnFeeds/init.php");
 
 
 include ("header.php");

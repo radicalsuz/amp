@@ -5,7 +5,7 @@ $modid = "45";
 require("Connections/freedomrising.php");
 $buildform = new BuildForm;
 
-include_once("feedonfeeds/init.php");
+include_once("FeedOnFeeds/init.php");
 
 $table = "px_feeds";
 $listtitle ="Subscribed Feeds";

@@ -33,8 +33,8 @@ else{
 	include ("AMP/List/list.layout.inc.php"); 
 }
 
-if($limit < $listct->fields[0]) {
-	echo '<span class="go"><a href="article.php?list=class&class='. $classpr .'">More <b>&#187;</b></a></span>'
+if ($limit < $listct->fields[0]) {
+	echo '<span class="go"><a href="article.php?list=class&class='. $classpr .'">More <b>&#187;</b></a></span>';
 }
 
 ?>

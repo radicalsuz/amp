@@ -20,10 +20,10 @@ define('FOF_TIME_OFFSET', 0);
 
 // Database connection information.  Host, username, password, database name.
 
-define('FOF_DB_HOST', "$MM_HOSTNAME");
-define('FOF_DB_USER', "$MM_USERNAME");
-define('FOF_DB_PASS', "$MM_PASSWORD");
-define('FOF_DB_DBNAME', "$MM_DATABASE");
+define('FOF_DB_HOST', "AMP_DB_HOST");
+define('FOF_DB_USER', "AMP_DB_USER");
+define('FOF_DB_PASS', "AMP_DB_PASS");
+define('FOF_DB_DBNAME', "AMP_DB_NAME");
 
 
 // The rest you should not need to change

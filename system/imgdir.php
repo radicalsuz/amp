@@ -79,7 +79,7 @@ for($t=0;$t<$numberOfFiles;$t++)	{
 			<?php }
 			if (isset($MM_season)) {	?>
 		<td><?php echo $getgal->Fields("season"); ?></td>	  <?php }?>
-		<td><a href="imgdir.php?actdel=<?php echo $thisName ?>">delete</a></td>
+		<td><a href="imgdir.php?actdel=<?php echo $thisName ?>" onclick="return confirmSubmit('Are you sure you want to DELETE this image?')">delete</a></td>
 		
 		</tr>
 <?php

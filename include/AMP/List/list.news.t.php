@@ -33,6 +33,6 @@ else{
 }
 
 if($limit < $listct->fields[0]) {
-	echo '<span class="go"><a href="article.php?list=class&class='. $classpr .'">More <b>&#187;</b></a></span>'
+	echo '<span class="go"><a href="article.php?list=class&class='. $classpr .'">More <b>&#187;</b></a></span>';
 }
 ?>

@@ -13,7 +13,7 @@
  */
 require("Connections/freedomrising.php");
 
-include_once("feedonfeeds/init.php");
+include_once("FeedOnFeeds/init.php");
 
 $feed = $_GET['feed'];
 

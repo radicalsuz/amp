@@ -1,0 +1,4 @@
+This is hacked portion of the original distibution of MagpieRSS.
+Changes have been made to rss_parse.inc, look for "SJM" in the comments.
+
+You can download the full distibution of MagpieRSS at http://magpierss.sourceforge.net/
