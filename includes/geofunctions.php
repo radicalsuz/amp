@@ -7,7 +7,7 @@ geo_getdata( "3212 24th St., San Francisco, CA" );
 
 function geo_getdata($address) {
 
-	$req =& new HTTP_Request( "http://rpc.geocoder.us/rest" );
+	$req =& new HTTP_Request( "http://rpc.geocoder.us/service/rest" );
 	$req->setMethod( HTTP_REQUEST_METHOD_GET );
 	
 	// assumes $address is *not* urlencoded
