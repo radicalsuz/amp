@@ -43,10 +43,10 @@ if (!defined('AMP_LOCAL_PATH'))
      define( 'AMP_LOCAL_PATH', find_local_path() );
 
 if ( AMP_LOCAL_PATH ) {
-
+	$incpath = ini_get('include_path');
     // Search local paths for includes.
-    ini_set( 'include_path', AMP_LOCAL_PATH . "/custom:" .
-                             AMP_LOCAL_PATH . "/lib:" .
+    ini_set( 'include_path', AMP_LOCAL_PATH . "/custom" . PATH_SEPARATOR .
+                             AMP_LOCAL_PATH . "/lib:" . PATH_SEPARATOR .
                              ini_get('include_path') );
 }
 

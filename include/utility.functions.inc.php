@@ -17,8 +17,7 @@ if ( !function_exists( 'file_exists_incpath' ) ) {
         foreach ($paths as $path)
         {
             // Formulate the absolute path
-            $fullpath = $path . DIRECTORY_SEPARATOR . $file;
-
+            $fullpath = $path . "/" . $file;
             // Check it
             if (file_exists($fullpath)) {
                 return true;
@@ -394,10 +393,9 @@ function pagination($count,$offset,$limit) {
 function find_local_path () {
 
     if (function_exists('apache_lookup_uri')) {
-
-        $localInfo = apache_lookup_uri( '/custom' );
-        $localPath = preg_replace( "/(.*)\/custom$/", "\$1", $localInfo->filename );
-        
+		
+        $localInfo = apache_lookup_uri( '/custom/' );
+		$localPath = preg_replace( "/(.*)\/custom.*/", "\$1", $localInfo->filename );
     }
 
     if (isset($localPath)) $customPath = $localPath . '/custom';
@@ -405,7 +403,7 @@ function find_local_path () {
     $searchPath = '.';
     $depth = 0;
     while ( !is_dir($customPath) && $depth++ < 4 ) {
-        $customPath = $searchPath . '/custom'; //realpath($searchPath) . '/custom';
+		$customPath = $searchPath . '/custom'; //realpath($searchPath) . '/custom';
         $localPath = realpath( $searchPath );
         $searchPath = '../' . $searchPath;
     }
