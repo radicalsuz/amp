@@ -12,9 +12,12 @@ Touch: Margot
 *********************/ 
 
 
+
+// function that makes a nav that shows sub sections if in that section
+
 function nav_sub_content($type) {
 	global $dbcon;
-	$html .= '<ul class= nav_sub_list>';
+	$html .= '<ul class="nav_sub_list">';
 	$sql = "select title,id, linktext from articles where type = $type and publish =1 and (class !=2 and class !=8 )";
 	$R=$dbcon->Execute($sql) or DIE('Could not load the sub navigation information'.$sql.$dbcon->ErrorMsg());	
 	while (!$R->EOF) {
@@ -24,16 +27,13 @@ function nav_sub_content($type) {
 		else {
 			$link = $R->Fields("title");
 		}
-		$html .= '<li><a href="article.php?id='.$R->Fields("id").'">'.$link.'</a></li>';
+		$html .= '<li class="nav_sub_list"><a href="article.php?id='.$R->Fields("id").'" class="nav_sub_list">'.$link.'</a></li>';
 		$R->MoveNext();
 	}
+
 	$html .= '</ul>';
 	return $html;
 }
-
-
-
-// function that makes a nav that shows sub sections if in that section
 
 function nav_sub_section($type) {
 	global $dbcon;
@@ -41,12 +41,13 @@ function nav_sub_section($type) {
 		$sql = "select type, id from articletype where parent = $type and usenav =1 order by textorder, id asc";
 		$R=$dbcon->Execute($sql) or DIE('Could not load the sub navigation information'.$sql.$dbcon->ErrorMsg());	
 		while (!$R->EOF) {
-			$html .= '<li><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>'; 
+			$html .= '<li class="nav_sub_list"><a href="section.php?id='.$R->Fields("id").'" class="nav_sub_list" >'.$R->Fields("type").'</a></li>'; 
 			$R->MoveNext();
 	} 
 	$html .= '</ul>';
 	return $html;
 }
+
 
 // function that builds Nav that shows top level sections
 function nav_menu_dd($type){
@@ -61,9 +62,9 @@ function nav_menu_dd($type){
 
 	while (!$R->EOF) {
         if (($type == $R->Fields("id")) ||  ($R->Fields("id") == $subsections->Fields("parent")) ) {
-            $html .= '<li class="nav_active"><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>';
+            $html .= '<li ><a href="section.php?id='.$R->Fields("id").'" class="nav_active" >'.$R->Fields("type").'</a></li>';
         } else { 
-		    $html .= '<li><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>';
+		    $html .= '<li class="nav_list"><a href="section.php?id='.$R->Fields("id").'" class="nav_list">'.$R->Fields("type").'</a></li>';
         }
 		if (($type == $R->Fields("id")) ||  ($R->Fields("id") == $subsections->Fields("parent")) ) {
 			if ($R->Fields("listtype")  == 5) {
@@ -74,6 +75,7 @@ function nav_menu_dd($type){
 				$html .= nav_sub_section($R->Fields("id"));
 				$html .= nav_sub_content($R->Fields("id"));
 			}
+		}
 		$R->MoveNext();
 	}
 	$html .= '</ul>';
