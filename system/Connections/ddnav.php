@@ -28,9 +28,9 @@ suboffset_left=100;	// Sub menu offset Left position
 closeOnClick = true
 
 style1=[			// style1 is an array of properties. You can have as many property arrays as you need. This means that menus can have their own style.
-"#ffffff",				// Mouse Off Font Color
+"#006699",				// Mouse Off Font Color
 "",			// Mouse Off Background Color
-"#ffffff",			// Mouse On Font Color
+"#006699",			// Mouse On Font Color
 "",			// Mouse On Background Color
 "#006699",			// Menu Border Color 
 12,					// Font Size in pixels
