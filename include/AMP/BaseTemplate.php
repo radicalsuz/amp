@@ -28,19 +28,19 @@ if ( !function_exists( 'buildheader' ) ) {
 
         if ($headertitle =="Article") $headertitle = "";
         
-        $htmlheader.="<meta http-equiv=\"Description\" content=\"$meta_description\">" .
-                     "<meta name=\"Keywords\" content=\"$meta_content\">" .
-                     "<link rel=\"Search\" href=\"/search.php\">";
+        $htmlheader.="<meta http-equiv=\"Description\" content=\"$meta_description\">\n" .
+                     "<meta name=\"Keywords\" content=\"$meta_content\">\n" .
+                     "<link rel=\"Search\" href=\"/search.php\">\n";
         if ( file_exists( $AmpPath . "img/favicon.ico" ) ) {
             $htmlheader .= '<link rel="icon" href="' . $AmpPath . 'img/favicon.ico" type="image/x-icon" />';
         }
 
-        $htmlheader.="<title>".$SiteName.$headertitle."</title>";
+        $htmlheader.="<title>".$SiteName.$headertitle."</title>\n";
 
         $allsheets=explode(", ", $css);
 
         for ($i=0;  $i<count($allsheets);$i++) {
-                $htmlheader.="<link href=\"".$Web_url.trim($allsheets[$i])."\" rel=\"stylesheet\" type=\"text/css\">";
+                $htmlheader.="<link href=\"".$Web_url.trim($allsheets[$i])."\" rel=\"stylesheet\" type=\"text/css\">\n";
         }
 		if ($extra_header) {
 			$htmlheader.=$extra_header;

@@ -17,7 +17,7 @@ function file_list($file){
 	$dir = opendir($dir_name);
 	$basename = basename($dir_name);
 	$fileArr = array();
-	
+	$fileArr[''] = 'Select';
 	while ($file_name = readdir($dir))
 	{
 		if (($file_name !=".") && ($file_name != "..")) {
@@ -28,9 +28,7 @@ function file_list($file){
 			//$fileArr[$file_name][Date] = $fTime;    
 		}
 	}
-	# Use arsort to get most recent first
-	# and asort to get oldest first
-	//arsort($fileArr);	
+
 	return $fileArr;
 }  
 if ($userper[2] or  $userper[1] ) { } else { header ("Location: index.php"); }
@@ -292,6 +290,10 @@ function change(which) {
 	document.getElementById('advanced').style.display = 'none'; 
     document.getElementById(which).style.display = 'block';
     }
+function change2(which) {
+    document.getElementById('upload').style.display = 'none';
+	document.getElementById(which).style.display = 'block';
+    }
 </script>
 
 <ul id="topnav">
@@ -423,7 +425,7 @@ function change(which) {
        
           <tr> 
             <td valign="top"><span align="left" class="name">Date</span><br> </td>
-            <td valign="top" class="text"> <input type="text" name="date" size="25" value="<?php echo DateConvertOut($r->Fields("date"))?>">
+            <td valign="top" class="text"> <input type="text" name="date" size="25" value="<?php if ($r->Fields("date")) { echo DateConvertOut($r->Fields("date")) ;} else {echo "00-00-0000";}?>">
 			
 			<script language="javascript"><!-- 
 if (!document.layers) {
@@ -445,7 +447,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td> <textarea name="contact" cols="45" rows="2" wrap="VIRTUAL"><?php echo htmlspecialchars($r->Fields("contact"))?></textarea> 
             </td>
           </tr>
-		  </table>
+		  </table> 
 		  </div>
 		    <div id="picture" style="display: none ;">
 		  <table width="100%" border="0" align="center"> 
@@ -453,11 +455,10 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td colspan="2" valign="top"><?php echo helpme("Image"); ?> Image 
               (to appear on front page and in first paragraph of article)</td>
           </tr>
- <?php
- 	if (!$_GET['id'] or (!$r->Fields("picture"))) {
-		echo  addfield('file','Uplaod File <br>(jpg files only)','file');
-	} else {
-		$filelist = file_list('img/thumb/'); 
+
+	 
+  
+<?php		$filelist = file_list('img/thumb/'); 
 		//$img_options = makelistarray($G,'id','galleryname','Select Gallery');
 		$Gal = & new Select('picture',$filelist,$r->Fields("picture"));
 		echo $buildform->add_row('Image Filename', $Gal);
@@ -466,10 +467,10 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
  
           <tr class="text"> 
             <td valign="top"><div align="right"></div></td> 
-            <td><p> &nbsp;<a href="imgdir.php" target="_blank">view images</a> 
-                | <a href="imgup.php" target="_blank">upload image</a></td>
-          </tr><?php }?>
-          <tr class="text"> 
+            <td><p> &nbsp;<a href="imgdir.php" target="_blank">View Images</a> | <a href="#"  onclick="change2('upload');" >Upload Image</a></td>
+          </tr><tr><td colspan="2"><div id="upload" style="display:none;"><table width="100%" border="0" align="center"> 
+		<?php	echo  addfield('file','Uplaod New Image <br>(jpg files only)','file','','Select image');?>	</table></div>
+          </td></tr><tr class="text"> 
             <td valign="top"><div align="right"></div></td> 
             <td>      <input <?php If (($r->Fields("picuse")) == "1") { echo "CHECKED";} ?> type="checkbox" name="usepict" value="1">
                 USE THIS IMAGE<br>
