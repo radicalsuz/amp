@@ -7,6 +7,8 @@
  * Creates an HTML_QuickForm object based on the contents of
  * an UDM object.
  *
+ * Copyright (c) 2004 Radial Designs
+ *
  *****/
 
 require_once( 'HTML/QuickForm.php' );
