@@ -13,7 +13,7 @@ function display_alerts($q) {
 }
 $sql="select form alerts where publish =1 order by data desc";
 $alerts_txt=$ampdbcon->Execute($sql) or DIE($dbcon->ErrorMsg());
-echo "<h2>AMP SYSTEM UPDATES & NEWS</h2>":
+echo "<h2>AMP SYSTEM UPDATES & NEWS</h2>";
 display_alerts($alerts_txt);
 
 ?>
