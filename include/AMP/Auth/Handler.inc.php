@@ -101,11 +101,12 @@ class AMP_Authentication_Handler {
             // By this time, we've validated the data, so we don't need to
             // escape it.
 
+/*
             if ($old_hash) {
                 $sql = "UPDATE users_sessions SET hash='$hash', secret='$secret', last_time='$now' WHERE hash='$old_hash'";
-            } else {
+            } else { */
                 $sql = "INSERT INTO users_sessions (hash, secret, in_time, last_time) VALUES ('$hash', '$secret', '$now', '$now')";
-            }
+//            }
 
             $dbcon->Execute( $sql );
 
@@ -123,6 +124,7 @@ class AMP_Authentication_Handler {
     }
 
     function check_cookie ( $cookie ) {
+
 		$dbcon = $this->dbcon;
 
         $cookie = explode( ':', $_COOKIE['AMPLoginCredentials'] );
@@ -138,7 +140,6 @@ class AMP_Authentication_Handler {
 
             return false;
         }
-
 
         $cookie_sql = "SELECT hash, secret, last_time FROM users_sessions WHERE hash=" . $dbcon->qstr( $cookie['hash'] );
         $authdata = $dbcon->GetRow( $cookie_sql );
