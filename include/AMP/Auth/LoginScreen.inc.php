@@ -26,7 +26,7 @@
             width: 400px;
             margin: 0 auto;
             padding: 2ex 0 0 0;
-            border: 1px solid grey;
+            border: 1px solid #999999;
             text-align: center;
         }
 
@@ -39,16 +39,16 @@
 
         p.Error {
             color: white;
-            background-color: #c00;
-            border: 1px outset #600;
+            background-color: #cc0000;
+            border: 1px outset #660000;
             font-weight: bold;
         }
 
         p.OK {
             font-size: 72%;
-            color: #262;
-            background-color: #cfc;
-            border: 1px outset #8a8;
+            color: #226622;
+            background-color: #ccffcc;
+            border: 1px outset #88aa88;
         }
 
         form#login div#formWrap {
@@ -64,7 +64,7 @@
             font-size: 90%;
         }
 
-        form#login input[TYPE="submit"] {
+        form#login input#login {
             margin: 2ex auto 0 auto;
             width: 8em;
         }
@@ -72,7 +72,7 @@
         form#login label {
             font-size: 80%;
             margin-left: 50px;
-            color: #333;
+            color: #333333;
         }
 
         form#login label[FOR="password"] {
@@ -82,7 +82,7 @@
 
         p.loginNote {
             font-size: 65%;
-            color: grey;
+            color: #999999; 
             text-align: center;
         }
 
