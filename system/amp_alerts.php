@@ -7,7 +7,7 @@ function display_alerts($q) {
 	echo "<table width=\"100%\" cellpadding=3><tr><td>";
 	while (!$q->EOF) {
 		echo "<h3>".$q->Fields("alert_title")."</h3>";
-		echo "<p><b>".$q->Fields("date")."</b><br>".$q->Fields("alert_text")."</p><br>";
+		echo "<p class=\"name\"><b>".$q->Fields("date")."</b><br>".$q->Fields("alert_text")."</p><br>";
 		
 		$q->MoveNext();
 	}
