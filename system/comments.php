@@ -9,11 +9,11 @@ $buildform = new BuildForm;
 $table = "comments";
 $listtitle ="Comments";
 if ($_GET['cid']) {
-	$listsql ="select title, articleid, publish, id   from $table where articleid =".$_GET['cid'] ;
+	$listsql ="select title, articleid, publish, id   from $table where articleid =".$_GET['cid']  ;
 } else {
 	$listsql ="select title, articleid, publish, id   from $table  ";
 }
-$orderby =" order by date  desc  ";
+$orderby =" order by  asc  ";
 $fieldsarray=array( 'Title'=>'title','Article ID'=>'articleid','Status'=>'publish');
 $filename="comments.php";
 
@@ -47,7 +47,7 @@ $html .= addfield('publish','Publish','checkbox',$R->Fields("publish"));
 $html .= addfield('author','Author','text',$R->Fields("author"));
 $html .= addfield('email','Email','text',$R->Fields("email"));
 $html .= addfield('title','Title','text',$R->Fields("title"));
-$html .= addfield('comment','Comment','textarea',$R->Fields("comment"),'',10);
+$html .= addfield('comment','Comment','textarea',$R->Fields("comment"),'',55,15);
 
 $html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id->fetch());
 $html .= $buildform->end_table();
