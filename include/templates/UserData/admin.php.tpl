@@ -175,7 +175,15 @@ function addPlugin() {
     }
 
     div#tabs ul li {
-        margin: 0 0.25ex;
+        margin: 0 0.25ex -5px;
+        padding-top: 10px;
+        vertical-align: bottom;
+    }
+
+    li.buttons {
+        padding-top: 0px;
+        padding-bottom: 6px;
+        margin-bottom: 6px;
     }
 
     label.field_title {
@@ -225,8 +233,9 @@ function addPlugin() {
         width: 250px;
         height: 100px;
     }
-
 </style>
+
+<form <?= $this->form['attributes'] ?>>
 
 <div id="tabs">
     <ul id="topnav">
@@ -235,6 +244,7 @@ function addPlugin() {
         <li class="tab3"><span id="custom_tab_btn" onclick="change('custom_tab');">Custom Fields</span></li>
         <li class="tab4"><span id="plugins_tab_btn" onclick="change('plugins_tab');">Plugins</span></li>
         <li class="tab5"><span id="preview_tab_btn" onclick="change('preview_tab');">Preview</span></li>
+        <li class="buttons" style="float: right;"><?php foreach ($this->form['sections'][0]['elements'] as $e): ?><?= $e['html'] ?><?php endforeach; ?></li>
     </ul>
 </div>
 
@@ -244,15 +254,9 @@ function addPlugin() {
 
 <div id="formContainer">
 
-<style type="text/css">
-
-</style>
-
-<form <?= $this->form['attributes'] ?>>
-
-<?= $this->form['hidden'] ?>
-
 <?php foreach ( $this->form['sections'] as $section ): ?>
+
+    <?php if ($section['name'] == '') continue; ?>
 
     <div id="<?= $section['name'] ?>" class="tab">
 
@@ -299,6 +303,6 @@ function addPlugin() {
 
 <?php endforeach; ?>
 
-</form>
-
 </div>
+
+</form>

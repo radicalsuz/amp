@@ -32,7 +32,7 @@ $sub = (isset($_REQUEST['btnUdmSubmit']) && $_REQUEST['btnUdmSubmit']);
 
 // Fetch or save user data.
 if ( $sub ) {
-    $udm->doPlugin( 'AMP', 'SaveAdmin' );
+    $udm->doPlugin( 'AMPsystem', 'Save' );
 }
 
 /* Now Output the Form.

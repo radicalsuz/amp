@@ -1,10 +1,32 @@
 <?php
 
+require_once( 'AMP/UserData/Plugin/Save.inc.php' );
+
+class UserDataPlugin_Save_AMPsystem extends UserDataPlugin_Save {
+
+    var $name        = 'Save Form Structure';
+    var $description = 'Saves the structure of the form.';
+
+    var $available = false;
+
+    function UserDataPlugin_Save_AMPsystem ( &$udm ) {
+        $this->init( $udm );
+    }
+
+    function execute ( $options = null ) {
+
+        // just make it work for now.
+        udm_amp_save_admin( $this->udm, $options );
+
+    }
+
+}
+
 function udm_amp_save_admin ( &$udm, $options = null ) {
 
 	$dbcon = $udm->dbcon;
 
-    $udm->doPlugin( 'AMP', 'fixup_db' );
+    $udm->doPlugin( 'AMP', 'FixupDB' );
 
 	// Insert or Update?
 	if (isset( $udm->instance )) {
@@ -24,6 +46,7 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 
 			if ( $field == 'id' ) continue;
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
+            if ( strpos( $field, 'plugin_' ) === 0 ) continue;
 
 			$elements[] = $sql_field . "=" . $dbcon->qstr( $udm->form->getSubmitValue( $field ) );
 

@@ -380,7 +380,7 @@ function udm_QuickForm_build_admin ( &$udm, $options = null ) {
     $form = new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
 
     $form->addElement( 'hidden', 'modin', 'Module Instance' );
-    $form->addElement( 'submit', 'btnUdmSubmit', 'Submit' );
+    $form->addElement( 'submit', 'btnUdmSubmit', 'Save' );
 
     /* Fetch module information.
         this should be moved to some generic AMP class or somesuch.

@@ -42,7 +42,7 @@ if (!isset($_REQUEST['modin'])) {
 
     // Fetch the form instance specified by submitted modin value.
     $udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ], true );
-    $udm->doPlugin( "QuickForm", "build_admin" );
+    $udm->doPlugin( "QuickForm", "BuildAdmin" );
 
     if ($new_modin = $udm->doPlugin( "AMPsystem", "copy_admin" )) {
 
