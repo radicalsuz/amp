@@ -32,7 +32,7 @@ if ( !function_exists( 'evalnavhtml' ) ) {
 			$incl = str_replace('"','',$include_args);
 			//echo $incl.'<br>';
 			ob_start();
-			$basefile = $base_path . 'include/AMP/Navs/'.$incl;
+			$basefile = AMP_BASE_PATH . 'include/AMP/Navs/'.$incl;
 			echo $basefile;
 			if (file_exists($basefile)) {
 				$file = 'AMP/Navs/'.$incl;
