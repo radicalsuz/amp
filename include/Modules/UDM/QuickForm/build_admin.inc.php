@@ -30,6 +30,11 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
     $form->addElement( 'hidden', 'modin', 'Module Instance' );
     $form->addElement( 'submit', 'btnUdmSubmit', 'Submit' );
 
+    if ( isset( $udm->uid ) ) {
+        $form->addElement( 'hidden', 'uid', 'User ID' );
+        $form->setConstants( array( 'uid' => $udm->uid ) );
+    }
+
     $tabs = '<tr><td colspan="2" style="border-bottom: 1px solid grey; margin: 0; padding: 0;"><br /><script type="text/javascript">
 
 
@@ -41,14 +46,14 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
                   }
 
                   function changef(which) {
-						var setting = document.getElementById(which).style.display;
-						if ( setting == \'block\' ) {
-							document.getElementById(which).style.display = \'none\';
-							document.getElementById( "arrow_" + which ).src = \'images/arrow-right.gif\';
-						} else {
+                        var setting = document.getElementById(which).style.display;
+                        if ( setting == \'block\' ) {
+                            document.getElementById(which).style.display = \'none\';
+                            document.getElementById( "arrow_" + which ).src = \'images/arrow-right.gif\';
+                        } else {
                               document.getElementById(which).style.display = \'block\';
-				document.getElementById( "arrow_" + which ).src = \'images/arrow-down.gif\';
-						}
+                document.getElementById( "arrow_" + which ).src = \'images/arrow-down.gif\';
+                        }
                   }
 
 
@@ -101,7 +106,7 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
 
 
     $fields =& $udm->fields;
-    $fields['core_name']          = array( 'label' => 'Name', 		      'type' => 'text' );
+    $fields['core_name']          = array( 'label' => 'Name',             'type' => 'text' );
     $fields['core_redirect']      = array( 'label' => 'Redirect URL',         'type' => 'text' );
     $fields['core_modidinput']    = array( 'label' => 'Module ID (Input)',    'type' => 'select', 'values' => $modules );
     $fields['core_modidresponse'] = array( 'label' => 'Module ID (Response)', 'type' => 'select', 'values' => $modules );
@@ -125,7 +130,7 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
     }
 
     $fSep = array( "</td>\n<td>", // down arrow -> field name
-		   "</td>\n<td>", // field name -> enabled
+           "</td>\n<td>", // field name -> enabled
                    "</td>\n<td>", // enabled -> public
                    "</td>\n<td>", // public -> required
                    "</td></tr><tr><td colspan=\"5\">\n", // required -> hidden stuff, type
@@ -197,11 +202,11 @@ function udm_quickform_addElement( $form, $name, $field_def, $admin = false ) {
     $group =& $form->getElement( $groupName );
     $elements =& $group->getElements();
 
-	$jscript = "onclick=\"changef('$name');\"";
+    $jscript = "onclick=\"changef('$name');\"";
     $regions = array( '' => '--' ) + $GLOBALS['regionObj']->getTLRegions();
 
     if ( $groupName != "core" ) {
-	$elements[] = &HTML_QuickForm::createElement( 'link', 'arrow', null, '#', '<img src="images/arrow-right.gif" border="0" id="arrow_' . $name . '" />', $jscript );
+    $elements[] = &HTML_QuickForm::createElement( 'link', 'arrow', null, '#', '<img src="images/arrow-right.gif" border="0" id="arrow_' . $name . '" />', $jscript );
         $elements[] = &HTML_QuickForm::createElement( 'static', 'title', null, ( $label ) ? $label : 'Unnamed Field' );
         $elements[] = &HTML_QuickForm::createElement( 'checkbox', 'enabled_' . $name, null, 'enabled' );
         $elements[] = &HTML_QuickForm::createElement( 'checkbox', 'public_' . $name, null, 'public' );
