@@ -75,7 +75,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
 
 function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
 
-    if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
+    if ( $field_def[ 'public' ] != 1 || ( $field_def['enabled'] == 1 && $admin ) ) return false;
 
     $type     = $field_def[ 'type'   ];
     $label    = $field_def[ 'label'  ];
@@ -175,13 +175,13 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
     }
 
 
-    if ( isset( $field_def[ 'required' ] ) && $field_def[ 'required' ] )
+    if ( isset( $field_def[ 'required' ] ) && $field_def[ 'required' ] && !$admin )
         $form->addRule( $name, $label . ' is required.', 'required' );
     
 //    if ( isset( $field_def[ 'size' ] ) && $field_def['size'] )
 //        $form->addRule( $name, $label . ' must be less than ' . $field_def[ 'size' ] + 1 . ' characters long.', 'maxlength', $field_def[ 'size' ] );
         
-    if ( $name == 'Email' )
+    if ( $name == 'Email' && !$admin )
         $form->addRule( $name, 'Must be a valid email address.', 'emailorblank' );
         
     return 1;
