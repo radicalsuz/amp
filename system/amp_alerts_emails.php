@@ -1,5 +1,6 @@
 <h3>AMP Email Alerts</h3>
-<form name="form" method="post" action="http://www.radicaldesigns.org/custom/amp_alerts.php" class="name">
+<?php if ($_GET["message"]) {echo $_GET["message"];} ?>
+<form name="form" method="post" action="http://www.radicaldesigns.org/custom/alert_emails.php" class="name">
 <input name="redirect" type="hidden" value="<?php echo $_SERVER["SCRIPT_URI"]."?".$_SERVER["QUERY_STRING"] ?>">
 <input name="user_ID" type="hidden" value="<?php echo $ID ?>">
 <input name="domain" type="hidden" value="<?php echo $_SERVER["HTTP_HOST"] ?>">
