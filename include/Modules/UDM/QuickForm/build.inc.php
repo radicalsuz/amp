@@ -61,7 +61,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     $form->setConstants( $consts );
 
     if ( !isset( $options[ 'no_validate' ] ) ) {
-        if ( $form->validate() ) {
+        if ( !$form->validate() ) {
             $udm->form = $form;
             return false;
         }

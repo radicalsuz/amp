@@ -54,13 +54,20 @@ class UserDataInput extends UserData {
 
         if (!isset( $this->form )) {
 
-            $this->doPlugin( 'QuickForm', 'build', $options );
+            $result = $this->doPlugin( 'QuickForm', 'build', $options );
 
         }
 
-        $this->modTemplateID = $this->_module_def['modidresponse'];
+        if ( $result ) {
 
-        return $this->doAction( 'save', $options );
+            $this->modTemplateID = $this->_module_def['modidresponse'];
+            return $this->doAction( 'save', $options );
+
+        } else { 
+
+            return false;
+
+        }
 
     }
 

@@ -167,7 +167,7 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
     $form->setConstants( array( 'modin' => $udm->instance ) );
 
     if ( !isset( $options[ 'no_validate' ] ) ) {
-        if ( $form->validate() ) {
+        if ( !$form->validate() ) {
             $udm->form = $form;
             return false;
         }
