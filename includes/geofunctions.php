@@ -15,7 +15,8 @@ require_once "XML/Unserializer.php";
     }
 
 
-geo_getdata( "3212 24th St., San Francisco, CA" );
+$latlong = geo_getdata( "3212 24th St., San Francisco, CA" );
+geo_showmap( $latlong );
 
 function geo_getdata($address) {
 
@@ -36,16 +37,11 @@ function geo_getdata($address) {
 
     $result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result . "\n";
 
-print "<pre>";
     $xmlparser = new XML_Unserializer();
     $parse_result = $xmlparser->unserialize( $result, false );
-#print_r( $xmlparser)."\n";
     $data = $xmlparser->getUnserializedData();
 
-print_r( $result ) . "\n";
-print_r( $parse_result ) . "\n";
-    print_r( $data );
-print "</pre>";
+    return array( $data['geo:Point']['geo:lat'], $data['geo:Point']['get:long'] );
 
 }
 		
