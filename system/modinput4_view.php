@@ -24,7 +24,7 @@ if ($userper[54]) { //UDM All permission
 	$udm->admin = true;
 }
 
-$modidselect = $dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $dbcon->qstr(udm->instance) )
+$modidselect = $dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $dbcon->qstr($udm->instance) )
                 or die("Couldn't get module information for form: " . $dbcon->ErrorMsg());
 $modid = $modidselect->Fields("id");
 $modin_permission = $modidselect->Fields("perid");
