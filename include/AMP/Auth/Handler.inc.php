@@ -10,7 +10,7 @@ class AMP_Authentication_Handler {
     var $message_type = 'Error';
     var $message;
 
-    var $timeout = 1800;					// default timeout of 30 minutes.
+    var $timeout = 43200;					// default timeout of 12 hours.
 
     var $dbcon;
 
