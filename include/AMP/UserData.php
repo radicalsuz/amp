@@ -396,9 +396,8 @@ class UserData {
 
     function tryPlugin( $namespace, $action, $options = array() ) {
 
-        //fixme should tryplugin really Register the plugin??
-        $plugin =& $this->registerPlugin( $namespace, $action );
-        return $plugin->execute( $options );
+        if ($plugin =& $this->getPlugin( $namespace, $action )) return $plugin->execute( $options );
+        else return false;
 
     }
 

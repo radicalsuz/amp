@@ -5,6 +5,7 @@ require_once( 'AMP/UserData.php' );
 class UserDataSet extends UserData {
 	var $set_sql;
 	var $results;
+    var $users;
 
     function UserDataSet( &$dbcon, $instance, $admin = false ) {
 
@@ -22,18 +23,27 @@ class UserDataSet extends UserData {
 
     }
 
-	//Gets the userdata from the DB
+    function setData($dataset) {
+        $this->users=$dataset;
+    }
 
+
+    function getData () {
+        return $this->users;
+    }
+    //DB functions -- these are irrelevant but will be left in 
+    //for backward compatibility till the new plugins
+    //are confirmed-working
 	function getSet($options) {
 		$list_sql=$this->_render_sql();
 		if ($_REQUEST['debug']==1) print $list_sql;
-		$this->results=$this->dbcon->GetArray($list_sql);
+		$this->results=$this->dbcon->CacheGetAll($list_sql);
 		return (is_array($this->results));
 	}
 	
 	function returnRS() {
 		$list_sql=$this->_render_sql();
-		return ($this->dbcon->Execute($list_sql));
+		return ($this->dbcon->CacheExecute($list_sql));
 	}
 	
 	function _render_sql($save_it=true) {

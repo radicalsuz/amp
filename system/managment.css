@@ -80,12 +80,13 @@ A.toplinks {
 
 /* id for the sidebar */
 
-p.side, a.side, .list_controls {
+p.side, a.side {
 	font-size: 9px;
 	text-align: left;
 	text-decoration : none;
 	margin-left: 7px;
 }
+
 
 ul.side {
 	margin: 0;
@@ -180,6 +181,12 @@ li.side_home {
 	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
 }
 
+/* Display Page Classes */
+.list_controls {
+	font-size: 9px;
+	text-decoration : none;
+	margin-left: 3px;
+}
 
 /* CONTENT LAYOOUT CLASSES */
 

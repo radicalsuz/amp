@@ -305,7 +305,7 @@ class UserDataPlugin {
                 $option_def=$this->options[$option_name];
 
                 if (isset($option_def['value'])) {
-                    $return_options[$option_name]=$option_value['value'];
+                    $return_options[$option_name]=$option_def['value'];
                 } else {
 
                     if (isset($option_def['default'])) {
