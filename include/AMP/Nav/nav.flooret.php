@@ -1,14 +1,27 @@
 <?php
 
+/*********************
+03-16-2005  v3.01
+Module:  Navigation
+Description:  displays an expanding navigation menu that lists 
+top level sections and one level of subsections
+CSS: nav_sub_list, nav_list, nav_active, nav_sub_active
+SYS VARS: $MM_type
+To Do: 
+Touch: Margot
+*********************/ 
+
+
+
 // function that makes a nav that shows sub sections if in that section
 
 function nav_subs($type,$list) {
 	global $dbcon;
-	$html .= '<ul class= nav_sub_list>';
+	$html .= '<ul class="nav_sub_list">';
 		$sql = "select type, id from articletype where parent = $type and usenav =1 order by textorder, id asc";
 		$R=$dbcon->Execute($sql) or DIE('Could not load the sub navigation information'.$sql.$dbcon->ErrorMsg());	
 		while (!$R->EOF) {
-			$html .= '<li><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>';
+			$html .= '<li><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>'; 
 			$R->MoveNext();
 	} 
 	$html .= '</ul>';
@@ -21,12 +34,17 @@ function nav_menu_dd($type){
 	$sql = "select type, id, listtype  from articletype where parent = 1 and usenav =1 order by textorder, id asc";
 		$subsql = "select type, parent, id, listtype  from articletype where id = $type and usenav =1 order by textorder, id asc";
 	
-     $R=$dbcon->Execute($sql) or DIE('Could not load the navigation information'.$sql.$dbcon->ErrorMsg());	
+    $R=$dbcon->Execute($sql) or DIE('Could not load the navigation information'.$sql.$dbcon->ErrorMsg());	
 	$subsections=$dbcon->Execute($subsql) or DIE('Could not load the navigation information'.$sql.$dbcon->ErrorMsg());	
-	$html .= '<ul class="nav_list">' ;
-	while (!$R->EOF) {
+	
+    $html .= '<ul class="nav_list">' ;
 
-		$html .= '<li><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>';
+	while (!$R->EOF) {
+        if (($type == $R->Fields("id")) ||  ($R->Fields("id") == $subsections->Fields("parent")) ) {
+            $html .= '<li class="nav_active"><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>';
+        } else { 
+		    $html .= '<li><a href="section.php?id='.$R->Fields("id").'">'.$R->Fields("type").'</a></li>';
+        }
 		if (($type == $R->Fields("id")) ||  ($R->Fields("id") == $subsections->Fields("parent")) ) {
 			$html .= nav_subs($R->Fields("id"),$R->Fields("listtype"));
 		}
