@@ -14,16 +14,16 @@ $attr_rs = $dbcon->Execute( $attribute_sql );
 $list_rs = $dbcon->Execute( $list_sql );
 
 while ( $row = $user_rs->FetchRow() ) {
-    $subdata[ $row['id'] ] = $row;
+    $subdata[ "user id=\"{$row['id']}\"" ] = $row;
 }
 
 while ( $row = $attr_rs->FetchRow() ) {
     $attrname = str_replace( " ", "-", $row['name'] );
-    $subdata[ $row[ 'userid' ] ][ $attrname ] = $row[ 'value' ];
+    $subdata[ "user id=\"{$row[ 'userid' ]}\"" ][ $attrname ] = $row[ 'value' ];
 }
 
 while ( $row = $list_rs->FetchRow() ) {
-    $subdata[ $row[ 'userid' ] ]['lists'][] = $row[ 'listid' ];
+    $subdata[ "user id=\"{$row[ 'userid' ]}\"" ]['lists'][] = $row[ 'listid' ];
 }
 
 $serializer = new XML_Serializer();
