@@ -31,11 +31,13 @@ class UserData {
 
     // Store raw (database-backed) module definition.
     var $_module_def;
-    var $modTemplateID;
-
-    var $class;
     var $instance;
 
+    // Templating information for AMP
+    var $modTemplateID;
+
+    // Computed Fields ( including plugin fields )
+    var $name;
     var $fields;
 
     // User ID
@@ -47,17 +49,18 @@ class UserData {
     // Placeholder for HTML_QuickForm. Not required for display-only.
     var $form;
 
-    var $name;
-    var $date;
+    // Configuration settings, legacy only.
+    var $redirect;
     var $mailto;
     var $subject;
 
+    // flag to enable / disable display of form to user.
     var $showForm;
 
+    // Flag to indicate administrator access.
     var $admin;
 
-    var $showAllFields;
-
+    // Arrays for holding result information.
     var $results;
     var $errors;
 
@@ -78,7 +81,7 @@ class UserData {
      *
      *****/
 
-    function UserData ( $dbcon, $instance, $all_fields = false ) {
+    function UserData ( $dbcon, $instance ) {
 
         // Setup database connection. Required.
         if (!isset($dbcon)) return false;
@@ -88,9 +91,6 @@ class UserData {
         // Get module instance. Required.
         $this->instance = preg_replace( "/(\d+)/", "\$1", $instance );
         if ( $this->instance == '' ) trigger_error( "No module specified!" );
-
-        // Set wether or not we're dealing with all available fields or not.
-        $this->showAllFields = $all_fields;
 
         // Initialise against database
         $this->init();
@@ -122,10 +122,11 @@ class UserData {
 
         // Define module variables.
         $this->name = $md[ 'name' ];
-        $this->date = $md[ 'date' ];
 
+        // Define redirect config. Legacy, will be replaced by redirect plugin.
         $this->redirect = $md[ 'redirect' ];
 
+        // Define email config. Legacy, will be replaced by email plugins.
         if ( $md[ 'useemail' ] == 1 ) {
             $this->mailto  = $md[ 'mailto' ];
             $this->subject = $md[ 'subject' ];
@@ -573,12 +574,8 @@ class UserData {
 
         foreach ( $fields as $fname ) {
 
-            if ( !$this->showAllFields ) {
-
-                if ( !isset( $md[ 'enabled_' . $fname ] )) continue;
-                if ( !$md[ 'enabled_' . $fname ] ) continue;
-
-            }
+            if ( !isset( $md[ 'enabled_' . $fname ] )) continue;
+            if ( !$md[ 'enabled_' . $fname ] ) continue;
 
             $field = array();
 
