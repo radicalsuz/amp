@@ -19,5 +19,4 @@ $AMP_Authen_Handler = new AMP_Authentication_Handler( $dbcon );
 
 if ( !$AMP_Authen_Handler->is_authenticated() )
     $AMP_Authen_Handler->do_login();
-
 ?>

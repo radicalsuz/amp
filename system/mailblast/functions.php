@@ -47,7 +47,9 @@ function send_mail(&$smtp, $website, $id, $email, $order, $updatefile) {
 
 		else {
 			//glog("error $email id=$id order=$order ok=" . ($ok ? 'TRUE' : 'FALSE') );
-			glog("   smtp_client error: " . $smtp->msg);
+			if (function_exists('glog')) {
+				glog("   smtp_client error: " . $smtp->msg);
+			}
 			echo "error sending $email ($smtp->msg)<br>";
 			return false;
 		}
@@ -176,7 +178,7 @@ global $dbcon;
 global $Web_url;
 	
 	$smtp = new smtp_client();
-	$smtp->log_file = dirname(__FILE__) . "/smtp_client.log";
+	$smtp->log_file = "/custom/smtp_client.log";
 	send_mail($smtp, $Web_url, 1, $_REQUEST['testemail'],1);
 	$smtp->send();
 }

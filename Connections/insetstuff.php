@@ -13,8 +13,8 @@
     }
   
     // append the query string to the redirect URL
-  if ($MM_editRedirectUrl && $QUERY_STRING && (strlen($QUERY_STRING) > 0)) {
-    $MM_editRedirectUrl .= ((strpos($MM_editRedirectUrl, '?') == false)?"?":"&") . $QUERY_STRING;
+  if ($MM_editRedirectUrl && $_SERVER['QUERY_STRING'] && (strlen($_SERVER['QUERY_STRING']) > 0)) {
+    $MM_editRedirectUrl .= ((strpos($MM_editRedirectUrl, '?') == false)?"?":"&") . $_SERVER['QUERY_STRING'];
     }
 	
 	?>

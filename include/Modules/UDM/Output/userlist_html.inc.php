@@ -596,18 +596,21 @@ function udm_output_userlist_html($udm, $options=null) {
 		return $options;
 	}
 
-	// converts system fieldnames to UDM-assigned fieldnames
+	if (!function_exists('list_translateFields')){
 
-	function list_translateFields($fieldname, &$udm, $options) {
-		$returnField=strip_tags($udm->fields[$fieldname]['label']);
-		if ($options['allow_lookups']) {
-			if (isset($options['Lookups'][$fieldname]['LookupName'])){
-				$returnField=$options['Lookups'][$fieldname]['LookupName'];
+		// converts system fieldnames to UDM-assigned fieldnames
+
+		function list_translateFields($fieldname, &$udm, $options) {
+			$returnField=strip_tags($udm->fields[$fieldname]['label']);
+			if ($options['allow_lookups']) {
+				if (isset($options['Lookups'][$fieldname]['LookupName'])){
+					$returnField=$options['Lookups'][$fieldname]['LookupName'];
+				}
 			}
-		}
 
-		if ($returnField==NULL) {$returnField=$fieldname;}
-		return $returnField;
+			if ($returnField==NULL) {$returnField=$fieldname;}
+			return $returnField;
+		}
 	}
 
 	//returns Sort columns for inclusion in a SQL query
@@ -621,16 +624,18 @@ function udm_output_userlist_html($udm, $options=null) {
 		return $output;
 	}
 
-	//retrieves Lookup values from database tables and stores them in the options array
-	function list_setupLookups(&$udm, $options) {
-		if (is_array($options['Lookups'])) {
-			foreach($options['Lookups'] as $key=>$this_lookup) {
-				if (isset($this_lookup['LookupTable'])) {
-					$options['Lookups'][$key]['LookupSet']=$udm->dbcon->GetAssoc( "Select id, ".$this_lookup['LookupField']." FROM ".$this_lookup['LookupTable']);
+	if (!function_exists('list_setupLookups')) {
+		//retrieves Lookup values from database tables and stores them in the options array
+		function list_setupLookups(&$udm, $options) {
+			if (is_array($options['Lookups'])) {
+				foreach($options['Lookups'] as $key=>$this_lookup) {
+					if (isset($this_lookup['LookupTable'])) {
+						$options['Lookups'][$key]['LookupSet']=$udm->dbcon->GetAssoc( "Select id, ".$this_lookup['LookupField']." FROM ".$this_lookup['LookupTable']);
+					}
 				}
 			}
+			return $options;
 		}
-		return $options;
 	}
 
 	//returns the editlink value  for inclusion in the SQL query

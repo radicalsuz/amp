@@ -21,13 +21,11 @@ php_flag zlib.output_compression Off
 
 #session_name("processor");
 session_start();
-
+require_once('AMP/BaseDB.php');
 include_once("glog.php");
 glog_set_level(LOG_DEBUG);
-glog_set_file(dirname(__FILE__) . "/blast.log");
-
+glog_set_file(AMP_LOCAL_PATH . "/custom/blast.log");
 #ini_set('max_execution_time', 1000000);
-
 if (!isset($chunk_size))
 	{$chunk_size = 100;}      // how many items to process at a time
 
@@ -39,6 +37,7 @@ if (!isset($process_function))
 
 if (isset($count_function) && !isset($_SESSION['max_count']))
 	{$_SESSION['max_count'] = $count_function();}
+
 
 $action = isset($_REQUEST['processor_action']) ? $_REQUEST['processor_action'] : '';
 

@@ -15,7 +15,7 @@ require_once( 'utility.functions.inc.php');
 
 require("Connections/freedomrising.php");
 
-$modidselect=$dbcon->Execute("SELECT id from modules where userdatamodid=$modin") or DIE($dbcon->ErrorMsg());
+$modidselect=$dbcon->Execute("SELECT id from modules where userdatamodid=".$_REQUEST['modin']) or DIE($dbcon->ErrorMsg());
 $modid=$modidselect->Fields("id");
 
 // Fetch the form instance specified by submitted modin value.

@@ -9,7 +9,7 @@ To Do: declare post vars
 $modid =17;
 $intro_id = 52;
 if ($_POST["thank"] == ("1")) { 
-	  $mod_id = 53 ;
+	  $intro_id = 53 ;
 }
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
@@ -17,6 +17,7 @@ include("AMP/BaseModuleIntro.php");
 
 if ( ($_POST["send"] == 1) && ($MM_email_contact) ) {    
 	mail ( $MM_email_contact, $_POST["subject"], $_POST["message"], "From: ".$_POST["email"]." \nX-Mailer: My PHP Script\n");
+		
 }
 
 if ($_POST["thank"] == (NULL)) { ?>

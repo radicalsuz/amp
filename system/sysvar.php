@@ -4,9 +4,9 @@ $mod_name = "system";
   require("Connections/freedomrising.php");
 ?><?php
   // *** Edit Operations: declare Tables
-  $MM_editAction = $PHP_SELF;
-  if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
+  $MM_editAction = $_SERVER['PHP_SELF'];
+  if ($_SERVER['QUERY_STRING']) {
+    $MM_editAction = $MM_editAction . "?" . $_SERVER['QUERY_STRING'];
   }
 
   $MM_abortEdit = 0;
@@ -15,19 +15,19 @@ $mod_name = "system";
 ?><?php
   // *** Update Record: set variables
   
-  if (isset($MM_update) && (isset($MM_recordId))) {
+  if (isset($_REQUEST['MM_update']) && (isset($_REQUEST['MM_recordId']))) {
 //    $MM_editConnection = $MM__STRING;
 
 $stripit= substr(trim($basepath), -1); 
 if ($stripit != "/") { $basepath = $basepath."/";}
     $MM_editTable  = "sysvar";
     $MM_editColumn = "id";
-    $MM_recordId = "" . $MM_recordId . "";
+    $MM_recordId = "" . $_REQUEST['MM_recordId'] . "";
     $MM_editRedirectUrl = "sysvar.php";
-    $MM_fieldsStr = "searchinstallbase|value|basepath|value|filepath|value|emfaq|value|emendorse|value|emgroup|value|emmedia|value|emride|value|emhousing|value|emcalendar|value|websitename|value|emfrom|value|sendmailpath|value|webname|value|metadescription|value|metacontent|value|template|value|emailfromname|value|thumb|value|optw|value|optl|value|cachesecs|value";
+    $MM_fieldsStr = "searchinstallbase|value|basepath_field|value|filepath|value|emfaq|value|emendorse|value|emgroup|value|emmedia|value|emride|value|emhousing|value|emcalendar|value|websitename|value|emfrom|value|sendmailpath|value|webname|value|metadescription|value|metacontent|value|template|value|emailfromname|value|thumb|value|optw|value|optl|value|cachesecs|value";
     $MM_columnsStr = "searchinstallbase|',none,''|basepath|',none,''|filepath|',none,''|emfaq|',none,''|emendorse|',none,''|emgroup|',none,''|emmedia|',none,''|emride|',none,''|emhousing|',none,''|emcalendar|',none,''|websitename|',none,''|emfrom|',none,''|sendmailpath|',none,''|webname|',none,''|metadescription|',none,''|metacontent|',none,''|template|',none,''|emailfromname|',none,''|thumb|',none,''|optw|',none,''|optl|',none,''|cacheSecs|',none,''";
   
-$inupdate = $dbcon->Execute("Update moduletext set templateid = " . $_POST[indextemplate] . " where id =2") or DIE($dbcon->ErrorMsg());  
+$inupdate = $dbcon->Execute("Update moduletext set templateid = " . $_REQUEST['indextemplate'] . " where id =2") or DIE($dbcon->ErrorMsg());  
  require ("../Connections/insetstuff.php");
   require ("../Connections/dataactions.php");
 }  
@@ -35,8 +35,6 @@ $inupdate = $dbcon->Execute("Update moduletext set templateid = " . $_POST[index
    $setsysvar=$dbcon->Execute("SELECT s.*, t.name FROM sysvar s left join template t on s.template=t.id  WHERE s.id =1") or DIE($dbcon->ErrorMsg());
    $intemp=$dbcon->Execute("select m.templateid, t.name from moduletext m left join template t on m.templateid = t.id where m.id=2") or DIE($dbcon->ErrorMsg());
    $templs=$dbcon->Execute("select id, name from template") or DIE($dbcon->ErrorMsg());
-
-  
   ?> <?php include ("header.php");
 ?>
 
@@ -54,7 +52,7 @@ $inupdate = $dbcon->Execute("Update moduletext set templateid = " . $_POST[index
           </tr>
 		  <tr valign="baseline"> 
             <td nowrap align="right"><div align="left">Site URL</div></td>
-            <td><input name="basepath" type="text" id="basepath" value="<?php echo $setsysvar->Fields("basepath")?>" size="32"></td>
+            <td><input name="basepath_field" type="text" id="basepath" value="<?php echo $setsysvar->Fields("basepath")?>" size="32"></td>
           </tr>
 		  
           <tr valign="baseline"> 

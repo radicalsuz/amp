@@ -1,11 +1,11 @@
 <?php
-  require_once("../adodb/toexport2.inc.php");
-  require_once("../adodb/adodb.inc.php");
+  require_once("adodb/toexport2.inc.php");
+  require_once("adodb/adodb.inc.php");
   require_once("Connections/freedomrising.php");
-  require_once("$ConfigPath2");
+  #require_once("config.php");
 
 
-$bval= $_GET[id];
+$bval= $_GET['id'];
 $R=$dbcon->Execute("SELECT * from userdata_fields where id=$bval") or DIE($dbcon->ErrorMsg());
 $file = ereg_replace ("'", "" ,$R->Fields('name'));
 $file = ereg_replace (",", "" ,$file);
@@ -66,11 +66,11 @@ if (isset($_POST['sqlsend'])) {
 } else {
 	$sql .= " from userdata  where modin=$bval  ";
 }
-print $sql;
+
 $db = &NewADOConnection('mysql');
 $db->Connect($MM_HOSTNAME, $MM_USERNAME, $MM_PASSWORD, $MM_DATABASE);
 //echo $sql."<br>";
 $rs = $db->Execute($sql) or DIE($dbcon->ErrorMsg());
-header("Content-type: text/csv");
+header("Content-type: application/csv");
 header("Content-Disposition: attachment; filename=$filename");
 print rs2csv($rs); # return a string, CSV formatprint '<hr>';?>

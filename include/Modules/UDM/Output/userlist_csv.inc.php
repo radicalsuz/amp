@@ -54,7 +54,7 @@ function udm_output_userlist_csv($udm, $options=null) {
 
 	if($options['display_fields']=="*") {$options['display_fields']=list_translateAllFieldsForSql($udm, $options);}
 	
-
+	
 	$udm->set_sql['from']=$options['usertable'];
 	$udm->set_sql['where']="(modin=".$udm->instance;
 	if ($options['allow_include_modins']&&isset($options['include_modin'])) {
@@ -65,13 +65,12 @@ function udm_output_userlist_csv($udm, $options=null) {
 	$udm->set_sql['orderby']=$options['sort_by'];
 
 
-
 	if ($udm->getSet($options)) {
 		$output=list_export($udm, $options, $_REQUEST['id']);
 		#$output.=list_output_dynamic($udm, $options);
 		#$output.="</form>";
 	} else {
-		#$output="This Module is currently empty";
+		$output="This Module is currently empty";
 	}
 	if ($udm->authorized) {
 		return $output;
@@ -157,8 +156,37 @@ function list_makeLookupsforSQL(&$udm, $options, $field) {
 	}
 */
 
+if (!function_exists('list_setupLookups')) {
+	//retrieves Lookup values from database tables and stores them in the options array
+	function list_setupLookups(&$udm, $options) {
+		if (is_array($options['Lookups'])) {
+			foreach($options['Lookups'] as $key=>$this_lookup) {
+				if (isset($this_lookup['LookupTable'])) {
+					$options['Lookups'][$key]['LookupSet']=$udm->dbcon->GetAssoc( "Select id, ".$this_lookup['LookupField']." FROM ".$this_lookup['LookupTable']);
+				}
+			}
+		}
+		return $options;
+	}
+}
 
 
+if (!function_exists('list_translateFields')){
+
+	// converts system fieldnames to UDM-assigned fieldnames
+
+	function list_translateFields($fieldname, &$udm, $options) {
+		$returnField=strip_tags($udm->fields[$fieldname]['label']);
+		if ($options['allow_lookups']) {
+			if (isset($options['Lookups'][$fieldname]['LookupName'])){
+				$returnField=$options['Lookups'][$fieldname]['LookupName'];
+			}
+		}
+
+		if ($returnField==NULL) {$returnField=$fieldname;}
+		return $returnField;
+	}
+}
 
 function list_setFileName(&$udm, $options){
 	$file = ereg_replace ("'", "" ,$udm->name);
@@ -176,12 +204,12 @@ function list_setFileName(&$udm, $options){
 function list_export(&$udm, $options, $ids) {
 	global $base_path;
 	#require_once('CSV/CSV.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/adodb/toexport2.inc.php');
+	require_once('adodb/toexport2.inc.php');
 	if (is_array($ids)){
 		$udm->set_sql['where'].=" and id IN(".join(",", $ids).") ";
 	}
 	if($rs=$udm->returnRS()) {
-		header("Content-type: text/csv");
+		header("Content-type: application/csv");
 		header("Content-Disposition: attachment; filename=".$options['filename']);
 		$output= rs2csv($rs);
 	} 

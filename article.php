@@ -20,7 +20,7 @@ ob_start();
 include("AMP/BaseDB.php");
 
 if ($_GET['list'] == "type") {
-	$title=$dbcon->CacheExecute("SELECT uselink, linkurl  FROM articletype WHERE id=$type")or DIE($dbcon->ErrorMsg()); 
+	$title=$dbcon->CacheExecute("SELECT uselink, linkurl  FROM articletype WHERE id=".$_GET['type'])or DIE($dbcon->ErrorMsg()); 
 	if ($title->Fields("uselink") == ("1")){
 		$MM_editRedirectUrl = $title->Fields("linkurl");
 		header ("Location: $MM_editRedirectUrl");

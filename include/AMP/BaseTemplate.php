@@ -52,10 +52,10 @@ if ( !function_exists( 'buildheader' ) ) {
     }
 }
 
-
-
+if (!$intro_id) { $intro_id = $mod_id; }
+	
 #ESTABLISH HIERARCHY
-if ($mod_id == 1) {
+if ($intro_id == 1) {
     
     #GET ARTICLE VARS
     if ($_GET["id"]) {
@@ -76,7 +76,7 @@ if ($mod_id == 1) {
 
 	#GET MODULE TEXT VARS
 
-	$getmodhierarchy=$dbcon->CacheExecute("SELECT templateid, title, name, type FROM moduletext WHERE id = $mod_id") or DIE('Could not load module hierarchy information in BaseTemplate '.$dbcon->ErrorMsg());
+	$getmodhierarchy=$dbcon->CacheExecute("SELECT templateid, title, name, type FROM moduletext WHERE id = $intro_id") or DIE('Could not load module hierarchy information in BaseTemplate '.$dbcon->ErrorMsg());
 
 	$MM_type = $getmodhierarchy->Fields("type");
 	$mod_name = $getmodhierarchy->Fields("name");

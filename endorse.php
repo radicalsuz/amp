@@ -18,7 +18,6 @@ include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
  
- 
 #clean up from udm conversion
 #also needs austin's instance code
 

@@ -16,7 +16,7 @@ class smtp_client {
     var $connection;
     var $server;
     var $elog_fp;
-    var $log_file='./smtp_client.log';
+    var $log_file='/custom/smtp_client.log';
     var $do_log=true;    
 	var $ok = true;
 	var $msg = '';
@@ -113,11 +113,11 @@ class smtp_client {
     function close() { $this->send(); }
 
     function elog($text, $mode=0) {
-        if (!$this->do_log) return;
+	    if (!$this->do_log) return;
 
         // open file
         if (!$this->elog_fp) {
-            if (!($this->elog_fp=fopen($this->log_file, 'a'))) return;
+            if (!($this->elog_fp=fopen(AMP_LOCAL_PATH.$this->log_file, 'a'))) return;
             fwrite($this->elog_fp, "\n-------------------------------------------\n");
             fwrite($this->elog_fp, " Sent " . date("Y-m-d H:i:s") . "\n");
             fwrite($this->elog_fp, "-------------------------------------------\n");

@@ -123,8 +123,7 @@ class AMP_Authentication_Handler {
     }
 
     function check_cookie ( $cookie ) {
-
-        $dbcon = $this->dbcon;
+		$dbcon = $this->dbcon;
 
         $cookie = explode( ':', $_COOKIE['AMPLoginCredentials'] );
 

@@ -8,8 +8,8 @@ $obj = new SysMenu;
 
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
-  if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
+  if ($_SERVER['QUERY_STRING']) {
+    $MM_editAction = $MM_editAction . "?" . $_SERVER['QUERY_STRING'];
   }
 
   $MM_abortEdit = 0;
@@ -19,12 +19,12 @@ $obj = new SysMenu;
 
   // *** Update Record: set variables
   
-if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or ((isset($MM_delete)) && (isset($MM_recordId))) )  {
+if ( ((isset($_REQUEST['MM_update'])) && (isset($_REQUEST['MM_recordId'])) ) or (isset($_REQUEST['MM_insert'])) or ((isset($_REQUEST['MM_delete'])) && (isset($_REQUEST['MM_recordId']))) )  {
   
- if (!$MM_insert) { $MM_editRedirectUrl = "edittypes.php";}
+ if (!$_REQUEST['MM_insert']) { $MM_editRedirectUrl = "edittypes.php";}
     $MM_editTable  = "articletype";
     $MM_editColumn = "id";
-    $MM_recordId = "" . $MM_recordId . "";
+    $MM_recordId = "" . $_REQUEST['MM_recordId'] . "";
 	$date2 =  DateConvertIn($date2);
     $MM_fieldsStr = "type|value|url|value|image|value|checkbox|value|cap|value|up|value|description|value|uselink|value|linkurl|value|order|value|usetype|value|usenav|value|image2|value|css|value|flash|value|templateid|value|parent|value|listtype|value|date2|value|searchbar|value|secure|value|header|value";
     $MM_columnsStr = "type|',none,''|url|',none,''|image|',none,''|useimage|none,1,0|imgcap|',none,''|up|',none,''|description|',none,''|uselink|none,1,0|linkurl|',none,''|textorder|',none,''|usetype|none,1,0|usenav|none,1,0|image2|',none,''|css|',none,''|flash|',none,''|templateid|none,none,NULL|parent|',none,''|listtype|',none,''|date2|',none,''|searchbar|none,1,0|secure|none,1,0|header|none,1,0";
