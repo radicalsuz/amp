@@ -52,7 +52,7 @@ foreach ( $lists as $userid => $listids ) {
     $listserializer->serialize( $listids );
     $listout = $listserializer->getSerializedData();
 
-    str_replace( "____LIST{$userid}____", $listout, $xmlout );
+    $xmlout = str_replace( "____LIST{$userid}____", $listout, $xmlout );
 
 }
 
