@@ -30,7 +30,7 @@ $mod_id = 58;
 
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
-
+include("AMP/Region.inc.php"); 
 
 if (!$_REQUEST['in']) {
 	$modinin =2; 
@@ -70,6 +70,15 @@ if (!function_exists('get_state_name')) {
 	}
 }
 
+
+if (!function_exists('get_country_name')) {
+	function get_country_name($t) {		
+		$r = new Region;
+		$c = $r->regions['WORLD'][$t];		
+		return $c;				
+	}
+}
+
 function groups_error($debug = NULL) {
 	echo '<p class="text">There are currently no local groups listed that match you request.</p>';//.$debug;
 }
@@ -77,6 +86,12 @@ function groups_error($debug = NULL) {
 function group_title($t) {
 	echo "<p class=\"title\">$t</p>\n";
 }
+ 
+
+function group_cap_title($t) {
+	echo "<p class=\"title\">".strtoupper($t)."</p>\n";
+}
+
 
 function group_subtitle($t) {
 	echo "<p class=\"subtitle\">$t</p>\n";
@@ -132,17 +147,17 @@ if ($_REQUEST['gdisplay']) {
 #########DISPLAY FOR INTERNATIONAL LISTING ##########################
 function groups_intl($gsql,$gsqo=NULL)  {
 	global $nonstateregion, $groupslayout, $dbcon;
-	$gsqlo ="ORDER BY u.Country, u.State , u.City, u.Company asc";
+	$gsqlo =" and u.Country != 'USA' ORDER BY u.Country, u.State , u.City, u.Company asc";
 	$groups=$dbcon->CacheExecute( $gsql."  $gsqlo ") or DIE($gsql.$dbcon->ErrorMsg());
 	if (!$groups->RecordCount() ){
-		 echo groups_error();
+		 //echo groups_error();
 	}
 	$currentName = '';
 	$currentState = '';
 	$currentCity = '';
 	while (!$groups->EOF) { 
 		if ($groups->Fields("Country") != $currentCountry) {
-			echo group_title($groups->Fields("Country"));
+			echo group_cap_title(get_country_name($groups->Fields("Country")));
 		}
 		if ( ( get_state_name($groups->Fields("State")) != $currentState )  && ( $groups->Fields("State") != 'Intl') ) {
 			echo group_title(get_state_name($groups->Fields("State")));
@@ -228,9 +243,9 @@ function groups_custom($gsql,$gsqo=NULL,$modinin) {
 function groups_state_city($gsql,$gsqo=NULL)   {
 	global $nonstateregion, $groupslayout, $dbcon;
 	if ($nonstateregion) { 
-		$gsqlo ="ORDER BY u.Country desc, r.title asc, u.City asc, u.Company asc ";
+		$gsqlo =" and u.Country = 'USA'  ORDER BY u.Country desc, r.title asc, u.City asc, u.Company asc ";
 	} else {
-		$gsqlo ="ORDER BY u.Country desc, u.State asc, u.City asc, u.Company asc ";
+		$gsqlo =" and u.Country = 'USA' ORDER BY u.Country desc, u.State asc, u.City asc, u.Company asc ";
 	}
 	$groups=$dbcon->CacheExecute($gsql."   $gsqlo") or DIE("Error in function groups_state_city".$gsql.$dbcon->ErrorMsg());
 	if (!$groups->RecordCount() ){ echo groups_error($gsql.$gsqlo); }
@@ -262,9 +277,9 @@ function groups_state($gsql,$gsqo=NULL)   {
 	global $nonstateregion, $groupslayout, $dbcon;
 	 
 	if ($nonstateregion) { 
-		$gsqlo ="ORDER BY u.Country desc, r.title asc,  u.Company asc ";
+		$gsqlo =" and u.Country = 'USA' ORDER BY u.Country desc, r.title asc,  u.Company asc ";
 	} else {
-		$gsqlo ="ORDER BY u.Country desc, u.State asc,  u.Company asc ";
+		$gsqlo ="and u.Country = 'USA' ORDER BY u.Country desc, u.State asc,  u.Company asc ";
 	}
 	$groups=$dbcon->CacheExecute($gsql."  $gsqlo") or DIE("Error in function groups_state".$gsql.$gsqlo.$dbcon->ErrorMsg());
 	if (!$groups->RecordCount() ){ echo groups_error(); }
@@ -303,12 +318,16 @@ elseif ($gdisplay == 4) {
 }
 elseif ($gdisplay == 5) {
 	groups_state_city($gsql,$gsqo);
+	groups_intl($gsql,$gsqo);
+
 }
 elseif ($gdisplay == 6) {
 	groups_custom($gsql,$gsqo,$modinin);
 }
 elseif ($gdisplay == 7) {
-	groups_state_city($gsql,$gsqo);
+	groups_state($gsql,$gsqo);
+	groups_intl($gsql,$gsqo);
+
 }
 
 else {
