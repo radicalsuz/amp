@@ -15,9 +15,6 @@ require_once "XML/Unserializer.php";
     }
 
 
-$latlong = geo_getdata( "3212 24th St., San Francisco, CA" );
-geo_showmap( $latlong[0], $latlong[1] );
-
 function geo_getdata($address) {
 
 	$req =& new HTTP_Request( "http://rpc.geocoder.us/service/rest" );
