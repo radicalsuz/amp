@@ -10,7 +10,6 @@ if ( !function_exists( 'DateOut' ) ) {
     }
 }
 
-
 function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort=null,$extra=null,$extramap=NULL) {
 	global $dbcon;
 	if ($sort) { $orderby =" order by $sort asc ";}
