@@ -49,36 +49,40 @@ $go= false;
 $myURI = $dbcon->qstr(substr($_SERVER['REQUEST_URI'], 1));
 $R=$dbcon->Execute("select * from redirect where publish =1 and old=$myURI") or DIE('404 query'.$dbcon->ErrorMsg());
 
-while (!$R->EOF) {
-	if ($R->Fields("conditional")) {
-		if ($go == false) {$go = errorred($R->Fields("old"),$R->Fields("new"),$R->Fields("num"));}
-	}
+
+if ( file_exists( AMP_LOCAL_PATH . "/custom/" . $myURI ) ) { include( AMP_LOCAL_PATH . "/custom/" . $filename );}
 	else {
-		if ($go == false) {$go = errorre($R->Fields("old"),$R->Fields("new"));}
+	
+	while (!$R->EOF) {
+		if ($R->Fields("conditional")) {
+			if ($go == false) {$go = errorred($R->Fields("old"),$R->Fields("new"),$R->Fields("num"));}
+		}
+		else {
+			if ($go == false) {$go = errorre($R->Fields("old"),$R->Fields("new"));}
+		}
+		$R->MoveNext();
 	}
-	$R->MoveNext();
+	
+	if ($go == false) {
+	  $sql = "select * from redirect where publish =1 and $myURI like Concat(old, '%')";
+	  $R=$dbcon->Execute($sql) or DIE('404 query'.$dbcon->ErrorMsg());
+	
+	  while (!$R->EOF) {
+		if ($R->Fields("conditional")) {
+		  
+		  if ($go == false) {$go = errorred($R->Fields("old"),$R->Fields("new"),$R->Fields("num"));}
+		  
+		}
+		else {
+		  
+		  if ($go == false) {$go = errorre($R->Fields("old"),$R->Fields("new"));}
+		}
+		$R->MoveNext();
+	  }
+	}
+	
+	
+	
+	if ($go == false) { 	   ampredirect ("$Web_url"."search.php");}
 }
-
-if ($go == false) {
-  $sql = "select * from redirect where publish =1 and $myURI like Concat(old, '%')";
-  $R=$dbcon->Execute($sql) or DIE('404 query'.$dbcon->ErrorMsg());
-
-  while (!$R->EOF) {
-    if ($R->Fields("conditional")) {
-      
-      if ($go == false) {$go = errorred($R->Fields("old"),$R->Fields("new"),$R->Fields("num"));}
-      
-    }
-    else {
-      
-      if ($go == false) {$go = errorre($R->Fields("old"),$R->Fields("new"));}
-    }
-    $R->MoveNext();
-  }
-}
-
-
-
-if ($go == false) { 	   ampredirect ("$Web_url"."search.php");}
-
 ?>
