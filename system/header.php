@@ -1,4 +1,5 @@
 <?php 
+include("Connections/system_navs.php");
 $cookiename = "AMPheader";
 if ($_COOKIE[$cookiename]) {
 	$cookvalue = $_COOKIE[$cookiename]; 
@@ -73,6 +74,28 @@ $mod_navs = $dbcon->Execute("SELECT * FROM module_navs where module_id=" . $dbco
 #}
 //$nav_link .= '</ul>';
 #$nav_link .= '<br clear="all" />'; 
+
+$nav_link .= '<p class="side_banner">'.$headerinst->Fields("name").'</p>';
+$nav_link .= '<div id="side_list"><ul>';
+
+for ($x=0; $x<sizeof($sys_nav[$modid]); $x++) {
+	if ($sys_nav[$modid][$x]['title']) {
+		$nav_link .= '<li class ="side_title">'.$sys_nav[$modid][$x]['title'].'</li>';
+	} else 
+		$nav_link .= '<li><a href="'.$sys_nav[$modid][$x]['link'].'" class=side>'.$sys_nav[$modid][$x]['name'].'</a></li>';
+}
+
+
+if ($headerinst->Fields("userdatamod") == 1) {
+	$nav_link .= '<li ><a href="modinput4_data.php?modin='.$headerinst->Fields("userdatamodid").'" class=side>View/Edit</a></li>';
+	$nav_link .= '<li ><a href="modinput4_view.php?modin='.$headerinst->Fields("userdatamodid").'" class=side>Add</a></li>';
+	$nav_link .= '<li ><a href="modinput4_edit.php?modin='.$headerinst->Fields("userdatamodid").'" class=side>Data Settings</a></li>';
+}
+if ($modid != 19) {
+	$nav_link .= '<li ><a href="module_control_list.php?modid='.$modid.'" class=side>Settings</a></li>';
+}
+$nav_link .= '</ul></div>';
+$nav_link .= '<br clear="all" />'; 
 
 
 $headernav_numRows=0;
@@ -394,164 +417,51 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
   </td>
 </tr>
   <tr> 
-    <td id="sidebar" bgcolor="#dedede" width="160" valign="top">
-        <table width="160" border="0" cellspacing="0" cellpadding="0">
-            <tr><td valign="top">
-<?php
+    <td bgcolor="#dedede" width="160" valign="top"> <table width="160" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td valign="top">
+	<?php echo $nav_link; ?>
+	     <?php // $perid=$headerinst->Fields("perid");
+			   //if ($userper["$perid"] == 1 && $modid != 19) { }?>
+          <?php // if ($userper[10] == 1){{} ?>
+          <?php //if ($userper[53] == 1){{} ?>
+          <p align="center" class="side_banner">AMP TOOLS</p>
+          &nbsp;&nbsp;&nbsp;<select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class="side">
+                <option value="index.php">Select Tool</option>
+				 <option value="index.php">&nbsp;&nbsp;---------</option>
+                <?php
+  if ($headernav__totalRows3 > 0){
+    $headernav__index3=0;
+    $headernav->MoveFirst();
+    WHILE ($headernav__index3 < $headernav__totalRows3){
 
-$perid = $headerinst->Fields("perid");
-
-if ($userper["$perid"] == 1 && $modid != 19) { ?> 
-    <p class="side_banner"><?= $headerinst->Fields("name") ?></p>
-	<p><?= evalhtml($headerinst->Fields("navhtml")) ?></p>
-<?php }?>
-    <div id="standard" style="display: <?= $hd_standard ?>; padding-top: 0; margin-top: 0; vertical-align: top;">
-
-<?php if ($userper[10] == 1) { ?>
-    <p class="side_banner" style="margin-top: 0;">Content System</p>
-
-	<p class="sidetitle">Home Page</p>
-    <ul class="side">
-	  <li><a href="article_list.php?&class=2">View/Edit Homepage </a></li>
-	  <li><a href="article_fpedit.php">Add Homepage Content</a></li>
-      <li><a href="module_nav_edit.php?id=2">Home Page Navigation</a></li>
-      <li><a href="article_list.php?&fpnews=1"> Homepage News</a></li>
-    </ul>
-
-    <p class="sidetitle">Content</p>
-            
-<?php if ($userper[1] == 1) { ?>
-    <ul class="side">
-        <li><a href="articlelist.php">View/Edit Content </a></li>
-<?php } ?>
-<?php if ($userper[2] == 1) { ?>
-        <li><a href="article_edit.php">Add Content</a></li>
-		<li><a href="module_nav_edit.php?id=1">Content Navigation</a></li>
-<?php } ?>
-    </ul>
-
-<?php if ($userper[85] == 1) { ?>
-    <p class="sidetitle">Docs and Images</p>
-
-    <ul class="side">
-      <li><a href="docdir.php">View Documents</a></li>
-      <li><a href="doc_upload.php">Upload Documents</a></li>
-      <li><a href="imgdir.php">View Images</a></li>
-      <li><a href="imgup.php">Upload Images</a></li>
-    </ul>
-<?php } ?>
-
-    <p class="sidetitle">Sections</p>
-
-    <ul class="side">
-<?php
-    if ($userper[9] == 1) echo '<li><a href="edittypes.php">View/Edit Sections</a></li>';
-	if ($userper[4] == 1) echo '<li><a href="type_edit.php">Add Section</a></li>'; 
-	if ($userper[8] == 1) echo '<li><a href="class.php">Add Class</a></li>';
-    echo '</ul>';
-}
-
-if ($userper[53] == 1) { ?>
-
-     <p align="center" class="side_banner">AMP TOOLS</p>
-            &nbsp;&nbsp;&nbsp;<select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class="side">
-                    <option value="index.php">Select Tool</option>
-                    <option value="index.php">&nbsp;&nbsp;---------</option>
-                    <?php
-    if ($headernav__totalRows3 > 0){
-        $headernav__index3=0;
-        $headernav->MoveFirst();
-        WHILE ($headernav__index3 < $headernav__totalRows3){
-
-                $perid=$headernav->Fields("perid");
-                if ($userper["$perid"] == 1) { ?>  <option value="<?php echo  $headernav->Fields("file");?>"> 
-                    <?php echo  substr($headernav->Fields("name"),0,20);?> </option>
-                    <?php 
-            }
-        $headernav->MoveNext();
-        $headernav__index3++;
-        }
-        $headernav__index3=0;  
-        $headernav->MoveFirst();
+             $perid=$headernav->Fields("perid");
+			   if ($userper["$perid"] == 1) { ?>  <option value="<?php echo  $headernav->Fields("file");?>"> 
+                <?php echo  substr($headernav->Fields("name"),0,20);?> </option>
+                <?php 
+		}
+      $headernav->MoveNext();
+      $headernav__index3++;
     }
-    ?>
-                </select>
-    </div>
-
-    <div id="basic" style="display: <?php echo $hd_basic ?>; margin-top: 0; padding-top: 0; vertical-align: top;">
-        <p class="side_banner" style="margin-top: 0;">Content</p>
-
-        <ul class="side">
-        <?php
-        if ($userper[2] == 1) echo '<li><a href="article_edit.php">Add Content</a></li>';
-        if ($userper[1] == 1) {
-            echo '<li><a href="articlelist.php">View/Edit Content </a></li>';
-            echo '<li><a href="article_fpedit.php">Add Homepage Content</a></li>';
-            echo '<li><a href="article_list.php?&class=2">View/Edit Homepage</a></li>';
-        } ?>
-        </ul>
-
-        <p class="sidetitle">Sections</p>
-
-        <?php
-
-        echo '<ul class="side">';
-        if ($userper[4] == 1) echo '<li><a href="type_edit.php">Add Section</a></li>';
-        if ($userper[9] == 1) echo '<li><a href="edittypes.php">View/Edit Sections</a></li>';
-        echo '</ul>';
-
-    if ($userper[85] == 1) {
-    ?>
-        <p class="sidetitle">Docs and Images</p>
-        <ul class="side">
-            <li><a href="docdir.php">View Documents</a></li>
-            <li><a href="doc_upload.php">Upload Documents</a></li>
-            <li><a href="imgdir.php">View Images</a></li>
-            <li><a href="imgup.php">Upload Images</a></li>
-        </ul>
-    <?php } ?>
-
-        <p align="center" class="side_banner">Modules</p>
-
-            <select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class="side">
-                <option value="index.php">Select Module</option>
-                <option value="index.php">&nbsp;&nbsp;---------</option>
-    <?php
-
-    if ($headernav__totalRows3 > 0) {
-        $headernav__index3=0;
-        $headernav->MoveFirst();
-
-        while ($headernav__index3 < $headernav__totalRows3) {
-
-            $perid=$headernav->Fields("perid");
-            if ($userper["$perid"] == 1) {
-                    echo '<option value="' . $headernav->Fields("file") . '">';
-                    echo  $headernav->Fields("name") . '</option>';
-            }
-
-            $headernav->MoveNext();
-            $headernav__index3++;
-        }
-
-        $headernav__index3=0;  
-        $headernav->MoveFirst();
-    }
-            echo '</select>';
-
-    } ?>
+    $headernav__index3=0;  
+    $headernav->MoveFirst();
+  }
+?>
+             </select>
+</div>
+      <?php //if ($userper[10] == 1){}} ?>
       
-    </div>
-    <br/><br/>
-  </td>
-  </tr>
-</table>
-</td>
-
-<td valign="top" bgcolor="#FFFFFF" width="100%">
+</div><br><br>
+        </td>
+        </tr>
+      </table> </td>
+    
+     
+    <td valign="top" bgcolor="#FFFFFF" width="100%">
 	<div><fieldset  style=" border: 1px solid grey; margin:20px; padding-top:10px; padding-left:10px; padding-right:10px; padding-bottom:10px;">
 	
-<?php
-	echo $nav_link;		
+	
+	<? 
+			
 	
 } ?>
