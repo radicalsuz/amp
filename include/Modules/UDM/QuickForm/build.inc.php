@@ -2,12 +2,10 @@
 
 /*****
  *
- * AMP UserData HTML_QuickForm builder Plugin
+ * AMP UserDataModule HTML_QuickForm builder Plugin
  *
  * Creates an HTML_QuickForm object based on the contents of
  * an UDM object.
- *
- * Copyright (c) 2004 Radial Designs
  *
  *****/
 
@@ -21,7 +19,6 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     if ( $udm->admin ) $admin = true;
 
     $frmName    = $udm->name;
-
     $frmMethod  = ( isset( $options['frmMethod'] ) ) ?
                     $options['frmMethod'] : 'post';
     $frmAction  = ( isset( $options['frmAction'] ) ) ?
@@ -85,7 +82,6 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
     $defaults = $field_def[ 'values' ];
     $size     = $field_def[ 'size' ];
     $renderer =& $form->defaultRenderer();
-
 
     // Check to see if we have an array of values.
     $defArray = explode( ",", $defaults );
@@ -166,8 +162,8 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
     if ( isset( $field_def[ 'required' ] ) && $field_def[ 'required' ] )
         $form->addRule( $name, $label . ' is required.', 'required' );
     
-    if ( isset( $field_def[ 'size' ] ) && $field_def['size'] )
-        $form->addRule( $name, $label . ' must be less than ' . $field_def[ 'size' ] + 1 . ' characters long.', 'maxlength', $field_def[ 'size' ] );
+//    if ( isset( $field_def[ 'size' ] ) && $field_def['size'] )
+//        $form->addRule( $name, $label . ' must be less than ' . $field_def[ 'size' ] + 1 . ' characters long.', 'maxlength', $field_def[ 'size' ] );
         
     if ( $name == 'Email' )
         $form->addRule( $name, 'Must be a valid email address.', 'emailorblank' );
