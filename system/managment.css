@@ -4,13 +4,10 @@ h2 {
 	font-weight: bold;
 	color: #FFFFFF;
 	background-color: #006666;	
-	font-size: 18px;
-	font-weight: bold;
-	color: #FFFFFF;
 	background-color: #006666;
 	background: url('images/banner-bg.png') top left repeat-x;
 	padding: 3px 7px;
-	text-shadow: 2px 2px 2px black;;
+	text-shadow: 2px 2px 2px black;
 }
 
 a {  font-weight: normal; color: #003399}
@@ -200,7 +197,7 @@ text-align: center;
 	background-color: #006666;
 	background: url('images/banner-bg.png') top left repeat-x;
 	padding: 3px 7px;
-	text-shadow: 2px 2px 2px black;;
+	text-shadow: 2px 2px 2px black;
 } 
 
 .main {
