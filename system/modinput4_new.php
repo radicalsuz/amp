@@ -10,53 +10,70 @@ include("FCKeditor/fckeditor.php");
 $obj = new SysMenu; 
 $buildform = new BuildForm;
 
-if ($_POST['MM_insert']) {
+if ( !function_exists( 'autoinc_check' ) ) {
 
+	function autoinc_check ($table,$num) {
+		global $dbcon;
+		$getid=$dbcon->Execute( "SELECT id FROM $table ORDER BY id DESC LIMIT 1") or die($dbcon->ErrorMsg());
+		if ($getid->Fields("id") < $num) { $id = $num; } else { $id = NULL;} 
+		return $id;
+	}
+
+}
+
+if ($_POST['MM_insert']) {
 	$MM_insert = 1;
 
-	## insert UDM
+# check auto incrament
+	$id = autoinc_check('userdata_fields',50);
+
+## insert UDM
     $MM_editTable  = "userdata_fields";
-    $MM_fieldsStr = "name|value";
-    $MM_columnsStr = "name|',none,''";
+    $MM_fieldsStr = "id|value|name|value";
+    $MM_columnsStr = "id|',none,''|name|',none,''";
  	require ("../Connections/insetstuff.php");
 	require ("../Connections/dataactions.php");
 
-	## get UDM id
-	$getmodid=$dbcon->Execute( "SELECT id FROM userdata_fields ORDER BY id DESC LIMIT 1") or die($dbcon->ErrorMsg());
-	$modid = $getmodid->Fields("id");
+## get UDM id
+	$modid = $dbcon->Insert_ID();
 
-	## insert new permission
+# check auto incrament
+	$id = autoinc_check('per_description',200);
+
+## insert new permission
 	$pname="$name Module";
 	$publish  =1;
-    $MM_editTable  = "per_description ";
-    $MM_fieldsStr = "pname|value|description|value|publish|value";
-    $MM_columnsStr = "name|',none,''|description|',none,''|publish|,none,''";
-		 	require ("../Connections/insetstuff.php");
-	  		require ("../Connections/dataactions.php");
+    $MM_editTable  = "per_description";
+    $MM_fieldsStr = "id|value|pname|value|description|value|publish|value";
+    $MM_columnsStr = "id|',none,''|name|',none,''|description|',none,''|publish|,none,''";
+ 	require ("../Connections/insetstuff.php");
+	require ("../Connections/dataactions.php");
+
 ##get per id
-	$getperid=$dbcon->Execute( "select id from  per_description   order by id desc limit 1") or DIE($dbcon->ErrorMsg());
-	$udmper = $getperid->Fields("id");
+	$udmper = $dbcon->Insert_ID();
+
+# check auto incrament
+	$id = autoinc_check('modules',100);
 
 ##make new module
-	$addmodule=$dbcon->Execute( "insert into modules (name) values ('$name')") or DIE($dbcon->ErrorMsg());
+	$addmodule=$dbcon->Execute( "insert into modules (id,name) values ('$id','$name')") or DIE($dbcon->ErrorMsg());
+
 ## get module id
-	$getmoduleid=$dbcon->Execute( "select id from modules  order by id desc limit 1") or DIE($dbcon->ErrorMsg());
-	$udmmodid = $getmoduleid->Fields("id");
+	$udmmodid =  $dbcon->Insert_ID();
 
-
-
+# check auto incrament
+	$id = autoinc_check('moduletext',100);
 
 	## insert header page
 	$hname = "$name Input";
     $MM_editTable  = "moduletext";
-    $MM_fieldsStr = "htitle|value|harticle|value|hname|value|udmmodid|value";
-    $MM_columnsStr = "title|',none,''|test|',none,''|name|',none,''|modid|',none,''";
+    $MM_fieldsStr = "id|value|htitle|value|harticle|value|hname|value|udmmodid|value";
+    $MM_columnsStr = "id|',none,''|title|',none,''|test|',none,''|name|',none,''|modid|',none,''";
 	require ("../Connections/insetstuff.php");
 	require ("../Connections/dataactions.php");
 
 	##get heder id
-	$getheaderid=$dbcon->Execute( "select id from moduletext  order by id desc limit 1") or DIE($dbcon->ErrorMsg());
-	$modidinput  = $getheaderid->Fields("id");
+	$modidinput  = $dbcon->Insert_ID();
 
 	##insert header response page
 	$rname = "$name Thank You";
@@ -67,9 +84,8 @@ if ($_POST['MM_insert']) {
 	require ("../Connections/dataactions.php");
 
 	# get reposne id
-	$getheaderid=$dbcon->Execute( "select id from moduletext  order by id desc limit 1") or DIE($dbcon->ErrorMsg());
-	$modidresponse = $getheaderid->Fields("id");
-
+	$modidresponse =  $dbcon->Insert_ID();
+	
 	#add source
 	$source= "Web $name";
 	$MM_editTable  = "source";
@@ -79,13 +95,14 @@ if ($_POST['MM_insert']) {
 	require ("../Connections/dataactions.php");
 
 	#get source id
-	$getsourceid=$dbcon->Execute( "select id from source order by id desc limit 1") or DIE($dbcon->ErrorMsg());
-	$sourceid = $getsourceid->Fields("id");
+	$sourceid =  $dbcon->Insert_ID();
 
 	#update udm
+	unset($_POST['MM_insert']);
 	unset($MM_insert);
+	$MM_update =1;
+	$_POST['MM_update']=1;
 
-	$MM_update=1;
     $MM_editTable  = "userdata_fields";
     $MM_editColumn = "id";
     $MM_recordId =$modid;
@@ -109,7 +126,10 @@ if ($_POST['MM_insert']) {
 	require ("../Connections/dataactions.php");
   
 	while (list($k, $v) = each($pergroup)) { 
-		$perupdate=$dbcon->Execute("INSERT INTO permission  VALUES ( '',$v,$udmper)") or DIE($dbcon->ErrorMsg());
+		if ($v) {
+			$sql = "INSERT INTO permission  VALUES ( '',$v,$udmper)";
+			$perupdate=$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
+		}
 	} 
 	header("Location: modinput4_edit.php?modin=$modid");
 }
@@ -133,8 +153,8 @@ $html .=  $buildform->add_row('Module Type', $Mo);
 
 $html .= $buildform->add_header('Intro Text');
 
-$html .= addfield('htitle','Intro Text Title','textarea');
-$html .= addfield('harticle','Intro Text','text');
+$html .= addfield('htitle','Intro Text Title','text');
+$html .= addfield('harticle','Intro Text','textarea');
 $html .= addfield('rtitle','Response Page Title','text');
 $html .= addfield('rarticle','Response Page Text','textarea');
 
@@ -155,7 +175,7 @@ $html .= addfield('mailto','Mail to','text');
 $html .= addfield('subject','Subject','text');
 $html .= $buildform->add_header('System Permissions');
 
-$html .= addfield('','Permission Groups','text');
+//$html .= addfield('','Permission Groups','text');
 $per_options = makelistarray($P,'id','name');
 $Per= & new Select('pergroup[]',$per_options,'','true',5);
 $html .=  $buildform->add_row('Permission Groups', $Per);
