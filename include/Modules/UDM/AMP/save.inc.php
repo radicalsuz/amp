@@ -80,7 +80,7 @@ function udm_amp_save ( &$udm, $options = null ) {
 
 //      $udm->doPlugin( 'AMP', 'auto_approve' );
 
-//      $udm->doPlugin( 'AMP', 'email_admin' );
+        $udm->tryPlugin( 'AMP', 'email_admin' );
     	$udm->tryPlugin( 'AMP', 'email_user' );
 
     } else {
