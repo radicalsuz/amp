@@ -6,11 +6,11 @@ require_once "XML/Unserializer.php";
     class rdfDocument
     {
         var $channel;
-        var $item;
+        var $geo;
 
         function getItems($amount)
         {
-            return array_splice($this->item,0,$amount);
+            return array_splice($this->geo,0,$amount);
         }
     }
 
@@ -54,10 +54,10 @@ function geo_getdata($address) {
                     );
  
 print "<pre>";
-    $xmlparse = new XML_Unserializer( $options );
-    $parse_result = $xmlparse->unserialize( $result, false );
-print_r( $xmlparse)."\n";
-    $data = $xmlparse->getUnserializedData();
+    $xmlparser = new XML_Unserializer( $options );
+    $parse_result = $xmlparser->unserialize( $result, false );
+#print_r( $xmlparser)."\n";
+    $data = $xmlparser->getUnserializedData();
 
 print_r( $result ) . "\n";
 print_r( $parse_result ) . "\n";
