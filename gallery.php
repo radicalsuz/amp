@@ -259,7 +259,7 @@ if ($gallerys->RecordCount() >= 1) {
 	$gallerys->MoveFirst();
 }
 ?> </select>
- <table width="100%" border="2" cellspacing="0" cellpadding="10" bordercolor="#000000" align="center">
+ <table width="100%" border="0" cellspacing="0" cellpadding="10" bordercolor="#000000" align="center">
                     <tr> 
                       <td> 
     <?php 
@@ -277,7 +277,7 @@ $galimage = $gphoto->Fields("img");
    <td width="25%" align="center" valign="top" class="text">
    <?php $daimg = $base_path_amp."img/pic/".$galimage;
 if (file_exists($daimg) && ($galimage)) { ?>
-        <a href="gallery.php?gal=<?php echo $gallerys->Fields("id")?>"><img src="img/pic/<?php echo $galimage; ?>" align="top" border="0"></a>          <?php } ?> 
+        <a href="gallery.php?gal=<?php echo $gallerys->Fields("id")?>"><img src="img/pic/<?php echo $galimage; ?>" align="top" border="0" class="gallerythumb"></a>          <?php } ?> 
             <br> 
              </td>
         
