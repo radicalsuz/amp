@@ -20,8 +20,10 @@ $PHP_SELF = $_SERVER['PHP_SELF'];
 $MM_sysvar_mq = (get_magic_quotes_gpc()) ? true : false;
 
 #load menu class	
-require_once($base_path."Connections/menu.class.php");
-$obj = new Menu;
+if (file_exists($base_path."Connections/menu.class.php")) {
+    require_once($base_path."Connections/menu.class.php");
+    $obj = new Menu;
+} 
 
 # Get system vars
 $getsysvars = $dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1")
