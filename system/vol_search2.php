@@ -2,7 +2,7 @@
 
 /*****
  *
- * AMP UserData Form View _ HACKED for Volunteer Form Display
+ * AMP UserData Form View - HACKED for Volunteer Form SEARCH
  *
  * (c) 2004 Radical Designs
  * Written by Blaine Cook, blaine@radicaldesigns.org
@@ -13,60 +13,35 @@ require_once( 'AMP/UserDataInput.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 
-if (!isset($_GET[modin])){ $modin=8;} else {$modin=$_GET[modin];}
+#set_error_handler( 'e' );
+if (!isset($_REQUEST[modin])){ $modin=8;} else {$modin=$_GET[modin];}
+#$modid=40;
 
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserDataInput( $dbcon, $modin );
 $udm->admin = true;
-$udm->authorized = true;
 
-$modidselect=$dbcon->Execute("SELECT id from modules where publish=1 AND userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
+$modidselect=$dbcon->Execute("SELECT id from modules where publish=1 and userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
 $modid=$modidselect->Fields("id");
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
-$udm->uid = $uid;
 
 // Was data submitted via the web?
 $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
 
-// Fetch or save user data.
+// Search user data.
 if ( $sub ) {
 
     // Save only if submitted data is present, and the user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
-    $udm->saveUser();
-	//Check for POST DATA from VOLUNTEER RECORD
-	if (is_array($_POST[available])) {
-		$d=$dbcon->Execute("delete from vol_relavailability where personid = ".$udm->uid) or DIE($dbcon->ErrorMsg());
-		foreach($_POST[available] as $v) { 
-			$rel_avail_sql="INSERT INTO vol_relavailability (personid,availabilityid) VALUES (".$udm->uid.",'$v')";
-			$relupdate=$dbcon->Execute($rel_avail_sql);# or DIE("40".$dbcon->ErrorMsg());
-			#$debug_html.=$rel_avail_sql."<BR>";
-		}
-		
-	}
-	if (is_array($_POST[skills])) {
-		$d=$dbcon->Execute("delete  from vol_relskill where personid = ".$udm->uid) or DIE($dbcon->ErrorMsg());
-		foreach($_POST[skills] as $v) { 
-			$rel_skill_sql="INSERT INTO vol_relskill (personid,skillid) VALUES (".$udm->uid.",'$v')";
-			$relupdate=$dbcon->Execute($rel_skill_sql);# or DIE("40".$dbcon->ErrorMsg());
-		}
-	}
-	if (is_array($_POST[interests])) {
-		$d=$dbcon->Execute("delete from vol_relinterest where personid = ".$udm->uid) or DIE($dbcon->ErrorMsg());
-		foreach($_POST[interests] as $v) { 
-			$rel_interest_sql="INSERT INTO vol_relinterest (personid,interestid) VALUES (".$udm->uid.",'$v')";
-			$relupdate=$dbcon->Execute($rel_interest_sql);# or DIE("40".$dbcon->ErrorMsg());
-			$debug_html .= $rel_interest_sql."<BR>";
-		}
-	}
-
+    
 } elseif ( !$sub && $uid ) {
 
     // Fetch the user data for $uid if there is no submitted data
     // and the user is authenticated.
     $udm->getUser( $uid ); 
+
 	//Get Associated Data Sets
 	if ($modin==8){
 		$my_avail_sql="Select availabilityid, id from vol_relavailability where personid=".$uid;
@@ -78,8 +53,10 @@ if ( $sub ) {
 		
 	}
 
+
 }
-if ($modin==8){//VOLUNTEER MODULE CONNECTIONS
+
+if ($modin==8){//VOLUNTEER MODULE TABLES
 		$skills_sql="Select * from vol_skill ORDER BY orderby ASC";
 		$skills = $dbcon->Execute($skills_sql);
 		$interests_sql="Select * from vol_interest";
@@ -123,6 +100,9 @@ if ($modin==8){//VOLUNTEER MODULE CONNECTIONS
 
 }
 
+
+
+
 $insert_html = $avail_html.$interests_html.$skills_html;
 
 
@@ -142,18 +122,25 @@ $mod_id = $udm->modTemplateID;
 
 require_once( 'header.php' );
 
-print "<h2>Add/Edit " . $udm->name . "</h2>";
-print "<center><table width='400'><tr><td>";
-$udm->showForm = true;
+
+print "<h2>Search " . $udm->name . "</h2>";
+print "<center><table width='400'><tr><td><p class=\"bodytext\">Enter your criteria in the fields below.</p>";
 $volform= $udm->output();
 $submitspot=strpos($volform, "input name=\"btnUdmSubmit\"");
 $insertpoint = strpos(substr($volform, $submitspot-200, 200), "<tr>");
 $form_footer=substr($volform, $submitspot-200+$insertpoint);
 $volform = substr($volform, 0, $submitspot-200+$insertpoint);
+//ASSIGN FORM VARIABLES TO _POST DATASET
+$actionspot = strpos($volform, "<form action=");
+$actionspot2=strpos($volform,"\"",$actionspot);
+$action_end = strpos($volform, "\"", $actionspot2+1);
+$volform=substr($volform,0,$actionspot+$actionspot2)."vol_results2.php\" method=\"POST".substr($volform,($actionspot+$actionspot2+$action_end-1));
+
+
 print $volform;
 print $insert_html;
 print $form_footer;
-#print $debug_html;
+print $debug_html;
 print "</td></tr></table></center>";
 
 // Append the footer and clean up.
