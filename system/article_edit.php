@@ -278,7 +278,8 @@ function ValidateForm(){
 			</td>
 		</tr>
 </table><br>
-<input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"><?php  if ($userper[98]){ ?>&nbsp;&nbsp;&nbsp;<input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"><?php } ?>&nbsp;&nbsp;&nbsp;<input type="submit" name="preview" value="Preview" onclick="return confirmSubmit('Please save this record first or all changes will be lost\nPress OK to continue or CANCEL to return and save you work')"><br><br>
+<input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"><?php  if ($userper[98]){ ?>&nbsp;&nbsp;&nbsp;<input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"><?php } ?><br>
+<br>
 
 <script type="text/javascript">
 function change(which) {
@@ -662,8 +663,9 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td colspan="2" valign="top"><input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes">
 			
 			
-            <?php  if ($userper[98]){ ?>  <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> <?php }?>
-              <input type="submit" name="preview" value="Preview" onclick="return confirmSubmit('Please save this record first or all changes will be lost\nPress OK to continue or CANCEL to return and save you work')"></td>
+            <?php  if ($userper[98]){ ?>  <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> 
+            <?php }?>
+              </td>
           </tr>
         </table>
               
