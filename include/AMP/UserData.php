@@ -43,7 +43,10 @@ class UserData {
     // User ID
     var $uid;
     var $pass;
+
     var $authorized;
+    var $authenticated;
+
     var $values;
 
     // Placeholder for HTML_QuickForm. Not required for display-only.
@@ -81,16 +84,14 @@ class UserData {
      *
      *****/
 
-    function UserData ( $dbcon, $instance, $admin = false ) {
+    function UserData ( &$dbcon, $instance, $admin = false ) {
 
         // Setup database connection. Required.
         if (!isset($dbcon)) return false;
         $this->dbcon =& $dbcon;
         $dbcon->SetFetchMode( ADODB_FETCH_ASSOC );
 
-        // Get module instance. Required.
-        $this->instance = preg_replace( "/(\d+)/", "\$1", $instance );
-        if ( $this->instance == '' ) trigger_error( "No module specified!" );
+        $this->instance( $instance );
 
         $this->admin = $admin;
 
@@ -110,29 +111,8 @@ class UserData {
 
     function init () {
 
-        // Fetch database definition of module.
-        $sql = "SELECT * FROM userdata_fields WHERE id='" . $this->instance . "'";
-
-        $rs = $this->dbcon->CacheExecute( $sql )
-            or trigger_error( "Error retreiving module information from database: " . $dbcon->ErrorMsg() );
-
-        $md = $this->_module_def = $rs->FetchRow();
-
-        // Define module class
-        $this->class = ( isset($md[ 'class' ]) ) ? $md['class'] : 1;
-        $this->modTemplateID = $md['modidinput'] or 10;
-
-        // Define module variables.
-        $this->name = $md[ 'name' ];
-
-        // Define redirect config. Legacy, will be replaced by redirect plugin.
-        $this->redirect = $md[ 'redirect' ];
-
-        // Define email config. Legacy, will be replaced by email plugins.
-        if ( $md[ 'useemail' ] == 1 ) {
-            $this->mailto  = $md[ 'mailto' ];
-            $this->subject = $md[ 'subject' ];
-        }
+        // Register the base module definition
+        $this->_register_base();
 
         // Register the fields from the database.
         $this->_register_fields();
@@ -167,60 +147,6 @@ class UserData {
     function output ( $format = 'html', $options = null ) {
 
             return $this->doPlugin( 'Output', $format, $options );
-
-    }
-
-    ##################################
-    ### Public Data Access Methods ###
-    ##################################
-
-    /*****
-     *
-     * getUser ( [ int userid ] )
-     *
-     * fetches user data for a given userid. If userid is not present,
-     * the object should be populated with sufficient data to allow
-     * plugins to perform a Query-By-Example.
-     *
-     * See specific plugin documentation for more information.
-     *
-     *****/
-
-    function getUser ( $userid = null ) {
-
-        return $this->doAction( 'read', array( '_userid' => $userid, 'admin' => $this->admin ) );
-
-    }
-
-    /*****
-     *
-     * saveUser ()
-     *
-     * saves the data stored in the object. Requires HTML_QuickForm object
-     * to validate submitted values before saving. This object is created
-     * if not already present.
-     *
-     * Plugins should use the $form->process() function to call internal
-     * methods, saving user-submitted data only once it has been laundered
-     * with the HTML_QuickForm object.
-     *
-     * See specific plugin documentation for more information.
-     *
-     *****/
-
-    function saveUser () {
-
-        $options = array( 'admin' => $this->admin );
-
-        if (!isset( $this->form )) {
-
-            $this->doPlugin( 'QuickForm', 'build', $options );
-
-        }
-
-        $this->modTemplateID = $this->_module_def['modidresponse'];
-
-        return $this->doAction( 'save', $options );
 
     }
 
@@ -302,20 +228,6 @@ class UserData {
                           'pass' => $pass );
 
         return $this->doAction( 'authenticate', $options );
-
-    }
-
-    /*****
-     *
-     * findDuplicates ()
-     *
-     * Find Duplicate records in the UserData database.
-     *
-     *****/
-
-    function findDuplicates () {
-
-        return $this->doAction( 'duplicate_check' );
 
     }
 
@@ -544,6 +456,22 @@ class UserData {
 
     /*****
      *
+     * instance()
+     *
+     * Accessor. Available for overriding to allow multiple instances.
+     *
+     *****/
+
+    function instance( $instance ) {
+
+        // Get module instance. Required.
+        $this->instance = preg_replace( "/(\d+)/", "\$1", $instance );
+        if ( $this->instance == '' ) trigger_error( "No module specified!" );
+
+    }
+
+    /*****
+     *
      * _make_mail_header ()
      *
      * Creates a header appropriate to UserDataModule, common
@@ -557,6 +485,42 @@ class UserData {
         $header .= "\nX-Mailer: AMP/UserDataModule\n";
 
         return $header;
+
+    }
+
+    /*****
+     *
+     * _register_base ()
+     *
+     * Registers core module information.
+     *
+     *****/
+
+    function _register_base () {
+
+        // Fetch database definition of module.
+        $sql = "SELECT * FROM userdata_fields WHERE id='" . $this->instance . "'";
+
+        $rs = $this->dbcon->CacheExecute( $sql )
+            or trigger_error( "Error retreiving module information from database: " . $dbcon->ErrorMsg() );
+
+        $md = $this->_module_def = $rs->FetchRow();
+
+        // Define module class
+        $this->class = ( isset($md[ 'class' ]) ) ? $md['class'] : 1;
+        $this->modTemplateID = $md['modidinput'] or 10;
+
+        // Define module variables.
+        $this->name = $md[ 'name' ];
+
+        // Define redirect config. Legacy, will be replaced by redirect plugin.
+        $this->redirect = $md[ 'redirect' ];
+
+        // Define email config. Legacy, will be replaced by email plugins.
+        if ( $md[ 'useemail' ] == 1 ) {
+            $this->mailto  = $md[ 'mailto' ];
+            $this->subject = $md[ 'subject' ];
+        }
 
     }
 
@@ -655,15 +619,7 @@ class UserData {
 
         } else {
 
-            // No plugins were attached to this module, but we can't very well
-            // get along without data access functions. Register the default
-            // AMP plugins.
-
-            $r = $this->registerPlugin( 'AMP', 'read' ) or $r;
-            $r = $this->registerPlugin( 'AMP', 'save' ) or $r;
-            $r = $this->registerPlugin( 'AMP', 'duplicate_check' ) or $r;
-            $r = $this->registerPlugin( 'AMP', 'authenticate' ) or $r;
-            $r = $this->registerPlugin( 'AMP', 'email_admin' ) or $r;
+            $this->_register_default_plugins();
 
         }
 

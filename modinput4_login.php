@@ -11,13 +11,13 @@
 
 ob_start();
 
-require_once( 'AMP/UserData.php' );
+require_once( 'AMP/UserDataInput.php' );
 require_once( 'AMP/BaseDB.php' );
 
 set_error_handler( 'e' );
 
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserData( $dbcon, $_REQUEST[ 'modin' ] );
+$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
 
 $mod_id = $udm->modTemplateID;
 

@@ -9,15 +9,15 @@
  *
  *****/
 
-ob_start();
+//ob_start();
 
 $mod_id = 57;
 $modid = 1;
-require_once( 'AMP/UserData.php' );
+require_once( 'AMP/UserDataInput.php' );
 require_once( 'AMP/BaseDB.php' );
 
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserData( $dbcon, $_REQUEST[ 'modin' ] );
+$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
