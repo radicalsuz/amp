@@ -1,0 +1,51 @@
+.nav {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-weight: normal; color: #FFFFFF}
+a:hover.nav {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-weight: normal; color: #CCCCCC;  text-decoration : none; }
+.boxheader {  font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #FFFFFF}
+.go {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 9px}
+a {  color: #0066CC; text-decoration: none}
+.boxcontents {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; padding-bottom: 5px}
+.newsbody {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #FFFFFF}
+a:hover {  color: #0099FF; text-decoration: underline}
+.photocaption {  font-family: Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; text-align: center; vertical-align: middle; clip:   rect(   ); padding-top: 3px; padding-bottom: 3px}
+.eventdate {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: bold; color: #000000}
+.eventname {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bolder; color: #006699}
+.eventtime {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: bold; color: #000000}
+.homebottom {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #FFFFFF; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; padding-left: 5px}
+.sidelist { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; padding-bottom: 5px }
+.sidetext { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; }
+
+.breadcrumb {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 9px; font-weight: normal; color: #333333}
+.subside { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #CC6600}
+p {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: normal; color: #000000}
+.title {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: Black;
+}
+.subtitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #000000}
+.newssubtitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #333333}
+.newstitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: #000000}
+.bodystrong {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #000000}
+.bodygrey {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: normal; color: #333333}
+.bodygreystrong {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #333333}
+.blacktitle { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: #000000 }
+.author {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #000000}
+.contact {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #000000}
+.date {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #333333;  font-style : normal; }
+.listtitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px; font-weight: bold;   font-style : normal; }
+.newstitlefront {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #FFFFFF}
+a:hover.newstitlefront{ font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; color: #CCCCCC;  text-decoration : none; }
+.eventsubtitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #333333}
+.eventtitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold}
+.text {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: normal;
+}
+.hometitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bolder; color: #006699; text-decoration: none}
+.homebody {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #000000}
+.homeeventdate {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: bold; color: #000000}
+.homeeventname {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16px; font-weight: bolder; color: #006699}
+.homeeventtime {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: bold; color: #000000}
+.homebottom {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #FFFFFF; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; padding-left: 5px}
+.docbox {
+	border : 1px double Black; font-family: Verdana, Arial, Helvetica, sans-seri;
+	font-size : 13px;
+	text-align : center;
+}
+.form {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #333333}
+

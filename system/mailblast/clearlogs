@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo '' > blast.log
+echo '' > smtp_client.log
+echo "Logs Cleared"
+

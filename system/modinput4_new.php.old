@@ -1,0 +1,44 @@
+<?php
+
+require_once( 'Connections/freedomrising.php' );
+require_once( 'header.php' );
+
+if ( !isset( $_REQUEST['name'] ) ) {
+
+?>
+
+<h2>Add a new User Data Module</h2>
+
+<p>Please enter the name of the new user data module and click the &lsquo;Submit&rsquo; button.</p>
+
+<form name="frmUdmAddNew" action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
+
+	<label for="name">Name:</label>
+	<input type="text" name="name" />
+
+	<input type="submit" />
+
+</form>
+
+<?php
+
+} else {
+
+	$sql = "INSERT INTO userdata_fields ( name ) VALUES ( " . $dbcon->qstr( $_REQUEST['name'] ) . ")";
+	$rs = $dbcon->Execute( $sql );
+
+	if ( $rs ) {
+
+		$instance = $dbcon->Insert_ID();
+		header( 'Location: modinput4_edit.php?modin=' . $instance );
+
+	} else {
+
+		print "<p>There was an error adding the new user data module: $name. Please contact your system administrator for assistance.</p><p>Error message was: " . $dbcon->ErrorMsg() . "</p>";
+
+	}
+}
+
+require_once( 'footer.php' );
+
+?>
