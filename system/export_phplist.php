@@ -14,19 +14,22 @@ $attr_rs = $dbcon->Execute( $attribute_sql );
 $list_rs = $dbcon->Execute( $list_sql );
 
 while ( $row = $user_rs->FetchRow() ) {
-    $subdata[ 'users' ][ $row['id'] ] = $row;
+    $subdata[ $row['id'] ] = $row;
 }
 
 while ( $row = $attr_rs->FetchRow() ) {
     $attrname = str_replace( " ", "-", $row['name'] );
-    $subdata[ 'users' ][ $row[ 'userid' ] ][ $attrname ] = $row[ 'value' ];
+    $subdata[ $row[ 'userid' ] ][ $attrname ] = $row[ 'value' ];
 }
 
 while ( $row = $list_rs->FetchRow() ) {
-    $subdata[ 'users' ][ $row[ 'userid' ] ]['lists'][] = $row[ 'listid' ];
+    $subdata[ $row[ 'userid' ] ]['lists'][] = $row[ 'listid' ];
 }
 
 $serializer = new XML_Serializer();
+$serializer->setOption( "addDecl", true );
+$serializer->setOption( "indent", "    " );
+$serializer->setOption( "rootName", "users" );
 
 $result = $serializer->serialize( $subdata );
 
