@@ -252,8 +252,8 @@ class UserData {
             $udmResults = $this->results;
         }
 
-        foreach ( $this->results as $type => $results ) {
-            foreach ( $this->results[ $type ] as $result ) {
+        foreach ( $udmResults as $type => $results ) {
+            foreach ( $udmResults[ $type ] as $result ) {
                 $retarray[] = array( 'type' => $type,
                                      'result' => $result );
             }
