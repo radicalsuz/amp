@@ -16,8 +16,7 @@ require_once( 'utility.functions.inc.php' );
 #set_error_handler( 'e' );
 
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
-if (function_exists('_register_plugin_fields')) _register_plugin_fields($udm);
+$udm = &new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
 
 
 if ($userper[54]) { //UDM All permission

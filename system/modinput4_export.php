@@ -51,59 +51,20 @@ if ($userper[$modin_permission]) {
 
 
 
-// Was data submitted via the web?
-$sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
-
-// Fetch or save user data.
-if ( $sub ) {
-
-    // Save only if submitted data is present, and the user is
-    // authenticated, or if the submission is anonymous (i.e., !$uid)
-   # $udm->saveUser();
-
-} elseif ( !$sub && $uid ) {
-
-    // Fetch the user data for $uid if there is no submitted data
-    // and the user is authenticated.
-    #$udm->submitted = false;
-    #$udm->getUser( $uid ); 
-
-}
-
-/* Now Output the Form.
-
-   Any necessary changes to the form should have been registered
-   before now, including any error messages, notices, or
-   complete form overhauls. This can happen either within the
-   $udm object, or from print() or echo() statements.
-
-   By default, the form will include AMP's base template code,
-   and any database-backed intro text to the appropriate module.
+/* Output the file
 
 */
 
 $mod_id = $udm->modTemplateID;
 
-#require_once( 'header.php' );
-
-#print "<h2>View/Edit " . $udm->name . "</h2>";
-
-
-$format="userlist_html";
-
-
-
-
-	if (isset($udm->plugins['userlist_csv'])) {
-		$output=$udm->doAction("userlist_csv", $options);
-	} else {
-		$udm->registerPlugin("Output", "userlist_csv");
-		$output=$udm->doAction("userlist_csv", $options);
+	if (isset($udm->plugins['UserlistCSV'])) {
+		
+        $output=$udm->doAction("UserlistCSV", $options); 
+    } else {
+		$udm->registerPlugin("Output", "UserlistCSV");
+		$output=$udm->doAction("UserlistCSV", $options);
 	}
 	print $output;
 
-
-// Append the footer and clean up.
-#require_once( 'footer.php' );
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-$ampasp = (AMP_HOSTED) ? '1' : '0';
+$ampasp = (defined('AMP_HOSTED') && AMP_HOSTED) ? '1' : '0';
 
 if (defined( 'AMP_BASE_PATH' ) ) $base_path = AMP_BASE_PATH;
 
@@ -31,7 +31,8 @@ $getsysvars = $dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1")
 
 $SiteName = $getsysvars->Fields("websitename")  ;
 $Web_url  = $getsysvars->Fields("basepath")  ;
-$cacheSecs = $getsysvars->Fields("cacheSecs")  ;
+//Set caching to 0 for AMP-authenticated system side users
+$cacheSecs = (isset($_SERVER['REMOTE_USER'])&&($_SERVER['REMOTE_USER']))?0:$getsysvars->Fields("cacheSecs")  ;
 $admEmail = $getsysvars->Fields("emfaq") ;					//needed for admin only
 $MM_email_usersubmit = $getsysvars->Fields("emendorse");	//User Submitted Article
 $MM_email_from = $getsysvars->Fields("emfrom");				//return email web sent emails
@@ -46,5 +47,9 @@ $MM_USERNAME = AMP_DB_USER;
 $MM_HOSTNAME = AMP_DB_HOST;
 $MM_PASSWORD = AMP_DB_PASS;
 $MM_DATABASE = AMP_DB_NAME;
+
+if (!isset($sysversion)) {
+    $sysversion = '3.3';
+}
 
 ?>

@@ -15,12 +15,16 @@ require_once( 'utility.functions.inc.php');
 
 require("Connections/freedomrising.php");
 
-$modidselect=$dbcon->Execute("SELECT id from modules where userdatamodid=".$_REQUEST['modin']) or DIE($dbcon->ErrorMsg());
-$modid=$modidselect->Fields("id");
+$modin = $_REQUEST['modin'];
+
+$modidselect = $dbcon->Execute("SELECT id from modules where userdatamodid=" . $dbcon->qstr( $modin ) )
+                    or die( "Couldn't get module information: " . $dbcon->ErrorMsg() );
+
+$modid = $modidselect->Fields("id");
 
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ], true );
-$udm->doPlugin( "QuickForm", "build_admin" );
+$udm = new UserDataInput( $dbcon, $modin, true );
+$udm->doPlugin( "QuickForm", "BuildAdmin" );
 $mod_id = $udm->modTemplateID;
 
 // Was data submitted via the web?
@@ -28,7 +32,7 @@ $sub = (isset($_REQUEST['btnUdmSubmit']) && $_REQUEST['btnUdmSubmit']);
 
 // Fetch or save user data.
 if ( $sub ) {
-    $udm->doPlugin( 'AMP', 'save_admin' );
+    $udm->doPlugin( 'AMP', 'SaveAdmin' );
 }
 
 /* Now Output the Form.

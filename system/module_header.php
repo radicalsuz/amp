@@ -9,9 +9,9 @@ $buildform = new BuildForm;
 
 $table = "moduletext";
 $listtitle ="Module Header Text";
-$listsql ="SELECT t.name, t.id, m.name as mod from moduletext t left join  modules m on  t.modid = m.id ";
+$listsql ="SELECT t.name, t.id, m.name as modname from moduletext t left join  modules m on  t.modid = m.id ";
 $orderby =" order by m.name, t.name asc  ";
-$fieldsarray=array( 'Module Page'=>'name','Module'=>'mod','ID'=>'id'
+$fieldsarray=array( 'Module Page'=>'name','Module'=>'modname','ID'=>'id'
 					);
 $filename="module_header.php";
 

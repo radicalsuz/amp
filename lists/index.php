@@ -1,8 +1,7 @@
 <?
 ###### HACK FOR AMP ############################################
 $subdir =1;
-require_once("adodb/adodb.inc.php");
-require_once("AMP/BaseDB.php");
+require_once('AMP/BaseDB.php');
 ###### END HACK FOR AMP ##########################################
 
 //ob_start();

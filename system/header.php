@@ -121,18 +121,17 @@ if ($header_udm == 1) {
 	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy</a></li>";
 	$nav_link .= "\n		<li ".nav_css("search")." ><a href='modinput4_search.php?modin=".$header_udmid."' >Search</a></li>";
 	$nav_link .= "\n		<li ".nav_css("form")." ><a href='modinput4_edit.php?modin=".$header_udmid."' >Form Settings</a></li>";
+	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy Form Template</a></li>";
 }
 if ($modid != 19 && $modid != 31 && $modid != 30 && ($modid)) {
 	$nav_link .= "\n		<li ".nav_css("page")."><a href='module_header_list.php?modid=".$modid."' >Pages</a></li>";
 	$nav_link .= "\n		<li ".nav_css("settings")."><a href='module_control_list.php?modid=".$modid."' >Settings</a></li>";
 }
- 
 
 if ($nav_link) {
     $nav_link .= "\n	</ul>";
     $nav_link .= "<br clear='all' />"; 
 }
-
 
 if (!isset($_GET['noHeader']) || !$_GET['noHeader']) {
 

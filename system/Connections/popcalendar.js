@@ -221,11 +221,13 @@
 	}
 
 	function hideCalendar() {
-		crossobj.visibility = 'hidden';
-		if (crossMonthObj != null) crossMonthObj.visibility = 'hidden';
-		if (crossYearObj  != null) crossYearObj.visibility = 'hidden';
-		showElement('SELECT');
-		showElement('APPLET');
+        if (crossobj) {
+            crossobj.visibility = 'hidden';
+            if (crossMonthObj != null) crossMonthObj.visibility = 'hidden';
+            if (crossYearObj  != null) crossYearObj.visibility = 'hidden';
+            showElement('SELECT');
+            showElement('APPLET');
+        }
 	}
 
 	function padZero(num) {

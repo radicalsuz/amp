@@ -85,12 +85,14 @@
             font-size: 65%;
             color: #999999; 
             text-align: center;
+            clear: both;
         }
 
     </style>
+
 </head>
 
-<body onload="document.forms[0].elements[0].focus();">
+<body onload="document.forms[0].elements[0].focus(); setOpacity( document.getElementById('shadow'), 100 ); setOpacity( document.getElementById('content'), 100 );">
 
 <div id="wrapper">
 
