@@ -15,7 +15,6 @@ require_once( 'AMP/Region.inc.php' );
 $GLOBALS['regionObj'] = new Region();
 
 function udm_QuickForm_build_admin ( $udm, $options = null ) {
-
     $admin      = ( isset( $options[ 'admin' ] ) ) ?
                     $options['admin'] : false;
 

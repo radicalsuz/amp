@@ -20,6 +20,7 @@ require_once( 'AMP/BaseDB.php' );
 
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
+if (function_exists('_register_plugin_fields')) _register_plugin_fields($udm);
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;

@@ -16,8 +16,11 @@ $GLOBALS['regionObj'] = new Region();
 
 function udm_QuickForm_build ( &$udm, $options = null ) {
 
-    if ( $udm->admin ) $admin = true;
-
+	if ( $udm->admin ){
+		$admin = true;
+	} else { 
+		$admin=false;
+	}
     $frmName    = $udm->name;
     $frmMethod  = ( isset( $options['frmMethod'] ) ) ?
                     $options['frmMethod'] : 'post';
@@ -95,7 +98,7 @@ function udm_quickform_setupLookup( $tablename, $displayfield, $valuefield, $res
 
 function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
 
-    if ( $field_def[ 'public' ] != 1 || ( $admin && $field_def[ 'enabled' ] == 1 ) ) return false;
+    if ( $name!='publish'&&($field_def[ 'public' ] != 1 || ( $admin && $field_def[ 'enabled' ] == 1 )) ) return false;
 
     $type     = $field_def[ 'type'   ];
     $label    = $field_def[ 'label'  ];

@@ -1,6 +1,6 @@
 <?php
 
-function udm_AMP_read ( $udm, $options = null ) {
+function udm_AMP_read ( &$udm, $options = null ) {
 
     $userid = $options[ '_userid' ];
 
