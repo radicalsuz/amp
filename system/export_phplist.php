@@ -23,13 +23,13 @@ while ( $row = $attr_rs->FetchRow() ) {
 }
 
 while ( $row = $list_rs->FetchRow() ) {
-    $subdata[ $row[ 'userid' ] ][ 'lists' ][] = $row['listid'];
+    $subdata[ $row[ 'userid' ] ][ 'list' ][] = $row['listid'];
 }
 
 $serializer = new XML_Serializer();
 $serializer->setOption( "addDecl", true );
 $serializer->setOption( "indent", "    " );
-$serializer->setOption( "rootName", "users" );
+$serializer->setOption( "rootName", "user" );
 //$serializer->setOption( "defaultTagName", "user" );
 $serializer->setOption( "mode", "simplexml" );
 
