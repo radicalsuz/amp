@@ -24,8 +24,8 @@ if (isset($HTTP_GET_VARS["id"]))
    $MM_recordId = "" . $MM_recordId . "";
    $MM_editRedirectUrl = "user_list.php";
    $MM_editColumn = "id";
-   $MM_fieldsStr = "name|value|passwordx|value|userlevel|value|email|value";
-   $MM_columnsStr = "name|',none,''|password|',none,''|permission|none,none,NULL|email|',none,''|";
+   $MM_fieldsStr = "name|value|passwordx|value|userlevel|value|email|value|system_home|value|system_allow_only|value";
+   $MM_columnsStr = "name|',none,''|password|',none,''|permission|none,none,NULL|email|',none,''|system_home|',none,''|system_allow_only|',none,''|";
  
  
     require ("../Connections/insetstuff.php");
@@ -84,6 +84,16 @@ if (isset($HTTP_GET_VARS["id"]))
     </tr>   <tr valign="baseline"> 
             <td nowrap align="right">email:</td>
             <td> <input type="text" name="email" value="<?php echo $Recordset1->Fields("email")?>" size="40"> 
+            </td>
+          </tr>
+		  <tr valign="baseline"> 
+            <td nowrap align="right">system home:</td>
+            <td> <input type="text" name="system_home" value="<?php echo $Recordset1->Fields("system_home")?>" size="40"> 
+            </td>
+          </tr>
+		  <tr valign="baseline"> 
+            <td nowrap align="right">system allowed pages:<br><span class=side>separate with commas</span></td>
+            <td> <Textarea  name="system_allow_only" rows=5 cols=40><?php echo $Recordset1->Fields("system_allow_only")?></textarea> 
             </td>
           </tr>
     <tr valign="baseline"> 

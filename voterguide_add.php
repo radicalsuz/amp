@@ -22,8 +22,8 @@ require_once( 'AMP/BaseDB.php' );
 $udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
 
 // User ID.
-$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
-$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
+#$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+#$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
 
 // Was data submitted via the web?
 $sub = isset($_REQUEST['btnUdmSubmit']);
@@ -74,7 +74,7 @@ if ( ( !$uid || $auth ) && $sub ) {
 			if (!$uid) {
 				$guide_id =$dbcon->Insert_ID();
 			} else {$guide_id =$uid;}
-			$del_guide=$dbcon->Execute("delete from voterguide where $guide_id = $guide_id"); 
+			$del_guide=$dbcon->Execute("delete from voterguide where guide_id = $guide_id"); 
 
 			while ($i <= 55){ 
 				if ($_POST['can'][$i]) {

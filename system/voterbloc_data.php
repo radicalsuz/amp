@@ -9,23 +9,40 @@
  *
  *****/
 
-require_once( 'AMP/UserData/Input.inc.php' );
+require_once( 'AMP/UserData/Set.inc.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 
-#set_error_handler( 'e' );
-
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
-$udm->admin = true;
+$udm = new UserDataSet( $dbcon, $_REQUEST[ 'modin' ] );
 
-$modidselect=$dbcon->Execute("SELECT id from modules where userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
+
+$modidselect=$dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
 $modid=$modidselect->Fields("id");
+$modin_permission=$modidselect->Fields("perid");
 
-// User ID.
-$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
-$udm->authorized = true;
-$udm->uid = $uid;
+$format="userlist_html";
+$options=array('allow_publish'=>'0', 'display_fields'=>"Concat(First_Name, \" \", Last_Name) as Name, Street, Email, Phone", 'email_action'=>'voterbloc_mailblast.php');
+
+if ($userper[53]&&$userper[$modin_permission]) { 
+	$udm->admin = true;
+	$options['allow_publish']=true;
+	$udm->authorized = true;
+	$options['allow_edit']=true;
+	$options['allow_export']=true;
+} else {
+	$udm->admin=false;
+}
+
+if ($userper[$modin_permission]) {
+	$udm->authorized=true;
+} else {
+	$udm->authorized=false;
+}
+
+
+
+
 
 // Was data submitted via the web?
 $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
@@ -33,19 +50,16 @@ $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
 // Fetch or save user data.
 if ( $sub ) {
 
-print "Trying to save....";
     // Save only if submitted data is present, and the user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
-	if($udm->saveUser()) {
-			header ("Location:modinput4_data.php?modin=".$udm->instance);
-	}
-	$udm->showForm = true;
+   # $udm->saveUser();
 
 } elseif ( !$sub && $uid ) {
 
     // Fetch the user data for $uid if there is no submitted data
     // and the user is authenticated.
-    $udm->getUser( $uid ); 
+    #$udm->submitted = false;
+    #$udm->getUser( $uid ); 
 
 }
 
@@ -65,8 +79,10 @@ $mod_id = $udm->modTemplateID;
 
 require_once( 'header.php' );
 
-print "<h2>Add/Edit " . $udm->name . "</h2>";
-print $udm->output();
+print "<h2>View/Edit " . $udm->name . "</h2>";
+
+
+	print $udm->doAction($format, $options);
 
 // Append the footer and clean up.
 require_once( 'footer.php' );

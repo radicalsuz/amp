@@ -13,6 +13,36 @@ else {
 	}
 
 
+//ENSURE THAT THE current user is allowed to see this page
+
+$MM_current_page =basename($_SERVER['PHP_SELF']);
+if (isset($_SERVER['QUERY_STRING'])) {
+	
+	parse_str($_SERVER['QUERY_STRING'], $MM_active_vars);
+	
+	foreach ($MM_active_vars as $v_key=>$v_value) {
+		$MM_query_string.=$v_key."=".$v_value."&";
+	}
+	$MM_current_page.="?".$MM_query_string;
+
+}
+$allowed_pages=$dbcon->GetAssoc("Select id, system_allow_only from users where id=$ID");
+if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted to certain pages
+	$permit_access=FALSE;
+	$allowed_pageset=split(",", $allowed_pages[$ID]);
+	foreach ($allowed_pageset as $key=>$allowed_page) {
+		$allowed_page=trim($allowed_page);
+		if (strlen($allowed_page)>3) {
+			#print $MM_current_page."   ".$allowed_page;
+			if (substr($MM_current_page, 0, strlen($allowed_page))==$allowed_page) {
+				$permit_access=TRUE;
+			}
+		}
+	}
+	if (!$permit_access) {
+		header ("Location:index.php");
+	}
+}
 
 
    $headernav=$dbcon->Execute("SELECT name, id, file, perid  FROM modules where publish=1 order by name asc") or DIE($dbcon->ErrorMsg());
@@ -202,36 +232,6 @@ document.getElementById('basic').style.display = 'none';
     }
 
 
-function hideClass(theclass, objtype) {
-	if (!objtype>'') {objtype='div';}
-	var objset=document.getElementsByTagName(objtype);
-	for (i=0;i<objset.length; i++) {
-		if (objset.item(i).className == theclass){
-			objset.item(i).style.display = 'none';
-		}
-	}
-	
-}
-
-function showClass(theclass, objtype) {
-	if (!objtype>'') {objtype='div';}
-	var objset=document.getElementsByTagName(objtype);
-	for (i=0;i<objset.length; i++) {
-		if (objset.item(i).className == theclass){
-			objset.item(i).style.display = 'block';
-		}
-	}
-}
-
-	function change_any(which, whatkind) {
-	if (whatkind!='') {hideClass(whatkind, '');}
-		if(document.getElementById(which).style.display == 'block' ) {
-			document.getElementById(which).style.display = 'none';
-		} else {
-		document.getElementById(which).style.display = 'block';
-		}
-	}
-	
 </script>
 <script type="text/javascript" src="Connections/popcalendar.js"></script>
 <script language="JavaScript" src="../Connections/functions.js"></script>
@@ -278,7 +278,7 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
 
              $perid=$headernav->Fields("perid");
 			   if ($userper["$perid"] == 1) { ?>  <option value="<?php echo  $headernav->Fields("file");?>"> 
-                <?php echo  $headernav->Fields("name");?> </option>
+                <?php echo  substr($headernav->Fields("name"), 0, 20);?> </option>
                 <?php 
 		}
       $headernav->MoveNext();
@@ -362,7 +362,7 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
 
              $perid=$headernav->Fields("perid");
 			   if ($userper["$perid"] == 1) { ?>  <option value="<?php echo  $headernav->Fields("file");?>"> 
-                <?php echo  $headernav->Fields("name");?> </option>
+                <?php echo  substr($headernav->Fields("name"),0,20);?> </option>
                 <?php 
 		}
       $headernav->MoveNext();

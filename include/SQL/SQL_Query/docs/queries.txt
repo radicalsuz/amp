@@ -1,0 +1,84 @@
+taken from the http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt
+
+some common defines:
+<left paren> ::= (
+<right paren> ::= )
+<column name list> ::=
+    <column name> [ { <comma> <column name> }... ]
+
+
+
+DELETE
+--------
+by spec there are two types of delete statements, a "positioned" and a "searched".
+I guess the "positioned" will have to wait a bit ... since it seems not very common, 
+but if someone volunteers - go ahead
+
+<delete statement: searched> ::=
+	DELETE FROM <table name>
+		[ WHERE <search condition> ]
+				
+<delete statement: positioned> ::=
+	DELETE FROM <table name>
+		WHERE CURRENT OF <cursor name>
+		
+				
+
+INSERT 
+--------
+<insert statement> ::=
+	INSERT INTO <table name>
+		<insert columns and source>
+
+<insert columns and source> ::=
+	[ <left paren> <insert column list> <right paren> ]
+	<query expression>
+	| DEFAULT VALUES
+
+<insert column list> ::= <column name list>
+
+		 
+
+UPDATE 
+--------
+<update statement: positioned> ::=
+	UPDATE <table name>
+		SET <set clause list>
+		WHERE CURRENT OF <cursor name>
+
+<set clause list> ::=
+	<set clause> [ { <comma> <set clause> }... ]
+
+<set clause> ::=
+	<object column> <equals operator> <update source>
+
+<update source> ::=
+		<value expression>
+	| <null specification>
+	| DEFAULT
+
+<object column> ::= <column name>
+
+
+<update statement: searched> ::=
+	UPDATE <table name>
+		SET <set clause list>
+		[ WHERE <search condition> ]
+
+		
+SELECT 
+--------
+<query specification> ::=
+	SELECT [ <set quantifier> ] <select list> <table expression>
+
+<select list> ::=
+		<asterisk>
+	| <select sublist> [ { <comma> <select sublist> }... ]
+
+<select sublist> ::=
+		<derived column>
+	| <qualifier> <period> <asterisk>
+
+<derived column> ::= <value expression> [ <as clause> ]
+
+<as clause> ::= [ AS ] <column name>

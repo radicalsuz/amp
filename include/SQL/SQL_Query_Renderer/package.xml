@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE package SYSTEM "../../php4/pehttp://pear.php.net/dtd/package-1.0">
+<!-- do not use the "Type" attribute here, that one is only for
+     generated package.xml files -->
+<package version="1.0">
+    <name>SQL_Query_Renderer</name>
+    <summary>
+Render a SQL_Query object into a string, which can be sent to a DB-backend.
+This package aims to provide ways to render a query for different DB-backends
+i.e. mysql, pgsql, orcale, etc.
+    </summary>
+
+    <description>
+Render a SQL_Query object into a string.    
+	</description>
+
+    <maintainers>
+        <maintainer>
+            <user>cain</user>
+            <name>Wolfram Kriesing</name>
+            <email>wolfram@kriesing.de</email>
+            <role>lead</role>
+        </maintainer>
+    </maintainers>
+
+    <release>
+        <version>0.0.1</version>
+        <license>PHP</license>
+        <state>alpha</state>
+        <date>2003-??-??</date>
+        <notes>
+        </notes>
+
+        <filelist>
+            <dir name="/" baseinstalldir="SQL/Query">
+
+                <dir name="Renderer">
+                    <file role="php" name="Common.php" />
+                    <file role="php" name="Standard.php" />
+                    <file role="php" name="sql2.php" />
+                </dir>
+<!--
+                <dir name="docs">
+                    <file role="doc" name="example.php" />
+                    <file role="doc" name="mysql.sql" />
+                    <file role="doc" name="pgsql.sql" />
+                </dir>
+
+                <dir name="tests">
+                    <file role="doc" name="Common.php" />
+                    <file role="doc" name="Get.php" />
+                    <file role="doc" name="GetAll.php" />
+                    <file role="doc" name="GetCount.php" />
+                    <file role="doc" name="index.php" />
+                    <file role="doc" name="Having.php" />
+                    <file role="doc" name="Limit.php" />
+                    <file role="doc" name="sql.php" />
+                    <file role="doc" name="UnitTest.php" />
+                    <file role="doc" name="Where.php" />
+                </dir>
+-->
+            </dir>
+
+            <deps>
+                <dep type="pkg" rel="ge" version="0.0.1">SQL_Query</dep>
+            </deps>
+
+        </filelist>
+
+    </release>
+
+    <changelog>
+        <release>
+        </release>
+    </changelog>
+
+
+</package>
