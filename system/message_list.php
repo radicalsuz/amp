@@ -1,7 +1,7 @@
 <?php
 $modid=38;
   require("Connections/freedomrising.php");
-   $new=$dbcon->Execute("SELECT * from message where toid = $ID order by date desc") or DIE($dbcon->ErrorMsg());
+   $new=$dbcon->Execute("SELECT * from message, users where message.toid = users.id and users.name=".$dbcon->qstr($_SERVER['REMOTE_USER'])." order by date desc") or DIE($dbcon->ErrorMsg());
   ?>
   
  <?php  include ("header.php");?>

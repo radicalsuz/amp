@@ -379,7 +379,8 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 
 </style>
 
-    <?php include("Connections/ddnav.php")?>
+    <?php include("Connections/ddnav.php");
+    ?>
 </head>
 
 <body <?= ($browser_mo) ? 'onload="initEditor()"' : '' ?>>

@@ -4,12 +4,17 @@ $modid=38;
 require_once("Connections/freedomrising.php");
 
 if (!$MM_Message && AMP_HOSTED) {
-
-    header('Location: amp_alerts.php');
-
+	
+	$index_user_settings = $dbcon->GetAssoc("Select id, system_home from users where name = ".$dbcon->qstr($_SERVER['REMOTE_USER']));
+	if (isset($index_user_settings['system_home'])&&$index_user_settings['system_home']!='') {
+		ampredirect($index_user_settings['system_home']);
+	} else {
+		header('Location: amp_alerts.php');
+	}
+    
 } else {
 
-    $new=$dbcon->Execute("SELECT * from message where toid = $ID order by date desc")
+    $new=$dbcon->Execute("SELECT * from message, users where message.toid = users.id and users.name=".$dbcon->qstr($_SERVER['REMOTE_USER'])." order by date desc")
             or die("Couldn't find any messages: " . $dbcon->ErrorMsg());
 ?>
   
