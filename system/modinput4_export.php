@@ -16,13 +16,17 @@ require_once( 'utility.functions.inc.php' );
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserDataSet( $dbcon, $_REQUEST[ 'modin' ] );
 
-
 $modidselect=$dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
 $modid=$modidselect->Fields("id");
 $modin_permission=$modidselect->Fields("perid");
 
-$format="userlist_html";
-$options=array('allow_publish'=>'0', 'display_fields'=>"Concat(First_Name, \" \", Last_Name) as Name, Street, Email, Phone", 'email_action'=>'voterbloc_mailblast.php');
+
+//Accept URL values for editlink and sortby options
+if (isset($_GET['editlink'])) { $options['editlink_action']=$_GET['editlink'];
+} else { $options=array();}
+if (isset($_GET['sortby'])) { $options['sort_by']=$_GET['sortby'].", First_Name, Last_Name";
+}
+
 
 if ($userper[53]&&$userper[$modin_permission]) { 
 	$udm->admin = true;
@@ -30,8 +34,10 @@ if ($userper[53]&&$userper[$modin_permission]) {
 	$udm->authorized = true;
 	$options['allow_edit']=true;
 	$options['allow_export']=true;
+	$options['allow_lookups']=true;
+	$options['include_id_column']=true;
 	$options['allow_include_modins']=true;
-	$options['allowed_modins']="*";
+	$options['include_modin_column']=true;
 } else {
 	$udm->admin=false;
 }
@@ -42,8 +48,6 @@ if ($userper[$modin_permission]) {
 } else {
 	$udm->authorized=false;
 }
-
-
 
 
 
@@ -80,14 +84,26 @@ if ( $sub ) {
 
 $mod_id = $udm->modTemplateID;
 
-require_once( 'header.php' );
+#require_once( 'header.php' );
 
-print "<h2>View/Edit " . $udm->name . "</h2>";
+#print "<h2>View/Edit " . $udm->name . "</h2>";
 
 
-	print $udm->doAction($format, $options);
+$format="userlist_html";
+
+
+
+
+	if (isset($udm->plugins['userlist_csv'])) {
+		$output=$udm->doAction("userlist_csv", $options);
+	} else {
+		$udm->registerPlugin("Output", "userlist_csv");
+		$output=$udm->doAction("userlist_csv", $options);
+	}
+	print $output;
+
 
 // Append the footer and clean up.
-require_once( 'footer.php' );
+#require_once( 'footer.php' );
 
 ?>

@@ -17,10 +17,14 @@ require_once( 'utility.functions.inc.php' );
 
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
-$udm->admin = true;
 
-$modidselect=$dbcon->Execute("SELECT id from modules where userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
+
+if ($userper[54]) { //UDM All permission
+	$udm->admin = true;
+}
+$modidselect=$dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
 $modid=$modidselect->Fields("id");
+$modin_permission=$modidselect->Fields("perid");
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
@@ -29,6 +33,9 @@ $udm->uid = $uid;
 
 // Was data submitted via the web?
 $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
+
+
+
 
 // Fetch or save user data.
 if ( $sub ) {

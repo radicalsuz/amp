@@ -26,7 +26,7 @@ function vg_detail($R) {
 	if ($R->Fields("MI")) {echo "<a href ='downloads/".$R->Fields("MI")."'>Download the Voter Guide as a PDF</a><br>"; }
 	else { echo "<a href=\"voterguide.php?detail=".$_GET[detail]."&printsafe=1\">Printer Safe Voter Guide</a><br>";}
 	//echo "</td></tr></table>";
-	if ($R->Fields("Suffix")) {echo "<br><a href ='modinput4.php?modin=".$R->Fields("Suffix")."'>JOIN THIS VOTER BLOC -- ENDORSE THIS VOTER GUIDE!</a><br>"; }
+	if ($R->Fields("Suffix")) {echo "<br><a href ='modinput4.php?modin=".$R->Fields("Suffix")."' class=\"joinlink\">JOIN THIS VOTER BLOC -- ENDORSE THIS VOTER GUIDE!</a><br>"; }
 	echo "<p>".$R->Fields("custom4")."</p><BR><BR>";
 	if ($L->Fields("id") ) {
 		while (!$L->EOF) {
@@ -34,7 +34,7 @@ function vg_detail($R) {
 		$L->MoveNext();
 		}
 	}
-	if ($R->Fields("Suffix")) {echo "<a href ='modinput4.php?modin=".$R->Fields("Suffix")."'>JOIN THIS VOTER BLOC -- ENDORSE THIS VOTER GUIDE!</a><br>"; }
+	if ($R->Fields("Suffix")) {echo "<a href ='modinput4.php?modin=".$R->Fields("Suffix")."' class=\"joinlink\">JOIN THIS VOTER BLOC -- ENDORSE THIS VOTER GUIDE!</a><br>"; }
 
 }
 

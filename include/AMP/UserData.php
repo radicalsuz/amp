@@ -353,6 +353,13 @@ class UserData {
         $func = join( '_', $func_a );
 
         if ( function_exists( $func ) ) {
+			if ( is_array( $this->plugins[$action][$namespace] ) ) {
+                if (isset($options)) {
+					$options = $this->plugins[$action][$namespace] + $options;
+				} else {
+					$options=$this->plugins[$action][$namespace];
+				}
+            }
             return $func( &$this, $options );
         } else {
             return false;
@@ -658,12 +665,12 @@ class UserData {
         $lists = array_filter( array_keys( $md ), array( &$this, "_register_lists_filter" ) );
 
         foreach ( $lists as $list ) {
-	    if ( $md[ $list ] ) {
-	        $list_id[] = $md[ $list ];
-	    }
+            if ( $md[ $list ] ) {
+                $list_id[] = $md[ $list ];
+            }
         }
 
-        if (!isset( $list_id)) return false;
+        if (count($list_id) == 0) return false;
 
         $table = $GLOBALS['MM_listtable'];
         if ( !isset( $table ) ) $table = 'lists';

@@ -35,10 +35,13 @@ if ($user_action=='create'&&($userper[51]==1)) {
 	if (substr($message, 0, 15)=='Created Account'&&$login_type=='voterbloc') {
 		//Rewrite the nav for that module
 		
-		$sql="UPDATE modules set navhtml = \"<A class=side href='voterbloc_data.php?modin=".$bloc_id."'>View/Edit Voter Bloc Members</A><br><A class=side href='modinput4_view.php?modin=".$bloc_id."'>Add Voter Bloc Members</A><br><A class=side href='voterguide.php?uid=".$uid."'>Edit Your Voter Guide</a><BR>\" where id=".$bloc_id;
+		$sql="UPDATE modules set navhtml = \"<A class=side href='voterbloc_data.php?modin=".$bloc_id."'>View/Edit Voter Bloc Members</A><br><A class=side href='modinput4_view.php?modin=".$bloc_id."'>Add Voter Bloc Members</A><br><A class=side href='voterguide.php?uid=".$uid."'>Edit Your Voter Guide</a><BR>\" where userdatamodid=".$bloc_id;
 		
+		#print $sql."<P>";
+
 		if($rs=$dbcon->Execute($sql)) {
-			$message.="\\nVoterBloc Nav revision worked";
+			$message.="\\nVoterBloc Nav revision for user # $uid  bloc #$bloc_id\\n";
+			$message.=$dbcon->Affected_Rows()." navs were changed";
 		} else {
 			$message.="\\please check the Nav for this bloc";
 		}
@@ -51,17 +54,12 @@ if ($user_action=='create'&&($userper[51]==1)) {
 } elseif ($user_action=='sendAccount') {
 	$email=$_REQUEST['email'];
 	$template=$_REQUEST['template_id'];
-	if (isset($_REQUEST['include_admin'])) {
-		$message=amp_emailUser($email, $template, TRUE);
-	} else {
-		$message=amp_emailUser($email, $template);
-	}
+	$message=amp_emailUser($email, $template);
 }
 
 print "<HTML><body><script type=\"text/javascript\"> alert ('".$message."'); 
 top.location=history.back(1); 
 </script></body></html>";
-
 
 	
 function amp_createUser($login, $pwd, $email, $permission, $new_home='', $allow_only='') {
@@ -88,7 +86,7 @@ function amp_createUser($login, $pwd, $email, $permission, $new_home='', $allow_
 	}
 }
 
-function amp_emailUser($email, $template_id=NULL, $cc_admin=NULL){
+function amp_emailUser($email, $template_id=NULL){
 	global $dbcon;
 	global $Web_url, $admEmail, $MM_email_from;
 	$qemail=$dbcon->qstr($email);
@@ -99,8 +97,8 @@ function amp_emailUser($email, $template_id=NULL, $cc_admin=NULL){
 		$from=$MM_email_from;
 		if (!$from>'') { $from=$admEmail;}
 		$site=$Web_url;
-		$header  = "From: " . $from."\r\n";
-        if ($cc_admin != NULL) { $header .= "Cc: $from\r\n";}
+		$header  = "From: " . $from;
+        #$header .= "\nX-Mailer: AMP/System\n";
 
 		$instructions="Go to ".$site."system\nYour login is: ".$founduser->Fields('name')."\n";
 		$instructions.="Your password is: ".$founduser->Fields('password')."\n";

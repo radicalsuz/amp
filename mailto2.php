@@ -34,6 +34,9 @@ if ($_POST[FromEmail]) {
  
 }
 else {
+	if (isset($_POST['url_link'])) { 
+		$messsageor=str_replace("[-url_link-]", $_POST['url_link'], $messsageor);
+	}
 	tellfriend($firstname,$lastname,$email,$subjector,$messsageor);
 }
 

@@ -20,6 +20,8 @@ $modidselect=$dbcon->Execute("SELECT id, perid from modules where userdatamodid=
 $modid=$modidselect->Fields("id");
 $modin_permission=$modidselect->Fields("perid");
 
+
+//Accept URL values for editlink and sortby options
 if (isset($_GET['editlink'])) { $options['editlink_action']=$_GET['editlink'];
 } else { $options=array();}
 if (isset($_GET['sortby'])) { $options['sort_by']=$_GET['sortby'].", First_Name, Last_Name";
@@ -32,6 +34,8 @@ if ($userper[53]&&$userper[$modin_permission]) {
 	$udm->authorized = true;
 	$options['allow_edit']=true;
 	$options['allow_export']=true;
+	$options['allow_include_modins']=true;
+	$options['allowed_modins']="*";
 } elseif ($userper[54]&&$userper[$modin_permission]) {
 	$udm->authorized = true;
 	$options['allow_edit']=false;

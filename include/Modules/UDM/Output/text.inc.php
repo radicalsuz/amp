@@ -7,8 +7,8 @@ function udm_output_text ( $udm, $options = null ) {
         $udm->doPlugin( 'QuickForm', 'build' );
 
     foreach ( $udm->form->exportValues() as $field => $value ) {
-
-        $out .= $field . ": " . $value . "\n";
+		$fieldname=isset($udm->fields[$field]) ? strip_tags($udm->fields[$field]['label']) : $field;
+        $out .= $fieldname . ": " . $value . "\n";
 
     }
 
