@@ -9,7 +9,7 @@ $orderbyorder ="desc";
 require_once( 'AMP/BaseDB.php' );
 
 if ($_GET['feed']) {
-	$f =$dbcon->CacheExecute("select * from rssfeed where id = ".$_GET[feed]." ") or DIE($dbcon->ErrorMsg());
+	$f =$dbcon->CacheExecute("select * from rssfeed where id = ".$_GET['feed']." ") or DIE($dbcon->ErrorMsg());
 	if ($f->Fields("description")) { $meta_description = $f->Fields("description");}
 	if ($f->Fields("title")) {$SiteName = $f->Fields("title"); } 
 	if ($f->Fields("sqllimit")) {$sqllimit = $f->Fields("sqllimit"); }
@@ -30,8 +30,8 @@ $R =$dbcon->CacheExecute($sql) or DIE($sql.$dbcon->ErrorMsg());
 	<link><?= $Web_url ?></link>
 	<description><?= $meta_description ?></description>
 	<language>en-us</language>
-	<docs><?php echo $Web_url.'rssfeed.php?feed='.$_GET[feed];?></docs>
-	<pubDate><?php echo date(r); ?></pubDate>
+	<docs><?php echo $Web_url.'rssfeed.php?feed='.$_GET['feed'];?></docs>
+	<pubDate><?php echo date('r'); ?></pubDate>
 	<generator>Activist Mobilization Platform</generator>
 	<webMaster><?= $admEmail ?></webMaster>
 <?php 
@@ -58,9 +58,9 @@ if ($R->Fields("title")) {
 	$description = htmlspecialchars(strip_tags($description));
 	if ($description == NULL) {$description= $R->Fields("title");}
 	if (($R->Fields("date")) or ($R->Fields("date") != '0000-00-00')) {
-		$date = date(r,$R->Fields("date"));
+		$date = date('r',$R->Fields("date"));
 	} else {
-		$date = date(r,$R->Fields("updated"));
+		$date = date('r',$R->Fields("updated"));
 	}
 	
 	$title = ereg_replace ("&", "and" ,$R->Fields("title"));

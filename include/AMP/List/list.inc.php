@@ -17,7 +17,7 @@ To Do:
 function list_header_article($type,$header_url=NULL){
 	global $dbcon, $articlereplace, $NAV_IMG_PATH;
 	if ($header_url && $header_url != 1 ) {
-		$MM_id = $header_use;
+		$MM_id = $header_url;
 	}
 	elseif ( $header_url != 1) {
 		$sectionheader=$dbcon->CacheExecute("SELECT id  FROM articles WHERE type = $type and class= 8 and publish =1 limit 1")or DIE("Could not load section header info in list".$dbcon->ErrorMsg()); 

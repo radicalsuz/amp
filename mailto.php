@@ -104,7 +104,7 @@ if ($submit) {
 	$comment=$form["comment"];
 	$site_name=$GLOBALS["site_name"];
 	$your_email=$GLOBALS["your_email"];
-	$message="Hi\n$from ($from_email) invited you to visit $site_name\n\$GLOBALS[prmailtomessage]\nCheck out this URL: $url";
+	$message="Hi\n$from ($from_email) invited you to visit $site_name\n".$GLOBALS['prmailtomessage']."\nCheck out this URL: $url";
 		if ($form["comment"] != "") {
 			$message.="\n\n$from left you a note:\n$comment";
 		}
@@ -117,4 +117,4 @@ if ($submit) {
 
 } else show_form();
 
- echo $GLOBALS[bthtml]; ?>
+ echo $GLOBALS['bthtml']; ?>

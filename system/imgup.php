@@ -16,6 +16,7 @@ if ($_FILES['file']['name']) {
 ob_start();
 // insert, update, delete
 if ($_POST['add'] ) {
+	$MM_insert=$_REQUEST['MM_insert'];
     $MM_editTable  = "gallery";
     $MM_fieldsStr = "section|value|imnae2|value|caption|value|photoby|value|date|value|byemail|value|publish|value|galleryid|value";
     $MM_columnsStr = "section|',none,''|img|',none,''|caption|',none,''|photoby|',none,''|date|',none,''|byemail|',none,''|publish|',none,''|galleryid|',none,''";

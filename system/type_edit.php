@@ -209,7 +209,7 @@ document.getElementById('advanced').style.display = 'none';
               (12-30-2002) </td>
           </tr>
 		    <tr> 
-            <td class="name">Override Defualt Section Header with Content ID#</td>
+            <td class="name">Override Default Section Header with Content ID#</td>
             <td><input name="url" type="text" id="url" value="<?php 
 			
 				

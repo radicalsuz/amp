@@ -3,21 +3,14 @@
 require("Connections/freedomrising.php");
 $modid="30";
 
-function module_name($id) {
-	global $dbcon;
-	$sql ="select name from moduletext where id =$id"; 
-	$R=$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
-	$output= $R->Fields("name");
-	return $output;
-}
-
-
 if ($_POST['moduleid']) {
 	$field= 'moduleid';
 	$field_value= $_POST['moduleid'];
 	$sql ="select modid from moduletext where id = ".$_POST['moduleid'];
 	$M =$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
 	$redirect = "module_control_list.php?modid=".$M->fields("modid");
+	//Default content modules should just return to nav_order page
+	if ($field_value==1||$field_value==2) $redirect=$_SERVER['PHP_SELF'].'?mod_id='.$field_value;
 }	
 if ($_POST['typelist']){
 	$field= 'typelist';
@@ -38,12 +31,11 @@ if ($_POST['classlist']) {
 
 // insert, update, delete
 if ($_POST['MM_update']) {
-
 	$sql = "delete from nav where $field = $field_value";
 	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
 	//echo $sql.'<br>';
-	foreach ($_POST['position'] as $k=>$v){	
-		$sql ="insert into nav (navid,position,$field) values('".$_POST['navid'][$k]."','".$v."','".$field_value."');"; 
+	foreach ($_POST['valid_nav'] as $k=>$v){	
+		$sql ="insert into nav (navid,position,$field) values('".$_POST['navid'][$k]."','".$_POST['position'][$k]."','".$field_value."');"; 
 		$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
 		//echo $sql.'<br>';
 	}
@@ -66,10 +58,10 @@ if ($_GET['class']) {
 
 $sql="SELECT * FROM nav $where  order by position asc";
 $R=$dbcon->Execute($sql) or DIE('could not load navigation items'.$sql.$dbcon->ErrorMsg());
-$N=$dbcon->Execute("SELECT modules.name as mod, navtbl.name, navtbl.id FROM navtbl, modules where modules.id= navtbl.modid order by modules.name asc, navtbl.name asc") or DIE($dbcon->ErrorMsg());	
+$N=$dbcon->Execute("SELECT modules.name as modname, navtbl.name, navtbl.id FROM navtbl, modules where modules.id= navtbl.modid order by modules.name asc, navtbl.name asc") or DIE($dbcon->ErrorMsg());	
 
 include ("header.php") ; ?>
-	<h2><?php echo module_name($_GET['mod_id']);?> Navigation Files</h2>
+	<h2>Navigation Files</h2>
 	<script type="text/javascript">
 
 	var SearchLines=new Array(); //Holds pointers to search criteria form elements
@@ -81,7 +73,7 @@ include ("header.php") ; ?>
 //This is A Javascript Function
 //to create a new row of search criteria
 	function AddItem() { 
-		sform=document.forms['UDM_Advanced_Search'];
+		sform=document.forms['Nav_Form'];
 		searchtable=document.getElementById('nav_table');
 
 		searchitems++; 
@@ -89,6 +81,9 @@ include ("header.php") ; ?>
 		var newnavidbox=SetupSelect('navid');
 		var newpositionbox=SetupSelect('position');
 		var newaddbtn=document.createElement('input');
+		var newhandle=document.createElement('img');
+		newhandle.setAttribute('src', 'images/hand.gif');
+		newhandle.setAttribute('align', 'left');
 		newaddbtn.type='button';
 		newaddbtn.value='+';
 		event(newaddbtn, 'onclick', 'AddItem();');
@@ -98,6 +93,7 @@ include ("header.php") ; ?>
 		event(newrmvbtn, 'onclick', ('RemoveItem('+searchitems+');'));
 		var newrow=searchtable.tBodies[0].appendChild(document.createElement('tr'));
 		var newcell=document.createElement('td');
+		newcell.appendChild(newhandle);
 		newcell.appendChild(newnavidbox);
 		newrow.appendChild(newcell);
 		newcell=document.createElement('td');
@@ -128,10 +124,23 @@ include ("header.php") ; ?>
 		SearchLines[rowindex][1]=sform.elements['position['+rowindex+']'];
 		
 	}
+    function ValidateItems () { //Javascript Function
+        //sets an indicator flag for which values should be kept
+		searchtable=document.getElementById('nav_table');
+		sform=document.forms['Nav_Form'];
+        var newrow=searchtable.tBodies[0].appendChild(document.createElement('tr'));
+        for (n=1; n<=searchitems; n++) {
+            var newflag=document.createElement('input');
+            newflag.type='hidden';
+            newflag.name='valid_nav['+n+']';
+            newflag.value=1;
+            newrow.appendChild(newflag);
+        }
+    }
 
 	function RemoveItem(which) { //This is A Javascript Function
 		searchtable=document.getElementById('nav_table');
-		if (searchitems>=1) {
+		if (searchitems>1) {
 			for (n=which; n<searchitems; n++) {
 				MoveRow(n+1, n);
 			}
@@ -199,7 +208,7 @@ include ("header.php") ; ?>
 	</script>	
 
 
-	<form name="Nav_Form" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+	<form name="Nav_Form" onSubmit="ValidateItems();" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
 <table id="nav_table"><div>
 
 <?php  
@@ -211,15 +220,16 @@ while (!$R->EOF) {
 
 	<tr>
 		<td>
-			<select name ='navid[<?php echo $x ;?>]'>
+			<img src="images/hand.gif" align="left"><select name ='navid[<?php echo $x ;?>]'>
 				<?php while (!$N->EOF) { ?>
-				<option value="<?php echo $N->Fields("id"); ?>" <?php if ($N->Fields("id")==$R->Fields("navid")) echo "SELECTED";?>><?php echo $N->Fields("mod").": ".$N->Fields("name"); ?></option>
+				<option value="<?php echo $N->Fields("id"); ?>" <?php if ($N->Fields("id")==$R->Fields("navid")) echo "SELECTED";?>><?php echo $N->Fields("modname").": ".$N->Fields("name"); ?></option>
 				<?php
 	$N->MoveNext();
 }
 $N->MoveFirst()
 ?>
-			</select>		</td>
+			</select>
+		</td>
 		<td>
 			<select name="position[<?php echo $x ;?>]">
                   <option value="L1" <?php if ($R->Fields("position")== "L1") echo "SELECTED";?>>Left Side, Position 1</option>
@@ -256,20 +266,18 @@ if ($R->RecordCount() == 0) {
 
 	<tr>
 		<td>
-			<select name ='navid[<?php echo $x ;?>]'>
-				<option value="">Select Navigation File</option>
+			<img src="images/hand.gif" align="left"><select name ='navid[<?php echo $x ;?>]'>
 				<?php while (!$N->EOF) { ?>
-				<option value="<?php echo $N->Fields("id"); ?>"><?php echo $N->Fields("mod").": ".$N->Fields("name"); ?></option>
+				<option value="<?php echo $N->Fields("id"); ?>"><?php echo $N->Fields("name"); ?></option>
 				<?php
 	$N->MoveNext();
 }
 $N->MoveFirst()
 ?>
-			</select>		</td>
+			</select>
+		</td>
 		<td>
 			<select name="position[<?php echo $x ;?>]">
-							<option value="">Select Position</option>
-
                   <option value="L1" >Left Side, Position 1</option>
                   <option value="L2" >Left Side, Position 2</option>
                   <option value="L3" >Left Side, Position 3</option>

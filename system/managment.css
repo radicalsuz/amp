@@ -80,7 +80,7 @@ A.toplinks {
 
 /* id for the sidebar */
 
-p.side, a.side {
+p.side, a.side, .list_controls {
 	font-size: 9px;
 	text-align: left;
 	text-decoration : none;
@@ -105,7 +105,7 @@ ul.side li a {
 	text-decoration: none;
 }
 
-ul.side li:hover {
+ul.side li:hover, a.list_controls:hover {
 		background-color: #d0d0d0;
 }
 

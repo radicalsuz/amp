@@ -59,7 +59,7 @@ $html .=  $buildform->add_row('Section', $Type);
 
 $template_options = makelistarray($T,'id','name','Select Template');
 $Tempalte = & new Select('tempateid',$template_options,$R->Fields("tempateid"));
-$html .=  $buildform->add_row('Tempalte', $Tempalte);
+$html .=  $buildform->add_row('Template', $Tempalte);
 
 
 

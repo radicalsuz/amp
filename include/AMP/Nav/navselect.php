@@ -1,5 +1,5 @@
 <?php 
-
+#print ini_get('include_path');
 if ( !function_exists( 'evalnavhtml' ) ) {
     
     function evalnavhtml($string){
@@ -227,11 +227,11 @@ function getthenavs($navside) {
         ###DEFINE NON SQL NAVIGATION
         
         //TITLE AS IMAGE 
-		if ($nav->Fields("rss")) {
+		if ($nav->Fields("rss")==1) {
 			$shownav.= magpienav($nav->Fields("rss"),$nav->Fields("repeat"),$nav->Fields("titletext"),$NAV_HTML_1,$NAV_HTML_2,$NAV_HTML_3,$NAV_HTML_4,$NAV_HTML_5);
 		}
-        elseif ($nav->Fields("nosql") == ('1') &&  $nav->Fields("titletext") != (NULL)  ) { 
-            if ($nav->Fields("titleti") == ('1')) { //start image
+        elseif ($nav->Fields("nosql") == 1 &&  $nav->Fields("titletext") != (NULL)  ) { 
+            if ($nav->Fields("titleti") == 1) { //start image
                 $shownav.="<img src=\"".$NAV_IMG_PATH ; 
                 $shownav.= $nav->Fields("titleimg")."\">";
             } 
@@ -253,13 +253,12 @@ function getthenavs($navside) {
 
         }
 	
-		elseif ($nav->Fields("nosql") == ('1') &&  $nav->Fields("titletext") == (NULL)) {
+		elseif ($nav->Fields("nosql") == 1 && $nav->Fields("titletext") != (NULL)) {
                 //start nonsql
                 $shownav.= $nav->Fields("nosqlcode");
-            } else {
-    
+            } elseif (trim($nav->Fields("sql"))>"") {
+    	
             ###DEFINE SQL GENERATED NAVIGATION
-    
             //deal with database php
             $sqlx = $nav->Fields("sql") ;
             $sqlx = addslashes($sqlx) ;

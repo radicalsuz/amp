@@ -375,14 +375,12 @@ function pagination($count,$offset,$limit) {
 }
 
 function find_local_path () {
-
     if (function_exists('apache_lookup_uri')) {
 
         $localInfo = apache_lookup_uri( '/custom/' );
         $localPath = preg_replace( "/(.*)\/custom.*$/", "\$1", $localInfo->filename );
         
     }
-
     if (isset($localPath)) $customPath = $localPath . '/custom';
 
     $searchPath = '.';
@@ -394,8 +392,8 @@ function find_local_path () {
     }
 
     if ($depth >= 4) return null;
-
-    return $localPath;
+	
+	return $localPath;
 }
   
 ?>
