@@ -11,7 +11,7 @@ function display_alerts($q) {
 		$q->MoveNext();
 	}
 }
-$sql="select * form alerts where publish =1 order by data desc";
+$sql="select * from alerts where publish =1 order by data desc";
 $alerts_txt=$ampdbcon->Execute($sql) or DIE("15".$ampdbcon->ErrorMsg());
 include ("header.php");
 echo "<h2>AMP SYSTEM UPDATES & NEWS</h2>";	
