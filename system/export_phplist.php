@@ -35,16 +35,12 @@ $serializer->setOption( "mode", "simplexml" );
 
 $result = $serializer->serialize( $subdata );
 
-print "<pre>";
-print_r( $subdata );
-
+header( 'Content-Type: application/xml' );
 
 if ( $result === true ) {
     $xmlout = $serializer->getSerializedData();
 }
 
-print htmlentities( $xmlout );
-
-print "</pre>";
+print $xmlout;
 
 ?>
