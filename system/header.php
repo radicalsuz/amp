@@ -102,14 +102,6 @@ $headernav_numRows=0;
 $headernav_numRows3=0;
 $headernav__totalRows=$headernav->RecordCount();
 $headernav__totalRows3=$headernav->RecordCount();
-$browser_ie =  strstr(getenv('HTTP_USER_AGENT'), 'MSIE') ;
-$browser_win =  strstr(getenv('HTTP_USER_AGENT'), 'Win') ;
-if (!strstr(getenv('HTTP_USER_AGENT'), 'Safari')){
-	$browser_mo =  strstr(getenv('HTTP_USER_AGENT'), 'Mozilla/5') ;
-}
-if (strstr(getenv('HTTP_USER_AGENT'), '2002')){
-        $browser_mo =  NULL ;
-}
 
 if (!$_GET['noHeader']) {
 
