@@ -1,6 +1,0 @@
-# NOTE: No one should be able to access this directory from the web.
-AuthName "DGS Search"
-AuthType Basic
-
-AuthUserFile /dev/null
-Require valid-user
