@@ -54,6 +54,7 @@ if ( ( !$uid || $auth ) && $sub ) {
 
     // Fetch the user data for $uid if there is no submitted data
     // and the user is authenticated.
+    $udm->submitted = false;
     $udm->getUser( $uid ); 
 
 }
