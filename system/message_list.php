@@ -1,14 +1,10 @@
 <?php
 $modid=38;
-require("Connections/freedomrising.php");
-
-if (!$MM_Message) {header ("Location: articlelist.php");}
-
-else {
-$new=$dbcon->Execute("SELECT * from message where toid = $ID order by date desc") or DIE($dbcon->ErrorMsg());
+  require("Connections/freedomrising.php");
+   $new=$dbcon->Execute("SELECT * from message where toid = $ID order by date desc") or DIE($dbcon->ErrorMsg());
   ?>
   
-<?php  include ("header.php");?>
+ <?php  include ("header.php");?>
 <h2>Your Messages</h2>
       <table width="90%" border="0" cellspacing="2" cellpadding="3" align="center">
         <tr class="intitle"> 
@@ -37,5 +33,5 @@ $new=$dbcon->Execute("SELECT * from message where toid = $ID order by date desc"
 }
 ?>
       </table>
- <?php  include ("footer.php"); }
+ <?php  include ("footer.php");
 ?>
