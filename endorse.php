@@ -5,7 +5,7 @@ Module:  Endorse
 Description:  display page for endorsements
 CSS: eventtitle, eventsubtitle,  bodygrey
 Userdatamod vars: .field1 =  show on page
-									field3 =  national
+					field3 =  national
 Get  Vars: area  -if set  shows only endorsements in that area
 To Do:  make modular so that  it can be passed  data from new modules
 				write a better sql statement
@@ -34,7 +34,6 @@ include("AMP/BaseModuleIntro.php");
 
 #$MM_linkid=$areaq->Fields("id"); 
 
-if (!
 
 $groups=$dbcon->CacheExecute("SELECT * FROM userdata  WHERE  publish = '1' and $modin and custom1 = 1 ORDER BY moduserdata.Comapny ASC") or DIE($dbcon->ErrorMsg());
 
