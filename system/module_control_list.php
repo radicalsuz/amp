@@ -22,7 +22,7 @@ listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby,$sort,$extra);
 
 $table = "module_control";
 $listtitle ="Module Settings";
-$listsql ="select description, setting  from $table where modid = ".$_GET['modid'];
+$listsql ="select description, setting, id  from $table where modid = ".$_GET['modid'];
 $orderby =" order by description asc  ";
 $fieldsarray=array( 'Module Setting'=>'description','Setting'=>'setting');
 $filename="module_control.php";
