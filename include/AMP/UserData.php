@@ -659,6 +659,7 @@ class UserData {
             $r = $this->registerPlugin( 'AMP', 'save' ) or $r;
             $r = $this->registerPlugin( 'AMP', 'duplicate_check' ) or $r;
             $r = $this->registerPlugin( 'AMP', 'authenticate' ) or $r;
+            $r = $this->registerPlugin( 'AMP', 'email_admin' ) or $r;
 
         }
 
