@@ -30,7 +30,11 @@ if ((($_POST[MM_update]) && ($_POST[MM_recordId])) or ($_POST[MM_insert]) or (($
 	}
 	
 	$date =  DateConvertIn($date);
-	$_POST[textfield] =htmlspecialchars($textfield); 
+	$_POST[textfield] =htmlspecialchars($textfield);
+	if ($_POST[mlink]) { 
+		$link = $_POST[mlink];
+		$linkuse = 1;
+	 }
 	$MM_editColumn = "id";  
     $MM_editTable  = "articles";
     $MM_recordId = $_POST[MM_recordId];
@@ -110,6 +114,7 @@ $class__totalRows=$class->RecordCount();
 $state=$dbcon->Execute("SELECT * FROM region order by title asc") or DIE($dbcon->ErrorMsg());
 $state_numRows=0;
 $state__totalRows=$state->RecordCount();
+$modsel=$dbcon->Execute("SELECT a.link, a.title FROM articles a, articletype t where a.type = t.id and  t.type = 'Module Pages' ORDER BY a.title ASC") or DIE($dbcon->ErrorMsg());
 	
 
 ?><?php include ("header.php"); ?>
@@ -492,7 +497,20 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
           <td> <input type="text" name="link" size="50" value="<?php echo $r->Fields("link")?>"> 
             <br> <input <?php If (($r->Fields("linkover")) == "1") { echo "CHECKED";} ?> type="checkbox" name="linkuse"> 
             <span class="text">USE THIS URL AS NAV LINK</span> </td>
-          </tr><tr> 
+          </tr>
+		  <?php if ($modsel->Fields("link") ) { ?>
+		   <tr>
+          <td valign="top"><span align="left" class="name">Link to Module</span></td>
+          <td> <select name="mlink">
+		  <option value="">Select Module</option>
+		  <?php while (!$modsel->EOF) { ?>
+		  <option value="<?php echo $modsel->Fields("link")?>"><?php echo $modsel->Fields("title")?></option>
+		  <?php $modsel->MoveNext();}?>
+		  </select>
+             </td>
+          </tr>
+		  <?php }?>
+		  <tr> 
             <td colspan="2" valign="top" class="text"><input <?php If (($r->Fields("uselink")) == "1") { echo "CHECKED";} 
 					If (($r->Fields("id")) == $NULL) { echo "CHECKED";} ?> type="checkbox" name="uselink" value="1">
               SHOW LINK IN NAVIGATION</td>
