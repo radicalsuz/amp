@@ -1,11 +1,66 @@
 <?php
+
+if ( !function_exists( 'buildheader' ) ) {
+		
+    function buildheader() {
+        
+        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $_GET, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url,$css;
+        $htmlheader .= "<html>
+        <head>
+        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">";
+        
+        //build header title
+        if ($MM_id) {
+            $headertitle = $MM_title;
+            $meta_description = substr(trim($MM_shortdesc),0,250); 
+            $meta_description = ereg_replace ("\"", "", $meta_description);
+        } elseif ($_GET["list"] == "type") {
+            $headertitle = $MM_typename;
+        } else {
+            $headertitle = $mod_name;
+        }
+
+        if ($mod_id != 2) {
+            $headertitle = ":&nbsp;".$headertitle ;
+        } else {
+            $headertitle = "";
+        }
+
+        if ($headertitle =="Article") $headertitle = "";
+        
+        $htmlheader.="<meta http-equiv=\"Description\" content=\"$meta_description\">" .
+                     "<meta name=\"Keywords\" content=\"$meta_content\">" .
+                     "<link rel=\"Search\" href=\"/search.php\">";
+
+        if ( file_exists( $AmpPath . "img/favicon.ico" ) ) {
+            $htmlheader .= '<link rel="icon" href="' . $AmpPath . 'img/favicon.ico" type="image/x-icon" />';
+        }
+
+        $htmlheader.="<title>".$SiteName.$headertitle."</title>";
+
+        $allsheets=explode(", ", $css);
+
+        for ($i=0;  $i<count($allsheets);$i++) {
+                $htmlheader.="<link href=\"".$Web_url.trim($allsheets[$i])."\" rel=\"stylesheet\" type=\"text/css\">";
+        }
+
+        $htmlheader.="<script language=\"JavaScript\" src=\"".$Web_url."scripts/functions.js\"></script>
+        </head>";
+
+        return $htmlheader;
+
+    }
+}
+
+
+
 #ESTABLISH HIERARCHY
 if ($mod_id == 1) {
     
     #GET ARTICLE VARS
-    if ($_GET[id]) {
-         $articleinfo=$dbcon->CacheExecute("SELECT author, title, type, class, link, linkover  FROM articles WHERE id=$_GET[id]")or DIE($dbcon->ErrorMsg()); 
-        $MM_id = $_GET[id];
+    if ($_GET["id"]) {
+         $articleinfo=$dbcon->CacheExecute("SELECT author, title, type, class, link, linkover  FROM articles WHERE id=".$_GET["id"])or DIE('Could not load article information in BaseTemplate '.$dbcon->ErrorMsg()); 
+        $MM_id = $_GET["id"];
         $MM_class =$articleinfo->Fields("class");
         $MM_type =$articleinfo->Fields("type");
         $MM_author = $articleinfo->Fields("author");
@@ -14,14 +69,14 @@ if ($mod_id == 1) {
         if ($articleinfo->Fields("linkover")) redirect($articleinfo->Fields("link"));
     }
     
-    if ($_GET[type]) $MM_type = $_GET[type];
+    if ($_GET["type"]) $MM_type = $_GET["type"];
     if ($_GET["class"])	$MM_class = $_GET["class"];
 
 } else {
 
 	#GET MODULE TEXT VARS
 
-	$getmodhierarchy=$dbcon->CacheExecute("SELECT templateid, title, name, type FROM moduletext WHERE id = $mod_id") or DIE($dbcon->ErrorMsg());
+	$getmodhierarchy=$dbcon->CacheExecute("SELECT templateid, title, name, type FROM moduletext WHERE id = $mod_id") or DIE('Could not load module hierarchy information in BaseTemplate '.$dbcon->ErrorMsg());
 
 	$MM_type = $getmodhierarchy->Fields("type");
 	$mod_name = $getmodhierarchy->Fields("name");
@@ -33,7 +88,7 @@ if ($mod_id == 1) {
 if (!$MM_type) $MM_type = 1;
 
 # GET HIERARCHY VARS
-$gettype=$dbcon->CacheExecute("select type, parent, templateid, css, secure, uselink, linkurl from articletype where id = $MM_type")or DIE($dbcon->ErrorMsg()); 
+$gettype=$dbcon->CacheExecute("select type, parent, templateid, css, secure, uselink, linkurl from articletype where id = $MM_type")or DIE('Could not load sectional heierarcy information in BaseTemplate '.$dbcon->ErrorMsg()); 
 
 $MM_typename = $gettype->Fields("type");
 $MM_parent = $gettype->Fields("parent");
@@ -46,7 +101,7 @@ if ($gettype->Fields("uselink")) {redirect($gettype->Fields("linkurl")) ;}
 
 #SET MODULE SPECIFIC VARS
 if (isset($modid)) {
-    $modinstance = $dbcon->CacheExecute("SELECT * from module_control where modid = $modid") or DIE($dbcon->ErrorMsg());
+    $modinstance = $dbcon->CacheExecute("SELECT * from module_control where modid = $modid") or DIE('Could not load module vars in BaseTemplate '.$dbcon->ErrorMsg());
     while (!$modinstance->EOF) {
     $a = $modinstance->Fields("var");
     $$a = $modinstance->Fields("setting");
@@ -68,14 +123,14 @@ if ($modtemplate_id) {
  
 		while ((!$template_id || !$css) && ($tparent != $MX_top)) {
 			$tparent=$obj->get_parent($tparent);
-			$gettemplate=$dbcon->CacheExecute("SELECT templateid, css FROM articletype WHERE id = $tparent") or DIE("dd");
+			$gettemplate=$dbcon->CacheExecute("SELECT templateid, css FROM articletype WHERE id = $tparent") or DIE('Could not load template information in BaseTemplate ');
 			if (!$template_id) $template_id = $gettemplate->Fields("templateid");
 			if (!$css) $css=$gettemplate->Fields("css");
 		}  
 	} else { //Search for template only
 		while (!$template_id && ($tparent != $MX_top)) {
 			$tparent=$obj->get_parent($tparent);
-			$gettemplate=$dbcon->CacheExecute("SELECT templateid FROM articletype WHERE id = $tparent") or DIE("dd");
+			$gettemplate=$dbcon->CacheExecute("SELECT templateid FROM articletype WHERE id = $tparent") or DIE('Could not load template information in BaseTemplate ');
 			$template_id = $gettemplate->Fields("templateid");
 		}  
 	}
@@ -84,7 +139,7 @@ if ($modtemplate_id) {
 if (!$template_id)  {$template_id = $systemplate_id;}
 
 #SET TEMPLATE VARS
-$settemplate=$dbcon->CacheExecute("SELECT * FROM template WHERE id = $template_id") or DIE($dbcon->ErrorMsg());
+$settemplate=$dbcon->CacheExecute("SELECT * FROM template WHERE id = $template_id") or DIE('Could not load template information in BaseTemplate '.$dbcon->ErrorMsg());
 
 $NAV_IMG_PATH = $settemplate->Fields("imgpath");
 $NAV_REPEAT = $settemplate->Fields("repeat");
@@ -104,15 +159,17 @@ $rNAV_HTML_5 = $settemplate->Fields("rnav9");		// content table row spacer
 
 #buildheader
 $htmlheader= buildheader();
-#echo 97;
+
 #SECURE THE PAGE
 
 if ($MM_secure) {
+	//require_once("AMP/Auth/Require.inc.php");
+	//$userLevel = $_SERVER['REMOTE_GROUP'];
 
     require($base_path."password/secure.php");
     
     // needs to make this better
-    $valper=$dbcon->CacheExecute("SELECT perid FROM permission WHERE groupid = $userLevel and perid= 43") or DIE($dbcon->ErrorMsg());
+    $valper=$dbcon->CacheExecute("SELECT perid FROM permission WHERE groupid = $userLevel and perid= 43") or DIE('Could not load security information in BaseTemplate '.$dbcon->ErrorMsg());
     if (!$valper->Fields("perid")) {
         session_start();
         session_unregister("login");

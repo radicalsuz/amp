@@ -12,18 +12,12 @@ if ($modulefooter != NULL){
 }
 
 $bodydata = ob_get_clean();
-	$bodydata =$bodydata2.$bodydata;
-//get left nav
- //$navside="l";
-// $sidelistcss="sidelist";
-// include("navselect.php"); 
-// $leftnav =  $shownav;
+$bodydata =$bodydata2.$bodydata;
 
- //get right nav;
 
- $sidelistcss="sidelist";
-// $shownav=NULL;
-  include("includes/navselect.php"); 
+$sidelistcss="sidelist";
+
+include("AMP/Nav/navselect.php"); 
 $navside="l";
 $leftnav  = getthenavs($navside);
 
@@ -32,14 +26,19 @@ $rightnav  = getthenavs($navside);
 
 
 $htmltemplate = evalhtml($htmltemplate);
- $htmltemplate=str_replace("[-right nav-]", $rightnav, $htmltemplate);
- $htmltemplate=str_replace("[-left nav-]", $leftnav, $htmltemplate);
- $htmltemplate=str_replace("[-body-]", $bodydata, $htmltemplate);
+$htmltemplate2 = str_replace("[-right nav-]", $rightnav, $htmltemplate);
+$htmltemplate2 = str_replace("[-left nav-]", $leftnav, $htmltemplate2);
+$htmltemplate2 = str_replace("[-body-]", $bodydata, $htmltemplate2);
 
-$htmloutput = $htmlheader.$htmltemplate;
-echo $htmloutput;
-//echo $leftnav;
- ob_end_flush();
+$htmloutput = $htmlheader . $htmltemplate2;
+
+if  ($_GET['printsafe'] == 1) {
+	$printer_safe_top= "<div class=printer_safe_top></div>";
+	echo $htmlheader.$printer_safe_top.$bodydata;
+}
+else {echo $htmloutput ;}
+
+ob_end_flush();
 ?>
 
 
