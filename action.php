@@ -18,7 +18,7 @@ function buildactionform($id,$error=NULL) {
  <p class="title"><?php echo $act->Fields("title"); ?></p>
  <p class="text"><?php echo converttext($act->Fields("introtext")); ?></p>
  <?php echo $error;?>
-<form method="POST"  class="form" action="<?php echo $PHP_SELF?>">
+<form method="POST"  class="form" action="<?php echo $_SERVER['PHP_SELF']; ?>">
   
         
     <input type="hidden" name="actionid" value="<?php echo $act->Fields("id"); ?>">
@@ -242,7 +242,7 @@ function buildactionform($id,$error=NULL) {
 
 function  getactionemail($email) {
 	global $dbcon;
-	$getuser = $dbcon->Execute("select * from action_user where Email ='".$email."' ") or DIE($dbcon->ErrorMsg());
+	$getuser = $dbcon->Execute("select * from userdata where Email ='".$email."' and modin=12 ") or DIE($dbcon->ErrorMsg());
 	return $getuser;
 }
 
@@ -253,7 +253,7 @@ function memebershipemail($email) {
 
 function getmember($email){
 	global $dbcon;
-	$getid = $dbcon->Execute("select id from action_user where Email ='".$email."' ") or DIE($dbcon->ErrorMsg());
+	$getid = $dbcon->Execute("select id from userdata where Email ='".$email."' and modin=12 ") or DIE($dbcon->ErrorMsg());
 	$id = $getid->Fields("id");
 	return $id;
 }
@@ -307,9 +307,10 @@ if (isset($MM_insert)) {
 }
 
 if ((isset($MM_insert)) && (!$_REQUEST[kill_insert] ) ) {
-	    $MM_editTable  = "action_user";
-	    $MM_fieldsStr =  "First_Name|value|Last_Name|value|Email|value|City|value|State|value|Zip|value|Street|value|Street_2|value|Country|value|Phone|value|Title|value|added|value";
-	    $MM_columnsStr = "First_Name|',none,''|Last_Name|',none,''|Email|',none,''|City|',none,''|State|',none,''|Zip|',none,''|Street|',none,''|Street_2|',none,''|Country|',none,''|Phone|',none,''|Title|',none,''|added|',none,now()";
+	    $MM_editTable  = "userdata";
+	    $modin =12;
+		$MM_fieldsStr =  "First_Name|value|Last_Name|value|Email|value|City|value|State|value|Zip|value|Street|value|Street_2|value|Country|value|Phone|value|Title|value|modin|value";
+	    $MM_columnsStr = "First_Name|',none,''|Last_Name|',none,''|Email|',none,''|City|',none,''|State|',none,''|Zip|',none,''|Street|',none,''|Street_2|',none,''|Country|',none,''|Phone|',none,''|Title|',none,''|modin|',none,''";
 	    require ("Connections/insetstuff.php");
 	    require ("Connections/dataactions.php");
 			
@@ -347,16 +348,10 @@ if ((isset($MM_insert)) && (!$_REQUEST[kill_insert] ) ) {
 # prepare email
 
 	$finalemail = 
-	"Dear ".$actiondetails->Fields("prefix")." ".$actiondetails->Fields("firstname")." ".$actiondetails->Fields("lastname").",\n
-	\n
+	"Dear ".$actiondetails->Fields("prefix")." ".$actiondetails->Fields("firstname")." ".$actiondetails->Fields("lastname").",
 $Letter_Content \n
 $Title $First_Name $Last_Name \n";
-	//"$Street \n"
-	//if ($Street_2) {$finalemail .= "$Street_2 \n";}
 	$finalemail .= "$City, $State $Country \n";
-	//$finalemail .= "$City, $State $Zip \n";
-	//if ($Country) {$finalemail .= "$Country \n";}
-	//if ($Phone) {$finalemail .= "$Phone \n";}
 	$finalemail .= "$Email \n";
  
 #send emails	
@@ -366,7 +361,17 @@ $Title $First_Name $Last_Name \n";
 	 $faxemail = $actiondetails->Fields("fax");
 	 $faxheaders = "From: ".$actiondetails->Fields("faxaccount");
      	 
-	if ($_POST[Send_Email]) {mail($emailemail,$_POST[subjectText],$finalemail,$emailheaders);  }
+	if ($_POST[Send_Email] && ($emailemail != "vsform")) {mail($emailemail,$_POST[subjectText],$finalemail,$emailheaders);  }
+	if ($_POST[Send_Email] && ($emailemail == "vsform")) {
+		require_once( 'Modules/vsLetter.inc.php' );
+		$vsr = sendVSletter( $_POST[First_Name], $_POST[Last_Name], $_POST[Email], $finalemail );
+		if ( $vsr ) {
+        	print "Success!";
+		} else {
+        	print "Failure!";
+		}
+	}
+	
 	if ($_POST[Send_Fax]) {mail($faxemail,$_POST[subjectText],$finalemail,$faxheaders); }
 	if ($actiondetails->Fields("bcc")) {mail($actiondetails->Fields("bcc"),$_POST[subjectText],$finalemail,$temailheaders); }
 	mail($Email,"Thank you for Taking Action",$finalemail,$temailheaders); 
