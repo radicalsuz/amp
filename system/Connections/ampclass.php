@@ -17,29 +17,29 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 	$query=$dbcon->Execute($listsql.$orderby) or DIE($dbcon->ErrorMsg());
 	
 	echo "<h2>".$listtitle."</h2>";
-	echo "<div class='list_table'> <table class='list_table'> <tr class='intitle'> ";
-	echo " <td>&nbsp;</td>";
+	echo "\n<div class='list_table'> \n	<table class='list_table'>\n		<tr class='intitle'> ";
+	echo "\n			<td>&nbsp;</td>";
 	foreach ($fieldsarray as $k=>$v) {
-		echo " <td><b><a href='".$_SERVER['PHP_SELF']."?action=list&sort=".$v."' class='intitle'>".$k."</a></b></td>";
+		echo "\n			<td><b><a href='".$_SERVER['PHP_SELF']."?action=list&sort=".$v."' class='intitle'>".$k."</a></b></td>";
 	}
 	
-	if ($extra) {echo " <td>&nbsp;</td>";}
-	echo "</tr>";
+	if ($extra) {echo "\n			<td>&nbsp;</td>";}
+	echo "\n		</tr>";
 	$i= 0;
 	while (!$query->EOF) {
 		 $i++;
 		 $bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
 	
-		echo "<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
-		echo "<td> <div align='center'><A HREF='".$filename."?id=".$query->Fields("id")."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
+		echo "\n		<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
+		echo "\n			<td> <div align='center'><A HREF='".$filename."?id=".$query->Fields("id")."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
 		foreach ($fieldsarray as $k=>$v) {
 			if ($v =='publish' ) {
 				if ($query->Fields($v) == 1) { $live= "live";}
 				else { $live= "draft";}
-				echo "<td> $live </td>";
+				echo "\n			<td> $live </td>";
 			}
 			else {
-				echo "<td> ".$query->Fields($v)." </td>";
+				echo "\n			<td> ".$query->Fields($v)." </td>";
 			}
 		}
 		
@@ -53,43 +53,142 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 				}else {
 					$id= "id";
 				}
-				echo "<td> <div align='right'>";
+				echo " \n			<td> <div align='right'>";
 				echo "<A HREF='".$v.$query->Fields($id)."'>$k</A>";
 				echo "</div></td>";
 			}
 			
 		}
-		echo "</tr>";
+		echo "\n		</tr>";
 	
 		$query->MoveNext();
 	}		
 	
-	echo "</table></div><br>&nbsp;&nbsp;<a href=\"$filename\">Add new record</a> ";
+	echo "\n	</table>\n</div>\n<br>&nbsp;&nbsp;<a href=\"$filename\">Add new record</a> ";
 
 }
 
 function listpage_basic($listtitle,$fieldsarray,$filename) {
 	echo "<h2>".$listtitle."</h2>";
-	echo "<div class='list_table'> <table class='list_table'> <tr class='intitle' > ";
+	echo "<div class='list_table'> \n	<table class='list_table'> \n		<tr class='intitle' > ";
 	$r=0;
 	foreach ($fieldsarray[0] as $k=>$v) {
-		echo " <td><b><a href='".$_SERVER['PHP_SELF']."?action=list&sort=".$k."' class='intitle'>".$k."</a></b></td>";
+		echo "\n			<td><b><a href='".$_SERVER['PHP_SELF']."?action=list&sort=".$k."' class='intitle'>".$k."</a></b></td>";
 		$f[$r]=$k;
 		$r++;
 	}
-	echo "</tr>";
+	echo "\n		</tr>";
 	$i=0;
 	for($x=0;$x<sizeof($fieldsarray);$x++){
 		$i++;
 		$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
-		echo "<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
+		echo "\n		<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
 		foreach ($f as $k=>$v) {
-			echo "<td> ".$fieldsarray[$x][$v]." </td>";
+			echo "\n			<td> ".$fieldsarray[$x][$v]." </td>";
 		}
-		echo "</tr>";
+		echo "\n		</tr>";
 	}
-	echo "</table> </div>";
+	echo "\n	</table> \n</div>";
 }
+
+function WYSIWYG($value,$html){
+	global $browser_mo, $browser_ie, $browser_win;
+	if ($browser_mo && ($_COOKIE["AMPWYSIWYG"] != 'none')  {
+		$output = launch_htmlarea($value,$html);
+	}
+	elseif (($browser_ie) && ($browser_win) && ($_COOKIE["AMPWYSIWYG"] != 'none')) { 
+		$output = launch_win($value,$html);
+	}
+	else {
+		$output = launch_nowysiwyg($value,$html);
+	}	
+	return $output;
+}
+
+function launch_htmlarea($value,$html=NULL) {
+	$output = '
+	<script type="text/javascript">
+		_editor_url = "htmlarea/";
+		_editor_lang = "en";
+	</script> 
+	<script type="text/javascript" src="htmlarea/htmlarea.js"></script> 
+	<script type="text/javascript">
+    	// WARNING: using this interface to load plugin
+      	// will _NOT_ work if plugins do not have the language
+      	// loaded by HTMLArea.
+
+      	// In other words, this function generates SCRIPT tags
+      	// that load the plugin and the language file, based on the
+      	// global variable HTMLArea.I18N.lang (defined in the lang file,
+      	// in our case "lang/en.js" loaded above).
+
+      	// If this lang file is not found the plugin will fail to
+      	// load correctly and nothing will work.
+
+      	HTMLArea.loadPlugin("TableOperations");
+      	HTMLArea.loadPlugin("SpellChecker");
+      	HTMLArea.loadPlugin("FullPage");
+      	HTMLArea.loadPlugin("CSS");
+      	HTMLArea.loadPlugin("ContextMenu");
+	</script>
+	<script type="text/javascript">
+		var editor = null;
+		function initEditor() {
+  			// create an editor for the "ta" textbox
+  			editor = new HTMLArea("articlemo");
+			// register the FullPage plugin
+			editor.registerPlugin(FullPage);
+			// register the SpellChecker plugin
+			editor.registerPlugin(TableOperations);
+			// register the SpellChecker plugin
+			//editor.registerPlugin(SpellChecker);
+			setTimeout(function() {
+				editor.generate();
+			}, 500);
+  		return false;
+		}
+	</script> 
+	<textarea id = "articlemo" name="article" cols="80" rows="60" wrap="VIRTUAL" style="width:100%">';
+	if ($html != "1") {
+		$output .= nl2br($value);
+	} else {
+		$output .= $value;
+	} 
+	$output .= '</textarea> <input name="html" type="hidden" value="1">'; 
+	return $output;
+}
+ 
+function launch_win($value,$html=NULL) {
+	$leadin = '';
+	if ($html != "1") {
+		$textvalue = nl2br($value);
+	} else {
+		$textvalue = $value;
+	}
+
+	$oFCKeditor = new FCKeditor ;
+	$oFCKeditor->Value = $textvalue  ;
+	ob_start();
+	$oFCKeditor->CreateFCKeditor( 'article', '500', 500 ) ;
+	$output = ob_get_contents();
+    ob_end_clean();
+    $output .= '<input name="html" type="hidden" value="1"> ';
+	return $output;
+} 
+
+function launch_nowysiwyg($value,$html=NULL) {
+    $output = '<input name="html" type="checkbox" value="1" ' ;  
+	if ($html == "1") { $output .= "CHECKED";} 
+    $output .= '>HTML Override <br> <textarea name="article" cols="65" rows="20" wrap="VIRTUAL">';
+	$text2 = $value;
+	if ($html == "1"){
+		$text2 = str_replace("<BR>", "<BR>\r\n", $text2);
+	} 
+	$output .= $text2 .'</textarea> ';
+	return $output;
+} 
+
+
 
 /**
  * Base RICE class.
