@@ -77,11 +77,11 @@ style2=[			// style1 is an array of properties. You can have as many property ar
 
 addmenu(menu=[		// This is the array that contains your menu properties and details
 "mainmenu",			// Menu Name - This is needed in order for the menu to be called
-62,					// Menu Top - The Top position of the menu in pixels
+65,					// Menu Top - The Top position of the menu in pixels
 0,				// Menu Left - The Left position of the menu in pixels
 ,					// Menu Width - Menus width in pixels
 0,					// Menu Border Width 
-"center",					// Screen Position - here you can use "center;left;right;middle;top;bottom" or a combination of "center:middle"
+"right",					// Screen Position - here you can use "center;left;right;middle;top;bottom" or a combination of "center:middle"
 style1,				// Properties Array - this is set higher up, as above
 1,					// Always Visible - allows the menu item to be visible at all time (1=on/0=off)
 "center",				// Alignment - sets the menu elements text alignment, values valid here are: left, right or center
