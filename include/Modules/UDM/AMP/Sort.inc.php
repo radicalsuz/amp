@@ -39,31 +39,13 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
         if (isset($_REQUEST['sortby'])&&$_REQUEST['sortby']) {
 
             //If the request is set, see if the userdata fields are defined
-            if (isset($this->udm->fields[$_REQUEST['sortby']])) {
-                $sort_defs=&$this->udm->fields[$_REQUEST['sortby']];
-            }
-            if (is_array($sort_defs)) {
-                /*
-                //Set the select value to the sqlname from the db
-                $this->select=$sort_defs['f_sqlname'];
-                //If the field is aliased, set the column name to the alias
-                if (isset($sort_defs['f_alias'])) {
-                    $this->sortname=$sort_defs['f_alias'];
-                    $this->select.=' AS `'.$sort_defs['f_alias'].'`';
-                } else {
-                    $this->sortname=$sort_defs['f_label'];
-                }
-                //If the field has a custom ordering value, set this as well
-                if (isset($sort_defs['f_orderby'])) {
-                    $this->orderby=$sort_defs['f_orderby'];
-                } else {
-                    $this->orderby=$sort_defs['f_sqlname'];
-                }
-            } else {
-                //If no userdata field is defined, just set all the sort values
-                //to the REQUEST value and hope that works :)
-                //fixme
-                */
+            if ($search_obj=&$this->udm->getPlugin('AMP', 'Search') && isset($search_obj->alias[$_REQUEST['sortby']])) {
+                $sortalias=$search->alias[$_REQUEST['sortby']];
+                $this->sortname=ucwords($_REQUEST['sortby']);
+                $this->select=$sortalias['sqlname'].' AS `'.$sort_defs['f_alias'].'`';
+                $this->orderby=$sortalias['orderby'];
+            } elseif (isset($this->udm->fields[$_REQUEST['sortby']])) {
+                $sort_defs=$this->udm->fields[$_REQUEST['sortby']];
                 $this->sortname=ucwords($_REQUEST['sortby']);
                 $this->select=$_REQUEST['sortby'];
                 $this->orderby=$_REQUEST['sortby'];

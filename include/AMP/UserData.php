@@ -477,7 +477,7 @@ class UserData {
         }
 
         // Add the plugin to our repertoire.
-        $plugin =& new $plugin_class( $this );
+        $plugin =& new $plugin_class( $this , $plugin_instance );
         $actions[$namespace] =& $plugin;
 
         // Add the fields from the plugin. Prefix with the plugin name.

@@ -12,7 +12,6 @@
 $modid=1;
 require_once( 'AMP/BaseDB.php' );
 require_once('AMP/UserData/Set.inc.php');
-require_once( 'header.php' );
 
 if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
     $modin=$_REQUEST['modin'];
@@ -20,21 +19,45 @@ if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
     header ("Location: modinput4_list.php");
 }
 
+$modidselect=$dbcon->CacheExecute("SELECT id, perid from modules where publish=1 and userdatamodid=" . $modin) or DIE($dbcon->ErrorMsg());
+$modid=$modidselect->Fields("id");
+$modin_permission=$modidselect->Fields("perid");
+
+/*
+if (!$userper[$modin_permission]) {
+
+    print "<script type=\"text/javascript\">
+        alert (\"You don't have permission to view this list\");
+        window.location.url=\"index.php\";
+        </script>";
+}
+$admin=($userper[54]&&$userper[$modin_permission]);
+*/
+$admin=true;
+$userlist=&new UserDataSet($dbcon, $modin, $admin);
+$searchform=&$userlist->registerPlugin('Output', 'SearchForm');
+$pager=&$userlist->registerPlugin('Output', 'Pager');
+$userlist->registerPlugin('AMP', 'Search');
+$userlist->registerPlugin('Output', 'TableHTML');
+$userlist->registerPlugin('AMP', 'Sort');
+$actionbar=&$userlist->registerPlugin('Output', 'Actions');
+
 $sub = isset($_REQUEST['btnUDMSubmit']);
 $uid= isset($_REQUEST['uid'])?$uid:false;
+
 if ($uid && $modin) {
+
     $list_options['_userid']= array('value'=> $_REQUEST['_userid']);
-    $userlist=new UserDataSet($dbcon, $modin, $admin=true);
     $output= $userlist->output('DisplayHTML', $list_options); 
 
 } else { 
+
     //display result list
-    $admin=true;
-    $userlist=&new UserDataSet($dbcon, $modin, $admin);
+    /*
     $searchform=&$userlist->getPlugin('Output', 'SearchForm');
     $pager=&$userlist->getPlugin('Output','Pager');
     $actionbar=&$userlist->getPlugin('Output','Actions');
-    
+    */    
     if ($userlist->doAction('Search')) {
         $output= (isset($userlist->error)? $userlist->error.'<BR>':"").
                 ($searchform?   $searchform->search_text_header()
@@ -48,6 +71,9 @@ if ($uid && $modin) {
         $output=$userlist->error.'<BR>'.$userlist->output('SearchForm');
     }
 }
+
+require_once( 'header.php' );
+
 print $output;
 
         

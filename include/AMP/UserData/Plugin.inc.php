@@ -179,11 +179,11 @@ class UserDataPlugin {
             // array in question. Try _register_options_dynamic or
             // _register_fields_dynamic as appropriate.
             foreach ( $merge_value as $key => $value ) {
-		if (!is_array($this_merge_value[$key])){
-	   	   $this_merge_value[$key] = $value; 
-		} else {
-                   $this_merge_value[$key]['value'] = $value;
-		}
+                if ( !is_array( $this_merge_value[$key] ) ){
+                    $this_merge_value[$key] = $value; 
+                } else {
+                    $this_merge_value[$key]['value'] = $value;
+                }
             }
         }
     }

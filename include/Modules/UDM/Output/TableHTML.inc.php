@@ -61,7 +61,7 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
                 "<input name=\"id[]\" type=\"checkbox\" value=\"%s\" onclick=\"this.checked=!this.checked;\">".
                 $this->options['list_item_end']['value'];
             $this->list_row_edit=sprintf($this->options['list_item_start']['value'],'editlink').
-                "<a href=\"".$this->options['editlink']['value']."?id=%s\">edit</a>".$this->options['list_item_end']['value'];
+                "<a href=\"".$this->options['editlink']['value']."?uid=%s&modin=".$this->udm->instance."\">edit</a>".$this->options['list_item_end']['value'];
         }
     }
 

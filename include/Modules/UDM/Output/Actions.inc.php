@@ -224,22 +224,23 @@ function execute ($options=null) {
 
     $frmName    = $options['form_name']; 
     $frmMethod  = 'POST';
-    $frmAction  =   $_SERVER['PHP_SELF'].'?'.(is_array($this->criteria)?join("&",$this->criteria):"") ;
+    $frmAction  = $_SERVER['PHP_SELF'].'?'.(is_array($this->criteria)?join("&",$this->criteria):"") ;
 
     $form = &new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
 
     foreach ($this->form_def as $fname=>$fdef) {
-        $this->form_addElement( &$form, $fname, $fdef, $this->udm->admin );
+        $this->form_addElement( $form, $fname, $fdef, $this->udm->admin );
     }
             
     $this->form = &$form;
-    $output=$this->action_script($options);
+    $output = $this->action_script($options);
+
+    /*
     if ($email_plugin=$this->udm->getPlugin('Output','EmailForm')){
         $output .= $this->udm->output('EmailForm');
-    }else {
-        #print 'cat';
-    }
-    $output.=$form->toHtml();
+    }*/
+
+    $output .= $form->toHtml();
     
     return  $output;
 
@@ -296,7 +297,7 @@ function email_set ($set) {
     }
 }
 
-function form_addElement( $form, $name, &$field_def, $admin = false ) {
+function form_addElement( &$form, $name, &$field_def, $admin = false ) {
 
     if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
     if ( $field_def[ 'enabled' ] != 1) return false;

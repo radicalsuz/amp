@@ -201,7 +201,7 @@ class UserDataPlugin_EmailForm_Output extends UserDataPlugin {
             'enabled'=>true);
         return $def;
     }
-	function form_addElement( $form, $name, &$field_def, $admin = false ) {
+	function form_addElement( &$form, $name, &$field_def, $admin = false ) {
 
 		if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
         if ( $field_def[ 'enabled' ] != 1) return false;

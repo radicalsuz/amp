@@ -227,14 +227,14 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 				$field = trim( $field );
                 if (isset($this->fields_def[$field])&&
                     (isset($options['show_'.$field])?$options['show_'.$field]:true)) {
-                    $this->udm_quickform_addElement( &$form, $field, $this->fields_def[ $field ], $this->udm->admin );
+                    $this->form_addElement( $form, $field, $this->fields_def[ $field ], $this->udm->admin );
                 }
 			}
 
 		} else {
             foreach ($this->fields_def as $fname=>$fdef) {
                 if (isset($options['show_'.$field])?$options['show_'.$field]:true)
-                    $this->udm_quickform_addElement( &$form, $fname, $fdef, $this->udm->admin );
+                    $this->form_addElement( $form, $fname, $fdef, $this->udm->admin );
             }
         }
                 
@@ -247,7 +247,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
 		
 		
-	function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
+	function form_addElement( &$form, $name, &$field_def, $admin = false ) {
 
 		if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
 
