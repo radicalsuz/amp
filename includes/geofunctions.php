@@ -24,11 +24,12 @@ function geo_getdata($address) {
 
     $xmlparse = new XML_Unserializer;
     $parse_result = $xmlparse->unserialize( $result );
+    $data = $xmlparse->getUnserializedData();
 
 print "<pre>";
 print_r( $result ) . "\n";
 print_r( $parse_result );
-    print_r( $xmlparse->getUnserializedData() );
+    print_r( $data );
 print "</pre>";
 
 }
