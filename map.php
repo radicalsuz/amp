@@ -7,6 +7,12 @@ function goState(id) {
 	window.close();
 	
 }
+
+function MM_jumpMenu(targ,selObj,restore){ //v3.0
+  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+  if (restore) selObj.selectedIndex=0;
+}
+
 //-->
 </script>
 </head>
@@ -17,6 +23,7 @@ function goState(id) {
       <a href="<?php echo $filename; ?>">view 
       nation-wide listings</a></td>
     <td valign="top" class="headerH1"><div align="right">
+        <!--
         <select name="lstate"  onChange="MM_jumpMenu('opener',this,0)">
           <option SELECTED>Select State</option>
           <option value="<?php echo $filename; ?>?area=1" >Alabama 
@@ -125,7 +132,7 @@ function goState(id) {
           </option>
           <option value="<?php echo $filename; ?>?area=52" >Wyoming 
           </option>
-        </select>
+        </select> -->
       </div></td>
   </tr>
   <tr> 
