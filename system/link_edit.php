@@ -11,8 +11,8 @@ if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or (
     $MM_editColumn = "id";
     $MM_recordId = "" . $MM_recordId . "";
     $MM_editRedirectUrl = "link_list.php";
-    $MM_fieldsStr = "name|value|desc|value|select|value|url|value|type|value|subtype|value|catagory|value|checkbox|value";
-    $MM_columnsStr = "linkname|',none,''|description|',none,''|linktype|none,none,NULL|url|',none,''|type|none,none,NULL|subtype|none,none,NULL|catagory|none,none,NULL|publish|none,1,0";
+    $MM_fieldsStr = "name|value|desc|value|select|value|url|value|type|value|subtype|value|catagory|value|checkbox|value|image|value";
+    $MM_columnsStr = "linkname|',none,''|description|',none,''|linktype|none,none,NULL|url|',none,''|type|none,none,NULL|subtype|none,none,NULL|catagory|none,none,NULL|publish|none,1,0|image|',none,''";
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
   
@@ -85,6 +85,14 @@ $linktype__totalRows=$linktype->RecordCount();
             </td>
           </tr>
           <tr valign="baseline"> 
+            <td nowrap align="right"><div align="left">Thumbnail:</div></td>
+            <td> <input type="text" name="image" value="<?php echo $called->Fields("image")?>" size="45"><br>&nbsp;<a href="imgdir.php" target="_blank">view images</a> 
+                | <a href="imgup.php" target="_blank">upload image</a><br>
+ 
+            </td>
+          </tr>
+
+         <tr valign="baseline"> 
             <td nowrap align="right"><div align="left">Related Sections:</div></td>
             <td> <select multiple name='reltype[]' size='8'>
 			<?php while ((!$related->EOF)){ ?>
