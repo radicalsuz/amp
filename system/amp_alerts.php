@@ -5,8 +5,8 @@ require("Connections/freedomrising.php");
 
 function display_alerts($q) {
 	while (!$q->EOF) {
-		echo ="<h3>".$q->Fields("alert_title")."</h3>";
-		echo ="<p><b>".$q->Fields("date")."</b><br>".$q->Fields("alert_text")."</p><br>";
+		echo "<h3>".$q->Fields("alert_title")."</h3>";
+		echo "<p><b>".$q->Fields("date")."</b><br>".$q->Fields("alert_text")."</p><br>";
 		
 		$q->MoveNext();
 	}
