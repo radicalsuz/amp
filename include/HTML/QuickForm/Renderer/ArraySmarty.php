@@ -18,7 +18,7 @@
 // |          Thomas Schulz <ths@4bconsult.de>                            |
 // +----------------------------------------------------------------------+
 //
-// $Id: ArraySmarty.php,v 1.8 2004/02/14 11:01:51 ths Exp $
+// $Id: ArraySmarty.php,v 1.9 2004/10/15 20:00:48 ths Exp $
 
 require_once 'HTML/QuickForm/Renderer/Array.php';
 
@@ -110,13 +110,47 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
    /**
     * Constructor
     *
+    * @param  object  reference to the Smarty template engine instance
+    * @param  bool    true: render an array of labels to many labels, $key 0 to 'label' and the oterh to "label_$key"
     * @access public
     */
-    function HTML_QuickForm_Renderer_ArraySmarty(&$tpl)
+    function HTML_QuickForm_Renderer_ArraySmarty(&$tpl, $staticLabels = false)
     {
-        $this->HTML_QuickForm_Renderer_Array(true);
+        $this->HTML_QuickForm_Renderer_Array(true, $staticLabels);
         $this->_tpl =& $tpl;
     } // end constructor
+
+   /**
+    * Called when displaying the form.
+    *
+    * @access   public
+    * @return   string
+    */
+    function display()
+    {
+        if (isset($this->_tpl_res)) {
+            $tpl =& $this->_tpl;
+            $tpl->assign($this->_tpl_var, $this->toArray());
+            return $tpl->fetch( $this->_tpl_res );
+        } else {
+            return null;
+        }
+    } // end func display
+
+   /**
+    * Accessor for template.
+    *
+    * @access   public
+    * @param    string  Smarty Template Resource  
+    * @param    string  Name to use for Smarty Variable, default is 'form'
+    * @return   string
+    */
+    function setTemplate( $template, $tplvar = 'form' )
+    {
+        $this->_tpl_res = $template;
+        $this->_tpl_var = $tplvar;
+    } // end func display
+
 
    /**
     * Called when visiting a header element

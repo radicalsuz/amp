@@ -626,10 +626,12 @@ function PageURL2($name,$desc = "",$url="") {
   return sprintf('./?page=%s%s',$name,$url);
 }
 
-function Redirect($page) {
-	global $website,$adminpages;
-	Header("Location: http://".$website."$adminpages/?page=$page");
-  exit;
+if (!function_exists('redirect')) {
+    function Redirect($page) {
+        global $website,$adminpages;
+        Header("Location: http://".$website."$adminpages/?page=$page");
+    exit;
+    }
 }
 
 function formatBytes ($value) {

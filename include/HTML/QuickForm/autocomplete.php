@@ -23,7 +23,7 @@
 // |      http://www.sitepoint.com/article/1220                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: autocomplete.php,v 1.4 2004/06/15 10:51:42 mansion Exp $
+// $Id: autocomplete.php,v 1.5 2004/10/09 19:24:32 avb Exp $
 
 
 require_once("HTML/QuickForm/text.php");
@@ -230,7 +230,7 @@ EOS;
             for ($i = 0; $i < count($this->_options); $i++) {
                 $js .= $arrayName . '[' . $i . "] = '" . strtr($this->_options[$i], $jsEscape) . "';\n";
             }
-            $js .= "//]]>\n</script>\n";
+            $js .= "//]]>\n</script>";
         }
         return $js . parent::toHtml();
     }// end func toHtml

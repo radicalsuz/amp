@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: group.php,v 1.33 2004/02/08 16:01:28 mansion Exp $
+// $Id: group.php,v 1.34 2004/10/14 20:00:49 avb Exp $
 
 require_once("HTML/QuickForm/element.php");
 
@@ -233,6 +233,9 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function setElements($elements)
     {
         $this->_elements = array_values($elements);
+        if ($this->_flagFrozen) {
+            $this->freeze();
+        }
     } // end func setElements
 
     // }}}
@@ -354,10 +357,21 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      */
     function getFrozenHtml()
     {
-        $tmp = $this->_flagFrozen;
-        $this->_flagFrozen = true;
+        $flags = array();
+        if (empty($this->_elements)) {
+            $this->_createElements();
+        }
+        foreach (array_keys($this->_elements) as $key) {
+            if (false === ($flags[$key] = $this->_elements[$key]->isFrozen())) {
+                $this->_elements[$key]->freeze();
+            }
+        }
         $html = $this->toHtml();
-        $this->_flagFrozen = $tmp;
+        foreach (array_keys($this->_elements) as $key) {
+            if (!$flags[$key]) {
+                $this->_elements[$key]->unfreeze();
+            }
+        }
         return $html;
     } //end func getFrozenHtml
 
@@ -436,10 +450,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
                 }
             }
 
-            if ($this->_flagFrozen) {
-                $element->freeze();
-            }
-            $required = !$this->_flagFrozen && in_array($element->getName(), $this->_required);
+            $required = !$element->isFrozen() && in_array($element->getName(), $this->_required);
 
             $element->accept($renderer, $required);
 
@@ -517,6 +528,39 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function _createElements()
     {
         // abstract
+    }
+
+    // }}}
+    // {{{ freeze()
+
+    function freeze()
+    {
+        parent::freeze();
+        foreach (array_keys($this->_elements) as $key) {
+            $this->_elements[$key]->freeze();
+        }
+    }
+
+    // }}}
+    // {{{ unfreeze()
+
+    function unfreeze()
+    {
+        parent::unfreeze();
+        foreach (array_keys($this->_elements) as $key) {
+            $this->_elements[$key]->unfreeze();
+        }
+    }
+
+    // }}}
+    // {{{ setPersistantFreeze()
+
+    function setPersistantFreeze($persistant = false)
+    {
+        parent::setPersistantFreeze($persistant);
+        foreach (array_keys($this->_elements) as $key) {
+            $this->_elements[$key]->setPersistantFreeze($persistant);
+        }
     }
 
     // }}}

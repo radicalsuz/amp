@@ -1,17 +1,16 @@
 <?php
- error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
 $subdir2 =1;
-require("adodb/adodb.inc.php");
-require("AMP/BaseDB.php");
+require_once("AMP/BaseDB.php");
 //chdir('/amp/password');
 //require("secure.php");
 //chdir('/amp/lists/admin/');
   
 
 ob_start();
-$er = error_reporting(0);
+//$er = error_reporting(0);
 # setup commandline
-if ($_SERVER["USER"]) {
+if (isset($_SERVER["USER"])) {
   for ($i=0; $i<$_SERVER['argc']; $i++) {
     $my_args = array();
     if (ereg("(.*)=(.*)",$_SERVER['argv'][$i], $my_args)) {
@@ -28,10 +27,10 @@ if ($_SERVER["USER"]) {
 
 header("Cache-Control: no-cache, must-revalidate");           // HTTP/1.1
 header("Pragma: no-cache");                                   // HTTP/1.0
-if ($_SERVER["ConfigFile"] && is_file($_SERVER["ConfigFile"])) {
+if (isset($_SERVER["ConfigFile"]) && is_file($_SERVER["ConfigFile"])) {
 	print '<!-- using '.$_SERVER["ConfigFile"].'-->'."\n";
   include $_SERVER["ConfigFile"];
-} elseif ($_ENV["CONFIG"] && is_file($_ENV["CONFIG"])) {
+} elseif (isset($_ENV["CONFIG"]) && is_file($_ENV["CONFIG"])) {
 #	print '<!-- using '.$_ENV["CONFIG"].'-->'."\n";
   include $_ENV["CONFIG"];
 } elseif (is_file("../config/config.php")) {
@@ -41,7 +40,7 @@ if ($_SERVER["ConfigFile"] && is_file($_SERVER["ConfigFile"])) {
 	print "Error, cannot find config file\n";
   exit;
 }
-error_reporting($er);
+//error_reporting($er);
 
 if ($GLOBALS["commandline"]) {
   if (!in_array($_SERVER["USER"],$GLOBALS["commandline_users"])) {

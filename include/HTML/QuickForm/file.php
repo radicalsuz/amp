@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: file.php,v 1.18 2003/11/01 15:03:50 avb Exp $
+// $Id: file.php,v 1.19 2004/10/09 19:26:00 avb Exp $
 
 require_once("HTML/QuickForm/input.php");
 
@@ -253,6 +253,10 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      */
     function _ruleCheckMaxFileSize($elementValue, $maxSize)
     {
+        if (!empty($elementValue['error']) && 
+            (UPLOAD_ERR_FORM_SIZE == $elementValue['error'] || UPLOAD_ERR_INI_SIZE == $elementValue['error'])) {
+            return false;
+        }
         if (!HTML_QuickForm_file::_ruleIsUploadedFile($elementValue)) {
             return true;
         }

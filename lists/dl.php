@@ -1,6 +1,6 @@
 <?
 ob_start();
-$er = error_reporting(0); # some ppl have warnings on
+//$er = error_reporting(0); # some ppl have warnings on
 if ($_SERVER["ConfigFile"] && is_file($_SERVER["ConfigFile"])) {
 	print '<!-- using '.$_SERVER["ConfigFile"].'-->'."\n";
   include $_SERVER["ConfigFile"];
@@ -14,7 +14,7 @@ if ($_SERVER["ConfigFile"] && is_file($_SERVER["ConfigFile"])) {
 	print "Error, cannot find config file\n";
   exit;
 }
-error_reporting($er);
+//error_reporting($er);
 
 $id = sprintf('%d',$_GET["id"]);
 

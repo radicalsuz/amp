@@ -5,8 +5,8 @@ require_once("adodb/adodb.inc.php");
 require_once("AMP/BaseDB.php");
 ###### END HACK FOR AMP ##########################################
 
-ob_start();
-$er = error_reporting(0); # some ppl have warnings on
+//ob_start();
+//$er = error_reporting(0); # some ppl have warnings on
 
 if ($_SERVER["ConfigFile"] && is_file($_SERVER["ConfigFile"])) {
 	print '<!-- using '.$_SERVER["ConfigFile"].'-->'."\n";
@@ -18,10 +18,9 @@ if ($_SERVER["ConfigFile"] && is_file($_SERVER["ConfigFile"])) {
 	print '<!-- using config/config.php -->'."\n";
   include "config/config.php";
 } else {
-	print "Error, cannot find config file\n";
-  exit;
+    die("Error, cannot find config file\n");
 }
-error_reporting($er);
+//error_reporting($er);
 
 if ($require_login || ASKFORPASSWORD) {
 	# we need session info if an admin subscribes a user

@@ -1,6 +1,6 @@
 <?php    
 
-/***************Redirection Page
+/*************** Redirection Page
 Displayed when a user queries an AMP website
 and no resulting page is returned from the database.
 Searches redirect table for matching pages, then sends 
@@ -13,7 +13,9 @@ $uri = $_SERVER['REQUEST_URI'];
 $pos = strpos( $uri, '?' );
 $PHP_SELF = $_SERVER['PHP_SELF'] = substr( $uri, 1, ($pos) ? $pos - 1 : strlen( $uri ) - 1 );
 
-parse_str( $_SERVER['REDIRECT_QUERY_STRING'], $_GET );
+if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
+    parse_str( $_SERVER['REDIRECT_QUERY_STRING'], $_GET );
+}
 
 $customHandler = AMP_LOCAL_PATH . "/custom/" . $_SERVER['PHP_SELF'];
 

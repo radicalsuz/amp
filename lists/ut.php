@@ -1,6 +1,6 @@
 <?
 ob_start();
-$er = error_reporting(0); # some ppl have warnings on
+//$er = error_reporting(0); # some ppl have warnings on
 if ($_SERVER["ConfigFile"] && is_file($_SERVER["ConfigFile"])) {
   include $_SERVER["ConfigFile"];
 } elseif ($_ENV["CONFIG"] && is_file($_ENV["CONFIG"])) {
@@ -8,7 +8,7 @@ if ($_SERVER["ConfigFile"] && is_file($_SERVER["ConfigFile"])) {
 } elseif (is_file("config/config.php")) {
   include "config/config.php";
 }
-error_reporting($er);
+//error_reporting($er);
 
 if ($u && $m) {
   $userid = Sql_Fetch_Row_Query(sprintf('select id from %s where uniqid = "%s"',

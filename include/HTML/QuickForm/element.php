@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: element.php,v 1.31 2004/02/28 22:10:16 avb Exp $
+// $Id: element.php,v 1.32 2004/10/14 20:00:49 avb Exp $
 
 require_once('HTML/Common.php');
 
@@ -197,6 +197,21 @@ class HTML_QuickForm_element extends HTML_Common
     {
         $this->_flagFrozen = true;
     } //end func freeze
+
+    // }}}
+    // {{{ unfreeze()
+
+   /**
+    * Unfreezes the element so that it becomes editable
+    *
+    * @access public
+    * @return void
+    * @since  3.2.4
+    */
+    function unfreeze()
+    {
+        $this->_flagFrozen = false;
+    }
 
     // }}}
     // {{{ getFrozenHtml()

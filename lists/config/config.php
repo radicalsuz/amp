@@ -178,8 +178,7 @@ $usertable_prefix = "phplist_user_";
 # if you change the path to these pages, make the change here as well
 # path should be relative to the root directory of your webserver
 # you may have to change it at loads of other places as well
-
-$pageroot =  "/".$subdir_path.'lists';
+$pageroot = $Web_url . '/lists';
 $adminpages = $pageroot . '/admin';
 
 # PHPlist can send RSS feeds to users. Feeds can be sent daily, weekly or
@@ -311,7 +310,7 @@ $database_module = "mysql.inc";
 #$adodb_driver = 'mysql';
 
 # if you want more trouble, make this 63 (very unlikely you will like the result)
-$error_level = error_reporting(0);
+//$error_level = error_reporting(0);
 
 ################################################################################################
 # you should not need to edit below, but if things go wrong you can try to play around with it #
