@@ -503,13 +503,13 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td colspan="2" valign="top"><?php echo helpme("Attached Document"); ?> 
               Attached Document</td>
           </tr>
-		  <?php		$filelist = file_list('downloads/'); 
-		$Doc = & new Select('doc',$filelist,$r->Fields("doc"));
-		echo $buildform->add_row('Document Name', $Gal);
+		  <?php		$doc_filelist = file_list('downloads/'); 
+		$Doc = & new Select('doc',$doc_filelist,$r->Fields("doc"));
+		echo $buildform->add_row('Document Name', $Doc);
  ?>
 
           <tr> 
-            <td valign="top"><</td>
+            <td valign="top"></td>
             <td><span class="text"><a href="docdir.php" target="_blank">view 
               documents</a> | <a href="doc_upload.php" target="_blank">upload 
               document</a> </span></td>
