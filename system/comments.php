@@ -13,7 +13,7 @@ if ($_GET['cid']) {
 } else {
 	$listsql ="select title, articleid, publish, id   from $table  ";
 }
-$orderby =" order by  asc  ";
+$orderby =" order by date desc  ";
 $fieldsarray=array( 'Title'=>'title','Article ID'=>'articleid','Status'=>'publish');
 $filename="comments.php";
 
@@ -42,7 +42,7 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 //build form
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Add/Edit '.$listtitle, 'banner');
-$html .= addfield('field','Line Description','text',$R->Fields(""));
+
 $html .= addfield('publish','Publish','checkbox',$R->Fields("publish"));
 $html .= addfield('author','Author','text',$R->Fields("author"));
 $html .= addfield('email','Email','text',$R->Fields("email"));
