@@ -15,7 +15,7 @@
 $mod_id = 57;
 $modid = 1;
 
-require_once( 'AMP/UserDataInput.php' );
+require_once( 'AMP/UserData/UserDataInput.php' );
 require_once( 'AMP/BaseDB.php' );
 
 // Fetch the form instance specified by submitted modin value.

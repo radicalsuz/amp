@@ -11,7 +11,7 @@
 
 ob_start();
 
-require_once( 'AMP/UserDataInput.php' );
+require_once( 'AMP/UserData/UserDataInput.php' );
 require_once( 'AMP/BaseDB.php' );
 
 set_error_handler( 'e' );

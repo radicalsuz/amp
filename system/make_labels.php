@@ -5,7 +5,7 @@
 require_once("../adodb/adodb.inc.php");
 require_once ($base_path.'Connections/freedomrising.php');
 #require_once('AMP/UserDataInput.php');
-require_once('AMP/UserDataSearch.php');
+require_once('AMP/UserData/UserDataSearch.php');
 require_once ("Modules/UDM/Output/labels.inc.php");
 
 $label_list=new UserLabels;
