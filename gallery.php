@@ -250,8 +250,7 @@ if ($gallerys->RecordCount() >= 1) {
 				  <option value="gallery.php">-----</option>';
 	
 	while (!$gallerys->EOF) { 
-			echo '<option value="gallery.php?gal='. $gallerys->Fields("id") .'" >';
-			$gallerys->Fields("galleryname");
+			echo '<option value="gallery.php?gal='. $gallerys->Fields("id") .'" >'. $gallerys->Fields("galleryname");
 			echo '</option>';
 			$gallerys->MoveNext();
 	}
