@@ -20,7 +20,7 @@ $modid=$modidselect->Fields("id");
 
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ], true );
-$udm->doPlugin( "QuickForm", "BuildAdmin" );
+$udm->doPlugin( "QuickForm", "build_admin" );
 $mod_id = $udm->modTemplateID;
 
 // Was data submitted via the web?
@@ -28,7 +28,7 @@ $sub = (isset($_REQUEST['btnUdmSubmit']) && $_REQUEST['btnUdmSubmit']);
 
 // Fetch or save user data.
 if ( $sub ) {
-    $udm->doPlugin( 'AMP', 'SaveAdmin' );
+    $udm->doPlugin( 'AMP', 'save_admin' );
 }
 
 /* Now Output the Form.
