@@ -9,16 +9,17 @@
  *
  *****/
 
-function udm_amp_email_user ( $udm, $options = null ) {
+function udm_AMP_email_user ( &$udm, $options = null ) {
 
     $message  = "Please go to " . $GLOBALS['Web_url'];
     $message .= "modinput2.php?modin=" . $udm->instance;
-    $message .= "&uid=" . $udm->userid;
-    $message .= " to update your profile.";
+    $message .= "&uid=" . $udm->uid;
+    $message .= " to update your profile.\n\n";
+    $message .= $udm->output( 'text' );
     
     $subject = "Update Your Posting";
 
-    $mailto  = $udm->fields[ 'EmailAddress' ][ 'value' ];
+    $mailto  = $udm->form->exportValue( 'Email' );
     $header  = $udm->_make_mail_header();
     
     return mail( $mailto, $subject, $message, $header );
