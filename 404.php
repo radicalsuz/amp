@@ -5,59 +5,29 @@ and no resulting page is returned from the database.
 Searches redirect table for matching pages, then sends 
 the user to search page if no matches are found.*/
 
-
-#include_once($base_path."adodb/adodb.inc.php");
-#include_once($base_path_amp."custom/config.php");
-#ADOLoadCode($MM_DBTYPE);
-#$dbcon=&ADONewConnection($MM_DBTYPE);
-#$dbcon->Connect($MM_HOSTNAME,$MM_USERNAME,$MM_PASSWORD,$MM_DATABASE);
-
-#$website = "http://vevo.verifiedvoting.org/";
 include_once("AMP/BaseDB.php");
 
-header( 'Status: 404 Not Found' );
+// Check for a custom handler.
+$customHandler = AMP_LOCAL_PATH . "/custom" . $_SERVER['REQUEST_URI'];
+if (file_exists($customHandler)) { 
 
-function errorre($org,$target) {
-        global $Web_url;
-        if (strstr($_SERVER['REQUEST_URI'], "$org")) {
-          if (substr($target, 0,4)=="http"){
-	   ampredirect ("$target");
-	  } else {
-	   ampredirect("$Web_url"."$target");
-	  } 
-	  return true;
-        }
-        else return false;
-}
+	include( $customHandler );
 
-function errorred($org,$target,$num) {
-        global $Web_url;
-        $get = strstr($_SERVER['REQUEST_URI'], $org);
-        $go = substr($get, $num);
-        if ($go) {
-          if (substr($target, 0, 4)=="http"){
-	    	   ampredirect($target.$go);
-	  } else {
-	   ampredirect($Web_url.$target.$go);
-	  }
-	  return true;
-        }
-        else return false;
-}
+    // Set response header to reflect the actual status of our request.
+    //
+    // if we made it this far, I'm going to assume that everything is just
+    // fine. Custom scripts that want to redirect must exit() before reaching
+    // here.
+    header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 200 OK' );
 
-$go= false;
-$myURI = $dbcon->qstr(substr($_SERVER['REQUEST_URI'], 1));
-$R=$dbcon->Execute("select * from redirect where publish =1 and old=$myURI") or DIE('404 query'.$dbcon->ErrorMsg());
+} else {
 
-$myURI2 = str_replace("'", "", "$myURI");
-//die(AMP_LOCAL_PATH . "/custom/" . $myURI2 );
-if ( file_exists( AMP_LOCAL_PATH . "/custom/" . $myURI2 ) ) { 
-	include( AMP_LOCAL_PATH . "/custom/" . $myURI2 );
+    header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found' );
 
-}
+    $myURI = $dbcon->qstr(substr($_SERVER['REQUEST_URI'], 1));
+    $R=$dbcon->Execute("select * from redirect where publish =1 and old=$myURI") or DIE('404 query'.$dbcon->ErrorMsg());
 
-
-	else {
+    $go= false;
 	
 	while (!$R->EOF) {
 		if ($R->Fields("conditional")) {
@@ -87,8 +57,37 @@ if ( file_exists( AMP_LOCAL_PATH . "/custom/" . $myURI2 ) ) {
 	  }
 	}
 	
-	
-	
 	if ($go == false) { 	   ampredirect ("$Web_url"."search.php");}
 }
+
+function errorre($org,$target) {
+        global $Web_url;
+        if (strstr($_SERVER['REQUEST_URI'], "$org")) {
+          if (substr($target, 0,4)=="http"){
+	   ampredirect ("$target");
+	  } else {
+	   ampredirect("$Web_url"."$target");
+	  } 
+	  return true;
+        }
+        else return false;
+}
+
+function errorred($org,$target,$num) {
+        global $Web_url;
+        $get = strstr($_SERVER['REQUEST_URI'], $org);
+        $go = substr($get, $num);
+        if ($go) {
+          if (substr($target, 0, 4)=="http"){
+	    	   ampredirect($target.$go);
+	  } else {
+	   ampredirect($Web_url.$target.$go);
+	  }
+	  return true;
+        }
+        else return false;
+}
+
+
+
 ?>

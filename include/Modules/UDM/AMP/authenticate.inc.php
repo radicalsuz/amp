@@ -1,5 +1,25 @@
 <?php
 
+require_once( 'AMP/UserData/Plugin/Authenticate.inc.php' );
+
+class UserData_Plugin_Authenticate_AMP extends UserData_Plugin_Authenticate {
+
+    function __doAuthenticate() {
+
+        if (isset( $_REQUEST['otp'] )) $this->authtok = $_REQUEST['otp'];
+                                  else return false;
+
+        $this->authtok = $_REQUEST
+
+        $dbcon =& $this->dbcon;
+
+        $sql  = "SELECT * FROM userdata_auth WHERE";
+        $sql .= " uid = " . $dbcon->qstr( $this->user );
+        $sql .= " AND otp = " . $dbcon->qstr( $this->authtok );
+        $sql .= " ";
+
+}
+
 /*****
  *
  * User Data Authentication Module

@@ -25,7 +25,7 @@ class UserDataPlugin {
 
     /*****
      *
-     * init ( ADOdb $dbcon [, str $options_callback [, str $fields_callback ] ] )
+     * init ( &$udm )
      *
      * This method should be called by all plugins to ensure that any available
      * optons and fields are registered properly. Two optional callback
@@ -34,43 +34,88 @@ class UserDataPlugin {
      *
      *****/
 
-    function init ( &$udm, $options_callback = null, $fields_callback = null ) {
+    function init ( &$udm ) {
 
         $this->udm = &$udm;
         $this->dbcon = &$udm->dbcon;
 
-        // Register Options
-        $this->_register_options( $options_callback );
+    }
 
-        // Register Fields
-        $this->_register_fields( $fields_callback );
+    /*****
+     *
+     * Execute; this method performs the plugin action.
+     *
+     * This function should always be overfidden in plugins to enable actions
+     * to be performed.
+     *
+     *****/
+
+    function execute ( $options = null ) {
+
+        return false;
 
     }
 
-    function getFields ( $admin = false ) {
+    /*****
+     *
+     * Plugin Field Definition Methods
+     *
+     *****/
 
-    }
+    function getFields ( $fields = null ) {
 
-    function getOptions () {
+        if (isset($fields)) {
 
-    }
+            if (!is_array( $fields )) $fields = array( $fields );
 
-    function _register_optons ( $callback = null ) {
-
-        if ( method_exists( $this, $callback ) ) {
+            return array_intersect_key( $this->fields, $fields );
 
         }
 
-    }
-
-    function _register_fields ( $callback = null ) {
-
-        if ( method_exists( $this, $callback ) ) {
-
-
-        }
+        return $this->fields;
 
     }
+
+    function addField ( $field ) {
+
+        $this->fields[ $field['id'] ] = $field;
+
+        return &$this->fields[ $field['id'] ];
+
+    }
+
+    function removeField ( $field ) {
+
+        return unset( $this->fields[ $field ] );
+
+    }
+
+    /*****
+     *
+     * Plugin Data Methods
+     *
+     * The data is *not* stored within the plugin, but rather in the UDM
+     * object's data store.
+     *
+     *****/
+
+    function getData ( $fields = null ) {
+
+        return $this->udm->getData( $fields );
+
+    }
+
+    function setData ( $data ) {
+
+        return $this->udm->setData( $data );
+
+    }
+
+    /*****
+     *
+     * Internal Functions
+     *
+     *****/
 
 }
 
