@@ -140,7 +140,7 @@ class UserList {
 		$select_group="<select name=\"selectgroup\" type=\"select\" onchange=\"setGroup();\" style=\"display: none;\"><option value=\"0\" selected>No Group Selected</option>";
 		$search_button_go="<input name=\"btnUdmSubmit\" value=\"Search\" type=\"button\" onclick=\"goSearch();\">";
 		$hidden_values="<input name=\"currentgroup\" type=\"hidden\" value=\"0\"><input name=\"totalgroups\" type=\"hidden\" value=\"0\"><input name=\"parentgroup\" type=\"hidden\" value=\"0\"><input name=\"num_items\" type=\"hidden\" value=\"0\"><input name=\"modin\" value=\"".$udm->instance."\" type=\"hidden\">";
-		$form_header="<script type=\"text/javascript\">\r\n
+		$form_header="<script type=\"text/javascript\">\r\n";
 	var SearchCriteria=new Array();
 		
 	function addOptions(chosen, ch_value) {
