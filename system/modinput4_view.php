@@ -59,6 +59,8 @@ $mod_id = $udm->modTemplateID;
 require_once( 'header.php' );
 
 print "<h2>Add/Edit " . $udm->name . "</h2>";
+
+$udm->showForm = true;
 print $udm->output();
 
 // Append the footer and clean up.
