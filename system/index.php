@@ -5,12 +5,13 @@ require_once("Connections/freedomrising.php");
 
 if (!$MM_Message && AMP_HOSTED) {
 	#$index_usr_sql="Select id, system_home from users where name = 'me'";#.$dbcon->qstr($_SERVER['REMOTE_USER']);
-	#$index_user_settings = $dbcon->GetAssoc("Select id, system_home from users where name = ".$dbcon->qstr($_SERVER['REMOTE_USER']));
-	#if (isset($index_user_settings['system_home'])&&$index_user_settings['system_home']!='') {
-#		ampredirect($index_user_settings['system_home']);
-#	} else {
-		header('Location: amp_alerts.php');
-#	}
+	$index_user_settings = $dbcon->GetAssoc("Select id, system_home from users where name = ".$dbcon->qstr($_SERVER['REMOTE_USER']));
+	if (isset($index_user_settings['system_home'])&&$index_user_settings['system_home']!='') {
+		header('Location: '.$index_user_settings['system_home']);
+	} else {
+		header('Location: articlelist.php');		
+		
+	}
     
 } else {
 
