@@ -4,7 +4,7 @@ if ( !function_exists( 'evalnavhtml' ) ) {
     
     function evalnavhtml($string){
 
-        global $dbcon, $MM_type, $MM_parent, $MM_typename, $list, $id, $MM_issue, $userper, $MM_region, $navalign;
+        global $base_path, $dbcon, $MM_type, $MM_parent, $MM_typename, $list, $id, $MM_issue, $userper, $MM_region, $navalign;
 
         $pos = 0;
         $start = 0;
@@ -32,7 +32,7 @@ if ( !function_exists( 'evalnavhtml' ) ) {
 			$incl = str_replace('"','',$include_args);
 			//echo $incl.'<br>';
 			ob_start();
-			$basefile = AMP_BASE_PATH.'/' . 'include/AMP/Navs/'.$incl;
+			$basefile = $base_path.'/' . 'include/AMP/Navs/'.$incl;
 			echo $basefile;
 			if (file_exists($basefile)) {
 				$file = 'AMP/Navs/'.$incl;
