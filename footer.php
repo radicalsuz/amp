@@ -23,7 +23,7 @@ $bodydata = ob_get_clean();
 
  $sidelistcss="sidelist";
 // $shownav=NULL;
-  include("navselect.php"); 
+  include("includes/navselect.php"); 
 $navside="l";
 $leftnav  = getthenavs($navside);
 
