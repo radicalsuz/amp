@@ -22,13 +22,14 @@ function geo_getdata($address) {
 		$result = $req->getResponseHeader();
 	}
 
+print "<pre>";
     $xmlparse = new XML_Unserializer;
     $parse_result = $xmlparse->unserialize( $result );
+print_r( $xmlparse)."\n";
     $data = $xmlparse->getUnserializedData();
 
-print "<pre>";
 print_r( $result ) . "\n";
-print_r( $parse_result );
+print_r( $parse_result ) . "\n";
     print_r( $data );
 print "</pre>";
 
