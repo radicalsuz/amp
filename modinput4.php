@@ -16,8 +16,6 @@ $modid = 1;
 require_once( 'AMP/UserData.php' );
 require_once( 'AMP/BaseDB.php' );
 
-set_error_handler( 'e' );
-
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserData( $dbcon, $_REQUEST[ 'modin' ] );
 
