@@ -7,7 +7,7 @@ function udm_amp_fixup_db ( &$udm, $options = null ) {
     // Fetch DB Structure
     $fields = $dbcon->MetaColumnNames( 'userdata_fields' );
 
-    if ( !isset( $fields[ 'PUBLISH' ] ) ) {
+    if ( !array_search( 'publish', $fields ) ) {
 
         $sql = 'ALTER TABLE userdata_fields ADD COLUMN publish INT(1) DEFAULT NULL';
         $dbcon->Execute( $sql ) or
