@@ -391,4 +391,28 @@ function pagination($count,$offset,$limit) {
 	}
 }
 
-?>  
+function find_local_path () {
+
+    if (function_exists('apache_lookup_uri')) {
+
+        $localInfo = apache_lookup_uri( '/custom' );
+        $localPath = preg_replace( "/(.*)\/custom$/", "\$1", $localInfo->filename );
+        
+    }
+
+    if (isset($localPath)) $customPath = $localPath . '/custom';
+
+    $searchPath = '.';
+    $depth = 0;
+    while ( !is_dir($customPath) && $depth++ < 4 ) {
+        $customPath = $searchPath . '/custom'; //realpath($searchPath) . '/custom';
+        $localPath = realpath( $searchPath );
+        $searchPath = '../' . $searchPath;
+    }
+
+    if ($depth >= 4) return null;
+
+    return $localPath;
+}
+
+?>

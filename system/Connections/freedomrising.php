@@ -1,25 +1,26 @@
 <?php 
 
-require("../adodb/adodb.inc.php");
-//require ("../includes/dbfunctions.php");
+ob_start();
 
-ob_start() ;
+require_once('AMP/BaseDB.php');
 
-//error_reporting  (NONE);
-$subdir=1;
-require("../Connections/freedomrising.php");
-
+/*
 if ($security == "inactive") {
 	$userLevel = 1 ;
 	$ID = 1 ;
 } else {
 	require("../password/secure.php");
 }
+*/
 
-$gettop = $dbcon->Execute("SELECT subsite FROM per_group WHERE id = $userLevel") or DIE($dbcon->ErrorMsg());
+$userLevel = $_SERVER['REMOTE_GROUP'];
+
+$gettop = $dbcon->Execute("SELECT subsite FROM per_group WHERE id = $userLevel")
+            or die( "Couldn't find sub-site authentication information: " . $dbcon->ErrorMsg());
 $MX_top = $gettop->Fields("subsite"); 
 
-$valper = $dbcon->Execute("SELECT perid FROM permission WHERE groupid = $userLevel") or DIE($dbcon->ErrorMsg());
+$valper = $dbcon->Execute("SELECT perid FROM permission WHERE groupid = $userLevel")
+            or die( "Couldn't find permission values: " . $dbcon->ErrorMsg());
 $userper = array();
 
 while (!$valper->EOF) { 
@@ -59,6 +60,8 @@ function helpme($link) {
 	return $output;
 
 }
-require ($base_path."includes/dbfunctions.php");
-require ("Connections/ampclass.php");
+
+require_once($base_path."includes/dbfunctions.php");
+require_once("Connections/ampclass.php");
+
 ?>

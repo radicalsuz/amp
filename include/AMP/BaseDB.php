@@ -1,86 +1,104 @@
 <?php
 
-require_once("adodb/adodb.inc.php");
-include_once("utility.functions.inc.php");
+require_once('adodb/adodb.inc.php');
+require_once('utility.functions.inc.php');
 
-$ampasp = 1;
+$ampdbcon = null;
 
-if ($ampasp == 1) {
- ADOLoadCode("mysql");
-   $ampdbcon=&ADONewConnection("mysql");
-   $ampdbcon->Connect("localhost","david","havlan","amp");
-   $AMPsql = "SELECT * FROM system where server = '".$HTTP_SERVER_VARS['SERVER_NAME']."'";
-#echo $AMPsql;
-  $ampversion=$ampdbcon->Execute($AMPsql)or DIE($ampdbcon->ErrorMsg());
-$AmpPath = $ampversion->Fields("amppath");
-$MX_type ="type"; //  $ampversion->Fields("typefield");
-$MX_top = 1; // $ampversion->Fields("toptypelevel");
+if (file_exists_incpath( 'AMP/HostConfig.inc.php' )) {
 
-$ConfigPath = $AmpPath."custom/config.php";
-$ConfigPath2 = $AmpPath."custom/config.php";
-$ConfigPath3 = $AmpPath."custom/config.php";
+    // Hosted Mode Configuration Present, load configuration
+    require_once('AMP/HostConfig.inc.php');
 
-	##### AMP SERVER ####
+    if (AMP_HOSTED) {
 
+        // Try to fetch configuration from a central service provider database.
+        if ( !defined('AMP_DB_TYPE') ) define('AMP_DB_TYPE', 'mysql');
+        ADOLoadCode( AMP_DB_TYPE );
 
-	##########
+        // If enabled, fetch information about our config.
+        $ampdbcon = &ADONewConnection('mysql');
+        $ampdbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME );
 
-} else { 
+        $AMPsql = "SELECT * FROM system WHERE server='".$_SERVER['SERVER_NAME']."'";
 
-    $MX_type ="type";
-    $MX_top =1;
-    $ConfigPath = "custom/config.php";
-    $ConfigPath2 = "../custom/config.php";
-    $ConfigPath3 = "../../custom/config.php";
+        $ampconfig = $ampdbcon->Execute( $AMPsql ) 
+                    or die( "Couldn't fetch local configuration: " . $ampdbcon->ErrorMsg());
 
+        if ( is_dir($ampconfig->Fields('amppath')) )
+            define( 'AMP_LOCAL_PATH', $ampconfig->Fields('amppath') );
+
+    }
+
+    // Clean up constants for security.
+    define('AMP_DB_HOST', null);
+    define('AMP_DB_NAME', null);
+    define('AMP_DB_USER', null);
+    define('AMP_DB_PASS', null);
 }
 
-$PHP_SELF=$_SERVER['PHP_SELF'];
+// If we don't yet have a local path, find one.
+if (!defined('AMP_LOCAL_PATH'))
+     define( 'AMP_LOCAL_PATH', find_local_path() );
 
-if (get_magic_quotes_gpc()==1) {
-	$MM_sysvar_mq ="1";
-} else{
-	 $MM_sysvar_mq ="0";
-} 
+if ( AMP_LOCAL_PATH ) {
+
+    // Search local paths for includes.
+    ini_set( 'include_path', AMP_LOCAL_PATH . "/custom:" .
+                             AMP_LOCAL_PATH . "/lib:" .
+                             ini_get('include_path') );
+}
+
+// Look for a local site configuration.
+if (file_exists_incpath( 'SiteConfig.inc.php' )) {
+
+    // This form is preferred.
+    require_once('SiteConfig.inc.php');
+
+    if ( !defined('AMP_DB_HOST') ||
+            !defined('AMP_DB_USER') ||
+            !defined('AMP_DB_PASS') ||
+            !defined('AMP_DB_NAME') ) {
+
+        die( "Incomplete site configuration. Please contact your system administrator." );
+
+    }
 
 
-if (isset($subdir)) {
-	require_once("$ConfigPath2");
-} elseif (isset($subdir2)) {
-	require_once("$ConfigPath3");
+} elseif (file_exists_incpath( 'config.php' )) {
+
+    // Included for backwards-compatibility.
+    require_once('config.php');
+
+    if (isset($MM_HOSTNAME) && isset($MM_USERNAME) && isset($MM_PASSWORD) && isset($MM_DATABASE)) {
+
+        if (isset($MM_DBTYPE)) define('AMP_DB_TYPE', $MM_DBTYPE);
+        define('AMP_DB_HOST', $MM_HOSTNAME);
+        define('AMP_DB_USER', $MM_USERNAME);
+        define('AMP_DB_PASS', $MM_PASSWORD);
+        define('AMP_DB_NAME', $MM_DATABASE);
+
+    } else {
+        die( "Incomplete database configuration. Please contact your system administrator." );
+    }
+
 } else {
-	require_once("$ConfigPath");
+
+    die( "Couldn't find a local site configuration file. Please contact your system administrator." );
 }
 
+// Connect to the database.
+if (!defined( AMP_DB_TYPE ))
+    define('AMP_DB_TYPE', 'mysql');
 
-#connect to Database
-ADOLoadCode($MM_DBTYPE);
-$dbcon=&ADONewConnection($MM_DBTYPE);
-$dbcon->Connect($MM_HOSTNAME,$MM_USERNAME,$MM_PASSWORD,$MM_DATABASE);
-	
-#load menu class	
-include($base_path."Connections/menu.class.php");
-$obj = new Menu;
-# Get system vars
-$getsysvars=$dbcon->CacheExecute("Select * from sysvar where id=1")or DIE($dbcon->ErrorMsg()); 
+if (!is_dir($ADODB_CACHE_DIR) || !is_writable($ADODB_CACHE_DIR))
+        $ADODB_CACHE_DIR = AMP_LOCAL_PATH . '/cache';
 
-$SiteName = $getsysvars->Fields("websitename")  ;
-$Web_url  = $getsysvars->Fields("basepath")  ;
-$cacheSecs = $getsysvars->Fields("cacheSecs")  ;
-$admEmail = $getsysvars->Fields("emfaq") ;					//needed for admin only
-$MM_email_usersubmit = $getsysvars->Fields("emendorse");	//User Submitted Article
-$MM_email_from = $getsysvars->Fields("emfrom");				//return email web sent emails
-$meta_description= $getsysvars->Fields("metadescription");	//meta desc
-$meta_content = $getsysvars->Fields("metacontent");			//meta content
-$systemplate_id = $getsysvars->Fields("template");
-		
-#SET DATABASE CACHING
-$dbcon->cacheSecs = $cacheSecs;
-	
-#INCLUDE FUNCTIONS
-require ($base_path."Connections/functions.php");
+ADOLoadCode(AMP_DB_TYPE);
+
+$dbcon =& ADONewConnection( AMP_DB_TYPE );
+$dbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME );
+
+require_once('AMP/LegacyRegistry.inc.php');
 
 ?>
-
-
-

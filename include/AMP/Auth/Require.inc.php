@@ -12,8 +12,6 @@
 
 ob_start();
 
-print $_SERVER['DOCUMENT_ROOT'];
-
 require_once( 'AMP/Auth/Handler.inc.php' );
 require_once( 'AMP/BaseDB.php' );
 
@@ -21,7 +19,5 @@ $AMP_Authen_Handler = new AMP_Authentication_Handler( $dbcon );
 
 if ( !$AMP_Authen_Handler->is_authenticated() )
     $AMP_Authen_Handler->do_login();
-
-ob_end_flush();
 
 ?>
