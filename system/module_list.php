@@ -6,9 +6,7 @@
    $catagory__totalRows=$catagory->RecordCount();
 ?><?php
 include ("header.php");
-?>
-
-<h2><b>Modules</b></h2>
+?><h2><b>Modules</b></h2>
       <table width="100%" border="0" cellspacing="3" cellpadding="0" align="center">
         <tr class="intitle"> 
           <td><b>Module Name</b></td>
@@ -31,6 +29,7 @@ include ("header.php");
 }
 ?>
       </table>
+	 <P><a href="module_edit.php">Add a New Module</a></P>
 <?php
 include ("footer.php");
 ?><?php

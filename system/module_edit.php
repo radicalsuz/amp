@@ -1,5 +1,6 @@
 <?php
   require("Connections/freedomrising.php");
+  include("FCKeditor/fckeditor.php");
 ?><?php
  if (isset($HTTP_GET_VARS["id"])) { $id= $HTTP_GET_VARS["id"];}
  else {$id= 90000000;}
@@ -23,8 +24,8 @@ if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or (
     $MM_recordId = $HTTP_POST_VARS["MM_recordId"];
     $MM_editRedirectUrl = "module_list.php";
     $MM_fieldsStr =
-"name|value|userdatamod|value|userdatamodid|value|file|value|perid|value|navhtml|value|publish|value";
-    $MM_columnsStr = "name|',none,''|userdatamod|',none,''|userdatamodid|',none,''|file|',none,''|perid|',none,''|navhtml|',none,''|publish|',none,''";
+"id|value|name|value|userdatamod|value|userdatamodid|value|file|value|perid|value|article|value|publish|value";
+    $MM_columnsStr = "id|',none,''|name|',none,''|userdatamod|',none,''|userdatamodid|',none,''|file|',none,''|perid|',none,''|navhtml|',none,''|publish|',none,''";
 	 require ("../Connections/insetstuff.php");
   require ("../Connections/dataactions.php");
 
@@ -34,7 +35,6 @@ if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or (
 <h2>Module Configuration</h2>
 <form name="form1" method="post" action="<?php echo $MM_editAction?>">
         <table width="100%" border="0" cellspacing="0" cellpadding="5" class="table">
-
           <tr> 
             <td class="name">Name</td>
             <td><input name="name" type="text" id="name" size="45" value="<?php echo $modsel->Fields("name");?>"></td>
@@ -48,8 +48,11 @@ if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or (
             <td><input name="publish" type="checkbox" id="publish" value="1" <?php if ($modsel->Fields("publish") == 1) {echo "checked";}?>></td>
           </tr>
           <tr> 
-            <td class="name">Navigation HTML</td>
-            <td><textarea name="navhtml" cols="45" rows="15" wrap="VIRTUAL" id="navhtml"><?php echo $modsel->Fields("navhtml");?></textarea></td>
+            <td colspan="2" class="name"> Navigation HTML:<br>
+ <textarea name="article" cols="65" rows="20" wrap="VIRTUAL"><?php
+		$text2 = $modsel->Fields("navhtml");
+		
+		 echo $text2; ?></textarea> </td>
           </tr>
           <tr> 
             <td class="name">Defual File</td>
@@ -63,11 +66,14 @@ if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or (
             <td class="name">User Data Module</td>
             <td><input name="userdatamodid" type="text" id="userdatamodid" size="45" value="<?php echo $modsel->Fields("userdatamodid");?>"></td>
           </tr>
+		       <tr> 
+            <td class="name">Module ID</td>
+            <td><input name="id" type="text"  size="45" value="<?php echo $modsel->Fields("id");?>"></td>
+          </tr>
           <tr> 
             <td class="name">&nbsp;</td>
             <td>&nbsp;</td>
           </tr>
-          
         </table>
         
         <p> 
