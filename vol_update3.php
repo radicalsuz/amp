@@ -2,7 +2,7 @@
 ob_start();
 require_once( 'AMP/UserData.php' );
 require_once( 'AMP/BaseDB.php' );
-include_once("includes/dbfunctions.php"); 
+include_once("AMP/DBfunctions.inc.php"); 
 
 
 if (!isset($_GET[modin])){ $modin=8;} else {$modin=$_GET[modin];}

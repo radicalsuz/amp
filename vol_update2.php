@@ -15,7 +15,7 @@ $modid=40;
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php");
-include_once("includes/dbfunctions.php"); 
+include_once("AMP/DBfunctions.inc.php"); 
 require($base_path."includes/volfunctions.php");
 //require($base_path."includes/diaemailfunctions.php");
  

@@ -1,11 +1,11 @@
 <?php
 
 $mod_id = 1;
-include("include/AMP/BaseDB.php");
-include("include/AMP/BaseTemplate.php");
+include("AMP/BaseDB.php");
+include("AMP/BaseTemplate.php");
 
 
-include("includes/dbfunctions.php"); 
+include("AMP/DBfunctions.inc.php"); 
 include("includes/emaillist_functions.php");
 
 
