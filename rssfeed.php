@@ -8,7 +8,7 @@ $orderby = "date";
 $orderbyorder ="desc";
 require_once( 'AMP/BaseDB.php' );
 
-if ($_GET[feed]) {
+if ($_GET['feed']) {
 	$f =$dbcon->CacheExecute("select * from rssfeed where id = ".$_GET[feed]." ") or DIE($dbcon->ErrorMsg());
 	if ($f->Fields("description")) { $meta_description = $f->Fields("description");}
 	if ($f->Fields("title")) {$SiteName = $f->Fields("title"); } 
@@ -19,7 +19,7 @@ if ($_GET[feed]) {
 }
 
 if ($sqlwhere) {$sqlwhere = " and ".$sqlwhere;}
-$sql = "SELECT distinct title, id, test, date, updated, shortdesc FROM articles Left Join articlereltype on articleid = id  WHERE publish=1 $sqlwhere ORDER BY $orderby $orderbyorder  limit $sqllimit" ;
+$sql = "SELECT distinct title, id, test, UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(updated) as updated, shortdesc FROM articles Left Join articlereltype on articleid = id  WHERE publish=1 $sqlwhere ORDER BY $orderby $orderbyorder  limit $sqllimit" ;
 	
 $R =$dbcon->CacheExecute($sql) or DIE($sql.$dbcon->ErrorMsg());
 
@@ -57,8 +57,12 @@ if ($R->Fields("title")) {
 	}
 	$description = htmlspecialchars(strip_tags($description));
 	if ($description == NULL) {$description= $R->Fields("title");}
-	//if ($R->Fields("date")) {
-	$date = date(r,$R->Fields("updated"));
+	if (($R->Fields("date")) or ($R->Fields("date") != '0000-00-00')) {
+		$date = date(r,$R->Fields("date"));
+	} else {
+		$date = date(r,$R->Fields("updated"));
+	}
+	
 	$title = ereg_replace ("&", "and" ,$R->Fields("title"));
 	$title = strip_tags($title)
 	//}
