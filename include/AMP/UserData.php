@@ -58,7 +58,6 @@ class UserData {
 
     var $showAllFields;
 
-    // Output Containers
     var $results;
     var $errors;
 
@@ -208,16 +207,17 @@ class UserData {
 
     function saveUser () {
 
+        $options = array( 'admin' => $this->admin );
+
         if (!isset( $this->form )) {
 
-            $options = array( 'admin' => $this->admin );
             $this->doPlugin( 'QuickForm', 'build', $options );
 
         }
 
         $this->modTemplateID = $this->_module_def['modidresponse'];
 
-        return $this->doAction( 'save' );
+        return $this->doAction( 'save', $options );
 
     }
 
@@ -233,7 +233,32 @@ class UserData {
             $this->results = array();
         }
 
-        $this->results[ $type ] = $result;
+        if ( !isset( $this->results[ $type ] ) ) {
+            $this->results[ $type ] = array();
+        }
+
+        $this->results[ $type ][] = $result;
+
+    }
+
+	function getResults ( $type = null ) {
+
+        $retarray = array();
+
+        if ( isset( $type ) ) {
+            $udmResults[ $type ] = $this->results[ $type ];
+        } else {
+            $udmResults = $this->results;
+        }
+
+        foreach ( $this->results as $type => $results ) {
+            foreach ( $this->results[ $type ] as $result ) {
+                $retarray[] = array( 'type' => $type,
+                                     'result' => $result );
+            }
+        }
+
+        return $retarray;
 
     }
 
