@@ -37,14 +37,10 @@ function geo_getdata($address) {
     $result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result . "\n";
 
     $result = '<?xml version="1.0" encoding="iso-8859-1"?>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
-
    <geo nodeID="aid12112551">
        <lat>37.752402</lat>
        <long>-122.416702</long>
-   </geo>
-</rdf:RDF>';
+   </geo>';
 
     $options = array(
                      "complexType" => "object",
@@ -54,7 +50,7 @@ function geo_getdata($address) {
                     );
  
 print "<pre>";
-    $xmlparser = new XML_Unserializer( $options );
+    $xmlparser = new XML_Unserializer();
     $parse_result = $xmlparser->unserialize( $result, false );
 #print_r( $xmlparser)."\n";
     $data = $xmlparser->getUnserializedData();
