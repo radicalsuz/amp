@@ -1,7 +1,10 @@
 <?php
 
 require_once "HTTP/Request.php";
-		
+require_once "XML/Unserializer.php";
+
+geo_getdata( "3212 24th St., San Francisco, CA" );
+
 function geo_getdata($address) {
 
 	$req =& new HTTP_Request( "http://rpc.geocoder.us/rest" );
@@ -17,7 +20,12 @@ function geo_getdata($address) {
 	} else {
 		$result = $req->getResponseBody();
 	}
-	return $result;
+
+    $xmlparse = new XML_Unserializer;
+    $xmlparse->unserialize( $result );
+
+    print_r( $xmlparse->getUnserializedData() );
+
 }
 		
 		
