@@ -245,6 +245,7 @@ class UserData {
 	function getResults ( $type = null ) {
 
         $retarray = array();
+        $udmResults = array();
 
         if ( isset( $type ) ) {
             $udmResults[ $type ] = $this->results[ $type ];
