@@ -245,7 +245,6 @@ class UserData {
 	function getResults ( $type = null ) {
 
         $retarray = array();
-        $udmResults = array();
 
         if ( isset( $type ) ) {
             $udmResults[ $type ] = $this->results[ $type ];
@@ -253,10 +252,12 @@ class UserData {
             $udmResults = $this->results;
         }
 
-        foreach ( $udmResults as $type => $results ) {
-            foreach ( $udmResults[ $type ] as $result ) {
-                $retarray[] = array( 'type' => $type,
-                                     'result' => $result );
+        if ( is_array( $udmResults ) ) {
+            foreach ( $udmResults as $type => $results ) {
+                foreach ( $udmResults[ $type ] as $result ) {
+                    $retarray[] = array( 'type' => $type,
+                                         'result' => $result );
+                }
             }
         }
 
