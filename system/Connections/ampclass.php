@@ -44,7 +44,7 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 		}
 		
 		if ($extra) {
-			echo "<td> <div align='right'>";
+			
 			
 			foreach ($extra as $k=>$v) {
 				$id=NULL;
@@ -53,9 +53,11 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 				}else {
 					$id= "id";
 				}
-				echo "<A HREF='".$v.$query->Fields($id)."'>$k</A>&nbsp;&nbsp;";
+				echo "<td> <div align='right'>";
+				echo "<A HREF='".$v.$query->Fields($id)."'>$k</A>";
+				echo "</div></td>";
 			}
-			echo "</div></td>";
+			
 		}
 		echo "</tr>";
 	
