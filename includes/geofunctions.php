@@ -11,8 +11,8 @@ function geo_getdata($address) {
 	$req->setMethod( HTTP_REQUEST_METHOD_GET );
 	
 	// assumes $address is *not* urlencoded
-	$req->addQueryString( 'address', $address )
-	$req->addHeader( "User-Agent", 'RadicalDesigns/AMP' );
+	$req->addQueryString( 'address', $address );
+	$req->addHeader( "User-Agent", "RadicalDesigns/AMP" );
 	
 	if ( !PEAR::isError( $req->sendRequest() ) ) {
 		// failed
