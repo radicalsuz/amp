@@ -15,6 +15,8 @@ the user to search page if no matches are found.*/
 #$website = "http://vevo.verifiedvoting.org/";
 include_once("includes/base_db.php");
 
+header( 'Status: 404 Not Found' );
+
 function errorre($org,$target) {
         global $Web_url;
         if (strstr($_SERVER['REQUEST_URI'], "$org")) {
