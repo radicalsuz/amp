@@ -145,7 +145,7 @@ if ($_GET['msg'] != '') {
                 <option value="moddata_list.php?limit=250<?php echo $keeper2; ?>">250</option>
                 <option value="moddata_list.php?limit=-1<?php echo $keeper2; ?>">All</option>
 			
-              </select>&nbsp;&nbsp;<a href="export.php?id=<?php echo $modin ?>">export  to csv file</a>&nbsp;&nbsp;&nbsp;&nbsp;
+              </select>&nbsp;&nbsp;<a href="export4.php?id=<?php echo $modin ?>">export  to csv file</a>&nbsp;&nbsp;&nbsp;&nbsp;
               <?php if ($modin == 2) { ?>
               <a href="moddata_list.php?modin=<?php echo $modin ?>&student=1" class="name">view 
               all student groups</a> 
