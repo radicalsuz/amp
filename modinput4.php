@@ -11,8 +11,10 @@
 
 //ob_start();
 
+// Set default module.
 $mod_id = 57;
 $modid = 1;
+
 require_once( 'AMP/UserDataInput.php' );
 require_once( 'AMP/BaseDB.php' );
 
