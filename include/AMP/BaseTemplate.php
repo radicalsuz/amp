@@ -46,7 +46,7 @@ if ( !function_exists( 'buildheader' ) ) {
 			$htmlheader.=$extra_header;
 		}
         $htmlheader.="<script language=\"JavaScript\" src=\"".$Web_url."scripts/functions.js\"></script>\n";
-		$htmlheader.= "</head>\n"
+		$htmlheader.= "</head>\n";
         return $htmlheader;
 
     }
