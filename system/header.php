@@ -202,6 +202,35 @@ document.getElementById('basic').style.display = 'none';
     }
 
 
+	function hideClass(theclass, objtype) {
+	if (objtype=='') {objtype='div';}
+	var objset=document.getElementsByTagName(objtype);
+	for (i=0;i<objset.length; i++) {
+		if (objset.item(i).className == theclass){
+			objset.item(i).style.display = 'none';
+		}
+	}
+	
+	}
+
+	function showClass(theclass, objtype) {
+	if (objtype=='') {objtype='div';}
+	for (i=0;i<document.getElementsByTagName(objtype).length; i++) {
+		if (document.getElementsByTagName(objtype).item(i).className == theclass){
+			document.getElementsByTagName(objtype).item(i).style.display = 'block';
+		}
+	}
+	}
+
+	function change_any(which, whatkind) {
+	if (whatkind!='') {hideClass(whatkind, '');}
+		if(document.getElementById(which).style.display == 'block' ) {
+			document.getElementById(which).style.display = 'none';
+		} else {
+		document.getElementById(which).style.display = 'block';
+		}
+	}
+	
 </script>
 <script type="text/javascript" src="Connections/popcalendar.js"></script>
 <script language="JavaScript" src="../Connections/functions.js"></script>

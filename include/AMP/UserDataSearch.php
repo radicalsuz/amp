@@ -26,6 +26,7 @@ class UserList {
 	var $include_modin;
 	var $base_modin;
 	var $sort_by="Last_Name, First_Name";
+	var $criteria_sql;
 	var $current_sql;
 	var $current_list;
 	var $search_count;
@@ -54,6 +55,8 @@ class UserList {
 		    
 			for ($n=$this->current_offset; ($n<($this->current_offset+$this->qty_displayed)&&$n<count($this->current_list)); $n++){
 				$current_row=$this->current_list[$n];
+				$bgcolor =($n % 2) ? "#D5D5D5" : "#E5E5E5";
+				$list_row_start='<tr bordercolor="#333333" bgcolor="'.$bgcolor.'" class="results" '." onMouseover=\"this.bgColor='#CCFFCC';\" onMouseout=\"this.bgColor='$bgcolor';\">";
 				$list_row="";
 				foreach($this->current_fieldset as $current_field) {
 				$showfield=TRUE;
@@ -76,7 +79,6 @@ class UserList {
 				$list_row=$list_row_start.$list_row.$list_row_end;
 				//append row to html var
 				$list_html.=$list_row;
-			
 			}
 		} else { //No Records Found
 			$list_html=$list_row_start."<td>No Records Found</td>".$list_row_end;
@@ -103,7 +105,7 @@ class UserList {
 	}
 
 	function paged_list_header () {
-		$output ="<span class=side>";
+		$output ="<div class=side>";
 		if ($this->current_offset>0) {
 			$output .= "&nbsp;<a href=\"#\" onclick=\"sform.elements['offset'].value='";
 			if ($this->current_offset>$this->qty_displayed) {
@@ -124,7 +126,7 @@ class UserList {
 		}
 		
 		$output.="&nbsp;".$this->jumpto_box();
-		$output.="</span>";
+		$output.="</div>";
 		return $output;
 	}
 	
@@ -148,9 +150,6 @@ class UserList {
 	function output_list ($link_action="modinput4_view.php") {
 		global $userper, $standalone;
 		$list_html_start.='<table cellpadding="1" cellspacing="1" width="95%">';
-		//Check if pagination header is needed
-
-		
 		$list_html_start.='<tr class="toplinks">';
 		if ($this->current_list!=NULL) {
 			//DISPLAY COLUMN HEADERS
@@ -178,7 +177,9 @@ class UserList {
 			$list_html_start=$this->paged_list_header().$list_html_start;
 			$list_html_footer.=$this->paged_list_header();
 		}
-
+		//INSERT LIST ACTION OPTIONS
+		$options_html="<div class=\"side\" style=\"float:right;\"><form name='export_button' action='export4.php?id=".$this->base_modin."' method='POST'><input type=\"hidden\" name=\"sqlsend\" value=\" FROM userdata WHERE ".$this->criteria_sql."\"><a href=\"#\" onclick=\"checkSave();\">Save This Search</a> &nbsp;| &nbsp;<a href=\"#\" onclick=\"document.forms['export_button'].submit();\">Export List</a></form></div>";
+		$list_html_start=$options_html.$list_html_start;
 
 		return $list_html_start.$list_html.$list_html_footer;
 	}
@@ -195,22 +196,131 @@ class UserList {
 		$page_tabset = explode(",", $page_tabs);
 		foreach ($page_tabset as $tabname){
 			$pagecount++;
-			$tabnav_html.="<li class=\"tab$pagecount\"><a href=\"#\" id=\"a$pagecount\" onclick=\"change('tabpage_$tabname', 'tabpage');\" >$tabname</a></li>";
+			$tabnav_html.="<li class=\"tab$pagecount\"><a href=\"#\" id=\"a$pagecount\" onclick=\"change_any('tabpage_$tabname', 'tabpage');\" >$tabname</a></li>";
 		}
 		$tabnav_html.="</ul>";
 		return $tabnav_html;
 	}
 	
+	function saveSearch($searchname, $id=NULL) {
+		global $dbcon;
+		$output=array();
+		$output['name']=$searchname;
+		$output['criteria_sql'].=$this->criteria_sql;
+		
+		foreach ($this->search_criteria as $searchset=>$currentset) {
+			foreach ($currentset as $currentitem=>$currentoptions) {
+				$output['fields'] .= $currentoptions['fieldname'].",";
+				$output['operators'].=$currentoptions['operator'].",";
+				//watch out for commas in user input criteria
+				$output['criteria'] .=str_replace(",", "&#044;", $currentoptions['value']).",";
+				$output['sets'].= $searchset.",";
+			}
+			$output['set_logic'] .= $this->search_logic[$searchset]['internal'].",";
+			$output['set_logic'] .=$this->search_logic[$searchset]['external'].",";
+		}
+		$output['base_modin']=$this->base_modin;
+		$output['include_modin']=$this->include_modin;
+
+		//kill final commas and format for insert
+		foreach ($output as $key=>$outputset) {
+			if (substr($outputset, strlen($outputset)-1,1)==',') {
+			$output[$key]=substr($outputset, 0, strlen($outputset)-1);}
+			if ($outputset==',') { $outputset='';}
+			
+		}
+
+		if (isset($id)) {  //overwrite an existing saved search
+			$save_sql="UPDATE userdata_search set  ";
+			foreach ($output as $outputname => $outputset) {
+				$save_sql.= "`".$outputname."` = ".$dbcon->qstr($outputset, true).", ";
+			}
+			$save_sql=substr($save_sql, 0, strlen($save_sql)-2);
+			$save_sql.=" WHERE id = ".$id;
+		} else { //save as new search
+			$save_sql_start="INSERT INTO userdata_search ( ";
+			foreach ($output as $fieldname=>$outputset) {
+				$save_sql_start.="`".$fieldname."`, ";
+				if ($fieldname=='criteria_sql') {
+					$save_sql_values .= $dbcon->qstr($outputset).", ";
+				} else {
+					$save_sql_values .= $dbcon->qstr($outputset, true).", ";
+				}
+			}
+			$save_sql=substr($save_sql_start, 0, strlen($save_sql_start)-2)." ) VALUES ( ".substr($save_sql_values, 0, strlen($save_sql_values)-2)." )";
+		}
+		echo $save_sql."<BR>";
+		$dbcon->Execute($save_sql) or DIE($dbcon->ErrorMsg());
+
+
+
+	}
+	
+	
+	function loadSearch($id, $logictype="0", $start_set=0) {
+		global $dbcon;
+		$load_sql="SELECT * from userdata_search where id = $id";
+		$loaded_search=$dbcon->Execute($load_sql);
+		if (!$logictype==0) { //search must be combined with current search
+
+
+		} else { //search is being loaded fresh
+			$input['fieldset']=explode(",", $loaded_search->Fields("fields"));
+			$input['opset']=explode(",", $loaded_search->Fields("operators"));
+			$input['valueset']=explode(",", $loaded_search->Fields("criteria"));
+			$input['searchset']=explode(",", $loaded_search->Fields("sets"));
+			$input['logicset']=explode(",", $loaded_search->Fields("set_logic"));
+			$input['base_modin']=$loaded_search->Fields("base_modin");
+			$input['include_modin']=explode(",", $loaded_search->Fields("include_modin"));
+
+			//criteria creation loop
+			foreach($input['fieldset'] as $currentkey=>$currentField) {
+				$op=$input['opset'][$currentkey];
+				//restore commas to normal
+				$crit_value=str_replace("&#044;", ",", $input['valueset'][$currentkey]);
+				$searchset=$input['searchset'][$currentkey]+$start_set;
+				$this->addCriteria($currentField, $op, $crit_value, $searchset);
+			}
+			foreach($input['searchset'] as $currentset) {
+				$this->setLogic($input['logicset'][$searchset*2], $currentset, 'internal');
+				$this->setLogic($input['logicset'][$searchset*2+1], $currentset, 'external');
+			}
+			$this->base_modin=$input['base_modin'];
+			foreach($input['include_modin'] as $current_mod) {
+				$this->addModule($current_mod);
+			}
+			#$this->udm=new UserData ($dbcon, $this->base_modin);
+			$this->readPagination();
+			$this->readDisplayFields();
+			$this->readSort();
+
+			$this->setupSearch($dbcon);
+			#$this->runSearch($dbcon);
+				
+
+
+		}
+	}
+	
+	
+	
+	
+	
 	function readSearch($udm) {
 		global $_REQUEST;
 		$searchset_count=0;
 		$searchitems_count=1;
+		if ($_REQUEST['UDM_load_searchnum']!=''&&($_REQUEST['UDM_load_search_logic']=='0')) {
+			//Loaded search wipes out existing search
+			return $this->loadSearch($_REQUEST['UDM_load_searchnum']);
+		}
+
 		$this->udm=$udm;
 		$modin=$udm->instance;
-		//Find modules specified for Search
+		//Find modules specified for inclusion in Search
 		$this->base_modin=$modin;
 		if($_REQUEST['UDM_Search_all_mods']) {//user checked 'Search in all' box
-			$this->include_modin="*";
+			$this->include_modin="*";  //flag to indicate all modules are included
 		} elseif(isset($_REQUEST['UDM_Search_modin'])) {
 			$mod_set=$_REQUEST['UDM_Search_modin'];
 			if (is_array($mod_set)){
@@ -222,8 +332,10 @@ class UserList {
 
 
 		//Check for old searches stored on form
+		//Prev_Search_action selectbox gives "Narrow/Expand/New" Search options
 		if (isset($_REQUEST['UDM_Prev_Search_action'])) {
-			if ($_REQUEST['UDM_Prev_Search_action']!='0') {
+			if ($_REQUEST['UDM_Prev_Search_action']!='0') { //New Search=0; ignore previous searches
+
 				while ($field_choice=$_REQUEST['UDM_Prev_Search_field'.$searchitems_count]) {
 					$op_choice=$_REQUEST['UDM_Prev_Search_compare'.$searchitems_count];
 					$value_choice=$_REQUEST['UDM_Prev_Search_value'.$searchitems_count];
@@ -257,11 +369,33 @@ class UserList {
 
 
 		}
-
+		//Set the LOGIC for the set
 		#$this->search_count=$searchset_count;
 		$this->setLogic($_REQUEST['choose_logic'], $searchset_count, 'internal');
 	
-		//set page offset and display qty
+		$this->readPagination();
+		$this->readDisplayFields();
+		$this->readSort();
+
+
+		$this->setupSearch($udm->dbcon);
+		//SAVE CURRENT SEARCH upon request
+		if ($_REQUEST['UDM_save_searchname']!=''&&$_REQUEST['UDM_save_searchnum']==''){
+			//INSERT new search record
+			$this->saveSearch($_REQUEST['UDM_save_searchname']);
+		}
+		if ($_REQUEST['UDM_save_searchnum']!='') {  
+			
+			//UPDATE previously saved search 
+			$this->saveSearch($_REQUEST['UDM_save_searchname'], $_REQUEST['UDM_save_searchnum']);
+		}
+
+
+	}
+
+	function readPagination() {
+		//set page offset and display qty from form data
+		global $_REQUEST;
 		if (isset($_REQUEST['page_qty'])) {
 			$this->qty_displayed=$_REQUEST['page_qty'];
 		} else {
@@ -272,8 +406,12 @@ class UserList {
 		} else {
 			$this->current_offset=0;
 		}
-	
-		//set fields for search list
+	}
+
+
+	function readDisplayFields() {
+		//set fields for search results list from form data
+		global $_REQUEST;
 		if (isset($_REQUEST['UDM_display_fields'])) {
 			$this->display_fields=stripslashes($_REQUEST['UDM_display_fields']);
 		}
@@ -285,10 +423,12 @@ class UserList {
 			$list_field_list.=", ".$this->action_fields;
 			$this->display_fields=$list_field_list;
 		}
+	}
 
-		//set sort
+	function readSort() {
+		global $_REQUEST;
+		//set sort fields from form data
 		if (isset($_REQUEST['UDM_sort'])) {
-			print $_REQUEST['UDM_sort'];
 			$sort_set=explode(",", $_REQUEST['UDM_sort']);
 			$this->sort_by="";
 			foreach ($sort_set as $this_sort) {
@@ -296,19 +436,20 @@ class UserList {
 				$this_sort=str_replace(" ASC", " ", $this_sort);
 				$this_sort=trim($this_sort);
 				if (strpos($this->sort_by, $this_sort)===FALSE) {
+					//sort descending when sortfield appears in form data twice
+					//but not if the sortfield is already DESC
 					if (substr_count($_REQUEST['UDM_sort'], $this_sort)>1&&strpos($_REQUEST['UDM_sort'], $this_sort." DESC") === FALSE) {
 						$this->sort_by.=$this_sort." DESC, ";
 					} else {
 						$this->sort_by.=$this_sort.", ";
 					}
 				}
-				#print $this_sort."#<BR>";
+			
 			}
 				
 			$this->sort_by=substr($this->sort_by, 0, strlen($this->sort_by)-2);
 			
 		}
-
 
 	}
 
@@ -378,6 +519,8 @@ class UserList {
 	}
 	
 	function translateSearch($udm) {
+		//Creates an explanation of the search process
+		//for user display
 		$output = "<div id=\"div_search_details\" style=\"display: none\">";
 		$output .= "Searched for ";
 		for ($current_set=0; $current_set<=$this->search_count; $current_set++) {
@@ -391,7 +534,8 @@ class UserList {
 				$endline="<BR>";
 				$endlist="";
 			}
-			foreach($this->search_criteria[$current_set] as $fieldname => $searchdef) {
+			foreach($this->search_criteria[$current_set] as $item => $searchdef) {
+				$fieldname=$searchdef['fieldname'];
 				$output.=$startline."<b>".$this->translateFields($fieldname, $udm)." ".$this->translateCompare($searchdef['operator'])." ".$searchdef['value']."</b>";
 				if (isset($this->include_modin)&&(substr($fieldname,0,6)=="custom")) { $output.= " in ".$udm->name." only";}
 				$output.=$endline;
@@ -408,7 +552,7 @@ class UserList {
 		}
 		$output.="</div>";
 		$output.=$this->translateMods($udm);
-		$output.="Your search returned ".count($this->current_list)." results &nbsp;&nbsp;<a href=\"#\" onclick=\"change('div_search_details')\">details</a><BR>";
+		$output.="Your search returned ".count($this->current_list)." results &nbsp;&nbsp;<a href=\"#\" onclick=\"change_any('div_search_details')\">details</a><BR>";
 		return $output;
 	}
 			
@@ -582,7 +726,44 @@ class UserList {
 			alert ('No search criteria have been selected');
 		}
 	}
+	
+	//JAVASCRIPT FUNCTION
+	//checks current searchlist before saving search
+	function checkSave() {
+		var searchname=prompt('Please enter a name for this search:');
+		var selbox= sform.elements['UDM_saved_search_list'];
+		var searchflag=0;
+		var searchitem=0;
+		if (searchname> '' ) { //do nothing if no search name is entered
+			for (n=0; n<selbox.length; n++) {
+				if (selbox.options[n].text==searchname) {
+					searchflag=1;
+					searchitem=n;
+				}
+			}
+			if (searchflag) {
+				var reply=confirm('The name you have chosen matches an existing saved search.\\nDo you wish to overwrite it?');
+				if (reply) {
+					sform.elements['UDM_save_searchname'].value=searchname; 
+					sform.elements['UDM_save_searchnum'].value=searchitem;
+					sform.submit();
+				}
+			} else {
+				sform.elements['UDM_save_searchname'].value=searchname; 
+				sform.submit();
+			}
+		} else return false;
+	}
 
+	function checkLoad() {
+		var searchnum=sform.elements['UDM_saved_search_list'].value;
+		if (searchnum!='') {
+			sform.elements['UDM_load_searchnum'].value=searchnum;
+			sform.submit();
+		} else {
+			alert ('Sorry, a saved search must be selected first');
+		}
+	}
 	</script>";
 	return $script;
 	}
@@ -593,9 +774,9 @@ class UserList {
 		$fieldcount=0;
 		if (count($this->search_criteria)>0) {
 		for ($n=0; $n<=$this->search_count;$n++) {
-			foreach ($this->search_criteria[$n] as $fieldname => $fdef) {
+			foreach ($this->search_criteria[$n] as $fitem => $fdef) {
 				$fieldcount++;
-				$output.="<input type='hidden' name=\"UDM_Prev_Search_field$fieldcount\"	  value=\"$fieldname\">";
+				$output.="<input type='hidden' name=\"UDM_Prev_Search_field$fieldcount\"	  value=\"".$fdef['fieldname']."\">";
 				$output.="<input type='hidden' name=\"UDM_Prev_Search_compare$fieldcount\" value=\"".$fdef['operator']."\">";
 				$output.="<input type='hidden' name=\"UDM_Prev_Search_value$fieldcount\" value=\"".$fdef['value']."\">";
 				$output.="<input type='hidden' name=\"UDM_Prev_Search_set$fieldcount\" value=\"".$n."\">";
@@ -603,14 +784,47 @@ class UserList {
 			$output.="<input type='hidden' name=\"UDM_Prev_Search_set_logic_int$n\" value=\"".$this->search_logic[$n]['internal']."\">";
 			$output.="<input type='hidden' name=\"UDM_Prev_Search_set_logic_ext$n\" value=\"".$this->search_logic[$n]['external']."\">";
 		}
-		$output.="<select name=\"UDM_Prev_Search_action\"><option value='AND' selected>Refine the current search using the criteria below</option><option value='OR'>Expand the current search to include results which match:</option><option value='0'>Start a new search</option></select><br>";
+		$output.="<table width=\"100%\"><tr><td  align=\"left\" valign=\"bottom\" nowrap><select  name=\"UDM_Prev_Search_action\" onchange=\"change_any(('prev_action_option'+this.value), 'prev_action_option');\" style=\"font-weight: bold;\"><option value='AND' selected>Focus</option><option value='OR'>Expand </option><option value='0'>New </option></select></td><td align=\"left\"><div id=\"prev_action_optionAND\" class=\"prev_action_option\" style=\"display: block; font-size:14px; \"><B>Narrow the current search</b> using the criteria below </div><div id=\"prev_action_optionOR\" class=\"prev_action_option\" style=\"display: none;font-size:14px;\"><B>Widen the current search</b> to include results which match: </div><div id=\"prev_action_option0\" class=\"prev_action_option\" style=\"display: none;font-size:14px;\">Start a <B>New search </b></div></td></tr></table>";
 		}
 		return $output;
 	}
 
 
+	//Returns an array of existing Saved Searches from the database
+	//can be restricted to show only those from the current modin
+	function getSavedSearches ($modin='') {
+		global $dbcon;
+		$load_sql="SELECT id, name from userdata_search";
+		if ($modin!='') { $load_sql.=" WHERE base_modin = $modin";}
+		$output = $dbcon->GetAssoc($load_sql);
+		return $output;
+	}
+
+	//outputSelbox utility function
+	//returns option list from an array
+	//until we get this hooked up to new dropdown.php
+	function makeSelbox ($data, $selected='') {
+		if (is_array($data)) {
+			foreach ($data as $key => $value) {
+				$output.="<option value='$key'";
+				if ($key==$selected&&($selected!='')){
+					$output.= " selected";
+				}
+				$output.=">$value</option>\n";
+			}
+		} else {
+			$output="<option value=''>No Items Found</option>";
+		}
+		return $output;
+	}
+
+
+	//Master Search Form output method
 
 	function SearchForm($udm, $action="modinput4_search.php") {
+		
+		//SET VALUES for User Interface
+		//FIELDS in current udm instance
 		foreach ($udm->fields as $fieldname => $fdef) {
 			$thislabel=strip_tags($fdef['label']);
 			if (strlen($thislabel)>25) {
@@ -619,40 +833,62 @@ class UserList {
 			$fieldselect.="<option value=\"$fieldname\">".$thislabel."</option>";
 		}
 		
+		//OPERATOR CHOICES
 		$compare_operators=$this->connect_SearchOperators();
+		$compare_select=$this->makeSelbox(array_flip($compare_operators));
+
 		
+		//LOGIC Options for this search
 		$logic_set['all']="AND";
 		$logic_set['any']="OR";
-		
-		$name_set=array_keys($compare_operators);
-		foreach($name_set as $compare_value) {
-			$compare_select.="<option value=\"".$compare_operators[$compare_value]."\">$compare_value</option>";
-		}
+		$logic_select=$this->makeSelbox(array_flip($logic_set));
 
-		$name_set=array_keys($logic_set);
-		foreach($name_set as $logic_value) {
-			$logic_select.="<option value=\"".$logic_set[$logic_value]."\">$logic_value</option>";
-		}
-
-
-		$new_row="<tr><td><select name = 'choose_field%1\$s' width='25'>".$fieldselect."</select>&nbsp;</td><td><select name='choose_comparison%1\$s' width='15'>".$compare_select."</select>&nbsp;</td><td><input name='value_field%1\$s' type='text' size='20'>&nbsp;</td><td><input name='add_criteria%1\$s' type='button' value='+'  onclick='AddItem();'>&nbsp;</td><td><input name='remove_criteria%1\$s' type='button' value='-'  onclick='RemoveItem(%1\$s);'></td></tr>";
-
-		$search_button_go="<input name=\"btnUdmSubmit\" value=\"Search\" type=\"button\" onclick=\"goSearch();\" id=\"UDM_Search_btn\">";
-		$hidden_values="<input name=\"UDM_search_items\" type=\"hidden\" value=\"1\"><input name=\"modin\" value=\"".$udm->instance."\" type=\"hidden\"><input name=\"offset\" value=\"0\" type=\"hidden\"><input name=\"UDM_display_fields\" value='".$this->display_fields."' type=\"hidden\"><input name=\"UDM_sort\" value='".$this->sort_by."' type=\"hidden\">";
+		//GET Javascript form engine
 		$control_script= $this->SearchForm_Jscript();
-		$logic_box='<div style ="background-color:E3E3E3; min-height=50px; vertical-align:center; text-align:left; padding: 5px;">'.$this->storeSearch().'Find results which match <select name="choose_logic">'.$logic_select.'</select> of the following:</div>';
-		$form_header=$control_script."	<form name=\"UDM_Advanced_Search\" action=\"$action\" method=\"POST\">$hidden_values $logic_box<table id=\"UDM_Search_tbl\">";
+
+		//ROW template for input fields on Search Form
+		$new_row="<tr><td><select name = 'choose_field%1\$s' width='25'>".$fieldselect."</select>&nbsp;</td><td><select name='choose_comparison%1\$s' width='15'>".$compare_select."</select>&nbsp;</td><td><input name='value_field%1\$s' type='text' size='20'>&nbsp;</td><td><input name='add_criteria%1\$s' type='button' value='+'  onclick='AddItem();'>&nbsp;</td><td><input name='remove_criteria%1\$s' type='button' value='-'  onclick='RemoveItem(%1\$s);'></td></tr>";
 		
+		//THE BIG BUTTON
+		$search_button_go="<input name=\"btnUdmSubmit\" value=\"Search\" type=\"button\" onclick=\"goSearch();\" id=\"UDM_Search_btn\" style=\"font-size: 20px;\">";
+		
+		//HIDDEN values which govern form behavior
+		$hidden_values="<input name=\"UDM_search_items\" type=\"hidden\" value=\"1\"><input name=\"modin\" value=\"".$udm->instance."\" type=\"hidden\"><input name=\"offset\" value=\"0\" type=\"hidden\"><input name=\"UDM_display_fields\" value='".$this->display_fields."' type=\"hidden\"><input name=\"UDM_sort\" value='".$this->sort_by."' type=\"hidden\"><input name=\"UDM_load_searchnum\" value='' type=\"hidden\"><input name=\"UDM_save_searchname\" value='' type=\"hidden\"><input name=\"UDM_save_searchnum\" value='' type=\"hidden\">";
+
+		//LOGIC CONTROL PANEL and STORING VALUES from previous searches
+		$logic_box='<div style ="background-color:E3E3E3; min-height=50px; vertical-align:center; text-align:left; padding: 5px;">'.$this->storeSearch().'Find results which match <select name="choose_logic">'.$logic_select.'</select> of the following:</div>';
+		
+		//UDM INSTANCE CONTROL PANEL
 		if (isset($this->include_modin)) {$modlist_style="block"; } else {$modlist_style="none";}
 		if ($this->include_modin=="*") {$is_selected=" CHECKED"; $modlist_style="none";}
 
-		$modinbox="<div id=\"UDM_search_modules\" style=\"display: $modlist_style;\">Currently searching <B>".$udm->name."</b><BR>Also include:<BR><SELECT MULTIPLE name=\"UDM_Search_modin[]\" size=\"6\">".$this->GetMods($udm)."</select></DIV><BR><input name=\"UDM_Search_all_mods\" type=\"checkbox\" value=\"1\" $is_selected>Search users from all sources&nbsp;&nbsp;<a href=\"#\" onclick=\"change('UDM_search_modules')\">show list</a>";
+		$modinbox="<div id=\"UDM_search_modules\" style=\"display: $modlist_style;\">Currently searching <B>".$udm->name."</b><BR>Also include:<BR><SELECT MULTIPLE name=\"UDM_Search_modin[]\" size=\"6\">".$this->GetMods($udm)."</select></DIV><BR><input name=\"UDM_Search_all_mods\" type=\"checkbox\" value=\"1\" $is_selected>Search users from all sources&nbsp;|&nbsp;<a href=\"#\" onclick=\"change_any('UDM_search_modules')\">show list</a>";
 		
+		//LOADING/SAVING SEARCHES CONTROL PANEL
+		$searchlist=$this->makeSelbox($this->getSavedSearches(), '0');
+		$saved_search_box="<input name=\"LoadSearch\" value=\"Show Saved Searches\" type=\"button\" onclick=\"change_any('UDM_saved_searches');\">";
+		$load_search_logic="<option value='0'>Open saved search";
+		if (isset($this->current_sql)) {
+			$saved_search_box.="<input name=\"SaveSearch\" value=\"Save This Search\" onclick=\"checkSave();\" type=\"button\">";
+			$load_search_logic.=" and ignore current search</option><option value=\"AND\">Narrow current search to show only users in both groups</option><option value=\"OR\">Expand current search to also include users from:";
+		}
+		$load_search_logic.="</option>";
+		$saved_search_box.="<div id=\"UDM_saved_searches\" style=\"display: none;\"><select name=\"UDM_load_search_logic\">$load_search_logic</select><BR><select name=\"UDM_saved_search_list\" size=\"8\">$searchlist</select><BR><input name=\"UDM_loadsearch_submit\" value=\"Open Search\" type=\"button\" onclick=\"checkLoad();\"></div>";
+
+		//DISPLAY FIELDS CONTROL PANEL
 		$fieldselect_no_custom=substr($fieldselect, 0, strpos($fieldselect, "<option value=\"custom"));
-		$display_fields_box="<a href=\"#\" onclick=\"change('UDM_search_listfields');\">Choose fields for list</a><BR><div id=\"UDM_search_listfields\" style=\"display: none;\">Name will show in list by default - please select other fields to include:<BR><select multiple name=\"UDM_list_fields[]\">$fieldselect_no_custom</select></div>";
-		$controls_html="<span>".sprintf($new_row, '1')."</span><BR>";
+		$display_fields_box="<a href=\"#\" onclick=\"change_any('UDM_search_listfields');\">Choose fields for display</a><BR><div id=\"UDM_search_listfields\" style=\"display: none;\">Name will show in list automatically<BR> Please select other fields to include:<BR><select multiple name=\"UDM_list_fields[]\" size=\"8\">$fieldselect_no_custom</select></div>";
+		
+		
+		//ASSEMBLE FORM
+		$form_header=$control_script."	<form name=\"UDM_Advanced_Search\" action=\"$action\" method=\"POST\">$hidden_values $logic_box<table id=\"UDM_Search_tbl\">";
+				
+		$controls_html="<div>".sprintf($new_row, '1')."</div><BR>";
+		//Save First Row to script when form loads
 		$controls_html.="<script type=\"text/javascript\">SaveRow(1);</script>";
-		$form_footer="</table><center>".$search_button_go."<P>".$modinbox."<BR>Display ".$this->display_qty_choice()." matches per page of results<BR>".$display_fields_box."</center></form>";
+		
+		//footer
+		$form_footer="</table><center>".$search_button_go."<P>".$modinbox."<P>Display ".$this->display_qty_choice()." matches per page of results<P>".$display_fields_box."<P>".$saved_search_box."</center></form>";
 
 		$form_html= $form_header.$controls_html.$form_footer;
 		return $form_html;
@@ -711,10 +947,12 @@ class UserList {
 	function addCriteria ($field, $operator, $value, $search_set=0, $logic="AND") {
 		#$search_set=$this->setSearchParent($search_set);
 		if ($search_set>$this->search_count) {$this->search_count=$search_set;}
-		$this->search_criteria[$search_set][$field]['operator']=$operator;
-		$this->search_criteria[$search_set][$field]['logic']=$logic;
-		$this->search_criteria[$search_set][$field]['value']=$value;
-		//echo "Added Criteria in Search[$search_set]:$field$operator$value";
+		$item=count($this->search_criteria[$search_set]);
+		$this->search_criteria[$search_set][$item]['fieldname']=$field;
+		$this->search_criteria[$search_set][$item]['operator']=$operator;
+		$this->search_criteria[$search_set][$item]['logic']=$logic;
+		$this->search_criteria[$search_set][$item]['value']=$value;
+		//echo "Added Criteria in Search[$search_set]:$field$operator$value<BR>";
 		if ($this->search_count<$search_set||!isset($this->search_count)) { $this->search_count=$search_set;}
 	}
 
@@ -736,19 +974,21 @@ class UserList {
 			$this->is_included[$current_set]=TRUE;
 			//echo "starting subsearch $current_set<BR>";
 			//ADD EACH CRITERIA  WITHIN SET
-			$working_fieldset=array_keys($this->search_criteria[$current_set]);
-			foreach ($working_fieldset as $currentField) {
+			#$working_fieldset=array_keys($this->search_criteria[$current_set]);
+			foreach ($this->search_criteria[$current_set] as $item=>$itemdef) {
+				$currentField=$itemdef['fieldname'];
 				//Check for custom fields in multi-module searches
 				if (!(substr($currentField,0,6)=="custom" && $avoid_custom)) { 
 					//Convert special operators to sql and add quotes to values
-					$op_prepped=$this->search_criteria[$current_set][$currentField]['operator'];
+					$op_prepped=$itemdef['operator'];
+					//LIKE-type exceptions
 					if (!(strpos($op_prepped, "LIKE")===FALSE)) {
-						$value_prepped=$this->search_criteria[$current_set][$currentField]['value'];
+						$value_prepped=$itemdef['value'];
 						if ($op_prepped<>"_LIKE") {
 							$value_prepped="%".$value_prepped;	}
 						if ($op_prepped<>"LIKE_") {
 							$value_prepped=$value_prepped."%";}
-						if ($this->search_criteria[$current_set][$currentField]['operator']=="!LIKE") {
+						if ($itemdef['operator']=="!LIKE") {
 							$clause_start="!(";
 							$clause_end=")";
 						} else { 
@@ -759,9 +999,9 @@ class UserList {
 
 						$value_prepped =$dbcon->qstr($value_prepped);
 					} else {
-						$value_prepped = $dbcon->qstr($this->search_criteria[$current_set][$currentField]['value']);
+						$value_prepped = $dbcon->qstr($itemdef['value']);
 					}
-					
+					//TRUE/ NOT TRUE Exceptions
 					if (strpos($op_prepped, "EMPTY")===FALSE) {
 						if (strpos($op_prepped, "TRUE")===FALSE){
 							$setup_sql.=" ".$clause_start.$currentField." ".$op_prepped;
@@ -773,6 +1013,7 @@ class UserList {
 								$setup_sql.=" (!".$currentField.") ";
 							}
 						}
+					//EMPTY/NOT EMPTY Exceptions
 					} elseif ($op_prepped=="EMPTY") {
 						$setup_sql.=" (IsNull($currentField) OR $currentField='') ";
 					} else { //NOT EMPTY
@@ -781,7 +1022,7 @@ class UserList {
 					if (isset($this->search_logic[$current_set]['internal'])) {
 						$logic_prepped =$this->search_logic[$current_set]['internal'];
 					} else {
-						$logic_prepped =$this->search_criteria[$current_set][$currentField]['logic'];
+						$logic_prepped =$this->$itemdef['logic'];
 					}
 					$setup_sql .= " ".$logic_prepped; 
 				}
@@ -848,6 +1089,7 @@ class UserList {
 			$criteria_sql.=" OR (".$criteria_sql2.") ";
 		}
 
+		$this->criteria_sql=$criteria_sql;
 		//ASSEMBLE SQL statment
 		$this->current_sql = "SELECT DISTINCTROW ".$this->display_fields.$this->setupSort()." FROM ".$this->search_tables." WHERE ".$criteria_sql." ORDER BY ".$this->sort_by;
 		echo $this->current_sql."<BR>";

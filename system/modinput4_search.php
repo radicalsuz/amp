@@ -36,11 +36,11 @@ if ( $sub ) {
 	//Search form has been submitted, assemble SQL query
 	
 	$usersearch->readSearch($udm); 		
-	$usersearch->setupSearch($dbcon);
+	#$usersearch->setupSearch($dbcon);
 	$usersearch->runSearch($dbcon);
 	
 	require_once( 'header.php' );
-	print "<script type=\"text/javascript\">\r\n 
+	/*print "<script type=\"text/javascript\">\r\n 
 	
 	function hideClass(theclass, objtype) {
 	if (objtype=='') {objtype='div';}
@@ -69,7 +69,7 @@ if ( $sub ) {
 		}
 	}
 	
-	</script>";
+	</script>";*/
 
 	$div_header_html="<div class=\"tabpage\" id=\"tabpage_%s\">";	
 		
