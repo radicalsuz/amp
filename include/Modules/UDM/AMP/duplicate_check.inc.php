@@ -11,7 +11,8 @@ function udm_amp_duplicate_check ( &$udm, $options = null ) {
 	}
 
 	$sql = "SELECT id FROM userdata WHERE " .
-		   " Email=" . $dbcon->qstr( $email );
+		   " Email=" . $dbcon->qstr( $email ) .
+                   " AND modin=" . $dbcon->qstr( $udm->instance );
 
 	$rs = $dbcon->CacheExecute( $sql );
 
