@@ -333,15 +333,16 @@ echo nav_mod_type(1);
 <?php
 echo nav_item($sys_nav['udm'][0]); # view
 echo nav_item($sys_nav['udm'][1]); # add
-echo nav_section('Form Data','UDMs',''); #  
+$udms_out = nav_udms(); 
+if ($udms_out) {
+	echo nav_section('Form Data','UDMs',''); #  
+} 
 echo nav_item($sys_nav['udm'][2]); # search
 ?>
 		])		
 	
 	addmenu(menu=["UDMs",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
-<?php
-echo nav_udms();
-?>
+<?php echo $udms_out ;?>
 		])
 
 	addmenu(menu=["rss",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
