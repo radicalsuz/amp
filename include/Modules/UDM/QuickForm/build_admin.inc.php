@@ -107,6 +107,7 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
     $fields =& $udm->fields;
     $fields['core_name']          = array( 'label' => 'Name',             'type' => 'text' );
     $fields['core_redirect']      = array( 'label' => 'Redirect URL',         'type' => 'text' );
+    $fields['core_publish']       = array( 'label' => 'Publish Data',         'type' => 'checkbox' );
     $fields['core_modidinput']    = array( 'label' => 'Module ID (Input)',    'type' => 'select', 'values' => $modules );
     $fields['core_modidresponse'] = array( 'label' => 'Module ID (Response)', 'type' => 'select', 'values' => $modules );
     $fields['core_sourceid']      = array( 'label' => 'Source',               'type' => 'select', 'values' => $sources );
@@ -123,7 +124,7 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
 
     $md =& $udm->_module_def;
 
-    $coreFields = array( 'redirect', 'modidinput', 'modidresponse', 'sourceid', 'enteredby', 'uselists', 'list1', 'list2', 'list3', 'list4', 'useemail', 'mailto', 'subject', 'field_order', 'name' );
+    $coreFields = array( 'redirect', 'publish', 'modidinput', 'modidresponse', 'sourceid', 'enteredby', 'uselists', 'list1', 'list2', 'list3', 'list4', 'useemail', 'mailto', 'subject', 'field_order', 'name' );
     foreach ( $coreFields as $cf ) {
         $md[ 'core_' . $cf ] = $md[ $cf ];
     }
