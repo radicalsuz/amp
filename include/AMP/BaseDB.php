@@ -89,7 +89,7 @@ if (file_exists_incpath( 'SiteConfig.inc.php' )) {
 }
 
 // Connect to the database.
-if (!defined( AMP_DB_TYPE ))
+if (!defined('AMP_DB_TYPE'))
     define('AMP_DB_TYPE', 'mysql');
 
 if (!is_dir($ADODB_CACHE_DIR) || !is_writable($ADODB_CACHE_DIR))

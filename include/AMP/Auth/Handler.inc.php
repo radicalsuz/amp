@@ -133,7 +133,7 @@ class AMP_Authentication_Handler {
         $cookie['permission'] = $cookie[2];
         $cookie['userid'] = $cookie[3];
 
-        if ($cookie['hash']=='logout' || $_REQUEST['logout']=='logout') {
+        if ($cookie['hash']=='logout' || (isset($_REQUEST['logout']) && $_REQUEST['logout']=='logout')) {
             $this->invalidate_cookie('Successfully logged out.', 'OK');
             $this->do_logout();
 
