@@ -15,18 +15,19 @@ function geo_getdata($address) {
 	$req->addHeader( "User-Agent", "RadicalDesigns/AMP" );
 	
 	if ( !PEAR::isError( $req->sendRequest() ) ) {
-		// failed
-        print "there was an error...";
 		$result = $req->getResponseBody();
 	} else {
-		$result = $req->getResponseBody();
+		// failed
+        print "there was an error...";
+		$result = $req->getResponseHeader();
 	}
 
     $xmlparse = new XML_Unserializer;
-    $xmlparse->unserialize( $result );
+    $parse_result = $xmlparse->unserialize( $result );
 
 print "<pre>";
 print_r( $result ) . "\n";
+print_r( $parse_result );
     print_r( $xmlparse->getUnserializedData() );
 print "</pre>";
 
