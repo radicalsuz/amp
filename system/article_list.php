@@ -1,7 +1,9 @@
 <?php
-   require("Connections/freedomrising.php");
-  include("Connections/menu.class.php");
-   $obj = new Menu;
+
+require("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+
+   $obj = new SysMenu;
    if ($userper[1] ) { } else { header ("Location: index.php"); }
    if ($userper[97]){if ($sectional_per[$_GET[type]] ) {} else { header ("Location: index.php"); }}
   

@@ -1,9 +1,10 @@
 <?php
-  require("Connections/freedomrising.php"); 
-   include("Connections/menu.class.php");
+
+require_once("Connections/freedomrising.php"); 
+require_once("Connections/sysmenu.class.php");
 
 // create Menu
-$obj = new Menu;
+$obj = new SysMenu;
 
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;

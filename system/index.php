@@ -1,12 +1,17 @@
 <?php
+
 $modid=38;
-require("Connections/freedomrising.php");
+require_once("Connections/freedomrising.php");
 
-if (!$MM_Message) {header ("Location: amp_alerts.php");}
+if (!$MM_Message && AMP_HOSTED) {
 
-else {
-$new=$dbcon->Execute("SELECT * from message where toid = $ID order by date desc") or DIE($dbcon->ErrorMsg());
-  ?>
+    header('Location: amp_alerts.php');
+
+} else {
+
+    $new=$dbcon->Execute("SELECT * from message where toid = $ID order by date desc")
+            or die("Couldn't find any messages: " . $dbcon->ErrorMsg());
+?>
   
 <?php  include ("header.php");?>
 <h2>Your Messages</h2>

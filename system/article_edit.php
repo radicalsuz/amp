@@ -1,10 +1,11 @@
 <?php
-require("Connections/freedomrising.php");
-include("Connections/menu.class.php");
-include("FCKeditor/fckeditor.php"); 
-include("../includes/versionfunctions.php");
+require_once("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+require_once("FCKeditor/fckeditor.php"); 
+require_once("../includes/versionfunctions.php");
+
 $buildform = new BuildForm;
-$obj = new Menu; 
+$obj = new SysMenu; 
   
   
 if ($userper[2] or  $userper[1] ) { } else { header ("Location: index.php"); }
@@ -117,7 +118,7 @@ $state__totalRows=$state->RecordCount();
 $modsel=$dbcon->Execute("SELECT a.link, a.title FROM articles a, articletype t where a.type = t.id and  t.type = 'Module Pages' ORDER BY a.title ASC") or DIE($dbcon->ErrorMsg());
 	
 
-?><?php include ("header.php"); ?>
+include ("header.php"); ?>
 
 <form ACTION="<?php echo $_SERVER['PHP_SELF'] ?>" METHOD="POST">
              
@@ -611,6 +612,11 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
      
 	 
 	  </form>
-<?php if ($_GET[id] or $_GET[vid]) { articleversionlist($id);}?>
 
-<?php include ("footer.php"); ?>
+<?php
+
+if ($_GET[id] or $_GET[vid]) { articleversionlist($id);}
+
+include ("footer.php");
+
+?>

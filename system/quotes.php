@@ -1,8 +1,10 @@
 <?php # quotes page
 $modid=41;
-  require("Connections/freedomrising.php");
-  include("Connections/menu.class.php");
-   $obj = new Menu; 
+
+require_once("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+
+$obj = new SysMenu; 
 
    ?>
  

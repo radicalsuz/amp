@@ -1,8 +1,11 @@
 <?php
+
 $modid=11;
-require("Connections/freedomrising.php");
-include("Connections/menu.class.php");
-$obj = new Menu;
+
+require_once("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+
+$obj = new SysMenu;
 
 ob_start();
 
@@ -122,8 +125,10 @@ $linktype__totalRows=$linktype->RecordCount();
           </tr>
         </table>
   </form>
-<?php include ("footer.php"); ?><?php
-  $called->Close();
-?><?php
-  $linktype->Close();
+<?php
+
+include ("footer.php");
+$called->Close();
+$linktype->Close();
+
 ?>

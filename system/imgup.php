@@ -1,7 +1,9 @@
-<?
-  require("Connections/freedomrising.php");
-    include("Connections/menu.class.php");
-  $obj = new Menu;
+<?php
+
+require_once("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+
+$obj = new SysMenu;
 
 
   // *** Edit Operations: declare Tables
@@ -14,12 +16,10 @@
   $MM_editQuery = "";
     ob_start();
   
-  ?>
-<?php
 $Recordset1__MMColParam = "900000000000";
 if (isset($HTTP_GET_VARS["id"]))
   {$Recordset1__MMColParam = $HTTP_GET_VARS["id"];}
-?><?php
+
    $Recordset1=$dbcon->Execute("SELECT * FROM gallery WHERE id = " . ($Recordset1__MMColParam) . " ") or DIE($dbcon->ErrorMsg());
    
    $Recordset1__totalRows=$Recordset1->RecordCount();
@@ -30,9 +30,9 @@ else {$typevar=1;}
    $timber2_numRows=0;
    $timber2__totalRows=$timber2->RecordCount();
     $getimgset=$dbcon->Execute("SELECT thumb, optw, optl FROM sysvar where id =1") or DIE($dbcon->ErrorMsg());
-?>
   
-  <?php include ("header.php");?>
+include ("header.php");?>
+
  <h2><?php echo helpme(""); ?>Image Upload</h2><?php
  
  ###########################################################################################
@@ -259,7 +259,7 @@ $lwidth=$getimgset->Fields("optl")  ;
       <hr class="script">
       <br>
 
-<?
+<?php
 
         if(isset($original))
          {
@@ -272,5 +272,6 @@ $lwidth=$getimgset->Fields("optl")  ;
         if(!isset($DEFAULTS))
                 echo "";
 
+include ("footer.php");
+
 ?>
-<?php include ("footer.php");?>

@@ -3,10 +3,10 @@ $modid = 27;
 $gxendorse = 0;
 $usefpcalendar =1; 
 $usestudent = 1;
-  require("Connections/freedomrising.php");
-    include("Connections/menu.class.php");
-?>
-<?php
+
+require_once("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
   if ($QUERY_STRING) {
@@ -16,7 +16,6 @@ $usestudent = 1;
   $MM_abortEdit = 0;
   $MM_editQuery = "";
  
-?><?php
 // *** Insert Record: set Variables
 
   if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or ((isset($MM_delete)) && (isset($MM_recordId))) ) {
@@ -245,7 +244,7 @@ if (isset($HTTP_GET_VARS["id"]))
             <td align="center"><div align="left">
                 <select name="section">
                   <OPTION VALUE="<?php
-				  $obj = new Menu; 
+				  $obj = new SysMenu; 
 				   if  ($_GET[id]) {$typelab=$dbcon->Execute("SELECT id, type FROM articletype where id = ".$calendaritems->Fields("section")."") or DIE($dbcon->ErrorMsg());
 				   echo  $typelab->Fields("id")?>" SELECTED><?php echo  $typelab->Fields("type")?></option>
                   <?php  }

@@ -1,8 +1,11 @@
 <?php
 $modid=19;
-  require("Connections/freedomrising.php");
-    include("Connections/menu.class.php");
-  $obj = new Menu; 
+
+require_once("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+
+$obj = new SysMenu; 
+
 $formtitle = "HotWord";
 $named = "hotwords";
 $tablein = "hotwords";
@@ -16,8 +19,6 @@ $filename = "hotwords.php";
   $MM_abortEdit = 0;
   $MM_editQuery = "";
   ob_start();
-?>
-<?php
 
  if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or ((isset($MM_delete)) && (isset($MM_recordId))) )  {
  
@@ -36,15 +37,13 @@ $filename = "hotwords.php";
 $Recordset2__MMColParam = "900000";
 if (isset($HTTP_GET_VARS["id"]))
   {$Recordset2__MMColParam = $HTTP_GET_VARS["id"];}
-?>
-<?php
    $all=$dbcon->Execute("SELECT *  FROM $tablein order by word") or DIE($dbcon->ErrorMsg());
 
 
    $called=$dbcon->Execute("SELECT * FROM $tablein WHERE id = " . ($Recordset2__MMColParam) . "") or DIE($dbcon->ErrorMsg());
-?>
-<?php $MM_paramName = ""; ?>
-<?php
+
+$MM_paramName = "";
+
 // *** Go To Record and Move To Record: create strings for maintaining URL and Form parameters
 
 // create the list of parameters which should not be maintained
@@ -84,10 +83,9 @@ if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
 if (isset($id)) {$typevar=$all->Fields("section");}
 else {$typevar=1;}
    $typelab=$dbcon->Execute("SELECT id, type FROM articletype where id = ".$typevar."") or DIE($dbcon->ErrorMsg());
-?>
 
+include ("header.php");?>
 
-<?php include ("header.php");?>
       <h2><?php if (empty($HTTP_GET_VARS["id"])== TRUE) { echo "Add";} else {echo "Edit";} ?> <?php echo $formtitle ;?></h2>
 <form name="form1" method="POST" action="<?php echo $MM_editAction?>" >
         <table width="90%" border="0" align="center">
@@ -150,4 +148,7 @@ else {$typevar=1;}
   
 
 <?php
-  include ("footer.php") ;?>
+
+include("footer.php");
+
+?>
