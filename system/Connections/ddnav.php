@@ -356,8 +356,8 @@ echo nav_item($sys_nav[45][3]); # RSS Aggragator
 	addmenu(menu=["Docs",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
 <?php
 echo nav_item($sys_nav['content'][5]); # View Documents
-echo nav_item($sys_nav['content'][8]); # Upload Documents
-echo nav_item($sys_nav['content'][7]); # View Images
+echo nav_item($sys_nav['content'][7]); # Upload Documents
+echo nav_item($sys_nav['content'][6]); # View Images
 echo nav_item($sys_nav['content'][8]); # Upload Images
 ?>
 		])
