@@ -56,6 +56,7 @@ function udm_amp_save ( &$udm, $options = null ) {
         $sql .= ")";
 
     }
+    print $sql;
 
     $rs = $dbcon->Execute( $sql ) or
         die( "There was an error completing the request: " . $dbcon->ErrorMsg() );
