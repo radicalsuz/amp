@@ -51,8 +51,8 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     $form->addElement( 'hidden', 'modin', 'Module Instance' );
     $consts['modin'] = $udm->instance;
 
-print_r( $udm );
     if ( $udm->authorized ) {
+        print "I'm here!!!!! Why won't tis work???";
         $form->addElement( 'hidden', 'uid', 'User ID' );
         $form->addElement( 'hidden', 'otp', 'Passphrase' );
         $consts['uid'] = $udm->uid;
