@@ -33,8 +33,13 @@ $serializer->setOption( "rootName", "users" );
 
 $result = $serializer->serialize( $subdata );
 
+print "<pre>";
+print_r( $subdata );
+
 if ( $result === true ) {
-    echo $serializer->getSerializedData();
+    echo htmlentities( $serializer->getSerializedData() );
 }
+
+print "</pre>";
 
 ?>
