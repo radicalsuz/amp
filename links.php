@@ -18,10 +18,10 @@ if ($_GET["name"]) {
 }
 
 if ($_GET[linktype] ) {
-	$sql = "SELECT l. * , t.name FROM links l, linksreltype r, linktype t WHERE l.id = r.linkid AND l.linktype = t.id AND r.typeid =$_GET[linktype] order by t.name asc, l.linkname asc";
+	$sql = "SELECT l. * , t.name FROM links l, linksreltype r, linktype t WHERE l.id = r.linkid AND l.linktype = t.id AND r.typeid =$_GET[linktype] AND l.publish = '1' order by t.name asc, l.linkname asc";
 	}
 	else  { 
-	$sql = "SELECT l. * , t.name FROM links l, linktype t WHERE  l.linktype = t.id  order by t.name asc, l.linkname asc";
+	$sql = "SELECT l. * , t.name FROM links l, linktype t WHERE  l.linktype = t.id  AND l.publish = '1' AND t.publish = '1' order by t.name asc, l.linkname asc";
 }
 
 $links=$dbcon->CacheExecute($sql) or DIE($dbcon->ErrorMsg());
