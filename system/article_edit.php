@@ -183,7 +183,7 @@ document.getElementById('advanced').style.display = 'none';
 	<br><ul id="topnav">
 	<li class="tab1"><a href="#" id="a0" onclick="change('main');" >Main Content</a></li>
 	<li class="tab2"><a href="#" id="a1" onclick="change('picture');" >Images and Documents</a></li>
-	<li class="tab3"><a href="#" id="a2" onclick="change('advanced');" >Advanaced Options </a></li>
+	<li class="tab3"><a href="#" id="a2" onclick="change('advanced');" >Advanced Options </a></li>
 </ul>
 		 
 		  <div id="main" class="main" >
