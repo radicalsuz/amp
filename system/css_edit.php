@@ -1,6 +1,10 @@
 <?php
+
 $modid = "31";
-  require("Connections/freedomrising.php");
+  require_once("Connections/freedomrising.php");
+
+
+
 
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
@@ -9,27 +13,26 @@ $modid = "31";
   }
   $MM_editQuery = "";
   
-if (!$filename) {
-	$filename = $base_path_amp."custom/styles.css";}
-else {
-	if (strpos($filename, $base_path_amp)===FALSE){
-		$filename = $base_path_amp.$filename;
+	if (!$_REQUEST['filename']) {
+		$filename = "styles.css";
+	} else {
+		$filename=basename($_REQUEST['filename']);			
 	}
-}
   
-   if ( $_POST[cssedit] )  {
+   if ( $_POST['cssedit'] )  {
    
-   $fp = fopen($filename , "w+"); 
-$test = fwrite($fp,"$_POST[cssedit]"); 
-fclose ($fp); 
-   
+   		$fp = fopen(AMP_LOCAL_PATH.'/custom/'.$filename , "w+"); 
+		$test = fwrite($fp,$_REQUEST['cssedit']); 
+		fclose ($fp); 		
     }
 	
-if (file_exists($filename)) {
-	$handle = fopen($filename, "r");
-	$contents = fread($handle, filesize($filename));
-	fclose($handle);
-	$msg_action = " : ".basename($filename);
+if (file_exists_incpath($filename)) {
+	if($contents=file_get_contents($filename,true) ){
+		$msg_action = " : ".basename($filename);
+	} else {
+		$msg_action = " : couldn't open ".basename($filename);
+	}
+	
 } else {
 	$msg_action = " : New File : ".basename($filename);
 }
@@ -52,6 +55,7 @@ if (file_exists($filename)) {
             <td class="name"> <textarea name="cssedit" cols="65" rows="40" wrap="VIRTUAL" id="cssedit"><?php echo $contents; ?></textarea>
               <br>
               <br>
+				<input type="hidden" name="filename" value="<?php echo $filename; ?>">
               <a href="javascript:TCP.popup(document.forms['form'].elements['pick'])"><img width="15" height="13" border="0" alt="Click Here to Pick up the color" src="images/sel.gif"></a>Color 
               Picker<br>
               <input name="pick" type="text" id="pick">

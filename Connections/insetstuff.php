@@ -4,11 +4,11 @@
     
     // set the form values
   for ($i=0; $i+1 < sizeof($MM_fields); ($i=$i+2)) {
-  //  if  (isset($$MM_fields[$i])){
-    $MM_fields[$i+1] = $$MM_fields[$i];
-	//}
-//	else {
-	// $MM_fields[$i+1] = $HTTP_POST_VARS[$$MM_fields[$i]]; }
+  	if  (isset($$MM_fields[$i])){
+  	  	$MM_fields[$i+1] = $$MM_fields[$i];
+	} else {
+		$MM_fields[$i+1] = $_POST[$MM_fields[$i]]; 
+	}
 	
     }
   

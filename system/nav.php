@@ -10,10 +10,10 @@ if (isset($_GET['nons'])){
 	$where_con = "  and nosql=1 "; 
 }
 $table = "navtbl";
-$listtitle ="Navagation Files";
-$listsql ="SELECT m.name as mod, n.name, n.id FROM navtbl n left join  modules m on  n.modid = m.id  $where_con ";
+$listtitle ="Navigation Files";
+$listsql ="SELECT m.name as modname, n.name, n.id FROM navtbl n left join  modules m on  n.modid = m.id  $where_con ";
 $orderby =" order by  m.name, n.name asc";
-$fieldsarray=array( 'Module'=>'mod','Navigation File'=>'name');
+$fieldsarray=array( 'Module'=>'modname','Navigation File'=>'name');
 $filename="nav.php";
 
 ob_start();
@@ -74,10 +74,10 @@ $html .= addfield('titletext','Navigation Title','text',$R->Fields("titletext"))
 $html .= addfield('titleimg','Title Image','text',$R->Fields("titleimg"));
 $html .= addfield('nosqlcode','Navigation HTML','textarea',$R->Fields("nosqlcode"));
 
-$html .= $buildform->add_header('Navigtation Template', 'intitle');
+$html .= $buildform->add_header('Navigation Template', 'intitle');
 $template_options = makelistarray($T,'id','name','Select Template');
 $Tempalte = & new Select('tempateid',$template_options,$R->Fields("tempateid"));
-$html .=  $buildform->add_row('Tempalte Override', $Tempalte);
+$html .=  $buildform->add_row('Template Override', $Tempalte);
 $html .= addfield('linkextra','Link CSS Override','text',$R->Fields("linkextra"));
 
 $html .= $buildform->end_table();

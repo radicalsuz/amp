@@ -17,7 +17,7 @@ $filename="template.php";
 ob_start();
 // insert, update, delete
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
-
+	
     $MM_editTable  = $table;
     $MM_recordId = $_POST['MM_recordId'];
     $MM_editRedirectUrl = $filename."?action=list";

@@ -1,7 +1,20 @@
  <?php // *** Update Record: construct a sql update statement and execute it
   set_time_limit(0); 
+//check action globals
+if (!isset($MM_update)&&isset($_POST['MM_update'])&&$_POST['MM_update']){
+$MM_update=$_POST['MM_update'];
+print 'mm_update set to post';
+} else {
+print 'mm_update set or post not set';
+
+}
+
+ if (!isset($MM_insert)&&isset($_POST['MM_insert'])&&$_POST['MM_insert']) $MM_insert=$_POST['MM_insert'];
+if (!isset($MM_delete)&&isset($_POST['MM_delete'])&&$_POST['MM_delete']) $MM_delete=$_POST['MM_delete'];
+if (!isset($MM_recordId)&&isset($_POST['MM_recordId'])&&$_POST['MM_recordId']) $MM_recordId=$_POST['MM_recordId'];
+
+
  if (isset($MM_update) && (isset($MM_recordId))) {
-  
 	// create the sql update statement
 	$MM_editQuery = "update " . $MM_editTable . " set ";
 	for ( $i=0; $i+1 < sizeof($MM_fields); ($i=$i+2)) 
