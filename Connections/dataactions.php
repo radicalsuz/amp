@@ -54,7 +54,7 @@
 	if ($MM_abortEdit != 1)
 	{
 		// execute the insert
-		$queryrs = $dbcon->Execute($MM_editQuery) or DIE($dbcon->ErrorMsg());
+		$queryrs = $dbcon->Execute($MM_editQuery) or DIE( "Couldn't execute $MM_editQuery: " . $dbcon->ErrorMsg());
 		if ($MM_editRedirectUrl) 
 		{
 			header ("Location: $MM_editRedirectUrl");
