@@ -23,8 +23,7 @@ if ($_GET["name"]) {
   	header ("Location: links.php#$name_link");  
   	
 }
-include("sysfiles.php");
-include("header.php"); ?>
+
 
 if ($_GET["linktype"] ) {
 	$sql = "SELECT l. * , t.name FROM links l, linksreltype r, linktype t WHERE l.id = r.linkid AND l.linktype = t.id AND r.typeid =$_GET[linktype] AND l.publish = '1' order by t.name asc, l.linkname asc";
