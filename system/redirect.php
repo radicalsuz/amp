@@ -54,7 +54,7 @@ $form->set_contents($html);
 
 include ("header.php");
 
-if ($_GET[action] == "list") {
+if ($_GET['action'] == "list") {
 	listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby,$sort);
 	
 }

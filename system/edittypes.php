@@ -72,44 +72,7 @@ switch($_POST['act']) {
    $Repeat4__index= 0;
    $Recordset3_numRows = $Recordset3_numRows + $Repeat4__numRows;
 ?>
-<?php $MM_paramName = ""; ?>
-<?php
-// *** Go To Record and Move To Record: create strings for maintaining URL and Form parameters
 
-// create the list of parameters which should not be maintained
-$MM_removeList = "&index=";
-if ($MM_paramName != "") $MM_removeList .= "&".strtolower($MM_paramName)."=";
-$MM_keepURL="";
-$MM_keepForm="";
-$MM_keepBoth="";
-$MM_keepNone="";
-
-// add the URL parameters to the MM_keepURL string
-reset ($HTTP_GET_VARS);
-while (list ($key, $val) = each ($HTTP_GET_VARS)) {
-	$nextItem = "&".strtolower($key)."=";
-	if (!stristr($MM_removeList, $nextItem)) {
-		$MM_keepURL .= "&".$key."=".urlencode($val);
-	}
-}
-
-// add the URL parameters to the MM_keepURL string
-if(isset($HTTP_POST_VARS)){
-	reset ($HTTP_POST_VARS);
-	while (list ($key, $val) = each ($HTTP_POST_VARS)) {
-		$nextItem = "&".strtolower($key)."=";
-		if (!stristr($MM_removeList, $nextItem)) {
-			$MM_keepForm .= "&".$key."=".urlencode($val);
-		}
-	}
-}
-
-// create the Form + URL string and remove the intial '&' from each of the strings
-$MM_keepBoth = $MM_keepURL."&".$MM_keepForm;
-if (strlen($MM_keepBoth) > 0) $MM_keepBoth = substr($MM_keepBoth, 1);
-if (strlen($MM_keepURL) > 0)  $MM_keepURL = substr($MM_keepURL, 1);
-if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
-?>
 <?php include ("header.php");?>
 
 

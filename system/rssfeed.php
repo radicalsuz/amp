@@ -2,7 +2,9 @@
 #generic update page
 $modid = "";
 
-require("Connections/freedomrising.php");
+require_once("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+$obj = new SysMenu; 
 $buildform = new BuildForm;
 
 
@@ -20,6 +22,7 @@ ob_start();
 if ((($_POST[MM_update]) && ($_POST[MM_recordId])) or ($_POST[MM_insert]) or (($_POST[MM_delete]) && ($_POST[MM_recordId]))) {
     $MM_editTable  = $table;
     $MM_recordId = $_POST[MM_recordId];
+	$MM_editColumn = "id";  
     $MM_editRedirectUrl = $filename."?action=list";
 	if ($_POST["class"]) {$sqlwhere = " class = ".$_POST["class"]." ";}
 	if ($_POST["type"]) {$sqlwhere = " type = ".$_POST["type"]." ";}
@@ -40,7 +43,7 @@ $classsql=$dbcon->Execute("SELECT id, class FROM class order by class asc") or D
 $section=$dbcon->Execute("SELECT id, type FROM articletype order by type asc") or DIE($dbcon->ErrorMsg());
 
 //declare form objects
-$rec_id = & new Input('hidden', 'MM_recordId', $_GET[id]);
+$rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 
 //build form
 $html  = $buildform->start_table('name');
@@ -54,9 +57,9 @@ $c_options = makelistarray($classsql,'id','class','Select Class');
 $csel = & new Select('class',$c_options);
 $html .=  $buildform->add_row('Feed from content in this class', $csel);
 
-$type_options = makelistarray($section,'id','type','Select Section');
-$typesel = & new Select('type',$type_options);
-$html .=  $buildform->add_row('Feed from content in this section', $typesel);
+
+$Type = & new Select('type', $obj->select_type_tree2(0));
+$html .=  $buildform->add_row('Feed from content in this section', $Type);
 
 $html .= addfield('sqlwhere','Where Statement','textarea',$R->Fields("sqlwhere"));
 
