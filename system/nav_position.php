@@ -205,7 +205,7 @@ while (!$R->EOF) {
 		<td>
 			<img src="images/hand.gif" align="left"><select name ='navid[<?php echo $x ;?>]'>
 				<?php while (!$N->EOF) { ?>
-				<option value="<?php echo $N->Fields("id"); ?>" <?php if ($N->Fields("id")==$R->Fields("navid")) echo "SELECTED";?>><?php echo $N->Fields("name"); ?></option>
+				<option value="<?php echo $N->Fields("id"); ?>" <?php if ($N->Fields("id")==$R->Fields("navid")) echo "SELECTED";?>><?php echo $N->Fields("mod").": ".$N->Fields("name"); ?></option>
 				<?php
 	$N->MoveNext();
 }

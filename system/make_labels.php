@@ -2,7 +2,7 @@
 
 #make_labels.php
 #makes labels from a search
-require_once("../adodb/adodb.inc.php");
+require_once("adodb/adodb.inc.php");
 require_once ($base_path.'Connections/freedomrising.php');
 #require_once('AMP/UserData/Input.inc.php');
 require_once('AMP/UserData/Search.inc.php');

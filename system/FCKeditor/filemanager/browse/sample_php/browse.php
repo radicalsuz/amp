@@ -16,28 +16,8 @@
  */
 
 // Init var :
-$ampasp =1;
-if ($ampasp == 1) {
-require("../../../../../adodb/adodb.inc.php");
-  ADOLoadCode("mysql");
-   $ampdbcon=&ADONewConnection("mysql");
-   $ampdbcon->Connect("localhost","david","havlan","amp");
-   $AMPsql = "SELECT * FROM system where server = '".$HTTP_SERVER_VARS['SERVER_NAME']."'";
-  $ampversion=$ampdbcon->Execute($AMPsql)or DIE($ampdbcon->ErrorMsg()); 
-$AmpPath = $ampversion->Fields("amppath");
-$ConfigPath = $AmpPath."custom/config.php";
-require ($ConfigPath);
 $IMAGES_BASE_URL = '/'.$subdir_path.'img/pic/';
-$IMAGES_BASE_DIR = $AmpPath.'img/pic/';
-}
-else {
-require("../../../../../custom/config.php");
-$IMAGES_BASE_URL = '/'.$subdir_path.'img/pic/';
-	$IMAGES_BASE_DIR = getenv("DOCUMENT_ROOT").$IMAGES_BASE_URL;
-}
-	
-	
-
+$IMAGES_BASE_DIR = getenv("DOCUMENT_ROOT").$IMAGES_BASE_URL;
 
 // End int var
 

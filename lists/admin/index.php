@@ -1,8 +1,8 @@
 <?php
  error_reporting(E_ALL & ~E_NOTICE);
 $subdir2 =1;
-require("../../adodb/adodb.inc.php");
-require("../../Connections/freedomrising.php");
+require("adodb/adodb.inc.php");
+require("AMP/BaseDB.php");
 //chdir('/amp/password');
 //require("secure.php");
 //chdir('/amp/lists/admin/');

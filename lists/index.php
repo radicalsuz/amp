@@ -1,8 +1,8 @@
 <?
 ###### HACK FOR AMP ############################################
 $subdir =1;
-require_once("../adodb/adodb.inc.php");
-require_once("../Connections/freedomrising.php");
+require_once("adodb/adodb.inc.php");
+require_once("AMP/BaseDB.php");
 ###### END HACK FOR AMP ##########################################
 
 ob_start();
