@@ -658,7 +658,9 @@ class UserData {
         $lists = array_filter( array_keys( $md ), array( &$this, "_register_lists_filter" ) );
 
         foreach ( $lists as $list ) {
-            $list_id[] = $md[ $list ];
+	    if ( $md[ $list ] ) {
+	        $list_id[] = $md[ $list ];
+	    }
         }
 
         if (!isset( $list_id)) return false;
