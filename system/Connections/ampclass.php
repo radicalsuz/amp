@@ -1,5 +1,17 @@
 <?php
-function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort=null,$extra=null) {
+
+if ( !function_exists( 'DateOut' ) ) {
+
+    function DateOut($date) {
+        if (ereg ("([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs)) {
+            $date = "$regs[2]-$regs[3]-$regs[1]";
+        }
+		return $date;
+    }
+}
+
+
+function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort=null,$extra=null,$extramap=NULL) {
 	global $dbcon;
 	if ($sort) { $orderby =" order by $sort asc ";}
 	$query=$dbcon->Execute($listsql.$orderby) or DIE($dbcon->ErrorMsg());
@@ -33,8 +45,15 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 		
 		if ($extra) {
 			echo "<td> <div align='right'>";
+			
 			foreach ($extra as $k=>$v) {
-				echo "<A HREF='".$v.$query->Fields("id")."'>$k</A>&nbsp;&nbsp;";
+				$id=NULL;
+				if ($extramap[$k] != NULL) {
+					$id= $extramap[$k];
+				}else {
+					$id= "id";
+				}
+				echo "<A HREF='".$v.$query->Fields($id)."'>$k</A>&nbsp;&nbsp;";
 			}
 			echo "</div></td>";
 		}
@@ -245,14 +264,20 @@ class BuildForm {
 		return $html;
 	}
 	
-	function add_colspan($label = null, $object = null, $req = null) {
+	function add_colspan_obj($label = null, $object = null, $req = null) {
 		$html = '
 		<tr valign="top"><td class="form" colspan="2">';
 		$html .= ($label != null) ? $label .'<br clear="all" />': '';
-		$html .= $object->fetch() .'<br clear="all" />'. $right_text .'</td></tr>';
+		$html .=  $object->fetch() .'<br clear="all" />'. $right_text .'</td></tr>';
 		return $html;
 	}
 	
+	function add_colspan($label = null, $object = null, $req = null) {
+		$html = '
+		<tr valign="top"><td class="form" colspan="2">'.$label.'</td></tr>';
+		return $html;
+	}
+
 	function add_header($header, $class='intitle') {
 		if ($class) {
 			$html .= '
@@ -276,7 +301,7 @@ class Input {
 	               $label=null, $check=null, $size=null, $maxlength=null) {
 		$this->type  = $type;
 		$this->name  = $name;
-		$this->value = $value;
+		$this->value = htmlentities($value);
 		$this->class = $class;
 		$this->label = $label;
 		$this->check = $check;
@@ -632,9 +657,9 @@ class Time {
 } 
 
 
-function addfield($name,$label,$fieldtype='text',$value=NULL,$defualt=NULL,$size=45) {
+function addfield($name,$label,$fieldtype='text',$value=NULL,$defualt=NULL,$size=45,$height=4) {
 	global $buildform;
-	if ((!$_GET[id]) && (!$value)) {$value = $defualt;}
+	if ((!$_GET['id']) && (!$value)) {$value = $defualt;}
 	if ($fieldtype == 'text') {
 		$field = & new Text($name, $value, $size);
 	}
@@ -643,7 +668,7 @@ function addfield($name,$label,$fieldtype='text',$value=NULL,$defualt=NULL,$size
 		$field = & new Input('checkbox', $name, '1', null, null, $value); 
 	}
 	if ($fieldtype == 'textarea') {
-		$field = & new Textarea($name, $value, 4, $size);
+		$field = & new Textarea($name, $value, $height , $size);
 	}
 	$output = $buildform->add_row($label, $field);
 	

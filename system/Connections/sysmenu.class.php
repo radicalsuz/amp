@@ -18,6 +18,7 @@ class SysMenu {
 var $hostname;
 var $user;
 var $pass;
+var $list;
 // database and table containing menu data
 var $db;
 var $table;
@@ -130,11 +131,12 @@ var $table;
 		return $row[0];
 	}
 
-function depth($depth) {
-    for ($i=2; $i<= $depth; ++$i) {
-        print "&nbsp;&nbsp;&nbsp;&nbsp;";
-    }
-}
+	function depth($depth) {
+		for ($i=2; $i<= $depth; ++$i) {
+			print "&nbsp;&nbsp;&nbsp;&nbsp;";
+		}
+	}
+	
 
 	// function: display complete menu tree (useful when debugging)
 	// returns: HTML list
@@ -233,6 +235,42 @@ function select_type_tree($id = 0,$y=0,$selcode)
 		echo "</option>";
 	}
 
+	function depth2($depth) {
+		for ($i=2; $i<= $depth; ++$i) {
+			$d .= "&nbsp;&nbsp;&nbsp;&nbsp;";
+		}
+		return $d;
+	}
+
+	function select_type_treedo($id = 0,$y=0,$list) {
+		$result = $this->get_children($id);	
+		for ($x=0; $x<sizeof($result); $x++) {
+			$y++;
+			$typeid = $result[$x]["id"];
+			$list[$typeid] = $this->depth2($y).$result[$x]["type"];
+			$list= $this->select_type_treedo($typeid,$y,$list);
+			$y--;	
+			
+			}
+		return $list;
+	}
+
+
+
+
+	function select_type_tree2($id = 0,$y=0) {	
+		$list = array(''=>'Select Section');
+		$result = $this->get_children($id);	
+		
+		for ($x=0; $x<sizeof($result); $x++) {
+			//$y++;
+			$typeid = $result[$x]["id"];
+			$list[$typeid] = $result[$x]["type"];
+			$list =$this->select_type_treedo($typeid,$y,$list);
+			//$y--;
+			}
+		return $list;
+	}
 
 
 	
