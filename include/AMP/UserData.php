@@ -32,6 +32,7 @@ class UserData {
     // Store raw (database-backed) module definition.
     var $_module_def;
     var $instance;
+    var $submitted = true;
 
     // Templating information for AMP
     var $modTemplateID;
