@@ -35,7 +35,7 @@ $serializer->setOption( "mode", "simplexml" );
 
 $result = $serializer->serialize( $subdata );
 
-header( 'Content-Type: application/xml' );
+header( 'Content-Type: text/xml' );
 
 if ( $result === true ) {
     $xmlout = $serializer->getSerializedData();
