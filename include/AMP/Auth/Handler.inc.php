@@ -39,7 +39,7 @@ class AMP_Authentication_Handler {
     function check_authen_credentials() {
 
         // First check for an existing authentication token.
-        if (isset( $_COOKIE['AMPLoginCredentials'] ))
+        if (isset($_COOKIE['AMPLoginCredentials']))
             return $this->check_cookie($_COOKIE['AMPLoginCredentials']);
 
         if (isset($_REQUEST['username']) || isset($_SERVER['PHP_AUTH_USER']))
@@ -73,13 +73,18 @@ class AMP_Authentication_Handler {
         $c_user   = $this->user;
         $c_userid = $this->userid;
         $c_perm   = $this->permission;
-        $c_time   = $now + $this->timeout;
         $c_domain = preg_replace( "/([^\.]*)\.([^\.]*)$/", "/.\$1.\$2/", $_SERVER['SERVER_NAME'] );
+
+        // Instead of letting the browser control cookie expiry, we'll control
+        // it from the database.
+        //
+        //        $c_time   = $now + $this->timeout;
+        $c_time   = null;
 
         $hash = $this->make_secure_cookie( $c_user, $c_perm, $secret );
         $old_hash = $this->has_cookie;
 
-        if (setcookie( 'AMPLoginCredentials', "$hash:$c_user:$c_perm:$c_userid", $now + $this->timeout )) {
+        if (setcookie( 'AMPLoginCredentials', "$hash:$c_user:$c_perm:$c_userid", $c_time )) {
 
             // Quick Hack, to be replaced by a more robust databas versioning
             // system.
