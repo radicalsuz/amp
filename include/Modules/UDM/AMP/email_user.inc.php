@@ -12,7 +12,7 @@
 function udm_AMP_email_user ( &$udm, $options = null ) {
 
     $message  = "Please go to " . $GLOBALS['Web_url'];
-    $message .= "modinput2.php?modin=" . $udm->instance;
+    $message .= "modinput4.php?modin=" . $udm->instance;
     $message .= "&uid=" . $udm->uid;
     $message .= " to update your profile.\n\n";
     $message .= $udm->output( 'text' );
