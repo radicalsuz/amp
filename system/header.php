@@ -1,31 +1,30 @@
 <?php 
 $cookiename = "AMPheader";
-if ($_COOKIE[$cookiename]) {$cookvalue = $_COOKIE[$cookiename]; 
+if ($_COOKIE[$cookiename]) {
+	$cookvalue = $_COOKIE[$cookiename]; 
 }
-else { $cookvalue = "standard";}
+else { 
+	$cookvalue = "standard";
+}
 if  ($cookvalue == "standard") {
 	$hd_standard = "block";
 	$hd_basic = "none";
-	}
+}
 else {
 	$hd_standard = "none";
 	$hd_basic = "block";
-	}
-
+}
 
 //ENSURE THAT THE current user is allowed to see this page
-
 $MM_current_page =basename($_SERVER['PHP_SELF']);
 if (isset($_SERVER['QUERY_STRING'])) {
-	
 	parse_str($_SERVER['QUERY_STRING'], $MM_active_vars);
-	
 	foreach ($MM_active_vars as $v_key=>$v_value) {
 		$MM_query_string.=$v_key."=".$v_value."&";
 	}
 	$MM_current_page.="?".$MM_query_string;
-
 }
+
 $allowed_pages=$dbcon->GetAssoc("Select id, system_allow_only from users where id=$ID");
 if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted to certain pages
 	$permit_access=FALSE;
@@ -45,16 +44,46 @@ if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted 
 }
 
 
-   $headernav=$dbcon->Execute("SELECT name, id, file, perid  FROM modules where publish=1 order by name asc") or DIE($dbcon->ErrorMsg());
- if ($modid ==NULL) {$modid =19;}
- $headerinst=$dbcon->Execute("SELECT *  FROM modules where id = $modid") or DIE($dbcon->ErrorMsg());
-   $headernav_numRows=0;
-    $headernav_numRows3=0;
-   $headernav__totalRows=$headernav->RecordCount();
-    $headernav__totalRows3=$headernav->RecordCount();
+$headernav=$dbcon->Execute("SELECT name, id, file, perid  FROM modules where publish=1 order by name asc") or DIE($dbcon->ErrorMsg());
+if ($modid ==NULL) {
+	$modid =19;
+}
+$headerinst=$dbcon->Execute("SELECT *  FROM modules where id = $modid") or DIE("could not load module information in header".$dbcon->ErrorMsg());
+ $mod_navs=$dbcon->Execute("SELECT *  FROM module_navs where module_id = $modid") or DIE("could not load module navigation information in header".$dbcon->ErrorMsg());
+
+$nav_link .= '<br><div><fieldset style="  border: 1px solid black;"><legend>';
+//$nav_link .= 'test';
+//$nav_link .= '<ul id="topnav">';
+while (!$mod_navs->EOF) {
+	$nav_link .= '<span class="option"><a href="'.$mod_navs->Fields("url").'">'.$mod_navs->Fields("name").'</a></span>';
+	$mod_navs->MoveNext();
+}
+if ($headerinst->Fields("userdatamod") == 1) {
+	$nav_link .= '<span class="option"><a href="modinput4_data.php?modin='.$headerinst->Fields("userdatamodid").'">View/Edit</a></span>';
+	$nav_link .= '<span class="option"><a href="modinput4_view.php?modin='.$headerinst->Fields("userdatamodid").'">Add</a></span>';
+	$nav_link .= '<span class="option"><a href="modinput4_edit.php?modin='.$headerinst->Fields("userdatamodid").'">Data Settings</a></span>';
+}
+if ($modid != 19) {
+
+	$nav_link .= '<span class="option"><a href="module_control_list.php?modid='.$modid.'">Settings</a></span>';
+}
+//$nav_link .= '</ul>';
+$nav_link .= '<br clear="all" /></legend>'; 
+
+
+$headernav_numRows=0;
+$headernav_numRows3=0;
+$headernav__totalRows=$headernav->RecordCount();
+$headernav__totalRows3=$headernav->RecordCount();
 $browser_ie =  strstr(getenv('HTTP_USER_AGENT'), 'MSIE') ;
 $browser_win =  strstr(getenv('HTTP_USER_AGENT'), 'Win') ;
-$browser_mo =  strstr(getenv('HTTP_USER_AGENT'), 'Mozilla/5') ;
+if (!strstr(getenv('HTTP_USER_AGENT'), 'Safari')){
+	$browser_mo =  strstr(getenv('HTTP_USER_AGENT'), 'Mozilla/5') ;
+}
+if (strstr(getenv('HTTP_USER_AGENT'), '2002')){
+        $browser_mo =  NULL ;
+}
+
 if (!$_GET[noHeader]) {
  ?>
 <html>
@@ -277,24 +306,63 @@ function confirmSubmit(text) {
 
 </script>  
 // --> 
+<style>
+	.top {align:right; font-size:10px; }
+	.subfield {background-color: #FFFFFF;}
+legend {border: 1px solid black;  border-top: none; background-color: #eee; padding: 0 1ex; }
+
+    .option  {
+      float:left;
+      background:url("images/norm_left.gif") no-repeat left top;
+      margin:0;
+      padding:0 0 0 9px;
+      }
+    .option a {
+      float:left;
+      display:block;
+      background:url("images/norm_right.gif") no-repeat right top;
+      padding:5px 15px 4px 6px;
+      text-decoration:none;
+      font-weight:bold;
+            font-size: 80%;
+      color:#765;
+      }
+    /* Commented Backslash Hack
+       hides rule from IE5-Mac \*/
+    .option a {float:none;}
+    /* End IE5-Mac hack */
+    .option a:hover {
+      color:#333;
+      }
+
+    .option.current {
+      background-image:url("images/norm_left_on.gif");
+      border-width:0;
+      }
+
+    .option.current a {
+      background-image:url("images/norm_right_on.gif");
+      color:#333;
+      }
 
 
+</style>
+<?php include("Connections/ddnav.php")?>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" <?php  if ($browser_mo) { echo "onload=\"initEditor()\" " ;} ?>>
-<br><table border="0" cellpadding="0" cellspacing="0" width="720" align="center"> 
+<table border="0" cellpadding="15" cellspacing="0" width="100%" align="center"> 
+<tr><td>
+<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center"> 
 <tr bordercolor="#FFFFFF" bgcolor="#006699" valign="top">
      <td colspan="4" class="pagetitle">
  
-       <table width="720" border="0">
+       <table width="100%" border="0">
       <tr> 
-        <td rowspan="2" bgcolor="#006699"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> 
-          <br>
-          Administration</span> </td>
+        <td rowspan="2" bgcolor="#006699"><img src="http://radicaldesigns.org/img/amp.jpg" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> 
+          </span> </td>
         <td align="right" valign="bottom" bgcolor="#006699" class="toplinks"><b class="toplinks"> 
-          <a href="index.php" class="toplinks" >ADMIN HOME</a> : <a href="http://www.radicaldesigns.org/manual.pdf" target="_blank" class="toplinks">HELP 
-          : </a> <a href="html.html" target="_blank" class="toplinks">HTML TIPS</a> 
-          : <a href="logout.php" class="toplinks">LOGOUT</a></b></font><br>
+          </b><br>
 Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'standard');" class="toplinks">Advanced</a></td>
       </tr>
       <tr>
@@ -320,6 +388,8 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
   }
 ?>
               </select></td>
+      </tr><tr><td><img src="../img/spacer.gif" height=20>
+</td>
       </tr>
     </table>
       </td>
@@ -334,7 +404,7 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
                     <p class="sidetitle"><?php echo  $headerinst->Fields("name");?>
 					<p class="side">  
 				    <?php echo  evalhtml($headerinst->Fields("navhtml"));?>
-				     </p>
+	        </p>
 				
           <?php 		}?>
 		   <div id="standard" style="display: <?php echo $hd_standard ?>;">
@@ -404,76 +474,9 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
   }
 ?>
              </select>
-          <p class="side"> 
-		  	
-	  <?php if ($userper[45] == 1){{} ?>
-      <a href="moduletext_list.php" class="side">Edit Module Intro Text</a><br>
-      <?php if ($userper[45] == 1){}} ?>
-      <?php if ($userper[46] == 1){{} ?>
-      <a href="moduletext_edit.php" class="side">Add Module Intro Text</a> <br>
-      <?php if ($userper[46] == 1){}} ?>
-      <?php if ($userper[54] == 1){{} ?>
-      <a href="modfields_list.php" class="side">Edit User Data Modules</a><br>
-	  <a href="modinput4_list.php" class="side">Edit NEW UDMs</a><br>
-      <?php if ($userper[54] == 1){}} ?>
-      <?php if ($userper[55] == 1){{} ?>
-	 <a href="udmwizard.php" class="side">Add User Data Module</a><br>
-	 <a href="modinput4_new.php" class="side">Add NEW UDM</a><br>
-      <?php if ($userper[55] == 1){}} ?>
-	    <a href="module_edit.php" class="side">Add Module</a> <br>
-		  <a href="module_list.php" class="side">Edit Module Settings</a><br>
-	
-
-    </p>
-          <?php if ($userper[53] == 1){}} ?>
-          <?php if ($userper[44] == 1){{} ?>
-          <p align="center" class="banner"><font size="-3">NAVIGATION SETTINGS</font></p>
-          <?php if ($userper[47] == 1){{} ?>
-          <a href="nav_list.php?nons=1" class="side">View/Edit Basic Nav Files</a><br>
-<a href="nav_list.php" class="side">View/Edit All Nav Files</a><br>
-          <?php if ($userper[47] == 1){}} ?>
-          <?php if ($userper[48] == 1){{} ?>
-          <a href="nav_minedit.php" class="side">Add Basic Nav File</a><br>
-		  <a href="nav_edit.php" class="side">Add Dynamic Nav File</a><br>
-		   <a href="hotwords.php" class="side">Edit/Add HotWord</a><br>
-      <?php if ($userper[48] == 1){}} ?>
-	   <p align="center" class="banner"><font size="-3">TEMPLATE SETTINGS 
-            </font></p>
-      <?php if ($userper[49] == 1){{} ?>
-      <a href="template_list.php" class="side">View/Edit Design Template</a><br>
-	  <a href="template_edit3.php" class="side">Add Design Template</a><br>
-	  	  <a href="css_edit.php" class="side">Edit CSS</a><br>
-		  <a href="css_list.php" class="side">Edit Custom CSS</a><br>
-		  
-
-      <?php if ($userper[49] == 1){}} ?>
-      <?php if ($userper[50] == 1){{} ?>
-      
-      <?php if ($userper[50] == 1){}} ?>
-	  <p align="center" class="banner"><font size="-3">SYSTEM SETTINGS 
-            </font></p>
-      <?php if ($userper[77] == 1){{} ?>
-      <a href="permissions_list.php" class="side">System Permisssions</a><br>
-      <?php if ($userper[77] == 1){}} ?>
-      <?php if ($userper[51] == 1){{} ?>
-      <a href="user_list.php" class="side">System Users</a><br>
-      <?php if ($userper[51] == 1){}} ?>
-      <?php if ($userper[52] == 1){{} ?>
-	  <a href="redirect.php?action=list" class="side">Page Redirection</a><br>
-      <a href="sysvar.php" class="side">System Settings</a><br> 
-      <a href="wizard_setup.php" class="side">Setup Wizard</a><br>
-      <a href="rssfeed.php?action=list" class="side">RSS Feeds</a><br>
-	  <?php if ($userper[52] == 1){}} ?>
-    <a href="flushcache.php" class="side">Reset Cahce</a><br>
-	<!--<a href="protect.php" class="side">Add Redirect</a><br> -->
-          <?php if ($userper[73] == 1){{} ?>
-          <a href="../contacts/" class="side">CONTACT SYSTEM</a><br> 
-          <?php if ($userper[73] == 1){}} ?></b>
-          <?php if ($userper[44] == 1){}} ?>
-		  </div>
+</div>
 		   <div id="basic"  style="display: <?php echo $hd_basic ?>;">
-		             <?php if ($userper[10] == 1){{} ?>
-          <p align="center" class="banner"><font size="-3">CONTENT</font></p>
+		   <p align="center" class="banner"><font size="-3">CONTENT</font></p>
 	      
          
             
@@ -538,6 +541,10 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
       </table> </td>
     
      
-    <td valign="top" bgcolor="#FFFFFF" width="560">
+    <td valign="top" bgcolor="#FFFFFF" width="100%">
 	
-	<? } ?>
+	
+	<? 
+	echo $nav_link;		
+	
+} ?>

@@ -1,4 +1,6 @@
-
+</fieldset>
+</div>
+</td></tr></table>
 </td>
    </tr>
 </table> 
@@ -8,6 +10,7 @@ Helvetica, sans-serif" size="1"><br>
 Helvetica, sans-serif" size="1"> for <?php echo $SiteName ; ?> <br>
   Please report problems to <a 
 href="mailto:<?php echo $admEmail ?>"><?php echo $admEmail ?></a></font></p>
+</td></tr></table>
 </body></html>
 <?php 
 ob_end_flush()  ;?>
