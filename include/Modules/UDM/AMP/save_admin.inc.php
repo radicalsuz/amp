@@ -4,6 +4,8 @@ function udm_amp_save_admin ( $udm, $options = null ) {
 
 	$dbcon = $udm->dbcon;
 
+    $udm->doPlugin( 'AMP', 'fixup_db' );
+
 	// Insert or Update?
 	if (isset( $udm->instance )) {
 
