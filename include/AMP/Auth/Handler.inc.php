@@ -84,7 +84,7 @@ class AMP_Authentication_Handler {
         $hash = $this->make_secure_cookie( $c_user, $c_perm, $secret );
         $old_hash = $this->has_cookie;
 
-        if (setcookie( 'AMPLoginCredentials', "$hash:$c_user:$c_perm:$c_userid", $c_time )) {
+        if (setcookie( 'AMPLoginCredentials', "$hash:$c_user:$c_perm:$c_userid" )) {
 
             // Quick Hack, to be replaced by a more robust databas versioning
             // system.
