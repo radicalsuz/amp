@@ -45,7 +45,7 @@ $bchtml.= $path2; }
   if (!$_GET["list"] && $MM_id && !$mod_name) { 
 	 $maxTextLenght=35;
   $aspace=" ";
-  $tttext =$hiarticle->Fields("title");
+  $tttext =strip_tags($hiarticle->Fields("title"));
   if(strlen($tttext) > $maxTextLenght ) {
      $tttext = substr(trim($tttext),0,$maxTextLenght); 
      $tttext = substr($tttext,0,strlen($tttext)-strpos(strrev($tttext),$aspace));
