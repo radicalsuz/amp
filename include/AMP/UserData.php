@@ -84,7 +84,7 @@ class UserData {
      *
      *****/
 
-    function UserData ( &$dbcon, $instance, $admin = false ) {
+    function UserData ( $dbcon, $instance, $admin = false ) {
 
         // Setup database connection. Required.
         if (!isset($dbcon)) return false;
