@@ -244,18 +244,16 @@ $MM_movePrev  = $urlStr.(max($MM_offset - $MM_size,0));
 
 
 if ($gallerys->RecordCount() >= 1) {
-	?>
-	<br>
-	<select onChange="MM_jumpMenu('parent',this,0)" class="name">
+	echo '<br>
+	<select onChange="MM_jumpMenu(\'parent\',this,0)" class="name">
 				  <option SELECTED value="gallery.php">Select Photo Gallery</option>
-				  <option value="gallery.php">-----</option>
+				  <option value="gallery.php">-----</option>';
 	
-		<?php 
-	while (!$gallerys->EOF) { ?>
-			<option value="gallery.php?gal=<?= $gallerys->Fields("id")?>" >
-				<?= $gallerys->Fields("galleryname"); ?> 
-			</option>
-		<?php $gallerys->MoveNext();
+	while (!$gallerys->EOF) { 
+			echo '<option value="gallery.php?gal='. $gallerys->Fields("id") .'" >';
+			$gallerys->Fields("galleryname");
+			echo '</option>';
+			$gallerys->MoveNext();
 	}
 		$gallerys->MoveFirst();
 }
@@ -321,21 +319,25 @@ elseif ($fullgal == 1) {
 
 	while (!$photo->EOF) { 
 		$daimg = $base_path_amp."img/original/".$photo->Fields("img");
+		
 		if (file_exists($daimg)) {
 			$rowx_count++;
 		   	echo '<div class="gallerycon">';  
-		   	?><a href="img/original/<?= $photo->Fields("img")?>"><img src="img/<?= $dir; ?>/<?= $photo->Fields("img") ?>"></a> 
-			<? echo '<div class="gallerycap">'. $photo->Fields("caption"); 
+		   	echo '<a href="img/original/'. $photo->Fields("img") . '"><img src="img/' . $dir .'/'. $photo->Fields("img") . '"></a>'; 
+			echo '<div class="gallerycap">'. $photo->Fields("caption"); 
 			if ($photo->Fields("date") != ("0000-00-00 00:00:00")) { 
 				echo "&nbsp;";
 				DoDate( $photo->Fields("date"), 'F jS Y'); 
 		
-				if ($photo->Fields("photoby")) { ?>
-					<br> <em> by: <?php if ($photo->Fields("byemail")) {?><a href="mailto:<?php echo $photo->Fields("byemail")?>"> <?php } ?>
-				  	<?php echo $photo->Fields("photoby")?> </a></em><br>
-				  	<?php 
-				} 
-			}
+				if ($photo->Fields("photoby")) {
+					echo '<br> <em> by: '; 
+					
+					if ($photo->Fields("byemail")) {
+						echo '<a href="mailto:'. $photo->Fields("byemail") .'">'; }
+						echo $photo->Fields("photoby");
+						echo '</a></em><br>';
+					} 
+				}
 		echo '</div>';
 	 	echo '</div>';
 	 	} 
@@ -409,9 +411,7 @@ else {
   $photo->MoveNext();
 }
 ?>    </table><?php } ?>
-                      </td>
-                    </tr>
-                  </table>
+
                
 
 <?php 
