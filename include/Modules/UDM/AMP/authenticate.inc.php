@@ -79,10 +79,13 @@ function udm_amp_authenticate ( &$udm, $options = null ) {
             
                 $header = $udm->_make_mail_header();
 
-                $result = mail( $mailto, 'Verified Voting Login', $message, $header );
+                $result = mail( $mailto, 'Your Website Login', $message, $header );
 
                 if ( $result ) {
-                    $udm->addResult( 'authenticate', "An email was sent to the address you provided containing login information." );
+                    $udm->addResult( 'authenticate', "An email was sent to $mailto containing login information so that you can update your information. Please click on the link in the email, or enter the password from the email in the Password field below." );
+		    		$fields[ 'otp' ] = array( 'label' => 'Password', 'public' => 1, 'type' => 'text', 'size' => 30 );
+					$udm->fields = $fields + $udm->fields;
+					$udm->_module_def = join( ",", array( "otp", $udm->_module_def[ 'field_order' ] ) );
                 } else {
                     $udm->addError( 'authenticate', "There was a problem delivering your login information to the email address you specified. Please contact the system administrator." );
                 }
