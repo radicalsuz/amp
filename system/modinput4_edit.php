@@ -11,9 +11,7 @@
 
 //ob_start();
 require_once( 'AMP/UserData.php' );
-#require_once( 'AMP/BaseDB.php' );
 require_once( 'utility.functions.inc.php');
-set_error_handler( 'e' );
 
 require("Connections/freedomrising.php");
 
