@@ -277,7 +277,7 @@ $galimage = $gphoto->Fields("img");
    <td width="25%" align="center" valign="top" class="text">
    <?php $daimg = $base_path_amp."img/pic/".$galimage;
 if (file_exists($daimg) && ($galimage)) { ?>
-        <a href="gallery.php?gal=<?php echo $gallerys->Fields("id")?>"><img src="img/pic/<?php echo $galimage; ?>" align="top" border="0" class="gallerythumb"></a>          <?php } ?> 
+        <a href="gallery.php?gal=<?php echo $gallerys->Fields("id")?>"><img src="img/pic/<?php echo $galimage; ?>" align="top" border="0" class="gallerypic"></a>          <?php } ?> 
             <br> 
              </td>
         
