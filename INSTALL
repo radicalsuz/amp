@@ -9,3 +9,5 @@ Things to watch for when installing:
 2. Make sure there is an .htaccess file in the main source directory (fixme)
 
 3. Make sure a cache directory exists (and is properly aliased in apache), and is readable / writeable by the apache process.
+
+This should really be updated.
