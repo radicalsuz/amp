@@ -542,6 +542,7 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
     
      
     <td valign="top" bgcolor="#FFFFFF" width="100%">
+	<table cellpadding="15"><tr><td>
 	
 	
 	<? 
