@@ -1,5 +1,7 @@
 <?php
 
+$AMP_start_table= "<table width='98%' border=0 cellspacing=1 cellpadding=0 align='center'> <tr class='intitle'>";
+
 if ( !function_exists( 'DateOut' ) ) {
 
     function DateOut($date) {
@@ -64,8 +66,31 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 		$query->MoveNext();
 	}		
 	
-	echo "</table><br><Br><br>&nbsp;&nbsp;<a href=\"$filename\">Add new record</a> ";
+	echo "</table><br>&nbsp;&nbsp;<a href=\"$filename\">Add new record</a> ";
 
+}
+
+function listpage_basic($listtitle,$fieldsarray,$filename) {
+	echo "<h2>&nbsp;&nbsp;".$listtitle."</h2>";
+	echo "<table width='98%' border=0 cellspacing=1 cellpadding=0 align='center'> <tr class='intitle'> ";
+	$r=0;
+	foreach ($fieldsarray[0] as $k=>$v) {
+		echo " <td><b><a href='".$_SERVER['PHP_SELF']."?action=list&sort=".$k."' class='intitle'>".$k."</a></b></td>";
+		$f[$r]=$k;
+		$r++;
+	}
+	echo "</tr>";
+	$i=0;
+	for($x=0;$x<sizeof($fieldsarray);$x++){
+		$i++;
+		$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
+		echo "<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
+		foreach ($f as $k=>$v) {
+			echo "<td> ".$fieldsarray[$x][$v]." </td>";
+		}
+		echo "</tr>";
+	}
+	echo "</table> ";
 }
 
 /**

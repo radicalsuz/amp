@@ -34,7 +34,7 @@ var $table;
 	// returns: array
 	function get_children($id, $wq = 1)
 	{
-		if ($wq == 1) {$query = "SELECT id, type FROM $this->table WHERE parent = '$id' ORDER BY type ASC"; }
+		if ($wq == 1) {$query = "SELECT id, usenav, textorder, type FROM $this->table WHERE parent = '$id' ORDER BY textorder, type ASC"; }
 		else {
 		$query = "SELECT distinct articletype.id, articletype.type FROM articletype left join articles on articles.type =articletype.id where articles.id  is not null and articletype.parent = '$id' ORDER BY type ASC"; 
 		}
@@ -44,6 +44,8 @@ var $table;
 		{
 			$children[$count]["id"] = $row["id"];	
 			$children[$count]["type"] = $row["type"];	
+			$children[$count]["usenav"] = $row["usenav"];
+			$children[$count]["textorder"] = $row["textorder"];
 		//	$children[$count]["link"] = $row["link"];	
 			$count++;
 		}
@@ -235,6 +237,30 @@ function select_type_tree($id = 0,$y=0,$selcode)
 		echo "</option>";
 	}
 
+// used in sectional list page
+	function section_type_tree_edit($id = 0,$y=0) {	
+		$result = $this->get_children($id);	
+		for ($x=0; $x<sizeof($result); $x++){
+			$y++;
+			$typeid = $result[$x]["id"];
+			$i++;
+			$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
+			echo "<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
+			echo "<td> <div align='center'><A HREF='type_edit.php?id=".$result[$x]["id"]."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
+			echo "<td>".$this->depth2($y).$result[$x]["type"]."</td>";
+			echo "<td>".$result[$x]["id"]."</td>";
+			if ($result[$x]["usenav"]) {$status ='live';} else {$status ='draft';}
+			echo "<td>".$status."</td>";
+			echo '<td><input name="order['.$result[$x]["id"].'type="text" value="'.$result[$x]["textorder"].'" size="2"></td>';
+			//echo '<td><div align="right"><A HREF="type_nav_edit.php?id="'.$result[$x]["id"].'">Edit</A></div></td>';
+			//echo '<td><div align="right"><A HREF="typelist_nav_edit.php?id="'.$result[$x]["id"].'">Edit</A></div></td>';
+			echo '</tr>';
+			$this->section_type_tree_edit($result[$x]["id"],$y);
+			$y--;	
+		}
+		echo "</option>";
+	}
+	
 	function depth2($depth) {
 		for ($i=2; $i<= $depth; ++$i) {
 			$d .= "&nbsp;&nbsp;&nbsp;&nbsp;";
