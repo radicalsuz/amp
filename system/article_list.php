@@ -22,7 +22,7 @@ function art_publish($ids) {
 		foreach ($ids as $id) {
 			$q = "update articles set publish=1 where id=$id";
 			#die($q);
-			$dbcon->execute($q) or die($dbcon->errorMsg());
+			$dbcon->execute($q) or die($q.$dbcon->errorMsg());
 		}
 		$qs = array(
 			'msg' => urlencode('Selected items posted live.')
@@ -37,10 +37,25 @@ function art_publish($ids) {
 
 	while(list($key,$value)= each($ids)){ 
 			$q = "update articles set  pageorder='$value' where id=$key";
-			$dbcon->execute($q) or die($dbcon->errorMsg());
+			$dbcon->execute($q) or die($q.$dbcon->errorMsg());
 		}
 		$qs = array(
 			'msg' => urlencode('Order Updated.')
+		);
+	}
+	send_to($_SERVER['PHP_SELF'], $qs);
+}
+
+function art_change_section($ids,$type) {
+	global $dbcon;
+	if (is_array($ids)) {
+		foreach ($ids as $id) {
+			$q = "update articles set type=$type where id=$id";
+			
+			$dbcon->execute($q) or die($q.$dbcon->errorMsg());
+		}
+		$qs = array(
+			'msg' => urlencode('Selected items section changes.')
 		);
 	}
 	send_to($_SERVER['PHP_SELF'], $qs);
@@ -52,7 +67,7 @@ function art_unpublish($ids) {
 		foreach ($ids as $id) {
 			$q = "update articles set publish=0 where id=$id";
 			#die($q);
-			$dbcon->execute($q) or die($dbcon->errorMsg());
+			$dbcon->execute($q) or die("error unpublishing ".$q.$dbcon->errorMsg());
 		}
 		$qs = array(
 			'msg' => urlencode('Selected items posted as draft.')
@@ -70,7 +85,7 @@ function art_delete($ids) {
 		foreach ($ids as $id) {
 			$q = "delete from articles where id=$id";
 			#die($q);
-			$dbcon->execute($q) or die($dbcon->errorMsg());
+			$dbcon->execute($q) or die($q.$dbcon->errorMsg());
 		}
 		$qs = array(
 			'msg' => urlencode('Selected items deleted.')
@@ -107,8 +122,10 @@ switch($_POST['act']) {
 	case 'Delete':
 		art_delete($_POST['id']);
 		break;
-		
-			case 'Change Order':
+	case 'Move Articles':
+		art_change_section($_POST['id'],$_POST['change_type']);
+		break;
+	case 'Change Order':
 		art_order($_POST['order']);
 		break;
 }
@@ -122,7 +139,7 @@ else { $limit=30;}
 ## create Menus
 
 
-$allclass=$dbcon->Execute("SELECT distinct class.id, class.class FROM class, articles a where a.class =class.id and a.id  is not null ORDER BY class ASC") or DIE($$dbcon-->ErrorMsg());
+$allclass=$dbcon->Execute("SELECT distinct class.id, class.class FROM class, articles a where a.class =class.id and a.id  is not null ORDER BY class ASC") or DIE($dbcon-->ErrorMsg());
 
 
 ######define search sql ###########################
@@ -226,14 +243,14 @@ if ($_GET[type]) {echo $Recordset1->Fields("type");}
         <tr> 
           <td>
 <select onChange="MM_jumpMenu('parent',this,0)" class="name">
-	  <option SELECTED>View Section</option>
+	  <option SELECTED>View By Section</option>
 	  <?php 
 	//$selcode="article_list.php?type=";
 	  echo $obj->select_type_tree($MX_top,0,"article_list.php?type="); ?></Select>
            
       &nbsp;&nbsp;
 <select onChange="MM_jumpMenu('parent',this,0)" class="name">
-              <option SELECTED>View Class</option>
+              <option SELECTED>View By Class</option>
               <option>-----</option>
               <?php  while (!$allclass->EOF){?>
               <option value="article_list.php?class=<?php echo  $allclass->Fields("id")?>" ><?php echo  $allclass->Fields("class");?> 
@@ -254,9 +271,11 @@ if ($_GET[type]) {echo $Recordset1->Fields("type");}
                 <option value="article_list.php?limit=250&<?php echo  $MM_keepURL; ?>">250</option>
                 <option value="article_list.php?limit=-1&<?php echo  $MM_keepURL; ?>">All</option>
 			
-              </select><a href="article_list.php" class="name"><strong><font face="Verdana, Arial, Helvetica, sans-serif">All Content</font></strong></a>
+              </select>&nbsp;&nbsp;&nbsp;<a href="article_list.php" class="name"><strong><font face="Verdana, Arial, Helvetica, sans-serif">Display All Content</font></strong></a>&nbsp;&nbsp;&nbsp;<a a href="#" onClick="change_any('search')" class="name"><strong><font face="Verdana, Arial, Helvetica, sans-serif">Search For Content</font></strong></a>
 		
-            <form action="article_list.php?<?php echo $keep ;?>" method="post" name="form2" class="name">
+		<div id='search' style="display:none">
+		
+		   <form action="article_list.php?<?php echo $keep ;?>" method="post" name="form2" class="name">
               <strong>Search By </strong><br>
               <input name="sid" type="text" id="id" value="ID" size="5" class="name">
               <input name="stitle" type="text" id="title" value="Title" size="25" class="name">
@@ -268,7 +287,9 @@ if ($_GET[type]) {echo $Recordset1->Fields("type");}
               To search all content please click &quot;All Content&quot; below 
               before you start your search. You may only search one field at a 
               time. 
-            </form> 
+            </form>
+		</div> 
+		<br>
 			 <script language="javascript" type="text/javascript"> 
 function selectall(){ 
 t=document.forms[1].length; 
@@ -288,7 +309,7 @@ $listct=$dbcon->CacheExecute("$sqlct");
 $count = $listct->RecordCount();
 $total = ($offset +$limit);
 if ($total > $count) {$total = $count ;}
-echo "Displaying ".($offset +1)."-".$total." of ".$count."  <b>".$q."</b> <br>";
+echo "<p class=name>Displaying ".($offset +1)."-".$total." of ".$count."  <b>".$q."</b> <br>";
  $pages = ceil(($count/$limit));
 if ($pages > 1) {
 $i = 0;
@@ -312,7 +333,7 @@ $i = ($offset+1);
       </table>	 <script language="javascript" type="text/javascript"> 
 function selectall(){ 
 t=document.forms[1].length; 
-for(i=1; i<t; i++) document.forms[1][i].checked=document.forms[1][5].checked; 
+for(i=1; i<t; i++) document.forms[1][i].checked=document.forms[1][7].checked; 
 } 
 </script> 
 
@@ -321,10 +342,20 @@ for(i=1; i<t; i++) document.forms[1][i].checked=document.forms[1][5].checked;
 				<input type="submit" name="act" value="Unpublish" class="name">
         <input type="submit" name="act" value="Delete" class="name" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')">
         <input type="submit" name="act" value="Change Order" class="name">
-        <input name="type" type="hidden" value="<?php echo $_GET[type]; ?>">
+		<input name="type" type="hidden" value="<?php echo $_GET['type']; ?>">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> 
         <input type="checkbox"  value="select_all" onClick="selectall();" />
         Select All</strong> <strong><?php } ?>
+
+		<br>&nbsp;&nbsp;&nbsp;<a href="#" onClick="change_any('section_change')" class=name>Move Articles</a>
+		<div id='section_change' style="display:none">
+		<select name="change_type" class="name">
+	  <option>Select Section To Move To</option>
+	  <?php echo $obj->select_type_tree($MX_top); ?></Select>
+		<input type="submit" name="act" value="Move Articles" class="name">
+		
+		</div>
+
         <table width="100%" border="0" align="center">
           <tr class="intitle"> 
             <td>&nbsp;</td>
