@@ -18,6 +18,7 @@ $alerts_txt=$ampdbcon->Execute($sql) or DIE("15".$ampdbcon->ErrorMsg());
 include ("header.php");
 echo "<h2>AMP SYSTEM UPDATES & NEWS</h2>";	
 display_alerts($alerts_txt);
+include ("amp_alerts_emails.php");
 include ("footer.php");
 
 ?>
