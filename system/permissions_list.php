@@ -32,5 +32,5 @@
 }
 ?>
             </table>
-    
+    <p><a href="permissiondetail.php?action=list">View Permission Details</a></p>
 <?php include("footer.php"); ?>
