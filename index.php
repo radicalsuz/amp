@@ -7,22 +7,20 @@ SYS VARS: $NAV_IMG_PATH, $indexreplace
 functions  evalhtml
 To Do: 
 *********************/ 
-if (isset($HTTP_GET_VARS["filelink"])) { header ("Location: $HTTP_GET_VARS[filelink]");}
+if (isset($_GET['filelink'])) header ("Location: " . $_GET['filelink']);
 
 $mod_id = 2 ;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 
-//include("sysfiles.php"); 
-// include("headerdata.php");
 ob_start(); 
 
- if ($indexreplace != NULL)
-{
-require ("$indexreplace");
- }
-else{ include("index.inc.php");} 
+if ($indexreplace != NULL) {
+    require ("$indexreplace");
+} else {
+    include("index.inc.php");
+}
 
-//include ("footer.php");
 include("AMP/BaseFooter.php");
+
 ?>
