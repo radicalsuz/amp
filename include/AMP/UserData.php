@@ -629,7 +629,9 @@ class UserData {
 
         } else {
 
-            $this->_register_default_plugins();
+            if ( method_exists( $this, '_register_default_plugins' ) ) {
+                $this->_register_default_plugins();
+            }
 
         }
 
