@@ -362,11 +362,8 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
         <td rowspan="2" bgcolor="#006699"><img src="http://radicaldesigns.org/img/amp.jpg" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> 
           </span> </td>
         <td align="right" valign="bottom" bgcolor="#006699" class="toplinks"><b class="toplinks"> 
-          </b><br>
-Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'standard');" class="toplinks">Advanced</a></td>
-      </tr>
-      <tr>
-                       <td align="right" valign="bottom" bgcolor="#006699" class="toplinks">&nbsp;&nbsp;<select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid">
+          </b>
+Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'standard');" class="toplinks">Advanced</a><br><select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid">
                 <option value="index.php">Select Module</option>
 				 <option value="index.php">&nbsp;&nbsp;---------</option>
                 <?php
@@ -388,7 +385,10 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
   }
 ?>
               </select></td>
-      </tr><tr><td><img src="../img/spacer.gif" height=20>
+      </tr>
+      <tr>
+                       <td align="right" valign="bottom" bgcolor="#006699" class="toplinks">;</td>
+      </tr><tr><td><img src="../img/spacer.gif" height=5>
 </td>
       </tr>
     </table>
