@@ -1,7 +1,11 @@
 <?php
 
 $mod_id = 1;
-include("includes/base.php");
+include("include/AMP/BaseDB.php");
+include("include/AMP/BaseTemplate.php");
+
+
+//include("include/base.php");
 //include("includes/moduleintro.php"); 
 include("includes/dbfunctions.php"); 
 include("includes/emaillist_functions.php");
@@ -11,15 +15,44 @@ include("includes/emaillist_functions.php");
 
 function buildactionform($id,$error=NULL) {
 	global $dbcon;
-	$act = $dbcon->Execute("SELECT *  FROM action_text  WHERE id = $_GET[action] and actiontype != 'Congress Merge'") or DIE($dbcon->ErrorMsg());
+	$act = $dbcon->Execute("SELECT *  FROM action_text  WHERE id = $id and actiontype != 'Congress Merge'") or DIE($dbcon->ErrorMsg());
 
   
 ?>
  <p class="title"><?php echo $act->Fields("title"); ?></p>
  <p class="text"><?php echo converttext($act->Fields("introtext")); ?></p>
  <?php echo $error;?>
-<form method="POST"  class="form" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<script language="Javascript" type="text/javascript">
+
+var fieldstocheck = new Array();
+    fieldnames = new Array();
+
+function checkform() {
+  for (i=0;i<fieldstocheck.length;i++) {
+    if (eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].value") == "") {
+      alert("Please enter your "+fieldnames[i]);
+      eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].focus()");
+      return false;
+    }
+  }
+  return true;
+}
+function addFieldToCheck(value,name) {
+  fieldstocheck[fieldstocheck.length] = value;
+  fieldnames[fieldnames.length] = name;
+}
+
+</script>	
+
+ 
+<form method="POST"  name="subscribeform" class="form" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+  <script language="Javascript" type="text/javascript">
+  addFieldToCheck("First_Name","First Name");
+
   
+  
+  </script> 
+
         
     <input type="hidden" name="actionid" value="<?php echo $act->Fields("id"); ?>">
     <input type="hidden" name="MM_insert" value="true">
@@ -90,7 +123,7 @@ function buildactionform($id,$error=NULL) {
             </tr>
             <tr> 
               <td valign="top"><div align="right">E-Mail:&nbsp;</div></td>
-              <td> <input name="Email" type="text"  size="35" value="<?php echo $_POST[First_Name] ;?>" style="width:165px"> 
+              <td> <input name="Email" type="text"  size="35" value="<?php echo $_POST["Email"] ;?>" style="width:165px"> 
               </td>
             </tr>
             <tr> 
@@ -229,7 +262,7 @@ function buildactionform($id,$error=NULL) {
     </tr>
     <tr> 
       <td colspan="3" valign="top"><center>
-          <input type="submit" class="submit" name="Submit" value="Send My Message!">
+          <input type="submit" class="submit" name="Submit" value="Send My Message!" onClick="return checkform();">
         </center></td>
     </tr>
   </table>
@@ -355,12 +388,18 @@ $Title $First_Name $Last_Name \n";
 	$finalemail .= "$Email \n";
  
 #send emails	
-     $emailemail =  $actiondetails->Fields("email");
-	 $emailheaders = "From: $First_Name $Last_Name <$Email>\nReply-To: $Email";
-	 $temailheaders = "From: $MM_email_from";
-	 $faxemail = $actiondetails->Fields("fax");
-	 $faxheaders = "From: ".$actiondetails->Fields("faxaccount");
-     	 
+    $emailemail =  $actiondetails->Fields("email");
+	$emailheaders = "From: $First_Name $Last_Name <$Email>\nReply-To: $Email";
+	$temailheaders = "From: $MM_email_from";
+	$faxemail = $actiondetails->Fields("fax");
+	$faxheaders = "From: ".$actiondetails->Fields("faxaccount");
+	if ($actiondetails->Fields("faxsubject") != 'subject') {	
+	 	$faxsubject = $actiondetails->Fields("faxsubject");
+	} else {
+		$faxsubject = $_POST["subjectText"];
+	}
+     
+	 	 
 	if ($_POST[Send_Email] && ($emailemail != "vsform")) {mail($emailemail,$_POST[subjectText],$finalemail,$emailheaders);  }
 	if ($_POST[Send_Email] && ($emailemail == "vsform")) {
 		require_once( 'Modules/vsLetter.inc.php' );
@@ -372,7 +411,7 @@ $Title $First_Name $Last_Name \n";
 		}
 	}
 	
-	if ($_POST[Send_Fax]) {mail($faxemail,$_POST[subjectText],$finalemail,$faxheaders); }
+	if ($_POST["Send_Fax"]) {mail($faxemail,$faxsubject,$finalemail,$faxheaders); }
 	if ($actiondetails->Fields("bcc")) {mail($actiondetails->Fields("bcc"),$_POST[subjectText],$finalemail,$temailheaders); }
 	mail($Email,"Thank you for Taking Action",$finalemail,$temailheaders); 
 
@@ -394,6 +433,7 @@ if ((!$_POST[MM_insert]) && (!$_REQUEST[kill_insert]) ) {
 	buildactionform($_GET[action]);
 }
 	
-include("footer.php");
+//include("footer.php");
+include("include/AMP/BaseFooter.php");
 
 ?>

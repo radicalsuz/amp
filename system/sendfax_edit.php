@@ -13,8 +13,8 @@ $enddate =  DateConvertIn($enddate);
     $MM_editColumn = "id";
     $MM_recordId = "" . $MM_recordId . "";
     $MM_editRedirectUrl = "sendfax_list.php";
-	  $MM_fieldsStr ="title|value|introtext|value|shortdesc|value|subject|value|text|value|firstname|value|lastname|value|prefix|value|position|value|actiontype|value|email|value|fax|value|uselist|value|list1|value|list2|value|list3|value|list4|value|enddate|value|tellfriend|value|tf_subject|value|tf_text|value|thankyou_title|value|thankyou_text|value|bcc|value|faxaccount|value";
-  $MM_columnsStr =  "title|',none,''|introtext|',none,''|shortdesc|',none,''|subject|',none,''|text|',none,''|firstname|',none,''|lastname|',none,''|prefix|',none,''|position|',none,''|actiontype|',none,''|email|',none,''|fax|',none,''|uselist|',none,''|list1|',none,''|list2|',none,''|list3|',none,''|list4|',none,''|enddate|',none,''|tellfriend|',none,''|tf_subject|',none,''|tf_text|',none,''|thankyou_title|',none,''|thankyou_text|',none,''|bcc|',none,''|faxaccount|',none,''";
+	  $MM_fieldsStr ="title|value|introtext|value|shortdesc|value|subject|value|text|value|firstname|value|lastname|value|prefix|value|position|value|actiontype|value|email|value|fax|value|uselist|value|list1|value|list2|value|list3|value|list4|value|enddate|value|tellfriend|value|tf_subject|value|tf_text|value|thankyou_title|value|thankyou_text|value|bcc|value|faxaccount|value|faxsubject|value";
+  $MM_columnsStr =  "title|',none,''|introtext|',none,''|shortdesc|',none,''|subject|',none,''|text|',none,''|firstname|',none,''|lastname|',none,''|prefix|',none,''|position|',none,''|actiontype|',none,''|email|',none,''|fax|',none,''|uselist|',none,''|list1|',none,''|list2|',none,''|list3|',none,''|list4|',none,''|enddate|',none,''|tellfriend|',none,''|tf_subject|',none,''|tf_text|',none,''|thankyou_title|',none,''|thankyou_text|',none,''|bcc|',none,''|faxaccount|',none,''|faxsubject|',none,''";
   
  require ("../Connections/insetstuff.php");
   require ("../Connections/dataactions.php");
@@ -106,9 +106,13 @@ if ($_GET["id"])
             <td> <input type="text" name="fax" size="50" value="<?php echo $fax->Fields("fax")?>"> 
             </td>
           </tr>
-          <tr> 
-            <td >Fax Account from email address</td>
+		  <tr> 
+            <td >Fax Account: email from</td>
             <td><input type="text" name="faxaccount" size="50" value="<?php echo $fax->Fields("faxaccount")?>"></td>
+          </tr>
+          <tr> 
+            <td >Fax Account: email subject</td>
+            <td><input type="text" name="faxsubject" size="50" value="<?php echo $fax->Fields("faxsubject")?>"></td>
           </tr>
           <tr> 
             <td >BCC Email Address</td>
