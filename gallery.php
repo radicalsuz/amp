@@ -290,10 +290,11 @@ if (!$_GET[gal]) {
         	 . '</a><p>'
         	 . $gallerys->Fields("description")
         	 . '</p> <br />';
+        	 echo '</div>';
    
 		$gallerys->MoveNext();
 	}
-	echo '</div>';
+	
 }
 elseif ($photo->Fields("img") == NULL) {	
                         echo '<p>&nbsp;</p>';
