@@ -10,7 +10,7 @@ class UserDataPlugin_FixupDB_AMP extends UserDataPlugin {
     var $available = false;
 
     function UserDataPlugin_FixupDB_AMP ( &$udm, $plugin_instance=null ) {
-        $this->init(&$udm, $plugin_instance);
+        $this->init($udm, $plugin_instance);
     }
 
     function execute ( $options = null ) {
