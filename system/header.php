@@ -359,7 +359,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
  
        <table width="100%" border="0" bgcolor="#006699">
       <tr> 
-        <td rowspan="2" bgcolor="#006699"><img src="http://radicaldesigns.org/img/amp.jpg" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> 
+        <td  bgcolor="#006699"><img src="http://radicaldesigns.org/img/amp.jpg" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> 
           </span> </td>
         <td align="right" valign="bottom" bgcolor="#006699" class="toplinks"><b class="toplinks"> 
           </b>
@@ -387,8 +387,7 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
               </select></td>
       </tr>
       <tr>
-                       <td align="right" valign="bottom" bgcolor="#006699" class="toplinks">;</td>
-      </tr><tr><td><img src="../img/spacer.gif" height=25>
+                       <td   bgcolor=""#dedede""  colspan="2"><img src="../img/spacer.gif" height=25>
 </td>
       </tr>
     </table>
