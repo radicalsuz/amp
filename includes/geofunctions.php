@@ -41,7 +41,7 @@ function geo_getdata($address) {
     $parse_result = $xmlparser->unserialize( $result, false );
     $data = $xmlparser->getUnserializedData();
 
-    return array( $data['geo:Point']['geo:lat'], $data['geo:Point']['get:long'] );
+    return array( $data['geo:Point']['geo:lat'], $data['geo:Point']['geo:long'] );
 
 }
 		
