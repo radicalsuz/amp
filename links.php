@@ -8,7 +8,7 @@ GET VARS: name - moves to  a sectional  anchor tag
 To Do:  user added option
 *********************/ 
 $modid=11;
-$intro_id = 12;
+$mod_id = 12;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
