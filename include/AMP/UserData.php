@@ -81,7 +81,7 @@ class UserData {
      *
      *****/
 
-    function UserData ( $dbcon, $instance ) {
+    function UserData ( $dbcon, $instance, $admin = false ) {
 
         // Setup database connection. Required.
         if (!isset($dbcon)) return false;
@@ -91,6 +91,8 @@ class UserData {
         // Get module instance. Required.
         $this->instance = preg_replace( "/(\d+)/", "\$1", $instance );
         if ( $this->instance == '' ) trigger_error( "No module specified!" );
+
+        $this->admin = $admin;
 
         // Initialise against database
         $this->init();
@@ -576,8 +578,10 @@ class UserData {
 
         foreach ( $fields as $fname ) {
 
-            if ( !isset( $md[ 'enabled_' . $fname ] )) continue;
-            if ( !$md[ 'enabled_' . $fname ] ) continue;
+            if ( !$this->admin ) {
+                if ( !isset( $md[ 'enabled_' . $fname ] )) continue;
+                if ( !$md[ 'enabled_' . $fname ] ) continue;
+            }
 
             $field = array();
 

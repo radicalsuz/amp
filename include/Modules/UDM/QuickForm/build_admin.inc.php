@@ -104,7 +104,6 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
         $lists[ $row['id'] ] = $row['name'];
     }
 
-
     $fields =& $udm->fields;
     $fields['core_name']          = array( 'label' => 'Name',             'type' => 'text' );
     $fields['core_redirect']      = array( 'label' => 'Redirect URL',         'type' => 'text' );
@@ -160,7 +159,7 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
     $renderer->setGroupElementTemplate( "{label}&nbsp;{element}\n", 'custom' );
 
     foreach ( $udm->fields as $field => $field_def ) {
-        udm_quickform_addElement( &$form, $field, $field_def, $admin );
+        udm_QuickForm_build_admin_addElement( &$form, $field, $field_def, $admin );
     }
 
     $form->setDefaults( $md );
@@ -180,7 +179,7 @@ function udm_QuickForm_build_admin ( $udm, $options = null ) {
     
 }
 
-function udm_quickform_addElement( $form, $name, $field_def, $admin = false ) {
+function udm_QuickForm_build_admin_addElement( $form, $name, $field_def, $admin = false ) {
 
     if ( $name == '' ) return;
 
