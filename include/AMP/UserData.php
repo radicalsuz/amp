@@ -56,6 +56,7 @@ class UserData {
     var $redirect;
     var $mailto;
     var $subject;
+    var $uselists;
 
     // flag to enable / disable display of form to user.
     var $showForm;
@@ -641,6 +642,7 @@ class UserData {
            objects at some point in the (near) future */
 
         $md = $this->_module_def;
+        $this->uselists = $md[ 'uselists' ];
 
         $lists = array_filter( array_keys( $md ), array( &$this, "_register_lists_filter" ) );
 
@@ -651,14 +653,35 @@ class UserData {
         if (!isset( $list_id)) return false;
 
         $table = $GLOBALS['MM_listtable'];
-        $sql = 'SELECT name, id FROM ' . $table . 'WHERE id IN ( ';
+        if ( !isset( $table ) ) $table = 'lists';
+
+        $sql = 'SELECT name, id FROM ' . $table . ' WHERE id IN ( ';
         $sql .= join( ", ", $list_id ) . ' )';
 
         $rs = $this->dbcon->CacheExecute( $sql );
 
-        foreach ( $rs->FetchRow() as $list ) {
+        if ( $this->uselists ) {
+            $listField = array( 'label' => 'Subscribe to the following lists:',
+                                'public' => true,
+                                'type' => 'header' );
+            $this->fields[ 'list_header' ] = $listField;
+        }
+
+        while ( $list = $rs->FetchRow() ) {
 
             $this->lists[ $list['id'] ] = $list[ 'name' ];
+
+            // Add lists to fields. This is a *temporary* change, and should be
+            // removed, along with all changes in SVN r121
+            if ( $this->uselists ) {
+                $listField = array( 'label'    => $list[ 'name' ],
+                                    'public'   => true,
+                                    'type'     => 'checkbox',
+                                    'required' => false,
+                                    'values'   => 1 );
+
+                $this->fields[ 'list_' . $list['id'] ] = $listField;
+            }
 
         }
 
@@ -673,7 +696,7 @@ class UserData {
      ***/
 
     function _register_lists_filter ( $var ) {
-        return ( substr( $var, 0, 3 ) == "list" );
+        return ( substr( $var, 0, 4 ) == "list" );
     }
 
 }

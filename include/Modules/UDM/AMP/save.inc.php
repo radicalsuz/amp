@@ -13,6 +13,11 @@ function udm_amp_save ( &$udm, $options = null ) {
         $submitValues = $udm->form->exportValues();
 
         foreach ( array_keys( $udm->fields ) as $fname ) {
+
+            // Ignore lists. This is a *temporary* change, and should be
+            // removed, along with all changes in SVN r121
+            if ( strpos( $fname, 'list_' ) === 0 ) continue;
+
             if ( isset( $submitValues[ $fname ] ) )
                 $frmFieldValues[ $fname ] = $submitValues[ $fname ];
         }
@@ -20,6 +25,11 @@ function udm_amp_save ( &$udm, $options = null ) {
     } else {
 
         foreach ( $udm->fields as $fname => $fdef ) {
+
+            // Ignore lists. This is a *temporary* change, and should be
+            // removed, along with all changes in SVN r121
+            if ( strpos( $fname, 'list_' ) === 0 ) continue;
+
             if ( isset( $fdef['public'] ) && $fdef['public'] ) {
                 $publicFields[] = $fname;
             }
