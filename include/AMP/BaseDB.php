@@ -5,6 +5,7 @@ require_once('utility.functions.inc.php');
 
 $ampdbcon = null;
 
+// Check for a hosted configuration.
 if (file_exists_incpath( 'AMP/HostConfig.inc.php' )) {
 
     // Hosted Mode Configuration Present, load configuration

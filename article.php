@@ -29,7 +29,7 @@ if ($_GET['list'] == "type") {
 	
 //load sysfiles
 
-include("Connections/menu.class.php");
+require_once("Connections/menu.class.php");
 $obj = new Menu;
 
 if ($HTTP_GET_VARS["list"] != "class" ){$isanarticle=1;}
