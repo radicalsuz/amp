@@ -217,7 +217,7 @@ echo nav_item($sys_nav[31][3]); # Edit Custom CSS
 	,"Email Lists","show-menu=Email",,,1
 	,"Directories","show-menu=Dir",,,1
 	,"Boards","show-menu=Boards",,,1
-	<?php	echo nav_mod_type_check(11); ?>
+	<?php 	echo nav_mod_type_check(12); ?>
 	<?php	echo nav_mod_type_check(1); ?>
 	//,"User Data Modules","show-menu=UDMs",,,1
 	,"Volunteer","vol_list.php",,,1
