@@ -6,7 +6,7 @@
 #$dbcon->Connect($MM_HOSTNAME,$MM_USERNAME,$MM_PASSWORD,$MM_DATABASE);
 
 #$website = "http://vevo.verifiedvoting.org/";
-include_once("includes/base_db.php");
+include_once("AMP/BaseDB.php");
 
 function errorre($org,$target) {
         global $Web_url;

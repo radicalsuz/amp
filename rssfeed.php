@@ -6,7 +6,7 @@ print '<?xml version="1.0" encoding="ISO-8859-1"?>
 $sqllimit= 15;
 $orderby = "date";
 $orderbyorder ="desc";
-require_once( 'includes/base_db.php' );
+require_once( 'AMP/BaseDB.php' );
 
 if ($_GET[feed]) {
 	$f =$dbcon->CacheExecute("select * from rssfeed where id = ".$_GET[feed]." ") or DIE($dbcon->ErrorMsg());
