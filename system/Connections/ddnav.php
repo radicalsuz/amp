@@ -21,12 +21,33 @@ function nav_udm_item($id,$name) {
 
 function nav_udms() {
 	global $dbcon;
-	$R=$dbcon->Execute("select id, name from userdata_fields order by name") or DIE($dbcon->ErrorMsg());
+	$R=$dbcon->Execute("select id, name from userdata_fields where id >= 50  order by name") or DIE($dbcon->ErrorMsg());
 	while (!$R->EOF) {
 		$output .= nav_udm_item($R->Fields("id"),$R->Fields("name"));
 		$R->MoveNext();
 	}
 	return $output;
+}
+
+function nav_mod_type($type) {
+	global $dbcon;
+	$sql ="select i.id, i.name from userdata_fields i, modules m where i.id = m.userdatamodid and m.module_type =$type and m.userdatamodid > 49 order by name";
+	$R=$dbcon->Execute($sql) or DIE('error in nov_mod_tpe sql= '.$sql.$dbcon->ErrorMsg());
+	while (!$R->EOF) {
+		$output .= nav_udm_item($R->Fields("id"),$R->Fields("name"));
+		$R->MoveNext();
+	}
+	return $output;
+}
+
+function nav_mod_type_check($type) {
+	global $dbcon;
+	$C=$dbcon->Execute("select id from  modules where module_type =$type and userdatamodid > 49 ") or DIE($dbcon->ErrorMsg());
+	if ($C->Fields("id")) {
+		$R=$dbcon->Execute("select name from module_type where id =$type ") or DIE($dbcon->ErrorMsg());
+		$output .= 	',"'.$R->Fields("name").'","show-menu='.$R->Fields("name").'",,,1';
+		return $output;
+	}
 }
 
 ?>
@@ -196,6 +217,8 @@ echo nav_item($sys_nav[31][3]); # Edit Custom CSS
 	,"Email Lists","show-menu=Email",,,1
 	,"Directories","show-menu=Dir",,,1
 	,"Boards","show-menu=Boards",,,1
+	<?php	echo nav_mod_type_check(11); ?>
+	<?php	echo nav_mod_type_check(1); ?>
 	//,"User Data Modules","show-menu=UDMs",,,1
 	,"Volunteer","vol_list.php",,,1
 	,"Media Sign In","modinput4_data.php?modin=7",,,1
@@ -214,6 +237,7 @@ echo nav_item($sys_nav[31][3]); # Edit Custom CSS
 	,"Web Actions","sendfax_list.php",,,1
 	,"Petitions","petition_list.php",,,1
 	,"Endorsements","modinput4_data.php?modin=1",,,1
+<?php	echo nav_mod_type(11); ?>
 
 		])
 	addmenu(menu=["Boards",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
@@ -222,7 +246,7 @@ echo nav_item($sys_nav[31][3]); # Edit Custom CSS
 ?>
 	,"Ride Board","modinput4_data.php?modin=10",,,1
 	,"Housing Board","modinput4_data.php?modin=11",,,1
-
+<?php	echo nav_mod_type(10); ?>
 		])
 		
 	addmenu(menu=["Email",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
@@ -240,8 +264,23 @@ echo nav_item($sys_nav[9][0]); # phplist
 	,"Local Groups","modinput4_data.php?modin=2",,,1
 	,"Speakers","modinput4_data.php?modin=6",,,1
 	,"Trainers","modinput4_data.php?modin=5",,,1
+	<?php	echo nav_mod_type(9); ?>
 		])
 
+	addmenu(menu=["Other",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+#echo nav_item($sys_nav[''][]); # view/edit
+?>
+
+	<?php	echo nav_mod_type(12); ?>
+		])
+	addmenu(menu=["Custom",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+#echo nav_item($sys_nav[''][]); # view/edit
+?>
+
+	<?php	echo nav_mod_type(1); ?>
+		])
 	//addmenu(menu=["User Data",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
 <?php
 #echo nav_item($sys_nav[''][]); # view/edit

@@ -5,25 +5,12 @@
 
 $mod_name='udm';
 require("Connections/freedomrising.php");
+require_once("Connections/sysmenu.class.php");
+include("FCKeditor/fckeditor.php");
+$obj = new SysMenu; 
+$buildform = new BuildForm;
 
-$list = $dbcon->Execute("SELECT id, name from lists ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
-$list_numRows = 0;
-$list__totalRows = $list->RecordCount();
-$Recordset1__MMColParam = 9999999999999;
-$Recordset1 = $dbcon->Execute("SELECT * FROM userdata_fields WHERE id = " . ($Recordset1__MMColParam) . "") or DIE($dbcon->ErrorMsg());
-$enteredby = $dbcon->Execute("SELECT id, name FROM users ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
-$enteredby_numRows = 0;
-$enteredby__totalRows = $enteredby->RecordCount();
-
-$MM_editAction = $PHP_SELF;
-if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
-}
-
-$MM_abortEdit = 0;
-$MM_editQuery = "";
-  
-if ($Submit) {
+if ($_POST['MM_insert']) {
 
 	$MM_insert = 1;
 
@@ -116,8 +103,8 @@ if ($Submit) {
     $MM_editColumn = "id";
     $MM_recordId =$udmmodid;
     $MM_editTable  = "modules";
-    $MM_fieldsStr ="name|value|userdatamod|value|modid|value|file|value|udmper|value|navhtml|value|publish|value";
-    $MM_columnsStr = "name|',none,''|userdatamod|',none,''|userdatamodid|',none,''|file|',none,''|perid|',none,''|navhtml|',none,''|publish|',none,''";
+    $MM_fieldsStr ="name|value|userdatamod|value|modid|value|file|value|udmper|value|navhtml|value|publish|value|module_type|value";
+    $MM_columnsStr = "name|',none,''|userdatamod|',none,''|userdatamodid|',none,''|file|',none,''|perid|',none,''|navhtml|',none,''|publish|',none,''|module_type|',none,''";
  	require ("../Connections/insetstuff.php");
 	require ("../Connections/dataactions.php");
   
@@ -126,160 +113,71 @@ if ($Submit) {
 	} 
 	header("Location: modinput4_edit.php?modin=$modid");
 }
-$usergp=$dbcon->Execute("select * from per_group ") or die($dbcon->ErrorMsg());
+
+
+
+$Recordset1__MMColParam = 9999999999999;
+$R = $dbcon->Execute("SELECT * FROM userdata_fields WHERE id = " . ($Recordset1__MMColParam) . "") or DIE($dbcon->ErrorMsg());
+$U = $dbcon->Execute("SELECT id, name FROM users ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
+$L = $dbcon->Execute("SELECT id, name from lists ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
+$P=$dbcon->Execute("select * from per_group ") or die($dbcon->ErrorMsg());
+$M=$dbcon->Execute("select * from module_type ") or die($dbcon->ErrorMsg());
+
+//build form
+$html  = $buildform->start_table('name');
+$html .= $buildform->add_header('Add New Form', 'banner');
+$html .= addfield('name','Form Name','text');
+$m_options = makelistarray($M,'id','name','Select Module Type');
+$Mo= & new Select('module_type',$m_options);
+$html .=  $buildform->add_row('Module Type', $Mo);
+
+$html .= $buildform->add_header('Intro Text');
+
+$html .= addfield('htitle','Intro Text Title','textarea');
+$html .= addfield('harticle','Intro Text','text');
+$html .= addfield('rtitle','Response Page Title','text');
+$html .= addfield('rarticle','Response Page Text','textarea');
+
+$html .= $buildform->add_header('Email Lists');
+$html .= addfield('uselists','use lists','checkbox');
+
+$list_options = makelistarray($L,'id','name','Select List');
+$List1 = & new Select('list1',$list_options);
+$List2 = & new Select('list2',$list_options);
+$List3 = & new Select('list3',$list_options);
+$html .=  $buildform->add_row('List #1', $List1);
+$html .=  $buildform->add_row('List #2', $List2);
+$html .=  $buildform->add_row('List #3', $List3);
+
+$html .= $buildform->add_header('Email Form Contnets');
+$html .= addfield('useemail','Use E-mail','checkbox');
+$html .= addfield('mailto','Mail to','text');
+$html .= addfield('subject','Subject','text');
+$html .= $buildform->add_header('System Permissions');
+
+$html .= addfield('','Permission Groups','text');
+$per_options = makelistarray($P,'id','name');
+$Per= & new Select('pergroup[]',$per_options,'','true',5);
+$html .=  $buildform->add_row('Permission Groups', $Per);
+
+
+$html .= $buildform->add_header('Data Source');
+$usr_options = makelistarray($U,'id','name','Select Source');
+$Us= & new Select('enteredbyid',$usr_options);
+$html .=  $buildform->add_row('Entered By', $Us);
+
+$html .= $buildform->add_content($buildform->add_btn() );
+$html .= $buildform->end_table();
+$form = & new Form();
+$form->set_contents($html);
+
+include ("header.php");
+if ($_GET['action'] == "list") {
+	listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby,$sort,$extra);
+}
+else {
+	echo $form->fetch();
+}	
+include ("footer.php");
 
 ?>
-
-<?php include ("header.php"); ?>
-
-<h2>Add User Data Module</h2>
-
-<form name="form1" method="post" action="<?php echo $MM_editAction?>">
-  <table width="95%" border="0" cellspacing="0" cellpadding="5" class="table">
-    
-  </table>
-        
-        <table width="95%" border="0" cellspacing="0" cellpadding="2">
-		<tr> 
-            <td class="name">User Data Module Name </td>
-            <td><input type="text" name="name" size="25" > </td>
-          </tr>
-          <tr> 
-            <td class="name">Header Title</td>
-            <td><input name="htitle" type="text" id="htitle"> </td>
-          </tr>
-          <tr> 
-            <td valign="top" class="name">Header Text</td>
-            <td><textarea name="harticle" cols="40" rows="4" wrap="VIRTUAL" id="harticle"></textarea> 
-            </td>
-          </tr>
-          <tr> 
-            <td class="name">Response Page Title</td>
-            <td><input name="rtitle" type="text" id="rtitle"> </td>
-          </tr>
-          <tr> 
-            <td valign="top" class="name">Response Page Text</td>
-            <td><textarea name="rarticle" cols="40" rows="4" wrap="VIRTUAL" id="rarticle"></textarea> 
-            </td>
-          </tr>
-          <tr> 
-            <td class="name">Entered By</td>
-            <td><select name="enteredbyid" id="enteredbyid">
-                <?php
-  if ($enteredby__totalRows > 0){
-    $enteredby__index=0;
-    $enteredby->MoveFirst();
-    WHILE ($enteredby__index < $enteredby__totalRows){
-?>
-                <OPTION VALUE="<?php echo  $enteredby->Fields("id")?>"<?php if ($enteredby->Fields("id")==$Recordset1->Fields("enteredby")) echo "SELECTED";?>> 
-                <?php echo  $enteredby->Fields("name");?> </OPTION>
-                <?php
-      $enteredby->MoveNext();
-      $enteredby__index++;
-    }
-    $enteredby__index=0;  
-    $enteredby->MoveFirst();
-  }
-?>
-              </select> </td>
-          </tr>
-          <tr> 
-            <td class="name">use lists</td>
-            <td><input name="uselists" type="checkbox" id="uselists" value="1" <?php if ($Recordset1->Fields("uselists") == 1) { echo "CHECKED";} ?>></td>
-          </tr>
-          <tr> 
-            <td  class="name">List # 1</td>
-            <td><select name="list1">
-                <option value="">none</option>
-                <?php
-  if ($list__totalRows > 0){
-    $list__index=0;
-    $list->MoveFirst();
-    WHILE ($list__index < $list__totalRows){
-?>
-                <OPTION VALUE="<?php echo  $list->Fields("id")?>"<?php if ($list->Fields("id")==$Recordset1->Fields("list1")) echo "SELECTED";?>> 
-                <?php echo  $list->Fields("name");?> </OPTION>
-                <?php
-      $list->MoveNext();
-      $list__index++;
-    }
-    $list__index=0;  
-    $list->MoveFirst();
-  }
-?>
-              </select></td>
-          </tr>
-          <tr> 
-            <td  class="name">List #2</td>
-            <td><select name="list2">
-                <option value="">none</option>
-                <?php
-  if ($list__totalRows > 0){
-    $list__index=0;
-    $list->MoveFirst();
-    WHILE ($list__index < $list__totalRows){
-?>
-                <OPTION VALUE="<?php echo  $list->Fields("id")?>"<?php if ($list->Fields("id")==$Recordset1->Fields("list2")) echo "SELECTED";?>> 
-                <?php echo  $list->Fields("name");?> </OPTION>
-                <?php
-      $list->MoveNext();
-      $list__index++;
-    }
-    $list__index=0;  
-    $list->MoveFirst();
-  }
-?>
-              </select></td>
-          </tr>
-          <tr> 
-            <td class="name">List #3</td>
-            <td><select name="list3">
-                <option value="">none</option>
-                <?php
-  if ($list__totalRows > 0){
-    $list__index=0;
-    $list->MoveFirst();
-    WHILE ($list__index < $list__totalRows){
-?>
-                <OPTION VALUE="<?php echo  $list->Fields("id")?>"<?php if ($list->Fields("id")==$Recordset1->Fields("list3")) echo "SELECTED";?>> 
-                <?php echo  $list->Fields("name");?> </OPTION>
-                <?php
-      $list->MoveNext();
-      $list__index++;
-    }
-    $list__index=0;  
-    $list->MoveFirst();
-  }
-?>
-              </select></td>
-          </tr>
-          <tr> 
-            <td class="name">Use E-mail</td>
-            <td><input name="useemail" type="checkbox" id="useemail" value="1"  ></td>
-          </tr>
-          <tr> 
-            <td class="name">Mail to:</td>
-            <td><input name="mailto" type="text" id="mailto" size="45" value=""></td>
-          </tr>
-          <tr> 
-            <td class="name">E-mail Subject</td>
-            <td><input name="subject" type="text" id="subject" size="45" value=""></td>
-          </tr>
-          <tr>
-            <td class="name">Permission Groups</td>
-            <td><select multiple name='pergroup[]' size='8'>
-			<?php while ((!$usergp->EOF)){ ?>
-                <option value="<?php echo  $usergp->Fields("id")?>"  ><?php echo  $usergp->Fields("name")?></option>
-			<?php 	$usergp->MoveNext(); }?>
-             
-              </select></td>
-          </tr>
-        </table>
-            
-              <p>
-                   <input type="submit" name="Submit" value="Submit">
-        </p>
-      </form>
-			
-			
-<?php include ("footer.php");?>

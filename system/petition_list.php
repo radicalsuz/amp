@@ -23,8 +23,8 @@ $modid=7;
         <tr bgcolor="#CCCCCC"> 
           <td> <?php echo $petitons->Fields("title")?> </td>
           <td> <div align="right"><A HREF="petition_edit.php?id=<?php echo $petitons->Fields("id") ?>">edit</A></div></td>
-          <td> <div align="right"><a href="modfields2.php?id=<?php echo $petitons->Fields("udmid") ?>">edit</a></div></td>
-          <td> <div align="right"><a href="moddata_list.php?modin=<?php echo $petitons->Fields("udmid") ?>">signers</a></div></td>
+          <td> <div align="right"><a href="petition_udm_list.php?modin=<?php echo $petitons->Fields("udmid") ?>">edit</a></div></td>
+          <td> <div align="right"><a href="modinput4_data.php?modin=<?php echo $petitons->Fields("udmid") ?>">signers</a></div></td>
         </tr>
         <?php
   $Repeat1__index++;

@@ -1,5 +1,5 @@
 <?php
-$modid = "";
+$mod_name="module";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
@@ -24,8 +24,8 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
     $MM_editRedirectUrl = $filename."?action=list";
 	$MM_editColumn = "id";
     $MM_fieldsStr =
-"id|value|name|value|userdatamod|value|userdatamodid|value|file|value|perid|value|navhtml|value|publish|value";
-    $MM_columnsStr = "id|',none,''|name|',none,''|userdatamod|',none,''|userdatamodid|',none,''|file|',none,''|perid|',none,''|navhtml|',none,''|publish|',none,''";
+"id|value|name|value|userdatamod|value|userdatamodid|value|file|value|perid|value|navhtml|value|publish|value|module_type|value";
+    $MM_columnsStr = "id|',none,''|name|',none,''|userdatamod|',none,''|userdatamodid|',none,''|file|',none,''|perid|',none,''|navhtml|',none,''|publish|',none,''|module_type|',none,''";
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
     ob_end_flush();	
@@ -35,6 +35,7 @@ if (isset($_GET['id'])) {	$R__MMColParam = $_GET['id']; }
 else {$R__MMColParam = "8000000";}
 
 $R=$dbcon->Execute("SELECT * FROM $table WHERE id = $R__MMColParam") or DIE($dbcon->ErrorMsg());
+$T=$dbcon->Execute("SELECT * FROM module_type ") or DIE($dbcon->ErrorMsg());
 
 
 $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
@@ -42,6 +43,9 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Add/Edit '.$listtitle, 'banner');
 $html .= addfield('name','Module','text',$R->Fields("name"));
+$tem_options = makelistarray($T,'id','name','Select Module Type');
+$Tem = & new Select('module_type',$tem_options,$R->Fields("module_type"));
+$html .=  $buildform->add_row('Module Type', $Tem);
 $html .= addfield('perid','Permission','text',$R->Fields("perid"));
 $html .= addfield('publish','Publish','checkbox',$R->Fields("publish"));
 $html .= addfield('navhtml','Navigation HTML','textarea',$R->Fields("navhtml"));

@@ -1,5 +1,5 @@
 <?php
-$module_name="module";
+$mod_name="module";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");

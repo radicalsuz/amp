@@ -12,7 +12,7 @@ $listsql ="select id, title, udmid   from $table  ";
 $orderby =" order by  title asc  ";
 $fieldsarray=array( 'Title'=>'title','ID'=>'id');
 
-$extra = array('Petition Signers'=>'modinput4_data.php?modin=','Petition Fields'=>'modinput4_edit.php?modin=','Add to Content System'=>'module_contentadd.php?pid=');
+$extra = array('Petition Signers'=>'petition_udm_list.php?modin=','Petition Fields'=>'modinput4_edit.php?modin=','Add to Content System'=>'module_contentadd.php?pid=');
 $extramap = array('Petition Fields'=>'udmid','Petition Signers'=>'udmid');
 
 $filename="petition.php";
@@ -56,13 +56,16 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 //build form
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Add/Edit '.$listtitle, 'banner');
-$html .= addfield('title','Title','text',$R->Fields("title"));
+$html .= $buildform->add_header('Petition Text');
+$html .= addfield('title','Petition Title','text',$R->Fields("title"));
 $html .= addfield('addressedto','Addressed to','text',$R->Fields("addressedto"));
 $html .= addfield('shortdesc','Short Description','textarea',$R->Fields("shortdesc"));
 $html .= addfield('text','Text of Petition','textarea',$R->Fields("text"));
+$html .= $buildform->add_header('Petition Length');
+$html .= addfield('datestarted','Start Date (format:01/20/2005)','text',DateOut($R->Fields("datestarted")));
+$html .= addfield('dateended','End Date (format:01/20/2005)','text',DateOut($R->Fields("dateended")));
+$html .= $buildform->add_header('Petition Sponser');
 $html .= addfield('intsigner','Submitted By','text',$R->Fields("intsigner"));
-$html .= addfield('datestarted','Start Date','text',DateOut($R->Fields("datestarted")));
-$html .= addfield('dateended','End Date','text',DateOut($R->Fields("dateended")));
 $html .= addfield('intsignerad','Contact Info','text',$R->Fields("intsignerad"));
 $html .= addfield('intsignerem','E-mail','text',$R->Fields("intsignerem"));
 $html .= addfield('org','Organization','text',$R->Fields("org"));
