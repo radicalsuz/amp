@@ -713,5 +713,3 @@ function makelistarray($q,$key,$value,$label='Select') {
 }
 
 ?>
-
-
