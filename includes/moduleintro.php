@@ -9,12 +9,27 @@ Called by: all modules
 To Do:  
 
 *********************/ 
-   $module=$dbcon->CacheExecute("SELECT * FROM moduletext WHERE id = $mod_id") or DIE("Couldn't retrieve module text: " . $dbcon->ErrorMsg());
-   if ($moduleintroreplace !=NULL) { include ("$moduleintroreplace"); }
-	else {
-?><table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="text">
-		   <p class="title"><?php echo $module->Fields("title")?></p>
-		   <?php if ($module->Fields("subtitile") != ($null)) {?><p class="subtitle"><?php echo $module->Fields("subtitile")?></p><?php } ?>
-		   <?php if ($module->Fields("test") != ($null)) {?><p class="text"><?php if  ($module->Fields("html")) {echo $module->Fields("test");} else {echo converttext($module->Fields("test"));}?></p><?php } ?>
-		   <?php $module->Close(); ?></td></tr></table>
-<?php } ?>
+
+$module=$dbcon->CacheExecute("SELECT * FROM moduletext WHERE id = $mod_id") or DIE("Couldn't retrieve module text: " . $dbcon->ErrorMsg());
+if ($moduleintroreplace != NULL) { 
+	include ("$moduleintroreplace"); 
+}
+else {
+	echo '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="text">';
+	echo '<p class="title">'  .  $module->Fields("title")  .  '</p>';
+	if ($module->Fields("subtitile") != (NULL)) {
+		echo '<p class="subtitle">'  .  $module->Fields("subtitile")  .  '</p>';
+	}
+	if ($module->Fields("test") != (NULL)) {
+		echo '<p class="text">';
+		if  ($module->Fields("html")) {
+			echo $module->Fields("test");
+		}
+		else {
+			echo converttext($module->Fields("test"));
+		}
+		echo '</p>';
+	}
+	echo '</td></tr></table>';
+}
+?>

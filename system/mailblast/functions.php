@@ -61,7 +61,7 @@ function send_mail(&$smtp, $website, $id, $email, $order, $updatefile) {
 
 }
 
-function email_is_valid($email) {
+/* function email_is_valid($email) {
 #	return ereg("[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+(.[a-zA-Z0-9-]+)", $email);
 	return eregi(
 		"^" .                               // start of line
@@ -72,7 +72,7 @@ function email_is_valid($email) {
 		"$",                                // end of line
 		$email
 	);
-}
+} */
 
 
 function id_encode($id) {
