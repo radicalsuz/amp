@@ -1,7 +1,5 @@
 <?php
 
-$AMP_start_table= "<table width='98%' border=0 cellspacing=1 cellpadding=0 align='center'> <tr class='intitle'>";
-
 if ( !function_exists( 'DateOut' ) ) {
 
     function DateOut($date) {
@@ -18,8 +16,8 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 	if ($sort) { $orderby =" order by $sort asc ";}
 	$query=$dbcon->Execute($listsql.$orderby) or DIE($dbcon->ErrorMsg());
 	
-	echo "<h2>&nbsp;&nbsp;".$listtitle."</h2>";
-	echo "<table width='98%' border=0 cellspacing=1 cellpadding=0 align='center'> <tr class='intitle'> ";
+	echo "<h2>".$listtitle."</h2>";
+	echo "<div class='list_table'> <table class='list_table'> <tr class='intitle'> ";
 	echo " <td>&nbsp;</td>";
 	foreach ($fieldsarray as $k=>$v) {
 		echo " <td><b><a href='".$_SERVER['PHP_SELF']."?action=list&sort=".$v."' class='intitle'>".$k."</a></b></td>";
@@ -66,13 +64,13 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 		$query->MoveNext();
 	}		
 	
-	echo "</table><br>&nbsp;&nbsp;<a href=\"$filename\">Add new record</a> ";
+	echo "</table></div><br>&nbsp;&nbsp;<a href=\"$filename\">Add new record</a> ";
 
 }
 
 function listpage_basic($listtitle,$fieldsarray,$filename) {
-	echo "<h2>&nbsp;&nbsp;".$listtitle."</h2>";
-	echo "<table width='98%' border=0 cellspacing=1 cellpadding=0 align='center'> <tr class='intitle'> ";
+	echo "<h2>".$listtitle."</h2>";
+	echo "<div class='list_table'> <table class='list_table'> <tr class='intitle' > ";
 	$r=0;
 	foreach ($fieldsarray[0] as $k=>$v) {
 		echo " <td><b><a href='".$_SERVER['PHP_SELF']."?action=list&sort=".$k."' class='intitle'>".$k."</a></b></td>";
@@ -90,7 +88,7 @@ function listpage_basic($listtitle,$fieldsarray,$filename) {
 		}
 		echo "</tr>";
 	}
-	echo "</table> ";
+	echo "</table> </div>";
 }
 
 /**

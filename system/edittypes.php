@@ -51,7 +51,7 @@ include ("header.php");?>
 <h2>Sections</h2>
 
 <form  action="<?= $PHP_SELF ?>" method="POST">
-<?php echo $AMP_start_table; ?>
+<div class='list_table'> <table class='list_table'><tr class="intitle">
     
           <td></td>
           <td>Section</td>
@@ -60,7 +60,7 @@ include ("header.php");?>
 		  <td >Order</td>
         </tr>
         <?php $obj->section_type_tree_edit(0);?>
-      </table>
+      </table></div>
 	  <input type="submit" name="act" value="Update" class="name">
 	  </form>
       <br>

@@ -78,11 +78,6 @@ A.toplinks {
 		border-top: 2px solid #eeeeee;
 }
 
-/* select jump menu */
-#navlinks {
-		
-}
-
 /* SIDE BAR CLASSES */
 
 
@@ -123,8 +118,10 @@ ul.side li:hover {
 	font-size: 12px;
 	font-weight: bold;
 	border-color: #FFFFFF;
-	margin-bottom: 20px;
-	margin-top: 25px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	margin-left: 7px;
+	
 }
 
 
@@ -153,6 +150,23 @@ ul.side li:hover {
 	background: url('images/intitle-bg.png') top left repeat-x;
 	padding: 2px 4px;
 	text-shadow: 2px 2px 1px black;
+	height: 20px;
+}
+a.intitle {
+	background: none;
+	padding: 0px 0px;
+}
+
+.list_table
+{ 
+text-align: center;
+}
+
+.list_table table {
+	width: 98%;
+	border:none;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /* label text in forms */
