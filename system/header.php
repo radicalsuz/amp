@@ -126,12 +126,12 @@ if ($modid != 19 && $modid != 31 && $modid != 30 && ($modid)) {
 	$nav_link .= "\n		<li ".nav_css("page")."><a href='module_header_list.php?modid=".$modid."' >Pages</a></li>";
 	$nav_link .= "\n		<li ".nav_css("settings")."><a href='module_control_list.php?modid=".$modid."' >Settings</a></li>";
 }
+ 
 
 if ($nav_link) {
     $nav_link .= "\n	</ul>";
     $nav_link .= "<br clear='all' />"; 
 }
-
 
 
 if (!isset($_GET['noHeader']) || !$_GET['noHeader']) {
@@ -413,21 +413,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
                         <td><nobr><img src="images/amp-megaphone.png" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> Administration</span></nobr> </td>
                         <td align="right" valign="middle" bgcolor="#006699" class="toplinks"> 
         
-<p class = "toplinks">Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'standard');" class="toplinks">Advanced</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class=name >
-                <option value="index.php">Select Tool</option>
-				 <option value="index.php">&nbsp;&nbsp;---------</option>
-<?php
-$headernav->MoveFirst();
-while (!$headernav->EOF) {
-	$perid=$headernav->Fields("perid");
-	if ($userper["$perid"] == 1) { 
-		echo '  <option value="'. $headernav->Fields("file").'>">'; 
-		echo  substr($headernav->Fields("name"), 0, 20)." </option> \n";
-	}
-    $headernav->MoveNext();
-} 
-?>
-              </select>&nbsp;&nbsp;&nbsp;</td>
+<p class = "toplinks">User: <?php echo $_SERVER['REMOTE_USER']; ?>&nbsp;&nbsp;&nbsp; <a href="logout.php"  class="toplinks" >Logout</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></td>
       </tr>
       <tr><td id="navlinks" colspan="2">&nbsp;</td></tr>
     </table>
@@ -440,25 +426,9 @@ while (!$headernav->EOF) {
 			   //if ($userper["$perid"] == 1 && $modid != 19) { }?>
           <?php // if ($userper[10] == 1){{} ?>
           <?php //if ($userper[53] == 1){{} ?>
-          <p align="center" class="side_banner" <?= (isset($navlink)) ? 'style="padding-top: 0; margin-top: 0;"' : ''?>>AMP TOOLS</p>
-          &nbsp;&nbsp;&nbsp;<select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid"class=name >
-                <option value="index.php">Select Tool</option>
-				 <option value="index.php">&nbsp;&nbsp;---------</option>
-<?php
-$headernav->MoveFirst();
-while (!$headernav->EOF) {
-	$perid=$headernav->Fields("perid");
-	if ($userper["$perid"] == 1) { 
-		echo '  <option value="'. $headernav->Fields("file").'>">'; 
-		echo  substr($headernav->Fields("name"), 0, 20)." </option> \n";
-	}
-    $headernav->MoveNext();
-} 
-?>
-             </select>
-      <?php //if ($userper[10] == 1){}} ?>
       
 <br/><br/>
+<img src ="images/spacer.gif" width = "165" height="1">
          </td>
     
      
