@@ -28,6 +28,7 @@ class UserDataInput extends UserData {
 
     function getUser ( $userid = null ) {
 
+        $this->useDefaults = false;
         return $this->doAction( 'read', array( '_userid' => $userid, 'admin' => $this->admin ) );
 
     }

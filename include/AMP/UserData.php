@@ -49,6 +49,7 @@ class UserData {
     var $authenticated;
 
     var $values;
+    var $useDefaults;
 
     // Placeholder for HTML_QuickForm. Not required for display-only.
     var $form;
@@ -95,6 +96,7 @@ class UserData {
 
         $this->instance( $instance );
         $this->submitted = true;
+        $this->useDefaults = true;
 
         $this->admin = $admin;
 
@@ -251,11 +253,14 @@ class UserData {
                 if ( !array_search( $name, $fields ) ) continue;
             }
 
-            if ( isset( $fDef[ 'value' ] ) ) {
-                $retarray[ $name ] = $fDef[ 'value' ];
-            } elseif ( isset( $fDef[ 'values' ] ) ) {
-                $retarray[ $name ] = $fDef['values'];
+            if ( $this->useDefaults ) {
+                $valueKey = 'values';
+            } else {
+                $valueKey = 'value';
             }
+
+            if ( isset( $fDef[ $valueKey ] ) )
+                $retarray[ $name ] = $fDef[ $valueKey ];
 
         }
 
