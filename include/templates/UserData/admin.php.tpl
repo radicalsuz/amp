@@ -256,7 +256,7 @@ function addPlugin() {
 
 <?php foreach ( $this->form['sections'] as $section ): ?>
 
-    <?php if ($section['name'] == '') continue; ?>
+    <?php if (!isset($section['name']) || $section['name'] == '') continue; ?>
 
     <div id="<?= $section['name'] ?>" class="tab">
 

@@ -355,7 +355,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
             "public_$fn"   => Array( 'type' => 'checkbox', 'values' => 'public'   ),
             "required_$fn" => Array( 'type' => 'checkbox', 'values' => 'required' ),
             "type_$fn"     => Array( 'type' => 'select',   'values' => $types,    'label' => 'Type' ),
-            "text_$fn"     => Array( 'type' => 'text',     'values' => null,      'label' => 'Label' ),
+            "label_$fn"    => Array( 'type' => 'text',     'values' => null,      'label' => 'Label' ),
             "region_$fn"   => Array( 'type' => 'select',   'values' => $regions,  'label' => 'Region' ),
             "values_$fn"   => Array( 'type' => 'textarea', 'values' => null,      'label' => 'Default Values' ),
             "size_$fn"     => Array( 'type' => 'text',     'values' => null,      'label' => 'Field Size', 'size' => 3 ),
