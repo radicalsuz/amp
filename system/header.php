@@ -75,27 +75,27 @@ $mod_navs = $dbcon->Execute("SELECT * FROM module_navs where module_id=" . $dbco
 //$nav_link .= '</ul>';
 #$nav_link .= '<br clear="all" />'; 
 
-$nav_link .= '<p class="side_banner">'.$headerinst->Fields("name").'</p>';
-$nav_link .= '<ul class=side>';
+$nav_link .= "<p class='side_banner'>".$headerinst->Fields("name")."</p>";
+$nav_link .= "\n	<ul class=side>";
 
 for ($x=0; $x<sizeof($sys_nav[$modid]); $x++) {
 	if ($sys_nav[$modid][$x]['title']) {
-		$nav_link .= '</ul><p class ="sidetitle">'.$sys_nav[$modid][$x]['title'].'</p><ul class=side>';
+		$nav_link .= "\n	</ul>\n<p class ='sidetitle'>".$sys_nav[$modid][$x]['title']."</p>\n	<ul class=side>";
 	} else 
-		$nav_link .= '<li><a href="'.$sys_nav[$modid][$x]['link'].'" >'.$sys_nav[$modid][$x]['name'].'</a></li>';
+		$nav_link .= "\n		<li><a href='".$sys_nav[$modid][$x]['link']."' >".$sys_nav[$modid][$x]['name']."</a></li>";
 }
 
 
 if ($headerinst->Fields("userdatamod") == 1) {
-	$nav_link .= '<li ><a href="modinput4_data.php?modin='.$headerinst->Fields("userdatamodid").'" >View/Edit</a></li>';
-	$nav_link .= '<li ><a href="modinput4_view.php?modin='.$headerinst->Fields("userdatamodid").'" >Add</a></li>';
-	$nav_link .= '<li ><a href="modinput4_edit.php?modin='.$headerinst->Fields("userdatamodid").'" >Data Settings</a></li>';
+	$nav_link .= "\n		<li ><a href='modinput4_data.php?modin=".$headerinst->Fields("userdatamodid")."' >View/Edit</a></li>";
+	$nav_link .= "\n		<li ><a href='modinput4_view.php?modin=".$headerinst->Fields("userdatamodid")."' >Add</a></li>";
+	$nav_link .= "\n		<li ><a href='modinput4_edit.php?modin=".$headerinst->Fields("userdatamodid")."' >Data Settings</a></li>";
 }
 if ($modid != 19) {
-	$nav_link .= '<li ><a href="module_control_list.php?modid='.$modid.'" class=side>Settings</a></li>';
+	$nav_link .= "\n		<li><a href='module_control_list.php?modid=".$modid."' >Settings</a></li>";
 }
-$nav_link .= '</ul>';
-$nav_link .= '<br clear="all" />'; 
+$nav_link .= "\n	</ul>";
+$nav_link .= "<br clear='all' />"; 
 
 
 $headernav_numRows=0;

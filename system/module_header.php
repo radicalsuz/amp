@@ -1,6 +1,4 @@
 <?php
-
-
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
 include("FCKeditor/fckeditor.php");
@@ -24,8 +22,8 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
     $MM_recordId = $_POST['MM_recordId'];
     $MM_editRedirectUrl = "module_control_list.php?modid=".$_POST['modid'];
 	$MM_editColumn = "id";
-$MM_fieldsStr = "title|value|subtitile|value|html|value|article|value|templateid|value|type|value|names|value|modid|value";
-    $MM_columnsStr = "title|',none,''|subtitile|',none,''|html|none,1,0|test|',none,''|templateid|',none,''|type|',none,''|name|',none,''|modid|',none,''";	
+$MM_fieldsStr = "title|value|subtitile|value|templateid|value|type|value|names|value|modid|value|html|value|article|value";
+    $MM_columnsStr = "title|',none,''|subtitile|',none,''|templateid|',none,''|type|',none,''|name|',none,''|modid|',none,''|html|none,1,0|test|',none,''";	
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
     ob_end_flush();	
@@ -48,7 +46,7 @@ $mod_options = makelistarray($M,'id','name','Select Module');
 $Mod = & new Select('modid',$mod_options,$R->Fields("modid"));
 $html .=  $buildform->add_row('Module', $Mod);
 
-$html .= addfield('name','Page Name','text',$R->Fields("name"));
+$html .= addfield('names','Page Name','text',$R->Fields("name"));
 $html .= addfield('title','Title','text',$R->Fields("title"));
 $html .= addfield('subtitile','Subtitle','text',$R->Fields("subtitile"));
 
