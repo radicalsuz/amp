@@ -104,7 +104,7 @@ else {$fpeventsql = "";}
 if ($_REQUEST['student']== 1){$studentsql = " and student=1 ";}
 else {$studentsql = "";}
 	$state_lookup=$dbcon->GetAssoc("SELECT id, state from states");
-	print "SELECT date, id, publish, event, lstate FROM calendar WHERE date $neworold Now()-1 $endosresql $fpeventsql $studentsql and repeat != 1 $sqldate2 $sqlarea $sqltype $sqlid ORDER BY ".$sortvar." asc";
+	//print "SELECT date, id, publish, event, lstate FROM calendar WHERE date $neworold Now()-1 $endosresql $fpeventsql $studentsql and repeat != 1 $sqldate2 $sqlarea $sqltype $sqlid ORDER BY ".$sortvar." asc";
    $currentevents=$dbcon->Execute("SELECT date, id, publish, event, lstate FROM calendar WHERE date $neworold Now()-1 $endosresql $fpeventsql $studentsql and repeat != 1 $sqldate2 $sqlarea $sqltype $sqlid ORDER BY ".$sortvar." asc") or DIE($dbcon->ErrorMsg());
    $currentevents_numRows=0;
    $currentevents__totalRows=$currentevents->RecordCount();
