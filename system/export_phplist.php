@@ -24,17 +24,7 @@ while ( $row = $attr_rs->FetchRow() ) {
 
 while ( $row = $list_rs->FetchRow() ) {
     $lists[ $row['userid'] ][] = $row[ 'listid' ];
-}
-
-$listserializer = new XML_Serializer();
-$listserializer->setOption( "indent", "    " );
-$listserializer->setOption( "defaultTagName", "list" );
-
-foreach ( $lists as $userid => $listids ) {
-
-    $listserializer->serialize( $listids );
-    $subdata[ $row['userid'] ][ 'lists' ] = $listserializer->getSerializedData();
-
+    $subdata[ $row[ 'userid' ] ][ 'lists' ] = "____LIST" . $row['userid'] . "____";
 }
 
 $serializer = new XML_Serializer();
@@ -48,9 +38,25 @@ $result = $serializer->serialize( $subdata );
 print "<pre>";
 print_r( $subdata );
 
+
 if ( $result === true ) {
-    echo htmlentities( $serializer->getSerializedData() );
+    $xmlout = $serializer->getSerializedData();
 }
+
+$listserializer = new XML_Serializer();
+$listserializer->setOption( "indent", "    " );
+$listserializer->setOption( "defaultTagName", "list" );
+
+foreach ( $lists as $userid => $listids ) {
+
+    $listserializer->serialize( $listids );
+    $listout = $listserializer->getSerializedData();
+
+    str_replace( "____LIST{$userid}____", $listout, $xmlout );
+
+}
+
+print htmlentities( $xmlout );
 
 print "</pre>";
 
