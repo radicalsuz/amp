@@ -2,7 +2,7 @@
 
 /*****
  *
- * AMP UserDataModule HTML_QuickForm builder Plugin
+ * AMP UserData HTML_QuickForm builder Plugin
  *
  * Creates an HTML_QuickForm object based on the contents of
  * an UDM object.
