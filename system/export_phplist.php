@@ -14,11 +14,11 @@ $attr_rs = $dbcon->Execute( $attribute_sql );
 $list_rs = $dbcon->Execute( $list_sql );
 
 while ( $row = $user_rs->FetchRow() ) {
-    $subdata[ "user id=\"{$row['id']}\"" ] = $row;
+    $subdata[ "user id=\"{$row[ 'userid' ] }\"" ] = $row;
 }
 
 while ( $row = $attr_rs->FetchRow() ) {
-    $attrname = str_replace( " ", "-", $row['name'] );
+    $attrname = str_replace( " ", "_", $row['name'] );
     $subdata[ "user id=\"{$row[ 'userid' ]}\"" ][ $attrname ] = $row[ 'value' ];
 }
 
