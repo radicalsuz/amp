@@ -25,6 +25,7 @@ $mod_id = $udm->modTemplateID;
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+$udm->uid = $uid;
 
 // Was data submitted via the web?
 $sub = isset($_REQUEST['btnUdmSubmit']);
