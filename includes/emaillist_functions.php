@@ -317,7 +317,7 @@ function isEmail(email) {
     </tr>
     <tr> 
       <td width="100">&nbsp;</td>
-      <td colspan="2" width="350"> <input type="Submit" value="Tell Your Friends"> 
+      <td colspan="2" width="350"> <input type="Submit"  value="Tell Your Friends"> 
         <br> <br> </td>
     </tr>
   </table>
@@ -327,9 +327,9 @@ function isEmail(email) {
 		
 function friendsend($email,$fromemail,$fromname,$subject,$text) {
 	$headers="From: $fromname <$fromemail>\nReply-To: $fromemail";
-	if (emailisvalid($email)) {
+	//if (emailisvalid($email)) {
 		mail ($email,$subject,$text,$headers);
-	}
+	//}
 }			
 			
 function friendthankyou() {
