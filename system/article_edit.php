@@ -9,33 +9,65 @@ $buildform = new BuildForm;
 $obj = new SysMenu; 
   
   
+function file_list($file){ 
+	global $base_path_amp;
+	
+	$dir_name= $base_path_amp.$file;  
+	//die($dir_name);
+	$dir = opendir($dir_name);
+	$basename = basename($dir_name);
+	$fileArr = array();
+	
+	while ($file_name = readdir($dir))
+	{
+		if (($file_name !=".") && ($file_name != "..")) {
+			#Get file modification date...
+			$fName = "$dir_name/$file_name";
+			$fTime = filemtime($fName);
+			$fileArr[$file_name] = $file_name;
+			//$fileArr[$file_name][Date] = $fTime;    
+		}
+	}
+	# Use arsort to get most recent first
+	# and asort to get oldest first
+	//arsort($fileArr);	
+	return $fileArr;
+}  
 if ($userper[2] or  $userper[1] ) { } else { header ("Location: index.php"); }
 if (isset($preview)) {header ("Location: ../article.php?id=$id&preview=1");} 
 
 
 ob_start();
 
-if ($_GET[restore]) {
-	articleversionrestore($_GET[restore]);
+if ($_GET['restore']) {
+	articleversionrestore($_GET['restore']);
 	redirect("articlelist.php");
 }
 
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
    //set non POST passed varablies
 	if (isset($_POST['MM_insert'])) {
-		$_POST['datecreated'] = date("y-n-j");;
-		$editor_user_id=$dbcon->GetAssoc('Select id, name from users where name='.$_SERVER['REMOTE_USER']);
-		$_POST['enteredby'] = $key($editor_user_id);
+		$_POST['datecreated'] = date("y-n-j");
+		$sql = "Select id, name from users where name='".$_SERVER['REMOTE_USER']."'";
+		$editor_user_id=$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
+		$_POST['enteredby'] = $editor_user_id->Fields("id");
+		
 	}
 	// add version control
 	else if ( (isset($_POST['MM_update'])) or (isset($_POST['MM_delete'])) ) {
 		articleversion($_POST['MM_recordId']);
 	}
+
+	//upload picture
+	$getimgset=$dbcon->Execute("SELECT thumb, optw, optl FROM sysvar where id =1") or DIE($dbcon->ErrorMsg());
+	if ($_FILES['file']['name']) {
+		$picture = upload_image('',$getimgset->Fields("optw"),$getimgset->Fields("optl"),$getimgset->Fields("thumb"));
+	}
 	
 	$date =  DateConvertIn($date);
-	$_POST[textfield] =htmlspecialchars($textfield);
-	if ($_POST[mlink]) { 
-		$link = $_POST[mlink];
+	$_POST['textfield'] =htmlspecialchars($textfield);
+	if ($_POST['mlink']) { 
+		$link = $_POST['mlink'];
 		$linkuse = 1;
 	 }
 	$MM_editColumn = "id";  
@@ -79,7 +111,7 @@ $r=$dbcon->Execute("SELECT * FROM articles WHERE id = " . ($r__MMColParam) . "")
 
 //pull from version table if called
 if (isset($_GET['vid'])) {
-	$r=$dbcon->Execute("SELECT * FROM articles_version WHERE vid = " . $_GET[vid] . "") or DIE("75".$dbcon->ErrorMsg());	
+	$r=$dbcon->Execute("SELECT * FROM articles_version WHERE vid = " . $_GET['vid'] ) or die("75".$dbcon->ErrorMsg());	
 	$id = $r->Fields("id");
 }
 
@@ -217,7 +249,7 @@ function ValidateForm(){
 
 
 
-<form name="form" ACTION="<?php echo $_SERVER['PHP_SELF'] ?>" METHOD="POST" >
+<form name="form" ACTION="<?php echo $_SERVER['PHP_SELF'] ?>" METHOD="POST" enctype="multipart/form-data">
              
 	<table width="100%" border="0" align="center" bgcolor="#dedede">
 		<tr> 
@@ -421,16 +453,25 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td colspan="2" valign="top"><?php echo helpme("Image"); ?> Image 
               (to appear on front page and in first paragraph of article)</td>
           </tr>
-          <tr> 
-            <td valign="top" class="name">Image Filename</td>
-            <td> <input type="text" name="picture" size="50" value="<?php echo $r->Fields("picture")?>"> 
-            </td>
-          </tr>
+ <?php
+ 	if (!$_GET['id'] or (!$r->Fields("picture"))) {
+		echo  addfield('file','Uplaod File <br>(jpg files only)','file');
+	} else {
+		$filelist = file_list('img/thumb/'); 
+		//$img_options = makelistarray($G,'id','galleryname','Select Gallery');
+		$Gal = & new Select('picture',$filelist,$r->Fields("picture"));
+		echo $buildform->add_row('Image Filename', $Gal);
+ 	 
+ ?>
+ 
           <tr class="text"> 
-            <td valign="top"><div align="right"></div></td>
+            <td valign="top"><div align="right"></div></td> 
             <td><p> &nbsp;<a href="imgdir.php" target="_blank">view images</a> 
-                | <a href="imgup.php" target="_blank">upload image</a><br>
-                <input <?php If (($r->Fields("picuse")) == "1") { echo "CHECKED";} ?> type="checkbox" name="usepict" value="1">
+                | <a href="imgup.php" target="_blank">upload image</a></td>
+          </tr><?php }?>
+          <tr class="text"> 
+            <td valign="top"><div align="right"></div></td> 
+            <td>      <input <?php If (($r->Fields("picuse")) == "1") { echo "CHECKED";} ?> type="checkbox" name="usepict" value="1">
                 USE THIS IMAGE<br>
               </p></td>
           </tr>
@@ -482,7 +523,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
           </tr>
 		   </table>
 		  </div>
-		    <div id="advanced" style="display: none;">
+				    <div id="advanced" style="display: none;">
 		  <table width="100%" border="0" align="center"> 
 		  <tr class="intitle"> 
             <td colspan="2" valign="top"><?php echo helpme("Display and Publishing"); ?> 

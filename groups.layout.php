@@ -1,16 +1,43 @@
-<span class ="eventtitle"><a <?php 
- if (($groups->Fields("WebPage") != ($null)) and ($groups->Fields("WebPage") != ("http://")))  
- {echo "href=\"".$groups->Fields("WebPage")."\"";}?> class ="eventtitle" target="_blank"><?php echo $groups->Fields("Organization")?></a></span><br>
-<?php if (($groups->Fields("City")) && ($groups->Fields("state"))) {?>
-	 <span class="eventsubtitle"><?php echo $groups->Fields("City")?>, <?php  if  ($groups->Fields("state") ==53) {echo $groups->Fields("Country") ;} else { 
-	 echo $groups->Fields("state");}?></span><br><?php }?>
-	 
-<?php if (($groups->Fields("FirstName") !=($null))  or ($groups->Fields("LastName") !=($null))) { ?>
-<span class="bodygrey"><?php echo $groups->Fields("FirstName")?>&nbsp;<?php echo $groups->Fields("LastName")?></span><br><?php } ?>
-<?php if (($groups->Fields("EmailAddress") !=($null)) ) { ?>
-<span class="bodygrey"><a href="mailto:<?php echo $groups->Fields("EmailAddress")?>"><?php echo $groups->Fields("EmailAddress")?></a></span><br><?php } ?>
-<?php if (($groups->Fields("Phone") !=($null)) ) { ?>
-<span class="bodygrey"><?php echo $groups->Fields("Phone")?></span><br><?php } ?>
-<?php if ($groups->Fields("field1") != ($null)) { ?>
-<span class="text"><?php echo converttext($groups->Fields("field1")); ?></span><br><?php }?>
-<br>
+<?php
+if (!function_exists('groups_layout_display')) {
+	function groups_layout_display($Organization,$City=NULL,$State=NULL,$Country=NULL,$First_Name=NULL,$Last_Name=NULL,$Email=NULL,$Phone=NULL,$Web_Page=NULL,$About=NULL) {
+		$html .= "<span class =\"eventtitle\"> \n";
+		$html .= "<a";
+		if ($Web_Page && ($Web_Page != 'http://')) {
+			 $html .= " href=\"$Web_Page\" ";
+		}
+		$html .= " class =\"eventtitle\" target=\"_blank\">".$Organization;
+		 
+		$html .= "</a></span><br>";
+		
+		if ($City && $State) {
+			$html .= "<span class=\"eventsubtitle\">$City, ";
+			if ($State =='Intl') { 
+				$html .= $Country;
+			} else {
+				$html .= state_convert($State);
+			}		
+			$html .="</span><br>\n";
+		}
+	
+		if ( ($First_Name) & ($Last_Name) ) {
+			$html .= "<span class=\"bodygrey\">". $First_Name . "&nbsp;" . $Last_Name. "</span><br>\n";
+		}
+		if ($Email) {
+			$html .= "<span class=\"bodygrey\"><a href=\"mailto:$Email\">$Email</a></span><br>\n";
+		}
+		if ($Phone) {
+			$html .= "<span class=\"bodygrey\">". $Phone . "</span><br>\n";
+		}
+		if ($About) {
+			$html .= "<span class=\"bodygrey\">". converttext($About) . "</span><br>\n";
+		}
+		$html .= "<br>\n";
+		return $html;
+	}
+}
+
+echo  groups_layout_display( $groups->Fields("Company"), $groups->Fields("City"), $groups->Fields("State") , $groups->Fields("Country"), $groups->Fields("First_Name"), $groups->Fields("Last_Name"), $groups->Fields("Email"), $groups->Fields("Phone"), $groups->Fields("Web_Page"), $groups->Fields("custom1"));
+
+
+?>

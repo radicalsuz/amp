@@ -3,7 +3,7 @@
 $modid = "45";
 
 require("Connections/freedomrising.php");
-include("Connections/menu.class.php");
+require("Connections/sysmenu.class.php");
 $buildform = new BuildForm;
 $obj = new Menu; 
 $class=$dbcon->Execute("SELECT id, class FROM class ORDER BY id ASC") or DIE($dbcon->ErrorMsg());

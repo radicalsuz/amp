@@ -3,6 +3,13 @@
 require("Connections/freedomrising.php");
 $modid="30";
 
+function module_name($id) {
+	global $dbcon;
+	$sql ="select name from moduletext where id =$id"; 
+	$R=$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
+	$output= $R->Fields("name");
+	return $output;
+}
 
 if (isset($_POST['moduleid'])) {
 	$field= 'moduleid';
@@ -27,7 +34,7 @@ if (isset($_POST['moduleid'])) {
 
 // insert, update, delete
 if (isset($_POST['MM_update'])) {
-	
+
 	$sql = "delete from nav where $field = $field_value";
 	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
 	echo $sql.'<br>';
@@ -57,7 +64,7 @@ $nsql = "SELECT modules.name as `mod`, navtbl.name, navtbl.id FROM navtbl, modul
 $N=$dbcon->Execute( $nsql ) or die( "Error getting module information: " . $nsql . "<br/>" . $dbcon->ErrorMsg());	
 
 include ("header.php") ; ?>
-	<h2>Navigation Files</h2>
+	<h2><?php echo module_name($_GET['mod_id']);?> Navigation Files</h2>
 	<script type="text/javascript">
 
 	var SearchLines=new Array(); //Holds pointers to search criteria form elements
@@ -199,7 +206,7 @@ while (!$R->EOF) {
 
 	<tr>
 		<td>
-			<img src="images/hand.gif" align="left"><select name ='navid[<?php echo $x ;?>]'>
+			<select name ='navid[<?php echo $x ;?>]'>
 				<?php while (!$N->EOF) { ?>
 				<option value="<?php echo $N->Fields("id"); ?>" <?php if ($N->Fields("id")==$R->Fields("navid")) echo "SELECTED";?>><?php echo $N->Fields("mod").": ".$N->Fields("name"); ?></option>
 				<?php
@@ -207,8 +214,7 @@ while (!$R->EOF) {
 }
 $N->MoveFirst()
 ?>
-			</select>
-		</td>
+			</select>		</td>
 		<td>
 			<select name="position[<?php echo $x ;?>]">
                   <option value="L1" <?php if ($R->Fields("position")== "L1") echo "SELECTED";?>>Left Side, Position 1</option>
@@ -245,16 +251,15 @@ if ($R->RecordCount() == 0) {
 
 	<tr>
 		<td>
-			<img src="images/hand.gif" align="left"><select name ='navid[<?php echo $x ;?>]'>
+			<select name ='navid[<?php echo $x ;?>]'>
 				<?php while (!$N->EOF) { ?>
-				<option value="<?php echo $N->Fields("id"); ?>"><?php echo $N->Fields("name"); ?></option>
+				<option value="<?php echo $N->Fields("id"); ?>"><?php echo $N->Fields("mod").": ".$N->Fields("name"); ?></option>
 				<?php
 	$N->MoveNext();
 }
 $N->MoveFirst()
 ?>
-			</select>
-		</td>
+			</select>		</td>
 		<td>
 			<select name="position[<?php echo $x ;?>]">
                   <option value="L1" >Left Side, Position 1</option>

@@ -26,9 +26,6 @@ if (isset($_SERVER['QUERY_STRING'])) {
 	$MM_current_page.="?".$MM_query_string;
 }
 
-/* Disabling permissions system until this actually makes sense (i.e., we have
-** a source for ID and so on...
-*
 $allowed_pages=$dbcon->GetAssoc("Select id, system_allow_only from users where id=$ID");
 if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted to certain pages
 	$permit_access=FALSE;
@@ -46,7 +43,6 @@ if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted 
 		header ("Location:index.php");
 	}
 }
-*/
 
 $headernav = $dbcon->Execute("SELECT name, id, file, perid  FROM modules where publish=1 order by name asc") or DIE("Couldn't fetch nav header info: " . $dbcon->ErrorMsg());
 
@@ -84,44 +80,45 @@ if ($modid !=NULL) {
 	$mod_name =$modid;
 }
 
-$nav_link = '';
-if (isset($sys_nav[$mod_name])) {
+if ($sys_nav[$mod_name]['title']) {
+	$header_title = $sys_nav[$mod_name]['title'];
+}
+$nav_link .= "<p class='side_banner'>".$header_title."</p>";
+$nav_link .= "\n	<ul class=side>";
 
-    $modsize= sizeof($sys_nav[$mod_name]);
+$modsize= sizeof($sys_nav[$mod_name]);
 
-    if (isset($sys_nav[$mod_name]['title']) && $sys_nav[$mod_name]['title']) {
-        $header_title = $sys_nav[$mod_name]['title'];
-        $modsize = ($modsize -1);
-    }
+if (isset($sys_nav[$mod_name]['title']) && $sys_nav[$mod_name]['title']) {
+    $header_title = $sys_nav[$mod_name]['title'];
+	$modsize = ($modsize -1);
+}
 
-    $nav_link .= "<p class='side_banner'>".$header_title."</p>";
-    $nav_link .= "\n	<ul class=side>";
-
-    for ($x=0; $x<$modsize; $x++) {
-        if (isset($sys_nav[$mod_name][$x]['title'])) {
-            $nav_link .= "\n	</ul>\n<p class ='sidetitle'>".$sys_nav[$mod_name][$x]['title']."</p>\n	<ul class=side>";
-        } else {
-            $nav_css = '';
-            if (isset($sys_nav[$mod_name][$x]['class'])) {
-                $nav_css = nav_css($sys_nav[$mod_name][$x]['class']);
-            }
-            $nav_link .= "\n		<li $nav_css><a href='".$sys_nav[$mod_name][$x]['link']."' >".$sys_nav[$mod_name][$x]['name']."</a></li>";
+$nav_link .= "<p class='side_banner'>$header_title</p>";
+$nav_link .= "\n    <ul class=\"side\">";
+	
+for ($x=0; $x<$modsize; $x++) {
+	if (isset($sys_nav[$mod_name][$x]['title'])) {
+		$nav_link .= "\n	</ul>\n<p class ='sidetitle'>".$sys_nav[$mod_name][$x]['title']."</p>\n	<ul class=side>";
+	} else {
+        if (isset($sys_nav[$mod_name][$x]['class'])) {
+            $nav_css = nav_css($sys_nav[$mod_name][$x]['class']);
         }
-    }
-
+		$nav_link .= "\n		<li $nav_css><a href='".$sys_nav[$mod_name][$x]['link']."' >".$sys_nav[$mod_name][$x]['name']."</a></li>";
+	}
 }
 
 if ($header_udm == 1) {
     if (!isset($sys_nav[$mod_name])) {
         $nav_link .= '<p class="side_banner">' . $headerinst->Fields('name') . '</p>';
-        $nav_link .= "\n    <ul class=side>";
+        $nav_link .= "\n    <ul class=\"side\">";
     }
+
 	$nav_link .= "\n		<li ".nav_css("view")."><a href='modinput4_data.php?modin=".$header_udmid."' >View/Edit</a></li>";
 	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_view.php?modin=".$header_udmid."' >Add</a></li>";
-	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy</a></li>";
 	$nav_link .= "\n		<li ".nav_css("search")." ><a href='modinput4_search.php?modin=".$header_udmid."' >Search</a></li>";
 	$nav_link .= "\n		<li ".nav_css("form")." ><a href='modinput4_edit.php?modin=".$header_udmid."' >Form Settings</a></li>";
 }
+
 if ($modid != 19 && $modid != 31 && $modid != 30 && ($modid)) {
 	$nav_link .= "\n		<li ".nav_css("page")."><a href='module_header_list.php?modid=".$modid."' >Pages</a></li>";
 	$nav_link .= "\n		<li ".nav_css("settings")."><a href='module_control_list.php?modid=".$modid."' >Settings</a></li>";
@@ -413,60 +410,25 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
                         <td><nobr><img src="images/amp-megaphone.png" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> Administration</span></nobr> </td>
                         <td align="right" valign="middle" bgcolor="#006699" class="toplinks"> 
         
-<p class = "toplinks">Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'standard');" class="toplinks">Advanced</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class=name >
-                <option value="index.php">Select Tool</option>
-				 <option value="index.php">&nbsp;&nbsp;---------</option>
-<?php
-$headernav->MoveFirst();
-while (!$headernav->EOF) {
-	$perid=$headernav->Fields("perid");
-	if ($userper["$perid"] == 1) { 
-		echo '  <option value="'. $headernav->Fields("file").'>">'; 
-		echo  substr($headernav->Fields("name"), 0, 20)." </option> \n";
-	}
-    $headernav->MoveNext();
-} 
-?>
-              </select>&nbsp;&nbsp;&nbsp;</td>
+<p class="toplinks">User: <?php echo $_SERVER['REMOTE_USER']; ?>&nbsp;&nbsp;&nbsp; <a href="logout.php"  class="toplinks" >Logout</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></td>
       </tr>
       <tr><td id="navlinks" colspan="2">&nbsp;</td></tr>
     </table>
   </td>
 </tr>
-<tr> 
+  <tr> 
     <td bgcolor="#dedede" width="160" valign="top"> 
-	<?= $nav_link ?>
+	<?= $nav_link; ?>
 	     <?php // $perid=$headerinst->Fields("perid");
-			   //if ($userper["$perid"] == 1 && $modid != 19) { }?>
-          <?php // if ($userper[10] == 1){{} ?>
-          <?php //if ($userper[53] == 1){{} ?>
-          <p align="center" class="side_banner" <?= (isset($navlink)) ? 'style="padding-top: 0; margin-top: 0;"' : ''?>>AMP TOOLS</p>
-          &nbsp;&nbsp;&nbsp;<select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid"class=name >
-                <option value="index.php">Select Tool</option>
-				 <option value="index.php">&nbsp;&nbsp;---------</option>
-<?php
-$headernav->MoveFirst();
-while (!$headernav->EOF) {
-	$perid=$headernav->Fields("perid");
-	if ($userper["$perid"] == 1) { 
-		echo '  <option value="'. $headernav->Fields("file").'>">'; 
-		echo  substr($headernav->Fields("name"), 0, 20)." </option> \n";
-	}
-    $headernav->MoveNext();
-} 
-?>
-             </select>
-      <?php //if ($userper[10] == 1){}} ?>
-      
-<br/><br/>
+			   //if ($userper["$perid"] == 1 && $modid != 19) { }
+               // if ($userper[10] == 1){{} 
+               //if ($userper[53] == 1){{} ?>
+       
+            <br/><br/>
+            <img src ="images/spacer.gif" width = "165" height="1">
          </td>
     
-     
     <td valign="top" bgcolor="#FFFFFF" width="100%">
 	<div><fieldset  style=" border: 1px solid grey; margin:20px; padding-top:10px; padding-left:10px; padding-right:10px; padding-bottom:10px;">
 	
-	
-	<? 
-			
-	
-} ?>
+<?php } ?>
