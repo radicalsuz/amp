@@ -1,120 +1,103 @@
 <?php
 $mod_id = 7;
 $modid = 2;
-include("sysfiles.php");
-include("header.php"); 
-include("dropdown.php"); 
+include("AMP/BaseDB.php");
+include("AMP/BaseTemplate.php");
+include("includes/moduleintro.php");  
 
+$have=$dbcon->CacheExecute("SELECT *  FROM userdata  Where custom6 = 'Have a Ride to Offer' and  custom9='1' and modin=10  ORDER BY custom1 ASC") or DIE($dbcon->ErrorMsg());
 
-   $have=$dbcon->CacheExecute("SELECT *  FROM ride  Where need='have'and  publish='1' and board='2' ORDER BY depatingfrom ASC") or DIE($dbcon->ErrorMsg());
-   $have_numRows=0;
-   $have__totalRows=$have->RecordCount();
+$need=$dbcon->CacheExecute("SELECT *  FROM userdata  WHERE custom6 = 'Need a Ride' and custom9=1 and modin=10  ORDER BY custom1 ASC") or DIE($dbcon->ErrorMsg());
 
-   $need=$dbcon->CacheExecute("SELECT *  FROM ride  WHERE need = 'need' and publish=1 and board=2 ORDER BY depatingfrom ASC") or DIE($dbcon->ErrorMsg());
-   $need_numRows=0;
-   $need__totalRows=$need->RecordCount();
-
-   $Repeat1__numRows = -1;
-   $Repeat1__index= 0;
-   $have_numRows = $have_numRows + $Repeat1__numRows;
-
-   $Repeat2__numRows = -1;
-   $Repeat2__index= 0;
-   $need_numRows = $need_numRows + $Repeat2__numRows;
 ?> 
 <p class="text"><a href="#need">Need a Ride</a> | <a href="#have">Have a Ride 
-  to Offer</a><a href="ride_add.php"><br>
+  to Offer</a><a href="modinput4.php?modin=10"><br>
   Add a Listing on the Ride Board</a> <br>
-  <a href="ride_remove.php">Remove Posting From Ride Board</a></p>
+  <a href="modinput4_login.php?modin=10">Edit Your Ride Board Posting</a></p>
 <p class="title"><a name="have"></a>Have a Ride to Offer</p>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr bgcolor="#006666"> 
-    <td class="form"><font color="#FFFFFF"><b>Departing From</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b>Departing Date</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b>Returning to</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b>Return Date</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b># of people</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b>Contact</b></font></td>
-    <td class="form"><font color="#FFFFFF">&nbsp;</font></td>
+<table width="100%" border="0" cellspacing="0" cellpadding="2" align="center" class="boardbg">
+  <tr class=board> 
+    <td class=board ><b>Departing From</b></td>
+    <td class=board><b>Departing Date</b></td>
+    <td class=board><b>Returning to</b></td>
+    <td class=board><b>Return Date</b></td>
+    <td class=board><b># of people</b></td>
+    <td class=board ><b>Contact</b></td>
+    <td class=board>&nbsp;</td>
   </tr>
-  <?php while (($Repeat1__numRows-- != 0) && (!$have->EOF)) 
-   { 
+<?php
+while  (!$have->EOF)    { 
 ?>
   <tr> 
-    <td valign="top" class="text"> <?php echo $have->Fields("depatingfrom")?> 
+    <td valign="top" class="text"> <?php echo $have->Fields("custom1")?> 
     </td>
-    <td valign="top" class="text"> <?php echo $have->Fields("depaturedate")?> 
+    <td valign="top" class="text"> <?php echo $have->Fields("custom2")?> 
     </td>
-    <td valign="top" class="text"> <?php echo $have->Fields("returningto")?> </td>
-    <td valign="top" class="text"> <?php echo $have->Fields("returndate")?> </td>
-    <td valign="top" class="text"> <?php echo $have->Fields("numpeople")?> </td>
-    <td valign="top" class="text"> <p> <?php echo $have->Fields("firstname")?> 
-        &nbsp; <?php echo $have->Fields("lastname")?> <br>
-        <a href="mailto:<?php echo $have->Fields("email")?>"> 
-        <?php echo $have->Fields("email")?> </a>&nbsp;<br>
-        <?php echo $have->Fields("phone")?> </p></td>
+    <td valign="top" class="text"> <?php echo $have->Fields("custom3")?> </td>
+    <td valign="top" class="text"> <?php echo $have->Fields("custom4")?> </td>
+    <td valign="top" class="text"> <?php echo $have->Fields("custom5")?> </td>
+    <td valign="top" class="text"> <p> <?php echo $have->Fields("First_Name")?> 
+        &nbsp; <?php echo $have->Fields("Last_Name")?> <br>
+        <a href="mailto:<?php echo $have->Fields("Email")?>"> 
+        <?php echo $have->Fields("Email")?> </a>&nbsp;<br>
+        <?php echo $have->Fields("Phone")?> </p></td>
     <td valign="top" class="text">&nbsp; </td>
   </tr>
   <tr> 
     <td valign="top" class="text">&nbsp;</td>
-    <td valign="top" class="text" colspan="6"><b>Comments: </b> <?php echo nl2br( $have->Fields("commets")) ?> 
+    <td valign="top" class="text" colspan="6"><b>Comments: </b> <?php echo nl2br( $have->Fields("custom8")) ?> 
     </td>
   </tr>
   <tr> 
-    <td colspan="7" valign="top" bgcolor="#006666" class="text"><img src="img/spacer.gif" height="4"></td>
+    <td colspan="7" valign="top" class="board"><img src="img/spacer.gif" height="4"></td>
   </tr>
   <?php
-  $Repeat1__index++;
-  $have->MoveNext();
+	$have->MoveNext();
 }
 ?>
 </table>
 <p class="title"><a name="need"></a>Need a Ride</p>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr bgcolor="#006666"> 
-    <td class="form"><font color="#FFFFFF"><b>Departing From</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b>Departing Date</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b>Returning to</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b>Return Date</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b># of people</b></font></td>
-    <td class="form"><font color="#FFFFFF"><b>Contact</b></font></td>
-    <td class="form"><font color="#FFFFFF">&nbsp;</font></td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" class="boardbg">
+  <tr class=board> 
+    <td class=board><b>Departing From</b></td>
+    <td class=board><b>Departing Date</b></td>
+    <td class=board><b>Returning to</b></td>
+    <td class=board ><b>Return Date</b></td>
+    <td class=board><b># of people</b></td>
+    <td class=board><b>Contact</b></td>
+    <td class=board>&nbsp;</td>
   </tr>
-  <?php while (($Repeat2__numRows-- != 0) && (!$need->EOF)) 
-   { 
+  <?php
+while (!$need->EOF) { 
 ?>
   <tr> 
-    <td valign="top" class="text"> <?php echo $need->Fields("depatingfrom")?> 
+    <td valign="top" class="text"> <?php echo $need->Fields("custom1")?> 
     </td>
-    <td valign="top" class="text"> <?php echo $need->Fields("depaturedate")?> 
+    <td valign="top" class="text"> <?php echo $need->Fields("custom2")?> 
     </td>
-    <td valign="top" class="text"> <?php echo $need->Fields("returningto")?> </td>
-    <td valign="top" class="text"> <?php echo $need->Fields("returndate")?> </td>
-    <td valign="top" class="text"> <?php echo $need->Fields("numpeople")?> </td>
-    <td valign="top" class="text"> <p> <?php echo $need->Fields("firstname")?> 
-        &nbsp; <?php echo $need->Fields("lastname")?> <br>
-        <a href="mailto:<?php echo $need->Fields("email")?>"> 
-        <?php echo $need->Fields("email")?> </a>&nbsp; <?php echo $need->Fields("phone")?> 
+    <td valign="top" class="text"> <?php echo $need->Fields("custom3")?> </td>
+    <td valign="top" class="text"> <?php echo $need->Fields("custom4")?> </td>
+    <td valign="top" class="text"> <?php echo $need->Fields("custom5")?> </td>
+    <td valign="top" class="text"> <p> <?php echo $need->Fields("First_Name")?> 
+        &nbsp; <?php echo $need->Fields("Last_Name")?> <br>
+        <a href="mailto:<?php echo $need->Fields("Email")?>"> 
+        <?php echo $need->Fields("Email")?> </a>&nbsp; <?php echo $need->Fields("Phone")?> 
         <br>
       </p></td>
     <td valign="top" class="text">&nbsp; </td>
   </tr>
   <tr> 
     <td valign="top" class="text">&nbsp;</td>
-    <td valign="top" class="text" colspan="6"><b>Comments: </b> <?php echo nl2br( $need->Fields("commets")) ?></td>
+    <td valign="top" class="text" colspan="6"><b>Comments: </b> <?php echo nl2br( $need->Fields("custom8")) ?></td>
   </tr>
-  <tr bgcolor="#006666"> 
-    <td colspan="7" valign="top" class="text"><img src="img/spacer.gif" width="1" height="4"></td>
+  <tr class=board> 
+    <td colspan="7" valign="top" ><img src="img/spacer.gif" width="1" height="4"></td>
   </tr>
   <?php
-  $Repeat2__index++;
-  $need->MoveNext();
+	$need->MoveNext();
 }
 ?>
 </table>
 <p>&nbsp;</p>
 <?php
-  $have->Close();
-
-  $need->Close();
- include("footer.php"); ?>
+include("AMP/BaseFooter.php");?>
