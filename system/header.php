@@ -1,23 +1,25 @@
 <?php 
+
 include("Connections/system_navs.php");
+
 $cookiename = "AMPheader";
-if ($_COOKIE[$cookiename]) {
+if (isset($_COOKIE[$cookiename]) && $_COOKIE[$cookiename]) {
 	$cookvalue = $_COOKIE[$cookiename]; 
-}
-else { 
+} else { 
 	$cookvalue = "standard";
 }
+
 if  ($cookvalue == "standard") {
 	$hd_standard = "block";
 	$hd_basic = "none";
-}
-else {
+} else {
 	$hd_standard = "none";
 	$hd_basic = "block";
 }
 
 //ENSURE THAT THE current user is allowed to see this page
 $MM_current_page =basename($_SERVER['PHP_SELF']);
+$MM_query_string = '';
 if (isset($_SERVER['QUERY_STRING'])) {
 	parse_str($_SERVER['QUERY_STRING'], $MM_active_vars);
 	foreach ($MM_active_vars as $v_key=>$v_value) {
@@ -25,6 +27,10 @@ if (isset($_SERVER['QUERY_STRING'])) {
 	}
 	$MM_current_page.="?".$MM_query_string;
 }
+
+/*
+
+The permissions system is currently doing nothing at all, and therefore it has been disabled. To be born again, new and shiny.
 
 $allowed_pages=$dbcon->GetAssoc("Select id, system_allow_only from users where id=$ID");
 if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted to certain pages
@@ -44,7 +50,10 @@ if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted 
 	}
 }
 
-$headernav = $dbcon->Execute("SELECT name, id, file, perid  FROM modules where publish=1 order by name asc") or DIE("Couldn't fetch nav header info: " . $dbcon->ErrorMsg());
+*/
+
+$headernav = $dbcon->Execute("SELECT name, id, file, perid  FROM modules where publish='1' order by name asc")
+                or DIE("Couldn't fetch nav header info: " . $dbcon->ErrorMsg());
 
 
 #$nav_link .= '<div width= "100%"><fieldset   style="  border: 1px solid black;">';
@@ -65,30 +74,17 @@ $headernav = $dbcon->Execute("SELECT name, id, file, perid  FROM modules where p
 //$nav_link .= '</ul>';
 #$nav_link .= '<br clear="all" />'; 
 
-function nav_css($class=NULL) {
-	$output= ' class="side_'.$class.'"';  
-	if (!$class) {$output=' class="side_type"'; }
-	return $output;
-}
-// get information about the module
-if ($modid !=NULL) {
-	$headerinst = $dbcon->Execute("SELECT * FROM modules where id=" . $dbcon->qstr($modid)) or DIE("could not load module information in header: " . $dbcon->ErrorMsg());
-	$mod_navs = $dbcon->Execute("SELECT * FROM module_navs where module_id=" . $dbcon->qstR($modid)) or DIE("could not load module navigation information in header".$dbcon->ErrorMsg());
-	$header_title = $headerinst->Fields("name");
-	$header_udm = $headerinst->Fields("userdatamod");
-	$header_udmid = $headerinst->Fields("userdatamodid");
-	$mod_name =$modid;
-}
+$nav_link = '<p class="side_banner">' .
+            $headerinst->Fields("name") .
+            "</p>\n" . '<ul class="side">';
 
-if ($sys_nav[$mod_name]['title']) {
-	$header_title = $sys_nav[$mod_name]['title'];
-}
-$nav_link .= "<p class='side_banner'>".$header_title."</p>";
-$nav_link .= "\n	<ul class=side>";
-
-$modsize= sizeof($sys_nav[$mod_name]);
-if ($sys_nav[$mod_name]['title']) {
-	$modsize = ($modsize -1);
+if ( isset( $sys_nav[$modid] ) ) {
+    for ($x=0; $x<sizeof($sys_nav[$modid]); $x++) {
+        if ($sys_nav[$modid][$x]['title']) {
+            $nav_link .= "\n	</ul>\n<p class ='sidetitle'>".$sys_nav[$modid][$x]['title']."</p>\n	<ul class=side>";
+        } else 
+            $nav_link .= "\n		<li><a href='".$sys_nav[$modid][$x]['link']."' >".$sys_nav[$modid][$x]['name']."</a></li>";
+    }
 }
 	
 for ($x=0; $x<$modsize; $x++) {
@@ -114,7 +110,7 @@ $nav_link .= "<br clear='all' />";
 
 
 
-if (!$_GET['noHeader']) {
+if (!isset($_GET['noHeader']) || !$_GET['noHeader']) {
 
 ?>
 <html>
@@ -382,7 +378,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
     <?php include("Connections/ddnav.php"); ?>
 </head>
 
-<body <?= ($browser_mo) ? 'onload="initEditor()"' : '' ?>>
+<body <?= (isset($browser_mo) && $browser_mo) ? 'onload="initEditor()"' : '' ?>>
     <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center"> 
         <tr bordercolor="#FFFFFF" bgcolor="#dedede" valign="top">
             <td colspan="4" id="pagetitle">
