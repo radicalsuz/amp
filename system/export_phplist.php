@@ -17,7 +17,7 @@ while ( $row = $user_rs->FetchRow() ) {
     $subdata[ $row['id'] ] = $row;
 }
 
-while ( $row = $attribute_rs->FetchRow() ) {
+while ( $row = $attr_rs->FetchRow() ) {
     $attrname = preg_replace( " ", "-", $row['name'] );
     $subdata[ $row[ 'userid' ] ][ $attrname ] = $row[ 'value' ];
 }
