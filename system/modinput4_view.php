@@ -16,6 +16,7 @@ require_once( 'utility.functions.inc.php' );
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserData( $dbcon, $_REQUEST[ 'modin' ] );
 $udm->admin = true;
+$udm->authorized = true;
 
 $modidselect=$dbcon->Execute("SELECT id from modules where userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
 $modid=$modidselect->Fields("id");
