@@ -29,7 +29,7 @@ class UserDataInput extends UserData {
     function getUser ( $userid = null ) {
 
         $this->useDefaults = false;
-        return $this->doAction( 'read', array( '_userid' => $userid, 'admin' => $this->admin ) );
+        return $this->doAction( 'Read', array( '_userid' => $userid, 'admin' => $this->admin ) );
 
     }
 
@@ -51,24 +51,17 @@ class UserDataInput extends UserData {
 
     function saveUser () {
 
-        $options = array( 'admin' => $this->admin );
+        $options = array( 'admin' => array ( 'value' => $this->admin ) );
 
         if (!isset( $this->form )) {
-
             $result = $this->doPlugin( 'QuickForm', 'build', $options );
-
         }
 
-        if ( $result ) {
+        if ( !$result )     return false;
+        if ( !$this->form ) return false;
 
-            $this->modTemplateID = $this->_module_def['modidresponse'];
-            return $this->doAction( 'save', $options );
-
-        } else { 
-
-            return false;
-
-        }
+        $this->modTemplateID = $this->_module_def['modidresponse'];
+        return $this->doAction( 'Save', $options );
 
     }
 
@@ -82,7 +75,7 @@ class UserDataInput extends UserData {
 
     function findDuplicates () {
 
-        return $this->doAction( 'duplicate_check' );
+        return $this->doAction( 'DuplicateCheck' );
 
     }
 
@@ -92,16 +85,13 @@ class UserDataInput extends UserData {
         // get along without data access functions. Register the default
         // AMP plugins.
 
-        $r = $this->registerPlugin( 'AMP', 'read' ) or $r;
-        $r = $this->registerPlugin( 'AMP', 'save' ) or $r;
-        $r = $this->registerPlugin( 'AMP', 'duplicate_check' ) or $r;
-        $r = $this->registerPlugin( 'AMP', 'authenticate' ) or $r;
-        $r = $this->registerPlugin( 'AMP', 'email_admin' ) or $r;
+        $r = $this->registerPlugin( 'AMP', 'Read'           ) and $r;
+        $r = $this->registerPlugin( 'AMP', 'Save'           ) and $r;
+        $r = $this->registerPlugin( 'AMP', 'DuplicateCheck' ) and $r;
+        $r = $this->registerPlugin( 'AMP', 'Authenticate'   ) and $r;
+        $r = $this->registerPlugin( 'AMP', 'EmailAdmin'     ) and $r;
 
     }
-
-
-
 }
 
 ?>

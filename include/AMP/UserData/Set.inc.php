@@ -18,7 +18,7 @@ class UserDataSet extends UserData {
         // get along without data access functions. Register the default
         // AMP plugins.
 
-        $r = $this->registerPlugin( 'Output', 'userlist_html' ) or $r;
+        #$r = $this->registerPlugin( 'Output', 'UserlistHTML' ) or $r;
 
     }
 
@@ -26,7 +26,7 @@ class UserDataSet extends UserData {
 
 	function getSet($options) {
 		$list_sql=$this->_render_sql();
-		#print $list_sql;
+		if ($_REQUEST['debug']==1) print $list_sql;
 		$this->results=$this->dbcon->GetArray($list_sql);
 		return (is_array($this->results));
 	}

@@ -40,6 +40,7 @@ class UserData {
     // Computed Fields ( including plugin fields )
     var $name;
     var $fields;
+    var $plugins;
 
     // User ID
     var $uid;
@@ -232,7 +233,7 @@ class UserData {
         $options = array( 'uid'  => $uid,
                           'pass' => $pass );
 
-        return $this->doAction( 'authenticate', $options );
+        return $this->doAction( 'Authenticate', $options );
 
     }
 
@@ -293,6 +294,45 @@ class UserData {
         return $retarray;
     }
 
+    /*****
+     *
+     * setData( array $data )
+     *
+     * Sets the values of form fields to the values in the associative array
+     * $data. Keys are field names, values are field values.
+     *
+     *****/
+
+    function setData( $data ) {
+
+        if (!is_array($data)) return false;
+
+        foreach ($data as $fname=>$fvalue) {
+
+            if (!isset($this->fields[$fname])) continue;
+
+            $this->fields[$fname]['value']=$fvalue;
+            print $fname.": ".$fvalue."<BR>";
+        }
+    }
+
+    /*****
+     *
+     * getData( array $fields )
+     *
+     * Gets the values of submitted form fields, either from the form or from
+     * the default / constant values from the fields definition if
+     * $this->form['field'] isn't set.
+     *
+     *****/
+
+    function getData( $fields ) {
+
+        if (!$this->form)       return false;
+
+        return $this->form->exportValues($fields);
+
+    }
 
     /*****
      *
@@ -314,6 +354,19 @@ class UserData {
     ### Public Plugin Methods ###
     #############################
 
+    function getPlugin( $namespace, $action ) {
+
+        $plugins =& $this->plugins;
+
+        if (!isset($plugins[$action])) return false;
+        if (!isset($plugins[$action][$namespace])) return false;
+
+        $actions =& $plugins[$action];
+        $plugin  =& $actions[$namespace];
+
+        return $plugin;
+    }
+
     /*****
      *
      * doPlugin( str namespace, str action, array options )
@@ -323,20 +376,15 @@ class UserData {
      *****/
 
     function doPlugin( $namespace, $action, $options = null ) {
+        
+        $plugin =& $this->registerPlugin( $namespace, $action );
 
-        $func_a = array( 'udm', $namespace, $action );
-        $func = join( '_', $func_a );
-
-        if ( !function_exists( $func ) ) {
-            $this->registerPlugin( $namespace, $action, $options );
+        if ($plugin) {
+            $retval = $plugin->execute( $options );
+            return $retval;
         }
 
-        if ( function_exists( $func ) ) {
-            return $func( &$this, $options );
-        } else {
-            return false;
-        }
-
+        return false;
     }
 
     /*****
@@ -349,23 +397,9 @@ class UserData {
 
     function tryPlugin( $namespace, $action, $options = array() ) {
 
-        $func_a = array( 'udm', $namespace, $action );
-        $func = join( '_', $func_a );
-
-        if ( function_exists( $func ) ) {
-
-            // If there are options passed from the plugin, join those with the
-            // options passed to this function.
-    		if ( is_array( $this->plugins[$action][$namespace] ) )
-                $options = $this->plugins[$action][$namespace] + $options;
-
-            return $func( &$this, $options );
-
-        } else {
-
-            return false;
-
-        }
+        //fixme should tryplugin really Register the plugin??
+        $plugin =& $this->registerPlugin( $namespace, $action );
+        return $plugin->execute( $options );
 
     }
 
@@ -377,16 +411,21 @@ class UserData {
      *
      *****/
 
-    function getPlugins ( $action ) { 
+    function getPlugins ( $action = null ) { 
 
-        if ( isset( $this->plugins ) ) {
-            if ( isset( $this->plugins[ $action ] ) ) {
-                return $this->plugins[ $action ];
+        if (!isset($this->plugins)) return false;
+
+        if ($action) {
+            if ( isset($this->plugins[$action]) ) {
+                return $this->plugins[$action];
+            } else {
+                return false;
             }
+        } else {
+            return $this->plugins;
         }
 
-        return null;
-
+        return false;
     }
 
     /*****
@@ -398,22 +437,55 @@ class UserData {
      *
      *****/
 
-    function registerPlugin ( $namespace, $action, $options = null ) {
+    function registerPlugin ( $namespace, $action, $plugin_instance=null ) {
+
+        // temporary fixup. 
+        if (strpos($action, "_") !== false) {
+            $action_parts = explode( "_", $action );
+            $action="";
+            foreach ($action_parts as $action_part) {
+                $action .= ucfirst($action_part);
+            }
+        } else {
+            $action = ucfirst($action);
+        }
+
+        // just return the plugin if it already exists.
+        if ($plugin =& $this->getPlugin( $namespace, $action )) {
+            return $plugin;
+        }
 
         $incl = join( DIRECTORY_SEPARATOR, array( 'Modules', 'UDM', $namespace, $action . '.inc.php' ) );
 
-        if ( file_exists_incpath( $incl ) ) {
+        // Do not pass GO if the plugin doesn't actually exist.
+        if ( !file_exists_incpath( $incl ) ) return false;
 
-            if ( !isset( $this->plugins[ $action ] ) ) $this->plugins[ $action ] = array();
+        require_once( $incl );
 
-            $this->plugins[ $action ][ $namespace ] = $options;
-            require_once( $incl );
-
+        if ( !isset($this->plugins[$action]) ) {
+            $actions = array();
+            $this->plugins[ $action ] =& $actions;
         } else {
-
-            return false;
-
+            $actions =& $this->plugins[ $action ];
         }
+        
+        $plugin_class = "UserDataPlugin_" . $action . "_" . $namespace;
+
+        // If the class doesn't exist (but we have a file for it), trigger an
+        // error, and failt.
+        if (!class_exists( $plugin_class )) {
+            trigger_error( "Unable to instantiate data class $action in $namespace." );
+            return false;
+        }
+
+        // Add the plugin to our repratoire.
+        $plugin =& new $plugin_class( $this );
+        $actions[$namespace] =& $plugin;
+
+        // Add the fields from the plugin. Prefix with the plugin name.
+        $this->registerFields( $plugin->fields, "plugin_$namespace" );
+
+        return $plugin;
 
     }
 
@@ -427,9 +499,9 @@ class UserData {
 
     function unregisterPlugin ( $action, $namespace ) {
 
-        if ( isset( $this->plugins[ $action ][ $namespace ] ) ) {
+        if ( isset($this->plugins[$action][$namespace]) ) {
 
-            unset( $this->plugins[ $action ][ $namespace ] );
+            unset( $this->plugins[$action][$namespace] );
 
         }
 
@@ -454,23 +526,21 @@ class UserData {
 
     function doAction ( $action, $options = array() ) {
 
-        $plugins = $this->getPlugins( $action );
+        $plugins =& $this->getPlugins( $action );
 
-        if (!isset( $plugins )) return;
-
+        if (!isset( $plugins )|| !is_array($plugins) ) return;
+        
         $result = false;
-        foreach ( $plugins as $namespace => $plug_options ) {
+        foreach ( array_keys($plugins) as $plugin_name ) {
 
-            if ( is_array( $plug_options ) ) {
-                $options = $plug_options + $options;
-            }
+            $plugin =& $plugins[$plugin_name];
 
-            $result = $this->doPlugin( $namespace, $action, $options ) or $result;
+            $plugin->setOptions( $options );
+            $result = $plugin->execute() or $result;
 
         }
 
         return $result;
-
     }
 
     /*****
@@ -491,24 +561,6 @@ class UserData {
 
     /*****
      *
-     * _make_mail_header ()
-     *
-     * Creates a header appropriate to UserDataModule, common
-     * to all UDM mailout functions.
-     *
-     *****/
-
-    function _make_mail_header () {
-
-        $header  = "From: " . $GLOBALS['MM_email_from'];
-        $header .= "\nX-Mailer: AMP/UserDataModule\n";
-
-        return $header;
-
-    }
-
-    /*****
-     *
      * _register_base ()
      *
      * Registers core module information.
@@ -517,10 +569,12 @@ class UserData {
 
     function _register_base () {
 
-        // Fetch database definition of module.
-        $sql = "SELECT * FROM userdata_fields WHERE id='" . $this->instance . "'";
+        $dbcon = &$this->dbcon;
 
-        $rs = $this->dbcon->CacheExecute( $sql )
+        // Fetch database definition of module.
+        $sql = "SELECT * FROM userdata_fields WHERE id=" . $dbcon->qstr( $this->instance );
+
+        $rs = $dbcon->CacheExecute( $sql )
             or trigger_error( "Error retreiving module information from database: " . $dbcon->ErrorMsg() );
 
         $md = $this->_module_def = $rs->FetchRow();
@@ -535,7 +589,7 @@ class UserData {
         // Define redirect config. Legacy, will be replaced by redirect plugin.
         $this->redirect = $md[ 'redirect' ];
 
-        // Define email config. Legacy, will be replaced by email plugins.
+        // Define email config. fixme, will be replaced by email plugins.
         if ( $md[ 'useemail' ] == 1 ) {
             $this->mailto  = $md[ 'mailto' ];
             $this->subject = $md[ 'subject' ];
@@ -557,9 +611,11 @@ class UserData {
 
         $fields = array_map( array( &$this, "_register_fields_filter" ), array_keys( $md ) );
 
-        $keys = array( 'label', 'public', 'type', 'required', 'values', 'region', 'size' );
+        $keys = array( 'label', 'public', 'type', 'required', 'values', 'region', 'size', 'enabled' );
 
         foreach ( $fields as $fname ) {
+
+            if (!$fname) continue;
 
             if ( !$this->admin ) {
                 if ( !isset( $md[ 'enabled_' . $fname ] )) continue;
@@ -593,6 +649,24 @@ class UserData {
         }
     }
 
+    /****
+     *
+     * registerFields
+     *
+     * registers fields from an array definition.
+     *
+     ****/
+
+    function registerFields( $fields_def, $prefix = '' ) {
+
+        if ( $prefix ) $prefix .= "_";
+
+        foreach ( $fields_def as $field_name => $field ) {
+            if (!$field['enabled']) continue;
+            $this->fields[ $prefix . $field_name ] = $field;
+        }
+    }
+
     /*****
      *
      * _register_plugins ()
@@ -605,13 +679,14 @@ class UserData {
 
     function _register_plugins () {
 
-        $this->plugins = array();
+        $plugins = array();
+        $this->plugins =& $plugins;
 
         $dbcon = $this->dbcon;
 
-        $sql  = "SELECT namespace, action, options FROM userdata_plugins WHERE instance_id='";
-        $sql .= $this->instance . "' AND active='1' ORDER BY priority";
-        $rs = $this->dbcon->CacheExecute( $sql ) or
+        $sql  = "SELECT id, namespace, action FROM userdata_plugins WHERE instance_id=";
+        $sql .= $dbcon->qstr( $this->instance ) . " AND active='1' ORDER BY priority";
+        $rs = $dbcon->CacheExecute( $sql ) or
             die( "Couldn't register module data: " . $dbcon->ErrorMsg() );
 
         $r = false;
@@ -622,6 +697,9 @@ class UserData {
 
                 $namespace = $plugin[ 'namespace' ];
                 $action    = $plugin[ 'action'    ];
+                $plugin_instance = $plugin[ 'id' ];
+                /*** this code is deprecated and should be removed once 
+                **** all sites have had options moved to userdata_plugins_options
                 $optionStr = $plugin[ 'options'   ];
 
                 $optArray = split( '::', $optionStr );
@@ -629,11 +707,11 @@ class UserData {
                 foreach ( $optArray as $option ) {
 
                     $thisOptions = split( '=', $option );
-                    $options[ $thisOptions['0'] ] = $thisOptions['1'];
+                    $options[ array_shift($thisOptions) ] = implode('', $thisOptions);
 
-                }
+                }*/
 
-                $r = $this->registerPlugin( $namespace, $action, $options ) or $r;
+                $r = $this->registerPlugin( $namespace, $action, $plugin_instance ) and $r;
             }
 
         } else {
@@ -654,6 +732,8 @@ class UserData {
      *
      * Obtains information about mailing lists attached to userData module.
      *
+     * fixme, replace with lists plugins.
+     *
      *****/
 
     function _register_lists () {
@@ -666,6 +746,7 @@ class UserData {
 
         $lists = array_filter( array_keys( $md ), array( &$this, "_register_lists_filter" ) );
 
+        $list_id = array();
         foreach ( $lists as $list ) {
             if ( $md[ $list ] ) {
                 $list_id[] = $md[ $list ];
