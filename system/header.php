@@ -102,9 +102,9 @@ if (isset($sys_nav[$mod_name])) {
             $nav_link .= "\n	</ul>\n<p class ='sidetitle'>".$sys_nav[$mod_name][$x]['title']."</p>\n	<ul class=side>";
         } else {
             $nav_css = '';
-            if (isset($sys_nav[$mod_name][$x]['class'])) {
+            //if (isset($sys_nav[$mod_name][$x]['class'])) {
                 $nav_css = nav_css($sys_nav[$mod_name][$x]['class']);
-            }
+            //}
             $nav_link .= "\n		<li $nav_css><a href='".$sys_nav[$mod_name][$x]['link']."' >".$sys_nav[$mod_name][$x]['name']."</a></li>";
         }
     }
