@@ -201,6 +201,8 @@ function buildheader() {
     
     $htmlheader.="<meta http-equiv=\"Description\" content=\"".$meta_description."\">";
     $htmlheader.="<meta name=\"Keywords\" content=\"".$meta_content."\">";
+	$htmlheader.="<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=".$Web_url."rssfeed.php\">";
+	$htmlheader.="<link rel=\"Search\" href=\"/search.php/\">";
     $htmlheader.="<title>".$SiteName.$headertitle."</title>";
 	array($allsheets);
 	$allsheets=explode(", ", $css);

@@ -1,33 +1,19 @@
 <?php
-  require("Connections/freedomrising.php");
-?><?php
-  // *** Edit Operations: declare Tables
-  $MM_editAction = $PHP_SELF;
-  if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
-  }
+require("Connections/freedomrising.php");
 
-  $MM_abortEdit = 0;
-  $MM_editQuery = "";
-  ob_start();
-
-?><?php
-// *** Update Record: set Variables
- 
-    if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or ((isset($MM_delete)) && (isset($MM_recordId))) )  {
-//    $MM_editConnection = $MM__STRING;
-    $MM_editTable  = "navtbl";
+ob_start();
+if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or ((isset($MM_delete)) && (isset($MM_recordId))) )  {
+	$MM_editTable  = "navtbl";
     $MM_editColumn = "id";
     $MM_recordId = "" . $MM_recordId . "";
     $MM_editRedirectUrl = "nav_list.php";
     $MM_fieldsStr =
 "name|value|sql|value|titleimg|value|titletext|value|titleti|value|linkfile|value|mfile|value|mcall1|value|mvar2|value|mcall2|value|repeat|value|linkextra|value|mvar1|value|linkfield|value|mvar1val|value|nosqlcode|value|nosql|value|templateid|value|modid|value|rss|value";
     $MM_columnsStr = "name|',none,''|sql|',none,''|titleimg|',none,''|titletext|',none,''|titleti|none,1,0|linkfile|',none,''|mfile|',none,''|mcall1|',none,''|mvar2|',none,''|mcall2|',none,''|repeat|',none,''|linkextra|',none,''|mvar1|',none,''|linkfield|',none,''|mvar1val|',none,''|nosqlcode|',none,''|nosql|none,1,0|templateid|',none,''|modid|',none,''|rss|',none,''";
-	
     require ("../Connections/insetstuff.php");
-  require ("../Connections/dataactions.php");
-  ob_end_flush();
-   }
+  	require ("../Connections/dataactions.php");
+  	ob_end_flush();
+}
 
 $Recordset1__MMColParam = "900000000";
 if (isset($HTTP_GET_VARS["id"]))
@@ -36,8 +22,7 @@ if (isset($HTTP_GET_VARS["id"]))
    $Recordset1=$dbcon->Execute("SELECT * FROM navtbl WHERE id = " . ($Recordset1__MMColParam) . "") or DIE($dbcon->ErrorMsg());
    $Recordset1_numRows=0;
    $Recordset1__totalRows=$Recordset1->RecordCount();
-?>
-<?php
+
    $templatelab=$dbcon->Execute("SELECT id, name FROM template ORDER BY id ASC") or DIE($dbcon->ErrorMsg());
    $templatelab_numRows=0;
    $templatelab__totalRows=$templatelab->RecordCount();
@@ -59,11 +44,67 @@ if (isset($HTTP_GET_VARS["id"]))
             <td> <input name="name" type="text" id="name" size="50" value="<?php echo $Recordset1->Fields("name")?>"> 
             </td>
           </tr>
+		            <tr> 
+            <td class="name">Navigation Title </td>
+            <td> <p class="text"> 
+                <input name="titletext" type="text" id="titletext" size="50" value="<?php echo $Recordset1->Fields("titletext")?>">
+                <br>
+                </td>
+          </tr>
           <tr> 
             <td class="name">SQL</td>
             <td><textarea name="sql" cols="55" rows="5" wrap="VIRTUAL" id="sql"><?php echo $Recordset1->Fields("sql")?></textarea> 
             </td>
-          <tr> 
+			<tr>
+                  <td class="name">Section</td>
+                  <td><select name="templateid" id="templateid">
+                      <option value="">none</option>
+                      <?php
+  if ($templatelab__totalRows > 0){
+    $templatelab__index=0;
+    $templatelab->MoveFirst();
+    WHILE ($templatelab__index < $templatelab__totalRows){
+?>
+                      <option value="<?php echo  $templatelab->Fields("id")?>"<?php if ($templatelab->Fields("id")==$Recordset1->Fields("templateid")) echo "SELECTED";?>> 
+                      <?php echo  $templatelab->Fields("name");?> </option>
+                      <?php
+      $templatelab->MoveNext();
+      $templatelab__index++;
+    }
+    $templatelab__index=0;  
+    $templatelab->MoveFirst();
+  }
+?>
+                    </select></td>
+                </tr>
+          <tr>
+                  <td class="name">Class</td>
+                  <td><select name="templateid" id="templateid">
+                      <option value="">none</option>
+                      <?php
+  if ($templatelab__totalRows > 0){
+    $templatelab__index=0;
+    $templatelab->MoveFirst();
+    WHILE ($templatelab__index < $templatelab__totalRows){
+?>
+                      <option value="<?php echo  $templatelab->Fields("id")?>"<?php if ($templatelab->Fields("id")==$Recordset1->Fields("templateid")) echo "SELECTED";?>> 
+                      <?php echo  $templatelab->Fields("name");?> </option>
+                      <?php
+      $templatelab->MoveNext();
+      $templatelab__index++;
+    }
+    $templatelab__index=0;  
+    $templatelab->MoveFirst();
+  }
+?>
+                    </select></td>
+                </tr>
+				 <tr> 
+            <td class="name">Content Repeats before more link </td>
+            <td><input name="repeat" type="text" id="repeat" size="5" value="<?php echo $Recordset1->Fields("repeat")?>"></td>
+          </tr>
+		  
+		  <tr> 
             <td class="name"><p>Non-SQL Based Nav</p>
               <p> 
                 <input name="nosql" type="checkbox" id="nosql" value="checkbox" <?php if (($Recordset1->Fields("nosql")) == "1") { echo "CHECKED";} ?>>
@@ -71,13 +112,7 @@ if (isset($HTTP_GET_VARS["id"]))
             <td><textarea name="nosqlcode" cols="55" rows="20" wrap="VIRTUAL" id="sql"><?php echo $Recordset1->Fields("nosqlcode")?></textarea> 
             </td>
           </tr>
-          <tr> 
-            <td class="name">Title Text</td>
-            <td> <p class="text"> 
-                <input name="titletext" type="text" id="titletext" size="50" value="<?php echo $Recordset1->Fields("titletext")?>">
-                <br>
-                zzz to define as field from above (zzztype)</td>
-          </tr>
+
           <tr> 
             <td class="name">Title Image</td>
             <td> <p class="text"> 
@@ -99,10 +134,7 @@ if (isset($HTTP_GET_VARS["id"]))
             <td class="name">RSS Feed</td>
             <td><input name="rss" type="text" size="40" value="<?php echo $Recordset1->Fields("rss")?>"></td>
           </tr>
-          <tr> 
-            <td class="name">Repeat number</td>
-            <td><input name="repeat" type="text" id="repeat" size="5" value="<?php echo $Recordset1->Fields("repeat")?>"></td>
-          </tr>
+         
 		   <tr> 
             <td colspan="2" class="intitle"><?php echo helpme("Link"); ?>Link</td>
           </tr>
@@ -179,8 +211,10 @@ if (isset($HTTP_GET_VARS["id"]))
                 </tr><tr>
             <td valign="top" class="name">Module</td>
             <td><select name="modid" id="modid">
+			
                 <option value="0">none</option>
                 <?php
+				if (!$_GET["id"]) { echo "<option value=\"19\"SELECTED> Content </option>";}
   if ($modlab__totalRows > 0){
     $modlab__index=0;
     $modlab->MoveFirst();
