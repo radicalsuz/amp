@@ -25,7 +25,7 @@ function geo_getdata($address) {
     $xmlparse->unserialize( $result );
 
 print "<pre>";
-print $result . "\n";
+print_r( $result ) . "\n";
     print_r( $xmlparse->getUnserializedData() );
 print "</pre>";
 
