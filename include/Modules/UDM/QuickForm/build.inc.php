@@ -52,6 +52,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     $consts['modin'] = $udm->instance;
 
     if ( $udm->authorized ) {
+        print "for christ's sake I'm here";
         $form->addElement( 'hidden', 'uid', 'User ID' );
         $form->addElement( 'hidden', 'otp', 'Passphrase' );
         $consts['uid'] = $udm->uid;
