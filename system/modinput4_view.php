@@ -9,7 +9,7 @@
  *
  *****/
 
-require_once( 'AMP/UserDataInput.php' );
+require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 

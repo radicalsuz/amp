@@ -10,7 +10,7 @@
  *****/
 
 //ob_start();
-require_once( 'AMP/UserDataInput.php' );
+require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'utility.functions.inc.php');
 require("Connections/freedomrising.php");
 
