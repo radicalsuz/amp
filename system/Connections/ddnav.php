@@ -367,6 +367,7 @@ echo nav_item($sys_nav['module'][0]); # intro
 echo nav_item($sys_nav['module'][1]); # intro add
 echo nav_item($sys_nav['module'][2]); # module add
 echo nav_item($sys_nav['module'][3]); # module list
+
 ?>
 		])	
 

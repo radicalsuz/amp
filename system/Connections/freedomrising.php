@@ -71,7 +71,7 @@ function helpme($link) {
 
 }
 
-require_once($base_path."AMP/DBfunctions.inc.php");
+require_once("AMP/DBfunctions.inc.php");
 require_once("Connections/ampclass.php");
 
 ?>

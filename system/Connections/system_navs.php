@@ -187,11 +187,11 @@ $sys_nav[45][5]['class'] ='view';
 # navigation
 $sys_nav[30]['title'] ='Navigation';
 $sys_nav[30][0]['link'] ='nav_position.php?mod_id=1';
-$sys_nav[30][0]['name'] ='Defualt Navigation Layout';
+$sys_nav[30][0]['name'] ='Default Navigation Layout';
 $sys_nav[30][1]['link'] ='nav_position.php?mod_id=2';
 $sys_nav[30][1]['name'] ='Homepage Navigation Layout';
 $sys_nav[30][2]['link'] ='nav.php?action=list';
-$sys_nav[30][2]['name'] ='Veiw/Edit Navigation Files';
+$sys_nav[30][2]['name'] ='View/Edit Navigation Files';
 $sys_nav[30][2]['class'] ='view';
 $sys_nav[30][3]['link'] ='nav.php';
 $sys_nav[30][3]['name'] ='Add Navigation Files';
