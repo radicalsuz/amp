@@ -9,18 +9,6 @@
  * @return       bool True if the file exists, False if it does not
  */
 
-if ( !function_exists( 'makesmall' ) ) {
-	function makesmall($text,$maxTextLenght=9000) {
-		$aspace=" ";
-		if(strlen($text) > $maxTextLenght ) {
-			$text = substr(trim($text),0,$maxTextLenght); 
-			$text = substr($text,0,strlen($text)-strpos(strrev($text),$aspace));
-			$text = $text.'...';
-		  }
-		return $text;
-	}
-}
-
 if ( !function_exists( 'file_exists_incpath' ) ) {
 
     function file_exists_incpath ($file) {
@@ -39,6 +27,52 @@ if ( !function_exists( 'file_exists_incpath' ) ) {
 
         return false;
     }
+}
+
+if (!function_exists( 'array_intersect_key' ) ) {
+
+    function array_intersect_key() {
+
+        $numArgs = func_num_args();
+
+        if (2 <= $numArgs) {
+
+            $arrays =& func_get_args();
+
+            for ($idx = 0; $idx $numArgs; $idx++) {
+                if (! is_array($arrays[$idx])) {
+                    trigger_error('Parameter ' . ($idx+1) . ' is not an array', E_USER_ERROR);
+                    return false;
+                }
+            }
+
+            foreach ($arrays[0] as $key => $val) {
+                for ($idx = 1; $idx $numArgs; $idx++) {
+                    if (! array_key_exists($key, $arrays[$idx])) {
+                        unset($arrays[0][$key]);
+                    }
+                }
+            }
+
+            return $arrays[0];
+        }
+
+        trigger_error('Not enough parameters; two arrays expected', E_USER_ERROR);
+        return false;
+    }
+
+}
+
+if ( !function_exists( 'makesmall' ) ) {
+	function makesmall($text,$maxTextLenght=9000) {
+		$aspace=" ";
+		if(strlen($text) > $maxTextLenght ) {
+			$text = substr(trim($text),0,$maxTextLenght); 
+			$text = substr($text,0,strlen($text)-strpos(strrev($text),$aspace));
+			$text = $text.'...';
+		  }
+		return $text;
+	}
 }
 
 if ( !function_exists( 'ampredirect' ) ) {
@@ -344,8 +378,8 @@ function find_local_path () {
 
     if (function_exists('apache_lookup_uri')) {
 
-        $localInfo = apache_lookup_uri( '/custom' );
-        $localPath = preg_replace( "/(.*)\/custom$/", "\$1", $localInfo->filename );
+        $localInfo = apache_lookup_uri( '/custom/' );
+        $localPath = preg_replace( "/(.*)\/custom.*$/", "\$1", $localInfo->filename );
         
     }
 
@@ -354,7 +388,7 @@ function find_local_path () {
     $searchPath = '.';
     $depth = 0;
     while ( !is_dir($customPath) && $depth++ < 4 ) {
-        $customPath = $searchPath . '/custom'; //realpath($searchPath) . '/custom';
+        $customPath = $searchPath . '/custom';
         $localPath = realpath( $searchPath );
         $searchPath = '../' . $searchPath;
     }
