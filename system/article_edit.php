@@ -119,69 +119,148 @@ $modsel=$dbcon->Execute("SELECT a.link, a.title FROM articles a, articletype t w
 	
 
 include ("header.php"); ?>
+<script language ="Javascript">
 
-<form ACTION="<?php echo $_SERVER['PHP_SELF'] ?>" METHOD="POST">
-             
-              
-        
-        <table width="100%" border="0" align="center">
-          <tr class="banner"> 
-            <td colspan="2" valign="top"><?php echo helpme("Overview"); ?>Add/Edit 
-              Content</td>
-          </tr></table>
-		  
-		  	  <script type="text/javascript">
+// Declaring valid date character, minimum year and maximum year
+var dtCh= "-";
+var minYear=1900;
+var maxYear=2100;
 
-
-function change(which) {
-    document.getElementById('main').style.display = 'none';
-document.getElementById('picture').style.display = 'none'; 
-document.getElementById('advanced').style.display = 'none'; 
-    document.getElementById(which).style.display = 'block';
-	
+function isInteger(s){
+	var i;
+    for (i = 0; i < s.length; i++){   
+        // Check that current character is number.
+        var c = s.charAt(i);
+        if (((c < "0") || (c > "9"))) return false;
     }
+    // All characters are numbers.
+    return true;
+}
 
+function stripCharsInBag(s, bag){
+	var i;
+    var returnString = "";
+    // Search through string's characters one by one.
+    // If character is not in bag, append to returnString.
+    for (i = 0; i < s.length; i++){   
+        var c = s.charAt(i);
+        if (bag.indexOf(c) == -1) returnString += c;
+    }
+    return returnString;
+}
 
+function daysInFebruary (year){
+	// February has 29 days in any year evenly divisible by four,
+    // EXCEPT for centurial years which are not also divisible by 400.
+    return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+}
+function DaysArray(n) {
+	for (var i = 1; i <= n; i++) {
+		this[i] = 31
+		if (i==4 || i==6 || i==9 || i==11) {this[i] = 30}
+		if (i==2) {this[i] = 29}
+   } 
+   return this
+}
+
+function isDate(dtStr){
+	var daysInMonth = DaysArray(12)
+	var pos1=dtStr.indexOf(dtCh)
+	var pos2=dtStr.indexOf(dtCh,pos1+1)
+	var strMonth=dtStr.substring(0,pos1)
+	var strDay=dtStr.substring(pos1+1,pos2)
+	var strYear=dtStr.substring(pos2+1)
+	strYr=strYear
+	if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+	if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+	for (var i = 1; i <= 3; i++) {
+		if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+	}
+	month=parseInt(strMonth)
+	day=parseInt(strDay)
+	year=parseInt(strYr)
+	if (pos1==-1 || pos2==-1){
+		alert("The date format should be : mm/dd/yyyy")
+		return false
+	}
+	if (strMonth.length<1 || month<1 || month>12){
+		alert("Please enter a valid month")
+		return false
+	}
+	if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+		alert("Please enter a valid day")
+		return false
+	}
+	if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+		alert("Please enter a valid 4 digit year between "+minYear+" and "+maxYear)
+		return false
+	}
+	if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+		alert("Please enter a valid date")
+		return false
+	}
+return true
+}
+
+function ValidateForm(){
+	var dt=document.form.date;
+	if (isDate(dt.value)==false){
+		dt.focus();
+		alert('This');
+		return false;
+	}
+    return true;
+ }
 </script>
 
- 
-<table width="100%" border="0" align="center">
-          <tr> 
-            <td colspan="2" valign="top" class="name">ID #<?php echo $r->Fields("id")?> 
-            </td>
-          </tr>
-          <tr> 
-            <td colspan="2" valign="top" class="name"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="name">
-                <tr> 
-                  <td width="25%">Date Created</td>
-                  <td width="25%"><div align="left"><?php echo DoDateTime($r->Fields("datecreated"),("n/j/y"))?></div></td>
-                  <td width="25%">Date Modified</td>
-                  <td width="25%"> <div align="left"> 
-                      <?php if ($r->Fields("updated")!= NULL) { echo DoTimeStamp($r->Fields("updated"),("n/j/y"));}?>
-                    </div></td>
-                </tr>
-                <tr> 
-                  <td>Created By</td>
-                  <td><div align="left"> 
-                      <?php if ($r->Fields("enteredby")!= NULL) {
-	$users=$dbcon->Execute("SELECT name FROM users where id =".$r->Fields("enteredby")."") or DIE($dbcon->ErrorMsg());
-	echo $users->Fields("name");}?>
-                    </div></td>
-                  <td>Last Modified BY</td>
-                  <td><div align="left"> 
-                      <?php if ($r->Fields("updatedby")!= NULL) {
+
+
+<form name="form" ACTION="<?php echo $_SERVER['PHP_SELF'] ?>" METHOD="POST" >
+             
+	<table width="100%" border="0" align="center" bgcolor="#dedede">
+		<tr> 
+            <td colspan="2" class ="banner" ><?php echo helpme("Overview"); ?>Add/Edit Content</td>
+		</tr>
+		<tr> 
+            <td rowspan="2" class ="doc_info" width="120">Document<br>Info</td>
+            <td valign="top" class="name">ID #<?php echo $r->Fields("id")?> </td>
+		</tr>
+        <tr> 
+			<td  valign="top" class="name">
+			
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="name">
+        			<tr> 
+        				<td width="25%">Date Created</td>
+                  		<td width="25%"><div align="left"><?php echo DoDateTime($r->Fields("datecreated"),("n/j/y"))?></div></td>
+                  		<td width="25%">Date Modified</td>
+                  		<td width="25%"> <div align="left"> <?php if ($r->Fields("updated")!= NULL) { echo DoTimeStamp($r->Fields("updated"),("n/j/y"));}?></div></td>
+                	</tr>
+                	<tr> 
+                  		<td>Created By</td>
+                  		<td><div align="left"> <?php if ($r->Fields("enteredby")!= NULL) {
+								$users=$dbcon->Execute("SELECT name FROM users where id =".$r->Fields("enteredby")."") or DIE($dbcon->ErrorMsg());
+								echo $users->Fields("name");}?></div></td>
+                  		<td>Last Modified BY</td>
+                  		<td><div align="left"> <?php if ($r->Fields("updatedby")!= NULL) {
 	$users=$dbcon->Execute("SELECT name FROM users where id =".$r->Fields("updatedby")."") or DIE($dbcon->ErrorMsg());
-	echo $users->Fields("name");}?>
-                    </div></td>
-                </tr>
-              </table></td>
-          </tr>
-          <tr> 
-            <td colspan="2" valign="top"><input type="submit" name="<?php if (empty($HTTP_GET_VARS["id"])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"> 
-           <?php  if ($userper[98]){ ?>   <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> <?php } ?>
-              <input type="submit" name="preview" value="Preview" onclick="return confirmSubmit('Please save this record first or all changes will be lost\nPress OK to continue or CANCEL to return and save you work')"></td>
-          </tr></table>
-	<br><ul id="topnav">
+	echo $users->Fields("name");}?></div></td>
+                	</tr>
+              	</table>
+			</td>
+		</tr>
+</table><br>
+<input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"><?php  if ($userper[98]){ ?>&nbsp;&nbsp;&nbsp;<input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"><?php } ?>&nbsp;&nbsp;&nbsp;<input type="submit" name="preview" value="Preview" onclick="return confirmSubmit('Please save this record first or all changes will be lost\nPress OK to continue or CANCEL to return and save you work')"><br><br>
+
+<script type="text/javascript">
+function change(which) {
+    document.getElementById('main').style.display = 'none';
+	document.getElementById('picture').style.display = 'none'; 
+	document.getElementById('advanced').style.display = 'none'; 
+    document.getElementById(which).style.display = 'block';
+    }
+</script>
+
+<ul id="topnav">
 	<li class="tab1"><a href="#" id="a0" onclick="change('main');" >Main Content</a></li>
 	<li class="tab2"><a href="#" id="a1" onclick="change('picture');" >Images and Documents</a></li>
 	<li class="tab3"><a href="#" id="a2" onclick="change('advanced');" >Advanced Options </a></li>
@@ -231,7 +310,7 @@ document.getElementById('advanced').style.display = 'none';
 			<?php 	$related->MoveNext(); }?>
                 <?php echo $obj->select_type_tree($MX_top); ?>
               </select>
-              </td>
+             </td>
           </tr>
           <?php } if (isset($relsection1id)) {?>
           <tr> 
@@ -288,7 +367,7 @@ document.getElementById('advanced').style.display = 'none';
               <?php 
 
 
-if ($browser_mo) {?>
+if ($browser_mo && ($_COOKIE["AMPWYSIWYG"] != 'none') ) {?>
 <script type="text/javascript">
   _editor_url = "htmlarea/";
   _editor_lang = "en";
@@ -341,7 +420,7 @@ function initEditor() {
    ?></textarea> <input name="html" type="hidden" value="1"> 
               <?php }
  
-elseif (($browser_ie) && ($browser_win)) { 
+elseif (($browser_ie) && ($browser_win) && ($_COOKIE["AMPWYSIWYG"] != 'none')) { 
    if (($r->Fields("html")) != "1") 
    {$textvalue = nl2br($r->Fields("test"));}
    else 
@@ -594,15 +673,30 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
               Editor Notes</td>
           </tr>
           <tr> 
+		  
             <td colspan="2" valign="top"><textarea name="notes" cols="65" rows="5" wrap="VIRTUAL"><?php echo htmlspecialchars( $r->Fields("notes"))?></textarea></td>
           </tr>
+		<tr class="intitle"> 
+            <td colspan="2" valign="top">WYSIWYG Settings</td>
+          </tr>
+          <tr> 
+		  
+            <td colspan="2" valign="top"><?php
+			
+			?><a href="#" class="name" onclick="deleteCookie('AMPWYSIWYG'); setCookie('AMPWYSIWYG', 'none'); " >No WYSIWYG Editor</a> | <a href="#" class="name" onclick="deleteCookie('AMPWYSIWYG'); setCookie('AMPWYSIWYG', 'use');" >use WYSIWYG Editor</a></td>
+          </tr>  
+		  
+		  
+		  
 		  </table></div>
 		  <table width = "100%">
           <tr class="intitle"> 
             <td colspan="2" valign="top">&nbsp;</td>
           </tr>
           <tr> 
-            <td colspan="2" valign="top"><input type="submit" name="<?php if (empty($HTTP_GET_VARS["id"])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes">
+            <td colspan="2" valign="top"><input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes">
+			
+			
             <?php  if ($userper[98]){ ?>  <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> <?php }?>
               <input type="submit" name="preview" value="Preview" onclick="return confirmSubmit('Please save this record first or all changes will be lost\nPress OK to continue or CANCEL to return and save you work')"></td>
           </tr>
@@ -611,7 +705,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 	<input type="hidden" name="MM_recordId" value="<?php echo $id; ?>">
      
 	 
-	  </form>
+</form>
 
 <?php
 
