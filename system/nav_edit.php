@@ -21,8 +21,8 @@
     $MM_recordId = "" . $MM_recordId . "";
     $MM_editRedirectUrl = "nav_list.php";
     $MM_fieldsStr =
-"name|value|sql|value|titleimg|value|titletext|value|titleti|value|linkfile|value|mfile|value|mcall1|value|mvar2|value|mcall2|value|repeat|value|linkextra|value|mvar1|value|linkfield|value|mvar1val|value|nosqlcode|value|nosql|value|templateid|value|modid|value";
-    $MM_columnsStr = "name|',none,''|sql|',none,''|titleimg|',none,''|titletext|',none,''|titleti|none,1,0|linkfile|',none,''|mfile|',none,''|mcall1|',none,''|mvar2|',none,''|mcall2|',none,''|repeat|',none,''|linkextra|',none,''|mvar1|',none,''|linkfield|',none,''|mvar1val|',none,''|nosqlcode|',none,''|nosql|none,1,0|templateid|',none,''|modid|',none,''";
+"name|value|sql|value|titleimg|value|titletext|value|titleti|value|linkfile|value|mfile|value|mcall1|value|mvar2|value|mcall2|value|repeat|value|linkextra|value|mvar1|value|linkfield|value|mvar1val|value|nosqlcode|value|nosql|value|templateid|value|modid|value|rss|value";
+    $MM_columnsStr = "name|',none,''|sql|',none,''|titleimg|',none,''|titletext|',none,''|titleti|none,1,0|linkfile|',none,''|mfile|',none,''|mcall1|',none,''|mvar2|',none,''|mcall2|',none,''|repeat|',none,''|linkextra|',none,''|mvar1|',none,''|linkfield|',none,''|mvar1val|',none,''|nosqlcode|',none,''|nosql|none,1,0|templateid|',none,''|modid|',none,''|rss|',none,'";
 	
     require ("../Connections/insetstuff.php");
   require ("../Connections/dataactions.php");
@@ -94,6 +94,10 @@ if (isset($HTTP_GET_VARS["id"]))
             <td class="name">Link CSS override</td>
             <td><input name="linkextra" type="text" id="linkextra" value="<?php echo $Recordset1->Fields("linkextra")?>" size="40"> 
             </td>
+          </tr>
+		  <tr> 
+            <td class="name">RSS Feed</td>
+            <td><input name="rss" type="text" size="5" value="<?php echo $Recordset1->Fields("rss")?>"></td>
           </tr>
           <tr> 
             <td class="name">Repeat number</td>
