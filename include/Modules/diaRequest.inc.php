@@ -19,9 +19,31 @@ class diaRequest {
 
         $info[ 'Email' ] = $email;
 
-        return $this->process( "supporter", $info );
+        $supporter_id = $this->process( "supporter", $info );
+
+        // nasty-ass hack. See DIAlist/save.inc.php.
+        $GLOBALS['diaSupporter'] = $supporter_id;
+        return $supporter_id;
 
     }
+
+    function linkSupporter ( $list, $supporter_id ) {
+        
+        $data[ 'linkKey' ] = $list;
+        $data[ 'supporter_Key' ] = $supporter_id;
+
+        return $this->process( "link", $data );
+
+    }
+
+/*    function unlinkSupporter ( $list, $supporter_id ) {
+
+        $data[ 'linkKey' ] = $list;
+        $data[ 'supporter_Key' ] = $supporter_id;
+
+        return $this->process( "delete" );
+
+    } */
 
     function process ( $table, $data ) {
 
