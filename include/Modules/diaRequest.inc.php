@@ -36,6 +36,7 @@ class diaRequest {
         $data[ 'link' ] = 'groups';
         $data[ 'linkKey' ] = $list;
         $data[ 'key' ] = $supporter;
+        $data[ 'updateRowValues' ] = 1;
 
         return $this->process( "supporter", $data );
 
