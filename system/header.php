@@ -202,8 +202,8 @@ document.getElementById('basic').style.display = 'none';
     }
 
 
-	function hideClass(theclass, objtype) {
-	if (objtype=='') {objtype='div';}
+function hideClass(theclass, objtype) {
+	if (!objtype>'') {objtype='div';}
 	var objset=document.getElementsByTagName(objtype);
 	for (i=0;i<objset.length; i++) {
 		if (objset.item(i).className == theclass){
@@ -211,16 +211,17 @@ document.getElementById('basic').style.display = 'none';
 		}
 	}
 	
-	}
+}
 
-	function showClass(theclass, objtype) {
-	if (objtype=='') {objtype='div';}
-	for (i=0;i<document.getElementsByTagName(objtype).length; i++) {
-		if (document.getElementsByTagName(objtype).item(i).className == theclass){
-			document.getElementsByTagName(objtype).item(i).style.display = 'block';
+function showClass(theclass, objtype) {
+	if (!objtype>'') {objtype='div';}
+	var objset=document.getElementsByTagName(objtype);
+	for (i=0;i<objset.length; i++) {
+		if (objset.item(i).className == theclass){
+			objset.item(i).style.display = 'block';
 		}
 	}
-	}
+}
 
 	function change_any(which, whatkind) {
 	if (whatkind!='') {hideClass(whatkind, '');}

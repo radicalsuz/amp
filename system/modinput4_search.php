@@ -8,7 +8,7 @@
  * 
  *****/
 
-require_once( 'AMP/UserData.php' );
+require_once( 'AMP/UserDataInput.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 require_once('AMP/UserDataSearch.php');
@@ -19,13 +19,10 @@ require_once('AMP/UserDataSearch.php');
 if (!isset($_REQUEST[modin])){ $modin=1;} else {$modin=$_REQUEST[modin];}
 
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserData( $dbcon, $modin );
+$udm = new UserDataInput( $dbcon, $modin );
 $udm->admin = true;
 $usersearch= &new UserList;
 $usersearch->addModule($modin);
-
-$modidselect=$dbcon->Execute("SELECT id from modules where publish=1 and userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
-$modid=$modidselect->Fields("id");
 
 
 // Was search submitted via the web?
@@ -35,48 +32,13 @@ $sub=(isset($_REQUEST['UDM_search_items']));
 if ( $sub ) {
 	//Search form has been submitted, assemble SQL query
 	
-	$usersearch->readSearch($udm); 		
-	#$usersearch->setupSearch($dbcon);
+	$udm=$usersearch->readSearch($udm); 		
 	$usersearch->runSearch($dbcon);
 	
-	require_once( 'header.php' );
-	/*print "<script type=\"text/javascript\">\r\n 
-	
-	function hideClass(theclass, objtype) {
-	if (objtype=='') {objtype='div';}
-	for (i=0;i<document.getElementsByTagName(objtype).length; i++) {
-		if (document.getElementsByTagName(objtype).item(i).className == theclass){
-			document.getElementsByTagName(objtype).item(i).style.display = 'none';
-		}
-	}
-	}
-
-	function showClass(theclass, objtype) {
-	if (objtype=='') {objtype='div';}
-	for (i=0;i<document.getElementsByTagName(objtype).length; i++) {
-		if (document.getElementsByTagName(objtype).item(i).className == theclass){
-			document.getElementsByTagName(objtype).item(i).style.display = 'block';
-		}
-	}
-	}
-
-	function change(which, whatkind) {
-	if (whatkind!='') {hideClass(whatkind, '');}
-		if(document.getElementById(which).style.display == 'block' ) {
-			document.getElementById(which).style.display = 'none';
-		} else {
-		document.getElementById(which).style.display = 'block';
-		}
-	}
-	
-	</script>";*/
 
 	$div_header_html="<div class=\"tabpage\" id=\"tabpage_%s\">";	
 		
 	//1st page shows search results
-
-	//Create 2nd page with search form
-	//3rd page will offer to combine lists or searches		  
 
 	if (count($usersearch->current_list)>0){
 		$pagehead= "<h2>Results from " . $udm->name . "</h2>";
@@ -90,13 +52,16 @@ if ( $sub ) {
 	
 	
 		$show_div_footer=TRUE;
-		$formhead=sprintf($div_header_html,"Refine Search");
+		$formhead=sprintf($div_header_html,"Search Options");
 	} 
 $search_summary= '<div style ="background-color:E3E3E3; width:300px; min-height=50px; vertical-align:center; text-align:left; padding: 5px;">'.$usersearch->translateSearch($udm).'</div><P>';
 
 
     
 } 
+
+$modidselect=$dbcon->Execute("SELECT id from modules where publish=1 and userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
+$modid=$modidselect->Fields("id");
 
 
 	/* Now Output the Form.
@@ -108,7 +73,11 @@ $search_summary= '<div style ="background-color:E3E3E3; width:300px; min-height=
 	
 	*/
 
+
 require_once( 'header.php' );
+
+	//Create page with search form
+
 if (!isset($pagehead)) {
 	$pagehead= "<h2>Search " . $udm->name . "</h2>";
 	$pagehead.= "<P align=\"left\">";

@@ -7,8 +7,6 @@
  * 
  *****/
 
-
-
 class UserList {
 	var $action_fields="modin";
 	var $display_fields="id, Concat(First_Name, \" \", Last_Name) as Name, Company, State, Phone, modin";
@@ -31,6 +29,7 @@ class UserList {
 	var $current_list;
 	var $search_count;
 	var $current_list_action;
+	var $message;
 	var $udm;
 
 	function list_isActionField($field) {
@@ -69,10 +68,10 @@ class UserList {
 								$list_row.=$list_item_start."<a href=\"$link_action?".$current_action."=".$current_row[$current_action]."&uid=".$current_row[$action_field]."\">edit</a>".$list_item_end;
 							} else {
 								$showfield=FALSE;
+								$list_row.=$list_item_start.$list_item_end;
 							}
 					} else {
 						if ($showfield)  $list_row.=$list_item_start.$current_row[$current_field].$list_item_end;
-						else $list_row.=$list_item_start.$list_item_end;
 					}
 				}
 
@@ -107,7 +106,7 @@ class UserList {
 	function paged_list_header () {
 		$output ="<div class=side>";
 		if ($this->current_offset>0) {
-			$output .= "&nbsp;<a href=\"#\" onclick=\"sform.elements['offset'].value='";
+			$output .= "&nbsp;<a href=\"javascript:void(0);\" onclick=\"sform.elements['offset'].value='";
 			if ($this->current_offset>$this->qty_displayed) {
 				$output.= $this->current_offset-$this->qty_displayed; 
 			} else {
@@ -130,6 +129,7 @@ class UserList {
 		return $output;
 	}
 	
+
 	function jumpto_box () {
 		$output="&nbsp;Go: <SELECT name=\"UDM_offset\" class=side onchange=\"sform.elements['offset'].value=this.value; sform.submit();\">";
 		$sortfields = explode(",", $this->sort_by);
@@ -178,7 +178,7 @@ class UserList {
 			$list_html_footer.=$this->paged_list_header();
 		}
 		//INSERT LIST ACTION OPTIONS
-		$options_html="<div class=\"side\" style=\"float:right;\"><form name='export_button' action='export4.php?id=".$this->base_modin."' method='POST'><input type=\"hidden\" name=\"sqlsend\" value=\" FROM userdata WHERE ".$this->criteria_sql."\"><a href=\"#\" onclick=\"checkSave();\">Save This Search</a> &nbsp;| &nbsp;<a href=\"#\" onclick=\"document.forms['export_button'].submit();\">Export List</a></form></div>";
+		$options_html="<div class=\"side\" style=\"float:right;\"><form name='export_button' action='export4.php?id=".$this->base_modin."' method='POST'><input type=\"hidden\" name=\"sqlsend\" value=\" FROM userdata WHERE ".$this->criteria_sql."\"><a href=\"#\" onclick=\"checkSave();\">Save This Search</a> &nbsp;| &nbsp;<a href=\"#\" onclick=\"document.forms['export_button'].submit();\">Export List</a></form></div><BR>";
 		$list_html_start=$options_html.$list_html_start;
 
 		return $list_html_start.$list_html.$list_html_footer;
@@ -190,7 +190,7 @@ class UserList {
 
 
 	function tab_navs() {
-		$page_tabs="Results,Refine Search";
+		$page_tabs="Results,Search Options";
 		//Create tabbed div wrapper
 		$tabnav_html='<ul id="topnav">';
 		$page_tabset = explode(",", $page_tabs);
@@ -201,6 +201,7 @@ class UserList {
 		$tabnav_html.="</ul>";
 		return $tabnav_html;
 	}
+	
 	
 	function saveSearch($searchname, $id=NULL) {
 		global $dbcon;
@@ -249,8 +250,12 @@ class UserList {
 			}
 			$save_sql=substr($save_sql_start, 0, strlen($save_sql_start)-2)." ) VALUES ( ".substr($save_sql_values, 0, strlen($save_sql_values)-2)." )";
 		}
-		echo $save_sql."<BR>";
-		$dbcon->Execute($save_sql) or DIE($dbcon->ErrorMsg());
+		//echo $save_sql."<BR>";
+		if ($dbcon->Execute($save_sql)) {
+			$this->message.="Search <B>".$searchname."</b> saved.";
+		} else {
+			$this->message.="Save failed: ".$dbcon->ErrorMsg();
+		}
 
 
 
@@ -260,11 +265,9 @@ class UserList {
 	function loadSearch($id, $logictype="0", $start_set=0) {
 		global $dbcon;
 		$load_sql="SELECT * from userdata_search where id = $id";
-		$loaded_search=$dbcon->Execute($load_sql);
-		if (!$logictype==0) { //search must be combined with current search
-
-
-		} else { //search is being loaded fresh
+		if($loaded_search=$dbcon->Execute($load_sql)) {
+			$search_list=$this->getSavedSearches();
+			$this->message="Loaded Search: ".$search_list[$id];
 			$input['fieldset']=explode(",", $loaded_search->Fields("fields"));
 			$input['opset']=explode(",", $loaded_search->Fields("operators"));
 			$input['valueset']=explode(",", $loaded_search->Fields("criteria"));
@@ -282,23 +285,33 @@ class UserList {
 				$this->addCriteria($currentField, $op, $crit_value, $searchset);
 			}
 			foreach($input['searchset'] as $currentset) {
-				$this->setLogic($input['logicset'][$searchset*2], $currentset, 'internal');
-				$this->setLogic($input['logicset'][$searchset*2+1], $currentset, 'external');
+				$this->setLogic($input['logicset'][$currentset*2], $currentset+$start_set, 'internal');
+				$this->setLogic($input['logicset'][$currentset*2+1], $currentset+$start_set, 'external');
 			}
-			$this->base_modin=$input['base_modin'];
 			foreach($input['include_modin'] as $current_mod) {
-				$this->addModule($current_mod);
+					$this->addModule($current_mod);
 			}
-			#$this->udm=new UserData ($dbcon, $this->base_modin);
-			$this->readPagination();
-			$this->readDisplayFields();
-			$this->readSort();
+		
+		
+			if (!$logictype==0) { //search must be combined with current search
+				if ($this->base_modin!=$input['base_modin']) {
+						$this->addModule($input['base_modin']);
+				}
+				$this->setLogic($logictype, $start_set-1, 'external');
+			
+			} else { //search is being loaded fresh
+				$this->base_modin=$input['base_modin'];
+				$this->readPagination();
+				$this->readDisplayFields();
+				$this->readSort();
 
-			$this->setupSearch($dbcon);
-			#$this->runSearch($dbcon);
-				
+				$this->setupSearch($dbcon);
+				#$this->runSearch($dbcon);
+			}
 
 
+		} else {
+			$this->message="Requested Search Record Not Found";
 		}
 	}
 	
@@ -310,9 +323,15 @@ class UserList {
 		global $_REQUEST;
 		$searchset_count=0;
 		$searchitems_count=1;
+
+		//check for a newly loaded search
 		if ($_REQUEST['UDM_load_searchnum']!=''&&($_REQUEST['UDM_load_search_logic']=='0')) {
 			//Loaded search wipes out existing search
-			return $this->loadSearch($_REQUEST['UDM_load_searchnum']);
+			//new udm for mapping new module
+			$this->loadSearch($_REQUEST['UDM_load_searchnum']);
+			$udm=new UserDataInput ($udm->dbcon, $this->base_modin);
+
+			return $udm;
 		}
 
 		$this->udm=$udm;
@@ -373,6 +392,14 @@ class UserList {
 		#$this->search_count=$searchset_count;
 		$this->setLogic($_REQUEST['choose_logic'], $searchset_count, 'internal');
 	
+
+		//LOAD SAVED SEARCH combined with current search
+
+		if ($_REQUEST['UDM_load_searchnum']!='') {
+			if (count($this->search_criteria[$searchset_count])>0) { $searchset_count++; }
+			$this->loadSearch($_REQUEST['UDM_load_searchnum'], $_REQUEST['UDM_load_search_logic'], $searchset_count);
+		}
+
 		$this->readPagination();
 		$this->readDisplayFields();
 		$this->readSort();
@@ -390,6 +417,7 @@ class UserList {
 			$this->saveSearch($_REQUEST['UDM_save_searchname'], $_REQUEST['UDM_save_searchnum']);
 		}
 
+		return $udm;
 
 	}
 
@@ -472,6 +500,18 @@ class UserList {
 		return $compare_operators;
 	}
 
+ function labels_box() {
+	$_Avery_Labels = array (
+        '5160'=>'Avery 5160',
+        '5161'=>'Avery 5161',        
+		'5162'=>'Avery 5162',
+        '5163'=>'Avery 5163',
+        '5164'=>'Avery 5164',
+        '8600'=>'Avery 8600',
+        'L7163'=>'Avery L7163');
+	$output.="<div id=\"UDM_Label_Options\" style=\"display:none;\">Select Label Type<BR><form name='labels_button' action='make_labels.php' method='POST'><select name=\"UDM_label_type\">".$this->makeSelbox($_Avery_Labels, '5160')."</select><BR><input type=\"hidden\" name=\"sqlsend\" value=\" FROM userdata WHERE ".$this->criteria_sql."\"><a href=\"#\" onclick=\"document.forms['labels_button'].submit();\">Make Labels</a></form></div>";
+	return $output;
+ }
 
 	
 	function translateLogic($current_set) {
@@ -551,8 +591,9 @@ class UserList {
 
 		}
 		$output.="</div>";
+		if (isset($this->message)) {$output.=$this->message."<BR>"; }
 		$output.=$this->translateMods($udm);
-		$output.="Your search returned ".count($this->current_list)." results &nbsp;&nbsp;<a href=\"#\" onclick=\"change_any('div_search_details')\">details</a><BR>";
+		$output.="Your search returned ".count($this->current_list)." results &nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"change_any('div_search_details')\">details</a><BR>";
 		return $output;
 	}
 			
@@ -764,6 +805,16 @@ class UserList {
 			alert ('Sorry, a saved search must be selected first');
 		}
 	}
+	function makeMail() {
+		//var searchnum=sform.elements['UDM_saved_search_list'].value;
+		//if (searchnum!='') {
+			sform.elements['UDM_make_labels'].value='5160';
+			sform.submit();
+		//} else {
+		//	alert ('Sorry, a saved search must be selected first');
+		//}
+	}
+
 	</script>";
 	return $script;
 	}
@@ -784,7 +835,7 @@ class UserList {
 			$output.="<input type='hidden' name=\"UDM_Prev_Search_set_logic_int$n\" value=\"".$this->search_logic[$n]['internal']."\">";
 			$output.="<input type='hidden' name=\"UDM_Prev_Search_set_logic_ext$n\" value=\"".$this->search_logic[$n]['external']."\">";
 		}
-		$output.="<table width=\"100%\"><tr><td  align=\"left\" valign=\"bottom\" nowrap><select  name=\"UDM_Prev_Search_action\" onchange=\"change_any(('prev_action_option'+this.value), 'prev_action_option');\" style=\"font-weight: bold;\"><option value='AND' selected>Focus</option><option value='OR'>Expand </option><option value='0'>New </option></select></td><td align=\"left\"><div id=\"prev_action_optionAND\" class=\"prev_action_option\" style=\"display: block; font-size:14px; \"><B>Narrow the current search</b> using the criteria below </div><div id=\"prev_action_optionOR\" class=\"prev_action_option\" style=\"display: none;font-size:14px;\"><B>Widen the current search</b> to include results which match: </div><div id=\"prev_action_option0\" class=\"prev_action_option\" style=\"display: none;font-size:14px;\">Start a <B>New search </b></div></td></tr></table>";
+		$output.="<table width=\"100%\"><tr><td  align=\"left\" valign=\"bottom\" nowrap><select  name=\"UDM_Prev_Search_action\" onchange=\"change_any(('prev_action_option'+this.value), 'prev_action_option');\"  style=\"font-weight: bold;\"><option value='AND' selected>Focus</option><option value='OR'>Expand </option><option value='0'>New </option></select></td><td align=\"left\"><div id=\"prev_action_optionAND\" class=\"prev_action_option\" style=\"display: block; font-size:14px; \"><B>Narrow the current search</b> using the criteria below </div><div id=\"prev_action_optionOR\" class=\"prev_action_option\" style=\"display: none;font-size:14px;\"><B>Widen the current search</b> to include results which match: </div><div id=\"prev_action_option0\" class=\"prev_action_option\" style=\"display: none;font-size:14px;\">Start a <B>New search </b></div></td></tr></table>";
 		}
 		return $output;
 	}
@@ -847,8 +898,10 @@ class UserList {
 		$control_script= $this->SearchForm_Jscript();
 
 		//ROW template for input fields on Search Form
-		$new_row="<tr><td><select name = 'choose_field%1\$s' width='25'>".$fieldselect."</select>&nbsp;</td><td><select name='choose_comparison%1\$s' width='15'>".$compare_select."</select>&nbsp;</td><td><input name='value_field%1\$s' type='text' size='20'>&nbsp;</td><td><input name='add_criteria%1\$s' type='button' value='+'  onclick='AddItem();'>&nbsp;</td><td><input name='remove_criteria%1\$s' type='button' value='-'  onclick='RemoveItem(%1\$s);'></td></tr>";
+		$new_row="<tr><td><select name = 'choose_field%1\$s' width='25'>".$fieldselect."</select></td><td><select name='choose_comparison%1\$s' width='15'>".$compare_select."</select></td><td><input name='value_field%1\$s' type='text' size='20'></td><td><input name='add_criteria%1\$s' type='button' value='+'  onclick='AddItem();'></td><td><input name='remove_criteria%1\$s' type='button' value='-'  onclick='RemoveItem(%1\$s);'></td></tr>";
 		
+
+
 		//THE BIG BUTTON
 		$search_button_go="<input name=\"btnUdmSubmit\" value=\"Search\" type=\"button\" onclick=\"goSearch();\" id=\"UDM_Search_btn\" style=\"font-size: 20px;\">";
 		
@@ -862,22 +915,22 @@ class UserList {
 		if (isset($this->include_modin)) {$modlist_style="block"; } else {$modlist_style="none";}
 		if ($this->include_modin=="*") {$is_selected=" CHECKED"; $modlist_style="none";}
 
-		$modinbox="<div id=\"UDM_search_modules\" style=\"display: $modlist_style;\">Currently searching <B>".$udm->name."</b><BR>Also include:<BR><SELECT MULTIPLE name=\"UDM_Search_modin[]\" size=\"6\">".$this->GetMods($udm)."</select></DIV><BR><input name=\"UDM_Search_all_mods\" type=\"checkbox\" value=\"1\" $is_selected>Search users from all sources&nbsp;|&nbsp;<a href=\"#\" onclick=\"change_any('UDM_search_modules')\">show list</a>";
+		$modinbox="Currently searching <B>".$udm->name."</b><BR><a href=\"javascript: void(0);\" onclick=\"change_any('UDM_search_modules')\">Select sources</a><BR><input name=\"UDM_Search_all_mods\" type=\"checkbox\" value=\"1\" $is_selected>Search users from all sources<br><div id=\"UDM_search_modules\" style=\"display: $modlist_style;\">Also include:<BR><SELECT MULTIPLE name=\"UDM_Search_modin[]\" size=\"6\">".$this->GetMods($udm)."</select></DIV>";
 		
 		//LOADING/SAVING SEARCHES CONTROL PANEL
-		$searchlist=$this->makeSelbox($this->getSavedSearches(), '0');
-		$saved_search_box="<input name=\"LoadSearch\" value=\"Show Saved Searches\" type=\"button\" onclick=\"change_any('UDM_saved_searches');\">";
+		$searchlist=$this->makeSelbox($this->getSavedSearches($this->base_modin), '0');
+		$saved_search_box="<a href=\"javascript: void(0);\" onclick=\"change_any('UDM_saved_searches');\"> Open A Search</a><BR>";
 		$load_search_logic="<option value='0'>Open saved search";
 		if (isset($this->current_sql)) {
-			$saved_search_box.="<input name=\"SaveSearch\" value=\"Save This Search\" onclick=\"checkSave();\" type=\"button\">";
+			$saved_search_box.="<a href=\"javascript: void(0);\"  onclick=\"checkSave();\" >Save this Search</a><BR><a href=\"javascript: void(0);\"  onclick=\"change_any('UDM_Label_Options');\" >Mailing labels</a><BR>";
 			$load_search_logic.=" and ignore current search</option><option value=\"AND\">Narrow current search to show only users in both groups</option><option value=\"OR\">Expand current search to also include users from:";
 		}
 		$load_search_logic.="</option>";
-		$saved_search_box.="<div id=\"UDM_saved_searches\" style=\"display: none;\"><select name=\"UDM_load_search_logic\">$load_search_logic</select><BR><select name=\"UDM_saved_search_list\" size=\"8\">$searchlist</select><BR><input name=\"UDM_loadsearch_submit\" value=\"Open Search\" type=\"button\" onclick=\"checkLoad();\"></div>";
+		$saved_search_box.="<div id=\"UDM_saved_searches\" style=\"display: none;\">When loading:<BR><select name=\"UDM_load_search_logic\">$load_search_logic</select><BR><select name=\"UDM_saved_search_list\" size=\"8\">$searchlist</select><BR><input name=\"UDM_loadsearch_submit\" value=\"Open Search\" type=\"button\" onclick=\"checkLoad();\"></div>";
 
 		//DISPLAY FIELDS CONTROL PANEL
 		$fieldselect_no_custom=substr($fieldselect, 0, strpos($fieldselect, "<option value=\"custom"));
-		$display_fields_box="<a href=\"#\" onclick=\"change_any('UDM_search_listfields');\">Choose fields for display</a><BR><div id=\"UDM_search_listfields\" style=\"display: none;\">Name will show in list automatically<BR> Please select other fields to include:<BR><select multiple name=\"UDM_list_fields[]\" size=\"8\">$fieldselect_no_custom</select></div>";
+		$display_fields_box="<a href=\"javascript: void(0);\" onclick=\"change_any('UDM_search_listfields');\">Fields to show</a><BR><div id=\"UDM_search_listfields\" style=\"display: none;\">Name will show in list automatically<BR> Please select other fields to include:<BR><select multiple name=\"UDM_list_fields[]\" size=\"8\">$fieldselect_no_custom</select></div><BR> ".$this->display_qty_choice()." matches per page of results";
 		
 		
 		//ASSEMBLE FORM
@@ -888,7 +941,7 @@ class UserList {
 		$controls_html.="<script type=\"text/javascript\">SaveRow(1);</script>";
 		
 		//footer
-		$form_footer="</table><center>".$search_button_go."<P>".$modinbox."<P>Display ".$this->display_qty_choice()." matches per page of results<P>".$display_fields_box."<P>".$saved_search_box."</center></form>";
+		$form_footer="</table><P><center>".$search_button_go."<div style=\"width:400px; text-align:left;\"><H3>Options</H3><b>Sources</b><P>".$modinbox."<P><b>Display</b><p>".$display_fields_box."<P><b>Actions</b><P>".$saved_search_box."</form></div><center><div style=\"width:400px; text-align:left;\">".$this->labels_box()."</div></center>";
 
 		$form_html= $form_header.$controls_html.$form_footer;
 		return $form_html;
@@ -912,6 +965,7 @@ class UserList {
 
 	//Make an array list of modules
 	function GetModsArray($udm) {
+		
 		return $udm->dbcon->GetAssoc("SELECT id, name from userdata_fields");
 	}
 	
@@ -1092,7 +1146,7 @@ class UserList {
 		$this->criteria_sql=$criteria_sql;
 		//ASSEMBLE SQL statment
 		$this->current_sql = "SELECT DISTINCTROW ".$this->display_fields.$this->setupSort()." FROM ".$this->search_tables." WHERE ".$criteria_sql." ORDER BY ".$this->sort_by;
-		echo $this->current_sql."<BR>";
+		//echo $this->current_sql."<BR>";
 	}
 
 	function setupSort() {
