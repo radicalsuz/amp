@@ -1,6 +1,20 @@
 <?php
 
 #calendar
+/*
+
+ideally, this should be structured more like so:
+
+$sys_nav['calendar'] = array(
+
+    array(  'link' => 'calendar_gxlist.php',
+            'name' => 'View/Edit' ),
+    array(  'link' => 'calendar_gxlist.php?old=1',
+            'name' => 'View/Edit Old Events' ),
+
+);
+*/
+
 $sys_nav[1][0]['link'] ='calendar_gxlist.php';
 $sys_nav[1][0]['name'] ='View/Edit';
 $sys_nav[1][1]['link'] ='calendar_gxlist.php?old=1';
@@ -19,10 +33,10 @@ $sys_nav[4][2]['link'] ='faq_type.php?action=list';
 $sys_nav[4][2]['name'] ='FAQ Types';
 
 #petition
-$sys_nav[7][0]['link'] ='View/Edit';
-$sys_nav[7][0]['name'] ='petition.php?action=list';
-$sys_nav[7][1]['link'] ='Add';
-$sys_nav[7][1]['name'] ='petition.php';
+$sys_nav[7][0]['link'] ='petition.php?action=list';
+$sys_nav[7][0]['name'] ='View/Edit';
+$sys_nav[7][1]['link'] ='petition.php';
+$sys_nav[7][1]['name'] ='Add';
 
 #photo gallery
 $sys_nav[8][0]['link'] ='photo_edit.php';
@@ -58,9 +72,9 @@ $sys_nav[19][5]['name'] ='View Document';
 $sys_nav[19][6]['link'] ='imgdir.php';
 $sys_nav[19][6]['name'] ='View Images';
 $sys_nav[19][7]['link'] ='doc_upload.php';
-$sys_nav[19][7]['name'] ='Uplaoad Document';
+$sys_nav[19][7]['name'] ='Upload Document';
 $sys_nav[19][8]['link'] ='imgup.php';
-$sys_nav[19][8]['name'] ='Uplaod Images';
+$sys_nav[19][8]['name'] ='Upload Images';
 
 $sys_nav[19][9]['title'] ='Sections';
 
@@ -111,7 +125,7 @@ $sys_nav[45][0]['name'] ='View/Edit Feeds';
 $sys_nav[45][1]['link'] ='rssfeep.php';
 $sys_nav[45][1]['name'] ='Add Feed';
 
-$sys_nav[45][2]['title'] ='RSS Agragator';
+$sys_nav[45][2]['title'] ='News Aggregator';
 
 $sys_nav[45][3]['link'] ='feeds_add.php';
 $sys_nav[45][3]['name'] ='Add/Edit';
