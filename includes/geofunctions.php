@@ -17,7 +17,7 @@ function geo_getdata($address) {
 	if ( !PEAR::isError( $req->sendRequest() ) ) {
 		// failed
         print "there was an error...";
-		$result = $req->getResponseHeader();
+		$result = $req->getResponseBody();
 	} else {
 		$result = $req->getResponseBody();
 	}
