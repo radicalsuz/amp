@@ -49,6 +49,36 @@ function nav_sub_section($type) {
 }
 
 
+
+function nav_sub_both($type) {
+	global $dbcon;
+	$html .= '<ul class="nav_sub_list">';
+		$sql = "select type, id from articletype where parent = $type and usenav =1 order by textorder, id asc";
+		$R=$dbcon->Execute($sql) or DIE('Could not load the sub navigation information'.$sql.$dbcon->ErrorMsg());	
+		while (!$R->EOF) {
+			$html .= '<li class="nav_sub_list"><a href="section.php?id='.$R->Fields("id").'" class="nav_sub_list" >'.$R->Fields("type").'</a></li>'; 
+			$R->MoveNext();
+	} 
+
+
+	$sql = "select title,id, linktext from articles where type = $type and publish =1 and (class !=2 and class !=8 )";
+	$C=$dbcon->Execute($sql) or DIE('Could not load the sub navigation information'.$sql.$dbcon->ErrorMsg());	
+	while (!$C->EOF) {
+		if ($C->Fields("linktext")) {
+			$link = $C->Fields("linktext");
+		}
+		else {
+			$link = $C->Fields("title");
+		}
+		$html .= '<li class="nav_sub_list"><a href="article.php?id='.$C->Fields("id").'" class="nav_sub_list">'.$link.'</a></li>';
+		$C->MoveNext();
+	}
+
+	$html .= '</ul>';
+	return $html;
+}
+
+
 // function that builds Nav that shows top level sections
 function nav_menu_dd($type){
 	global $dbcon, $MM_type;
@@ -72,8 +102,7 @@ function nav_menu_dd($type){
 			} else if ($R->Fields("listtype")  == 1)  {
 				$html .= nav_sub_content($R->Fields("id"));
 			} else {
-				$html .= nav_sub_section($R->Fields("id"));
-				$html .= nav_sub_content($R->Fields("id"));
+				$html .= nav_sub_both($R->Fields("id"));
 			}
 		}
 		$R->MoveNext();
