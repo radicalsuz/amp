@@ -60,7 +60,7 @@ if ($R->Fields("title")) {
 	//if ($R->Fields("date")) {
 	$date = date(r,$R->Fields("updated"));
 	$title = ereg_replace ("&", "and" ,$R->Fields("title"));
-
+	$title = strip_tags($title)
 	//}
 	//else {$date = rssdateformat();}
 ?>
