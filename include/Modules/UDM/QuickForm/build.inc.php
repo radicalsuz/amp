@@ -25,8 +25,15 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
                     $options['frmAction'] : null;
 
     $form = new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
+	//include publish checkbox on admin form
+    if ($admin) { 
+		$publish_field = array('type'=>'checkbox', 'label'=>'PUBLISH', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'value'=>$udm->fields['publish']['value']);
+		$udm->fields['publish']=$publish_field;
+	}
 
-    if ( isset( $udm->_module_def[ 'field_order' ] ) ) {
+	
+	
+	if ( isset( $udm->_module_def[ 'field_order' ] ) ) {
     
         $fieldOrder = split( ',', $udm->_module_def[ 'field_order']  );
         
@@ -44,7 +51,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
         udm_quickform_addElement( &$form, $field, $field_def, $admin );
     
     }
-    
+
     $form->setDefaults( $udm->getStoredValues() );
 
     $form->addElement( 'submit', 'btnUdmSubmit', 'Submit' );
@@ -73,9 +80,22 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     
 }
 
+function udm_quickform_setupLookup( $tablename, $displayfield, $valuefield, $restrictions=null) {
+	global $dbcon;
+	$lookup_sql="Select $valuefield, $displayfield from $tablename";
+	if (isset($restrictions)&&$restrictions) {
+		$lookup_sql.=" WHERE $restrictions";
+	}
+	$lookup_sql.=" ORDER BY $displayfield";
+	return $dbcon->GetAssoc($lookup_sql);
+}
+
+
+
+
 function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
 
-    if ( $field_def[ 'public' ] != 1 || ( $field_def['enabled'] == 1 && $admin ) ) return false;
+    if ( $field_def[ 'public' ] != 1 || ( $admin && $field_def[ 'enabled' ] == 1 ) ) return false;
 
     $type     = $field_def[ 'type'   ];
     $label    = $field_def[ 'label'  ];
@@ -83,17 +103,32 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
     $size     = $field_def[ 'size' ];
     $renderer =& $form->defaultRenderer();
 
-    // Check to see if we have an array of values.
-    $defArray = explode( ",", $defaults );
-    if (count( $defArray ) > 1) {
-        $defaults = array();
-        foreach ( $defArray as $option ) {
-            $defaults[ $option ] = $option;
-        }
-    } else {
-        $defaults = $defArray[0];
-    }
+	//Check for defined Lookup in selectbox defaults
+	//format is Lookup(table_name, display_column, value_column, restrictions);
+	if ($type=='select' && ( substr($defaults,0,7) == "Lookup(" ) ) {
 
+		$just_values = str_replace(")", "", substr($defaults, 7));
+		$valueset = split(", ", $just_values );
+		$defaults = udm_quickform_setupLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
+	
+	} elseif ( is_array( $defaults ) ) {
+
+		$defArray = $defaults;
+
+	} else {
+		
+		// Check to see if we have an array of values.
+		$defArray = explode( ",", $defaults );
+		if (count( $defArray ) > 1) {
+			$defaults = array();
+			foreach ( $defArray as $option ) {
+				$defaults[ $option ] = $option;
+			}
+		} else {
+			$defaults = $defArray[0];
+		}
+	
+	}
     // Get region information if it's needed.
     if ( isset( $field_def[ 'region' ] )
          && strlen( $field_def[ 'region' ] ) > 1
@@ -173,6 +208,8 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
     if ($type=='static') {
         $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\"><tr><td>\t{element}</td></tr></table></td>\n\t</tr>", $name);
     }
+
+
 
 
     if ( isset( $field_def[ 'required' ] ) && $field_def[ 'required' ] && !$admin )
