@@ -12,7 +12,7 @@ To Do:  gallery by type
 
 *********************/ 
 //$fullgal =0;
-$divz =2;  //numer of rows 
+//$divz =2;  //numer of rows 
 
 $modid =8;
 $mod_id = 27 ;
@@ -20,14 +20,16 @@ $mod_id = 27 ;
 #include("header.php"); 
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
-include("includes/moduleintro.php");  
+include("AMP/BaseModuleIntro.php");
+
 
 if ($_GET["gal"]) {
 	$photo = $dbcon->CacheExecute("SELECT gallery.*, gallerytype.galleryname FROM gallery, gallerytype where gallery.galleryid=gallerytype.id and gallery.galleryid = ".$_GET["gal"]." and gallery.publish=1 ORDER BY gallery.date DESC") or DIE($dbcon->ErrorMsg());
 } else {
- $photo=$dbcon->CacheExecute("SELECT * FROM gallery where publish=1") or DIE($dbcon->ErrorMsg());
+ 	$photo=$dbcon->CacheExecute("SELECT * FROM gallery where publish=1") or DIE($dbcon->ErrorMsg());
 }
- $gallerys = $dbcon->CacheExecute("SELECT * FROM gallerytype where galleryname != 'none'  order by galleryname asc") or DIE($dbcon->ErrorMsg());
+
+$gallerys = $dbcon->CacheExecute("SELECT * FROM gallerytype where galleryname != 'none'  order by galleryname asc") or DIE($dbcon->ErrorMsg());
 
 $photo_numRows=0;
 $photo__totalRows=$photo->RecordCount();
@@ -242,104 +244,109 @@ $MM_movePrev  = $urlStr.(max($MM_offset - $MM_size,0));
 
 
 if ($gallerys->RecordCount() >= 1) {
-
-?>
-<br>
-<select onChange="MM_jumpMenu('parent',this,0)" class="name">
-              <option SELECTED value="gallery.php">Select Photo Gallery</option>
-              <option value="gallery.php">-----</option>
-
-	<?php while (!$gallerys->EOF) { ?>
-
-		<option value="gallery.php?gal=<?= $gallerys->Fields("id")?>" >
-			<?= $gallerys->Fields("galleryname"); ?> 
-		</option>
-	<?php $gallerys->MoveNext();
+	?>
+	<br>
+	<select onChange="MM_jumpMenu('parent',this,0)" class="name">
+				  <option SELECTED value="gallery.php">Select Photo Gallery</option>
+				  <option value="gallery.php">-----</option>
+	
+		<?php 
+	while (!$gallerys->EOF) { ?>
+			<option value="gallery.php?gal=<?= $gallerys->Fields("id")?>" >
+				<?= $gallerys->Fields("galleryname"); ?> 
+			</option>
+		<?php $gallerys->MoveNext();
 	}
-	$gallerys->MoveFirst();
+		$gallerys->MoveFirst();
 }
-?> </select>
- <table width="100%" border="0" cellspacing="0" cellpadding="10" bordercolor="#000000" align="center">
-                    <tr> 
-                      <td> 
-    <?php 
-	if (!$_GET[gal]) {?>
- 
-	<table width="100%" border="0" cellspacing="0" cellpadding="10">
-       		<?php while(!$gallerys->EOF) {
-$galimage = $gallerys->Fields("img");
-if (!$galimage) {
-$gphoto=$dbcon->CacheExecute("SELECT img FROM gallery where publish=1 and galleryid = ".$gallerys->Fields("id")." order by RAND()") or DIE($dbcon->ErrorMsg());
-$galimage = $gphoto->Fields("img");
-}
-?> <tr>
+echo '</select>';
 
-   <td width="25%" align="center" valign="top" class="text">
-   <?php $daimg = $base_path_amp."img/pic/".$galimage;
-if (file_exists($daimg) && ($galimage)) { ?>
-        <a href="gallery.php?gal=<?php echo $gallerys->Fields("id")?>"><img src="img/pic/<?php echo $galimage; ?>" align="top" border="0" class="gallerypic"></a>          <?php } ?> 
-            <br> 
-             </td>
-        
-        <td width="75%" align="center" valign="top" class="text"><div align="left"><a href="gallery.php?gal=<?php echo $gallerys->Fields("id")?>"><p class="eventtitle"><?= $gallerys->Fields("galleryname") ?></p></a><?= $gallerys->Fields("description") ?></div></td>
-        <?php
+
+/* CREATE THE LIST OF GALLERYS */
+if (!$_GET[gal]) { 
+	
+	while(!$gallerys->EOF) {
+		$galimage = $gallerys->Fields("img");
 		
-  $gallerys->MoveNext();
-}?>
-
-</tr>
-      </table>
-	<?php }
-	elseif ($photo->Fields("img") == NULL) {	?>
-                        <p>&nbsp;</p>
-                        <p class="text">There are no photos currently in this gallery.</p>
-
- <?php } 
- elseif ($fullgal == 1) {
-	if (!$dir) { $dir = "thumb"; }	?>
-
-			<p class="title"> 
- <?php if ($_GET["gal"]) {	echo $photo->Fields("galleryname");}
-				 else {	echo "Photo Gallery";}	?>
-            </p>		
-						   
-      <table width="100%" border="0" cellspacing="0" cellpadding="10">
-        <tr>
-<?php
-$rowx_count=0;
-$crcd2 ="</tr><tr>";
-$crcd1 = "";
-while (!$photo->EOF) { 
-$daimg = $base_path_amp."img/original/".$photo->Fields("img");
-if (file_exists($daimg)) {
-	$rowx_count++;
-?>
-   <td valign="top" align="center" class="text">
-          <p class="text">  <a href="img/original/<?= $photo->Fields("img")?>"><img src="img/<?= $dir; ?>/<?= $photo->Fields("img") ?>" align="top" border="0"></a> 
-          
-            <br> <?= $photo->Fields("caption") ?>
-             <?php if ($photo->Fields("date") != ("0000-00-00 00:00:00")) { echo "&nbsp;";
-              	DoDate( $photo->Fields("date"), 'F jS Y'); 
-              }
-              if ($photo->Fields("photoby")) { ?>
-            <br>by: <?php if ($photo->Fields("byemail")) {?><a href="mailto:<?php echo $photo->Fields("byemail")?>"> <?php } ?>
-              <?php echo $photo->Fields("photoby")?> </a><br>
-              <?php } ?>  </td>
+		if (!$galimage) {
+			$gphoto=$dbcon->CacheExecute("SELECT img FROM gallery where publish=1 and galleryid = ".$gallerys->Fields("id")." order by RAND()") or DIE($dbcon->ErrorMsg());
+			$galimage = $gphoto->Fields("img");
+		}
+		
+   		$daimg = $base_path_amp."img/pic/".$galimage;
+		echo '<div class="gallerylist">';
+		if (file_exists($daimg) && ($galimage)) { 
+			echo '<a href="gallery.php?gal=' 
+					. $gallerys->Fields("id") 
+					. '"><img src="img/pic/' 
+					. $galimage 
+					. '"></a>';         
+		} 
         
-        <?php
-		 $roundcr= ($rowx_count % $divz) ? $crcd1 : $crcd2;
-		 
-		  echo $roundcr;
- }
-  $photo->MoveNext();
-}?>
+        echo '<a href="gallery.php?gal='
+        	 . $gallerys->Fields("id")
+        	 . '">' 
+        	 . $gallerys->Fields("galleryname")
+        	 . '</a><p>'
+        	 . $gallerys->Fields("description")
+        	 . '</p> <br />';
+   
+		$gallerys->MoveNext();
+	}
+	echo '</div>';
+}
+elseif ($photo->Fields("img") == NULL) {	
+                        echo '<p>&nbsp;</p>';
+                        echo '<p class="text">There are no photos currently in this gallery.</p>';
+} 
 
-</tr>
-      </table>
-						
-<?php } 
+/* OR DISPLAY A SPECIFIC GALLERY */
+elseif ($fullgal == 1) {
+	## fullgallery set to 1 in module control then show entire gallery
+	if (!$dir) { 
+		$dir = "thumb"; 
+	}	
+	
+	echo '<p class="gallerytitle">';
+	
+	if ($_GET["gal"]) {	
+		echo $photo->Fields("galleryname");
+	}
+	else {	
+		echo "Photo Gallery";
+	}	
+	echo '</p>'; 
+	echo '<div class="gallery">';
+
+	while (!$photo->EOF) { 
+		$daimg = $base_path_amp."img/original/".$photo->Fields("img");
+		if (file_exists($daimg)) {
+			$rowx_count++;
+		   	echo '<div class="gallerycon">';  
+		   	?><a href="img/original/<?= $photo->Fields("img")?>"><img src="img/<?= $dir; ?>/<?= $photo->Fields("img") ?>"></a> 
+			<? echo '<div class="gallerycap">'. $photo->Fields("caption"); 
+			if ($photo->Fields("date") != ("0000-00-00 00:00:00")) { 
+				echo "&nbsp;";
+				DoDate( $photo->Fields("date"), 'F jS Y'); 
+		
+				if ($photo->Fields("photoby")) { ?>
+					<br> <em> by: <?php if ($photo->Fields("byemail")) {?><a href="mailto:<?php echo $photo->Fields("byemail")?>"> <?php } ?>
+				  	<?php echo $photo->Fields("photoby")?> </a></em><br>
+				  	<?php 
+				} 
+			}
+		echo '</div>';
+	 	echo '</div>';
+	 	} 
+	  $photo->MoveNext();
+	} echo '</div>';
+	
+
+					
+} 
 ####LIST OF PHOTOS #####
- else {
+else {
+## fullgallery set to 2 in module control then show one picture at a time
  	if (!$dir) {$dir="pic";}?>
 						
  <table width="100%" border="0" cellspacing="0" cellpadding="25">
@@ -347,7 +354,7 @@ if (file_exists($daimg)) {
                           <tr> 
                             <td valign="top"> 
 							
-							<p class="title">
+							<p class="gallerytitle">
 	<?php if ($_GET["gal"]) {echo $photo->Fields("galleryname");}
 						 else{?>Photo Gallery<?php } ?>
 						</p>
@@ -376,10 +383,10 @@ if (file_exists($daimg)) {
                                 </tr>
                               </table>
                               <p class="text">&nbsp; </p>
-                              <p class="text"> 
+                              <p class="gallerycaption"> 
                                 <?php echo $photo->Fields("caption")?>
                               </p>
-                              <p class="text"> 
+                              <p class="gallerycredit"> 
                                 <?php if ($photo->Fields("photoby") != ($null)) { ?>
                                 by:  <?php if ($photo->Fields("byemail") != NULL) {?><a href="mailto:<?php echo $photo->Fields("byemail")?>"> <?php } ?>
                                 
@@ -393,7 +400,7 @@ if (file_exists($daimg)) {
                               <p> 
                             </td>
                             <td> 
-                              <div align="center"><img src="img/<?php echo $dir; ?>/<?php echo $photo->Fields("img")?>" align="top"></div>
+                              <div class="gallerycon"><img src="img/<?php echo $dir; ?>/<?php echo $photo->Fields("img")?>" align="top"></div>
                             </td>
                           </tr>
                           <?php
@@ -406,4 +413,5 @@ if (file_exists($daimg)) {
                   </table>
                
 
-<?php include("footer.php"); ?>
+<?php 
+ include("AMP/BaseFooter.php"); ?>
