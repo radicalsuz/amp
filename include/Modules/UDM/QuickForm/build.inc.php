@@ -133,17 +133,28 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
         if ( isset( $cols ) ) $fRef->setCols( $cols );
     }
 
-    if ( isset( $defaults ) && ( $type == 'checkbox' ) ) {
+    if ( $type == 'checkbox' ) {
+        $fRef =& $form->getElement( $name );
+        $fRef->setText( null );
+    }
+    /*
+
+        print "I'm trying here: <pre>";
 
         $fRef =& $form->getElement( $name );
-        if ( $defaults == "1" ) {
-            $fRef->setChecked( true );
-            $fRef->setText( false );
+        print_r( $fRef );
+        print "</pre>";
+        $fRef->setText( false );
+        if ( $defaults == "1"  ) {
+            $fRef->setValue( 1 );
+            $fRef->setChecked( 1 );
         } else {
-            $fRef->setChecked( false );
+            $fRef->setValue( 1 );
+            $fRef->setChecked( 1 );
         }
 
     }
+*/
     
     //OUTPUT TEMPLATE MODIFICATIONS
     //Default output template (with classes defined)
@@ -151,7 +162,6 @@ function udm_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
 
     if ($type=='checkbox') {
         $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->{element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t<b>{label}</b></td>\n\t</tr>", $name);
-
     }
 
     //textareas have a table they sit within for CSS-controlled positioning

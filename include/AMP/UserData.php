@@ -243,14 +243,14 @@ class UserData {
     function getStoredValues ( $fields = array() ) {
 
         $retarray = array();
-        foreach ( $this->fields as $name => $array ) {
+        foreach ( $this->fields as $name => $fDef ) {
 
-            if ( isset( $fields ) ) {
-                if ( array_search( $name, $fields ) ) continue;
+            if ( count( $fields ) > 0 ) {
+                if ( !array_search( $name, $fields ) ) continue;
             }
 
-            if ( isset( $array[ 'value' ] ) ) {
-                $retarray[ $name ] = $array['value'];
+            if ( isset( $fDef[ 'values' ] ) ) {
+                $retarray[ $name ] = $fDef['values'];
             }
 
         }
@@ -658,9 +658,10 @@ class UserData {
         $sql = 'SELECT name, id FROM ' . $table . ' WHERE id IN ( ';
         $sql .= join( ", ", $list_id ) . ' )';
 
-        $rs = $this->dbcon->CacheExecute( $sql );
+        $rs = $this->dbcon->CacheExecute( $sql )
+            or die( "Error fetching list info from database: " . $this->dbcon->ErrorMsg() );
 
-        if ( $this->uselists ) {
+        if ( $this->uselists && (count( $lists ) > 0)) {
             $listField = array( 'label' => 'Subscribe to the following lists:',
                                 'public' => true,
                                 'type' => 'header' );
