@@ -3,9 +3,9 @@
 $modid = "45";
 
 require("Connections/freedomrising.php");
-require("Connections/sysmenu.class.php");
+require_once("Connections/sysmenu.class.php");
 $buildform = new BuildForm;
-$obj = new Menu; 
+$obj = new SysMenu; 
 $class=$dbcon->Execute("SELECT id, class FROM class ORDER BY id ASC") or DIE($dbcon->ErrorMsg());
 
 function feed_read($id) {
@@ -20,7 +20,20 @@ function feed_publish($id,$type,$class) {
 	$d=$dbcon->execute("select p.*, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id and  p.id = $id ") or die($dbcon->errorMsg());
 	//pasre out date
 	
-	$q = "insert into articles (title,class,type,shortdesc,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".addslashes($d->Fields("title"))."','".$class."','".$type."','".addslashes($d->Fields("content"))."','".DoTimeStamp($d->Fields("timestamp"),("Y-n-j"))."','1','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
+	if (strlen($d->Fields("content")) > 750 ) {
+		$text = addslashes($d->Fields("content"));
+		$aspace=" ";
+		$ttext = addslashes($d->Fields("content"));
+		$ttext = substr(trim($ttext),0,750); 
+		$ttext = substr($ttext,0,strlen($ttext)-strpos(strrev($ttext),$aspace));
+		$ttext = $ttext.'...';
+		$shortdesc = $ttext;
+	} else {
+		$text = addslashes($d->Fields("content"));
+		$shortdesc = addslashes($d->Fields("content"));
+		$linkover = 1 ;
+	}
+	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".addslashes($d->Fields("title"))."','".$class."','".$type."','".$shortdesc."','".$text."','".DoTimeStamp($d->Fields("timestamp"),("Y-n-j"))."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
 	//die($q);
 	$dbcon->execute($q) or die($dbcon->errorMsg());
 	feed_read($id);
@@ -168,8 +181,7 @@ Publish:
     </div></td>
               <td>Section</td>
               <td><select name="type[<?php echo $rs->Fields("id") ?>]" class=name >
-                <?php echo $obj->select_type_tree($MX_top); ?>
-              </select></td>
+<?php echo $obj->select_type_tree(0); ?>              </select></td>
             </tr>
             <tr>
               <td>Class</td>

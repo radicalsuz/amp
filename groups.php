@@ -70,8 +70,8 @@ if (!function_exists('get_state_name')) {
 	}
 }
 
-function groups_error() {
-	echo '<p class="text">There are currently no local groups listed that match you request.</p>';
+function groups_error($debug = NULL) {
+	echo '<p class="text">There are currently no local groups listed that match you request.</p>';//.$debug;
 }
 
 function group_title($t) {
@@ -89,6 +89,7 @@ function state_convert($in) {
 		$S=$dbcon->CacheExecute("SELECT state from states where id = $in ") or DIE($dbcon->ErrorMsg());
 		$out = $S->Fields("state");
 		return $out;
+		
 	} else {
 		return $in;
 	}
@@ -100,7 +101,7 @@ function state_convert($in) {
 
 if ($_GET["area"]) {
 	if (!$nonstateregion) { 
-		$area_sql = " and u.State = '".state_convert($_GET["area"]."'");
+		$area_sql = " and u.State = '".state_convert($_GET["area"])."'";
 	} else {
 		$area_sql = " and r.id = '".$_GET["area"]."'";
 	}
@@ -198,6 +199,17 @@ function groups_alphalist($gsql,$gsqlo){
 	}
 }
 
+
+######### Groups Details ##########################
+function groups_details($id,$modinin) {
+	global $dbcon,$groupslayout;
+	$sql = "Select * from userdata where publish =1 and modin= $modinin and id = $id";
+	$groups=$dbcon->CacheExecute($sql) or DIE($sql.$dbcon->ErrorMsg());  
+	include ("$groupslayout");
+
+}
+
+
 #########DISPLAY by custom field ##########################
 function groups_custom($gsql,$gsqo=NULL,$modinin) {
 	global $nonstateregion, $groupslayout, $dbcon;
@@ -221,7 +233,7 @@ function groups_state_city($gsql,$gsqo=NULL)   {
 		$gsqlo ="ORDER BY u.Country desc, u.State asc, u.City asc, u.Company asc ";
 	}
 	$groups=$dbcon->CacheExecute($gsql."   $gsqlo") or DIE("Error in function groups_state_city".$gsql.$dbcon->ErrorMsg());
-	if (!$groups->RecordCount() ){ echo groups_error(); }
+	if (!$groups->RecordCount() ){ echo groups_error($gsql.$gsqlo); }
 	$currentRegion = '';
 	$currentState = '';
 	$currentCity = '';
@@ -274,8 +286,13 @@ function groups_state($gsql,$gsqo=NULL)   {
 	}
 }
 
+##start display
 
-if ($gdisplay == 2 ) {
+if ($_GET['gid']) {
+	groups_details($_GET['gid'],$modinin);
+}
+
+elseif ($gdisplay == 2 ) {
 	groups_intl($gsql,$gsqo);
 }
 elseif ($gdisplay == 3) {
@@ -293,6 +310,7 @@ elseif ($gdisplay == 6) {
 elseif ($gdisplay == 7) {
 	groups_state_city($gsql,$gsqo);
 }
+
 else {
 	groups_state($gsql,$gsqo);
 }
