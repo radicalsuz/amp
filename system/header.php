@@ -75,7 +75,7 @@ $headernav = $dbcon->Execute("SELECT name, id, file, perid  FROM modules where p
 #$nav_link .= '<br clear="all" />'; 
 
 $nav_link = '<p class="side_banner">' .
-            $headerinst->Fields("name") .
+            $headernav->Fields("name") .
             "</p>\n" . '<ul class="side">';
 
 if ( isset( $sys_nav[$modid] ) ) {
