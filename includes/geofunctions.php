@@ -24,6 +24,18 @@ function geo_getdata($address) {
 
     $result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result . "\n";
 
+    $result = '<?xml version="1.0" encoding="iso-8859-1"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+
+   <geo:Point rdf:nodeID="aid12112551">
+       <geo:lat>37.752402</geo:lat>
+       <geo:long>-122.416702</geo:long>
+   </geo:Point>
+</rdf:RDF>';
+
+    $options = array( "tagMap" => array( "rdf:RDF" => "array" ) );
+
 print "<pre>";
     $xmlparse = new XML_Unserializer;
     $parse_result = $xmlparse->unserialize( $result, false );
