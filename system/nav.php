@@ -7,7 +7,7 @@ $obj = new SysMenu;
 $buildform = new BuildForm;
 
 if (isset($_GET['nons'])){
-	$where_con = "  and nosql=1 "; 
+	$where_con = " and nosql=1 "; 
 }
 $table = "navtbl";
 $listtitle ="Navigation Files";
@@ -26,7 +26,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 	$MM_editColumn = "id";
     $MM_fieldsStr =
 "name|value|sql|value|titleimg|value|titletext|value|titleti|value|linkfile|value|mfile|value|mcall1|value|mvar2|value|mcall2|value|repeat|value|linkextra|value|mvar1|value|linkfield|value|mvar1val|value|nosqlcode|value|nosql|value|templateid|value|modid2|value|rss|value";
-    $MM_columnsStr = "name|',none,''|sql|',none,''|titleimg|',none,''|titletext|',none,''|titleti|none,1,0|linkfile|',none,''|mfile|',none,''|mcall1|',none,''|mvar2|',none,''|mcall2|',none,''|repeat|',none,''|linkextra|',none,''|mvar1|',none,''|linkfield|',none,''|mvar1val|',none,''|nosqlcode|',none,''|nosql|none,1,0|templateid|',none,''|modid|',none,''|rss|',none,''";
+    $MM_columnsStr = "name|',none,''|sql|',none,''|titleimg|',none,''|titletext|',none,''|titleti|none,1,0|linkfile|',none,''|mfile|',none,''|mcall1|',none,''|mvar2|',none,''|mcall2|',none,''|repeat|',none,''|linkextra|',none,''|mvar1|',none,''|linkfield|',none,''|mvar1val|',none,''|nosqlcode|',none,''|nosql|none,1,1|templateid|',none,''|modid|',none,''|rss|',none,''";
 
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
@@ -59,7 +59,7 @@ function change(which) {
 	<li class="tab2"><a href="#" id="a1" onclick="change(\'advanced\');" >Advanced</a></li>
 </ul>';
 
-$html .= '<div id="main" style="display:block;">';
+$html .= '<div id="main" style="display:block; clear: both;">';
 
 $html  .= $buildform->start_table('name');
 
@@ -81,7 +81,7 @@ $html .=  $buildform->add_row('Template Override', $Tempalte);
 $html .= addfield('linkextra','Link CSS Override','text',$R->Fields("linkextra"));
 
 $html .= $buildform->end_table();
-$html .= '</div><div id="advanced" style="display:none; " >';
+$html .= '</div><div id="advanced" style="display:none; clear: both;" >';
 $html  .= $buildform->start_table('advanced');
 
 $html .= $buildform->add_header('RSS Based Navigation', 'intitle');
@@ -113,7 +113,9 @@ $html .= addfield('mvar2','More Var #2 (3)','text',$R->Fields("mvar2"));
 $html .= addfield('mcall2','More Field #2 (4)','text',$R->Fields("mcall2"));
 $html .= $buildform->end_table();
 $html .= '</div>';
+$html .= $buildform->start_table('buttons');
 $html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id->fetch());
+$html .= $buildform->end_table();
 
 $form = & new Form();
 $form->set_contents($html);

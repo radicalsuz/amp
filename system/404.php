@@ -1,13 +1,28 @@
 <?php 
-#include_once($base_path."adodb/adodb.inc.php");
-#include_once($base_path_amp."custom/config.php");
-#ADOLoadCode($MM_DBTYPE);
-#$dbcon=&ADONewConnection($MM_DBTYPE);
-#$dbcon->Connect($MM_HOSTNAME,$MM_USERNAME,$MM_PASSWORD,$MM_DATABASE);
 
-#$website = "http://vevo.verifiedvoting.org/";
 include_once("AMP/BaseDB.php");
 
+header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found' );
+
+include('header.php');
+
+?>
+<p>Sorry, we couldn't find the page you requested.</p>
+
+<?php
+
+if (isset($_SERVER['HTTP_REFERER'])) {
+
+?>    
+<p>You can <a href="<?= $_SERVER['HTTP_REFERER'] ?>">go back</a> to the previous page.</p>
+<?php
+
+}
+
+include('footer.php');
+
+?><?php
+/*
 function errorre($org,$target) {
         global $Web_url;
         if (strstr($_SERVER['REQUEST_URI'], "$org")) {
@@ -69,14 +84,7 @@ if ($go == false) {
   }
 }
 
+//if ($go == false) { header ("Location:  $Web_url"."search.php");}
 
-
-if ($go == false) { header ("Location:  $Web_url"."search.php");}
-
-
-
-
-
-
+*/
 ?>
-

@@ -23,9 +23,11 @@ if (function_exists('_register_plugin_fields')) _register_plugin_fields($udm);
 if ($userper[54]) { //UDM All permission
 	$udm->admin = true;
 }
-$modidselect=$dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
-$modid=$modidselect->Fields("id");
-$modin_permission=$modidselect->Fields("perid");
+
+$modidselect = $dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $dbcon->qstr(udm->instance) )
+                or die("Couldn't get module information for form: " . $dbcon->ErrorMsg());
+$modid = $modidselect->Fields("id");
+$modin_permission = $modidselect->Fields("perid");
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
@@ -41,7 +43,6 @@ $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
 // Fetch or save user data.
 if ( $sub ) {
 
-print "Trying to save....";
     // Save only if submitted data is present, and the user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
 	if($udm->saveUser()) {

@@ -4,24 +4,21 @@ require("Connections/freedomrising.php");
 $modid="30";
 
 
-if ($_POST['moduleid']) {
+if (isset($_POST['moduleid'])) {
 	$field= 'moduleid';
 	$field_value= $_POST['moduleid'];
 	$sql ="select modid from moduletext where id = ".$_POST['moduleid'];
 	$M =$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
 	$redirect = "module_control_list.php?modid=".$M->fields("modid");
-}	
-if ($_POST['typelist']){
+} elseif (isset($_POST['typelist'])){
 	$field= 'typelist';
 	$field_value= $_POST['typelist'];
 	$redirect = "edittypes.php";
-}	
-if ($_POST['typeid']){
+} elseif (isset($_POST['typeid'])){
 	$field = 'typeid';
 	$field_value = $_POST['typeid'];
 	$redirect = "edittypes.php";
-}	
-if ($_POST['classlist']) {
+} elseif (isset($_POST['classlist'])) {
 	$field = 'classlist';
 	$field_value = $_POST['classlist'];
 	$redirect = "edittypes.php";
@@ -29,15 +26,15 @@ if ($_POST['classlist']) {
 
 
 // insert, update, delete
-if ($_POST['MM_update']) {
+if (isset($_POST['MM_update'])) {
 	
 	$sql = "delete from nav where $field = $field_value";
 	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
-	//echo $sql.'<br>';
+	echo $sql.'<br>';
 	foreach ($_POST['position'] as $k=>$v){	
-		$sql ="insert into nav (navid,position,$field) values('".$_POST['navid'][$k]."','".$v."','".$field_value."');"; 
+		$sql ="INSERT INTO nav (navid, position, $field) VALUES ('".$_POST['navid'][$k]."','".$v."','".$field_value."');"; 
 		$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
-		//echo $sql.'<br>';
+//		echo $sql.'<br>';
 	}
 	redirect($redirect);
 }
@@ -45,20 +42,19 @@ if ($_POST['MM_update']) {
 
 if ($_GET['mod_id']) {
 	$where = 'where moduleid= '.$_GET['mod_id'];
-}	
-if ($_GET['type']){
+} elseif ($_GET['type']){
 	$where ='where typelist= '.$_GET['type'];
-}	
-if ($_GET['typeid']){
+} elseif ($_GET['typeid']){
 	$where ='where typeid= '.$_GET['typeid'];
-}	
-if ($_GET['class']) {
+} elseif ($_GET['class']) {
 	$where ='where class= '.$_GET['class'];
-}	
+}
 
-$sql="SELECT * FROM nav $where  order by position asc";
-$R=$dbcon->Execute($sql) or DIE('could not load navigation items'.$sql.$dbcon->ErrorMsg());
-$N=$dbcon->Execute("SELECT modules.name as mod, navtbl.name, navtbl.id FROM navtbl, modules where modules.id= navtbl.modid order by modules.name asc, navtbl.name asc") or DIE($dbcon->ErrorMsg());	
+$rsql = "SELECT * FROM nav $where ORDER BY position ASC";
+$R=$dbcon->Execute($rsql) or DIE('Could not load navigation items: ' . "<br/>" . $nsql . $dbcon->ErrorMsg());
+
+$nsql = "SELECT modules.name as `mod`, navtbl.name, navtbl.id FROM navtbl, modules where modules.id= navtbl.modid order by modules.name asc, navtbl.name asc";
+$N=$dbcon->Execute( $nsql ) or die( "Error getting module information: " . $nsql . "<br/>" . $dbcon->ErrorMsg());	
 
 include ("header.php") ; ?>
 	<h2>Navigation Files</h2>
@@ -170,7 +166,7 @@ include ("header.php") ; ?>
 	function SetupSelect(selecttype) {
 		var newselect=document.createElement('select');
 		var selbox = SearchLines[1][convertSelectType(selecttype)];
-		newselect.name='choose_'+selecttype+searchitems;
+		newselect.name=selecttype+'['+searchitems+']';
 		for (n=0; n<selbox.options.length; n++) {
 			newselect.options[n] = new Option(selbox.options[n].text, selbox.options[n].value);
 		}
@@ -296,10 +292,15 @@ for ($i = 1; $i <= $x; $i++) {
 ?>
 
 </table>
-<input name="moduleid" type="hidden" value="<?php echo $_GET['mod_id']; ?>">
-<input name="classlist" type="hidden" value="<?php echo $_GET['class']; ?>">
-<input name="typelist" type="hidden" value="<?php echo $_GET['type']; ?>">
-<input name="typeid" type="hidden" value="<?php echo $_GET['typeid']; ?>">
+<?php if (isset($_GET['mod_id'])) { ?>
+<input name="moduleid" type="hidden" value="<?= $_GET['mod_id']; ?>">
+<?php } elseif (isset($_GET['class'])) { ?>
+<input name="classlist" type="hidden" value="<?= $_GET['class']; ?>">
+<?php } elseif (isset($_GET['type'])) { ?>
+<input name="typelist" type="hidden" value="<?= $_GET['type']; ?>">
+<?php } elseif (isset($_GET['typeid'])) { ?>
+<input name="typeid" type="hidden" value="<?= $_GET['typeid']; ?>">
+<?php } ?>
 <input type="submit" name="MM_update" value="Save Changes"> 
 </form>
 

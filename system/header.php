@@ -1,23 +1,23 @@
 <?php 
 include("Connections/system_navs.php");
 $cookiename = "AMPheader";
-if ($_COOKIE[$cookiename]) {
+if (isset($_COOKIE[$cookiename]) && $_COOKIE[$cookiename]) {
 	$cookvalue = $_COOKIE[$cookiename]; 
-}
-else { 
+} else { 
 	$cookvalue = "standard";
 }
+
 if  ($cookvalue == "standard") {
 	$hd_standard = "block";
 	$hd_basic = "none";
-}
-else {
+} else {
 	$hd_standard = "none";
 	$hd_basic = "block";
 }
 
 //ENSURE THAT THE current user is allowed to see this page
 $MM_current_page =basename($_SERVER['PHP_SELF']);
+$MM_query_string = '';
 if (isset($_SERVER['QUERY_STRING'])) {
 	parse_str($_SERVER['QUERY_STRING'], $MM_active_vars);
 	foreach ($MM_active_vars as $v_key=>$v_value) {
@@ -26,6 +26,9 @@ if (isset($_SERVER['QUERY_STRING'])) {
 	$MM_current_page.="?".$MM_query_string;
 }
 
+/* Disabling permissions system until this actually makes sense (i.e., we have
+** a source for ID and so on...
+*
 $allowed_pages=$dbcon->GetAssoc("Select id, system_allow_only from users where id=$ID");
 if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted to certain pages
 	$permit_access=FALSE;
@@ -43,6 +46,7 @@ if (isset($allowed_pages[$ID])&&$allowed_pages[$ID]!='') { //user is restricted 
 		header ("Location:index.php");
 	}
 }
+*/
 
 $headernav = $dbcon->Execute("SELECT name, id, file, perid  FROM modules where publish=1 order by name asc") or DIE("Couldn't fetch nav header info: " . $dbcon->ErrorMsg());
 
@@ -73,35 +77,48 @@ function nav_css($class=NULL) {
 // get information about the module
 if ($modid !=NULL) {
 	$headerinst = $dbcon->Execute("SELECT * FROM modules where id=" . $dbcon->qstr($modid)) or DIE("could not load module information in header: " . $dbcon->ErrorMsg());
-	$mod_navs = $dbcon->Execute("SELECT * FROM module_navs where module_id=" . $dbcon->qstR($modid)) or DIE("could not load module navigation information in header".$dbcon->ErrorMsg());
+	$mod_navs = $dbcon->Execute("SELECT * FROM module_navs where module_id=" . $dbcon->qstr($modid)) or DIE("could not load module navigation information in header".$dbcon->ErrorMsg());
 	$header_title = $headerinst->Fields("name");
 	$header_udm = $headerinst->Fields("userdatamod");
 	$header_udmid = $headerinst->Fields("userdatamodid");
 	$mod_name =$modid;
 }
 
-if ($sys_nav[$mod_name]['title']) {
-	$header_title = $sys_nav[$mod_name]['title'];
-}
-$nav_link .= "<p class='side_banner'>".$header_title."</p>";
-$nav_link .= "\n	<ul class=side>";
+$nav_link = '';
+if (isset($sys_nav[$mod_name])) {
 
-$modsize= sizeof($sys_nav[$mod_name]);
-if ($sys_nav[$mod_name]['title']) {
-	$modsize = ($modsize -1);
-}
-	
-for ($x=0; $x<$modsize; $x++) {
-	if ($sys_nav[$mod_name][$x]['title']) {
-		$nav_link .= "\n	</ul>\n<p class ='sidetitle'>".$sys_nav[$mod_name][$x]['title']."</p>\n	<ul class=side>";
-	} else {
-		$nav_link .= "\n		<li ".nav_css($sys_nav[$mod_name][$x]['class'])."><a href='".$sys_nav[$mod_name][$x]['link']."' >".$sys_nav[$mod_name][$x]['name']."</a></li>";
-	}
+    $modsize= sizeof($sys_nav[$mod_name]);
+
+    if (isset($sys_nav[$mod_name]['title']) && $sys_nav[$mod_name]['title']) {
+        $header_title = $sys_nav[$mod_name]['title'];
+        $modsize = ($modsize -1);
+    }
+
+    $nav_link .= "<p class='side_banner'>".$header_title."</p>";
+    $nav_link .= "\n	<ul class=side>";
+
+    for ($x=0; $x<$modsize; $x++) {
+        if (isset($sys_nav[$mod_name][$x]['title'])) {
+            $nav_link .= "\n	</ul>\n<p class ='sidetitle'>".$sys_nav[$mod_name][$x]['title']."</p>\n	<ul class=side>";
+        } else {
+            $nav_css = '';
+            if (isset($sys_nav[$mod_name][$x]['class'])) {
+                $nav_css = nav_css($sys_nav[$mod_name][$x]['class']);
+            }
+            $nav_link .= "\n		<li $nav_css><a href='".$sys_nav[$mod_name][$x]['link']."' >".$sys_nav[$mod_name][$x]['name']."</a></li>";
+        }
+    }
+
 }
 
 if ($header_udm == 1) {
+    if (!isset($sys_nav[$mod_name])) {
+        $nav_link .= '<p class="side_banner">' . $headerinst->Fields('name') . '</p>';
+        $nav_link .= "\n    <ul class=side>";
+    }
 	$nav_link .= "\n		<li ".nav_css("view")."><a href='modinput4_data.php?modin=".$header_udmid."' >View/Edit</a></li>";
 	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_view.php?modin=".$header_udmid."' >Add</a></li>";
+	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy</a></li>";
 	$nav_link .= "\n		<li ".nav_css("search")." ><a href='modinput4_search.php?modin=".$header_udmid."' >Search</a></li>";
 	$nav_link .= "\n		<li ".nav_css("form")." ><a href='modinput4_edit.php?modin=".$header_udmid."' >Form Settings</a></li>";
 }
@@ -109,12 +126,15 @@ if ($modid != 19 && $modid != 31 && $modid != 30 && ($modid)) {
 	$nav_link .= "\n		<li ".nav_css("page")."><a href='module_header_list.php?modid=".$modid."' >Pages</a></li>";
 	$nav_link .= "\n		<li ".nav_css("settings")."><a href='module_control_list.php?modid=".$modid."' >Settings</a></li>";
 }
-$nav_link .= "\n	</ul>";
-$nav_link .= "<br clear='all' />"; 
+
+if ($nav_link) {
+    $nav_link .= "\n	</ul>";
+    $nav_link .= "<br clear='all' />"; 
+}
 
 
 
-if (!$_GET['noHeader']) {
+if (!isset($_GET['noHeader']) || !$_GET['noHeader']) {
 
 ?>
 <html>
@@ -383,8 +403,8 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
     ?>
 </head>
 
-<body <?= ($browser_mo) ? 'onload="initEditor()"' : '' ?>>
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center"> 
+<body <?= (isset($browser_mo) && $browser_mo) ? 'onload="initEditor()"' : '' ?>>
+    <table cellpadding="0" cellspacing="0" width="100%" align="center"> 
         <tr bordercolor="#FFFFFF" bgcolor="#dedede" valign="top">
             <td colspan="4" id="pagetitle">
  
@@ -413,14 +433,14 @@ while (!$headernav->EOF) {
     </table>
   </td>
 </tr>
-  <tr> 
+<tr> 
     <td bgcolor="#dedede" width="160" valign="top"> 
-	<?php echo $nav_link; ?>
+	<?= $nav_link ?>
 	     <?php // $perid=$headerinst->Fields("perid");
 			   //if ($userper["$perid"] == 1 && $modid != 19) { }?>
           <?php // if ($userper[10] == 1){{} ?>
           <?php //if ($userper[53] == 1){{} ?>
-          <p align="center" class="side_banner">AMP TOOLS</p>
+          <p align="center" class="side_banner" <?= (isset($navlink)) ? 'style="padding-top: 0; margin-top: 0;"' : ''?>>AMP TOOLS</p>
           &nbsp;&nbsp;&nbsp;<select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid"class=name >
                 <option value="index.php">Select Tool</option>
 				 <option value="index.php">&nbsp;&nbsp;---------</option>
@@ -438,7 +458,7 @@ while (!$headernav->EOF) {
              </select>
       <?php //if ($userper[10] == 1){}} ?>
       
-<br><br>
+<br/><br/>
          </td>
     
      

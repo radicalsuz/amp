@@ -2,8 +2,8 @@
 
 #make_labels.php
 #makes labels from a search
-require_once("adodb/adodb.inc.php");
 require_once ($base_path.'Connections/freedomrising.php');
+
 #require_once('AMP/UserData/Input.inc.php');
 require_once('AMP/UserData/Search.inc.php');
 require_once ("Modules/UDM/Output/labels.inc.php");
@@ -15,4 +15,5 @@ if (isset($_REQUEST['sqlsend'])) {
 	$label_list->runSearch($dbcon);
 	$label_list->list2labels('labels.pdf', $_REQUEST['UDM_label_type']);
 }
+
 ?>

@@ -1,17 +1,19 @@
 <?php
-  require_once("../adodb/toexport2.inc.php");
-  require_once("../adodb/adodb.inc.php");
-  require_once("Connections/freedomrising.php");
-  require_once("$ConfigPath2");
+
+require_once("AMP/BaseDB.php");
+require_once("adodb/toexport2.inc.php");
 
 $filename='emailexport.csv';
 
-$sql .= "Select e.*, l.name from email e, subscription s, lists l where l.id = s.listid and s.userid = e.id and  s.listid = $id ";
-$db = &NewADOConnection('mysql');
-$db->Connect($MM_HOSTNAME, $MM_USERNAME, $MM_PASSWORD, $MM_DATABASE);
-$rs = $db->Execute($sql);
-header("Content-type: text/csv");
-header("Content-Disposition: attachment; filename=$filename");
+$id = preg_replace( "/(^\d+\)/", "\$1", $_REQUEST['id'] );
+
+$sql .= "SELECT e.*, l.name
+         FROM email e, subscription s, lists l
+         WHERE l.id = s.listid AND s.userid = e.id AND s.listid=" . $dbcon->qstr($id);
+$rs = $dbcon->Execute($sql);
+
+header("Content-type: application/csv");
+header("Content-Disposition: attachment; filename=\"$filename\"");
 print rs2csv($rs); # return a string, CSV formatprint '<hr>';
 
-	?>
+?>

@@ -1,8 +1,8 @@
 <?php
 
 if($MM_haveMaster){
-	require_once("../adodb/adodb.inc.php");
-	require_once( 'db_compare.inc2.php');
+	require_once("adodb/adodb.inc.php");
+	require_once('db_compare.inc2.php');
 
 	$master_template=new dbDefinition;
 	#set_time_limit(0);

@@ -4,10 +4,12 @@ $modid = $_GET['modid'];
 require("Connections/freedomrising.php");
 include ("header.php");
 
+global $dbcon;
+
 $table = "moduletext";
 $listtitle ="Pages";
-$listsql ="select id, name, title  from $table where modid = ".$_GET['modid'];
-$orderby =" order by name asc  ";
+$listsql ="SELECT id, name, title FROM $table WHERE modid=" . $dbcon->qstr($modid);
+$orderby =" ORDER BY name asc  ";
 $fieldsarray=array( 'Name'=>'name','Title'=>'title');
 $filename="module_header.php";
 

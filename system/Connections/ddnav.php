@@ -21,7 +21,9 @@ function nav_udm_item($id,$name) {
 
 function nav_udms() {
 	global $dbcon;
-	$R=$dbcon->Execute("select id, name from userdata_fields where id >= 50  order by name") or DIE($dbcon->ErrorMsg());
+    $output = '';
+	$R=$dbcon->CacheExecute("SELECT id, name FROM userdata_fields WHERE id >= 50 ORDER BY name")
+                    or die("Couldn't fetch UDM nav information: " . $dbcon->ErrorMsg());
 	while (!$R->EOF) {
 		$output .= nav_udm_item($R->Fields("id"),$R->Fields("name"));
 		$R->MoveNext();
@@ -31,8 +33,9 @@ function nav_udms() {
 
 function nav_mod_type($type) {
 	global $dbcon;
-	$sql ="select i.id, i.name from userdata_fields i, modules m where i.id = m.userdatamodid and m.module_type =$type and m.userdatamodid > 49 order by name";
-	$R=$dbcon->Execute($sql) or DIE('error in nov_mod_tpe sql= '.$sql.$dbcon->ErrorMsg());
+    $output = '';
+	$sql ="SELECT i.id, i.name FROM userdata_fields i, modules m WHERE i.id = m.userdatamodid AND m.module_type=" . $dbcon->qstr($type) . " AND m.userdatamodid > 49 ORDER BY name";
+	$R=$dbcon->CacheExecute($sql) or die('Error in nov_mod_tpe: ' . $dbcon->ErrorMsg());
 	while (!$R->EOF) {
 		$output .= nav_udm_item($R->Fields("id"),$R->Fields("name"));
 		$R->MoveNext();
@@ -42,9 +45,11 @@ function nav_mod_type($type) {
 
 function nav_mod_type_check($type) {
 	global $dbcon;
-	$C=$dbcon->Execute("select id from  modules where module_type =$type and userdatamodid > 49 ") or DIE($dbcon->ErrorMsg());
+	$C=$dbcon->CacheExecute("SELECT id FROM modules WHERE module_type=" . $dbcon->qstr($type) . " AND userdatamodid > 49")
+                    or die("Couldn't check module type: " . $dbcon->ErrorMsg());
 	if ($C->Fields("id")) {
-		$R=$dbcon->Execute("select name from module_type where id =$type ") or DIE($dbcon->ErrorMsg());
+		$R=$dbcon->CacheExecute("SELECT name FROM module_type WHERE id=" . $dbcon->qstr($type))
+                    or die("Couldn't fetch module type information: " . $dbcon->ErrorMsg());
 		$output .= 	',"'.$R->Fields("name").'","show-menu='.$R->Fields("name").'",,,1';
 		return $output;
 	}
