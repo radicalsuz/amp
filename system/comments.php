@@ -14,7 +14,7 @@ if ($_GET['cid']) {
 	$listsql ="select title, articleid, publish, id   from $table  ";
 }
 $orderby =" order by date  desc  ";
-$fieldsarray=array( 'Title'=>'title','Article ID'=>'articleid');
+$fieldsarray=array( 'Title'=>'title','Article ID'=>'articleid','Status'=>'publish');
 $filename="comments.php";
 
 ob_start();
