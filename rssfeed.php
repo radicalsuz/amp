@@ -11,8 +11,7 @@ require_once( 'includes/base_db.php' );
 if ($_GET[feed]) {
 	$f =$dbcon->CacheExecute("select * from rssfeed where id = ".$_GET[feed]." ") or DIE($dbcon->ErrorMsg());
 	if ($f->Fields("description")) { $meta_description = $f->Fields("description");}
-	if ($f->Fields("title")) {$title = $f->Fields("title"); } 
-	else {$title = $SiteName ;}
+	if ($f->Fields("title")) {$SiteName = $f->Fields("title"); } 
 	if ($f->Fields("sqllimit")) {$sqllimit = $f->Fields("sqllimit"); }
 	if ($f->Fields("orderby")) {$orderby = $f->Fields("orderby"); }
 	if ($f->Fields("orderbyorder")) {$orderbyorder = $f->Fields("orderbyorder"); }
@@ -27,7 +26,7 @@ $R =$dbcon->CacheExecute($sql) or DIE($sql.$dbcon->ErrorMsg());
 ?>
 <rss version="2.0">
    <channel>
-   	<title><?= $title ?></title>
+   	<title><?= $SiteName ?></title>
 	<link><?= $Web_url ?></link>
 	<description><?= $meta_description ?></description>
 	<language>en-us</language>
