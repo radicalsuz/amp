@@ -36,19 +36,6 @@ function geo_getdata($address) {
 
     $result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result . "\n";
 
-    $result = '<?xml version="1.0" encoding="iso-8859-1"?>
-   <geo nodeID="aid12112551">
-       <lat>37.752402</lat>
-       <long>-122.416702</long>
-   </geo>';
-
-    $options = array(
-                     "complexType" => "object",
-                     "tagMap"      => array(
-                                                "rdf:RDF"   => "rdfDocument",   // this is used to specify a classname for the root tag
-                                            )
-                    );
- 
 print "<pre>";
     $xmlparser = new XML_Unserializer();
     $parse_result = $xmlparser->unserialize( $result, false );
