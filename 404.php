@@ -1,4 +1,4 @@
-<?php 
+<?php    
 /***************Redirection Page
 Displayed when a user queries an AMP website
 and no resulting page is returned from the database.
