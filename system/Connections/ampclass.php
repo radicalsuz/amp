@@ -92,7 +92,7 @@ function listpage_basic($listtitle,$fieldsarray,$filename) {
 
 function WYSIWYG($value,$html){
 	global $browser_mo, $browser_ie, $browser_win;
-	if ($browser_mo && ($_COOKIE["AMPWYSIWYG"] != 'none')  {
+	if ($browser_mo && ($_COOKIE["AMPWYSIWYG"] != 'none'))  {
 		$output = launch_htmlarea($value,$html);
 	}
 	elseif (($browser_ie) && ($browser_win) && ($_COOKIE["AMPWYSIWYG"] != 'none')) { 
