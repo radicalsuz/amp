@@ -18,7 +18,7 @@ function udm_amp_email_admin ( $udm, $options = null ) {
         
     $message .= "\n\nPlease visit " . $GLOBALS['Web_url'];
     $message .= "system/moddata2.php?modin=" . $udm->instance;
-    $message .= "&id=" . $udm->userid;
+    $message .= "&id=" . $udm->uid;
     $message .= " to publish.";
         
     $header = $udm->_make_mail_header();
