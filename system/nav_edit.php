@@ -31,32 +31,132 @@ if (isset($HTTP_GET_VARS["id"]))
    $modlab__totalRows=$modlab->RecordCount();
 ?>
 <?php include ("header.php");?>
-<h2><?php echo helpme(""); ?>Edit Navigation File</h2>
+<script type="text/javascript">
+function change(which) {
+    document.getElementById('main').style.display = 'none';
+	document.getElementById('advanced').style.display = 'none'; 
+    document.getElementById(which).style.display = 'block';
+    }
+</script>
 <form name="form1" method="POST" action="<?php echo $MM_editAction?>">
-             
+             <h2>Add/Edit Navigation File </h2>
+			 <ul id="topnav">
+	<li class="tab1"><a href="#" id="a0" onclick="change('main');" >Basic</a></li>
+	<li class="tab2"><a href="#" id="a1" onclick="change('advanced');" >Advanced</a></li>
+</ul>
+ <div id="main" class="main" >
               
-        <table width="90%" border="0">
-          <tr> 
-            <td colspan="2" class="intitle"><?php echo helpme("Navigation"); ?>Navigation</td>
+        <table width="100%" border="0" align="center">
+          <tr valign="top"> 
+            <td colspan="2" class="intitle">Navigation Info</td>
           </tr>
-		  <tr> 
+		  <tr valign="top"> 
             <td class="name">Navigation Name</td>
-            <td> <input name="name" type="text" id="name" size="50" value="<?php echo $Recordset1->Fields("name")?>"> 
-            </td>
+            <td> <input name="name" type="text" id="name" size="50" value="<?php echo $Recordset1->Fields("name")?>">            </td>
           </tr>
-		            <tr> 
+		    <tr valign="top">
+            <td class="name">Associated Module (REQUIRED) </td>
+            <td><select name="modid" id="modid">
+			
+                <option value="0">none</option>
+                <?php
+				if (!$_GET["id"]) { echo "<option value=\"19\"SELECTED> Content </option>";}
+  if ($modlab__totalRows > 0){
+    $modlab__index=0;
+    $modlab->MoveFirst();
+    WHILE ($modlab__index < $modlab__totalRows){
+?>
+                <option value="<?php echo  $modlab->Fields("id")?>"<?php if ($modlab->Fields("id")==$Recordset1->Fields("modid")) echo "SELECTED";?>> 
+                <?php echo  $modlab->Fields("name");?> </option>
+                <?php
+      $modlab->MoveNext();
+      $modlab__index++;
+    }
+    $modlab__index=0;  
+    $modlab->MoveFirst();
+  }
+?>
+              </select></td>
+          </tr>
+		            <tr valign="top"> 
+            <td colspan="2" class="intitle">Navigation Content</td>
+          </tr>
+		            <tr valign="top"> 
             <td class="name">Navigation Title </td>
             <td> <p class="text"> 
                 <input name="titletext" type="text" id="titletext" size="50" value="<?php echo $Recordset1->Fields("titletext")?>">
                 <br>
                 </td>
           </tr>
-          <tr> 
-            <td class="name">SQL</td>
-            <td><textarea name="sql" cols="55" rows="5" wrap="VIRTUAL" id="sql"><?php echo $Recordset1->Fields("sql")?></textarea> 
-            </td>
-			<tr>
-                  <td class="name">Section</td>
+		    <tr valign="top"> 
+            <td class="name">Title Image</td>
+            <td> <p class="text"> 
+                <input name="titleimg" type="text" id="titleimage" size="50" value="<?php echo $Recordset1->Fields("titleimg")?>">
+              &nbsp;no path needed <br>
+              <input name="titleti" type="checkbox" id="titleti" value="checkbox" <?php if (($Recordset1->Fields("titleti")) == "1") { echo "CHECKED";} ?>>
+              Use Image </p></td>
+          </tr>
+        
+				
+		  
+		  <tr valign="top"> 
+            <td class="name"><p>Non-SQL Based Nav</p>
+              <p> 
+                <input name="nosql" type="checkbox" id="nosql" value="checkbox" <?php if (($Recordset1->Fields("nosql")) == "1") { echo "CHECKED";} ?>>
+              </p></td>
+            <td><textarea name="nosqlcode" cols="55" rows="20" wrap="VIRTUAL" id="sql"><?php echo $Recordset1->Fields("nosqlcode")?></textarea>            </td>
+          </tr>
+
+        
+  
+       
+		  
+         
+		  
+          <tr valign="top"> 
+            <td colspan="2" class="intitle">Navigtation Template</td>
+          </tr>
+          <tr valign="top">
+                  <td class="name">Template Override </td>
+                  <td><select name="templateid" id="templateid">
+                      <option value="">none</option>
+                      <?php
+  if ($templatelab__totalRows > 0){
+    $templatelab__index=0;
+    $templatelab->MoveFirst();
+    WHILE ($templatelab__index < $templatelab__totalRows){
+?>
+                      <option value="<?php echo  $templatelab->Fields("id")?>"<?php if ($templatelab->Fields("id")==$Recordset1->Fields("templateid")) echo "SELECTED";?>> 
+                      <?php echo  $templatelab->Fields("name");?> </option>
+                      <?php
+      $templatelab->MoveNext();
+      $templatelab__index++;
+    }
+    $templatelab__index=0;  
+    $templatelab->MoveFirst();
+  }
+?>
+              </select></td>
+            </tr><tr>   <tr valign="top"> 
+            <td class="name">Link CSS Override</td>
+            <td><input name="linkextra" type="text" id="linkextra" value="<?php echo $Recordset1->Fields("linkextra")?>" size="40">            </td>
+          </tr>
+        </table>
+		</div>
+		<div id="advanced" >
+		<table width="100%" border="0" align="center">
+		  <tr> 
+            <td colspan="2" class="intitle">RSS Based Navigation</td>
+          </tr>
+		<tr> 
+            <td class="name">RSS Feed URL</td>
+            <td><input name="rss" type="text" size="40" value="<?php echo $Recordset1->Fields("rss")?>"></td>
+          </tr>
+		    <tr> 
+            <td colspan="2" class="intitle">Dynamic Navigation Settings</td>
+          </tr>
+          <tr><tr>
+                  <td class="name">Pull Content From Section</td>
                   <td><select name="templateid" id="templateid">
                       <option value="">none</option>
                       <?php
@@ -78,7 +178,7 @@ if (isset($HTTP_GET_VARS["id"]))
                     </select></td>
                 </tr>
           <tr>
-                  <td class="name">Class</td>
+                  <td class="name">Pull Content From Class</td>
                   <td><select name="templateid" id="templateid">
                       <option value="">none</option>
                       <?php
@@ -99,44 +199,13 @@ if (isset($HTTP_GET_VARS["id"]))
 ?>
                     </select></td>
                 </tr>
-				 <tr> 
-            <td class="name">Content Repeats before more link </td>
-            <td><input name="repeat" type="text" id="repeat" size="5" value="<?php echo $Recordset1->Fields("repeat")?>"></td>
-          </tr>
-		  
 		  <tr> 
-            <td class="name"><p>Non-SQL Based Nav</p>
-              <p> 
-                <input name="nosql" type="checkbox" id="nosql" value="checkbox" <?php if (($Recordset1->Fields("nosql")) == "1") { echo "CHECKED";} ?>>
-              </p></td>
-            <td><textarea name="nosqlcode" cols="55" rows="20" wrap="VIRTUAL" id="sql"><?php echo $Recordset1->Fields("nosqlcode")?></textarea> 
+            <td class="name">SQL</td>
+            <td><textarea name="sql" cols="55" rows="5" wrap="VIRTUAL" id="sql"><?php echo $Recordset1->Fields("sql")?></textarea> 
             </td>
-          </tr>
-
-          <tr> 
-            <td class="name">Title Image</td>
-            <td> <p class="text"> 
-                <input name="titleimg" type="text" id="titleimage" size="50" value="<?php echo $Recordset1->Fields("titleimg")?>">
-                <br>
-                no path needed </p></td>
-          </tr>
-          <tr> 
-            <td class="name">Use Title Image</td>
-            <td> <input name="titleti" type="checkbox" id="titleti" value="checkbox" <?php if (($Recordset1->Fields("titleti")) == "1") { echo "CHECKED";} ?>> 
-            </td>
-          </tr>
-          <tr> 
-            <td class="name">Link CSS override</td>
-            <td><input name="linkextra" type="text" id="linkextra" value="<?php echo $Recordset1->Fields("linkextra")?>" size="40"> 
-            </td>
-          </tr>
-		  <tr> 
-            <td class="name">RSS Feed</td>
-            <td><input name="rss" type="text" size="40" value="<?php echo $Recordset1->Fields("rss")?>"></td>
-          </tr>
-         
-		   <tr> 
-            <td colspan="2" class="intitle"><?php echo helpme("Link"); ?>Link</td>
+			
+		 <tr> 
+            <td colspan="2" class="intitle"><?php echo helpme("Link"); ?>Link for Dynamic Content </td>
           </tr>
           <td colspan="2" class="name"><div align="center">&lt;a href=1?2(or id)=3(or 
               $id)&gt; 4 (or $linktext) &lt;a&gt;<br>
@@ -158,7 +227,11 @@ if (isset($HTTP_GET_VARS["id"]))
             <td class="name">Other Link Field (4)</td>
             <td><input name="linkfield" type="text" id="linkfield" size="50" value="<?php echo $Recordset1->Fields("linkfield")?>"></td>
           </tr>
-          <td colspan="2" class="intitle"><?php echo helpme("More Link"); ?>More Link</td>
+            <td colspan="2" class="intitle"><?php echo helpme("More Link"); ?>Dynamic More Link</td>
+          </tr>
+		   <tr> 
+            <td class="name">Content Repeats before more link </td>
+            <td><input name="repeat" type="text" id="repeat" size="5" value="<?php echo $Recordset1->Fields("repeat")?>"></td>
           </tr>
           <tr> 
             <td colspan="2" class="name"><div align="center">&lt;A HREF=1?list=2&amp;3=4&gt;more&lt;/a&gt; 
@@ -184,55 +257,8 @@ if (isset($HTTP_GET_VARS["id"]))
             <td> <input name="mcall2" type="text" id="mcall2"  size="50" value="<?php echo $Recordset1->Fields("mcall2")?>"> 
             </td>
           </tr>
-          <tr> 
-            <td colspan="2" class="intitle"><?php echo helpme("Template"); ?>Template</td>
-          </tr>
-          <tr>
-                  <td class="name">Template</td>
-                  <td><select name="templateid" id="templateid">
-                      <option value="">none</option>
-                      <?php
-  if ($templatelab__totalRows > 0){
-    $templatelab__index=0;
-    $templatelab->MoveFirst();
-    WHILE ($templatelab__index < $templatelab__totalRows){
-?>
-                      <option value="<?php echo  $templatelab->Fields("id")?>"<?php if ($templatelab->Fields("id")==$Recordset1->Fields("templateid")) echo "SELECTED";?>> 
-                      <?php echo  $templatelab->Fields("name");?> </option>
-                      <?php
-      $templatelab->MoveNext();
-      $templatelab__index++;
-    }
-    $templatelab__index=0;  
-    $templatelab->MoveFirst();
-  }
-?>
-                    </select></td>
-                </tr><tr>
-            <td valign="top" class="name">Module</td>
-            <td><select name="modid" id="modid">
-			
-                <option value="0">none</option>
-                <?php
-				if (!$_GET["id"]) { echo "<option value=\"19\"SELECTED> Content </option>";}
-  if ($modlab__totalRows > 0){
-    $modlab__index=0;
-    $modlab->MoveFirst();
-    WHILE ($modlab__index < $modlab__totalRows){
-?>
-                <option value="<?php echo  $modlab->Fields("id")?>"<?php if ($modlab->Fields("id")==$Recordset1->Fields("modid")) echo "SELECTED";?>> 
-                <?php echo  $modlab->Fields("name");?> </option>
-                <?php
-      $modlab->MoveNext();
-      $modlab__index++;
-    }
-    $modlab__index=0;  
-    $modlab->MoveFirst();
-  }
-?>
-              </select></td>
-          </tr>
-        </table>
+		</table>
+		</div>
   <p> 
             <input type="submit" name="Submit" value="Submit">
           <input type="submit" name="MM_delete" value="Delete Record">
