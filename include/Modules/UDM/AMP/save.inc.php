@@ -31,7 +31,7 @@ function udm_amp_save ( &$udm, $options = null ) {
     $dbcon = $udm->dbcon;
 
     // Insert or Update?
-    if (isset( $udm->uid )) {
+    if (isset( $udm->uid ) && $udm->uid ) {
 
         $sql = "UPDATE userdata SET ";
 
