@@ -270,5 +270,3 @@ $sys_nav['system'][5]['class'] ='exit';
 
 
 ?>
-
-?>
