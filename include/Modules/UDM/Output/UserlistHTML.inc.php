@@ -525,7 +525,7 @@ function udm_output_userlist_html(&$udm, $options=null) {
 				asort($allowed_modins);
 				$output=makeSelbox($allowed_modins, split(",", $options['include_modin']));
 			} elseif ($options['allowed_modins']=="*") {
-				if is_array($options['Lookups']['modin']['LookupSet']) {
+				if (is_array($options['Lookups']['modin']['LookupSet'])) {
 					asort($options['Lookups']['modin']['LookupSet']);
 				}
 				$output=makeSelbox($options['Lookups']['modin']['LookupSet'], split(",", $options['include_modin']));
