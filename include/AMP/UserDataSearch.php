@@ -7,6 +7,55 @@
  * 
  *****/
 
+require_once( 'AMP/UserDataSet.php' );
+
+class UserDataSearch extends UserDataSet {
+
+    function UserDataSearch( &$dbcon, $instance, $admin = false ) {
+
+        $this->UserDataSet( $dbcon, $instance, $admin );
+
+        $this->results = array();
+
+    }
+
+    function doSearch () {
+
+        $this->_build_search();
+
+    }
+
+    function saveSearch () {
+
+    }
+
+    function output ( $format = 'html', $options = null ) {
+
+        if ( strpos( $format, 'search_' ) === false ) {
+            if ( count( $this->results ) > 0 ) {
+                $format = 'search_results_' . $format;
+            } else {
+                $format = 'search_form_' . $format;
+            }
+        }
+
+        $parent = get_parent_class( $this );
+//        return $parent::output( $format, $options );
+
+    }
+
+    function showForm ( $format = 'html', $options ) {
+
+        return $this->output( 'search_form_' . $format, $options );
+
+    }
+
+    function _build_search () {
+
+    }
+
+}
+
 class UserList {
 	var $action_fields="modin";
 	var $display_fields="id, Concat(First_Name, \" \", Last_Name) as Name, Company, State, Phone, modin";
