@@ -23,13 +23,18 @@ while ( $row = $attr_rs->FetchRow() ) {
 }
 
 while ( $row = $list_rs->FetchRow() ) {
-    $lists = $subdata[ $row[ 'userid' ] ]['lists'];
-    
-    if ( !isset( $lists ) ) $lists = "\n";
+    $lists[ $row['userid'] ][] = $row[ 'listid' ];
+}
 
-    $lists .= "<list>" . $row[ 'listid' ] . "</list>\n";
+$listserializer = new XML_Serializer();
+$listserializer->setOption( "indent", "    " );
+$listserializer->setOption( "defaultTagName", "list" );
 
-    $subdata[ $row[ 'userid' ] ]['lists'] = $lists;
+foreach ( $lists as $userid => $listids ) {
+
+    $listserializer->serialize( $listids );
+    $subdata[ $row['userid'] ][ 'lists' ] = $listserializer->getSerializedData();
+
 }
 
 $serializer = new XML_Serializer();
