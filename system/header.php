@@ -51,24 +51,23 @@ if ($modid ==NULL) {
 $headerinst=$dbcon->Execute("SELECT *  FROM modules where id = $modid") or DIE("could not load module information in header".$dbcon->ErrorMsg());
  $mod_navs=$dbcon->Execute("SELECT *  FROM module_navs where module_id = $modid") or DIE("could not load module navigation information in header".$dbcon->ErrorMsg());
 
-$nav_link .= '<br><div><fieldset style="  border: 1px solid black;"><legend>';
+#$nav_link .= '<div width= "100%"><fieldset   style="  border: 1px solid black;">';
 //$nav_link .= 'test';
 //$nav_link .= '<ul id="topnav">';
-while (!$mod_navs->EOF) {
-	$nav_link .= '<span class="option"><a href="'.$mod_navs->Fields("url").'">'.$mod_navs->Fields("name").'</a></span>';
-	$mod_navs->MoveNext();
-}
-if ($headerinst->Fields("userdatamod") == 1) {
-	$nav_link .= '<span class="option"><a href="modinput4_data.php?modin='.$headerinst->Fields("userdatamodid").'">View/Edit</a></span>';
-	$nav_link .= '<span class="option"><a href="modinput4_view.php?modin='.$headerinst->Fields("userdatamodid").'">Add</a></span>';
-	$nav_link .= '<span class="option"><a href="modinput4_edit.php?modin='.$headerinst->Fields("userdatamodid").'">Data Settings</a></span>';
-}
-if ($modid != 19) {
-
-	$nav_link .= '<span class="option"><a href="module_control_list.php?modid='.$modid.'">Settings</a></span>';
-}
+#while (!$mod_navs->EOF) {
+#	$nav_link .= '<span class="option"><a href="'.$mod_navs->Fields("url").'">'.$mod_navs->Fields("name").'</a></span>';
+#	$mod_navs->MoveNext();
+#}
+#if ($headerinst->Fields("userdatamod") == 1) {
+#	$nav_link .= '<span class="option"><a href="modinput4_data.php?modin='.$headerinst->Fields("userdatamodid").'">View/Edit</a></span>';
+#	$nav_link .= '<span class="option"><a href="modinput4_view.php?modin='.$headerinst->Fields("userdatamodid").'">Add</a></span>';
+#	$nav_link .= '<span class="option"><a href="modinput4_edit.php?modin='.$headerinst->Fields("userdatamodid").'">Data Settings</a></span>';
+#}
+#if ($modid != 19) {
+#	$nav_link .= '<span class="option"><a href="module_control_list.php?modid='.$modid.'">Settings</a></span>';
+#}
 //$nav_link .= '</ul>';
-$nav_link .= '<br clear="all" /></legend>'; 
+#$nav_link .= '<br clear="all" />'; 
 
 
 $headernav_numRows=0;
@@ -357,14 +356,13 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 <tr bordercolor="#FFFFFF" bgcolor="#dedede" valign="top">
      <td colspan="4" class="pagetitle">
  
-       <table width="100%" border="0" bgcolor="#006699">
+       <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#006699">
       <tr> 
-        <td  bgcolor="#006699"><img src="http://radicaldesigns.org/img/amp.jpg" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> 
-          </span> </td>
-        <td align="right" valign="middle" bgcolor="#006699" class="toplinks"><b class="toplinks"> 
-          </b>
-Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'standard');" class="toplinks">Advanced</a><br><select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid">
-                <option value="index.php">Select Module</option>
+        <td  bgcolor="#006699"><nobr><img src="http://radicaldesigns.org/img/amp_blue.jpg" align = middle style="padding-right:15px"><span class="toptitle"><a href="<?php echo $Web_url ; ?>" class="toptitle"><?php echo $SiteName ; ?></a> Administration</span></nobr> </td>
+        <td align="right" valign="middle" bgcolor="#006699"> 
+        
+<p class = "toplinks">Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'basic'); " class="toplinks" >Basic</a> | <a href="#" id="a1" onclick="changex('standard') ;deleteCookie('<?php echo $cookiename ?>'); setCookie('<?php echo $cookiename ?>', 'standard');" class="toplinks">Advanced</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class="side">
+                <option value="index.php">Select Tool</option>
 				 <option value="index.php">&nbsp;&nbsp;---------</option>
                 <?php
   if ($headernav__totalRows > 0){
@@ -384,17 +382,20 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
     $headernav->MoveFirst();
   }
 ?>
-              </select></td>
+              </select>&nbsp;&nbsp;&nbsp;</td>
       </tr>
       <tr>
-                       <td   bgcolor="#dedede"  colspan="2"><img src="../img/spacer.gif" height=25>
+                       <td   bgcolor="#dedede"  colspan="2"><img src="../img/spacer.gif" height=26>
 </td>
+      </tr>
+	   <tr>
+                       <td   colspan="2"><img src="../img/spacer.gif" height=1></td>
       </tr>
     </table>
       </td>
   </tr>
   <tr> 
-    <td bgcolor="#dedede" width="160" valign="top"> <table width="160" border="0" cellspacing="10" cellpadding="0">
+    <td bgcolor="#dedede" width="160" valign="top"> <table width="160" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td valign="top">
 	
@@ -408,8 +409,8 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
           <?php 		}?>
 		   <div id="standard" style="display: <?php echo $hd_standard ?>;">
           <?php if ($userper[10] == 1){{} ?>
-          <p align="center" class="banner"><font size="-3">CONTENT 
-      SYSTEM</font></p>
+          <p align="center" class="side_banner">CONTENT 
+      SYSTEM</p>
 	  <p class="sidetitle">Home Page</p>
 	  <a href="article_list.php?&class=2" class="side">View/Edit Homepage </a> <br>
    
@@ -429,14 +430,14 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
 			<a href="module_nav_edit.php?id=1" class="side">Content Navigation</a><br>
             <?php if ($userper[2] == 1){}} ?>
 			<?php if ($userper[85] == 1){{} ?>
-    <p class="sidetitle">Docs and Images
-    <p class="side"> 
+    <p class="sidetitle">Docs and Images</p>
+   
      
       <a href="docdir.php" class="side">View Documents</a><br>
     <a href="doc_upload.php" class="side">Upload Documents</a><br>
        <a href="imgdir.php" class="side">View Images</a><br>
     <a href="imgup.php" class="side">Upload Images</a>
-    </p>
+   
     <?php if ($userper[85] == 1){}} ?>
           <p class="sidetitle">Sections</p>
              <?php if ($userper[9] == 1){{} ?>
@@ -450,9 +451,9 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
           <?php if ($userper[8] == 1){}} ?></P>
           <?php if ($userper[10] == 1){}} ?>
           <?php if ($userper[53] == 1){{} ?>
-          <p align="center" class="banner"><font size="-3">MODULE SYSTEM</font></p>
-          <select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid">
-                <option value="index.php">Select Module</option>
+          <p align="center" class="side_banner">AMP TOOLS</p>
+          &nbsp;&nbsp;&nbsp;<select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class="side">
+                <option value="index.php">Select Tool</option>
 				 <option value="index.php">&nbsp;&nbsp;---------</option>
                 <?php
   if ($headernav__totalRows3 > 0){
@@ -475,7 +476,7 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
              </select>
 </div>
 		   <div id="basic"  style="display: <?php echo $hd_basic ?>;">
-		   <p align="center" class="banner"><font size="-3">CONTENT</font></p>
+		   <p align="center" class="side_banner">CONTENT</p>
 	      
          
             
@@ -510,8 +511,8 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
     <?php if ($userper[85] == 1){}} ?>
           
           
-          <p align="center" class="banner"><font size="-3">MODULEs</font></p>
-          <select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid">
+          <p align="center" class="side_banner">MODULES</p>
+          <select onChange="MM_jumpMenu('parent',this,0)" name="modid" id="modid" class="side">
                 <option value="index.php">Select Module</option>
 				 <option value="index.php">&nbsp;&nbsp;---------</option>
                 <?php
@@ -534,14 +535,15 @@ Navigation Display:&nbsp;&nbsp;&nbsp; <a href="#" onclick="changex('basic'); del
 ?>
              </select>
       <?php if ($userper[10] == 1){}} ?>
-		   </div>
+      
+</div><br><br>
         </td>
         </tr>
       </table> </td>
     
      
     <td valign="top" bgcolor="#FFFFFF" width="100%">
-	<table cellpadding="15"><tr><td>
+	<div><fieldset  style=" border: 1px solid grey; margin:20px; padding-top:10px; padding-left:10px; padding-right:10px; padding-bottom:10px;">
 	
 	
 	<? 

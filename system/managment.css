@@ -52,38 +52,64 @@ ul#topnav {
 }
 .toplinks {
 	color : #cccccc;
-; text-align: right; font-size: 10px; font-weight: bold; border-color: 
-black black #FFFFFF
-; font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	text-align: right;
+	font-size: 10px;
+	font-weight: bold;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	text-decoration : none;
+
 }
 A.toplinks {
 	color : #cccccc;
-; text-align: right; font-size: 10px; font-weight: bold; border-color: 
-black black #FFFFFF
-; font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	text-align: right;
+	font-size: 10px;
+	font-weight: bold;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	text-decoration : none;
+
 }
 .sidetitle {
 	color : #000000;
-; text-align: left; font-size: 12px; font-weight: bold; border-color: 
-black black #FFFFFF
-; font-family: Arial, Helvetica, sans-serif}
-.side {  font-size: 9px; text-align: left; font-family: Verdana, 
-Arial, Helvetica, sans-serif;
- text-decoration : none;
+	text-align: left;
+	font-size: 12px;
+	font-weight: bold;
+	border-color: #FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	padding-left: 10px;
 }
-a.side {  font-size: 9px; text-align: left; font-family: Verdana, 
-Arial, Helvetica, sans-serif;
- text-decoration : none;}
+.side {
+	font-size: 9px;
+	text-align: left;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	text-decoration : none;
+	padding-left: 10px;
+}
+a.side {
+	font-size: 9px;
+	text-align: left;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	text-decoration : none;
+	padding-left: 10px;
+}
  
- a.side:hover {  font-size: 9px; text-align: left; font-family: Verdana, 
-Arial, Helvetica, sans-serif;
- text-decoration : none;
+ a.side:hover  {
+	font-size: 9px;
+	text-align: left;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	text-decoration : none;
+	padding-left: 10px;
 }
-h2 { font-family: Verdana, Arial, Helvetica, sans-serif; 
-font-size: 18px; font-weight: bold; color: #FFFFFF; background-color: 
-#006666; padding-top: 3px; padding-bottom: 3px }
+
+h2 { 	
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #006666;
+	padding-bottom: 3px;
+	padding-left: 7px;
+	padding-top: 3px;
+}
 A:HOVER {
 	color : #0033FF;
 	text-decoration : none;
@@ -111,13 +137,35 @@ A:HOVER {
 	color: #CC0000;
 }
 a {  font-weight: normal; color: #003399}
-.header {  font-family: Verdana, Arial, Helvetica, sans-serif; 
-font-size: 10px; font-weight: bold}
+.header {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+}
 .pagetitle {  font-family: Verdana, Arial, Helvetica, sans-serif; 
 font-size: 14px; font-weight: bold; color: #000000}
-.banner {  font-family: Verdana, Arial, Helvetica, sans-serif; 
-font-size: 18px; font-weight: bold; color: #FFFFFF; background-color: 
-#006666; padding-top: 3px; padding-bottom: 3px}
+
+.side_banner {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #006666;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	text-transform: uppercase;
+ }
+
+.banner {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #006666;
+	padding-bottom: 3px;
+	padding-left: 7px;
+	padding-top: 3px;
+ }
 .small {  font-family: Arial, Helvetica, sans-serif; font-size: 9px; 
 font-weight: normal}
 
