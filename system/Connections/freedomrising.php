@@ -52,7 +52,7 @@ if ($userper[73] != 1) {
 } 
 
 function helpme2($link) {
-	$output = "<a href=\"javascript:void(0)\" ONCLICK=\"open('help.php?file=$link','miniwin','location=1,scrollbars=1,resizable=1,width=550,height=400')\"><img src=\"images/help.gif\" width=\"15\" height=\"15\" border=\"0\" align=\"absmiddle\"></a>&nbsp;";
+	$output = "<a href=\"javascript:void(0)\" ONCLICK=\"open('help.php?file=$link','miniwin','location=1,scrollbars=1,resizable=1,width=550,height=400')\"><img src=\"images/help.png\" width=\"15\" height=\"15\" border=\"0\" align=\"absmiddle\"></a>&nbsp;";
 	return $output;
 }
 	 
@@ -66,7 +66,7 @@ function helpme($link) {
 	$output.= $pos;
 	$output.= "#";
 	$output.= $link;
-	$output.="','miniwin','location=1,scrollbars=1,resizable=1,width=550,height=400')\"><img src=\"images/help.jpg\" width=\"15\" height=\"15\" border=\"0\" align=\"absmiddle\"></a></td></tr></table>";
+	$output.="','miniwin','location=1,scrollbars=1,resizable=1,width=550,height=400')\"><img src=\"images/help.png\" border=\"0\" align=\"absmiddle\"></a></td></tr></table>";
 	return $output;
 
 }

@@ -12,9 +12,8 @@ $modid = 7;
 $mod_id = 42;
 include_once("AMP/BaseDB.php");
 include_once("AMP/BaseTemplate.php");
-include_once("AMP/BaseModuleIntro.php");  
-
-
+include_once("AMP/BaseModuleIntro.php"); 
+require_once( 'AMP/UserData/Input.inc.php' );
 
 $petitontx=$dbcon->Execute("SELECT * FROM petition where id = ".$_GET["pid"]) or DIE("could not find petition".$dbcon->ErrorMsg());
 $petmod  =  $petitontx->Fields("udmid");
@@ -115,10 +114,56 @@ if(!$inputSubmit){
 
  //recentSignatures(); 
 
-	if (!$_GET[pthank] ) {
-		$modin =$petmod  ;
-?><p class="title">Sign Petition</p><?php
-		include ("modinput4.php" );
+	if (!$_GET['pthank'] ) {
+		$_GET['modin'] =$petmod  ;
+		//die($_GET['modin']);
+		echo '<p class="title">Sign Petition</p>';
+
+		// Fetch the form instance specified by submitted modin value.
+		$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
+		
+		// User ID.
+		$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+		$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
+		
+		// Was data submitted via the web?
+		$sub = isset($_REQUEST['btnUdmSubmit']);
+		
+		// Check fo rduplicates, setting $uid if found.
+		if ( !$uid ) {
+			$uid = $udm->findDuplicates();
+		} 
+		
+		// Check for authentication, sending authentication mail if necessary.
+		if ( $uid ) {
+			// Set authentication token if uid present
+			$auth = $udm->authenticate( $uid, $otp );
+		}
+		
+		// Fetch or save user data.
+		if ( ( !$uid || $auth ) && $sub ) {
+			// Save only if submitted data is present, and the user is
+			// authenticated, or if the submission is anonymous (i.e., !$uid)
+			$udm->saveUser();
+		} elseif ( $uid && $auth && !$sub ) {
+			// Fetch the user data for $uid if there is no submitted data
+			// and the user is authenticated.
+			$udm->submitted = false;
+			$udm->getUser( $uid ); 
+		}
+		
+		/* Now Output the Form.
+		   Any necessary changes to the form should have been registered
+		   before now, including any error messages, notices, or
+		   complete form overhauls. This can happen either within the
+		   $udm object, or from print() or echo() statements.
+		
+		   By default, the form will include AMP's base template code,
+		   and any database-backed intro text to the appropriate module.
+		*/
+		
+		$mod_id = $udm->modTemplateID;
+		print $udm->output();
 	}
 }
 

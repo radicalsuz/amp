@@ -1,9 +1,7 @@
 <?php
-
+$mod_name='content';
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
-
-
 $obj = new SysMenu;
    
 $allclass=$dbcon->Execute("SELECT distinct class.id, class.class FROM class left  join articles on articles.class =class.id where articles.id  is not null ORDER BY class ASC") or DIE($freedomrising->ErrorMsg());

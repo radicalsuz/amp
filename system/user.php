@@ -1,5 +1,5 @@
 <?php
-$modid = "";
+$mod_name = "system";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
@@ -47,6 +47,7 @@ $Per = & new Select('userlevel',$per_options,$R->Fields("permission"));
 $html .=  $buildform->add_row('Access Level', $Per);
 
 $html .= addfield('email','Email','text',$R->Fields("email"));
+$html .= $buildform->add_header('Advanced Settings');
 $html .= addfield('system_home','System Home','text',$R->Fields("system_home"));
 $html .= addfield('system_allow_only','system allowed pages:<br>separate with commas','textarea',$R->Fields("system_allow_only"));
 

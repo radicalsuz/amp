@@ -1,5 +1,5 @@
 <?php
-$intro_id = 40;
+$mod_id = 40;
 $modid = 19;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");

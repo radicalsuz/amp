@@ -1,6 +1,5 @@
 <?php
-#generic update page
-$modid = "";
+$mod_name="content";
 
 require("Connections/freedomrising.php");
 $buildform = new BuildForm;
@@ -16,10 +15,9 @@ $filename="redirect.php";
 
 ob_start();
 // insert, update, delete
-if ((($_POST[MM_update]) && ($_POST[MM_recordId])) or ($_POST[MM_insert]) or (($_POST[MM_delete]) && ($_POST[MM_recordId]))) {
-    $MM_editTable  = $table;
+if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {    $MM_editTable  = $table;
 	$MM_editColumn="id";
-    $MM_recordId = $_POST[MM_recordId];
+    $MM_recordId = $_POST['MM_recordId'];
     $MM_editRedirectUrl = $filename."?action=list";
 	$MM_fieldsStr = "old|value|new|value|publish|value|conditional|value|num|value";
     $MM_columnsStr = "old|',none,''|new|',none,''|publish|',none,''|conditional|',none,''|num|',none,''"; //|$delim,$altVal,$emptyVal|  |',none,''|
@@ -45,6 +43,7 @@ $html .= $buildform->add_header('Add/Edit '.$listtitle, 'banner');
 $html .= addfield('publish','Publish','checkbox',$r['publish'],1);
 $html .= addfield('old','Old Address','text',$r['old']);
 $html .= addfield('new','New Address','text',$r['new']);
+$html .= $buildform->add_header('Advanced Settings');
 $html .= addfield('conditional','Conditional Redirect','checkbox',$r['conditional']);
 $html .= addfield('num','Number of Charecters','text',$r['num']);
 $html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id->fetch());

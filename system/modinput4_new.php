@@ -3,7 +3,7 @@
 #set differnt list 
 #defulat file
 
-
+$mod_name='udm';
 require("Connections/freedomrising.php");
 
 $list = $dbcon->Execute("SELECT id, name from lists ORDER BY name ASC") or DIE($dbcon->ErrorMsg());

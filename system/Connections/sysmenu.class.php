@@ -252,8 +252,9 @@ function select_type_tree($id = 0,$y=0,$selcode)
 			if ($result[$x]["usenav"]) {$status ='live';} else {$status ='draft';}
 			echo "\n			<td>".$status."</td>";
 			echo "\n			<td><input name=\"order[".$result[$x]["id"]."]\" type=\"text\" value=\"".$result[$x]["textorder"]."\" size=2></td>";
-			//echo '<td><div align="right"><A HREF="type_nav_edit.php?id="'.$result[$x]["id"].'">Edit</A></div></td>';
-			//echo '<td><div align="right"><A HREF="typelist_nav_edit.php?id="'.$result[$x]["id"].'">Edit</A></div></td>';
+			
+			echo '<td><div align="right"><A HREF="nav_position.php?type='.$result[$x]["id"].'">Edit</A></div></td>';
+			echo '<td><div align="right"><A HREF="nav_position.php?typeid='.$result[$x]["id"].'">Edit</A></div></td>';
 			echo "\n		</tr>";
 			$this->section_type_tree_edit($result[$x]["id"],$y);
 			$y--;	

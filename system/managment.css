@@ -88,24 +88,69 @@ p.side, a.side {
 }
 
 ul.side {
-		margin: 0;
-		padding: 0;
+	margin: 0;
+	padding: 0px 0px 0px 30px;
+		
 }
 
 ul.side li {
-		list-style: none;
-		padding: 1px 0 1px 10px;
-		margin: 0;
-		font-size: 9px;
-		text-align: left;
+	padding: 1px 0 1px 1px;
+	margin: 0;
+	font-size: 9px;
+	text-align: left;
+	list-style-type: none;		
 }
 
 ul.side li a {
-		text-decoration: none;
+	text-decoration: none;
 }
 
 ul.side li:hover {
 		background-color: #d0d0d0;
+}
+
+li.side_add {
+	list-style-image: url("images/edit.png");
+}
+
+li.side_view {
+	list-style-image: url("images/view2.png");;
+}
+li.side_settings {
+	list-style-image: url("images/settings.png");;
+}
+li.side_doc {
+	list-style-image: url("images/pdf.png");;
+}
+li.side_upload {
+	list-style-image: url("images/upload.gif");;
+}
+li.side_img {
+	list-style-image: url("images/picture.png");;
+}
+li.side_type {
+	list-style-image: url("images/type.png");;
+}
+li.side_user {
+	list-style-image: url("images/user.png");;
+}
+li.side_exit {
+	list-style-image: url("images/exit.png");;
+}
+li.side_email {
+	list-style-image: url("images/email.png");;
+}
+li.side_form {
+	list-style-image: url("images/browse.png");;
+}
+li.side_search {
+	list-style-image: url("images/search.png");;
+}
+li.side_page {
+	list-style-image: url("images/document.png");;
+}
+li.side_home {
+	list-style-image: url("images/home.png");;
 }
 
 /* black text in list that breaks up ul */
@@ -142,12 +187,17 @@ ul.side li:hover {
 .intitle {
 	font-size: 12px;
 	font-weight: bold;
-	color: White;
+	color: white;
 	background-color : #006699;
 	background: url('images/intitle-bg.png') top left repeat-x;
 	padding: 2px 4px;
 	text-shadow: 2px 2px 1px black;
-	height: 20px;
+	height: 25px;
+}
+
+.intitle td {
+		padding: 2px 2px 2px 4px;
+		vertical-align: middle;
 }
 a.intitle {
 	background: none;

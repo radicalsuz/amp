@@ -1,10 +1,11 @@
 <?php
+$module_name="module";
+
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
 include("FCKeditor/fckeditor.php");
 $obj = new SysMenu; 
 $buildform = new BuildForm;
-
 
 $table = "moduletext";
 $listtitle ="Module Header Text";

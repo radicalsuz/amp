@@ -1,7 +1,8 @@
 <?php
-  require("Connections/freedomrising.php");
-    include("FCKeditor/fckeditor.php");
-?><?php
+$mod_name='content';
+require("Connections/freedomrising.php");
+include("FCKeditor/fckeditor.php");
+
 if (isset($preview)) {header ("Location: ../article.php?id=$id&preview=1");}
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;

@@ -1,5 +1,5 @@
 <?php
-
+$mod_name="content";
 require_once("Connections/freedomrising.php"); 
 require_once("Connections/sysmenu.class.php");
 
@@ -107,7 +107,7 @@ document.getElementById('advanced').style.display = 'none';
   <br><ul id="topnav">
 	<li class="tab1"><a href="#" id="a0" onclick="change('main');" >Section Information</a></li>
 	
-	<li class="tab2"><a href="#" id="a1" onclick="change('advanced');" >Advanaced Options </a></li>
+	<li class="tab2"><a href="#" id="a1" onclick="change('advanced');" >Advanced Options </a></li>
 </ul>
 <div id="main" class="main" style="display: block;">
         <table width="100%" border="0">

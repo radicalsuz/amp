@@ -1,4 +1,5 @@
 <?php
+$mod_name='content';
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
 require_once("FCKeditor/fckeditor.php"); 

@@ -1,4 +1,5 @@
 <?php
+$modid = "31";
   require("Connections/freedomrising.php");
 
   // *** Edit Operations: declare Tables

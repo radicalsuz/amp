@@ -5,6 +5,30 @@ function no_wh($text) {
 	echo '<nobr>'.$t.'</nobr>';
 }
 
+function nav_item($var=NULL) {
+	if (!$var) {
+			$output =",\"\",\"\",,,1 ";
+	} else {
+		$output = ",\"".$var['name']."\",\"".$var['link']."\",,,1 ";
+	}
+	return $output;
+}
+
+function nav_udm_item($id,$name) {
+	$output = ",\"".$name."\",\"modinput4_data.php?modin=".$id."\",,,1 ";
+	return $output;
+}
+
+function nav_udms() {
+	global $dbcon;
+	$R=$dbcon->Execute("select id, name from userdata_fields order by name") or DIE($dbcon->ErrorMsg());
+	while (!$R->EOF) {
+		$output .= nav_udm_item($R->Fields("id"),$R->Fields("name"));
+		$R->MoveNext();
+	}
+	return $output;
+}
+
 ?>
 <script language="JavaScript">
 menunum=0;
@@ -113,8 +137,9 @@ style1,				// Properties Array - this is set higher up, as above
 ,"<?php no_wh('Content')?>","show-menu=Content","","Content",1
 ,"<?php no_wh('Docs and Images')?>","show-menu=Docs","","Docs and Images",1
 ,"<?php no_wh('Tools')?>","show-menu=Modules","","Modules",1
+,"<?php no_wh('Forms')?>","show-menu=Form","","Forms",1
 ,"<?php no_wh('Navigation')?>","show-menu=Nav","","Navigation",1
-,"<?php no_wh('User Data')?>","show-menu=User Data","","User Data",1
+//,"<?php #no_wh('User Data')?>","show-menu=User Data","","User Data",1
 ,"<?php no_wh('Site Template')?>","show-menu=Template","","Template",1
 ,"<?php no_wh('Settings')?>","show-menu=Settings","","Settings",1
 ,"<?php no_wh('Help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')?>","show-menu=Help","","Help",1
@@ -122,468 +147,190 @@ style1,				// Properties Array - this is set higher up, as above
 ])
 
 
-	addmenu(menu=["Content",
-	,
-	,
-	190,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,"View Edit Site Content","articlelist.php",,,1
-	,"Add Site Content","article_edit.php",,,1
-	,"","",,,1
-	,"View/Edit Home page Content","article_list.php?&class=2",,,1
-	,"Add Home Page Content","article_fpedit.php",,,1
-	,"","",,,1
-	,"View/Edit Sections","edittypes.php",,,1
-	,"Add Section","type_edit.php",,,1
-	,"Add Class","class.php",,,1
+	addmenu(menu=["Content",,,190,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav['content'][0]); # view/edit
+echo nav_item($sys_nav['content'][1]); # add
+echo nav_item(); #
+echo nav_item($sys_nav['content'][2]); # view homepage
+echo nav_item($sys_nav['content'][3]); # add homepage
+echo nav_item(); #
+echo nav_item($sys_nav['content'][10]); # view sections
+echo nav_item($sys_nav['content'][11]); # add section
+echo nav_item($sys_nav['content'][12]); # add class
+echo nav_item(); #
+?>
 	,"RSS","show-menu=rss",,,1
 	,"Content Tools","show-menu=Content Tools",,,1
 
 		])
 	
 	
-	addmenu(menu=["Nav",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"Default Navigation Layout","module_nav_edit.php?id=1",,,1
-	,"Homepage Navigation Layout","module_nav_edit.php?id=2",,,1
-	,"View Basic Navigation Files","nav_list.php?nons=1",,,1
-	,"View All Navigation Files","nav_list.php",,,1
-	,"Add Basic Navigation File","nav_minedit.php",,,1
-	,"Add Dynamic Navigation File","nav_edit.php",,,1
+	addmenu(menu=["Nav",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav[30][0]); # Default Navigation Layout
+echo nav_item($sys_nav[30][1]); # Homepage Navigation Layout
+echo nav_item($sys_nav[30][2]); # View  Navigation Files
+echo nav_item($sys_nav[30][3]); # Add Navigation File
+?>
+
 			
 		])
 	
-	
-	addmenu(menu=["Template",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,"View/Edit Design Template","template.php?action=list",,,1
-	,"Add Design Template","template.php",,,1
-	,"Edit Standard CSS","css_edit.php",,,1
-	,"Edit Custom CSS","css_list.php",,,1
-
+	addmenu(menu=["Template",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav[31][0]); # View/Edit Design Template
+echo nav_item($sys_nav[31][1]); # Add Design Template
+echo nav_item($sys_nav[31][2]); # Edit Standard CSS
+echo nav_item($sys_nav[31][3]); # Edit Custom CSS
+?>
 		])
 	
-	
-	addmenu(menu=["Modules",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
+	addmenu(menu=["Modules",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+#echo nav_item($sys_nav[''][]); # view/edit
+?>
+	,"Calendar","<?php echo $sys_nav[1][0]['link']; ?>",,,1
+	,"Photo Gallery","<?php echo $sys_nav[8][1]['link']; ?>",,,1
 	,"Advocacy Modules","show-menu=Advocacy",,,1
-	,"Email Tools","lists/admin",,,1
-	,"Calendar","calendar_gxlist.php",,,1
+	,"Email Lists","show-menu=Email",,,1
 	,"Directories","show-menu=Dir",,,1
 	,"Boards","show-menu=Boards",,,1
-	,"User Data Modules","show-menu=UDMs",,,1
-	,"Photo Gallery","photo_list.php",,,1
-	,"Other Modules","show-menu=Other",,,1
-	," ","",,,1
-	,"View/Edit Forms","modinput4_list.php",,,1
-	,"Add New Form","modinput4_new.php",,,1
-	,"Modules Settings","show-menu=Module Settings",,,1
+	//,"User Data Modules","show-menu=UDMs",,,1
+	,"Volunteer","vol_list.php",,,1
+	,"Media Sign In","modinput4_data.php?modin=7",,,1
+	,"FAQs","f<?php echo $sys_nav[4][0]['link']; ?>",,,1
+	,"Tell A Friend","module_header_list.php?modid=22",,,1
+	,"Contact Us","module_header_list.php?modid=17",,,1
+	,"Quotes","<?php echo $sys_nav[41][0]['link']; ?>",,,1
+	//,"Forums","",,,1
 
 		])
 		
-	addmenu(menu=["Advocacy",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
+	addmenu(menu=["Advocacy",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+#echo nav_item($sys_nav[''][]); # view/edit
+?>
 	,"Web Actions","sendfax_list.php",,,1
 	,"Petitions","petition_list.php",,,1
 	,"Endorsements","modinput4_data.php?modin=1",,,1
 
 		])
-	addmenu(menu=["Boards",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
+	addmenu(menu=["Boards",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+#echo nav_item($sys_nav[''][]); # view/edit
+?>
 	,"Ride Board","modinput4_data.php?modin=10",,,1
 	,"Housing Board","modinput4_data.php?modin=11",,,1
 
 		])
-
-	addmenu(menu=["UDMs",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"Media Sign In","modinput4_data.php?modin=7",,,1
-	,"","",,,1
-	,"","",,,1
-	,"","",,,1
-	,"","",,,1
+		
+	addmenu(menu=["Email",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav[9][1]); # amp
+echo nav_item($sys_nav[9][0]); # phplist
+?>
 		])
 		
-	addmenu(menu=["Other",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"FAQs","faq_list.php",,,1
-	,"Forums","",,,1
-
-		])
-		
-	addmenu(menu=["Dir",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"Links","link_list.php",,,1
+	addmenu(menu=["Dir",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+#echo nav_item($sys_nav[''][]); # view/edit
+?>
+	,"Links","link_list.php?action=list",,,1
 	,"Local Groups","modinput4_data.php?modin=2",,,1
 	,"Speakers","modinput4_data.php?modin=6",,,1
 	,"Trainers","modinput4_data.php?modin=5",,,1
 		])
-	addmenu(menu=["User Data",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"View/Edit Users","",,,1
-	,"Add User","",,,1
-	,"Search Users","",,,1
 
-
+	//addmenu(menu=["User Data",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+#echo nav_item($sys_nav[''][]); # view/edit
+?>
+//	,"View/Edit Users","",,,1
+//	,"Add User","",,,1
+//	,"Search Users","",,,1
+//		])		
+		
+	addmenu(menu=["Form",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav['udm'][0]); # view
+echo nav_item($sys_nav['udm'][1]); # add ?>
+	,"Form Data","show-menu=UDMs",,,1
+<?php
+echo nav_item($sys_nav['udm'][2]); # search
+?>
 		])		
-		
-		
-		
-	addmenu(menu=["Module Settings",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
 	
-	,"View Module Intro Text","module_header.php?action=list",,,1
-	,"Add Module Intro Text","module_hedear.php",,,1
-	,"Add Module","module.php",,,1
-	,"Edit Module Settings","module.php?action=list",,,1
+	addmenu(menu=["UDMs",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_udms();
+?>
+		])
 
-
-		])	
-		addmenu(menu=["rss",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"bottom"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"View RSS Feeds","rssfeed.php?action=list",,,1
-	,"Add RSS Feed","rssfeed.php",,,1
-	,"RSS Aggragator","feeds_view.php?action=list",,,1
-
-
+	addmenu(menu=["rss",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav[45][0]); #View RSS Feeds
+echo nav_item($sys_nav[45][1]); # Add RSS Feed
+echo nav_item($sys_nav[45][3]); # RSS Aggragator
+?>
 		])
 	
-	addmenu(menu=["Docs",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"View Documents","docdir.php",,,1
-	,"Upload Documents","doc_upload.php",,,1
-	,"View Images","imgdir.php",,,1
-	,"Upload Images","imgup.php",,,1
 
+	addmenu(menu=["Docs",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav['content'][5]); # View Documents
+echo nav_item($sys_nav['content'][8]); # Upload Documents
+echo nav_item($sys_nav['content'][6]); # View Images
+echo nav_item($sys_nav['content'][8]); # Upload Images
+?>
 		])
-		
-	addmenu(menu=["Content Tools",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"Comments","comments.php",,,1
+
+
+	addmenu(menu=["Content Tools",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+#echo nav_item($sys_nav[''][]); # view/edit
+?>
+	,"Comments","comments.php?action=list",,,1
 	,"Page Redirection","redirect.php?action=list",,,1
-	,"Hot Words","hotwords.php",,,1
-	,"RSS","show-menu=rss",,,1
+	,"Hot Words","hotwords.php?action=list",,,1
 	,"User Added Content","article_list.php?&class=9",,,1
-	,"Site Map","",,,1
-	,"Search","",,,1
+	,"Other Content Tools","module_header_list.php?modid=19",,,1
+	
 
 		])		
 
-
-
-	addmenu(menu=["Help",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
+	addmenu(menu=["Help",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+//echo nav_item($sys_nav[''][]); # 
+?>
 	,"Help","http://www.radicaldesigns.org/manual.pdf",,,1
 	,"HTML Tips","html.html",,,1
 	,"About","",,,1
-
 		])
 		
-			addmenu(menu=["Settings",
-	,
-	,
-	175,
-	1,
-	"",
-	style2,
-	,"top"
-	,effect,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	,
-	
-	,"System Permisssions","permissions_list.php",,,1
-	,"System Users","user_list.php",,,1
-	,"System Settings","sysvar.php",,,1
-	,"Setup Wizard","wizard_setup.php",,,1
-	,"Reset Cache","flushcache.php",,,1
-	,"Logout","logout.php",,,1
+	addmenu(menu=["Settings",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav['system'][1]); # System Permisssions
+echo nav_item($sys_nav['system'][0]); # System Users
+echo nav_item($sys_nav['system'][2]); # System Settings
+?>
+,"Modules Settings","show-menu=Module Settings",,,1
+<?php
+echo nav_item($sys_nav['system'][3]); # Setup Wizard
+echo nav_item($sys_nav['system'][4]); # Reset Cache
+echo nav_item($sys_nav['system'][5]); # Logout
+?>
 		])
+
+	addmenu(menu=["Module Settings",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
+<?php
+echo nav_item($sys_nav['module'][0]); # intro
+echo nav_item($sys_nav['module'][1]); # intro add
+echo nav_item($sys_nav['module'][2]); # module add
+echo nav_item($sys_nav['module'][3]); # module list
+?>
+		])	
+
 	
 dumpmenus()
 

@@ -8,7 +8,7 @@
  * Written by Blaine Cook, blaine@radicaldesigns.org
  *
  *****/
-
+$mod_name='udm';
 require_once( 'AMP/UserData/Set.inc.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );

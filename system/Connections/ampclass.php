@@ -22,7 +22,11 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 		echo "\n			<td><b><a href='".$_SERVER['PHP_SELF']."?action=list&sort=".$v."' class='intitle'>".$k."</a></b></td>";
 	}
 	
-	if ($extra) {echo "\n			<td>&nbsp;</td>";}
+	if ($extra) {
+		for ($i = 1; $i <= sizeof($extra); $i++) {
+			echo "\n			<td>&nbsp;</td>";
+		}
+	}
 	echo "\n		</tr>";
 	$i= 0;
 	while (!$query->EOF) {
@@ -793,6 +797,13 @@ function addfield($name,$label,$fieldtype='text',$value=NULL,$defualt=NULL,$size
 	if ($fieldtype == 'textarea') {
 		$field = & new Textarea($name, $value, $height , $size);
 	}
+	if ($fieldtype == 'file') {
+		$field =  & new Input($fieldtype,$name,'','','', '', $size);
+	}
+	if ($fieldtype == 'hidden') {
+		$field =  & new Input($fieldtype,$name,$value,'','', '', '');
+	}
+
 	$output = $buildform->add_row($label, $field);
 	
 	return $output;
@@ -807,5 +818,109 @@ function makelistarray($q,$key,$value,$label='Select') {
 	}
 	return $list;
 }
+
+function upload_image($newname=NULL,$wwidth,$lwidth,$thumbwidth,$hide_display=NULL){
+	global $base_path_amp,$gd_version;
+
+	$picdir = $base_path_amp."img/original";
+	$thumbdir = $base_path_amp."img/thumb";
+	$usedir = $base_path_amp."img/pic"; 
+	$addition = "";
+ 	$newext = "jpg";
+
+	$array = explode (".",$_FILES['file']['name']);
+	$filename = $array[0];
+	$extension = strtolower($array[1]);
+    if ($_FILES['file']['name'] == "")	{
+    } else {
+		if(!(($extension == jpe) or ($extension == jpg) or ($extension == jpeg))) {
+			$response = "<b>The attached file is not a jpeg!</b>";
+        } else {
+			if($newname){
+				 $filename = $newname; 
+			}
+            	$smallimage = "$thumbdir"."/"."$filename"."$addition"."."."$newext";
+				$useimage = "$usedir"."/"."$filename"."$addition"."."."$newext";
+                $original = "$picdir"."/"."$filename"."."."$newext";
+
+			if(file_exists($original)) {
+				$response = "<b>A file with this name already exists  on the server</b>";
+			} else {
+				if (move_uploaded_file($_FILES['file']['tmp_name'], $original)) {  
+					$response = "<b>File is valid, and was successfully uploaded.</b>"; 
+				} else { 
+					$response = "<b>File uploaded failed.</b>";
+				}
+				if (!copy($original, $useimage)) {
+  					echo "<b>failed to copy $useimage...\n</b>";
+				}
+				if (!copy($original, $smallimage)) {
+  					echo "<b>failed to copy $smallimage...\n</b>";
+				}
+				chmod($smallimage,0755);
+				chmod($useimage,0755);
+				chmod($original,0755);
+				if(file_exists($smallimage)) {
+                	$image = imagecreatefromjpeg("$smallimage");
+                    $ywert=imagesy($image);
+					$xwert=imagesx($image);
+					if($xwert > $ywert){
+						$verh = $xwert / $ywert;
+						$newwidth = $thumbwidth;
+						$newheight = $newwidth / $verh;
+					} else  {
+						$verh = $ywert / $xwert;
+                        $newwidth = $thumbwidth;
+                        $newheight= $newwidth * $verh;
+                   	}
+					if ($gd_version >= 2.0) {
+            			$destimage = ImageCreateTrueColor($newwidth,$newheight);
+                        ImageCopyResampled($destimage, $image, 0,   0,   0,   0, $newwidth, $newheight,$xwert,$ywert); 
+					} else {
+						$destimage = ImageCreate($newwidth,$newheight);
+                        ImageCopyResized($destimage, $image, 0,   0,   0,   0, $newwidth, $newheight,$xwert,$ywert); 
+					}
+                    imagejpeg($destimage,$smallimage);
+				}
+				if(file_exists($useimage)) {
+					$image = imagecreatefromjpeg("$useimage");
+                    $ywert=imagesy($image);
+                    $xwert=imagesx($image);
+					if($xwert > $ywert) {
+						$verh = $xwert / $ywert;
+                        $newwidth = $wwidth;
+                        $newheight = $newwidth / $verh;
+					} else  {
+                        $verh = $ywert / $xwert;
+                        $newwidth = $lwidth;
+                        $newheight= $newwidth * $verh;
+               		}
+					if ($gd_version >= 2.0) {
+           				$destimage = ImageCreateTrueColor($newwidth,$newheight);
+                    	ImageCopyResampled($destimage, $image, 0,   0,   0,   0, $newwidth, $newheight,$xwert,$ywert); 
+					} else {
+           				$destimage = ImageCreate($newwidth,$newheight);
+                        ImageCopyResized($destimage, $image, 0,   0,   0,   0, $newwidth, $newheight,$xwert,$ywert); 
+					}
+                    imagejpeg($destimage,$useimage);
+				}
+  			}
+		}
+	}
+	
+	if (isset($original)) {
+		$response .= '>hr><table>';
+        $response .= '<tr><td>Thumbnail:<td><td>'.$smallimage.'</td><td><img src="../img/thumb/'.$filename.$addition.".".$newext."\"></td></tr>";
+		$response .= '<tr><td>Optimized:<td><td>'.$useimage.'</td><td><img src="../img/pic/'.$filename.$addition.".".$newext."\"></td></tr>";
+		$response .= '<tr><td>Original:<td><td>'.$original.'</td><td><img src="../img/original/'.$filename.$addition.".".$newext."\"></td></tr>";
+		$response .= '</table><hr><br>';
+	}
+	if (!$hide_display) {
+		echo $response;
+	}
+	$image =$filename.$addition.".".$newext;
+	return $image;
+}
+
 
 ?>

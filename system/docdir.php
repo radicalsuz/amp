@@ -1,5 +1,5 @@
 <?php
-$modid = "19";
+$mod_name="content";
 
 require_once("Connections/freedomrising.php");
 

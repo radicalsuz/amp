@@ -1,4 +1,6 @@
 <?php
+$mod_name = "system";
+
 require("Connections/freedomrising.php");
 $buildform = new BuildForm;
 

@@ -10,6 +10,7 @@
  *****/
 
 //ob_start();
+$mod_name='udm';
 require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'utility.functions.inc.php');
 

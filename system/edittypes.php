@@ -1,5 +1,5 @@
 <?php
-$modid=19;
+$mod_name="content";
 
 require("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
@@ -58,6 +58,9 @@ include ("header.php");?>
           <td>ID</td>
           <td>Status</td>
 		  <td >Order</td>
+		  <td>Index Navs</td>
+		  <td >Content Navs</td>
+
         </tr>
         <?php $obj->section_type_tree_edit(0);?>
       </table></div>

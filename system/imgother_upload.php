@@ -1,4 +1,5 @@
 <?php
+$mod_name="content";
   require("Connections/freedomrising.php");?>
    <?php  include("header.php");?>
    <h2><?php echo helpme(""); ?>Image Upload</h2>
@@ -28,14 +29,14 @@ global $PHP_SELF,$my_max_file_size;
 
 	if ($error) print $error . "<br><br>";
 	
-	print "\n<form ENCTYPE=\"multipart/form-data\"  action=\"" . $PHP_SELF . "\" method=\"post\">";
-	print "\n<INPUT TYPE=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . $my_max_file_size . "\">";
+	print "\n<form ENCTYPE=\"multipart/form-data\"  action=\"" . $PHP_SELF . "\" method=\"post\"><div class=list_table><table class=list_table>";
+	print "\n<tr class=intitle><td colspan=2><INPUT TYPE=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . $my_max_file_size . "\">";
 	print "\n<INPUT TYPE=\"hidden\" name=\"task\" value=\"upload\">";
-	print "\n<P>Upload a file";
-	print "\n<BR>NOTE: Max file size is " . ($my_max_file_size / 1024) . "KB";
- 	print "\n<br>Optimized: <INPUT NAME=\"the_file1\" TYPE=\"file\" SIZE=\"35\"> <br>";
-	print "\n<br>Thumbnail: <INPUT NAME=\"the_file2\" TYPE=\"file\" SIZE=\"35\"> <br>";
-	print "\n<br>Full Size: <INPUT NAME=\"the_file3\" TYPE=\"file\" SIZE=\"35\"> <br><br>If you do not have multiple sizes of this file please upload the same file in all fields<br>";
+	print "\n Upload a file</td></tr>";
+	print "\n<tr><td colspan=2><br>NOTE: Max file size is " . ($my_max_file_size / 1024) . "KB<br></td></tr>";
+ 	print "\n<tr><td>Optimized: </td><td><INPUT NAME=\"the_file1\" TYPE=\"file\" SIZE=\"35\"> </td</tr>";
+	print "\n<tr><td>Thumbnail: </td><td><INPUT NAME=\"the_file2\" TYPE=\"file\" SIZE=\"35\"> </td</tr>";
+	print "\n<tr><td>Full Size: </td><td><INPUT NAME=\"the_file3\" TYPE=\"file\" SIZE=\"35\"> </td</tr><tr><td colspan=2>If you do not have multiple sizes of this file please upload the same file in all fields</td></tr></table></div>";
 	print "\n<input type=\"submit\" Value=\"Upload\">";
 	print "\n</form>";
 
@@ -110,7 +111,6 @@ function upload($the_file, $the_path, $name) {
 
 ############ Start page
 
-print "<html>\n<head>\n<title>Upload example</title>\n</head>\n<body>";
 
 switch($task) {
 	case 'upload':

@@ -1,11 +1,11 @@
 <?php
-
+$mod_name='content';
 require("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
 
-   $obj = new SysMenu;
-   if ($userper[1] ) { } else { header ("Location: index.php"); }
-   if ($userper[97]){if ($sectional_per[$_GET[type]] ) {} else { header ("Location: index.php"); }}
+$obj = new SysMenu;
+if ($userper[1] ) { } else { header ("Location: index.php"); }
+if ($userper[97]){if ($sectional_per[$_GET[type]] ) {} else { header ("Location: index.php"); }}
   
    
 	#$result = $obj->get_children($MX_top,1);	
