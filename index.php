@@ -18,7 +18,7 @@ ob_start();
 if ($indexreplace != NULL) {
     require ("$indexreplace");
 } else {
-    include("index.inc.php");
+    include("AMP/Article/index.inc.php");
 }
 
 include("AMP/BaseFooter.php");
