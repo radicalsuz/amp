@@ -47,7 +47,7 @@ if (!function_exists( 'array_intersect_key' ) ) {
             }
 
             foreach ($arrays[0] as $key => $val) {
-                for ($idx = 1; $idx $numArgs; $idx++) {
+                for ($idx = 1; $idx < $numArgs; $idx++) {
                     if (! array_key_exists($key, $arrays[$idx])) {
                         unset($arrays[0][$key]);
                     }
