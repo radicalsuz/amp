@@ -33,10 +33,8 @@ if ( !function_exists( 'evalnavhtml' ) ) {
 			//echo $incl.'<br>';
 			ob_start();
 			$basefile = $base_path. 'include/AMP/Nav/'.$incl;
-			echo $basefile;
 			if (file_exists($basefile)) {
 				$file = 'AMP/Nav/'.$incl;
-				echo $file;
 				include($file);
 			} elseif (file_exists($incl)) {		
 				$file = $incl;
