@@ -97,7 +97,7 @@ if (isset($HTTP_GET_VARS["id"]))
           </tr>
 		  <tr> 
             <td class="name">RSS Feed</td>
-            <td><input name="rss" type="text" size="5" value="<?php echo $Recordset1->Fields("rss")?>"></td>
+            <td><input name="rss" type="text" size="40" value="<?php echo $Recordset1->Fields("rss")?>"></td>
           </tr>
           <tr> 
             <td class="name">Repeat number</td>
