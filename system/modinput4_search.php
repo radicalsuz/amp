@@ -8,10 +8,10 @@
  * 
  *****/
 
-require_once( 'AMP/UserData/UserDataInput.php' );
+require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
-require_once('AMP/UserData/UserDataSearch.php');
+require_once('AMP/UserData/Search.inc.php');
 
 #set_error_handler( 'e' );
 
