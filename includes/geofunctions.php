@@ -3,6 +3,18 @@
 require_once "HTTP/Request.php";
 require_once "XML/Unserializer.php";
 
+    class rdfDocument
+    {
+        var $channel;
+        var $item;
+
+        function getItems($amount)
+        {
+            return array_splice($this->item,0,$amount);
+        }
+    }
+
+
 geo_getdata( "3212 24th St., San Francisco, CA" );
 
 function geo_getdata($address) {
@@ -34,10 +46,15 @@ function geo_getdata($address) {
    </geo:Point>
 </rdf:RDF>';
 
-    $options = array( "tagMap" => array( "rdf:RDF" => "array" ) );
-
+    $options = array(
+                     "complexType" => "object",
+                     "tagMap"      => array(
+                                                "rdf:RDF"   => "rdfDocument",   // this is used to specify a classname for the root tag
+                                            )
+                    );
+ 
 print "<pre>";
-    $xmlparse = new XML_Unserializer;
+    $xmlparse = new XML_Unserializer( $options );
     $parse_result = $xmlparse->unserialize( $result, false );
 print_r( $xmlparse)."\n";
     $data = $xmlparse->getUnserializedData();
