@@ -105,7 +105,7 @@ style1,				// Properties Array - this is set higher up, as above
 ,"<?php no_wh('User Data')?>","show-menu=User Data","","User Data",1
 ,"<?php no_wh('Site Template')?>","show-menu=Template","","Template",1
 ,"<?php no_wh('Settings')?>","show-menu=Settings","","Settings",1
-,"<?php no_wh('Help')?>","show-menu=Help","","Help",1
+,"<?php no_wh('Help')?>","show-menu=Help","","Help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",1
 
 ])
 
