@@ -4,7 +4,7 @@
   if ($QUERY_STRING) {
     $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
   }
- // include("Connections/menu.class.php");
+ // require_once("Connections/menu.class.php");
 //$obj2 = new Menu; 
 if  (isset($searchx)){
 
@@ -27,9 +27,7 @@ if  ($_POST[authy] != NULL) {
 <?php
 
   if (isset($relsection1id)) {?>
-	
-          
-       
+
 			<select name="rel1y">
 	  <OPTION SELECTED value=""><?php echo $relsection1label ;?></option>
 	   <?php echo $obj->select_type_tree($relsection1id); ?>
