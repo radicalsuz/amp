@@ -21,7 +21,7 @@ function udm_AMP_read ( $udm, $options = null ) {
         }
     }
     
-    $udm->userid = $userid;
+    $udm->uid = $userid;
 
 }
  
