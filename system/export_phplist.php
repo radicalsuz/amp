@@ -23,7 +23,11 @@ while ( $row = $attr_rs->FetchRow() ) {
 }
 
 while ( $row = $list_rs->FetchRow() ) {
-    $subdata[ $row[ 'userid' ] ]['lists']["{$row['listid']}"] = $row[ 'listid' ];
+    $lists &= $subdata[ $row[ 'userid' ] ]['lists'];
+    
+    if ( !isset( $lists ) ) $lists = "\n";
+
+    $lists .= "<list>" . $row[ 'listid' ] . "</list>\n";
 }
 
 $serializer = new XML_Serializer();
