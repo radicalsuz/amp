@@ -7,10 +7,13 @@ To Do:
 
 *********************/ 
 //set modle id
-ob_start();
-$mod_id = 1 ; 
 
-if (isset($HTTP_GET_VARS["filelink"])) { header ("Location: $HTTP_GET_VARS[filelink]");} 
+$mod_id = 1 ; 
+if ($_GET["filelink"]) {
+        header("Location:".$_GET["filelink"]);
+        die();
+}
+ob_start();
 //load cahce functions
  require_once("adodb/adodb.inc.php");
 require_once("Connections/freedomrising.php");
