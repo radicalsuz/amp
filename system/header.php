@@ -389,7 +389,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 ?>
               </select>&nbsp;&nbsp;&nbsp;</td>
       </tr>
-      <tr><td id="navlinks" bgcolor="#dedede" colspan="2">&nbsp;</td></tr>
+      <tr><td id="navlinks" colspan="2">&nbsp;</td></tr>
     </table>
   </td>
 </tr>
