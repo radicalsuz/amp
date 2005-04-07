@@ -40,12 +40,12 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
 
             //If the request is set, see if the userdata fields are defined
             if ($search_obj=&$this->udm->getPlugin('AMP', 'Search') && isset($search_obj->alias[$_REQUEST['sortby']])) {
-                $sortalias=$search->alias[$_REQUEST['sortby']];
+                $sortalias=$search_obj->alias[$_REQUEST['sortby']];
                 $this->sortname=ucwords($_REQUEST['sortby']);
-                $this->select=$sortalias['sqlname'].' AS `'.$sort_defs['f_alias'].'`';
-                $this->orderby=$sortalias['orderby'];
+                $this->select=$sortalias['f_sqlname'].' AS `'.$sortalias['f_alias'].'`';
+                $this->orderby=$sortalias['f_orderby'];
+                print $this->select;
             } elseif (isset($this->udm->fields[$_REQUEST['sortby']])) {
-                $sort_defs=$this->udm->fields[$_REQUEST['sortby']];
                 $this->sortname=ucwords($_REQUEST['sortby']);
                 $this->select=$_REQUEST['sortby'];
                 $this->orderby=$_REQUEST['sortby'];

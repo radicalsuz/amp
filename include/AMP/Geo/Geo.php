@@ -32,12 +32,17 @@ Class Geo {
 		$this->State =$State;
 		$this->Zip =$Zip;
 
-		if  ( ($this->Street) && ( ( ($this->City) && ($this->State) ) ) or ($this->Zip)) {
-			$this->geocoder_getdata();
-		}
-		elseif  (  ($this->City) and ($this->State))  {
+		if  ( isset($this->Street) ) {
+            if  ( (isset($this->City) && $this->City && isset($this->State) && $this->State ) 
+                or (isset($this->Zip) && $this->Zip)) {
+                $this->geocoder_getdata();
+            }
+        }
+		if  (  (!isset($this->lat)) && isset($this->City) && $this->City 
+            && isset($this->State) && $this->State)  {
 			$this->city_lookup();
-		} elseif ($this->Zip) {
+		} 
+        if ((!isset($this->lat)) && isset($this->Zip) && $this->Zip) {
             $this->zip_lookup();
         }
 	}
@@ -143,16 +148,20 @@ Class Geo {
 	}
 	function zip_lookup() {
 		$sql = "select latitude,longitude from zipcodes where zip = ".$this->dbcon->qstr($this->Zip);
-		if ($R=$this->dbcon->CacheExecute($sql)) {
-			$this->lat = $R->Fields("latitude") ;
-			$this->long = $R->Fields("longitude");			
+		if ($R=$this->dbcon->CacheGetRow($sql)) {
+			$this->lat = $R["latitude"] ;
+			$this->long = $R["longitude"];			
 		}
 	}
 	
 //a function that retruns an array of zip codes with a radius of mise from a set zip code
 	function zip_radius($radius) {	
-		$zip_query='SELECT zip, zip,latitude,longitude, (ACOS((SIN(' . $this->lat . '/57.2958) * SIN(latitude/57.2958)) + (COS(' . $this->lat . '/57.2958) * COS(latitude/57.2958) * COS(longitude/57.2958 - ' . $this->long. '/57.2958)))) * 3963 AS distance FROM zip WHERE (latitude >= ' . $this->lat . ' - (' . $radius . '/111)) AND (latitude <= ' . $this->lat . ' + (' . $radius . '/111)) AND (longitude >= ' . $this->long . '- (' . $radius . '/111)) AND (longitude <= ' . $this->long. '+ (' . $radius . '/111)) ORDER BY distance ASC;';
-		return ($this->dbcon->CacheGetAssoc($zip_query) );
+		$zip_query='SELECT zip, zip,latitude,longitude, (ACOS((SIN(' . $this->lat . '/57.2958) * SIN(latitude/57.2958)) + (COS(' . $this->lat . '/57.2958) * COS(latitude/57.2958) * COS(longitude/57.2958 - ' . $this->long. '/57.2958)))) * 3963 AS distance FROM zipcodes WHERE (latitude >= ' . $this->lat . ' - (' . $radius . '/111)) AND (latitude <= ' . $this->lat . ' + (' . $radius . '/111)) AND (longitude >= ' . $this->long . '- (' . $radius . '/111)) AND (longitude <= ' . $this->long. '+ (' . $radius . '/111)) ORDER BY distance ASC;';
+        if ( $zipset=$this->dbcon->CacheGetAssoc($zip_query) ) {
+            return $zipset; 
+        } else {
+            return false;
+        }
 	}
 
 //a function the returns links to othe maping programs

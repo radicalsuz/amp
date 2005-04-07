@@ -11,7 +11,7 @@ class UserDataPlugin_Index_Output extends UserDataPlugin {
 
     function execute ($options=null) {
 
-		$index['state']['name']="Records By State";
+		$index['state']['name']=$this->udm->name."s By State";
 		$index['state']['sql'].="SELECT count(userdata.id) as qty, userdata.State as item_key, states.statename as item_name from userdata, states WHERE userdata.State=states.state and modin=".$_REQUEST['modin']." GROUP BY userdata.State ";
 		foreach ($index as $index_key=>$this_index) {
 			$index_set=$this->dbcon->CacheGetAll($this_index['sql']);

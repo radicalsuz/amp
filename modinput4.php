@@ -28,7 +28,7 @@ $otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
 // Was data submitted via the web?
 $sub = isset($_REQUEST['btnUdmSubmit']);
 
-// Check fo rduplicates, setting $uid if found.
+// Check for duplicates, setting $uid if found.
 if ( !$uid ) {
 
 	$uid = $udm->findDuplicates();

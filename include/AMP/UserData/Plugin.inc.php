@@ -284,6 +284,7 @@ class UserDataPlugin {
     
 
     function setData ( $data ) {
+        
         if ($this->_field_prefix) {
 
             foreach ($data as $key=>$value) {

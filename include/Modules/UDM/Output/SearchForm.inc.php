@@ -65,7 +65,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		if (isset($_REQUEST['zip'])&&isset($_REQUEST['distance'])&&$_REQUEST['zip']&&$_REQUEST['distance']) {
 			$srch_options['zip']=$_REQUEST['zip'];
 			$srch_options['distance']=$_REQUEST['distance'];
-            $srch_loc=new Geo ($this->dbcon, NULL, NULL, NULL, $_REQUEST['zip']);
+            $srch_loc=&new Geo ($this->dbcon, NULL, NULL, NULL, $_REQUEST['zip']);
             if ($ziplist=$srch_loc->zip_radius($_REQUEST['distance'])) {
                 $zipset = "(".$_REQUEST['zip'];
                 foreach ($ziplist as $zindex=>$zinfo) {
@@ -183,9 +183,14 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$def['bydate']=array('type'=>'select', 'label'=>'Entered Date', 'required'=>false,  'values'=>$this->lookups['bydate']['Set'], 'size'=>null, 'value'=>$mydate, 'public'=>'1');
 	
 		//distance by zip
-		$distance_options=array('1'=>'1','5'=>'5', '10'=>'10', '25'=>'25', '100'=>'100', '9999'=>'All');
-		$def['distance']=array('type'=>'select', 'label'=>'Within:', 'required'=>false,  'values'=>$distance_options, 'size'=>null, 'value'=>'5', 'public'=>'1');
-		$def['zip']=array('type'=>'text', 'label'=>'&nbsp;miles of US zipcode:&nbsp', 'value'=>$_REQUEST['zip'], 'size'=>'8', 'public'=>'1');
+		$distance_options=array('1'=>'1','5'=>'5', '10'=>'10', '25'=>'25', '100'=>'100', '250'=>'250');
+		$def['distance']=array('type'=>'select', 'label'=>'Within:', 'required'=>false,  'values'=>$distance_options, 'size'=>null, 'value'=>(isset($_REQUEST['distance'])?$_REQUEST['distance']:'5'), 'public'=>'1');
+		$def['zip']  =  array(
+            'type'=>'text',     
+            'label'=>'&nbsp;miles of US zipcode:&nbsp', 
+            'value'=>$_REQUEST['zip'], 
+            'size'=>'8', 
+            'public'=>'1');
 		
 		$def['search']=array('type'=>'submit', 'label'=>'Search', 'public'=>'1');
 		$def['modin']=array('type'=>'hidden', 'label'=>'', 'value'=>$_REQUEST['modin'], 'size'=>'8', 'public'=>'1', 'enabled'=>'1');
@@ -393,7 +398,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
     function search_text_header () {
 		global $_REQUEST;
 		$this->setupRegion();
-		$search_type='records';
+		$search_type=$this->udm->name;
 		foreach ($_REQUEST as $searchitem=>$searchdata) {
 			//add criteria to the holding set
 			if ($searchdata) {
@@ -425,10 +430,14 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
                 }
             }
         }
-        if (isset($search_text)||$search_type!='items') { 
+        if (isset($search_text)||$search_type!=$this->udm->name) { 
+            if (substr($this->udm->name, strlen($this->udm->name)-1)!='s') 
+                $search_type = str_replace( $this->udm->name, ($this->udm->name.'s'), $search_type);
             $header_text="Listing ".$search_type."<BR>".((is_array($search_text))?join(' ', $search_text):$search_text);
         } else {//default header - showing all
-            $header_text="Listing All Records";
+            $header_text="Listing All ".ucwords($this->udm->name);
+            if (substr($this->udm->name, strlen($this->udm->name)-1)!='s') 
+                $header_text.='s';
         }
         $header_class=($this->udm->admin?'header':'title');
         $header_text='<span class='.$header_class.'>'.$header_text.'</span><BR>';

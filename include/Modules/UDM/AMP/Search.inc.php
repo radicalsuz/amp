@@ -32,7 +32,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 		if (!$this->udm->admin) { 
             $this->criteria[]="publish=1"; 
         }
-        $this->criteria[]="modin=".$this->udm->instance;
+        #$this->criteria[]="modin=".$this->udm->instance;
         if (isset($this->udm->plugins['SearchForm'])) { 
             $this->criteria=array_merge($this->criteria, $this->udm->plugins['SearchForm']['Output']->sql_criteria);
         }
@@ -51,7 +51,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 		}
         $options=array_merge($this->getOptions(), $options);
 		
-		//count total records in search AND get Jump Index
+		//count total records in search
 		$this->total_qty=$this->count_items();
 		
         //Setup the fieldset for the SQL query

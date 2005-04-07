@@ -104,13 +104,14 @@
 
         <?= (isset($this->message)) ? "<p class=\"login {$this->message_type}\">{$this->message}</p>" : '' ?>
 
-        <form id="login" method="post" action="<?= $_SYSTEM['PHP_SELF'] ?>" />
+        <form id="login" method="post" action="<?= $_SYSTEM['PHP_SELF']; ?>" />
 
             <div id="formWrap">
                 <label for="username">Username:</label> <input type="text" name="username" />
                 <label for="password">Password:</label> <input type="password" name="password" />
 
                 <input type="submit" value="Login" id="login" />
+                <? echo $this->hidden_post_vars(); ?>
             </div>
 
         </form>

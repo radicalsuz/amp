@@ -276,5 +276,30 @@ class AMP_Authentication_Handler {
         }
 
     }
+    function hidden_post_vars() {
+        if ($post_vars=$this->collect_post_vars()) {
+            foreach ($post_vars as $key=>$value) {
+                $output='<div id="hidden_post" style="display: none;">';
+                if (strpos($value, '\'')===FALSE) {
+                    $output .= '<input type="hidden" name="'.$key.'" value="'.$value."\">\n";
+                } else {
+                    $output .= '<textarea name="'.$key.'">'.$value.'</textarea>';
+               
+                }
+                $output.="</div>";
+            }
+            return $output;
+        }
+    }
 
+    function collect_post_vars() {
+        if (is_array($_POST)) {
+            foreach ($_POST as $key=>$value) {
+                if ($key!='username' && $key!='password') 
+                    $post_vars[$key]=$value;
+            }
+            return $post_vars;
+        }
+        return false;
+    }
 }

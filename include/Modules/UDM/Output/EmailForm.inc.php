@@ -104,13 +104,13 @@ class UserDataPlugin_EmailForm_Output extends UserDataPlugin {
 			foreach ( $fieldOrder as $field ) {
 				$field = trim( $field );
                 if (isset($this->form_def[$field])) {
-                    $this->form_addElement( &$form, $field, $this->form_def[ $field ], $this->udm->admin );
+                    $this->form_addElement( $form, $field, $this->form_def[ $field ], $this->udm->admin );
                 }
 			}
 
 		} else {
             foreach ($this->form_def as $fname=>$fdef) {
-                $this->form_addElement( &$form, $fname, $fdef, $this->udm->admin );
+                $this->form_addElement( $form, $fname, $fdef, $this->udm->admin );
             }
         }
                 
