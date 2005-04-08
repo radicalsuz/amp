@@ -784,14 +784,20 @@ class Time {
 } 
 
 
-function addfield($name,$label,$fieldtype='text',$value=NULL,$defualt=NULL,$size=45,$height=4) {
-	global $buildform;
+function addfield($name,$label=NULL,$fieldtype='text',$value=NULL,$defualt=NULL,$size=45,$height=4,$right_text=NULL) {
+	global $buildform,$R;
+	if ($label == NULL) { $label = $name; }
+	if (($R) &&  $value == NULL ) { $value  = $R->Fields($name); }
+	
+	$label = str_replace('_',' ',$label); 
+	$label = ucwords($label);
+	
 	if ((!$_GET['id']) && (!$value)) {$value = $defualt;}
 	if ($fieldtype == 'text') {
 		$field = & new Text($name, $value, $size);
 	}
 	if ($fieldtype == 'checkbox') {
-		if ($value == 1) $value = 'checked';
+		if ($value == 1 or $defualt == 1) $value = 'checked';
 		$field = & new Input('checkbox', $name, '1', null, null, $value); 
 	}
 	if ($fieldtype == 'textarea') {
@@ -800,15 +806,15 @@ function addfield($name,$label,$fieldtype='text',$value=NULL,$defualt=NULL,$size
 	if ($fieldtype == 'file') {
 		$field =  & new Input($fieldtype,$name,'','','', '', $size);
 	}
+	
 	if ($fieldtype == 'hidden') {
 		$field =  & new Input($fieldtype,$name,$value,'','', '', '');
 	}
 
-	$output = $buildform->add_row($label, $field);
+	$output = $buildform->add_row($label, $field,'',$right_text);
 	
 	return $output;
 }
-
 function makelistarray($q,$key,$value,$label='Select') {
 	global $dbcon;
 	$list = array(''=>$label);
