@@ -24,8 +24,8 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 	$MM_editColumn = "id";
 	$MM_fieldsStr = "name|value";
     $MM_columnsStr = "name|',none,''"; //|$delim,$altVal,$emptyVal|  |',none,''|
-	require ("Connections/insetstuff.php");
-    require ("Connections/dataactions.php");
+	require ("../Connections/insetstuff.php");
+    require ("../Connections/dataactions.php");
     ob_end_flush();	
 }
 
