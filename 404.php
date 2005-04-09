@@ -28,7 +28,7 @@ if (file_exists($customHandler)) {
     // if we made it this far, I'm going to assume that everything is just
     // fine. Custom scripts that want to redirect must exit() before reaching
     // here.
-    header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 200 OK' );
+   // header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 200 OK' );
 
 } else {
 
