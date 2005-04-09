@@ -7,7 +7,7 @@ CSS: breadcrumb
 To Do: 
 
 *********************/
-global $MM_type, $MM_class ,$area, $list, $MM_id, $mod_name, $mod_id, $isanarticle, $obj;
+global $MM_type, $MM_class ,$area, $list, $MM_id, $mod_name, $MM_title, $mod_id, $isanarticle, $obj;
 //include("system/Connections/menu.class.php");
 //if (isset($area)){
 //$histate=$dbcon->CacheExecute("Select title from region where id = $area") or DIE($dbcon->ErrorMsg());
@@ -59,7 +59,7 @@ if (!$_GET["list"] && $MM_id && !$mod_name) {
 
 
 if (!$_GET["list"] && $mod_name) { 
-	$bchtml.= $ar.$mod_name ;  
+	$bchtml.= $ar.$MM_title ;  
 }
 
 	
