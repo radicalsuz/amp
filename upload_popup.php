@@ -45,14 +45,15 @@ function find_safe_filename($filename, $num=0){
 
 
 if ($_POST['Submit']){
-    $img = new Image_Upload ( $_FILES['userfile']['name'] );
+    $img = new Image_Upload ( $_FILES['userfile']['tmp_name'] );
     if ( $img->extension ) {
         $img->makethumb();
         $img->makepic();
-        $uploadfile=$img->imgpaths['original'].$img->name.".".$img->extension;
+        $uploadfile=$img->imgpaths['original'].basename($_FILES['userfile']['name']);
         $uploadfile=find_safe_filename($uploadfile);
         $new_file_name = basename($uploadfile);
-        $img->name=$new_file_name;
+        $dotpoint = strrpos ($new_file_name, ".");
+        $img->name = substr( $new_file_name, 0, $dotpoint);
         if ($img->saveImagesAMP()) {
             echo "<font face='arial' size=2>File was successfully uploaded.<br>
                 <br><b>Close this window and enter this exact filename into the box on the form:</b>

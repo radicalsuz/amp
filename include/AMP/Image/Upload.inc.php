@@ -19,8 +19,6 @@ class Image_Upload {
         $name = basename ($filename);
         $this->name = substr( $name, 0, $dotpoint);
         
-        #$extension = substr( $filename, $dotpoint+1);
-        #$lextension = strtolower ($extension);
         if ($this->original=imagecreatefromjpeg($filename)) {
             $this->extension='jpg';
         } elseif ( $this->original=imagecreatefromgif($filename)) {
