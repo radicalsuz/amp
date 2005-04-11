@@ -8,7 +8,7 @@ class Image_Upload {
     var $thumb;
     var $original;
     var $imgpaths=array('thumb'=>'img/thumb/', 'pic'=>'img/pic/', 'original'=>'img/original/');
-    var $long_image_width=150;
+    var $tall_image_width=150;
     var $wide_image_width=200;
     var $thumb_width=50;
     var $error;
@@ -67,7 +67,7 @@ class Image_Upload {
         global $dbcon;
         if ($imgset = $dbcon->GetRow("SELECT thumb, optw, optl FROM sysvar where id =1")) {
             $this->thumb_width=$imgset['thumb'];
-            $this->long_image_width=$imgset['optl'];
+            $this->tall_image_width=$imgset['optl'];
             $this->wide_image_width=$imgset['optw'];
         } else {
             $this->error="Failed to load Image Settings: ".$dbcon->ErrorMsg();
@@ -133,7 +133,11 @@ class Image_Upload {
             $newwidth = $this->wide_image_width;
         }
         
-        $this->pic=$this->resize($newwidth);
+        if($this->pic=$this->resize($newwidth)) {
+            return true;
+        } else {
+            return false;
+        }
     }
             
 }

@@ -15,7 +15,7 @@ function passback ( ) {
 		var parentform='".$_GET['pform']."';
 		var calledfield='".$_GET['pfield']."';
 		window.opener.document.forms[parentform].elements[calledfield].value = userfile ;
-		//window.self.close();
+		window.self.close();
 		
 }
 passback();
@@ -73,7 +73,6 @@ if ($_POST['Submit']){
         $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
         $uploadfile=find_safe_filename($uploadfile);
         $new_file_name=basename($uploadfile);
-        print $uploadfile;
         if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
             echo "<font face='arial' size=2>File was successfully uploaded.<br>
                 <br><b>Close this window and enter this exact filename into the box on the form:</b>
