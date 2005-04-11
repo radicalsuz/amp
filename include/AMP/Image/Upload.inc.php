@@ -45,12 +45,13 @@ class Image_Upload {
     function saveImage($img, $version='original') {
         $type =$this->extension;
         if ($type =="jpg") $type="jpeg";
-        $imgpath=$this->imgpaths[$version].$this->name.".".$this->extension;
+        $imgpath=AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$this->imgpaths[$version].$this->name.".".$this->extension;
         if (file_exists($imgpath)) {
             $this->error.="File already exists: ".$imgpath."<BR>";
             return false;
         }
         $write_function="image".$type;
+        print $write_function;
         if ($write_function($img, $imgpath)) {
             chmod ($imgpath, 0755);
             return true;
@@ -63,7 +64,8 @@ class Image_Upload {
             
 
     function getImgSettings() {
-        if ($imgset=$dbcon->GetRow("SELECT thumb, optw, optl FROM sysvar where id =1")) {
+        global $dbcon;
+        if ($imgset = $dbcon->GetRow("SELECT thumb, optw, optl FROM sysvar where id =1")) {
             $this->thumb_width=$imgset['thumb'];
             $this->long_image_width=$imgset['optl'];
             $this->wide_image_width=$imgset['optw'];
