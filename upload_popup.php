@@ -15,7 +15,7 @@ function passback ( ) {
 		var parentform='".$_GET['pform']."';
 		var calledfield='".$_GET['pfield']."';
 		window.opener.document.forms[parentform].elements[calledfield].value = userfile ;
-		window.self.close();
+		//window.self.close();
 		
 }
 passback();
