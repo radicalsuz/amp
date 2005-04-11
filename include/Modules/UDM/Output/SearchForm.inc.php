@@ -10,8 +10,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	var $form;
 	var $fields_def;
 	var $control_class;
-	var $url_criteria;
-    var $sql_criteria;
+	#var $url_criteria;
+    #var $sql_criteria;
     var $options = array (
         'show_distance'=>array(
             'description'=>'Allow Search by Zip/Distance',
@@ -44,7 +44,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$this->fields_def=$this->define_form();
 
         //check the REQUEST array
-        $this->sql_criteria=$this->read_request();
+        $this->udm->sql_criteria=$this->read_request();
 	}	
 	
 	function read_request() {
@@ -132,10 +132,11 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             else $sql_criteria[]="publish!=1";
         }
 
-		//Grab valid URL data
+		//Vet valid URL data
+        $this->udm->url_criteria=array();
 		foreach ($this->fields_def as $field=>$fdef) {
 			if (isset($_REQUEST[$field]) && ($_REQUEST[$field]||$_REQUEST[$field]==='0')) {
-				$this->url_criteria[]=$field.'='.$_REQUEST[$field];
+				$this->udm->url_criteria[]=$field.'='.$_REQUEST[$field];
 			}
 		}
 

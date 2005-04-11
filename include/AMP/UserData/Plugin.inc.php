@@ -323,7 +323,6 @@ class UserDataPlugin {
     function setOptions ( $options ) {
 
         foreach ( $options as $option_name => $option_value ) {
-
             if (isset($this->options[$option_name])) {
                 if ( is_array( $option_value ) ) {
                     foreach ( $option_value as $key => $value ) {

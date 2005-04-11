@@ -6,13 +6,11 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         'control_class'=>array(
             'available'=>true,
             'description'=>'CSS class for pagebar controls, user side',
-            'default'=>'go',
-            'value'=>'go'), 
+            'default'=>'sidelist'), 
         'max_qty'=>array (
             'available'=>true,
             'description'=>'Most results allowed on one page from front end',
-            'default'=>200,
-            'value'=>200 ), 
+            'default'=>200), 
         'form_name'=>array (
             'available'=>true,
             'description'=>'Name of Pager form',
@@ -34,6 +32,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	}
 
 	function read_request() {
+        $options=$this->getOptions();
 		if(is_numeric($_REQUEST['offset'])&&$_REQUEST['offset']) {
 			$this->offset=$_REQUEST['offset'];
 		} else {
@@ -42,11 +41,11 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 		if(is_numeric($_REQUEST['qty'])&&$_REQUEST['qty']) {
 			$this->return_qty=$_REQUEST['qty'];
 		} else {
-			$this->return_qty=$this->options['max_qty']['value'];
+			$this->return_qty=$options['max_qty'];
 		}
 		//block frontend users from making large requests
-		if (($this->return_qty>$this->options['max_qty']['value']||$this->return_qty=='*')&&(!$this->udm->admin)) {
-			$this->return_qty=$this->options['max_qty']['value'];
+		if (($this->return_qty>$options['max_qty']||$this->return_qty=='*')&&(!$this->udm->admin)) {
+			$this->return_qty=$options['max_qty'];
 		}
 	}
 	
@@ -67,23 +66,9 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
                 $this->udm->setData(array_slice($this->udm->users, $this->offset, $this->return_qty));
             }
         }
-        if ($searchform=$this->udm->getPlugin('Output','SearchForm')) {
-            //if a SearchForm plugin is used, use that to validate the query
-            //string
-           $this->criteria=$searchform->url_criteria;
-        } else {
-            //otherwise pass the whole thing along
-            parse_str($_SERVER['QUERY_STRING'], $parsed_criteria);
-            foreach ($parsed_criteria as $pkey=>$pvalue) {
-
-                if (isset($pvalue)&&($pvalue||$pvalue==='0')) {
-
-                    if ($pkey!='offset'&&$pkey!='qty') {
-                        $this->criteria[]=$pkey.'='.$pvalue;
-                    }
-                }
-            }
-        }
+        if (!isset($this->udm->url_criteria)) $this->criteria = $this->udm->parse_URL();
+        else $this->criteria=$this->udm->url_criteria;
+        
         if ($this->udm->admin) $options['control_class']="list_controls";
 
 		$output .="<div class=".$options['control_class']." style=\"width:100%;text-align:center;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";

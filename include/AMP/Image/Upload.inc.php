@@ -1,6 +1,6 @@
 <?php
 
-class Image_Upload () {
+class Image_Upload {
 
     var $extension;
     var $name;

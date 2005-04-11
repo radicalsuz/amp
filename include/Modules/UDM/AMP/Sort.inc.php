@@ -6,14 +6,22 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
     var $order;
     var $sortname;
     var $options = array (
-        'default_sortname'=>array(
+        /*'default_sortname'=>array(
             'value'=>"State/Org",
             'available'=>true,
             'description'=>'Text name of default sort'),
         'default_select'=>array(
             'value'=>"Concat( State, '-', Company) as `State/Org`"),
         'default_orderby'=>array(
-            'value'=>"State,Company,Last_Name,First_Name"),
+            'value'=>"State,Company,Last_Name,First_Name"),*/
+        'default_sortname'=>array(
+            'value'=>"Name",
+            'available'=>true,
+            'description'=>'Text name of default sort'),
+        'default_select'=>array(
+            'value'=>"Concat(First_Name,' ',Last_Name) as Name"),
+        'default_orderby'=>array(
+            'value'=>"Last_Name,First_Name"),
         'default_sortname_admin'=>array(
             'value'=>'Name'),
             
@@ -72,12 +80,13 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
     }
 
     function makelink ($sortname) {
-        if ($searchform=&$this->udm->getPlugin('Output', 'SearchForm')) {
-            $link=sprintf("<a href=\"javascript: document.forms['%1\$s'].elements['sortby'].value = '%2\$s'; 
-                document.forms['%1\$s'].submit();\">%3\$s</a>", $searchform->options['form_name']['value'], $sortname, $sortname);
-        } else {
-            $link='<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&sortby='.$sortname.'">'.$sortname.'</a>';
-        }
+        #if ($searchform=&$this->udm->getPlugin('Output', 'SearchForm')) {
+        #    $link=sprintf("<a href=\"javascript: document.forms['%1\$s'].elements['sortby'].value = '%2\$s'; 
+        #        document.forms['%1\$s'].submit();\">%3\$s</a>", $searchform->options['form_name']['value'], $sortname, $sortname);
+
+        if (!isset($this->udm->url_criteria)) $this->udm->parse_URL();
+        $link='<a href="'.$_SERVER['PHP_SELF'].'?'.join('&', $this->udm->url_criteria).'&sortby='.$sortname.'">'.$sortname.'</a>';
+
         return $link;
     }
 }

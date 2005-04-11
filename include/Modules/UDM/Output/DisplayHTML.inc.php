@@ -6,9 +6,9 @@ require_once ('AMP/Region.inc.php');
 class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     
     var $options= array( 
-        'subheader'=>array('value'=>'State'),
-        'display_format'=>array('value'=>'groups_layout_output'),
-        'detail_format'=>array('value'=>'groups_detail_display'),
+        'subheader'=>array('available'=>true, 'description'=>'Show subheadings for'),
+        'display_format'=>array('default'=>'groups_layout_display'),
+        'detail_format'=>array('default'=>'groups_detail_display'),
         '_userid' => array ('value'=>null)
         );
     
@@ -26,11 +26,12 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     }
 
     function execute ($options=null) {
+        $options=array_merge($this->getOptions(), $options);
         //Check to see if a single record was specified
         //if so, return detail information for that record 
-		if (isset($options['_userid']['value'])) {
-            $detail_function=isset($this->options['detail_format']['value'])?($this->options['detail_format']['value']):"display_detail";
-            $inclass=method_exists($this->$detail_function);
+		if (isset($options['_userid'])) {
+            $detail_function=isset($options['detail_format'])?($options['detail_format']):"display_detail";
+            $inclass=method_exists($detail_function, $this);
             $single_udm=&new UserDataInput ($dbcon, $this->udm->instance, $this->udm->admin);
             $single_udm->getUser($options['_userid']['value']);
             $dataset=$single_udm->getData();
@@ -42,8 +43,8 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         //Print the current results list
             $dataset=$this->udm->getData();
             
-            $display_function=isset($this->options['display_format']['value'])?($this->options['display_format']['value']):"display_item";
-            $inclass=method_exists($this->$display_function);
+            $display_function=isset($options['display_format'])?($options['display_format']):"display_item";
+            $inclass=method_exists($display_function, $this);
 
             //output display format
             foreach ($dataset as $dataitem) {
@@ -206,4 +207,17 @@ function list_state_convert($in) {
 
 		return $html;
 	}
+
+    function user_photo_layout ($data ) {
+        $html ='<table width="500" border="0" cellspacing="0" cellpadding="0"><tr>';
+        if ($data['custom15']) {
+            $html .= '<td><img ="img/thumb/'.$data['custom15'].'"></td>';
+        }
+        $html .= '<td><a href="story.php?detail='.$data['id'].'">'.$data['First_Name'].' '
+            .$data['Last_Name'].($data['Suffix']?', '.$data['Suffix']:"").'</a><br>'.
+            $data['City'].($data['State']?', '.$data['State']:"")
+            .'<br>'.$data['custom25'].'</td>';
+        $html .= '</tr></table><BR>';
+        return $html;
+    }
 ?>

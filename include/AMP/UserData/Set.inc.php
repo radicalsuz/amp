@@ -6,6 +6,8 @@ class UserDataSet extends UserData {
 	var $set_sql;
 	var $results;
     var $users;
+    var $sql_criteria;
+    var $url_criteria;
 
     function UserDataSet( &$dbcon, $instance, $admin = false ) {
 
@@ -52,8 +54,20 @@ class UserDataSet extends UserData {
 		if ($save_it) $this->set_sql['query']=$query;
 		return $query;
 	}
+    function parse_URL () {
+        parse_str($_SERVER['QUERY_STRING'], $parsed_criteria);
+        foreach ($parsed_criteria as $pkey=>$pvalue) {
 
-	
+            if (isset($pvalue)&&($pvalue||$pvalue==='0')) {
+
+                if ($pkey!='offset'&&$pkey!='qty') {
+                    $this->url_criteria[]=$pkey.'='.$pvalue;
+                }
+            }
+        }
+        return $this->url_criteria;
+    }
+
 	//Function to see whether a list field is enabled and public to the user
 	function _check_fields($options) {
 		//Name hack again

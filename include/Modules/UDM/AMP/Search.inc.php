@@ -3,12 +3,17 @@
 class UserDataPlugin_Search_AMP extends UserDataPlugin {
 	var $criteria;
 	var $total_qty;
+    var $count_criteria;
 	var $sortby;
     var $options = array (
         'global_criteria'=> array (
             'available'=>true,
             'description'=>'Required criteria in all searches'
-            ));
+            ),
+        'criteria'=> array (
+            'available'=>false,
+            'description'=>'Passed criteria')
+        );
     var $alias = array(
             'Name'=>array(
                 'f_alias'=>'Name',
@@ -33,8 +38,8 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
             $this->criteria[]="publish=1"; 
         }
         #$this->criteria[]="modin=".$this->udm->instance;
-        if (isset($this->udm->plugins['SearchForm'])) { 
-            $this->criteria=array_merge($this->criteria, $this->udm->plugins['SearchForm']['Output']->sql_criteria);
+        if (isset($this->udm->sql_criteria)) { 
+            $this->criteria=array_merge($this->criteria, $this->udm->sql_criteria);
         }
 	}
 
@@ -46,13 +51,14 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 
 	function execute ($options=null) {
 		//combine init criteria with passed criteria 
+        $options=array_merge($this->getOptions(), $options);
 		if(is_array($options['criteria'])) {
 			$this->criteria = array_merge($this->criteria, $options['criteria']);
 		}
-        $options=array_merge($this->getOptions(), $options);
 		
 		//count total records in search
 		$this->total_qty=$this->count_items();
+        if (!isset($this->sortby)) $this->setSort();
 		
         //Setup the fieldset for the SQL query
         foreach ($this->alias as $fname=>$fdef) {
@@ -72,12 +78,16 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 
     function count_items ($criteria=null) {		
 		//combine init criteria with passed criteria 
-		if(is_array($this->criteria)) {
+		if(is_array($criteria)) {
 			$criteria = array_merge($this->criteria, $criteria);
-		} 
+		} else {
+            $criteria = $this->criteria;
+        }
 
-        if ($indexset=$this->get_index($criteria, "id")) {
-		    $total_qty=count($indexset);
+		$index_sql="SELECT count(id) as qty from userdata where ".join(" AND ", $criteria);
+        if ($_REQUEST['debug']) print 'count:<BR>'.$index_sql."<BR>";
+        if ($indexset=$this->dbcon->Execute($index_sql)) {
+		    $total_qty=$indexset->Fields("qty");
             return $total_qty;
         } else {
             return false;
@@ -107,7 +117,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         } else {
             $sql.=($return_qty!="*")?" LIMIT ".strval($offset). ", ".strval($return_qty):"";
         } 
-		if ($_GET['debug']) print $sql;
+		if ($_GET['debug']) print $sql."<BR>";
 		if ($dataset=$this->dbcon->CacheGetAll($sql)) {
             return $dataset;
         } else {

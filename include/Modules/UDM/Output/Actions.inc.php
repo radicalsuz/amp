@@ -82,28 +82,16 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
     ** Captures the values in the current Query String
     ** so the current searchdata/page won't be lost when a list action is taken
     **
-    ** accepts criteria vetted by the searchform / pager plugins when such exist
+    ** accepts criteria vetted by the pager plugins when such exist
     **/
 
     function setCriteria() {
-        if ($searchform=$this->udm->getPlugin('Output','SearchForm')) {
-            //if a SearchForm plugin is used, use that to validate the query
-            //string
-           $this->criteria=$searchform->url_criteria;
-        } else {
-            //otherwise pass the whole thing along
-            parse_str($_SERVER['QUERY_STRING'], $parsed_criteria);
-            foreach ($parsed_criteria as $pkey=>$pvalue) {
 
-                if (isset($pvalue)&&($pvalue||$pvalue==='0')) {
-
-                    if ($pkey!='offset'&&$pkey!='qty') {
-                        $this->criteria[]=$pkey.'='.$pvalue;
-                    }
-                }
-            }
-        }
+        if (!isset($this->udm->url_criteria)) $this->criteria=$this->udm->parse_URL(); 
+        else $this->criteria=$this->udm->url_criteria;
+        
         if ($pager=$this->udm->getPlugin('Output','Pager')) {
+
             if ($pager->offset) $this->criteria[]='offset='.$pager->offset;
             if ($pager->return_qty) $this->criteria[]='qty='.$pager->return_qty;
         }
