@@ -45,30 +45,35 @@ function find_safe_filename($filename, $num=0){
 
 
 if ($_POST['Submit']){
-    $img = new Image_Upload ( $_FILES['userfile']['tmp_name'] );
-    if ( $img->extension ) {
-        $img->makethumb();
-        $img->makepic();
-        $uploadfile=$img->imgpaths['original'].basename($_FILES['userfile']['name']);
-        $uploadfile=find_safe_filename($uploadfile);
-        $new_file_name = basename($uploadfile);
-        $dotpoint = strrpos ($new_file_name, ".");
-        $img->name = substr( $new_file_name, 0, $dotpoint);
-        if ($img->saveImagesAMP()) {
-            echo "<font face='arial' size=2>File was successfully uploaded.<br>
-                <br><b>Close this window and enter this exact filename into the box on the form:</b>
-                <br><br> <b><a href=\"#\" onclick=\"passback();\"><font color=003399>".
-                $new_file_name."</font></a></font></b><br><br><br><br><br><br><br><br>\n"
-                .return_filename($new_file_name);
+    if ($_REQUEST['doctype']=='img') {
+        $img = new Image_Upload ( $_FILES['userfile']['tmp_name'] );
+        if ( $img->extension ) {
+            $img->makethumb();
+            $img->makepic();
+            $uploadfile=$img->imgpaths['original'].basename($_FILES['userfile']['name']);
+            $uploadfile=find_safe_filename($uploadfile);
+            $new_file_name = basename($uploadfile);
+            $dotpoint = strrpos ($new_file_name, ".");
+            $img->name = substr( $new_file_name, 0, $dotpoint);
+            if ($img->saveImagesAMP()) {
+                echo "<font face='arial' size=2>File was successfully uploaded.<br>
+                    <br><b>Close this window and enter this exact filename into the box on the form:</b>
+                    <br><br> <b><a href=\"#\" onclick=\"passback();\"><font color=003399>".
+                    $new_file_name."</font></a></font></b><br><br><br><br><br><br><br><br>\n"
+                    .return_filename($new_file_name);
+            } else {
+                print $img->error;
+            }
         } else {
             print $img->error;
         }
-    } else {
-       
+    } else { //Upload goes to docs directory
+    
         $uploaddir = AMP_LOCAL_PATH.'/downloads/';
         $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
         $uploadfile=find_safe_filename($uploadfile);
         $new_file_name=basename($uploadfile);
+        print $uploadfile;
         if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
             echo "<font face='arial' size=2>File was successfully uploaded.<br>
                 <br><b>Close this window and enter this exact filename into the box on the form:</b>
@@ -91,6 +96,7 @@ if ($_POST['Submit']){
 <br>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']; ?>" enctype="multipart/form-data">
 <input type="hidden" name="MAX_FILE_SIZE" value="3000000" />
+<input type="hidden" name="doctype" value="<?= (isset($_REQUEST['doctype'])?$_REQUEST['doctype']:'img'); ?>" />
 1) Click this button and select the file to upload from your computer:<br><br>
 <input name="userfile" type="file" ><br><br>
 2) Click the "Upload" button to upload the file:<br>

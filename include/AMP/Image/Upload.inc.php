@@ -26,6 +26,7 @@ class Image_Upload {
         } elseif ($this->original=imagecreatefrompng($filename)) {
             $this->extension='png';
         } else {
+            $this->error="Could not determine the type of image. JPG, GIF, and PNG format only";
             return false;
         }
         $this->getImgSettings();
@@ -51,7 +52,6 @@ class Image_Upload {
             return false;
         }
         $write_function="image".$type;
-        print $write_function;
         if ($write_function($img, $imgpath)) {
             chmod ($imgpath, 0755);
             return true;
@@ -124,8 +124,8 @@ class Image_Upload {
     }
     function makepic ($image=null) {
         if (isset($image)) $this->original=$image;
-        $y_orig=imagesy( $image );
-        $x_orig=imagesx( $image );
+        $y_orig=imagesy( $this->original );
+        $x_orig=imagesx( $this->original );
 
         if ( $x_orig > $y_orig ) {
             $newwidth = $this->tall_image_width;
