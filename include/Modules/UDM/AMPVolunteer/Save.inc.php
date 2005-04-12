@@ -57,7 +57,6 @@ class UserDataPlugin_Save_AMPVolunteer extends UserDataPlugin_Save {
 
     function removeSet($table) {
         $sql="DELETE from $table where personid=".$this->udm->uid;
-        print $sql.'<BR>';
         $this->dbcon->execute($sql);
         
     }

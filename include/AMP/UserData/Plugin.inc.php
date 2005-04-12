@@ -241,45 +241,71 @@ class UserDataPlugin {
      * execute, the plugin has access to all the form data in any event.
      *
      *****/
-
-    function getData ( $fields = null ) {
+    function getData ($fields = null){
         
         //Filter returned data for items with the appropriate plugin field
         //prefix
         if ($this->_field_prefix) {
+            $fieldkeys=array();
 
-            $data=$this->udm->getData();
             $prefix=$this->_field_prefix.'_';
 
             if (isset($fields)) {
-
-                foreach ($fields as $key=>$value) {
-                    $returnData[$value]=
-                        (isset($data[$prefix.$value])?
-                            $data[$prefix.$value]
-                            :NULL);
+   
+                foreach ($fields as $keyname) {
+                    $fieldkeys[$prefix.$keyname]=$keyname;
                 }
 
+                $fields = array_keys($fieldkeys);
+
             } else {
+                //designate the array of fields containing the plugin prefix
 
-                foreach ($data as $key=>$value) {
+                foreach ($this->udm->fields as $fname=>$fdef ) {
 
-                    if (substr($key, $prefix)===0) {
-                        $returnData[substr($key, strlen($prefix))]=$value;
+                    if (substr ($fname, $prefix) === 0) {
+                        $fields[] = $fname;
+                        $fieldkeys[$fname] = substr($fname, strlen($prefix));
                     }
                 }
             }
-            $data=$returnData;
-
-        } else {
-
-            $data=$this->udm->getData( $fields );
-
         }
 
+        // get the data 
+        $data = $this->udm->getData($fields);
+                
+        // check the data for strange types that need massaging
+        $changes = $this->checkData ($data);
+        if ($changes)  $data = array_merge($data, $changes);
 
+        //remove the field prefixes
+        if (isset($prefix)) {
+            foreach ($data as $key=>$value) {
+                $finaldata[$fieldkeys[$key]]=$value;
+                print $key.": ".$fieldkeys[$key].":".$value;
+            }
+            $data=$finaldata;
+        }
         
         return $data; 
+    }
+
+
+    function checkData( $data ) {
+        $returnSet = array();
+        foreach ($data as $keyname=>$value) {
+            switch ($this->udm->fields[$prefix.$keyname]['type']) { 
+                case "date":
+                    $tempValue=is_array($rawValue)?mktime(0,0,0,$rawValue['M'],$rawValue['Y'],$rawValue['d']):null;
+                    if (isset($tempValue)) $returnSet[$keyname] = date("Y-m-d",$tempValue);
+                    break;
+            }
+        }
+        if (count($returnSet)>0) {
+            return $returnSet;
+        } else {
+            return false;
+        }
     }
     
 

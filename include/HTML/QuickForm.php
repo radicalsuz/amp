@@ -1435,7 +1435,6 @@ class HTML_QuickForm extends HTML_Common {
             $submitValue = $this->getSubmitValue($target);
 
             foreach ($rules as $elementName => $rule) {
-                print $target.':'.$rule['type'].': '.count($this->_errors).'<BR>';
                 if ((isset($rule['group']) && isset($this->_errors[$rule['group']])) ||
                      isset($this->_errors[$target])) {
                     continue 2;
