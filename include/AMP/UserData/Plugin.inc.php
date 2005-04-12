@@ -294,10 +294,14 @@ class UserDataPlugin {
     function checkData( $data ) {
         $returnSet = array();
         foreach ($data as $keyname=>$value) {
-            switch ($this->udm->fields[$prefix.$keyname]['type']) { 
+            switch ($this->udm->fields[$keyname]['type']) { 
                 case "date":
-                    $tempValue=is_array($rawValue)?mktime(0,0,0,$rawValue['M'],$rawValue['Y'],$rawValue['d']):null;
+                    foreach ($value as $dd => $dk ) {
+                        print $dd.": ".$dk."<BR>";
+                    }
+                    $tempValue=is_array($value)?mktime(0,0,0,$value['M'],$value['d'],$value['Y']):null;
                     if (isset($tempValue)) $returnSet[$keyname] = date("Y-m-d",$tempValue);
+                    print 'date: '.$returnSet[$keyname].'<BR>';
                     break;
             }
         }
