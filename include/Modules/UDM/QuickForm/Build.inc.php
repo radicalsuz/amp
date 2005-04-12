@@ -44,9 +44,9 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
 
     $form = new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
 	//include publish checkbox on admin form
-    if ($admin) { 
+    if ($admin && $udm->_module_def['publish']) { 
         $pub_val = ( isset($udm->fields['publish']) && isset($udm->fields['publish']['value']) ) ? $udm->fields['publish']['value'] : null;
-		$publish_field = array('type'=>'checkbox', 'label'=>'PUBLISH', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'value' => $pub_val);
+		$publish_field = array('type'=>'checkbox', 'label'=>'PUBLISH', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'value' => $pub_val, 'enabled'=>true);
 		$udm->fields['publish']=$publish_field;
 	}
 
@@ -88,6 +88,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     if ( $udm->submitted ) {
         if ( !$form->validate() ) {
             $udm->form =& $form;
+            print 'not valid';
             return false;
         }
     }

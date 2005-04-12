@@ -49,7 +49,6 @@ if ( ( !$uid || $auth ) && $sub ) {
     // Save only if submitted data is present, and the user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
     $udm->saveUser();
-    print 'tried to save';
 } elseif ( $uid && $auth && !$sub ) {
 
     // Fetch the user data for $uid if there is no submitted data
