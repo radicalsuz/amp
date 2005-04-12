@@ -58,7 +58,9 @@ class UserDataInput extends UserData {
         }
 
         if ( !$result )     return false;
+        print 'build worked';
         if ( !$this->form ) return false;
+        print 'form found';
 
         $this->modTemplateID = $this->_module_def['modidresponse'];
         return $this->doAction( 'Save', $options );
