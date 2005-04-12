@@ -88,7 +88,6 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     if ( $udm->submitted ) {
         if ( !$form->validate() ) {
             $udm->form =& $form;
-            print 'not valid';
             return false;
         }
     }
