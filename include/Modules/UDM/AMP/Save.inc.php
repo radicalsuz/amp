@@ -37,6 +37,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         $sql = ($this->udm->uid) ? $this->updateSQL( $data ) :
                                    $this->insertSQL( $data );
+                                   print $sql.'AA<BR>';
 
         $rs = $this->dbcon->CacheExecute( $sql ) or
                     die( "Unable to save request data using SQL $sql: " . $this->dbcon->ErrorMsg() );
