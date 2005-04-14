@@ -31,8 +31,8 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 	}
 	$MM_fieldsStr =
 	
-"name|value|sql|value|titleimg|value|titletext|value|titleti|value|linkfile|value|mfile|value|mcall1|value|mvar2|value|mcall2|value|repeat|value|linkextra|value|mvar1|value|linkfield|value|mvar1val|value|nosqlcode|value|nosql|value|templateid|value|modid2|value|rss|value|titlei|value";
-    $MM_columnsStr = "name|',none,''|sql|',none,''|titleimg|',none,''|titletext|',none,''|titleti|none,1,0|linkfile|',none,''|mfile|',none,''|mcall1|',none,''|mvar2|',none,''|mcall2|',none,''|repeat|',none,''|linkextra|',none,''|mvar1|',none,''|linkfield|',none,''|mvar1val|',none,''|nosqlcode|',none,''|nosql|',none,''|templateid|',none,''|modid|',none,''|rss|',none,''|titlei|',none,''";
+"name|value|sql|value|titleimg|value|titletext|value|titleti|value|linkfile|value|mfile|value|mcall1|value|mvar2|value|mcall2|value|repeat|value|linkextra|value|mvar1|value|linkfield|value|mvar1val|value|nosqlcode|value|nosql|value|templateid|value|modid2|value|rss|value|titleti|value";
+    $MM_columnsStr = "name|',none,''|sql|',none,''|titleimg|',none,''|titletext|',none,''|titleti|none,1,0|linkfile|',none,''|mfile|',none,''|mcall1|',none,''|mvar2|',none,''|mcall2|',none,''|repeat|',none,''|linkextra|',none,''|mvar1|',none,''|linkfield|',none,''|mvar1val|',none,''|nosqlcode|',none,''|nosql|',none,''|templateid|',none,''|modid|',none,''|rss|',none,''|titleti|',none,''";
 
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
@@ -78,7 +78,7 @@ $html .= addfield('name','Navigation Name','text',$R->Fields("name"));
 $html .= $buildform->add_header('Navigation Content', 'intitle');
 $html .= addfield('titletext','Navigation Title','text',$R->Fields("titletext"));
 $html .= addfield('titleimg','Title Image','text',$R->Fields("titleimg"));
-$html .= addfield('titlei','Use Image As Title','checkbox',$R->Fields("titlei"));
+$html .= addfield('titleti','Use Image As Title','checkbox',$R->Fields("titleti"));
 
 $html .= addfield('nosqlcode','Navigation HTML','textarea',$R->Fields("nosqlcode"));
 
