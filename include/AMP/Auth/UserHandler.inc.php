@@ -39,8 +39,8 @@ class AMP_Authentication_Handler {
     function check_authen_credentials() {
 
         // First check for an existing authentication token.
-        if (isset($_COOKIE['AMPLoginCredentials']))
-            return $this->check_cookie($_COOKIE['AMPLoginCredentials']);
+        if (isset($_COOKIE['AMPUserLoginCredentials']))
+            return $this->check_cookie($_COOKIE['AMPUserUserLoginCredentials']);
 
         if (isset($_REQUEST['username']) || isset($_SERVER['PHP_AUTH_USER']))
             return $this->check_password();
@@ -84,7 +84,7 @@ class AMP_Authentication_Handler {
         $hash = $this->make_secure_cookie( $c_user, $c_perm, $secret );
         $old_hash = $this->has_cookie;
 
-        if (setcookie( 'AMPLoginCredentials', "$hash:$c_user:$c_perm:$c_userid" )) {
+        if (setcookie( 'AMPUserLoginCredentials', "$hash:$c_user:$c_perm:$c_userid" )) {
 
             // Quick Hack, to be replaced by a more robust databas versioning
             // system.
@@ -127,7 +127,7 @@ class AMP_Authentication_Handler {
 
 		$dbcon = $this->dbcon;
 
-        $cookie = explode( ':', $_COOKIE['AMPLoginCredentials'] );
+        $cookie = explode( ':', $_COOKIE['AMPUserLoginCredentials'] );
 
         $cookie['hash'] = $cookie[0];
         $cookie['user'] = $cookie[1];
@@ -186,7 +186,7 @@ class AMP_Authentication_Handler {
         $this->message = $message;
 
         $c_domain = preg_replace( "/([^\.]*)\.([^\.]*)$/", "/.\$1.\$2/", $_SERVER['SERVER_NAME'] );
-        return setcookie( 'AMPLoginCredentials', '*', time() - 86400 );
+        return setcookie( 'AMPUserLoginCredentials', '*', time() - 86400 );
 
     }
 
