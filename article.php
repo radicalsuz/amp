@@ -72,23 +72,6 @@ include("AMP/BaseTemplate.php");
 
 ob_start(); 
 
-//secure the page
-# use new secure stuff
-if ($MM_secure) {
-	require("password/secure.php");
-	$valper=$dbcon->Execute("SELECT perid FROM permission WHERE groupid = $userLevel and perid= 43") or DIE($dbcon->ErrorMsg());
-	if (!$valper->Fields("perid")) {
-		session_start();
-		session_unregister("login");
-		session_unregister("password");
-		session_destroy();
-		$sessionPath = session_get_cookie_params(); 
-		setcookie(session_name(), "", 0, $sessionPath["path"], $sessionPath["domain"]); 
-		$redire = $PHP_SELF. "?" . $QUERY_STRING."&fail=1";
-  	header ("Location: $redire");
-	}
-}
-
 
 //set article or list inc
 if ($_GET["list"] != NULL) {

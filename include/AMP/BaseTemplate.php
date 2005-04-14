@@ -93,6 +93,15 @@ $gettype=$dbcon->CacheExecute("select type, parent, templateid, css, secure, use
 $MM_typename = $gettype->Fields("type");
 $MM_parent = $gettype->Fields("parent");
 $MM_secure = $gettype->Fields("secure");
+// work up hierarchy to ensure page is not protected
+$sparent= $MM_type;
+if ($MX_top != NULL) {$MX_top ='1';}
+while (!$MM_secure && ($sparent != $MX_top)) {
+	$sparent=$obj->get_parent($sparent);
+	$getsec=$dbcon->CacheExecute("SELECT secure FROM articletype WHERE id = $sparent") or DIE('Could not load security information in BaseTemplate ');
+	$MM_secure = $getsec->Fields("secure");
+}  
+
 $typetemplate_id = $gettype->Fields("templateid");
 $css = $gettype->Fields("css");
 
@@ -161,26 +170,11 @@ $rNAV_HTML_5 = $settemplate->Fields("rnav9");		// content table row spacer
 #buildheader
 $htmlheader= buildheader();
 
+
 #SECURE THE PAGE
 
 if ($MM_secure) {
-	//require_once("AMP/Auth/Require.inc.php");
-	//$userLevel = $_SERVER['REMOTE_GROUP'];
-
-    require($base_path."password/secure.php");
-    
-    // needs to make this better
-    $valper=$dbcon->CacheExecute("SELECT perid FROM permission WHERE groupid = $userLevel and perid= 43") or DIE('Could not load security information in BaseTemplate '.$dbcon->ErrorMsg());
-    if (!$valper->Fields("perid")) {
-        session_start();
-        session_unregister("login");
-        session_unregister("password");
-        session_destroy();
-        $sessionPath = session_get_cookie_params(); 
-        setcookie(session_name(), "", 0, $sessionPath["path"], $sessionPath["domain"]); 
-        $redire = $PHP_SELF. "?" . $_SERVER['QUERY_STRING']."&fail=1"; 
-        header ("Location: $redire");
-	}
+	require("AMP/Auth/UserRequire.inc.php");
 }
 
 # Start Output Buffering
