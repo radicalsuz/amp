@@ -32,7 +32,7 @@ config.BaseUrl = document.location.protocol + '//' + document.location.host + '/
 //##
 //## Style File to be used the the editor
 //##
-config.EditorAreaCSS = '/custom/styles.css' ;
+//##config.EditorAreaCSS = '/custom/styles.css' ;
 
 
 
