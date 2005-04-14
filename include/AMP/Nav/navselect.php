@@ -232,8 +232,10 @@ function getthenavs($navside) {
 		}
         elseif ($nav->Fields("nosql") == 1 &&  $nav->Fields("titletext") != (NULL)  ) { 
             if ($nav->Fields("titleti") == 1) { //start image
-                $shownav.="<img src=\"".$NAV_IMG_PATH ; 
+                $shownav.= $NAV_HTML_1 ;
+				$shownav.="<img src=\"".$NAV_IMG_PATH ; 
                 $shownav.= $nav->Fields("titleimg")."\">";
+				$shownav.=$NAV_HTML_2 ; 
             } 
 
             //TITLE AS TEXT        
