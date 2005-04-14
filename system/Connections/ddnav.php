@@ -367,6 +367,7 @@ echo nav_item($sys_nav['content'][8]); # Upload Images
 	addmenu(menu=["Content Tools",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
 <?php
 #echo nav_item($sys_nav[''][]); # view/edit
+echo nav_item_basic('User Accounts','modinput4_data.php?modin=20',''); # 
 echo nav_item_basic('Comments','comments.php?action=list','');# 
 echo nav_item_basic('Page Redirection','redirect.php?action=list','');# 
 echo nav_item_basic('Hot Words','hotwords.php?action=list','');# 
