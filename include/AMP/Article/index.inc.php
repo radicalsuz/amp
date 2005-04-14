@@ -40,7 +40,7 @@ while  ( !$maintext->EOF ) {
     print '" cellpadding="0" cellspacing="0"><tr><td>';
     print '<img src="' .
             $pathtoimg .  
-            ' alt="' .
+            '" alt="' .
             $maintext->Fields("alttag") .
             '" vspace="4" hspace="4" border="1" width="' .
             $pwidth .

@@ -166,14 +166,19 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     
     $form->addElement( $type, $name, $label, $defaults );
 
+    $fRef =& $form->getElement( $name );
+
     if ( isset( $selected ) ) {
-        $fRef =& $form->getElement( $name );
         $fRef->setSelected( $selected );
     }
 
     if ( isset( $size ) && $size && ( $type == 'text' ) ) {
         if ($size > 40) $size = 40;
-        $fRef =& $form->getElement( $name );
+        $fRef->setSize( $size );
+    }
+    if ( isset( $size ) && $size && ( $type == 'select' ) ) {
+        if ($size > 40) $size = 40;
+        $fRef->setMultiple(true);
         $fRef->setSize( $size );
     }
 
@@ -186,13 +191,11 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
             $cols = $size;
         }
 
-        $fRef =& $form->getElement( $name );
         if ( isset( $rows ) ) $fRef->setRows( $rows );
         if ( isset( $cols ) ) $fRef->setCols( $cols );
     }
 
     if ( $type == 'checkbox' ) {
-        $fRef =& $form->getElement( $name );
         $fRef->setText( null );
     }
     /*
@@ -216,20 +219,36 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     
     //OUTPUT TEMPLATE MODIFICATIONS
     //Default output template (with classes defined)
-    $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required --><b>{label}</b></td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td>\n\t</tr>");
+    $renderer->setElementTemplate(
+        "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
+        <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+        <b>{label}</b></td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
+        <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t
+        {element}</td>\n\t</tr>");
 
     if ($type=='checkbox') {
-        $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->{element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t<b>{label}</b></td>\n\t</tr>", $name);
+        $renderer->setElementTemplate(
+            "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
+            <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+            {element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
+            <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+            \t<b>{label}</b></td>\n\t</tr>", $name);
     }
 
     //textareas have a table they sit within for CSS-controlled positioning
     if ($type=='textarea') {
-        $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\"><tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required --><b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td></tr></table></td>\n\t</tr>", $name);
+        $renderer->setElementTemplate(
+            "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+            <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+            <b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+            \t{element}</td></tr></table></td>\n\t</tr>", $name);
     }
 
 	//static items now span both columns
     if ($type=='static') {
-        $renderer->setElementTemplate("\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\"><tr><td>\t{element}</td></tr></table></td>\n\t</tr>", $name);
+        $renderer->setElementTemplate(
+            "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+            <tr><td>\t{element}</td></tr></table></td>\n\t</tr>", $name);
     }
 
 
