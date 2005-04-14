@@ -33,9 +33,9 @@ var $table;
 	// returns: array
 	function get_children($id, $wq = 1)
 	{
-		if ($wq == 1) {$query = "SELECT id,  type FROM $this->table WHERE parent = '$id'  and articletype.usenav = 1 ORDER BY type ASC"; }
+		if ($wq == 1) {$query = "SELECT id,  type FROM $this->table WHERE parent = '$id'  and articletype.usenav = 1 and secure != 1 ORDER BY textorder, type ASC"; }
 		else {
-		$query = "SELECT distinct articletype.id, articletype.type FROM articletype articles where articles.".$MX_type." =articletype.id and articles.id  is not null and articletype.parent = '$id' and articletype.usenav = 1 ORDER BY type ASC"; 
+		$query = "SELECT distinct articletype.id, articletype.type FROM articletype articles where articles.".$MX_type." =articletype.id and articles.id  is not null and articletype.secure != 1 and articletype.parent = '$id' and articletype.usenav = 1 ORDER BY textorder type ASC"; 
 		}
 		$result = $this->query($query);
 		$count = 0;
