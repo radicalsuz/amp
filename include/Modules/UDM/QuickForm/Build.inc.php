@@ -176,11 +176,12 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
         if ($size > 40) $size = 40;
         $fRef->setSize( $size );
     }
+    /*
     if ( isset( $size ) && $size && ( $type == 'select' ) ) {
         if ($size > 40) $size = 40;
         $fRef->setMultiple(true);
         $fRef->setSize( $size );
-    }
+    }*/
 
     if ( isset( $size ) && $size && ( $type == 'textarea' ) ) {
         if ( strpos( $size, ':' ) ) {

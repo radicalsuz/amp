@@ -282,7 +282,6 @@ class UserDataPlugin {
         if (isset($prefix)) {
             foreach ($data as $key=>$value) {
                 $finaldata[$fieldkeys[$key]]=$value;
-                print $key.": ".$fieldkeys[$key].":".$value;
             }
             $data=$finaldata;
         }
@@ -296,12 +295,8 @@ class UserDataPlugin {
         foreach ($data as $keyname=>$value) {
             switch ($this->udm->fields[$keyname]['type']) { 
                 case "date":
-                    foreach ($value as $dd => $dk ) {
-                        print $dd.": ".$dk."<BR>";
-                    }
                     $tempValue=is_array($value)?mktime(0,0,0,$value['M'],$value['d'],$value['Y']):null;
                     if (isset($tempValue)) $returnSet[$keyname] = date("Y-m-d",$tempValue);
-                    print 'date: '.$returnSet[$keyname].'<BR>';
                     break;
             }
         }
