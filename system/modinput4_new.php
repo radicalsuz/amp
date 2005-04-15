@@ -22,7 +22,7 @@ if ( !function_exists( 'autoinc_check' ) ) {
 }
 
 if ($_POST['MM_insert']) {
-	$MM_insert = 1;
+		$MM_insert = 1;
 
 # check auto incrament
 	$id = autoinc_check('userdata_fields',50);

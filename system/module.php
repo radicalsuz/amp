@@ -19,6 +19,11 @@ ob_start();
 // insert, update, delete
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
 
+#check auto inc value
+	if ($_POST['MM_insert']) {
+		$id = autoinc_check('modules',100);
+	}
+
     $MM_editTable  = $table;
     $MM_recordId = $_POST['MM_recordId'];
     $MM_editRedirectUrl = $filename."?action=list";
@@ -49,7 +54,7 @@ $html .=  $buildform->add_row('Module Type', $Tem);
 $html .= addfield('perid','Permission','text',$R->Fields("perid"));
 $html .= addfield('publish','Publish','checkbox',$R->Fields("publish"));
 $html .= addfield('navhtml','Navigation HTML','textarea',$R->Fields("navhtml"));
-$html .= addfield('file','Default File','text',$R->Fields("file"));
+$html .= addfield('file','Defualt File','text',$R->Fields("file"));
 $html .= addfield('userdatamod','User Data Module','checkbox',$R->Fields("userdatamod"));
 $html .= addfield('userdatamodid','UDM ID','text',$R->Fields("userdatamodid"));
 $html .= addfield('id','ID','text',$R->Fields("id"));

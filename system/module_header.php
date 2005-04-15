@@ -9,15 +9,20 @@ $buildform = new BuildForm;
 
 $table = "moduletext";
 $listtitle ="Module Header Text";
-$listsql ="SELECT t.name, t.id, m.name as modname from moduletext t left join  modules m on  t.modid = m.id ";
+$listsql ="SELECT t.name, t.id, m.name as mod from moduletext t left join  modules m on  t.modid = m.id ";
 $orderby =" order by m.name, t.name asc  ";
-$fieldsarray=array( 'Module Page'=>'name','Module'=>'modname','ID'=>'id'
+$fieldsarray=array( 'Module Page'=>'name','Module'=>'mod','ID'=>'id'
 					);
 $filename="module_header.php";
 
 ob_start();
 // insert, update, delete
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
+
+#check auto inc value
+	if ($_POST['MM_insert']) {
+		$id = autoinc_check('moduletext',100);
+	}
 
     $MM_editTable  = $table;
     $MM_recordId = $_POST['MM_recordId'];
@@ -59,7 +64,7 @@ $html .=  $buildform->add_row('Section', $Type);
 
 $template_options = makelistarray($T,'id','name','Select Template');
 $Tempalte = & new Select('tempateid',$template_options,$R->Fields("tempateid"));
-$html .=  $buildform->add_row('Template', $Tempalte);
+$html .=  $buildform->add_row('Tempalte', $Tempalte);
 
 
 

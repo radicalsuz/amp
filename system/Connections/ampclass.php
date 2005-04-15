@@ -1,5 +1,37 @@
 <?php
 
+if ( !function_exists( 'autoinc_check' ) ) {
+	function autoinc_check ($table,$num) {
+		global $dbcon;
+		$getid=$dbcon->Execute( "SELECT id FROM $table ORDER BY id DESC LIMIT 1") or die($dbcon->ErrorMsg());
+		if ($getid->Fields("id") < $num) { $id = $num; } else { $id = NULL;} 
+		return $id;
+	}
+}
+if ( !function_exists( 'helpme2' ) ) {
+	function helpme2($link) {
+		$output = "<a href=\"javascript:void(0)\" ONCLICK=\"open('help.php?file=$link','miniwin','location=1,scrollbars=1,resizable=1,width=550,height=400')\"><img src=\"images/help.png\" width=\"15\" height=\"15\" border=\"0\" align=\"absmiddle\"></a>&nbsp;";
+		return $output;
+	}
+}	 
+if ( !function_exists( 'helpme' ) ) {
+
+	function helpme($link) {
+	
+		global $PHP_SELF;
+		$output="<table width=\"15\" border=\"0\" align=\"right\" cellpadding=\"0\" cellspacing=\"0\"><tr><td><a href=\"javascript:void(0)\" ONCLICK=\"open('help.php?file=";
+		
+		$pos = strrpos($PHP_SELF, "/");
+		$pos = substr($PHP_SELF, ($pos + 1), -4);
+		$output.= $pos;
+		$output.= "#";
+		$output.= $link;
+		$output.="','miniwin','location=1,scrollbars=1,resizable=1,width=550,height=400')\"><img src=\"images/help.png\" border=\"0\" align=\"absmiddle\"></a></td></tr></table>";
+		return $output;
+	
+	}
+}
+
 if ( !function_exists( 'DateOut' ) ) {
 
     function DateOut($date) {
@@ -815,6 +847,7 @@ function addfield($name,$label=NULL,$fieldtype='text',$value=NULL,$defualt=NULL,
 	
 	return $output;
 }
+
 function makelistarray($q,$key,$value,$label='Select') {
 	global $dbcon;
 	$list = array(''=>$label);
