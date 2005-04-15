@@ -6,11 +6,11 @@ if ( !function_exists( 'evalnavhtml' ) ) {
 
         global $base_path, $dbcon, $MM_type, $MM_parent, $MM_typename, $list, $id, $MM_issue, $userper, $MM_region, $navalign;
 
-        $pos = 0;
+        $pos = strpos( $string, '<?php', $start );
         $start = 0;
 
         /* Loop through to find the php code in html...  */
-        while ( $pos = strpos( $string, '<?php', $start ) ) {
+        while (!($pos === FALSE)  ) {
 
             /* Find the end of the php code.. */
             $pos2 = strpos( $string, "?>", $pos + 5);
@@ -32,14 +32,18 @@ if ( !function_exists( 'evalnavhtml' ) ) {
 			$incl = str_replace('"','',$include_args);
 			//echo $incl.'<br>';
 			ob_start();
-			$basefile = $base_path. 'include/AMP/Nav/'.$incl;
-			if (file_exists($basefile)) {
-				$file = 'AMP/Nav/'.$incl;
-				include($file);
-			} elseif (file_exists($incl)) {		
-				$file = $incl;
-				include($file);
-			}
+            $customfile = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . $incl;
+            if (file_exists($customfile)) {
+                include ($customfile);
+            } else {
+                $basefile = 'AMP/Nav/'.$incl;
+                if (file_exists_incpath($basefile)) {
+                    include($basefile);
+                } elseif (file_exists_incpath($incl)) {		
+                    $file = $incl;
+                    include($file);
+                }
+            }
 			
             $value = ob_get_contents();
             ob_end_clean();
@@ -47,6 +51,7 @@ if ( !function_exists( 'evalnavhtml' ) ) {
             /* Grab that chunk!  */
             $start = $pos + strlen($value);
             $string = substr( $string, 0, $pos ) . $value . substr( $string, $pos2 + 2);
+            $pos = strpos( $string, '<?php', $start );
         }
 
         return $string;

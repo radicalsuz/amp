@@ -264,11 +264,11 @@ if ( !function_exists( 'evalhtml' ) ) {
 
         global $dbcon, $MM_type, $MM_parent, $MM_typename, $HTTP_GET_VARS, $list, $id, $MM_issue, $userper, $MM_region, $navalign;
 
-        $pos = 0;
         $start = 0;
 
         /* Loop through to find the php code in html...  */
-        while ( $pos = strpos( $string, '<?php', $start ) ) {
+        $pos = strpos( $string, '<?php', $start ) ; 
+        while ( !($pos === FALSE)) { 
 
             /* Find the end of the php code.. */
             $pos2 = strpos( $string, "?>", $pos + 5);
@@ -282,6 +282,7 @@ if ( !function_exists( 'evalhtml' ) ) {
             /* Grab that chunk!  */
             $start = $pos + strlen($value);
             $string = substr( $string, 0, $pos ) . $value . substr( $string, $pos2 + 2);
+            $pos = strpos( $string, '<?php', $start ) ; 
         }
 
         return $string;
