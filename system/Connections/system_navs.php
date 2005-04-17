@@ -299,7 +299,12 @@ $sys_nav[31][2]['per'] ='49';
 $sys_nav[31][3]['link'] ='css_list.php';
 $sys_nav[31][3]['name'] ='View/Edit Custom CSS';
 $sys_nav[31][3]['class'] ='view';
-$sys_nav[31][2]['per'] ='49';
+$sys_nav[31][3]['per'] ='49';
+
+$sys_nav[31][4]['link'] ='custom_edit.php';
+$sys_nav[31][4]['name'] ='View/Edit Custom Files';
+$sys_nav[31][4]['class'] ='view';
+$sys_nav[31][4]['per'] ='49';
 
 
 $sys_nav['module'][]['per'] ='';

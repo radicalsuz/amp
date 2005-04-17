@@ -261,6 +261,7 @@ echo nav_item($sys_nav[31][0]); # View/Edit Design Template
 echo nav_item($sys_nav[31][1]); # Add Design Template
 echo nav_item($sys_nav[31][2]); # Edit Standard CSS
 echo nav_item($sys_nav[31][3]); # Edit Custom CSS
+echo nav_item($sys_nav[31][4]); # Edit Custom Files
 ?>
 		])
 	
