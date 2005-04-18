@@ -13,9 +13,7 @@ $obj = new SysMenu;
   }
  */ 
 function file_list($file){ 
-	global $base_path_amp;
-	
-	$dir_name= $base_path_amp.$file;  
+	$dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
 	//die($dir_name);
 	$dir = opendir($dir_name);
 	$basename = basename($dir_name);
@@ -461,19 +459,29 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
   
 <?php		$filelist = file_list('img/thumb/'); 
 		//$img_options = makelistarray($G,'id','galleryname','Select Gallery');
-		$Gal = & new Select('picture',$filelist,$r->Fields("picture"));
-		echo $buildform->add_row('Image Filename', $Gal);
+        $galattr= 'onChange="art_showThumb(\'img/thumb/\'+this.value);"';
+		$Gal = & new Select('picture',$filelist,$r->Fields("picture"),false,10,null,null,$galattr);
+        $th_style = $r->Fields("picture")?null:" style='display:none' ";
+        $th_img= '<P><img align="center" width=100 src="http://'.$_SERVER['SERVER_NAME'].'/img/thumb/'.$r->Fields("picture").'" id="active_thumb"'.$th_style.'>';
+		echo $buildform->add_row('Image Filename'.$th_img, $Gal);
  	 
  ?>
- 
+            <script type="text/javascript"> 
+            function art_showThumb(imgname) {
+                th_img = document.getElementById('active_thumb');
+                th_img.src='http://'+window.location.host+"/"+imgname;
+                th_img.style.display="block";
+            }
+            </script>
           <tr class="text"> 
             <td valign="top"><div align="right"></div></td> 
             <td><p> &nbsp;<a href="imgdir.php" target="_blank">View Images</a> | <a href="#"  onclick="change2('upload');" >Upload Image</a></td>
           </tr><tr><td colspan="2"><div id="upload" style="display:none;"><table width="100%" border="0" align="center"> 
-		<?php	echo  addfield('file','Uplaod New Image <br>(jpg files only)','file','','Select image');?>	</table></div>
+		<?php	echo  addfield('file','Upload New Image <br>(jpg files only)','file','','Select image');?>	</table></div>
           </td></tr><tr class="text"> 
             <td valign="top"><div align="right"></div></td> 
-            <td>      <input <?php If (($r->Fields("picuse")) == "1") { echo "CHECKED";} ?> type="checkbox" name="usepict" value="1">
+            <td>
+                <input <?php If (($r->Fields("picuse")) == "1") { echo "CHECKED";} ?> type="checkbox" name="usepict" value="1">
                 USE THIS IMAGE<br>
               </p></td>
           </tr>

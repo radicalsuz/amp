@@ -637,7 +637,7 @@ class Select {
 	 * @param int    $size size of the select box
 	 * @param string $special any special text for processing the value
 	 */
-	function Select($name, $options, $selected=null, $multiple=false, $size=1, $special=null, $class=null) {
+	function Select($name, $options, $selected=null, $multiple=false, $size=1, $special=null, $class=null, $attr=null) {
 		$this->name     = $name;
 		$this->options  = $options;
 		$this->selected = $selected;
@@ -645,13 +645,14 @@ class Select {
 		$this->size     = $size;
 		$this->special  = $special;
 		$this->class    = $class;
+        $this->attr     = $attr;
 	}
 
 	/**
 	 * Return the completed select box.
 	 */
 	function fetch() {
-		$box = '<select name="%s" size="%s" class="%s" %s>%s</select>';
+		$box = '<select name="%s" size="%s" class="%s" %s %s>%s</select>';
 		$opt = '<option value="%s" %s>%s</option>';
 		$buf = null;
 
@@ -665,7 +666,7 @@ class Select {
 			$buf .= sprintf($opt, $key, $sel, $value);
 		}
 
-		return sprintf($box, $this->name, $this->size, $this->class, $this->multiple, $buf);
+		return sprintf($box, $this->name, $this->size, $this->class, $this->multiple, $this->attr, $buf);
 	}
 }
 class Form extends Base {
