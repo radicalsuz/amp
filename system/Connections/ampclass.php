@@ -376,6 +376,7 @@ class Base {
 }
 
 class BuildForm {
+    var $first_copy_btn=true;
 
 	function db_out($m) {
 		$m = stripslashes($m);
@@ -412,6 +413,32 @@ class BuildForm {
 		$html .="\" value='Save Changes'> ";
 		return $html;
 	}
+    
+	function copy_btn($namefield, $formname, $idfield='MM_recordId') {
+		if (empty($_REQUEST["id"])== TRUE) return "";
+		$html = '<input type="button" name= "MM_copy" value="Save As ..." onclick="save_getName()"> ';
+        if ($this->first_copy_btn) {
+            $html .= '<input type="hidden" name="MM_insert" value = "">';
+            $html .= '<script type="text/javascript"> 
+                function save_getName() {
+                    pform = document.forms["'.$formname.'"];
+                    copyname = prompt ("What would you like to name this new item?");
+                    
+                    if (copyname != "" && copyname) {
+                        pform.elements["MM_insert"].value=\'MM_insert\';
+                        pform.elements["'.$namefield.'"].value=copyname;
+                        pform.elements["'.$idfield.'"].value=null;
+                        pform.submit();
+                    } else {
+                        pform.elements["MM_insert"].value=0;
+                        return false;
+                    }
+                }
+            </script>';
+            $this->first_copy_btn=false;
+        } 
+		return $html;
+    }
 	
 	function add_row($label=null, $field=null, $req=null, $right_text=null) {
 		$html = '
