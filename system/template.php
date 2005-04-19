@@ -16,7 +16,9 @@ $filename="template.php";
 
 ob_start();
 // insert, update, delete
-if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
+if ( (($_POST['MM_update']) && ($_POST['MM_recordId'])) 
+        or ($_POST['MM_insert']) 
+        or (($_POST['MM_delete']) && ($_POST['MM_recordId'])) ) {
 	
     $MM_editTable  = $table;
     $MM_recordId = $_POST['MM_recordId'];
@@ -40,7 +42,8 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 //build form
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Edit '.$listtitle, 'banner');
-$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().'&nbsp;'.$buildform->copy_btn('name','template_edit'));
+#$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().'&nbsp;'.$buildform->copy_btn('name','template_edit'));
+$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn());
 $html .= addfield('name','Name','text',$R->Fields("name"));
 $html .= $buildform->add_header('HTML Template');
 $html .= $buildform->add_colspan('Add [-body-] [-left nav-] [-right nav-] to the template where you want content to appear');
@@ -61,7 +64,8 @@ $html .= $buildform->add_header('Template Paths');
 $html .= addfield('css','CSS File','text',$R->Fields("css"),'custom/styles.css');
 $html .= addfield('imgpath','Image Path','text',$R->Fields("imgpath"),'img/');
 $html .= addfield('extra_header','Extra Headers','textarea',$R->Fields("extra_header"));
-$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().'&nbsp;'.$buildform->copy_btn('name','template_edit').$rec_id->fetch());
+#$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().'&nbsp;'.$buildform->copy_btn('name','template_edit').$rec_id->fetch());
+$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn());
 $html .= $buildform->end_table();
 $form = & new Form("POST", $_SERVER['PHP_SELF'], "template_edit");
 $form->set_contents($html);
