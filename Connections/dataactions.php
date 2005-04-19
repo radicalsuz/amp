@@ -87,7 +87,7 @@ if (!isset($MM_recordId)&&isset($_POST['MM_recordId'])&&$_POST['MM_recordId']) $
   }
   
 // *** Insert Record: construct a sql insert statement and execute it
-if (isset($MM_insert)) {
+if (isset($MM_insert) && $MM_insert) {
    // create the sql insert statement
   $MM_tableValues = "";
   $MM_dbValues = "";
