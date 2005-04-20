@@ -11,15 +11,13 @@ To Do:  declare post vars, verify the required fields
 $mod_id = 15;
 $modid=1;
 require_once("AMP/BaseDB.php"); 
-require_once("AMP/BaseTemplate.php"); 
-require_once("AMP/BaseModuleIntro.php"); 
 require_once("dropdown.php"); ?>
 
 <?php
   // *** Edit Operations: declare Tables
-  $MM_editAction = $PHP_SELF;
-  if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
+  $MM_editAction = $_SERVER['PHP_SELF'];
+  if ($_SERVER['QUERY_STRING']) {
+    $MM_editAction = $MM_editAction . "?" . $_SERVER['QUERY_STRING'];
   }
 
   $MM_abortEdit = 0;
@@ -28,7 +26,7 @@ require_once("dropdown.php"); ?>
 ?><?php
 // *** Insert Record: set Variables
 
-if (isset($MM_insert)){
+if (isset($_POST['MM_insert']&&$_POST['MM_insert'])){
 
    // $MM_editConnection = MM__STRING;
    $startdate = DateConvertIn($_REQUEST['startdate']);
@@ -99,10 +97,12 @@ function MM_validateForm() { //v4.0
 //-->
 </script>
 
+<?php
+require_once("AMP/BaseTemplate.php"); 
+if ($HTTP_GET_VARS["thank"] == ($null)) { 
 
- <?php if ($HTTP_GET_VARS["thank"] == ($null)) { ?>
-
-
+    require_once("AMP/BaseModuleIntro.php"); 
+?>
       <form action="<?php echo $MM_editAction?>" method="POST" name="form" onSubmit="MM_validateForm('event','','R','startdate','','R','contact','','R','email','','R','city','','R','description','','R');return document.MM_returnValue" >
         
   <table width="100%" align="center" class="form">
