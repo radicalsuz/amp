@@ -86,6 +86,7 @@ function nav_mod_type($type) {
 	}
 
     if ($entries) {
+        global $sys_nav;
         $output .= nav_item($sys_nav['udm'][0]);
     }
 
