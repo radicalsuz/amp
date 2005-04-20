@@ -117,7 +117,7 @@ if (!isset($_GET['thank'])) {
     $eventtype->MoveFirst();
     WHILE ($eventtype__index < $eventtype__totalRows){
 
-          echo '<OPTION VALUE="'.$eventtype->Fields("id")'">'. 
+          echo '<OPTION VALUE="'.$eventtype->Fields("id").'">'. 
                   $eventtype->Fields("name").'</OPTION>';
       $eventtype->MoveNext();
       $eventtype__index++;
