@@ -24,7 +24,7 @@ Class Gallery {
 				
 		if ($_GET["gal"]) {
 		// set the current gallery name
-			$galn = $gals = $this->dbcon->CacheExecute("SELECT * FROM gallerytype id = ".$_GET["gal"]) or DIE($this->dbcon->ErrorMsg());
+			$galn = $gals = $this->dbcon->CacheExecute("SELECT * FROM gallerytype where id = ".$_GET["gal"]) or DIE($this->dbcon->ErrorMsg());
 			$this->galleryname = $galn->Fields("galleryname");
 
 		// get the count 	
