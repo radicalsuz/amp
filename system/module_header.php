@@ -63,8 +63,8 @@ $Type = & new Select('type', $obj->select_type_tree2(0),$R->Fields("type"));
 $html .=  $buildform->add_row('Section', $Type);
 
 $template_options = makelistarray($T,'id','name','Select Template');
-$Tempalte = & new Select('tempateid',$template_options,$R->Fields("tempateid"));
-$html .=  $buildform->add_row('Tempalte', $Tempalte);
+$Tempalte = & new Select('templateid',$template_options,$R->Fields("templateid"));
+$html .=  $buildform->add_row('Template', $Tempalte);
 
 
 
