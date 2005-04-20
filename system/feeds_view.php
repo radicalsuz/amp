@@ -93,7 +93,7 @@ document.forms[0][i].checked=document.forms[0][1].checked;
 } 
 } 
 </script>  
-<h2>Feed Argragator</h2>
+<h2>Feed Aggregator</h2>
 
 <p class="name">&nbsp;&nbsp;Display:&nbsp;&nbsp;<select name="repeat" onChange="MM_jumpMenu('parent',this,0)" class="name">
                 <option selected>Select Feed</option>
