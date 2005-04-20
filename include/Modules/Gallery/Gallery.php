@@ -31,13 +31,13 @@ Class Gallery {
 			$sqlct  = "SELECT  COUNT(DISTINCT id)  from gallery where publish =1 and galleryid = ".$_GET["gal"];
 			$listct=$this->dbcon->CacheExecute("$sqlct")or DIE("could not get gallerycount".$this->dbcon->ErrorMsg());
 			$this->amount = $listct->Fields[0];
-			if (!$this->limit) {$this->limit = $this->amount}
+			if (!$this->limit) {$this->limit = $this->amount;}
 
 		// set up offset varaibales
 			if ($_GET["offset"]) {
 				$this->off = $_GET['offset'];
 			}
-			$slimit = " LIMIT ".$this->off.",".$this->limit
+			$slimit = " LIMIT ".$this->off.",".$this->limit;
 
 		// do the query		
 			$this->photo = $this->dbcon->CacheExecute("SELECT * FROM gallery where  gallery.publish=1 and galleryid = ".$_GET["gal"]." ORDER BY date, id DESC ".$slimit) or DIE($this->dbcon->ErrorMsg());
