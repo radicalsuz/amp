@@ -23,7 +23,7 @@ if (file_exists($customHandler)) {
 
     ob_start();
     include( $customHandler );
-    $output = ob_get_contents();
+    $output = ob_get_clean();
     ob_end_clean();
 
     // Set response header to reflect the actual status of our request.

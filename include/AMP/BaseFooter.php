@@ -14,7 +14,6 @@ if ($modulefooter != NULL){
 $bodydata = ob_get_clean();
 $bodydata =$bodydata2.$bodydata;
 
-
 $sidelistcss="sidelist";
 
 include("AMP/Nav/navselect.php"); 
@@ -39,11 +38,5 @@ if  ($_GET['printsafe'] == 1) {
 else {echo $htmloutput ;}
 
 ob_end_flush();
+
 ?>
-
-
-
-
-
-
-
