@@ -21,88 +21,99 @@ $customHandler = AMP_LOCAL_PATH . "/custom/" . $_SERVER['PHP_SELF'];
 
 if (file_exists($customHandler)) { 
 
-	include( $customHandler );
+    include( $customHandler );
 
     // Set response header to reflect the actual status of our request.
     //
     // if we made it this far, I'm going to assume that everything is just
     // fine. Custom scripts that want to redirect must exit() before reaching
     // here.
-   // header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 200 OK' );
+    header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 200 OK' );
 
 } else {
 
+    // We haven't found what we're looking for, so flag a 404 error, and try to
+    // redirect.
     header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found' );
 
+    // Search for something to redirect to, based on our redirect table.
     $myURI = $dbcon->qstr(substr($_SERVER['REQUEST_URI'], 1));
-    $R=$dbcon->Execute("select * from redirect where publish =1 and old=$myURI or conditional =1") or DIE('404 query'.$dbcon->ErrorMsg());
+    $R=$dbcon->Execute("SELECT * FROM redirect WHERE publish=1 AND old=$myURI OR conditional=1")
+        or die('404 query error: '.$dbcon->ErrorMsg());
 
-    $go= false;
-	
-	while (!$R->EOF) {
-		if ($R->Fields("conditional")) {
-			if ($go == false) {
-				$go = errorred($R->Fields("old"),$R->Fields("new"),$R->Fields("num"));
-				}
-		}
-		else {
-			if ($go == false) {$go = errorre($R->Fields("old"),$R->Fields("new"));}
-		}
-		$R->MoveNext();
-	}
-	
-	if ($go == false) {
-	  $sql = "select * from redirect where publish =1 and $myURI like Concat(old, '%')";
-	  $R=$dbcon->Execute($sql) or DIE('404 query'.$dbcon->ErrorMsg());
-	
-	  while (!$R->EOF) {
-		if ($R->Fields("conditional")) {
-		  
-		  if ($go == false) {$go = errorred($R->Fields("old"),$R->Fields("new"),$R->Fields("num"));}
-		  
-		}
-		else {
-		  
-		  if ($go == false) {$go = errorre($R->Fields("old"),$R->Fields("new"));}
-		}
-		$R->MoveNext();
-	  }
-	}
-	
-	if ($go == false) { 	   //ampredirect ("$Web_url"."search.php");
-	}
-}
+    $redirected = false;
+    
+    // It feels like this loop is totally unnecessary and could be handled in
+    // the SQL, but we'll loop through it anyhow since I don't know what the
+    // intent of this is...
+    while (!$R->EOF && !$go) {
 
-function errorre($org,$target) {
-        global $Web_url;
-        if (strstr($_SERVER['REQUEST_URI'], "$org")) {
-          if (substr($target, 0,4)=="http"){
-	   ampredirect ("$target");
-	  } else {
-	   ampredirect("$Web_url"."$target");
-	  } 
-	  return true;
+        $old_uri = $R->Fields("old");
+        $new_uri = $R->Fields("new");
+        $num     = ($R->Fields("conditional")) ? $R->Fields("num") : null;
+
+        $redirected = error_redirect($R->Fields("old"),$R->Fields("new"),$R->Fields("num"));
+
+        $R->MoveNext();
+    }
+
+    // If we still ... haven't found ... what we're looking for, then scale
+    // some city walls. Bizarre, twisted, surrealist city walls. It appears as
+    // though we're doing a starts-with search, which is a bit crazy, but
+    // whatever.
+    
+    if (!$redirected) {
+
+        $sql = "SELECT * FROM redirect WHERE publish=1 AND $myURI LIKE CONCAT(old, '%')";
+        $R=$dbcon->Execute($sql) or die('404 query error: ' . $dbcon->ErrorMsg());
+    
+        while (!$R->EOF && !$redirected) {
+
+            $old_uri = $R->Fields("old");
+            $new_uri = $R->Fields("new");
+            $num     = ($R->Fields("conditional")) ? $R->Fields("num") : null;
+
+            $redirected = error_redirect($old_uri, $new_uri, $num);
+
+            $R->MoveNext();
         }
-        else return false;
+    }
+    
+    if (!$redirected) {
+
+        // Redirect to the search page, since we still couldn't find whatever it was
+        // that they were looking for. Even after kissing honey lips.
+        ampredirect ($Web_url . "search.php");
+
+    }
 }
 
-function errorred($org,$target,$num) {
-        global $Web_url;
-        $get = strstr($_SERVER['REQUEST_URI'], $org);
-		//die($org);
-		//die($_SERVER['REQUEST_URI'].'ll');
-        $go = substr($get, $num);
-		//die($go);
-        if ($go) {
-          if (substr($target, 0, 4)=="http"){
-	    	   ampredirect($target.$go);
-	  } else {
-	   ampredirect($Web_url.$target.$go);
-	  }
-	  return true;
+function error_redirect( $requested_uri, $target_uri, $num = null ) {
+
+    global $Web_url;
+
+    // This is very confusing, and I'm not entirely clear on what it's supposed
+    // to do or accomplish. Oh well...
+    $fetch_str = strstr($_SERVER['REQUEST_URI'], $requested_uri);
+    $fetch_val = ( $num ) ? substr( $fetch_str, $num ) : "";
+
+    // Check to see if our REQUEST_URI matches in any way the $requested_uri
+    if ($fetch_str) {
+
+        // Add the appropriate junk if $target isn't a real URI.
+        if (substr($target, 0, 4) == "http") {
+            $redirect_uri = $target_uri . $fetch_val;
+        } else {
+            $redirect_uri = $Web_url . $target . $fetch_val;
         }
-        else return false;
-}
 
+        // Everything worked out OK. Redirect and report success.
+        ampredirect( $redirect_uri );
+        return true;
+    }
+
+    // We didn't redirect, report failure.
+    return false;
+}
 
 ?>
