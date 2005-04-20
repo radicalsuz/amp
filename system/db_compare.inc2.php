@@ -53,7 +53,7 @@ class dbDefinition {
 			if ($master_fields->name==$fieldobj->name){  
 			$fieldfound=TRUE ;
 				if (($master_fields->type.$master_fields->max_length) != ($fieldobj->type.$fieldobj->max_length)) {
-					$this->dboutput[$currentTable][$dbdef->dbname] .= "Field Type mismatch: <B>".$fieldobj->name."</B> in table <B>".$currentTable."</b> in database ".$dbdef->dbname." is of type <B>".$fieldobj->type."(".$fieldobj->max_length.")</B>&nbsp;&nbsp;&nbsp;Template field type: ".$master_fields->type."(".$master_fields->max_length.")<BR>\r\n";
+					$this->dboutput[$currentTable][$dbdef->dbname] .= "Field Type mismatch: <B>".$fieldobj->name."</B> in table <B>".$currentTable."</b> in database ".$this->dbname." is of type <B>".$master_fields->type."(".$master_fields->max_length.")</B><BR>\r\n";
 				}
 			}
 		}
@@ -105,9 +105,6 @@ class dbDefinition {
 		//Check for tables present in called set and not in secondary set
 		$this->tables_missing[$dbdef->dbname] =array_diff($this->tableSet, $dbdef->tableSet);
 		$this->tables_found[$dbdef->dbname]=array_diff($dbdef->tableSet, $this->tableSet);
-		/*foreach ($this->tables_found[$dbdef->dbname] as $debug_set){
-			echo $dbdef->dbname.": found table: ".$debug_set."<BR>";
-		}*/
 		
 		$this->tables_common[$dbdef->dbname] = array_intersect($this->tableSet, $dbdef->tableSet);
 		
@@ -118,9 +115,6 @@ class dbDefinition {
 			
 		
 			$this->fields_found[$dbdef->dbname][$currentTable]=array_diff($client_fieldnameSet, $master_fieldnameSet);
-			/*foreach ($this->fields_found[$dbdef->dbname][$currentTable] as $debug_set){
-				echo $dbdef->dbname.": found field: ".$debug_set. " in table: ".$currentTable."<BR>";
-			}*/
 			$this->fields_common[$dbdef->dbname][$currentTable]=array_intersect($client_fieldnameSet, $master_fieldnameSet);
 			$temp_fields_newtype = array_diff_assoc($dbdef->fieldSet_extended[$currentTable], $this->fieldSet_extended[$currentTable]);
 			$debug_flag=FALSE;
@@ -128,14 +122,8 @@ class dbDefinition {
 			foreach (array_keys($temp_fields_newtype) as $temp_field) {
 				if (in_array($temp_field, $this->fields_common[$dbdef->dbname][$currentTable])){
 					$this->fields_newtype[$dbdef->dbname][$currentTable][$temp_field]=$temp_fields_newtype[$temp_field];
-					#$debug_flag=TRUE;
 				}
 			}
-			/*if ($debug_flag) {
-			foreach (array_keys($this->fields_newtype[$dbdef->dbname][$currentTable]) as $debug_set) {
-				echo $dbdef->dbname.": field type non-match: ".$debug_set. "in table: ".$currentTable."is of type :".$this->fields_newtype[$dbdef->dbname][$currentTable][$debug_set]."<BR>";
-			}
-			} #end debug if*/
 		}
 
 	}

@@ -1,11 +1,10 @@
- <?php // *** Update Record: construct a sql update statement and execute it
+<?php // *** Update Record: construct a sql update statement and execute it
   set_time_limit(0); 
 //check action globals
 if (!isset($MM_update)&&isset($_POST['MM_update'])&&$_POST['MM_update']){
 $MM_update=$_POST['MM_update'];
-print 'mm_update set to post';
 } else {
-print 'mm_update set or post not set';
+#print 'mm_update set or post not set';
 
 }
 

@@ -44,7 +44,7 @@ if($_REQUEST['MM_haveMaster']&&$_REQUEST['master_dbname']){
 			}
 			if (count($master_template->fields_newtype[$thisDB][$currentTable])) {
 				foreach (array_keys($master_template->fields_newtype[$thisDB][$currentTable]) as $output_set) {
-					$db_divided_output["Field_Type_Changes"].= $thisDB.": in table: ".$currentTable." field type non-match: ".$output_set." is of type :".$master_template->fields_newtype[$thisDB][$currentTable][$output_set]."<BR>\r\n";
+					$db_divided_output["Field_Type_Changes"].= $master_template->dbname.": in table: ".$currentTable." field type non-match: ".$output_set." is of type :".$master_template->fieldSet_extended[$currentTable][$output_set]."<BR>\r\n";
 				}
 			}	
 		}		

@@ -1,4 +1,4 @@
- <?php
+<?php
 
 // create the $MM_fields and $MM_columns arrays
 $MM_fields = Explode("|", $MM_fieldsStr);
