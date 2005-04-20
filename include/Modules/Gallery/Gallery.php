@@ -5,7 +5,7 @@ Class Gallery {
 	var $gals;
 	var $photo;
 	var $galleryname;
-	var $dbcon
+	var $dbcon;
 	var $list_img_size = "thumb";
 	var $dir = "thumb";
 	var $off =0;
