@@ -68,7 +68,7 @@ function nav_udms() {
 	}
 
     if (!$R->EOF) {
-        $output .= nav_item($sys_nav['udm'][0]);
+#        $output .= nav_item($sys_nav['udm'][0]);
     }
 
 	return $output;
