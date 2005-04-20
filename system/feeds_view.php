@@ -168,7 +168,7 @@ $i++;
 	
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
 		<td></td>
-		<td colspan="4"><?php echo utf8_decode( preg_replace( "\n", "<br/>", $rs->Fields("content") ) ) ?></td>
+		<td colspan="4"><?php echo utf8_decode( preg_replace( "/\n/", "<br/>", $rs->Fields("content") ) ) ?></td>
 	</tr>
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
 	  <td colspan = '5'>
