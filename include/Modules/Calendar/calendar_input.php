@@ -38,8 +38,8 @@ if (isset($MM_insert)){
    $MM_columnsStr = "typeid|none,none,NULL|date|',none,NULL|time|',none,''|event|',none,''|shortdesc|',none,''|fulldesc|',none,''|org|',none,''|contact1|',none,''|email1|',none,''|phone1|',none,''|url|',none,''|location|',none,''|lcity|',none,''|lstate|',none,''|lcountry|',none,''|laddress|',none,''|lzip|',none,''|fname2|',none,''|lname2|',none,''|orgaznization2|',none,''|address2|',none,''|city2|',none,''|state2|',none,''|zip2|',none,''|country2|',none,''|email2|',none,''|phone2|',none,''|endorse|',none,''|publish|none,none,NULL|repeat|none,1,0|student|none,1,0|region|',none,''";
  
     
- require ("DBConnections/insetstuff.php"); 
-require ("DBConnections/dataactions.php");
+ require ("Connections/insetstuff.php"); 
+require ("Connections/dataactions.php");
 $recent=$dbcon->Execute("SELECT id FROM calendar order by id desc LIMIT 1") or DIE($dbcon->ErrorMsg());
  $idval= $recent->Fields("id");
  $recent->Close();
@@ -58,8 +58,8 @@ $recent=$dbcon->Execute("SELECT id FROM calendar order by id desc LIMIT 1") or D
    $MM_fieldsStr = "fname2|value|lname2|value|organization2|value|address2|value|city2|value|state2|value|zip2|value|country2|value|email2|value|phone2|value|source|value|enteredby|value|classid|value";
  
    $MM_columnsStr = "FirstName|',none,''|LastName|',none,''|Company|',none,''|BusinessStreet|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|EmailAddress|',none,''|BusinessPhone|',none,''|source|none,none,NULL|enteredby|none,none,NULL|classid|none,none,NULL";
-   require ("DBConnections/insetstuff.php"); 
-require ("DBConnections/dataactions.php"); }
+   require ("Connections/insetstuff.php"); 
+require ("Connections/dataactions.php"); }
   
   }
 
