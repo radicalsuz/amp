@@ -76,7 +76,8 @@ if ($intro_id == 1) {
 
 	#GET MODULE TEXT VARS
 
-	$getmodhierarchy=$dbcon->CacheExecute("SELECT templateid, title, name, type FROM moduletext WHERE id = $intro_id") or DIE('Could not load module hierarchy information in BaseTemplate '.$dbcon->ErrorMsg());
+	$getmodhierarchy=$dbcon->CacheExecute("SELECT templateid, title, name, type FROM moduletext WHERE id = $intro_id") 
+        or DIE('Could not load module hierarchy information in BaseTemplate '.$dbcon->ErrorMsg());
 
 	$MM_type = $getmodhierarchy->Fields("type");
 	$mod_name = $getmodhierarchy->Fields("name");
@@ -88,7 +89,8 @@ if ($intro_id == 1) {
 if (!$MM_type) $MM_type = 1;
 
 # GET HIERARCHY VARS
-$gettype=$dbcon->CacheExecute("select type, parent, templateid, css, secure, uselink, linkurl from articletype where id = $MM_type")or DIE('Could not load sectional heierarcy information in BaseTemplate '.$dbcon->ErrorMsg()); 
+$gettype=$dbcon->CacheExecute("select type, parent, templateid, css, secure, uselink, linkurl from articletype where id = $MM_type")
+    or DIE('Could not load sectional heierarcy information in BaseTemplate '.$dbcon->ErrorMsg()); 
 
 $MM_typename = $gettype->Fields("type");
 $MM_parent = $gettype->Fields("parent");
@@ -98,7 +100,8 @@ $sparent= $MM_type;
 if ($MX_top != NULL) {$MX_top ='1';}
 while (!$MM_secure && ($sparent != $MX_top)) {
 	$sparent=$obj->get_parent($sparent);
-	$getsec=$dbcon->CacheExecute("SELECT secure FROM articletype WHERE id = $sparent") or DIE('Could not load security information in BaseTemplate ');
+	$getsec=$dbcon->CacheExecute("SELECT secure FROM articletype WHERE id = $sparent") 
+        or DIE('Could not load security information in BaseTemplate ');
 	$MM_secure = $getsec->Fields("secure");
 }  
 
@@ -118,7 +121,6 @@ if (isset($modid)) {
 }
 
 #SET TEMPLATE VARS
-
 #DETERMIN TEMPLATE ID
 if ($modtemplate_id) {
 	$template_id = $modtemplate_id;
