@@ -8,7 +8,6 @@ To Do:  declare post vars, verify the required fields
 
 *********************/ 
 
-$mod_id = 15;
 $modid=1;
 require_once("AMP/BaseDB.php"); 
 require_once("dropdown.php"); ?>
@@ -26,7 +25,7 @@ require_once("dropdown.php"); ?>
 ?><?php
 // *** Insert Record: set Variables
 
-if (isset($_POST['MM_insert']&&$_POST['MM_insert'])){
+if (isset($_POST['MM_insert'])&&$_POST['MM_insert']){
 
    // $MM_editConnection = MM__STRING;
    $startdate = DateConvertIn($_REQUEST['startdate']);
@@ -98,9 +97,10 @@ function MM_validateForm() { //v4.0
 </script>
 
 <?php
-require_once("AMP/BaseTemplate.php"); 
-if ($HTTP_GET_VARS["thank"] == ($null)) { 
+if (!isset($_GET['thank'])) { 
 
+    $mod_id = 15;
+    require_once("AMP/BaseTemplate.php"); 
     require_once("AMP/BaseModuleIntro.php"); 
 ?>
       <form action="<?php echo $MM_editAction?>" method="POST" name="form" onSubmit="MM_validateForm('event','','R','startdate','','R','contact','','R','email','','R','city','','R','description','','R');return document.MM_returnValue" >
@@ -347,6 +347,7 @@ if ($HTTP_GET_VARS["thank"] == ($null)) {
 	  <?php if ($HTTP_GET_VARS["thank"] == ("1")) { ?>
       <?php 
 	  $mod_id = 51 ;
+        require_once("AMP/BaseTemplate.php"); 
 	  require_once("AMP/BaseModuleIntro.php"); ?>
       <?php } //end thank you
   $state->Close();
