@@ -260,10 +260,10 @@ echo nav_section('Content Tools','Content Tools',''); # rss menu
 	
 	addmenu(menu=["Nav",,,175,1,"",style2,,"top",effect,,,,,,,,,,,,
 <?php
-echo nav_item($sys_nav[30][0]); # Default Navigation Layout
-echo nav_item($sys_nav[30][1]); # Homepage Navigation Layout
-echo nav_item($sys_nav[30][2]); # View  Navigation Files
-echo nav_item($sys_nav[30][3]); # Add Navigation File
+echo nav_item($sys_nav['nav'][0]); # Default Navigation Layout
+echo nav_item($sys_nav['nav'][1]); # Homepage Navigation Layout
+echo nav_item($sys_nav['nav'][2]); # View  Navigation Files
+echo nav_item($sys_nav['nav'][3]); # Add Navigation File
 ?>
 		])
 	
