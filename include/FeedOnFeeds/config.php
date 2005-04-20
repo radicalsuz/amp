@@ -66,7 +66,7 @@ if (!defined('FOF_DIR')) {
 
 if (!defined('FOF_CACHE_DIR'))
 {
-    define('FOF_CACHE_DIR', FOF_DIR . DIR_SEP . "cache");
+    define('FOF_CACHE_DIR', AMP_LOCAL_PATH . DIR_SEP . "cache");
 }
 
 ?>

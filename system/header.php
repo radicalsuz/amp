@@ -139,7 +139,7 @@ if (!isset($_GET['noHeader']) || !$_GET['noHeader']) {
 <html>
 <head>
 <title><?php echo $SiteName  ; ?> Administration</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="managment.css" type="text/css">
 		  	  <script type="text/javascript">
 			function getCookie(name)
