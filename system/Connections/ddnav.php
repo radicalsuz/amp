@@ -68,7 +68,8 @@ function nav_udms() {
 	}
 
     if (!$R->EOF) {
-#        $output .= nav_item($sys_nav['udm'][0]);
+        global $sys_nav;
+        $output .= nav_item($sys_nav['udm'][0]);
     }
 
 	return $output;
@@ -79,10 +80,15 @@ function nav_mod_type($type) {
     $output = '';
 	$sql ="SELECT i.id, i.name FROM userdata_fields i, modules m WHERE i.id = m.userdatamodid AND m.module_type=" . $dbcon->qstr($type) . " AND m.userdatamodid > 49 ORDER BY name";
 	$R=$dbcon->CacheExecute($sql) or die('Error in nov_mod_tpe: ' . $dbcon->ErrorMsg());
-	while (!$R->EOF) {
+	while (!$R->EOF && $entries++ < 10) {
 		$output .= nav_item_udm($R->Fields("id"));
 		$R->MoveNext();
 	}
+
+    if ($entries) {
+        $output .= nav_item($sys_nav['udm'][0]);
+    }
+
 	return $output;
 }
 
