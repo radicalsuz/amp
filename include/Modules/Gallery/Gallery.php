@@ -52,7 +52,7 @@ Class Gallery {
 	
 
 	function set_moves() {
-		if ( $this->amount > 1) {;
+		//if ( $this->amount > 1) {;
 			$MM_removeList = "&offset=";
 			reset ($_GET);
 			while (list ($key, $val) = each ($_GET)) {
@@ -67,7 +67,7 @@ Class Gallery {
 			$this->movePrev =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($this->off-$this->limit);
 			$loffset = (floor($this->amount / $this->limit) * $this->limit);
 			$this->moveLast =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($loffset);	
-		}
+		//}
 	}
 
 //display move links
