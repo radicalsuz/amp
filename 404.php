@@ -22,6 +22,7 @@ $customHandler = AMP_LOCAL_PATH . "/custom/" . $_SERVER['PHP_SELF'];
 if (file_exists($customHandler)) { 
 
     ob_start();
+    ob_start();
     include( $customHandler );
     $output = ob_get_clean();
     ob_end_clean();
