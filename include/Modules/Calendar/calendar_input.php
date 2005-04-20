@@ -10,9 +10,8 @@ To Do:  declare post vars, verify the required fields
 
 $modid=1;
 require_once("AMP/BaseDB.php"); 
-require_once("dropdown.php"); ?>
+require_once("dropdown.php"); 
 
-<?php
   // *** Edit Operations: declare Tables
   $MM_editAction = $_SERVER['PHP_SELF'];
   if ($_SERVER['QUERY_STRING']) {
@@ -22,7 +21,6 @@ require_once("dropdown.php"); ?>
   $MM_abortEdit = 0;
   $MM_editQuery = "";
 
-?><?php
 // *** Insert Record: set Variables
 
 if (isset($_POST['MM_insert'])&&$_POST['MM_insert']){
@@ -118,10 +116,9 @@ if (!isset($_GET['thank'])) {
     $eventtype__index=0;
     $eventtype->MoveFirst();
     WHILE ($eventtype__index < $eventtype__totalRows){
-?>
-          <OPTION VALUE="<?php echo  $eventtype->Fields("id")?>"> 
-          <?php echo  $eventtype->Fields("name");?> </OPTION>
-          <?php
+
+          echo '<OPTION VALUE="'.$eventtype->Fields("id")'">'. 
+                  $eventtype->Fields("name").'</OPTION>';
       $eventtype->MoveNext();
       $eventtype__index++;
     }
