@@ -21,7 +21,10 @@ $customHandler = AMP_LOCAL_PATH . "/custom/" . $_SERVER['PHP_SELF'];
 
 if (file_exists($customHandler)) { 
 
+    ob_start();
     include( $customHandler );
+    $output = ob_get_contents();
+    ob_end_clean();
 
     // Set response header to reflect the actual status of our request.
     //
@@ -29,6 +32,8 @@ if (file_exists($customHandler)) {
     // fine. Custom scripts that want to redirect must exit() before reaching
     // here.
     header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 200 OK' );
+
+    print $output;
 
 } else {
 
