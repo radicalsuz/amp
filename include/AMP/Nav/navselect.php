@@ -30,7 +30,7 @@ if ( !function_exists( 'evalnavhtml' ) ) {
 			
 			$include_args = preg_replace("/.*include\s*[\(\s*]?\s*\"?([^\)\"\s]*)\"?[\)\s*]?.*/", "\$1", $code );
 			$incl = str_replace('"','',$include_args);
-			//echo $incl.'<br>';
+			#echo $incl.'<br>';
 			ob_start();
             $customfile = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . $incl;
             if (file_exists($customfile)) {

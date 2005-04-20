@@ -2,7 +2,7 @@
 
 $menu_header = '<!-- this prevents \'events fall through the menu\' bug in win/ie --><!--[if gte IE 5]>
 <STYLE type=text/css>UL#menu DIV {
-	BACKGROUND-COLOR: #ffffff
+	BACKGROUND-COLOR: #'.$menu_bg_bgcolor.'
 }
 </STYLE>
 <![endif]-->
