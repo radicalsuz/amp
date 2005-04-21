@@ -29,7 +29,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 		require_once( 'AMP/UserData/Input.inc.php' );
 		require_once( 'utility.functions.inc.php');
 		$chsql = "select id from userdata_fields where id =4";
-	    $check  = $dbcon->Execute($chsql) or die('pettion setup faild ' . $chsql . $dbcon->ErrorMsg());
+	    $check  = $dbcon->Execute($chsql) or die('petition setup faild ' . $chsql . $dbcon->ErrorMsg());
 
 		if (!$check->Fields("id")) {
 		
@@ -41,11 +41,11 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 		
 		$udm = new UserDataInput( $dbcon, '4', true );
 	    $udm->doPlugin( "QuickForm", "BuildAdmin" );
-    	$new_modin = $udm->doPlugin( "AMPsystem", "copy_admin" );
+    	$new_modin = $udm->doPlugin( "AMPsystem", "CopyAdmin" );
 		if ($new_modin) {
 			$udmid = $new_modin;
 		} else {
-		die("copy failed");
+		    die("copy failed");
 		}
 	}
 	$datestarted =DateConvertIn($datestarted);
