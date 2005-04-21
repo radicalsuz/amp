@@ -162,7 +162,7 @@ $i++;
 		<td><?= $rs->Fields("id") ?></td>
 		<td><b><?= $rs->Fields("ftitle") ?>:</b> <?= utf8_decode( $rs->Fields("title") ) ?></td>
 		
-		<td><?= $rs->Fields("date") ?></td>
+		<td><?= preg_replace( "/ /", "&nbsp;", $rs->Fields("date") ?></td>
 		<td><a href="<?= $rs->Fields("link") ?>" target="_blank">view</a></td>
 	</tr>
 	
