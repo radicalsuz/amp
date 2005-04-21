@@ -40,8 +40,11 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 
 			$sql_field = $field;
 			if ( $field == 'redirect' ) continue;
-			if ( $field == 'id' ) continue;
-			if ( $field=='core_name') { $new_name = $dbcon->qstr( $udm->form->getSubmitValue( $field ) ) }
+            if ( $field == 'name') continue;
+
+            // ugly, vicious hack.
+			if ( $field == 'id' ) $sql_value = autoinc_check( userdata_fields, 50 );
+			if ( $field=='core_name') { $sql_value = $dbcon->qstr( $udm->form->getSubmitValue( $field ) ); }
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
 
 			if (!$sql_value) $sql_value = $dbcon->qstr( $udm->_module_def[$field] );
@@ -54,7 +57,6 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 		$sql .= join( ", ", $elements );
 		$sql .= ") VALUES ( ";
 		$sql .= join( ", ", $values );
-		
 		$sql .= " )";
 
 
