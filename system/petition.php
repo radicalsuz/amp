@@ -46,6 +46,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 			$udmid = $new_modin;
 		} else {
 		die("copy failed");
+		}
 	}
 	$datestarted =DateConvertIn($datestarted);
 	$dateended =DateConvertIn($dateended);
