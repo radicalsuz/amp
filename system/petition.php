@@ -1,4 +1,6 @@
 <?php
+
+// something needs to deal with the petition redirect
 $modid = "7";
 
 require_once("Connections/freedomrising.php");
@@ -26,7 +28,15 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 	if ($_POST['MM_insert']) {
 		require_once( 'AMP/UserData/Input.inc.php' );
 		require_once( 'utility.functions.inc.php');
+		$chsql = "select id from userdata_fields where id =4";
+	    $check  = $dbcon->Execute($chsql) or die('pettion setup faild ' . $chsql . $dbcon->ErrorMsg());
 
+		if (!$check->Fields("id")) {
+		
+			$addsql = "INSERT INTO `userdata_fields` VALUES (4, 'Petition', 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'text', 'text', 'text', 'text', 'text', 'text', 'textarea', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'select', 'text', 'select', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'checkbox', 'header', 'header', 'header', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'Title', 'First Name', 'Last Name', 'Suffix', 'MI', 'Organization', 'Comments to display on website', 'Email', 'Phone', 'Call Phone', 'Phone Provider', 'Work Phone', 'Pager', 'Work Fax', 'Home Fax', 'Web Page', 'Street', 'Street 2', 'Street 3', 'City', 'State', 'Zip', 'Country', 'Title/Position', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Show my name and comments on this site', 'Personal Information', 'Contact Information', 'Other Information', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '1', 'Personal Information', 'Contact Information', 'Other Information', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'US', 0, 'WORLD', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00', '', 0, 0, 0, '', '', 3, 2, 0, 0, 0, 0, 0, 'custom20,First_Name,Last_Name,Company,occupation,custom21,Email,Phone,Web_Page,Street,Street_2,City,State,Zip,Country,custom22,Notes,custom19', 1)";
+	        $dbcon->Execute($addsql) or die('pettion setup faild ' . $addsql . $dbcon->ErrorMsg());
+		}
+  
 		$_POST['core_name'] = "Petition - ".$_POST['title'];
 		$udm = new UserDataInput( $dbcon, 7, true );
 		$udm->doPlugin( "QuickForm", "build_admin" );
