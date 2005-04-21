@@ -42,7 +42,10 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 		$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ], true );
 	    $udm->doPlugin( "QuickForm", "BuildAdmin" );
     	$new_modin = $udm->doPlugin( "AMPsystem", "copy_admin" );
-		$udmid = $new_modin;
+		if ($new_modin) {
+			$udmid = $new_modin;
+		} else {
+		die("copy failed");
 	}
 	$datestarted =DateConvertIn($datestarted);
 	$dateended =DateConvertIn($dateended);
