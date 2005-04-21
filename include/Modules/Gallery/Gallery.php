@@ -63,7 +63,7 @@ Class Gallery {
 			}
 			
 			$this->moveFirst=   $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=0";
-			if ($this->off <= $this->photo->RecordCount()) {
+			if ($this->off < $this->photo->RecordCount()) {
 				$this->moveNext =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($this->off+$this->limit);
 			}
 			$this->movePrev =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($this->off-$this->limit);
