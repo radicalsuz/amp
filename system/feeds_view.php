@@ -160,7 +160,7 @@ $i++;
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
 		<td><input type="checkbox" name="read[<?php echo $rs->Fields("id") ?>]" value="1" <?php if ($rs->Fields("read")) {echo "checked";} ?> ></td>
 		<td><?php echo $rs->Fields("id") ?></td>
-		<td><b><?php echo $rs->Fields("ftitle") ?>:</b> <?php echo $rs->Fields("title") ?></td>
+		<td><b><?php echo $rs->Fields("ftitle") ?>:</b> <?= utf8_encode( $rs->Fields("title") ) ?></td>
 		
 		<td><?php echo DoTimeStamp($rs->Fields("timestamp"),("n/j/y"))?></td>
 		<td><a href="<?php echo $rs->Fields("link") ?>" target="_blank">view</a></td>
