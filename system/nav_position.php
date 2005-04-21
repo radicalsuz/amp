@@ -140,7 +140,7 @@ include ("header.php") ; ?>
 
 	function RemoveItem(which) { //This is A Javascript Function
 		searchtable=document.getElementById('nav_table');
-		if (searchitems>1) {
+		if (searchitems>=1) {
 			for (n=which; n<searchitems; n++) {
 				MoveRow(n+1, n);
 			}
