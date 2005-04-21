@@ -10,6 +10,7 @@ Class Gallery {
 	var $dir = "thumb";
 	var $off =0;
 	var $limit ;
+	var $amount;
 	var $moveFirst;
 	var $moveNext;
 	var $movePrev;
