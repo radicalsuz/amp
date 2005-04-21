@@ -98,16 +98,16 @@ document.forms[0][i].checked=document.forms[0][1].checked;
 <p class="name">&nbsp;&nbsp;Display:&nbsp;&nbsp;<select name="repeat" onChange="MM_jumpMenu('parent',this,0)" class="name">
                 <option selected>Select Feed</option>
 				<?php while (!$f->EOF) { ?>
-                <option value="feeds_view.php?feed=<?php echo $f->Fields("id"); ?>"><?php echo $f->Fields("title"); ?></option>
+                <option value="feeds_view.php?feed=<?= $f->Fields("id") ?>"><?= $f->Fields("title") ?></option>
 				<?php $f->MoveNext(); }?>
 				<option value="feeds_view.php">All Feeds</option>      
               </select>&nbsp;&nbsp;&nbsp;<select name="repeat" onChange="MM_jumpMenu('parent',this,0)" class="name">
                 <option selected># to Display</option>
-                <option value="feeds_view.php?limit=10&<?php echo  $MM_keepURL; ?>">10</option>
-                <option value="feeds_view.php?limit=50&<?php echo  $MM_keepURL; ?>">50</option>
-                <option value="feeds_view.php?limit=100&<?php echo  $MM_keepURL; ?>">100</option>
-                <option value="feeds_view.php?limit=250&<?php echo  $MM_keepURL; ?>">250</option>
-                <option value="feeds_view.php?limit=-1&<?php echo  $MM_keepURL; ?>">All</option>
+                <option value="feeds_view.php?limit=10&<?= $MM_keepURL ?>">10</option>
+                <option value="feeds_view.php?limit=50&<?= $MM_keepURL ?>">50</option>
+                <option value="feeds_view.php?limit=100&<?= $MM_keepURL ?>">100</option>
+                <option value="feeds_view.php?limit=250&<?= $MM_keepURL ?>">250</option>
+                <option value="feeds_view.php?limit=-1&<?= $MM_keepURL ?>">All</option>
 			
               </select></p>
 <p class="name">
@@ -139,7 +139,7 @@ echo "<br>"; }
 $i = ($offset+1);
 ?>
 </p>
- <form  action="<?php echo $PHP_SELF ?>" method="POST">
+<form action="<?= $PHP_SELF ?>" method="POST">
 &nbsp;&nbsp;<input type="submit" name="act" value="Submit" class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Select All</strong> 
         <input type="checkbox"  value="select_all" onClick="selectall();" />
 <table align="center" cellpadding="1" cellspacing="1" width="95%">
@@ -157,13 +157,13 @@ $i++;
   $bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
         ?>
 
-	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
-		<td><input type="checkbox" name="read[<?php echo $rs->Fields("id") ?>]" value="1" <?php if ($rs->Fields("read")) {echo "checked";} ?> ></td>
-		<td><?php echo $rs->Fields("id") ?></td>
-		<td><b><?php echo $rs->Fields("ftitle") ?>:</b> <?= utf8_decode( $rs->Fields("title") ) ?></td>
+	<tr bgcolor="<?= $bgcolor ?>" class=name>
+		<td><input type="checkbox" name="read[<?= $rs->Fields("id") ?>]" value="1" <?= ($rs->Fields("read")) ? "checked" : '' ?> ></td>
+		<td><?= $rs->Fields("id") ?></td>
+		<td><b><?= $rs->Fields("ftitle") ?>:</b> <?= utf8_decode( $rs->Fields("title") ) ?></td>
 		
-		<td><?php echo DoTimeStamp($rs->Fields("timestamp"),("n/j/y"))?></td>
-		<td><a href="<?php echo $rs->Fields("link") ?>" target="_blank">view</a></td>
+		<td><?= $rs->Fields("timestamp") . DoTimeStamp($rs->Fields("timestamp"),("n/j/y"))?></td>
+		<td><a href="<?= $rs->Fields("link") ?>" target="_blank">view</a></td>
 	</tr>
 	
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
