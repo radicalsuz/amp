@@ -1,5 +1,25 @@
 <?php
 
+require_once( 'AMP/UserData/Plugin.inc.php' );
+
+class UserDataPlugin_CopyModuletext_AMPsystem extends UserDataPlugin {
+
+    var $name = "Copy a plugin."
+    var $available = false;
+
+    function UserDataPlugin_CopyModuletext_AMPsystem ( &$udm ) {
+        $this->init( $udm );
+    }
+
+    function execute ( $options = null ) {
+
+        // nasty hack, sigh.
+        udm_amp_copy_moduletext( $this->udm, $options );
+
+    }
+}
+
+
 function udm_amp_copy_moduletext ( $udm, $options = null ) {
 
 	$dbcon = $udm->dbcon;

@@ -1,5 +1,23 @@
 <?php
 
+require_once( 'AMP/UserData/Plugin.inc.php' );
+
+class UserDataPlugin_CopyPermissions_AMPsystem extends UserDataPlugin {
+
+    var $name = "Copy a plugin."
+    var $available = false;
+
+    function UserDataPlugin_CopyPermissions_AMPsystem ( &$udm ) {
+        $this->init( $udm );
+    }
+
+    function execute ( $options = null ) {
+
+        // nasty hack, sigh.
+        udm_amp_copy_permissions( $this->udm, $options );
+
+    }
+}
 function udm_amp_copy_permissions ( $udm, $options = null ) {
 
 	$dbcon = $udm->dbcon;
