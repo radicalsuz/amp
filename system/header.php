@@ -397,6 +397,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 
 
 </style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <?php include("Connections/ddnav.php");
     ?>
