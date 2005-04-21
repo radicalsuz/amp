@@ -44,7 +44,9 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 
 			$sql_field = $field;
 
-			if ( $field == 'id' ) continue;
+            // ugly vicious hack.
+			if ( $field == 'id' ) $sql_value = autoinc_check( userdata_fields, 50 );
+
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
             if ( strpos( $field, 'plugin_' ) === 0 ) continue;
 
