@@ -5,7 +5,9 @@ if ( !function_exists( 'evalnavhtml' ) ) {
     function evalnavhtml($string){
 
         global $base_path, $dbcon, $MM_type, $MM_parent, $MM_typename, $list, $id, $MM_issue, $userper, $MM_region, $navalign;
-
+		global $rNAV_HTML_1, $rNAV_HTML_2, $rNAV_HTML_3,$rNAV_HTML_4,$rNAV_HTML_5;
+    	global $lNAV_HTML_1, $lNAV_HTML_2, $lNAV_HTML_3,$lNAV_HTML_4,$lNAV_HTML_5;
+    
         $pos = strpos( $string, '<?php', $start );
         $start = 0;
 
