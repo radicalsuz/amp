@@ -13,10 +13,15 @@ $menu_header = '<!-- this prevents \'events fall through the menu\' bug in win/i
 
 
 function CSSMenu_showmenu($typeid, &$menuset){
-    $menu_entry="<li><a href=\"article.php?list=type&type=%s\">%s</a></li>\r\n";
-    $menu_folder="<li><a href=\"article.php?list=type&type=%s\" class=\"menufolder\">%s</a>\r\n<ul>\r\n     ";
+    $menu_entry="<li><a href=\"%s\">%s</a></li>\r\n";
+    $menu_folder="<li><a href=\"%s\" class=\"menufolder\">%s</a>\r\n<ul>\r\n     ";
     $menu_folder_end="</ul></li>\r\n";
     $output = "";
+    if (isset($menuset[$typeid]['link'])) {
+        $linktext=$menuset[$typeid]['link'];
+    } else {
+        $linktext = "article.php?list=type&type=".$typeid;
+    }
 
     $currentset = array();
     foreach ($menuset as $testtype=>$typeinfo) {
@@ -27,9 +32,9 @@ function CSSMenu_showmenu($typeid, &$menuset){
     $numtabs=count($currentset);
 
     if ($numtabs==0) {
-        $output .= sprintf($menu_entry, $typeid, $menuset[$typeid]['type']);
+        $output .= sprintf($menu_entry, $linktext, $menuset[$typeid]['type']);
     } else {
-        $output .= sprintf ($menu_folder, $typeid,  $menuset[$typeid]['type']);
+        $output .= sprintf ($menu_folder, $linktext,  $menuset[$typeid]['type']);
         foreach ($currentset as $currenttype) {
             $output.= CSSMenu_showmenu($currenttype, $menuset);
         }
