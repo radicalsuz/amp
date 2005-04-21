@@ -4,7 +4,7 @@ require_once( 'AMP/UserData/Plugin.inc.php' );
 
 class UserDataPlugin_CopyPermissions_AMPsystem extends UserDataPlugin {
 
-    var $name = "Copy a plugin."
+    var $name = "Copy a plugin.";
     var $available = false;
 
     function UserDataPlugin_CopyPermissions_AMPsystem ( &$udm ) {

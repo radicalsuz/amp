@@ -4,7 +4,7 @@ require_once( 'AMP/UserData/Plugin.inc.php' );
 
 class UserDataPlugin_CopyAdmin_AMPsystem extends UserDataPlugin {
 
-    var $name = "Copy a plugin."
+    var $name = "Copy a plugin.";
     var $available = false;
 
     function UserDataPlugin_CopyAdmin_AMPsystem ( &$udm ) {
@@ -14,7 +14,7 @@ class UserDataPlugin_CopyAdmin_AMPsystem extends UserDataPlugin {
     function execute ( $options = null ) {
 
         // nasty hack, sigh.
-        udm_amp_copy_admin( $this->udm, $options );
+        return udm_amp_copy_admin( $this->udm, $options );
 
     }
 }
@@ -30,16 +30,18 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 		$frmFieldValues = array_keys( $udm->_module_def );
 		foreach ( $frmFieldValues as $field ) {
 			if ( substr( $field, 0, 5 ) == "core_" ) $skipFields[] =  substr( $field, 5 );
+            if ( substr( $field, 0, 7 ) == "plugin_" ) continue;
 		}
 
 		foreach ( $frmFieldValues as $field ) {
 
+            if ( substr( $field, 0, 7 ) == "plugin_" ) continue;
 			if ( array_search( $field, $skipFields ) ) continue;
 
 			$sql_field = $field;
 			if ( $field == 'redirect' ) continue;
 			if ( $field == 'id' ) continue;
-			if ( $field=='core_name') {$new_name= $udm->form->getSubmitValue( $field );}
+			if ( $field=='core_name') {$new_name= $udm->form->getSubmitValue( $field ); continue; }
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
 
 			$sql_value=$dbcon->qstr( $udm->form->getSubmitValue( $field ) );
