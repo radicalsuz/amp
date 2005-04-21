@@ -30,7 +30,7 @@ Class Gallery {
 
 		// get the count 	
 			$sqlct  = "SELECT  COUNT(DISTINCT id)  from gallery where publish =1 and galleryid = ".$_GET["gal"];
-			$listct=$this->dbcon->CacheExecute("$sqlct")or DIE("could not get gallerycount".$this->dbcon->ErrorMsg());
+			$listct=$this->dbcon->CacheExecute($sqlct)or DIE("could not get gallerycount".$this->dbcon->ErrorMsg());
 			$this->amount = $listct->Fields[0];
 			if (!$this->limit) {$this->limit = $this->amount;}
 
