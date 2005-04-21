@@ -31,7 +31,7 @@ Class Gallery {
 		// get the count 	
 			$sqlct  = "SELECT  COUNT(DISTINCT id)  from gallery where publish =1 and galleryid = ".$_GET["gal"];
 			$listct=$this->dbcon->CacheExecute($sqlct)or DIE("could not get gallerycount".$this->dbcon->ErrorMsg());
-			$this->amount = $listct->Fields[0];
+			$this->amount = $listct->fields[0];
 			if (!$this->limit) {$this->limit = $this->amount;}
 
 		// set up offset varaibales
@@ -64,7 +64,9 @@ Class Gallery {
 			}
 			
 			$this->moveFirst=   $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=0";
+			if ($this->amount >= $this->off) {
 				$this->moveNext =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($this->off+$this->limit);
+			}
 			$this->movePrev =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($this->off-$this->limit);
 			$loffset = (floor($this->amount / $this->limit) * $this->limit);
 			$this->moveLast =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($loffset);	
