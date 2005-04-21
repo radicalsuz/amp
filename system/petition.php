@@ -38,9 +38,10 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 		}
   
 		$_POST['core_name'] = "Petition - ".$_POST['title'];
-		$udm = new UserDataInput( $dbcon, 7, true );
-		$udm->doPlugin( "QuickForm", "build_admin" );
-		if($new_modin=$udm->doPlugin( "AMP", "copy_admin" )) 
+		
+		$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ], true );
+	    $udm->doPlugin( "QuickForm", "BuildAdmin" );
+    	$new_modin = $udm->doPlugin( "AMPsystem", "copy_admin" );
 		$udmid = $new_modin;
 	}
 	$datestarted =DateConvertIn($datestarted);
