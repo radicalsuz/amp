@@ -60,7 +60,7 @@ else { $limit=30;}
 
 
 
-$rs  = $dbcon->Execute("select p.*, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id  $feedsql order by p.id desc Limit  $offset, $limit") or die($dbcon->ErrorMsg() );
+$rs  = $dbcon->Execute("select p.*, date_format( p.timestamp, \"%b %e, %Y\" ) as date, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id  $feedsql order by p.id desc Limit  $offset, $limit") or die($dbcon->ErrorMsg() );
 $sqlct = "select p.id from px_items p, px_feeds f where f.id = p.feed_id $feedsql order by p.id desc ";
 $f  = $dbcon->Execute( "select id, title from px_feeds order by title asc" ) or die(  $dbcon->ErrorMsg() );
 
@@ -162,7 +162,7 @@ $i++;
 		<td><?= $rs->Fields("id") ?></td>
 		<td><b><?= $rs->Fields("ftitle") ?>:</b> <?= utf8_decode( $rs->Fields("title") ) ?></td>
 		
-		<td><?= $rs->Fields("timestamp") . DoTimeStamp($rs->Fields("timestamp"),("n/j/y"))?></td>
+		<td><?= $rs->Fields("date") ?></td>
 		<td><a href="<?= $rs->Fields("link") ?>" target="_blank">view</a></td>
 	</tr>
 	
