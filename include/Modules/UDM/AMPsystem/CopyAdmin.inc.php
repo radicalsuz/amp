@@ -44,7 +44,7 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 			if ( $field=='core_name') {$new_name= $udm->form->getSubmitValue( $field ); continue; }
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
 
-			$sql_value=$dbcon->qstr( $udm->form->getSubmitValue( $field ) );
+			$sql_value=$dbcon->qstr( $udm->_module_def[$field] );
 
 			$elements[] = $sql_field; 
 			$values[] = $sql_value;
