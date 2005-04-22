@@ -44,7 +44,10 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
             if ( $field == 'name') continue;
 
             // ugly, vicious hack.
-			if ( $field == 'id' ) $sql_value = autoinc_check( userdata_fields, 50 );
+			if ( $field == 'id' ) {
+				$sql_value = autoinc_check( userdata_fields, 50 );
+				$new_modin = $sql_value;
+			}
             if ( $field == 'id' && !$sql_value ) continue;
 			if ( $field=='core_name') { $sql_value = $dbcon->qstr( $udm->form->getSubmitValue( $field ) ); }
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
@@ -67,7 +70,7 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 
 	if ( $rs ) {
 		$rs2=$dbcon->GetArray("SELECT LAST_INSERT_ID()");
-		$new_modin= join(",",$rs2[0]);
+		if (!$new_modin) $new_modin= join(",",$rs2[0]);
 		
 		$old_input_mod=$udm->form->getSubmitValue( 'core_modidinput' );
 		$old_response_mod=$udm->form->getSubmitValue( 'core_modidresponse' );
