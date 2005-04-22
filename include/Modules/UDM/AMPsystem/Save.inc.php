@@ -44,9 +44,7 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 
 			$sql_field = $field;
 
-            // ugly vicious hack.
-			if ( $field == 'id' ) $sql_value = autoinc_check( userdata_fields, 50 );
-
+			if ( $field == 'id' ) continue;
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
             if ( strpos( $field, 'plugin_' ) === 0 ) continue;
 
@@ -68,6 +66,9 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 		foreach ( $values_noescape as $value ) {
 			$values[] = $dbcon->qstr( $value );
 		}
+
+        $fields[] = 'id';
+        $values[] = autoinc_check( userdata_fields, 50 );
 
 		$sql .= join( ", ", $fields );
 		$sql .= ") VALUES ( ";
