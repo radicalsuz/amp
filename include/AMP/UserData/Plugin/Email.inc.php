@@ -34,11 +34,6 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
     function execute ( $options = null ) {
 
-        if (!$udm->_module_def['useemail']) {
-            trigger_error( "Refusing to send email; email disabled in form configuration.", E_USER_WARNING );
-            return false;
-        }
-
         if (!isset($options)) {
             $options = $this->options;
         }

@@ -61,7 +61,12 @@ class UserDataInput extends UserData {
         if ( !$this->form ) return false;
 
         $this->modTemplateID = $this->_module_def['modidresponse'];
-        return $this->doAction( 'Save', $options );
+        $save_results = $this->doAction( 'Save', $options );
+
+        $this->doAction( 'EmailUser' );
+        $this->doAction( 'EmailAdmin' );
+
+        return $save_results;
 
     }
 
@@ -90,7 +95,6 @@ class UserDataInput extends UserData {
         $r = $this->registerPlugin( 'AMP', 'DuplicateCheck' ) and $r;
         $r = $this->registerPlugin( 'AMP', 'Authenticate'   ) and $r;
         $r = $this->registerPlugin( 'AMP', 'EmailAdmin'     ) and $r;
-        $r = $this->registerPlugin( 'AMP', 'EmailUser'     ) and $r;
 
     }
 }
