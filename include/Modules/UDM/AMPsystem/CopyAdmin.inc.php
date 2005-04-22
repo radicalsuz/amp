@@ -45,7 +45,7 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 
             // ugly, vicious hack.
 			if ( $field == 'id' ) $sql_value = autoinc_check( userdata_fields, 50 );
-            if ( $field == 'id') print "trying to insert form with id $sql_value";
+            if ( $field == 'id' ) print "trying to insert form with id $sql_value";
 			if ( $field=='core_name') { $sql_value = $dbcon->qstr( $udm->form->getSubmitValue( $field ) ); }
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
 
