@@ -58,7 +58,7 @@ if (file_exists($customHandler)) {
         $new_uri = $R->Fields("new");
         $num     = ($R->Fields("conditional")) ? $R->Fields("num") : null;
 
-        $redirected = error_redirect($R->Fields("old"),$R->Fields("new"),$R->Fields("num"));
+        $redirected = error_redirect($old_uri, $new_uri, $num);
 
         $R->MoveNext();
     }
@@ -110,7 +110,7 @@ function error_redirect( $requested_uri, $target_uri, $num = null ) {
         if (substr($target, 0, 4) == "http") {
             $redirect_uri = $target_uri . $fetch_val;
         } else {
-            $redirect_uri = $Web_url . $target . $fetch_val;
+            $redirect_uri = $Web_url . $target_uri . $fetch_val;
         }
 
         // Everything worked out OK. Redirect and report success.
