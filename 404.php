@@ -107,7 +107,7 @@ function error_redirect( $requested_uri, $target_uri, $num = null ) {
     if ($fetch_str) {
 
         // Add the appropriate junk if $target isn't a real URI.
-        if (substr($target, 0, 4) == "http") {
+        if (substr($target_uri, 0, 4) == "http") {
             $redirect_uri = $target_uri . $fetch_val;
         } else {
             $redirect_uri = $Web_url . $target_uri . $fetch_val;
