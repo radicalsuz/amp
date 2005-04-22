@@ -30,6 +30,8 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
 
         $message = '';
 
+        $this->options['mailto'] = $udm->_module_def['mailto'];
+
         // Output the form data (default format is text, defined above)
         $message .= $udm->output( $options['format'] );
 

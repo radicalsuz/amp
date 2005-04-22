@@ -63,8 +63,11 @@ class UserDataInput extends UserData {
         $this->modTemplateID = $this->_module_def['modidresponse'];
         $save_results = $this->doAction( 'Save', $options );
 
-        $this->doAction( 'EmailUser' );
-        $this->doAction( 'EmailAdmin' );
+        if ($this->_module_def['useemail']) {
+            print "Emailing user and admin if i can...";
+            $this->doAction( 'EmailUser' );
+            $this->doAction( 'EmailAdmin' );
+        }
 
         return $save_results;
 
