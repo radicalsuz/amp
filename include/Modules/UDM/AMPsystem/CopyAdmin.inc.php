@@ -39,6 +39,7 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 			if ( array_search( $field, $skipFields ) ) continue;
 
 			$sql_field = $field;
+            $sql_value = null;
 			if ( $field == 'redirect' ) continue;
             if ( $field == 'name') continue;
 
