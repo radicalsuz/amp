@@ -155,6 +155,8 @@ if ( !function_exists( 'DateConvertIn' ) ) {
 
     function DateConvertIn($date) {
 
+    	$date = preg_replace("/\//", "-", $date);
+
         if (ereg ("([0-9]{1,2})-([0-9]{1,2})-([0-9]{4})", $date, $regs) || !$date) {
             $date = "$regs[3]-$regs[1]-$regs[2]";
         } else {
@@ -168,6 +170,7 @@ if ( !function_exists( 'DateConvertIn' ) ) {
 if ( !function_exists( 'DateConvertOut' ) ) {
 
     function DateConvertOut($date) {
+    	$date = preg_replace("/\//", "-", $date);
         if (ereg ("([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})", $date, $regs)) {
             echo "$regs[2]-$regs[3]-$regs[1]";
         }
