@@ -44,6 +44,7 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 
             // ugly, vicious hack.
 			if ( $field == 'id' ) $sql_value = autoinc_check( userdata_fields, 50 );
+            if ($field=='id') print "trying to insert form with id $id";
 			if ( $field=='core_name') { $sql_value = $dbcon->qstr( $udm->form->getSubmitValue( $field ) ); }
 			if ( substr( $field, 0, 5 ) == "core_" ) $sql_field = substr( $field, 5 );
 
@@ -59,10 +60,9 @@ function udm_amp_copy_admin ( $udm, $options = null ) {
 		$sql .= join( ", ", $values );
 		$sql .= " )";
 
-
+print "$sql";
 	
-
-	$rs = $dbcon->Execute( $sql ) or
+    	$rs = $dbcon->Execute( $sql ) or
 		die( "There was an error completing the request: " . $dbcon->ErrorMsg() );
 
 
