@@ -34,6 +34,7 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 		$sql = "UPDATE userdata_fields SET ";
 
 		$frmFieldValues = array_keys( $udm->_module_def );
+        $skipFields = array();
 		foreach ( $frmFieldValues as $field ) {
 			if ( substr( $field, 0, 5 ) == "core_" ) $skipFields[] =  substr( $field, 5 );
 		}
