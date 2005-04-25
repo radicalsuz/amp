@@ -98,6 +98,10 @@ $MM_secure = $gettype->Fields("secure");
 // work up hierarchy to ensure page is not protected
 $sparent= $MM_type;
 if ($MX_top != NULL) {$MX_top ='1';}
+if (!isset($obj)) { 
+    require_once('AMP/Article/menu.class.php');
+    $obj = & new Menu; 
+}
 while (!$MM_secure && ($sparent != $MX_top)) {
 	$sparent=$obj->get_parent($sparent);
 	$getsec=$dbcon->CacheExecute("SELECT secure FROM articletype WHERE id = $sparent") 

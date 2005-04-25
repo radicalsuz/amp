@@ -52,7 +52,7 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
                 $this->sortname=ucwords($_REQUEST['sortby']);
                 $this->select=$sortalias['f_sqlname'].' AS `'.$sortalias['f_alias'].'`';
                 $this->orderby=$sortalias['f_orderby'];
-                print $this->select;
+                #print $this->select;
             } elseif (isset($this->udm->fields[$_REQUEST['sortby']])) {
                 $this->sortname=ucwords($_REQUEST['sortby']);
                 $this->select=$_REQUEST['sortby'];

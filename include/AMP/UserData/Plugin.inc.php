@@ -245,7 +245,7 @@ class UserDataPlugin {
         
         //Filter returned data for items with the appropriate plugin field
         //prefix
-        if ($this->_field_prefix) {
+        if ( $this->_field_prefix ) {
             $fieldkeys=array();
 
             $prefix=$this->_field_prefix.'_';

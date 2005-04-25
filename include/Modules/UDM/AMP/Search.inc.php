@@ -112,7 +112,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
     function return_items($fieldset, $criteria, $orderby=null, $return_qty="*", $offset=0) {
 		$sql="SELECT $fieldset from userdata where ".join(" AND ", $criteria);
 		$sql.=(isset($orderby))?" ORDER BY ".$orderby:"";
-        if ($pager=&$this->udm->plugins['Pager']['Output']) {
+        if ($pager=&$this->udm->getPlugin('Output','Pager')) {
             $sql.=($pager->return_qty!="*")?" LIMIT ".strval($pager->offset). ", ".strval($pager->return_qty):"";
         } else {
             $sql.=($return_qty!="*")?" LIMIT ".strval($offset). ", ".strval($return_qty):"";

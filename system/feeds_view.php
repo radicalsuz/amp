@@ -33,7 +33,7 @@ function feed_publish($id,$type,$class) {
 		$shortdesc = addslashes($d->Fields("content"));
 		$linkover = 1 ;
 	}
-	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".addslashes($d->Fields("title"))."','".$class."','".$type."','".$shortdesc."','".$text."','".DoTimeStamp($d->Fields("timestamp"),("Y-n-j"))."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
+	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".addslashes($d->Fields("title"))."','".$class."','".$type."','".$shortdesc."','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
 	//die($q);
 	$dbcon->execute($q) or die($dbcon->errorMsg());
 	feed_read($id);
@@ -60,7 +60,7 @@ else { $limit=30;}
 
 
 
-$rs  = $dbcon->Execute("select p.*, date_format( p.timestamp, \"%b %e, %Y\" ) as date, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id  $feedsql order by p.id desc Limit  $offset, $limit") or die($dbcon->ErrorMsg() );
+$rs  = $dbcon->Execute("select p.*, p.dcdate as date, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id  $feedsql order by p.id desc Limit  $offset, $limit") or die($dbcon->ErrorMsg() );
 $sqlct = "select p.id from px_items p, px_feeds f where f.id = p.feed_id $feedsql order by p.id desc ";
 $f  = $dbcon->Execute( "select id, title from px_feeds order by title asc" ) or die(  $dbcon->ErrorMsg() );
 

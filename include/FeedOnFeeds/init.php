@@ -564,9 +564,17 @@ function fof_update_feed($url)
 			$content = mysql_escape_string($item['atom_content']);
 		}
 
-		$dcdate = mysql_escape_string($item['dc']['date']);
-		$dccreator = mysql_escape_string($item['dc']['creator']);
-		$dcsubject = mysql_escape_string($item['dc']['subject']);
+        if (isset($item['dc'])) {
+            $dcdate = strtotime(mysql_escape_string($item['dc']['date']));
+            $dcdate=date("Y-m-d", $dcdate);
+            $dccreator = mysql_escape_string($item['dc']['creator']);
+            $dcsubject = mysql_escape_string($item['dc']['subject']);
+        } else {
+            $dcdate=strtotime(mysql_escape_string($item['pubdate']));
+            $dcdate=date("Y-m-d", $dcdate);
+            $dccreator = mysql_escape_string($item['author']);
+            $dcsubject = mysql_escape_string($item['category']);
+        }
 
 		if(!$link)
 		{
