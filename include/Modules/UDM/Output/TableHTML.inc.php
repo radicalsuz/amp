@@ -65,8 +65,6 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         }
     }
 
-    function _register_fields_dynamic(){
-    }
 
     function column_headers() {
         foreach ($this->display_fieldset as $key) {
