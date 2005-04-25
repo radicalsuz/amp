@@ -20,6 +20,8 @@ function feed_publish($id,$type,$class) {
 	$d=$dbcon->execute("select p.*, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id and  p.id = $id ") or die($dbcon->errorMsg());
 	//pasre out date
 	$text = utf8_decode( preg_replace( "/\\n/", "<br/>", $d->Fields("content") ) );
+	$text =  preg_replace( "/\\n\\n/", "<br/><br/>", $text ) );
+
 	if (strlen($d->Fields("content")) > 750 ) {
 		$text = addslashes($text);
 		$aspace=" ";
@@ -34,7 +36,7 @@ function feed_publish($id,$type,$class) {
 		$linkover = 1 ;
 	}
 	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".addslashes($d->Fields("title"))."','".$class."','".$type."','".$shortdesc."','".$text."','".DoTimeStamp($d->Fields("timestamp"),("Y-n-j"))."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
-	//die($q);
+	die($q);
 	$dbcon->execute($q) or die($dbcon->errorMsg());
 	feed_read($id);
 }
