@@ -170,7 +170,8 @@ $i++;
 	
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
 		<td></td>
-		<td colspan="4" charset="utf-8"><?= utf8_decode( preg_replace( "/\\n/", "<br/>", $rs->Fields("content") ) ) ?></td>
+		<td colspan="4" charset="utf-8"><?php $text = utf8_decode( preg_replace( "/\\n/", "<br/>", $rs->Fields("content") ) ); 	echo preg_replace( "/\\n\\n/", "<br/><br/>", $text ) );
+ ?></td>
 	</tr>
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
 	  <td colspan = '5'>
