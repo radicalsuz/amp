@@ -21,7 +21,7 @@ function feed_publish($id,$type,$class) {
 	//pasre out date
 	$text = utf8_decode( preg_replace( "/\\n/", "<br/>", $d->Fields("content") ) );
 	if (strlen($d->Fields("content")) > 750 ) {
-		$text = addslashes($d->Fields("content"));
+		$text = addslashes($text);
 		$aspace=" ";
 		$ttext = addslashes($d->Fields("content"));
 		$ttext = substr(trim($ttext),0,750); 
@@ -29,7 +29,7 @@ function feed_publish($id,$type,$class) {
 		$ttext = $ttext.'...';
 		$shortdesc = $ttext;
 	} else {
-		$text = addslashes($d->Fields("content"));
+		$text = addslashes($text);
 		$shortdesc = addslashes($d->Fields("content"));
 		$linkover = 1 ;
 	}
