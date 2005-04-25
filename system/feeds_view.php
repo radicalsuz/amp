@@ -34,7 +34,7 @@ function feed_publish($id,$type,$class) {
 		$linkover = 1 ;
 	}
 	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".addslashes($d->Fields("title"))."','".$class."','".$type."','".$shortdesc."','".$text."','".DoTimeStamp($d->Fields("timestamp"),("Y-n-j"))."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
-	die($q);
+	//die($q);
 	$dbcon->execute($q) or die($dbcon->errorMsg());
 	feed_read($id);
 }
