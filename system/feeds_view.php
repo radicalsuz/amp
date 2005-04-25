@@ -19,7 +19,7 @@ function feed_publish($id,$type,$class) {
 	global $dbcon, $ID;
 	$d=$dbcon->execute("select p.*, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id and  p.id = $id ") or die($dbcon->errorMsg());
 	//pasre out date
-	
+	$text = utf8_decode( preg_replace( "/\\n/", "<br/>", $d->Fields("content") ) )
 	if (strlen($d->Fields("content")) > 750 ) {
 		$text = addslashes($d->Fields("content"));
 		$aspace=" ";
