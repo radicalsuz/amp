@@ -20,7 +20,7 @@ function feed_publish($id,$type,$class) {
 	$d=$dbcon->execute("select p.*, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id and  p.id = $id ") or die($dbcon->errorMsg());
 	//pasre out date
 	$text = utf8_decode( preg_replace( "/\\n/", "<br/>", $d->Fields("content") ) );
-	$text =  preg_replace( "/\\n\\n/", "<br/><br/>", $text ) );
+	$text =  preg_replace( "/\\n\\n/", "<br/><br/>", $text ) ;
 
 	if (strlen($d->Fields("content")) > 750 ) {
 		$text = addslashes($text);
@@ -170,7 +170,7 @@ $i++;
 	
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
 		<td></td>
-		<td colspan="4" charset="utf-8"><?php $text = utf8_decode( preg_replace( "/\\n/", "<br/>", $rs->Fields("content") ) ); 	echo preg_replace( "/\\n\\n/", "<br/><br/>", $text ) );
+		<td colspan="4" charset="utf-8"><?php $text = utf8_decode( preg_replace( "/\\n/", "<br/>", $rs->Fields("content") ) ); 	echo preg_replace( "/\\n\\n/", "<br/><br/>", $text );
  ?></td>
 	</tr>
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
