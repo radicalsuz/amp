@@ -281,11 +281,7 @@ function groups_state_city($gsql,$gsqo=NULL)   {
 
 function groups_state($gsql,$gsqo=NULL)   {
 	global $nonstateregion, $groupslayout, $dbcon;
-	 if ($groups->Fields("Country") != $currentCountry) {
-         echo group_cap_title(get_country_name($groups->Fields("Country")));
-        }	
-
-	if ($nonstateregion) { 
+	 	if ($nonstateregion) { 
 		$gsqlo =" and u.Country = 'USA' ORDER BY u.Country desc, r.title asc,  u.Company asc ";
 	} else {
 		$gsqlo ="and u.Country = 'USA' ORDER BY u.Country desc, u.State asc,  u.Company asc ";
@@ -295,7 +291,12 @@ function groups_state($gsql,$gsqo=NULL)   {
 	$currentRegion = '';
 	$currentState = '';
 	$currentCity = '';
-	while (!$groups->EOF) { 
+	if ($groups->Fields("Country") != $currentCountry) {
+         echo group_cap_title(get_country_name($groups->Fields("Country")));
+        }	
+
+
+    while (!$groups->EOF) { 
 		if (!$nonstateregion) {   
 			$Areaname = get_state_name($groups->Fields("State"));
 		} else { 
