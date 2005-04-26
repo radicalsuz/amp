@@ -49,7 +49,7 @@ $MM_PASSWORD = AMP_DB_PASS;
 $MM_DATABASE = AMP_DB_NAME;
 
 if (!isset($sysversion)) {
-    $sysversion = '3.3';
+    $sysversion = '3.4-dev';
 }
 
 ?>
