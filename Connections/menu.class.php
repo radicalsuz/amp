@@ -232,9 +232,9 @@ function select_type_tree($id = 0,$y=0,$selcode)
 	function query($query)
 	{
 	// connect
-	$connection = mysql_connect($this->hostname, $this->user, $this->password) or die ("Cannot connect to database");
+	$connection = mysql_connect(AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS) or die ("Cannot connect to database");
 	// run query
-	$ret = mysql_db_query($this->db, $query, $connection) or die ("Error in query: $query");
+	$ret = mysql_db_query(AMP_DB_NAME, $query, $connection) or die ("Error in query: $query");
 	// return result identifier
 	return $ret;
 	}
