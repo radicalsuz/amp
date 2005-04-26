@@ -1,0 +1,12 @@
+amp (3.4.4) urgency=medium
+
+    * Fix for 404 redirects (blaine).
+    * Fixes to RSS aggregator, including encoding and date parsing.
+    * New article section nav added (david).
+    * New-age AMPCalendar introduction (austin).
+    * International Group display fixes (blaine).
+    * Paged output for UserData information (austin).
+    * UDM Email Plugin fixes (blaine).
+    * Default database connection fixes (blaine).
+
+-- Blaine Cook <blaine@radicaldesigns.org>  Tue, 26 Apr 2005 00:50:45 -0700
