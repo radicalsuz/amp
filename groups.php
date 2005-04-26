@@ -320,17 +320,20 @@ elseif ($gdisplay == 4) {
 	groups_alphalist($gsql,$gsqlo);
 }
 elseif ($gdisplay == 5) {
-	groups_state_city($gsql,$gsqo);
-	groups_intl($gsql,$gsqo);
-
+    if ($_GET['area'] != 53) {
+	    groups_state_city($gsql,$gsqo);
+    }
+    groups_intl($gsql,$gsqo);
 }
 elseif ($gdisplay == 6) {
 	groups_custom($gsql,$gsqo,$modinin);
 }
 elseif ($gdisplay == 7) {
-	groups_state($gsql,$gsqo);
 	groups_intl($gsql,$gsqo);
 
+    if ($_GET['area'] != 53) {
+	    groups_state($gsql,$gsqo);
+    }
 }
 
 else {
