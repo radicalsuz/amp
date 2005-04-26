@@ -1,7 +1,7 @@
 <?php
 
 require_once('AMP/UserData/Plugin.inc.php');
-require_once('AMP/Calendar.inc.php');
+require_once('Modules/Calendar/Calendar.inc.php');
 
 class UserDataPlugin_Read_AMPCalendar extends UserDataPlugin {
 

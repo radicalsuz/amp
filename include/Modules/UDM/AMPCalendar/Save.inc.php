@@ -1,6 +1,6 @@
 <?php
 
-require_once ('AMP/Calendar.inc.php');
+require_once ('Modules/Calendar/Calendar.inc.php');
 require_once ('AMP/UserData/Plugin/Save.inc.php');
 
 class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
