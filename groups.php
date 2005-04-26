@@ -115,10 +115,10 @@ function state_convert($in) {
 //Construct SQL
 
 if ($_GET["area"]) {
-	if (!$nonstateregion && $_GET['area'] == 53) { 
-		$area_sql = " and u.State = '".state_convert($_GET["area"])."'";
-	} elseif ($_GET['area'] == 53) {
-        $area_sql = " and u.Country != 'USA' ";
+	if (!$nonstateregion) { 
+		$area_sql = " and ( u.State = '".state_convert($_GET["area"])."' or u.Country != 'USA') ";
+//	} elseif ($_GET['area'] == '53') {
+//        $area_sql = " and u.Country != 'USA' ";
     } else {
 		$area_sql = " and r.id = '".$_GET["area"]."'";
 	}
@@ -208,8 +208,8 @@ function groups_alpha($gsql,$gsqo=NULL)  {
 #########DISPLAY FOR ALPHA  ##########################
 function groups_alphalist($gsql,$gsqlo){
 	global $nonstateregion, $groupslayout, $dbcon;
-	$groups=$dbcon->CacheExecute($gsql."  $gsqlo ") or DIE($dbcon->ErrorMsg());  
-	if (!$groups->RecordCount() ){ echo groups_error(); }
+	$groups=$dbcon->CacheExecute("$gsql $gsqlo ") or DIE($dbcon->ErrorMsg());  
+	if ( !$groups->RecordCount() ){ echo groups_error(); }
 	while (!$groups->EOF) { 
 		include ("$groupslayout");
 		$groups->MoveNext();
@@ -327,7 +327,7 @@ elseif ($gdisplay == 6) {
 	groups_custom($gsql,$gsqo,$modinin);
 }
 elseif ($gdisplay == 7) {
-	groups_state($gsql,$gsqo);
+//	groups_state($gsql,$gsqo);
 	groups_intl($gsql,$gsqo);
 
 }
