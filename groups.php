@@ -115,9 +115,11 @@ function state_convert($in) {
 //Construct SQL
 
 if ($_GET["area"]) {
-	if (!$nonstateregion) { 
+	if (!$nonstateregion && $_GET['area'] == 53) { 
 		$area_sql = " and u.State = '".state_convert($_GET["area"])."'";
-	} else {
+	} elseif ($_GET['area'] == 53) {
+        $area_sql = " and u.Country != 'USA' ";
+    } else {
 		$area_sql = " and r.id = '".$_GET["area"]."'";
 	}
 }
