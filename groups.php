@@ -1,4 +1,5 @@
 <?php 
+
 /*********************
 05-06-2003  v3.01
 Module:  Groups
@@ -115,10 +116,10 @@ function state_convert($in) {
 //Construct SQL
 
 if ($_GET["area"]) {
-	if (!$nonstateregion) { 
-		$area_sql = " and ( u.State = '".state_convert($_GET["area"])."' or u.Country != 'USA') ";
-//	} elseif ($_GET['area'] == '53') {
-//        $area_sql = " and u.Country != 'USA' ";
+    if ($_GET['area'] == '53') {
+        $area_sql = " and u.Country != 'USA' ";
+    } elseif (!$nonstateregion) { 
+		$area_sql = " and u.State = '".state_convert($_GET["area"])."' ";
     } else {
 		$area_sql = " and r.id = '".$_GET["area"]."'";
 	}
@@ -327,7 +328,7 @@ elseif ($gdisplay == 6) {
 	groups_custom($gsql,$gsqo,$modinin);
 }
 elseif ($gdisplay == 7) {
-//	groups_state($gsql,$gsqo);
+	groups_state($gsql,$gsqo);
 	groups_intl($gsql,$gsqo);
 
 }

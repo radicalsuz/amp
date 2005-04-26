@@ -1,3 +1,10 @@
+amp (3.4.4-1) urgency=medium
+
+    * Fix groups display (blaine).
+
+-- Blaine Cook <blaine@radicaldesigns.org>  Tue, 26 Apr 2005 11:37:41 -0700
+
+
 amp (3.4.4) urgency=medium
 
     * Fix for 404 redirects (blaine).
