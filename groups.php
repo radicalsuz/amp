@@ -304,7 +304,9 @@ function groups_state($gsql,$gsqo=NULL)   {
 		}
 		$currentArea = trim($Areaname); 
 		include ($groupslayout);
-		$groups->MoveNext(); 
+    echo 'rabbit';
+	
+	$groups->MoveNext(); 
 	}
 }
 
