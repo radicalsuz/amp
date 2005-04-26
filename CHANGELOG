@@ -1,3 +1,10 @@
+amp (3.4.4-2) urgency=low
+
+    * Rearrange groups display to place non-US locations at the top of the
+      page, as per Code Pink's request (blaine).
+
+-- Blaine Cook <blaine@radicaldesigns.org>  Tue, 26 Apr 2005 11:50:34 -0700
+
 amp (3.4.4-1) urgency=medium
 
     * Fix groups display (blaine).
