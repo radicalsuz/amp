@@ -253,6 +253,7 @@ function groups_state_city($gsql,$gsqo=NULL)   {
 	$groups=$dbcon->CacheExecute($gsql."   $gsqlo") or DIE("Error in function groups_state_city".$gsql.$dbcon->ErrorMsg());
     if ($groups->Fields("Country") != $currentCountry) {
          echo group_cap_title(get_country_name($groups->Fields("Country")));
+        echo 'rabbit';
         }	
     if (!$groups->RecordCount() ){ echo groups_error($gsql.$gsqlo); }
 	$currentRegion = '';
