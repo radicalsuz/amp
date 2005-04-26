@@ -64,7 +64,6 @@ class UserDataInput extends UserData {
         $save_results = $this->doAction( 'Save', $options );
 
         if ($this->_module_def['useemail']) {
-            print "Emailing user and admin if i can...";
             $this->doAction( 'EmailUser' );
             $this->doAction( 'EmailAdmin' );
         }

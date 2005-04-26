@@ -35,7 +35,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
     function execute ( $options = null ) {
 
         if (!isset($options)) {
-            $options = $this->options;
+            $options =& $this->options;
         }
 
         // Allow for pre-processing of message & options. Return anything but
@@ -44,8 +44,6 @@ class UserDataPlugin_Email extends UserDataPlugin {
             $rt = $this->preProcess();
             if ($rt !== true) return $rt;
         }
-
-        if (!isset( $options['mailto'] )) return false;
 
         // Header text.
         if (isset($options['intro_text'])) {
@@ -76,6 +74,8 @@ class UserDataPlugin_Email extends UserDataPlugin {
             $rt = $this->postProcess();
             if ($rt !== true) return $rt;
         }
+
+        if (!isset( $options['mailto'] )) return false;
 
         // Send the mail.
         return mail( $options['mailto'], $options['subject'], $this->message, $this->header );
