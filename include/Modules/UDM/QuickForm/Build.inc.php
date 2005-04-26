@@ -52,6 +52,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
         $udm->_module_def[ 'field_order' ] = join(",", array("publish", $udm->_module_def[ 'field_order']));
 	}
 
+    $form->registerElementType('multiselect','HTML/QuickForm/select.php','HTML_QuickForm_select');
 	
 	
 	if ( isset( $udm->_module_def[ 'field_order' ] ) ) {
@@ -161,6 +162,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     }
 
     // Add a default blank value to the select array.
+    if ( $type == 'multiselect' && is_array( $defaults ) ) $defaults = array('' => 'Select all that apply') + $defaults;
     if ( $type == 'select' && is_array( $defaults ) ) $defaults = array('' => 'Select one') + $defaults;
     if ( $type == 'header' && (strlen($defaults) > 0) ) $label = $defaults;
     

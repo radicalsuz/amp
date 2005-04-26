@@ -298,6 +298,9 @@ class UserDataPlugin {
                     $tempValue=is_array($value)?mktime(0,0,0,$value['M'],$value['d'],$value['Y']):null;
                     if (isset($tempValue)) $returnSet[$keyname] = date("Y-m-d",$tempValue);
                     break;
+                case "multiselect":
+                    $returnSet[$keyname]=is_array($value)?join (", ",$value):null;
+                    break;
             }
         }
         if (count($returnSet)>0) {

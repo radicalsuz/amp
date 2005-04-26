@@ -256,6 +256,7 @@ class UserData {
 
             if ( $this->useDefaults ) {
                 $valueKey = 'values';
+                if ($fDef['type']=='multiselect') continue;
             } else {
                 $valueKey = 'value';
             }

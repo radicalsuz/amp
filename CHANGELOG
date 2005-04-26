@@ -4,6 +4,12 @@ amp (3.4.5) urgency=low
 
 -- Blaine Cook <blaine@radicaldesigns.org>  Tue, 26 Apr 2005 11:50:34 -0700
 
+amp (3.4.5) urgency=medium
+    * Addition of multiselect type to form generator (austin)
+    * Support for RSS 2.0 spec in FeedsOnFeeds/init.php (austin)
+
+-- Austin Putman <austin@radicaldesigns.org>  Tue Apr 26 14:24:50 PDT 2005
+
 amp (3.4.4-2) urgency=low
 
     * Rearrange groups display to place non-US locations at the top of the
@@ -30,3 +36,4 @@ amp (3.4.4) urgency=medium
     * Default database connection fixes (blaine).
 
 -- Blaine Cook <blaine@radicaldesigns.org>  Tue, 26 Apr 2005 00:50:45 -0700
+

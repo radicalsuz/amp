@@ -341,6 +341,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
                                "Unnamed Field <span class=\"fieldname\">(<em>$fn</em>)</span>";
 
         // Do this in the absence of array_combine.
+        $this->form->registerElementType('multiselect','HTML/QuickForm/select.php','HTML_QuickForm_select');
         $available_types = $this->form->getRegisteredTypes();
         foreach ( $available_types as $ftype ) {
             $types[ $ftype ] = $ftype;
@@ -597,6 +598,7 @@ function udm_QuickForm_build_admin_addElement( &$form, $name, $field_def ) {
     foreach ( array_values( $form->getRegisteredTypes() ) as $ftype ) {
         $types[ $ftype ] = $ftype;
     }
+    $types[ 'HTML_QuickForm_select' ] = 'HTML_QuickForm_select';
 
     if ( substr( $name, 0, 6 ) == "custom" ) {
         $groupName = "custom";
