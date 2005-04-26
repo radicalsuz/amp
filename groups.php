@@ -251,7 +251,10 @@ function groups_state_city($gsql,$gsqo=NULL)   {
 		$gsqlo =" and u.Country = 'USA' ORDER BY u.Country desc, u.State asc, u.City asc, u.Company asc ";
 	}
 	$groups=$dbcon->CacheExecute($gsql."   $gsqlo") or DIE("Error in function groups_state_city".$gsql.$dbcon->ErrorMsg());
-	if (!$groups->RecordCount() ){ echo groups_error($gsql.$gsqlo); }
+    if ($groups->Fields("Country") != $currentCountry) {
+         echo group_cap_title(get_country_name($groups->Fields("Country")));
+        }	
+    if (!$groups->RecordCount() ){ echo groups_error($gsql.$gsqlo); }
 	$currentRegion = '';
 	$currentState = '';
 	$currentCity = '';
@@ -320,10 +323,10 @@ elseif ($gdisplay == 4) {
 	groups_alphalist($gsql,$gsqlo);
 }
 elseif ($gdisplay == 5) {
+    groups_intl($gsql,$gsqo);
     if ($_GET['area'] != 53) {
 	    groups_state_city($gsql,$gsqo);
     }
-    groups_intl($gsql,$gsqo);
 }
 elseif ($gdisplay == 6) {
 	groups_custom($gsql,$gsqo,$modinin);
