@@ -11,7 +11,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
         'reg_modin' => array(
             'description'=>'Registration Form',
             'name'=>'Registration',
-            'values'=>'Lookup(userdata, name, id)',
+            'values'=>'Lookup(userdata_fields, name, id)',
             'default'=>null,
             'type'=>'select',
             'available'=>true),
@@ -56,12 +56,24 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
             $this->udm->_module_def[ 'field_order' ] = str_replace($prefix.'org,', ($prefix.'org,'.$cal_fieldorder), $this->udm->_module_def[ 'field_order']);
         }
         if ($options['reg_modin']) {
-            $this->fields['rsvp']=array(
-                'type'=>'checkbox', 
-                'label'=>'Please setup registration/RSVPs for this event', 
-                'required'=>false, 
-                'public'=>true, 
-                'enabled'=>true);
+            if ($this->udm->admin) {
+                $this->fields['reg_modin'] = array (
+                    'label' => 'Registration',
+                    'public' =>false,
+                    'type' => 'select',
+                    'required' => false,
+                    'values'=>'Lookup(userdata_fields, name, id)',
+                    'enabled' => true,
+                    'size' => null,
+                    );
+            } else {
+                $this->fields['rsvp']=array(
+                    'type'=>'checkbox', 
+                    'label'=>'Please setup registration/RSVPs for this event', 
+                    'required'=>false, 
+                    'public'=>true, 
+                    'enabled'=>true);
+            }
         }
 
     }
