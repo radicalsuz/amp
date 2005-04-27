@@ -45,10 +45,10 @@ function list_header_article($type,$header_url=NULL){
 function list_header_intro($list_name=NULL,$description=NULL,$date=NULL) {
 	echo "<p class=title>".$list_name."</p>" ;
 	if ($_GET["nointro"] == NULL) {
-		if ($description != NULL) { 
+		if ($description != NULL && $description) { 
 			echo "<p class=text>".converttext($description).'</p>'; 
 		}
-		if  ($date != "00-00-0000") { 
+		if  ($date != "00-00-0000" && isset($date)) { 
 			echo "<p class=text>".DoDate( $date, 'F j, Y')."<br>".'</p>'; 
 		}
 	}
@@ -77,7 +77,7 @@ $usevar='usetype';
 $tvar = "type";
 
 if ($_GET["list"] == "classt" or $_GET["list"] == "class") { 	
-	$section=$dbcon->CacheExecute("SELECT *  FROM class  WHERE id = $MM_class") or DIE($dbcon->ErrorMsg());  
+	$section=$dbcon->CacheExecute("SELECT *, 1 as header  FROM class  WHERE id = $MM_class") or DIE($dbcon->ErrorMsg());  
 	$usevar='useclass';
 	$tvar = "class";
 }
