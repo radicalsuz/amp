@@ -44,7 +44,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
         'field_order_admin'=>array(
             'description'=>'Order of Fields, Admin View',
             'available'=>true,
-            'value'=>'newline,start_text,caltype,lcountry,state, city, endline,newline,bydate,distance,zip,endline,newline,publish,recurring_options,student,search,sortby,endline')
+            'value'=>'newline,start_text,caltype,lcountry,state, city, endline,newline,bydate,distance,zip,endline,newline,publish,recurring_options,student,old,search,sortby,endline')
             );
         
                     
@@ -74,7 +74,8 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		if (isset($_REQUEST['bydate'])&&($_REQUEST['bydate'])) {
 			$sql_criteria[]='((`date` >= '.$this->dbcon->qstr($_REQUEST['bydate']).' AND `recurring_options`=0) OR (`enddate`>='.$this->dbcon->qstr($_REQUEST['bydate']).' AND `recurring_options`>0))';
 		} else {
-			$sql_criteria[]='((`date` >= CURDATE() AND `recurring_options`=0) || (`recurring_options`>0 AND `enddate`>= CURDATE() ))';
+            if ($_REQUEST['old']!=1)  
+                $sql_criteria[]='((`date` >= CURDATE() AND `recurring_options`=0) || (`recurring_options`>0 AND `enddate`>= CURDATE() ))';
 		
 		}
 
@@ -150,6 +151,10 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		//Student events
 		if (isset($_REQUEST['student'])&&$_REQUEST['student']) {
 			$sql_criteria[]="student=1";
+		}
+		//Old events (legacy compatibility)
+		if (isset($_REQUEST['old'])&&$_REQUEST['old']) {
+			$sql_criteria[]='((`date` < CURDATE() AND `recurring_options`=0) || (`recurring_options`>0 AND `enddate`< CURDATE() ))';
 		}
 
 		//Uid or Creator_id
@@ -235,7 +240,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		$def['zip']=array('type'=>'text', 'label'=>'&nbsp;miles of US zipcode:&nbsp', 'value'=>$_REQUEST['zip'], 'size'=>'8', 'public'=>'1');
 		
 		//student checkbox
-		$def['student']=array('type'=>'checkbox', 'label'=>'Student Events Only', 'value'=>1, 'public'=>'1');
+		$def['student']=array('type'=>'checkbox', 'label'=>'Student Events Only', 'value'=>1, 'public'=>'1','enabled'=>'1');
 		
 		$def['search']=array('type'=>'submit', 'label'=>'Search', 'public'=>'1');
 
@@ -246,6 +251,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		#city is defined by state read_request routine
         #$def['city']=array('type'=>'select', 'label'=>'Select City', 'values'=>$this->lookups['lcity'], 'value'=>$_REQUEST['city']);
         $def['sortby']=array('type'=>($_REQUEST['sortby']?'select':'hidden'), 'label'=>($_REQUEST['sortby']?'Sort:':''), 'value'=>$_REQUEST['sortby'], 'public'=>1, 'enabled'=>1, 'values'=>array(''=>'Default',$_REQUEST['sortby']=>$_REQUEST['sortby']));
+        $def['old']=array('type'=>($_REQUEST['old']?'checkbox':'hidden'), 'label'=>($_REQUEST['old']?'Past Events':''), 'value'=>'1', 'public'=>1, 'enabled'=>'1' );
 
 		return $def;
 

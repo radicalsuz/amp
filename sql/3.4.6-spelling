@@ -1,0 +1,1 @@
+update module_type set name='Content' where id=2;

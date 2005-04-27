@@ -407,6 +407,23 @@ var $sql_criteria;
     }
 
     /****
+        _register_default_plugins();
+
+        Standard Calendar Actions
+    */
+
+    function _register_default_plugins() {
+        $r = $this->registerPlugin( 'Output',   'SearchForm') and $r;
+        $r = $this->registerPlugin( 'Output',   'Pager'     ) and $r;
+        $r = $this->registerPlugin( 'AMP',      'Search'    ) and $r;
+        $r = $this->registerPlugin( 'Output',   'TableHTML' ) and $r;
+        $r = $this->registerPlugin( 'Output',   'DisplayHTML') and $r;
+        $r = $this->registerPlugin( 'AMP',      'Sort'      ) and $r;
+        $r = $this->registerPlugin( 'Output',   'Actions'   ) and $r;
+        
+    }
+
+    /****
      *
      * registerFields
      *
