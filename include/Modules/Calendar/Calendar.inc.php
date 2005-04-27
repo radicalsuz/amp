@@ -376,6 +376,7 @@ var $sql_criteria;
 
         $dbcon = $this->dbcon;
 
+/*
         $sql  = "SELECT id, namespace, action FROM calendar_plugins WHERE instance_id=";
         $sql .= $dbcon->qstr( $this->instance ) . " AND active='1' ORDER BY priority";
         $rs = $dbcon->CacheExecute( $sql ) or
@@ -395,12 +396,12 @@ var $sql_criteria;
             }
 
         } else {
-
+*/
             if ( method_exists( $this, '_register_default_plugins' ) ) {
                 $this->_register_default_plugins();
             }
 
-        }
+        #}
 
         return $r;
     }
