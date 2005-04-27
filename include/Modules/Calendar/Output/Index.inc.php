@@ -14,10 +14,10 @@ class CalendarPlugin_Index_Output extends CalendarPlugin {
 
     function execute ($options=null) {
 
-		$index['state']['name']="Events By State";
+		$index['state']['name']="Upcoming Events By State";
 		$index['state']['sql'].="SELECT count(calendar.id) as qty, calendar.lstate as item_key, states.statename as item_name from calendar, states WHERE calendar.lstate=states.state and calendar.publish=1 and ((recurring_options>0 and enddate>=CURDATE()) OR (recurring_options=0 and date>=CURDATE())) GROUP BY calendar.lstate ";
 		$index['caltype']['sql']="SELECT count(calendar.id) as qty, calendar.typeid as item_key, eventtype.name as item_name from calendar, eventtype WHERE calendar.typeid=eventtype.id and calendar.publish=1 and ((recurring_options>0 and enddate>=CURDATE()) OR (recurring_options=0 and date>=CURDATE())) GROUP BY calendar.typeid ORDER BY eventtype.name ";
-		$index['caltype']['name']="Events By Type";
+		$index['caltype']['name']="Upcoming Events By Type";
 		foreach ($index as $index_key=>$this_index) {
 			$index_set=$this->dbcon->CacheGetAll($this_index['sql']);
 			$output.='<P><B>'.$this_index['name'].'</B><BR>';
@@ -30,7 +30,7 @@ class CalendarPlugin_Index_Output extends CalendarPlugin {
         
     
     
-	
+/*	
 
 	function a_slow_bad_object_based_approach_to_Index() {
 		$index['state']['name']="Events By State";
@@ -58,7 +58,7 @@ class CalendarPlugin_Index_Output extends CalendarPlugin {
 		return $output;
 	}
     
-    
+ */   
 }    
     
 ?>

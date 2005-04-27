@@ -24,7 +24,7 @@ class CalendarPlugin_Sort_AMP extends CalendarPlugin {
         'default_orderby_admin'=>array(
             'value'=>'publish, recurring_options, date, lcity') );
 
-    function CalendarPlugin_Sort_AMP(&$calendar, $plugin_instance) {
+    function CalendarPlugin_Sort_AMP(&$calendar, $plugin_instance=null) {
         $this->init ($calendar, $plugin_instance);
     }
 

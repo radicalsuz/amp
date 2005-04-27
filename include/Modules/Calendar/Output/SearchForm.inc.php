@@ -49,7 +49,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
         
                     
 
-	function CalendarPlugin_SearchForm_Output (&$calendar, $plugin_instance) {
+	function CalendarPlugin_SearchForm_Output (&$calendar, $plugin_instance=null) {
         $this->init ($calendar, $plugin_instance);
 		
 		//define lookup arrays (region, date, state, country, etc)
@@ -282,14 +282,14 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 				$field = trim( $field );
                 if (isset($this->fields_def[$field])&&
                     (isset($options['show_'.$field])?$options['show_'.$field]:true)) {
-                    $this->calendar_quickform_addElement( &$form, $field, $this->fields_def[ $field ], $this->calendar->admin );
+                    $this->calendar_quickform_addElement( $form, $field, $this->fields_def[ $field ], $this->calendar->admin );
                 }
 			}
 
 		} else {
             foreach ($this->fields_def as $fname=>$fdef) {
                 if (isset($options['show_'.$field])?$options['show_'.$field]:true)
-                    $this->calendar_quickform_addElement( &$form, $fname, $fdef, $this->calendar->admin );
+                    $this->calendar_quickform_addElement( $form, $fname, $fdef, $this->calendar->admin );
             }
         }
                 
@@ -302,7 +302,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		
 		
 		
-	function calendar_quickform_addElement( $form, $name, &$field_def, $admin = false ) {
+	function calendar_quickform_addElement( &$form, $name, &$field_def, $admin = false ) {
 
 		if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
 

@@ -29,7 +29,7 @@ class CalendarPlugin_Pager_Output extends CalendarPlugin {
     var $available=true;
 			
 	
-	function CalendarPlugin_Pager_Output (&$calendar, $plugin_instance) {
+	function CalendarPlugin_Pager_Output (&$calendar, $plugin_instance=null) {
         $this->init ($calendar, $plugin_instance);
 		$this->read_request();	
 	}

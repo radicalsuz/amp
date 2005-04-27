@@ -32,7 +32,7 @@ class CalendarPlugin_EmailForm_Output extends CalendarPlugin {
             'default'       =>'go')
             );
 
-    function CalendarPlugin_EmailForm_Output (&$calendar, $plugin_instance) { 
+    function CalendarPlugin_EmailForm_Output (&$calendar, $plugin_instance=null) { 
         $this->init($calendar, $plugin_instance);
         $this->form_def=$this->define_form();
         $this->read_request();

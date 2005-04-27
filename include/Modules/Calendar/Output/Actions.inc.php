@@ -47,7 +47,7 @@ class CalendarPlugin_Actions_Output extends CalendarPlugin {
         );
 
 
-    function CalendarPlugin_Actions_Output (&$calendar, $plugin_instance) {
+    function CalendarPlugin_Actions_Output (&$calendar, $plugin_instance=null) {
         $this->init ($calendar, $plugin_instance);
         $this->form_def=$this->define_form();
         $this->read_request();
@@ -229,7 +229,7 @@ function execute ($options=null) {
     $form = &new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
 
     foreach ($this->form_def as $fname=>$fdef) {
-        $this->form_addElement( &$form, $fname, $fdef, $this->calendar->admin );
+        $this->form_addElement( $form, $fname, $fdef, $this->calendar->admin );
     }
             
     $this->form = &$form;
@@ -294,7 +294,7 @@ function email_set ($set) {
     }
 }
 
-function form_addElement( $form, $name, &$field_def, $admin = false ) {
+function form_addElement( &$form, $name, &$field_def, $admin = false ) {
 
     if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
     if ( $field_def[ 'enabled' ] != 1) return false;
