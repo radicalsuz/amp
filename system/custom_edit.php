@@ -15,8 +15,10 @@ if (!$_REQUEST['filename']) {
   
 // If Edited file has been posted, save it to disk.
 if ( $_POST['include_edit'] )  {
+    if (get_magic_quotes_gpc()) $includefile=stripslashes($_POST['include_edit']);
+    else $includefile = $_POST['include_edit'];
     $fp = fopen($filepath, "w+"); 
-    $test = fwrite($fp,$_REQUEST['include_edit']); 
+    $test = fwrite($fp, $includefile); 
     if ($test) {
         $filepath = "";
     } else {
