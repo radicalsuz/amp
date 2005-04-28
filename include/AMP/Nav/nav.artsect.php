@@ -12,20 +12,22 @@ $secsql = "select id, type from articletype where usenav=1 and parent =$MM_type 
 
 
 
-
+$x =1;
 while (!$sec->EOF) {
-	$shownav.=$lNAV_HTML_3 ; 
+	if ($x > 1) {$shownav.=$lNAV_HTML_3 ;} 
 	$shownav.='<a href="section.php?id='.$sec->Fields("id").'" class="sidelist">'.$sec->Fields("type").'</a>';
 	$shownav.=$lNAV_HTML_4 ;
 	$sec->MoveNext();
+	$x++;
 }
 
-
+y= 1;
 while (!$art->EOF) {
-	$shownav.=$lNAV_HTML_3 ; 
+	if ($y >= 1) {$shownav.=$lNAV_HTML_3 ;} 
 	$shownav.='<a href="article.php?id='.$art->Fields("id").'" class="sidelist">'.$art->Fields("title").'</a>';
 	$shownav.=$lNAV_HTML_4 ; //start link text
 	$art->MoveNext();
+	$y++;
 }
 echo $shownav;
 
