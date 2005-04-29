@@ -21,9 +21,10 @@ while (!$sec->EOF) {
 	$x++;
 }
 
+$shownav.=$lNAV_HTML_3 ;
 $y =1;
 while (!$art->EOF) {
-	if ($y > 0) {$shownav.=$lNAV_HTML_3 ;} 
+	if ($y > 1) {$shownav.=$lNAV_HTML_3 ;} 
 	$shownav.='<a href="article.php?id='.$art->Fields("id").'" class="sidelist">'.$art->Fields("title").'</a>';
 	$shownav.=$lNAV_HTML_4 ; //start link text
 	$art->MoveNext();
