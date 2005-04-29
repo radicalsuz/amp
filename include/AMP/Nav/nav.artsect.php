@@ -11,7 +11,7 @@ $secsql = "select id, type from articletype where usenav=1 and parent =$MM_type 
    	$sec=$dbcon->Execute($secsql) or DIE($dbcon->ErrorMsg());
 
 
-if ($sec->RecordCount() > 0) {$shownav.=$lNAV_HTML_3 ;}
+if ($sec->RecordCount() > 0) {
 $x =1;
 while (!$sec->EOF) {
 	if ($x > 1) {$shownav.=$lNAV_HTML_3 ;} 
@@ -20,8 +20,10 @@ while (!$sec->EOF) {
 	$sec->MoveNext();
 	$x++;
 }
+}
 
-if ($art->RecordCount() > 0) {$shownav.=$lNAV_HTML_3 ;}
+if ($art->RecordCount() > 0) {
+$shownav.=$lNAV_HTML_3 ;
 $y =1;
 while (!$art->EOF) {
 	if ($y > 1) {$shownav.=$lNAV_HTML_3 ;} 
@@ -29,7 +31,7 @@ while (!$art->EOF) {
 	$shownav.=$lNAV_HTML_4 ; //start link text
 	$art->MoveNext();
 	$y++;
-}
+}}
 echo $shownav;
 
 ?>
