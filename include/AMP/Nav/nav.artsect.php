@@ -20,10 +20,10 @@ while (!$sec->EOF) {
 	$sec->MoveNext();
 	$x++;
 }
+$shownav.=$lNAV_HTML_3 ;
 }
 
 if ($art->RecordCount() > 0) {
-$shownav.=$lNAV_HTML_3 ;
 $y =1;
 while (!$art->EOF) {
 	if ($y > 1) {$shownav.=$lNAV_HTML_3 ;} 
