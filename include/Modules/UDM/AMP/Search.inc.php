@@ -38,18 +38,21 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
             $this->criteria[]="publish=1"; 
         }
         #$this->criteria[]="modin=".$this->udm->instance;
-        if (isset($this->udm->sql_criteria)) { 
-            $this->criteria=array_merge($this->criteria, $this->udm->sql_criteria);
-        }
 	}
 
     function setSort() {
         $this->sortby=$this->udm->doAction('Sort');
             
     }
+    function getUDMCrit() {
+        if (isset($this->udm->sql_criteria)) { 
+            $this->criteria=array_merge($this->criteria, $this->udm->sql_criteria);
+        }
+    }
 
 
 	function execute ($options=null) {
+        $this->getUDMCrit();
 		//combine init criteria with passed criteria 
         $options=array_merge($this->getOptions(), $options);
 		if(is_array($options['criteria'])) {
@@ -84,7 +87,8 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
             $criteria = $this->criteria;
         }
 
-		$index_sql="SELECT count(id) as qty from userdata where ".join(" AND ", $criteria);
+		$index_sql="SELECT count(id) as qty from userdata ";
+        if (is_array($criteria)) $index_sql.="where ".join(" AND ", $criteria);
         if ($_REQUEST['debug']) print 'count:<BR>'.$index_sql."<BR>";
         if ($indexset=$this->dbcon->Execute($index_sql)) {
 		    $total_qty=$indexset->Fields("qty");
@@ -102,7 +106,8 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         if (!isset($this->sortby)) $this->setSort();
         if (!isset($index_col)) $index_col=$this->sortby['select'];
         if (!isset($orderby)) $orderby=$this->sortby['orderby'];
-		$index_sql="SELECT ".$index_col." from userdata where ".join(" AND ", $criteria);
+		$index_sql="SELECT ".$index_col." from userdata ";
+        if (is_array($criteria)) $index_sql.="where ".join(" AND ", $criteria);
         if (isset($orderby)) $index_sql.= " ORDER BY ".$orderby;
         if ($_REQUEST['debug']) print "index:<BR>".$index_sql."<P>";
 		if($indexset=&$this->dbcon->CacheGetAll($index_sql))  return $indexset;
@@ -110,7 +115,8 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
     }
 
     function return_items($fieldset, $criteria, $orderby=null, $return_qty="*", $offset=0) {
-		$sql="SELECT $fieldset from userdata where ".join(" AND ", $criteria);
+		$sql="SELECT $fieldset from userdata ";
+        if (is_array($criteria)) $sql.="where ".join(" AND ", $criteria);
 		$sql.=(isset($orderby))?" ORDER BY ".$orderby:"";
         if ($pager=&$this->udm->getPlugin('Output','Pager')) {
             $sql.=($pager->return_qty!="*")?" LIMIT ".strval($pager->offset). ", ".strval($pager->return_qty):"";

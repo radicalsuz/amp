@@ -162,7 +162,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     }
 
     // Add a default blank value to the select array.
-    if ( $type == 'multiselect' && is_array( $defaults ) ) $defaults = array('' => 'Select all that apply') + $defaults;
+    #if ( $type == 'multiselect' && is_array( $defaults ) ) $defaults = array('' => 'Select all that apply') + $defaults;
     if ( $type == 'select' && is_array( $defaults ) ) $defaults = array('' => 'Select one') + $defaults;
     if ( $type == 'header' && (strlen($defaults) > 0) ) $label = $defaults;
     

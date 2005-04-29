@@ -29,11 +29,11 @@ return $pass_script;
 function find_safe_filename($filename, $num=0){
 	$ext_spot = strrpos($filename, "." );
 	if ($num==0) {
-		$test_filename=$filename;
+		$test_filename=substr($filename,0,$ext_spot).strtolower(substr($filename,$ext_spot));
 
 	} else {
 
-		$test_filename=substr($filename, 0, $ext_spot)."_".$num.substr($filename, $ext_spot);
+		$test_filename=substr($filename, 0, $ext_spot)."_".$num.strtolower(substr($filename, $ext_spot));
 	}
 	$num++;
 	if (file_exists($test_filename)) {

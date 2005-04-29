@@ -340,6 +340,11 @@ function change_any(which, whatkind) {
 	}
 }
 	
+function showUploadWindow (parentform, calledfield, dtype) {
+    url  = 'http://'+location.host+'/upload_popup.php?pform='+parentform+'&pfield='+calledfield;
+    if (dtype) url = url + '&doctype='+dtype;
+    hWnd = window.open( url, 'recordWindow', 'height=175,width=300,scrollbars=no,menubar=no,toolbar=no,resizeable=no,location=no,status=no' );
+}
 
 
 </script>

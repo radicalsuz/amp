@@ -28,7 +28,8 @@ if ($userlist->_module_def['publish']) {
     $pager=&$userlist->registerPlugin('Output', 'Pager');
     $userlist->registerPlugin('AMP', 'Search');
     if ($display=&$userlist->getPlugin('Output', 'DisplayHTML')) {
-        $mod_id=$display->options['header_text'];
+        $headr=$display->getOptions();
+        $intro_id=$headr['header_text'];
     } else {
        $display=&$userlist->registerPlugin('Output', 'DisplayHTML');
        $mod_id=1;
@@ -39,12 +40,13 @@ if ($userlist->_module_def['publish']) {
 }
 
 $sub = isset($_REQUEST['btnUDMSubmit']);
-$uid= isset($_REQUEST['uid'])?$uid:false;
+$uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
 
 if ($uid && $modin) {
 
-    $list_options['_userid']= $_REQUEST['_userid'];
-    $output= $userlist->output('DisplayHTML', $list_options); 
+    $list_options['_userid']= $uid;
+    $list_options['detail_format'] = 'photo_detail_display';
+    $output= $userlist->doAction('DisplayHTML', $list_options); 
 
 } else { 
 
@@ -54,7 +56,7 @@ if ($uid && $modin) {
     $pager=&$userlist->getPlugin('Output','Pager');
     $actionbar=&$userlist->getPlugin('Output','Actions');
     */    
-    $list_options['display_format']='user_photo_layout';
+    $list_options['display_format']='photo_layout_display';
     if (!isset($searchform)||$searchform==false) $srch_options['criteria']=array('value'=>array("modin=".$modin));
 
     if ($userlist->doAction('Search', $srch_options)) {

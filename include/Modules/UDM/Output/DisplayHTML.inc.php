@@ -2,14 +2,29 @@
 require_once ('AMP/UserData/Plugin.inc.php');
 require_once ('AMP/UserData/Input.inc.php');
 require_once ('AMP/Region.inc.php');
+require_once ('luminary.layout.inc.php');
 
 class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     
     var $options= array( 
-        'subheader'=>array('available'=>true, 'description'=>'Show subheadings for'),
-        'display_format'=>array('default'=>'groups_layout_display'),
-        'detail_format'=>array('default'=>'groups_detail_display'),
-        '_userid' => array ('value'=>null)
+        'subheader'=>array('available'=>true, 
+                            'description'=>'Show subheadings for',
+                            'default'=>'State',
+                            'type'=>'text'),
+        'display_format'=>array('name'=>'List Display Function Name',
+                                'default'=>'groups_layout_display',
+                                'available'=>true,
+                                'type'=>'text'),
+        'detail_format'=>array('name'=>'Detail Display Function Name',
+                               'default'=>'groups_detail_display',
+                               'available'=>true,
+                               'type'=>'text'),
+        'header_text'=>array('name'=>'Intro Text',
+                               'default'=>'1',
+                               'available'=>true,
+                               'type'=>'select'),
+        '_userid' => array ('default'=>null,
+                            'available'=>false)
         );
     
     var $current_subheader;
@@ -25,16 +40,38 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         $this->regionset=new Region;
     }
 
+    function _register_options_dynamic () {
+        if ($this->udm->admin) {
+            $udm_mod_id  = $this->dbcon->qstr( $this->udm->instance );
+            $modlist_sql = "SELECT   moduletext.id, moduletext.name FROM moduletext, modules
+                            WHERE    modules.id = moduletext.modid
+                                AND modules.userdatamodid = $udm_mod_id
+                            ORDER BY name ASC";
+            $modlist_rs  = $this->dbcon->CacheExecute( $modlist_sql )
+                or die( "Error fetching module information: " . $this->dbcon->ErrorMsg() );
+
+            $modules[ '' ] = '--';
+            while ( $row = $modlist_rs->FetchRow() ) {
+                $modules[ $row['id'] ] = $row['name'];
+            }
+            $this->options['header_text']['values']=$modules;
+        }
+    }
+
     function execute ($options=null) {
         $options=array_merge($this->getOptions(), $options);
         //Check to see if a single record was specified
         //if so, return detail information for that record 
 		if (isset($options['_userid'])) {
+
             $detail_function=isset($options['detail_format'])?($options['detail_format']):"display_detail";
             $inclass=method_exists($detail_function, $this);
-            $single_udm=&new UserDataInput ($dbcon, $this->udm->instance, $this->udm->admin);
-            $single_udm->getUser($options['_userid']['value']);
+
+            $single_udm=&new UserDataInput ($this->dbcon, $this->udm->instance, $this->udm->admin);
+            $single_udm->getUser($options['_userid']);
+
             $dataset=$single_udm->getData();
+
             if ($inclass){ $output=$this->$detail_function($dataset, $options);
             } else {
                 $output=$detail_function($dataset, $options);
@@ -208,16 +245,4 @@ function list_state_convert($in) {
 		return $html;
 	}
 
-    function user_photo_layout ($data ) {
-        $html ='<table width="500" border="0" cellspacing="0" cellpadding="0"><tr>';
-        if ($data['custom15']) {
-            $html .= '<td><img ="img/thumb/'.$data['custom15'].'"></td>';
-        }
-        $html .= '<td><a href="story.php?detail='.$data['id'].'">'.$data['First_Name'].' '
-            .$data['Last_Name'].($data['Suffix']?', '.$data['Suffix']:"").'</a><br>'.
-            $data['City'].($data['State']?', '.$data['State']:"")
-            .'<br>'.$data['custom25'].'</td>';
-        $html .= '</tr></table><BR>';
-        return $html;
-    }
 ?>

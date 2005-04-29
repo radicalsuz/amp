@@ -1,1 +1,2 @@
 update module_type set name='Content' where id=2;
+alter table userdata change column Notes Notes text null;

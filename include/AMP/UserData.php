@@ -328,8 +328,15 @@ class UserData {
 
     function getData( $fields=null ) {
 
-        if (!$this->form)       return false;
+        if (!$this->form)  {
+            foreach ($this->fields as $fname=>$fDef) {
+                if (isset($fields) && (array_search($fname, $fields)===FALSE)) continue;
+                if (isset($fDef['value']))
+                    $data[$fname]=$fDef['value'];
 
+            }
+            return $data;
+        }
         return $this->form->exportValues($fields);
 
     }

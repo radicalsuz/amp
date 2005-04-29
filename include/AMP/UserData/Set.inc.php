@@ -21,7 +21,9 @@ class UserDataSet extends UserData {
         // get along without data access functions. Register the default
         // AMP plugins.
 
-        #$r = $this->registerPlugin( 'Output', 'UserlistHTML' ) or $r;
+        $r = $this->registerPlugin( 'Output', 'DisplayHTML' ) or $r;
+        $r = $this->registerPlugin( 'Output', 'TableHTML' ) or $r;
+        $r = $this->registerPlugin( 'AMP', 'Sort' ) or $r;
 
     }
 
