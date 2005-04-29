@@ -24,10 +24,11 @@ $admin=false;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);
 if ($userlist->_module_def['publish']) {
     #$searchform=&$userlist->getPlugin('Output', 'SearchForm');
-    $searchform=&$userlist->registerPlugin('Output', 'SearchFormLum');
+    #$searchform=&$userlist->registerPlugin('Output', 'SearchForm');
     $pager=&$userlist->registerPlugin('Output', 'Pager');
     $userlist->registerPlugin('AMP', 'Search');
     if ($display=&$userlist->getPlugin('Output', 'DisplayHTML')) {
+        
         $headr=$display->getOptions();
         $intro_id=$headr['header_text'];
     } else {
@@ -45,18 +46,13 @@ $uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
 if ($uid && $modin) {
 
     $list_options['_userid']= $uid;
-    $list_options['detail_format'] = 'photo_detail_display';
+    $list_options['detail_format'] = 'groups_detail_display';
     $output= $userlist->doAction('DisplayHTML', $list_options); 
 
 } else { 
 
     //display result list
-    /*
-    $searchform=&$userlist->getPlugin('Output', 'SearchForm');
-    $pager=&$userlist->getPlugin('Output','Pager');
-    $actionbar=&$userlist->getPlugin('Output','Actions');
-    */    
-    $list_options['display_format']='photo_layout_display';
+    $list_options['display_format']='groups_layout_display';
     if (!isset($searchform)||$searchform==false) $srch_options['criteria']=array('value'=>array("modin=".$modin));
 
     if ($userlist->doAction('Search', $srch_options)) {

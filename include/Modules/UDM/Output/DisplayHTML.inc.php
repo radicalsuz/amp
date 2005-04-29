@@ -2,7 +2,6 @@
 require_once ('AMP/UserData/Plugin.inc.php');
 require_once ('AMP/UserData/Input.inc.php');
 require_once ('AMP/Region.inc.php');
-require_once ('luminary.layout.inc.php');
 
 class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     

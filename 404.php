@@ -15,6 +15,7 @@ $PHP_SELF = $_SERVER['PHP_SELF'] = substr( $uri, 1, ($pos) ? $pos - 1 : strlen( 
 
 if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
     parse_str( $_SERVER['REDIRECT_QUERY_STRING'], $_GET );
+    $_REQUEST = array_merge($_REQUEST, $_GET);
 }
 
 $customHandler = AMP_LOCAL_PATH . "/custom/" . $_SERVER['PHP_SELF'];
