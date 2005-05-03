@@ -257,6 +257,7 @@ class UserData {
             if ( $this->useDefaults ) {
                 $valueKey = 'values';
                 if ($fDef['type']=='multiselect') continue;
+                if (!(strpos($fDef['type'],'group')===FALSE)) continue;
             } else {
                 $valueKey = 'value';
             }
@@ -636,6 +637,11 @@ class UserData {
             }
 
             $this->fields[ $fname ] = $field;
+        }
+        //Publish Field Hack
+        if ($this->admin) {
+            $publish_field = array('type'=>'checkbox', 'label'=>'<font color="#CC0000" size="3">PUBLISH</font>', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'enabled'=>true);
+            $this->fields['publish']=$publish_field;
         }
 
         return true;

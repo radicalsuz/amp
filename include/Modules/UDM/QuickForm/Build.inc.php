@@ -45,14 +45,12 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     $form = new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
 	//include publish checkbox on admin form
     if ( $admin && $udm->_module_def['publish']) { 
-        $pub_val = ( isset($udm->fields['publish']) && isset($udm->fields['publish']['value']) ) ? $udm->fields['publish']['value'] : null;
-		$publish_field = array('type'=>'checkbox', 'label'=>'<font color="#CC0000" size="3">PUBLISH</font>', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'value' => $pub_val, 'enabled'=>true);
-		$udm->fields['publish']=$publish_field;
-        
         $udm->_module_def[ 'field_order' ] = join(",", array("publish", $udm->_module_def[ 'field_order']));
 	}
 
     $form->registerElementType('multiselect','HTML/QuickForm/select.php','HTML_QuickForm_select');
+    $form->registerElementType('radiogroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
+    $form->registerElementType('checkgroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
 	
 	
 	if ( isset( $udm->_module_def[ 'field_order' ] ) ) {
@@ -165,12 +163,34 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     #if ( $type == 'multiselect' && is_array( $defaults ) ) $defaults = array('' => 'Select all that apply') + $defaults;
     if ( $type == 'select' && is_array( $defaults ) ) $defaults = array('' => 'Select one') + $defaults;
     if ( $type == 'header' && (strlen($defaults) > 0) ) $label = $defaults;
-    
-    $form->addElement( $type, $name, $label, $defaults );
 
-    $fRef =& $form->getElement( $name );
+    //Create sub-objects for group elements
+    if ( !(strpos($type, 'group')===FALSE) && is_array($defaults) ) {
+        if ($type=='checkgroup') { 
+            $grouptype = 'checkbox';
+            $chkcount=0;
+            foreach ($defaults as $def_key=>$def_value) {
+                    $group_set[] = HTML_QuickForm::createElement($grouptype,$def_key,null,$def_value);
+            }
+        } else { 
+            $grouptype= 'radio';
+            foreach ($defaults as $def_key=>$def_value) {
+                    $group_set[] = HTML_QuickForm::createElement($grouptype,null,null,$def_value, $def_key);
+            }
+        }
+       
+    }
+    // ADD THE ITEM TO THE FORM OBJECT
+    if (isset($group_set)) { 
+            $form->addGroup( $group_set, $name, $label, '<BR>');
+    } else {
+            $form->addElement( $type, $name, $label, $defaults );
+    }
 
-    if ( isset( $selected ) ) {
+    $fRef = &$form->getElement( $name );
+
+    #if ( isset( $selected )&& !isset($group_set)  ) {
+    if ( isset( $selected ) && strpos($type, 'group')===FALSE  ) {
         $fRef->setSelected( $selected );
     }
 
@@ -184,6 +204,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
         $fRef->setMultiple(true);
         $fRef->setSize( $size );
     }
+
 
     if ( isset( $size ) && $size && ( $type == 'textarea' ) ) {
         if ( strpos( $size, ':' ) ) {

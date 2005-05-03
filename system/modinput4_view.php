@@ -14,14 +14,12 @@ require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 
 #set_error_handler( 'e' );
+$admin = $userper[54]; //UDM All permission
 
 // Fetch the form instance specified by submitted modin value.
-$udm = &new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
+$udm = &new UserDataInput( $dbcon, $_REQUEST[ 'modin' ],$admin );
 
 
-if ($userper[54]) { //UDM All permission
-	$udm->admin = true;
-}
 
 $modidselect = $dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $dbcon->qstr($udm->instance) )
                 or die("Couldn't get module information for form: " . $dbcon->ErrorMsg());
@@ -35,8 +33,6 @@ $udm->uid = $uid;
 
 // Was data submitted via the web?
 $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
-
-
 
 
 // Fetch or save user data.

@@ -136,7 +136,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 			if (strlen($_REQUEST['lcountry'])==3&&($country_name=$this->lookups['lcountry']['Set'][ $_REQUEST['lcountry']])) {
 				$sql_criteria[]="lcountry=".$this->dbcon->qstr($_REQUEST['lcountry']);
 			} else {
-				if ($country_code=array_search($_REQUEST['lcountry'], $this->regionset->region['WORLD'])) {
+				if ($country_code=array_search($_REQUEST['lcountry'], $this->regionset->regions['WORLD'])) {
 					$sql_criteria[]="lcountry=".$this->dbcon->qstr($country_code);
 				}
 			}

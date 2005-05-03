@@ -301,6 +301,38 @@ class UserDataPlugin {
                 case "multiselect":
                     $returnSet[$keyname]=is_array($value)?join (", ",$value):null;
                     break;
+                case "checkgroup":
+                    $returnSet[$keyname]=is_array($value)?join (", ",array_keys($value)):null;
+                    break;
+            }
+        }
+        //fix checkbox problem - blank checkboxes don't save values
+        //this should probably go somewhere else
+        //but needs to happen now
+        if (isset($this->udm)) {
+            foreach ($this->udm->fields as $fname =>$fDef) {
+                if ($fDef['type']=='checkbox' &&($this->udm->admin||$fDef['public'])) {
+                    if (!isset($data[$fname])) $returnSet[$fname]='0';
+                }
+            }
+        }
+        if (count($returnSet)>0) {
+            return $returnSet;
+        } else {
+            return false;
+        }
+    }
+    
+    function uncheckData( $data ) {
+        $returnSet = array();
+        foreach ($data as $keyname=>$value) {
+            switch ($this->udm->fields[$keyname]['type']) { 
+                case "checkgroup":
+                    $dataset=split('[ ]?,[ ]?', $value);
+                    foreach ($dataset as $item) {
+                        $returnSet[$keyname][$item]=1;
+                    }
+                    break;
             }
         }
         if (count($returnSet)>0) {
@@ -321,6 +353,9 @@ class UserDataPlugin {
 
             $data=$plugin_data;
         }
+        // check the data for strange types that need massaging
+        $changes = $this->uncheckData ($data);
+        if ($changes)  $data = array_merge($data, $changes);
 
         return $this->udm->setData( $data );
     }

@@ -21,15 +21,15 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         'form_name'=>array(
             'description'=>'Name of Search Form',
             'available'=>false,
-            'value'=>'udm_search'),
+            'default'=>'udm_search'),
         'field_order'=>array(
             'description'=>'Order of Fields, User Side',
             'available'=>true,
-            'value'=>'newline,start_text,country,state,bydate,endline,newline,distance,zip,search,sortby,modin,endline'),
+            'default'=>'newline,start_text,country,state,bydate,endline,newline,distance,zip,search,sortby,modin,endline'),
         'field_order_admin'=>array(
             'description'=>'Order of Fields, Admin View',
             'available'=>true,
-            'value'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,endline,newline,distance,zip,search,sortby,modin,endline')
+            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,endline,newline,distance,zip,search,sortby,modin,endline')
             );
         
                     
@@ -48,7 +48,6 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	}	
 	
 	function read_request() {
-		global $_REQUEST;
 		$this->setupRegion();
 
 
@@ -80,8 +79,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		} 
 		//State Request from index page
 		if (isset($_REQUEST['state'])&&($_REQUEST['state'])) {
-			$sql_criteria[]="state=".$this->dbcon->qstr($_REQUEST['state']);
-			$this->lookups['city']['LookupWhere'] = " state=".$this->dbcon->qstr($_REQUEST['state']);
+			$sql_criteria[]="State=".$this->dbcon->qstr($_REQUEST['state']);
+			$this->lookups['city']['LookupWhere'] = " State=".$this->dbcon->qstr($_REQUEST['state']);
 			$this->setupLookup('city');
 		    $this->fields_def['city']=array('type'=>'select', 'label'=>'Select City', 'values'=>$this->lookups['city']['Set'], 'value'=>$_REQUEST['city']);
 
@@ -100,7 +99,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 			if($state_name=$this->lookups['area']['Set'][$_REQUEST['area']]) {
 				$state_code=array_search($state_name, $this->lookups['state']['Set']);
 				if ($state_code) {
-					$sql_criteria[]="state=".$this->dbcon->qstr($state_code);
+					$sql_criteria[]="State=".$this->dbcon->qstr($state_code);
 				}
 			}
 		}
@@ -109,10 +108,10 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		if (isset($_REQUEST['country'])&&$_REQUEST['country']) {
 			//check to see if the search is by code
 			if (strlen($_REQUEST['country'])==3&&($country_name=$this->lookups['country']['Set'][ $_REQUEST['country']])) {
-				$sql_criteria[]="country=".$this->dbcon->qstr($_REQUEST['country']);
+				$sql_criteria[]="Country=".$this->dbcon->qstr($_REQUEST['country']);
 			} else {
-				if ($country_code=array_search($_REQUEST['country'], $this->regionset->region['WORLD'])) {
-					$sql_criteria[]="country=".$this->dbcon->qstr($country_code);
+				if ($country_code=array_search($_REQUEST['country'], $this->regionset->regions['WORLD'])) {
+					$sql_criteria[]="Country=".$this->dbcon->qstr($country_code);
 				}
 			}
 		}
@@ -149,12 +148,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	function define_form (){
 		
 		$this->setupRegion();
-
-		$def['field_order']=$this->options['field_order']['value'];
+        $options=$this->getOptions();
+		$def['field_order']=$options['field_order'];
 		
 		if ($this->udm->admin) {
 			$this->control_class='list_controls'; 
-			$def['field_order']=$this->options['field_order_admin']['value'];
+			$def['field_order']=$options['field_order_admin'];
 		} else {
 			$this->control_class='go'; 
 		}
@@ -417,7 +416,9 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 					case 'country':
 						if (isset($this->lookups['country']['Set'][$searchdata])) {
 							$search_text[]="in ".$this->lookups['country']['Set'][$searchdata];
-						} elseif ($country_code=array_search($searchdata, $this->regionset->regions['WORLD'])) 		{ $search_text[]="in ".$searchdata;}
+						} elseif ($country_code=array_search($searchdata, $this->regionset->regions['WORLD']))	{ 
+                            $search_text[]="in ".$searchdata;
+                        }
 						break;
 					case 'uid':
 						$search_text[]="by contact";

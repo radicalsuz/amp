@@ -342,6 +342,8 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
         // Do this in the absence of array_combine.
         $this->form->registerElementType('multiselect','HTML/QuickForm/select.php','HTML_QuickForm_select');
+        $this->form->registerElementType('radiogroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
+        $this->form->registerElementType('checkgroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
         $available_types = $this->form->getRegisteredTypes();
         foreach ( $available_types as $ftype ) {
             $types[ $ftype ] = $ftype;

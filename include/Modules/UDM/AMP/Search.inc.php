@@ -21,6 +21,11 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
                 'f_type'=>'text',
                 'f_sqlname'=>"Concat(First_Name, ' ', Last_Name)"
              ),
+             'Location'=>array(
+                'f_alias'=>'Location',
+                'f_sqlname'=>"Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))",
+                'f_orderby'=>'Country,State,City,Company',
+                'f_type'=>'text'),
              'Status'=>array(
                 'f_alias'=>'Status',
                 'f_orderby'=>'publish',

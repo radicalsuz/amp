@@ -2,7 +2,9 @@
 require_once ('AMP/UserData/Plugin.inc.php');
 require_once ('AMP/UserData/Input.inc.php');
 require_once ('AMP/Region.inc.php');
-include_once ('custom.layouts.inc.php');
+if (file_exists_incpath('custom.layouts.inc.php')) {
+    include_once ('custom.layouts.inc.php');
+}
 
 class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     
