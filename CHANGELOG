@@ -1,3 +1,11 @@
+amp (3.4.6) urgency=rabid
+
+    * construct UDM radio-group and checkbox-group display types
+    * fixes to checkbox processing and PUBLISH checkbox behavior
+    * tweaking of userdata_display.php for production use
+
+-- Austin Putman <austin@radicaldesigns.org> Mon May  2 21:24:10 PDT 2005
+
 amp (3.4.5) urgency=low
 
     * Edit Groups display to include the United States as a hearder (margot).
