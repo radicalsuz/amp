@@ -3,6 +3,7 @@
 class UserDataPlugin_Sort_AMP extends UserDataPlugin {
     var $sortby;
     var $select;
+    var $available=true;
     var $order;
     var $sortname;
     var $options = array (

@@ -9,8 +9,8 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
     var $available = true;
 
-    function UserDataPlugin_Save_AMP ( &$udm ) {
-        $this->init( $udm );
+    function UserDataPlugin_Save_AMP ( &$udm, $plugin_instance=null ) {
+        $this->init( $udm, $plugin_instance );
     }
 
     function getSaveFields () {

@@ -46,13 +46,11 @@ $uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
 if ($uid && $modin) {
 
     $list_options['_userid']= $uid;
-    $list_options['detail_format'] = 'groups_detail_display';
     $output= $userlist->doAction('DisplayHTML', $list_options); 
 
 } else { 
 
     //display result list
-    $list_options['display_format']='groups_layout_display';
     if (!isset($searchform)||$searchform==false) $srch_options['criteria']=array('value'=>array("modin=".$modin));
 
     if ($userlist->doAction('Search', $srch_options)) {

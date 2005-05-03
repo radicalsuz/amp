@@ -43,7 +43,9 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
                     $options['frmAction'] : null;
 
     $form = new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
-	//include publish checkbox on admin form
+	//set PUBLISH field at the top of the form
+    //do this during the build so it surpasses
+    //all other manipulation of field_order
     if ( $admin && $udm->_module_def['publish']) { 
         $udm->_module_def[ 'field_order' ] = join(",", array("publish", $udm->_module_def[ 'field_order']));
 	}

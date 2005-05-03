@@ -3,6 +3,7 @@
 class UserDataPlugin_Search_AMP extends UserDataPlugin {
 	var $criteria;
 	var $total_qty;
+    var $available=true;
     var $count_criteria;
 	var $sortby;
     var $options = array (

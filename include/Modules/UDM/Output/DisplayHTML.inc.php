@@ -9,7 +9,8 @@ if (file_exists_incpath('custom.layouts.inc.php')) {
 class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     
     var $options= array( 
-        'subheader'=>array('available'=>true, 
+        'subheader'=>array('label'=>'Subheading',
+                            'available'=>true, 
                             'description'=>'Show subheadings for',
                             'default'=>null,
                             'type'=>'text'),
@@ -29,16 +30,12 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
                             'available'=>false)
         );
     
+    var $available=true;
     var $current_subheader;
     var $regionset;
 
-    function UserDataPlugin_DisplayHTML_Output (&$udm, $options=null, $instance=null) {   
-        $this->init($udm, $options, $instance);
-    }
-
-    function init (&$udm, $options=null, $instance=null) {
-        $this->dbcon=&$udm->dbcon;
-        $this->udm= &$udm;
+    function UserDataPlugin_DisplayHTML_Output (&$udm, $instance=null) {   
+        $this->init($udm, $instance);
         $this->regionset=new Region;
     }
 

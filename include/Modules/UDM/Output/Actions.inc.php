@@ -7,6 +7,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
     var $action;
     var $form_def;
     var $form;
+    var $available=true;
     var $criteria;
     var $options = array (
         'allow_email'=>array(

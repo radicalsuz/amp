@@ -21,6 +21,7 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         );
     var $html_rowcount=0;
     var $display_fieldset;
+    var $available=true;
     var $Lookups;
     var $list_row_select;
     var $list_row_edit;

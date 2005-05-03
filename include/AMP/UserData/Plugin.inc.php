@@ -93,8 +93,8 @@ class UserDataPlugin {
 
         while ( $option = $rs->FetchRow() ) {
             if (isset( $options[ $option['name'] ] )) {
-                $options[ $option['name'] ] = $option['value'];
-                #$options[ $option['name'] ]['value'] = $option['value'];
+                #$options[ $option['name'] ] = $option['value'];
+                $options[ $option['name'] ]['value'] = $option['value'];
             }
         }
 

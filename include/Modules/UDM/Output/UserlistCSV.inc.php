@@ -17,6 +17,7 @@ class UserDataPlugin_UserlistCSV_Output extends UserDataPlugin {
     var $short_name  = 'ExportFile';
     var $long_name   = 'Export List in CSV Format';
     var $description = 'Use this to set options for the CSV export plugin';
+    var $available=true;
     //List Vars
     //create default options array
     var $options=array(

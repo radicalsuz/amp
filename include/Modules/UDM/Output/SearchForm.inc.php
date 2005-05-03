@@ -7,6 +7,7 @@ require_once('AMP/UserData/Plugin.inc.php');
 class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	var $regionset;
 	var $lookups;
+    var $available=true;
 	var $form;
 	var $fields_def;
 	var $control_class;

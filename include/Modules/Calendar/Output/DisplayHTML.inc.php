@@ -13,13 +13,8 @@ class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
     var $current_subheader;
     var $regionset;
 
-    function CalendarPlugin_DisplayHTML_Output (&$calendar, $options=null, $instance=null) {   
-        $this->init($calendar, $options, $instance);
-    }
-
-    function init (&$calendar, $options=null, $instance=null) {
-        $this->dbcon=&$calendar->dbcon;
-        $this->calendar= &$calendar;
+    function CalendarPlugin_DisplayHTML_Output (&$calendar, $instance=null) {   
+        $this->init($calendar, $instance);
         $this->regionset=new Region;
     }
 
