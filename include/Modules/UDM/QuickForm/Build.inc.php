@@ -278,6 +278,13 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
             \t{element}</td></tr></table></td>\n\t</tr>", $name);
     }
 	
+		    if ($type=='radiogroup') {
+        $renderer->setElementTemplate(
+            "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+            <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+            <b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+            \t{element}</td></tr></table></td>\n\t</tr>", $name);
+    }
 
 
 	//static items now span both columns
