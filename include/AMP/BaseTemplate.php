@@ -7,7 +7,8 @@ if ( !function_exists( 'buildheader' ) ) {
         global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $_GET, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url, $extra_header, $css;
         $htmlheader .= "<html>
         <head>
-        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
+        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">";
+        #<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
         
         //build header title
         if ($MM_id) {
