@@ -262,10 +262,13 @@ function getthenavs($navside) {
 
         }
 	
-		elseif ($nav->Fields("nosql") == 1 && $nav->Fields("titletext") != (NULL)) {
+		elseif ($nav->Fields("nosql") == 1 && $nav->Fields("titletext") == (NULL)) {
                 //start nonsql
-                $shownav.= $nav->Fields("nosqlcode");
-            } elseif (trim($nav->Fields("sql"))>"") {
+				$nonsqlreturn = $nav->Fields("nosqlcode");
+           		$shownav.= evalnavhtml($nonsqlreturn);
+
+                //$shownav.= $nav->Fields("nosqlcode");
+        } elseif (trim($nav->Fields("sql"))>"") {
     	
             ###DEFINE SQL GENERATED NAVIGATION
             //deal with database php
