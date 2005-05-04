@@ -122,7 +122,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     $type     = (isset($field_def['type']))   ? $field_def['type']     : null;
     $label    = (isset($field_def['label']))  ? $field_def[ 'label'  ] : null;
     $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
-    $size     = (isset($field_def['size']))   ? $field_def[ 'size' ]   : null;
+    $size     = (isset($field_def['size']))   ? $field_def[ 'size' ]   : 40;
 
     $renderer =& $form->defaultRenderer();
 
@@ -215,6 +215,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
             $cols = $tmpArray['1'];
         } else {
             $cols = $size;
+			$rows = 4;
         }
 
         if ( isset( $rows ) ) $fRef->setRows( $rows );
