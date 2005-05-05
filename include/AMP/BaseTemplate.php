@@ -76,9 +76,9 @@ if ($intro_id == 1) {
 } else {
 
 	#GET MODULE TEXT VARS
-
-	$getmodhierarchy=$dbcon->CacheExecute("SELECT templateid, title, name, type FROM moduletext WHERE id = $intro_id") 
-        or DIE('Could not load module hierarchy information in BaseTemplate '.$dbcon->ErrorMsg());
+	$sql = "SELECT templateid, title, name, type FROM moduletext WHERE id = $intro_id";
+	$getmodhierarchy=$dbcon->CacheExecute($sql) 
+        or DIE('Could not load module hierarchy information in BaseTemplate '.$sql.$dbcon->ErrorMsg());
 
 	$MM_type = $getmodhierarchy->Fields("type");
 	$mod_name = $getmodhierarchy->Fields("name");
