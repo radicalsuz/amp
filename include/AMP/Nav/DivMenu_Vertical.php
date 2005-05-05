@@ -90,7 +90,7 @@ $menu_footer='
 	  menu.style.pixelTop = getPos(el,"Top")
       }
       else {
-        alert (menuid."is the id");
+        alert (menuid+"is the id");
       }
       if (mptr=document.getElementById("mptr_"+menuid)) {
 	mptr.src="img/point_r_rd.gif"
