@@ -29,7 +29,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
     $MM_editRedirectUrl = "module_header_list.php?modid=".$_POST['modid'];
 	$MM_editColumn = "id";
 $MM_fieldsStr = "title|value|subtitile|value|templateid|value|type|value|names|value|modid|value|html|value|article|value|searchtype|value";
-    $MM_columnsStr = "title|',none,''|subtitile|',none,''|templateid|',none,''|type|',none,''|name|',none,''|modid|',none,''|html|none,1,0|test|',none,''|searchtype|value";	
+    $MM_columnsStr = "title|',none,''|subtitile|',none,''|templateid|',none,''|type|',none,''|name|',none,''|modid|',none,''|html|none,1,0|test|',none,''|searchtype|',none,''";	
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
     ob_end_flush();	
