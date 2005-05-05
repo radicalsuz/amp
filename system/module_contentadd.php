@@ -57,7 +57,7 @@ $C=$dbcon->Execute("SELECT * from class order by class") or DIE($dbcon->ErrorMsg
 //build form
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Add to Content System', 'banner');
-if (!$link) {
+if (!$link or ($link = 'article.php')) {
 	$html .= $buildform->add_colspan("<b>This page does not have a link associated with it.  Please add a link below or the page will not link.</b>");
 }
 $html .= addfield('redirect','','hidden',$redirect);
