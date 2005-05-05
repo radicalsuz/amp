@@ -66,9 +66,10 @@ if ($_POST['MM_insert']) {
 
 	## insert header page
 	$hname = "$name Input";
+	$linkpage = "modinput4.php?modin=".$modid;
     $MM_editTable  = "moduletext";
-    $MM_fieldsStr = "id|value|htitle|value|harticle|value|hname|value|udmmodid|value";
-    $MM_columnsStr = "id|',none,''|title|',none,''|test|',none,''|name|',none,''|modid|',none,''";
+    $MM_fieldsStr = "id|value|htitle|value|harticle|value|hname|value|udmmodid|value|linkpage|value";
+    $MM_columnsStr = "id|',none,''|title|',none,''|test|',none,''|name|',none,''|modid|',none,''|searchtype|',none,''";
 	require ("../Connections/insetstuff.php");
 	require ("../Connections/dataactions.php");
 
