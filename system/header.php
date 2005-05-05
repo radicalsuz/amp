@@ -116,16 +116,16 @@ if (isset($header_udm) && $header_udm == 1) {
         $nav_link .= '<p class="side_banner">' . $headerinst->Fields('name') . '</p>';
         $nav_link .= "\n    <ul class=side>";
     }
-	$nav_link .= "\n		<li ".nav_css("view")."><a href='modinput4_data.php?modin=".$header_udmid."' >View/Edit</a></li>";
-	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_view.php?modin=".$header_udmid."' >Add</a></li>";
-	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy</a></li>";
-	$nav_link .= "\n		<li ".nav_css("search")." ><a href='modinput4_search.php?modin=".$header_udmid."' >Search</a></li>";
+	$nav_link .= "\n		<li ".nav_css("view")."><a href='modinput4_data.php?modin=".$header_udmid."' >View/Edit Data</a></li>";
+	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_view.php?modin=".$header_udmid."' >Add Data</a></li>";
+	$nav_link .= "\n		<li ".nav_css("search")." ><a href='modinput4_search.php?modin=".$header_udmid."' >Search Data</a></li>";	
 	$nav_link .= "\n		<li ".nav_css("form")." ><a href='modinput4_edit.php?modin=".$header_udmid."' >Form Settings</a></li>";
-	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy Form Template</a></li>";
+	$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy Form</a></li>";
+	//$nav_link .= "\n		<li ".nav_css("add")."><a href='modinput4_copy.php?modin=".$header_udmid."' >Copy Form Template</a></li>";
 }
 if (isset($modid) && $modid != 19 && $modid != 31 && $modid != 30 && $modid) {
-	$nav_link .= "\n		<li ".nav_css("page")."><a href='module_header_list.php?modid=".$modid."' >Pages</a></li>";
-	$nav_link .= "\n		<li ".nav_css("settings")."><a href='module_control_list.php?modid=".$modid."' >Settings</a></li>";
+	$nav_link .= "\n		<li ".nav_css("page")."><a href='module_header_list.php?modid=".$modid."' >Public Pages</a></li>";
+	$nav_link .= "\n		<li ".nav_css("settings")."><a href='module_control_list.php?modid=".$modid."' >Module Settings</a></li>";
 }
 
 if ($nav_link) {

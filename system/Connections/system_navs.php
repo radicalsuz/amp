@@ -315,7 +315,7 @@ $sys_nav['module'][0]['name'] ='View Intro Text';
 $sys_nav['module'][0]['class'] ='view';
 $sys_nav['module'][0]['per'] ='45';
 
-$sys_nav['module'][1]['link'] ='module_hedear.php';
+$sys_nav['module'][1]['link'] ='module_header.php';
 $sys_nav['module'][1]['name'] ='Add Intro Text';
 $sys_nav['module'][1]['class'] ='add';
 $sys_nav['module'][1]['per'] ='46';
