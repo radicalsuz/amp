@@ -83,10 +83,14 @@ $menu_footer='
   var current_menu = null;
   var current_mptr = null;
   function show_menu(el,menuid) {
-      if (menu=document.getElementById("divmenu_"+menuid)) {
+      if (menu=document.getElementById(("divmenu_"+menuid))) {
+      alert (menu.style.display);
 	  menu.style.display="block";
 	  menu.style.pixelLeft = getPos(el,"Left") + el.offsetWidth + 2
 	  menu.style.pixelTop = getPos(el,"Top")
+      }
+      else {
+        alert (menuid."is the id");
       }
       if (mptr=document.getElementById("mptr_"+menuid)) {
 	mptr.src="img/point_r_rd.gif"
