@@ -37,8 +37,8 @@ ob_start();
 
 if ($_GET['restore']) {
 	articleversionrestore($_GET['restore']);
-    $ver_type = ($_GET['type']);
-    redirect("article_list.php?type=$ver_type");
+    $org_id = ($_GET['id']);
+    redirect("article_edit.php?id=$org_id");
 }
 
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
