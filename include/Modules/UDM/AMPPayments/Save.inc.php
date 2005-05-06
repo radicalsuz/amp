@@ -1,5 +1,5 @@
 <?php
-#payment usage
+/* #payment usage
 require_once ('Modules/Payments/Payments.php');
 
 #dude austin beats the fuck out of me how this mess will work with the UDM but here is the usage code that mostly works, I will leave it to you do the plug in stuff
@@ -22,6 +22,6 @@ $data array (
 		)
 
 $status = $pay->process_payment($data);
-
+ */
 
 ?>
