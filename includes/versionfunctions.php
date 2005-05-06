@@ -42,7 +42,6 @@ function articleversionrestore($vid) {
 	$sql = "UPDATE articles SET $matchedpairs where id  = $id";
 	echo $sql;
 	$update=$dbcon->Execute($sql) or DIE($dbcon->ErrorMsg());
-	die();
 }
 
 function articleversionlist($id) {
