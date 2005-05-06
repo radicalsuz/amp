@@ -40,13 +40,14 @@ function articleversionrestore($vid) {
 	$matchedpairs = preg_replace( "/vid = '(\d+)',/", " ", $matchedpairs );
 	
 	$sql = "UPDATE articles SET $matchedpairs where id  = $id";
-	echo $sql;
+//	echo $sql;
 	$update=$dbcon->Execute($sql) or DIE($dbcon->ErrorMsg());
+    
 }
 
 function articleversionlist($id) {
 	global $dbcon;
-	$get=$dbcon->Execute("select a.vid, DATE_FORMAT(a.updated, '%c/%e/%Y %H:%i ') as updated, u.name from articles_version a left join users u on u.id = a.updatedby where a.id = $id") or DIE($dbcon->ErrorMsg());
+	$get=$dbcon->Execute("select a.vid, DATE_FORMAT(a.updated, '%c/%e/%Y %H:%i ') as updated, u.name, a.type from articles_version a left join users u on u.id = a.updatedby where a.id = $id") or DIE($dbcon->ErrorMsg());
 	if ($get->Fields("vid")) {
 	?><h2>Version History</h2>
 	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -65,7 +66,7 @@ function articleversionlist($id) {
     <td><?php echo $get->Fields("name");?></td>
     <td><a href="../article.php?vid=<?php echo $get->Fields("vid");?>&preview=1" target="_blank">View</a></td>
 	<td><a href="article_edit.php?vid=<?php echo $get->Fields("vid");?>">Edit</a></td>
-	<td><a href="article_edit.php?restore=<?php echo $get->Fields("vid");?>">Restore</a></td>
+	<td><a href="article_edit.php?restore=<?php echo $get->Fields("vid");?>&type=<? echo $get->Fields("type");?>">Restore</a></td>
   </tr>
   <?php $get->MoveNext() ; } ?>
 </table>
