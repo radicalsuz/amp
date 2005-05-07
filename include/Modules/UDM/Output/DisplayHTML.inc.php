@@ -14,15 +14,19 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
                             'description'=>'Show subheadings for',
                             'default'=>null,
                             'type'=>'text'),
-        'display_format'=>array('name'=>'List Display Function Name',
+        'display_format'=>array('label'=>'List Display Function Name',
                                 'default'=>'groups_layout_display',
                                 'available'=>true,
                                 'type'=>'text'),
-        'detail_format'=>array('name'=>'Detail Display Function Name',
+        'detail_format'=>array('label'=>'Detail Display Function Name',
                                'default'=>'groups_detail_display',
                                'available'=>true,
                                'type'=>'text'),
-        'header_text'=>array('name'=>'Intro Text',
+        'header_text_list'=>array('label'=>'Intro Text For List Page',
+                               'default'=>'1',
+                               'available'=>true,
+                               'type'=>'select'),
+        'header_text_detail'=>array('label'=>'Intro Text For Detail Page',
                                'default'=>'1',
                                'available'=>true,
                                'type'=>'select'),
@@ -53,7 +57,8 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
             while ( $row = $modlist_rs->FetchRow() ) {
                 $modules[ $row['id'] ] = $row['name'];
             }
-            $this->options['header_text']['values']=$modules;
+            $this->options['header_text_list']['values']=$modules;
+            $this->options['header_text_display']['values']=$modules;
         }
     }
 
