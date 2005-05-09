@@ -1,23 +1,23 @@
 <?php
-require_once ('Modules/Payment/CreditCard.php');
+require_once ('Modules/Payment/CreditCard.inc.php');
 require_once ('AMP/UserData/Plugin.inc.php');
 
 class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
     var $options = array(
-        'merchant_ID'= array('label'=>'Merchant',
+        'merchant_ID'=> array('label'=>'Merchant',
                              'type'=>'select',
                              'available'=>true,
                              'default'=>1,
                              'values'=>'Lookup(payment_merchants,id,Merchant)'),
-        'item_ID' = array( 'label'=>'Item for Purchase',
+        'item_ID' => array( 'label'=>'Item for Purchase',
                             'type'=>'select',
                             'available'=>true,
                             'values'=>'Lookup(payment_items,id,name)'),
-        'email_receipt' = array( 'label'=>'Send Receipt Email',
-                                 'type'='checkbox',
-                                 'available'=true,
-                                 'value'=false ),
-        'email_receipt_template' = array( 'label' => 'Template For Receipt',
+        'email_receipt' => array( 'label'=>'Send Receipt Email',
+                                 'type'=>'checkbox',
+                                 'available'=>true,
+                                 'value'=>false ),
+        'email_receipt_template' => array( 'label' => 'Template For Receipt',
                                           'type'  => 'select',
                                           'available' => true)
         );
@@ -26,9 +26,8 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
 
     
     function UserDataPlugin_Save_AMPPayment (&$udm, $plugin_instance=null) {
+        $this->processor = &new Payment_CreditCard($udm->dbcon);
         $this->init($udm, $plugin_instance);
-        $options => $this->getOptions();
-        $this->processor = &new Payment_CreditCard($this->dbcon, $options['merchant_ID']);
 
     }
     function getSaveFields() {
@@ -55,7 +54,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
 
         $processor->setCard($data);
         $processor->setCustomer($data);
-        if ($processor->charge($this->item_info['name'], $this->item_info['amount']) {
+        if ($processor->charge($this->item_info['name'], $this->item_info['amount'])) {
             return true;
         } else {
             $this->udm->errorMessage($processor->error);
@@ -73,29 +72,52 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
     }
 
     function _register_fields_dynamic() {
+        
+        $options = $this->getOptions();
+        $this->processor->setMerchant($options['merchant_ID']);
+        
         //Get fields from the Payment_CreditCard object
         $fields=$this->processor->fields;
         
         //add a fancy javascript to save users time when CC data matches
         //personal data
         $fields['Share_Data']=array('type'=>'checkbox','label'=>'Check here if information below is the same as above', 
-                                    'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30
-                                    'attr'='onClick=plugin_AMPPayment_setAddress(this.value);');
-        $fields['setaddress_script']=array('type'=>'html', 'value'=>
-        '
+                                    'required'=>false, 'public'=>true, 'enabled'=>true, 'size'=>30,
+                                    'attr'=>array('onClick'=>'plugin_AMPPayment_setAddress(this.checked);'));
+        $fields['setaddress_script']=array('type'=>'html', 'values'=>
+        $this->address_script($fields), 'enabled'=>true,'public'=>true, 'required'=>false);
+        
+        $this->fields = array_merge($this->fields, $fields);
+    }
+
+    function address_script($fields) {
+        if (!isset($this->_field_prefix)) $this->_field_prefix = "plugin_AMPPayment";
+
+        $script = '
         <script type="text/javascript">
         function plugin_AMPPayment_setAddress (chk_val) {
             var payform = document.forms["'.$this->udm->name.'"];
-            if (chk_val) {
-                payform.elements["plugin_AMPPayment_First_Name"].value=payform.elements["First_Name"].value;
-                payform.elements["plugin_AMPPayment_First_Name"].enabled=false;
-            } else {
-                payform.elements["plugin_AMPPayment_First_Name"].enabled=true;
+            if (chk_val) {';
+
+        //Setup the form keys array
+        $form_keys = $this->processor->customer_info_keys;
+        $form_keys[] = "First_Name";
+        $form_keys[] = "Last_Name";
+
+        foreach ($form_keys as $cust_key) {
+            if (!isset($this->udm->fields[$cust_key])) continue;
+            $field_key = $this->_field_prefix.'_'.$cust_key;
+            $script_on .= '
+                payform.elements["'.$field_key.'"].value=payform.elements["'.$cust_key.'"].value;
+                payform.elements["'.$field_key.'"].disabled=true;';
+            $script_off .='payform.elements["'.$field_key.'"].disabled=false;';
+        }
+        $script .= $script_on ."\n 
+            } else {\n". $script_off ."\n
             }
         }
-        </script>
-        ', 'enabled'=>true,'public'=>true);
-        $this->fields=$fields+$this->fields;
+        </script>";
+        return $script;
     }
 
     function _register_options_dynamic () {

@@ -45,7 +45,8 @@ class Payment_CreditCard extends Payment {
         'Street2',
         'City',
         'State',
-        'Zip');
+        'Zip',
+        'Email');
 
     // Information related to the transaction attempt
     var $transaction_info = array();
@@ -87,9 +88,9 @@ class Payment_CreditCard extends Payment {
     * * * * * * * * * */
 
 
-    function Payment_CreditCard($dbcon, $merchant_ID) {
+    function Payment_CreditCard($dbcon, $merchant_ID=null) {
         $this->init($dbcon, "CreditCard");
-        $this->setMerchant($merchant_ID);
+        if (isset($merchant_ID)) $this->setMerchant($merchant_ID);
         $this->CC_Library = &new CC_Functions();
     }
 
@@ -182,13 +183,13 @@ class Payment_CreditCard extends Payment {
 		$fields['Credit_Card_Number'] = array('type'=>'text', 'label'=>'Credit Card Number', 'required'=>true, 'public'=>false, 'size'=>40, 'enabled'=>true);
 		$fields['Credit_Card_Type'] = array('type'=>'select', 'label'=>'Credit Card Type', 'required'=>true, 'public'=>false, 'size'=>40, 'values'=>'Visa,Master Card,Discover,Amex','enabled'=>true);
 		$fields['Credit_Card_Expiration'] = array('type'=>'text', 'label'=>'Credit Card Expiration (mm/yyyy)', 'required'=>true, 'public'=>false, 'size'=>40, 'enabled'=>true);
-        $fields['First_Name']=array('type'='text','label'=>'Cardholder First Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
-        $fields['Last_Name']=array('type'='text','label'=>'Cardholder Last Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
-        $fields['Street']=array('type'='text','label'=>'Cardholder Address', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
-        $fields['City']=array('type'='text','label'=>'Cardholder City', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
-        $fields['State']=array('type'='text','label'=>'Cardholder State/Province', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
-        $fields['Zip']=array('type'='text','label'=>'Cardholder Postal Code', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
-        $fields['Email']=array('type'='text','label'=>'Cardholder Email', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
+        $fields['First_Name']=array('type'=>'text','label'=>'Cardholder First Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
+        $fields['Last_Name']=array('type'=>'text','label'=>'Cardholder Last Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
+        $fields['Street']=array('type'=>'text','label'=>'Cardholder Address', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
+        $fields['City']=array('type'=>'text','label'=>'Cardholder City', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
+        $fields['State']=array('type'=>'text','label'=>'Cardholder State/Province', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
+        $fields['Zip']=array('type'=>'text','label'=>'Cardholder Postal Code', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
+        $fields['Email']=array('type'=>'text','label'=>'Cardholder Email', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
         
     }
 

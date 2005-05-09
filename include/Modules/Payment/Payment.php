@@ -19,6 +19,7 @@ Class Payment {
     function init(&$dbcon, $type) {
 		$this->dbcon = &$dbcon;
 		$this->_register_fields();
+        $this->type = $type;
     }
 	
     function _register_fields(){

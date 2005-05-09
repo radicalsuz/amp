@@ -123,8 +123,11 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     $label    = (isset($field_def['label']))  ? $field_def[ 'label'  ] : null;
     $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
     $size     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 40;
+    $attr     = (isset($field_def['attr']))   ? $field_def['attr']       : null;
 
     $renderer =& $form->defaultRenderer();
+
+    if ($type=='html') $name = $defaults;
 
 	//Check for defined Lookup in selectbox defaults
 	//format is Lookup(table_name, display_column, value_column, restrictions);
@@ -191,6 +194,11 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
 
     $fRef = &$form->getElement( $name );
 
+    //set Attributes for the new element
+    if (isset($attr)) {
+        $fRef->updateAttributes($attr);
+    }
+
     #if ( isset( $selected )&& !isset($group_set)  ) {
     if ( isset( $selected ) && strpos($type, 'group')===FALSE  ) {
         $fRef->setSelected( $selected );
@@ -206,7 +214,6 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
         $fRef->setMultiple(true);
         $fRef->setSize( $size );
     }
-
 
     if ( isset( $size ) && $size && ( $type == 'textarea' ) ) {
         if ( strpos( $size, ':' ) ) {
