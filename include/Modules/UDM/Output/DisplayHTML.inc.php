@@ -66,34 +66,40 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         $options=array_merge($this->getOptions(), $options);
         //Check to see if a single record was specified
         //if so, return detail information for that record 
+        /*
 		if (isset($options['_userid'])) {
 
-            $detail_function=isset($options['detail_format'])?($options['detail_format']):"display_detail";
-            $inclass=method_exists($detail_function, $this);
 
             $single_udm=&new UserDataInput ($this->dbcon, $this->udm->instance, $this->udm->admin);
             $single_udm->getUser($options['_userid']);
 
             $dataset=$single_udm->getData();
+        */
 
-            if ($inclass){ $output=$this->$detail_function($dataset, $options);
-            } else {
-                $output=$detail_function($dataset, $options);
-            }
-        } else {
-        //Print the current results list
-            $dataset=$this->udm->getData();
-            
+        // if the UID is set, show only one record with the detail format
+        if (isset($this->udm->uid)) {
+            $display_function=isset($options['detail_format'])?($options['detail_format']):"display_detail";
+            $dataset = $this->udm->getUser( $this->udm->uid );
+            $this->udm->modTemplateID = $options['header_text_detail'];
+
+        } else { 
+            //by default the list display function is used
             $display_function=isset($options['display_format'])?($options['display_format']):"display_item";
-            $inclass=method_exists($display_function, $this);
+            //Retrieve the full results list
+            $dataset=$this->udm->getData();
 
-            //output display format
-            foreach ($dataset as $dataitem) {
-                if (isset($options['subheader'])) $output.=$this->subheader($dataitem, $options['subheader']);
-                if($inclass) $output.=$this->$display_function($dataitem);
-                else $output.=$display_function($dataitem, $this->options);
-            }
+            $this->udm->modTemplateID = $options['header_text_list'];
         }
+        
+        $inclass=method_exists($display_function, $this);
+
+        //output display format
+        foreach ($dataset as $dataitem) {
+            if (isset($options['subheader'])) $output.=$this->subheader($dataitem, $options['subheader']);
+            if($inclass) $output.=$this->$display_function($dataitem);
+            else $output.=$display_function($dataitem, $this->options);
+        }
+    
 
 		return $output;
     }

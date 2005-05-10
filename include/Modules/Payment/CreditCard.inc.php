@@ -189,7 +189,6 @@ class Payment_CreditCard extends Payment {
 		$fields['Credit_Card_Number'] = array('type'=>'text', 'label'=>'Credit Card Number', 'required'=>true, 'public'=>true, 'size'=>40, 'enabled'=>true);
 		$fields['Credit_Card_Type'] = array('type'=>'select', 'label'=>'Credit Card Type', 'required'=>true, 'public'=>true, 'size'=>40, 'values'=>'Visa,Master Card,Discover,Amex','enabled'=>true);
 		$fields['Credit_Card_Expiration'] = array('type'=>'date', 'label'=>'Credit Card Expiration', 'required'=>true, 'public'=>true, 'values'=>$dt_options, 'enabled'=>true);
-		#$fields['Credit_Card_Expiration_Year'] = array('type'=>'select', 'label'=>'Year', 'required'=>true, 'public'=>true, 'size'=>40, 'enabled'=>true, 'values'=>$coming_years);
         $fields['First_Name']=array('type'=>'text','label'=>'Cardholder First Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
         $fields['Last_Name']=array('type'=>'text','label'=>'Cardholder Last Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
         $fields['Street']=array('type'=>'text','label'=>'Cardholder Address', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);

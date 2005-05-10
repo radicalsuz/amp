@@ -88,7 +88,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
 
     function setCriteria() {
 
-        if (!isset($this->udm->url_criteria)) $this->criteria=$this->udm->parse_URL(); 
+        if (!isset($this->udm->url_criteria)) $this->criteria=$this->udm->parse_URL_crit(); 
         else $this->criteria=$this->udm->url_criteria;
         
         if ($pager=$this->udm->getPlugin('Output','Pager')) {

@@ -20,12 +20,10 @@ if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
 }
 
 $intro_id=1;
-$headr=0;
+$display_options=0;
 $admin=false;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);
 if ($userlist->_module_def['publish']) {
-    #$searchform=&$userlist->getPlugin('Output', 'SearchForm');
-    #$searchform=&$userlist->registerPlugin('Output', 'SearchForm');
 
 	#get all registered SearchForm plugins
 	$searchforms=$userlist->getPlugins('SearchForm');
@@ -35,7 +33,7 @@ if ($userlist->_module_def['publish']) {
     $pager=&$userlist->registerPlugin('Output', 'Pager');
     $userlist->registerPlugin('AMP', 'Search');
     if ($display=&$userlist->getPlugin('Output', 'DisplayHTML')) {
-        $headr=$display->getOptions();
+        $display_options = $display->getOptions();
 
     } else {
        $display=&$userlist->registerPlugin('Output', 'DisplayHTML');
@@ -49,20 +47,21 @@ $sub = isset($_REQUEST['btnUDMSubmit']);
 $uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
 
 if ($uid && $modin) {
-
-	if(isset($headr['header_text_detail'])) {
-		$intro_id=$headr['header_text_detail'];
+/*
+	if(isset($display_options['header_text_detail'])) {
+		$intro_id=$display_options['header_text_detail'];
 	}
-
-    $list_options['_userid']= $uid;
-    $output= $userlist->doAction('DisplayHTML', $list_options); 
+*/
+    $userlist->uid = $uid;
+    $output= $userlist->output('DisplayHTML'); 
 
 } else { 
 
-	if(isset($headr['header_text_list'])) {
-		$intro_id=$headr['header_text_list'];
+/*
+	if(isset($display_options['header_text_list'])) {
+		$intro_id=$display_options['header_text_list'];
 	}
-
+*/
     //display result list
     if (!isset($searchform)||$searchform==false) $srch_options['criteria']=array('value'=>array("modin=".$modin));
 
@@ -72,14 +71,14 @@ if ($uid && $modin) {
                                 .$searchform->execute():"").
                 ($pager?$pager->execute():"").
                 ($actionbar?$actionbar->execute():"").
-                $userlist->output('DisplayHTML', $list_options);#.
-                #($pager?$pager->execute():"").
+                $userlist->output('DisplayHTML', $list_options).
+                ($pager?$pager->execute():"");#.
                 #$userlist->output('Index');
     } else {
         $output=join('<BR>',$userlist->errors).'<P>'.($searchform?$searchform->execute():"");
     }
 }
-
+if ($userlist->modTemplateID) $intro_id = $userlist->modTemplateID;
 require_once( 'AMP/BaseTemplate.php' );
 require_once( 'AMP/BaseModuleIntro.php' );
 

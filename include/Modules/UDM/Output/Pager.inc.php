@@ -67,7 +67,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
                 $this->udm->setData(array_slice($this->udm->users, $this->offset, $this->return_qty));
             }
         }
-        if (!isset($this->udm->url_criteria)) $this->criteria = $this->udm->parse_URL();
+        if (!isset($this->udm->url_criteria)) $this->criteria = $this->udm->parse_URL_crit();
         else $this->criteria=$this->udm->url_criteria;
         
         if ($this->udm->admin) $options['control_class']="list_controls";

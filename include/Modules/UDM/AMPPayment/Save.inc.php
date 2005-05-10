@@ -75,19 +75,31 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
         
         $options = $this->getOptions();
         $this->processor->setMerchant($options['merchant_ID']);
+        $prefix = ($this->_field_prefix?$this->_field_prefix:'plugin_AMPPayment').'_';
         
         //Get fields from the Payment_CreditCard object
         $fields=$this->processor->fields;
+
+        //set the field order to put the dynamic checkbox before the Customer
+        //Data
+        foreach ($fields as $cc_field=>$cc_fDef) {
+            if ($cc_field=="First_Name") $cc_fieldorder .= $prefix."Share_Data,";
+            $cc_fieldorder .= $prefix.$cc_field.",";
+        }
+        $cc_fieldorder = substr($cc_fieldorder, 0, strlen($cc_fieldorder)-1);
         
-        //add a fancy javascript to save users time when CC data matches
+        //add a fancy javascript to save users time when Cardholder data matches
         //personal data
         $fields['Share_Data']=array('type'=>'checkbox','label'=>'Check here if information below is the same as above', 
                                     'required'=>false, 'public'=>true, 'enabled'=>true, 'size'=>30,
                                     'attr'=>array('onClick'=>'plugin_AMPPayment_setAddress(this.checked);'));
         $fields['setaddress_script']=array('type'=>'html', 'values'=>
-        $this->address_script($fields), 'enabled'=>true,'public'=>true, 'required'=>false);
+            $this->address_script($fields), 'enabled'=>true,'public'=>true, 'required'=>false);
+
+        $this->udm->_module_def[ 'field_order' ] = join(",", array($this->udm->_module_def[ 'field_order'],$cc_fieldorder));
         
         $this->fields = array_merge($this->fields, $fields);
+
     }
 
     function address_script($fields) {
@@ -95,6 +107,8 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
 
         $script = '
         <script type="text/javascript">
+        var save_table;
+
         function plugin_AMPPayment_setAddress (chk_val) {
             var payform = document.forms["'.$this->udm->name.'"];
             if (chk_val) {';
@@ -108,14 +122,15 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
             if (!isset($this->udm->fields[$cust_key])) continue;
             $field_key = $this->_field_prefix.'_'.$cust_key;
             $script_on .= '
-                payform.elements["'.$field_key.'"].value=payform.elements["'.$cust_key.'"].value;
-                payform.elements["'.$field_key.'"].disabled=true;';
-            $script_off .='payform.elements["'.$field_key.'"].disabled=false;';
+                payform.elements["'.$field_key.'"].value=payform.elements["'.$cust_key.'"].value;';
+                #payform.elements["'.$field_key.'"].disabled=true;';
+            #$script_off .='payform.elements["'.$field_key.'"].disabled=false;';
         }
         $script .= $script_on ."\n 
-            } else {\n". $script_off ."\n
             }
         }
+        
+            
         </script>";
         return $script;
     }
