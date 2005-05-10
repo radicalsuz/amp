@@ -4,24 +4,28 @@ if ( !function_exists( 'buildheader' ) ) {
 		
     function buildheader() {
         
-        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $_GET, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url, $extra_header, $css;
+        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url, $extra_header, $css, $SystemSettings;
+
+        $encoding = (isset($SystemSettings['encoding'])) ? $SystemSettings['encoding'] : 'iso-8859-1'; 
+
+        if (!isset($htmlheader)) $htmlheader = "";
+
         $htmlheader .= "<html>
         <head>
-        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">";
-        #<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
+        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$encoding\">";
         
         //build header title
         if ($MM_id) {
             $headertitle = $MM_title;
             $meta_description = substr(trim($MM_shortdesc),0,250); 
             $meta_description = ereg_replace ("\"", "", $meta_description);
-        } elseif ($_GET["list"] == "type") {
+        } elseif (isset($_GET['list']) && $_GET["list"] == "type") {
             $headertitle = $MM_typename;
         } else {
             $headertitle = $mod_name;
         }
 
-        if ($mod_id != 2) {
+        if (!isset($mod_id) || $mod_id != 2) {
             $headertitle = ":&nbsp;".$headertitle ;
         } else {
             $headertitle = "";
@@ -53,7 +57,7 @@ if ( !function_exists( 'buildheader' ) ) {
     }
 }
 
-if (!$intro_id) { $intro_id = $mod_id; }
+if (!isset($intro_id) || !$intro_id) { $intro_id = $mod_id; }
 	
 #ESTABLISH HIERARCHY
 if ($intro_id == 1) {
@@ -131,7 +135,7 @@ if ($modtemplate_id) {
 	$template_id = $modtemplate_id;
 } elseif ($typetemplate_id) {
 	$template_id = $typetemplate_id;
-} elseif ( (!$template_id) && $MM_type != 1 ) { 
+} elseif ( (!isset($template_id) || !$template_id) && $MM_type != 1 ) { 
 
 	$tparent= $MM_type;
  
@@ -152,7 +156,7 @@ if ($modtemplate_id) {
 	}
 }
 
-if (!$template_id)  {$template_id = $systemplate_id;}
+if (!isset($template_id) || !$template_id)  {$template_id = $systemplate_id;}
 
 #SET TEMPLATE VARS
 $settemplate=$dbcon->CacheExecute("SELECT * FROM template WHERE id = $template_id") or DIE('Could not load template information in BaseTemplate '.$dbcon->ErrorMsg());
