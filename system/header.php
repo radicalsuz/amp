@@ -85,6 +85,8 @@ if (isset($modid) && $modid !=NULL) {
 }
 
 $nav_link = '';
+if (!isset($mod_name)) $mod_name = '';
+
 if (isset($sys_nav[$mod_name])) {
 
     $modsize= sizeof($sys_nav[$mod_name]);
@@ -102,9 +104,9 @@ if (isset($sys_nav[$mod_name])) {
             $nav_link .= "\n	</ul>\n<p class ='sidetitle'>".$sys_nav[$mod_name][$x]['title']."</p>\n	<ul class=side>";
         } else {
             $nav_css = '';
-            //if (isset($sys_nav[$mod_name][$x]['class'])) {
+            if (isset($sys_nav[$mod_name][$x]['class'])) {
                 $nav_css = nav_css($sys_nav[$mod_name][$x]['class']);
-            //}
+            }
             $nav_link .= "\n		<li $nav_css><a href='".$sys_nav[$mod_name][$x]['link']."' >".$sys_nav[$mod_name][$x]['name']."</a></li>";
         }
     }
@@ -135,11 +137,15 @@ if ($nav_link) {
 
 if (!isset($_GET['noHeader']) || !$_GET['noHeader']) {
 
+    global $SystemSettings;
+
+    $encoding = (isset($SystemSettings['encoding'])) ? $SystemSettings['encoding'] : 'iso-8859-1';
+
 ?>
 <html>
 <head>
-<title><?php echo $SiteName  ; ?> Administration</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title><?= $SiteName  ; ?> Administration</title>
+<meta http-equiv="Content-Type" content="text/html; charset=<?= $encoding ?>">
 <link rel="stylesheet" href="managment.css" type="text/css">
 		  	  <script type="text/javascript">
 			function getCookie(name)
@@ -346,7 +352,6 @@ function showUploadWindow (parentform, calledfield, dtype) {
     hWnd = window.open( url, 'recordWindow', 'height=175,width=300,scrollbars=no,menubar=no,toolbar=no,resizeable=no,location=no,status=no' );
 }
 
-
 </script>
 <script type="text/javascript" src="Connections/popcalendar.js"></script>
 <script language="JavaScript" src="../Connections/functions.js"></script>
@@ -402,7 +407,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 
 
 </style>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=<?= $encoding ?>">
 
     <?php include("Connections/ddnav.php");
     ?>
