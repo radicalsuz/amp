@@ -15,7 +15,7 @@ global $MM_type, $MM_class ,$area, $list, $MM_id, $mod_name, $MM_title, $mod_id,
 
 $ar = "&nbsp;&nbsp;<b>&#187;<b>&nbsp;&nbsp;";
 
-if ($_GET["list"]=="class"){
+if (isset($_GET['list']) && $_GET["list"]=="class"){
 	$hiclass=$dbcon->CacheExecute("Select class from class where id = $MM_class") or DIE($dbcon->ErrorMsg());
 }
 if ($MM_id){
@@ -24,6 +24,9 @@ if ($MM_id){
 if (($mod_id==1) && ($_GET["list"]!="class")){
 	$hitype=$dbcon->CacheExecute("Select type, id from articletype where id = $MM_type") or DIE($dbcon->ErrorMsg());
 }
+
+if (!isset($Web_url)) $Web_url = '/';
+if (!isset($bchtml)) $bchtml = '';
 
 ####strat html #################
 $bchtml.= " <!-- BEGIN BREADCRUMB CODE -->
@@ -58,12 +61,12 @@ if (!$_GET["list"] && $MM_id && !$mod_name) {
 }
 
 
-if (!$_GET["list"] && $mod_name) { 
+if ((!isset($_GET['list']) || !$_GET["list"]) && $mod_name) { 
 	$bchtml.= $ar.$MM_title ;  
 }
 
 	
-if ($_GET["list"] == "class") {
+if (isset($_GET['list']) && $_GET["list"] == "class") {
 	$bchtml.=  $ar."<a href=\"".$Web_url."article.php?list=class&class=".$MM_class."\" class=breadcrumb>".$hiclass->Fields("class")."</a>"; 
 }  
   
