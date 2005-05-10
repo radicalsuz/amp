@@ -1,1 +1,7 @@
+php_value auto_prepend_file "AMP/Auth/Require.inc.php"
+
+<Files utf8-upgrade.php>
+    allow from all
+</Files>
+
 deny from all
