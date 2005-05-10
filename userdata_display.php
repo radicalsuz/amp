@@ -19,21 +19,26 @@ if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
     header ("Location: index.php");
 }
 
-
+$intro_id=1;
+$headr=0;
 $admin=false;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);
 if ($userlist->_module_def['publish']) {
     #$searchform=&$userlist->getPlugin('Output', 'SearchForm');
     #$searchform=&$userlist->registerPlugin('Output', 'SearchForm');
+
+	#get all registered SearchForm plugins
+	$searchforms=$userlist->getPlugins('SearchForm');
+	#use only the first one (NULL if not an array or empty)
+	$searchform = array_shift($searchforms);
+
     $pager=&$userlist->registerPlugin('Output', 'Pager');
     $userlist->registerPlugin('AMP', 'Search');
     if ($display=&$userlist->getPlugin('Output', 'DisplayHTML')) {
-        
         $headr=$display->getOptions();
-        $intro_id=$headr['header_text'];
+
     } else {
        $display=&$userlist->registerPlugin('Output', 'DisplayHTML');
-       $mod_id=1;
     }
     $userlist->registerPlugin('AMP', 'Sort');
 } else {
@@ -45,10 +50,18 @@ $uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
 
 if ($uid && $modin) {
 
+	if(isset($headr['header_text_detail'])) {
+		$intro_id=$headr['header_text_detail'];
+	}
+
     $list_options['_userid']= $uid;
     $output= $userlist->doAction('DisplayHTML', $list_options); 
 
 } else { 
+
+	if(isset($headr['header_text_list'])) {
+		$intro_id=$headr['header_text_list'];
+	}
 
     //display result list
     if (!isset($searchform)||$searchform==false) $srch_options['criteria']=array('value'=>array("modin=".$modin));
@@ -68,6 +81,7 @@ if ($uid && $modin) {
 }
 
 require_once( 'AMP/BaseTemplate.php' );
+require_once( 'AMP/BaseModuleIntro.php' );
 
 print $output;
 
