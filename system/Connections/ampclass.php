@@ -83,7 +83,7 @@ function listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby=null,$sort
 			
 			foreach ($extra as $k=>$v) {
 				$id=NULL;
-				if ($extramap[$k] != NULL) {
+				if (isset($extramap[$k]) && $extramap[$k] !== false) {
 					$id= $extramap[$k];
 				}else {
 					$id= "id";
@@ -466,7 +466,7 @@ class BuildForm {
 
 	function add_header($header, $class='intitle') {
 		if ($class) {
-			$html .= '
+			$html = '
 			<tr valign="top"><td colspan="2" class="'. $class .'">'. $header .'</td></tr>';
 		} else {
 			$html .= '
@@ -476,7 +476,7 @@ class BuildForm {
 	}
 	
 	function add_content($content) {
-		$html .= '
+		$html = '
 		<tr valign="top"><td colspan="2" class="form">'. $content .'</td></tr>';
 		return $html;
 	}
@@ -678,6 +678,9 @@ class Form extends Base {
 	 * @param string $name the name of the form (useful if you use js)
 	 * @param string $enctype enctype
 	 */
+
+    var $contents;
+
 	function Form($method='POST', $action=null, $name=null, $enctype=null) {
 		if ($action == null) $action = $_SERVER['PHP_SELF'];
 
@@ -852,7 +855,7 @@ function addfield($name,$label=NULL,$fieldtype='text',$value=NULL,$defualt=NULL,
 	$label = str_replace('_',' ',$label); 
 	$label = ucwords($label);
 	
-	if ((!$_GET['id']) && (!$value)) {$value = $defualt;}
+	if ((!isset($_GET['id']) || !$_GET['id']) && (!$value)) {$value = $defualt;}
 	if ($fieldtype == 'text') {
 		$field = & new Text($name, $value, $size);
 	}
