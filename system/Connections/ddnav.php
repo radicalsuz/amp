@@ -62,6 +62,7 @@ function nav_udms() {
     $output = '';
 	$R=$dbcon->CacheExecute("SELECT id, name FROM userdata_fields WHERE id >= 50 ORDER BY name")
                     or die("Couldn't fetch UDM nav information: " . $dbcon->ErrorMsg());
+    $forms = 0;
 	while (!$R->EOF && $forms++ < 10) {
 		$output .= nav_item_udm($R->Fields("id"));
 		$R->MoveNext();
@@ -85,7 +86,7 @@ function nav_mod_type($type) {
 		$R->MoveNext();
 	}
 
-    if ($entries) {
+    if (isset($entries) && $entries) {
         global $sys_nav;
         $output .= nav_item($sys_nav['udm'][0]);
     }
