@@ -194,7 +194,7 @@ class AMP_Authentication_Handler {
 
         $dbcon = $this->dbcon;
 
-        if ($_REQUEST['logout']=='logout') $this->do_logout();
+        if (isset($_REQUEST['logout']) && $_REQUEST['logout']=='logout') $this->do_logout();
 
         if (isset($_REQUEST['username'])) {
             $username = $_REQUEST['username'];
@@ -294,6 +294,7 @@ class AMP_Authentication_Handler {
 
     function collect_post_vars() {
         if (is_array($_POST)) {
+            $post_vars = array();
             foreach ($_POST as $key=>$value) {
                 if ($key!='username' && $key!='password') 
                     $post_vars[$key]=$value;

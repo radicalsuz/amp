@@ -1,9 +1,10 @@
+<?php global $SiteName; ?>
 <?php header("P3P: CP='NON ADMi OUR STP INT'"); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title><?= $_GLOBAL['SiteName'] ?> Administration</title>
+    <title><?= $SiteName ?> Administration</title>
     <style type="text/css">
 
         * {
@@ -97,14 +98,14 @@
 <div id="wrapper">
 
     <div id="header">
-        <h1><?php global $SiteName; print $SiteName; ?> Administrative Login</h1>
+        <h1><?= $SiteName; ?> Administrative Login</h1>
     </div>
 
     <div id="content">
 
         <?= (isset($this->message)) ? "<p class=\"login {$this->message_type}\">{$this->message}</p>" : '' ?>
 
-        <form id="login" method="post" action="<?= $_SYSTEM['PHP_SELF']; ?>" />
+        <form id="login" method="post" action="<?= $_SERVER['PHP_SELF']; ?>" />
 
             <div id="formWrap">
                 <label for="username">Username:</label> <input type="text" name="username" />
