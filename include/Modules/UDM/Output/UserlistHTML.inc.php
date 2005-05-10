@@ -20,26 +20,26 @@ class UserDataPlugin_UserlistHTML_Output extends UserDataPlugin {
     //List Vars
     //create default options array
     var $options = array (
-        'editlink_fields'=>"modin,id",
-        'editlink_action'=>"modinput4_view.php",
-        'allow_edit'=>TRUE,
-        'display_fields'=>"id, Concat(First_Name, \" \", Last_Name) as Name, Company, State, Phone, publish",
-        'current_offset'=>0,
-        'qty_displayed'=>50,
-        'sort_by'=>"Last_Name, First_Name",
-        'usertable'=>"userdata",
+        'editlink_fields'=> array ('default'=>"modin,id"),
+        'editlink_action'=>array ('default'=>"modinput4_view.php"),
+        'allow_edit'=>array ('default'=>TRUE),
+        'display_fields'=>array ('default'=>"id, Concat(First_Name, \" \", Last_Name) as Name, Company, State, Phone, publish"),
+        'current_offset'=>array ('default'=>0),
+        'qty_displayed'=>array ('default'=>50),
+        'sort_by'=>array ('default'=>"Last_Name, First_Name"),
+        'usertable'=>array ('default'=>"userdata"),
         
-        'show_headers'=>TRUE,
-        'is_dynamic'=>TRUE,
-        'form_name'=>'UDM_List',
-        'show_action_bar'=>TRUE,
-        'allow_lookups'=>TRUE,
-        'list_form'=>"UDM_Listing",
-        'allow_publish'=>TRUE,
-        'allow_email'=>TRUE,
-        'email_action'=>"udm_mailblast.php",
-        'allow_include_modins'=>FALSE,
-        'show_advanced_modin'=>FALSE,
+        'show_headers'=>array ('default'=>TRUE),
+        'is_dynamic'=>array ('default'=>TRUE),
+        'form_name'=>array ('default'=>'UDM_List'),
+        'show_action_bar'=>array ('default'=>TRUE),
+        'allow_lookups'=>array ('default'=>TRUE),
+        'list_form'=>array ('default'=>"UDM_Listing"),
+        'allow_publish'=>array ('default'=>TRUE),
+        'allow_email'=>array ('default'=>TRUE),
+        'email_action'=>array ('default'=>"udm_mailblast.php"),
+        'allow_include_modins'=>array ('default'=>FALSE),
+        'show_advanced_modin'=>array ('default'=>FALSE)
     );
 
 
@@ -50,8 +50,8 @@ class UserDataPlugin_UserlistHTML_Output extends UserDataPlugin {
 
     function execute ( $options = null ) {
 
-        if (isset($options)) $this->_shallow_replace('options', $options);
-        return udm_output_userlist_html( $this->udm, $this->options );
+        $options = array_merge($this->getOptions(), $options);
+        return udm_output_userlist_html( $this->udm, $options );
 
     }
 
@@ -61,31 +61,33 @@ class UserDataPlugin_UserlistHTML_Output extends UserDataPlugin {
     function _register_options_dynamic() {
 
 		global $MM_email_from; // - returns current user variable
+        $options = $this->getOptions();
         /*
+        
 		if ($default_email=$udm->dbcon->GetAssoc("SELECT id, name, email from users where id=".$_SERVER['REMOTE_USER'])){
 			if (isset($default_email[$ID]['email'])) {
 				$options['user_email']=$default_email[$ID]['email'];
 				$options['user_name']=$default_email[$ID]['name'];
 			}
 		} else {*/ 
-		$options['user_email']=$MM_email_from;
+		$new_options['user_email']=$MM_email_from;
 		
-        $options['page_name']=$_SERVER['PHP_SELF'];
-        $options['Lookups']['publish']=array("LookupSet"=>array("0"=>"draft" , "1"=>"live"), 'LookupName'=>'status');
+        $new_options['page_name']=$_SERVER['PHP_SELF'];
+        $new_options['Lookups']['publish']=array("LookupSet"=>array("0"=>"draft" , "1"=>"live"), 'LookupName'=>'status');
 		
         //check display fields for admin/enabled
         #$options=list_check_fields($this->udm, $this->options);
         
-        if ($this->options['is_dynamic']) {
-            $options=list_readFormOptions($this->udm, $this->options);
+        if ($options['is_dynamic']) {
+            $new_options=list_readFormOptions($this->udm, $options);
         }
 
-        if ($this->options['allow_include_modins']&&$this->options['show_advanced_modin']) {
-            $options['Lookups']['modin']['LookupName']="Source";
-            $options['Lookups']['modin']['LookupTable']="userdata_fields";
-            $options['Lookups']['modin']['LookupField']="name";
+        if ($options['allow_include_modins']&&$options['show_advanced_modin']) {
+            $new_options['Lookups']['modin']['LookupName']="Source";
+            $new_options['Lookups']['modin']['LookupTable']="userdata_fields";
+            $new_options['Lookups']['modin']['LookupField']="name";
         }
-        $this->_shallow_replace('options', $options);
+        $this->setOptions($new_options);
         
      }
 }
@@ -121,6 +123,7 @@ function udm_output_userlist_html(&$udm, $options=null) {
 		$output.=list_output_dynamic($udm, $options);
 		$output.="</form>";
 	} else {
+        print $options['display_fields'];
 		$output="This Module is currently empty";
 	}
 	if ($udm->authorized) {
