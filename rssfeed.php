@@ -19,7 +19,8 @@ if ($_GET['feed']) {
 }
 
 if ($sqlwhere) {$sqlwhere = " and ".$sqlwhere;}
-$sql = "SELECT distinct title, id, test, UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(updated) as updated, shortdesc FROM articles Left Join articlereltype on articleid = id  WHERE publish=1 $sqlwhere ORDER BY $orderby $orderbyorder  limit $sqllimit" ;
+$sql = "SELECT distinct title, id, test, UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(updated) as updated, 
+        shortdesc FROM articles Left Join articlereltype on articleid = id  WHERE publish=1 $sqlwhere ORDER BY $orderby $orderbyorder  limit $sqllimit" ;
 	
 $R =$dbcon->CacheExecute($sql) or DIE($sql.$dbcon->ErrorMsg());
 

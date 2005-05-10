@@ -80,7 +80,7 @@ if ( !function_exists( 'magpienav' ) ) {
 		global $base_path;
 	
 	
-		define('MAGPIE_DIR', 'Magpie/');
+		define('MAGPIE_DIR', 'FeedonFeeds/magpierss/');
 		require_once(MAGPIE_DIR.'rss_fetch.inc');
 	
 		$error_level_tmp = error_reporting();
@@ -234,7 +234,7 @@ function getthenavs($navside) {
         ###DEFINE NON SQL NAVIGATION
         
         //TITLE AS IMAGE 
-		if ($nav->Fields("rss")==1) {
+		if ($nav->Fields("rss")) {
 			$shownav.= magpienav($nav->Fields("rss"),$nav->Fields("repeat"),$nav->Fields("titletext"),$NAV_HTML_1,$NAV_HTML_2,$NAV_HTML_3,$NAV_HTML_4,$NAV_HTML_5);
 		}
         elseif ($nav->Fields("nosql") == 1 &&  $nav->Fields("titletext") != (NULL)  ) { 

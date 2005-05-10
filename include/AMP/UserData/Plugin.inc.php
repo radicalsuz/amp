@@ -296,7 +296,12 @@ class UserDataPlugin {
             switch ($this->udm->fields[$keyname]['type']) { 
                 case "date":
                     $tempValue=is_array($value)?mktime(0,0,0,$value['M'],$value['d'],$value['Y']):null;
-                    if (isset($tempValue)) $returnSet[$keyname] = date("Y-m-d",$tempValue);
+                    
+                    if (isset($tempValue)) {
+                        if (isset($value['d'])) $returnSet[$keyname] = date("Y-m-d",$tempValue);
+                        elseif (count($value)==2 && isset($value['Y']) && isset($value['m'])) $returnSet[$keyname] = date("m/Y",$tempValue);
+                        else $returnSet[$keyname] = date(join("-", array_keys($value)), $tempValue);
+                    }
                     break;
                 case "multiselect":
                     $returnSet[$keyname]=is_array($value)?join (", ",$value):null;

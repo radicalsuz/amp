@@ -25,7 +25,7 @@ if ((($_POST[MM_update]) && ($_POST[MM_recordId])) or ($_POST[MM_insert]) or (($
 	$MM_editColumn = "id";  
     $MM_editRedirectUrl = $filename."?action=list";
 	if ($_POST["class"]) {$sqlwhere = " class = ".$_POST["class"]." ";}
-	if ($_POST["type"]) {$sqlwhere = " type = ".$_POST["type"]." ";}
+	if ($_POST["type"]) {$sqlwhere = "( type = ".$_POST["type"]." OR typeid = ".$_POST["type"].") ";}
 	if (($_POST["class"]) && ($_POST["type"])) {$sqlwhere = " class = ".$_POST["class"]." and type = ".$_POST["type"]." ";}
 
 	$MM_fieldsStr = "title|value|description|value|sqllimit|value|orderbysql|value|orderbyorder|value|sqlwhere|value";

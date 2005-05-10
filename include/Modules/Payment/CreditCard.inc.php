@@ -124,10 +124,14 @@ class Payment_CreditCard extends Payment {
 
     function setCard ($data) {
         if (!is_array($data)) return false;
+        if ((!isset($data['Credit_Card_Expiration']))&&(isset($data['Credit_Card_Expiration_Month'])&&isset($data['Credit_Card_Expiration_Year']))) {
+            $data['Credit_Card_Expiration']=$data['Credit_Card_Expiration_Month']."/".$data['Credit_Card_Expiration_Year'];
+        }
 
         //Checks each value in $data to see if there is a matching key in
         //$card_info_keys -- note that credit card values in $data are prefaced
         //with a string: "Credit_Card_"
+        
         foreach ($data as $card_key=>$card_value) {
             if (array_search($card_info_keys, substr($card_key,12))) {
                 $card_info[substr($card_key,12)]=$card_value;
@@ -177,12 +181,15 @@ class Payment_CreditCard extends Payment {
     function _register_fields () {
 
         $fields = &$this->fields;
+        $this_year = date('Y');
+        $dt_options = array("format"=>"mY","minYear"=>$this_year,"maxYear"=>($this_year+10));
 
-		$fields['Credit_Card_Info'] = array('type'=>'header', 'label'=>'Credit Card Information', 'public'=>false,  'enabled'=>true);
+		$fields['Credit_Card_Info'] = array('type'=>'header', 'label'=>'Credit Card Information', 'public'=>true,  'enabled'=>true);
 		$fields['Amount'] = array('type'=>'select', 'label'=>'Amount', 'required'=>true, 'public'=>false, 'size'=>40, 'enabled'=>true);
-		$fields['Credit_Card_Number'] = array('type'=>'text', 'label'=>'Credit Card Number', 'required'=>true, 'public'=>false, 'size'=>40, 'enabled'=>true);
-		$fields['Credit_Card_Type'] = array('type'=>'select', 'label'=>'Credit Card Type', 'required'=>true, 'public'=>false, 'size'=>40, 'values'=>'Visa,Master Card,Discover,Amex','enabled'=>true);
-		$fields['Credit_Card_Expiration'] = array('type'=>'text', 'label'=>'Credit Card Expiration (mm/yyyy)', 'required'=>true, 'public'=>false, 'size'=>40, 'enabled'=>true);
+		$fields['Credit_Card_Number'] = array('type'=>'text', 'label'=>'Credit Card Number', 'required'=>true, 'public'=>true, 'size'=>40, 'enabled'=>true);
+		$fields['Credit_Card_Type'] = array('type'=>'select', 'label'=>'Credit Card Type', 'required'=>true, 'public'=>true, 'size'=>40, 'values'=>'Visa,Master Card,Discover,Amex','enabled'=>true);
+		$fields['Credit_Card_Expiration'] = array('type'=>'date', 'label'=>'Credit Card Expiration', 'required'=>true, 'public'=>true, 'values'=>$dt_options, 'enabled'=>true);
+		#$fields['Credit_Card_Expiration_Year'] = array('type'=>'select', 'label'=>'Year', 'required'=>true, 'public'=>true, 'size'=>40, 'enabled'=>true, 'values'=>$coming_years);
         $fields['First_Name']=array('type'=>'text','label'=>'Cardholder First Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
         $fields['Last_Name']=array('type'=>'text','label'=>'Cardholder Last Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
         $fields['Street']=array('type'=>'text','label'=>'Cardholder Address', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30);
