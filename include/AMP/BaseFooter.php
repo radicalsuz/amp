@@ -6,12 +6,14 @@ Description:  display footer and right nav of template. called from all display 
 To Do: 
 
 *********************/ 
-if ($modulefooter != NULL){
+if (isset($modulefooter) && $modulefooter){
 	echo $modulefooter;
 	$modulefooter=NULL;
 }
 
 $bodydata = ob_get_clean();
+
+if (!isset($bodydata2)) $bodydata2 = '';
 $bodydata =$bodydata2.$bodydata;
 
 $sidelistcss="sidelist";
@@ -31,12 +33,13 @@ $htmltemplate2 = str_replace("[-body-]", $bodydata, $htmltemplate2);
 
 $htmloutput = $htmlheader . $htmltemplate2;
 
-if  ($_GET['printsafe'] == 1) {
+if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) {
 	$printer_safe_top= "<div class=printer_safe_top></div>";
 	echo $htmlheader.$printer_safe_top.$bodydata;
+} else {
+    echo $htmloutput;
 }
-else {echo $htmloutput ;}
 
-ob_end_flush();
+@ob_end_flush();
 
 ?>
