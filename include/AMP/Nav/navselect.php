@@ -80,7 +80,7 @@ if ( !function_exists( 'magpienav' ) ) {
 		global $base_path;
 	
 	
-		define('MAGPIE_DIR', 'FeedonFeeds/magpierss/');
+		define('MAGPIE_DIR', 'FeedOnFeeds/magpierss/');
 		require_once(MAGPIE_DIR.'rss_fetch.inc');
 	
 		$error_level_tmp = error_reporting();
