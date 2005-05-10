@@ -29,16 +29,18 @@ if (file_exists($base_path."Connections/menu.class.php")) {
 $getsysvars = $dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1")
     or die("Couldn't fetch system settings: " . $dbcon->ErrorMsg()); 
 
-$SiteName = $getsysvars->Fields("websitename")  ;
-$Web_url  = $getsysvars->Fields("basepath")  ;
+$SystemSettings = $getsysvars->FetchRow();
+
+$SiteName            = $getsysvars->Fields("websitename")  ;
+$Web_url             = $getsysvars->Fields("basepath")  ;
 //Set caching to 0 for AMP-authenticated system side users
-$cacheSecs = (isset($_SERVER['REMOTE_USER'])&&($_SERVER['REMOTE_USER']))?0:$getsysvars->Fields("cacheSecs")  ;
-$admEmail = $getsysvars->Fields("emfaq") ;					//needed for admin only
+$cacheSecs           = (isset($_SERVER['REMOTE_USER'])&&($_SERVER['REMOTE_USER']))?0:$getsysvars->Fields("cacheSecs")  ;
+$admEmail            = $getsysvars->Fields("emfaq") ;					//needed for admin only
 $MM_email_usersubmit = $getsysvars->Fields("emendorse");	//User Submitted Article
-$MM_email_from = $getsysvars->Fields("emfrom");				//return email web sent emails
-$meta_description= $getsysvars->Fields("metadescription");	//meta desc
-$meta_content = $getsysvars->Fields("metacontent");			//meta content
-$systemplate_id = $getsysvars->Fields("template");
+$MM_email_from       = $getsysvars->Fields("emfrom");				//return email web sent emails
+$meta_description    = $getsysvars->Fields("metadescription");	//meta desc
+$meta_content        = $getsysvars->Fields("metacontent");			//meta content
+$systemplate_id      = $getsysvars->Fields("template");
 		
 #SET DATABASE CACHING
 $dbcon->cacheSecs = $cacheSecs;
