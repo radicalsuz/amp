@@ -4,7 +4,7 @@ if ( !function_exists( 'buildheader' ) ) {
 		
     function buildheader() {
         
-        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url, $extra_header, $css, $SystemSettings;
+        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $systemplate_id, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url, $extra_header, $css, $SystemSettings;
 
         $encoding = (isset($SystemSettings['encoding'])) ? $SystemSettings['encoding'] : 'iso-8859-1'; 
 
@@ -109,8 +109,8 @@ if (!isset($obj)) {
 }
 while (!$MM_secure && ($sparent != $MX_top)) {
 	$sparent=$obj->get_parent($sparent);
-	$getsec=$dbcon->CacheExecute("SELECT secure FROM articletype WHERE id = $sparent") 
-        or DIE('Could not load security information in BaseTemplate ');
+	$getsec=$dbcon->CacheExecute("SELECT secure FROM articletype WHERE id=" . $dbcon->qstr( $sparent )) 
+       		or DIE('Could not load security information in BaseTemplate: ' . $dbcon->ErrorMsg() );
 	$MM_secure = $getsec->Fields("secure");
 }  
 
@@ -156,7 +156,7 @@ if ($modtemplate_id) {
 	}
 }
 
-if (!isset($template_id) || !$template_id)  {$template_id = $systemplate_id;}
+if (!isset($template_id) || !$template_id) {$template_id = $systemplate_id;}
 
 #SET TEMPLATE VARS
 $settemplate=$dbcon->CacheExecute("SELECT * FROM template WHERE id = $template_id") or DIE('Could not load template information in BaseTemplate '.$dbcon->ErrorMsg());

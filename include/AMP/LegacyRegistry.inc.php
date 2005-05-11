@@ -31,16 +31,16 @@ $getsysvars = $dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1")
 
 $SystemSettings = $getsysvars->FetchRow();
 
-$SiteName            = $getsysvars->Fields("websitename")  ;
-$Web_url             = $getsysvars->Fields("basepath")  ;
+$SiteName            = $SystemSettings["websitename"];
+$Web_url             = $SystemSettings["basepath"];
 //Set caching to 0 for AMP-authenticated system side users
-$cacheSecs           = (isset($_SERVER['REMOTE_USER'])&&($_SERVER['REMOTE_USER']))?0:$getsysvars->Fields("cacheSecs")  ;
-$admEmail            = $getsysvars->Fields("emfaq") ;					//needed for admin only
-$MM_email_usersubmit = $getsysvars->Fields("emendorse");	//User Submitted Article
-$MM_email_from       = $getsysvars->Fields("emfrom");				//return email web sent emails
-$meta_description    = $getsysvars->Fields("metadescription");	//meta desc
-$meta_content        = $getsysvars->Fields("metacontent");			//meta content
-$systemplate_id      = $getsysvars->Fields("template");
+$cacheSecs           = (isset($_SERVER['REMOTE_USER'])&&($_SERVER['REMOTE_USER']))?0:$SystemSettings["cacheSecs"];
+$admEmail            = $SystemSettings["emfaq"];			//needed for admin only
+$MM_email_usersubmit = $SystemSettings["emendorse"];			//User Submitted Article
+$MM_email_from       = $SystemSettings["emfrom"];			//return email web sent emails
+$meta_description    = $SystemSettings["metadescription"];		//meta desc
+$meta_content        = $SystemSettings['metacontent'];			//meta content
+$systemplate_id      = $SystemSettings['template'];
 		
 #SET DATABASE CACHING
 $dbcon->cacheSecs = $cacheSecs;
