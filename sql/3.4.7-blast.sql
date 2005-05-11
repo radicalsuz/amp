@@ -85,4 +85,29 @@ CREATE TABLE `blast_templates` (
   `template` text,
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
+
+CREATE TABLE `messages_to_contacts` (
+  `message_ID` int(16) NOT NULL auto_increment,
+  `blast_ID` int(16) default NULL,
+  `user_ID` int(16) NOT NULL default '0',
+  `system_user_ID` int(16) NOT NULL default '0',
+  `message_type` enum('Email','Email-Admin','SMS','VOIP','VOIP-Admin') default NULL,
+  `requested` timestamp(14) NOT NULL,
+  `status` enum('New','Loaded','Paused','Pending','Sending','Done','In-Progress','Bad Address','Bounced','Conected','Answered','Failed','Server Failure','Delayed','Testing') default 'New',
+  `asterisk_error_ID` int(11) NOT NULL default '0',
+  `asterisk_box_ID` int(11) unsigned NOT NULL default '0',
+  `thread_ID` int(8) default NULL,
+  `bounce_type` enum('hard','soft') default NULL,
+  `call_length` int(11) default '0',
+  `unsubscribed` datetime default NULL,
+  `viewed` datetime default NULL,
+  `uniqueid` int(11) default NULL,
+  `billable_seconds` char(32) default NULL,
+  `last_data` char(32) default NULL,
+  `last_application` char(32) default NULL,
+  `ending_context` char(32) default NULL,
+  `channel` char(128) default NULL,
+  PRIMARY KEY  (`message_ID`)
+) TYPE=MyISAM;
+        
         
