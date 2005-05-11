@@ -1,196 +1,102 @@
 <?php
-set_magic_quotes_runtime (1);
-/*********************
 
- send out a lot of emails...
- example usage:
+# system email plugin
+#this will display the details of emails sent to a person 
 
+#$sql ="select b.created, b.subject, b.from_email from blast_system_users u, blast b where u.blast_ID = b.blast_ID where u.Email = '".$email."'" ;
 
-*********************/ 
-error_reporting(E_ALL & ~E_NOTICE);
-#session_name("mail_blast");
-session_start();
-#$base = dirname(dirname(__FILE__));
-//chdir($base);
-require_once("AMP/BaseDB.php");
+#
+# build form
+# set hidden value as email array
+# 
+ob_start();
+$mod_name="email";
+
 require_once("Connections/freedomrising.php");
-require_once("mailblast/smtp_client.php");
-require_once("mailblast/functions.php");
-#require_once("mailblast/glog.php");
-#glog_set_level(LOG_DEBUG);
-#glog_set_file("custom/udmblast.log");
+require_once("Connections/sysmenu.class.php");
+include("FCKeditor/fckeditor.php");
+$obj = new SysMenu; 
+$buildform = new BuildForm;
+require("AMP/Blast/EmailBlast.php");
 
-##################################################################3
-
-$test             = false;  // if true, we don't actually send mail
-$process_delay    = 100;  // the time to sleep between emails  
-
-                           // value of 1000 is one second
-# give our own handler a chance to process the request
-
-if (handle_request()) {
-	return; # we are done
-
-}
-
-else {
-	# otherwise, let processor.php handle the request
-	$process_function = 'do_email_batch';
-	$count_function    = 'get_count';
-	$controls_function = 'print_controls';
-
-	$chunk_size       = 20;     // how many emails to process at a time
-	$refresh_delay    = 10;     // the delay between processing chunks
-	                             // value of 1000 is one second
-	$title            = "Mail Blast";
-	# pass off to processor.php
-	include("mailblast/processor.php");
-	return;
-}
-#######################################################################
-/*
- * process a batch of emails, starting with offset and processing
- * $chunksize number of emails.
- */
-
-function do_email_batch(&$offset, $chunksize) {
-
-	global $dbcon;
-	global $Web_url;
-	global $process_delay;
+ob_start();
+if (isset($_REQUEST['sendformat'] )) {
+	$bc = new EmailBlast($dbcon);	
+	$sql = "Select distinct Email ".stripslashes($_POST['passedsql']);
+	$E=$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
+	while (!$E->EOF) {
+		$emails[]=$E->Fields("Email");	
+		$E->MoveNext();
+	}
 	
-	 $updatefile = "modinput4_login.php?modin=".$_POST['modin']	;
-	
-	$passedsql = $_SESSION['passedsql'];
-	//glog("------ start chunk ------ offset=$offset -----");
-	$list = $_SESSION['list'];
-
-	## get system vars ##
-
-
-	## get mailing list ##
-
-	$timestart = getmicrotime();
-
-	$sql = "SELECT userdata.id, userdata.Email ";
-	$sql .= " $passedsql ";
-	$sql .= " LIMIT $offset, $chunksize ";
-
-	$contact_list=$dbcon->Execute("$sql") or DIE($dbcon->ErrorMsg());
-
-	if ($contact_list->RecordCount() == 0) {
-		echo("done");
-		return 'Done.'; // we must be done!
-	}
-	//set_time_limit(0);
-
-	$smtp = new smtp_client();
-	$smtp->log_file = dirname(__FILE__) . "/smtp_client.log";
-	$smtp->do_log = false;
-
-	while(!$contact_list->EOF) {
-
-		$offset++;
-		$userid = $contact_list->Fields("id");
-		$email = $contact_list->Fields("Email");
-		if ( email_is_valid($email) ) {
-
-			$ok = send_mail($smtp, $Web_url, $userid, $email, $offset, $updatefile);
-
-			if (!$ok) {
-
-				$return_message = "Sending Halted!<br>Error: could not send email $email, id $userid, record #$offset";
-
-				break;
-
-			}
-
-		}
-
-		echo("\n"); flush();
-
-		usleep($process_delay * 1000);
-
-		$contact_list->MoveNext();
-
-	}
-
-	$smtp->send();
-	$elapsedtime = getmicrotime()-$timestart; 
-	echo("elapsed time: $elapsedtime");
-	return 'success';
-
+	$message = array('subject'=>$_POST['subject'],
+					'messagetext'=>$_POST['message_email_text'],
+					'messagehtml'=>$_POST['article'],
+					'from_email'=>$_POST['from_email'],
+					'from_name'=>$_POST['from_name'],
+					'replyto_email'=>$_POST['reply_to_address']
+					);
+	$response = $bc->new_system_blast($emails,$message);
+	$location= "modinput4_data.php?modin=".$_POST['modin']."&response=".$response;
+	#ampredirect($location);
+	ob_end_flush();
 }
 
 
-function get_count() {
 
-	global $dbcon;
-	$passedsql = $_SESSION['passedsql'];
+if (isset($_GET['id'])) {	$R__MMColParam = $_GET['id']; }
+else {$R__MMColParam = "8000000";}
 
-	# haven't tried this!!!
-	$sql  = "SELECT  COUNT(DISTINCT userdata.id)  ";
-	$sql .= " $passedsql ";
-	
-	$result=$dbcon->Execute("$sql") or DIE($dbcon->ErrorMsg());
-	return $result->fields[0];
+$R=$dbcon->Execute("SELECT * FROM blast WHERE blast_ID = $R__MMColParam") or DIE($dbcon->ErrorMsg());
+#$T=$dbcon->Execute("SELECT id, name FROM blast_templates") or DIE($dbcon->ErrorMsg());
 
+
+$rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
+$blast_type = new Input('hidden', 'blast_type', 'System-Email' );
+$sendformat = new Input('hidden', 'sendformat', 'HTML and Text' );
+$passedsql = new Input('hidden', 'passedsql', stripslashes($_POST['sqlp'] ));
+$modin = new Input('hidden', 'modin', $_POST['modin'] );
+
+
+//build form
+$html  = $buildform->start_table('name');
+
+
+
+
+$html .= $buildform->add_header('Send System Email', 'banner');
+
+if (!$R->Fields("status")) {$stat = "New";}
+else {$stat = $R->Fields("status"); }
+$blast_status = & new Input('hidden', 'status', $stat );
+
+
+$html .= addfield('subject','Subject','text',$R->Fields("subject"));
+$html .= addfield('from_email','From Email','text',$R->Fields("from_email"));
+$html .= addfield('from_name','From Name','text',$R->Fields("from_name"));
+$html .= addfield('reply_to_address','Reply To Address','text',$R->Fields("reply_to_address"));
+
+$Text = WYSIWYG('',$R->Fields("message_email_html"),1);
+$html .=  $buildform->add_row('HTML Email Message', $Text);
+
+$html .= addfield('message_email_text','Text Email Message','textarea',$R->Fields("message_email_text"));
+
+#$t_options = makelistarray($T,'id','name','Select Template');
+#$temp = & new Select('message_template_ID',$t_options,$R->Fields("message_template_ID"));
+#$html .=  $buildform->add_row('HTML Email Template', $temp);
+
+$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id->fetch().$sendformat->fetch().$blast_type->fetch().$passedsql->fetch().$modin->fetch());
+$html .= $buildform->end_table();
+$form = & new Form();
+$form->set_contents($html);
+
+
+include ("header.php");
+if ($response) {
+	echo "<h3>$response</h3>";
+} else {
+	echo $form->fetch();
 }
-
-
-function do_list_subscribers() {
-
-	global $dbcon;
-
-	$list = $_SESSION['list'];
-	$passedsql = $_SESSION['passedsql'];
-
-	## get mailing list ##
-	$sql = "SELECT DISTINCT userdata.id, userdata.Email ";
-	$sql .= " $passedsql ";
-
-	$result=$dbcon->Execute("$sql") or DIE($dbcon->ErrorMsg());
-	if ($result->RecordCount() == 0)
-
-		echo "No records returned";
-
-	//set_time_limit(0); 
-
-	echo "order -- email -- id number<p>";
-	$i = 0;
-	while(!$result->EOF) {
-		echo $i++ . ' -- ' . 
-			$result->Fields("Email") . ' -- ' . 
-			$result->Fields("id") . 
-			(!email_is_valid($result->Fields("Email")) ? " -- <font color=red>INVALID INVALID</font>" : '') . 
-			"<br>";
-
-		$result->MoveNext();
-	}
-}
-
-
-function do_list_invalid_subscribers() {
-
-	global $dbcon;
-
-	$list = $_SESSION['list'];
-	$passedsql = $_SESSION['passedsql'];
-	## get mailing list ##
-
-	$sql = "SELECT DISTINCT userdata.id, userdata.Email ";
-	$sql .= " $passedsql ";
-	$result=$dbcon->Execute("$sql") or DIE($dbcon->ErrorMsg());
-	if ($result->RecordCount() == 0)
-		echo "No records returned";
-	//set_time_limit(0); 
-	echo "Invalid email addresses:<p>";
-
-	while(!$result->EOF) {
-		if (!email_is_valid($result->Fields("email")))
-			echo $result->Fields("id") . ' -- "' . $result->Fields("Email") . '"<br>';
-		$result->MoveNext();
-	}
-}
+include ("footer.php");
 
 ?>
