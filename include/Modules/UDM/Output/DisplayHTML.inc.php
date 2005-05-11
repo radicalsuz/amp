@@ -66,15 +66,6 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         $options=array_merge($this->getOptions(), $options);
         //Check to see if a single record was specified
         //if so, return detail information for that record 
-        /*
-		if (isset($options['_userid'])) {
-
-
-            $single_udm=&new UserDataInput ($this->dbcon, $this->udm->instance, $this->udm->admin);
-            $single_udm->getUser($options['_userid']);
-
-            $dataset=$single_udm->getData();
-        */
         $this->udm->modTemplateID = $this->header_text_id();
 
         // if the UID is set, show only one record with the detail format
@@ -114,6 +105,10 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
         
     function subheader($dataitem, $header_field) {
+       // Show alphabetical headers
+        if ($header_field=="alpha") {
+            $dataitem["alpha"]="&#8212; ".strtoupper(substr($dataitem['Company'],0,1))." &#8212;";
+        }
         if ($this->current_subheader != trim($dataitem[$header_field])) {
             $this->current_subheader = trim($dataitem[$header_field]);
             $output .= '<h1 style="font-size: small; background: #ccc; padding: 3px 3px;">' . $this->current_subheader;
