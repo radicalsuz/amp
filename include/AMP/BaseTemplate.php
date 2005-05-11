@@ -85,7 +85,7 @@ if ($intro_id == 1) {
         or DIE('Could not load module hierarchy information in BaseTemplate '.$sql.$dbcon->ErrorMsg());
 
 	$MM_type = $getmodhierarchy->Fields("type");
-	$mod_name = $getmodhierarchy->Fields("name");
+	$mod_name = $getmodhierarchy->Fields("title");
 	$MM_title = $getmodhierarchy->Fields("title");
 	$modtemplate_id = $getmodhierarchy->Fields("templateid");
  
