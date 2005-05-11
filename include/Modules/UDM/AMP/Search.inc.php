@@ -13,7 +13,10 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
             ),
         'criteria'=> array (
             'available'=>false,
-            'description'=>'Passed criteria')
+            'description'=>'Passed criteria'),
+        'clear_criteria' => array (
+            'available'=>false,
+            'description'=>'clear preset criteria when search runs')
         );
     var $alias = array(
             'Name'=>array(
@@ -62,12 +65,14 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 		//combine init criteria with passed criteria 
         $options=array_merge($this->getOptions(), $options);
 		if(is_array($options['criteria'])) {
+            if ($options['clear_criteria']) $this->criteria=array();
 			$this->criteria = array_merge($this->criteria, $options['criteria']);
 		}
 		
 		//count total records in search
-		$this->total_qty=$this->count_items();
+		$this->udm->total_qty = $this->total_qty=$this->count_items();
         if (!isset($this->sortby)) $this->setSort();
+        $this->udm->index_set = $this->get_index();
 		
         //Setup the fieldset for the SQL query
         foreach ($this->alias as $fname=>$fdef) {
@@ -124,7 +129,8 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 		$sql="SELECT $fieldset from userdata ";
         if (is_array($criteria)) $sql.="where ".join(" AND ", $criteria);
 		$sql.=(isset($orderby))?" ORDER BY ".$orderby:"";
-        if ($pager=&$this->udm->getPlugin('Output','Pager')) {
+        if ($pager=&$this->udm->getPlugins('Pager')) {
+            $pager = &array_shift($pager);
             $sql.=($pager->return_qty!="*")?" LIMIT ".strval($pager->offset). ", ".strval($pager->return_qty):"";
         } else {
             $sql.=($return_qty!="*")?" LIMIT ".strval($offset). ", ".strval($return_qty):"";

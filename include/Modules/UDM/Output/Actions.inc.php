@@ -91,7 +91,8 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         if (!isset($this->udm->url_criteria)) $this->criteria=$this->udm->parse_URL_crit(); 
         else $this->criteria=$this->udm->url_criteria;
         
-        if ($pager=$this->udm->getPlugin('Output','Pager')) {
+        if ($pager_set=&$this->udm->getPlugins('Pager')) {
+            $pager = &array_shift($pager_set);
 
             if ($pager->offset) $this->criteria[]='offset='.$pager->offset;
             if ($pager->return_qty) $this->criteria[]='qty='.$pager->return_qty;

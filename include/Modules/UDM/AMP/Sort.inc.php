@@ -48,7 +48,11 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
         if (isset($_REQUEST['sortby'])&&$_REQUEST['sortby']) {
 
             //If the request is set, see if the userdata fields are defined
-            if ($search_obj=&$this->udm->getPlugin('AMP', 'Search') && isset($search_obj->alias[$_REQUEST['sortby']])) {
+            if ($searches = &$this->udm->getPlugins('Search')){
+                $search_obj = $array_shift($searches);
+            }
+            
+            if ($search_obj && isset($search_obj->alias[$_REQUEST['sortby']])) {
                 $sortalias=$search_obj->alias[$_REQUEST['sortby']];
                 $this->sortname=ucwords($_REQUEST['sortby']);
                 $this->select=$sortalias['f_sqlname'].' AS `'.$sortalias['f_alias'].'`';
@@ -76,6 +80,7 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
         }
         $this->sortby=array('name'=>$this->sortname, 'select'=>$this->select, 'orderby'=>$this->orderby);
         $this->executed=true;
+        $this->udm->sortby = $this->sortby;
         return $this->sortby;
 
     }

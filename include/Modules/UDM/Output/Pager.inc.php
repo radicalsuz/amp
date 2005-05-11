@@ -54,19 +54,21 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         if (!isset($options)) $options=$this->getOptions();
         else $options=array_merge($this->getOptions(), $options);
 
-        if ($search_plugin=$this->udm->getPlugin('AMP','Search')) {
-            //if a Search plugin is used, inherit qualities of that plugin
-            $this->total_qty=$search_plugin->count_items();
-            $this->indexset=$search_plugin->get_index();
-            $this->indexname=$search_plugin->sortby['name'];
-        } else {
+        $this->indexset=$this->udm->index_set;
+        $this->indexname=$this->udm->sortby['name'];
+
+        if ($this->udm->total_qty) $this->total_qty = $this->udm->total_qty;
+        else $this->total_qty = count($this->udm->users);
+
+        if (!$search_plugin=$this->udm->getPlugins('Search')) {
             //Otherwise slice the current page out of the udm dataset
             $this->total_qty=count($this->udm->users);
-            $this->stored_dataset=$this->udm->results();
+            $this->stored_dataset=$this->udm->getData();
             if ($this->total_qty>$this->return_qty) {
                 $this->udm->setData(array_slice($this->udm->users, $this->offset, $this->return_qty));
             }
         }
+
         if (!isset($this->udm->url_criteria)) $this->criteria = $this->udm->parse_URL_crit();
         else $this->criteria=$this->udm->url_criteria;
         

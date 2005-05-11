@@ -30,7 +30,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         'field_order_admin'=>array(
             'description'=>'Order of Fields, Admin View',
             'available'=>true,
-            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,endline,newline,distance,zip,search,sortby,modin,endline')
+            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,endline,newline,distance,zip,search,sortby,modin,endline'),
+        'show_search_header'=>array(
+            'description'=>'show description of current search',
+            'type'=>'checkbox',
+            'label'=>'Describe search on results page',
+            'default'=>1)
             );
         
                     
@@ -124,7 +129,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
 		//Uid or Creator_id
 		if ((isset($_REQUEST['uid'])&&$_REQUEST['uid'])) {
-			$sql_criteria[]="uid=".$this->dbcon->qstr($_REQUEST['uid']);
+			$sql_criteria[]="id=".$this->dbcon->qstr($_REQUEST['uid']);
 		}
         //Publish status
         if (is_numeric($_REQUEST['publish'])){
@@ -246,7 +251,10 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
                 
 		$this->form = &$form;
 		
-		return  $form->toHtml();
+        $output = $form->toHtml();
+        if ($options['show_search_header']) $output = $this->search_text_header(). $output;
+
+		return $output;
     
 	}
 		

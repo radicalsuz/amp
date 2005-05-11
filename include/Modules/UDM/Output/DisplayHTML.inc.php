@@ -75,12 +75,12 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
             $dataset=$single_udm->getData();
         */
+        $this->udm->modTemplateID = $this->header_text_id();
 
         // if the UID is set, show only one record with the detail format
         if (isset($this->udm->uid)) {
             $display_function=isset($options['detail_format'])?($options['detail_format']):"display_detail";
             $dataset = $this->udm->getUser( $this->udm->uid );
-            $this->udm->modTemplateID = $options['header_text_detail'];
 
         } else { 
             //by default the list display function is used
@@ -88,7 +88,6 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
             //Retrieve the full results list
             $dataset=$this->udm->getData();
 
-            $this->udm->modTemplateID = $options['header_text_list'];
         }
         
         $inclass=method_exists($display_function, $this);
@@ -103,6 +102,16 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
 		return $output;
     }
+
+    function header_text_id() {
+        $options = $this->getOptions();
+        if ($this->udm->uid) {
+            return $options['header_text_detail'];
+        } else {
+            return $options['header_text_list'];
+        }
+    }
+
         
     function subheader($dataitem, $header_field) {
         if ($this->current_subheader != trim($dataitem[$header_field])) {

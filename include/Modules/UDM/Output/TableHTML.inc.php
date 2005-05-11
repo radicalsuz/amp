@@ -31,65 +31,69 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
     }
 
 
-    function execute ($options=null) {
+    function execute ($options=null) { 
+        $options = array_merge($this->getOptions(), $options);
+
         //create fieldset
-        $this->display_fieldset=split(',', $this->options['display_fields']['value']);
+        $this->display_fieldset=split(',', $options['display_fields']);
 
         //Print the current results list
         if (!($dataset=$this->udm->getData())) return false;
         
-        $display_function=isset($this->options['display_format']['value'])?($this->options['display_format']['value']):"display_item";
+        $display_function=isset($options['display_format'])?($options['display_format']):"display_item";
         $inclass=method_exists($this, $display_function);
 
         //Start Output
-        $output='<FORM name="'.$this->options['form_name']['value'].'" action="'.$_SERVER['PHP_SELF'].'" method="POST">';
-        if ($this->udm->admin) $output.=$this->select_script();
-        $output.=$this->column_headers();
+        $output='<FORM name="'.$options['form_name'].'" action="'.$_SERVER['PHP_SELF'].'" method="POST">';
+        if ($this->udm->admin) $output.=$this->select_script($options['form_name']);
+        $output.=$this->column_headers($options);
 
         //output display format
         foreach ($dataset as $dataitem) {
-            if (isset($this->options['subheader'])) $output.=$this->subheader($dataitem);
+            if (isset($options['subheader'])) $output.=$this->subheader($dataitem);
             if($inclass) $output.=$this->$display_function($dataitem);
-            else $output.=$display_function($dataitem, $this->options);
+            else $output.=$display_function($dataitem, $options);
         }
 
-		return $this->options['list_html_start']['value'].$output.$this->options['list_html_footer']['value'];
+		return $options['list_html_start'].$output.$options['list_html_footer'];
     }
 
     function _register_options_dynamic(){
+        $options = $this->getOptions();
         if ($this->udm->admin) { //make editing permission available
-            $this->list_row_select.=sprintf($this->options['list_item_start']['value'], 'ROWSELECT_box').
+            $this->list_row_select.=sprintf($options['list_item_start'], 'ROWSELECT_box').
                 "<input name=\"id[]\" type=\"checkbox\" value=\"%s\" onclick=\"this.checked=!this.checked;\">".
-                $this->options['list_item_end']['value'];
-            $this->list_row_edit=sprintf($this->options['list_item_start']['value'],'editlink').
-                "<a href=\"".$this->options['editlink']['value']."?uid=%s&modin=".$this->udm->instance."\">edit</a>".$this->options['list_item_end']['value'];
+                $options['list_item_end'];
+            $this->list_row_edit=sprintf($options['list_item_start'],'editlink').
+                "<a href=\"".$options['editlink']."?uid=%s&modin=".$this->udm->instance."\">edit</a>".$options['list_item_end'];
         }
     }
 
 
-    function column_headers() {
+    function column_headers($options=null) {
         foreach ($this->display_fieldset as $key) {
             if ($sort_obj=&$this->udm->getPlugin('AMP', 'Sort')) {
                 $key=$sort_obj->makelink($key);
             }
-            $list_html_headers.=sprintf($this->options['list_html_header_template']['value'], $key);
+            $list_html_headers.=sprintf($options['list_html_header_template'], $key);
         }
         if ($this->udm->admin) { //include columns headers for select and edit cols
-            $list_html_headers=$this->options['list_html_header_column_start']['value'].
+            $list_html_headers=$options['list_html_header_column_start'].
                     "<a href=\"javascript: list_selectall();\"><B>All</B></a>".
-                    $this->options['list_item_end']['value'].$list_html_headers;
-            $list_html_headers.=$this->options['list_item_start']['value'].$this->options['list_item_end']['value'];
+                    $options['list_item_end'].$list_html_headers;
+            $list_html_headers.=$options['list_item_start'].$options['list_item_end'];
         }
         return $list_html_headers;
     }
 
-    function table_format($current_row) {
+    function table_format($current_row, $options=null) {
+        if (!isset($options)) $options = $this->getOptions();
         $this->html_rowcount++;
 
         //assigns an id and background color to each row
         $bgcolor =($this->html_rowcount % 2) ? "#D5D5D5" : "#E5E5E5";
         $list_row="";
-        $list_row_start=sprintf($this->options['list_row_start_template']['value'], $current_row['id'], $bgcolor, $bgcolor);
+        $list_row_start=sprintf($options['list_row_start_template'], $current_row['id'], $bgcolor, $bgcolor);
 
         foreach($this->display_fieldset as $key) {
             //Check for values swapped by Lookup
@@ -99,21 +103,20 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
                 $kvalue=$current_row[$key];
             }
             //Main Field Format Statement
-            $list_row.=sprintf($this->options['list_item_start']['value'], $key).
-                        $kvalue.$this->options['list_item_end']['value'];
+            $list_row.=sprintf($options['list_item_start'], $key).
+                        $kvalue.$options['list_item_end'];
         }
         //Admin View Formatting
         if ($this->udm->admin) {
             $list_row=sprintf($this->list_row_select, $current_row['id']).$list_row;
             $list_row.=sprintf($this->list_row_edit, $current_row['id']);
         }
-        return $list_row_start.$list_row.$this->options['list_row_end']['value'];
+        return $list_row_start.$list_row.$options['list_row_end'];
 
     }
 
-    function select_script() {
+    function select_script($form_name) {
 
-        $form_name=$this->options['form_name']['value'];
 		$script="<script type=\"text/javascript\">
 		
 		var sform=document.forms['".$form_name."'];";

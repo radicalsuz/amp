@@ -8,6 +8,9 @@ class UserDataSet extends UserData {
     var $users;
     var $sql_criteria;
     var $url_criteria;
+    var $total_qty;
+    var $index_set;
+    var $sortby;
 
     function UserDataSet( &$dbcon, $instance, $admin = false ) {
 
@@ -18,13 +21,68 @@ class UserDataSet extends UserData {
     function _register_default_plugins () {
 
         // No plugins were attached to this module, but we can't very well
-        // get along without data access functions. Register the default
-        // AMP plugins.
+        // get along without display functions. Register default
+        // Set plugins.
 
+        
+        $r = $this->registerPlugin( 'Output', 'SearchForm' ) or $r;
+        $r = $this->registerPlugin( 'Output', 'Pager' ) or $r;
+        $r = $this->registerPlugin( 'AMP',    'Search' ) or $r;
         $r = $this->registerPlugin( 'Output', 'DisplayHTML' ) or $r;
-        $r = $this->registerPlugin( 'Output', 'TableHTML' ) or $r;
+        if ($this->admin) {
+            $r = $this->registerPlugin('Output', 'Actions');
+            $r = $this->registerPlugin('Output', 'TableHTML');
+        }
         $r = $this->registerPlugin( 'AMP', 'Sort' ) or $r;
 
+    }
+
+    function output( $format='DisplayHTML', $options = null, $order = null) {
+
+        //block unpublished data from appearing online
+        if ((!$this->_module_def['publish'])&&(!$this->admin)) {
+            ampredirect("index.php");
+            return false;
+        }
+
+        //Specify a default output order
+        if (!isset($order)) {
+            if ($this->uid) $order = array($format);
+            else $order = array('SearchForm','Pager','Actions',$format,'Pager','Index');
+        }
+        
+        // Check for each of the standard display components
+        // be flexible for custom namespaces
+        foreach ($order as $display_item) {
+            if ($output_item  = $this->getPlugins($display_item)) {
+                $output_set[$display_item] = &array_shift($output_item);
+            }
+        }
+        // check for any error messages, display them
+        if (isset($this->errors)) {
+            $output_html = '<P>'.join('<BR>',$this->errors)."<BR>";
+            
+            //a terrible hack for the header text in case of error
+            //the other option is to start making the plugins do
+            //error-checking, which feels premature
+            if (method_exists($output_set[$format], 'header_text_id')) {
+                $this->modTemplateID = $output_set[$format]->header_text_id();
+            } else {
+                $this->modTemplateID = 1;
+            }
+            
+            //Show only the search form and the index so the user can create a
+            //new search
+            $order = array('SearchForm','Index');
+            
+        }
+
+        // render each component into html
+        foreach ($order as $output_component) {
+            if (isset($output_set[$output_component])) 
+                $output_html .= $output_set[$output_component]->execute();
+        }
+        return $output_html;
     }
 
     function setData($dataset) {
@@ -33,8 +91,8 @@ class UserDataSet extends UserData {
 
 
     function getData ( $id = null ) {
-        if (isset($id)) {
-            foreach ($this->users as $udef) {
+        if (isset($id)&&is_array($this->users)) {
+            foreach ($this->users as $user_def) {
                 if ($user_def['id']==$id) return array($user_def);
             }
             return false;
@@ -60,7 +118,10 @@ class UserDataSet extends UserData {
         
         if ($result = $this->getData($userid)) return $result;
         
-        if ($this->doAction( 'Search', array( 'criteria' => array("uid = ".$userid), 'admin' => $this->admin ) )) {
+        $search_options = array (   'criteria'  =>  array('value'=>array("id = ".$userid)),
+                                    'admin'     =>  array('value'=>$this->admin),
+                                    'clear_criteria'    => array('value'=> true) );
+        if ($this->doAction( 'Search', $search_options )) {
             return $this->getData();
         }
         return false;

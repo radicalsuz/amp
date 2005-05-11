@@ -9,7 +9,6 @@
  * 
  *
  *****/
-$modid=1;
 require_once( 'AMP/BaseDB.php' );
 require_once('AMP/UserData/Set.inc.php');
 
@@ -35,20 +34,23 @@ $admin=($userper[54]&&$userper[$modin_permission]);
 */
 $admin=true;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);
+
+$userlist->_register_default_plugins();
+/*
 $searchform=&$userlist->registerPlugin('Output', 'SearchForm');
 $pager=&$userlist->registerPlugin('Output', 'Pager');
 $userlist->registerPlugin('AMP', 'Search');
 $userlist->registerPlugin('Output', 'TableHTML');
 $userlist->registerPlugin('AMP', 'Sort');
 $actionbar=&$userlist->registerPlugin('Output', 'Actions');
-
-$sub = isset($_REQUEST['btnUDMSubmit']);
+*/
 $uid= isset($_REQUEST['uid'])?$uid:false;
+
 
 if ($uid && $modin) {
 
-    $list_options['_userid']= array('value'=> $_REQUEST['_userid']);
-    $output= $userlist->output('DisplayHTML', $list_options); 
+    $userlist->uid=$uid;
+    $output= $userlist->output('DisplayHTML'); 
 
 } else { 
 
@@ -58,7 +60,9 @@ if ($uid && $modin) {
     $pager=&$userlist->getPlugin('Output','Pager');
     $actionbar=&$userlist->getPlugin('Output','Actions');
     */    
-    if ($userlist->doAction('Search')) {
+
+    $userlist->doAction('Search'); 
+        /*
         $output= (isset($userlist->error)? $userlist->error.'<BR>':"").
                 ($searchform?   $searchform->search_text_header()
                                 .$userlist->output('SearchForm'):"").
@@ -67,9 +71,12 @@ if ($uid && $modin) {
                 $userlist->output('TableHTML').
                 ($pager?$pager->execute():"").
                 $userlist->output('Index');
+                */
+    $output = $userlist->output('TableHTML');
+        /*
     } else {
         $output=$userlist->error.'<BR>'.$userlist->output('SearchForm');
-    }
+    }*/
 }
 
 require_once( 'header.php' );
