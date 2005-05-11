@@ -16,7 +16,7 @@ class UserDataPlugin_HTML_Output extends UserDataPlugin {
 
 }
 
-function udm_output_html ( $udm, $options = null ) {
+function udm_output_html ( &$udm, $options = null ) {
 
     $out = '';
 

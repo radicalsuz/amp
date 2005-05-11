@@ -75,7 +75,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
     }
     $form->setDefaults( $udm->getStoredValues() );
 	
-    $udm->form =& $form;
+    $udm->form = &$form;
 	$udm->doPlugin('Output','SubmitButton');
 	//$form->addElement( 'submit', 'btnUdmSubmit', 'Submit' );
     $form->addElement( 'hidden', 'modin', 'Module Instance' );
