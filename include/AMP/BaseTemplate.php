@@ -64,7 +64,7 @@ if ($intro_id == 1) {
     
     #GET ARTICLE VARS
     if ($_GET["id"]) {
-         $articleinfo=$dbcon->CacheExecute("SELECT author, title, type, class, link, linkover  FROM articles WHERE id=".$_GET["id"])or DIE('Could not load article information in BaseTemplate '.$dbcon->ErrorMsg()); 
+        $articleinfo=$dbcon->CacheExecute("SELECT author, title, type, class, link, linkover FROM articles WHERE id=".$_GET["id"]) or die('Could not load article information in BaseTemplate '.$dbcon->ErrorMsg()); 
         $MM_id = $_GET["id"];
         $MM_class =$articleinfo->Fields("class");
         $MM_type =$articleinfo->Fields("type");
@@ -110,7 +110,7 @@ if (!isset($obj)) {
 while (!$MM_secure && ($sparent != $MX_top)) {
 	$sparent=$obj->get_parent($sparent);
 	$getsec=$dbcon->CacheExecute("SELECT secure FROM articletype WHERE id=" . $dbcon->qstr( $sparent )) 
-       		or DIE('Could not load security information in BaseTemplate: ' . $dbcon->ErrorMsg() );
+       		or die('Could not load security information in BaseTemplate: ' . $dbcon->ErrorMsg() );
 	$MM_secure = $getsec->Fields("secure");
 }  
 
