@@ -8,8 +8,8 @@
 $indicies = array( 
 
     "articles" => array( 
-        array( 'DROP INDEX articles_ft_idx ON articles' ),
-        array( 'CREATE FULLTEXT INDEX articles_ft_idx ON ARTICLES( test, author, shortdesc, title )' )
+        array( 'DROP INDEX article_ft_idx ON articles' ),
+        array( 'CREATE FULLTEXT INDEX article_ft_idx ON ARTICLES( test, author, shortdesc, title )' )
     ),
 
     "categories_description" => array(
@@ -61,7 +61,11 @@ $skip_tables = array( 'sessions', 'users_sessions', 'userdata_plugins_options',
 
 /* Don't modify beyond here, unless you intend to alter functionality. */
 
-$tables = $dbcon->MetaTables('TABLES');
+if (isset($_GET['table'])) {
+	$tables = array( $_GET['table'] );
+} else {
+	$tables = $dbcon->MetaTables('TABLES');
+}
 
 foreach ( $tables as $table ) {
 
