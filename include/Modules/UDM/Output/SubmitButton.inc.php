@@ -16,10 +16,11 @@ class UserDataPlugin_SubmitButton_Output extends UserDataPlugin {
 	
 	function execute(){
     	#$button = &$form->getElement( 'btnUdmSubmit' );
-		$get_options = $this->getOptions();		
-		$btn_fields = array('type'=>'submit', 'label'=>$get_options['button_label'], 'required'=>false, 'public'=>true,'enabled'=>true);
-		udm_quickform_addElement( $this->udm->form, 'btnUdmSubmit', $btn_fields, $this->udm->admin );
-
+		if (isset($this->udm->form)) {
+			$get_options = $this->getOptions();		
+			$btn_fields = array('type'=>'submit', 'label'=>$get_options['button_label'], 'required'=>false, 'public'=>true,'enabled'=>true);
+			udm_quickform_addElement( $this->udm->form, 'btnUdmSubmit', $btn_fields, $this->udm->admin );
+		}
 		
 	}
 
