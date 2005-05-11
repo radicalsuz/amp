@@ -21,7 +21,7 @@ if (isset($_GET['list']) && $_GET["list"]=="class"){
 if ($MM_id){
 	$hiarticle=$dbcon->CacheExecute("Select title from articles where id = $MM_id") or DIE($dbcon->ErrorMsg());
 }
-if (($mod_id==1) && ($_GET["list"]!="class")){
+if (($MM_type != 1) && ($_GET["list"]!="class")){
 	$hitype=$dbcon->CacheExecute("Select type, id from articletype where id = $MM_type") or DIE($dbcon->ErrorMsg());
 }
 
@@ -32,18 +32,18 @@ if (!isset($bchtml)) $bchtml = '';
 $bchtml.= " <!-- BEGIN BREADCRUMB CODE -->
  <span class=breadcrumb><a href=\"".$Web_url ."index.php\" class=breadcrumb>Home</a> ";
 
-if (isset($isanarticle)){
+//if (isset($isanarticle) or isset($MM_type)){
 	if ($MM_type != 1){
-		$ancestors = $obj->get_ancestors("$MM_type");
+		$ancestors = $obj->get_ancestors($MM_type);
  		for ($x=0; $x<sizeof($ancestors); $x++) { 
 			if ($ancestors[$x]["id"] != "1" ){
 				$path .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $ancestors[$x]["id"] . "\" class=\"breadcrumb\">" . $ancestors[$x]["type"] . "</a>" ;
 			}
 		} 
 	$bchtml.= $path; 
-}   
+//}   
 
-if ($MM_type != "1" && $mod_id=="1"){
+if ($MM_type != "1" ){
 	$path2 .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $hitype->Fields("id") . "\" class=\"breadcrumb\">" . $hitype->Fields("type") . "</a>";
 	$bchtml.= $path2; 
 }
