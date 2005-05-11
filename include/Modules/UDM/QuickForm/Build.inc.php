@@ -43,6 +43,7 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
                     $options['frmAction'] : null;
 
     $form = new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
+	$form->_requiredNote = '<span style="font-size:80%; color:#ff0000;">*</span><span style="font-size:80%;"> denotes required field</span>';
 	//set PUBLISH field at the top of the form
     //do this during the build so it surpasses
     //all other manipulation of field_order
@@ -72,10 +73,11 @@ function udm_QuickForm_build ( &$udm, $options = null ) {
         udm_quickform_addElement( $form, $field, $field_def, $admin );
     
     }
-
     $form->setDefaults( $udm->getStoredValues() );
-
-    $form->addElement( 'submit', 'btnUdmSubmit', 'Submit' );
+	
+    $udm->form =& $form;
+	$udm->doPlugin('Output','SubmitButton');
+	//$form->addElement( 'submit', 'btnUdmSubmit', 'Submit' );
     $form->addElement( 'hidden', 'modin', 'Module Instance' );
     $consts['modin'] = $udm->instance;
 
@@ -278,7 +280,20 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
             \t{element}</td></tr></table></td>\n\t</tr>", $name);
     }
 	
-	    if ($type=='checkgroup') {
+
+    if ($type=='header') {
+        $renderer->setHeaderTemplate(
+				"\n\t<tr>\n\t\t<td class=\"udm_header\"  align=\"left\" valign=\"top\" colspan=\"2\" ><b>{header}</b></td>\n\t</tr>", $name);
+    }
+
+    if ($type=='submit') {
+        $renderer->setElementTemplate(
+            "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+            <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+            <b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+            \t{element}</td></tr></table></td>\n\t</tr>", $name);
+    }	
+	if ($type=='checkgroup') {
         $renderer->setElementTemplate(
             "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
             <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->

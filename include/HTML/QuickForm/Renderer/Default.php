@@ -67,7 +67,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @access   private
     */
     var $_requiredNoteTemplate = 
-        "\n\t<tr>\n\t\t<td></td>\n\t<td align=\"left\" valign=\"top\">{requiredNote}</td>\n\t</tr>";
+        "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=2>{requiredNote}</td>\n\t</tr>";
 
    /**
     * Array containing the templates for customised elements
