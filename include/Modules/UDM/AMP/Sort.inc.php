@@ -49,7 +49,7 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
 
             //If the request is set, see if the userdata fields are defined
             if ($searches = &$this->udm->getPlugins('Search')){
-                $search_obj = $array_shift($searches);
+                $search_obj = $searches[key($searches)];
             }
             
             if ($search_obj && isset($search_obj->alias[$_REQUEST['sortby']])) {

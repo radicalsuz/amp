@@ -72,7 +72,7 @@ if ($uid && $modin) {
                 ($pager?$pager->execute():"").
                 $userlist->output('Index');
                 */
-    $output = $userlist->output('TableHTML');
+    $output = $userlist->output_list('TableHTML');
         /*
     } else {
         $output=$userlist->error.'<BR>'.$userlist->output('SearchForm');

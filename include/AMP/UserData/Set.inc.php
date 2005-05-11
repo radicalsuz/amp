@@ -34,10 +34,11 @@ class UserDataSet extends UserData {
             $r = $this->registerPlugin('Output', 'TableHTML');
         }
         $r = $this->registerPlugin( 'AMP', 'Sort' ) or $r;
+        return $r;
 
     }
 
-    function output( $format='DisplayHTML', $options = null, $order = null) {
+    function output_list ( $format='DisplayHTML', $options = null, $order = null) {
 
         //block unpublished data from appearing online
         if ((!$this->_module_def['publish'])&&(!$this->admin)) {
@@ -50,14 +51,7 @@ class UserDataSet extends UserData {
             if ($this->uid) $order = array($format);
             else $order = array('SearchForm','Pager','Actions',$format,'Pager','Index');
         }
-        
-        // Check for each of the standard display components
-        // be flexible for custom namespaces
-        foreach ($order as $display_item) {
-            if ($output_item  = $this->getPlugins($display_item)) {
-                $output_set[$display_item] = &array_shift($output_item);
-            }
-        }
+
         // check for any error messages, display them
         if (isset($this->errors)) {
             $output_html = '<P>'.join('<BR>',$this->errors)."<BR>";
@@ -77,11 +71,21 @@ class UserDataSet extends UserData {
             
         }
 
+        //get the registered plugins and adjust the order to only
+        //include valid actions
+        $plugin_set = &$this->getPlugins(); 
+        $actions = array_keys($plugin_set);
+        $order = array_intersect($order, $actions);
+
+
         // render each component into html
         foreach ($order as $output_component) {
-            if (isset($output_set[$output_component])) 
-                $output_html .= $output_set[$output_component]->execute();
+            $component = &$plugin_set[$output_component];
+            foreach ($component as $namespace=>$plugin) {
+                $output_html .= $component[$namespace]->execute($options);
+            }
         }
+
         return $output_html;
     }
 

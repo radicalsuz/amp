@@ -72,7 +72,8 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
 
     function column_headers($options=null) {
         foreach ($this->display_fieldset as $key) {
-            if ($sort_obj=&$this->udm->getPlugin('AMP', 'Sort')) {
+            if ($sort_set=&$this->udm->getPlugins('Sort')) {
+                $sort_obj=&$sort_set[key($sort_set)];
                 $key=$sort_obj->makelink($key);
             }
             $list_html_headers.=sprintf($options['list_html_header_template'], $key);

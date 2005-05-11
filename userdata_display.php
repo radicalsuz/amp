@@ -73,7 +73,7 @@ if ($uid && $modin) {
     if (!$userlist->getPlugins('SearchForm')) $srch_options['criteria']=array('value'=>array("modin=".$modin));
 
     $userlist->doAction('Search', $srch_options);
-    $output = $userlist->output();
+    $output = $userlist->output_list();
         /*
         $output= (isset($userlist->error)? $userlist->error.'<BR>':"").
                 ($searchform?   $searchform->search_text_header()

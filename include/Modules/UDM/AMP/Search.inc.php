@@ -130,7 +130,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         if (is_array($criteria)) $sql.="where ".join(" AND ", $criteria);
 		$sql.=(isset($orderby))?" ORDER BY ".$orderby:"";
         if ($pager=&$this->udm->getPlugins('Pager')) {
-            $pager = &array_shift($pager);
+            $pager = &$pager[key($pager)];
             $sql.=($pager->return_qty!="*")?" LIMIT ".strval($pager->offset). ", ".strval($pager->return_qty):"";
         } else {
             $sql.=($return_qty!="*")?" LIMIT ".strval($offset). ", ".strval($return_qty):"";
