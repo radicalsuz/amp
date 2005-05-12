@@ -61,7 +61,7 @@ function nav_sub_both($type) {
 	} 
 
 
-	$sql = "select title,id, linktext from articles where type = $type and publish =1 and (class !=2 and class !=8 )";
+	$sql = "select title,id, linktext from articles where type = $type and publish =1 and (class !=2 and class !=8 ) orderby pageorder, id asc";
 	$C=$dbcon->Execute($sql) or DIE('Could not load the sub navigation information'.$sql.$dbcon->ErrorMsg());	
 	while (!$C->EOF) {
 		if ($C->Fields("linktext")) {
