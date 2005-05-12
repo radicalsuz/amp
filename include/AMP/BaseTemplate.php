@@ -20,7 +20,11 @@ if ( !function_exists( 'buildheader' ) ) {
             $meta_description = substr(trim($MM_shortdesc),0,250); 
             $meta_description = ereg_replace ("\"", "", $meta_description);
         } elseif (isset($_GET['list']) && $_GET["list"] == "type") {
-            $headertitle = $MM_typename;
+            if (isset($MM_typename)) {
+                $headertitle = $MM_typename;
+            } else {
+                $headertitle = "";
+            }
         } else {
             $headertitle = $mod_name;
         }
@@ -63,7 +67,7 @@ if (!isset($intro_id) || !$intro_id) { $intro_id = $mod_id; }
 if ($intro_id == 1) {
     
     #GET ARTICLE VARS
-    if ($_GET["id"]) {
+    if (isset($_GET['id']) && $_GET["id"]) {
         $articleinfo=$dbcon->CacheExecute("SELECT author, title, type, class, link, linkover FROM articles WHERE id=".$_GET["id"]) or die('Could not load article information in BaseTemplate '.$dbcon->ErrorMsg()); 
         $MM_id = $_GET["id"];
         $MM_class =$articleinfo->Fields("class");
@@ -74,8 +78,8 @@ if ($intro_id == 1) {
         if ($articleinfo->Fields("linkover")) redirect($articleinfo->Fields("link"));
     }
     
-    if ($_GET["type"]) $MM_type = $_GET["type"];
-    if ($_GET["class"])	$MM_class = $_GET["class"];
+    if (isset($_GET["type"])  && $_GET['type'] ) $MM_type  = $_GET["type"];
+    if (isset($_GET['class']) && $_GET["class"]) $MM_class = $_GET["class"];
 
 } else {
 
@@ -130,8 +134,8 @@ if (isset($modid)) {
 }
 
 #SET TEMPLATE VARS
-#DETERMIN TEMPLATE ID
-if ($modtemplate_id) {
+#DETERMINE TEMPLATE ID
+if (isset($modtemplate_id)) {
 	$template_id = $modtemplate_id;
 } elseif ($typetemplate_id) {
 	$template_id = $typetemplate_id;
@@ -139,7 +143,7 @@ if ($modtemplate_id) {
 
 	$tparent= $MM_type;
  
-	if ($css_inherit!=NULL) { //Search for template and css files to inherit
+	if (isset($css_inherit)) { //Search for template and css files to inherit
  
 		while ((!$template_id || !$css) && ($tparent != $MX_top)) {
 			$tparent=$obj->get_parent($tparent);
@@ -148,7 +152,7 @@ if ($modtemplate_id) {
 			if (!$css) $css=$gettemplate->Fields("css");
 		}  
 	} else { //Search for template only
-		while (!$template_id && ($tparent != $MX_top)) {
+		while (!(isset($template_id) && $template_id) && ($tparent != $MX_top)) {
 			$tparent=$obj->get_parent($tparent);
 			$gettemplate=$dbcon->CacheExecute("SELECT templateid FROM articletype WHERE id = $tparent") or DIE('Could not load template information in BaseTemplate ');
 			$template_id = $gettemplate->Fields("templateid");
