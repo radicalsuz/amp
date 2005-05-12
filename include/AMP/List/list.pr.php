@@ -26,7 +26,7 @@ $list=$dbcon->CacheExecute("$sqlx")or DIE($dbcon->ErrorMsg());
 	
 echo '<p class="subtitle">Recent&nbsp;'  .  $title->Fields("class")  .  '</p>';
 
-if ($listlayoutreplace !=NULL) {
+if (isset($listlayoutreplace) && $listlayoutreplace !=NULL) {
 	include("$listlayoutreplace"); 
 }
 else{
