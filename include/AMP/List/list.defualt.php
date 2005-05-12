@@ -18,7 +18,10 @@ if (isset($_GET['type']) && $_GET['type']) {
 	if (isset($MM_reltype) && $MM_reltype){
 		$wtype = "AND (type=$MM_type OR typeid = $MM_type) ";
 		$joinreltype = "  LEFT JOIN articlereltype ON articleid = id ";
-	}
+	} else {
+        $wtype = "";
+        $joinreltype = "";
+    }
 } else {
     $wtype = "";
     $joinreltype = "";
