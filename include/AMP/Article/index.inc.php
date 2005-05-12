@@ -23,7 +23,9 @@ while  ( !$maintext->EOF ) {
 
         $fpathtoimg = AMP_LOCAL_PATH . $NAV_IMG_PATH .$maintext->Fields("pselection")."/".$maintext->Fields("picture");
         $pathtoimg = $NAV_IMG_PATH .$maintext->Fields("pselection")."/".$maintext->Fields("picture");
-        $imageInfo = getimagesize($fpathtoimg); 
+        if (file_exists($fpathtoimg)) {
+            $imageInfo = getimagesize($fpathtoimg); 
+        }
         $pwidth = $imageInfo[0]; 
         $pheight = $imageInfo[1];
 
