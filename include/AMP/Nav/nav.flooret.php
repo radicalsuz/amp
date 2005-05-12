@@ -37,7 +37,7 @@ function nav_sub_content($type) {
 
 function nav_sub_section($type) {
 	global $dbcon;
-	$html .= '<ul class="nav_sub_list">';
+	$html = '<ul class="nav_sub_list">';
 		$sql = "select type, id from articletype where parent = $type and usenav =1 order by textorder, id asc";
 		$R=$dbcon->Execute($sql) or DIE('Could not load the sub navigation information'.$sql.$dbcon->ErrorMsg());	
 		while (!$R->EOF) {
@@ -87,6 +87,8 @@ function nav_menu_dd($type){
 	
     $R=$dbcon->Execute($sql) or DIE('Could not load the navigation information'.$sql.$dbcon->ErrorMsg());	
 	$subsections=$dbcon->Execute($subsql) or DIE('Could not load the navigation information'.$sql.$dbcon->ErrorMsg());	
+
+    if (!isset($html)) $html = '';
 	
     $html .= '<ul class="nav_list">' ;
 
