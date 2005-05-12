@@ -75,7 +75,7 @@ ob_start();
 
 //set article or list inc
 if ($_GET["list"] != NULL) {
-	if ($listreplace != NULL) {include("$listreplace");}
+	if (isset($listreplace) && $listreplace != null) {include("$listreplace");}
 	else  { include ("AMP/List/list.inc.php");}
 } 
 elseif (($MM_class == 3) or ($MM_class == 4)) {
