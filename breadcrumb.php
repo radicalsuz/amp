@@ -40,10 +40,15 @@ $bchtml.= " <!-- BEGIN BREADCRUMB CODE -->
 				$path .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $ancestors[$x]["id"] . "\" class=\"breadcrumb\">" . $ancestors[$x]["type"] . "</a>" ;
 			}
 		} 
-	$bchtml.= $path; 
+    if (isset($path)) {
+    	$bchtml.= $path; 
+    }
 //}   
 
 if ($MM_type != "1" ){
+
+    if (!isset($path2)) $path2 = "";
+
 	$path2 .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $hitype->Fields("id") . "\" class=\"breadcrumb\">" . $hitype->Fields("type") . "</a>";
 	$bchtml.= $path2; 
 }
