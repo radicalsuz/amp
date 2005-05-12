@@ -11,9 +11,9 @@ To Do:
 $mod_id = 1 ; 
 
 #redirect pages 
-if ($_GET["filelink"]) {
-        header("Location:".$_GET["filelink"]);
-        die();
+if (isset($_GET['filelink']) && $_GET["filelink"]) {
+        header("Location: ".$_GET["filelink"]);
+        exit;
 }
 ob_start();
 
