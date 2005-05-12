@@ -38,7 +38,7 @@ include("AMP/BaseTemplate.php");
 
 ob_start(); 
 
-if ($indexreplace != NULL) {
+if (isset($indexreplace) && $indexreplace) {
     require ("$indexreplace");
 } else {
     include("AMP/Article/index.inc.php");
