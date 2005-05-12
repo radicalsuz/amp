@@ -21,7 +21,7 @@ while  ( !$maintext->EOF ) {
 
     if ( $maintext->Fields("picuse") == (1) ) { //start of picture 
 
-        $fpathtoimg = $base_path_amp.$NAV_IMG_PATH .$maintext->Fields("pselection")."/".$maintext->Fields("picture");
+        $fpathtoimg = AMP_LOCAL_PATH . $NAV_IMG_PATH .$maintext->Fields("pselection")."/".$maintext->Fields("picture");
         $pathtoimg = $NAV_IMG_PATH .$maintext->Fields("pselection")."/".$maintext->Fields("picture");
         $imageInfo = getimagesize($fpathtoimg); 
         $pwidth = $imageInfo[0]; 
