@@ -28,41 +28,43 @@ if (($MM_type != 1) && ($_GET["list"]!="class")){
 if (!isset($Web_url)) $Web_url = '/';
 if (!isset($bchtml)) $bchtml = '';
 
-####strat html #################
+####start html #################
 $bchtml.= " <!-- BEGIN BREADCRUMB CODE -->
  <span class=breadcrumb><a href=\"".$Web_url ."index.php\" class=breadcrumb>Home</a> ";
 
 //if (isset($isanarticle) or isset($MM_type)){
-	if ($MM_type != 1){
-		$ancestors = $obj->get_ancestors($MM_type);
- 		for ($x=0; $x<sizeof($ancestors); $x++) { 
-			if ($ancestors[$x]["id"] != "1" ){
-				$path .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $ancestors[$x]["id"] . "\" class=\"breadcrumb\">" . $ancestors[$x]["type"] . "</a>" ;
-			}
-		} 
-    if (isset($path)) {
-    	$bchtml.= $path; 
+if ($MM_type != 1) {
+
+    if (!isset($path)) $path = "";
+
+	$ancestors = $obj->get_ancestors($MM_type);
+ 	for ($x=0; $x<sizeof($ancestors); $x++) { 
+		if ($ancestors[$x]["id"] != "1" ){
+			$path .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $ancestors[$x]["id"] . "\" class=\"breadcrumb\">" . $ancestors[$x]["type"] . "</a>" ;
+		}
+	} 
+
+    $bchtml .= $path; 
+
+    if ($MM_type != "1" ) {
+
+        if (!isset($path2)) $path2 = "";
+
+    	$path2 .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $hitype->Fields("id") . "\" class=\"breadcrumb\">" . $hitype->Fields("type") . "</a>";
+    	$bchtml.= $path2; 
     }
-//}   
 
-if ($MM_type != "1" ){
-
-    if (!isset($path2)) $path2 = "";
-
-	$path2 .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $hitype->Fields("id") . "\" class=\"breadcrumb\">" . $hitype->Fields("type") . "</a>";
-	$bchtml.= $path2; 
-}
-
-if (!$_GET["list"] && $MM_id && !$mod_name) { 
-	$maxTextLenght=35;
-  	$aspace=" ";
-  	$tttext =strip_tags($hiarticle->Fields("title"));
-  	if(strlen($tttext) > $maxTextLenght ) {
-    	$tttext = substr(trim($tttext),0,$maxTextLenght); 
-     	$tttext = substr($tttext,0,strlen($tttext)-strpos(strrev($tttext),$aspace));
-    	$tttext = $tttext.'...';
-  	}
-  	$bchtml.=  $ar.$tttext; }
+    if (!$_GET["list"] && $MM_id && !$mod_name) { 
+    	$maxTextLenght=35;
+      	$aspace=" ";
+        $tttext =strip_tags($hiarticle->Fields("title"));
+        if(strlen($tttext) > $maxTextLenght ) {
+            $tttext = substr(trim($tttext),0,$maxTextLenght); 
+            $tttext = substr($tttext,0,strlen($tttext)-strpos(strrev($tttext),$aspace));
+            $tttext = $tttext.'...';
+        }
+  	    $bchtml.=  $ar.$tttext;
+    }
 }
 
 
