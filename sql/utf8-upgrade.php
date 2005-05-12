@@ -61,6 +61,30 @@ $skip_tables = array( 'sessions', 'users_sessions', 'userdata_plugins_options',
 
 /* Don't modify beyond here, unless you intend to alter functionality. */
 
+if (!isset($_GET['go'])) {
+    ?>
+    <html>
+    <head>
+    Click go to get going!
+    </head>
+    <body>
+    Do you really wanna upgrade to UTF-8? Have you backed up?
+
+    <form method="get">
+       <input type="submit" name="go" value="go" />
+    </form>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+set_time_limit(86400);
+
+require_once( 'ConvertCharset.class.php' );
+
+$conv = new ConvertCharset;
+
 if (isset($_GET['table'])) {
 	$tables = array( $_GET['table'] );
 } else {
@@ -91,6 +115,13 @@ foreach ( $tables as $table ) {
         if (!$rs) print "Error dropping index: " . $dbcon->ErrorMsg();
     }
 
+    $has_id = false;
+    foreach ( $columns as $column ) {
+        if ($column->name = 'id') {
+            $has_id = true;
+        }
+    }
+
     foreach ( $columns as $column ) {
 
         if (!preg_match("/(text|char)/", $column->type)) continue;
@@ -103,8 +134,37 @@ foreach ( $tables as $table ) {
         $cTypeLen = ($cLen && $cLen != '-1') ? "$cType($cLen)" : $cType;
         $bLen     = ($cLen && $cLen != '-1') ? "($cLen)" : '';
 
-        $rs = $dbcon->Execute("ALTER TABLE $table CHANGE `$cName` `$cName` BLOB $bLen");
-        $rs = $rs && $dbcon->Execute("ALTER TABLE $table CHANGE `$cName` `$cName` $cTypeLen CHARACTER SET utf8");
+//        $rs = $dbcon->Execute("ALTER TABLE $table CHANGE `$cName` `$cName` BLOB $bLen");
+
+        print "Working on $cName...";
+
+        if ($has_id) {
+            $rst = $dbcon->Execute("SELECT id, `$cName` FROM $table");
+            
+            if ($rst) {
+                while ($row = $rst->FetchRow()) {
+
+                    if (strlen($row[$cName]) < 1) continue;
+
+                    $encoding = mb_detect_encoding($row[$cName], "UTF-8, windows-1252, ISO-8859-1");
+
+                    if ($encoding == 'UTF-8') {
+                        print "Skipping $table ($cName) row #" . $row['id'] . " as it's already UTF-8.<br/>";
+                        continue;
+                    }
+
+                    print "Converting $table ($cName) row #" . $row['id'] . "from $encoding to UTF-8<br/>";
+
+                    $converted = $conv->Convert($row[$cName], 'windows-1252', 'utf-8');
+                    $rsr = $dbcon->Execute("UPDATE $table SET `$cName`=" . $dbcon->qstr($converted) . " WHERE id='" . $row['id'] . "'");
+
+                    if (!$rsr) echo "<br/><em>There was an error updating row " . $row['id'] . " from $table.</em><br/>";
+
+                }
+            }
+        }
+
+//        $rs = $rs && $dbcon->Execute("ALTER TABLE $table CHANGE `$cName` `$cName` $cTypeLen CHARACTER SET utf8");
 
         if (!$rs) print "<strong>Error: " . $dbcon->ErrorMsg() . "</strong> ";
         
@@ -114,11 +174,11 @@ foreach ( $tables as $table ) {
         $dbcon->Execute($sql);
     }
 
-    $utf8_tbl_sql_1 = "ALTER TABLE $table CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci";
+//    $utf8_tbl_sql_1 = "ALTER TABLE $table CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci";
     $utf8_tbl_sql_2 = "ALTER TABLE $table DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
-    $rs = $dbcon->Execute($utf8_tbl_sql_1);
-    $rs = $rs && $dbcon->Execute($utf8_tbl_sql_2);
+//    $rs = $dbcon->Execute($utf8_tbl_sql_1);
+    $rs = $dbcon->Execute($utf8_tbl_sql_2);
 
     if (!$rs) print "<strong>Error: " . $dbcon->ErrorMsg() . "</strong> ";
 
