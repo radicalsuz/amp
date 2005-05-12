@@ -17,7 +17,7 @@ Touch: Margot
 
 function nav_sub_content($type) {
 	global $dbcon;
-	$html .= '<ul class="nav_sub_list">';
+	$html = '<ul class="nav_sub_list">';
 	$sql = "select title,id, linktext from articles where type = $type and publish =1 and (class !=2 and class !=8 ) order by pageorder, id asc";
 	$R=$dbcon->Execute($sql) or DIE('Could not load the sub navigation information'.$sql.$dbcon->ErrorMsg());	
 	while (!$R->EOF) {
