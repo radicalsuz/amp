@@ -26,7 +26,7 @@ function list_header_article($type,$header_url=NULL){
 		}
 		else {return false;}
 	}
-	if ($_GET["nointro"] !=1 && $MM_id) { 
+	if (isset($_GET['nointro']) && $_GET["nointro"] !=1 && $MM_id) { 
 		if ($articlereplace !=NULL) {
 			include ("$articlereplace"); 
 		}
@@ -66,7 +66,7 @@ if ($_GET["list"] == "type"){
 	}
 	$listtype = $listtypeck->Fields("listtype");
 //check to see if defualt list is set from url override
-	if ($_GET["nointro"] == 1  &&  $listtype != 4) {
+	if (isset($_GET['nointro']) && $_GET["nointro"] == 1  &&  $listtype != 4) {
 		$listtype = 1;
 	}
 }
@@ -83,7 +83,8 @@ if ($_GET["list"] == "classt" or $_GET["list"] == "class") {
 }
 
 //set vars needed for display
-$list_name = $section->Fields($tvar).$ttype ;
+if (!isset($ttype)) $ttype = '';
+$list_name = $section->Fields($tvar).$ttype;
 $limit = $section->Fields("up");
 
 if ($section->Fields($usevar) == ("1")){
@@ -100,7 +101,7 @@ if ($section->Fields("uselink") == ("1")){
 
 echo '<div id="content_header">';
 	
-if ( ($section->Fields("header")==1) and ($_GET["nointro"] !=1)  ){
+if ( ($section->Fields("header")==1) and (isset($_GET['nointro']) && $_GET["nointro"] !=1)  ){
 	if (list_header_article($MM_type,$section->Fields("url")) != true) {
 		list_header_intro($list_name,$section->Fields("description"),$section->Fields("date2"));
 	}
@@ -121,7 +122,7 @@ else{
 	}
 
 //set list layout
-	if   ((isset($listtype)) & ($listtype !=1)) {
+	if (isset($listtype) && $listtype != 1) {
  		$listfile = $listtypeck->Fields("file");
 		include ("$listfile");
 	}

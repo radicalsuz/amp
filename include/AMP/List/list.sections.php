@@ -21,7 +21,7 @@ while (!$list->EOF) { ?><table width="100%" border="0" cellspacing="0" cellpaddi
 	</td>
     <td width="100%" valign="top">
 
- <a href="<?php if ($list->Fields("uselink") != (1)) { ?>article.php?list=type<?php if  ($MM_rel) {echo"r" ;}?>&type=<? echo $list->Fields("id")?><?php }?>
+ <a href="<?php if ($list->Fields("uselink") != (1)) { ?>article.php?list=type<?php if (isset($MM_rel) && $MM_rel) {echo"r" ;}?>&type=<? echo $list->Fields("id")?><?php }?>
 <?php if ($list->Fields("uselink") == (1)) { ?><?php echo $list->Fields("linkurl")?><?php }?>" class="listtitle"  >
   <?php echo $list->Fields("type")  //end title ?></a> 
 <span class="text"> 

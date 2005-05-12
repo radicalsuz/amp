@@ -20,7 +20,7 @@ while  (!$list->EOF)
     <td width="100%" valign="top">
      <a href="<?php if ($list->Fields("linkover") != (1)) { ?>article.php?id=<? echo $list->Fields("id")?><?php }?>
 <?php if ($list->Fields("linkover") == (1)) { ?><?php echo $list->Fields("link")?><?php }?>" class="listtitle"  > 
-<?php echo utf8_decode($list->Fields("title"))  //end title ?> </a> <br> <?php if (trim($list->Fields("author")) != (NULL)) { ?><span class="bodygreystrong">by&nbsp;<?php echo converttext($list->Fields("author"))?></span><?php } //end if for author ?><?php if ((trim($list->Fields("author")) != (NULL)) &  ($list->Fields("source") != (NULL))) { echo ?>,&nbsp;<?php } ?><?php if ($list->Fields("source") != (NULL)) { ?><span class="bodygreystrong"><?php if ($list->Fields("sourceurl") != NULL){echo "<a href=\"".$list->Fields("sourceurl")."\">";}
+<?php echo $list->Fields("title")  //end title ?> </a> <br> <?php if (trim($list->Fields("author")) != (NULL)) { ?><span class="bodygreystrong">by&nbsp;<?php echo converttext($list->Fields("author"))?></span><?php } //end if for author ?><?php if ((trim($list->Fields("author")) != (NULL)) &  ($list->Fields("source") != (NULL))) { echo ?>,&nbsp;<?php } ?><?php if ($list->Fields("source") != (NULL)) { ?><span class="bodygreystrong"><?php if ($list->Fields("sourceurl") != NULL){echo "<a href=\"".$list->Fields("sourceurl")."\">";}
 echo $list->Fields("source");
 if ($list->Fields("sourceurl") != NULL){echo "</a>";}
 ?></span> <?php } //end if for author ?>

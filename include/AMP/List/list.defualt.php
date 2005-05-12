@@ -2,45 +2,58 @@
 #defual list layout
 
 #set list defualts
-$sqlorder = " Order by pageorder asc, date desc, id desc ";
-$sqlorder2= " Order by date desc, id desc ";
+$sqlorder = " ORDER BY pageorder ASC, date DESC, id DESC ";
+$sqlorder2= " ORDER BY date DESC, id DESC ";
 if (!$limit) {$limit=20;}
 
 //set up defulat list class types
-$classselect = " (class !=2 && class !=8 && class !=9) and ";
-if ($MM_classselect ) { 
-	$classselect = $MM_classselect .' and ';
+$classselect = " (class !=2 && class !=8 && class !=9) AND ";
+if (isset($MM_classselect) && $MM_classselect) { 
+	$classselect = $MM_classselect .' AND ';
 }
 
 #set the main query
-if ($_GET['type']) {
-	$wtype = " and type=$MM_type ";
-	if  ($MM_reltype){
-		$wtype = "and (type=$MM_type or typeid = $MM_type) ";
-		$joinreltype = "  Left Join articlereltype  on articleid = id ";
+if (isset($_GET['type']) && $_GET['type']) {
+	$wtype = " AND type=$MM_type ";
+	if (isset($MM_reltype) && $MM_reltype){
+		$wtype = "AND (type=$MM_type OR typeid = $MM_type) ";
+		$joinreltype = "  LEFT JOIN articlereltype ON articleid = id ";
 	}
+} else {
+    $wtype = "";
+    $joinreltype = "";
 }
 
-if ($_GET['class']) {
+if (isset($_GET['class']) && $_GET['class']) {
 	$wclass =  " and class=$MM_class ";
 	$classselect ='';
 	$_GET["nointro"] =1;
+} else {
+    $wclass = "";
 }
 
-if ($_GET['author']) {
+if (isset($_GET['author']) && $_GET['author']) {
 	$wauthor = " and author= '".$_GET['author']."' ";  
 	$classselect ='';
+} else {
+    $wauthor = "";
 }
 
-if ($_GET['area']) {
+if (isset($_GET['area']) && $_GET['area']) {
 	$warea = " and region= '".$_GET['area']."' ";  
 	$classselect ='';
+} else {
+    $warea = "";
 }
 
-if ($_GET['year']) {
+if (isset($_GET['year']) && $_GET['year']) {
 	$wyear =   " and YEAR(date) as date = $_GET[year] ";
 	$classselect ='';
+} else {
+    $wyear = "";
 }
+
+if (!isset($wreltype)) $wreltype = "";
 
 $sql = $joinreltype . ' WHERE  ' . $classselect . ' publish =1  ' . $wreltype . $warea . $wclass . $wauthor . $wyear .$wtype . $sqlorder;
 //echo $sql;
@@ -64,7 +77,7 @@ $sql = $sqlsel.$sql.$sqloffset;
 $list=$dbcon->CacheExecute("$sql")or DIE("Could not build list:<br>".$sql.'<br>'.$dbcon->ErrorMsg());
 
 // calll the layout file
-if ($listlayoutreplace !=NULL) {
+if (isset($listlayoutreplace) && $listlayoutreplace !=NULL) {
 	include("$listlayoutreplace"); 
 }	
 else { 
@@ -76,6 +89,7 @@ if ($limit < $listct->fields[0]) {
 	echo '<br><br><div align="right">';
 	$MM_removeList = "&offset=, &all=,&nointro=";
 	reset ($_GET);
+    if (!isset($MM_keepURL)) $MM_keepURL = "";
 	while (list ($key, $val) = each ($_GET)) {
 		$nextItem = "&".strtolower($key)."=";
 		if (!stristr($MM_removeList, $nextItem)) {
@@ -87,6 +101,8 @@ if ($limit < $listct->fields[0]) {
 	$MM_movePrev =  $PHP_SELF."?".$MM_keepURL."&nointro=1&offset=".($soffset-$limit);
 	$loffset = (floor($listct->fields[0] / $limit) * $limit);
 	$MM_moveLast =  $PHP_SELF."?".$MM_keepURL."&nointro=1&offset=".($loffset);
+
+    if (!isset($all)) $all = null;
 	
 	if ( $soffset  != 0 && $all !=1 ) { 
 		echo '&nbsp; <a href="' . $MM_moveFirst . '" >&laquo;&nbsp;First Page</a>'; 
