@@ -75,12 +75,7 @@ if ($Recordset1->Fields("picuse") == (1)) {
 
 	#set table
 	echo '<table width="' . $pwidth . '" border="0" align="';
-	if ($Recordset1->Fields("alignment") == ("left")) {
-		echo "left";
-	} 
-	else {
-		echo "right";
-	}
+	echo ($Recordset1->Fields("alignment") == "left") ? "left" : "right";
 	echo '" cellpadding="0" cellspacing="0"><tr><td>';
 	#set image
 	echo '<img src="' . $pathtoimg . '" alt="' . $Recordset1->Fields("alttag") . '" hspace="4" vspace="4" border="0">';
