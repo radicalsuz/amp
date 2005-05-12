@@ -25,9 +25,12 @@ while  ( !$maintext->EOF ) {
         $pathtoimg = $NAV_IMG_PATH .$maintext->Fields("pselection")."/".$maintext->Fields("picture");
         if (file_exists($fpathtoimg)) {
             $imageInfo = getimagesize($fpathtoimg); 
+            $pwidth = $imageInfo[0]; 
+            $pheight = $imageInfo[1];
+        } else {
+            $pwidth = 0;
+            $pheight = 0;
         }
-        $pwidth = $imageInfo[0]; 
-        $pheight = $imageInfo[1];
 
 
     print   '<table width="'. 
