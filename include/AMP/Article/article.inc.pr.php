@@ -8,7 +8,7 @@ To Do:
 
 *********************/ 
 
-if ($preview==1) {
+if (isset($preview) && $preview==1) {
 	$Recordset1=$dbcon->CacheExecute("SELECT * FROM articles WHERE id = $MM_id") or DIE($dbcon->ErrorMsg());
 } else {
 	$Recordset1=$dbcon->CacheExecute("SELECT * FROM articles WHERE id = $MM_id and publish=1") or DIE($dbcon->ErrorMsg());
