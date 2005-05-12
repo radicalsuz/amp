@@ -96,7 +96,7 @@ if ($Recordset1->Fields("html") == (0)) {
 	echo hotword(converttext($Recordset1->Fields("test"))); 
 }  
 if ($Recordset1->Fields("html") == (1)) {  
-	echo hotword($Recordset1->Fields("test")); 
+	echo hotword($Recordset1->Fields("test"));
 } 	
 if ($Recordset1->Fields("comments") == (1)){
 	include ("comments.inc.php"); 
