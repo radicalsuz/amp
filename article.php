@@ -19,7 +19,7 @@ ob_start();
 
 include("AMP/BaseDB.php");
 
-if ($_GET['list'] == "type") {
+if (isset($_GET['list']) && $_GET['list'] == "type") {
 	$title=$dbcon->CacheExecute("SELECT uselink, linkurl  FROM articletype WHERE id=".$_GET['type'])or DIE($dbcon->ErrorMsg()); 
 	if ($title->Fields("uselink") == ("1")){
 		$MM_editRedirectUrl = $title->Fields("linkurl");
@@ -27,8 +27,7 @@ if ($_GET['list'] == "type") {
    }  
 }
 	
-
-if ($_GET["list"] != "class" ){
+if (isset($_GET['list']) && $_GET["list"] != "class" ){
 	$isanarticle=1;
 }
 
@@ -59,7 +58,7 @@ if (isset($_GET["class"])) {
 	$MM_class = $_GET["class"];	 
 }
  
-if ($_GET['list'] == "class" ){
+if (isset($_GET['list']) && $_GET['list'] == "class" ){
 	$class_type=$dbcon->CacheExecute("SELECT  type FROM class WHERE id = $MM_class") or DIE($dbcon->ErrorMsg()); 
 	if ($class_type->Fields("type")) {
 		$MM_type = $class_type->Fields("type");
@@ -74,7 +73,7 @@ ob_start();
 
 
 //set article or list inc
-if ($_GET["list"] != NULL) {
+if (isset($_GET['list']) && $_GET["list"] != NULL) {
 	if (isset($listreplace) && $listreplace != null) {include("$listreplace");}
 	else  { include ("AMP/List/list.inc.php");}
 } 
@@ -87,10 +86,11 @@ elseif (($MM_class == 3) or ($MM_class == 4)) {
 	} 
 }
 elseif ($MM_class == 10){
-	if ($prreplace != NULL) {
+	if (isset($prreplace) && $prreplace != NULL) {
 		include("$prreplace"); 
-	}
-	else{ include("AMP/Article/article.inc.pr.php");} 
+	} else{
+        include("AMP/Article/article.inc.pr.php");
+    }
 }
 elseif ($_GET["region"] != NULL){ 
 	$MM_region = $_GET["region"] ;

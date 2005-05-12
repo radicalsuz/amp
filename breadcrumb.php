@@ -21,7 +21,7 @@ if (isset($_GET['list']) && $_GET["list"]=="class"){
 if ($MM_id){
 	$hiarticle=$dbcon->CacheExecute("Select title from articles where id = $MM_id") or DIE($dbcon->ErrorMsg());
 }
-if (($MM_type != 1) && ($_GET["list"]!="class")){
+if (!(isset($MM_type) && $MM_type == 1) && !(isset($_GET['list']) && $_GET["list"]=="class")){
 	$hitype=$dbcon->CacheExecute("Select type, id from articletype where id = $MM_type") or DIE($dbcon->ErrorMsg());
 }
 
@@ -54,7 +54,7 @@ if ($MM_type != 1) {
     	$bchtml.= $path2; 
     }
 
-    if (!$_GET["list"] && $MM_id && !$mod_name) { 
+    if (!(isset($_GET['list']) && $_GET["list"]) && $MM_id && !$mod_name) { 
     	$maxTextLenght=35;
       	$aspace=" ";
         $tttext =strip_tags($hiarticle->Fields("title"));
