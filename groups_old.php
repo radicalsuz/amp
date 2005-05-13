@@ -231,7 +231,7 @@ function groups_details($id,$modinin) {
 #########DISPLAY by custom field ##########################
 function groups_custom($gsql,$gsqo=NULL,$modinin) {
 	global $nonstateregion, $groupslayout, $dbcon;
-	$fieldtitle=$dbcon->CacheExecute("SELECT  ".$_GET['field']."text  as title from  userdata_fields where id = $modinin ") or DIE($dbcon->ErrorMsg());  
+	$fieldtitle=$dbcon->CacheExecute("SELECT  label_".$_GET['field']." as title from  userdata_fields where id = $modinin ") or DIE($dbcon->ErrorMsg());  
 	echo group_title($fieldtitle->Fields("title"));
 	$groups=$dbcon->CacheExecute($gsql." and ".$_GET['field']." = 1  $gsqlo ") or DIE($dbcon->ErrorMsg());  
 	if (!$groups->RecordCount() ){ echo groups_error(); }
