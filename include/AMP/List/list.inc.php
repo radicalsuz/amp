@@ -26,7 +26,7 @@ function list_header_article($type,$header_url=NULL){
 		}
 		else {return false;}
 	}
-	if (isset($_GET['nointro']) && $_GET["nointro"] !=1 && $MM_id) { 
+	if (!(isset($_GET['nointro']) && $_GET["nointro"] == 1) && $MM_id) { 
 		if ($articlereplace !=NULL) {
 			include ("$articlereplace"); 
 		}
@@ -59,7 +59,9 @@ function list_header_intro($list_name=NULL,$description=NULL,$date=NULL) {
 if ($_GET["list"] == "type"){
 //get list type and repeat info
 
-	$listtypeck=$dbcon->CacheExecute("SELECT articletype.listtype, articletype.up, listtype.file  FROM articletype, listtype WHERE articletype.listtype = listtype.id and articletype.id=$MM_type")or DIE('Could not load section information in list '.$dbcon->ErrorMsg());
+	$listtypeck=$dbcon->CacheExecute("SELECT articletype.listtype, articletype.up, listtype.file
+                                      FROM articletype, listtype
+                                      WHERE articletype.listtype = listtype.id AND articletype.id=$MM_type")or DIE('Could not load section information in list '.$dbcon->ErrorMsg());
 //set repeat number
  	if ($listtypeck->Fields("up") != NULL) {
 		$mm_limit = $listtypeck->Fields("up");
@@ -101,7 +103,7 @@ if ($section->Fields("uselink") == ("1")){
 
 echo '<div id="content_header">';
 	
-if ( ($section->Fields("header")==1) and (isset($_GET['nointro']) && $_GET["nointro"] !=1)  ){
+if ( $section->Fields("header")==1 && !(isset($_GET['nointro']) && $_GET["nointro"] == 1)  ){
 	if (list_header_article($MM_type,$section->Fields("url")) != true) {
 		list_header_intro($list_name,$section->Fields("description"),$section->Fields("date2"));
 	}
@@ -122,7 +124,7 @@ else{
 	}
 
 //set list layout
-	if (isset($listtype) && $listtype != 1) {
+	if ($listtype != 1) {
  		$listfile = $listtypeck->Fields("file");
 		include ("$listfile");
 	}

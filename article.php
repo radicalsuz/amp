@@ -92,7 +92,7 @@ elseif ($MM_class == 10){
         include("AMP/Article/article.inc.pr.php");
     }
 }
-elseif ($_GET["region"] != NULL){ 
+elseif (isset($_GET['region']) && $_GET["region"] != NULL){ 
 	$MM_region = $_GET["region"] ;
 	if ($regionreplace != NULL) {
 		include("$regionreplace"); 
@@ -102,7 +102,7 @@ elseif ($_GET["region"] != NULL){
 	} 
 }
 else {
-	if ($articlereplace != NULL) {
+	if (isset($articlereplace) && $articlereplace != NULL) {
 		include("$articlereplace"); 
 	}
 	else { 

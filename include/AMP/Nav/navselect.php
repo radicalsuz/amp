@@ -7,6 +7,8 @@ if ( !function_exists( 'evalnavhtml' ) ) {
         global $base_path, $dbcon, $MM_type, $MM_parent, $MM_typename, $list, $id, $MM_issue, $userper, $MM_region, $navalign;
 		global $rNAV_HTML_1, $rNAV_HTML_2, $rNAV_HTML_3,$rNAV_HTML_4,$rNAV_HTML_5;
     	global $lNAV_HTML_1, $lNAV_HTML_2, $lNAV_HTML_3,$lNAV_HTML_4,$lNAV_HTML_5;
+
+        if (!isset($start)) $start = '';
     
         $pos = strpos( $string, '<?php', $start );
         $start = 0;
@@ -114,10 +116,10 @@ function getthenavs($navside) {
     global $lNAV_HTML_1, $lNAV_HTML_2, $lNAV_HTML_3,$lNAV_HTML_4,$lNAV_HTML_5;
     
 
-    if ($_GET["list"] ) {
+    if (isset($_GET['list']) && $_GET["list"] ) {
         
         ##GET TYPE NAV FILES ####
-        if ( $_GET["type"]) {
+        if (isset($_GET['type']) && $_GET["type"]) {
 
             $navsql="  WHERE typelist= $MM_type " ;
             $navcalled = getnavs($navsql, $navside);
@@ -144,7 +146,7 @@ function getthenavs($navside) {
     } //end list
     
     ##GET ID NAV FILES ####
-    elseif ($_GET['id']) {
+    elseif (isset($_GET['id']) && $_GET['id']) {
         $navcalled = getnavs("  WHERE typeid=$MM_type ", $navside);
         $nparent =$MM_type;
         $nnnavid = $navcalled->Fields("navid");
@@ -162,7 +164,7 @@ function getthenavs($navside) {
 
     ## GET MODULES AND DEFULAT ########
     
-    if (!$nnnavid ) {
+    if (!isset($nnnavid) || !$nnnavid ) {
         $navcalled = getnavs(" WHERE moduleid = $intro_id ", $navside);
             $nnnavid  = $navcalled->Fields("navid");
     }
@@ -182,6 +184,9 @@ function getthenavs($navside) {
     ##cycle through list #####
     $rowx_count=0;
     while (!$navcalled->EOF) {
+
+        if (!isset($temp1)) $temp1 = '';
+        if (!isset($temp2)) $temp2 = '';
         
         $nav_var = $navcalled->Fields("navid") ; //set nav id 
         $settemplatex= ($rowx_count % 2) ? $temp1 : $temp2;
@@ -203,6 +208,8 @@ function getthenavs($navside) {
             $NAV_HTML_4 = $rNAV_HTML_4;
             $NAV_HTML_5 = $rNAV_HTML_5;
         }
+        
+        if (!isset($template_id)) $template_id = null;
             
         ##  GET DIFFERENT NAV TEMPLATES (Overridden) ####
         if ($settemplatex  or (($nav->Fields("templateid") != $template_id) && ($nav->Fields("templateid") != 0) ) ) {
@@ -232,6 +239,8 @@ function getthenavs($navside) {
         }
         
         ###DEFINE NON SQL NAVIGATION
+
+        if (!isset($shownav)) $shownav = '';
         
         //TITLE AS IMAGE 
 		if ($nav->Fields("rss")) {

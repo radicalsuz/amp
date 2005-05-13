@@ -19,12 +19,12 @@ if (isset($_GET['type']) && $_GET['type']) {
 		$wtype = "AND (type=$MM_type OR typeid = $MM_type) ";
 		$joinreltype = "  LEFT JOIN articlereltype ON articleid = id ";
 	} else {
-        $wtype = "";
-        $joinreltype = "";
+        if (!isset($wtype))       $wtype = "";
+        if (!isset($joinreltype)) $joinreltype = "";
     }
 } else {
-    $wtype = "";
-    $joinreltype = "";
+    if (!isset($wtype))       $wtype = "";
+    if (!isset($joinreltype)) $joinreltype = "";
 }
 
 if (isset($_GET['class']) && $_GET['class']) {
@@ -32,28 +32,28 @@ if (isset($_GET['class']) && $_GET['class']) {
 	$classselect ='';
 	$_GET["nointro"] =1;
 } else {
-    $wclass = "";
+    if (!isset($wclass)) $wclass = "";
 }
 
 if (isset($_GET['author']) && $_GET['author']) {
 	$wauthor = " and author= '".$_GET['author']."' ";  
 	$classselect ='';
 } else {
-    $wauthor = "";
+    if (!isset($wauthor)) $wauthor = "";
 }
 
 if (isset($_GET['area']) && $_GET['area']) {
 	$warea = " and region= '".$_GET['area']."' ";  
 	$classselect ='';
 } else {
-    $warea = "";
+    if (!isset($warea)) $warea = "";
 }
 
 if (isset($_GET['year']) && $_GET['year']) {
 	$wyear =   " and YEAR(date) as date = $_GET[year] ";
 	$classselect ='';
 } else {
-    $wyear = "";
+    if (!isset($wyear)) $wyear = "";
 }
 
 if (!isset($wreltype)) $wreltype = "";
