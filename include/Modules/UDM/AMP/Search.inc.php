@@ -28,7 +28,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
              'Location'=>array(
                 'f_alias'=>'Location',
                 'f_sqlname'=>"Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))",
-                'f_orderby'=>'(if(Country="USA",1,if(Country="CAN",2,Country))),State,City,Company',
+                'f_orderby'=>'(if(Country="USA",1,if(Country="CAN",2,if(isnull(Country),3,Country)))),State,City,Company',
                 'f_type'=>'text'),
              'Status'=>array(
                 'f_alias'=>'Status',

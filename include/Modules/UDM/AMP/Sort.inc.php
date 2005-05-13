@@ -40,8 +40,8 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
     function execute ($options=null) {
         if (!isset($options)) {
             if ($this->executed) return $this->sortby;
-            $options=$this->getOptions();
         }
+        $options = array_merge($this->getOptions(), $options);
         
 
 		//Check sort

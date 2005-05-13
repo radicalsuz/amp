@@ -144,7 +144,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 				$output.=" selected";
 			}
 			$output.=">".$mysort_alias.": ";
-			$output.=$jumpto_set[$n][$mysort_alias];
+			$output.=(isset($jumpto_set[$n][$mysort_alias])?$jumpto_set[$n][$mysort_alias]:$jumpto_set[$n][key($jumpto_set[$n])]);
 			$output.="</option>";
 		}
 		$output.="</select>";

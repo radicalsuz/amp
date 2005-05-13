@@ -14,6 +14,16 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
                             'description'=>'Show subheadings for',
                             'default'=>null,
                             'type'=>'text'),
+        'subheader2'=>array('label'=>'Subheading 2',
+                            'available'=>true, 
+                            'description'=>'Show subheadings for',
+                            'default'=>null,
+                            'type'=>'text'),
+        'subheader3'=>array('label'=>'Subheading 3',
+                            'available'=>true, 
+                            'description'=>'Show subheadings for',
+                            'default'=>null,
+                            'type'=>'text'),
         'display_format'=>array('label'=>'List Display Function Name',
                                 'default'=>'groups_layout_display',
                                 'available'=>true,
@@ -35,7 +45,11 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         );
     
     var $available=true;
+
+    //multiple subheaders - yay!
     var $current_subheader;
+    var $current_subheader2;
+    var $current_subheader3;
     var $regionset;
 
     function UserDataPlugin_DisplayHTML_Output (&$udm, $instance=null) {   
@@ -82,10 +96,11 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         }
         
         $inclass=method_exists($display_function, $this);
+        $subheader_level = $this->subheader_depth($options);
 
         //output display format
         foreach ($dataset as $dataitem) {
-            if (isset($options['subheader'])) $output.=$this->subheader($dataitem, $options['subheader']);
+            if ($subheader_level) $output.=$this->subheader($dataitem, $options, $subheader_level);
             if($inclass) $output.=$this->$display_function($dataitem);
             else $output.=$display_function($dataitem, $this->options);
         }
@@ -103,23 +118,68 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         }
     }
 
-        
-    function subheader($dataitem, $header_field) {
-       // Show alphabetical headers
-        if ($header_field=="alpha") {
-            $dataitem["alpha"]="&#8212; ".strtoupper(substr($dataitem['Company'],0,1))." &#8212;";
-        }
-        if ($this->current_subheader != trim($dataitem[$header_field])) {
-            $this->current_subheader = trim($dataitem[$header_field]);
-            $output .= '<h1 style="font-size: small; background: #ccc; padding: 3px 3px;">' . $this->current_subheader;
-            if ($header_field=='City') {
-                if ($dataitem['State']) $output.= ($dataitem['City']?', ':'') . $this->regionset->regions['US AND CANADA'][$dataitem['State']];
-                if ($dataitem['Country']!="USA") $output.= '&nbsp;' . $this->regionset->regions['WORLD'][$dataitem['Country']];
+    function subheader_depth($options) {
+        $level = 0;
+        foreach ($options as $option_name=>$option_value) {
+            if (strpos($option_name, "subheader")===0) {
+                if (strlen($option_name)==9) $level=1;
+                else $level = intval(substr($option_name,9));
             }
-            $output.= '</h1>';
         }
-        return $output;
+        return $level;
     }
+
+        
+    function subheader($dataitem, $options, $level='') {
+        
+        $output = "";
+        
+        // Show alphabetical headers
+        $dataitem["alpha"]="&#8212; ".strtoupper(substr($dataitem['Company'],0,1))." &#8212;";
+        
+        // Create Readable Locations 
+        $location = $dataitem['City'];
+        if ($dataitem['State']) {
+            $state_name =  isset($this->regionset->regions['US AND CANADA'][$dataitem['State']])?
+                    $this->regionset->regions['US AND CANADA'][$dataitem['State']]:
+                    $dataitem['State'];
+            $location.= ($dataitem['City']?', ':'') .$state_name;
+            $dataitem['State']=$state_name;
+        }
+        if ($dataitem['Country']!="USA") {
+            $country_name = isset ($this->regionset->regions['WORLD'][$dataitem['Country']])?
+                    $this->regionset->regions['WORLD'][$dataitem['Country']]:
+                    $dataitem['Country'];
+            $location .= '&nbsp;' . $country_name;
+            $dataitem['Country'] = $country_name;
+        }
+        $dataitem["Location"] = $location;
+
+
+        return $this->subheader_print($dataitem, $options, $level);
+    }
+
+
+    function subheader_print($dataitem, $options, $level) {
+        if ($level<1) return false;
+        if ($level==1) $textlevel='';
+        else $textlevel=strval($level);
+        $header_field = $options['subheader'.$textlevel];
+        $output = "";
+
+        //set which header we are currently checking
+        $current_sub = "current_subheader" . $textlevel;
+
+        //show normal headers
+        if ($this->$current_sub != trim($dataitem[$header_field])) {
+            $this->$current_sub = trim($dataitem[$header_field]);
+            $output = '<span class="list_subheader'.$textlevel.'">' . $this->$current_sub.'</span><BR>';
+        }
+        # return $output;
+        $level = $level - 1;
+        return $this->subheader_print($dataitem, $options, $level).$output;
+    }
+
     function display_detail($dbcon, $calid) {
         print 'Warning: this detail page has not been specified.  Please contact your site administrator!';
     }
@@ -133,6 +193,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
 //end of UserData list class
 //utility output functions follow
+if (!function_exists('groups_layout_display')) {
 	function groups_layout_display($data, $options) {
         
         $id=$data['id'];
@@ -150,6 +211,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         $image=$data['custom19'];
         $start="";
         $end="";
+        $html="";
 		
 		if ($image) {
 			$start = "<table width= \"100%\"><tr><td width = 100><img src =\"img/thumb/$image\"></td><td valign=\"top\">";
@@ -197,6 +259,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
 		return $html;
 	}
+}
 
 function list_state_convert($in) {
 	global $dbcon;
@@ -210,6 +273,9 @@ function list_state_convert($in) {
 		return $in;
 	}
 }
+
+if (!function_exists('groups_detail_display')) {
+
 	function groups_detail_display( $data, $options=null) {
         $id=$data['id'];
         $Organization=$data['Company'];
@@ -223,6 +289,7 @@ function list_state_convert($in) {
         $Web_Page=$data['Web_Page'];
         $About=$data['custom1'];
         $Details=$data['custom18'];
+        $html="";
 	
 		$html .= '<p class ="title">'.$Organization.'</p>';
 		if ($Web_Page && ($Web_Page != 'http://')) {
@@ -261,5 +328,6 @@ function list_state_convert($in) {
 
 		return $html;
 	}
+}
 
 ?>
