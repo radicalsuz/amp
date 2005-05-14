@@ -1,5 +1,10 @@
 <?php 
 #print ini_get('include_path');
+//Override any of these functions with new equivalents!
+if (file_exists_incpath('custom.navs.inc.php')) {
+    include_once('custom.navs.inc.php');
+}
+
 if ( !function_exists( 'evalnavhtml' ) ) {
     
     function evalnavhtml($string){
@@ -78,10 +83,7 @@ if ( !function_exists( 'getnavs' ) ) {
 }
 
 if ( !function_exists( 'magpienav' ) ) {
-	function magpienav($url,$num_items=NULL,$title=NULL,$html1=NULL,$html2=NULL,$html3=NULL,$html4=NULL,$html5=NULL) {
-		global $base_path;
-	
-	
+	function magpienav($url,$num_items=NULL,$title=NULL,$html1=NULL,$html2=NULL,$html3=NULL,$html4=NULL,$html5=NULL,$format=NULL) {
 		define('MAGPIE_DIR', 'FeedOnFeeds/magpierss/');
 		require_once(MAGPIE_DIR.'rss_fetch.inc');
 	
@@ -97,10 +99,14 @@ if ( !function_exists( 'magpienav' ) ) {
 			if (!$title) {$title = $rss->channel['title'];}
 			$shownav.= $html1.$title.$html2;
 			foreach ($items as $item) {
-			$href = $item['link'];
-			$title = $item['title'];
-			$shownav.= $html3."<a href=$href class=sidelist>$title</a>".$html4;
-		}
+                if (isset($format) && function_exists($format)) {
+                    $shownav = $format($item);
+                } else {
+                    $href = $item['link'];
+                    $title = $item['title'];
+                    $shownav.= $html3."<a href=$href class=sidelist>$title</a>".$html4;
+                }
+            }
 		} else {
 			$shownav .= $html1 . $html2;
 		}

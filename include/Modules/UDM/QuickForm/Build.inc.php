@@ -216,6 +216,9 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
         $fRef->setMultiple(true);
         $fRef->setSize( $size );
     }
+    if ( $type == 'WYSIWYG' ) {
+        $udm->doPlugin('Output', 'HTMLEditor', array('fieldname'=>$name);
+    }
 
     if ( isset( $size ) && $size && ( $type == 'textarea' ) ) {
         if ( strpos( $size, ':' ) ) {
@@ -272,7 +275,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     }
 
     //textareas have a table they sit within for CSS-controlled positioning
-    if ($type=='textarea') {
+    if ($type=='textarea' OR $type=='WYSIWYG') {
         $renderer->setElementTemplate(
             "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
             <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
