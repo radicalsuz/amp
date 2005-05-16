@@ -105,7 +105,9 @@ if ($uid && $modin) {
     $output=$userlist->output_list('DisplayHTML', $list_options); 
 }
 
+$intro_id = $userlist->modTemplateID;
 require_once( 'AMP/BaseTemplate.php' );
+if ($intro_id != 1) require_once( 'AMP/BaseModuleIntro.php' );
 
 print $output;
 
