@@ -17,7 +17,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
             'description'=>'Name of Pager form',
             'default'=>'udm_list_pager',
             ) );
-	var $criteria;
+	var $criteria = array();
     var $return_qty;
     var $total_qty;
     var $offset;
