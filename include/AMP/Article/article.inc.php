@@ -79,7 +79,7 @@ if ($Recordset1->Fields("picuse") == (1)) {
 	echo ($Recordset1->Fields("alignment") == "left") ? "left" : "right";
 	echo '" cellpadding="0" cellspacing="0"><tr><td>';
 	#set image
-	echo '<img src="' . $pathtoimg . '" alt="' . $Recordset1->Fields("alttag") . '" hspace="4" vspace="4" border="0">';
+	echo '<img src="' . $pathtoimg . '" alt="' . $Recordset1->Fields("alttag") . '" hspace="4" vspace="4" border="0" class="img_main">';
 	#set caption
 	echo '</td></tr><Tr align="center"><td width="' .  $pwidth  . '" class="photocaption">' . $Recordset1->Fields("piccap") . '</td>';
 	echo '</TR></table>';

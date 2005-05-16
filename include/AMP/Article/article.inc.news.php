@@ -47,7 +47,7 @@ $imageInfo = getimagesize($fpathtoimg);
 $pwidth = $imageInfo[0]; 
 
 ?>
-<table align="<?php if ($Recordset1->Fields("alignment") == ("left")) {echo "left";} else {echo "right";}?>" width="<?php echo $pwidth ?>"><tr><td><img src="<?php echo $pathtoimg; ?>" alt="<?php echo $Recordset1->Fields("alttag")?>" hspace="4" vspace="4" border="1"></td></tr><Tr align="center"><td width="<?php echo $pwidth ?>" class="photocaption"><?php echo $Recordset1->Fields("piccap")?></td></TR></table>
+<table align="<?php if ($Recordset1->Fields("alignment") == ("left")) {echo "left";} else {echo "right";}?>" width="<?php echo $pwidth ?>"><tr><td><img src="<?php echo $pathtoimg; ?>" alt="<?php echo $Recordset1->Fields("alttag")?>" hspace="4" vspace="4" border="1" class="img_main"></td></tr><Tr align="center"><td width="<?php echo $pwidth ?>" class="photocaption"><?php echo $Recordset1->Fields("piccap")?></td></TR></table>
 <p class="text"> 
   <?php } //end of picture ?>
   
