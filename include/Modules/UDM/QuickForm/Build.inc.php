@@ -217,7 +217,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
         $fRef->setSize( $size );
     }
     if ( $type == 'WYSIWYG' ) {
-        $udm->doPlugin('Output', 'HTMLEditor', array('fieldname'=>$name);
+        $udm->doPlugin('Output', 'HTMLEditor', array('fieldname'=>$name));
     }
 
     if ( isset( $size ) && $size && ( $type == 'textarea' ) ) {
