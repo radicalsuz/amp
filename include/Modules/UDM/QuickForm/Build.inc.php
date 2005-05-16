@@ -261,7 +261,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
     $renderer->setElementTemplate(
         "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
         <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-        <b>{label}</b></td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
+        {label}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
         <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t
         {element}</td>\n\t</tr>");
 
