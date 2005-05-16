@@ -271,7 +271,7 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
             <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
             {element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
             <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-            \t<b>{label}</b></td>\n\t</tr>", $name);
+            \t{label}</td>\n\t</tr>", $name);
     }
 
     //textareas have a table they sit within for CSS-controlled positioning
@@ -279,14 +279,14 @@ function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) 
         $renderer->setElementTemplate(
             "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
             <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-            <b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+            {label}<br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
             \t{element}</td></tr></table></td>\n\t</tr>", $name);
     }
 	
 
     if ($type=='header') {
         $renderer->setHeaderTemplate(
-				"\n\t<tr>\n\t\t<td class=\"udm_header\"  align=\"left\" valign=\"top\" colspan=\"2\" ><b>{header}</b></td>\n\t</tr>", $name);
+				"\n\t<tr>\n\t\t<td class=\"udm_header\"  align=\"left\" valign=\"top\" colspan=\"2\" >{header}</td>\n\t</tr>", $name);
     }
 
     if ($type=='submit') {
