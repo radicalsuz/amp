@@ -35,7 +35,6 @@ if (isset($_GET['filelink'])) header ("Location: " . $_GET['filelink']);
 $mod_id = 2 ;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
-
 ob_start(); 
 
 if (isset($indexreplace) && $indexreplace) {

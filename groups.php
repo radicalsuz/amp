@@ -15,17 +15,7 @@ require_once('AMP/UserData/Set.inc.php');
 
 $intro_id = 58;
 
-/** Someday, we may want to customize group layouts
-** though now we can use the userlist plugin options to do this
-**
-*/
-if (!isset($groupslayout)) $groupslayout = "groups.layout.php";
-if (file_exists_incpath($groupslayout)) {
-    include_once($groupslayout);
-}
-
 //Default list behavior
-$list_options['subheader']='Location';
 $list_options['display_format']='groups_layout_display';
 
 $sort_options['default_sortname'] = "Location";
@@ -34,7 +24,7 @@ $sort_options['default_select'] = "Concat( if(!isnull(Country), Concat(Country, 
 
 
 //Display sensitivity for legacy compatibility
-$gdisplay = isset($_REQUEST['gdisplay'])?$_REQUEST['gdisplay']:false ;
+$gdisplay = isset($_REQUEST['gdisplay'])?$_REQUEST['gdisplay']:false;
 switch ($gdisplay) {
     case 2:
         //international
@@ -93,15 +83,15 @@ if ($uid && $modin) {
     $output= $userlist->output('DisplayHTML', $list_options); 
 
 } else { 
-    $userlist->registerPlugin("Output", "Index");
+    #$userlist->registerPlugin("Output", "Index");
     if (is_array($sort_options)) {
         $sort = $userlist->getPlugins("Sort");
         $sort_plugin = $sort[key($sort)];
         $sort_plugin->setOptions($sort_options);
     }
 
-    //display result list
-#    $searchform = $userlist->getPlugins('SearchForm');
+    //restrict to a modin, even without a searchform specified
+    $searchform = $userlist->getPlugins('SearchForm');
     if (!isset($searchform)||$searchform==false) {
         if (is_array($srch_options['criteria']['value'])) {
             $srch_options['criteria']['value'][] = "modin=".$modin;
@@ -110,6 +100,7 @@ if ($uid && $modin) {
         }
     }
 
+    //display result list
     $userlist->doAction('Search', $srch_options); 
     $output=$userlist->output_list('DisplayHTML', $list_options); 
 }

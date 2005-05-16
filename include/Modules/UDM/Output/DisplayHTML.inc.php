@@ -86,9 +86,11 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         if (isset($this->udm->uid)) {
             $display_function=isset($options['detail_format'])?($options['detail_format']):"display_detail";
             $dataset = $this->udm->getUser( $this->udm->uid );
+            $subheader_level=0;
 
         } else { 
             //by default the list display function is used
+            $subheader_level = $this->subheader_depth($options);
             $display_function=isset($options['display_format'])?($options['display_format']):"display_item";
             //Retrieve the full results list
             $dataset=$this->udm->getData();
@@ -96,7 +98,6 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         }
         
         $inclass=method_exists($display_function, $this);
-        $subheader_level = $this->subheader_depth($options);
 
         //output display format
         foreach ($dataset as $dataitem) {
@@ -260,6 +261,7 @@ if (!function_exists('groups_layout_display')) {
 		return $html;
 	}
 }
+if (!function_exists('list_state_convert')) {
 
 function list_state_convert($in) {
 	global $dbcon;
@@ -274,6 +276,7 @@ function list_state_convert($in) {
 	}
 }
 
+}
 if (!function_exists('groups_detail_display')) {
 
 	function groups_detail_display( $data, $options=null) {
