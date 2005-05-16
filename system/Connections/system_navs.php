@@ -117,6 +117,24 @@ $sys_nav[11][2]['link'] ='link_type.php?action=list';
 $sys_nav[11][2]['name'] ='Link Types';
 $sys_nav[11][2]['per'] ='26';
 
+#payments
+$sys_nav['payments'][0]['link'] ='payment_type.php?action=list';
+$sys_nav['payments'][0]['name'] ='Add Payment Type';
+$sys_nav['payments'][0]['class'] ='add';
+
+$sys_nav['payments'][1]['link'] ='payment_type.php';
+$sys_nav['payments'][1]['name'] ='Edit Payment Type';
+$sys_nav['payments'][1]['class'] ='view';
+
+$sys_nav['payments'][2]['link'] ='payment_merchant.php?action=list';
+$sys_nav['payments'][2]['name'] ='View/Edit Merchants';
+$sys_nav['payments'][2]['class'] ='add';
+
+$sys_nav['payments'][3]['link'] ='payment_merchant.php';
+$sys_nav['payments'][3]['name'] ='Add Merchants';
+$sys_nav['payments'][3]['class'] ='view';
+
+
 #content
 $sys_nav['content']['title'] ='Content';
 $sys_nav['content'][0]['link'] ='articlelist.php';
