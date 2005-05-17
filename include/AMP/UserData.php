@@ -71,6 +71,9 @@ class UserData {
     var $results;
     var $errors;
 
+	// Flag for suppressing javascript output (for emails, for example)
+	var $no_javascript = false;
+
     ##################################
     ### Core Constructor Functions ###
     ##################################
@@ -152,9 +155,33 @@ class UserData {
 
     function output ( $format = 'html', $options = null ) {
 
-            return $this->doPlugin( 'Output', $format, $options );
+			return $this->doPlugin( 'Output', $format, $options );
 
     }
+
+	function get_plugin_javascript() {
+		if ($this->no_javascript) {
+			return false;
+		}
+
+		$javascript = '';
+		foreach ($this->getPlugins() as $action) {
+			foreach ($action as $component) {
+				if($plugin_javascript = $component->get_javascript()) {
+					$javascript .= $plugin_javascript;
+				}
+			}
+		}
+		return $javascript;
+	}
+
+	function disable_javascript() {
+		$this->no_javascript = true;
+	}
+
+	function enable_javascript() {
+		$this->no_javascript = false;
+	}
 
     /*****
      *
@@ -362,7 +389,7 @@ class UserData {
     ### Public Plugin Methods ###
     #############################
 
-    function getPlugin( $namespace, $action ) {
+    function &getPlugin( $namespace, $action ) {
 
         $plugins =& $this->plugins;
 
@@ -444,7 +471,7 @@ class UserData {
      *
      *****/
 
-    function registerPlugin ( $namespace, $action, $plugin_instance=null ) {
+    function &registerPlugin ( $namespace, $action, $plugin_instance=null ) {
 
         // temporary fixup. 
         if (strpos($action, "_") !== false) {

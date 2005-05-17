@@ -17,6 +17,9 @@ class UserDataPlugin {
     var $options = array();
     var $fields  = array();
 
+	// $javascript contains an array of javascript tag(s) needed by this plugin
+	var $javascript = array();
+
     // $available, bool, denotes whether or not this module is available for
     // use by system admins via the plugin menu. True for available, false for
     // not.
@@ -151,6 +154,25 @@ class UserDataPlugin {
         $this->_shallow_replace($type, $this_class_vars[$type]);
 
     }
+
+	function _register_javascript ( $javascript, $name = NULL ) {
+		if($name) {
+			$this->javascript[$name] .= $javascript;
+		} else {
+			$this->javascript[] .= $javascript;
+		}
+	}
+
+	function get_javascript() {
+		if(!empty($this->javascript)) {
+			$javascript = '';
+			foreach ($this->javascript as $script) {
+				$javascript .= $script;
+			}
+			return $javascript;
+		}
+		return false;
+	}
 
     function _shallow_replace ( $merge_to, $merge_from ) {
 
