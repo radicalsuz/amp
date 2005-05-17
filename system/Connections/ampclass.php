@@ -846,6 +846,15 @@ class Time {
 	}
 } 
 
+function add_view_row($label,$value=NULL,$db=NULL) {
+	global $buildform,$R;
+	if (!$db) {$db = $R;}
+	if (($db) && ($value == NULL)) { 
+		$value= $db->Fields($label) ;
+	} 
+	$output = $buildform->add_row($label, $value);
+	return $output; 
+}
 
 function addfield($name,$label=NULL,$fieldtype='text',$value=NULL,$defualt=NULL,$size=45,$height=4,$right_text=NULL) {
 	global $buildform,$R;
