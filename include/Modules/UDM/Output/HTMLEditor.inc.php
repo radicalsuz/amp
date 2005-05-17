@@ -51,7 +51,6 @@ if(!isset($this->udm->form)) {
 		$element->do_browser_specific_field_adjustment();
 */
 
-$browser = 'ie';
         switch ($browser) {
             case 'mozilla':
 				$element =& $this->udm->form->getElement($fieldname);
