@@ -57,7 +57,7 @@ add_view_row('Billing_Zip');
 add_view_row('Billing_Email');
  
 
-$html .= $rec_id->fetch());
+$html .= $rec_id->fetch();
 $html .= $buildform->end_table();
 $form = & new Form();
 $form->set_contents($html);
