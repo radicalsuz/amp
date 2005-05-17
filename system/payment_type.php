@@ -23,7 +23,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
     $MM_recordId = $_POST['MM_recordId'];
     $MM_editRedirectUrl = $filename."?action=list";
 	$MM_editColumn = "id";
-	$MM_fieldsStr = merchant_ID "merchant_ID|value|name|value|description|value|Amount|value|Amount_Array|value|Amount_Other|value|Tax_Status|value|Donation_Limit|value|Thank_You_Email|value|Email_Alert|value|Alert_Customer|value|Alert_Merchant|value";
+	$MM_fieldsStr =  "merchant_ID|value|name|value|description|value|Amount|value|Amount_Array|value|Amount_Other|value|Tax_Status|value|Donation_Limit|value|Thank_You_Email|value|Email_Alert|value|Alert_Customer|value|Alert_Merchant|value";
     $MM_columnsStr = "merchant_ID|',none,''|name|',none,''|description|',none,''|Amount|',none,''|Amount_Array|',none,''|Amount_Other|',none,''|Tax_Status|',none,''|Donation_Limit|',none,''|Thank_You_Email|',none,''|Email_Alert|',none,''|Alert_Customer|',none,''|Alert_Merchant|',none,''"; //|$delim,$altVal,$emptyVal|  |',none,''|
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
