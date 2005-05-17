@@ -3,7 +3,7 @@ $mod_name="module";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
-include("FCKeditor/fckeditor.php");
+include("WYSIWYG/editor.php");
 $obj = new SysMenu; 
 $buildform = new BuildForm;
 

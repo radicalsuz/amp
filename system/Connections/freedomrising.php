@@ -3,6 +3,7 @@
 ob_start();
 
 require_once('AMP/BaseDB.php');
+/*
 
 $browser_ie =  strstr(getenv('HTTP_USER_AGENT'), 'MSIE') ;
 $browser_win =  strstr(getenv('HTTP_USER_AGENT'), 'Win') ;
@@ -12,6 +13,8 @@ if (!strstr(getenv('HTTP_USER_AGENT'), 'Safari')){
 if (strstr(getenv('HTTP_USER_AGENT'), '2002')){
         $browser_mo =  NULL ;
 }
+*/
+setBrowser();
 
 
 /*

@@ -17,7 +17,7 @@
 
 // The editor base path
 // You have to update it with you web site configuration
-$FCKeditorBasePath = "FCKeditor/" ;
+$FCKeditorBasePath = "/scripts/FCKeditor/" ;
 
 class FCKeditor
 {

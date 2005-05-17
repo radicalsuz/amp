@@ -1,7 +1,7 @@
 <?php
 $mod_name='content';
 require("Connections/freedomrising.php");
-include("FCKeditor/fckeditor.php");
+require_once("WYSIWYG/editor.php");
 
 if (isset($preview)) {header ("Location: ../article.php?id=$id&preview=1");}
   // *** Edit Operations: declare Tables

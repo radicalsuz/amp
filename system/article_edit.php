@@ -2,7 +2,7 @@
 $mod_name='content';
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
-require_once("FCKeditor/fckeditor.php"); 
+require_once("WYSIWYG/editor.php");
 require_once("../includes/versionfunctions.php");
 
 $buildform = new BuildForm;
