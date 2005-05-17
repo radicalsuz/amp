@@ -54,4 +54,10 @@ if (!isset($sysversion)) {
     $sysversion = '3.4-dev';
 }
 
+#define browser detection global variables
+$browser_ie = NULL;
+$browser_win = NULL;
+$browser_mo = NULL;
+$browser_checked = false;
+
 ?>

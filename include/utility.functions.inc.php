@@ -399,5 +399,29 @@ function find_local_path () {
 	
 	return $localPath;
 }
+
+function setBrowser() {
+    global $browser_ie, $browser_win, $browser_mo, $browser_checked;
+    $browser_ie =  strstr(getenv('HTTP_USER_AGENT'), 'MSIE') ;
+    $browser_win =  strstr(getenv('HTTP_USER_AGENT'), 'Win') ;
+    if (!strstr(getenv('HTTP_USER_AGENT'), 'Safari')){
+        $browser_mo =  strstr(getenv('HTTP_USER_AGENT'), 'Mozilla/5') ;
+    }
+    if (strstr(getenv('HTTP_USER_AGENT'), '2002')){
+        $browser_mo =  NULL ;
+    }
+    $browser_checked = true;
+
+    return getBrowser();
+}
+
+function getBrowser() {
+    global $browser_ie, $browser_win, $browser_mo, $browser_checked;
+    if ($browser_checked) {
+        return  $browser_ie?"ie":$browser_win?"win":$browser_mo?"mozilla":false;
+    } else {
+        return setBrowser();
+    }
+}
   
 ?>
