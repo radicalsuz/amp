@@ -19,7 +19,8 @@ class UserDataPlugin_SubmitButton_Output extends UserDataPlugin {
 		if (isset($this->udm->form)) {
 			$get_options = $this->getOptions();		
 			$btn_fields = array('type'=>'submit', 'label'=>$get_options['button_label'], 'required'=>false, 'public'=>true,'enabled'=>true);
-			udm_quickform_addElement( $this->udm->form, 'btnUdmSubmit', $btn_fields, $this->udm->admin );
+			$build_plugin =& $this->udm->getPlugin('QuickForm','Build');
+			$build_plugin->udm_quickform_addElement( $this->udm->form, 'btnUdmSubmit', $btn_fields, $this->udm->admin );
 		}
 		
 	}

@@ -34,9 +34,11 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
                    "modinput4.php?modin=" . $udm->instance .
                    "&uid=" . $udm->uid . " to update your information.\n\n";
 
+		$udm->disable_javascript();
         // Output the form data - default is 'text' as defined in
         // UserDataPlugin_Email.
         $message .= $udm->output( $options['format'] );
+		$udm->enable_javascript();
 
         return $message;
 

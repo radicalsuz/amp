@@ -32,8 +32,10 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
 
         $this->options['mailto'] = $udm->_module_def['mailto'];
 
+		$this->udm->disable_javascript();
         // Output the form data (default format is text, defined above)
         $message .= $udm->output( $options['format'] );
+		$this->udm->enable_javascript();
 
         // Append Edit/Publish Link
         $message .= "\n\nPlease visit " . $GLOBALS['Web_url'] . 
