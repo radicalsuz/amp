@@ -68,43 +68,79 @@ function DivMenu_showsub($typeid,&$menuset) {
 $menu_footer='
 </TABLE>
 <SCRIPT type="text/javascript">
+
 <!--
+
   document.onclick = new Function("show_menu(null)")
+
   
+
   function getPos(el,sProp) {
-      var iPos = 0
+
+      var iPos = 0;
+
       while (el != null) {
-	  iPos += el["offset" + sProp]
-	  el = el.offsetParent
+
+	  iPos += el["offset" + sProp];
+
+	  el = el.offsetParent;
+
       }
-      return iPos
+
+      return iPos;
+
   }
+
   
+
   var current_menu = null;
+
   var current_mptr = null;
-  function show_menu(el,menuid) {
-      if (menu=document.getElementById(("divmenu_"+menuid))) {
-      alert (menu.style.display);
-	  menu.style.display="block";
-	  menu.style.pixelLeft = getPos(el,"Left") + el.offsetWidth + 2
-	  menu.style.pixelTop = getPos(el,"Top")
+
+
+  function show_menu(el, menuid) {
+
+      if (el) {
+          menu_block = document.getElementById(("divmenu_"+menuid));
+          if (menu_block) {
+
+          menu_block.style.display="block";
+
+          menu_block.style.pixelLeft = getPos(el,"Left") + el.offsetWidth + 2;
+
+          menu_block.style.pixelTop = getPos(el,"Top");
+
+          }
+
+
+          if (mptr=document.getElementById("mptr_"+menuid)) {
+
+        mptr.src="img/point_r_rd.gif";
+
+          }
       }
-      else {
-        alert (menuid+"is the id");
+
+      if ((menu_block != current_menu) && (current_menu)) {
+
+	  current_menu.style.display="none";
+
       }
-      if (mptr=document.getElementById("mptr_"+menuid)) {
-	mptr.src="img/point_r_rd.gif"
-      }
-      if ((menu != current_menu) && (current_menu)) {
-	  current_menu.style.display="none"
-      }
+
       if ((mptr != current_mptr) && (current_mptr)) {
-	  current_mptr.src="img/point_r_wt.gif"
+
+	  current_mptr.src="img/point_r_wt.gif";
+
       }
-      current_menu = menu
-      current_mptr = mptr
+
+      current_menu = menu_block;
+
+      current_mptr = mptr;
+
   }
+
   -->
-</SCRIPT>';
+
+</SCRIPT>
+';
 
 ?>
