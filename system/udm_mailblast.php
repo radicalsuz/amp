@@ -14,7 +14,7 @@ $mod_name="email";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
-include("WYSIWYG/editor.php");
+require_once("WYSIWYG/editor.php");
 
 $obj = new SysMenu; 
 $buildform = new BuildForm;
