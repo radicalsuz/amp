@@ -1,5 +1,5 @@
 <?php
 
-header("Location: modinout4.php?modin=".$_GET['id']);
+header("Location: modinput4.php?modin=".$_GET['id']);
 
 ?>
