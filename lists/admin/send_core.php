@@ -2,8 +2,8 @@
 // 2004-1-7  This function really isn't quite ready for register globals.  
 require_once "accesscheck.php";
 
-if (file_exists("FCKeditor/fckeditor.php") && USEFCK) {
-	include("./FCKeditor/fckeditor.php") ;
+if (file_exists("WYSIWYG/FCKeditor/fckeditor.php") && USEFCK) {
+	include("WYSIWYG/FCKeditor/fckeditor.php") ;
 
   // Create the editor object here so we can check to see if *it* wants us to use it (this 
 	// does a browser check, etc.
