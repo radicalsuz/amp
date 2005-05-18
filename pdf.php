@@ -22,7 +22,7 @@ require_once ("HTML_ToPDF/HTML_ToPDF.php");
 $htmlFile = $Web_url.$_GET['file'].'?modin='.$_GET['modin'].'&uid='.$_GET['uid'].'&id='.$_GET['id'].'&list='.$_GET['list'].'&type='.$_GET['type'];
 $defaultDomain = $Web_url;
 
-$pdfFile = AMP_LOCAL_PATH. '/downloads/pdfs/test'..'pdf';
+$pdfFile = AMP_LOCAL_PATH. '/downloads/pdfs/test.pdf';
 // Remove old one, just to make sure we are making it afresh
 @unlink($pdfFile);
 
