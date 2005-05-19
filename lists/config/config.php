@@ -51,9 +51,9 @@ $bounce_protocol = 'pop';
 define ("MANUALLY_PROCESS_BOUNCES",1);
 
 # when the protocol is pop, specify these three
-$bounce_mailbox_host = 'localhost';
-$bounce_mailbox_user = 'popuser';
-$bounce_mailbox_password = 'password';
+$bounce_mailbox_host = $AMP_mailbox_host;//'localhost';
+$bounce_mailbox_user = $AMP_mailbox_host;//'popuser';
+$bounce_mailbox_password = $AMP_mailbox_password;//'password';
 
 # when the protocol is mbox specify this one
 # it needs to be a local file in mbox format, accessible to your webserver user
@@ -178,8 +178,8 @@ $usertable_prefix = "phplist_user_";
 # if you change the path to these pages, make the change here as well
 # path should be relative to the root directory of your webserver
 # you may have to change it at loads of other places as well
-$pageroot = $Web_url . '/lists';
-$adminpages = $pageroot . '/admin';
+$pageroot = $Web_url . 'lists/';
+$adminpages = $pageroot . 'admin';
 
 # PHPlist can send RSS feeds to users. Feeds can be sent daily, weekly or
 # monthly. This feature is currently marked experimental.
