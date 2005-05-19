@@ -188,7 +188,7 @@ function processBounce ($link,$num,$header) {
 }
 
 function processPop ($server,$user,$password) {
-  $port =  "995/pop3/notls";
+  $port =  "110/pop3/notls";
   set_time_limit(6000);
 
   if (!TEST) {
