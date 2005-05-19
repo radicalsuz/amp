@@ -6,6 +6,7 @@ require_once("Connections/sysmenu.class.php");
 $obj = new SysMenu; 
 $buildform = new BuildForm;
 
+$where_con = "";
 if (isset($_GET['nons'])){
 	$where_con = "  and nosql=1 "; 
 }
@@ -18,7 +19,14 @@ $filename="nav.php";
 
 ob_start();
 // insert, update, delete
-if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
+if (!isset($_POST['MM_update']))   $_POST['MM_update']   = null;
+if (!isset($_POST['MM_recordId'])) $_POST['MM_recordId'] = null;
+if (!isset($_POST['MM_insert']))   $_POST['MM_insert']   = null;
+if (!isset($_POST['MM_delete']))   $_POST['MM_delete']   = null;
+
+if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) ||
+     ($_POST['MM_insert'])                             ||
+    (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
 
     $MM_editTable  = $table;
     $MM_recordId = $_POST['MM_recordId'];
@@ -47,8 +55,12 @@ $M = $dbcon->Execute("SELECT id, name FROM modules ORDER BY name ASC") or DIE($d
 $T = $dbcon->Execute("SELECT name, id FROM template ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
 $C = $dbcon->Execute("SELECT class, id FROM class ORDER BY class ASC") or DIE($dbcon->ErrorMsg());
 
-
-$rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
+if (isset($_GET['id'])) {
+    $rec_id_input =& new Input('hidden', 'MM_recordId', $_GET['id']);
+    $rec_id = $rec_id_input->fetch();
+} else {
+    $rec_id = "";
+}
 //build form
 $html = '<h2>Add/Edit '.$listtitle. '</h2>';
 $html .= '
@@ -122,7 +134,7 @@ $html .= addfield('mcall2','More Field #2 (4)','text',$R->Fields("mcall2"));
 $html .= $buildform->end_table();
 $html .= '</div>';
 $html .= $buildform->start_table( 'buttons' );
-$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id->fetch());
+$html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id);
 $html .= $buildform->end_table();
 
 $form = & new Form();
@@ -130,6 +142,8 @@ $form->set_contents($html);
 
 include ("header.php");
 if ($_GET['action'] == "list") {
+    $sort     = (isset($_GET['sort']))  ? $_GET['sort']  : "";
+    $extra    = (isset($_GET['extra'])) ? $_GET['extra'] : "";
 	listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby,$sort,$extra);
 }
 else {
