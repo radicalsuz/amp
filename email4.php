@@ -69,8 +69,8 @@ $MM_editTable  = "contacts2";
   ##add sourceid and enteredby and date enetered
    $MM_fieldsStr = "firstname|value|email|value|lastname|value|organization|value|address|value|address2|value|city|value|state|value|zip|value|country|value|phone|value|fax|value|website|value|enteredby|value|sourceid|value|notes|value";
    $MM_columnsStr = "FirstName|',none,''|EmailAddress|',none,''|LastName|',none,''|Company|',none,''|BusinessStreet|',none,''|BusinessStreet2|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|BusinessPhone|',none,''|BusinessFax|',none,''|WebPage|',none,''|enteredby|',none,''|source|',none,''|notes|',none,''";
-   require ("DBConnections/insetstuff.php");
-   require ("DBConnections/dataactions.php");
+   require ("Connections/insetstuff.php");
+   require ("Connections/dataactions.php");
 
  
    }// end insert
