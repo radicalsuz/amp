@@ -263,6 +263,7 @@ function select_type_tree($id = 0,$y=0,$selcode)
 	}
 	
 	function depth2($depth) {
+        $d = "";
 		for ($i=2; $i<= $depth; ++$i) {
 			$d .= "&nbsp;&nbsp;&nbsp;&nbsp;";
 		}

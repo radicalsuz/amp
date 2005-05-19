@@ -81,6 +81,7 @@ function nav_mod_type($type) {
     $output = '';
 	$sql ="SELECT i.id, i.name FROM userdata_fields i, modules m WHERE i.id = m.userdatamodid AND m.module_type=" . $dbcon->qstr($type) . " AND m.userdatamodid > 49 ORDER BY name";
 	$R=$dbcon->CacheExecute($sql) or die('Error in nov_mod_tpe: ' . $dbcon->ErrorMsg());
+    $entries = 0;
 	while (!$R->EOF && $entries++ < 10) {
 		$output .= nav_item_udm($R->Fields("id"));
 		$R->MoveNext();
@@ -113,10 +114,11 @@ function nav_mod_type_check($type) {
 	global $dbcon;
 	$C=$dbcon->CacheExecute("SELECT id FROM modules WHERE module_type=" . $dbcon->qstr($type) . " AND userdatamodid > 49")
                     or die("Couldn't check module type: " . $dbcon->ErrorMsg());
+    $output = "";
 	if ($C->Fields("id")) {
 		$R=$dbcon->CacheExecute("SELECT name FROM module_type WHERE id=" . $dbcon->qstr($type))
                     or die("Couldn't fetch module type information: " . $dbcon->ErrorMsg());
-		$output .= 	',"'.$R->Fields("name").'","show-menu='.$R->Fields("name").'",,,1';
+		$output .= 	',"' . $R->Fields("name").'","show-menu='.$R->Fields("name").'",,,1';
 		return $output;
 	}
 }
