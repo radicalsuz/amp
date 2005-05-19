@@ -279,7 +279,7 @@ class Payment_CreditCard extends Payment {
 
         //complete transaction metadata
         $this->transaction_info['Status']=$this->response_codes[$ChargeResult['return_code']];
-        $this->transaction_info['Date_Processed']=date();
+        $this->transaction_info['Date_Processed']=date("r");
         $this->transaction_info['Time_Responded']=time();
 
         //save the record of the transaction

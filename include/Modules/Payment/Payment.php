@@ -32,7 +32,7 @@ Class Payment {
         $payment_info['order_ID']=$this->order_ID;
         $payment_info['Amount']=$this->amount;
         $payment_info['description']=$this->description;
-        $payment_info['Date_Processed']=date();
+        $payment_info['Date_Processed']=date("r");
         $payment_info['Status']='Processed';
         $payment_info['Payment_Type']=$this->type;
 
