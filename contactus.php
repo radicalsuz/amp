@@ -6,21 +6,21 @@ Description:  sends email to $MM_email_contact
 To Do: declare post vars
 
 *********************/ 
-$modid =17;
+$modid = 17;
 $intro_id = 52;
-if ($_POST["thank"] == ("1")) { 
+if (isset($_POST['thank']) && $_POST["thank"]) { 
 	  $intro_id = 53 ;
 }
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
 
-if ( ($_POST["send"] == 1) && ($MM_email_contact) ) {    
+if ( (isset($_POST['send']) && $_POST["send"]) && $MM_email_contact ) {    
 	mail ( $MM_email_contact, $_POST["subject"], $_POST["message"], "From: ".$_POST["email"]." \nX-Mailer: My PHP Script\n");
 		
 }
 
-if ($_POST["thank"] == (NULL)) { ?>
+if (!isset($_POST['thank']) || $_POST["thank"] == NULL) { ?>
 <form method="post" action="<?php $PHP_SELF."?thank=1" ; ?>"><table width="100%" border="0" cellspacing="0" cellpadding="5" class="form">
   <tr> 
     <td valign="top">Your E-Mail:</td>
