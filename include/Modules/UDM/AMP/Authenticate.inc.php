@@ -72,7 +72,9 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
 
             $dbcon =& $udm->dbcon;
 
-            $otp = sha1( mt_rand() . $_SERVER['REMOTE_HOST'] . $uid . mt_rand() );
+            $host_sha_seed = (isset($_SERVER['REMOTE_HOST'])) ? $_SERVER['REMOTE_HOST'] : $_SERVER['REMOTE_ADDR'];
+
+            $otp = sha1( mt_rand() . $host_sha_seed . $uid . mt_rand() );
 
             // Insert the temporary (not really a OTP) password into the database.
             // Validity is set by SQL column DEFAULTS.

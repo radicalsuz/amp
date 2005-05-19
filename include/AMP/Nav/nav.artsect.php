@@ -34,6 +34,6 @@ while (!$art->EOF) {
 	$art->MoveNext();
 	$y++;
 }}
-echo $shownav;
+if (isset($shownav)) echo $shownav;
 
 ?>

@@ -62,8 +62,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
             $this->udm->errorMessage($processor->error);
             return false;
         }
-        
-
     }
 
     function getItem() {
