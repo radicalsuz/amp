@@ -164,7 +164,7 @@ class Payment_CreditCard extends Payment {
         //Checks each value in $data to see if there is a matching key in
         //$customer_info_keys
         foreach ($data as $cust_key=>$cust_value) {
-            if (array_search($customer_info_keys, $cust_key)) {
+            if (array_search($cust_key, $this->customer_info_keys)) {
                 $cust_info[$cust_key]=$cust_value;
             }
         }
