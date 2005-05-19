@@ -131,6 +131,7 @@ class UserDataSet extends UserData {
         return false;
 
     }
+
     function parse_URL_crit () {
         parse_str($_SERVER['QUERY_STRING'], $parsed_criteria);
         foreach ($parsed_criteria as $pkey=>$pvalue) {

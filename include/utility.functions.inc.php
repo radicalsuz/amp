@@ -181,7 +181,7 @@ if ( !function_exists( 'converttext' ) ) {
 
     function converttext($text) {
 
-        $text = ereg_replace("(([a-z0-9_\.-]+)(\@)[a-z0-9_-]+([\.][a-z0-9_-]+)+)", "<a href=\"mailto:\\0\">\\0</a>", $text);
+        $text = ereg_replace("(([a-zA-Z0-9_\.-]+)(\@)[a-z0-9_-]+([\.][a-z0-9_-]+)+)", "<a href=\"mailto:\\0\">\\0</a>", $text);
         $text = ereg_replace(" [[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target=_offsite>\\0</a>", $text); 
         $text = nl2br($text);
         return $text;

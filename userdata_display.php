@@ -26,30 +26,11 @@ $admin=false;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);
 
 //Check if publishing of data has been authorized
-/*
-if ($userlist->_module_def['publish']) {
 
-	#get all registered SearchForm plugins
-	if ($searchforms=$userlist->getPlugins('SearchForm')) {
-        #use only the first one (NULL if not an array or empty)
-        $searchform = array_shift($searchforms);
-    }
-
-    $pager=&$userlist->registerPlugin('Output', 'Pager');
-    $userlist->registerPlugin('AMP', 'Search');
-    /*
-    if ($display=&$userlist->getPlugin('Output', 'DisplayHTML')) {
-        $display_options = $display->getOptions();
-
-    } else {
-       $display=&$userlist->registerPlugin('Output', 'DisplayHTML');
-    }
-    
-    $userlist->registerPlugin('AMP', 'Sort');
-} else {
+if (!$userlist->_module_def['publish']) {
     header ("Location: index.php");
 }
-*/
+
 $sub = isset($_REQUEST['btnUDMSubmit']);
 $uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
 
