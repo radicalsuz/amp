@@ -1,7 +1,7 @@
 <?php
 $mod_name="email";
 require_once("Connections/freedomrising.php");
-require_once("WYSIWYG/FCKeditor/fckeditor.php");
+require_once("../scripts/FCKeditor/fckeditor.php");
 $buildform = new BuildForm;
 
 include("AMP/Blast/Reporting.php");

@@ -6,7 +6,7 @@
 $mod_name='udm';
 require("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
-require_once("WYSIWYG/FCKeditor/fckeditor.php");
+require_once("../scripts/FCKeditor/fckeditor.php");
 $obj = new SysMenu; 
 $buildform = new BuildForm;
 
