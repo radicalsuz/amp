@@ -11,7 +11,7 @@ To Do:
 *********************/ 
 
 $module=$dbcon->CacheExecute("SELECT * FROM moduletext WHERE id = $mod_id") or DIE("Couldn't retrieve module text: " . $dbcon->ErrorMsg());
-if ($moduleintroreplace != NULL) { 
+if (isset($moduleintroreplace) && $moduleintroreplace != NULL) { 
 	include ("$moduleintroreplace"); 
 }
 else {
