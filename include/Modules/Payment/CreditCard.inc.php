@@ -123,18 +123,27 @@ class Payment_CreditCard extends Payment {
     * * * * * * * * * */
 
     function setCard ($data) {
+
         if (!is_array($data)) return false;
-        if ((!isset($data['Credit_Card_Expiration']))&&(isset($data['Credit_Card_Expiration_Month'])&&isset($data['Credit_Card_Expiration_Year']))) {
-            $data['Credit_Card_Expiration']=$data['Credit_Card_Expiration_Month']."/".$data['Credit_Card_Expiration_Year'];
+
+        if (!isset($data['Credit_Card_Expiration']) &&
+            (isset($data['Credit_Card_Expiration_Month'] &&
+             isset($data['Credit_Card_Expiration_Year']) )) {
+
+            $data['Credit_Card_Expiration'] = $data['Credit_Card_Expiration_Month']
+                                              . "/" .
+                                              $data['Credit_Card_Expiration_Year'];
+
         }
 
         //Checks each value in $data to see if there is a matching key in
-        //$card_info_keys -- note that credit card values in $data are prefaced
+        //$this->card_info_keys -- note that credit card values in $data are prefaced
         //with a string: "Credit_Card_"
         
-        foreach ($data as $card_key=>$card_value) {
-            if (array_search($card_info_keys, substr($card_key,12))) {
-                $card_info[substr($card_key,12)]=$card_value;
+        foreach ($data as $card_key => $card_value) {
+            $cc_num = substr($card_key, 12);
+            if (array_search($cc_num, $this->card_info_keys)) {
+                $card_info[$cc_num]=$card_value;
             }
         }
 
