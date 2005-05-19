@@ -38,7 +38,7 @@ echo converttext($title->Fields("description"))."<br>"; }?>
   	 	$Repeat2__index= 0;
 		?>
 
-<?php if ($listlayoutreplace !=NULL) {include("$listlayoutreplace"); 
+<?php if (isset($listlayoutreplace) && $listlayoutreplace !=NULL) {include("$listlayoutreplace"); 
 		}	else{include ("AMP/List/list.layout.inc.php"); }?>
  <?php
  }

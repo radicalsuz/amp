@@ -397,6 +397,8 @@ function getthenavs($navside) {
         $navcalled->MoveNext();
     }
 
+    if (!isset($shownav)) $shownav = null;
+
     return $shownav; 
 }
 ?>

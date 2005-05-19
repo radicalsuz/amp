@@ -14,6 +14,7 @@ $secsql = "select id, type from articletype where usenav=1 and parent =$MM_type 
 if ($sec->RecordCount() > 0) {
 $x =1;
 while (!$sec->EOF) {
+    if (!isset($shownav)) $shownav = "";
 	if ($x > 1) {$shownav.=$lNAV_HTML_3 ;} 
 	$shownav.='<a href="section.php?id='.$sec->Fields("id").'" class="sidelist">'.$sec->Fields("type").'</a>';
 	$shownav.=$lNAV_HTML_4 ;
@@ -26,6 +27,7 @@ if ($art->RecordCount() > 0) { $shownav.=$lNAV_HTML_3 ;}
 if ($art->RecordCount() > 0) {
 $y =1;
 while (!$art->EOF) {
+    if (!isset($shownav)) $shownav = "";
 	if ($y > 1) {$shownav.=$lNAV_HTML_3 ;} 
 	$shownav.='<a href="article.php?id='.$art->Fields("id").'" class="sidelist">'.$art->Fields("title").'</a>';
 	$shownav.=$lNAV_HTML_4 ; //start link text

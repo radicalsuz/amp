@@ -9,7 +9,7 @@ Called by: all modules
 To Do:  
 
 *********************/ 
-if (($mod_id) or ($intro_id)) {
+if (isset($mod_id) || isset($intro_id)) {
 	if (!$intro_id) { $intro_id = $mod_id; }
 	$module=$dbcon->CacheExecute("SELECT * FROM moduletext WHERE id = $intro_id") or DIE("Couldn't retrieve module text: " . $dbcon->ErrorMsg());
 	if (isset($moduleintroreplace) && $moduleintroreplace != NULL) { 
