@@ -56,8 +56,10 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         $sql = "UPDATE userdata SET ";
 
-        foreach ($data as $field => $value) {
-            $elements[] = $field . "=" . $dbcon->qstr( $value );
+        $save_fields = $this->getSaveFields();
+
+        foreach ($save_fields as $field) {
+            $elements[] = $field . "=" . $dbcon->qstr( $data[$field] );
         }
 
         $sql .= implode( ", ", $elements );
@@ -73,7 +75,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         $data['modin'] = $this->udm->instance;
 
-        $fields = array_keys( $data );
+        $fields = $this->getSaveFields();
         $values_noescape = array_values( $data );
 
         foreach ( $values_noescape as $value ) {
