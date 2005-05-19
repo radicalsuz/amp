@@ -1,5 +1,5 @@
 <?php
-require_once("FCKeditor/fckeditor.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/scripts/FCKeditor/fckeditor.php");
 
 function WYSIWYG($value,$html){
 	$editor = get_textarea_editor();
