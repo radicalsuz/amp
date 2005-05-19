@@ -2,7 +2,7 @@
 $modid=9;
 $source = 11;
 $enteredby =2;
-
+ob_start();
 if (isset($MM_insert)){$mod_id = 24;}
 elseif ($p=="subscribe"){ $mod_id = 20; }
 else { $mod_id = 20; }
