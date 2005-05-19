@@ -254,7 +254,7 @@ class Payment_CreditCard extends Payment {
         //Create transaction metadata
         $this->transaction_info['Amount']=$amount;
         $this->transaction_info['Time_Requested']=time();
-        $this->transaction_info['Date_Submitted']=date();
+        $this->transaction_info['Date_Submitted']=date("r");
         $this->transaction_info['Status']='Awaiting Approval';
        
         //Generate a permanent Transation_ID by saving to the DB
