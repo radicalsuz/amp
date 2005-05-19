@@ -1,8 +1,11 @@
 <?php
 require_once ('Modules/Payment/CreditCard.inc.php');
-require_once ('AMP/UserData/Plugin.inc.php');
+require_once ('AMP/UserData/Plugin/Save.inc.php');
 
-class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
+class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
+
+    var $short_name = "AMPPayment";
+
     var $options = array(
         'merchant_ID'=> array('label'=>'Merchant',
                              'type'=>'select',
@@ -21,15 +24,14 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
                                           'type'  => 'select',
                                           'available' => true)
         );
+
     var $item_info;
-
-
     
     function UserDataPlugin_Save_AMPPayment (&$udm, $plugin_instance=null) {
         $this->processor = &new Payment_CreditCard($udm->dbcon);
         $this->init($udm, $plugin_instance);
-
     }
+
     function getSaveFields() {
         $save_fields=array_keys($this->fields);
         unset($save_fields['Share_Data']);
@@ -39,7 +41,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin {
                 case 'html':
                 case 'static':
                 case 'header':
-                    unset($save_fields[$fname]);
+                unset($save_fields[$fname]);
             }
         }
         return $save_fields;
