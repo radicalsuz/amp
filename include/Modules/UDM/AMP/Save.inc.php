@@ -78,7 +78,8 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
         $fields = $this->getSaveFields();
         $values_noescape = array_values( $data );
 
-        foreach ( $values_noescape as $value ) {
+        foreach ( $fields as $field ) {
+            $value = $data[$field];
             $values[] = $dbcon->qstr( $value );
         }
 
