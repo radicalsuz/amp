@@ -128,7 +128,7 @@ class Payment_CreditCard extends Payment {
 
         if (!isset($data['Credit_Card_Expiration']) &&
             (isset($data['Credit_Card_Expiration_Month'] &&
-             isset($data['Credit_Card_Expiration_Year']) )) {
+             isset($data['Credit_Card_Expiration_Year']) ))) {
 
             $data['Credit_Card_Expiration'] = $data['Credit_Card_Expiration_Month']
                                               . "/" .
