@@ -45,7 +45,7 @@ Class Payment {
 	function save() {
         $save_data=$this->getData();
         $sql = $this->payment_ID?   $this->updateSQL ( $save_data ):
-                                    $this->insertSQL ( $sqve_data );
+                                    $this->insertSQL ( $save_data );
         
         $rs = $this->dbcon->CacheExecute( $sql ) or
                     die( "Unable to save payment data using SQL $sql: " . $this->dbcon->ErrorMsg() );
@@ -96,12 +96,5 @@ Class Payment {
         return $sql;
 
     }
-
-    
-	
-	
-	
-
-
 }
 ?>
