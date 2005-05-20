@@ -342,8 +342,8 @@ if ((isset($MM_insert)) && (!$_REQUEST[kill_insert] ) ) {
 	    $modin =12;
 		$MM_fieldsStr =  "First_Name|value|Last_Name|value|Email|value|City|value|State|value|Zip|value|Street|value|Street_2|value|Country|value|Phone|value|Title|value|modin|value";
 	    $MM_columnsStr = "First_Name|',none,''|Last_Name|',none,''|Email|',none,''|City|',none,''|State|',none,''|Zip|',none,''|Street|',none,''|Street_2|',none,''|Country|',none,''|Phone|',none,''|Title|',none,''|modin|',none,''";
-	    require ("DBConnections/insetstuff.php");
-	    require ("DBConnections/dataactions.php");
+	    require ("Connections/insetstuff.php");
+	    require ("Connections/dataactions.php");
 			
 		#send welcome message	
 		#membershipemail($_POST[Email]);
@@ -368,8 +368,8 @@ if ((isset($MM_insert)) && (!$_REQUEST[kill_insert] ) ) {
 	$MM_editTable  = "action_history";
 	$MM_fieldsStr =  "actionid|value|memberid|value|subjectText|value|Letter_Content|value|date|value";
 	$MM_columnsStr = "actionid|',none,''|memberid|',none,''|subject|',none,''|text|',none,''|date|',none,now()";
-	require ("DBConnections/insetstuff.php");
-	require ("DBConnections/dataactions.php");
+	require ("Connections/insetstuff.php");
+	require ("Connections/dataactions.php");
 
 ##### mail to target
 # get send info
