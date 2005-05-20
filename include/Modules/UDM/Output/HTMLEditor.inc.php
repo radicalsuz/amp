@@ -31,9 +31,9 @@ class UserDataPlugin_HTMLEditor_Output extends UserDataPlugin {
 	}
 
 	function execute($options=null){
-if(!isset($this->udm->form)) {
-	return false;
-}
+        if(!isset($this->udm->form)) {
+            return false;
+        }
  
         if (!isset($options['fieldname'])) return false;
         $fieldname = $options['fieldname'];
@@ -50,17 +50,34 @@ if(!isset($this->udm->form)) {
 		$element =& $this->udm->form->getElement($fieldname);
 		$element->do_browser_specific_field_adjustment();
 */
+        $element =& $this->udm->form->getElement($fieldname);
+        $fDef = $this->udm->fields[$fieldname];
+
+        //Size settings - perform for all variations
+        $size = $fDef['size'];
+        
+        $columns=80;
+        $rows=20;
+
+        if ( is_numeric( $size ) && $size ) {
+            if ( strpos( $size, ':' ) ) {
+                $tmpArray = split( ':', $fDef['size'] );
+                $rows = $tmpArray['0'];
+            } else {
+                $rows=$size;
+            }
+        }
+
+
+        $element->setRows($rows);
+        $element->setCols($columns);
 
         switch ($browser) {
             case 'mozilla':
-				$element =& $this->udm->form->getElement($fieldname);
 				$element->updateAttributes(array('id' => $fieldname, 'wrap' => "VIRTUAL", 'style' => "'width:100%"));
-				$element->setRows(20);
-				$element->setCols(80);
 				return $element;
                 break;
-            case 'ie':
-                $fDef = $this->udm->fields[$fieldname];
+            case 'win/ie':
                 //get HTML for iFrame Field
                 $new_value = $this->iFrame_HTML($fieldname, $fDef);
 

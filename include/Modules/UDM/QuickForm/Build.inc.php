@@ -219,9 +219,6 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 			$fRef->setMultiple(true);
 			$fRef->setSize( $size );
 		}
-		if ( $type == 'wysiwyg' ) {
-			$this->udm->doPlugin('Output', 'HTMLEditor', array('fieldname'=>$name));
-		}
 
 		if ( isset( $size ) && $size && ( $type == 'textarea' ) ) {
 			if ( strpos( $size, ':' ) ) {
@@ -235,6 +232,11 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
 			if ( isset( $rows ) ) $fRef->setRows( $rows );
 			if ( isset( $cols ) ) $fRef->setCols( $cols );
+		}
+
+        //Wysiwyg plugin
+		if ( $type == 'wysiwyg' ) {
+			$this->udm->doPlugin('Output', 'HTMLEditor', array('fieldname'=>$name));
 		}
 
 		if ( $type == 'checkbox' ) {

@@ -11,7 +11,6 @@
 //   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
-
 HTMLArea.I18N = {
 
 	// the following should be the filename without .js extension

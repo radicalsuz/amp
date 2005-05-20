@@ -418,6 +418,7 @@ function setBrowser() {
 function getBrowser() {
     global $browser_ie, $browser_win, $browser_mo, $browser_checked;
     if ($browser_checked) {
+        if ($browser_ie&&$browser_win) return "win/ie";
         return  $browser_ie?"ie":$browser_win?"win":$browser_mo?"mozilla":false;
     } else {
         return setBrowser();

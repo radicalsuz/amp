@@ -60,7 +60,6 @@ function javascript_htmlarea_plugins() {
 
         // If this lang file is not found the plugin will fail to
         // load correctly and nothing will work.
-
         HTMLArea.loadPlugin("TableOperations");
         HTMLArea.loadPlugin("SpellChecker");
         HTMLArea.loadPlugin("FullPage");
@@ -96,7 +95,9 @@ function javascript_htmlarea_startInitEditor() {
 function javascript_htmlarea_endInitEditor() {
     return '    return false;
         }
-    </script>';
+    initEditor();
+    </script>
+    ';
 }
 
 function javascript_initEditor_contents($id, $timeout=500) {
