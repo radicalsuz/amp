@@ -109,25 +109,26 @@ function processWindow(&$content, $width, $height, $q) {
             <form action="search.php" method="get" name="form2" class="name">
   <p><strong>Search For&nbsp;&nbsp;&nbsp;</strong><br>
     <input name="q" type="text" id="title" size="35" class="name">
-  <br><strong>Posted in Last:<br>
+ <!--  <br><strong>Posted in Last:<br>
     </strong> 
     <select name="date">
       <option value="">--</option>
-      <option value="<?php echo $yesterday ; ?>">Day</option>
-      <option value="<?php echo $weekAgo ; ?>">Week</option>
-      <option value="<?php echo  $monthAgo ; ?>">Month</option>
-      <option value="<?php echo $twoMonthsAgo ; ?>">Two 
+      <option value="<?php //echo $yesterday ; ?>">Day</option>
+      <option value="<?php //echo $weekAgo ; ?>">Week</option>
+      <option value="<?php //echo  $monthAgo ; ?>">Month</option>
+      <option value="<?php //echo $twoMonthsAgo ; ?>">Two 
       Months</option>
-      <option value="<?php echo $YearAgo ; ?>">Year</option>
+      <option value="<?php //echo $YearAgo ; ?>">Year</option>
     </select>
  <br>
     
   <strong>In Section:<br>
   </strong> 
-  <select name="section">
+ <select name="section">
       <option value="">--</option>
-				  <?php  echo  $obj->select_type_tree(1); ?>
+				  <?php  //echo  $obj->select_type_tree(1); ?>
  </select>
+ -->
 </p>
     <input name="Search" type="submit"  class="name"><hr>
 </form> 
