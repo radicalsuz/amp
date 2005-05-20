@@ -1,10 +1,10 @@
 <?php
 
-$mod_id = 62;
-$modid = 21;
+$mod_id = 7;
+//$modid = 21;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
-//include("AMP/BaseModuleIntro.php");
+include("AMP/BaseModuleIntro.php");
 
 
 include("AMP/DBfunctions.inc.php"); 
