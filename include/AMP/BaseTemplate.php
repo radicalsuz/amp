@@ -4,7 +4,7 @@ if ( !function_exists( 'buildheader' ) ) {
 		
     function buildheader() {
         
-        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $systemplate_id, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url, $extra_header, $css, $SystemSettings;
+        global $AmpPath, $MM_title, $MM_shortdesc, $MM_id, $systemplate_id, $meta_description, $meta_content, $mod_name, $SiteName, $Web_url, $extra_header, $css, $SystemSettings, $MM_typename ;
 
         $encoding = (isset($SystemSettings['encoding'])) ? $SystemSettings['encoding'] : 'iso-8859-1'; 
 
