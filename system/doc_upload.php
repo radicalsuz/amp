@@ -6,7 +6,7 @@ set_time_limit(0);
 $my_max_file_size 	= "65000000"; # in bytes
 $image_max_width	= "50000";
 $image_max_height	= "50000";
-$the_path			= AMP_LOCAL_PATH."downloads/";
+$the_path			= AMP_LOCAL_PATH."/downloads/";
 
 $registered_types = array(
 					"application/x-gzip-compressed" 	=> ".tar.gz, .tgz",
