@@ -8,12 +8,12 @@ $filename="docdir.php";
 
 //delete file 
 if ( isset($_GET['actdel']) ){
-	$dir_name="".$base_path_amp."downloads/";
+	$dir_name=AMP_LOCAL_PATH."/downloads/";
 	unlink($dir_name.$actdel);
 }
 
 // get file list
-$dir_name="".$base_path_amp."downloads";
+$dir_name=AMP_LOCAL_PATH."/downloads";
 $dir = opendir($dir_name);
 $basename = basename($dir_name);
 $fileArr = array();
