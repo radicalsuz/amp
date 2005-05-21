@@ -567,7 +567,6 @@ class UserData {
         
         $result = false;
         foreach ( array_keys($plugins) as $plugin_name ) {
-            print $plugin_name." a<BR>";
 
             $plugin =& $plugins[$plugin_name];
 

@@ -40,12 +40,8 @@ class UserDataPlugin_Read_AMPCalendar extends UserDataPlugin {
     function execute( $options = null ) {
         $options = array_merge($this->getOptions(), $options);
         // Check for the existence of a userid.
-        if (!(isset( $options['calid'] )&&$options['calid'])) {
-            print 'no calid';
-            return false;
-        } else {
-            print $options['calid']."#AA#";
-        }
+        if (!(isset( $options['calid'] )&&$options['calid'])) return false;
+
         $calid = $options['calid'];
 	
         //Read Calendar Record
