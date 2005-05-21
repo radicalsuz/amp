@@ -8,7 +8,7 @@ $buildform = new BuildForm;
 $table = "redirect";
 $listtitle ="Redirects";
 $listsql ="select * from $table  ";
-$orderby =" order by id desc  ";
+$orderby =" order by old asc  ";
 $fieldsarray=array('Old Address'=>'old','New Address'=>'new');
 $filename="redirect.php";
 
