@@ -14,7 +14,7 @@ $listsql ="select id, title, udmid   from $table  ";
 $orderby =" order by  title asc  ";
 $fieldsarray=array( 'Title'=>'title','ID'=>'id');
 
-$extra = array('Petition Signers'=>'petition_udm_list.php?modin=','Petition Fields'=>'modinput4_edit.php?modin=','Add to Content System'=>'module_contentadd.php?pid=');
+$extra = array('Petition Signers'=>'mopiput4_data.php?modin=','Petition Fields'=>'modinput4_edit.php?modin=','Add to Content System'=>'module_contentadd.php?pid=');
 $extramap = array('Petition Fields'=>'udmid','Petition Signers'=>'udmid');
 
 $filename="petition.php";
