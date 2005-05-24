@@ -2,14 +2,14 @@
 
 $menu_header='
 <STYLE type ="text/css">
-    .floater{ position: absolute; background-color: '.$menu_bg_color.'; width: 200; 
+    TABLE#menu .floater{ position: absolute; background-color: '.$menu_bg_color.'; width: 200; 
                 border: solid black 1px; text-align: left; padding: 4px; }
     TABLE#menu td.boxcontents {
                 font-family: Verdana, Arial, Helvetica, sans-serif; background-color: '.$menu_bg_color.';
                     font-size: 10px; font-weight: normal; color: '.$menu_txt_color.'; padding-bottom: 5px;}
-    .nav {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-weight: normal; 
+    TABLE#menu .nav {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-weight: normal; 
             color: '.$menu_txt_color.';}
-    a:hover.nav {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; 
+    TABLE#menu a:hover.nav {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; 
                     font-weight: normal; color: '.$menu_txt_color_hover.';  text-decoration : none; }
 </STYLE>
 <!-- this prevents \'events fall through the menu\' bug in win/ie --><!--[if gte IE 5]>

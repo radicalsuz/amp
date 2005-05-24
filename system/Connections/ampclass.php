@@ -946,9 +946,9 @@ function makelistarray($q,$key,$value,$label='Select') {
 function upload_image($newname=NULL,$wwidth,$lwidth,$thumbwidth,$hide_display=NULL){
 	global $base_path_amp,$gd_version;
 
-	$picdir = $base_path_amp."img/original";
-	$thumbdir = $base_path_amp."img/thumb";
-	$usedir = $base_path_amp."img/pic"; 
+	$picdir = AMP_LOCAL_PATH.DIRECTORY_SEPARATOR."img/original";
+	$thumbdir = AMP_LOCAL_PATH.DIRECTORY_SEPARATOR."img/thumb";
+	$usedir = AMP_LOCAL_PATH.DIRECTORY_SEPARATOR."img/pic"; 
 	$addition = "";
  	$newext = "jpg";
 
@@ -1033,7 +1033,7 @@ function upload_image($newname=NULL,$wwidth,$lwidth,$thumbwidth,$hide_display=NU
 	}
 	
 	if (isset($original)) {
-		$response .= '>hr><table>';
+		$response .= '<hr><table>';
         $response .= '<tr><td>Thumbnail:<td><td>'.$smallimage.'</td><td><img src="../img/thumb/'.$filename.$addition.".".$newext."\"></td></tr>";
 		$response .= '<tr><td>Optimized:<td><td>'.$useimage.'</td><td><img src="../img/pic/'.$filename.$addition.".".$newext."\"></td></tr>";
 		$response .= '<tr><td>Original:<td><td>'.$original.'</td><td><img src="../img/original/'.$filename.$addition.".".$newext."\"></td></tr>";

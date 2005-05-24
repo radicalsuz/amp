@@ -2,7 +2,7 @@
 #make ical files
 include_once('AMP/BaseDB.php');
 include_once('iCal/class.iCal.inc.php');
-$iCal = (object) new iCal('', 0, $base_path_amp.'custom/iCal'); // (ProgrammID, Method (1 = Publish | 0 = Request), Download Directory)
+$iCal = (object) new iCal('', 0, AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.'custom/iCal'); // (ProgrammID, Method (1 = Publish | 0 = Request), Download Directory)
 
 
 	

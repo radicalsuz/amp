@@ -89,7 +89,7 @@ Class Gallery {
 				$galimage = $gphoto->Fields("img");
 			}
 		
-   			$daimg = $base_path_amp."img/pic/".$galimage;
+   			$daimg = AMP_LOCAL_PATH.DIRECTORY_SEPARATOR."img/pic/".$galimage;
 			echo '<div class="gallerylist">';
 			if (file_exists($daimg) && ($galimage)) { 
 				echo '<a href="gallery.php?gal=' 

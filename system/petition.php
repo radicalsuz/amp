@@ -29,7 +29,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 		require_once( 'AMP/UserData/Input.inc.php' );
 		require_once( 'utility.functions.inc.php');
 		$chsql = "select id from userdata_fields where id =4";
-	    $check  = $dbcon->Execute($chsql) or die('petition setup faild ' . $chsql . $dbcon->ErrorMsg());
+	    $check  = $dbcon->Execute($chsql) or die('petition setup failed ' . $chsql . $dbcon->ErrorMsg());
 
 		if (!$check->Fields("id")) {
 		

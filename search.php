@@ -148,7 +148,7 @@ $section = $_GET['section'] ;
 $ssql = " and $MX_type = $section "; } 
 
 
-$sql= "select test, title, id from articles where match(test, author, shortdesc, title) against('$_GET[q]') and publish =1 $dsql $ssql   ";
+$sql= "select test, title, id, type, class from articles where match(test, author, shortdesc, title) against('$_GET[q]') and publish =1 $dsql $ssql   ";
 $sqlct= "SELECT  COUNT(DISTINCT id) from articles where match(test, author, shortdesc, title) against('$_GET[q]') and publish =1  $dsql  $ssql  ";
 $searchx=$dbcon->CacheExecute($sql." Limit  $offset, $limit;");
 
@@ -182,7 +182,12 @@ echo "<br><br>"; }
 $i = ($offset+1);
  while (!$searchx->EOF)   {  ?>
 <span class =listtitle><?php echo $i;?>.&nbsp;
-<a href="article.php?id=<?php echo $searchx->Fields('id')."\"  class=listtitle>".strip_tags($searchx->Fields('title')); ?></a> <br></span>
+<?php 
+//if text appears in a section header, return the section listing
+$search_url_vars = ($searchx->Fields("class")=="8")?
+    "list=type&type=".$searchx->Fields("type")
+    :"id=".$searchx->Fields("id");?>
+<a href="article.php?<?php echo $search_url_vars."\"  class=listtitle>".strip_tags($searchx->Fields('title')); ?></a> <br></span>
 <?php $desc = processWindow($searchx->Fields('test'), 80, 1, $_GET[q]); 
 if ($desc[0]) {echo $desc[0];}
 else {echo $searchx->Fields('shortdesc');}

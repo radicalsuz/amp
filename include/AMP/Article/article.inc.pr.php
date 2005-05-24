@@ -53,7 +53,7 @@ $Recordset1__totalRows=$Recordset1->RecordCount();
 
 if ($Recordset1->Fields("picuse") == (1)) { //start of picture 
 
-	$fpathtoimg = $base_path_amp.$NAV_IMG_PATH .$Recordset1->Fields("pselection")."/".$Recordset1->Fields("picture");
+	$fpathtoimg = AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$NAV_IMG_PATH .$Recordset1->Fields("pselection")."/".$Recordset1->Fields("picture");
 	$pathtoimg = $Web_url.$NAV_IMG_PATH .$Recordset1->Fields("pselection")."/".$Recordset1->Fields("picture");
 	$imageInfo = getimagesize($fpathtoimg); 
 	$pwidth = $imageInfo[0]; 

@@ -33,7 +33,7 @@ class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
             $dataset=$this->calendar->results();
             
             $display_function=isset($this->options['display_format']['value'])?($this->options['display_format']['value']):"display_item";
-            $inclass=method_exists($this->$display_function);
+            $inclass=method_exists($this, $display_function);
 
             //output display format
             foreach ($dataset as $dataitem) {
