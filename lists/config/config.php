@@ -178,8 +178,8 @@ $usertable_prefix = "phplist_user_";
 # if you change the path to these pages, make the change here as well
 # path should be relative to the root directory of your webserver
 # you may have to change it at loads of other places as well
-$pageroot = 'http://'.$_SERVER['HTTP_HOST']. '/lists/';
-#$pageroot = '/lists/';
+#$pageroot = 'http://'.$_SERVER['HTTP_HOST']. '/lists/';
+$pageroot = '/lists/';
 $adminpages = $pageroot . 'admin';
 
 # PHPlist can send RSS feeds to users. Feeds can be sent daily, weekly or
