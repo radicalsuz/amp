@@ -1,7 +1,7 @@
 <?php
 /*********************
 01-04-2004  v3.01
-Module:  Phot Gallery
+Module:  Photo Gallery
 Description:  displays images in  the photo gallery
 CSS: text, title
 VARS: $fullgal, $divz
@@ -270,7 +270,7 @@ if (!$_GET[gal]) {
 			$galimage = $gphoto->Fields("img");
 		}
 		
-   		$daimg = $base_path_amp."img/pic/".$galimage;
+   		$daimg = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR ."img/pic/".$galimage;
 		echo '<div class="gallerylist">';
 		if (file_exists($daimg) && ($galimage)) { 
 			echo '<a href="gallery.php?gal=' 
@@ -317,7 +317,7 @@ elseif ($fullgal == 1) {
 	echo '<div class="gallery">';
 
 	while (!$photo->EOF) { 
-		$daimg = $base_path_amp."img/original/".$photo->Fields("img");
+		$daimg = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR ."img/original/".$photo->Fields("img");
 		
 		if (file_exists($daimg)) {
 			$rowx_count++;
