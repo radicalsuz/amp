@@ -19,7 +19,7 @@ if ($Recordset1->Fields("linkover") == 1){
    header ("Location: $goodbye") ;}
 
 ?>
-<table width="100%" class="text"><tr><td>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="text"><tr><td>
 <?php ########## HEADER ########## ?>
 <span class="newstitle"><?php echo converttext($Recordset1->Fields("title"))?></span><br>
 

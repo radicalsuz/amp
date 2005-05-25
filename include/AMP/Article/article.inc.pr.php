@@ -26,7 +26,7 @@ $Recordset1__totalRows=$Recordset1->RecordCount();
 
 ?>
 
-<table width="100%" class="text"><tr><td>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="text"><tr><td>
 <?php ########## HEADER ########## ?>
 
 <?php if ($Recordset1->Fields("date") != (NULL)) { ?><span class="bodygreystrong">For Immediate Release:</span>&nbsp;<span class="bodygrey"><?php echo DoDate( $Recordset1->Fields("date"), 'F jS, Y') ?></span><br><?php } ?>

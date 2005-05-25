@@ -25,7 +25,7 @@ if ($Recordset1->Fields("linkover") == 1){
 
 
 #table frame
-echo '<table width="100%" class="text"><tr><td>';
+echo '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="text"><tr><td>';
 #title
 echo '<p class="title">'  .  converttext($Recordset1->Fields("title"))  .  '</p>';
 #subtitle
