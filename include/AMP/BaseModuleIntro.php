@@ -21,13 +21,15 @@ if (isset($mod_id) || isset($intro_id)) {
 		if ($module->Fields("subtitile") != (NULL)) {
 			echo '<p class="subtitle">'  .  $module->Fields("subtitile")  .  '</p>';
 		}
-		if ($module->Fields("test") != (NULL)) {
+        $AMP_Module_Intro = $module->Fields("test");
+		if ($AMP_Module_Intro != (NULL)) {
+            $AMP_Module_Intro = eval_includes ( $AMP_Module_Intro );
 			echo '<p class="text">';
 			if  ($module->Fields("html")) {
-				echo $module->Fields("test");
+				echo $AMP_Module_Intro;
 			}
 			else {
-				echo converttext($module->Fields("test"));
+				echo converttext($AMP_Module_Intro);
 			}
 			echo '</p>';
 		}

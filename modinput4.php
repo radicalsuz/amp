@@ -73,7 +73,7 @@ if ( ( !$uid || $auth ) && $sub ) {
 $mod_id = $udm->modTemplateID;
 
 require_once( 'AMP/BaseTemplate.php' );
-require_once( 'includes/moduleintro.php' );
+require_once( 'AMP/BaseModuleIntro.php' );
 
 print $udm->output();
 
