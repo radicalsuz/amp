@@ -315,6 +315,7 @@ if ( !function_exists( 'eval_includes' ) ) {
             $include_args = substr($code, $include_start, $include_stop-$include_start);
 			#$include_args = preg_replace("/.*include\s*[\(\s*]?\s*\"?([^\)\"\s]*)\"?[\)\s*]?.*/", "\$1", $code );
             $incl = trim(str_replace('"','',$include_args));
+            print 'a'.$incl.'aAAa';
 
             //catch the include
 			ob_start();
