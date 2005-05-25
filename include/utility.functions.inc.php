@@ -295,14 +295,12 @@ if ( !function_exists( 'evalhtml' ) ) {
 if ( !function_exists( 'eval_includes' ) ) {
     //evaluates php include files contained within the given text
     function eval_includes ($text, $basedir=null) {
-        print 'hi';
         $pos = strpos ( $text, '<?php');
         if ($pos===FALSE) return $text;
         $endpos = 0;
 
         $result = substr($text, 0, $pos);
         while (!($pos===FALSE)) {
-            print '1';
 
             //find the end of the block
             $endpos = strpos($text, '?>', $pos);
@@ -317,7 +315,6 @@ if ( !function_exists( 'eval_includes' ) ) {
             $include_args = substr($code, $include_start, $include_stop-$include_start);
 			#$include_args = preg_replace("/.*include\s*[\(\s*]?\s*\"?([^\)\"\s]*)\"?[\)\s*]?.*/", "\$1", $code );
             $incl = trim(str_replace('"','',$include_args));
-            print 'a'.$incl.'aAAa';
 
             //catch the include
 			ob_start();
