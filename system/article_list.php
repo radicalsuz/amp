@@ -195,17 +195,17 @@ if ($_GET["sorder"]){ $sql = " ORDER BY a.".$_GET["sorder"]; }
 else { $sql = "  ORDER BY a.pageorder asc, a.date desc"; }
 
 ###########################make sql statement ###########################
-$fullsql = "SELECT DISTINCTROW a.date, a.id, a.pageorder, a.publish, a.title,  articletype.type, a.publish, a.uselink,  class.class FROM articles a, class left join on articletype where articletype.id = a.type and class.id=a.class   $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql Limit  $offset, $limit";
+$fullsql = "SELECT DISTINCTROW a.date, a.id, a.pageorder, a.publish, a.title,  articletype.type, a.publish, a.uselink,  class.class FROM articles a, class left join articletype on articletype.id = a.type where  class.id=a.class   $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql Limit  $offset, $limit";
 $sqlct= "SELECT DISTINCTROW  a.id FROM articles a, articletype, class where articletype.id = a.type and class.id=a.class  $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql ";
 if ($MM_reltype ) {
-$fullsql = "SELECT DISTINCTROW a.date, a.id,  a.pageorder,  a.publish, a.title, articletype.type, a.publish, a.uselink, class.class  FROM articles a, class  left JOIN articlereltype   on a.id = articlereltype.articleid  left join articletype on articletype.id = a.typewhere  where class.id=a.class $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql  Limit  $offset, $limit ";
+$fullsql = "SELECT DISTINCTROW a.date, a.id,  a.pageorder,  a.publish, a.title, articletype.type, a.publish, a.uselink, class.class  FROM articles a, class  left JOIN articlereltype   on a.id = articlereltype.articleid  left join articletype on articletype.id = a.type where class.id=a.class $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql  Limit  $offset, $limit ";
 $sqlct= "SELECT DISTINCTROW a.id FROM articles a, class  left JOIN articlereltype   on a.id = articlereltype.articleid Left Join articletype on articletype.id = a.type where  class.id=a.class  $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql ";
 }
 //$subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sq
 //echo $fullsql;
 //die;
 
-   $Recordset1=$dbcon->Execute($fullsql) or DIE($dbcon->ErrorMsg());
+   $Recordset1=$dbcon->Execute($fullsql) or DIE($fullsql.$dbcon->ErrorMsg());
    
 ###########################KEEP PARAMATERS###########################
 // create the list of parameters which should not be maintained
