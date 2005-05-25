@@ -6,6 +6,8 @@ class UserDataPlugin_Email extends UserDataPlugin {
     var $message = '';
     var $header = '';
 
+#XXX: this should be options.  needs some cleanup, as some code
+#     references options and some references option_defs
     var $option_defs = array(
 
                 'mailto'      => array( 'description' => 'Email Address',
