@@ -365,8 +365,12 @@ class UserData {
             }
             return $data;
         }
-        return $this->form->exportValues($fields);
-
+		$data = $this->form->exportValues($fields);
+		if (PEAR::isError($data)) {
+			return false;
+		} else {
+			return $data;
+		}
     }
 
     /*****
