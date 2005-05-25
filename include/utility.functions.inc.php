@@ -301,6 +301,7 @@ if ( !function_exists( 'eval_includes' ) ) {
 
         $result = substr($text, 0, $pos);
         while (!($pos===FALSE)) {
+            print '1';
 
             //find the end of the block
             $endpos = strpos($text, '?>', $pos);
