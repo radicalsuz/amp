@@ -1,6 +1,22 @@
 <?php
 
-function udm_output_text ( $udm, $options = null ) {
+require_once( 'AMP/UserData/Plugin.inc.php' );
+
+class UserDataPlugin_Text_Output extends UserDataPlugin {
+
+    function UserDataPlugin_Text_Output ( &$udm, $plugin_instance=null ) {
+        $this->init( $udm, $plugin_instance );
+    }
+
+    function execute ( $options = null ) {
+
+        return udm_output_text( $this->udm );
+
+    }
+
+}
+
+function udm_output_text ( &$udm, $options = null ) {
 
     // Ensure we have a form built before proceeding.
     if ( !isset( $udm->form ) )
