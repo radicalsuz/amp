@@ -193,7 +193,7 @@ if ($_GET["sorder"]){ $sql = " ORDER BY a.".$_GET["sorder"]; }
 //elseif ($_GET["ido"]){$sql = " ORDER BY  a.id"; }
 //elseif ($_GET["uselink"]){ $sql = " ORDER BY  a.publish";}
 else { $sql = "  ORDER BY a.pageorder asc, a.date desc"; }
-
+ 
 ###########################make sql statement ###########################
 $fullsql = "SELECT DISTINCTROW a.date, a.id, a.pageorder, a.publish, a.title,  articletype.type, a.publish, a.uselink,  class.class FROM articles a, class left join articletype on articletype.id = a.type where  class.id=a.class   $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql Limit  $offset, $limit";
 $sqlct= "SELECT DISTINCTROW  a.id FROM articles a, articletype, class where articletype.id = a.type and class.id=a.class  $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql ";
