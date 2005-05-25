@@ -52,18 +52,12 @@ class UserDataSet extends UserData {
             else $order = array('SearchForm','Pager','Actions',$format,'Pager','Index');
         }
 
+        //get the registered plugins
+        $plugin_set = &$this->getPlugins(); 
+
         // check for any error messages, display them
         if (isset($this->errors)) {
             $output_html = '<P>'.join('<BR>',$this->errors)."<BR>";
-            
-            //a terrible hack for the header text in case of error
-            //the other option is to start making the plugins do
-            //error-checking, which feels premature
-            if (method_exists($output_set[$format], 'header_text_id')) {
-                $this->modTemplateID = $output_set[$format]->header_text_id();
-            } else {
-                $this->modTemplateID = 1;
-            }
             
             //Show only the search form and the index so the user can create a
             //new search
@@ -71,12 +65,17 @@ class UserDataSet extends UserData {
             
         }
 
-        //get the registered plugins and adjust the order to only
-        //include valid actions
-        $plugin_set = &$this->getPlugins(); 
+        //set the header text
+        if (method_exists($plugin_set[$format], 'header_text_id')) {
+            $this->modTemplateID = $plugin_set[$format]->header_text_id();
+        } else {
+            $this->modTemplateID = 1;
+        }
+        
+
+        //adjust the order to only include valid actions
         $actions = array_keys($plugin_set);
         $order = array_intersect($order, $actions);
-
 
         // render each component into html
         foreach ($order as $output_component) {
