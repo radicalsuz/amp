@@ -64,9 +64,14 @@ class UserDataInput extends UserData {
         $save_results = $this->doAction( 'Save', $options );
 
         if ($this->_module_def['useemail']) {
-            $this->doAction( 'EmailUser' );
+			$this->registerPlugin('AMP', 'EmailAdmin');
             $this->doAction( 'EmailAdmin' );
         }
+
+		// for now turn this on by registering the EmailUser plugin
+		if ($this->getPlugin('AMP', 'EmailUser')) {
+            $this->doAction( 'EmailUser' );
+		}
 
         return $save_results;
 
