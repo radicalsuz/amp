@@ -295,6 +295,7 @@ if ( !function_exists( 'evalhtml' ) ) {
 if ( !function_exists( 'eval_includes' ) ) {
     //evaluates php include files contained within the given text
     function eval_includes ($text, $basedir=null) {
+        print 'hi';
         $pos = strpos ( $text, '<?php');
         if ($pos===FALSE) return $text;
         $endpos = 0;
