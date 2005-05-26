@@ -36,7 +36,7 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
 
     function _register_options_dynamic() {
         $this->options['subject']['default']='Update Your Posting';
-        $this->options['mailto']['default'] = $this->getData( array('Email') );
+        $this->options['mailto']['default'] = current($this->getData( array('Email') ));
     }
 
     function prepareMessage ( $options = null ) {
