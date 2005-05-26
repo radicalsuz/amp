@@ -31,7 +31,7 @@ function udm_output_html ( &$udm, $options = null ) {
 
         // Ensure we have a form built before proceeding.
         if ( !isset( $udm->form ) )
-            $udm->doPlugin( 'QuickForm', 'build', $options );
+            $udm->doPlugin( 'QuickForm', 'Build', $options );
 
         $out .= $udm->form->display();
 

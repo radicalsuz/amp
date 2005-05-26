@@ -357,6 +357,8 @@ class UserData {
     function getData( $fields=null ) {
 
         if (!$this->form)  {
+            $this->doPlugin('QuickForm', 'Build');
+            /*
             foreach ($this->fields as $fname=>$fDef) {
                 if (isset($fields) && (array_search($fname, $fields)===FALSE)) continue;
                 if (isset($fDef['value']))
@@ -364,9 +366,12 @@ class UserData {
 
             }
             return $data;
+            */
         }
+        
 		$data = $this->form->exportValues($fields);
-		if (PEAR::isError($data)) {
+		
+        if (PEAR::isError($data)) {
 			return false;
 		} else {
 			return $data;

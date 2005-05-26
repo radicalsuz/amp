@@ -36,7 +36,8 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
 
     function _register_options_dynamic() {
         $this->options['subject']['default']='Update Your Posting';
-        $this->options['mailto']['default'] = current($this->getData( array('Email') ));
+        $answer = $this->getData( array('Email') );
+        $this->options['mailto']['default'] = $answer['Email'];
     }
 
     function prepareMessage ( $options = null ) {
@@ -45,8 +46,8 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
         $options = array_merge($this->getOptions(), $options);
 
         //Update Link
-        $message = "\n\nPlease go to " . $_SERVER['SERVER_NAME'] .
-                   $options['update_page']."?modin=" . $udm->instance .
+        $message = "\n\nPlease go to http://" . $_SERVER['SERVER_NAME'] .
+                   "/" . $options['update_page'] . "?modin=" . $udm->instance .
                    "&uid=" . $udm->uid . " to update your information.\n\n";
 
 		$udm->disable_javascript();
