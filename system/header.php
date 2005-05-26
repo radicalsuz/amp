@@ -413,7 +413,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
     ?>
 </head>
 
-<body <?= (isset($browser_mo) && $browser_mo) ? 'onload="initEditor()"' : '' ?>>
+<body>
     <table cellpadding="0" cellspacing="0" width="100%" align="center"> 
         <tr bordercolor="#FFFFFF" bgcolor="#dedede" valign="top">
             <td colspan="4" id="pagetitle">

@@ -100,13 +100,19 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
         }
         
-        $inclass=method_exists($display_function, $this);
+        $inclass=method_exists($this, $display_function);
 
         //output display format
         foreach ($dataset as $dataitem) {
+            //check if a new subheader is needed
             if ($subheader_level) $output.=$this->subheader($dataitem, $options, $subheader_level);
-            if($inclass) $output.=$this->$display_function($dataitem);
-            else $output.=$display_function($dataitem, $this->options);
+
+            //run the output function
+            if($inclass) {
+                $output.=$this->$display_function($dataitem);
+            } else {
+                $output.=$display_function($dataitem, $this->options);
+            }
         }
     
 
