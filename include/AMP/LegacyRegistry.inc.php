@@ -25,8 +25,6 @@ if (file_exists($base_path."Connections/menu.class.php")) {
     $obj = new Menu;
 } 
 
-# Get system vars
-$getsysvars = $dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1")
     or die("Couldn't fetch system settings: " . $dbcon->ErrorMsg()); 
 
 $SystemSettings = $getsysvars->FetchRow();

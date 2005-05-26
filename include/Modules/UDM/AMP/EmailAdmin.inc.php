@@ -24,24 +24,27 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
         $this->init($udm, $plugin_instance);
     }
 
+    function _register_options_dynamic() {
+        $this->options['mailto']['default'] = $udm->_module_def['mailto'];
+        $this->options['subject']['default'] = $udm->_module_def['subject'];
+        $this->options['update_page']['default'] = "system/modinput4_edit.php";
+    }
+
     function prepareMessage ( $options = null ) {
 
         $udm   =& $this->udm;
 
         $message = '';
 
-        $this->options['mailto'] = $udm->_module_def['mailto'];
-        $this->options['subject'] = $udm->_module_def['subject'];
 
 		$this->udm->disable_javascript();
         // Output the form data (default format is text, defined above)
-#FIXME:options_defs should be options
-        $message .= $udm->output( $this->option_defs['format']['default'] );
+        $message .= $udm->output( $options['format'] );
 		$this->udm->enable_javascript();
 
         // Append Edit/Publish Link
-        $message .= "\n\nPlease visit " . $GLOBALS['Web_url'] . 
-                    "system/modinput4_edit.php?modin=" . $udm->instance .
+        $message .= "\n\nPlease visit http://" . $_SERVER['SERVER_NAME'] . 
+                    "/".$options['update_page']."?modin=" . $udm->instance .
                     "&uid=" . $udm->uid . " to publish or edit this record.\n\n";
 
         return $message;

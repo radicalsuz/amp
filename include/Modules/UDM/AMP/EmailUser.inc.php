@@ -17,39 +17,52 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
     var $long_name   = 'Email User';
     var $description = 'Notifies the user that their record has been created.';
 
-    var $option_defs = array('subject' => array( 'default' => 'Update Your Posting' ),
-							 'format' => array( 'default' => 'text' ));
+    /*
+    var $options = array(
+        'subject' => array( 
+            'default' => 'Update Your Posting',
+            'available'=>true,
+            'type'=>'text'
+            'label'=>'Email Subject Line'),
+        'format' => array( 
+            'default' => 'Text' )
+        );
+    */
     var $available = true;
 
     function UserDataPlugin_EmailUser_AMP ( &$udm, $plugin_instance=null ) {
         $this->init($udm, $plugin_instance);
     }
 
+    function _register_options_dynamic() {
+        $this->options['subject']['default']='Update Your Posting';
+        $this->options['mailto']['default'] = $this->getData( array('Email') );
+    }
+
     function prepareMessage ( $options = null ) {
 
         $udm =& $this->udm;
+        $options = array_merge($this->getOptions(), $options);
 
         //Update Link
-        $message = "\n\nPlease go to " . $GLOBALS['Web_url'] .
-                   "modinput4.php?modin=" . $udm->instance .
+        $message = "\n\nPlease go to " . $_SERVER['SERVER_NAME'] .
+                   $options['update_page']."?modin=" . $udm->instance .
                    "&uid=" . $udm->uid . " to update your information.\n\n";
 
 		$udm->disable_javascript();
         // Output the form data - default is 'text' as defined in
         // UserDataPlugin_Email.
-#FIXME:option_defs should be options
-        $message .= $udm->output( $this->option_defs['format']['default'] );
+        $message .= $udm->output( $options['format'] );
 		$udm->enable_javascript();
 
         return $message;
 
     }
 
+    /*
     function preProcess () {
 
 
-#XXX: should this be done through getData?  wasn't really working out for me.
-#		$mailto = $this->getData(array('Email'));
 		$mailto = $this->udm->form->exportValue('Email');
 		$subject = $this->option_defs['subject']['default'];
 
@@ -60,6 +73,7 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
         return true;
 
     }
+    */
 }
 
 ?>

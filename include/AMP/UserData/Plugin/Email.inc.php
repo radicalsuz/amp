@@ -6,39 +6,45 @@ class UserDataPlugin_Email extends UserDataPlugin {
     var $message = '';
     var $header = '';
 
-#XXX: this should be options.  needs some cleanup, as some code
-#     references options and some references option_defs
-    var $option_defs = array(
+    var $options = array(
 
-                'mailto'      => array( 'description' => 'Email Address',
+                'mailto'      => array( 'label' => 'Email Address',
+                                        'type'        => 'text',
+                                        'required'    => true ,
+                                        'available'   => true),
+
+                'subject'     => array( 'label' => 'Email Subject',
+                                        'available'   => true,
                                         'type'        => 'text',
                                         'required'    => true ),
 
-                'subject'     => array( 'description' => 'Email Subject',
-                                        'type'        => 'text',
-                                        'required'    => true ),
-
-                'format'      => array( 'description' => 'Email Format',
+                'format'      => array( 'label' => 'Email Format',
+                                        'available'   => true,
                                         'type'        => 'select',
-                                        'values'      => array( 'Plain Text' => 'text' ),
-                                        'default'     => 'text' ),
+                                        'values'      => array( 'Plain Text' => 'Text' ),
+                                        'default'     => 'Text' ),
 
-                'intro_text'  => array( 'description' => 'Email Intro Text',
+                'intro_text'  => array( 'label' => 'Email Intro Text',
                                         'type'        => 'select',
+                                        'available'   => true,
                                         'values'      => '',
                                         'default'     => '' ),
 
-                'footer_text' => array( 'description' => 'Email Footer Text',
+                'footer_text' => array( 'label' => 'Email Footer Text',
+                                        'available'   => true,
                                         'type'        => 'select',
-                                        'values'      => '',
-                                        'default'     => '' )
+                                        'default'     => '', 
+                                        'values'      => ''),
+
+                'update_page' => array( 'default' => 'modinput4.php',
+                                        'available'=>true,
+                                        'type'=>'text',
+                                        'label'=>'Edit Page'),
          );
 
     function execute ( $options = null ) {
 
-        if (!isset($options)) {
-            $options =& $this->options;
-        }
+        $options = array_merge($this->getOptions(), $options);
 
         // Allow for pre-processing of message & options. Return anything but
         // true to abort message send.
@@ -94,8 +100,10 @@ class UserDataPlugin_Email extends UserDataPlugin {
      *****/
 
     function prepareHeader () {
+        global $MM_email_from;
 
-        $header  = "From: " . $GLOBALS['MM_email_from'];
+        #$header  = "From: " . $GLOBALS['MM_email_from'];
+        $header  = "From: " . $MM_email_from;
         $header .= "\nX-Mailer: AMP/UserDataMail\n";
 
         return $header;
