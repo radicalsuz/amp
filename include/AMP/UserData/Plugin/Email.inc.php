@@ -55,8 +55,8 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
         // Header text.
         if (isset($options['intro_text'])) {
-            $sql      = "SELECT text FROM moduletext WHERE id=" . $dbcon->qstr( $options['intro_text'] );
-            $rs       = $dbcon->CacheExecute($sql);
+            $sql      = "SELECT text FROM moduletext WHERE id=" . $this->dbcon->qstr( $options['intro_text'] );
+            $rs       = $this->dbcon->CacheExecute($sql);
             $message .= $rs->Fields('text') . "\n\n";
         }
 
@@ -65,8 +65,8 @@ class UserDataPlugin_Email extends UserDataPlugin {
         // Footer Text.
         if (isset($options['footer_text'])) {
             if (is_int($options['footer_text'])) {
-                $sql            = "SELECT text FROM moduletext WHERE id=" . $dbcon->qstr( $options['footer_text'] );
-                $rs             = $dbcon->CacheExecute($sql);
+                $sql            = "SELECT text FROM moduletext WHERE id=" . $this->dbcon->qstr( $options['footer_text'] );
+                $rs             = $this->dbcon->CacheExecute($sql);
                 $this->message .= $rs->Fields('text');
             } else {
                 $this->message .= $options['footer_text'];
