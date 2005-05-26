@@ -25,7 +25,7 @@ if (file_exists($base_path."Connections/menu.class.php")) {
     $obj = new Menu;
 } 
 
-    or die("Couldn't fetch system settings: " . $dbcon->ErrorMsg()); 
+    //or die("Couldn't fetch system settings: " . $dbcon->ErrorMsg()); 
 
 $SystemSettings = $getsysvars->FetchRow();
 
