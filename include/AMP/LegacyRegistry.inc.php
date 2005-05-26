@@ -24,8 +24,7 @@ if (file_exists($base_path."Connections/menu.class.php")) {
     require_once($base_path."Connections/menu.class.php");
     $obj = new Menu;
 } 
-
-    //or die("Couldn't fetch system settings: " . $dbcon->ErrorMsg()); 
+$getsysvars = $dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1") or die("Couldn't fetch system settings: " . $dbcon->ErrorMsg()); 
 
 $SystemSettings = $getsysvars->FetchRow();
 
