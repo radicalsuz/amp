@@ -146,7 +146,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
 			$defArray = $defaults;
 
-		} else {
+		} elseif ( strpos('htmlstaticheader', $type)===FALSE) {
 			
 			// Check to see if we have an array of values.
 			$defArray = explode( ",", $defaults );
