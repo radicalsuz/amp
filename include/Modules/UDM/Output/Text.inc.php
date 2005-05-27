@@ -10,43 +10,91 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
 
     function execute ( $options = null ) {
 
-        return udm_output_text( $this->udm );
+        $udm =& $this->udm;
+        $this->_field_prefix=null;
+        
+        // Ensure we have a form built before proceeding.
+        if ( !isset( $udm->form ) )
+            $udm->doPlugin( 'QuickForm', 'build' );
 
+        return $this->toText( $this->getData() );
     }
 
-}
+    function toText($data) {
 
-function udm_output_text ( &$udm, $options = null ) {
+        $order = split("[ ]?,[ ]?", $this->udm->_module_def['field_order']);
+        
+        if (count($order)>1) { 
+            foreach ($order as $field) {
+                $output .= $this->elementToText ($field, $data[$field]);
+                $finishedElements[ $field ] = 1;
+            }
+        }
+                
+        foreach ($data as $field => $value ) {
+            if (isset($finishedElements[$field])) continue;
 
-    // Ensure we have a form built before proceeding.
-    if ( !isset( $udm->form ) )
-        $udm->doPlugin( 'QuickForm', 'build' );
+            $output .= $this->elementToText ($field, $value);
 
-    foreach ( $udm->form->exportValues() as $field => $value ) {
-        $fDef = $udm->fields[$field];
-		$fieldname=isset($udm->fields[$field]) ? strip_tags($fDef['label']) : $field;
+        }
+
+        return $output;
+    }
+
+    function elementToText($field, $value) {
+        $fDef = $this->udm->fields[$field];
+
+        //if the field is not explicitly enabled, return no data
+        //no non-public fields are sent via insecure e-mail
+        if (!($fDef['enabled'] && $fDef['public'])) return ''; 
+
+        //if neither the label nor the value
+        if (!($fDef['label'].$value)) return '';
+
+        $label = (isset($fDef) ? strip_tags($fDef['label']) : $field);
+        if ($label) $label .= ": ";
+
         switch ($fDef['type']) {
-            case 'static':
             case 'html':
+                return '';
+                break;
+            case 'static':
             case 'header':
-                continue;
+                if ($fDef['values']) $label = $fDef['values'];
+                return "\n:: " . strip_tags( $label ) . "\n";
                 break;
             case 'checkbox':
                 $value = $value?'yes':'no';
                 break;
             case 'select':
                 if ( $fDef['region'] ) {
-                    $regset = $this->region->getSubRegions( $fDef['region'] );
+                    $regset = $GLOBALS['regionObj']->getSubRegions( $fDef[ 'region' ] );
                     $value = $regset[$value];
                 }
+                if (is_array($fDef['values'])) {
+                    if (isset($fDef['values'][$value])) {
+                        $value = $fDef['values'][$value];
+                    }
+                }
+                break;
+            case 'wysiwyg':
+                //replace <BR> with \n
+                #$value =  preg_replace("/(\r\n|\n|\r)/", "", $value);
+                $value =  preg_replace("=<br */?>=i", "\n", $value);
+                $value = strip_tags($value)."\n";
+                $label.= "\n";
+                break;
+            case 'textarea':
+                $label.= "\n";
+                $value.= "\n";
                 break;
         }
-        $out .= $fieldname . ": " . $value . "\n";
-
+        return ( $label. $value . "\n" );
     }
 
-    return $out;
+        
 
 }
+
 
 ?>

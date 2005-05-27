@@ -25,9 +25,9 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
     }
 
     function _register_options_dynamic() {
-        $this->options['mailto']['default'] = $udm->_module_def['mailto'];
-        $this->options['subject']['default'] = $udm->_module_def['subject'];
-        $this->options['update_page']['default'] = "system/modinput4_edit.php";
+        $this->options['mailto']['default'] = $this->udm->_module_def['mailto'];
+        $this->options['subject']['default'] = $this->udm->_module_def['subject'];
+        $this->options['update_page']['default'] = "system/modinput4_view.php";
     }
 
     function prepareMessage ( $options = null ) {
@@ -46,7 +46,6 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
         $message .= "\n\nPlease visit http://" . $_SERVER['SERVER_NAME'] . 
                     "/".$options['update_page']."?modin=" . $udm->instance .
                     "&uid=" . $udm->uid . " to publish or edit this record.\n\n";
-
         return $message;
 
     }

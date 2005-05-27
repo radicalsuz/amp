@@ -63,12 +63,17 @@ class UserDataInput extends UserData {
         $this->modTemplateID = $this->_module_def['modidresponse'];
         $save_results = $this->doAction( 'Save', $options );
 
-        if ($this->_module_def['useemail']) {
-			$this->doPlugin('AMP', 'EmailAdmin');
-        }
+        //Attempt Email notifications when Data is updated by non-admin users
+        if (!$this->admin) {
+            //Admin Notification
+            if ($this->_module_def['useemail']) {
+                $this->doPlugin('AMP', 'EmailAdmin');
+            }
 
-		// for now turn this on by registering the EmailUser plugin
-		$this->tryPlugin('AMP', 'EmailUser');
+            //User Notification
+            // for now turn this on by registering the EmailUser plugin
+            $this->tryPlugin('AMP', 'EmailUser');
+        }
 
         return $save_results;
 

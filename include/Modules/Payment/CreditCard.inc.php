@@ -1,6 +1,6 @@
 <?php 
 require_once ('Modules/Payment/Payment.php');
-define (PAYMENT_CC_DEBUG, 1);
+define ('PAYMENT_CC_DEBUG', 1);
 
 /* * * * * * * * * * * * *
 * Class Payment_CreditCard

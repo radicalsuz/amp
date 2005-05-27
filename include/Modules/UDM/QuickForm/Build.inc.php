@@ -61,7 +61,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		
 		if ( isset( $udm->_module_def[ 'field_order' ] ) ) {
 		
-			$fieldOrder = split( ',', $udm->_module_def[ 'field_order']  );
+			$fieldOrder = split( '[ ]?,[ ]?', $udm->_module_def[ 'field_order']  );
 			
 			foreach ( $fieldOrder as $field ) {
 				$field = trim( $field );
@@ -107,13 +107,12 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 	}
 
 	function udm_quickform_setupLookup( $tablename, $displayfield, $valuefield, $restrictions=null) {
-		global $dbcon;
 		$lookup_sql="Select $valuefield, $displayfield from $tablename";
 		if (isset($restrictions)&&$restrictions) {
 			$lookup_sql.=" WHERE $restrictions";
 		}
 		$lookup_sql.=" ORDER BY $displayfield";
-		return $dbcon->GetAssoc($lookup_sql);
+		return $this->dbcon->GetAssoc($lookup_sql);
 	}
 
 	function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) {
@@ -139,8 +138,9 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		if ($type=='select' && is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
 
 			$just_values = str_replace(")", "", substr($defaults, 7));
-			$valueset = split(", ", $just_values );
+			$valueset = split("[ ]?,[ ]?", $just_values );
 			$defaults = $this->udm_quickform_setupLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
+            $this->udm->fields[$name]['values'] = $defaults;
 		
 		} elseif ( is_array( $defaults ) ) {
 
@@ -155,6 +155,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 				foreach ( $defArray as $option ) {
 					$defaults[ $option ] = $option;
 				}
+                $this->udm->fields[$name]['values'] = $defaults;
 			} else {
 				$defaults = $defArray[0];
 			}
@@ -204,7 +205,6 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 			$fRef->updateAttributes($attr);
 		}
 
-		#if ( isset( $selected )&& !isset($group_set)  ) {
 		if ( isset( $selected ) && strpos($type, 'group')===FALSE  ) {
 			$fRef->setSelected( $selected );
 		}
@@ -242,87 +242,68 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		if ( $type == 'checkbox' ) {
 			$fRef->setText( null );
 		}
-		/*
-
-			print "I'm trying here: <pre>";
-
-			$fRef =& $form->getElement( $name );
-			print_r( $fRef );
-			print "</pre>";
-			$fRef->setText( false );
-			if ( $defaults == "1"  ) {
-				$fRef->setValue( 1 );
-				$fRef->setChecked( 1 );
-			} else {
-				$fRef->setValue( 1 );
-				$fRef->setChecked( 1 );
-			}
-
-		}
-	*/
 		
 		//OUTPUT TEMPLATE MODIFICATIONS
-		//Default output template (with classes defined)
-		$renderer->setElementTemplate(
-			"\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
-			<!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-			{label}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
-			<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t
-			{element}</td>\n\t</tr>");
+        switch ($type) {
 
-		if ($type=='checkbox') {
-			$renderer->setElementTemplate(
-				"\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
-				<!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-				{element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
-				<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-				\t{label}</td>\n\t</tr>", $name);
-		}
+            case 'checkbox':
+                $renderer->setElementTemplate(
+                    "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
+                    <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+                    {element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
+                    <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+                    \t{label}</td>\n\t</tr>", $name);
+                break;
+            
+            case 'textarea':
+            case 'wysiwyg':
+                //textareas have a table they sit within for CSS-controlled positioning
+                $renderer->setElementTemplate(
+                    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+                    <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+                    {label}<br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+                    \t{element}</td></tr></table></td>\n\t</tr>", $name);
+	            break;	
 
-		//textareas have a table they sit within for CSS-controlled positioning
-		if ($type=='textarea' OR $type=='wysiwyg') {
-			$renderer->setElementTemplate(
-				"\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-				<tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-				{label}<br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-				\t{element}</td></tr></table></td>\n\t</tr>", $name);
-		}
-		
-
-		if ($type=='header') {
-			$renderer->setHeaderTemplate(
+            case 'header':
+                $renderer->setHeaderTemplate(
 					"\n\t<tr>\n\t\t<td class=\"udm_header\"  align=\"left\" valign=\"top\" colspan=\"2\" >{header}</td>\n\t</tr>", $name);
-		}
+                break;
+        
+            case 'static':
+                //static items now span both columns
+                $renderer->setElementTemplate(
+                    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+                    <tr><td>\t{element}</td></tr></table></td>\n\t</tr>", $name);
+                break;
 
-		if ($type=='submit') {
-			$renderer->setElementTemplate(
-				"\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-				<tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-				<b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-				\t{element}</td></tr></table></td>\n\t</tr>", $name);
-		}	
-		if ($type=='checkgroup') {
-			$renderer->setElementTemplate(
-				"\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-				<tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-				<span class=\"udm_group_label\">{label}</span><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-				\t{element}</td></tr></table></td>\n\t</tr>", $name);
-		}
+            case 'submit':
+                $renderer->setElementTemplate(
+                    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+                    <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+                    <b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+                    \t{element}</td></tr></table></td>\n\t</tr>", $name);
+                break;
+
+            case 'checkgroup':
+            case 'radiogroup':
+                $renderer->setElementTemplate(
+                    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+                    <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+                    <span class=\"udm_group_label\">{label}</span><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+                    \t{element}</td></tr></table></td>\n\t</tr>", $name);
+                break;
+            
+            default:
+                //Default output template (with classes defined)
+                $renderer->setElementTemplate(
+                    "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
+                    <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+                    {label}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
+                    <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t
+                    {element}</td>\n\t</tr>");
+                break;
 		
-				if ($type=='radiogroup') {
-			$renderer->setElementTemplate(
-				"\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-				<tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-				<span class=\"udm_group_label\">{label}</span><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-				\t{element}</td></tr></table></td>\n\t</tr>", $name);
-		}
-
-
-		//static items now span both columns
-		if ($type=='static') {
-			$renderer->setElementTemplate(
-				"\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-				<tr><td>\t{element}</td></tr></table></td>\n\t</tr>", $name);
 		}
 
 
@@ -335,7 +316,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 	//        $form->addRule( $name, $label . ' must be less than ' . $field_def[ 'size' ] + 1 . ' characters long.', 'maxlength', $field_def[ 'size' ] );
 			
 		if ( $name == 'Email' && !$admin )
-			$form->addRule( $name, 'Must be a valid email address.', 'emailorblank' );
+			$form->addRule( $name, 'Must be a valid email address.', 'email' );
 			
 		return 1;
 
