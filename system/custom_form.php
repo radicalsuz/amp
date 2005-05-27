@@ -6,6 +6,7 @@
  *  Dependencies:
  *  AMP/CustomForm.php  - defines the AMP_CustomForm class using
  *  HTML::QuickForm engine
+ *  custom.forms.inc.php - contains form definitions
  *
  *  URL vars: formname, action=list (shows list of records)
  *  Author: austin@radicaldesigns.org
@@ -82,6 +83,3 @@ print $output;
 
 require_once('footer.php');
 ?>
-    
-    
-}

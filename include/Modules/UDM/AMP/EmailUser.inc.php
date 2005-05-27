@@ -36,8 +36,6 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
 
     function _register_options_dynamic() {
         $this->options['subject']['default']='Update Your Posting';
-        $answer = $this->getData( array('Email') );
-        $this->options['mailto']['default'] = $answer['Email'];
     }
 
     function prepareMessage ( $options = null ) {
@@ -60,9 +58,23 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
 
     }
 
-    /*
     function preProcess () {
+        //Remove the field prefix
+        //this allows access to core UDM data
+        $this->_field_prefix = '';
+        
+        $answer = $this->getData( array('Email') );
+        if ( $answer['Email'] ) {
+            $this->options['mailto']['default'] = $answer['Email'];
+            return true;
+        }
 
+        //if no email is found, don't try to send
+        return false;
+
+        
+    }
+    /*
 
 		$mailto = $this->udm->form->exportValue('Email');
 		$subject = $this->option_defs['subject']['default'];

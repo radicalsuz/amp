@@ -1,5 +1,21 @@
 <?php
+
+/* * * * * * * * * * * *
+ *   AMP CustomForm
+ *
+ *   A base class for building forms 
+ *   which save, read, and list data in any table
+ *
+ *   Author: austin@radicaldesigns.org
+ *   Date: 5/26/2005
+ *
+ */
+
+
+
 require_once('HTML/QuickForm.php');
+
+
 
 class AMP_CustomForm {
     
@@ -202,10 +218,19 @@ class AMP_CustomForm {
         $start_html .= "\n<div class='list_table'> \n	<table class='list_table'>\n		<tr class='intitle'> ";
         $start_html .= "\n<td>&nbsp;</td>";
 
-        //Define HTML for Column Headers
-        $url_criteria = "formname=".$this->name."&action=list&sort=";
-        if (isset($this->list['criteria'])) $url_criteria = join("&", $this->list['criteria']).$url_criteria;
+        //URL Criteria
+        //Fixme I'm using this function everywhere - it should go in the Base
+        //class
+        parse_str($_SERVER['QUERY_STRING'], $url_criteria_set );
+        unset ($url_criteria_set['sort']);
+        $url_criteria = "";
 
+        foreach($url_criteria_set as $ukey=>$uvalue) {
+            $url_criteria .= $ukey."=".$uvalue.'&';
+        }
+        $url_criteria .= "sort=";            
+
+        //Define HTML for Column Headers
         foreach ($this->list['alias'] as $k=>$v) {
             $column_headers .= "\n        <td><b><a href='".$_SERVER['PHP_SELF']."?".$url_criteria.$v."' class='intitle'>".$k."</a></b></td>";
         }

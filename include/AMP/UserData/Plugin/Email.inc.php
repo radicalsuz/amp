@@ -44,14 +44,16 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
     function execute ( $options = null ) {
 
-        $options = array_merge($this->getOptions(), $options);
-
         // Allow for pre-processing of message & options. Return anything but
         // true to abort message send.
         if (method_exists( $this, 'preProcess' )) {
             $rt = $this->preProcess();
             if ($rt !== true) return $rt;
         }
+
+        //get options
+        $options = array_merge($this->getOptions(), $options);
+
 
         // Header text.
         if (isset($options['intro_text']) && $options['intro_text']) {
@@ -100,10 +102,8 @@ class UserDataPlugin_Email extends UserDataPlugin {
      *****/
 
     function prepareHeader () {
-        global $MM_email_from;
 
-        #$header  = "From: " . $GLOBALS['MM_email_from'];
-        $header  = "From: " . $MM_email_from;
+        $header  = "From: " . $GLOBALS['MM_email_from'];
         $header .= "\nX-Mailer: AMP/UserDataMail\n";
 
         return $header;

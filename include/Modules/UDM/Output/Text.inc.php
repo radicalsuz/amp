@@ -23,7 +23,24 @@ function udm_output_text ( &$udm, $options = null ) {
         $udm->doPlugin( 'QuickForm', 'build' );
 
     foreach ( $udm->form->exportValues() as $field => $value ) {
-		$fieldname=isset($udm->fields[$field]) ? strip_tags($udm->fields[$field]['label']) : $field;
+        $fDef = $udm->fields[$field];
+		$fieldname=isset($udm->fields[$field]) ? strip_tags($fDef['label']) : $field;
+        switch ($fDef['type']) {
+            case 'static':
+            case 'html':
+            case 'header':
+                continue;
+                break;
+            case 'checkbox':
+                $value = $value?'yes':'no';
+                break;
+            case 'select':
+                if ( $fDef['region'] ) {
+                    $regset = $this->region->getSubRegions( $fDef['region'] );
+                    $value = $regset[$value];
+                }
+                break;
+        }
         $out .= $fieldname . ": " . $value . "\n";
 
     }
