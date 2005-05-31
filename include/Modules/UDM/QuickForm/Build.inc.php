@@ -126,7 +126,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		$type     = (isset($field_def['type']))   ? $field_def['type']     : null;
 		$label    = (isset($field_def['label']))  ? $field_def[ 'label'  ] : null;
 		$defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
-		$size     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 40;
+		$size     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 50;
 		$attr     = (isset($field_def['attr']))   ? $field_def['attr']       : null;
 
 		$renderer =& $form->defaultRenderer();
