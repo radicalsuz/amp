@@ -1,7 +1,7 @@
 <?PHP 
 $modid = 22;
-if ($_POST["FromEmail"]) {$intro_id = 32 ; }
-else {$intro_id = 33;}
+if ($_POST["FromEmail"]) {$mod_id = 32 ; }
+else {$mod_id = 33;}
 
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
@@ -29,8 +29,8 @@ if ($_POST["FromEmail"]) {
 	$Last_Name = $names[1];
 	$MM_fieldsStr =  "First_Name|value|Last_Name|value|FromEmail|value|subject|value|text|value|friend1|value|friend2|value|friend3|value|friend4|value|friend5|value|friend6|value|friend7|value|friend8|value|modin|value";
 	$MM_columnsStr = "First_Name|',none,''|Last_Name|',none,''|Email|',none,''|custom1|',none,''|custom2|',none,''|custom3|',none,''|custom4|',none,''|custom5|',none,''|custom6|',none,''|custom7|',none,''|custom8|',none,''|custom9|',none,''|custom10|',none,''|modin|',none,''";
-	require ("DBConnections/insetstuff.php");
-    require ("DBConnections/dataactions.php");
+	require ("Connections/insetstuff.php");
+    require ("Connections/dataactions.php");
 }
 else {
 	if (isset($_POST['url_link'])) { 
