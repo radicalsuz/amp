@@ -396,7 +396,8 @@ echo nav_item_basic('Other Content Tools','module_header_list.php?modid=19','');
 <?php
 echo nav_item_basic('Help','http://www.radicaldesigns.org/manual.pdf','');# 
 echo nav_item_basic('HTML Tips','html.html','');# 
-echo nav_item_basic('About','','');# 
+echo nav_item_basic('Site Style Guide','/custom/styleguide.html','');# 
+#echo nav_item_basic('About','','');# 
 ?>
 		])
 		
