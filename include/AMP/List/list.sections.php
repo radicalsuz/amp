@@ -27,7 +27,8 @@ while (!$list->EOF) { ?><table width="100%" border="0" cellspacing="0" cellpaddi
 <span class="text"> 
 <?php  
 	if ($list->Fields("description") != NULL ){
- 		echo "&nbsp;-&nbsp;";
+ 		echo "<br>";
+		//echo "&nbsp;-&nbsp;";
 		$aspace=" ";
 		$ttext =$list->Fields("description");
 		if(strlen($ttext) > $maxTextLenght ) {
