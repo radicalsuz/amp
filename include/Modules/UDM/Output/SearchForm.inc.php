@@ -134,7 +134,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         //Publish status
         if (is_numeric($_REQUEST['publish'])){
             if ($_REQUEST['publish']) $sql_criteria[]="publish=1";
-            else $sql_criteria[]="publish!=1";
+            else $sql_criteria[]="(isnull(publish) OR publish!=1)";
         }
 
 		//Vet valid URL data

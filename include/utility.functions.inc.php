@@ -376,6 +376,7 @@ if ( !function_exists('ob_get_clean') ) {
 }
 
 
+if (!function_exists('randomid')) {
 function randomid() {
 
 	$random_id_length = 10;
@@ -387,7 +388,9 @@ function randomid() {
 	return $rnd_id;
 
 }
+}
 
+if (!function_exists('pagination')) {
 function pagination($count,$offset,$limit) {
 	
 	$total = ($offset +$limit);
@@ -431,7 +434,9 @@ function pagination($count,$offset,$limit) {
 		echo '<br/><br/>'; 
 	}
 }
+}
 
+if (!function_exists('find_local_path')) {
 function find_local_path () {
     if (function_exists('apache_lookup_uri')) {
 
@@ -453,7 +458,9 @@ function find_local_path () {
 	
 	return $localPath;
 }
+}
 
+if (!function_exists('setBrowser')) {
 function setBrowser() {
     global $browser_ie, $browser_win, $browser_mo, $browser_checked;
     $browser_ie =  strstr(getenv('HTTP_USER_AGENT'), 'MSIE') ;
@@ -468,7 +475,9 @@ function setBrowser() {
 
     return getBrowser();
 }
+}
 
+if (!function_exists('getBrowser')) {
 function getBrowser() {
     global $browser_ie, $browser_win, $browser_mo, $browser_checked;
     if ($browser_checked) {
@@ -478,5 +487,15 @@ function getBrowser() {
         return setBrowser();
     }
 }
+}
   
+if (!function_exists('array_combine_key')) {
+		function array_combine_key(&$arr1, &$arr2) {
+				if (!is_array($arr1) || !is_array($arr2)) return false;
+				foreach ($arr1 as $key => $value) {
+						if (isset($arr2[$value])) $result[$value]=$arr2[$value];
+				}
+				return $result;
+		}
+}
 ?>
