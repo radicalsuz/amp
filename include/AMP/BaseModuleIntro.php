@@ -21,6 +21,7 @@ if (isset($mod_id) || isset($intro_id)) {
 		if ($module->Fields("subtitile") != (NULL)) {
 			echo '<p class="subtitle">'  .  $module->Fields("subtitile")  .  '</p>';
 		}
+		
         $AMP_Module_Intro = $module->Fields("test");
 		if ($AMP_Module_Intro != (NULL)) {
             $AMP_Module_Intro = eval_includes ( $AMP_Module_Intro );
@@ -33,7 +34,7 @@ if (isset($mod_id) || isset($intro_id)) {
 			}
 			echo '</p>';
 		}
-		echo '</td></tr></table>';
+		echo '</td></tr></table><br>';
 	}
 }
 ?>
