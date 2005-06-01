@@ -23,7 +23,7 @@ if (isset($mod_id) || isset($intro_id)) {
 		}
 		
         $AMP_Module_Intro = $module->Fields("test");
-		if ($AMP_Module_Intro != (NULL)) {
+		if ($AMP_Module_Intro != (NULL) or $AMP_Module_Intro != '' ) {
             $AMP_Module_Intro = eval_includes ( $AMP_Module_Intro );
 			echo '<p class="text">';
 			if  ($module->Fields("html")) {
