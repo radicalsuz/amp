@@ -151,6 +151,7 @@ $ssql = " and $MX_type = $section "; }
 $sql= "select test, title, id, type, class from articles where match(test, author, shortdesc, title) against('".$_GET['q']."') and publish =1 $dsql $ssql   ";
 $sqlct= "SELECT  COUNT(DISTINCT id) from articles where match(test, author, shortdesc, title) against('".$_GET['q']."') and publish =1  $dsql  $ssql  ";
 $sql = $sql." Limit  $offset, $limit";
+print $sql;
 $searchx=$dbcon->CacheExecute($sql) or die($sq1);
 
 if  (!$searchx->Fields('id')) {
