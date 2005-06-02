@@ -296,6 +296,52 @@ if ( !function_exists( 'eval_includes' ) ) {
     //evaluates php include files contained within the given text
     function eval_includes ($text, $basedir=null) {
         $pos = strpos ( $text, '<?php');
+        if ($pos!==FALSE) {
+			$endpos = 0;
+	
+			$result = substr($text, 0, $pos);
+			while (!($pos===FALSE)) {
+	
+				//find the end of the block
+				$endpos = strpos($text, '?>', $pos);
+				if ($endpos === FALSE) return $result;
+				$code = substr($text, $pos+5, $endpos);
+	
+				//Get the include
+				$include_start = strpos($code, 'include')+7;
+				$include_start = strpos($code, '"', $include_start)+1;
+				$include_stop = strpos($code, '"', $include_start+1);
+	
+				$include_args = substr($code, $include_start, $include_stop-$include_start);
+				#$include_args = preg_replace("/.*include\s*[\(\s*]?\s*\"?([^\)\"\s]*)\"?[\)\s*]?.*/", "\$1", $code );
+				$incl = trim(str_replace('"','',$include_args));
+	
+				//catch the include
+				ob_start();
+				if (file_exists_incpath($incl)) {
+					include($incl);
+				} elseif (isset($basedir)) {
+					$newfile = $basedir.$incl;
+					if (file_exists_incpath($newfile)) include($newfile);
+				}
+			
+				
+				$value = ob_get_contents();
+				ob_end_clean();
+				$result .= $value;
+				$pos = strpos( $text, '<?php', $endpos);
+				
+				//add the last chunk to the result
+				if ($pos === FALSE) {
+					$result .= substr($text, $endpos+2);
+				} else {
+					$result .= substr($text, $endpos+2, $pos);
+				}
+	
+			}
+		}
+		 
+		$pos = strpos ( $text, '{{');
         if ($pos===FALSE) return $text;
         $endpos = 0;
 
@@ -303,21 +349,15 @@ if ( !function_exists( 'eval_includes' ) ) {
         while (!($pos===FALSE)) {
 
             //find the end of the block
-            $endpos = strpos($text, '?>', $pos);
+            $endpos = strpos($text, '}}', $pos);
             if ($endpos === FALSE) return $result;
-            $code = substr($text, $pos+5, $endpos);
+            $code = substr($text, $pos+2, $endpos-($pos+2));
 
-            //Get the include
-            $include_start = strpos($code, 'include')+7;
-            $include_start = strpos($code, '"', $include_start)+1;
-            $include_stop = strpos($code, '"', $include_start+1);
-
-            $include_args = substr($code, $include_start, $include_stop-$include_start);
-			#$include_args = preg_replace("/.*include\s*[\(\s*]?\s*\"?([^\)\"\s]*)\"?[\)\s*]?.*/", "\$1", $code );
-            $incl = trim(str_replace('"','',$include_args));
+            $incl = trim(str_replace('"','',$code));
 
             //catch the include
 			ob_start();
+			
             if (file_exists_incpath($incl)) {
                 include($incl);
             } elseif (isset($basedir)) {
@@ -329,7 +369,7 @@ if ( !function_exists( 'eval_includes' ) ) {
             $value = ob_get_contents();
             ob_end_clean();
             $result .= $value;
-            $pos = strpos( $text, '<?php', $endpos);
+            $pos = strpos( $text, '{{', $endpos);
             
             //add the last chunk to the result
             if ($pos === FALSE) {
@@ -342,7 +382,6 @@ if ( !function_exists( 'eval_includes' ) ) {
         return $result;
     }
 }
-
             
 
 
