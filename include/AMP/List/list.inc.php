@@ -124,7 +124,7 @@ else{
 	}
 
 //set list layout
-	if ($listtype != 1) {
+	if ($listtype != 1 && $listtypeck) {
  		$listfile = $listtypeck->Fields("file");
 		include ("$listfile");
 	}
