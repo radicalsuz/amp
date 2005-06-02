@@ -35,7 +35,7 @@ class UserDataPlugin_Save_PHPlist extends UserDataPlugin {
 				$sql  = "INSERT INTO phplist_user_user (";
 				$sql .= " email, confirmed, uniqid, htmlemail, entered,  foreignkey ) VALUES ('";
 				$sql .= $data['Email'];
-				$sql .= "', 1, '" . $rndVal . "', ".$data['custom1'].", NOW(), ".$this->udm->uid." )";
+				$sql .= "', 1, '" . $rndVal . "', ".$data['custom1'].", NOW(), '".$this->udm->uid."' )";
 				$rs = $this->dbcon->Execute( $sql )or DIE("add to phplist error ".$sql.$this->dbcon->ErrorMsg()); ;
 				
 				$emailid = $this->dbcon->Insert_ID( );
