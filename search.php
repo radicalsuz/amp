@@ -133,10 +133,10 @@ function processWindow(&$content, $width, $height, $q) {
     <input name="Search" type="submit"  class="name"><hr>
 </form> 
 <?php
-if ($_GET[q]) {
-if ($_GET[offset]) {$offset=$_GET[offset];}
+if ($_GET['q']) {
+if ($_GET['offset']) {$offset=$_GET['offset'];}
 else { $offset=0;}
-if ($_GET[limit]) {$limit=$_GET[limit];}
+if ($_GET['limit']) {$limit=$_GET['limit'];}
 else { $limit=25;}
 
 if ($_GET['date']){ 
@@ -148,13 +148,13 @@ $section = $_GET['section'] ;
 $ssql = " and $MX_type = $section "; } 
 
 
-$sql= "select test, title, id, type, class from articles where match(test, author, shortdesc, title) against('$_GET[q]') and publish =1 $dsql $ssql   ";
-$sqlct= "SELECT  COUNT(DISTINCT id) from articles where match(test, author, shortdesc, title) against('$_GET[q]') and publish =1  $dsql  $ssql  ";
+$sql= "select test, title, id, type, class from articles where match(test, author, shortdesc, title) against('".$_GET['q']."') and publish =1 $dsql $ssql   ";
+$sqlct= "SELECT  COUNT(DISTINCT id) from articles where match(test, author, shortdesc, title) against('".$_GET['q']."') and publish =1  $dsql  $ssql  ";
 $searchx=$dbcon->CacheExecute($sql." Limit  $offset, $limit;");
 
 if  (!$searchx->Fields('id')) {
-$sql = "select distinct test, title, id from articles where  (title like '%$_GET[q]%'  or test like '%$_GET[q]%'  or author like '%$_GET[q]%'  or shortdesc like '%$_GET[q]%'   )and publish =1 $dsql  $ssql  order by id desc ";
-$sqlct = "SELECT  COUNT(DISTINCT id) from articles where  (title like '%$_GET[q]%'  or test like '%$_GET[q]%'  or author like '%$_GET[q]%'  or shortdesc like '%$_GET[q]%'   )and publish =1 $dsql $ssql   order by id desc ";
+$sql = "select distinct test, title, id from articles where  (title like '%".$_GET['q']."%'  or test like '%$_GET[q]%'  or author like '%".$_GET['q']."%'  or shortdesc like '%".$_GET['q']."%'   )and publish =1 $dsql  $ssql  order by id desc ";
+$sqlct = "SELECT  COUNT(DISTINCT id) from articles where  (title like '%".$_GET['q']."%'  or test like '%".$_GET['q']."%'  or author like '%".$_GET['q']."%'  or shortdesc like '%".$_GET['q']."%'   )and publish =1 $dsql $ssql   order by id desc ";
 $searchx=$dbcon->CacheExecute($sql."Limit  $offset, $limit;") ;
 }
 //echo $sql;
@@ -170,7 +170,7 @@ $i = 0;
 $io =0;
 echo "<b>Pages:</b>&nbsp;";
 while ($i != $pages) {
-echo "<a  href=\"search.php?q=$_GET[q]&offset=";
+echo "<a  href=\"search.php?q=".$_GET['q']."&offset=";
 echo $io;
 echo "\">";
 echo ($i +1);
