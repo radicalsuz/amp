@@ -66,7 +66,9 @@ class AMP_CustomForm {
         $this->form->addElement('hidden','formname');
         $this->form->setConstants( array('formname'=>$this->name) );
         $this->form->addElement('submit', 'btnCustomFormSubmit', 'Save Data');
-        $fRef = &$this->form->addElement('submit', 'btnCustomFormDelete', 'Delete Record');
+        if ($_REQUEST['id']) {
+            $fRef = &$this->form->addElement('submit', 'btnCustomFormDelete', 'Delete Record');
+        }
         $fRef->updateAttributes( array(
             'onClick'=>'return confirmSubmit("Are you sure you want to DELETE this record?");',
             'style'=>'margin-top:30px') );
@@ -74,7 +76,8 @@ class AMP_CustomForm {
     }
     
 
-//Data Management Functions
+    //Data Management Functions
+
     function getData($id = null) {
         $this->id = $id;
         $fieldset = array_keys($this->fields);
