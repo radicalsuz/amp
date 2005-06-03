@@ -382,7 +382,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		$this->lookups['lstate']=array('LookupName'=>'State');
 		$this->lookups['lcity']=array('name'=>'City', 'LookupTable' => 'calendar', 'LookupField' => 'lcity', 'LookupDistinctField' => 1, 'LookupSearchby' => 'lcity', 'LookupSortby' => 'lcity' );
 		//Region is for backwards compatibility with older Region calendars
-		$this->lookups['area']=array('name'=>'Region', 'LookupField'=>'title', 'LookupTable'=>'regions');
+		$this->lookups['area']=array('name'=>'Region', 'LookupField'=>'title', 'LookupTable'=>'region');
 	
 		//Modin is for searching events by campaign - not yet implemented but will be handy
 		#$this->lookups['modin']=array('name'=>'Activity/Campaign', 'LookupField'=>'name', 'LookupTable'=>'userdata_fields');

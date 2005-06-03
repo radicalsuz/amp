@@ -16,8 +16,10 @@
  */
 
 // Init var :
-$IMAGES_BASE_URL = '/'.$subdir_path.'img/pic/';
-$IMAGES_BASE_DIR = getenv("DOCUMENT_ROOT").$IMAGES_BASE_URL;
+#$IMAGES_BASE_URL = '/'.$subdir_path.'img/pic/';
+#$IMAGES_BASE_DIR = getenv("DOCUMENT_ROOT").$IMAGES_BASE_URL;
+$IMAGES_BASE_URL = 'http://'. $_SERVER['SERVER_NAME'] . '/img/pic/';
+$IMAGES_BASE_DIR = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'img/pic/';
 
 // End int var
 

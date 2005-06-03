@@ -161,7 +161,7 @@ function write_win($textarea_name,$value,$html=NULL) {
 function write_fckeditor_html($textarea_name, $value) {
     $oFCKeditor =& new FCKeditor;
     $oFCKeditor->Value = $value  ;
-    $output = $oFCKeditor->ReturnFCKeditor( $textarea_name, '500', 500 ) ;
+    $output = $oFCKeditor->ReturnFCKeditor( $textarea_name, '550', 500 ) ;
 	return $output;
 }
 

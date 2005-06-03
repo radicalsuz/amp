@@ -132,10 +132,18 @@ switch($_POST['act']) {
 
   
   
-if ($_GET[offset]) {$offset=$_GET[offset];}
+if ($_GET['offset']) {$offset=$_GET['offset'];}
 else { $offset=0;}
-if ($_GET[limit]) {$limit=$_GET[limit];}
-else { $limit=30;}
+if ($_GET['limit']) {$limit=$_GET['limit'];}
+else { $limit=50;}
+
+$limit_sql = " LIMIT $offset, $limit ";
+
+if ($limit=='-1') {
+    $offset=0;
+    $limit=false;
+    $limit_sql='';
+}
 ## create Menus
 
 
@@ -157,31 +165,32 @@ $allclass=$dbcon->Execute("SELECT distinct class.id, class.class FROM class, art
  
 ###########################define sql for list  #########################
 $track ="all";
-if ($_GET[subsite]) {
+if ($_GET['subsite']) {
 $subsql= "and  a.subsite=".$_GET["subsite"];
 $track ="site";
 }
+$class = (isset($_GET['class']) && $_GET['class'])?$_GET['class']:false;
 if ($_GET["class"]) {
 $subsql= "and  a.class=".$_GET["class"];
 $track ="class";
 }
-if ($_GET[type]) {
-$subsql= "and  a.type=".$_GET[type];
+if ($_GET['type']) {
+$subsql= "and  a.type=".$_GET['type'];
 $track ="type";
 }
-if (($_GET[typer]) or ($AMP_view_rel && $_GET[type]) ) {
-if ($_GET[typer]) {$type =  $_GET[typer];} else  {$type =  $_GET[type];}
+if (($_GET['typer']) or ($AMP_view_rel && $_GET['type']) ) {
+if ($_GET['typer']) {$type =  $_GET['typer'];} else  {$type =  $_GET['type'];}
 $subsql= "and  (a.$MX_type=$type or a.relsection1 = $type or a.relsection2 = $type)  ";
 $track ="type";
 }
-if ($MM_reltype && $_GET[type] ) {
+if ($MM_reltype && $_GET['type'] ) {
 $subsql= "and  (a.type=$_GET[type] or   articlereltype.typeid =$_GET[type])  ";
 //$subsql= "and  a.type=".$_GET[type];
 $track ="type";
 }
 
 
-if ($_GET[fpnews]) {
+if ($_GET['fpnews']) {
 $subsql= "and a.fplink= 1";
 $track ="fpnews";
 }
@@ -195,10 +204,10 @@ if ($_GET["sorder"]){ $sql = " ORDER BY a.".$_GET["sorder"]; }
 else { $sql = "  ORDER BY a.pageorder asc, a.date desc"; }
  
 ###########################make sql statement ###########################
-$fullsql = "SELECT DISTINCTROW a.date, a.id, a.pageorder, a.publish, a.title,  articletype.type, a.publish, a.uselink,  class.class FROM articles a, class left join articletype on articletype.id = a.type where  class.id=a.class   $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql Limit  $offset, $limit";
+$fullsql = "SELECT DISTINCTROW a.date, a.id, a.pageorder, a.publish, a.title,  articletype.type, a.publish, a.uselink,  class.class FROM articles a, class left join articletype on articletype.id = a.type where  class.id=a.class   $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql $limit_sql ";
 $sqlct= "SELECT DISTINCTROW  a.id FROM articles a, articletype, class where articletype.id = a.type and class.id=a.class  $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql ";
 if ($MM_reltype ) {
-$fullsql = "SELECT DISTINCTROW a.date, a.id,  a.pageorder,  a.publish, a.title, articletype.type, a.publish, a.uselink, class.class  FROM articles a, class  left JOIN articlereltype   on a.id = articlereltype.articleid  left join articletype on articletype.id = a.type where class.id=a.class $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql  Limit  $offset, $limit ";
+$fullsql = "SELECT DISTINCTROW a.date, a.id,  a.pageorder,  a.publish, a.title, articletype.type, a.publish, a.uselink, class.class  FROM articles a, class  left JOIN articlereltype   on a.id = articlereltype.articleid  left join articletype on articletype.id = a.type where class.id=a.class $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql $limit_sql";
 $sqlct= "SELECT DISTINCTROW a.id FROM articles a, class  left JOIN articlereltype   on a.id = articlereltype.articleid Left Join articletype on articletype.id = a.type where  class.id=a.class  $subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sql ";
 }
 //$subsql $sqlid $sqlauthor $sqldate $sqltitle $sqlfpnews $sq
@@ -237,7 +246,7 @@ if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr> 
           <td class="banner"><?php if ($_GET["class"]) {echo $Recordset1->Fields("class");}
-if ($_GET[type]) {echo $Recordset1->Fields("type");}
+if ($_GET['type']) {echo $Recordset1->Fields("type");}
 ?>&nbsp;Content </td>
         </tr>
         <tr> 
@@ -259,8 +268,8 @@ if ($_GET[type]) {echo $Recordset1->Fields("type");}
             </select>
         <?php 
 		$keep = "";
-		if ($_GET[type]) {$keep = "type=$type";}
-		if ($_GET["class"]) {$keep = "class=$class";}
+		if ($_GET['type']) {$keep = "type=".$_GET['type'];}
+		if ($_GET["class"]) {$keep = "class=".$_GET['class'];}
 		?>  
 		<br>
 <select name="repeat" onChange="MM_jumpMenu('parent',this,0)" class="name">
@@ -307,7 +316,7 @@ if ($_GET['msg'] != '') {
 $listct=$dbcon->CacheExecute("$sqlct");
 //$count = $listct->fields[0];
 $count = $listct->RecordCount();
-$total = ($offset +$limit);
+$total = $limit?($offset +$limit):$count;
 if ($total > $count) {$total = $count ;}
 echo "<p class=name>Displaying ".($offset +1)."-".$total." of ".$count."  <b>".$q."</b> <br>";
  $pages = ceil(($count/$limit));

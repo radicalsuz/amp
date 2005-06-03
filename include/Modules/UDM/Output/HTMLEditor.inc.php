@@ -115,7 +115,7 @@ class UserDataPlugin_HTMLEditor_Output extends UserDataPlugin {
         }
         $new_value .= "\t
             <IFRAME src=\"/scripts/FCKeditor/fckeditor.html?FieldName=".$fieldname."\" 
-                    width=\"500\" height=\"500\" frameborder=\"no\" scrolling=\"no\">
+                    width=\"550\" height=\"500\" frameborder=\"no\" scrolling=\"no\">
             </IFRAME>
         </td></tr></table></td>\n\t</tr>";
 
