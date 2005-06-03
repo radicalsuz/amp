@@ -19,8 +19,13 @@ function Init() {
       document.getElementById("f_align").value = param["f_align"];
       document.getElementById("f_vert").value = param["f_vert"];
       document.getElementById("f_horiz").value = param["f_horiz"];
-      window.ipreview.location.replace(param.f_url);
-  }
+			if ( param.f_url ) {
+				window.ipreview.location.replace(param.f_url);
+			}
+  } else {
+		window.onBrowse();
+	}
+	window.focus();
   document.getElementById("f_url").focus();
 };
 
@@ -65,6 +70,10 @@ function onPreview() {
   window.ipreview.location.replace(url);
   return false;
 };
+function onBrowse() {
+  window.ipreview.location.replace("/system/imgpreview.php");
+  return false;
+}
 </script>
 
 <style type="text/css">
@@ -102,7 +111,7 @@ form { padding: 0px; margin: 0px; }
 
 <div class="title">Insert Image</div>
 <!--- new stuff --->
-<form action="" method="get">
+<form name = "Insert_Image" action="" method="get">
 <table border="0" width="100%" style="padding: 0px; margin: 0px">
   <tbody>
 
@@ -181,6 +190,7 @@ title="Vertical padding" />
     <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" height="200" width="300" src=""></iframe>
   </td>
   <td valign="bottom" style="text-align: right">
+    <button type="button" name="browse" onclick="return onBrowse();">Browse</button><P>
     <button type="button" name="ok" onclick="return onOK();">OK</button><br>
     <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
   </td>

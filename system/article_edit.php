@@ -12,23 +12,6 @@ $obj = new SysMenu;
     print $ps_key.": ".$ps_value."<BR>";
   }
  */ 
-function file_list($file){ 
-	$dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
-	//die($dir_name);
-	$dir = opendir($dir_name);
-	$basename = basename($dir_name);
-	$fileArr = array();
-	$fileArr[''] = 'Select';
-	while ($file_name = readdir($dir))
-	{
-		if (($file_name !=".") && ($file_name != "..")) {
-			$fileArr[$file_name] = $file_name;
-		}
-	}
-	uksort($fileArr, "strnatcasecmp");
-	return $fileArr;
-} 
- 
 if ($userper[2] or  $userper[1] ) { } else { header ("Location: index.php"); }
 if (isset($preview)) {header ("Location: ../article.php?id=$id&preview=1");} 
 

@@ -537,4 +537,23 @@ if (!function_exists('array_combine_key')) {
 				return $result;
 		}
 }
+if (!function_exists('file_list')) {
+		function file_list($file){ 
+				$dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
+				//die($dir_name);
+				$dir = opendir($dir_name);
+				$basename = basename($dir_name);
+				$fileArr = array();
+				$fileArr[''] = 'Select';
+				while ($file_name = readdir($dir))
+				{
+						if (($file_name !=".") && ($file_name != "..")) {
+						$fileArr[$file_name] = $file_name;
+						}
+				}
+				uksort($fileArr, "strnatcasecmp");
+				return $fileArr;
+		} 
+}
+ 
 ?>
