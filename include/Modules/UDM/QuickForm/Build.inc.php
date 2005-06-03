@@ -115,6 +115,45 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		return $this->dbcon->GetAssoc($lookup_sql);
 	}
 
+    function getDefaults( &$field_def ) {
+        $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
+        if (is_array($defaults)) return $defaults;
+
+		//Check for defined Lookup in selectbox defaults
+		//format is Lookup(table_name, display_column, value_column, restrictions);
+		if ($field_def['type']=='select') {
+            if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
+
+                $just_values = str_replace(")", "", substr($defaults, 7));
+                $valueset = split("[ ]?,[ ]?", $just_values );
+                return $this->udm_quickform_setupLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
+            }
+
+            // Get region information if it's needed.
+            if ( isset( $field_def[ 'region' ] )
+                && strlen( $field_def[ 'region' ] ) > 1 ) {
+
+                return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
+            }
+        }
+
+        // Split string with commas into an array, unless the field is static
+        if ( strpos('htmlstaticheader', $field_def['type'])===FALSE) {
+			
+			// Check to see if we have an array of values.
+			$defArray = split( "[ ]?,[ ]?", $defaults );
+			if (count( $defArray ) > 1) {
+				$defaults = array();
+				foreach ( $defArray as $option ) {
+					$defaults[ $option ] = $option;
+				}
+			}
+        }
+
+        return $defaults;
+    }
+		
+    
 	function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) {
 
 		if ( !$admin ) {
@@ -125,7 +164,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
 		$type     = (isset($field_def['type']))   ? $field_def['type']     : null;
 		$label    = (isset($field_def['label']))  ? $field_def[ 'label'  ] : null;
-		$defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
+		$defaults = $this->getDefaults( $field_def ); 
 		$size     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 50;
 		$attr     = (isset($field_def['attr']))   ? $field_def['attr']       : null;
 
@@ -133,42 +172,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
 		if ($type=='html') $name = $defaults;
 
-		//Check for defined Lookup in selectbox defaults
-		//format is Lookup(table_name, display_column, value_column, restrictions);
-		if ($type=='select' && is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
-
-			$just_values = str_replace(")", "", substr($defaults, 7));
-			$valueset = split("[ ]?,[ ]?", $just_values );
-			$defaults = $this->udm_quickform_setupLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
-            $this->udm->fields[$name]['values'] = $defaults;
 		
-		} elseif ( is_array( $defaults ) ) {
-
-			$defArray = $defaults;
-
-		} elseif ( strpos('htmlstaticheader', $type)===FALSE) {
-			
-			// Check to see if we have an array of values.
-			$defArray = explode( ",", $defaults );
-			if (count( $defArray ) > 1) {
-				$defaults = array();
-				foreach ( $defArray as $option ) {
-					$defaults[ $option ] = $option;
-				}
-                $this->udm->fields[$name]['values'] = $defaults;
-			} else {
-				$defaults = $defArray[0];
-			}
-		
-		}
-		// Get region information if it's needed.
-		if ( isset( $field_def[ 'region' ] )
-			 && strlen( $field_def[ 'region' ] ) > 1
-			 && $type == 'select' ) {
-
-			$defaults = $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
-			$selected = $field_def[ 'values' ];
-		}
 
 		// Add a default blank value to the select array.
 		#if ( $type == 'multiselect' && is_array( $defaults ) ) $defaults = array('' => 'Select all that apply') + $defaults;
@@ -205,9 +209,11 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 			$fRef->updateAttributes($attr);
 		}
 
+        /*
 		if ( isset( $selected ) && strpos($type, 'group')===FALSE  ) {
 			$fRef->setSelected( $selected );
 		}
+        */
 
 		if ( isset( $size ) && $size && ( $type == 'text' ) ) {
 			if ($size > 40) $size = 40;

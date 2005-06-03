@@ -15,7 +15,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
         
         // Ensure we have a form built before proceeding.
         if ( !isset( $udm->form ) )
-            $udm->doPlugin( 'QuickForm', 'build' );
+            $udm->doPlugin( 'QuickForm', 'Build' );
 
         return $this->toText( $this->getData() );
     }
@@ -67,13 +67,14 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
                 $value = $value?'yes':'no';
                 break;
             case 'select':
+                $build_plugin = $this->udm->getPlugin('QuickForm', 'Build');
+                $value_set = $build_plugin->getDefaults($fDef);
                 if ( $fDef['region'] ) {
-                    $regset = $GLOBALS['regionObj']->getSubRegions( $fDef[ 'region' ] );
-                    $value = $regset[$value];
+                    $value = $value_set[$value];
                 }
-                if (is_array($fDef['values'])) {
-                    if (isset($fDef['values'][$value])) {
-                        $value = $fDef['values'][$value];
+                if (is_array($value_set)) {
+                    if (isset($value_set[$value])) {
+                        $value = $value_set[$value];
                     }
                 }
                 break;
