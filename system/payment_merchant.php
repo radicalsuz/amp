@@ -7,12 +7,12 @@ $obj = new SysMenu;
 $buildform = new BuildForm;
 
 $table = "payment_merchant";
-$listtitle ="Marchant";
+$listtitle ="Merchant";
 $listsql ="select id, Merchant   from $table  ";
-$orderby =" order by  asc  ";
+$orderby =" order by  Merchant asc  ";
 $fieldsarray=array( 'Merchant'=>'Merchant','ID'=>'id'
 					);
-$filename="";
+$filename="payment_merchant.php";
 
 ob_start();
 // insert, update, delete

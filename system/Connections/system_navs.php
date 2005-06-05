@@ -85,6 +85,39 @@ $sys_nav[8][2]['name'] ='Gallery Types';
 $sys_nav[8][2]['per'] ='34';
 
 #email 
+$sys_nav['email'][0]['nav'] ='Email Blast';
+$sys_nav['email'][0]['link'] ='blast_email.php?action=list';
+$sys_nav['email'][0]['name'] ='Email Blasts';
+$sys_nav['email'][0]['class'] ='view';
+$sys_nav['email'][0]['per'] ='38';
+
+$sys_nav['email'][1]['link'] ='blast_email.php';
+$sys_nav['email'][1]['name'] ='New Blast';
+$sys_nav['email'][1]['class'] ='add';
+$sys_nav['email'][1]['per'] ='38';
+
+$sys_nav['email'][2]['link'] ='blast_lists.php?action=list';
+$sys_nav['email'][2]['name'] ='Lists';
+$sys_nav['email'][2]['class'] ='view';
+$sys_nav['email'][2]['per'] ='38';
+
+$sys_nav['email'][3]['link'] ='blast_template.php?action=list';
+$sys_nav['email'][3]['name'] ='Email Templates';
+$sys_nav['email'][3]['class'] ='email';
+$sys_nav['email'][3]['per'] ='38';
+
+$sys_nav['email'][4]['link'] ='blast_report.php?action=list';
+$sys_nav['email'][4]['name'] ='Reports';
+$sys_nav['email'][4]['class'] ='email';
+$sys_nav['email'][4]['per'] ='38';
+
+$sys_nav['email'][5]['link'] ='../lists/admin';
+$sys_nav['email'][5]['name'] ='PHP List Admin';
+$sys_nav['email'][5]['class'] ='email';
+$sys_nav['email'][5]['per'] ='38';
+
+
+#email 
 $sys_nav[9][0]['link'] ='../lists/admin';
 $sys_nav[9][0]['name'] ='PHP List Admin';
 $sys_nav[9][0]['class'] ='email';
