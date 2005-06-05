@@ -9,7 +9,7 @@ $table = "redirect";
 $listtitle ="Redirects";
 $listsql ="select * from $table  ";
 $orderby =" order by old asc  ";
-$fieldsarray=array('Old Address'=>'old','New Address'=>'new');
+$fieldsarray=array('Alias'=>'old','Target'=>'new');
 $filename="redirect.php";
 
 
@@ -41,11 +41,11 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET[id]);
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Add/Edit '.$listtitle, 'banner');
 $html .= addfield('publish','Publish','checkbox',$r['publish'],1);
-$html .= addfield('old','Old Address','text',$r['old']);
-$html .= addfield('new','New Address','text',$r['new']);
+$html .= addfield('old','Alias','text',$r['old']);
+$html .= addfield('new','Target Page','text',$r['new']);
 $html .= $buildform->add_header('Advanced Settings');
-$html .= addfield('conditional','Conditional Redirect','checkbox',$r['conditional']);
-$html .= addfield('num','Number of Charecters','text',$r['num']);
+$html .= addfield('conditional','Preserve URL variables','checkbox',$r['conditional']);
+$html .= addfield('num','URL Characters to trim','text',$r['num']);
 $html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id->fetch());
 $html .= $buildform->end_table();
 $form = & new Form();
