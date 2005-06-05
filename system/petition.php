@@ -14,7 +14,7 @@ $listsql ="select id, title, udmid   from $table  ";
 $orderby =" order by  title asc  ";
 $fieldsarray=array( 'Title'=>'title','ID'=>'id');
 
-$extra = array('Petition Signers'=>'mopiput4_data.php?modin=','Petition Fields'=>'modinput4_edit.php?modin=','Add to Content System'=>'module_contentadd.php?pid=');
+$extra = array('Petition Signers'=>'modinput4_data.php?modin=','Petition Fields'=>'modinput4_edit.php?modin=','Add to Content System'=>'module_contentadd.php?pid=');
 $extramap = array('Petition Fields'=>'udmid','Petition Signers'=>'udmid');
 
 $filename="petition.php";
@@ -39,7 +39,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
   
 		$_POST['core_name'] = "Petition - ".$_POST['title'];
 		
-		$udm = new UserDataInput( $dbcon, '7', true );
+		$udm = new UserDataInput( $dbcon, '4', true );
 	    $udm->doPlugin( "QuickForm", "BuildAdmin" );
     	$new_modin = $udm->doPlugin( "AMPsystem", "CopyAdmin" );
 		if ($new_modin) {

@@ -117,6 +117,16 @@ Class Petition {
 		return $out;
 	}
 
+	function petitionlist() {
+		$sql = "select * from petition  order by id desc";
+		$R = $this->dbcon->Execute($sql) or DIE("could not find petition: ".$sql.$this->dbcon->ErrorMsg());
+		while (!$R->EOF) {
+			$out = '<p><a href="petition.php?pid='.$R->Fields("id").'" class="listtitle">'.$R->Fields("title") .'</a><br>'.$R->Fields("shortdesc").'</p><br>';
+			$R->MoveNext();
+		}
+		return $out;
+	}	
+
 }
 
 ?>
