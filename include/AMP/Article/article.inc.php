@@ -70,7 +70,8 @@ echo '</td></tr><td></td><tr><td  class="text"><br>';
 if ($Recordset1->Fields("picuse") == (1)) {  
 	$fpathtoimg = AMP_LOCAL_PATH.'/'.$NAV_IMG_PATH .$Recordset1->Fields("pselection")."/".$Recordset1->Fields("picture");
 	$pathtoimg = $NAV_IMG_PATH .$Recordset1->Fields("pselection")."/".$Recordset1->Fields("picture");
-	$imageInfo = getimagesize($fpathtoimg); 
+	$pathtoimg2 = $Web_url.$NAV_IMG_PATH."original/".$Recordset1->Fields("picture");
+    $imageInfo = getimagesize($fpathtoimg); 
 	$pwidth = $imageInfo[0]; 
 	$pheight = $imageInfo[1];
 
@@ -79,7 +80,7 @@ if ($Recordset1->Fields("picuse") == (1)) {
 	echo ($Recordset1->Fields("alignment") == "left") ? "left" : "right";
 	echo '" cellpadding="0" cellspacing="0"><tr><td>';
 	#set image
-	echo '<img src="' . $pathtoimg . '" alt="' . $Recordset1->Fields("alttag") . '" hspace="4" vspace="4" border="0" class="img_main">';
+	echo '<a href="'. $pathtoimg .'" target="_blank"> <img src="' . $pathtoimg . '" alt="' . $Recordset1->Fields("alttag") . '" hspace="4" vspace="4" border="0" class="img_main"></a>';
 	#set caption
 	echo '</td></tr><Tr align="center"><td width="' .  $pwidth  . '" class="photocaption">' . $Recordset1->Fields("piccap") . '</td>';
 	echo '</TR></table>';
