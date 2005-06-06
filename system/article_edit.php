@@ -485,7 +485,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
           </tr>
           <tr> 
             <td valign="top" class="name">Image Caption</td>
-            <td> <input type="textarea" name="piccap" size="50" value="<?php echo $r->Fields("piccap")?>"> 
+            <td> <input type="textarea" name="piccap" size="50" value="<?php echo htmlspecialchars($r->Fields("piccap"))?>"> 
             </td>
           </tr>
           <tr> 
