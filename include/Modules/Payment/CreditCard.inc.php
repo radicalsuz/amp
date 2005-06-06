@@ -103,12 +103,18 @@ class Payment_CreditCard extends Payment {
     * * * * * * * * * */
 
     function setMerchant($merchant_ID) {
-		$sql = "Select * from payment_merchants where id = ".$merchant_ID;
+		$sql = "Select * from payment_merchants where id = ".$this->dbcon->qstr($merchant_ID);
 		$R = $this->dbcon->Execute($sql) or DIE($sql.$this->dbcon->ErrorMsg());
         $setmerch = $R->FetchRow();
-        foreach ($setmerch as $merch_key=>$merch_value) {
-            if (array_search($merchant_info_keys, $merch_key)) {
-                $merchant_info[$merch_key]=$merch_value;
+        $merchant_info = null;
+        print "<pre>";
+        print_r($setmerch);
+        print "</pre>";
+        if ($setmerch) {
+            foreach ($setmerch as $merch_key=>$merch_value) {
+                if (array_search($merch_key, $this->merchant_info_keys)) {
+                    $merchant_info[$merch_key]=$merch_value;
+                }
             }
         }
         if (is_array($merchant_info)) $this->merchant_info=$merchant_info;
@@ -139,13 +145,15 @@ class Payment_CreditCard extends Payment {
         //Checks each value in $data to see if there is a matching key in
         //$this->card_info_keys -- note that credit card values in $data are prefaced
         //with a string: "Credit_Card_"
-        
+
         foreach ($data as $card_key => $card_value) {
             $cc_num = substr($card_key, 12);
             if (array_search($cc_num, $this->card_info_keys)) {
                 $card_info[$cc_num]=$card_value;
             }
         }
+
+        $card_info['Type'] = $data['Credit_Card_Type'];
 
         if (is_array($card_info)) $this->card_info=$card_info;
     }
@@ -173,7 +181,7 @@ class Payment_CreditCard extends Payment {
             $cust_info['Name']=$data['First_Name'].' '.$data['Last_Name'];
         }
         //set user_ID value for base Payment class
-        if ($data['user_ID']) $this->user_ID = $data['user_ID'];
+        if (isset($data['user_ID'])) $this->user_ID = $data['user_ID'];
 
         if (is_array($cust_info)) $this->customer_info=$cust_info;
     }
@@ -194,7 +202,7 @@ class Payment_CreditCard extends Payment {
         $dt_options = array("format"=>"mY","minYear"=>$this_year,"maxYear"=>($this_year+10));
 
 		$fields['Credit_Card_Info'] = array('type'=>'header', 'label'=>'Credit Card Information', 'public'=>true,  'enabled'=>true);
-		$fields['Amount'] = array('type'=>'select', 'label'=>'Amount', 'required'=>true, 'public'=>false, 'size'=>40, 'enabled'=>true);
+//		$fields['Amount'] = array('type'=>'select', 'label'=>'Amount', 'required'=>true, 'public'=>false, 'size'=>40, 'enabled'=>true);
 		$fields['Credit_Card_Number'] = array('type'=>'text', 'label'=>'Credit Card Number', 'required'=>true, 'public'=>true, 'size'=>40, 'enabled'=>true);
 		$fields['Credit_Card_Type'] = array('type'=>'select', 'label'=>'Credit Card Type', 'required'=>true, 'public'=>true, 'size'=>40, 'values'=>'Visa,Master Card,Discover,Amex','enabled'=>true);
 		$fields['Credit_Card_Expiration'] = array('type'=>'date', 'label'=>'Credit Card Expiration', 'required'=>true, 'public'=>true, 'values'=>$dt_options, 'enabled'=>true);
@@ -219,7 +227,7 @@ class Payment_CreditCard extends Payment {
     function getData_CreditCard() {
 
 		$data_fields=array (
-        'Credit_Card_Type'  =>  $this->card_info['type'],
+        'Credit_Card_Type'  =>  $this->card_info['Type'],
         'Credit_Card_Number'=>  $this->card_info['Number'],
         'Credit_Card_Expiration'    =>  $this->card_info['Expiration'],
         'Date_Submitted'    =>  $this->transaction_info['Date_Submitted'],
@@ -259,6 +267,10 @@ class Payment_CreditCard extends Payment {
        
         //Generate a permanent Transation_ID by saving to the DB
         $this->save();
+
+        print "<b>Before we call the actual charge processing stuff:</b> <pre>";
+        print_r($this);
+        print "</pre>";
         
         //Call the Credit Card processing Library
         $ChargeResult=$this->CC_Library->ChargeCreditCard( $this->customer_info,

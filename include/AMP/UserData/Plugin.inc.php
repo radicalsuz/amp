@@ -264,7 +264,7 @@ class UserDataPlugin {
      *
      *****/
     function getData ($fields = null){
-        
+
         //Filter returned data for items with the appropriate plugin field
         //prefix
         if ( $this->_field_prefix ) {
@@ -295,15 +295,18 @@ class UserDataPlugin {
 
         // get the data 
         $data = $this->udm->getData($fields);
-                
+
         // check the data for strange types that need massaging
         $changes = $this->checkData ($data);
         if ($changes)  $data = array_merge($data, $changes);
 
         //remove the field prefixes
         if (isset($prefix)) {
+            $finaldata = array();
             foreach ($data as $key=>$value) {
-                $finaldata[$fieldkeys[$key]]=$value;
+                if (!isset($fieldkeys[$key])) continue;
+                $field = $fieldkeys[$key];
+                $finaldata[$field]=$value;
             }
             $data=$finaldata;
         }
@@ -315,6 +318,7 @@ class UserDataPlugin {
     function checkData( $data ) {
         $returnSet = array();
         foreach ($data as $keyname=>$value) {
+            if (!isset($this->udm->fields[$keyname])) continue;
             switch ($this->udm->fields[$keyname]['type']) { 
                 case "date":
                     $tempValue=is_array($value)?mktime(0,0,0,$value['M'],$value['d'],$value['Y']):null;

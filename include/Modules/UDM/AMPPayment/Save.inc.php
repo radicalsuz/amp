@@ -25,6 +25,8 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                                           'available' => true)
         );
 
+    var $_feild_prefix = 'plugin_AMPPayment';
+
     var $item_info;
     
     function UserDataPlugin_Save_AMPPayment (&$udm, $plugin_instance=null) {
@@ -33,29 +35,37 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
     }
 
     function getSaveFields() {
+
         $save_fields=array_keys($this->fields);
-        unset($save_fields['Share_Data']);
+
+        $new_save_fields = array();
 
         foreach ($save_fields as $fname) {
-            switch ($this->udm->fields[$fname]['type']) {
+            if ($fname == 'Share_Data') continue;
+            switch ($this->fields[$fname]['type']) {
                 case 'html':
                 case 'static':
                 case 'header':
-                unset($save_fields[$fname]);
+                    continue;
+                    break;
+                default:
+                    $new_save_fields[] = $fname;
+                    break;
             }
         }
-        return $save_fields;
+
+        return $new_save_fields;
     }
                 
     function save($data) {
         $processor=& $this->processor;
         $options = $this->getOptions();
-        
+
         $this->item_info = $this->getItem();
-        $data['user_ID'] = $this->udm->uid;
 
         $processor->setCard($data);
         $processor->setCustomer($data);
+
         if ($processor->charge($this->item_info['name'], $this->item_info['amount'])) {
             return true;
         } else {
@@ -67,7 +77,8 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
     function getItem() {
     
         $options = $this->getOptions();
-        $sql =  "Select * from payment_items where id=".$this->dbcon->qstr($options['payment_item_ID']);
+        if (!isset($options['item_ID'])) return false;
+        $sql =  "SELECT * FROM payment_items WHERE id=".$this->dbcon->qstr($options['item_ID']);
         return $this->dbcon->CacheGetOne($sql);
     }
 
@@ -82,11 +93,12 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         //set the field order to put the dynamic checkbox before the Customer
         //Data
+        $cc_fieldorder_tmp = array();
         foreach ($fields as $cc_field=>$cc_fDef) {
-            if ($cc_field=="First_Name") $cc_fieldorder .= $prefix."Share_Data,";
-            $cc_fieldorder .= $prefix.$cc_field.",";
+            if ($cc_field=="First_Name") $cc_fieldorder_tmp[] = $prefix."Share_Data,";
+            $cc_fieldorder_tmp[] = $prefix.$cc_field.",";
         }
-        $cc_fieldorder = substr($cc_fieldorder, 0, strlen($cc_fieldorder)-1);
+        $cc_fieldorder = join(",", $cc_fieldorder_tmp);
         
         //add a fancy javascript to save users time when Cardholder data matches
         //personal data
@@ -96,8 +108,8 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $fields['setaddress_script']=array('type'=>'html', 'values'=>
             $this->address_script($fields), 'enabled'=>true,'public'=>true, 'required'=>false);
 
-        $this->udm->_module_def[ 'field_order' ] = join(",", array($this->udm->_module_def[ 'field_order'],$cc_fieldorder));
-        
+//        $this->udm->_module_def[ 'field_order' ] = join(",", array($this->udm->_module_def[ 'field_order'],$cc_fieldorder));
+       
         $this->fields = array_merge($this->fields, $fields);
 
     }
@@ -118,6 +130,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $form_keys[] = "First_Name";
         $form_keys[] = "Last_Name";
 
+        $script_on = '';
         foreach ($form_keys as $cust_key) {
             if (!isset($this->udm->fields[$cust_key])) continue;
             $field_key = $this->_field_prefix.'_'.$cust_key;

@@ -63,6 +63,8 @@ Class Payment {
 
         $dbcon =& $this->dbcon;
 
+        unset($data['merchant_ID']);
+
         $sql = "UPDATE payment SET ";
 
         foreach ($data as $field => $value) {
@@ -79,6 +81,8 @@ Class Payment {
     function insertSQL ( $data ) {
 
         $dbcon =& $this->dbcon;
+
+        unset($data['merchant_ID']);
 
         $fields = array_keys( $data );
         $values_noescape = array_values( $data );
