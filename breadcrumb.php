@@ -13,7 +13,7 @@ global $MM_type, $MM_class ,$area, $list, $MM_id, $mod_name, $MM_title, $mod_id,
 //$histate=$dbcon->CacheExecute("Select title from region where id = $area") or DIE($dbcon->ErrorMsg());
 //}
 
-$ar = "&nbsp;&nbsp;<b>&#187;<b>&nbsp;&nbsp;";
+$ar = "&nbsp;&nbsp;<b>&#187;</b>&nbsp;&nbsp;";
 
 if (isset($_GET['list']) && $_GET["list"]=="class"){
 	$hiclass=$dbcon->CacheExecute("Select class from class where id = $MM_class") or DIE($dbcon->ErrorMsg());
