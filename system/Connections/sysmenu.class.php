@@ -287,7 +287,7 @@ function select_type_tree($id = 0,$y=0,$selcode)
 
 
 	function select_type_tree2($id = 0,$y=0) {	
-		$list = array(''=>'Select Section');
+		$list = array('1'=>'Select Section');
 		$result = $this->get_children($id);	
 		
 		for ($x=0; $x<sizeof($result); $x++) {
