@@ -35,7 +35,7 @@ if ($Recordset1->Fields("sourceurl") != NULL){echo "</a>";}
  echo DoDate( $Recordset1->Fields("date"), 'F jS, Y') ;}?></span><br>
 
 </td></tr>
-<td><img src="<?php echo $Web_url.$NAV_IMG_PATH ?>s.gif" width=8 height=5></td>
+<td><br></td>
 <tr><td class="text">
 <?php 
 #################IMAGE IMAGE ###############
