@@ -1,0 +1,1 @@
+ALTER TABLE `template` ADD `extra_header` TEXT;
