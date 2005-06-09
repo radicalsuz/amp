@@ -86,22 +86,19 @@ if ($uid && $modin) {
     #$userlist->registerPlugin("Output", "Index");
     if (is_array($sort_options)) {
         $sort = $userlist->getPlugins("Sort");
-        $sort_plugin = $sort[key($sort)];
+        $sort_plugin = current($sort);
         $sort_plugin->setOptions($sort_options);
     }
 
-    //restrict to a modin, even without a searchform specified
+    //require searching to be possible
+    $search = $userlist->getPlugins('Search');
+    if (!$search) $userlist->registerPlugin('AMP', 'Search');
     $searchform = $userlist->getPlugins('SearchForm');
-    if (!isset($searchform)||$searchform==false) {
-        if (is_array($srch_options['criteria']['value'])) {
-            $srch_options['criteria']['value'][] = "modin=".$modin;
-        } else {
-            $srch_options['criteria']['value'] = array("modin=".$modin);
-        }
-    }
+    if (!$searchform) $userlist->registerPlugin('Output', 'SearchForm');
 
     //display result list
-    $output=$userlist->output_list('DisplayHTML', $list_options, null, $srch_options); 
+    $order = null;
+    $output=$userlist->output_list('DisplayHTML', $list_options, $order, $srch_options); 
 }
 
 $intro_id = $userlist->modTemplateID;

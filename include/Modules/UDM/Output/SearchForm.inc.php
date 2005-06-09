@@ -233,8 +233,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
 		
 		$frmName    = $options['form_name']; 
-		$frmMethod  = 'get';
-		$frmAction  =   $_SERVER['PHP_SELF'] ;
+		$frmMethod  = 'GET';
+		$frmAction  =   substr($_SERVER['PHP_SELF'], 1) ;
 
 	    $form = &new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
 
@@ -352,7 +352,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$this->lookups['state']=array('LookupName'=>'State');
 		$this->lookups['city']=array('name'=>'City', 'LookupTable' => 'userdata', 'LookupField' => 'city', 'LookupDistinctField' => 1, 'LookupSearchby' => 'city', 'LookupSortby' => 'city' );
 		//Region is for backwards compatibility with older Region udms
-		$this->lookups['area']=array('name'=>'Region', 'LookupField'=>'title', 'LookupTable'=>'regions');
+		$this->lookups['area']=array('name'=>'Region', 'LookupField'=>'title', 'LookupTable'=>'region');
 	
 		//Date lookup 
 		$this->lookups['bydate']=array('name'=>'Date');
