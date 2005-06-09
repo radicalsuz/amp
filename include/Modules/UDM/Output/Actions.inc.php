@@ -167,6 +167,9 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         $def['list_action_id']=array(  'type'=>'hidden',
                                 'value'=>'',
                                 'enabled'=>true);
+        $def['sqlp']=array(  'type'=>'hidden',
+                                'value'=>'',
+                                'enabled'=>true);
         $def['list_return_url']=array(  'type'=>'hidden',
                                 'value'=>'',
                                 'enabled'=>true);
@@ -182,8 +185,22 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
             id_val=list_return_selected();
             if (action=="email") return (list_DoEmail(id_val));
             if (id_val.length==0) {
-                alert ("No record is selected to "+action);
-                return false;
+                var al_msg ="No record is selected to "+action;
+                if (action=="export") {
+
+                    if (confirm ( al_msg + "\nExport entire list?")) {
+                        aform.elements["list_action"].value = action;
+                        aform.submit();
+                    } else {
+                        return false;
+                    }
+
+                } else {
+
+                    alert (al_msg);
+                    return false;
+
+                }
             } else {
                 aform.elements["list_action"].value = action;
                 aform.elements["list_action_id"].value = id_val; 
@@ -198,11 +215,14 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                 if (id_val.length==0) {
                     response= (confirm("No email address is selected.\\n Send email to entire list?"));
                     if (response==false) return false;
+                    aform.elements["sqlp"].value = "from userdata '.(is_array($this->udm->sql_criteria)?"WHERE ".join(" AND ", $this->udm->sql_criteria):"") .'"; 
+                } else {
+                    aform.elements["sqlp"].value = "from userdata where id in(" + id_val + ") "; 
                 }
                 aform.elements["list_return_url"].value = aform.action;
                 aform.elements["list_action"].value = "email";
                 aform.elements["list_action_id"].value = id_val; 
-                aform.action="udm_email.php";
+                aform.action="udm_mailblast.php?modin='.$this->udm->instance.'";
                 aform.submit();
             }
             ';
@@ -279,18 +299,20 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         }
     }
 
-    function export_set($set) {
+    function export_set($set=null) {
 
-        $criteria = $this->udm->parse_URL_crit();
+        $criteria = $this->udm->getURLCriteria();
 
-        $set_values = split(",", $set);
-        $url_ids = 'uid[]=' . join('&uid[]=', $set_values);
+        if (isset($set) && $set) {
+            $set_values = split(",", $set);
+            $criteria[] = 'uid[]=' . join('&uid[]=', $set_values);
+        }
 
-        $url_vals = $url_ids .'&'. join("&", $criteria);
+        $url_vals = join("&", $criteria);
 
         $target = '/system/form_export.php?'.$url_vals;
         $metatag ='<META http-equiv="refresh" content="2; URL='.$target.'">';
-        $message = "Your download should begin in a moment.<BR>
+        $message = "Your download should begin within one minute.<BR>
                     If it does not, please <a href=\"$target\">click here</a>.";
         return $metatag.$message;
         

@@ -107,9 +107,9 @@ class Payment_CreditCard extends Payment {
 		$R = $this->dbcon->Execute($sql) or DIE($sql.$this->dbcon->ErrorMsg());
         $setmerch = $R->FetchRow();
         $merchant_info = null;
-        print "<pre>";
+        /*print "<pre>";
         print_r($setmerch);
-        print "</pre>";
+        print "</pre>";*/
         if ($setmerch) {
             foreach ($setmerch as $merch_key=>$merch_value) {
                 if (array_search($merch_key, $this->merchant_info_keys)) {

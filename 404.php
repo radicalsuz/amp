@@ -6,7 +6,7 @@ and no resulting page is returned from the database.
 Searches redirect table for matching pages, then sends 
 the user to search page if no matches are found.*/
 
-include_once("AMP/BaseDB.php");
+require_once("AMP/BaseDB.php");
 
 // Check for a custom handler.
 $uri = $_SERVER['REQUEST_URI'];

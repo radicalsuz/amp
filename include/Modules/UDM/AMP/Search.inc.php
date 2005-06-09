@@ -17,14 +17,14 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         'clear_criteria' => array (
             'available'=>false,
             'description'=>'clear preset criteria when search runs'),
+        'multimodin' => array (
+            'available'=>false,
+            'default'=>false,
+            'description'=>'search across UDM instances'),
         'display_fields' => array(
             'available'=>false,
             'description'=>'fields to include in sql statement',
-            'default' => 'userdata.*'),
-        'rs_format' => array(
-            'available'=>false,
-            'description'=>'return data as rs or array',
-            'default'=>'CacheGetAll')
+            'default' => 'userdata.*')
         );
     
     function UserDataPlugin_Search_AMP (&$udm, $plugin_instance=null) {
@@ -38,16 +38,29 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         if (isset($options['clear_criteria']) && $options['clear_criteria']) $this->criteria=array();
 
 		if (isset($options['global_criteria'])) { 
-            $this->criteria[]=$options['global_criteria']; 
+            $new_criteria[]=$options['global_criteria']; 
         }
 
 		if (!$this->udm->admin) { 
-            $this->criteria[]="publish=1"; 
+            $new_criteria[]="publish=1"; 
         }
-
+		if (!($options['multimodin'])) { 
+            $new_criteria[]="modin=".$this->udm->instance; 
+        }
 		if(is_array($options['criteria'])) {
-			$this->criteria = array_merge($this->criteria, $options['criteria']);
+			$new_criteria = array_merge($new_criteria, $options['criteria']);
 		}
+        if (isset($new_criteria)) {
+            if (is_array($this->criteria) && count($this->criteria)>0) {
+                foreach($new_criteria as $crit_item) {
+                    if (array_search($crit_item, $this->criteria)===FALSE) {
+                        $this->criteria[] = $crit_item;
+                    }
+                }
+            } else {
+                $this->criteria = $new_criteria;
+            }
+        }
 
         $this->udm->setSQLCriteria( $this->criteria );
     }

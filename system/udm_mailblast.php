@@ -56,7 +56,7 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 $blast_type = new Input('hidden', 'blast_type', 'System-Email' );
 $sendformat = new Input('hidden', 'sendformat', 'HTML and Text' );
 $passedsql = new Input('hidden', 'passedsql', stripslashes($_POST['sqlp'] ));
-$modin = new Input('hidden', 'modin', $_POST['modin'] );
+$modin = new Input('hidden', 'modin', $_REQUEST['modin'] );
 
 
 //build form

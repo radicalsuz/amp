@@ -40,22 +40,26 @@ $userlist = & new UserDataSet( $dbcon, $_REQUEST[ 'modin' ], $admin );
 
 */
     $userlist->unregisterPlugin('Pager', 'Output');
+    $search_form = $userlist->getPlugins('SearchForm');
+    $search = $userlist->getPlugins('Search');
+    if (!$search_form) {
+        $userlist->registerPlugin('Output', 'SearchForm'); 
+    }
+    if (!$search) {
+        $userlist->registerPlugin('AMP', 'Search'); 
+    }
+
     set_time_limit(150);
 
-    if (true) {
-    #if ($userlist->doAction('Search')) { 
-        if ($output = $userlist->doPlugin('Output', 'ExportFile')) {
-            
-            print $output;
-        } else {
-            $show_template=true;
-            $output = "Export failed:<BR>".join("<BR>",$userlist->errors);
-        }
+    #if (true) {
+if ($output = $userlist->doPlugin('Output', 'ExportFile')) {
     
-    } else {
-        $show_template = true;
-        $output = join ("<BR>",$userlist->errors); 
-    }
+    print $output;
+} else {
+    $show_template=true;
+    $output = "Export failed:<BR>".join("<BR>",$userlist->errors);
+}
+
 
 if ($show_template) {
     require_once('header.php');

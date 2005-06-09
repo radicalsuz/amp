@@ -25,7 +25,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                                           'available' => true)
         );
 
-    var $_feild_prefix = 'plugin_AMPPayment';
+    var $_field_prefix = 'plugin_AMPPayment';
 
     var $item_info;
     

@@ -62,6 +62,7 @@ if ( !function_exists( 'buildheader' ) ) {
 }
 
 if (!isset($intro_id) || !$intro_id) { $intro_id = $mod_id; }
+if (!isset($intro_id) || !$intro_id) { $intro_id = 1; }
 	
 #ESTABLISH HIERARCHY
 if ($intro_id == 1) {
@@ -95,7 +96,7 @@ if ($intro_id == 1) {
  
 } 
 
-if (!isset($MM_type)) $MM_type = 1;
+if (!isset($MM_type)||!$MM_type) $MM_type = 1;
 
 # GET HIERARCHY VARS
 $gettype=$dbcon->CacheExecute("select type, parent, templateid, css, secure, uselink, linkurl from articletype where id = $MM_type")

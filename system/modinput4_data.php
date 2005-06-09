@@ -8,6 +8,7 @@
  * Written by Blaine Cook, blaine@radicaldesigns.org
  *
  *****/
+header("Location: userdata_list.php?".$_SERVER['QUERY_STRING']);
 $mod_name='udm';
 require_once( 'AMP/UserData/Set.inc.php' );
 require_once( 'Connections/freedomrising.php' );

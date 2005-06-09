@@ -26,11 +26,11 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         'field_order'=>array(
             'description'=>'Order of Fields, User Side',
             'available'=>true,
-            'default'=>'newline,start_text,country,state,bydate,endline,newline,distance,zip,search,sortby,modin,endline'),
+            'default'=>'newline,start_text,country,state,bydate,search,sortby,modin,endline'),
         'field_order_admin'=>array(
             'description'=>'Order of Fields, Admin View',
             'available'=>true,
-            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,endline,newline,distance,zip,search,sortby,modin,endline'),
+            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,search,sortby,modin,endline'),
         'show_search_header'=>array(
             'description'=>'show description of current search',
             'type'=>'checkbox',
@@ -50,7 +50,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$this->fields_def=$this->define_form();
 
         //check the REQUEST array
-        $this->udm->sql_criteria=$this->read_request();
+        $this->udm->setSQLCriteria($this->read_request());
 	}	
 	
 	function read_request() {
@@ -86,7 +86,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		//State Request from index page
 		if (isset($_REQUEST['state'])&&($_REQUEST['state'])) {
 			$sql_criteria[]="State=".$this->dbcon->qstr($_REQUEST['state']);
-			$this->lookups['city']['LookupWhere'] = " State=".$this->dbcon->qstr($_REQUEST['state']);
+			$this->lookups['city']['LookupWhere'] = " modin=".$this->udm->instance." AND State=".$this->dbcon->qstr($_REQUEST['state']);
 			$this->setupLookup('city');
 		    $this->fields_def['city']=array('type'=>'select', 'label'=>'Select City', 'values'=>$this->lookups['city']['Set'], 'value'=>$_REQUEST['city']);
 
@@ -131,7 +131,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		if ((isset($_REQUEST['uid'])&&$_REQUEST['uid'])) {
             if (is_array($_REQUEST['uid'])) {
                 //allow for multiple ids
-                $sql_criteria = "id in(" . join(",", $_REQUEST['uid']) . ")";
+                $sql_criteria[] = "id in(" . join(",", $_REQUEST['uid']) . ")";
             } else {
                 $sql_criteria[]="id=".$this->dbcon->qstr($_REQUEST['uid']);
             }

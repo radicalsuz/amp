@@ -53,9 +53,9 @@ class UserDataSet extends UserData {
 
         //Specify a default output order
         if (!isset($order)) {
-            if ($this->uid) $order = array($format);
-            else $order = array('SearchForm','Pager','Actions',$format,'Pager','Index');
+            $order = array('SearchForm','Pager','Actions',$format,'Pager','Index');
         }
+        if ($this->uid) $order = array($format);
 
         //get the registered plugins
         $plugin_set = &$this->getPlugins(); 
@@ -76,18 +76,24 @@ class UserDataSet extends UserData {
 
 
         //set the header text
-        if (method_exists($plugin_set[$format], 'header_text_id')) {
-            $this->modTemplateID = $plugin_set[$format]->header_text_id();
+        if (method_exists($plugin_set[$format]['Output'], 'header_text_id')) {
+            $this->modTemplateID = $plugin_set[$format]['Output']->header_text_id();
         } else {
             $this->modTemplateID = 1;
         }
         //set alias values
-        if (method_exists($plugin_set[$format], 'setAliases')) {
-            $plugin_set[$format]->setAliases();
+        if (method_exists($plugin_set[$format]['Output'], 'setAliases')) {
+            $plugin_set[$format]['Output']->setAliases();
         }
 
         //run the search
-        $this->doAction('Search', $search_options); 
+        if (!isset($this->dataset)) {
+            if ($this->uid) {
+                $this->getUser($this->uid);
+            } else {
+                $this->doAction('Search', $search_options); 
+            }
+        }
         
 
         //adjust the order to only include valid actions
@@ -130,6 +136,13 @@ class UserDataSet extends UserData {
         return $this->users;
     }
 
+    function getData_Recordset( ) {
+        if (isset($this->users_Recordset)) {
+            return $this->users_Recordset;
+        }
+        return false;
+    }
+
     /*****
      *
      * getUser ( [ int userid ] )
@@ -148,14 +161,18 @@ class UserDataSet extends UserData {
         
         if ($result = $this->getData($userid)) return $result;
         
-        $search_options = array (   'criteria'  =>  array('value'=>array("id = ".$userid)),
-                                    'admin'     =>  array('value'=>$this->admin),
+        $search_options = array (   'criteria'  =>  array( 'value'=>array("id = ".$userid)),
                                     'clear_criteria'    => array('value'=> true) );
         if ($this->doAction( 'Search', $search_options )) {
             return $this->getData();
         }
         return false;
 
+    }
+
+    function getURLCriteria() {
+        if (isset($this->url_criteria)) return $this->url_criteria;
+        else return $this->parse_URL_crit();
     }
 
     function parse_URL_crit () {
@@ -176,7 +193,11 @@ class UserDataSet extends UserData {
         $this->sql_criteria = $criteria;
     }
     function setSort() {
-        $this->sortby=$this->doAction('Sort');
+        if ($this->sortby=$this->doAction('Sort')) {
+            return true;
+        } else {
+            return ($this->sortby = $this->doPlugin('AMP', 'Sort'));
+        }
             
     }
 

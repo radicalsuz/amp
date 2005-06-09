@@ -41,6 +41,8 @@ $MM_email_from       = $SystemSettings["emfrom"];			//return email web sent emai
 $meta_description    = $SystemSettings["metadescription"];		//meta desc
 $meta_content        = $SystemSettings['metacontent'];			//meta content
 $systemplate_id      = $SystemSettings['template'];
+
+define('AMP_SITE_ADMIN', $admEmail);
 		
 #SET DATABASE CACHING
 $dbcon->cacheSecs = $cacheSecs;

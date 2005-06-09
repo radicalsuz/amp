@@ -7,12 +7,10 @@
     <?php    
  while  (!$state->EOF) {
 ?>
-    <option value="<?php echo $regionlink;  ?>?area=<?php echo  $state->Fields("id")?>" ><?php echo  $state->Fields("title");?> 
+    <option value="<?php echo (isset($regionlink)?$regionlink:"");  ?>?area=<?php echo  $state->Fields("id")?>" ><?php echo  $state->Fields("title");?> 
     </option>
     <?php
       $state->MoveNext();
      
     }
   ?>
-
-
