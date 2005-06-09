@@ -47,18 +47,16 @@ if (file_exists($customHandler)) {
     $myURI = $dbcon->qstr(substr($_SERVER['REQUEST_URI'], 1));
     
     if ($exactmatches=$dbcon->GetRow("SELECT * FROM redirect WHERE publish=1 AND old=$myURI")) {
-        if (error_redirect($exactmatches['old'], $exactmatches['new'])) {
-            return;
-        }
+        $redirected = error_redirect($exactmatches['old'], $exactmatches['new']);
     }
 
     if ($conditional_matches = $dbcon->GetRow("SELECT * FROM redirect WHERE publish=1 and $myURI LIKE CONCAT(old, '%') and conditional=1")) {
-        if (error_redirect($conditional_matches['old'], $conditional_matches['new'], $conditional_matches['num'])) {
-            return;
+        if (!$redirected) {
+            $redirected = error_redirect($conditional_matches['old'], $conditional_matches['new'], $conditional_matches['num']);
         }
     }
 
-    ampredirect ($GLOBALS['Web_url'] . "search.php");
+    if (!$redirected) ampredirect ($GLOBALS['Web_url'] . "search.php");
 
 }
 
