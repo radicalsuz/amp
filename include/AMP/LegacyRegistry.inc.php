@@ -52,9 +52,7 @@ $MM_HOSTNAME = AMP_DB_HOST;
 $MM_PASSWORD = AMP_DB_PASS;
 $MM_DATABASE = AMP_DB_NAME;
 
-if (!isset($sysversion)) {
-    $sysversion = '3.4-dev';
-}
+define( "AMP_SYSTEM_VERSION_ID", '3.4.8');
 
 #define browser detection global variables
 $browser_ie = NULL;

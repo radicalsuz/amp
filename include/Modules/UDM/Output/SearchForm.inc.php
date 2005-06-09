@@ -234,7 +234,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
 		$frmName    = $options['form_name']; 
 		$frmMethod  = 'GET';
-		$frmAction  =   substr($_SERVER['PHP_SELF'], 1) ;
+		$frmAction  =   $_SERVER['PHP_SELF'] ;
 
 	    $form = &new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
 
