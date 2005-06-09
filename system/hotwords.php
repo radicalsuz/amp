@@ -12,7 +12,7 @@ $listsql ="select id, word, url, publish   from $table  ";
 $orderby =" order by  word asc  ";
 $fieldsarray=array( 'Word'=>'word','URL'=>'url','Status'=>'publish'
 					);
-$filename="hotwords";
+$filename="hotwords.php";
 
 ob_start();
 // insert, update, delete

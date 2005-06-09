@@ -25,18 +25,14 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
 
     function execute ( $options = null ) {
 
-        if (!isset( $options )) {
-            $options = $this->options;
-        } else {
-            $options = array_merge( $options, $this->options );
-        }
+        $options = array_merge($this->getOptions(), $options);
 
         $udm =& $this->udm;
 
         $authStatus = false;
 
-        $uid  = $options[ 'uid' ][ 'value' ];
-        $pass = $options[ 'pass' ][ 'value' ];
+        $uid  = $options[ 'uid' ];
+        $pass = $options[ 'pass' ];
 
         if ( $uid && $pass ) {
 
@@ -107,7 +103,7 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
 
                     if ( $result ) {
                         $udm->addResult( 'authenticate', "An email was sent to $mailto containing login information so that you can update your information. Please click on the link in the email, or enter the password from the email in the Password field below." );
-                        $fields[ 'otp' ] = array( 'label' => 'Password', 'public' => 1, 'type' => 'text', 'size' => 30 );
+                        $fields[ 'otp' ] = array( 'label' => '<B>Password</B>', 'public' => 1, 'type' => 'text', 'size' => 30 );
                         $udm->fields = $fields + $udm->fields;
                         $udm->_module_def = join( ",", array( "otp", $udm->_module_def[ 'field_order' ] ) );
                     } else {

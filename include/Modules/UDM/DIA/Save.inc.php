@@ -3,7 +3,7 @@
 require_once( 'Modules/diaRequest.inc.php' );
 require_once( 'AMP/UserData/Plugin.inc.php' );
 
-class UserDataPlugin_Save_DIA extends UserDataPlugin {
+class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
     var $options = array(
         'orgCode' => array(
             'type'=>'text',
@@ -17,19 +17,21 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin {
         $this->init($udm, $plugin_instance);
     }
 
-
-    function execute ( $options = null ) {
-        $options=array_merge($this->getOptions(), $options);
-
+    function getSaveFields() {
         $db_fields   = $this->udm->dbcon->MetaColumnNames('userdata');
         $qf_fields   = array_keys( $this->udm->form->exportValues() );
+        $this->_field_prefix="";
 
-        $save_fields = array_intersect( $db_fields, $qf_fields );
+        return array_intersect( $db_fields, $qf_fields );
+    }
 
-        $frmFieldValues = $this->udm->form->exportValues($save_fields);
+
+
+    function save ( $data ) {
+        $options=$this->getOptions();
 
         $diaRequest = new diaRequest( $options[ 'orgCode' ] );
-        $result = $diaRequest->addSupporter( $frmFieldValues[ 'Email' ], $frmFieldValues );
+        $result = $diaRequest->addSupporter( $data[ 'Email' ], $data);
 
         return $result;
 

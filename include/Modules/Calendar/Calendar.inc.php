@@ -129,7 +129,7 @@ var $sql_criteria;
 		#$fields['publish']=array('type'=>'checkbox', 'label'=>'Publish Event', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'enabled'=>true);
 
 		$fields['fulldesc'] = array('type'=>'textarea', 'label'=>'Full Description of the Event (optional)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>"10:40", 'enabled'=>true);
-		$fields['header3']=array('type'=>'header', 'label'=>'The following information is for the staff<BR> at United For Peace and Justice and will<BR> not be listed on the website, unless it is<BR> the same as the information above.', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true) ;
+		$fields['header3']=array('type'=>'header', 'label'=>'The following information is for the staff at '.$GLOBALS['SiteName'].' and will not be listed on the website, unless it is the same as the information above.', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true) ;
 		$fields['lat']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 		$fields['lon']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 

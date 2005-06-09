@@ -1,6 +1,5 @@
 <?php
 require_once ('AMP/UserData/Plugin.inc.php');
-require_once ('AMP/UserData/Input.inc.php');
 require_once ('AMP/Region.inc.php');
 if (file_exists_incpath('custom.layouts.inc.php')) {
     include_once ('custom.layouts.inc.php');
@@ -52,6 +51,24 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     var $current_subheader3;
     var $regionset;
 
+    var $alias = array(
+            'Name'=>array(
+                'f_alias'=>'Name',
+                'f_orderby'=>'Last_Name,First_Name',
+                'f_type'=>'text',
+                'f_sqlname'=>"Concat(First_Name, ' ', Last_Name)"
+             ),
+             'Location'=>array(
+                'f_alias'=>'Location',
+                'f_sqlname'=>"Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))",
+                'f_orderby'=>'(if(Country="USA",1,if(Country="CAN",2,if(isnull(Country),3,Country)))),State,City,Company',
+                'f_type'=>'text'),
+             'Status'=>array(
+                'f_alias'=>'Status',
+                'f_orderby'=>'publish',
+                'f_type'=>'text',
+                'f_sqlname'=>'if(publish=1,"Live","Draft")'
+              ));
     function UserDataPlugin_DisplayHTML_Output (&$udm, $instance=null) {   
         $this->init($udm, $instance);
         $this->regionset=new Region;
@@ -118,6 +135,11 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
 		return $output;
     }
+
+    function setAliases() {
+        $this->udm->alias = $this->alias;
+    }
+
 
     function header_text_id() {
         $options = $this->getOptions();

@@ -121,33 +121,36 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
 		//Check for defined Lookup in selectbox defaults
 		//format is Lookup(table_name, display_column, value_column, restrictions);
-		if ($field_def['type']=='select') {
-            if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
+        switch ($field_def['type']) {
+            case 'select':
+            case 'multiselect':
+            case 'radiogroup':
+            case 'checkgroup':
+                // Get region information if it's needed.
+                if ( isset( $field_def[ 'region' ] )
+                    && strlen( $field_def[ 'region' ] ) > 1 ) {
 
-                $just_values = str_replace(")", "", substr($defaults, 7));
-                $valueset = split("[ ]?,[ ]?", $just_values );
-                return $this->udm_quickform_setupLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
-            }
+                    return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
+                }
 
-            // Get region information if it's needed.
-            if ( isset( $field_def[ 'region' ] )
-                && strlen( $field_def[ 'region' ] ) > 1 ) {
+                if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
 
-                return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
-            }
-        }
+                    $just_values = str_replace(")", "", substr($defaults, 7));
+                    $valueset = split("[ ]?,[ ]?", $just_values );
+                    return $this->udm_quickform_setupLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
+                }
 
-        // Split string with commas into an array, unless the field is static
-        if ( strpos('htmlstaticheader', $field_def['type'])===FALSE) {
-			
-			// Check to see if we have an array of values.
-			$defArray = split( "[ ]?,[ ]?", $defaults );
-			if (count( $defArray ) > 1) {
-				$defaults = array();
-				foreach ( $defArray as $option ) {
-					$defaults[ $option ] = $option;
-				}
-			}
+                // Split string with commas into an array
+                // Check to see if we have an array of values.
+                $defArray = split( "[ ]?,[ ]?", $defaults );
+                if (count( $defArray ) > 1) {
+                    $defaults = array();
+                    foreach ( $defArray as $option ) {
+                        $defaults[ $option ] = $option;
+                    }
+                }
+                break;
+           default:
         }
 
         return $defaults;
@@ -273,7 +276,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
             case 'header':
                 $renderer->setHeaderTemplate(
-					"\n\t<tr>\n\t\t<td class=\"udm_header\"  align=\"left\" valign=\"top\" colspan=\"2\" >{header}</td>\n\t</tr>", $name);
+					"\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\" ><span class=\"udm_header\">{header}</span></td>\n\t</tr>", $name);
                 break;
         
             case 'static':

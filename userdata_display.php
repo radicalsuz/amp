@@ -53,7 +53,7 @@ if ($uid && $modin) {
     //display result list
     if (!$userlist->getPlugins('SearchForm')) $srch_options['criteria']=array('value'=>array("modin=".$modin));
 
-    $userlist->doAction('Search', $srch_options);
+    #$userlist->doAction('Search', $srch_options);
     $output = $userlist->output_list();
         /*
         $output= (isset($userlist->error)? $userlist->error.'<BR>':"").

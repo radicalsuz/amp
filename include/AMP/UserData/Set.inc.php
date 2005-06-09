@@ -5,12 +5,17 @@ require_once( 'AMP/UserData.php' );
 class UserDataSet extends UserData {
 	var $set_sql;
 	var $results;
+
     var $users;
+    var $users_Recordset;
+    
     var $sql_criteria;
     var $url_criteria;
     var $total_qty;
     var $index_set;
     var $sortby;
+
+    var $alias;
 
     function UserDataSet( &$dbcon, $instance, $admin = false ) {
 
@@ -38,7 +43,7 @@ class UserDataSet extends UserData {
 
     }
 
-    function output_list ( $format='DisplayHTML', $options = null, $order = null) {
+    function output_list ( $format='DisplayHTML', $options = null, $order = null, $search_options=null) {
 
         //block unpublished data from appearing online
         if ((!$this->_module_def['publish'])&&(!$this->admin)) {
@@ -64,6 +69,11 @@ class UserDataSet extends UserData {
             $order = array('SearchForm','Index');
             
         }
+        // check for any result messages, display them
+        if ($list_results = $this->getResults()) {
+            $output_html = '<P>'.join('<BR>',$list_results)."<BR>";
+        }
+
 
         //set the header text
         if (method_exists($plugin_set[$format], 'header_text_id')) {
@@ -71,6 +81,13 @@ class UserDataSet extends UserData {
         } else {
             $this->modTemplateID = 1;
         }
+        //set alias values
+        if (method_exists($plugin_set[$format], 'setAliases')) {
+            $plugin_set[$format]->setAliases();
+        }
+
+        //run the search
+        $this->doAction('Search', $search_options); 
         
 
         //adjust the order to only include valid actions
@@ -88,12 +105,22 @@ class UserDataSet extends UserData {
         return $output_html;
     }
 
-    function setData($dataset) {
-        $this->users=$dataset;
+    function setData(&$dataset) {
+        if (is_object($dataset)) {
+            $this->users_Recordset =& $dataset;
+            $this->users_Recordset->MoveFirst();
+        } else {
+            // set array dataset ** now deprecated ** ap
+            $this->users=$dataset;
+        }
     }
 
 
     function getData ( $id = null ) {
+        if (isset($this->users_Recordset)) {
+            return $this->users_Recordset->GetArray();
+        }
+        //check for array dataset ** now deprecated ** ap
         if (isset($id)&&is_array($this->users)) {
             foreach ($this->users as $user_def) {
                 if ($user_def['id']==$id) return array($user_def);
@@ -143,6 +170,14 @@ class UserDataSet extends UserData {
             }
         }
         return $this->url_criteria;
+    }
+
+    function setSQLCriteria( $criteria=null ) {
+        $this->sql_criteria = $criteria;
+    }
+    function setSort() {
+        $this->sortby=$this->doAction('Sort');
+            
     }
 
     //DB functions -- these are irrelevant but will be left in 

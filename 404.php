@@ -45,64 +45,31 @@ if (file_exists($customHandler)) {
 
     // Search for something to redirect to, based on our redirect table.
     $myURI = $dbcon->qstr(substr($_SERVER['REQUEST_URI'], 1));
-    $R=$dbcon->Execute("SELECT * FROM redirect WHERE publish=1 AND old=$myURI OR conditional=1")
-        or die('404 query error: '.$dbcon->ErrorMsg());
-
-    $redirected = false;
     
-    // It feels like this loop is totally unnecessary and could be handled in
-    // the SQL, but we'll loop through it anyhow since I don't know what the
-    // intent of this is...
-    while (!$R->EOF && !$go) {
-
-        $old_uri = $R->Fields("old");
-        $new_uri = $R->Fields("new");
-        $num     = ($R->Fields("conditional")) ? $R->Fields("num") : null;
-
-        $redirected = error_redirect($old_uri, $new_uri, $num);
-
-        $R->MoveNext();
-    }
-
-    // If we still ... haven't found ... what we're looking for, then scale
-    // some city walls. Bizarre, twisted, surrealist city walls. It appears as
-    // though we're doing a starts-with search, which is a bit crazy, but
-    // whatever.
-    
-    if (!$redirected) {
-
-        $sql = "SELECT * FROM redirect WHERE publish=1 AND $myURI LIKE CONCAT(old, '%')";
-        $R=$dbcon->Execute($sql) or die('404 query error: ' . $dbcon->ErrorMsg());
-    
-        while (!$R->EOF && !$redirected) {
-
-            $old_uri = $R->Fields("old");
-            $new_uri = $R->Fields("new");
-            $num     = ($R->Fields("conditional")) ? $R->Fields("num") : null;
-
-            $redirected = error_redirect($old_uri, $new_uri, $num);
-
-            $R->MoveNext();
+    if ($exactmatches=$dbcon->GetRow("SELECT * FROM redirect WHERE publish=1 AND old=$myURI")) {
+        if (error_redirect($exactmatches['old'], $exactmatches['new'])) {
+            return;
         }
     }
-    
-    if (!$redirected) {
 
-        // Redirect to the search page, since we still couldn't find whatever it was
-        // that they were looking for. Even after kissing honey lips.
-        ampredirect ($Web_url . "search.php");
-
+    if ($conditional_matches = $dbcon->GetRow("SELECT * FROM redirect WHERE publish=1 and $myURI LIKE CONCAT(old, '%') and conditional=1")) {
+        if (error_redirect($conditional_matches['old'], $conditional_matches['new'], $conditional_matches['num'])) {
+            return;
+        }
     }
+
+    ampredirect ($GLOBALS['Web_url'] . "search.php");
+
 }
 
 function error_redirect( $requested_uri, $target_uri, $num = null ) {
 
-    global $Web_url;
 
     // This is very confusing, and I'm not entirely clear on what it's supposed
     // to do or accomplish. Oh well...
     $fetch_str = strstr($_SERVER['REQUEST_URI'], $requested_uri);
-    $fetch_val = ( $num ) ? substr( $fetch_str, $num ) : "";
+    $fetch_val = ( isset($num) && $num ) ? substr( $fetch_str, $num ) : "";
+    print $target_uri;
 
     // Check to see if our REQUEST_URI matches in any way the $requested_uri
     if ($fetch_str) {
@@ -111,7 +78,7 @@ function error_redirect( $requested_uri, $target_uri, $num = null ) {
         if (substr($target_uri, 0, 4) == "http") {
             $redirect_uri = $target_uri . $fetch_val;
         } else {
-            $redirect_uri = $Web_url . $target_uri . $fetch_val;
+            $redirect_uri = $GLOBALS['Web_url'] . $target_uri . $fetch_val;
         }
 
         // Everything worked out OK. Redirect and report success.

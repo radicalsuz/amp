@@ -61,7 +61,6 @@ if ($uid && $modin) {
     $actionbar=&$userlist->getPlugin('Output','Actions');
     */    
 
-    $userlist->doAction('Search'); 
         /*
         $output= (isset($userlist->error)? $userlist->error.'<BR>':"").
                 ($searchform?   $searchform->search_text_header()

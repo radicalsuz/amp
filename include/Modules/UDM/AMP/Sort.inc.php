@@ -1,4 +1,5 @@
 <?php
+require_once ('AMP/UserData/Plugin.inc.php');
 
 class UserDataPlugin_Sort_AMP extends UserDataPlugin {
     var $sortby;

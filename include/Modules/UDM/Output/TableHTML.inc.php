@@ -26,6 +26,25 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
     var $list_row_select;
     var $list_row_edit;
 
+    var $alias = array(
+            'Name'=>array(
+                'f_alias'=>'Name',
+                'f_orderby'=>'Last_Name,First_Name',
+                'f_type'=>'text',
+                'f_sqlname'=>"Concat(First_Name, ' ', Last_Name)"
+             ),
+             'Location'=>array(
+                'f_alias'=>'Location',
+                'f_sqlname'=>"Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))",
+                'f_orderby'=>'(if(Country="USA",1,if(Country="CAN",2,if(isnull(Country),3,Country)))),State,City,Company',
+                'f_type'=>'text'),
+             'Status'=>array(
+                'f_alias'=>'Status',
+                'f_orderby'=>'publish',
+                'f_type'=>'text',
+                'f_sqlname'=>'if(publish=1,"Live","Draft")'
+              ));
+
     function UserDataPlugin_TableHTML_Output (&$udm, $options=null, $instance=null) {   
         $this->init($udm, $options, $instance);
     }
@@ -115,6 +134,11 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         return $list_row_start.$list_row.$options['list_row_end'];
 
     }
+
+    function setAliases() {
+        $this->udm->alias = $this->alias;
+    }
+
 
     function select_script($form_name) {
 

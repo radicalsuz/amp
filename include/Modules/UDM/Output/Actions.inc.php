@@ -9,42 +9,49 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
     var $form;
     var $available=true;
     var $criteria;
+    var $message;
     var $options = array (
         'allow_email'=>array(
             'default'=>true,
             'type'=>'checkbox',
             'available'=>false,
-            'description'=>'Allow user to Email list'),
+            'label'=>'Allow user to Email list'),
+
         'allow_delete'=>array(
             'default'=>true,
             'type'=>'checkbox',
             'available'=>true,
-            'description'=>'Allow user to Delete records'),
+            'label'=>'Allow user to Delete records'),
+
         'allow_export'=>array(
-            'default'=>false,
+            'default'=>true,
             'type'=>'checkbox',
             'available'=>true,
-            'description'=>'Allow user to Export records'),
+            'label'=>'Allow user to Export records'),
+
         'allow_publish'=>array(
             'default'=>true,
             'type'=>'checkbox',
             'available'=>true,
-            'description'=>'Allow user to Publish records'),
+            'label'=>'Allow user to Publish records'),
+            
         'allow_unpublish'=>array(
             'default'=>true,
             'type'=>'checkbox',
             'available'=>true,
-            'description'=>'Allow user to UnPublish records'),
+            'label'=>'Allow user to UnPublish records'),
+
         'form_name'=>array(
             'default'=>'udm_actions',
             'type'=>'text',
             'available'=>true,
-            'description'=>'Name of Action Form'),
+            'label'=>'Name of Action Form'),
+
         'control_class'=>array(
             'default'=>'go',
             'type'=>'text',
             'available'=>true,
-            'description'=>'Class used for list controls')
+            'label'=>'CSS class used for list controls')
         );
 
 
@@ -54,7 +61,9 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         $this->read_request();
     }
     function _register_options_dynamic() {
-        if ($this->udm->admin) $this->options['control_class']['value']='list_controls';
+        if ($this->udm->admin) {
+            $this->options['control_class']['value']='list_controls';
+        }
     }
 
     function read_request($options=array()) {
@@ -70,10 +79,12 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                 $count=$this->$action($_POST['list_action_id']);
 
                 if (is_numeric($count)) {
-                    $this->udm->error="$count item(s) ".$this->action.(strrchr($this->action, "e")=="e"?"":"e")."d.<BR>";
+                    $message = "$count item(s) ".$this->action.(strrchr($this->action, "e")=="e"?"":"e")."d.<BR>";
                 } else {
-                    $this->udm->error=$count;
+                    $message = $count;
                 }
+
+                $this->message = $message;
             }
         }
     }
@@ -92,11 +103,12 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         else $this->criteria=$this->udm->url_criteria;
         
         if ($pager_set=&$this->udm->getPlugins('Pager')) {
-            $pager = ($pager_set[key($pager_set)]);
+            $pager = current($pager_set);
 
             if ($pager->offset) $this->criteria[]='offset='.$pager->offset;
             if ($pager->return_qty) $this->criteria[]='qty='.$pager->return_qty;
         }
+        return $this->criteria;
     }
 
     function define_form($options=array()) {
@@ -114,11 +126,12 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         //Publish Button
         $def['publish']=array(  
                                 'type'=>'button',
-                                'label'=>' Publish',
+                                'label'=>'Publish',
                                 'attr'=>
                                     array('class'=>$options['control_class'],
                                     'onClick'=>"list_DoAction( 'publish' );"),
                                 'enabled'=>$options['allow_publish']);
+
         //Unpublish Button
         $def['unpublish']=array('type'=>'button',
                                 'label'=>'Unpublish',
@@ -127,14 +140,14 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                                     'onClick'=>"list_DoAction( 'unpublish' );"),
                                 'enabled'=>$options['allow_publish']);
         //Delete Button
-        $def['delete']=array(  'type'=>'button',
+        $def['delete']=array(   'type'=>'button',
                                 'label'=>'Delete',
                                 'attr'=>
                                     array('class'=>$options['control_class'],
                                     'onClick'=>"list_DoAction( 'delete' );"),
                                 'enabled'=>($this->udm->admin&&$options['allow_delete']));
         //Export Button
-        $def['export']=array(  'type'=>'button',
+        $def['export']=array(   'type'=>'button',
                                 'label'=>'Export',
                                 'attr'=>
                                     array('class'=>$options['control_class'],
@@ -192,158 +205,177 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                 aform.action="udm_email.php";
                 aform.submit();
             }
-        ';
-    }
-                    
-                    
-
-    $script.='</script>';
-    return $script;
-}
-
-function execute ($options=null) {
-    if (!isset($options)) {
-        if ($this->executed) return false;
-        $options=$this->getOptions();
-    } else {
-        $options=array_merge($this->getOptions(), $options);
-        $this->form_def=$this->define_form($options);
-    }
-
-    $this->setCriteria();
-
-    $frmName    = $options['form_name']; 
-    $frmMethod  = 'POST';
-    $frmAction  = $_SERVER['PHP_SELF'].'?'.(is_array($this->criteria)?join("&",$this->criteria):"") ;
-
-    $form = &new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
-
-    foreach ($this->form_def as $fname=>$fdef) {
-        $this->form_addElement( $form, $fname, $fdef, $this->udm->admin );
-    }
-            
-    $this->form = &$form;
-    $output = $this->action_script($options);
-
-    /*
-    if ($email_plugin=$this->udm->getPlugin('Output','EmailForm')){
-        $output .= $this->udm->output('EmailForm');
-    }*/
-
-    $output .= $form->toHtml();
-    
-    return  $output;
-
-}
-    
-    
-function publish_set($set) {
-    $id_set=split(",", $set);
-    if (is_array($id_set)) {
-        $sql="UPDATE userdata set publish=1 where id in(".$set.");";
-        if ($this->dbcon->execute($sql)) {
-            return $this->dbcon->Affected_Rows();
-        } else {
-            return "Publish Failed: ".$this->dbcon->ErrorMsg();
+            ';
         }
-    } else {
-        return "No items selected to publish";
+                        
+                        
+
+        $script.='</script>';
+        return $script;
     }
-}
-    
-function unpublish_set($set) {
-    $id_set=split(",", $set);
-    if (is_array($id_set)) {
-        $sql="UPDATE userdata set publish=0 where id in(".$set.");";
-        if ($this->dbcon->execute($sql)) {
-            return $this->dbcon->Affected_Rows();
+
+    function execute ($options=null) {
+        if (!isset($options)) {
+            if ($this->executed) return false;
+            $options=$this->getOptions();
         } else {
-            return "UnPublish Failed: ".$this->dbcon->ErrorMsg();
+            $options=array_merge($this->getOptions(), $options);
+            $this->form_def=$this->define_form($options);
         }
-    } else {
-        return "No items selected to unpublish";
-    }
-}
-    
-function delete_set($set) {
-    $id_set=split(",", $set);
-    if (is_array($id_set)) {
-        $sql="DELETE FROM userdata where id in(".$set.");";
-        if ($this->dbcon->execute($sql)) {
-            return $this->dbcon->Affected_Rows();
-        } else {
-            return "Delete Failed: ".$this->dbcon->ErrorMsg();
+
+        $this->setCriteria();
+
+        $frmName    = $options['form_name']; 
+        $frmMethod  = 'POST';
+        $frmAction  = $_SERVER['PHP_SELF'].'?'.(is_array($this->criteria)?join("&",$this->criteria):"") ;
+
+        $form = &new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
+
+        foreach ($this->form_def as $fname=>$fdef) {
+            $this->form_addElement( $form, $fname, $fdef, $this->udm->admin );
         }
-    } else {
-        return "No items given to delete.";
+
+        $this->form = &$form;
+        $output = $this->action_script($options);
+
+        /*
+           if ($email_plugin=$this->udm->getPlugin('Output','EmailForm')){
+           $output .= $this->udm->output('EmailForm');
+           }*/
+
+        $output .= $form->toHtml();
+        $output .= (isset($this->message)?$this->message."<BR>":"");
+
+        return  $output;
+
     }
-}
 
-function email_set ($set) {
-    if ($this->udm->registerPlugin('Output','EmailForm')) {
-        return "Please compose your message below";
-    } else {
-        return "Sorry, the Email feature isn't available";
-    }
-}
 
-function form_addElement( &$form, $name, &$field_def, $admin = false ) {
-
-    if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
-    if ( $field_def[ 'enabled' ] != 1) return false;
-
-    $type     = $field_def[ 'type'   ];
-    $label    = $field_def[ 'label'  ];
-    $defaults = $field_def[ 'values' ];
-    $size     = $field_def[ 'size' ];
-    $renderer =& $form->defaultRenderer();
-
-    // Check to see if we have an array of values.
-    if (!is_array($defaults)) {
-        $defArray = explode( ",", $defaults );
-        if (count( $defArray ) > 1) {
-            $defaults = array();
-            foreach ( $defArray as $option ) {
-                $defaults[ $option ] = $option;
+    function publish_set($set) {
+        $id_set=split(",", $set);
+        if (is_array($id_set)) {
+            $sql="UPDATE userdata set publish=1 where id in(".$set.");";
+            if ($this->dbcon->execute($sql)) {
+                return $this->dbcon->Affected_Rows();
+            } else {
+                return "Publish Failed: ".$this->dbcon->ErrorMsg();
             }
         } else {
-            $defaults = $defArray[0];
+            return "No items selected to publish";
         }
-    }			
-
-    
-    // Add a default blank value to the select array.
-    if ( $type  == 'select' && is_array( $defaults ) ) {
-        //Move label into select box for non colonned entries.
-        if (substr($label, strlen($label)-1)!=":") {
-            $defaults = array('' => $label) + $defaults;
-            $label="";
-        } 
-        if ($field_def['value']&&isset($field_def['value'])) $selected=$field_def['value'];
-    }
-    
-    //add the element
-    $form->addElement( $type, $name, $label, $defaults );
-
-    //get the element reference
-    $fRef =& $form->getElement( $name );
-    $fRef->updateAttributes($field_def['attr']);
-    if ( isset( $selected ) ) {
-        $fRef->setSelected( $selected );
     }
 
+    function unpublish_set($set) {
+        $id_set=split(",", $set);
+        if (is_array($id_set)) {
+            $sql="UPDATE userdata set publish=0 where id in(".$set.");";
+            if ($this->dbcon->execute($sql)) {
+                return $this->dbcon->Affected_Rows();
+            } else {
+                return "UnPublish Failed: ".$this->dbcon->ErrorMsg();
+            }
+        } else {
+            return "No items selected to unpublish";
+        }
+    }
 
-    if ($type=='static') {
+    function export_set($set) {
+
+        $criteria = $this->udm->parse_URL_crit();
+
+        $set_values = split(",", $set);
+        $url_ids = 'uid[]=' . join('&uid[]=', $set_values);
+
+        $url_vals = $url_ids .'&'. join("&", $criteria);
+
+        $target = '/system/form_export.php?'.$url_vals;
+        $metatag ='<META http-equiv="refresh" content="2; URL='.$target.'">';
+        $message = "Your download should begin in a moment.<BR>
+                    If it does not, please <a href=\"$target\">click here</a>.";
+        return $metatag.$message;
+        
+
+    }
+
+    function delete_set($set) {
+        $id_set=split(",", $set);
+        if (is_array($id_set)) {
+            $sql="DELETE FROM userdata where id in(".$set.");";
+            if ($this->dbcon->execute($sql)) {
+                return $this->dbcon->Affected_Rows();
+            } else {
+                return "Delete Failed: ".$this->dbcon->ErrorMsg();
+            }
+        } else {
+            return "No items given to delete.";
+        }
+    }
+
+    function email_set ($set) {
+        if ($this->udm->registerPlugin('Output','EmailForm')) {
+            return "Please compose your message below";
+        } else {
+            return "Sorry, the Email feature isn't available";
+        }
+    }
+
+    function form_addElement( &$form, $name, &$field_def, $admin = false ) {
+
+        if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
+        if ( $field_def[ 'enabled' ] != 1) return false;
+
+        $type     = $field_def[ 'type'   ];
+        $label    = $field_def[ 'label'  ];
+        $defaults = $field_def[ 'values' ];
+        $size     = $field_def[ 'size' ];
+        $renderer =& $form->defaultRenderer();
+
+        // Check to see if we have an array of values.
+        if (!is_array($defaults)) {
+            $defArray = explode( ",", $defaults );
+            if (count( $defArray ) > 1) {
+                $defaults = array();
+                foreach ( $defArray as $option ) {
+                    $defaults[ $option ] = $option;
+                }
+            } else {
+                $defaults = $defArray[0];
+            }
+        }			
+
+
+        // Add a default blank value to the select array.
+        if ( $type  == 'select' && is_array( $defaults ) ) {
+            //Move label into select box for non colonned entries.
+            if (substr($label, strlen($label)-1)!=":") {
+                $defaults = array('' => $label) + $defaults;
+                $label="";
+            } 
+            if ($field_def['value']&&isset($field_def['value'])) $selected=$field_def['value'];
+        }
+
+        //add the element
+        $form->addElement( $type, $name, $label, $defaults );
+
+        //get the element reference
+        $fRef =& $form->getElement( $name );
+        $fRef->updateAttributes($field_def['attr']);
+        if ( isset( $selected ) ) {
+            $fRef->setSelected( $selected );
+        }
+
+
+        if ($type=='static') {
             $renderer->setElementTemplate("{label}", $name);
-    } elseif ($type=='submit') {
-        $renderer->setElementTemplate("{element}", $name);
-    } else {
+        } elseif ($type=='submit') {
+            $renderer->setElementTemplate("{element}", $name);
+        } else {
             $renderer->setElementTemplate("\n\t\t<span align=\"right\" valign=\"top\" class=\"".$this->control_class."\">{label} {element}\n\t", $name);
+        }
+
+
+        return 1;
     }
-    
-    
-    return 1;
-}
 }
 
 ?>

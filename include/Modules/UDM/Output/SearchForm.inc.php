@@ -129,7 +129,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
 		//Uid or Creator_id
 		if ((isset($_REQUEST['uid'])&&$_REQUEST['uid'])) {
-			$sql_criteria[]="id=".$this->dbcon->qstr($_REQUEST['uid']);
+            if (is_array($_REQUEST['uid'])) {
+                //allow for multiple ids
+                $sql_criteria = "id in(" . join(",", $_REQUEST['uid']) . ")";
+            } else {
+                $sql_criteria[]="id=".$this->dbcon->qstr($_REQUEST['uid']);
+            }
 		}
         //Publish status
         if (is_numeric($_REQUEST['publish'])){

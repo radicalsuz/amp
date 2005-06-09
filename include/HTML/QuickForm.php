@@ -1633,10 +1633,10 @@ class HTML_QuickForm extends HTML_Common {
     {
         if (isset($this->_renderer) && method_exists($this->_renderer, 'display')) {
             // Display output directly from renderer.
-            print $this->_renderer->display();
+            return $this->_renderer->display();
         } else {
             // Fallback on old default.
-            print $this->toHtml();
+            return $this->toHtml();
         }
     } // end func display
 

@@ -68,10 +68,10 @@ class AMP_CustomForm {
         $this->form->addElement('submit', 'btnCustomFormSubmit', 'Save Data');
         if ($_REQUEST['id']) {
             $fRef = &$this->form->addElement('submit', 'btnCustomFormDelete', 'Delete Record');
+            $fRef->updateAttributes( array(
+                'onClick'=>'return confirmSubmit("Are you sure you want to DELETE this record?");',
+                'style'=>'margin-top:30px') );
         }
-        $fRef->updateAttributes( array(
-            'onClick'=>'return confirmSubmit("Are you sure you want to DELETE this record?");',
-            'style'=>'margin-top:30px') );
 
     }
     

@@ -2,7 +2,7 @@
 
 /*****
  *
- * UserData Listing Page
+ * Groups Listing Page
  * 
  * Allows search for records 
  *
@@ -101,8 +101,7 @@ if ($uid && $modin) {
     }
 
     //display result list
-    $userlist->doAction('Search', $srch_options); 
-    $output=$userlist->output_list('DisplayHTML', $list_options); 
+    $output=$userlist->output_list('DisplayHTML', $list_options, null, $srch_options); 
 }
 
 $intro_id = $userlist->modTemplateID;

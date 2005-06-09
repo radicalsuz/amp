@@ -22,8 +22,6 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
     var $total_qty;
     var $offset;
     var $stored_dataset;
-    var $indexset;
-    var $indexname;
     var $available=true;
 			
 	
@@ -40,9 +38,9 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 			$this->offset='0';
 		}
 		if(is_numeric($_REQUEST['qty'])&&$_REQUEST['qty']) {
-			$this->return_qty=$_REQUEST['qty'];
+			$this->return_qty = $_REQUEST['qty'];
 		} else {
-			$this->return_qty=$options['max_qty'];
+			$this->return_qty = $options['max_qty'];
 		}
 		//block frontend users from making large requests
 		if (($this->return_qty>$options['max_qty']||$this->return_qty=='*')&&(!$this->udm->admin)) {
@@ -53,9 +51,6 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	function execute($options=null) {
         if (!isset($options)) $options=$this->getOptions();
         else $options=array_merge($this->getOptions(), $options);
-
-        $this->indexset=$this->udm->index_set;
-        $this->indexname=$this->udm->sortby['name'];
 
         if ($this->udm->total_qty) $this->total_qty = $this->udm->total_qty;
         else $this->total_qty = count($this->udm->users);
@@ -74,7 +69,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         
         if ($this->udm->admin) $options['control_class']="list_controls";
 
-		$output .="<div class=".$options['control_class']." style=\"width:100%;text-align:center;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";
+		$output ="<div class=".$options['control_class']." style=\"width:100%;text-align:center;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";
         if (!$this->executed) $output .="<Form name=\"".$options['form_name']."\" ACTION=\"".$_SERVER['PHP_SELF']."\" METHOD=\"GET\">";
 		
 		#if ($this->return_qty=="*") {$this->return_qty=$this->total_qty;}
@@ -90,7 +85,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 		}
 		$output.=" of ".$this->total_qty;
 
-		if ($this->total_qty>$this->return_qty && isset($this->indexset)) {
+		if ($this->total_qty>$this->return_qty) {
 			//Go: Jumpto box
 			$output.="&nbsp;".$this->jumpto_box($options);
 		} 
@@ -132,12 +127,15 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 
 ////Creates the HTML for the Go Box on Paginated Lists
 	function jumpto_box ($options=null) {
+
+		$jumpto_set=$this->get_index();
+        if (!$jumpto_set) return false;
+        
 		$output=" Go:&nbsp;<SELECT name=\"List_offset\" class=\"".$options['control_class']
             ."\" onchange=\"window.location.href='".$_SERVER['PHP_SELF']."?".join("&", $this->criteria)
             ."&qty='+document.forms['".$options['form_name']."'].elements['qty_selector[]'].value + '&offset='+this.value;\">";
 
-		$jumpto_set=$this->indexset;
-		$mysort_alias=$this->indexname;
+		$mysort_alias=$this->udm->sortby['name'];
 		for ($n=0;$n<count($jumpto_set); $n=$n+$this->return_qty) {
 			$output.="<option value=\"$n\"";
 			if ($n==$this->offset) {
@@ -178,6 +176,26 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 		$output.="</select>";
 		return $output;
 	}
+
+    //Create an index of records based on the sort criteria
+    //or supplied values
+    function get_index ($index_col=null, $orderby=null) {		
+        $criteria=$this->udm->sql_criteria; 
+        
+        if (!isset($this->udm->sortby)) $this->udm->setSort();
+        if (!isset($index_col)) $index_col=$this->udm->sortby['select'];
+        if (!isset($orderby)) $orderby=$this->udm->sortby['orderby'];
+
+		$index_sql="SELECT ".$index_col." from userdata ";
+        if (is_array($criteria)) $index_sql.="where ".join(" AND ", $criteria);
+        if (isset($orderby)) $index_sql.= " ORDER BY ".$orderby;
+        
+        if ($_REQUEST['debug']) print "index:<BR>".$index_sql."<P>";
+
+		if($indexset=&$this->dbcon->CacheGetAll($index_sql))  return $indexset;
+        else return false;
+    }
+
 
 }
 
