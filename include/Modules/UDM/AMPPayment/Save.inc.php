@@ -13,9 +13,13 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                              'default'=>1,
                              'values'=>'Lookup(payment_merchants,id,Merchant)'),
         'item_ID' => array( 'label'=>'Item for Purchase',
-                            'type'=>'select',
+                            'type'=>'multiselect',
                             'available'=>true,
                             'values'=>'Lookup(payment_items,id,name)'),
+        'purchase_description' => array( 'label'=>'Label for Purchase Field',
+                            'type'=>'text',
+                            'available'=>true,
+                            'default'=>'Purchase Description'),
         'email_receipt' => array( 'label'=>'Send Receipt Email',
                                  'type'=>'checkbox',
                                  'available'=>true,
@@ -61,12 +65,12 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $processor=& $this->processor;
         $options = $this->getOptions();
 
-        $this->item_info = $this->getItem();
-
         $processor->setCard($data);
         $processor->setCustomer($data);
 
-        if ($processor->charge($this->item_info['name'], $this->item_info['amount'])) {
+        $this->item_info = $this->getItem( $data['item_ID'] );
+
+        if ($processor->charge($this->item_info['name'], $this->item_info['Amount'])) {
             return true;
         } else {
             $this->udm->errorMessage($processor->error);
@@ -74,13 +78,37 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         }
     }
 
-    function getItem() {
+    function getItem( $item_id=null ) {
     
         $options = $this->getOptions();
-        if (!isset($options['item_ID'])) return false;
-        $sql =  "SELECT * FROM payment_items WHERE id=".$this->dbcon->qstr($options['item_ID']);
-        return $this->dbcon->CacheGetOne($sql);
+
+        $sought_item = isset($item_id)? $item_id : $options['item_ID'];
+
+        if (!isset($sought_item)) return false;
+
+        $sql =  "SELECT * FROM payment_items WHERE id in(".$sought_item.")";
+        return $this->dbcon->GetAll($sql);
     }
+
+    function describeItems() {
+        if (!isset($this->item_info)) return false;
+        foreach ($this->item_info as $item_desc) {
+            $desc[$item_desc['id']] = "( $". $item_desc['Amount'] . " US ) ". $item_desc['name'] ;
+        }
+        return $desc;
+    }
+
+    function setupItems( $options ) {
+        $this->item_info = $this->getItem(); 
+        if (!$this->item_info) return;
+
+        return array( 'label'=>$options['purchase_description'],
+                                    'type'=>'select',
+                                    'values'=>$this->describeItems(),
+                                    'public'=>true,
+                                    'enabled'=>true);
+    }
+
 
     function _register_fields_dynamic() {
         
@@ -90,6 +118,9 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         
         //Get fields from the Payment_CreditCard object
         $fields=$this->processor->fields;
+        
+        //Grab the item data
+        $fields['item_ID'] = $this->setupItems( $options );
 
         //set the field order to put the dynamic checkbox before the Customer
         //Data

@@ -68,7 +68,8 @@ if ($Recordset1->Fields("usedate") != (1))  {
 echo '</td></tr><td></td><tr><td  class="text"><br>';
 #image 
 if ($Recordset1->Fields("picuse") == (1)) {  
-	$fpathtoimg = AMP_LOCAL_PATH.'/'.$NAV_IMG_PATH .$Recordset1->Fields("pselection")."/".$Recordset1->Fields("picture");
+    $pselection = ($Recordset1->Fields("pselection")?$Recordset1->Fields("pselection"):'pic');
+	$fpathtoimg = AMP_LOCAL_PATH.'/'.$NAV_IMG_PATH .$pselection."/".$Recordset1->Fields("picture");
 	$pathtoimg = $NAV_IMG_PATH .$Recordset1->Fields("pselection")."/".$Recordset1->Fields("picture");
 	$pathtoimg2 = $Web_url.$NAV_IMG_PATH."original/".$Recordset1->Fields("picture");
     $imageInfo = getimagesize($fpathtoimg); 

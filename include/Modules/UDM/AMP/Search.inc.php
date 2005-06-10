@@ -1,4 +1,5 @@
 <?php
+require_once ('AMP/UserData/Plugin.inc.php');
 
 class UserDataPlugin_Search_AMP extends UserDataPlugin {
 	var $criteria;
