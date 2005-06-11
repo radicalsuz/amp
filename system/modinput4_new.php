@@ -170,7 +170,7 @@ $html .=  $buildform->add_row('List #1', $List1);
 $html .=  $buildform->add_row('List #2', $List2);
 $html .=  $buildform->add_row('List #3', $List3);
 
-$html .= $buildform->add_header('Email Form Contnets');
+$html .= $buildform->add_header('Email Form Contents');
 $html .= addfield('useemail','Use E-mail','checkbox');
 $html .= addfield('mailto','Mail to','text');
 $html .= addfield('subject','Subject','text');
