@@ -391,6 +391,39 @@ class UserDataPlugin {
         return $this->udm->setData( $data );
     }
 
+    function addPrefix( $fieldname ) {
+        return $this->_field_prefix .'_'. $fieldname;
+    }
+
+    function convertFieldNamestoUDM( $fields=null ) {
+        $udmFields = array();
+
+        if (!isset($fields)) {
+            $fields = array_keys($this->fields);
+        }
+
+        foreach ($fields as $fieldname) {
+            $udmFields[] = $this->addPrefix($fieldname);
+        }
+        return $udmFields;
+    }
+
+    function insertBeforeFieldOrder( $fields = null, $beforeField = 0 ) {
+        $udmFields = $this->convertFieldNamestoUDM($fields);
+
+        if ((!is_numeric($beforeField)) && (isset($this->fields[$beforeField]))) {
+            $beforeField = $this->addPrefix($beforeField);
+        }
+
+        $this->udm->insertBeforeFieldOrder ( $udmFields, $beforeField );
+    }
+
+    function insertAfterFieldOrder( $fields = null ) {
+        $udmFields = $this->convertFieldNamestoUDM($fields);
+        $this->udm->insertAfterFieldOrder( $udmFields );
+    }
+
+
     function getOptions( $options=null ) {
         if (!isset($options)) $options = array_keys($this->options);
         

@@ -601,6 +601,58 @@ class UserData {
 
     }
 
+    /****
+     *
+     * setFieldOrder ()
+     *
+     * allows plugin to manipulate form field order
+     * 
+     * var $fields: array of fieldnames to insert
+     * var $beforeField: numeric index or existing fieldname
+     *
+     *********/
+
+     function insertBeforeFieldOrder ( $fields, $beforeField = 0 ) {
+        $fieldOrderSet = $this->getFieldOrder();
+        $startinsert = 0;
+
+        if (is_numeric($beforeField) && ($beforeField!=0)) $startinsert = $beforeField;
+        elseif ($key = array_search($beforeField, $fieldOrderSet)) $startinsert = $key;
+
+        if ($startinsert) {
+            $newfieldOrder = array_slice($fieldOrderSet, 0, $startinsert);
+            $fieldOrderSet = array_slice($fieldOrderSet, $startinsert);
+        }
+
+        foreach ( $fields as $fieldname ) {
+            $newfieldOrder[] = $fieldname;
+        }
+
+        foreach ($fieldOrderSet as $fieldname) {
+            $newfieldOrder[] = $fieldname;
+        }
+
+        $this->setFieldOrder( $newfieldOrder );
+     }
+
+     function InsertAfterFieldOrder( $fields ) {
+        $fieldOrderSet = $this->getFieldOrder();
+
+        foreach ( $fields as $fieldname ) {
+            $fieldOrderSet[] = $fieldname;
+        }
+        $this->setFieldOrder( $fieldOrderSet );
+     }
+
+     function getFieldOrder() {
+        return split("[ ],[ ]", $this->_module_def['field_order']);
+     }
+
+     function setFieldOrder($fieldOrderSet) {
+        $this->_module_def['field_order'] = join ("," , $fieldOrderSet);
+     }
+
+
     /*****
      *
      * _register_base ()
