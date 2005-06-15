@@ -10,7 +10,6 @@
  * * */
 
  require_once('AMP/Menu/Component.inc.php');
- include_once('AMP/Menu/ArticleType.inc.php');
 
 
 class AMP_Menu {

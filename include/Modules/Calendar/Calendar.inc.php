@@ -84,6 +84,7 @@ var $sql_criteria;
 		$fields['event'] = array('type'=>'text', 'label'=>'Event Name', 'required'=>true, 'public'=>true,  'values'=>null, 'size'=>40, 'enabled'=>true);
 		$fields['typeid']=array('type'=>'select', 'label'=>'Event Type', 'required'=>false, 'public'=>true, 'values'=>'Lookup(eventtype, name, id)', 'enabled'=>true);
 		$fields['student']=array('type'=>'checkbox', 'label'=>'Student Event',  'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
+		$fields['fpevent']=array('type'=>'checkbox', 'label'=>'Front Page Event',  'required'=>false, 'public'=>false, 'values'=>null, 'enabled'=>true);
 		$fields['date'] = array('type'=>'date', 'label'=>'Event Date', 'required'=>true, 'public'=>true,  'values'=>'today', 'size'=>null, 'enabled'=>true);
 		$fields['time'] = array('type'=>'text', 'label'=>'Event Start Time', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>10, 'enabled'=>true);
 		$fields['endtime'] = array('type'=>'text', 'label'=>'Event End Time', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>10, 'enabled'=>true);

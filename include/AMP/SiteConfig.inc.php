@@ -12,6 +12,4 @@ define('AMP_DB_PASS', 'pass' );
 define('AMP_BASE_PATH', $_SERVER['DOCUMENT_ROOT']);
 define('AMP_SITE_ADMIN', 'help@radicaldesigns.org');
 
-define('ADODB_REPLACE_INSERTED', 2);
-define('ADODB_REPLACE_UPDATED', 1);
 ?>

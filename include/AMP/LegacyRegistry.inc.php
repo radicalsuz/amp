@@ -60,4 +60,7 @@ $browser_win = NULL;
 $browser_mo = NULL;
 $browser_checked = false;
 
+define('ADODB_REPLACE_INSERTED', 2);
+define('ADODB_REPLACE_UPDATED', 1);
+
 ?>

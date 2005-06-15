@@ -10,10 +10,7 @@
  *****/
 
 require_once( 'HTML/QuickForm.php' );
-require_once( 'AMP/Region.inc.php' );
 require_once( 'AMP/UserData/Plugin.inc.php' );
-
-$GLOBALS['regionObj'] = new Region();
 
 class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
@@ -107,55 +104,14 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 	}
 
 	function udm_quickform_setupLookup( $tablename, $displayfield, $valuefield, $restrictions=null) {
-		$lookup_sql="Select $valuefield, $displayfield from $tablename";
-		if (isset($restrictions)&&$restrictions) {
-			$lookup_sql.=" WHERE $restrictions";
-		}
-		$lookup_sql.=" ORDER BY $displayfield";
-		return $this->dbcon->GetAssoc($lookup_sql);
+        return $this->returnLookup ($tablename, $displayfield, $valuefield, $restrictions);
 	}
 
     function getDefaults( &$field_def ) {
-        $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
-        if (is_array($defaults)) return $defaults;
 
-		//Check for defined Lookup in selectbox defaults
-		//format is Lookup(table_name, display_column, value_column, restrictions);
-        switch ($field_def['type']) {
-            case 'select':
-            case 'multiselect':
-            case 'radiogroup':
-            case 'checkgroup':
-                // Get region information if it's needed.
-                if ( isset( $field_def[ 'region' ] )
-                    && strlen( $field_def[ 'region' ] ) > 1 ) {
-
-                    return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
-                }
-
-                if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
-
-                    $just_values = str_replace(")", "", substr($defaults, 7));
-                    $valueset = split("[ ]?,[ ]?", $just_values );
-                    return $this->udm_quickform_setupLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
-                }
-
-                // Split string with commas into an array
-                // Check to see if we have an array of values.
-                $defArray = split( "[ ]?,[ ]?", $defaults );
-                if (count( $defArray ) > 1) {
-                    $defaults = array();
-                    foreach ( $defArray as $option ) {
-                        $defaults[ $option ] = $option;
-                    }
-                }
-                break;
-           default:
-        }
-
-        return $defaults;
-    }
+        return $this->getValueSet ($field_def);
 		
+    }
     
 	function udm_quickform_addElement( &$form, $name, &$field_def, $admin = false ) {
 
@@ -167,7 +123,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
 		$type     = (isset($field_def['type']))   ? $field_def['type']     : null;
 		$label    = (isset($field_def['label']))  ? $field_def[ 'label'  ] : null;
-		$defaults = $this->getDefaults( $field_def ); 
+		$defaults = $this->getValueSet( $field_def ); 
 		$size     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 50;
 		$attr     = (isset($field_def['attr']))   ? $field_def['attr']       : null;
 

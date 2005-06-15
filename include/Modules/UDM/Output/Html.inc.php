@@ -38,7 +38,7 @@ function udm_output_html ( &$udm, $options = null ) {
     }
 
 	if ( $javascript = $udm->get_plugin_javascript()) {
-		$out = $javascript . $out;
+		$out .= $javascript;
 	}
 
     return $out;

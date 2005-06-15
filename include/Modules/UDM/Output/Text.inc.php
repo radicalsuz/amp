@@ -67,8 +67,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
                 $value = $value?'yes':'no';
                 break;
             case 'select':
-                $build_plugin = $this->udm->getPlugin('QuickForm', 'Build');
-                $value_set = $build_plugin->getDefaults($fDef);
+                $value_set = $this->getValueSet($fDef);
                 if ( $fDef['region'] ) {
                     $value = $value_set[$value];
                 }

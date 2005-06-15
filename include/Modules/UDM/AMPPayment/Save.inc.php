@@ -1,6 +1,8 @@
 <?php
-require_once ('Modules/Payment/CreditCard.inc.php');
+require_once ('Modules/Payment/Payment.php');
+require_once ('Modules/Payment/Item.inc.php');
 require_once ('AMP/UserData/Plugin/Save.inc.php');
+require_once ('AMP/Form/ElementSwapScript.inc.php');
 
 class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
@@ -12,7 +14,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                              'available'=>true,
                              'default'=>1,
                              'values'=>'Lookup(payment_merchants,id,Merchant)'),
-        'item_ID' => array( 'label'=>'Item for Purchase',
+        'item_IDs' => array( 'label'=>'Items for Purchase',
                             'type'=>'multiselect',
                             'available'=>true,
                             'values'=>'Lookup(payment_items,id,name)'),
@@ -26,16 +28,28 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                                  'value'=>false ),
         'email_receipt_template' => array( 'label' => 'Template For Receipt',
                                           'type'  => 'select',
+                                          'available' => true),
+        'allowed_payment_types' => array( 'label' => 'Allowed Payment Options',
+                                          'type'  => 'multiselect',
+                                          'values'=> array('CreditCard'=>'Credit Card','Check'=>'Check'),
+                                          'default'=>'CreditCard,Check',
                                           'available' => true)
         );
 
     var $_field_prefix = 'plugin_AMPPayment';
+    var $fieldswap_object_id = 'plugin_AMPPayment_Swap';
 
     var $item_info;
     
     function UserDataPlugin_Save_AMPPayment (&$udm, $plugin_instance=null) {
-        $this->processor = &new Payment_CreditCard($udm->dbcon);
+
         $this->init($udm, $plugin_instance);
+    }
+
+    function setProcessor( $type = null ) {
+        if (!isset($this->processor)) {
+            $this->processor = new Payment ( $this->dbcon, $type );
+        }
     }
 
     function getSaveFields() {
@@ -44,8 +58,10 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         $new_save_fields = array();
 
+        $fields_to_avoid = array ('Share_Data');
+
         foreach ($save_fields as $fname) {
-            if ($fname == 'Share_Data') continue;
+            if ( array_search($fname, $fields_to_avoid) ) continue;
             switch ($this->fields[$fname]['type']) {
                 case 'html':
                 case 'static':
@@ -60,93 +76,139 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         return $new_save_fields;
     }
+
+    function getPaymentType() {
+        if ( isset($_REQUEST[$this->addPrefix('Payment_Type')]) ) {
+            return $_REQUEST[$this->addPrefix('Payment_Type')];
+        }
+        return false;
+    }
                 
     function save($data) {
-        $processor=& $this->processor;
         $options = $this->getOptions();
 
-        $processor->setCard($data);
-        $processor->setCustomer($data);
+        $this->setProcessor();
+        $this->processor->setMerchant($options['merchant_ID']);
+        $this->processor->prepareTransaction( $data );
 
-        $this->item_info = $this->getItem( $data['item_ID'] );
+        $item = $this->item_info[  $data['item_ID']  ] ;
 
-        if ($processor->charge($this->item_info['name'], $this->item_info['Amount'])) {
-            return true;
-        } else {
-            $this->udm->errorMessage($processor->error);
-            return false;
-        }
+        if ($this->processor->execute($item->name, $item->amount)) return true;
+            
+        //in case of failure
+        $this->udm->errorMessage($this->processor->error);
+        return false;
     }
-
-    function getItem( $item_id=null ) {
-    
-        $options = $this->getOptions();
-
-        $sought_item = isset($item_id)? $item_id : $options['item_ID'];
-
-        if (!isset($sought_item)) return false;
-
-        $sql =  "SELECT * FROM payment_items WHERE id in(".$sought_item.")";
-        return $this->dbcon->GetAll($sql);
-    }
-
-    function describeItems() {
-        if (!isset($this->item_info)) return false;
-        foreach ($this->item_info as $item_desc) {
-            $desc[$item_desc['id']] = "( $". $item_desc['Amount'] . " US ) ". $item_desc['name'] ;
-        }
-        return $desc;
-    }
-
-    function setupItems( $options ) {
-        $this->item_info = $this->getItem(); 
-        if (!$this->item_info) return;
-
-        return array( 'label'=>$options['purchase_description'],
-                                    'type'=>'select',
-                                    'values'=>$this->describeItems(),
-                                    'public'=>true,
-                                    'enabled'=>true);
-    }
-
 
     function _register_fields_dynamic() {
         
         $options = $this->getOptions();
-        $this->processor->setMerchant($options['merchant_ID']);
-        $prefix = ($this->_field_prefix?$this->_field_prefix:'plugin_AMPPayment').'_';
+
+        $fields = array();
         
-        //Get fields from the Payment_CreditCard object
-        $fields=$this->processor->fields;
-        
+		$fields['Payment_Info'] = array('type'=>'header', 'label'=>'Payment Information', 'public'=>true,  'enabled'=>true);
+
         //Grab the item data
-        $fields['item_ID'] = $this->setupItems( $options );
+        $fields['item_ID'] = $this->setupPaymentItems( $options );
+        if (!isset($fields['item_ID'])) return;
+
+        //Get fields from the Payment object
+        $fields = array_merge( $fields, $this->setupPaymentTypes($options));
+
+        $this->fields = &$fields;
+        #$this->insertAfterFieldOrder(array('Payment_Type'));
+        
 
         //set the field order to put the dynamic checkbox before the Customer
         //Data
-        $cc_fieldorder_tmp = array();
-        foreach ($fields as $cc_field=>$cc_fDef) {
-            if ($cc_field=="First_Name") $cc_fieldorder_tmp[] = $prefix."Share_Data,";
-            $cc_fieldorder_tmp[] = $prefix.$cc_field.",";
-        }
-        $cc_fieldorder = join(",", $cc_fieldorder_tmp);
-        
+        /*
+        $this->insertAfterFieldOrder($fields);
+        $this->insertBeforeFieldOrder('Share_Data', 'First_Name');
+
         //add a fancy javascript to save users time when Cardholder data matches
         //personal data
         $fields['Share_Data']=array('type'=>'checkbox','label'=>'Check here if information below is the same as above', 
                                     'required'=>false, 'public'=>true, 'enabled'=>true, 'size'=>30,
                                     'attr'=>array('onClick'=>'plugin_AMPPayment_setAddress(this.checked);'));
-        $fields['setaddress_script']=array('type'=>'html', 'values'=>
-            $this->address_script($fields), 'enabled'=>true,'public'=>true, 'required'=>false);
+        
+        $this->_register_javascript ($this->address_script());
+        */
 
-//        $this->udm->_module_def[ 'field_order' ] = join(",", array($this->udm->_module_def[ 'field_order'],$cc_fieldorder));
-       
-        $this->fields = array_merge($this->fields, $fields);
 
     }
 
-    function address_script($fields) {
-        if (!isset($this->_field_prefix)) $this->_field_prefix = "plugin_AMPPayment";
+    function setupPaymentItems( $options ) {
+        if (!isset($options['item_IDs'])) return;
+        $item_set = split("[ ]?,[ ]?", $options['item_IDs']);
+        if (!is_array($item_set)) return;
+
+        foreach ($item_set as $item) {
+            $this->item_info[$item] = & new PaymentItem ( $this->dbcon, $item );
+        }
+
+        return array( 'label'=>$options['purchase_description'],
+                                    'type'=>'select',
+                                    'required'=>true,
+                                    'values'=>$this->getItemOptions(),
+                                    'public'=>true,
+                                    'enabled'=>true);
+    }
+
+    function getItemOptions() {
+        if (!isset($this->item_info)) return false;
+
+        $itemOptions = array();
+        foreach ($this->item_info as $item) {
+            $itemOptions = array_merge($itemOptions, $item->optionValue());
+        }
+        return $itemOptions;
+    }
+
+    function setupPaymentTypes( $options = null ) {
+
+        //if the payment type is already set
+        //return only the fields from the relevent processor
+        $this->setProcessor( $this->getPaymentType() );
+
+        if (isset($this->processor->paymentType)) {
+            return $this->processor->fields;
+        }
+
+        //Otherwise Return fields from all processor types
+        
+        $paymentType_fields = array();
+        $allowed_types = split("[ ]?,[ ]?", $options['allowed_payment_types']);
+        $payment_options = array_combine_key( $allowed_types, $this->options['allowed_payment_types']['values']);
+        $selector_field['Payment_Type'] = 
+                array(  'type'      => 'select',
+                        'values'    => $payment_options,
+                        'label'     => 'Payment Method',
+                        'enabled'   => true,
+                        'default'   => null,
+                        'public'    => true,
+                        'required'  => true,
+                        'attr'      => array(   'onChange'=>
+                                                'ActivateSwap( window.'.$this->fieldswap_object_id.', this.value );')
+                        );
+
+
+        $fieldswapper = & new ElementSwapScript( $this->fieldswap_object_id );
+        $fieldswapper->formname = $this->udm->name;
+
+        foreach ($allowed_types as $payment_type) {
+            $current = &new Payment ($this->dbcon, $payment_type);
+            
+            $fieldswapper->addSet( $payment_type, $this->convertFieldDefstoDOM($current->fields)) ;
+            $paymentType_fields = array_merge($paymentType_fields, $current->fields);
+        }
+
+        $this->_register_javascript ($fieldswapper->output()); 
+
+        return ($selector_field + $paymentType_fields);
+    }
+
+    /*
+    function address_script() {
 
         $script = '
         <script type="text/javascript">
@@ -157,7 +219,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
             if (chk_val) {';
 
         //Setup the form keys array
-        $form_keys = $this->processor->customer_info_keys;
+        $form_keys = $this->processor->customer->customer_info_keys;
         $form_keys[] = "First_Name";
         $form_keys[] = "Last_Name";
 
@@ -166,7 +228,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
             if (!isset($this->udm->fields[$cust_key])) continue;
             $field_key = $this->_field_prefix.'_'.$cust_key;
             $script_on .= '
-                payform.elements["'.$field_key.'"].value=payform.elements["'.$cust_key.'"].value;';
+                payform.elements["'.$field_key.'"].value=payform.elements["'.$cust_key.'"].value;'."\n";
                 #payform.elements["'.$field_key.'"].disabled=true;';
             #$script_off .='payform.elements["'.$field_key.'"].disabled=false;';
         }
@@ -178,6 +240,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         </script>";
         return $script;
     }
+    */
 
     function _register_options_dynamic () {
         if ($this->udm->admin) {

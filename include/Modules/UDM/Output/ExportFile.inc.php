@@ -138,20 +138,22 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
                 case 'select':
                 case 'multiselect':
                     $result_fields[]=$column;
-                    $build_plugin = $this->udm->registerPlugin('QuickForm','Build');
-                    $defaults = $build_plugin->getDefaults($this->udm->fields[$column]);
+                    #$build_plugin = $this->udm->registerPlugin('QuickForm','Build');
+                    #$defaults = $build_plugin->getDefaults($this->udm->fields[$column]);
+                    $defaults = $this->getValueSet($this->udm->fields[$column]);
                     $this->setTranslation($column, $defaults);
                     break;
                 case 'checkgroup':
                     $result_fields[]=$column . '_' . $this->getLabel($column);
-                    $build_plugin = $this->udm->registerPlugin('QuickForm','Build');
-                    $defaults = $build_plugin->getDefaults($this->udm->fields[$column]);
-                    $this->setTranslation( $column, $defaults, 'expandCheckGroup' );
+                    #$build_plugin = $this->udm->registerPlugin('QuickForm','Build');
+                    #$defaults = $build_plugin->getDefaults($this->udm->fields[$column]);
+                    $defaults = $this->getValueSet($this->udm->fields[$column]);
+                    $this->setTranslation( $column, $defaults, 'readExpandedCheckGroup' );
                     foreach ($defaults as $ex_column) {
                         $newfield = $column.'_'.$ex_column;
                         $result_fields[] = $newfield;
                         $this->setParent( $newfield, $column);
-                        $this->setTranslation( $newfield, $defaults, 'expandCheckGroup' );
+                        $this->setTranslation( $newfield, $defaults, 'readExpandedCheckGroup' );
                     }
                     break;
                default:
@@ -175,7 +177,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
             $result_row = array();
 
             foreach ($this->display_fieldset as $readyfield) {
-                if (isset($this->current_row[$readyfield])) {
+                if (isset($this->current_row[$readyfield]) || isset($this->translations[$readyfield])) {
                     $result_row[$readyfield]=$this->translate($readyfield, $this->current_row[$readyfield]);
                 } else {
                     $result_row[$readyfield]='';
@@ -217,13 +219,11 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         return strip_tags($this->udm->fields[$field]['label']);
     }
     
-    function expandCheckGroup($field, $value) {
+    function readExpandedCheckGroup($field, $value) {
         if ($groupname = $this->parentGroup($field)) {
+            $group_set = $this->expandCheckgroup( $groupname, $this->current_row[$groupname] );
             $sought_value = substr($field, strlen($groupname)+1);
-            $valueset = split("[ ]?,[ ]?", $this->current_row[$groupname]);
-            foreach($valueset as $test_value) {
-                if ($test_value == $sought_value) return '1';
-            }
+            if (isset($group_set[$groupname][$sought_value])) return 1;
         }
         return '0';
     }

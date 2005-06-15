@@ -50,7 +50,9 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$this->fields_def=$this->define_form();
 
         //check the REQUEST array
-        $this->udm->setSQLCriteria($this->read_request());
+        if (method_exists($this->udm, 'setSQLCriteria')) {
+            $this->udm->setSQLCriteria($this->read_request());
+        }
 	}	
 	
 	function read_request() {

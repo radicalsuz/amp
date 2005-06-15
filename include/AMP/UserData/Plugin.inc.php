@@ -263,149 +263,225 @@ class UserDataPlugin {
      * execute, the plugin has access to all the form data in any event.
      *
      *****/
-    function getData ($fields = null){
+    function getData ($request_fields = null){
 
-        //Filter returned data for items with the appropriate plugin field
-        //prefix
-        if ( $this->_field_prefix ) {
-            $fieldkeys=array();
-
-            $prefix=$this->_field_prefix.'_';
-
-            if (isset($fields)) {
-   
-                foreach ($fields as $keyname) {
-                    $fieldkeys[$prefix.$keyname]=$keyname;
-                }
-
-                $fields = array_keys($fieldkeys);
-
-            } else {
-                //designate the array of fields containing the plugin prefix
-
-                foreach ($this->udm->fields as $fname=>$fdef ) {
-
-                    if (substr ($fname, $prefix) === 0) {
-                        $fields[] = $fname;
-                        $fieldkeys[$fname] = substr($fname, strlen($prefix));
-                    }
-                }
-            }
+        $udm_request_fields = null;
+        if (isset($request_fields)) {
+            $udm_request_fields = $this->convertFieldNamestoUDM( $request_fields );
         }
 
         // get the data 
-        $data = $this->udm->getData($fields);
-
-        // check the data for strange types that need massaging
-        $changes = $this->checkData ($data);
-        if ($changes)  $data = array_merge($data, $changes);
-
-        //remove the field prefixes
-        if (isset($prefix)) {
-            $finaldata = array();
-            foreach ($data as $key=>$value) {
-                if (!isset($fieldkeys[$key])) continue;
-                $field = $fieldkeys[$key];
-                $finaldata[$field]=$value;
-            }
-            $data=$finaldata;
-        }
+        $udmdata = $this->udm->getData($udm_request_fields);
         
-        return $data; 
+        $udmdata = array_merge( $udmdata, $this->reinstateBlankCheckBoxValues( $udmdata ) );
+
+
+        //retain only local-prefixed data
+        foreach($udmdata as $keyname => $value) {
+            if ( !($localkey = $this->checkPrefix($keyname)) ) continue;
+
+            $data[$localkey] = $this->checkData( $this->udm->fields[$keyname], $value );
+        }
+
+        if (!empty ($request_fields)) $data = array_combine_key($request_fields, $data);
+
+        return $data;
+
     }
 
 
-    function checkData( $data ) {
+    function checkData( $fDef, $value ) {
+
+        $translation_method = $fDef['type']."FieldtoText";
+        if (method_exists( $this, $translation_method )) {
+            return $this->$translation_method( $value );
+        }
+
+        return $value;
+    }
+
+    function dateFieldtoText( $value ) {
+        if (!is_array($value)) return $value;
+
+        $month = isset($value['M'])? $value['M']:(isset($value['m'])?$value['m']:0);
+        $day  = isset($value['D'])? $value['D']:(isset($value['d'])?$value['d']:false);
+        $year = isset($value['Y'])? $value['Y']:(isset($value['y'])?$value['y']:0);
+        $hour = isset($value['H'])? $value['H']:0;
+        $minute = isset($value['i'])? $value['i']:0;
+        $second = isset($value['s'])? $value['s']:0;
+
+        $time_stamped = mktime($hour,$minute,$second,$month,$day,$year);
+        if (!$time_stamped) return false;
+
+        if ($day) return   date("Y-m-d",$time_stamped);
+        $day=1;
+        $time_stamped = mktime($hour,$minute,$second,$month,$day,$year);
+        if ($year && $month) return date("m/Y", $time_stamped);
+
+        return $time_stamped;
+    }
+
+
+    function checkgroupFieldtoText ($value) {
+        if (!is_array($value)) return $value;
+        return join (", ",array_keys($value));
+    }
+
+    function multiselectFieldtoText ( $value ) {
+        if (!is_array($value)) return $value;
+        return join (", ", $value);
+    }
+
+    //fix checkbox problem - blank checkboxes don't save values
+    function reinstateBlankCheckBoxValues( $data, $local = true ) {
         $returnSet = array();
-        foreach ($data as $keyname=>$value) {
-            if (!isset($this->udm->fields[$keyname])) continue;
-            switch ($this->udm->fields[$keyname]['type']) { 
-                case "date":
-                    $tempValue=is_array($value)?mktime(0,0,0,$value['M'],$value['d'],$value['Y']):null;
-                    
-                    if (isset($tempValue)) {
-                        if (isset($value['d'])) $returnSet[$keyname] = date("Y-m-d",$tempValue);
-                        elseif (count($value)==2 && isset($value['Y']) && isset($value['m'])) $returnSet[$keyname] = date("m/Y",$tempValue);
-                        else $returnSet[$keyname] = date(join("-", array_keys($value)), $tempValue);
-                    }
-                    break;
-                case "multiselect":
-                    $returnSet[$keyname]=is_array($value)?join (", ",$value):null;
-                    break;
-                case "checkgroup":
-                    $returnSet[$keyname]=is_array($value)?join (", ",array_keys($value)):null;
-                    break;
-            }
+        if (!isset($this->udm)) return false;
+
+        foreach ($this->udm->fields as $fname =>$fDef) {
+            if (isset($data[$fname])) continue;
+            if ($fDef['type']!='checkbox') continue;
+            if ($fDef['public']==false && $this->udm->admin==false) continue;
+            $returnSet[$fname]='0';
         }
-        //fix checkbox problem - blank checkboxes don't save values
-        //this should probably go somewhere else
-        //but needs to happen now
-        if (isset($this->udm)) {
-            foreach ($this->udm->fields as $fname =>$fDef) {
-                if ($fDef['type']=='checkbox' &&($this->udm->admin||$fDef['public'])) {
-                    if (!isset($data[$fname])) $returnSet[$fname]='0';
-                }
-            }
-        }
-        if (count($returnSet)>0) {
-            return $returnSet;
-        } else {
-            return false;
-        }
+
+        return $returnSet;
     }
     
-    function uncheckData( $data ) {
+    function uncheckData( $fDef, $value ) {
+
+        switch ($fDef['type']) { 
+            case "checkgroup":
+                return $this->expandCheckGroup($keyname, $value);
+                break;
+            default:
+                return $value;
+        }
+    }
+
+    function expandCheckGroup ( $keyname, $value ) {
         $returnSet = array();
-        foreach ($data as $keyname=>$value) {
-            switch ($this->udm->fields[$keyname]['type']) { 
-                case "checkgroup":
-                    $dataset=split('[ ]?,[ ]?', $value);
-                    foreach ($dataset as $item) {
-                        $returnSet[$keyname][$item]=1;
-                    }
-                    break;
-            }
+        $dataset=split('[ ]?,[ ]?', $value);
+        if (!is_array($dataset)) return false;
+
+        foreach ($dataset as $item) {
+            $returnSet[$keyname][$item]=1;
         }
-        if (count($returnSet)>0) {
-            return $returnSet;
-        } else {
-            return false;
-        }
+        return $returnSet;
     }
     
 
     function setData ( $data ) {
         
-        if ($this->_field_prefix) {
-
-            foreach ($data as $key=>$value) {
-                $plugin_data[$this->_field_prefix.'_'.$key]=$value;
-            }
-
-            $data=$plugin_data;
+        foreach ($data as $key=>$value) {
+            $udmkey = $this->addPrefix($key);
+            $plugin_data[$udmkey]=$this->uncheckData( $this->udm->fields[$udmkey], $value );
         }
-        // check the data for strange types that need massaging
-        $changes = $this->uncheckData ($data);
-        if ($changes)  $data = array_merge($data, $changes);
 
-        return $this->udm->setData( $data );
+        return $this->udm->setData( $plugin_data );
     }
 
     function addPrefix( $fieldname ) {
+        if (empty($this->_field_prefix)) return $fieldname;
+        if (substr($fieldname, 0, strlen($this->_field_prefix)) == $this->_field_prefix ) return $fieldname;
         return $this->_field_prefix .'_'. $fieldname;
     }
+    function dropPrefix( $fieldname ) {
+        if (empty($this->_field_prefix)) return $fieldname;
+        if (substr($fieldname, 0, strlen($this->_field_prefix)) != $this->_field_prefix ) return $fieldname;
+        return substr($fieldname, strlen($this->_field_prefix) + 1);
+    }
 
-    function convertFieldNamestoUDM( $fields=null ) {
+    //check to see if the field is local, if so return the local fieldname
+    function checkPrefix ( $fieldname ) {
+        $dropped = $this->dropPrefix( $fieldname );
+        if ($dropped == $fieldname && (!empty($this->_field_prefix))) return false;
+        return $dropped;
+    }
+
+    function convertFieldNamestoUDM( $fields=null, $use_keys=FALSE ) {
         $udmFields = array();
-
         if (!isset($fields)) {
             $fields = array_keys($this->fields);
         }
+
+        if ($use_keys) $fields = array_keys($fields);
+        if (empty($this->_field_prefix)) return $fields;
+
 
         foreach ($fields as $fieldname) {
             $udmFields[] = $this->addPrefix($fieldname);
         }
         return $udmFields;
+    }
+
+    function convertFieldNamesfromUDM ( $udmfields=null ) {
+        $localFields = array();
+
+        if (!isset($udmfields)) {
+            $udmfields = array_keys($this->udm->fields);
+        }
+
+        if (!is_numeric( key($udmfields) )) $fields = array_keys($udmfields);
+
+
+        foreach ($udmfields as $fieldname) {
+            if (!$this->checkPrefix($fieldname)) continue;
+            $localFields[] = $this->dropPrefix( $fieldname );
+        }
+        return $localFields;
+    }
+
+    function convertFieldDefstoDOM ( $fields=null ) {
+        $domFields = array();
+        
+        foreach ($fields as $fieldname => $fDef) {
+            $element = $this->returnDOMElement( $fieldname, $fDef );                
+            
+            if (!is_array($element)) {
+                $domFields[] = $this->addPrefix($element);
+                continue;
+            }
+
+            foreach ($element as $DOMelement) {
+                $domFields[] = $this->addPrefix($DOMelement);
+            }
+        }
+        return $domFields;
+    }
+
+    function getDateFormat($fDef) {
+        $default_format =  array('d','M','Y');
+        if (!is_array($fDef['values'])) return $default_format;
+        if (!isset($fDef['values']['format'])) return $default_format;
+
+        $format = array();
+        for ($n=0;$n<strlen($fDef['values']['format']); $n++) {
+            $format[] = $fDef['values']['format'][$n];
+        }
+        return $format;
+    }
+
+    function returnDOMElement( $fieldname, $fDef ) {
+        switch ($fDef['type']) {
+            case 'date':
+                $date_format = $this->getDateFormat( $fDef );
+                $fieldname_template = $fieldname."[%s]";
+                foreach($date_format as $date_component) {
+                    $date_dom[] = sprintf($fieldname_template, $date_component);
+                }
+                return $date_dom;
+                break;
+            case 'checkgroup':
+                $option_set = $this->getValueSet( $fDef );
+                if (is_array($option_set)) {
+                    return $this->convertFieldNamestoUDM( $option_set );
+                }
+                break;
+            default:
+                return $fieldname;
+        }
+
+        return $fieldname;
     }
 
     function insertBeforeFieldOrder( $fields = null, $beforeField = 0 ) {
@@ -446,7 +522,57 @@ class UserDataPlugin {
 
         return $return_options;
     }
-        
+
+    function returnLookup ( $tablename, $displayfield, $valuefield, $restrictions=null) {
+        $lookup_sql="Select $valuefield, $displayfield from $tablename";
+        if (isset($restrictions)&&$restrictions) {
+            $lookup_sql.=" WHERE $restrictions";
+        }
+        $lookup_sql.=" ORDER BY $displayfield";
+        return $this->dbcon->GetAssoc($lookup_sql);
+    }
+    function getValueSet ( &$field_def ) {
+        $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
+        if (is_array($defaults)) return $defaults;
+
+        //Check for defined Lookup in selectbox defaults
+        //format is Lookup(table_name, display_column, value_column, restrictions);
+        switch ($field_def['type']) {
+            case 'select':
+            case 'multiselect':
+            case 'radiogroup':
+            case 'checkgroup':
+                // Get region information if it's needed.
+                if ( isset( $field_def[ 'region' ] )
+                        && strlen( $field_def[ 'region' ] ) > 1 ) {
+
+                    return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
+                }
+
+                if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
+
+                    $just_values = str_replace(")", "", substr($defaults, 7));
+                    $valueset = split("[ ]?,[ ]?", $just_values );
+                    return $this->returnLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
+                }
+
+                // Split string with commas into an array
+                // Check to see if we have an array of values.
+                $defArray = split( "[ ]?,[ ]?", $defaults );
+                if (count( $defArray ) > 1) {
+                    $defaults = array();
+                    foreach ( $defArray as $option ) {
+                        $defaults[ $option ] = $option;
+                    }
+                }
+                break;
+            default:
+        }
+
+        return $defaults;
+    }
+
+
     function setOptions ( $options ) {
         if (!is_array($options)) return false;
 
