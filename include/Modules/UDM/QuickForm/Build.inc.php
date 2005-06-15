@@ -252,71 +252,11 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 			$fRef->setText( null );
 		}
 		
-		//OUTPUT TEMPLATE MODIFICATIONS
-        switch ($type) {
-
-            case 'checkbox':
-                $renderer->setElementTemplate(
-                    "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
-                    <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-                    {element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
-                    <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-                    \t{label}</td>\n\t</tr>", $name);
-                break;
-            
-            case 'textarea':
-            case 'wysiwyg':
-                //textareas have a table they sit within for CSS-controlled positioning
-                $renderer->setElementTemplate(
-                    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-                    <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-                    {label}<br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-                    \t{element}</td></tr></table></td>\n\t</tr>", $name);
-	            break;	
-
-            case 'header':
-                $renderer->setHeaderTemplate(
-					"\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\" ><span class=\"udm_header\">{header}</span></td>\n\t</tr>", $name);
-                break;
-        
-            case 'static':
-                //static items now span both columns
-                $renderer->setElementTemplate(
-                    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-                    <tr><td>\t{element}</td></tr></table></td>\n\t</tr>", $name);
-                break;
-
-            case 'submit':
-                $renderer->setElementTemplate(
-                    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-                    <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-                    <b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-                    \t{element}</td></tr></table></td>\n\t</tr>", $name);
-                break;
-
-            case 'checkgroup':
-            case 'radiogroup':
-                $renderer->setElementTemplate(
-                    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
-                    <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-                    <span class=\"udm_group_label\">{label}</span><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
-                    \t{element}</td></tr></table></td>\n\t</tr>", $name);
-                break;
-            
-            default:
-                //Default output template (with classes defined)
-                $renderer->setElementTemplate(
-                    "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
-                    <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-                    {label}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
-                    <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t
-                    {element}</td>\n\t</tr>");
-                break;
-		
-		}
-
-
-
+		$template_function = ($type=='header'?'setHeaderTemplate':'setElementTemplate');
+		$renderer->$template_function((isset($field_def['template'])?
+											$field_def['template']:
+											$this->getTemplate( $type )),
+									  $name);
 
 		if ( isset( $field_def[ 'required' ] ) && $field_def[ 'required' ] && !$admin )
 			$form->addRule( $name, $label . ' is required.', 'required' );
@@ -329,6 +269,67 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 			
 		return 1;
 
+	}
+
+	function getTemplate( $type ) {
+		$template_method =  "getTemplate".ucfirst($type);
+		if (method_exists($this, $template_method)) {
+			return $this->$template_method();
+		}
+
+		// default template
+		return 
+			"\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
+			<!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+			{label}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
+			<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t
+			{element}</td>\n\t</tr>";
+	}
+
+	function getTemplateCheckbox() {
+		return "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"form_label_col\">
+		<!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+		{element}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"form_data_col\">
+		<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+		\t{label}</td>\n\t</tr>";
+	}
+
+	function getTemplateTextarea() {
+		 return "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+				<tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+				{label}<br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+				\t{element}</td></tr></table></td>\n\t</tr>";
+	}
+
+	function getTemplateWysiwyg() {
+		return $this->getTemplateTextarea();
+	}
+
+	function getTemplateHeader() {
+		return "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\" ><span class=\"udm_header\">{header}</span></td>\n\t</tr>";
+	}
+
+	function getTemplateStatic() {
+		return  "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+				<tr><td>\t{element}</td></tr></table></td>\n\t</tr>";
+	}
+
+	function getTemplateSubmit() {
+		return	"\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+				<tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+				<b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+				\t{element}</td></tr></table></td>\n\t</tr>";
+	}
+
+	function getTemplateCheckgroup() {
+		return  "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"form_span_col\">
+				<tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+				<span class=\"udm_group_label\">{label}</span><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+				\t{element}</td></tr></table></td>\n\t</tr>";
+	}
+
+	function getTemplateRadiogroup() {
+		return $this->getTemplateCheckgroup();
 	}
 
 }
