@@ -61,12 +61,12 @@ Class Payment {
 
     }
 
-    function prepareTransaction( $data ) {
+    function prepareTransaction( $data, $options=null ) {
         $this->setCustomer($data);
         $this->setItem( $data );
         $this->setOrder( $data );
 
-        $this->paymentType->prepareTransaction($data);
+        $this->paymentType->prepareTransaction($data, $options);
 
     }
 

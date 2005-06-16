@@ -129,7 +129,8 @@ class PaymentType_CreditCard {
         $this->card_info[ $new_key ] = $value;
     }
 
-    function prepareTransaction( $data ) {
+    function prepareTransaction( $data, $options=null ) {
+        if (isset($options['merchant_ID'])) $this->setMerchant( $options['merchant_ID'] );
         $this->setCard( $data );
     }
 
@@ -237,7 +238,7 @@ class PaymentType_CreditCard {
         //Call the Credit Card processing Library
         $ChargeResult=
             $this->CC_Library->ChargeCreditCard( 
-                    #$this->payment->customer->getData(),
+                    $this->payment->customer->getData(),
                     $amount,
                     $this->card_info['Number'],
                     $description,
@@ -247,8 +248,8 @@ class PaymentType_CreditCard {
                     $this->merchant->getData('Account_Password'),
                     $this->merchant->getData('Partner'),
                     $this->payment->payment_ID,
-                    #$this->options['Email_Merchant'],
-                    #$this->options['Email_Customer'],
+                    $this->options['Email_Merchant'],
+                    $this->options['Email_Customer'],
                     $this->merchant->getData('Payment_Transaction'),
                     $this->merchant->getData('Payment_Method'),
                     PAYMENT_CC_DEBUG

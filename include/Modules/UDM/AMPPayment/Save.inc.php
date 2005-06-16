@@ -79,21 +79,19 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
     function getPaymentType() {
         if ( isset($_REQUEST[$this->addPrefix('Payment_Type')]) ) {
-            print $_REQUEST[$this->addPrefix('Payment_Type')].'cat';
             return $_REQUEST[$this->addPrefix('Payment_Type')];
         }
-        print '<pre>';
-        print_r ($_REQUEST);
-        print '</pre>';
         return false;
     }
                 
     function save($data) {
         $options = $this->getOptions();
 
-        $this->setProcessor( $this->getPaymentType() );
-        $this->processor->setMerchant($options['merchant_ID']);
-        $this->processor->prepareTransaction( $data );
+        if (!isset($data['Payment_Type'])) return true;
+        if (!isset($data['item_ID'])) return false;
+
+        $this->setProcessor( $data['Payment_Type'] );
+        $this->processor->prepareTransaction( $data, $options );
 
         $item = $this->item_info[  $data['item_ID']  ] ;
 
@@ -117,7 +115,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         if (!isset($fields['item_ID'])) return;
 
         //Get fields from the Payment object
-        $fields = array_merge( $fields, $this->setupPaymentTypes($options));
+        $fields = array_merge( $fields, $this->setupPaymentTypes($options) );
 
         $this->fields = &$fields;
         #$this->insertAfterFieldOrder(array('Payment_Type'));
