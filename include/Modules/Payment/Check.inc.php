@@ -30,7 +30,6 @@ class PaymentType_Check {
                                         'public' =>  false,
                                         'label'  =>  'Date Processed',
                                         'enabled'=>  true,
-                                        #'values'=>  $dt_format) );
                                         'values'=>  'today') );
     }
 
@@ -43,9 +42,13 @@ class PaymentType_Check {
     function setData ( $data ) {
         $this->check_info = array_combine_key( $this->check_info_keys, $data );
     }
-
     function prepareTransaction( $data ) {
+        $this->setData( $data );
         return;
+    }
+
+    function execute( ) {
+        $this->payment->save();
     }
 }
 ?>

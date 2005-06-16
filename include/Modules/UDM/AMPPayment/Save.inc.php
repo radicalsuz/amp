@@ -79,15 +79,19 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
     function getPaymentType() {
         if ( isset($_REQUEST[$this->addPrefix('Payment_Type')]) ) {
+            print $_REQUEST[$this->addPrefix('Payment_Type')].'cat';
             return $_REQUEST[$this->addPrefix('Payment_Type')];
         }
+        print '<pre>';
+        print_r ($_REQUEST);
+        print '</pre>';
         return false;
     }
                 
     function save($data) {
         $options = $this->getOptions();
 
-        $this->setProcessor();
+        $this->setProcessor( $this->getPaymentType() );
         $this->processor->setMerchant($options['merchant_ID']);
         $this->processor->prepareTransaction( $data );
 
@@ -168,10 +172,9 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         //if the payment type is already set
         //return only the fields from the relevent processor
-        $this->setProcessor( $this->getPaymentType() );
-
-        if (isset($this->processor->paymentType)) {
-            return $this->processor->fields;
+        if ( $this->udm->uid ) {
+            //don't do anything
+            return;
         }
 
         //Otherwise Return fields from all processor types
@@ -205,6 +208,19 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $this->_register_javascript ($fieldswapper->output()); 
 
         return ($selector_field + $paymentType_fields);
+    }
+
+    function returnTransactions ( $uid ) {
+        $listing = new PaymentList ($this->dbcon);
+        $cust_payments = $listing->getCustomerTransactions( $uid );
+        foreach ($cust_payments as $row=>$payment_set) {
+            $this->setProcessor( $payment_set['PaymentType'] );
+            $this->processor->readData( $payment_set['id'] );
+        }
+
+        if (isset($this->processor->paymentType)) {
+            return $this->processor->fields;
+        }
     }
 
     /*

@@ -36,7 +36,6 @@ Class Payment {
         $this->id=$payment_id;
     }
 
-
     function setPaymentType ( $type ) {
         $type_class = 'PaymentType_' . $type;
         if (class_exists( $type_class )) {
