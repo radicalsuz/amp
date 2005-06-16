@@ -48,7 +48,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
     function setProcessor( $type = null ) {
         if (!isset($this->processor)) {
-            $this->processor = new Payment ( $this->dbcon, $type );
+            $this->processor =& new Payment ( $this->dbcon, $type );
         }
     }
 
