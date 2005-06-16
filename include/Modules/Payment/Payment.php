@@ -124,6 +124,10 @@ Class Payment {
                     die( "Unable to save payment data using SQL $sql: " . $this->dbcon->ErrorMsg() );
                     */
         $save_data=$this->getData();
+        print 'attempting save<BR>';
+        foreach ($save_data as $key=>$value) {
+            print $key.": ".$value."<BR>";
+        }
         $rs = $this->dbcon->Replace("payment", $save_data, "id", $quote = true );
 
         if ($rs == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
