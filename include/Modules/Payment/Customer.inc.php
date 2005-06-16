@@ -41,7 +41,7 @@ class PaymentCustomer {
     }
 
     function assembleFieldsforRead () {
-        foreach ($this->SQLtranslation as $key => $value ) {
+        foreach ($this->SQL_translation as $key => $value ) {
             $fielddesc [] = $key . " as " . $value;
         }
         return join ("," , $fielddesc);
@@ -50,7 +50,7 @@ class PaymentCustomer {
     function getDataforSQL () {
         $data = $this->getData();
         foreach ($data as $key => $value) {
-            $sqlkey = array_search( $key, $this->SQLtranslation);
+            $sqlkey = array_search( $key, $this->SQL_translation);
             if ($sqlkey) $insert_data[$sqlkey] = $value;
         }
         return $insert_data;
