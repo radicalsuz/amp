@@ -1,9 +1,22 @@
 <?php
 
+/**************************
+ *   
+ *    PaymentCustomer
+ *
+ *      Collection of Customer Address Info from payment table
+ *
+ *      Author: austin@radicaldesigns.org
+ *
+ *      Date: 06/17/2005
+ *
+ *******/
+
 class PaymentCustomer {
 
-    // Information related to the customer to charge
     var $dbcon;
+
+    // Information related to the customer to charge
     var $customer_info = array();
     var $customer_info_keys = array(
         'user_ID',
@@ -14,6 +27,9 @@ class PaymentCustomer {
         'State',
         'Zip',
         'Email');
+
+    // Reference Table converts column names from payment table
+    // to keynames for customer_info array
     var $SQL_translation = array (
         'Name_On_Card' => 'Name',
         'Billing_Street' => 'Street',
@@ -22,14 +38,16 @@ class PaymentCustomer {
         'Billing_Zip'=> 'Zip',
         'Billing_Email'=>'Email',
         'user_ID'=>'user_ID' );
+
+    // Address Verification Fields
     var $fields = array(
-        'First_Name' => array('type'=>'text','label'=>'First Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30),
-        'Last_Name' => array('type'=>'text','label'=>'Last Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30),
+        'Name' => array('type'=>'text','label'=>'Name', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>40),
         'Street' => array('type'=>'text','label'=>'Address', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30),
-        'City' => array('type'=>'text','label'=>'City', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30),
-        'State' => array('type'=>'text','label'=>'State/Province', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30),
-        'Zip' => array('type'=>'text','label'=>'Postal Code', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30),
-        'Email' => array('type'=>'text','label'=>'Email', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30));
+        'Zip' => array('type'=>'text','label'=>'Postal Code', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30)
+        #'City' => array('type'=>'text','label'=>'City', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30),
+        #'State' => array('type'=>'text','label'=>'State/Province', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30),
+        #'Email' => array('type'=>'text','label'=>'Email', 'required'=>true, 'public'=>true, 'enabled'=>true, 'size'=>30)
+        );
 
     function PaymentCustomer ( &$dbcon, $id=null ) {
         $this->init ($dbcon, $id);
@@ -40,58 +58,12 @@ class PaymentCustomer {
         if (isset($id)) $this->readData ( $id );
     }
 
-    function assembleFieldsforRead () {
-        foreach ($this->SQL_translation as $key => $value ) {
-            $fielddesc [] = $key . " as " . $value;
-        }
-        return join ("," , $fielddesc);
-    }
 
-    function getDataforSQL () {
-        $data = $this->getData();
-        foreach ($data as $key => $value) {
-            $sqlkey = array_search( $key, $this->SQL_translation);
-            if ($sqlkey) $insert_data[$sqlkey] = $value;
-        }
-        return $insert_data;
-    }
-                
+    #######################################
+    ### Public Data Retrieval Functions ###
+    #######################################
 
-
-    function readData ($id) {
-        $fields = $this->assembleFieldsforRead();
-        $sql = "Select $fields from payment where user_ID = " . $id;
-        if ($customer_info = $this->dbcon->GetRow( $sql ) ) {
-            return $this->customer_info = $customer_info;
-        }
-        return false;
-    }
-
-    function readUserData( $id ) {
-        $sql = "Select ".join(", ", array_keys($this->fields))." from userdata where id=".$id;
-        if ($userdata = $this->dbcon->GetRow($sql)) {
-            $this->setData( $userdata );
-            return $this->customer_info;
-        }
-        return false;
-    }
-
-        
-
-    function setData ( $data ) {
-        if (!is_array($data)) return false;
-
-        $cust_info = array_combine_key ($this->customer_info_keys, $data );
-        //hack for Name field
-        if ($data['First_Name']&&$data['Last_Name']) {
-            $cust_info['Name']=$data['First_Name'].' '.$data['Last_Name'];
-        }
-        
-        if (is_array($cust_info)) $this->customer_info=$cust_info;
-
-        //set user_ID value for base Payment class
-        if (isset($data['user_ID'])) return $data['user_ID'];
-    }
+    // getData retrieves values from the customer_info array
 
     function getData( $fieldname = null ) {
         if (!isset($fieldname)) return $this->customer_info;
@@ -102,5 +74,80 @@ class PaymentCustomer {
 
         return false;
     }
+
+    function getInsertData() {
+        $data = $this->getData();
+        foreach ($data as $key => $value) {
+            $sqlkey = array_search( $key, $this->SQL_translation);
+            if ($sqlkey) $insert_data[$sqlkey] = $value;
+        }
+        return $insert_data;
+    }
+                
+
+    ########################################
+    ### Public Data-Assignment Functions ###
+    ########################################
+
+
+    // readData calls up values for a particular payment id from the payment
+    // table and assigns them to the current instance 
+
+    function readData ($id) {
+        $sql = "Select ".$this->assembleFieldsfromPayment()." from payment where user_ID = " . $id;
+        if ($customer_info = $this->dbcon->GetRow( $sql ) ) {
+            return $this->customer_info = $customer_info;
+        }
+        return false;
+    }
+
+    // readUserData calls up values for a particular id from the
+    // userdata table and assigns them to the current instance 
+
+    function readUserData( $id ) {
+        $sql = "Select ".$this->assembleFieldsfromUserData()." from userdata where id=".$id;
+        if ($userdata = $this->dbcon->GetRow($sql)) {
+            $this->setData( $userdata );
+            return $this->customer_info;
+        }
+        return false;
+    }
+
+    // setData assigns values to the customer_info array
+
+    function setData ( $data ) {
+        if (!is_array($data)) return false;
+
+        $cust_info = array_combine_key ($this->customer_info_keys, $data );
+        
+        if (is_array($cust_info)) $this->customer_info=$cust_info;
+
+        //set user_ID value for base Payment class
+        if (isset($data['user_ID'])) return $data['user_ID'];
+    }
+
+
+    #################################
+    ### Private Utility Functions ###
+    #################################
+
+    function _assembleFieldsfromPayment () {
+        foreach ($this->SQL_translation as $key => $value ) {
+            $fielddesc [] = $key . " as " . $value;
+        }
+        return join ("," , $fielddesc);
+    }
+
+
+    function _assembleFieldsfromUserData () {
+        $fields = array_keys($this->fields);
+
+        $namekey = $fields[ array_search( "Name", $fields );
+        if ( $namekey !== FALSE ) unset ( $fields[ $namekey ] );
+        $fields[] = "Concat( First_Name, \" \", Last_Name) as Name";
+
+        return join(", ", $fields);
+    }
+        
 }
 ?>

@@ -6,6 +6,7 @@
 */
 
 define("PAYMENT_CC_DEBUG", '1');
+require_once( "Modules/Payment/CreditCard/Validator.inc.php" );
 
 class CC_Functions {
 	
@@ -319,10 +320,12 @@ class CC_Functions {
 	   *			   $intTestMod - Either "0"-off, or "1"-on                            
 	   *
 	   ************************************************************************************/
-	   function ChargePayflow ($fltAmount, 
+	   function ChargePayflow ($arrPerson,
+                                    $fltAmount, 
 								  $intCCNumber, 
 								  $strDescription, 
 								  $strCCExpireDate,
+								  $strCVV2,
 								  $strLogin, 
                                   $strVendor,
 								  $strPassword, 
@@ -527,6 +530,7 @@ class CC_Functions {
 								  $intCCNumber, 
 								  $strDescription, 
 								  $strCCExpireDate,
+								  $strCVV2,
 								  $strProcessor,
 								  $strLogin, 
                                   $strVendor,
@@ -567,11 +571,12 @@ class CC_Functions {
 				}
 	
 				$ascReturnCodes=$this->ChargePayflow(
-								  #$arrPerson,
+								  $arrPerson,
 								  $fltAmount, 
 								  $intCCNumber, 
 								  $strDescription,
 								  $strCCExpireDate,
+								  $strCVV2,
 								  $strLogin,
                                   $strVendor,
 								  $strPassword,

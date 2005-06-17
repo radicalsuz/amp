@@ -88,11 +88,15 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $options = $this->getOptions();
 
         if (!isset($data['item_ID'])) return false;
+        if (empty($data)) return true;
         
         $data['user_ID'] = $this->udm->uid;
-        #$this->setProcessor( $this->getPaymentType() );
 
-        $this->processor->prepareTransaction( $data, $options );
+        if ($this->processor->getData( "Payment_Type" ) == "CreditCard" ) {
+            $data['merchant_ID'] = $options['merchant_ID'];
+        }
+
+        $this->processor->setData( $data );
 
         $item = $this->item_info[  $data['item_ID']  ] ;
 
