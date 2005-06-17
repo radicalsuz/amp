@@ -324,6 +324,7 @@ class CC_Functions {
 								  $strDescription, 
 								  $strCCExpireDate,
 								  $strLogin, 
+                                  $strVendor,
 								  $strPassword, 
 								  $strPartner,
 								  $strTransactionID, 
@@ -336,7 +337,7 @@ class CC_Functions {
 	
 			 $strCCExpireDate = ereg_replace("/", "", $strCCExpireDate);
 			 $strParameters="USER=".$strLogin;
-			 $strParameters.="&VENDOR=".$strLogin;
+			 $strParameters.="&VENDOR=".$strVendor;
 			 $strParameters.="&PARTNER=".$strPartner;
 			 $strParameters.="&PWD=".$strPassword;
 			 $strParameters.="&TRXTYPE=".$strTransactionType;
@@ -528,6 +529,7 @@ class CC_Functions {
 								  $strCCExpireDate,
 								  $strProcessor,
 								  $strLogin, 
+                                  $strVendor,
 								  $strPassword, 
 								  $strPartner="VeriSign",
 								  $strTransactionID, 
@@ -565,17 +567,19 @@ class CC_Functions {
 				}
 	
 				$ascReturnCodes=$this->ChargePayflow(
-								  $arrPerson,
+								  #$arrPerson,
 								  $fltAmount, 
 								  $intCCNumber, 
 								  $strDescription,
 								  $strCCExpireDate,
 								  $strLogin,
+                                  $strVendor,
 								  $strPassword,
+								  $strPartner,
 								  $strTransactionID,
-								  $strMerchantEmail,
-								  $strEmailCustomer,
 								  $strTransactionType,
+								  #$strMerchantEmail,
+								  #$strEmailCustomer,
 								  $strMethod,
 								  $intTestMode
 								  );

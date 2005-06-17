@@ -24,6 +24,12 @@ class UserDataPlugin_Read_AMPPayment extends UserDataPlugin {
 
     function _register_fields_dynamic() {
         $this->fields = array(
+		    'Payment_Info' => array(
+                'type'=>'header', 
+                'label'=>'Payment Information', 
+                'public'=>true,  
+                'enabled'=>true),
+
             'transaction_list' => array(
                 'type'=>'html',
                 'public'=>false,
@@ -39,9 +45,19 @@ class UserDataPlugin_Read_AMPPayment extends UserDataPlugin {
         
         $paymentlist = new PaymentList ( $this->dbcon );
         $paymentlist->getCustomerTransactions( $uid );
+        $paymentlist->suppressHeader();
+        $paymentlist->suppressAddlink();
+
+        foreach ($this->udm->fields as $fname => $fDef) {
+            $local_name = $this->checkPrefix($fname);
+            if ($local_name && !isset($this->fields[$local_name])) unset ($this->udm->fields[$fname]);
+        }
         
-        $data['transaction_list'] = $paymentlist->output();
-        $this->setData($data);
+        $this->udm->fields[ $this->addPrefix('transaction_list') ]['values'] = $this->inForm($paymentlist->output());
+    }
+
+    function inForm( $raw_html ) {
+        return "<tr><td colspan=2 class = \"form_span_col\">". $raw_html ."</td></tr>\n";
     }
 }
 ?>

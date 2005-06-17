@@ -126,6 +126,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		$defaults = $this->getValueSet( $field_def ); 
 		$size     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 50;
 		$attr     = (isset($field_def['attr']))   ? $field_def['attr']       : null;
+        $template = (isset($field_def['template'])? $field_def['template']: $this->getTemplate( $type ));
 
 		$renderer =& $form->defaultRenderer();
 
@@ -168,11 +169,13 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 			$fRef->updateAttributes($attr);
 		}
 
+        
         /*
 		if ( isset( $selected ) && strpos($type, 'group')===FALSE  ) {
 			$fRef->setSelected( $selected );
 		}
         */
+        
 
 		if ( isset( $size ) && $size && ( $type == 'text' ) ) {
 			if ($size > 40) $size = 40;
@@ -209,10 +212,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		}
 		
 		$template_function = ($type=='header'?'setHeaderTemplate':'setElementTemplate');
-		$renderer->$template_function((isset($field_def['template'])?
-											$field_def['template']:
-											$this->getTemplate( $type )),
-									  $name);
+		$renderer->$template_function( $template, $name);
 
 		if ( isset( $field_def[ 'required' ] ) && $field_def[ 'required' ] && !$admin )
 			$form->addRule( $name, $label . ' is required.', 'required' );

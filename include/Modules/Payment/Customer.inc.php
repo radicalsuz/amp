@@ -16,7 +16,7 @@ class PaymentCustomer {
         'Email');
     var $SQL_translation = array (
         'Name_On_Card' => 'Name',
-        'Billing_Address' => 'Street',
+        'Billing_Street' => 'Street',
         'Billing_City' => 'City',
         'Billing_State'=> 'State',
         'Billing_Zip'=> 'Zip',

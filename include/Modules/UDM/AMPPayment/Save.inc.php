@@ -87,16 +87,14 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
     function save($data) {
         $options = $this->getOptions();
 
-        if (!isset($data['Payment_Type'])) return true;
         if (!isset($data['item_ID'])) return false;
         
         $data['user_ID'] = $this->udm->uid;
-        $this->setProcessor( $data['Payment_Type'] );
         $this->processor->prepareTransaction( $data, $options );
 
         $item = $this->item_info[  $data['item_ID']  ] ;
 
-        if ($this->processor->execute($item->name, $item->amount)) return true;
+        if ($this->processor->execute( $item->amount, $item->name )) return true;
             
         //in case of failure
         $this->udm->errorMessage($this->processor->error);
@@ -106,11 +104,10 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
     function _register_fields_dynamic() {
         
         $options = $this->getOptions();
+        $fields = & $this->fields; 
 
         $fields = array();
         
-		$fields['Payment_Info'] = array('type'=>'header', 'label'=>'Payment Information', 'public'=>true,  'enabled'=>true);
-
         //Grab the item data
         $fields['item_ID'] = $this->setupPaymentItems( $options );
         if (!isset($fields['item_ID'])) return;
@@ -118,7 +115,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         //Get fields from the Payment object
         $fields = array_merge( $fields, $this->setupPaymentTypes($options) );
 
-        $this->fields = &$fields;
         #$this->insertAfterFieldOrder(array('Payment_Type'));
         
 
@@ -175,6 +171,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
             //don't do anything
             return;
         }
+
         if ($selected_type = $this->getPaymentType()) {
             $this->setProcessor( $selected_type );
             return $this->processor->fields;
@@ -190,7 +187,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                         'values'    => $payment_options,
                         'label'     => 'Payment Method',
                         'enabled'   => true,
-                        'default'   => null,
                         'public'    => true,
                         'required'  => true,
                         'attr'      => array(   'onChange'=>

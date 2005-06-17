@@ -32,6 +32,8 @@ class AMP_SystemList {
     var $list_counter=0;
     var $editlink;
 
+    var $suppress = array();
+
 
 //Initialization Functions
     function AMP_SystemList (&$dbcon, $name, $datatable, $fields) {
@@ -51,8 +53,8 @@ class AMP_SystemList {
     }
 
     function defineFieldset() {
-        if (is_numeric(key($this->fields))) return $this->fields;
-        return array_keys($this->fields);
+        if (is_numeric(key($this->fields))) return array_merge($this->col_headers, $this->fields);
+        return array_merge(array_keys($this->fields), $this->col_headers);
     }
 
 
@@ -60,14 +62,14 @@ class AMP_SystemList {
 
     function getData() {
         $fieldset = $this->defineFieldSet();
-        $sql = "Select ".join(",",$fieldset)." from ".$this->datatable;
+        $sql = "Select ".join(", ",$fieldset)." from ".$this->datatable;
         if (isset($this->sql_criteria)) {
             $sql .= ' WHERE '.join(" AND ", $this->sql_criteria);
         }
         if (isset($this->sort)) {
             $sql .= " ORDER BY ".$this->sort;
         }
-        if ($_REQUEST['debug']) print $sql;
+        if ($_REQUEST['debug']) print 'SystemList:<BR>'.$sql.'<P>';
         $dataset = $this->dbcon->CacheGetAll($sql);
         
         return $dataset;
@@ -110,7 +112,7 @@ class AMP_SystemList {
 
     function headerHTML() {
         //Starter HTML
-        $start_html = "<h2>".str_replace("_", " ", $this->name)."</h2>";
+        $start_html = $this->listTitle();
         $start_html .= $this->message;
         $start_html .= "\n<div class='list_table'> \n	<table class='list_table'>\n		<tr class='intitle'> ";
         $start_html .= "\n<td>&nbsp;</td>";
@@ -118,19 +120,27 @@ class AMP_SystemList {
         return $start_html.$this->columnHeaders();
     }
 
+    function listTitle() {
+
+        if (isset($this->suppress['header'])) return false;
+        return "<h2>".str_replace("_", " ", $this->name)."</h2>";
+    }
+
     function columnHeaders() {
         $url_criteria = $this->getURLCriteria();
         $output = "";
+        $endrow = "\n		</tr>";
         //Define HTML for Column Headers
         foreach ($this->col_headers as $k=>$v) {
             $output.= "\n        <td><b><a href='".$_SERVER['PHP_SELF']."?".$url_criteria.$v."' class='intitle'>".$k."</a></b></td>";
         }
+        if (!isset($this->extra_columns)) return $output.$endrow;
+        
         foreach ($this->extra_columns as $header=>$col) {
             $output.= "\n			<td>&nbsp;</td>";
         }
-        $output.= "\n		</tr>";
 
-        return $output;
+        return $output . $endrow ;
     }
 
 
@@ -143,7 +153,7 @@ class AMP_SystemList {
 
 
         $list_html .="\n		<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
-        $list_html .="\n			<td> <div align='center'><A HREF='".$this->editlink."&id=".$currentrow['id']."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
+        $list_html .="\n			<td> <div align='center'><A HREF='".$this->editlink."?id=".$currentrow['id']."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
         
 
         //show each row
@@ -191,7 +201,12 @@ class AMP_SystemList {
     }
 
     function footerHTML () {
-        return "\n	</table>\n</div>\n<br>&nbsp;&nbsp;<a href=\"".$this->editlink."\">Add new record</a> ";
+        return "\n	</table>\n</div>\n<br>&nbsp;&nbsp;" . $this->addLink();
+    }
+
+    function addLink () {
+        if (isset($this->suppress['addlink'])) return false;
+        return "<a href=\"".$this->editlink."\">Add new record</a> ";
     }
 
 
@@ -207,6 +222,13 @@ class AMP_SystemList {
             $url_criteria .= $ukey."=".$uvalue.'&';
         }
         return $url_criteria . "sort=";            
+    }
+
+    function suppressHeader() {
+        $this->suppress['header'] = true;
+    }
+    function suppressAddlink() {
+        $this->suppress['addlink'] = true;
     }
 
 }

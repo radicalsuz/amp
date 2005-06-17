@@ -285,13 +285,7 @@ class UserData {
                 if ( !array_search( $name, $fields ) ) continue;
             }
 
-            if ( $this->useDefaults ) {
-                $valueKey = 'values';
-                if ($fDef['type']=='multiselect') continue;
-                if (!(strpos($fDef['type'],'group')===FALSE)) continue;
-            } else {
-                $valueKey = 'value';
-            }
+            if (!($valueKey = $this->getValueKey( $fDef ))) continue;
 
             if ( isset( $fDef[ $valueKey ] ) )
                 $retarray[ $name ] = $fDef[ $valueKey ];
@@ -299,6 +293,18 @@ class UserData {
         }
 
         return $retarray;
+    }
+
+    function getValueKey( $fDef ) {
+        if (!$this->useDefaults) return 'value';
+
+        if (isset($fDef['default'])) return 'default';
+        if (isset($fDef['region'])) return 'values';
+
+        $no_default_types = array( "select", "multiselect","checkgroup","radiogroup" );
+        if (array_search( $fDef['type'], $no_default_types ) !== FALSE) return FALSE;
+
+        return 'values';
     }
 
     /*****

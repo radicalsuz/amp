@@ -371,7 +371,6 @@ class UserDataPlugin {
     
 
     function setData ( $data ) {
-        
         foreach ($data as $key=>$value) {
             $udmkey = $this->addPrefix($key);
             $plugin_data[$udmkey]=$this->uncheckData( $this->udm->fields[$udmkey], $value );

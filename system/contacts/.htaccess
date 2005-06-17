@@ -1,3 +1,0 @@
-php_flag register_globals on
-php_value auto_prepend_file "AMP/Auth/Require.inc.php"
-ErrorDocument 404 /system/404.php

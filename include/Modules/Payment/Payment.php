@@ -7,15 +7,18 @@ require_once ('Modules/Payment/Check.inc.php');
 Class Payment {
 	var $dbcon;
 	var $id;
-    var $customer;
-	var $user_ID;
-    var $amount;
-    var $description; //Description of what is being purchased
-	var $fields;
-	var $data;
-    var $paymentType; //CreditCard, Check, or Cash
     var $payment_info_keys = array (
 		'user_ID','payment_item_ID','Amount','Date_Processed','Status','Payment_Type');
+
+    var $amount;
+    var $description; //Description of what is being purchased
+
+	var $fields;
+	var $data;
+
+	var $user_ID;
+    var $customer;
+    var $paymentType; //CreditCard, Check, or Cash
 
 	function Payment(&$dbcon, $type=null) {
         $this->init($dbcon, $type);
@@ -78,7 +81,7 @@ Class Payment {
     }
 
 
-    function execute( $description, $amount ) {
+    function execute( $amount, $description = "generic item" ) {
         $this->description = $description;
         $this->amount = $amount;
 
@@ -103,6 +106,7 @@ Class Payment {
         $payment_info['Date_Processed']=date("r");
         $payment_info['Status']='Processed';
         $payment_info['Payment_Type']=$this->paymentType->name;
+        $payment_info['requesting_ip']=$_SERVER['REMOTE_ADDR'];
 
         return array_merge($payment_info,  $this->paymentType->getData());
 
@@ -116,18 +120,7 @@ Class Payment {
 
 
 	function save() {
-        /*
-        $sql = $this->payment_ID?   $this->updateSQL ( $save_data ):
-                                    $this->insertSQL ( $save_data );
-        
-        $rs = $this->dbcon->CacheExecute( $sql ) or
-                    die( "Unable to save payment data using SQL $sql: " . $this->dbcon->ErrorMsg() );
-                    */
         $save_data=$this->getData();
-        print 'attempting save<BR>';
-        foreach ($save_data as $key=>$value) {
-            print $key.": ".$value."<BR>";
-        }
         $rs = $this->dbcon->Replace("payment", $save_data, "id", $quote = true );
 
         if ($rs == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
@@ -137,46 +130,5 @@ Class Payment {
 	
 	}
 
-    function updateSQL ( $data ) {
-
-        $dbcon =& $this->dbcon;
-
-        unset($data['merchant_ID']);
-
-        $sql = "UPDATE payment SET ";
-
-        foreach ($data as $field => $value) {
-            $elements[] = $field . "=" . $dbcon->qstr( $value );
-        }
-
-        $sql .= implode( ", ", $elements );
-        $sql .= " WHERE id=" . $dbcon->qstr( $this->id);
-
-        return $sql;
-
-    }
-
-    function insertSQL ( $data ) {
-
-        $dbcon =& $this->dbcon;
-
-        unset($data['merchant_ID']);
-
-        $fields = array_keys( $data );
-        $values_noescape = array_values( $data );
-
-        foreach ( $values_noescape as $value ) {
-            $values[] = $dbcon->qstr( $value );
-        }
-
-        $sql  = "INSERT INTO payment (";
-        $sql .= join( ", ", $fields ) .
-                ") VALUES (" .
-                join( ", ", $values ) .
-                ")";
-
-        return $sql;
-
-    }
 }
 ?>

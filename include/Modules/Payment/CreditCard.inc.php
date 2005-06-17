@@ -31,6 +31,8 @@ class PaymentType_CreditCard {
         'Date_Processed',
         'Time_Requested',
         'Time_Responded',
+        'auth_code',
+        'transaction_id',
         'Amount',
         'Status');
 
@@ -108,15 +110,6 @@ class PaymentType_CreditCard {
 
         $card_data = array();
         array_walk ($data, array(&$this,'filterCCdata'));
-        /*
-        print count($card_data);
-        print 'lbagh'.join(", ",array_keys($card_data));
-
-        $card_info['Expiration'] = $this->getExpirationDate( $card_data );
-        $card_info = array_combine_key ( $this->card_info_keys, $card_data );
-
-        if (is_array($card_info)) $this->card_info=$card_info;
-        */
     }
 
     function filterCCdata ($value, $key) {
@@ -160,12 +153,30 @@ class PaymentType_CreditCard {
     function getFields() {
 
 
-		$fields['Credit_Card_Number'] = array('type'=>'text', 'label'=>'Credit Card Number', 'required'=>true, 'public'=>true, 'size'=>40, 'enabled'=>true);
-		$fields['Credit_Card_Type'] = array('type'=>'select', 'label'=>'Credit Card Type', 'required'=>true, 'public'=>true, 'size'=>40, 'values'=>'Visa,Master Card','enabled'=>true);
+		$fields['Credit_Card_Number'] = array(
+            'type'=>'text', 
+            'label'=>'Credit Card Number', 
+            'required'=>true,  
+            'public'=>true,  
+            'size'=>16, 
+            'enabled'=>true);
+		$fields['Credit_Card_Type'] = array(
+            'type'=>'select', 
+            'label'=>'Credit Card Type', 
+            'required'=>true, 
+            'public'=>true, 
+            'values'=>'Visa,MasterCard',
+            'enabled'=>true);
 
         $this_year = date('Y');
         $date_options = array("format"=>"mY","minYear"=>$this_year,"maxYear"=>($this_year+10));
-		$fields['Credit_Card_Expiration'] = array('type'=>'date', 'label'=>'Credit Card Expiration', 'required'=>true, 'public'=>true, 'values'=>$date_options, 'enabled'=>true);
+		$fields['Credit_Card_Expiration'] = array(
+            'type'=>'date', 
+            'label'=>'Credit Card Expiration', 
+            'required'=>true, 
+            'public'=>true, 
+            'values'=>$date_options, 
+            'enabled'=>true);
 
         $cardholder_fields = $this->prefixLabels( $this->payment->customer->fields, 'Cardholder ' );
 
@@ -181,6 +192,10 @@ class PaymentType_CreditCard {
         }
         return $fielddefs;
     }
+
+    function protect( $cc_number ) {
+        return str_repeat( 'XXXX-', 3). substr($cc_number, 12);
+    }
         
 
     /* * * * * * * * * * * * *
@@ -195,14 +210,16 @@ class PaymentType_CreditCard {
 
 		$data_fields=array (
         'Credit_Card_Type'  =>  $this->card_info['Type'],
-        'Credit_Card_Number'=>  $this->card_info['Number'],
+        'Credit_Card_Number'=>  $this->protect( $this->card_info['Number'] ),
         'Credit_Card_Expiration'    =>  $this->card_info['Expiration'],
         'Date_Submitted'    =>  $this->transaction_info['Date_Submitted'],
         'Date_Processed'    =>  $this->transaction_info['Date_Processed'],
         'Time_Requested'    =>  $this->transaction_info['Time_Requested'],
+        'auth_code'         =>  $this->transaction_info['auth_code'],
+        'transaction_id'    =>  $this->transaction_info['transaction_id'],
         'Status'            =>  $this->transaction_info['Status'],
         'Amount'            =>  $this->transaction_info['Amount'],
-        'merchant_ID'       =>  $this->merchant->getData('id'));
+        'payment_merchant_ID'       =>  $this->merchant->getData('id'));
 
         return array_merge($data_fields, $this->payment->customer->getDataforSQL());
     }
@@ -217,34 +234,27 @@ class PaymentType_CreditCard {
     * * * * * * * * * */
 
 	function execute() {
-        $description = $this->payment->amount;
-        $amount = $this->payment->amount;
 
         //Create transaction metadata
         $this->transaction_info['Amount']=$amount;
         $this->transaction_info['Time_Requested']=time();
-        $this->transaction_info['Date_Submitted']=date("r");
+        $this->transaction_info['Date_Submitted']=date("Y-m-d");
         $this->transaction_info['Status']='Awaiting Approval';
        
         //Generate a permanent Transation_ID by saving to the DB
         $this->payment->save();
 
-        /*
-        print "<b>Before we call the actual charge processing stuff:</b> <pre>";
-        print_r($this);
-        print "</pre>";
-        */
-        
         //Call the Credit Card processing Library
         $ChargeResult=
             $this->CC_Library->ChargeCreditCard( 
                     $this->payment->customer->getData(),
-                    $amount,
+                    $this->payment->amount,
                     $this->card_info['Number'],
-                    $description,
+                    $this->payment->description,
                     $this->card_info['Expiration'],
                     $this->merchant->getData('Account_Type'),
                     $this->merchant->getData('Account_Username'),
+                    $this->merchant->getData('Merchant'),
                     $this->merchant->getData('Account_Password'),
                     $this->merchant->getData('Partner'),
                     $this->payment->payment_ID,
@@ -257,8 +267,10 @@ class PaymentType_CreditCard {
 
         //complete transaction metadata
         $this->transaction_info['Status']=$this->response_codes[$ChargeResult['return_code']];
-        $this->transaction_info['Date_Processed']=date("r");
+        $this->transaction_info['Date_Processed']=date("Y-m-d");
         $this->transaction_info['Time_Responded']=time();
+        $this->transaction_info['auth_code'] = $ChargeResult["auth_code"];
+        $this->transaction_info['transaction_id'] = $ChargeResult['return_id'];
 
         //save the record of the transaction
         $this->payment->save();

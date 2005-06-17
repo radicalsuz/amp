@@ -7,6 +7,7 @@ class CreditCardMerchant {
 	var $merchant_info = array();
 	var $merchant_info_keys = array(
         'id',
+        'Merchant',
 		'Account_Type', 
 		'Account_Username',
 		'Account_Password',
