@@ -65,11 +65,11 @@ if ($MM_type != 1) {
     }
 
     if (!(isset($_GET['list']) && $_GET["list"]) && $MM_id && !$mod_name) { 
-    	$maxTextLenght=35;
+    	$maxTextLength=35;
       	$aspace=" ";
         $tttext =strip_tags($hiarticle->Fields("title"));
-        if(strlen($tttext) > $maxTextLenght ) {
-            $tttext = substr(trim($tttext),0,$maxTextLenght); 
+        if(strlen($tttext) > $maxTextLength ) {
+            $tttext = substr(trim($tttext),0,$maxTextLength); 
             $tttext = substr($tttext,0,strlen($tttext)-strpos(strrev($tttext),$aspace));
             $tttext = $tttext.'...';
         }
