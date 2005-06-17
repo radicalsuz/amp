@@ -246,6 +246,15 @@ class UserData {
 
     }
 
+    function outputErrors () {
+        if (!isset($this->errors)) return false;
+        $output = "";
+        foreach ($this->errors as $type => $message) {
+            $output .= $message."<BR>";
+        }
+        return $output;
+    }
+
     ################################
     ### Public Utility Functions ###
     ################################

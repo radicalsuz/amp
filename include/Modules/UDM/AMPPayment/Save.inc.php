@@ -90,6 +90,8 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         if (!isset($data['item_ID'])) return false;
         
         $data['user_ID'] = $this->udm->uid;
+        #$this->setProcessor( $this->getPaymentType() );
+
         $this->processor->prepareTransaction( $data, $options );
 
         $item = $this->item_info[  $data['item_ID']  ] ;
@@ -114,9 +116,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         //Get fields from the Payment object
         $fields = array_merge( $fields, $this->setupPaymentTypes($options) );
-
-        #$this->insertAfterFieldOrder(array('Payment_Type'));
-        
 
         //set the field order to put the dynamic checkbox before the Customer
         //Data
@@ -174,7 +173,10 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         if ($selected_type = $this->getPaymentType()) {
             $this->setProcessor( $selected_type );
-            return $this->processor->fields;
+            $selector_field['Payment_Type'] = $this->getPaymentSelect();
+            $selector_field['Payment_Type']['type'] = 'hidden';
+            $selector_field['Payment_Type']['default'] = $selected_type;
+            return ($selector_field + $this->processor->fields);
         }
 
         //Otherwise Return fields from all processor types
@@ -182,17 +184,10 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $paymentType_fields = array();
         $allowed_types = split("[ ]?,[ ]?", $options['allowed_payment_types']);
         $payment_options = array_combine_key( $allowed_types, $this->options['allowed_payment_types']['values']);
-        $selector_field['Payment_Type'] = 
-                array(  'type'      => 'select',
-                        'values'    => $payment_options,
-                        'label'     => 'Payment Method',
-                        'enabled'   => true,
-                        'public'    => true,
-                        'required'  => true,
-                        'attr'      => array(   'onChange'=>
-                                                'ActivateSwap( window.'.$this->fieldswap_object_id.', this.value );')
-                        );
-
+        $selector_field['Payment_Type'] = $this->getPaymentSelect();
+        $selector_field['Payment_Type']['values'] = $payment_options;
+        $selector_field['Payment_Type']['attr']   = array(   'onChange'=>
+                                             'ActivateSwap( window.'.$this->fieldswap_object_id.', this.value );');
 
         $fieldswapper = & new ElementSwapScript( $this->fieldswap_object_id );
         $fieldswapper->formname = $this->udm->name;
@@ -207,6 +202,15 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $this->_register_javascript ($fieldswapper->output()); 
 
         return ($selector_field + $paymentType_fields);
+    }
+
+    function getPaymentSelect() {
+        return array(       'type'      => 'select',
+                            'label'     => 'Payment Method',
+                            'enabled'   => true,
+                            'public'    => true,
+                            'required'  => true
+                    );
     }
 
     function returnTransactions ( $uid ) {

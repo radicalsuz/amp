@@ -70,6 +70,7 @@ $mod_id = $udm->modTemplateID;
 require_once( 'header.php' );
 
 print "<h2>Add/Edit " . $udm->name . "</h2>";
+print "<font color = \"red\">".$udm->outputErrors()."</font>";
 print $udm->output();
 
 // Append the footer and clean up.

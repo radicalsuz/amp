@@ -236,7 +236,7 @@ class PaymentType_CreditCard {
 	function execute() {
 
         //Create transaction metadata
-        $this->transaction_info['Amount']=$amount;
+        $this->transaction_info['Amount']=$this->payment->amount;
         $this->transaction_info['Time_Requested']=time();
         $this->transaction_info['Date_Submitted']=date("Y-m-d");
         $this->transaction_info['Status']='Awaiting Approval';
@@ -276,7 +276,8 @@ class PaymentType_CreditCard {
         $this->payment->save();
 
         if ($ChargeResult['return_code'] != PAYMENT_CC_TRANSACTION_SUCCESS) {
-            $this->payment->error = $ChargeResult['return_reason'];
+            if ( $ChargeResult['return_reason'] ) $this->payment->error = $ChargeResult['return_reason'];
+            else $this->payment->error = "Credit Card Transaction Failed";
             return false;
         }
 
