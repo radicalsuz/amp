@@ -15,14 +15,17 @@ global $MM_type, $MM_class ,$area, $list, $MM_id, $mod_name, $MM_title, $mod_id,
 
 $ar = "&nbsp;&nbsp;<b>&#187;</b>&nbsp;&nbsp;";
 
-if (isset($_GET['list']) && $_GET["list"]=="class"){
-	$hiclass=$dbcon->CacheExecute("Select class from class where id = $MM_class") or DIE($dbcon->ErrorMsg());
+if (isset($_GET['list']) && $_GET["list"]=="class") {
+	$hiclass=$dbcon->CacheExecute("Select class from class where id = $MM_class")
+		or DIE($dbcon->ErrorMsg());
 }
-if ($MM_id){
-	$hiarticle=$dbcon->CacheExecute("Select title from articles where id = $MM_id") or DIE($dbcon->ErrorMsg());
+if ($MM_id) {
+	$hiarticle=$dbcon->CacheExecute("Select title from articles where id = $MM_id")
+		or DIE($dbcon->ErrorMsg());
 }
-if (!(isset($MM_type) && $MM_type == 1) && !(isset($_GET['list']) && $_GET["list"]=="class")){
-	$hitype=$dbcon->CacheExecute("Select type, id from articletype where id = $MM_type") or DIE($dbcon->ErrorMsg());
+if (!(isset($MM_type) && $MM_type == 1) && !(isset($_GET['list']) && $_GET["list"]=="class")) {
+	$hitype=$dbcon->CacheExecute("Select type, id from articletype where id = $MM_type")
+		or DIE($dbcon->ErrorMsg());
 }
 
 if (!isset($Web_url)) $Web_url = '/';
@@ -30,7 +33,7 @@ if (!isset($bchtml)) $bchtml = '';
 
 ####start html #################
 $bchtml.= " <!-- BEGIN BREADCRUMB CODE -->
- <span class=breadcrumb><a href=\"".$Web_url ."index.php\" class=breadcrumb>Home</a> ";
+			<span class=breadcrumb><a href=\"".$Web_url ."index.php\" class=breadcrumb>Home</a> ";
 
 //if (isset($isanarticle) or isset($MM_type)){
 if ($MM_type != 1) {
@@ -39,18 +42,25 @@ if ($MM_type != 1) {
 
 	$ancestors = $obj->get_ancestors($MM_type);
  	for ($x=0; $x<sizeof($ancestors); $x++) { 
-		if ($ancestors[$x]["id"] != "1" ){
-			$path .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $ancestors[$x]["id"] . "\" class=\"breadcrumb\">" . $ancestors[$x]["type"] . "</a>" ;
+		if ($ancestors[$x]["id"] != "1" ) {
+			$path .= $ar."<a href=\"" . $Web_url
+				   . "article.php?list=type&type=" . $ancestors[$x]["id"]
+				   . "\" class=\"breadcrumb\">" . $ancestors[$x]["type"]
+				   . "</a>" ;
 		}
 	} 
-
     $bchtml .= $path; 
 
     if ($MM_type != "1" && isset($hitype) ) {
 
-        if (!isset($path2)) $path2 = "";
+        if (!isset($path2)) {
+			$path2 = "";
+		}
 
-    	$path2 .= $ar."<a href=\"" . $Web_url . "article.php?list=type&type=" . $hitype->Fields("id") . "\" class=\"breadcrumb\">" . $hitype->Fields("type") . "</a>";
+    	$path2 .= $ar."<a href=\"" . $Web_url
+				. "article.php?list=type&type=" . $hitype->Fields("id")
+				. "\" class=\"breadcrumb\">" . $hitype->Fields("type")
+				. "</a>";
     	$bchtml.= $path2; 
     }
 
