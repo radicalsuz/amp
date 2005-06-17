@@ -89,7 +89,8 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         if (!isset($data['Payment_Type'])) return true;
         if (!isset($data['item_ID'])) return false;
-
+        
+        $data['user_ID'] = $this->udm->uid;
         $this->setProcessor( $data['Payment_Type'] );
         $this->processor->prepareTransaction( $data, $options );
 
@@ -161,7 +162,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         $itemOptions = array();
         foreach ($this->item_info as $item) {
-            $itemOptions = array_merge($itemOptions, $item->optionValue());
+            $itemOptions[$item->id] =  $item->optionValue();
         }
         return $itemOptions;
     }
@@ -173,6 +174,10 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         if ( $this->udm->uid ) {
             //don't do anything
             return;
+        }
+        if ($selected_type = $this->getPaymentType()) {
+            $this->setProcessor( $selected_type );
+            return $this->processor->fields;
         }
 
         //Otherwise Return fields from all processor types

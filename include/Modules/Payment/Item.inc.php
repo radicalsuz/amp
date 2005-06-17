@@ -47,7 +47,8 @@ class PaymentItem {
         
 
     function optionValue() {
-        return array ($this->id => sprintf( $this->currency_format, $this->amount ) ."  ". $this->name);
+        return sprintf( $this->currency_format, $this->amount ) ."  ". $this->name;
+
     }
 
 

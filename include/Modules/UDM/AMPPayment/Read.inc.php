@@ -38,7 +38,9 @@ class UserDataPlugin_Read_AMPPayment extends UserDataPlugin {
         $uid = $options['_userid'];
         
         $paymentlist = new PaymentList ( $this->dbcon );
-        $data['transaction_list'] = $paymentlist->getCustomerTransactions( $uid );
+        $paymentlist->getCustomerTransactions( $uid );
+        
+        $data['transaction_list'] = $paymentlist->output();
         $this->setData($data);
     }
 }
