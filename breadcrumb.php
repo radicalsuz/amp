@@ -46,7 +46,7 @@ if ($MM_type != 1) {
 
     $bchtml .= $path; 
 
-    if ($MM_type != "1" ) {
+    if ($MM_type != "1" && isset($hitype) ) {
 
         if (!isset($path2)) $path2 = "";
 
