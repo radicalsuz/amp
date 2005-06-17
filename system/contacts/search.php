@@ -1,7 +1,7 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
    $allusers=$dbcon->Execute("SELECT id, name FROM users ORDER BY name ASC") or DIE($dbcon->ErrorMsg());

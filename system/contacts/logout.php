@@ -1,7 +1,7 @@
 <?PHP $logout = true; 
 
 
-require_once("Connections/freedomrising.php");  
+require_once("../Connections/freedomrising.php");  
 if ($standalone != 1) {
 require("../password/secure.php");}
 else  { require("password/secure.php");}?>

@@ -1,6 +1,6 @@
 <?php   
   
-  require_once("Connections/freedomrising.php");?>
+  require_once("../Connections/freedomrising.php");?>
   <?php include ("header.php");?>
 <h2>System Administration</h2>
  <?php if ($userper[66] == 1 or $standalone == 1){{} ?>

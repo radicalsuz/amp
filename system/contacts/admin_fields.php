@@ -1,7 +1,7 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
    $Recordset1=$dbcon->Execute("SELECT id, name FROM contacts_fields ORDER BY camid, fieldorder") or DIE($dbcon->ErrorMsg());

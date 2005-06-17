@@ -1,7 +1,7 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 if (isset($HTTP_GET_VARS["repeat"])) {$repeat= $HTTP_GET_VARS["repeat"];}
 else {$repeat = 50;}

@@ -1,7 +1,7 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
   // *** Edit Operations: declare Tables
@@ -12,20 +12,18 @@
 
   $MM_abortEdit = 0;
   $MM_editQuery = "";
-?><?php
-$Recordset1__MMColParam = "8000";
-if (isset($HTTP_GET_VARS["id"]))
-  {$Recordset1__MMColParam = $HTTP_GET_VARS["id"];}
-?><?php
+   ob_start();
+?>
+<?php
 // *** Insert Record: set Variables
 
 if (isset($MM_insert)){
 
    // $MM_editConnection = MM_freedomrising_STRING;
-   $MM_editTable  = "users";
+   $MM_editTable  = "source";
    $MM_editRedirectUrl = "admin.php";
-   $MM_fieldsStr = "name|value|password|value|permission|value";
-   $MM_columnsStr = "name|',none,''|password|',none,''|permission|',none,''";
+   $MM_fieldsStr = "name|value|password|value";
+   $MM_columnsStr = "title|',none,''|description|',none,''";
  
   // create the $MM_fields and $MM_columns arrays
    $MM_fields = explode("|", $MM_fieldsStr);
@@ -47,10 +45,10 @@ if (isset($MM_insert)){
 //    $MM_editConnection = $MM_freedomrising_STRING;
        $MM_editColumn = "id";
     $MM_recordId = "" . $MM_recordId . "";
-   	$MM_editTable  = "users";
+   	   $MM_editTable  = "source";
    $MM_editRedirectUrl = "admin.php";
-   $MM_fieldsStr = "name|value|passwordx|value|permission|value";
-   $MM_columnsStr = "name|',none,''|password|',none,''|permission|',none,''";
+   $MM_fieldsStr = "name|value|password|value";
+   $MM_columnsStr = "title|',none,''|description|',none,''";
     
 	// create the $MM_fields and $MM_columns arrays
    $MM_fields = Explode("|", $MM_fieldsStr);
@@ -66,11 +64,10 @@ if (isset($MM_insert)){
     $MM_editRedirectUrl .= ((strpos($MM_editRedirectUrl, '?') == false)?"?":"&") . $QUERY_STRING;
     }
   }
-  
 	// *** Delete Record: declare variables
   if (isset($MM_delete) && (isset($MM_recordId))) {
 //    $MM_editConnection = $MM_freedomrising_STRING;
-    $MM_editTable  = "users";
+    $MM_editTable  = "source";
     $MM_editColumn = "id";
     $MM_recordId = "" . $MM_recordId . "";
     $MM_editRedirectUrl = "admin.php";
@@ -79,58 +76,53 @@ if (isset($MM_insert)){
       $MM_editRedirectUrl = $MM_editRedirectUrl . ((strpos($MM_editRedirectUrl, '?') == false)?"?":"&") . $QUERY_STRING;
     }
   }
-
-require ("../Connections/dataactions.php");
+require ("../../Connections/dataactions.php");
 ob_end_flush();
-
-
-?><?php
-   $Recordset1=$dbcon->Execute("SELECT * FROM users WHERE id = " . ($Recordset1__MMColParam) . "") or DIE($dbcon->ErrorMsg());
-   $Recordset1_numRows=0;
-   $Recordset1__totalRows=$Recordset1->RecordCount();
-?><?php include ("header.php"); ?>
-
-<h2>Users</h2>
+$Recordset1__MMColParam = "9000000";
+if (isset($HTTP_GET_VARS["id"]))
+  {$Recordset1__MMColParam = $HTTP_GET_VARS["id"];}
+ $Recordset1=$dbcon->Execute("SELECT id, title, description FROM source WHERE id = " . ($Recordset1__MMColParam) . "") or DIE($dbcon->ErrorMsg());
+ include ("header.php"); ?>
+<html>
+<head>
+<title>admin_users</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h2>Source #<?php echo $Recordset1->Fields("id") ?></h2>
 <form method="post" action="<?php echo $MM_editAction?>" name="form1">
   <table border=0 cellpadding=2 cellspacing=0 align="center">
     <tr valign="baseline"> 
       <td nowrap align="right">Name:</td>
       <td> 
-        <input type="text" name="name" value="<?php echo $Recordset1->Fields("name")?>" size="40">
+        <input type="text" name="name" value="<?php echo $Recordset1->Fields("title")?>" size="40">
       </td>
     </tr>
     <tr valign="baseline"> 
-      <td nowrap align="right">Password:</td>
+      <td nowrap align="right">Description:</td>
       <td> 
-        <input type="password" name="passwordx" value="<?php echo $Recordset1->Fields("password")?>" size="40">
-      </td>
-    </tr>
-    <tr valign="baseline"> 
-      <td nowrap align="right">Permission:</td>
-      <td> 
-        <input type="text" name="permission" value="<?php echo $Recordset1->Fields("permission")?>" size="32">
+        <textarea name="password" cols="40" rows="4" wrap="VIRTUAL"><?php echo $Recordset1->Fields("description")?></textarea>
       </td>
     </tr>
     <tr valign="baseline"> 
       <td nowrap align="right">&nbsp;</td>
-      <td><p>1 = no admin access<br>
-          2 = no users admin<br>
-          3 = full admin access</p>
-        </td>
+      <td>&nbsp; </td>
     </tr>
   </table>
-   <?php if ($Recordset1->Fields("id") == ($null)){?>
-        <input type="hidden" name="MM_insert" value="true">
-<?php
+  <?php if ($Recordset1->Fields("id") == ($null)){?>
+  <input type="hidden" name="MM_insert" value="true">
+  <?php
 }
  if ($Recordset1->Fields("id") != ($null)){?>
-  <input type="hidden" name="MM_update" value="true">
-  <input type="hidden" name="MM_recordId" value="<?php echo $Recordset1->Fields("id") ?>"><?php } ?>
-   <input type="submit" name="Submit" value="Update">
-</form>  <form name="delete" method="POST" action="<?php echo $MM_editAction?>">
-  <input type="hidden" name="MM_delete" value="true">
-	 <input type="hidden" name="MM_recordId" value="<?php echo $Recordset1->Fields("id") ?>">
-	<input type="submit" name="Submit2" value="Delete"></form>
+ <input type="hidden" name="MM_update" value="true">
+ <input type="hidden" name="MM_recordId" value="<?php echo $Recordset1->Fields("id") ?>"><?php } ?>
+ <input type="submit" name="Submit" value="Update">
+ </form>
+ 
+ <form name="delete" method="POST" action="<?php echo $MM_editAction?>">
+ <input type="hidden" name="MM_delete" value="true">
+ <input type="hidden" name="MM_recordId" value="<?php echo $Recordset1->Fields("id") ?>">
+ <input type="submit" name="Submit2" value="Delete"></form>
 <p>&nbsp;</p>
 </body>
 </html>

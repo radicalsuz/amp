@@ -1,10 +1,10 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
-   $Recordset1=$dbcon->Execute("SELECT id, title FROM contacts_class ORDER BY title ASC") or DIE($dbcon->ErrorMsg());
+   $Recordset1=$dbcon->Execute("SELECT id, name FROM users ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
    $Recordset1_numRows=0;
    $Recordset1__totalRows=$Recordset1->RecordCount();
 ?><?php
@@ -48,8 +48,14 @@ if (strlen($MM_keepBoth) > 0) $MM_keepBoth = substr($MM_keepBoth, 1);
 if (strlen($MM_keepURL) > 0)  $MM_keepURL = substr($MM_keepURL, 1);
 if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
 ?><?php include ("header.php"); ?>
-
-<h2>All Types</h2>
+<html>
+<head>
+<title>admin_camfieldsall</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="site.css" type="text/css">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h2>All Users</h2>
 <table width="75%" border="0" cellspacing="5" cellpadding="0" align="center">
   <tr> 
     <td class="toplinks">ID #</td>
@@ -64,9 +70,9 @@ if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
       <?php echo $Recordset1->Fields("id")?>
     </td>
     <td> 
-      <?php echo $Recordset1->Fields("title")?>
+      <?php echo $Recordset1->Fields("name")?>
     </td>
-    <td><A HREF="admin_types.php?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>">edit</A></td>
+    <td><A HREF="admin_users.php?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>">edit</A></td>
   </tr>
   <?php
   $Repeat1__index++;

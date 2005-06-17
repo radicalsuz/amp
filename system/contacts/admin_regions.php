@@ -1,7 +1,7 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
   // *** Edit Operations: declare Tables
@@ -12,14 +12,15 @@
 
   $MM_abortEdit = 0;
   $MM_editQuery = "";
-     ob_start();
-
+   ob_start();
+?>
+<?php
 // *** Insert Record: set Variables
 
 if (isset($MM_insert)){
 
    // $MM_editConnection = MM_freedomrising_STRING;
-   $MM_editTable  = "contacts_class";
+   $MM_editTable  = "region";
    $MM_editRedirectUrl = "admin.php";
    $MM_fieldsStr = "name|value|password|value";
    $MM_columnsStr = "title|',none,''|description|',none,''";
@@ -44,7 +45,7 @@ if (isset($MM_insert)){
 //    $MM_editConnection = $MM_freedomrising_STRING;
        $MM_editColumn = "id";
     $MM_recordId = "" . $MM_recordId . "";
-   	   $MM_editTable  = "contacts_class";
+   	   $MM_editTable  = "region";
    $MM_editRedirectUrl = "admin.php";
    $MM_fieldsStr = "name|value|password|value";
    $MM_columnsStr = "title|',none,''|description|',none,''";
@@ -63,10 +64,10 @@ if (isset($MM_insert)){
     $MM_editRedirectUrl .= ((strpos($MM_editRedirectUrl, '?') == false)?"?":"&") . $QUERY_STRING;
     }
   }
-// *** Delete Record: declare variables
+	// *** Delete Record: declare variables
   if (isset($MM_delete) && (isset($MM_recordId))) {
 //    $MM_editConnection = $MM_freedomrising_STRING;
-    $MM_editTable  = "contacts_class";
+    $MM_editTable  = "region";
     $MM_editColumn = "id";
     $MM_recordId = "" . $MM_recordId . "";
     $MM_editRedirectUrl = "admin.php";
@@ -75,21 +76,25 @@ if (isset($MM_insert)){
       $MM_editRedirectUrl = $MM_editRedirectUrl . ((strpos($MM_editRedirectUrl, '?') == false)?"?":"&") . $QUERY_STRING;
     }
   }
-require ("../Connections/dataactions.php");
+require ("../../Connections/dataactions.php");
 ob_end_flush();
 
-
-?><?php
-$Recordset1__MMColParam = "8000";
+$Recordset1__MMColParam = "900000000";
 if (isset($HTTP_GET_VARS["id"]))
   {$Recordset1__MMColParam = $HTTP_GET_VARS["id"];}
-  
-   $Recordset1=$dbcon->Execute("SELECT id, title, description FROM contacts_class WHERE id = " . ($Recordset1__MMColParam) . "") or DIE($dbcon->ErrorMsg());
+
+ $Recordset1=$dbcon->Execute("SELECT id, title, description FROM region WHERE id = " . ($Recordset1__MMColParam) . "") or DIE($dbcon->ErrorMsg());
    $Recordset1_numRows=0;
    $Recordset1__totalRows=$Recordset1->RecordCount();
-?><?php include ("header.php"); ?>
 
-<h2>Types</h2>
+ include ("header.php"); ?>
+<html>
+<head>
+<title>admin_users</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<h2>Region <?php echo $Recordset1->Fields("id") ?></h2>
 <form method="post" action="<?php echo $MM_editAction?>" name="form1">
   <table border=0 cellpadding=2 cellspacing=0 align="center">
     <tr valign="baseline"> 
@@ -124,8 +129,9 @@ if (isset($HTTP_GET_VARS["id"]))
  <input type="hidden" name="MM_recordId" value="<?php echo $Recordset1->Fields("id") ?>">
  <input type="submit" name="Submit2" value="Delete"></form>
 <p>&nbsp;</p>
-
+</body>
+</html>
 <?php
   $Recordset1->Close();
+  include ("footer.php");
 ?>
-<?php include ("footer.php");?>

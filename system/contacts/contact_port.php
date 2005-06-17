@@ -1,6 +1,6 @@
 <?php
 set_time_limit(0);
- require("../adodb/adodb.inc.php");
+ require("adodb/adodb.inc.php");
    $MM_HOSTNAME = "localhost";
   $MM_DBTYPE = "mysql";
  $MM_DATABASE = "seaflow";

@@ -1,7 +1,7 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
   // *** Edit Operations: declare Tables
@@ -74,7 +74,7 @@ if (isset($MM_insert)){
       $MM_editRedirectUrl = $MM_editRedirectUrl . ((strpos($MM_editRedirectUrl, '?') == false)?"?":"&") . $QUERY_STRING;
     }
   }
-require ("../Connections/dataactions.php");
+require ("../../Connections/dataactions.php");
 ob_end_flush();
 
 $Recordset1__MMColParam = "8000";

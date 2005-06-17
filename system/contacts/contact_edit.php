@@ -1,7 +1,7 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
   // *** Edit Operations: declare Tables
@@ -38,8 +38,8 @@
     $MM_editRedirectUrl = "allcontacts.php";}
 	else {$MM_editRedirectUrl = "contact.php";}
 
-  	require ("../Connections/insetstuff.php");
-    require ("../Connections/dataactions.php");
+  	require ("../../Connections/insetstuff.php");
+    require ("../../Connections/dataactions.php");
   }
   ?>
   <?php

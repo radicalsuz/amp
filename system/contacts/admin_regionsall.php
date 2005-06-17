@@ -1,10 +1,10 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
-   $Recordset1=$dbcon->Execute("SELECT id, name FROM campaigns ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
+   $Recordset1=$dbcon->Execute("SELECT id, title FROM region ORDER BY title ASC") or DIE($dbcon->ErrorMsg());
    $Recordset1_numRows=0;
    $Recordset1__totalRows=$Recordset1->RecordCount();
 ?><?php
@@ -48,7 +48,8 @@ if (strlen($MM_keepBoth) > 0) $MM_keepBoth = substr($MM_keepBoth, 1);
 if (strlen($MM_keepURL) > 0)  $MM_keepURL = substr($MM_keepURL, 1);
 if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
 ?><?php include ("header.php"); ?>
-<h2>All Campaigns</h2>
+
+<h2>All Regions</h2>
 <table width="75%" border="0" cellspacing="5" cellpadding="0" align="center">
   <tr> 
     <td class="toplinks">ID #</td>
@@ -58,14 +59,14 @@ if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
   <?php while (($Repeat1__numRows-- != 0) && (!$Recordset1->EOF)) 
    { 
 ?>
-  <tr> 
-    <td class="results"> 
+  <tr class="results"> 
+    <td> 
       <?php echo $Recordset1->Fields("id")?>
     </td>
-    <td class="title"> 
-      <?php echo $Recordset1->Fields("name")?>
+    <td> 
+      <?php echo $Recordset1->Fields("title")?>
     </td>
-    <td class="title"><A HREF="admin_camfieldsphp.php?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>">edit</A></td>
+    <td><A HREF="admin_regions.php?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>">edit</A></td>
   </tr>
   <?php
   $Repeat1__index++;

@@ -10,7 +10,7 @@
 #todo: query to fill input_choice
 
 
-require_once("Connections/freedomrising.php");   # for $dbcon
+require_once("../Connections/freedomrising.php");   # for $dbcon
 require_once("fieldmaps.php");   # for outlook_to_mysql and mysql_to_outlook
  
 

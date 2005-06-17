@@ -1,5 +1,5 @@
 <?php
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
      if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or ((isset($MM_delete)) && (isset($MM_recordId))) )  {
 	 
 	     $MM_editTable  = "contacts_fields";
@@ -9,8 +9,8 @@
 	$MM_fieldsStr = "name|value|type|value|camid|value|fieldorder|value";
     $MM_columnsStr = "name|',none,''|type|',none,''|camid|',none,''|fieldorder|',none,''";
   
- require ("../Connections/insetstuff.php");
-  require ("../Connections/dataactions.php");
+ require ("../../Connections/insetstuff.php");
+  require ("../../Connections/dataactions.php");
 
 		 }
   

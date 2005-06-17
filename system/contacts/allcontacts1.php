@@ -1,7 +1,7 @@
 <?php
      
   
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 
  $allusers=$dbcon->Execute("SELECT distinct users.id, users.name, contacts2.enteredby FROM users, contacts2 where contacts2.enteredby =users.id and contacts2.enteredby  is not null ORDER BY name ASC") or DIE($dbcon->ErrorMsg());

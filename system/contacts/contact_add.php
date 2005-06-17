@@ -1,7 +1,7 @@
 <?php
      
 
-  require_once("Connections/freedomrising.php");  
+  require_once("../Connections/freedomrising.php");  
 
 ?><?php
   // *** Edit Operations: declare Tables
@@ -24,8 +24,8 @@ if ( !$emailck->Fields("id") ) {
    $MM_fieldsStr = "EmailAddress|value|LastName|value|FirstName|value|Company|html|value";
    $MM_columnsStr = "email|',none,''|lastname|',none,''|firstname|',none,''|organization|',none,''|html|none,1,0";
 
-  require ("../Connections/insetstuff.php");
-  require ("../Connections/dataactions.php");
+  require ("../../Connections/insetstuff.php");
+  require ("../../Connections/dataactions.php");
   
   
  $newrec=$dbcon->Execute("SELECT id FROM email ORDER BY id desc LIMIT 1") or DIE($dbcon->ErrorMsg());  
@@ -41,8 +41,8 @@ if ( $emailck->Fields("id") == NULL) {
  $MM_editTable  = "subscription";
   $MM_fieldsStr = "recid|value|listid|value";
    $MM_columnsStr = "userid|none,none,NULL|listid|none,none,NULL"; 
-	require ("../Connections/insetstuff.php");
-    require ("../Connections/dataactions.php");
+	require ("../../Connections/insetstuff.php");
+    require ("../../Connections/dataactions.php");
 	}
 	}
 	
@@ -66,8 +66,8 @@ if ( $emailck->Fields("id") == NULL) {
     $MM_fieldsStr = "Suffix|value|FirstName|value|LastName|value|Company|value|JobTitle|value|BusinessPhone|value|HomePhone|value|MobilePhone|value|BUsinessFax|value|EmailAddress|value|BusinessStreet|value|BusinessStreet2|value|BusinessCity|value|BusinessState|value|BusinessPostalCode|value|BusinessCountry|value|HomeStreet|value|HomeStreet2|value|HomeCity|value|HomeState|value|HomePostalCode|value|HomeCountry|value|classid|value|regionid|value|notes|value|WebPage|value|useaddress|value|enteredby|value|source|value|Email2Address|value|campus|value";
     $MM_columnsStr = "Suffix|',none,''|FirstName|',none,''|LastName|',none,''|Company|',none,''|JobTitle|',none,''|BusinessPhone|',none,''|HomePhone|',none,''|MobilePhone|',none,''|BusinessFax|',none,''|EmailAddress|',none,''|BusinessStreet|',none,''|BusinessStreet2|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|HomeStreet|',none,''|HomeStreet2|',none,''|HomeCity|',none,''|HomeState|',none,''|HomePostalCode|',none,''|HomeCountry|',none,''|classid|',none,''|regionid|',none,''|notes|',none,''|WebPage|',none,''|useaddress|',none,''|enteredby|',none,''|source|',none,''|Email2Address|',none,''|campus|',none,''";
   
-	require ("../Connections/insetstuff.php");
-    require ("../Connections/dataactions.php");
+	require ("../../Connections/insetstuff.php");
+    require ("../../Connections/dataactions.php");
 	$getnext=$dbcon->Execute("select id from contacts2 order by id desc limit 1") or DIE($dbcon->ErrorMsg());
 	foreach ($custom as $k=>$v) {
    $addit=$dbcon->Execute( "Insert into contacts_rel (fieldid,perid,value) VALUES ('".$k."','".$getnext->Fields("id")."','".$v."')") or DIE($dbcon->ErrorMsg());
