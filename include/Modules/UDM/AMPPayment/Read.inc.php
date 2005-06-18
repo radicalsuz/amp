@@ -48,12 +48,16 @@ class UserDataPlugin_Read_AMPPayment extends UserDataPlugin {
         $paymentlist->suppressHeader();
         $paymentlist->suppressAddlink();
 
+        $this->removeSaveFieldset();
+        
+        $this->udm->fields[ $this->addPrefix('transaction_list') ]['values'] = $this->inForm($paymentlist->output());
+    }
+
+    function removeSaveFieldset() {
         foreach ($this->udm->fields as $fname => $fDef) {
             $local_name = $this->checkPrefix($fname);
             if ($local_name && !isset($this->fields[$local_name])) unset ($this->udm->fields[$fname]);
         }
-        
-        $this->udm->fields[ $this->addPrefix('transaction_list') ]['values'] = $this->inForm($paymentlist->output());
     }
 
     function inForm( $raw_html ) {

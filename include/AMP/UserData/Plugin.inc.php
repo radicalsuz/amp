@@ -290,6 +290,47 @@ class UserDataPlugin {
     }
 
 
+    function getOptions( $options=null ) {
+        if (!isset($options)) $options = array_keys($this->options);
+        
+        if (!is_array($options)) return false;
+
+        foreach ( $options as $option_name ) {
+            $option_def=$this->options[$option_name];
+
+            if (isset($option_def['value'])) {
+                $return_options[$option_name]=$option_def['value'];
+                continue;
+            }
+
+            if (isset($option_def['default'])) $return_options[$option_name]=$option_def['default'];
+        }
+        if (!isset ($return_options)) return false;
+
+        return $return_options;
+    }
+
+    function setOptions ( $options ) {
+        if (!is_array($options)) return false;
+
+        foreach ( $options as $option_name => $option_value ) {
+            if (isset($this->options[$option_name])) {
+                if ( is_array( $option_value ) ) {
+                    foreach ( $option_value as $key => $value ) {
+                        $this->options[$option_name][$key] = $value;
+                    }
+                } else {
+                    $this->options[$option_name]['value'] = $option_value;
+                }
+            } else {
+                continue;
+            }
+        }
+
+        return true;
+    }
+
+
     function checkData( $fDef, $value ) {
 
         $translation_method = $fDef['type']."FieldtoText";
@@ -348,6 +389,9 @@ class UserDataPlugin {
     }
     
     function uncheckData( $fDef, $value ) {
+
+        $types_to_modify = array( "checkgroup" );
+        if (array_search($fDef['type'], $types_to_modify)===FALSE) return $value;
 
         switch ($fDef['type']) { 
             case "checkgroup":
@@ -470,6 +514,7 @@ class UserDataPlugin {
                 }
                 return $date_dom;
                 break;
+            case 'radiogroup':
             case 'checkgroup':
                 $option_set = $this->getValueSet( $fDef );
                 if (is_array($option_set)) {
@@ -498,30 +543,6 @@ class UserDataPlugin {
         $this->udm->insertAfterFieldOrder( $udmFields );
     }
 
-
-    function getOptions( $options=null ) {
-        if (!isset($options)) $options = array_keys($this->options);
-        
-        if (is_array($options)) {
-
-            foreach ( $options as $option_name ) {
-                $option_def=$this->options[$option_name];
-
-                if (isset($option_def['value'])) {
-                    $return_options[$option_name]=$option_def['value'];
-                } else {
-
-                    if (isset($option_def['default'])) {
-                        $return_options[$option_name]=$option_def['default'];
-                    }
-                }
-            }
-        }
-        if (!isset ($return_options)) return false;
-
-        return $return_options;
-    }
-
     function returnLookup ( $tablename, $displayfield, $valuefield, $restrictions=null) {
         $lookup_sql="Select $valuefield, $displayfield from $tablename";
         if (isset($restrictions)&&$restrictions) {
@@ -530,67 +551,45 @@ class UserDataPlugin {
         $lookup_sql.=" ORDER BY $displayfield";
         return $this->dbcon->GetAssoc($lookup_sql);
     }
+
     function getValueSet ( &$field_def ) {
         $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
         if (is_array($defaults)) return $defaults;
 
-        //Check for defined Lookup in selectbox defaults
-        //format is Lookup(table_name, display_column, value_column, restrictions);
-        switch ($field_def['type']) {
-            case 'select':
-            case 'multiselect':
-            case 'radiogroup':
-            case 'checkgroup':
-                // Get region information if it's needed.
-                if ( isset( $field_def[ 'region' ] )
-                        && strlen( $field_def[ 'region' ] ) > 1 ) {
+        $fieldtypes_possessing_valuesets = array( 'select', 'multiselect', 'radiogroup', 'checkgroup' );
 
-                    return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
-                }
+        if (array_search( $field_def['type'], $fieldtypes_possessing_valuesets ) === FALSE ) return $defaults;
 
-                if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
+        // Return region information
+        if ( isset( $field_def[ 'region' ] )
+                && strlen( $field_def[ 'region' ] ) > 1 ) {
 
-                    $just_values = str_replace(")", "", substr($defaults, 7));
-                    $valueset = split("[ ]?,[ ]?", $just_values );
-                    return $this->returnLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
-                }
+            return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
+        }
 
-                // Split string with commas into an array
-                // Check to see if we have an array of values.
-                $defArray = split( "[ ]?,[ ]?", $defaults );
-                if (count( $defArray ) > 1) {
-                    $defaults = array();
-                    foreach ( $defArray as $option ) {
-                        $defaults[ $option ] = $option;
-                    }
-                }
-                break;
-            default:
+        // Return a defined index from the DB
+        if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
+
+            $just_values = str_replace(")", "", substr($defaults, 7));
+            $valueset = split("[ ]?,[ ]?", $just_values );
+            if (isset($valueset[4])) $field_def['default'] = $valueset[4];
+            return $this->returnLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
+        }
+
+        // Split string with commas into an array
+        // Check to see if we have an array of values.
+        $defArray = split( "[ ]?,[ ]?", $defaults );
+        if (count( $defArray ) > 1) {
+            $defaults = array();
+            foreach ( $defArray as $option ) {
+                $defaults[ $option ] = $option;
+            }
         }
 
         return $defaults;
     }
 
 
-    function setOptions ( $options ) {
-        if (!is_array($options)) return false;
-
-        foreach ( $options as $option_name => $option_value ) {
-            if (isset($this->options[$option_name])) {
-                if ( is_array( $option_value ) ) {
-                    foreach ( $option_value as $key => $value ) {
-                        $this->options[$option_name][$key] = $value;
-                    }
-                } else {
-                    $this->options[$option_name]['value'] = $option_value;
-                }
-            } else {
-                continue;
-            }
-        }
-
-        return true;
-    }
 
 }
 

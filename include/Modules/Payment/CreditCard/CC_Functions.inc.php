@@ -343,7 +343,7 @@ class CC_Functions {
 			$PathToSDK="/usr/local/lib/verisign/payflowpro/amp/";
 	
 			 $expire_parts = split("/", $strCCExpireDate);
-			 $strCCExpireDate = $expire_parts[0] . substr($expire_parts, -2);
+			 $strCCExpireDate = $expire_parts[0] . substr($expire_parts[1], -2);
 			 $strParameters = "USER=".$strLogin;
 			 $strParameters.="&VENDOR=".$strVendor;
 			 $strParameters.="&PARTNER=".$strPartner;

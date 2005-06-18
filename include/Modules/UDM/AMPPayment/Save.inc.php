@@ -46,42 +46,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $this->init($udm, $plugin_instance);
     }
 
-    function setProcessor( $type = null ) {
-        if (!isset($this->processor)) {
-            $this->processor =& new Payment ( $this->dbcon, $type );
-        }
-    }
-
-    function getSaveFields() {
-
-        $save_fields=array_keys($this->fields);
-
-        $new_save_fields = array();
-
-        foreach ($save_fields as $fname) {
-            if ( array_search($fname, $fields_to_avoid) ) continue;
-            switch ($this->fields[$fname]['type']) {
-                case 'html':
-                case 'static':
-                case 'header':
-                    continue;
-                    break;
-                default:
-                    $new_save_fields[] = $fname;
-                    break;
-            }
-        }
-
-        return $new_save_fields;
-    }
-
-    function getPaymentType() {
-        if ( isset($_REQUEST[$this->addPrefix('Payment_Type')]) ) {
-            return $_REQUEST[$this->addPrefix('Payment_Type')];
-        }
-        return false;
-    }
-                
     function save($data) {
         $options = $this->getOptions();
 
@@ -101,6 +65,35 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         return false;
     }
 
+    function setProcessor( $type = null ) {
+        if (!isset($this->processor)) {
+            $this->processor =& new Payment ( $this->dbcon, $type );
+        }
+    }
+
+    function getSaveFields() {
+
+        $save_fields = array();
+        
+        $types_to_avoid = array ("html", "static", "header");
+
+        foreach ($this->fields as $fname => $fdef) {
+            if ( array_search($this->fields[$fname]['type'], $types_to_avoid)!==FALSE ) continue;
+
+            $save_fields[] = $fname;
+
+        }
+
+        return $save_fields;
+    }
+
+    function getPaymentType() {
+        if ( isset($_REQUEST[$this->addPrefix('Payment_Type')]) ) {
+            return $_REQUEST[$this->addPrefix('Payment_Type')];
+        }
+        return false;
+    }
+                
     function _pass_errors_to_UDM () {
         if (!isset($this->processor->errors)) return false;
         foreach ($this->processor->errors as $error_message) {
@@ -121,22 +114,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         //Get fields from the Payment object
         $fields = array_merge( $fields, $this->setupPaymentTypes($options) );
-
-        //set the field order to put the dynamic checkbox before the Customer
-        //Data
-        /*
-        $this->insertAfterFieldOrder($fields);
-        $this->insertBeforeFieldOrder('Share_Data', 'First_Name');
-
-        //add a fancy javascript to save users time when Cardholder data matches
-        //personal data
-        $fields['Share_Data']=array('type'=>'checkbox','label'=>'Check here if information below is the same as above', 
-                                    'required'=>false, 'public'=>true, 'enabled'=>true, 'size'=>30,
-                                    'attr'=>array('onClick'=>'plugin_AMPPayment_setAddress(this.checked);'));
-        
-        $this->_register_javascript ($this->address_script());
-        */
-
 
     }
 
@@ -179,33 +156,22 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         //if the payment type is already set
         //return only the fields from the relevent processor
-        if ( $this->udm->uid ) {
-            //don't do anything
-            return;
-        }
-
         if ($selected_type = $this->getPaymentType()) {
             $this->setProcessor( $selected_type );
-            $selector_field['Payment_Type'] = $this->getPaymentSelect();
-            $selector_field['Payment_Type']['type'] = 'hidden';
+            $selector_field['Payment_Type'] = $this->getPaymentSelect( $options, $allow_select = false );
             $selector_field['Payment_Type']['default'] = $selected_type;
             return ($selector_field + $this->processor->fields);
         }
 
         //Otherwise Return fields from all processor types
         
-        $paymentType_fields = array();
-        $allowed_types = split("[ ]?,[ ]?", $options['allowed_payment_types']);
-        $payment_options = array_combine_key( $allowed_types, $this->options['allowed_payment_types']['values']);
-        $selector_field['Payment_Type'] = $this->getPaymentSelect();
-        $selector_field['Payment_Type']['values'] = $payment_options;
-        $selector_field['Payment_Type']['attr']   = array(   'onChange'=>
-                                             'ActivateSwap( window.'.$this->fieldswap_object_id.', this.value );');
+        $selector_field['Payment_Type'] = $this->getPaymentSelect($options);
 
         $fieldswapper = & new ElementSwapScript( $this->fieldswap_object_id );
         $fieldswapper->formname = $this->udm->name;
+        $paymentType_fields = array();
 
-        foreach ($allowed_types as $payment_type) {
+        foreach ($this->getAllowedPaymentTypes( $options ) as $payment_type => $description) {
             $current = &new Payment ($this->dbcon, $payment_type);
             
             $fieldswapper->addSet( $payment_type, $this->convertFieldDefstoDOM($current->fields)) ;
@@ -217,13 +183,29 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         return ($selector_field + $paymentType_fields);
     }
 
-    function getPaymentSelect() {
-        return array(       'type'      => 'select',
+    function getPaymentSelect( $options, $allow_select=true ) {
+        $payment_options = $this->getAllowedPaymentTypes( $options );
+        $type = $allow_select?'select':'hidden';
+
+        $new_select = array('type'      => $type,
                             'label'     => 'Payment Method',
                             'enabled'   => true,
                             'public'    => true,
                             'required'  => true
                     );
+
+        if (!$allow_select) return $new_select;
+
+        $new_select['values'] = $payment_options;
+        $new_select['attr']   = array(  'onChange'=>
+                                        'ActivateSwap( window.'.$this->fieldswap_object_id.', this.value );');
+
+        return $new_select;
+    }
+
+    function getAllowedPaymentTypes( $options ) {
+        $allowed_types =  split("[ ]?,[ ]?", $options['allowed_payment_types']);
+        return array_combine_key( $allowed_types, $this->options['allowed_payment_types']['values']);
     }
 
     function _register_options_dynamic () {
@@ -244,55 +226,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         }
     }
 
-/*
-    function returnTransactions ( $uid ) {
-        $listing = new PaymentList ($this->dbcon);
-        $cust_payments = $listing->getCustomerTransactions( $uid );
-        foreach ($cust_payments as $row=>$payment_set) {
-            $this->setProcessor( $payment_set['PaymentType'] );
-            $this->processor->readData( $payment_set['id'] );
-        }
-
-        if (isset($this->processor->paymentType)) {
-            return $this->processor->fields;
-        }
-    }
-    */
-
-    /*
-    function address_script() {
-
-        $script = '
-        <script type="text/javascript">
-        var save_table;
-
-        function plugin_AMPPayment_setAddress (chk_val) {
-            var payform = document.forms["'.$this->udm->name.'"];
-            if (chk_val) {';
-
-        //Setup the form keys array
-        $form_keys = $this->processor->customer->customer_info_keys;
-        $form_keys[] = "First_Name";
-        $form_keys[] = "Last_Name";
-
-        $script_on = '';
-        foreach ($form_keys as $cust_key) {
-            if (!isset($this->udm->fields[$cust_key])) continue;
-            $field_key = $this->_field_prefix.'_'.$cust_key;
-            $script_on .= '
-                payform.elements["'.$field_key.'"].value=payform.elements["'.$cust_key.'"].value;'."\n";
-                #payform.elements["'.$field_key.'"].disabled=true;';
-            #$script_off .='payform.elements["'.$field_key.'"].disabled=false;';
-        }
-        $script .= $script_on ."\n 
-            }
-        }
-        
-            
-        </script>";
-        return $script;
-    }
-    */
 
 }
 ?>

@@ -6,8 +6,7 @@ require_once ('Modules/Payment/CreditCard/Merchant.inc.php');
 
 define ('PAYMENT_CC_TRANSACTION_SUCCESS', '1');
 /* * * * * * * * * * * * *
-* Class Payment_CreditCard
-* extends Payment
+* Class PaymentType_CreditCard
 *
 * AMP Build 3.4.7
 * 2005-05-10
@@ -91,6 +90,7 @@ class PaymentType_CreditCard {
 
         if (!$this->_confirmTransactionisReady()) return false;
 
+
         $this->_preTransactionSave();
         $ChargeResult = $this->_chargeCard();
         $this->_postTransactionSave( $ChargeResult );
@@ -171,7 +171,7 @@ class PaymentType_CreditCard {
     }
 
     function setData( $data ) {
-        $this->_setMerchant( $data['merchant_ID'] );
+        $this->_setMerchant( $data );
         $this->_setCard( $data );
         $this->_setTransaction( $data );
     }
@@ -279,6 +279,8 @@ class PaymentType_CreditCard {
             $this->payment->addError( "Amount must be a positive number" );
             return false;
         }
+
+        return true;
     }
 
     #################################

@@ -10,7 +10,7 @@ Class Payment {
 
     var $payment_info;
     var $payment_info_keys = array (
-		'user_ID','payment_item_ID','order_ID','Amount','Date_Processed','Status','Payment_Type');
+		'user_ID','payment_item_ID','order_ID','Amount','Date_Processed','Status','Payment_Type', 'description');
 
 	var $fields;
     var $errors;
@@ -82,7 +82,7 @@ Class Payment {
     }
 
     function setPayment ( $data ) {
-        $this->payment_info = array_merge( $this->payment_info, array_combine_key ( $payment_info_keys, $data ));
+        $this->payment_info = array_merge( $this->payment_info, array_combine_key ( $this->payment_info_keys, $data ));
     }
 
 
@@ -136,7 +136,7 @@ Class Payment {
         $payment_info['Status']='Processed';
         $payment_info['requesting_ip']=$_SERVER['REMOTE_ADDR'];
 
-        return array_merge($payment_info,  $this->paymentType->getData());
+        return array_merge($payment_info,  $this->paymentType->getInsertData());
 
     }        
 

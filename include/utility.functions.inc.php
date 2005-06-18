@@ -531,6 +531,7 @@ function getBrowser() {
 if (!function_exists('array_combine_key')) {
 		function array_combine_key(&$arr1, &$arr2) {
 				if (!is_array($arr1) || !is_array($arr2)) return false;
+                $result = array();
 				foreach ($arr1 as $key => $value) {
 						if (isset($arr2[$value])) $result[$value]=$arr2[$value];
 				}
