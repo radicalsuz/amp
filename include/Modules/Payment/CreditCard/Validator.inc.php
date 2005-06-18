@@ -224,11 +224,11 @@ class CreditCardValidationSolution {
         /* Import the language preferences. */
 
         $Path = dirname(__FILE__);
-        if ( !file_exists("$Path/language/ccvs_$Language.inc") ) {
+        if ( !file_exists("$Path/language/ccvs_$Language.inc.php") ) {
             $this->CCVSError = "The $Language language file can't be found";
             return FALSE;
         }
-        include("$Path/language/ccvs_$Language.inc");
+        include("$Path/language/ccvs_$Language.inc.php");
 
         /* Catch malformed input. */
 

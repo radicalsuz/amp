@@ -58,8 +58,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         $new_save_fields = array();
 
-        $fields_to_avoid = array ('Share_Data');
-
         foreach ($save_fields as $fname) {
             if ( array_search($fname, $fields_to_avoid) ) continue;
             switch ($this->fields[$fname]['type']) {
@@ -91,20 +89,23 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         if (empty($data)) return true;
         
         $data['user_ID'] = $this->udm->uid;
-
-        if ($this->processor->getData( "Payment_Type" ) == "CreditCard" ) {
-            $data['merchant_ID'] = $options['merchant_ID'];
-        }
+        $data['merchant_ID'] = $options['merchant_ID'];
+        $item = $this->getItems( $data['item_ID'] ) ;
 
         $this->processor->setData( $data );
-
-        $item = $this->item_info[  $data['item_ID']  ] ;
 
         if ($this->processor->execute( $item->amount, $item->name )) return true;
             
         //in case of failure
-        $this->udm->errorMessage($this->processor->error);
+        $this->_pass_errors_to_UDM();
         return false;
+    }
+
+    function _pass_errors_to_UDM () {
+        if (!isset($this->processor->errors)) return false;
+        foreach ($this->processor->errors as $error_message) {
+            $this->udm->errorMessage( $error_message );
+        }
     }
 
     function _register_fields_dynamic() {
@@ -144,8 +145,8 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         $item_set = split("[ ]?,[ ]?", $options['item_IDs']);
         if (!is_array($item_set)) return;
 
-        foreach ($item_set as $item) {
-            $this->item_info[$item] = & new PaymentItem ( $this->dbcon, $item );
+        foreach ($item_set as $item_id) {
+            $this->item_info[$item_id] = & new PaymentItem ( $this->dbcon, $item_id );
         }
 
         return array( 'label'=>$options['purchase_description'],
@@ -156,11 +157,19 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                                     'enabled'=>true);
     }
 
-    function getItemOptions() {
+    function &getItems( $item_id = null ) {
         if (!isset($this->item_info)) return false;
+        if (!isset($item_id)) return $this->item_info;
+
+        if (isset($this->item_info[$item_id])) return $this->item_info[$item_id];
+        return false;
+    }
+
+    function getItemOptions() {
+        if (!$this->getItems()) return false; 
 
         $itemOptions = array();
-        foreach ($this->item_info as $item) {
+        foreach ($this->getItems() as $item) {
             $itemOptions[$item->id] =  $item->optionValue();
         }
         return $itemOptions;
@@ -217,6 +226,25 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                     );
     }
 
+    function _register_options_dynamic () {
+        if ($this->udm->admin) {
+            $udm_mod_id  = $this->dbcon->qstr( $this->udm->instance );
+            $modlist_sql = "SELECT   moduletext.id, moduletext.name FROM moduletext, modules
+                            WHERE    modules.id = moduletext.modid
+                                AND modules.userdatamodid = $udm_mod_id
+                            ORDER BY name ASC";
+            $modlist_rs  = $this->dbcon->CacheExecute( $modlist_sql )
+                or die( "Error fetching module information: " . $this->dbcon->ErrorMsg() );
+
+            $modules[ '' ] = '--';
+            while ( $row = $modlist_rs->FetchRow() ) {
+                $modules[ $row['id'] ] = $row['name'];
+            }
+            $this->options['Email_Receipt_Template']['values']=$modules;
+        }
+    }
+
+/*
     function returnTransactions ( $uid ) {
         $listing = new PaymentList ($this->dbcon);
         $cust_payments = $listing->getCustomerTransactions( $uid );
@@ -229,6 +257,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
             return $this->processor->fields;
         }
     }
+    */
 
     /*
     function address_script() {
@@ -265,22 +294,5 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
     }
     */
 
-    function _register_options_dynamic () {
-        if ($this->udm->admin) {
-            $udm_mod_id  = $this->dbcon->qstr( $this->udm->instance );
-            $modlist_sql = "SELECT   moduletext.id, moduletext.name FROM moduletext, modules
-                            WHERE    modules.id = moduletext.modid
-                                AND modules.userdatamodid = $udm_mod_id
-                            ORDER BY name ASC";
-            $modlist_rs  = $this->dbcon->CacheExecute( $modlist_sql )
-                or die( "Error fetching module information: " . $this->dbcon->ErrorMsg() );
-
-            $modules[ '' ] = '--';
-            while ( $row = $modlist_rs->FetchRow() ) {
-                $modules[ $row['id'] ] = $row['name'];
-            }
-            $this->options['Email_Receipt_Template']['values']=$modules;
-        }
-    }
 }
 ?>

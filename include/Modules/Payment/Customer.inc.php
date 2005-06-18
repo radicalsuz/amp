@@ -142,7 +142,7 @@ class PaymentCustomer {
     function _assembleFieldsfromUserData () {
         $fields = array_keys($this->fields);
 
-        $namekey = $fields[ array_search( "Name", $fields );
+        $namekey = $fields[ array_search( "Name", $fields )];
         if ( $namekey !== FALSE ) unset ( $fields[ $namekey ] );
         $fields[] = "Concat( First_Name, \" \", Last_Name) as Name";
 

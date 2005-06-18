@@ -1,6 +1,7 @@
 <?php 
 require_once ('Modules/Payment/Payment.php');
 require_once ('Modules/Payment/CreditCard/CC_Functions.inc.php');
+require_once ('Modules/Payment/CreditCard/Validator.inc.php');
 require_once ('Modules/Payment/CreditCard/Merchant.inc.php');
 
 define ('PAYMENT_CC_TRANSACTION_SUCCESS', '1');
@@ -62,7 +63,7 @@ class PaymentType_CreditCard {
     var $CC_Library;
 
     /* * * * * * * * * * * * *
-    * function Payment_CrediCard
+    * function Payment_CreditCard
     * 
     * constructor
     * calls base class init
@@ -82,66 +83,25 @@ class PaymentType_CreditCard {
         $this->dbcon = & $payment->dbcon;
     }
 
-    /* * * * * * * * * * * * *
-    * function setMerchant 
-    * 
-    * initializes Merchant Account information
-    * var merchant_ID = id number of merchant record in payment_merchants table 
-    * 
-    * * * * * * * * * */
+    #########################
+    ###  Core Functions   ###
+    #########################
 
-    function setMerchant($data) {
-        if (!isset( $data[ 'merchant_ID' ] )) {
-            $this->payment->addError( "No merchant specified" );
-            return false;      
-        }
-        $this->merchant = & new CreditCardMerchant( $this->dbcon, $data['merchant_ID'] );
-    }
+	function execute() {
 
-    /* * * * * * * * * * * * *
-    * function setCard
-    * 
-    * initializes Credit Card information
-    * var $data = associative array of values
-    * 
-    * * * * * * * * * */
+        if (!$this->_confirmTransactionisReady()) return false;
 
-    function setCard ($data) {
+        $this->_preTransactionSave();
+        $ChargeResult = $this->_chargeCard();
+        $this->_postTransactionSave( $ChargeResult );
 
-        if (!is_array($data)) return false;
-
-        $card_data = array();
-        array_walk ($data, array(&$this,'filterCCdata'));
-    }
-
-    function filterCCdata ($value, $key) {
-        $CCdata_prefix = "Credit_Card_";
-        if (substr($key, 0, strlen($CCdata_prefix)) != $CCdata_prefix ) return false;
-
-        $new_key = substr($key, strlen($CCdata_prefix));
-        if (array_search($new_key, $this->card_info_keys)===FALSE) return false;
-
-        $this->card_info[ $new_key ] = $value;
-    }
-
-    function setData( $data ) {
-        $this->setMerchant( $data['merchant_ID'] );
-        $this->setCard( $data );
-    }
-
-    function getExpirationDate( $data ) {
-        if (isset($data['Expiration'])) return $data['Expiration'];
-            
-        if (isset($data['Expiration_Month']) &&
-            isset($data['Expiration_Year']) ) {
-
-             return $data['Expiration_Month'] . "/" .
-                    $data['Expiration_Year'];
-
+        if ($ChargeResult['return_code'] != PAYMENT_CC_TRANSACTION_SUCCESS) {
+            $this->_aggregateErrors( $ChargeResult );
+            return false;
         }
 
-        return false;
-    }
+        return true;
+	}
 
     /* * * * * * * * * * * * *
     * function getFields()
@@ -187,78 +147,73 @@ class PaymentType_CreditCard {
             'size'=>3, 
             'enabled'=>true);
 
-        $cardholder_fields = $this->prefixLabels( $this->payment->customer->fields, 'Cardholder ' );
-
-        $cardholder_fields = $this->prefixLabels( $this->payment->customer->fields, 'Cardholder ' );
+        $cardholder_fields = $this->_prefixLabels( $this->payment->customer->fields, 'Cardholder ' );
 
         return array_merge($fields, $cardholder_fields);
         
     }
 
-    function prefixLabels ( $fielddefs, $prefix ) {
-        if (!is_array($fielddefs)) return false;
+    ##################################
+    ### Public Data Access Methods ###
+    ##################################
 
-        foreach ($fielddefs as $key => $fDef) {
-            $fielddefs[$key]['label'] = $prefix . $fDef['label'];
-        }
-        return $fielddefs;
-    }
-
-    function protect( $cc_number ) {
-        return str_repeat( 'XXXX-', 3). substr($cc_number, 12);
-    }
-        
-
-    /* * * * * * * * * * * * *
-    * function getData() 
-    * 
-    * returns data related to the current transaction
-    * referenced by the getData function in the Payment base class
-    * 
-    * * * * * * * * * */
-
-    function getData() {
+    function getInsertData() {
 
 		$data_fields=array (
         'Credit_Card_Type'  =>  $this->card_info['Type'],
-        'Credit_Card_Number'=>  $this->protect( $this->card_info['Number'] ),
+        'Credit_Card_Number'=>  $this->_protect( $this->card_info['Number'] ),
         'Credit_Card_Expiration'    =>  $this->card_info['Expiration'],
-        'Date_Submitted'    =>  $this->transaction_info['Date_Submitted'],
-        'Date_Processed'    =>  $this->transaction_info['Date_Processed'],
-        'Time_Requested'    =>  $this->transaction_info['Time_Requested'],
-        'auth_code'         =>  $this->transaction_info['auth_code'],
-        'transaction_id'    =>  $this->transaction_info['transaction_id'],
-        'Status'            =>  $this->transaction_info['Status'],
-        'Amount'            =>  $this->transaction_info['Amount'],
         'payment_merchant_ID'       =>  $this->merchant->getData('id'));
 
-        return array_merge($data_fields, $this->payment->customer->getDataforSQL());
+        $data_fields = array_merge( $data_fields, $this->transaction_info );
+
+        return array_merge($data_fields, $this->payment->customer->getInsertData());
     }
 
-    /* * * * * * * * * * * * *
-    * function execute()
-    * 
-    * assembles data related to the payment for use by the credit card
-    * processor , saves a record of each attempted transaction
-    * returns false on error, true on success
-    * 
-    * * * * * * * * * */
+    function setData( $data ) {
+        $this->_setMerchant( $data['merchant_ID'] );
+        $this->_setCard( $data );
+        $this->_setTransaction( $data );
+    }
 
-	function execute() {
-        if (!$this->confirmTransactionisReady()) return false;
 
-        //Create transaction metadata
-        $this->transaction_info['Amount']=$this->payment->getData('Amount');
-        $this->transaction_info['Time_Requested']=time();
-        $this->transaction_info['Date_Submitted']=date("Y-m-d");
-        $this->transaction_info['Status']='Awaiting Approval';
-       
-        //Generate a permanent Transaction_ID by saving to the DB
-        $this->payment->save();
 
+    ###################################
+    ### Private Data Access Methods ###
+    ###################################
+
+
+    function _setMerchant($data) {
+        if (!isset( $data[ 'merchant_ID' ] )) {
+            $this->payment->addError( "No merchant specified" );
+            return false;      
+        }
+        $this->merchant = & new CreditCardMerchant( $this->dbcon, $data['merchant_ID'] );
+    }
+
+    function _setCard ($data) {
+
+        if (!is_array($data)) return false;
+
+        $card_data = array();
+        array_walk ($data, array(&$this,'_filterCCdata'));
+    }
+
+    function _setTransaction( $data ) {
+        $this->transaction_info =
+            array_merge(    $this->transaction_info, 
+                            array_combine_key( $this->transaction_info_keys, $data )
+                       );
+    }
+
+    ####################################
+    ### Private Helper Functions for ###
+    ###  Charging the Credit Cards   ###
+    ####################################
+
+    function _chargeCard() {
         //Call the Credit Card processing Library
-        $ChargeResult=
-            $this->CC_Library->ChargeCreditCard( 
+        return  $this->CC_Library->ChargeCreditCard( 
                     $this->payment->customer->getData(),
                     $this->payment->getData('Amount'),
                     $this->card_info['Number'],
@@ -277,7 +232,28 @@ class PaymentType_CreditCard {
                     $this->merchant->getData('Payment_Method'),
                     PAYMENT_CC_DEBUG
             );
+    }
 
+    function _aggregateErrors( $ChargeResult ) {
+        if ( $ChargeResult['CVV2MATCH']=='N' ) $this->payment->addError( "Card Security Code incorrect" );
+        if ( $ChargeResult['AVSZIP']=='N' ) $this->payment->addError( "Supplied Cardholder Address does not match bank record" );
+        if ( $ChargeResult['AVSADDR']=='N' ) $this->payment->addError( "Supplied Cardholder Address does not match bank record" );
+        if ( $ChargeResult['return_reason'] ) $this->payment->addError ( $ChargeResult['return_reason']);
+        else $this->payment->addError ("Credit Card Transaction Failed");
+    }
+
+    //Generate a permanent Transaction_ID by saving to the DB
+    function _preTransactionSave() {
+        //Create transaction metadata
+        $this->transaction_info['Amount']=$this->payment->getData('Amount');
+        $this->transaction_info['Time_Requested']=time();
+        $this->transaction_info['Date_Submitted']=date("Y-m-d");
+        $this->transaction_info['Status']='Awaiting Approval';
+
+        $this->payment->save();
+    }
+
+    function _postTransactionSave( $ChargeResult ) {
         //complete transaction metadata
         $this->transaction_info['Status']=$this->response_codes[$ChargeResult['return_code']];
         $this->transaction_info['Date_Processed']=date("Y-m-d");
@@ -287,25 +263,15 @@ class PaymentType_CreditCard {
 
         //save the record of the transaction
         $this->payment->save();
-
-        if ($ChargeResult['return_code'] != PAYMENT_CC_TRANSACTION_SUCCESS) {
-            if ( $ChargeResult['return_reason'] ) $this->payment->error = $ChargeResult['return_reason'];
-            else $this->payment->error = "Credit Card Transaction Failed";
-            return false;
-        }
-
-        return true;
+    }
        
-        
-	    	
-	}
 
-    function confirmTransactionisReady() {
+    function _confirmTransactionisReady() {
         if (!isset( $this->merchant )) {
             $this->payment->addError( "No merchant specified" );
             return false;      
         }
-        if (!$this->validateCard() ) {
+        if (!$this->_validateCard() ) {
             $this->payment->addError( "Credit Card Information incomplete" );
             return false;      
         }
@@ -315,18 +281,46 @@ class PaymentType_CreditCard {
         }
     }
 
-    function validateCard() {
-        if (!isset($this->card_info['Number']) return false;
+    #################################
+    ### Private Utility Functions ###
+    #################################
+
+    function _validateCard() {
+        if (!isset($this->card_info['Number'])) return false;
         $validator = new CreditCardValidationSolution;
         $split_exp = split( "/", $this->card_info['Expiration']);
 
-        if ( $validator->validateCreditCard( $this->card_info['Number'], 'en', '', 'Y', $split_exp[0], $split_exp[1] ){
+        if ( $validator->validateCreditCard( $this->card_info['Number'], 'en', '', 'Y', $split_exp[0], $split_exp[1] )) {
             return true;
         }
 
         $this->payment->addError( $validator->CCVSError );
         return false;
     }
+
+    function _filterCCdata ($value, $key) {
+        $CCdata_prefix = "Credit_Card_";
+        if (substr($key, 0, strlen($CCdata_prefix)) != $CCdata_prefix ) return false;
+
+        $new_key = substr($key, strlen($CCdata_prefix));
+        if (array_search($new_key, $this->card_info_keys)===FALSE) return false;
+
+        $this->card_info[ $new_key ] = $value;
+    }
+
+    function _prefixLabels ( $fielddefs, $prefix ) {
+        if (!is_array($fielddefs)) return false;
+
+        foreach ($fielddefs as $key => $fDef) {
+            $fielddefs[$key]['label'] = $prefix . $fDef['label'];
+        }
+        return $fielddefs;
+    }
+
+    function _protect( $cc_number ) {
+        return str_repeat( 'XXXX-', 3). substr($cc_number, 12);
+    }
+        
 
 }
 

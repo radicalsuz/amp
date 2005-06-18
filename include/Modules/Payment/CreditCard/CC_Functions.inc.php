@@ -1,12 +1,10 @@
 <?php
 /*****
 * Credit Card Library
-* I'm hoping to replace this with one that supports CVV2 verification
 *
 */
 
 define("PAYMENT_CC_DEBUG", '1');
-require_once( "Modules/Payment/CreditCard/Validator.inc.php" );
 
 class CC_Functions {
 	
@@ -112,6 +110,12 @@ class CC_Functions {
 	 *				$strReturnCodes["auth_code"];		// 6-digit bank approval code
 	 *
 	 *******************************************************************************************/
+
+    var $card_info;
+    var $merchant_info;
+    var $customer_info;
+
+     
      /******
      * Function: CC_Functions()
      * stub constructor
@@ -338,14 +342,19 @@ class CC_Functions {
 	
 			$PathToSDK="/usr/local/lib/verisign/payflowpro/amp/";
 	
-			 $strCCExpireDate = ereg_replace("/", "", $strCCExpireDate);
-			 $strParameters="USER=".$strLogin;
+			 $expire_parts = split("/", $strCCExpireDate);
+			 $strCCExpireDate = $expire_parts[0] . substr($expire_parts, -2);
+			 $strParameters = "USER=".$strLogin;
 			 $strParameters.="&VENDOR=".$strVendor;
 			 $strParameters.="&PARTNER=".$strPartner;
 			 $strParameters.="&PWD=".$strPassword;
 			 $strParameters.="&TRXTYPE=".$strTransactionType;
 			 $strParameters.="&TENDER=".$strMethod;
 			 $strParameters.="&ACCT=".$intCCNumber;
+			 if (isset( $arrPerson['Name'] ) )  $strParameters.="&NAME=".$arrPerson['Name'];
+			 if (isset( $arrPerson['Street'] ) )$strParameters.="&STREET=".$arrPerson['Street'];
+			 if (isset( $arrPerson['Zip'] ) )   $strParameters.="&ZIP=".$arrPerson['Zip'];
+			 if (isset( $strCVV2 ))              $strParameters.="&CVV2=". $strCVV2;
 			 $strParameters.="&EXPDATE=".$strCCExpireDate;
 			 $strParameters.="&AMT=".$fltAmount;
 			 if ($strTransactionID!="") {

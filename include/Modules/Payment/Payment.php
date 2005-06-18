@@ -17,7 +17,8 @@ Class Payment {
 
 	var $user_ID;
     var $customer;
-    var $paymentType; //CreditCard, Check
+
+    var $paymentType; //CreditCard or Check object
 
 	function Payment(&$dbcon, $type=null) {
         $this->init($dbcon, $type);
@@ -75,9 +76,8 @@ Class Payment {
         $this->setPayment ($data);
         $this->setCustomer($data);
         $this->setItem( $data );
-        $this->setOrder( $data );
 
-        $this->paymentType->prepareTransaction($data, $options);
+        $this->paymentType->setData( $data );
 
     }
 
@@ -94,7 +94,7 @@ Class Payment {
 
     }
 
-    function setCustomer ($data) {    
+    function setCustomer ( $data ) {    
         if (!is_array($data)) return false;
         $this->customer = new PaymentCustomer ($this->dbcon);
         $this->user_ID = $this->customer->setData($data);
