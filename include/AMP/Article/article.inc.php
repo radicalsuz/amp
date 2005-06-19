@@ -11,16 +11,16 @@ To Do:
 if (isset($_GET['preview']) && $_GET["preview"] == 1) {
 	$Recordset1=$dbcon->CacheExecute("SELECT * FROM articles WHERE id = $MM_id") or DIE($dbcon->ErrorMsg());
 } else {
-	$Recordset1=$dbcon->CacheExecute("SELECT * FROM articles WHERE id = $MM_id and publish=1") or header("Location: search.php");				//DIE($dbcon->ErrorMsg());
+	$Recordset1=$dbcon->CacheExecute("SELECT * FROM articles WHERE id = $MM_id and publish=1") or ampredirect("search.php");				//DIE($dbcon->ErrorMsg());
 }
 
 if ($Recordset1->RecordCount() == 0) {
-	header ("Location: index.php");
+	ampredirect("index.php");
 }
 
 if ($Recordset1->Fields("linkover") == 1){
 	$goodbye = $Recordset1->Fields("link");
-	header ("Location: $goodbye") ;
+	ampredirect($goodbye) ;
 }
 
 
