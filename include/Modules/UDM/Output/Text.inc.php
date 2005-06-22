@@ -16,6 +16,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
     }
 
     function execute ( $options = null ) {
+        if (isset($options)) $this->setOptions( $options );
 
         $this->_field_prefix=null;
         
@@ -38,7 +39,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
 
         foreach ($data as $key => $value) {
             foreach ($skip_prefixes as $badprefix) {
-                if (strpos($badprefix, $key)===0) continue 2;
+                if (strpos($key, $badprefix)===0) continue 2;
             }
             $return_data[$key] = $value;
         }

@@ -69,7 +69,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         $this->processor->setData( $data );
 
-        if ($this->processor->execute( $item->amount, $item->name )) {
+        if ($this->processor->execute( $item->getData('Amount'), $item->getData('name'))) {
             $this->sendReceipt( $options );
             return true;
         }

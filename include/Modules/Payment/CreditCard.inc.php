@@ -255,7 +255,7 @@ class PaymentType_CreditCard {
     function _preTransactionSave() {
         //Create transaction metadata
         $this->transaction_info['Amount']=$this->payment->getData('Amount');
-        $this->transaction_info['Time_Requested']=time();
+        $this->transaction_info['Time_Requested']=date("Y-m-d h:i:s");
         $this->transaction_info['Date_Submitted']=date("Y-m-d");
         $this->transaction_info['Status']='Awaiting Approval';
 
@@ -266,7 +266,7 @@ class PaymentType_CreditCard {
         //complete transaction metadata
         $this->transaction_info['Status']=$this->response_codes[$ChargeResult['return_code']];
         $this->transaction_info['Date_Processed']=date("Y-m-d");
-        $this->transaction_info['Time_Responded']=time();
+        $this->transaction_info['Time_Responded']=date("Y-m-d h:i:s");
         $this->transaction_info['auth_code'] = $ChargeResult["auth_code"];
         $this->transaction_info['transaction_id'] = $ChargeResult['return_id'];
 

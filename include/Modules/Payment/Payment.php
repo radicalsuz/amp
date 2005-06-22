@@ -133,7 +133,7 @@ Class Payment {
     function _getInsertData() { 
         $payment_info = $this->payment_info;
         $payment_info['id'] = $this->id;
-        $payment_info['Date_Processed']=date("r");
+        $payment_info['Date_Processed']=date("Y-m-d");
         $payment_info['Status']='Processed';
         $payment_info['requesting_ip']=$_SERVER['REMOTE_ADDR'];
 
