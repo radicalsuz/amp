@@ -4,25 +4,52 @@ require_once( 'AMP/UserData/Plugin.inc.php' );
 
 class UserDataPlugin_Text_Output extends UserDataPlugin {
 
+    var $options = array (
+        'skip_prefix' => array(
+            'type'=>'text',
+            'available'=> true,
+            'label' => 'Skip Fields Prefixed' )
+        );
+
     function UserDataPlugin_Text_Output ( &$udm, $plugin_instance=null ) {
         $this->init( $udm, $plugin_instance );
     }
 
     function execute ( $options = null ) {
 
-        $udm =& $this->udm;
         $this->_field_prefix=null;
         
         // Ensure we have a form built before proceeding.
-        if ( !isset( $udm->form ) )
-            $udm->doPlugin( 'QuickForm', 'Build' );
+        if ( !isset( $this->udm->form ) )
+            $this->udm->doPlugin( 'QuickForm', 'Build' );
 
         return $this->toText( $this->getData() );
     }
 
-    function toText($data) {
+    function setSkipPrefix() {
+        $options = $this->getOptions();
+        if (!isset($options['skip_prefix'])) return false;
 
-        $order = split("[ ]?,[ ]?", $this->udm->_module_def['field_order']);
+        return split("[ ]?,[ ]?", $options['skip_prefix']); 
+    }
+
+    function skipPlugins( $data ) {
+        if (!($skip_prefixes = $this->setSkipPrefix())) return $data;
+
+        foreach ($data as $key => $value) {
+            foreach ($skip_prefixes as $badprefix) {
+                if (strpos($badprefix, $key)===0) continue 2;
+            }
+            $return_data[$key] = $value;
+        }
+
+        return $return_data;
+    }
+
+    function toText($data) {
+        $data = $this->skipPlugins( $data );
+
+        $order = $this->udm->getFieldOrder();
         
         if (count($order)>1) { 
             foreach ($order as $field) {

@@ -93,6 +93,16 @@ class UserDataInput extends UserData {
 
     }
 
+    function &returnSingleUser( $user_id, &$dbcon ) {
+        $sql = "Select modin from userdata where id = ".$user_id;
+        if (!($seek_set = $dbcon->Execute( $sql ))) {
+            return false;
+        }
+        $instance = &new UserDataInput ( $dbcon, $seek_set->Fields("modin"));
+        $instance->getUser( $user_id );
+        return $instance->getData();
+    }
+
     function _register_default_plugins () {
 
         // No plugins were attached to this module, but we can't very well

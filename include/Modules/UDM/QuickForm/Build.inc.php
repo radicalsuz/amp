@@ -227,9 +227,9 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
 	}
 
-	function getTemplate( $type ) {
+	function getTemplate( $type=null ) {
 		$template_method =  "getTemplate".ucfirst($type);
-		if (method_exists($this, $template_method)) {
+		if (isset( $type ) && method_exists($this, $template_method)) {
 			return $this->$template_method();
 		}
 

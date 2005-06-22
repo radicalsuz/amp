@@ -58,10 +58,11 @@ function list_header_intro($list_name=NULL,$description=NULL,$date=NULL) {
 #get list definiations
 if ($_GET["list"] == "type"){
 //get list type and repeat info
-
-	$listtypeck=$dbcon->CacheExecute("SELECT articletype.listtype, articletype.up, listtype.file
+    $listtype_sql = "SELECT articletype.listtype, articletype.up, listtype.file
                                       FROM articletype, listtype
-                                      WHERE articletype.listtype = listtype.id AND articletype.id=$MM_type")or DIE('Could not load section information in list '.$dbcon->ErrorMsg());
+                                      WHERE articletype.listtype = listtype.id AND articletype.id=$MM_type";
+	$listtypeck=$dbcon->CacheExecute( $listtype_sql )
+                        or DIE('Could not load section information in list '.$dbcon->ErrorMsg());
 //set repeat number
  	if ($listtypeck->Fields("up") != NULL) {
 		$mm_limit = $listtypeck->Fields("up");
@@ -124,12 +125,14 @@ else{
 	}
 
 //set list layout
+    $listfolder= "AMP/List/";
 	if ($listtype != 1 && $listtypeck) {
  		$listfile = $listtypeck->Fields("file");
-		include ("$listfile");
+        if (file_exists_incpath($listfile)) include ("$listfile");
+        elseif (file_exists_incpath($listfolder.$listfile)) include ($listfolder.$listfile);
 	}
 	else {
-		include ("AMP/List/list.defualt.php");
+		include ($listfolder."list.defualt.php");
 	}
 }
 ?>

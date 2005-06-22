@@ -173,7 +173,7 @@ var $table;
 		for ($x=0; $x<sizeof($result); $x++) {
 			$typeid = $result[$x]["id"];
 			$check = $this->get_children($typeid,1);
-			$o .=  "['</a><a href=\"type_edit.php?id=".$typeid."\"><img src=\"images/edit.png\" border=0 align=bottem></a>&nbsp;<a href=\"article_list.php?type=".$result[$x]["id"]."\"><img src=\"images/spacer.gif\" width=7 border=0><img src=\"images/view.jpg\" border=0><img src=\"images/spacer.gif\" width=5 border=0>".addslashes($result[$x]["type"])."</a> ', 'article_list.php?type=".$result[$x]["id"]."'";
+			$o .=  "['</a><a href=\"type_edit.php?id=".$typeid."\"><img src=\"images/edit.png\" border=\"0\" valign=\"bottom\"></a>&nbsp;<a href=\"article_list.php?type=".$result[$x]["id"]."\"><img src=\"images/spacer.gif\" width=\"7\" border=\"0\"><img src=\"images/view.jpg\" border=\"0\"><img src=\"images/spacer.gif\" width=\"5\" border=\"0\">".addslashes($result[$x]["type"])."</a> ', 'article_list.php?type=".$result[$x]["id"]."'";
 			
 			if (sizeof($check)>=1) {
 				$o .=  ", \n";
@@ -247,7 +247,7 @@ function select_type_tree($id = 0,$y=0,$selcode)
 			$i++;
 			$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
 			echo "\n		<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
-			echo "\n			<td> <div align='center'><A HREF='type_edit.php?id=".$result[$x]["id"]."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
+			echo "\n			<td> <div align='center'><A HREF='type_edit.php?id=".$result[$x]["id"]."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=\"0\"></A></div></td>";
 			echo "\n			<td>".$this->depth2($y).$result[$x]["type"]."</td>";
 			echo "\n			<td>".$result[$x]["id"]."</td>";
 			if ($result[$x]["usenav"]) {$status ='live';} else {$status ='draft';}

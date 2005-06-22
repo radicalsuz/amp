@@ -67,6 +67,7 @@ Class Payment {
         if ( !($payment_data = $this->dbcon->GetRow("Select * from payment where id=".$payment_id))) return false;
 
         $this->id=$payment_id;
+        $this->setPaymentType( $payment_data['Payment_Type'] );
         $this->setData( $payment_data );
 
         return true;
@@ -102,7 +103,7 @@ Class Payment {
     }
 
     function setItem ( $data ) {
-        if (isset($data['item_ID'])) $this->payment_data['payment_item_ID'] = $data['item_ID'];
+        if (isset($data['item_ID'])) $this->payment_info['payment_item_ID'] = $data['item_ID'];
     }
 
     

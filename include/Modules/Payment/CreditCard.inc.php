@@ -170,6 +170,15 @@ class PaymentType_CreditCard {
         return array_merge($data_fields, $this->payment->customer->getInsertData());
     }
 
+    function getData( $fieldname = null ) {
+        if (!isset($fieldname)) return $this->card_info;
+
+        if (isset($this->card_info[$fieldname])) return $this->card_info[$fieldname];
+        if (isset($this->transaction_info[$fieldname])) return $this->transaction_info[$fieldname];
+        return false;
+    }
+
+
     function setData( $data ) {
         $this->_setMerchant( $data );
         $this->_setCard( $data );

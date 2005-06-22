@@ -1,8 +1,9 @@
 <?php
 #defual list layout
+if (!defined( 'AMP_MAX_PAGEORDER')) define('AMP_MAX_PAGEORDER', 999999999);
 
 #set list defualts
-$sqlorder = " ORDER BY pageorder ASC, date DESC, id DESC ";
+$sqlorder = " ORDER BY if(isnull(pageorder) or pageorder='', ".AMP_MAX_PAGEORDER.", pageorder) ASC, date DESC, id DESC ";
 $sqlorder2= " ORDER BY date DESC, id DESC ";
 if (!$limit) {$limit=20;}
 
@@ -78,6 +79,8 @@ if (isset($_GET['all'])) {
 
 $sql = $sqlsel.$sql.$sqloffset;
 $list=$dbcon->CacheExecute("$sql")or DIE("Could not build list:<br>".$sql.'<br>'.$dbcon->ErrorMsg());
+if (isset($_GET['debug'])) print $sql;
+
 
 // calll the layout file
 if (isset($listlayoutreplace) && $listlayoutreplace !=NULL) {

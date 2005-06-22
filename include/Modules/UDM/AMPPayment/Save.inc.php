@@ -25,7 +25,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         'email_receipt' => array( 'label'=>'Send Receipt Email',
                                  'type'=>'checkbox',
                                  'available'=>true,
-                                 'value'=>false ),
+                                 'default'=>true),
         'email_receipt_template' => array( 'label' => 'Template For Receipt',
                                           'type'  => 'select',
                                           'available' => true),
@@ -33,7 +33,10 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                                           'type'  => 'multiselect',
                                           'values'=> array('CreditCard'=>'Credit Card','Check'=>'Check'),
                                           'default'=>'CreditCard,Check',
-                                          'available' => true)
+                                          'available' => true),
+        'secure_server'    => array( 'label' => 'Secure Server Name',
+                                    'type'  =>  'text',
+                                    'available' => true )
         );
 
     var $_field_prefix = 'plugin_AMPPayment';
@@ -44,25 +47,44 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
     function UserDataPlugin_Save_AMPPayment (&$udm, $plugin_instance=null) {
 
         $this->init($udm, $plugin_instance);
+        $this->confirmSSL();
     }
+    function confirmSSL() {
+        if ( isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ) return true;
+        $options = $this->getOptions( array('secure_server') );
+        if ( !isset($options['secure_server']) ) return false;
 
+        header ('Location: https://'.$options['secure_server'].$_SERVER['REQUEST_URI']);
+    }
     function save($data) {
         $options = $this->getOptions();
 
         if (!isset($data['item_ID'])) return false;
         if (empty($data)) return true;
         
+        if (!$this->confirmSSL()) trigger_error( "Payment Save operating without secure server" );   
         $data['user_ID'] = $this->udm->uid;
         $data['merchant_ID'] = $options['merchant_ID'];
         $item = $this->getItems( $data['item_ID'] ) ;
 
         $this->processor->setData( $data );
 
-        if ($this->processor->execute( $item->amount, $item->name )) return true;
+        if ($this->processor->execute( $item->amount, $item->name )) {
+            $this->sendReceipt( $options );
+            return true;
+        }
+            $this->sendReceipt( $options );
             
         //in case of failure
         $this->_pass_errors_to_UDM();
         return false;
+    }
+
+    function sendReceipt( $options ) {
+        if ((!isset($options['email_receipt'])) || $options['email_receipt']==FALSE) return false;
+        $email_options['intro_text'] = $options['email_receipt_template'];
+        $email_options['_payment_ID'] = $this->processor->id;
+        $this->udm->doPlugin ('AMPPayment', 'EmailReceipt', $email_options);
     }
 
     function setProcessor( $type = null ) {
