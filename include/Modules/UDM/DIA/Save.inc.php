@@ -1,7 +1,7 @@
 <?php
 
 require_once( 'Modules/diaRequest.inc.php' );
-require_once( 'AMP/UserData/Plugin.inc.php' );
+require_once( 'AMP/UserData/Plugin/Save.inc.php' );
 
 class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
     var $options = array(
