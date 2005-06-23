@@ -14,8 +14,13 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
                                                'size'        => '5',
                                                'default'     => '7200',
                                                'available'   => true ),
-                           'uid' =>  array( 'description' => 'User ID' ),
-                           'pass' => array( 'description' => 'Password' ) );
+                           'uid' =>  array( 'label' => 'User ID',
+                                            'default'     => null,
+                                            'available'   => false ),
+                           'pass' => array( 'label' => 'Password',
+                                            'available' => false ) 
+                           
+                           );
 
     var $available = true;
 
@@ -39,7 +44,7 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
             $dbcon =& $udm->dbcon;
 
             // Check the database for matching rows.
-            $sql .= "SELECT * FROM userdata_auth WHERE";
+            $sql  = "SELECT * FROM userdata_auth WHERE";
             $sql .= " uid=" . $dbcon->qstr( $uid );
             $sql .= " AND otp=" . $dbcon->qstr( $pass );
             $sql .= " AND ABS( NOW() - valid ) < " . $options['validity']['default'];
@@ -47,6 +52,7 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
             // Having a cached execute may result in some users not being
             // able to login immediately, but may protect against some DOS attacks.
             $rs = $dbcon->CacheExecute( $sql ) or die( "Couldn't obtain login information: " . $dbcon->ErrorMsg() );
+            print $sql;
 
             if ( $rs->RecordCount() >= 1 ) {
 
@@ -54,6 +60,7 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
                 $udm->authorized = true;
                 $udm->uid = $uid;
                 $udm->pass = $pass;
+                $this->addAuthFields( 'hidden' );
 
             } else {
     
@@ -103,9 +110,8 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
 
                     if ( $result ) {
                         $udm->addResult( 'authenticate', "An email was sent to $mailto containing login information so that you can update your information. Please click on the link in the email, or enter the password from the email in the Password field below." );
-                        $fields[ 'otp' ] = array( 'label' => '<B>Password</B>', 'public' => 1, 'type' => 'text', 'size' => 30 );
-                        $udm->fields = $fields + $udm->fields;
-                        $udm->_module_def = join( ",", array( "otp", $udm->_module_def[ 'field_order' ] ) );
+                        $this->addAuthFields();
+                        $udm->insertBeforeFieldOrder( array( "otp" ) );
                     } else {
                         $udm->addError( 'authenticate', "There was a problem delivering your login information to the email address you specified. Please contact the system administrator." );
                     }
@@ -124,6 +130,24 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
         }
 
         return $authStatus;
+    }
+
+    function addAuthFields( $type = 'text' ) {
+        $fields = array(
+            'otp' => array( 
+                'label' => '<B>Password</B>', 
+                'public' => 1, 
+                'enabled' => 1, 
+                'value' => $this->udm->pass,
+                'type' => $type, 
+                'size' => 30 ),
+            'uid' => array(
+                'public'=> true,
+                'value' => $this->udm->uid,
+                'type' => 'hidden',
+                'enabled'=> true )
+            );
+        $this->udm->fields = $fields + $this->udm->fields;
     }
 
     function _make_mail_header () {

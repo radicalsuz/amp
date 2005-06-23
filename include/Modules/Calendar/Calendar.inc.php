@@ -28,14 +28,17 @@ var $error;
 var $url_criteria;
 var $sql_criteria;
 
+var $allow_recurring_events = false;
+var $allow_registration = false;
+var $registration_form_modin;
+
+var $id;
+
 	function Calendar(&$dbcon, $eventset=null, $admin=false, $instance=1) {
 		$this->instance=$instance;
 		$this->dbcon=$dbcon;
         $this->admin=$admin;
 		if (isset($eventset)) $this->setEvents($eventset);
-
-        // Register the fields from the database.
-        $this->_register_fields();
 
         // Register methods for data access / manipulation.
         $this->_register_plugins();
@@ -57,7 +60,7 @@ var $sql_criteria;
 
 	function addEvent ($event) {
 		//adds an event to the Calendar object
-			$this->events[]=$event;
+        $this->events[]=$event;
 	}
 
 	function removeEvent ($eventid) {
@@ -71,16 +74,12 @@ var $sql_criteria;
 		return $this->events;
 	}
     
-    function _register_fields () {
+    function getFields() {
 
-        #$this->_register_common('fields');
 
-        $dbcon  = &$this->dbcon;
-        $fields = &$this->fields;
-
-        // We only need to worry about the fields attached to this instance,
-        // since fields are attached directly to specific instances of plugins.
+        $fields = array();
         $fields['publish'] = array('type'=>'checkbox', 'label'=>'<font color="#CC0000" size="3">PUBLISH</font>', 'required'=>false, 'public'=>false,'enabled'=>true);
+        $fields = array_merge( $fields, $this->addRegistrationFields());
 		$fields['event'] = array('type'=>'text', 'label'=>'Event Name', 'required'=>true, 'public'=>true,  'values'=>null, 'size'=>40, 'enabled'=>true);
 		$fields['typeid']=array('type'=>'select', 'label'=>'Event Type', 'required'=>false, 'public'=>true, 'values'=>'Lookup(eventtype, name, id)', 'enabled'=>true);
 		$fields['student']=array('type'=>'checkbox', 'label'=>'Student Event',  'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
@@ -91,6 +90,8 @@ var $sql_criteria;
 		$fields['cost']=array('type'=>'text', 'label'=>'Event Cost', 'required'=>false, 'public'=>true, 'size'=>'10', 'enabled'=>true);
 		$fields['url']=array('type'=>'text', 'label'=>'Website', 'required'=>false, 'public'=>true, 'enabled'=>true);
 		$fields['shortdesc'] = array('type'=>'textarea', 'label'=>'Brief description of the Event', 'required'=>true, 'public'=>true,  'values'=>null, 'size'=>"5:40", 'enabled'=>true);
+
+        $fields = array_merge( $fields, $this->addRecurringFields());
 		$fields['org']= array('type'=>'textarea', 'label'=>'Endorsing Organizations (if any)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>"4:40", 'enabled'=>true);
 		$fields['header1']= array('type'=>'header', 'label'=>'Public Contact Information', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true);
 		$fields['contact1']=array('type'=>'text', 'label'=>'Contact Name', 'required'=>true, 'public'=>true, 'enabled'=>true);
@@ -126,19 +127,100 @@ var $sql_criteria;
 		
 		$fields['uid']=array('type'=>'hidden', 'label'=>'', 'required'=>false, 'public'=>true, 'values'=>null, 'size'=>null, 'enabled'=>true);
 		$fields['id']=array('type'=>'hidden', 'label'=>'', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>null, 'enabled'=>true);
-		#$fields['modin']=array('type'=>'hidden', 'label'=>'', 'required'=>false, 'public'=>false,  'values'=>null, 'size'=>null, 'enabled'=>true);
-		#$fields['publish']=array('type'=>'checkbox', 'label'=>'Publish Event', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'enabled'=>true);
 
 		$fields['fulldesc'] = array('type'=>'textarea', 'label'=>'Full Description of the Event (optional)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>"10:40", 'enabled'=>true);
 		$fields['header3']=array('type'=>'header', 'label'=>'The following information is for the staff at '.$GLOBALS['SiteName'].' and will not be listed on the website, unless it is the same as the information above.', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true) ;
 		$fields['lat']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 		$fields['lon']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 
-        if ( method_exists( $this, '_register_fields_dynamic' ) ) {
-            $this->_register_fields_dynamic();
-        }
+        return $fields;
+
     }
-    function parse_URL () {
+
+    function addRecurringFields( ) {
+        $fields = array();
+        if (!$this->allowRecurringEvents()) return null;
+        $fields['header_recur']= array('type'=>'header', 'label'=>'Repeating Events<BR><span class=photocaption>The next three items apply to Repeating events only:</span>', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true);
+        $fields['recurring_options']= array('type'=>'select', 'label'=>'Event Frequency', 'required'=>false, 'public'=>true, 'values'=>'Lookup(calendar_recur, name, id)', 'value'=>0, 'enabled'=>true);
+        $fields['enddate']=array('type'=>'date', 'label'=>'Choose a date for the event to stop appearing on the calendar:', 'required'=>false, 'public'=>true,  'values'=>'today', 'enabled'=>true);
+        $fields['recurring_description']=array('type'=>'textarea', 'label'=>'Describe the schedule for a repeating event <BR>(e.g <i>Every 2nd Tuesday of the Month</i>)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>'3:40', 'enabled'=>true);
+        return $fields;
+    }
+
+    function addRegistrationFields ( ) {
+        if (! $this->allowRegistration() ) return null;
+        if ($this->admin) {
+            $fields['modin'] = array (
+                'label' => 'Registration Form',
+                'public' =>false,
+                'type' => 'select',
+                'required' => false,
+                'values'=>'Lookup(userdata_fields, name, id)',
+                'default'=> $this->registrationForm(),
+                'enabled' => true,
+                'size' => null,
+                );
+        } else {
+            $fields['rsvp']=array(
+                'type'=>'checkbox', 
+                'label'=>'Please setup registration/RSVPs for this event', 
+                'required'=>false, 
+                'public'=>true, 
+                'enabled'=>true);
+        }
+        return $fields;
+    }
+
+    function allowRegistration( $value = null ) {
+        if (!isset($value)) return $this->allow_registration;
+        $this->allow_registration = $value;
+        if (is_numeric($value)) $this->setRegistrationForm( $value );
+    }
+
+    function setRegistrationForm( $modin ) {
+        $this->registration_form_modin = $modin;
+    }
+
+    function registrationForm() {
+        return $this->registration_form_modin;
+    }
+
+    function allowRecurringEvents( $value = null ) {
+        if (!isset($value)) return $this->allow_recurring_events;
+        $this->allow_recurring_events = $value;
+    }
+
+    function readData ($cal_id) {
+        if (!isset($cal_id)) return false;
+        //Read Calendar Record
+        $sql  = "SELECT * FROM calendar WHERE "; 
+        $sql .= "id='" . $calid . "'";      
+    
+        if ($event = $this->dbcon->CacheExecute( $sql )){
+            $data = $event->FetchRow();
+            $this->addEvent( $data );
+            return $data;
+        }
+
+        return false;
+    }
+
+    function saveEvent( $save_data ) {
+        if ($this->allowRegistration() && $save_data['rsvp']) {
+            $save_data['registration_modin'] = $this->registrationForm();
+            unset($save_data['rsvp']);
+        }
+
+        $rs = $this->dbcon->Replace("calendar", $save_data, "id", $quote = true );
+
+        if ($rs == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
+        if ($rs) return true;
+
+        return false;
+    }
+	
+
+    function parse_URL_criteria () {
         parse_str($_SERVER['QUERY_STRING'], $parsed_criteria);
         foreach ($parsed_criteria as $pkey=>$pvalue) {
 

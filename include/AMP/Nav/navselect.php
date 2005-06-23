@@ -228,14 +228,14 @@ function getthenavs($navside) {
             
             $settemplate=$dbcon->CacheExecute("SELECT * FROM template WHERE id = $template_id2") or DIE($dbcon->ErrorMsg());
 
-            if ($navside == l) {
+            if ($navside == 'l') {
                 $NAV_HTML_1 = $settemplate->Fields("lnav3");        //heading row
                 $NAV_HTML_2 = $settemplate->Fields("lnav4");        //close heading row
                 $NAV_HTML_3 = $settemplate->Fields("lnav7");                //start content table row
                 $NAV_HTML_4 = $settemplate->Fields("lnav8");                //end content table row
                 $NAV_HTML_5 = $settemplate->Fields("lnav9");                // content table row spacer
 
-            } elseif ($navside == r) {
+            } elseif ($navside == 'r') {
                 $NAV_HTML_1 = $settemplate->Fields("rnav3");        //heading row
                 $NAV_HTML_2 = $settemplate->Fields("rnav4");        //close heading row
                 $NAV_HTML_3 = $settemplate->Fields("rnav7");                //start content table row
@@ -293,9 +293,10 @@ function getthenavs($navside) {
             $sqlx = stripslashes($sqlx);
             $limit = $nav->Fields("repeat");
             $alimit = $limit + 1;
-            if ($limit != 700) {
+            if ($limit != AMP_NAV_NO_LIMIT) {
                     $sqlx = $sqlx." Limit ".$alimit;
             }
+            if ( isset($_GET['debug']) ) print 'nav: '.$sqlx;
             $nested=$dbcon->CacheExecute($sqlx) or die ($dbcon->ErrorMsg());
             $nested_numRows=0;
             $nested__totalRows=$nested->RecordCount();

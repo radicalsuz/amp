@@ -47,7 +47,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		//do this during the build so it surpasses
 		//all other manipulation of field_order
 		if ( $admin && $udm->_module_def['publish']) { 
-			$udm->_module_def[ 'field_order' ] = join(",", array("publish", $udm->_module_def[ 'field_order']));
+            $udm->insertBeforeFieldOrder( array('publish') );
 		}
 
 		$form->registerElementType('multiselect','HTML/QuickForm/select.php','HTML_QuickForm_select');
@@ -56,9 +56,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		$form->registerElementType('wysiwyg','HTML/QuickForm/textarea.php','HTML_QuickForm_textarea');
 		
 		
-		if ( isset( $udm->_module_def[ 'field_order' ] ) ) {
-		
-			$fieldOrder = split( '[ ]?,[ ]?', $udm->_module_def[ 'field_order']  );
+		if ( $fieldOrder = $udm->getFieldOrder() ) {
 			
 			foreach ( $fieldOrder as $field ) {
 				$field = trim( $field );
@@ -82,8 +80,8 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		$consts['modin'] = $udm->instance;
 
 		if ( $udm->authorized ) {
-			$form->addElement( 'hidden', 'uid', 'User ID' );
-			$form->addElement( 'hidden', 'otp', 'Passphrase' );
+			#$form->addElement( 'hidden', 'uid', 'User ID' );
+			#$form->addElement( 'hidden', 'otp', 'Passphrase' );
 			$consts['uid'] = $udm->uid;
 			$consts['otp'] = $udm->pass;
 		}   
