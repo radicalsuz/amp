@@ -60,8 +60,11 @@ class UserDataInput extends UserData {
         if ( !$result )     return false;
         if ( !$this->form ) return false;
 
+        if (!$save_results = $this->doAction( 'Save', $options )) {
+            return false;
+        }
+        $this->showForm = false;
         $this->modTemplateID = $this->_module_def['modidresponse'];
-        $save_results = $this->doAction( 'Save', $options );
 
         //Attempt Email notifications when Data is updated by non-admin users
         if (!$this->admin) {

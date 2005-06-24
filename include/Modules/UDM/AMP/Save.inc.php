@@ -42,7 +42,6 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
                     die( "Unable to save request data using SQL $sql: " . $this->dbcon->ErrorMsg() );
 
         if ($rs) {
-            $this->udm->showForm = false;
             $this->udm->uid = $this->dbcon->Insert_ID();
             return true;
         }

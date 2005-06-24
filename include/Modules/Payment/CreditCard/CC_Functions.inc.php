@@ -391,11 +391,11 @@ class CC_Functions {
 				$ascField=$ascHoldArray[0];
 				$ascCodeReturnArray[$ascField]=$ascHoldArray[1];
 			 } 
-			$this->Debug('$ascCodeReturnArray[RESULT]: '.$ascCodeReturnArray[RESULT]);
+			$this->Debug('$ascCodeReturnArray[RESULT]: '.$ascCodeReturnArray['RESULT']);
 			
-			if ($ascCodeReturnArray[RESULT]=="0") {
+			if ($ascCodeReturnArray['RESULT']=="0") {
 				$ReturnArray["return_code"]=1;
-			} elseif ($ascCodeReturnArray[RESULT]=="12") {
+			} elseif ($ascCodeReturnArray['RESULT']=="12") {
 				$ReturnArray["return_code"]=2;
 			} else {
 				$ReturnArray["return_code"]=3;

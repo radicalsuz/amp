@@ -73,7 +73,6 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
             $this->sendReceipt( $options );
             return true;
         }
-            $this->sendReceipt( $options );
             
         //in case of failure
         $this->_pass_errors_to_UDM();

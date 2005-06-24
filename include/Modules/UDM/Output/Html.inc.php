@@ -27,6 +27,8 @@ function udm_output_html ( &$udm, $options = null ) {
         $out .= $result[ 'result' ] . '</p>';
     }
 
+    $out .= $udm->outputErrors();
+
     if ( !isset( $udm->showForm ) || $udm->showForm && !isset( $options['showForm'] ) ) {
 
         // Ensure we have a form built before proceeding.

@@ -47,12 +47,11 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
             $sql  = "SELECT * FROM userdata_auth WHERE";
             $sql .= " uid=" . $dbcon->qstr( $uid );
             $sql .= " AND otp=" . $dbcon->qstr( $pass );
-            $sql .= " AND ABS( NOW() - valid ) < " . $options['validity']['default'];
+            $sql .= " AND ABS( NOW() - valid ) < " . $options['validity'];
 
             // Having a cached execute may result in some users not being
             // able to login immediately, but may protect against some DOS attacks.
             $rs = $dbcon->CacheExecute( $sql ) or die( "Couldn't obtain login information: " . $dbcon->ErrorMsg() );
-            print $sql;
 
             if ( $rs->RecordCount() >= 1 ) {
 

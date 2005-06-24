@@ -5,6 +5,7 @@ require_once ('Modules/Payment/CreditCard/Validator.inc.php');
 require_once ('Modules/Payment/CreditCard/Merchant.inc.php');
 
 define ('PAYMENT_CC_TRANSACTION_SUCCESS', '1');
+define ('PAYMENT_CC_PENDING_STATUS', 'Awaiting Approval');
 /* * * * * * * * * * * * *
 * Class PaymentType_CreditCard
 *
@@ -60,6 +61,9 @@ class PaymentType_CreditCard {
 
     //Object which does the actual processing of Credit Cards
     var $CC_Library;
+
+    //Waiting period before accepting another transaction with the same card
+    var $waitingPeriod = 300;
 
     /* * * * * * * * * * * * *
     * function Payment_CreditCard
@@ -257,10 +261,28 @@ class PaymentType_CreditCard {
         $this->transaction_info['Amount']=$this->payment->getData('Amount');
         $this->transaction_info['Time_Requested']=date("Y-m-d h:i:s");
         $this->transaction_info['Date_Submitted']=date("Y-m-d");
-        $this->transaction_info['Status']='Awaiting Approval';
+        $this->transaction_info['Status']=PAYMENT_CC_PENDING_STATUS;
 
         $this->payment->save();
     }
+
+    function _PendingChargeAttempt() {
+        $sql = "Select * from payment ";
+        $sql .= "where RIGHT( Credit_Card_Number, 4 ) = " . 
+                    $this->dbcon->qstr( substr( $this->_protect( $this->card_info['Number'] ), -4) ); 
+        $sql .= " and Credit_Card_Expiration = ". $this->dbcon->qstr( $this->card_info['Expiration'] );
+        $sql .= " and ( Status =". $this->dbcon->qstr($this->response_codes[PAYMENT_CC_TRANSACTION_SUCCESS]) .
+                " or Status =" . $this->dbcon->qstr(PAYMENT_CC_PENDING_STATUS) ." ) ";
+        $sql .= " and ABS( NOW() - Time_Requested ) < " . $this->waitingPeriod;
+
+        $rs = $this->dbcon->Execute( $sql ) ;
+        if ( $rs->RecordCount() ) {
+            return true;
+        }
+
+        return false;
+    }
+        
 
     function _postTransactionSave( $ChargeResult ) {
         //complete transaction metadata
@@ -288,6 +310,11 @@ class PaymentType_CreditCard {
             $this->payment->addError( "Amount must be a positive number" );
             return false;
         }
+        if ($this->_PendingChargeAttempt()) {
+            $this->payment->addError( "Payment has already been processed from this card" );
+            return false;
+        }
+
 
         return true;
     }
@@ -329,7 +356,7 @@ class PaymentType_CreditCard {
     }
 
     function _protect( $cc_number ) {
-        return str_repeat( 'XXXX-', 3). substr($cc_number, 12);
+        return str_repeat( 'XXXX-', 3). substr($cc_number, -4);
     }
         
 

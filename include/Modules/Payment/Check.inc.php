@@ -33,7 +33,14 @@ class PaymentType_Check {
                                         'values'=>  'today') );
     }
 
-    function getData() {
+    function getData( $field = null ) {
+        if (!isset( $field )) return $this->check_info;
+
+        if (isset($this->check_info[$field])) return $this->check_info[$field];
+        return false;
+    }
+
+    function getInsertData() {
         return array(
             'Check_Number' =>  $this->check_info['Check_Number'],
             'Date_Processed' => $this->check_info['Date_Processed'] );
@@ -44,7 +51,7 @@ class PaymentType_Check {
     }
 
     function execute( ) {
-        $this->payment->save();
+        return $this->payment->save(); 
     }
 }
 ?>

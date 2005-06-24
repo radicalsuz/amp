@@ -376,7 +376,6 @@ class UserData {
     function getData( $fields=null ) {
 
         if (!$this->form)  {
-            #$this->doPlugin('QuickForm', 'Build');
             foreach ($this->fields as $fname=>$fDef) {
                 if (isset($fields) && (array_search($fname, $fields)===FALSE)) continue;
                 if (isset($fDef['value']))
@@ -386,6 +385,11 @@ class UserData {
             return $data;
         }
         
+        if ( isset( $fields ) ) {
+            foreach ($fields as $key=>$fname ) {
+                if (!$this->form->elementExists( $fname ) ) unset ($fields[$key] );
+            }
+        }
 		$data = $this->form->exportValues($fields);
 		
         if (PEAR::isError($data)) {
@@ -655,6 +659,7 @@ class UserData {
 
             $plugin->setOptions( $options );
             $result = $plugin->execute() or $result;
+            if ($result === false) return false;
 
         }
 

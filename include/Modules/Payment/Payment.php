@@ -40,10 +40,10 @@ Class Payment {
 
 	function save() {
         $save_data=$this->_getInsertData();
-        $rs = $this->dbcon->Replace("payment", $save_data, "id", $quote = true );
+        $result = $this->dbcon->Replace("payment", $save_data, "id", $quote = true );
 
-        if ($rs == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
-        if ($rs) return true;
+        if ($result == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
+        if ($result) return true;
 
         return false;
 	
