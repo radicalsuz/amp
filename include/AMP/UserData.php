@@ -474,6 +474,24 @@ class UserData {
         $this->fieldOrder = $fieldOrderSet;
      }
 
+     function addFields( $field_definitions ) {
+        foreach ($field_definitions as $fname => $field_def) {
+            $this->fields[$fname] = $field_def;
+        }
+     }
+
+     function formNotBlank() {
+        $types_to_avoid = array("header", "hidden", "html", "static");
+        $fields_to_avoid = array("otp", "modin", "uid", "btnUdmSubmit");
+        foreach ($this->fields as $fname => $field_def) {
+            if (array_search($fname, $fields_to_avoid)!==FALSE) continue;
+            if (array_search($field_def['type'], $types_to_avoid)!==FALSE) continue;
+            if (!(isset($_REQUEST[$fname]) && $_REQUEST[$fname])) continue;
+            return true;
+        }
+        return false;
+     }
+
 
     #############################
     ### Public Plugin Methods ###

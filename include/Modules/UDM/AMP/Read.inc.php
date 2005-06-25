@@ -39,14 +39,28 @@ class UserDataPlugin_Read_AMP extends UserDataPlugin {
         $rs = $dbcon->CacheExecute( $sql )
                 or trigger_error( "Unable to fetch information about record #" . $userid . ': ' . $dbcon->ErrorMsg() );
 
-        $userData = $rs->FetchRow();
+        if ($userData = $rs->FetchRow()) {
+            // Populate the form with the data we've fetched.
+            $this->setData( $userData );
 
-        // Populate the form with the data we've fetched.
-        $this->setData( $userData );
+            // Set the primary uid to $userid
+            $this->udm->uid = $userid;
 
-        // Set the primary uid to $userid
-        $this->udm->uid = $userid;
+            $this->udm->addFields( $this->uidField() );
+            return true;
 
+        }
+        return false;
+
+    }
+
+    function uidField() {
+        return array (
+            'uid' => array(
+                'public'=> true,
+                'value' => $this->udm->uid,
+                'type' => 'hidden',
+                'enabled'=> true ) );
     }
 
 }

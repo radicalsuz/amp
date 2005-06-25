@@ -59,7 +59,7 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
                 $udm->authorized = true;
                 $udm->uid = $uid;
                 $udm->pass = $pass;
-                $this->addAuthFields( 'hidden' );
+                $this->addAuthFields( $uid, 'hidden' );
 
             } else {
     
@@ -109,7 +109,7 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
 
                     if ( $result ) {
                         $udm->addResult( 'authenticate', "An email was sent to $mailto containing login information so that you can update your information. Please click on the link in the email, or enter the password from the email in the Password field below." );
-                        $this->addAuthFields();
+                        $this->addAuthFields( $uid );
                         $udm->insertBeforeFieldOrder( array( "otp" ) );
                     } else {
                         $udm->addError( 'authenticate', "There was a problem delivering your login information to the email address you specified. Please contact the system administrator." );
@@ -131,7 +131,7 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
         return $authStatus;
     }
 
-    function addAuthFields( $type = 'text' ) {
+    function addAuthFields( $uid, $type = 'text' ) {
         $fields = array(
             'otp' => array( 
                 'label' => '<B>Password</B>', 
@@ -142,11 +142,12 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
                 'size' => 30 ),
             'uid' => array(
                 'public'=> true,
-                'value' => $this->udm->uid,
+                'value' => $uid,
+                'default' => $uid,
                 'type' => 'hidden',
-                'enabled'=> true )
+                'enabled'=> true ) 
             );
-        $this->udm->fields = $fields + $this->udm->fields;
+        $this->udm->addFields( $fields );
     }
 
     function _make_mail_header () {
