@@ -206,7 +206,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             'public'=>'1');
 		
 		$def['search']=array('type'=>'submit', 'label'=>'Search', 'public'=>'1');
-		$def['modin']=array('type'=>'hidden', 'label'=>'', 'value'=>$_REQUEST['modin'], 'size'=>'8', 'public'=>'1', 'enabled'=>'1');
+		$def['modin']=array('type'=>'hidden', 'label'=>'', 'value'=>$this->udm->instance, 'size'=>'8', 'public'=>'1', 'enabled'=>'1');
 
         //Other values the list may want to preserve under some circumstances
         //Gdisplay is a display type for the groups page

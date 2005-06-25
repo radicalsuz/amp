@@ -66,7 +66,7 @@ switch ($gdisplay) {
 
 
 
-if (!isset($_REQUEST['modin']))$_REQUEST['modin']=2;
+if (!(isset($_REQUEST['modin']) && $_REQUEST['modin'])) $_REQUEST['modin'] = 2;
 $modin=$_REQUEST['modin'];
 
 $admin=false;
