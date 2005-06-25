@@ -23,7 +23,7 @@ class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
         //if so, return detail information for that event
 		if (isset($options['calid'])) {
             $detail_function=isset($this->options['detail_format']['value'])?($this->options['detail_format']['value']):"display_detail";
-            $inclass=method_exists($this->$detail_function);
+            $inclass=method_exists($this, $detail_function);
             if ($inclass){ $output=$this->$detail_function($this->dbcon, $options['calid']['value'] );
             } else {
                 $output=$detail_function($this->dbcon, $options['calid']['value']);

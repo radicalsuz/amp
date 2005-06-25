@@ -10,8 +10,6 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 	var $form;
 	var $fields_def;
 	var $control_class;
-	#var $url_criteria;
-    #var $sql_criteria;
     var $options = array (
         'show_caltype'=>array(
             'description'=>'Allow Search by Event Type',
