@@ -70,7 +70,7 @@ if ( !function_exists( 'evalnavhtml' ) ) {
 
 if ( !function_exists( 'getnavs' ) ) {
 
-    function getnavs($sql,$navside=l) {
+    function getnavs($sql,$navside='l') {
 
         global $dbcon, $MM_type, $intro_id, $modtemplate;
         $navsqlsel="SELECT navid FROM nav  ";
@@ -140,8 +140,8 @@ function getthenavs($navside) {
                     $nnnavid = $navcalled->Fields("navid");
             } 
 
-              }//end type
-        
+        }//end type
+
         ##GET CLASS NAV FILES ####
         elseif ( $_GET["class"]) {
             $navsql="  WHERE classlist=".$_GET["class"] ;
