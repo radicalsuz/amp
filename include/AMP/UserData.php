@@ -45,6 +45,7 @@ class UserData {
     var $name;
     var $fields;
     var $plugins;
+    var $fieldOrder;
 
     // User ID
     var $uid;
@@ -464,11 +465,13 @@ class UserData {
      }
 
      function getFieldOrder() {
-        return split("[ ],[ ]", $this->_module_def['field_order']);
+        if (isset($this->fieldOrder)) return $this->fieldOrder;
+        if ($this->_module_def['field_order']) $this->setFieldOrder(split("[ ]?,[ ]?", $this->_module_def['field_order']));
+        return $this->fieldOrder;
      }
 
      function setFieldOrder($fieldOrderSet) {
-        $this->_module_def['field_order'] = join ("," , $fieldOrderSet);
+        $this->fieldOrder = $fieldOrderSet;
      }
 
 

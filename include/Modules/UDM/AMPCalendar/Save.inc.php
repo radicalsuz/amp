@@ -12,7 +12,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
             'description'=>'Registration Form',
             'name'=>'Registration',
             'values'=>'Lookup(userdata_fields, name, id)',
-            'default'=>false,
+            'default'=>51,
             'type'=>'select',
             'available'=>true),
         'recurring_events' =>array(
@@ -23,6 +23,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 
     var $available = true;
     var $cal; #the Calendar Object
+    var $_field_prefix = "plugin_AMPCalendar";
 
     function UserdataPlugin_Save_AMPCalendar ( &$udm , $plugin_instance=null){
         $this->cal =new Calendar( $udm->dbcon, null, $udm->admin );
@@ -42,15 +43,15 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 
     function _register_fields_dynamic() {
         $options=$this->getOptions();
-        #if (isset($options['reg_modin']) && $options['reg_modin']) {
+        if (isset($options['reg_modin']) && $options['reg_modin']) {
             $this->cal->allowRegistration( $options['reg_modin'] );
-        #}
-        #if (isset ($options['recurring_events']) && $options['recurring_events']) {
+        }
+        if (isset ($options['recurring_events']) && $options['recurring_events']) {
             $this->cal->allowRecurringEvents( true );
-        #}
+        }
         $this->fields=$this->cal->getFields();
 
-        $this->InsertBeforeFieldOrder( array_keys($this->fields) );
+        $this->insertBeforeFieldOrder( array_keys($this->fields) );
 
     }
 

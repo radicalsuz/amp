@@ -19,8 +19,8 @@ $intro_id = 58;
 $list_options['display_format']='groups_layout_display';
 
 $sort_options['default_sortname'] = "Location";
-$sort_options['default_orderby'] = '(if(Country="USA",1,if(Country="CAN",2,if((isnull(Country) or Country=""),3,Country)))),State,City,Company';
-$sort_options['default_select'] = "Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))";
+$sort_options['default_orderby']  = '(if(Country="USA",1,if(Country="CAN",2,if((isnull(Country) or Country=""),3,Country)))),State,City,Company';
+$sort_options['default_select']   = "Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))";
 
 
 //Display sensitivity for legacy compatibility

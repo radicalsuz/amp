@@ -43,9 +43,10 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		$udm->form =& $form;
 
 		$form->_requiredNote = '<span style="color:#ff0000;">*</span> Required Field';
+
 		//set PUBLISH field at the top of the form
 		//do this during the build so it surpasses
-		//all other manipulation of field_order
+		//all other manipulation of fieldOrder
 		if ( $admin && $udm->_module_def['publish']) { 
             $udm->insertBeforeFieldOrder( array('publish') );
 		}

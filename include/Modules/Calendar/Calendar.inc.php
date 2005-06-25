@@ -79,20 +79,21 @@ var $id;
 
         $fields = array();
         $fields['publish'] = array('type'=>'checkbox', 'label'=>'<font color="#CC0000" size="3">PUBLISH</font>', 'required'=>false, 'public'=>false,'enabled'=>true);
-        $fields = array_merge( $fields, $this->addRegistrationFields());
 		$fields['event'] = array('type'=>'text', 'label'=>'Event Name', 'required'=>true, 'public'=>true,  'values'=>null, 'size'=>40, 'enabled'=>true);
 		$fields['typeid']=array('type'=>'select', 'label'=>'Event Type', 'required'=>false, 'public'=>true, 'values'=>'Lookup(eventtype, name, id)', 'enabled'=>true);
 		$fields['student']=array('type'=>'checkbox', 'label'=>'Student Event',  'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 		$fields['fpevent']=array('type'=>'checkbox', 'label'=>'Front Page Event',  'required'=>false, 'public'=>false, 'values'=>null, 'enabled'=>true);
+        $fields = array_merge( $fields, $this->addRegistrationFields());
 		$fields['date'] = array('type'=>'date', 'label'=>'Event Date', 'required'=>true, 'public'=>true,  'values'=>'today', 'size'=>null, 'enabled'=>true);
 		$fields['time'] = array('type'=>'text', 'label'=>'Event Start Time', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>10, 'enabled'=>true);
 		$fields['endtime'] = array('type'=>'text', 'label'=>'Event End Time', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>10, 'enabled'=>true);
 		$fields['cost']=array('type'=>'text', 'label'=>'Event Cost', 'required'=>false, 'public'=>true, 'size'=>'10', 'enabled'=>true);
 		$fields['url']=array('type'=>'text', 'label'=>'Website', 'required'=>false, 'public'=>true, 'enabled'=>true);
 		$fields['shortdesc'] = array('type'=>'textarea', 'label'=>'Brief description of the Event', 'required'=>true, 'public'=>true,  'values'=>null, 'size'=>"5:40", 'enabled'=>true);
+		$fields['org']= array('type'=>'textarea', 'label'=>'Endorsing Organizations (if any)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>"4:40", 'enabled'=>true);
 
         $fields = array_merge( $fields, $this->addRecurringFields());
-		$fields['org']= array('type'=>'textarea', 'label'=>'Endorsing Organizations (if any)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>"4:40", 'enabled'=>true);
+
 		$fields['header1']= array('type'=>'header', 'label'=>'Public Contact Information', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true);
 		$fields['contact1']=array('type'=>'text', 'label'=>'Contact Name', 'required'=>true, 'public'=>true, 'enabled'=>true);
 		$fields['email1']=array('type'=>'text', 'label'=>'Contact Email', 'required'=>true, 'public'=>true, 'enabled'=>true);
@@ -141,7 +142,7 @@ var $id;
         $fields = array();
         if (!$this->allowRecurringEvents()) return null;
         $fields['header_recur']= array('type'=>'header', 'label'=>'Repeating Events<BR><span class=photocaption>The next three items apply to Repeating events only:</span>', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true);
-        $fields['recurring_options']= array('type'=>'select', 'label'=>'Event Frequency', 'required'=>false, 'public'=>true, 'values'=>'Lookup(calendar_recur, name, id)', 'value'=>0, 'enabled'=>true);
+        $fields['recurring_options']= array('type'=>'select', 'label'=>'Event Frequency', 'required'=>false, 'public'=>true, 'values'=>'Lookup(calendar_recur, name, id)', 'default'=>0, 'enabled'=>true);
         $fields['enddate']=array('type'=>'date', 'label'=>'Choose a date for the event to stop appearing on the calendar:', 'required'=>false, 'public'=>true,  'values'=>'today', 'enabled'=>true);
         $fields['recurring_description']=array('type'=>'textarea', 'label'=>'Describe the schedule for a repeating event <BR>(e.g <i>Every 2nd Tuesday of the Month</i>)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>'3:40', 'enabled'=>true);
         return $fields;
@@ -150,7 +151,7 @@ var $id;
     function addRegistrationFields ( ) {
         if (! $this->allowRegistration() ) return null;
         if ($this->admin) {
-            $fields['modin'] = array (
+            $fields['registration_modin'] = array (
                 'label' => 'Registration Form',
                 'public' =>false,
                 'type' => 'select',
@@ -190,11 +191,11 @@ var $id;
         $this->allow_recurring_events = $value;
     }
 
-    function readData ($cal_id) {
+    function readData ($cal_id = null) {
         if (!isset($cal_id)) return false;
         //Read Calendar Record
         $sql  = "SELECT * FROM calendar WHERE "; 
-        $sql .= "id='" . $calid . "'";      
+        $sql .= "id='" . $cal_id . "'";      
     
         if ($event = $this->dbcon->CacheExecute( $sql )){
             $data = $event->FetchRow();

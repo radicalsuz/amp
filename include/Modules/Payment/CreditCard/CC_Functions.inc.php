@@ -4,7 +4,7 @@
 *
 */
 
-define("PAYMENT_CC_DEBUG", '1');
+define("PAYMENT_CC_DEBUG", '0');
 
 class CC_Functions {
 	

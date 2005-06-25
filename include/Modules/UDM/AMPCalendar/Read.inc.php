@@ -35,9 +35,7 @@ class UserDataPlugin_Read_AMPCalendar extends UserDataPlugin {
         // Check for the existence of a userid.
         if (!(isset( $options['calid'] )&&$options['calid'])) return false;
 
-        $calid = $options['calid'];
-	
-        if ($calData = $this->cal->readData( $option['calid'])) {
+        if ($calData = $this->cal->readData( $options['calid'])) {
             $this->setData( $calData );
             return true;
         }
