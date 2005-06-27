@@ -1,5 +1,68 @@
 <?php
 
+// an attempt to reduce the number of global variables
+class AMP_Template {
+
+	var $_nav_positions = array('left' => 'l', 'right' => 'r');
+
+	//replaces the global $lNAV_HTML_<integer> and $rNAV_HTML_<integer>
+	var $_nav_html = array();
+	//replaces global $NAV_IMG_PATH
+	var $_nav_image_path;
+	//replaces global $NAV_REPEAT
+	var $_nav_repeat;
+	//replaces global $htmltemplate
+	var $_html_template;
+	//replaces global $css
+	var $_css;
+	//replaces global $extra_header
+	var $_extra_header;
+
+	function AMP_Template($id) {
+		global $dbcon;
+		$templateRecord = $dbcon->CacheExecute("SELECT * FROM template WHERE id = $id") or DIE('Could not load template information in BaseTemplate '.$dbcon->ErrorMsg());
+
+		foreach ($this->_nav_positions as $position => $prefix) {
+			$this->_nav_html[$position] = 
+				array( 'start_heading' => $templateRecord->Fields($prefix."nav3"),
+					   'close_heading' => $templateRecord->Fields($prefix."nav4"),
+					   'start_content' => $templateRecord->Fields($prefix."nav7"),
+					   'close_content' => $templateRecord->Fields($prefix."nav8"),
+					   'content_spacer' => $templateRecord->Fields($prefix."nav9")
+					 );
+		}
+		$this->_nav_image_path = $templateRecord->Fields("imgpath");
+		$this->_nav_repeat = $templateRecord->Fields("repeat");
+		$this->_html_template = $templateRecord->Fields("header2");
+		$this->_css = $templateRecord->Fields("css");
+		$this->_extra_header = $templateRecord->Fields("extra_header");
+	}
+
+	function getNavHtml($position, $element) {
+		return $this->_nav_html[$position][$element];
+	}
+
+	function getNavImagePath() {
+		return $this->_nav_image_path;
+	}
+
+	function getNavRepeat() {
+		return $this->_nav_repeat;
+	}
+
+	function getHtmlTemplate() {
+		return $this->_html_template;
+	}
+
+	function getCSS() {
+		return $this->_css;
+	}
+
+	function getExtraHeader() {
+		return $this->_extra_header;
+	}
+}
+
 if ( !function_exists( 'buildheader' ) ) {
 		
     function buildheader() {
@@ -164,24 +227,30 @@ if (isset($modtemplate_id)) {
 if (!isset($template_id) || !$template_id) {$template_id = $systemplate_id;}
 
 #SET TEMPLATE VARS
-$settemplate=$dbcon->CacheExecute("SELECT * FROM template WHERE id = $template_id") or DIE('Could not load template information in BaseTemplate '.$dbcon->ErrorMsg());
+//$settemplate=$dbcon->CacheExecute("SELECT * FROM template WHERE id = $template_id") or DIE('Could not load template information in BaseTemplate '.$dbcon->ErrorMsg());
+$registry =& AMP_Registry::instance();
 
-$NAV_IMG_PATH = $settemplate->Fields("imgpath");
-$NAV_REPEAT = $settemplate->Fields("repeat");
-$htmltemplate =$settemplate->Fields("header2");	
-if (!$css) {   $css = $settemplate->Fields("css");}
-$extra_header = $settemplate->Fields("extra_header");
+$template =& new AMP_Template($template_id);
+$registry->setTemplate($template);
 
-$lNAV_HTML_1 = $settemplate->Fields("lnav3");		//heading row
-$lNAV_HTML_2 = $settemplate->Fields("lnav4");		//close heading row
-$lNAV_HTML_3 = $settemplate->Fields("lnav7");		//start content table row
-$lNAV_HTML_4 = $settemplate->Fields("lnav8");		//end content table row
-$lNAV_HTML_5 = $settemplate->Fields("lnav9");		// content table row spacer
-$rNAV_HTML_1 = $settemplate->Fields("rnav3");		//heading row
-$rNAV_HTML_2 = $settemplate->Fields("rnav4");		//close heading row
-$rNAV_HTML_3 = $settemplate->Fields("rnav7");		//start content table row
-$rNAV_HTML_4 = $settemplate->Fields("rnav8");		//end content table row
-$rNAV_HTML_5 = $settemplate->Fields("rnav9");		// content table row spacer
+$NAV_IMG_PATH = $template->getNavImagePath();
+$NAV_REPEAT = $template->getNavRepeat();
+$htmltemplate = $template->getHtmlTemplate();
+if (!$css) {
+	$css = $template->getCSS();
+}
+$extra_header = $template->getExtraHeader();
+
+$lNAV_HTML_1 = $template->getNavHtml('left', 'start_heading');
+$lNAV_HTML_2 = $template->getNavHtml('left', 'close_heading');
+$lNAV_HTML_3 = $template->getNavHtml('left', 'start_content');
+$lNAV_HTML_4 = $template->getNavHtml('left', 'close_content');
+$lNAV_HTML_5 = $template->getNavHtml('left', 'content_spacer');
+$rNAV_HTML_1 = $template->getNavHtml('right', 'start_heading');
+$rNAV_HTML_2 = $template->getNavHtml('right', 'close_heading');
+$rNAV_HTML_3 = $template->getNavHtml('right', 'start_content');
+$rNAV_HTML_4 = $template->getNavHtml('right', 'close_content');
+$rNAV_HTML_5 = $template->getNavHtml('right', 'content_spacer');
 
 #buildheader
 $htmlheader= buildheader();
