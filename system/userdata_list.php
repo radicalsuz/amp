@@ -10,7 +10,7 @@
  *
  *****/
 $mod_name='udm';
-require_once( 'AMP/BaseDB.php' );
+require_once( 'Connections/freedomrising.php' );
 require_once('AMP/UserData/Set.inc.php');
 
 if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
@@ -23,23 +23,15 @@ $modidselect=$dbcon->CacheExecute("SELECT id, perid from modules where publish=1
 $modid=$modidselect->Fields("id");
 $modin_permission=$modidselect->Fields("perid");
 
-/*
-if (!$userper[$modin_permission]) {
 
-    print "<script type=\"text/javascript\">
-        alert (\"You don't have permission to view this list\");
-        window.location.url=\"index.php\";
-        </script>";
-}
-$admin=($userper[54]&&$userper[$modin_permission]);
-*/
+$view_permission = ($userper[54]&&$userper[$modin_permission]);
+
 $admin=true;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);
 
 $userlist->_register_default_plugins();
 
 $uid= isset($_REQUEST['uid'])?$uid:false;
-
 
 if ($uid && $modin) {
 
@@ -51,6 +43,8 @@ if ($uid && $modin) {
     //display result list
     $output = $userlist->output_list('TableHTML');
 }
+
+if (!$view_permission) $output = "You do not have permission to view this list";
 
 require_once( 'header.php' );
 

@@ -13,6 +13,7 @@ require_once( 'HTML/QuickForm.php' );
 require_once( 'AMP/UserData/Plugin.inc.php' );
 
 class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
+    var $AMPForm;
 
     function UserDataPlugin_Build_QuickForm ( &$udm ) {
         $this->init( $udm );

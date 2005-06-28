@@ -309,7 +309,7 @@ class UserData {
         if (!$this->useDefaults) return 'value';
 
         if (isset($fDef['default'])) return 'default';
-        if (isset($fDef['region'])) return 'values';
+        if (isset($fDef['region']) && $fDef['region']) return 'values';
 
         $no_default_types = array( "select", "multiselect","checkgroup","radiogroup" );
         if (array_search( $fDef['type'], $no_default_types ) !== FALSE) return FALSE;
