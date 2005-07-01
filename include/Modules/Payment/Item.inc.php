@@ -6,7 +6,7 @@ class PaymentItem {
     var $description;
     var $amount;
     var $tax_status;
-    var $currency_format = '$ %01.2f US';
+    var $currency_format = '$%5.2f US';
     var $item_data;
     var $item_data_keys = array( "name", "description", "Amount", "Tax_Status");
     var $id;
@@ -59,7 +59,7 @@ class PaymentItem {
         
 
     function optionValue() {
-        return sprintf( $this->currency_format, $this->getData('Amount') ) ."  ". $this->getData('name');
+        return sprintf( $this->currency_format, $this->getData('Amount') ) ."&nbsp;&nbsp;&nbsp;". $this->getData('name');
 
     }
 

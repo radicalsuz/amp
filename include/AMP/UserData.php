@@ -624,8 +624,7 @@ class UserData {
         $plugin =& new $plugin_class( $this , $plugin_instance );
         $actions[$namespace] =& $plugin;
 
-        // Add the fields from the plugin. Prefix with the plugin name.
-        $plugin->_field_prefix="plugin_$namespace"; 
+        // Add the fields from the plugin. Prefix with the plugin value..
         $this->registerFields( $plugin->fields, $plugin->_field_prefix );
 
         return $plugin;
@@ -847,18 +846,6 @@ class UserData {
                 $namespace = $plugin[ 'namespace' ];
                 $action    = $plugin[ 'action'    ];
                 $plugin_instance = $plugin[ 'id' ];
-                /*** this code is deprecated and should be removed once 
-                **** all sites have had options moved to userdata_plugins_options
-                $optionStr = $plugin[ 'options'   ];
-
-                $optArray = split( '::', $optionStr );
-
-                foreach ( $optArray as $option ) {
-
-                    $thisOptions = split( '=', $option );
-                    $options[ array_shift($thisOptions) ] = implode('', $thisOptions);
-
-                }*/
 
                 $r = $this->registerPlugin( $namespace, $action, $plugin_instance ) and $r;
             }

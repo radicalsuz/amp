@@ -36,7 +36,10 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
                                           'available' => true),
         'secure_server'    => array( 'label' => 'Secure Server Name',
                                     'type'  =>  'text',
-                                    'available' => true )
+                                    'available' => true ),
+        'check_payable'    => array( 'label' => 'Check Payment Instructions',
+                                        'type'  =>  'textarea',
+                                        'available' => true )
         );
 
     var $_field_prefix = 'plugin_AMPPayment';
@@ -194,6 +197,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         foreach ($this->getAllowedPaymentTypes( $options ) as $payment_type => $description) {
             $current = &new Payment ($this->dbcon, $payment_type);
+            if ($payment_type == 'Check') $this->_setupCheck( $current, $options );
             
             $fieldswapper->addSet( $payment_type, $this->convertFieldDefstoDOM($current->fields)) ;
             $paymentType_fields = array_merge($paymentType_fields, $current->fields);
@@ -203,6 +207,12 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
         return ($selector_field + $paymentType_fields);
     }
+
+    function _setupCheck( &$payment, $options = null ) { 
+        if (!isset($options['check_payable'])) return false;
+        $payment->paymentType->setPayable( $options['check_payable'] );
+    }
+
 
     function getPaymentSelect( $options, $allow_select=true ) {
         $payment_options = $this->getAllowedPaymentTypes( $options );

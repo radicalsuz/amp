@@ -51,6 +51,8 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
         $data = $this->skipPlugins( $data );
 
         $order = $this->udm->getFieldOrder();
+        $finishedElements = array();
+        $finishedElements['modin'] = 1;
         
         if (count($order)>1) { 
             foreach ($order as $field) {
@@ -89,7 +91,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
             case 'static':
             case 'header':
                 if ($fDef['values']) $label = $fDef['values'];
-                return "\n:: " . strip_tags( $label ) . "\n";
+                return "\n:: " . strip_tags( $label ) . "\n\n";
                 break;
             case 'checkbox':
                 $value = $value?'yes':'no';

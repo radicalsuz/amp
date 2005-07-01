@@ -58,8 +58,10 @@ class UserDataPlugin_Read_AMP extends UserDataPlugin {
         return array (
             'uid' => array(
                 'public'=> true,
+                'default' => $this->udm->uid,
                 'value' => $this->udm->uid,
                 'type' => 'hidden',
+                'constant' => true,
                 'enabled'=> true ) );
     }
 

@@ -13,18 +13,18 @@ class UserDataPlugin_Read_AMPVolunteer extends UserDataPlugin {
     // We take one option, a userid, and no fields.
     var $options     = array( '_userid' => array(   'available' => false,
                                                     'value' => null) );
-    var $fields      = array();
 
     // Available for use in forms.
     var $available   = true;
+    var $_field_prefix = "plugin_AMPVolunteer";
 
-    function UserDataPlugin_Read_AMPVolunteer ( &$udm, $options=null ) {
-        $this->init( $udm );
+    function UserDataPlugin_Read_AMPVolunteer ( &$udm, $plugin_instance=null ) {
+        $this->init( $udm, $plugin_instance );
     }
     
     function _register_fields_dynamic() {
         $vol=new Volunteer( $this->dbcon );
-        $this->fields=$this->fields + $vol->fields;
+        $this->fields = $vol->fields;
     }
     
     function execute( $options = null ) {

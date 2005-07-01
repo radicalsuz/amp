@@ -64,7 +64,7 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
             } else {
     
                 $authStatus = false;
-                $udm->authenticated = false;
+                $udm->authorized = false;
                 $udm->uid = $uid;
                 $udm->pass = null;
 
@@ -137,16 +137,18 @@ class UserDataPlugin_Authenticate_AMP extends UserDataPlugin {
                 'label' => '<B>Password</B>', 
                 'public' => 1, 
                 'enabled' => 1, 
-                'value' => $this->udm->pass,
+                'default' => $this->udm->pass,
                 'type' => $type, 
                 'size' => 30 ),
             'uid' => array(
                 'public'=> true,
                 'value' => $uid,
                 'default' => $uid,
+                'constant' => true,
                 'type' => 'hidden',
                 'enabled'=> true ) 
             );
+        if ($this->udm->authorized) $fields['otp']['constant'] = true;
         $this->udm->addFields( $fields );
     }
 

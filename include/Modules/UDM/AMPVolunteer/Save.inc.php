@@ -11,6 +11,7 @@ class UserDataPlugin_Save_AMPVolunteer extends UserDataPlugin_Save {
 
     var $available = true;
     var $vol; #the Volunteer Object
+    var $_field_prefix = "plugin_AMPVolunteer";
 
     function UserdataPlugin_Save_AMPVolunteer( &$udm ){
         $this->init( $udm );
@@ -25,10 +26,10 @@ class UserDataPlugin_Save_AMPVolunteer extends UserDataPlugin_Save {
     function getSaveFields(){
         $this->vol=new Volunteer( $this->dbcon );
         $save_fields=array();
+        $types_to_avoid = array( "header", "static", "html" );
         foreach ($this->vol->fields as $fname=>$fdef) {
-            if ($fdef['type']!="header" && $fdef['type']!='static') {
-                $save_fields[]=$fname;
-            }
+            if ( array_search($fdef['type'], $types_to_avoid)!==FALSE) continue; 
+            $save_fields[]=$fname;
         }
         return $save_fields;
     }
