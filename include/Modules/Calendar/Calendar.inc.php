@@ -84,7 +84,7 @@ var $id;
 		$fields['student']=array('type'=>'checkbox', 'label'=>'Student Event',  'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 		$fields['fpevent']=array('type'=>'checkbox', 'label'=>'Front Page Event',  'required'=>false, 'public'=>false, 'values'=>null, 'enabled'=>true);
         $fields = array_merge( $fields, $this->addRegistrationFields());
-		$fields['date'] = array('type'=>'date', 'label'=>'Event Date', 'required'=>true, 'public'=>true,  'values'=>'today', 'size'=>null, 'enabled'=>true);
+		$fields['date'] = array('type'=>'date', 'label'=>'Event Date', 'required'=>true, 'public'=>true,  'default'=>'today', 'size'=>null, 'enabled'=>true);
 		$fields['time'] = array('type'=>'text', 'label'=>'Event Start Time', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>10, 'enabled'=>true);
 		$fields['endtime'] = array('type'=>'text', 'label'=>'Event End Time', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>10, 'enabled'=>true);
 		$fields['cost']=array('type'=>'text', 'label'=>'Event Cost', 'required'=>false, 'public'=>true, 'size'=>'10', 'enabled'=>true);
@@ -143,7 +143,7 @@ var $id;
         if (!$this->allowRecurringEvents()) return null;
         $fields['header_recur']= array('type'=>'header', 'label'=>'Repeating Events<BR><span class=photocaption>The next three items apply to Repeating events only:</span>', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true);
         $fields['recurring_options']= array('type'=>'select', 'label'=>'Event Frequency', 'required'=>false, 'public'=>true, 'values'=>'Lookup(calendar_recur, name, id)', 'default'=>0, 'enabled'=>true);
-        $fields['enddate']=array('type'=>'date', 'label'=>'Choose a date for the event to stop appearing on the calendar:', 'required'=>false, 'public'=>true,  'values'=>'today', 'enabled'=>true);
+        $fields['enddate']=array('type'=>'date', 'label'=>'Choose a date for the event to stop appearing on the calendar:', 'required'=>false, 'public'=>true,  'default'=>'today', 'enabled'=>true);
         $fields['recurring_description']=array('type'=>'textarea', 'label'=>'Describe the schedule for a repeating event <BR>(e.g <i>Every 2nd Tuesday of the Month</i>)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>'3:40', 'enabled'=>true);
         return $fields;
     }
@@ -209,10 +209,11 @@ var $id;
     function saveEvent( $save_data ) {
         if ($this->allowRegistration() && $save_data['rsvp']) {
             $save_data['registration_modin'] = $this->registrationForm();
-            unset($save_data['rsvp']);
         }
+        unset($save_data['rsvp']);
 
         $rs = $this->dbcon->Replace("calendar", $save_data, "id", $quote = true );
+        
 
         if ($rs == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
         if ($rs) return true;

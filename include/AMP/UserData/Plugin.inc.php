@@ -388,27 +388,28 @@ class UserDataPlugin {
         return $returnSet;
     }
     
-    function uncheckData( $fDef, $value ) {
+    function uncheckData( $keyname, $value ) {
 
+        $fDef = $this->udm->fields[ $keyname ];
         $types_to_modify = array( "checkgroup" );
         if (array_search($fDef['type'], $types_to_modify)===FALSE) return $value;
 
         switch ($fDef['type']) { 
             case "checkgroup":
-                return $this->expandCheckGroup($keyname, $value);
+                return $this->expandCheckGroup($value);
                 break;
             default:
                 return $value;
         }
     }
 
-    function expandCheckGroup ( $keyname, $value ) {
+    function expandCheckGroup ( $value ) {
         $returnSet = array();
         $dataset=split('[ ]?,[ ]?', $value);
         if (!is_array($dataset)) return false;
 
         foreach ($dataset as $item) {
-            $returnSet[$keyname][$item]=1;
+            $returnSet[$item]=1;
         }
         return $returnSet;
     }
@@ -417,7 +418,7 @@ class UserDataPlugin {
     function setData ( $data ) {
         foreach ($data as $key=>$value) {
             $udmkey = $this->addPrefix($key);
-            $plugin_data[$udmkey]=$this->uncheckData( $this->udm->fields[$udmkey], $value );
+            $plugin_data[$udmkey]=$this->uncheckData( $udmkey, $value );
         }
 
         return $this->udm->setData( $plugin_data );

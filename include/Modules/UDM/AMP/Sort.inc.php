@@ -33,7 +33,7 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
         'default_orderby_admin'=>array(
             'value'=>'Last_Name,First_Name'));
 
-    function UserDataPlugin_Sort_AMP(&$udm, $plugin_instance) {
+    function UserDataPlugin_Sort_AMP(&$udm, $plugin_instance = null) {
         $this->init ($udm, $plugin_instance);
     }
 

@@ -50,6 +50,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     var $display_fieldset;
     var $current_row;
     var $dataset;
+    var $Lookups;
 
 
     function UserDataPlugin_ExportFile_Output ( &$udm, $plugin_instance=null ) {
@@ -138,15 +139,11 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
                 case 'select':
                 case 'multiselect':
                     $result_fields[]=$column;
-                    #$build_plugin = $this->udm->registerPlugin('QuickForm','Build');
-                    #$defaults = $build_plugin->getDefaults($this->udm->fields[$column]);
                     $defaults = $this->getValueSet($this->udm->fields[$column]);
                     $this->setTranslation($column, $defaults);
                     break;
                 case 'checkgroup':
                     $result_fields[]=$column . '_' . $this->getLabel($column);
-                    #$build_plugin = $this->udm->registerPlugin('QuickForm','Build');
-                    #$defaults = $build_plugin->getDefaults($this->udm->fields[$column]);
                     $defaults = $this->getValueSet($this->udm->fields[$column]);
                     $this->setTranslation( $column, $defaults, 'readExpandedCheckGroup' );
                     foreach ($defaults as $ex_column) {
@@ -168,12 +165,9 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
     function translateValues() {
 
-        #foreach($this->dataset as $current_row) {
         $this->dataset->MoveFirst();
         while ($this->current_row = $this->dataset->FetchRow()) {
 
-            #$this->current_row = $current_row;
-            
             $result_row = array();
 
             foreach ($this->display_fieldset as $readyfield) {
@@ -200,7 +194,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     }
 
     function setLookup($field, $lookup_set) {
-        $this->LookUps[$field]['Set']=$lookup_set;
+        $this->Lookups[$field]['Set']=$lookup_set;
     }
 
     function parentGroup($field) {
@@ -221,9 +215,9 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     
     function readExpandedCheckGroup($field, $value) {
         if ($groupname = $this->parentGroup($field)) {
-            $group_set = $this->expandCheckgroup( $groupname, $this->current_row[$groupname] );
+            $group_set = $this->expandCheckgroup( $this->current_row[$groupname] );
             $sought_value = substr($field, strlen($groupname)+1);
-            if (isset($group_set[$groupname][$sought_value])) return 1;
+            if (isset($group_set[$sought_value])) return 1;
         }
         return '0';
     }

@@ -78,6 +78,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         foreach ($this->udm->alias as $fname=>$fdef) {
             if (isset($fdef['f_sqlname'])) $fieldset.=", ".$fdef['f_sqlname'].(isset($fdef['f_alias'])?" AS ".$fdef['f_alias']:"");
         }
+        if (isset($this->udm->sortby['select']) && $this->udm->sortby['select']) $fieldset .= ", " . $this->udm->sortby['select'];
         return $fieldset;
     }
 
