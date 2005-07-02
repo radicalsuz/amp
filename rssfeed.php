@@ -58,7 +58,7 @@ if ($R->Fields("title")) {
 	}
 	$description = htmlspecialchars(strip_tags($description));
 	if ($description == NULL) {$description= $R->Fields("title");}
-	if (($R->Fields("date")) or ($R->Fields("date") != '0000-00-00')) {
+	if (($R->Fields("date")) && ($R->Fields("date") != '0000-00-00')) {
 		$date = date('r',$R->Fields("date"));
 	} else {
 		$date = date('r',$R->Fields("updated"));
