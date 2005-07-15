@@ -2,7 +2,7 @@
 $mod_name='content';
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
-require_once("WYSIWYG/editor.php");
+require_once("AMP/Form/HTMLEditor.inc.php");
 require_once("../includes/versionfunctions.php");
 
 $buildform = new BuildForm;
@@ -383,7 +383,22 @@ function change2(which) {
           <tr> 
             <td colspan="2" valign="top" class="name">Full Text (not applicable 
               for offsite URLs)<br> 
-              <?php echo WYSIWYG($r->Fields("test"),$r->Fields("html")); ?>
+                <textarea id="articlexin" name="article" rows="60" cols="80" WRAP="VIRTUAL" style = "width: 100%;"> 
+                <?php print $r->Fields("test")?></textarea><BR>
+                <?php
+                $current_browser = getBrowser();
+                if (($_COOKIE['AMPWYSIWYG'] != 'none' ) && ($current_browser == 'win/ie' or $current_browser == 'mozilla' )) {
+                    print '<input name="html" type="hidden" value="1"><BR>';
+                    $editor = &AMPFormElement_HTMLEditor::instance();
+                    $editor->addEditor('articlexin');
+                    $editor->height = '800px';
+                    print $editor->output();
+                } else {
+                    print '<input name="html" type="checkbox" value="1"'.
+                            ( $r->Fields("html")?" CHECKED":"") . ">HTML Override <br>";
+                }
+
+              ?>
             </td>
           </tr>
 		   <tr class="intitle"> 

@@ -1,13 +1,13 @@
 <?php
 $mod_name='content';
 require("Connections/freedomrising.php");
-require_once("WYSIWYG/editor.php");
+require_once( "AMP/Form/HTMLEditor.inc.php" );
 
 if (isset($preview)) {header ("Location: ../article.php?id=$id&preview=1");}
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
-  if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
+  if ($_SERVER['QUERY_STRING']) {
+    $MM_editAction = $MM_editAction . "?" . $_SERVER['QUERY_STRING'];
   }
 
   $MM_abortEdit = 0;
@@ -113,7 +113,7 @@ if (isset($HTTP_GET_VARS["id"]))
               and Publishing</td>
           </tr>
           <tr> 
-            <td colspan="2" valign="top"><input <?php If (($type->Fields("publish")) == "1") { echo "CHECKED";} If (($type->Fields("id")) == $NULL) { echo "CHECKED";}?>  type="checkbox" name="publish" value="1"> 
+            <td colspan="2" valign="top"><input <?php If (($type->Fields("publish")) !== 0) { echo "CHECKED";} ?>  type="checkbox" name="publish" value="1"> 
               <font color="#990000" size="3"><strong>PUBLISH </strong></font></td>
           </tr>
           <tr> 
@@ -151,7 +151,22 @@ if (isset($HTTP_GET_VARS["id"]))
           <tr> 
              <td colspan="2" valign="top" class="name">Full Text (not applicable 
               for offsite URLs)<br> 
-              <?php echo WYSIWYG($type->Fields("test"),$type->Fields("html")); ?>
+                <textarea id="articlexin" name="article" rows="60" cols="80" WRAP="VIRTUAL" style = "width: 100%;"> 
+                <?php print $type->Fields("test")?></textarea><BR>
+                <?php
+                $current_browser = getBrowser();
+                if (($_COOKIE['AMPWYSIWYG'] != 'none' ) && ($current_browser == 'win/ie' or $current_browser == 'mozilla' )) {
+                    print '<input name="html" type="hidden" value="1"><BR>';
+                    $editor = &AMPFormElement_HTMLEditor::instance();
+                    $editor->addEditor('articlexin');
+                    $editor->height = '800px';
+                    print $editor->output();
+                } else {
+                    print '<input name="html" type="checkbox" value="1"'.
+                            ( $type->Fields("html")?" CHECKED":"") . ">HTML Override <br>";
+                }
+
+              ?>
             </td>
           </tr>
           <tr class="intitle"> 

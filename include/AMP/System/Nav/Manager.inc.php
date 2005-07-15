@@ -27,13 +27,6 @@ class AMPSystem_NavManager {
         $this->loadNavs();
     }
 
-    function &addNav ( $nav_name, $desc ) {
-        $desc['id'] = $nav_name;
-        $this->nav_set[$nav_name] = &new AMPSystem_Nav( $desc, $this );
-        return $this->nav_set[$nav_name];
-    }
-
-
     function loadNavs() {
         if (!($xmlEngine = &new AMPSystem_XMLEngine('Nav'))) return false;;
         $nav_set = $xmlEngine->readData();
@@ -43,6 +36,13 @@ class AMPSystem_NavManager {
             $new_nav = &$this->addNav( $name, $item );
         }
     }
+
+    function &addNav ( $nav_name, $desc ) {
+        $desc['id'] = $nav_name;
+        $this->nav_set[$nav_name] = &new AMPSystem_Nav( $desc, $this );
+        return $this->nav_set[$nav_name];
+    }
+
 
     function render( $nav_name ) {
         if (!($nav = &$this->getNav($nav_name))) return false;

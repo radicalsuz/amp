@@ -1,5 +1,4 @@
 <?php
-require_once("WYSIWYG/editor.php");
 
 class BuildForm {
     var $first_copy_btn=true;

@@ -26,42 +26,12 @@
 
     function AMPSystem_Nav( $desc=null, &$manager ) {
         if (!isset($desc)) return;
-        if(isset( $desc['id'])) $this->id = $desc['id'];
-        if(isset( $desc['title']))$this->addTitle($desc['title']);
-        if(isset( $desc['href'])) $this->href = $desc['href'];
-        if(isset( $desc['per']))  $this->permission = $desc['per'];
-        if(isset( $desc['item'])) $this->addItems($desc['item']);
-
-        if (isset($desc['child'])) {
-            foreach ($desc['child'] as $childname ) {
-                $this->addChild( $manager->addNav( $childname, $desc[ $childname ] ));
-            }
-        }
+        if(isset( $desc['id']))     $this->id =  $desc['id'];
+        if(isset( $desc['title']))  $this->addTitle($desc['title']);
+        if(isset( $desc['href']))   $this->href = $desc['href'];
+        if(isset( $desc['per']))    $this->permission = $desc['per'];
+        if(isset( $desc['item']))   $this->addItems($desc['item']);
                 
-    }
-
-    function addItems( $itemvar ) {
-        static $itemcount = 0;
-
-        if (!is_array($itemvar)) $itemset = array( $itemvar );
-        else $itemset = $itemvar;
-
-        foreach ($itemset as $item) {
-            $id = $this->id . $itemcount++;
-            $this->items[$id] = $item;
-        }
-    }
-
-    function addChild( &$item ) {
-        $this->children[] = &$item;
-    }
-
-    function checkPermission( $item=null ) {
-        $per = false;
-        if (isset($item['per'])) $per = $item['per'];
-        if (!isset($item)) $per = $this->permission;
-        if (!$per) return true;
-        return AMP_Authorized( $per);
     }
 
     function output() {
@@ -80,6 +50,26 @@
     }
 
 
+    #############################
+    ###  Public Setup Methods ###
+    #############################
+
+    function addItems( $itemvar ) {
+        static $itemcount = 0;
+
+        if (!is_array($itemvar)) $itemset = array( $itemvar );
+        else $itemset = $itemvar;
+
+        foreach ($itemset as $item) {
+            $id = $this->id . $itemcount++;
+            $this->items[$id] = $item;
+        }
+    }
+
+    function addChild( &$item ) {
+        $this->children[] = &$item;
+    }
+
     function addTitle( $title ) {
         $this->label = $title;
     }
@@ -95,7 +85,19 @@
         $this->addItem( 'module_header_list.php?modid='.$modid , 'Public Pages',  'page',       AMP_PERMISSION_TOOLS_INTROTEXT );
         $this->addItem( 'module_controllist.php?modid='.$modid , 'Tool Settings', 'settings',   AMP_PERMISSION_TOOLS_ADMIN );
     }
-        
+
+
+    function checkPermission( $item=null ) {
+        $per = false;
+        if (isset($item['per'])) $per = $item['per'];
+        if (!isset($item)) $per = $this->permission;
+        if (!$per) return true;
+        return AMP_Authorized( $per);
+    }
+
+    #####################################
+    ### Private Output Helper Methods ###
+    #####################################        
 
     function _HTML_NavTitle( ) {
        if (!isset($this->label)) return false; 

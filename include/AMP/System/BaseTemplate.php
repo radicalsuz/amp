@@ -39,6 +39,16 @@ class AMPSystem_BaseTemplate {
         $this->page_encoding = $reg->getEntry( AMP_REGISTRY_SETTING_ENCODING );
     }
 
+    function instance() {
+        static $basetemplate = false;
+        if (!$basetemplate) $basetemplate = new AMPSystem_BaseTemplate();
+        return $basetemplate;
+    }
+
+    ####################################
+    ### Public Configuration Methods ###
+    ####################################
+
     function setTool( $modid ) {
         $module_names = AMPSystem_Lookup::instance('Modules');
         $form_lookup = AMPSystem_Lookup::instance('FormsbyTool');
@@ -52,20 +62,32 @@ class AMPSystem_BaseTemplate {
         $this->nav_name = $nav_name;
     }
 
+    #############################
+    ### Public Output Methods ###
+    #############################
+
+
     function outputHeader() {
         return $this->_HTML_pageHeader() . $this->_HTML_bodyTemplate();
-    }
-
-
-    function instance() {
-        static $basetemplate = false;
-        if (!$basetemplate) $basetemplate = new AMPSystem_BaseTemplate();
-        return $basetemplate;
     }
 
     function outputFooter() {
         return $this->_HTML_systemFooter();
     }
+
+
+    #####################################
+    ### Private Output Helper Methods ###
+    #####################################
+
+    function _systemFooterText() {
+        $reg = AMP_Registry::instance();
+        $name = $reg->getEntry(AMP_REGISTRY_SETTING_SITENAME);
+        $admEmail = $reg->getEntry(AMP_REGISTRY_SETTING_EMAIL_SYSADMIN);
+        return  "AMP " . AMP_SYSTEM_VERSION_ID . " for $name\n" .
+                "Please report problems to $admEmail";
+    }
+
 
     function _HTML_systemFooter() {
         return "</fieldset>\n</div></td>\n</tr></table>\n" .
@@ -76,14 +98,6 @@ class AMPSystem_BaseTemplate {
     }
     function _HTML_systemFooterText() {
         return converttext( $this->_systemFooterText() );
-    }
-
-    function _systemFooterText() {
-        $reg = AMP_Registry::instance();
-        $name = $reg->getEntry(AMP_REGISTRY_SETTING_SITENAME);
-        $admEmail = $reg->getEntry(AMP_REGISTRY_SETTING_EMAIL_SYSADMIN);
-        return  "AMP " . AMP_SYSTEM_VERSION_ID . " for $name\n" .
-                "Please report problems to $admEmail";
     }
 
 

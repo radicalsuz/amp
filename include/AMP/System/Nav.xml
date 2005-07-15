@@ -234,13 +234,13 @@
 </item>
 <item>
 <href>article_list.php?&amp;class=2</href>
-<label>View/Edit Homepage Content</label>
+<label>View/Edit Front Page Content</label>
 <class>home</class>
 <per>CONTENT_EDIT</per>
 </item>
 <item>
 <href>article_fpedit.php</href>
-<label>Add Homepage Content</label>
+<label>Add Front Page Content</label>
 <class>add</class>
 <per>CONTENT_EDIT</per>
 </item>

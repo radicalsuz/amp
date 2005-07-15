@@ -1,14 +1,22 @@
 <?php
 
-ob_start();
-
 require_once('AMP/BaseDB.php');
+
+/* * * * * * * *
+ * Initialize Lookup Factory
+ *
+ * Global Object used for reference data
+ *
+ */
 require_once('AMP/System/Lookups.inc.php');
 $lookup_factory = & AMPSystem_LookupFactory::instance();
 $lookup_factory->init( $dbcon );
 
+//Browser discovery
 setBrowser();
 
+
+//Initialize System Permissions
 require_once("AMP/System/Permission/Manager.inc.php");
 
 $userLevel = $_SERVER['REMOTE_GROUP'];
@@ -22,23 +30,24 @@ if (!$AMP_Permission->authorizedPage()) {
     ampredirect( $AMP_Permission->userHome() );
 }
 
-/* This $userper var is deprecated, modules should now check the AMPSystem_Permissions
- * singleton like so:
- *
+/* The $userper var is deprecated, modules should now use this syntax:
  * if (AMP_Authorized( CONSTANT_PERMISSION ));
- *
  */
- 
 $userper = $AMP_Permission->permission_array;
 
+
+// Discover top of content hierarchy
 $gettop = $dbcon->Execute("SELECT subsite FROM per_group WHERE id = $userLevel")
             or die( "Couldn't find sub-site authentication information: " . $dbcon->ErrorMsg());
 $MX_top = $gettop->Fields("subsite"); 
 
+//initialize Content Map
 require_once('AMP/Content/Map.inc.php');
 $system_map = & AMPContent_Map::instance();
 $system_map->init( $dbcon, $MX_top );
 
+//These items are deprecated 
+//used in the older form-processing engine
 require_once("AMP/System/Help.inc.php");
 require_once("AMP/DBfunctions.inc.php");
 ?>
