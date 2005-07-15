@@ -1,5 +1,6 @@
 <?php
 $modid=8;
+$mod_name="gallery";
 
 require("Connections/freedomrising.php");
 if ($_GET['o']){

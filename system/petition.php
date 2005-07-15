@@ -2,6 +2,8 @@
 
 // something needs to deal with the petition redirect
 $modid = "7";
+$mod_name = 'petition';
+
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");

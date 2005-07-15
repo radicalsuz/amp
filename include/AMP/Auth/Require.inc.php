@@ -19,6 +19,6 @@ $AMP_Authen_Handler = new AMP_Authentication_Handler( $dbcon );
 
 if ( !$AMP_Authen_Handler->is_authenticated() )
     $AMP_Authen_Handler->do_login();
-unset ($_POST['username']);
-unset ($_POST['password']);
+unset ($_POST['AMPLogin_username']);
+unset ($_POST['AMPLogin_password']);
 ?>

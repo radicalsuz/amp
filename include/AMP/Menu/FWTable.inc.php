@@ -20,6 +20,9 @@ class AMP_Menu_FWTable extends AMP_Menu {
 		//Script set is an additional menu hierarchy object
 		var $script_set;
 
+        var $_baseComponentHTML = 'AMP_MenuComponent_Table';
+        var $_baseComponentScript = 'AMP_MenuComponent_FWmenuScriptItem';
+
 		function AMP_Menu_FWTable( &$menu_array, $name="menu" ) {
 
 				$this->init( $menu_array, $name );
@@ -28,13 +31,15 @@ class AMP_Menu_FWTable extends AMP_Menu {
 		function &buildMenu ( &$menu_array ) {
 
 				//First build the table
-				$root_menu = new AMP_MenuComponent_Table( $this, array('id'=>$this->name, 'label'=>'', 'href'=>'') );
+                $component = $this->_baseComponentHTML;
+				$root_menu = new $component( $this, array('id'=>$this->name, 'label'=>'', 'href'=>'') );
 
 				// the build call is not recursive, the table is only an anchor
 				$root_menu->buildMenuSub ( $menu_array, false );
 
 				$lastChild = end($root_menu->getChildren());
-				$this->script_set = &new AMP_MenuComponent_FWmenuScriptHeader( $this, array('id'=>$this->name, 'label'=>$lastChild->id, 'href'=>'') ); 
+				$this->script_set = & new AMP_MenuComponent_FWmenuScriptHeader( $this, array('id'=>$this->name, 'label'=>$lastChild->id, 'href'=>'') ); 
+                $this->script_set->setChildComponent( $this->_baseComponentScript );
 
 				$this->script_set->buildMenuSub ( $menu_array );
 
@@ -50,10 +55,26 @@ class AMP_Menu_FWTable extends AMP_Menu {
 				return ($this->outputCSS() . $this->script_set->output() . $this->menuset->output() );
 
 		}
+
+     function setStyle( $style_select, $new_value, $component_id = null ) {
+        $component = &$this;
+        if (isset($component_id)) $component = &$this->script_set->getChild( $component_id );
+        if ($component) {
+            $component->style[$style_select] = $new_value;
+            return true;
+        }
+        if (isset($component_id)) $component = &$this->menuset->getChild( $component_id );
+        if ($component) {
+            $component->style[$style_select] = $new_value;
+            return true;
+        }
+        return false;
+     }
+
 }
 
 class AMP_MenuComponent_Table extends AMP_MenuComponent {
-		var $default_child_class = "AMP_MenuComponent_FWmenuTD";
+		var $_child_component = "AMP_MenuComponent_FWmenuTR";
 
 		var $template = "<table width=\"100%%\" border=\"0\" cellspacing=\"0\" id=\"%1\$s\" cellpadding=\"3\" class=\"AMPmenu\">\n%2\$s</table>\n";
 		var $css_template = "
@@ -77,14 +98,14 @@ class AMP_MenuComponent_Table extends AMP_MenuComponent {
 	  }
 }
 
-class AMP_MenuComponent_FWmenuTD extends AMP_MenuComponent {
+class AMP_MenuComponent_FWmenuTR extends AMP_MenuComponent {
 		#var $default_child_class = "AMP_MenuComponent_FWmenuItem";
 	
 		var $template = "\n<tr><td class=\"AMPmenu\" onMouseOut=\"window.FW_startTimeout();\" 
         onMouseOver=\"FW_showMenu(window.fw_menu_%1\$s, (window.getOffLeft(this)+this.offsetWidth), (window.getOffTop(this)));\" id=\"mrow_%1\$s\">
         %2\$s</td></tr>\n<tr><td><img src=\"img/s.gif\" width=\"5\" height=\"3\"></td></tr>\n";
 		
-		function AMP_MenuComponent_FWmenuTD (&$menu, $def ) {
+		function AMP_MenuComponent_FWmenuTR (&$menu, $def ) {
 				$this->init($menu, $def);
 		}
 }

@@ -1,5 +1,6 @@
 <?php
 $modid = "1";
+$mod_name = "calendar";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");

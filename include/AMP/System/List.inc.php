@@ -10,150 +10,124 @@
  *
  */
 
+require_once ( 'AMP/System/Data/Set.inc.php' );
 
-class AMP_SystemList {
+class AMPSystem_List {
     
     var $name;
-    var $fields;
-
-    var $id;
-    var $dbcon;
-    var $admin;
-
-    var $list;
-    var $sort;
     var $message;
-    var $sql_criteria;
 
+    var $source;
+    var $sourceclass = "AMPSystem_Data_Set";
+
+    var $col_headers;
     var $extra_columns;
     var $extra_column_mapvalue;
-    var $lookups;
-    var $col_headers;
-    var $list_counter=0;
+
     var $editlink;
 
-    var $suppress = array();
+    var $lookups;
 
+    var $color = array ( 
+        'background' => array( "#D5D5D5" , "#E5E5E5" ) ,
+        'border'    => '#333333',
+        'mouseover' => '#CCFFCC');
 
-//Initialization Functions
-    function AMP_SystemList (&$dbcon, $name, $datatable, $fields) {
+    var $suppress = array( 'header'=>true );
+
+    ####################
+    ### Core Methods ###
+    ####################
+
+    //Constuctor -- this object is primarily meant to be subclassed
+    //but some use can be gained via this constructor
+
+    function AMPSystem_List (&$dbcon, $name, $col_headers=null, $datatable = null ) {
+
         $this->name = $name;
-        $this->datatable = $datatable;
-        $this->fields = $fields;
+        if (isset($col_headers)) $this->setColumns( $col_headers );
 
-        $this->init($dbcon);
+        $source = & new $sourceclass ( $dbcon );
+        $source->setSource( $datatable );
+
+        $this->init($source);
 
     }
 
-    function init(&$dbcon, $admin=false) {
+    function init(&$source) {
      
-        $this->dbcon = &$dbcon;
-        $this->admin = $admin;
+        $this->source = &$source;
+        $this->_setSort();
+        $this->_prepareData();
 
     }
 
-    function defineFieldset() {
-        if (is_numeric(key($this->fields))) return array_merge($this->col_headers, $this->fields);
-        return array_merge(array_keys($this->fields), $this->col_headers);
-    }
-
-
-    //Data Management Functions
-
-    function getData() {
-        $fieldset = $this->defineFieldSet();
-        $sql = "Select ".join(", ",$fieldset)." from ".$this->datatable;
-        if (isset($this->sql_criteria)) {
-            $sql .= ' WHERE '.join(" AND ", $this->sql_criteria);
-        }
-        if (isset($this->sort)) {
-            $sql .= " ORDER BY ".$this->sort;
-        }
-        if ($_REQUEST['debug']) print 'SystemList:<BR>'.$sql.'<P>';
-        $dataset = $this->dbcon->CacheGetAll($sql);
-        
-        return $dataset;
-    }
-
-    function delData($id) {
-        $sql = "DELETE FROM " . $this->datatable . " where id = ".$id;
-        if($this->dbcon->Execute($sql)) {
-            return true;
-        }
-
-        return false;
-        
-    }
-
-    function setSort() {
-        //Sort the data
-        if (isset($_REQUEST['sort']) && $_REQUEST['sort']) { 
-            $this->sort = $_REQUEST['sort'];
-        }
-    }
-
-    //listpage shows the set of records
     function output() {
-        $this->setSort();
 
-        //Retrieve the dataset from the DB
-        //this page should not be used for big big lists, it will die
-        $data = $this->getData();
+        if (!$this->_prepareData()) return false;
 
         $output = "";
 
-        foreach ($data as $rownum=>$currentrow) {
-            $output .= $this->listitemHTML( $this->translateRow($currentrow));
+        while ( $currentrow = $this->source->getData()) {
+            $output .= $this->_HTML_listRow ( $this->_translateRow($currentrow));
         
         }		
-        return $this->headerHTML().$output.$this->footerHTML();
+        return $this->_HTML_header() .
+               $output .
+               $this->_HTML_footer();
 
     }
 
-    function headerHTML() {
-        //Starter HTML
-        $start_html = $this->listTitle();
-        $start_html .= $this->message;
-        $start_html .= "\n<div class='list_table'> \n	<table class='list_table'>\n		<tr class='intitle'> ";
-        $start_html .= "\n<td>&nbsp;</td>";
+    ###########################################
+    ###  Public Presentation Option Methods ###
+    ###########################################
 
-        return $start_html.$this->columnHeaders();
-    }
-
-    function listTitle() {
-
-        if (isset($this->suppress['header'])) return false;
-        return "<h2>".str_replace("_", " ", $this->name)."</h2>";
-    }
-
-    function columnHeaders() {
-        $url_criteria = $this->getURLCriteria();
-        $output = "";
-        $endrow = "\n		</tr>";
-        //Define HTML for Column Headers
-        foreach ($this->col_headers as $k=>$v) {
-            $output.= "\n        <td><b><a href='".$_SERVER['PHP_SELF']."?".$url_criteria.$v."' class='intitle'>".$k."</a></b></td>";
+    function setColumns( $col_headers ) {
+        foreach ($col_headers as $col_name => $col_exp ) {
+            $this->addColumn( $col_name, $col_exp );
         }
-        if (!isset($this->extra_columns)) return $output.$endrow;
-        
-        foreach ($this->extra_columns as $header=>$col) {
-            $output.= "\n			<td>&nbsp;</td>";
-        }
+    }
 
-        return $output . $endrow ;
+    function addColumn ( $col_name, $col_exp ) {
+        $this->col_headers[$col_name] = $col_exp;
+    }
+
+    function suppressHeader() {
+        $this->suppress['header'] = true;
+    }
+
+    function suppressAddlink() {
+        $this->suppress['addlink'] = true;
+    }
+
+    function getColor( $color_type ) {
+        if (!isset($this->color[$color_type])) return "#000000";
+        return $this->color[$color_type];
+    }
+
+    function setColor( $type, $color_id ) {
+        $this->color[$type] = $color_id;
+    }
+
+    function setMessage( $text ) {
+        $this->message .= $text .'<BR>';
     }
 
 
+    #########################################
+    ### Private HTML Construction Methods ###
+    #########################################
 
-    function listitemHTML( $currentrow ) {
-        $this->list_counter++;
-        $bgcolor =($this->list_counter % 2) ? "#D5D5D5" : "#E5E5E5";
-        $list_html_endrow =  "\n		</tr>";
+    function _HTML_listRow ( $currentrow ) {
+        $bgcolor = $this->_setBgColor();
         $list_html = "";
+        $list_html_endrow =  "\n</tr>";
 
 
-        $list_html .="\n		<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
-        $list_html .="\n			<td> <div align='center'><A HREF='".$this->editlink."?id=".$currentrow['id']."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
+        $list_html .="\n<tr bordercolor=\"".$this->getColor('border')."\" bgcolor=\"". $bgcolor."\""
+                    ." onMouseover=\"this.bgColor='".$this->getColor('mouseover')."';\""
+                    ." onMouseout=\"this.bgColor='". $bgcolor ."';\"> "; 
+        $list_html .= $this->_HTML_editColumn( $currentrow['id'] );
         
 
         //show each row
@@ -161,29 +135,108 @@ class AMP_SystemList {
             $list_html .= "<td> " . $currentrow[$col] . " </td>";
         }
 
-        return $list_html.$this->extraColumns($currentrow).$list_html_endrow;
+        return $list_html.$this->_HTML_extraColumns($currentrow).$list_html_endrow;
         
     }
 
-    function extraColumns( $currentrow ) {
+    function _HTML_editColumn( $id ) {
+        if (isset($this->suppress['editcolumn'])) return "";
+        return "\n<td><div align='center'><A HREF='".$this->editlink."?id=".$id."'>"
+              ."<img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A></div></td>";
+    }
+
+    function _HTML_extraColumns( $currentrow ) {
         if (!isset($this->extra_columns)) return '';
         $list_html='';
 
         //show extra links for each row
         foreach ($this->extra_columns as $header=>$col) {
-            $list_html .= " \n			<td> <div align='right'>";
-            $list_html .= "<A HREF='".$col.$currentrow[$this->requestedID( $header )]."'>$header</A>";
+            $list_html .= " \n<td> <div align='right'>";
+            $list_html .= "<A HREF='".$col.$currentrow[$this->_requestedID( $header )]."'>$header</A>";
             $list_html .= "</div></td>";
         }
         return $list_html;
     }
 
-    function requestedID( $header ) {
+
+    function _HTML_header() {
+        //Starter HTML
+        $start_html = $this->_HTML_listTitle() . $this->_HTML_showMessage();
+        $start_html .= "\n<div class='list_table'>\n<table class='list_table'>\n<tr class='intitle'> ";
+
+        return $start_html.$this->_HTML_columnHeaders();
+    }
+
+    function _HTML_showMessage() {
+        #if (!isset($this->suppress['message'])) return '<span class="page_result">'.$this->message.'</span>';
+    }
+
+    function _HTML_listTitle() {
+
+        if (isset($this->suppress['header'])) return false;
+        return "<h2>".str_replace("_", " ", $this->name)."</h2>";
+    }
+
+    function _HTML_editColumnHeader() {
+        if (isset($this->suppress['editcolumn'])) return "";
+        return "\n<td>&nbsp;</td>";
+    }
+
+    function _HTML_columnHeaders() {
+        $url_criteria = $this->_prepURLCriteria();
+        $output = $this->_HTML_editColumnHeader();
+        $endrow = "\n</tr>";
+
+        foreach ($this->col_headers as $header=>$col_value) {
+            $link = $_SERVER['PHP_SELF']."?$url_criteria&sort=$col_value";
+            $output.= 
+                "\n<td><b><a href='$link' class='intitle'>".$header."</a></b></td>";
+        }
+        return $output . $this->_HTML_extraColumnHeaders() . $endrow ;
+    }
+
+    function _HTML_extraColumnHeaders() {
+        if (!isset($this->extra_columns)) return "";
+        return str_repeat( "<td>&nbsp;</td>", count ($this->extra_columns) );
+    }
+
+    function _HTML_footer() {
+        return "\n	</table>\n</div>\n<br>&nbsp;&nbsp;" . $this->_HTML_addLink();
+    }
+
+    function _HTML_addLink () {
+        if (isset($this->suppress['addlink'])) return false;
+        return "<a href=\"".$this->editlink."\">Add new record</a> ";
+    }
+
+
+    ################################################
+    ### Private HTML Construction Helper Methods ###
+    ################################################
+    
+    function _setBgColor() {
+        static $list_counter = 0;
+        $list_counter++;
+        return $this->color['background'][ ($list_counter%2) ];
+    }
+
+    function _requestedID( $header ) {
         if (!isset($this->extra_column_maps[$header])) return "id"; 
         return $this->extra_column_maps[$header];
     }
 
-    function translateRow( $currentrow ) {
+    function _prepURLCriteria() {
+        $url_criteria_set = AMP_URL_Values();
+        if (empty( $url_criteria_set )) return "";
+        unset ($url_criteria_set['sort']);
+        return join("&" , $url_criteria_set );            
+    }
+
+    #########################################
+    ### Private Data Manipulation Methods ###
+    #########################################
+
+    function _translateRow( $currentrow ) {
         //Publish field hack
         if (isset($currentrow['publish']))
             $currentrow['publish'] = ($currentrow['publish']==1)?'live':'draft';
@@ -192,7 +245,7 @@ class AMP_SystemList {
 
         //check for a lookup table
         foreach ($this->lookups as $lookup_name=>$lookup_set) {
-            if (!isset($current_row[$lookup_name])) continue;
+            if (!isset($currentrow[$lookup_name])) continue;
             if (!isset($lookup_set[$currentrow[$lookup_name]])) continue;
             $currentrow[$lookup_name] = $lookup_set[$currentrow[$lookup_name]];
         }
@@ -200,35 +253,26 @@ class AMP_SystemList {
         return $currentrow;
     }
 
-    function footerHTML () {
-        return "\n	</table>\n</div>\n<br>&nbsp;&nbsp;" . $this->addLink();
+    function _prepareData() {
+        if ($this->source->isReady()) return true;
+        $this->source->setSelect( $this->_defineFieldSet() );
+        return $this->source->readData();
+        
     }
 
-    function addLink () {
-        if (isset($this->suppress['addlink'])) return false;
-        return "<a href=\"".$this->editlink."\">Add new record</a> ";
-    }
-
-
-    function getURLCriteria() {
-        //URL Criteria
-        //Fixme I'm using this function everywhere - it should go in the Base
-        //class
-        parse_str($_SERVER['QUERY_STRING'], $url_criteria_set );
-        unset ($url_criteria_set['sort']);
-        $url_criteria = "";
-
-        foreach($url_criteria_set as $ukey=>$uvalue) {
-            $url_criteria .= $ukey."=".$uvalue.'&';
+    function _setSort() {
+        //Sort the data
+        if (isset($_REQUEST['sort']) && $_REQUEST['sort']) { 
+            $this->source->addSort($_REQUEST['sort']);
         }
-        return $url_criteria . "sort=";            
     }
 
-    function suppressHeader() {
-        $this->suppress['header'] = true;
+    function _defineFieldset( ) {
+        if (!isset($this->col_headers)) return;
+        $select_exps =  array_values($this->col_headers);
+        $select_exps[] = "id";
+        return $select_exps;
     }
-    function suppressAddlink() {
-        $this->suppress['addlink'] = true;
-    }
+
 
 }

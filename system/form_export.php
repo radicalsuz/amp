@@ -11,7 +11,7 @@
 
 $mod_name = "udm";
 require_once( 'AMP/UserData/Set.inc.php' );
-require_once( 'Connections/freedomrising.php' );
+require_once( 'AMP/System/Base.php' );
 require_once( 'utility.functions.inc.php' );
 
 $modin = (isset($_REQUEST['modin']) && $_REQUEST['modin'])?$_REQUEST['modin']:false;
@@ -25,20 +25,17 @@ if ($modin) {
     ampredirect("modinput4_list.php");
 }
 
-if ($userper[53]&&$userper[$modin_permission]) { 
+$view_permission = (AMP_Authorized(AMP_PERMISSION_FORM_DATA_EXPORT)
+                 && AMP_Authorized($modin_permission));
+if ( $view_permission ) {
     $admin = true;
-} else {
-    $show_template = true;
-    $output = 'You do not have permission to export this list'; 
-}
-
-// Fetch the form instance specified by submitted modin value.
-$userlist = & new UserDataSet( $dbcon, $_REQUEST[ 'modin' ], $admin );
+    // Fetch the form instance specified by submitted modin value.
+    $userlist = & new UserDataSet( $dbcon, $_REQUEST[ 'modin' ], $admin );
 
 
-/* Output the file
+    /* Output the file
 
-*/
+    */
     $userlist->unregisterPlugin('Pager', 'Output');
     $search_form = $userlist->getPlugins('SearchForm');
     $search = $userlist->getPlugins('Search');
@@ -49,16 +46,20 @@ $userlist = & new UserDataSet( $dbcon, $_REQUEST[ 'modin' ], $admin );
         $userlist->registerPlugin('AMP', 'Search'); 
     }
 
-    set_time_limit(150);
+        set_time_limit(150);
 
-    #if (true) {
-if ($output = $userlist->doPlugin('Output', 'ExportFile')) {
-    
-    print $output;
+    if ($output = $userlist->doPlugin('Output', 'ExportFile')) {
+        
+        print $output;
+    } else {
+        $show_template=true;
+        $output = "Export failed:<BR>".join("<BR>",$userlist->errors);
+    }
 } else {
-    $show_template=true;
-    $output = "Export failed:<BR>".join("<BR>",$userlist->errors);
+    $show_template = true;
+    $output = 'You do not have permission to export this list'; 
 }
+
 
 
 if ($show_template) {

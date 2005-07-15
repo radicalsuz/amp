@@ -42,7 +42,7 @@ class AMP_Authentication_Handler {
         if (isset($_COOKIE['AMPLoginCredentials']))
             return $this->check_cookie($_COOKIE['AMPLoginCredentials']);
 
-        if (isset($_REQUEST['username']) || isset($_SERVER['PHP_AUTH_USER']))
+        if (isset($_REQUEST['AMPLogin_username']) || isset($_SERVER['PHP_AUTH_USER']))
             return $this->check_password();
 
         return false;
@@ -196,9 +196,9 @@ class AMP_Authentication_Handler {
 
         if (isset($_REQUEST['logout']) && $_REQUEST['logout']=='logout') $this->do_logout();
 
-        if (isset($_REQUEST['username'])) {
-            $username = $_REQUEST['username'];
-            $password = $_REQUEST['password'];
+        if (isset($_REQUEST['AMPLogin_username'])) {
+            $username = $_REQUEST['AMPLogin_username'];
+            $password = $_REQUEST['AMPLogin_password'];
         } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
             $username = $_SERVER['PHP_AUTH_USER'];
             $password = $_SERVER['PHP_AUTH_PW'];
@@ -296,7 +296,7 @@ class AMP_Authentication_Handler {
         if (is_array($_POST)) {
             $post_vars = array();
             foreach ($_POST as $key=>$value) {
-                if ($key!='username' && $key!='password') 
+                if ($key!='AMPLogin_username' && $key!='AMPLogin_password') 
                     $post_vars[$key]=$value;
             }
             return $post_vars;

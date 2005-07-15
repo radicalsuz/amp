@@ -4,17 +4,26 @@ class AMP_MenuComponent_FWmenuScriptItem extends AMP_MenuComponent {
 
 		var $core_template = "\"%2\$s\", \"location='%1\$s'\"";
 		var $template = "fw_menu_%1\$s.addMenuItem( %2\$s );\n";
-    var $folder_template = "\n\nwindow.fw_menu_%1\$s = new Menu(\"%2\$s\",,,,,,,,);";
+        var $folder_template = "\n\nwindow.fw_menu_%1\$s = new Menu(\"%2\$s\",,,,,,,,);";
 		var $folder_core_template = "fw_menu_%1\$s , \"location='%2\$s'\"";
+        var $separator = "fw_menu_%1\$s.addMenuSeparator();\n";
 
 		var $css_template = "%1\$s, %2\$s, \"%3\$s\", %4\$s, \"#%5\$s\", \"#%6\$s\", \"#%7\$s\", \"#%8\$s\");\nfw_menu_%9\$s.menuItemBorder=0;
-										 	fw_menu_%9\$s.fontWeight=\"normal\";\n fw_menu_%9\$s.hideOnMouseOut=true;\n fw_menu_%9\$s.childMenuIcon = \"%10\$s\";\n fw_menu_%9\$s.childMenuIconHover = \"%11\$s\";\n";
-		var $css_template_vars = array('width', 'height', 'font_face', 'font_size','color','color_hover','bgcolor','bgcolor_hover', 'id', 'bg_image', 'bg_image_hover');
+										 	fw_menu_%9\$s.fontWeight=\"%12\$s\";\n fw_menu_%9\$s.hideOnMouseOut=true;\n fw_menu_%9\$s.childMenuIcon = \"%10\$s\";\n fw_menu_%9\$s.childMenuIconHover = \"%11\$s\";\n";
+		var $css_template_vars = array('width', 'height', 'font_face', 'font_size','color','color_hover','bgcolor','bgcolor_hover', 'id', 'bg_image', 'bg_image_hover', 'font_weight');
 		var $returned_output = false;
 
 		function AMP_MenuComponent_FWmenuScriptItem( &$menu, $def ) {
 				$this->init($menu, $def);
 		}
+
+        function _register_def( $def ) {
+            if (isset($def['separator']) && $def['separator']) $this->addSeparator();
+        }
+
+        function addSeparator() {
+            $this->template = $this->separator . $this->template;
+        }
 
 		function setCSS($recursive=true) {
 				if (!$this->hasChildren()) return false;
@@ -22,6 +31,7 @@ class AMP_MenuComponent_FWmenuScriptItem extends AMP_MenuComponent {
 				if ($styleinfo = $this->evalCSS()) {
 						$this->folder_template = str_replace(",,,,,,,);", $styleinfo, $this->folder_template);
 				}
+
 				if ($recursive) $this->doChildren('setCSS');
 		}
 
@@ -60,7 +70,7 @@ class AMP_MenuComponent_FWmenuScriptItem extends AMP_MenuComponent {
 
 class AMP_MenuComponent_FWmenuScriptHeader extends AMP_MenuComponent {
 		var $template = "
-            <script language=\"JavaScript1.2\" src=\"scripts/fw_menu.js\"></script>
+            <script language=\"JavaScript1.2\" src=\"/scripts/fw_menu.js\"></script>
             <script language=\"javascript\" type = \"text/javascript\">
             
             //<!--
@@ -72,6 +82,19 @@ class AMP_MenuComponent_FWmenuScriptHeader extends AMP_MenuComponent {
 
                 return item.offsetTop;
             }
+
+            function getOffRight( item ) {
+                if (item.offsetParent) {
+                    return (getRightSize( item ) + getOffRight( item.offsetParent ));
+                }
+
+                return getRightSize ( item );
+            }
+
+            function getRightSize( item ) {
+                return window.innerWidth - (getOffLeft( item ) + item.offsetWidth);
+            }
+
 
             function getOffLeft ( item ) {
                 if ( item.offsetParent ) {
@@ -93,11 +116,12 @@ class AMP_MenuComponent_FWmenuScriptHeader extends AMP_MenuComponent {
 						</script>";
 			
 		  var $css_template = "
+        div.FW_menuItem { cursor: pointer; cursor: hand; }
         span.FW_menuItem { display:block; padding: 3px 0px 0px 0px; color: #%1\$s}
         span.FW_menuItem:hover, .FW_menuItemHilite {  display:block; padding: 3px 0px 0px 0px; color: #%2\$s; }
 				";
 			var $css_template_vars = array ("color", "color_hover");
-			var $default_child_class = "AMP_MenuComponent_FWmenuScriptItem";
+			var $_child_component = "AMP_MenuComponent_FWmenuScriptItem";
 
 
 			function AMP_MenuComponent_FWmenuScriptHeader ( &$menu, $def ) {

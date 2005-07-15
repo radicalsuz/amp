@@ -11,6 +11,8 @@
  * Distributed under the GPL - see LICENSE
  *
  */
+
+$mod_name = "rss";
 require("Connections/freedomrising.php");
 
 include_once("FeedOnFeeds/init.php");

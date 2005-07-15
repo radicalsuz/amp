@@ -172,10 +172,10 @@ li.side_home {
 	font-size: 12px;
 	font-weight: bold;
 	color: #FFFFFF;
-	background-color: #006666;
-	background: url('images/side-banner-bg.png') top left repeat-x;
+	background: url('images/side-banner-bg.png') bottom left repeat-x #007676;
 	padding-bottom: 3px;
 	padding-top: 3px;
+	margin-top:3px;
 	text-transform: uppercase;
 	text-align: center;
 	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
@@ -186,6 +186,16 @@ li.side_home {
 	font-size: 9px;
 	text-decoration : none;
 	margin-left: 3px;
+}
+
+span.page_result {
+		display:block;
+		width: 100%;
+		background-color: #99CCFF;
+		color: #006666;
+		padding: 5px;
+		text-align: center;
+		margin: 5px 20% 5px 20%;
 }
 
 /* CONTENT LAYOOUT CLASSES */
@@ -331,3 +341,40 @@ ul#topnav a {
 	padding: 0.2em 1em 0.2em 35px;
 	margin: 0 4px 0 0;
 }
+.top {align:right; font-size:10px; }
+.subfield {background-color: #FFFFFF;}
+legend {border: 1px solid black;  border-top: none; background-color: #eee; padding: 0 1ex; }
+
+.option  {
+		float:left;
+		background:url("images/norm_left.gif") no-repeat left top;
+		margin:0;
+		padding:0 0 0 9px;
+		}
+.option a {
+		float:left;
+		display:block;
+		background:url("images/norm_right.gif") no-repeat right top;
+		padding:5px 15px 4px 6px;
+		text-decoration:none;
+		font-weight:bold;
+				font-size: 80%;
+		color:#765;
+		}
+/* Commented Backslash Hack
+		hides rule from IE5-Mac \*/
+.option a {float:none;}
+/* End IE5-Mac hack */
+.option a:hover {
+		color:#333;
+		}
+
+.option.current {
+		background-image:url("images/norm_left_on.gif");
+		border-width:0;
+		}
+
+.option.current a {
+		background-image:url("images/norm_right_on.gif");
+		color:#333;
+		}

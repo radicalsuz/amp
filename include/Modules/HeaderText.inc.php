@@ -1,7 +1,7 @@
 <?php
 
 /**************
- *  Module_HeaderText
+ *  AMPSystem_IntroText 
  *  represents introductory and response texts
  *  used by the Modules system
  *
@@ -13,17 +13,17 @@
  *****/
 
 
- class AMPModule_HeaderText   {
+ class AMPSystem_IntroText {
 
     var $dbcon;
     var $textdata;
     var $_textdata_keys;
     var $id;
 
-    function AMPModule_HeaderText( &$dbcon, $text_id=null ) {
+    function AMPSystem_IntroText ( &$dbcon, $text_id=null ) {
         $this->dbcon = & $dbcon;
         $this->_textdata_keys = $this->dbcon->MetaColumnNames( "moduletext" );
-        if (isset($text_id)) $this->readData( $text_id );
+        if (isset($text_id) && $text_id) $this->readData( $text_id );
     }
 
     function readData ( $text_id ) {
@@ -36,6 +36,15 @@
         }
 
         return false;
+    }
+
+    function deleteData( $text_id ) {
+        $sql = "Delete from moduletext where id = ". $this->dbcon->qstr( $text_id );
+        if ( $textdata = $this->dbcon->Execute( $sql )) {
+            return true;
+        }
+
+        return false ;
     }
 
     function save() {
@@ -53,6 +62,7 @@
         $this->textdata = array_combine_key( $this->_textdata_keys, $data );
         $this->legacyFieldname( $data, 'test', 'body' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
+        if (isset($data['id']) && $data['id']) $this->id = $data['id'];
     }
 
     function legacyFieldname( $data, $oldname, $newname ) {

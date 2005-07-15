@@ -1,10 +1,9 @@
-<?php global $SiteName; ?>
 <?php header("P3P: CP='NON ADMi OUR STP INT'"); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title><?= $SiteName ?> Administration</title>
+    <title><?= $GLOBALS['SiteName'] ?> Administration</title>
     <style type="text/css">
 
         * {
@@ -77,7 +76,7 @@
             color: #333333;
         }
 
-        form#login label[FOR="password"] {
+        form#login label[FOR="AMPLogin_password"] {
             display: block;
             margin-top: 1.5ex;
         }
@@ -98,18 +97,18 @@
 <div id="wrapper">
 
     <div id="header">
-        <h1><?= $SiteName; ?> Administrative Login</h1>
+        <h1><?= $GLOBALS['SiteName']; ?> Administrative Login</h1>
     </div>
 
     <div id="content">
 
         <?= (isset($this->message)) ? "<p class=\"login {$this->message_type}\">{$this->message}</p>" : '' ?>
 
-        <form id="login" method="post" action="<?= $_SERVER['PHP_SELF']; ?>" />
+        <form id="login" method="post" action="<? PHP_SELF_QUERY()?>" />
 
             <div id="formWrap">
-                <label for="username">Username:</label> <input type="text" name="username" />
-                <label for="password">Password:</label> <input type="password" name="password" />
+                <label for="AMPLogin_username">Username:</label> <input type="text" name="AMPLogin_username" />
+                <label for="AMPLogin_password">Password:</label> <input type="password" name="AMPLogin_password" />
 
                 <input type="submit" value="Login" id="login" />
                 <? echo $this->hidden_post_vars(); ?>

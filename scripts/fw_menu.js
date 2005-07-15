@@ -315,8 +315,8 @@ function writeMenus(container) {
                 var childItem = FIND("childMenu" + menuCount);
                 if (childItem) {
                     l.childMenu = container.menus[x].items[i].menuLayer;
-                    childItem.style.pixelLeft = childItem.style.left = menu.menuItemWidth -11;
-                    childItem.style.pixelTop = childItem.style.top =(menu.menuItemHeight /2) -4;
+                    childItem.style.pixelLeft = childItem.style.left = menu.menuItemWidth -20;
+                    childItem.style.pixelTop = childItem.style.top =(menu.menuItemHeight /2) -5;
                     l.childMenuIcon = FIND ("childMenuIcon"+menuCount);
                     //childItem.style.pixelWidth = 30 || 7;
                     //childItem.style.clip = "rect(0 7 7 3)";
@@ -470,15 +470,15 @@ function FW_startTimeout()
 {
     fwStart = new Date();
     fwDHFlag = true;
-    fwHideMenuTimer = setTimeout("fwDoHide()", 1000);
+    fwHideMenuTimer = setTimeout("fwDoHide()", 500);
 }
 
 function fwDoHide()
 {
     if (!fwDHFlag) return;
     var elapsed = new Date() - fwStart;
-    if (elapsed < 1000) {
-        fwHideMenuTimer = setTimeout("fwDoHide()", 1100-elapsed);
+    if (elapsed < 500) {
+        fwHideMenuTimer = setTimeout("fwDoHide()", 600-elapsed);
         return;
     }
     fwDHFlag = false;
@@ -657,9 +657,15 @@ function hideChildMenu(hcmLayer) {
             if (document.all) { // ie case.
                 s.pixelTop = l.style.pixelTop + menuLayer.style.pixelTop + l.Menu.menuItemHeight/3;
                 s.left = s.pixelLeft = (menuLayer.style.pixelWidth) + menuLayer.style.pixelLeft -5;
+                if ((s.pixelWidth + PxToNum(s.left)) > window.getWindowWidth()) {
+                    s.left = s.pixelLeft =  menuLayer.style.pixelLeft - s.pixelWidth;
+                }
             } else { // zilla case
                 var top = PxToNum(l.style.top) + PxToNum(menuLayer.style.top) + l.Menu.menuItemHeight/3;
                 var left = (PxToNum(menuLayer.style.width)) + PxToNum(menuLayer.style.left) -5;
+                if ((a.offsetWidth + left) > window.getWindowWidth()) {
+                    left = (PxToNum(menuLayer.style.left)) - (a.offsetWidth);
+                }
                 s.top = top;
                 s.left = left;
             }
@@ -691,3 +697,12 @@ function hideActiveMenus() {
     }
     window.activeMenus.length = 0;
 }
+function FW_menuisActive() {
+    if (!window.activeMenus.length) return false;
+    return true;
+}
+function getWindowWidth() {
+    if (!window.innerWidth) return document.body.offsetWidth;
+    return window.innerWidth;
+}
+

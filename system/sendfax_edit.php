@@ -1,5 +1,6 @@
 <?php
 $modid=21;
+$mod_name = 'actions';
   require("Connections/freedomrising.php");
   
   if (!$MM_listtable) {$MM_listtable= "lists";}

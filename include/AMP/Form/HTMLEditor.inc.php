@@ -13,6 +13,7 @@ class AMPFormElement_HTMLEditor {
     var $width = '550px';
     var $height = '420px';
     var $stylesheet = '/custom/styles.css';
+    var $config_actions = array();
 
     function AMPFormElement_HTMLEditor() {
     }
@@ -41,6 +42,10 @@ class AMPFormElement_HTMLEditor {
         if (empty($this->editors)) return false;
 
         return $this->_script_header(). $this->_config_script();
+    }
+
+    function register_config_action( $action ) {
+        $this->config_actions[] = $action;
     }
 
     ##################################
@@ -78,6 +83,11 @@ class AMPFormElement_HTMLEditor {
         $output .= "    cfg.height = '".$this->height."';\n";
         if ($this->isPlugin('Stylist')) {
             $output .= "    cfg.stylistLoadStylesheet('".$this->stylesheet."');\n";
+        }
+        if (!empty($this->config_actions)) {
+            foreach ($this->config_actions as $action) {
+                $output.= $action."\n";
+            }
         }
         $output .= "    return cfg; \n } \n";
 

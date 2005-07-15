@@ -40,9 +40,8 @@ class ElementSwapScript {
             }
         }
 
-        $script .= "} \nloadSwapper_".$this->swapper_name."();\n".
-                    "ActivateSwap( window.".$this->swapper_name.", '".$this->initial_set."');\n</script>";
-
+        $script .=  "ActivateSwap( window.".$this->swapper_name.", '".$this->initial_set."');\n".
+                    "} \n loadSwapper_".$this->swapper_name."();\n</script>";
         return $script;
     }
 

@@ -1,5 +1,6 @@
 <?php
 $modid = "11";
+$mod_name = "links";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");

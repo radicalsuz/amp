@@ -161,12 +161,14 @@ function calendar_list_rsvp_format($e, $options=null) {
 		//
 		//insert map
 		//var_dump($event); 
+        /* broken and not always valid: buh-bye
 		if ($e['lat']&&$e['lon']) {
 			$map_lat=$e['lat'];$map_long=$e['lon']; 
 			$mapcode = "mapgen?lon=" .  $map_long . "&lat=" .  $map_lat . "&wid=0.035&ht=0.035&iht=320&iwd=320&mark=" .  $map_long . "," .  $map_lat . ",redpin";
-			$meat .= str_replace('$map_long',$map_long,str_replace('$map_lat',$map_lat,file_get_contents('http://'.$_SERVER['SERVER_NAME'].'/includes/geocode.js')));
+			$meat .= str_replace('$map_long',$map_long,str_replace('$map_lat',$map_lat,file_get_contents('http://'.$_SERVER['SERVER_NAME'].'/scripts/geocode.js')));
 			$meat .= str_replace('$mapcode',$mapcode,file_get_contents('includes/geocode.inc.php'));
 		}
+        
 		$meat .= '<p class="eventsubtitle">Event followups and comments:</p>';
 		// read in results for this calendar id here
 		if (!$resultspresent) {$meat .= '<p class="text">No results entered yet for this event.</p>';};
@@ -174,13 +176,9 @@ function calendar_list_rsvp_format($e, $options=null) {
 		$meat .= '<p class="eventsubtitle">Event photos:</p>';
 		// read in photos for this calendar id here
 		if (!$photospresent) {$meat .= '<p class="text">No photos entered yet for this event.</p>';};
+            */
 		}
 		
 		return $meat;
 	}
-
-
-
-
-
 ?>

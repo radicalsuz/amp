@@ -1,6 +1,7 @@
 <?php
 $studenton=1;
 $modid=1;
+$mod_name = "calendar";
   require("Connections/freedomrising.php");
 /**
  * a function to take an array of IDs and set their publish status to 1

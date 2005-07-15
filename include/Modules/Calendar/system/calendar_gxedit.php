@@ -3,6 +3,7 @@ $modid = 1;
 $gxendorse = 0;
 $usefpcalendar =1; 
 $usestudent = 1;
+$mod_name = "calendar";
 
 require_once("Connections/freedomrising.php");
 require_once('utility.functions.inc.php');

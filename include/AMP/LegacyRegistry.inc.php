@@ -34,7 +34,7 @@ $SystemSettings = $getsysvars->FetchRow();
 $SiteName            = $SystemSettings["websitename"];
 $Web_url             = $SystemSettings["basepath"];
 //Set caching to 0 for AMP-authenticated system side users
-$cacheSecs           = (isset($_SERVER['REMOTE_USER'])&&($_SERVER['REMOTE_USER']))?0:$SystemSettings["cacheSecs"];
+$cacheSecs           = (isset($_SERVER['REMOTE_USER']) && ($_SERVER['REMOTE_USER'])) ? 1 : $SystemSettings["cacheSecs"];
 $admEmail            = $SystemSettings["emfaq"];			//needed for admin only
 $MM_email_usersubmit = $SystemSettings["emendorse"];			//User Submitted Article
 $MM_email_from       = $SystemSettings["emfrom"];			//return email web sent emails
@@ -43,6 +43,14 @@ $meta_content        = $SystemSettings['metacontent'];			//meta content
 $systemplate_id      = $SystemSettings['template'];
 
 define('AMP_SITE_ADMIN', $admEmail);
+
+$encoding = isset($SystemSettings['encoding']) ? $SystemSettings['encoding'] : 'iso-8859-1';
+$reg_manager = & AMP_Registry::instance();
+$reg_manager->setEntry( AMP_REGISTRY_SETTING_ENCODING, $encoding );
+$reg_manager->setEntry( AMP_REGISTRY_SETTING_SITENAME, $SystemSettings['websitename'] );
+$reg_manager->setEntry( AMP_REGISTRY_SETTING_SITEURL, $SystemSettings['basepath'] );
+$reg_manager->setEntry( AMP_REGISTRY_SETTING_EMAIL_SYSADMIN, $SystemSettings['emfaq'] );
+
 		
 #SET DATABASE CACHING
 $dbcon->cacheSecs = $cacheSecs;
@@ -52,7 +60,7 @@ $MM_HOSTNAME = AMP_DB_HOST;
 $MM_PASSWORD = AMP_DB_PASS;
 $MM_DATABASE = AMP_DB_NAME;
 
-define( "AMP_SYSTEM_VERSION_ID", '3.4.8');
+define( "AMP_SYSTEM_VERSION_ID", '3.5.0');
 
 #define browser detection global variables
 $browser_ie = NULL;

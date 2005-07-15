@@ -24,7 +24,8 @@ $modid=$modidselect->Fields("id");
 $modin_permission=$modidselect->Fields("perid");
 
 
-$view_permission = ($userper[54]&&$userper[$modin_permission]);
+$view_permission = (AMP_Authorized(AMP_PERMISSION_FORM_DATA_EDIT)
+                 && AMP_Authorized($modin_permission));
 
 $admin=true;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);

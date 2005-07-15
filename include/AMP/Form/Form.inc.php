@@ -50,6 +50,12 @@
 
          *  template:   custom template for use by the HTML::QuickForm renderer
 
+         *  attr:       attributes to be included in the HTML tag for the
+                        element (e.g. style, checked, onclick )
+
+         *  elements:   used for group elements to denote the sub-elements of
+                        the group;
+
          *  type:       type of form element to create.  For a list of types,
                         see the HTML::QuickForm documentation.  
                         In addition, the library supports the following types:
@@ -66,6 +72,7 @@
 
     // the form object which is produced by the class
     var $form;
+    var $formname;
 
     // the renderer of the form
     var $renderer;
@@ -77,8 +84,9 @@
     // the most common is 'public' == true;
     var $conditionals;
 
-    // Bucket for any needed javascript produced by the form elements
+    // Register for any javascript required by the form elements
     var $javascript;
+    var $javascript_register = array();
 
     var $submit_button = array(
         'submit' => array(
@@ -95,6 +103,7 @@
     }
     
     function init ( $name , $method="POST", $action = null ) {
+        $this->formname = $name;
         $this->form = &new HTML_QuickForm( $name, $method, $action );
         $this->template = &new AMPFormTemplate();
     }
@@ -113,18 +122,32 @@
         $this->setJavascript();
     }
 
+    function output( $include_javascript = true ) {
+        $script = "";
+        if ($include_javascript) $script = $this->getJavascript();
+        return  $this->form->display() . $script;
+    }
+
 
     function setValues( $data ) {
         $this->form->setDefaults( $data );
     }
 
-    function getValues () {
-        return $this->form->exportValues();
+    function getValues ( $fields = null ) {
+        return $this->form->exportValues( $fields );
     }
 
     function setJavascript() {
         $editor = &AMPFormElement_HTMLEditor::instance();
-        if ($script = $editor->output()) $this->javascript = $script;
+        if ($script = $editor->output()) $this->registerJavascript( $script, 'editor');
+
+        if (empty($this->javascript_register)) return false;
+        $this->javascript = join("\n", $this->javascript_register);
+    }
+
+    function registerJavascript( $script, $name = null ) {
+        if (isset($name)) $this->javascript_register[ $name ] = $script;
+        else $this->javascript_register[] = $script;
     }
 
     function getJavascript() {
@@ -142,6 +165,11 @@
             $this->fields[$key] = $field_def;
         }
         return true;
+    }
+
+    function setFieldValueSet( $fieldname, $valueset ) {
+        if (!isset($this->fields[$fieldname])) return false;
+        $this->fields[$fieldname]['values'] = $valueset;
     }
 
     function getField( $name ) {
@@ -202,6 +230,8 @@
     }
 
     function enforceConstants() {
+        if (!isset($this->fields)) return false;
+        $consts = array();
         foreach ($this->fields as $fname => $field_def) {
             if (isset($field_def['constant']) && $field_def['constant'] ) {
                 $consts[$fname] = $field_def['default'];
@@ -380,6 +410,7 @@
 		$newdef['label']    = (isset($field_def['label']))  ? $field_def[ 'label'  ] : null;
 		$newdef['size']     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 40;
 		$newdef['attr']     = (isset($field_def['attr']))   ? $field_def['attr']       : null;
+		$newdef['elements'] = (isset($field_def['elements']))   ? $field_def['elements']       : null;
         $newdef['template'] = (isset($field_def['template'])? $field_def['template']: $this->_getTemplate( $newdef['type'] ));
 
         return $newdef;

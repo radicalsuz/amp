@@ -11,7 +11,7 @@
 
 //ob_start();
 require_once('AMP/BaseDB.php');
-require_once('AMP/System/Copy/UserDataModule.inc.php');
+require_once('AMP/System/UserData/Module/Copy.inc.php');
 require_once('AMP/UserData/Input.inc.php');
 
 
@@ -22,7 +22,7 @@ if ($modin) {
     $udm = new UserDataInput($dbcon, $modin);
     if ($new_name) {
         //proceed to make a copy
-        $copier = new AMPSystem_Copy_UserDataModule($dbcon, $modin);
+        $copier = new AMPSystem_UserData_Module_Copy ($dbcon, $modin);
         $copier->setOverride('name', $new_name, $udm->name);
         if($new_copy = $copier->execute()) {
             ampredirect("modinput4_edit.php?modin=".$new_copy);

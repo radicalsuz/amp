@@ -1,5 +1,6 @@
 <?php
 $modid = "31";
+$mod_name = "template";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");

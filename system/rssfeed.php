@@ -1,6 +1,7 @@
 <?php
 #generic update page
 $modid = "45";
+$mod_name = "rss";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");

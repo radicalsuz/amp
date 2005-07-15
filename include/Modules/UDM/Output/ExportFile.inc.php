@@ -18,7 +18,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     var $short_name  = 'Export';
     var $long_name   = 'Export List in CSV Format';
     var $description = 'Use this to set options for the CSV export plugin';
-    var $available=true;
+    var $available   = true;
     //List Vars
     //create default options array
     var $options=array(
@@ -69,10 +69,6 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
             $this->udm->errorMessage("No Dataset Specified");
             return false;
         }
-        /*$this->dataset = $this->dbcon->Execute(
-            "Select * from userdata where modin=".$this->udm->instance);
-        */
-        
 
         $this->setupColumns($this->definedColumns($options));
         
@@ -117,15 +113,19 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         return $this->formatFileOutput($header_rows);
     }
 
+    function validateColumn( $column ) {
+        if ($column == "timestamp") return "date";
+        if (!isset($this->udm->fields[$column])) return false;
+        if (!($this->udm->fields[$column]['enabled'])) return false;
+        if ((!$this->udm->admin) && !($this->udm->fields[$column]['public'])) return false;
+        
+        return $this->udm->fields[$column]['type'];
+    }
+
 
     function setupColumns( $fieldset_def ) {
-
         foreach ($fieldset_def as $column) {
-            if (!isset($this->udm->fields[$column])) continue;
-            if (!($this->udm->fields[$column]['enabled'])) continue;
-            if ((!$this->udm->admin) && !($this->udm->fields[$column]['public'])) continue;
-            
-            $type = $this->udm->fields[$column]['type'];
+            if (!($type = $this->validateColumn( $column ))) continue;
             switch ($type) {
                 case 'text':
                 case 'textarea':
@@ -162,6 +162,11 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         return ($this->display_fieldset = $result_fields);
     }
 
+    function currentRowValue( $fieldname ) {
+        if (!isset($this->current_row[$fieldname])) return false;
+        return $this->current_row[ $fieldname ];
+    }
+
 
     function translateValues() {
 
@@ -171,8 +176,8 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
             $result_row = array();
 
             foreach ($this->display_fieldset as $readyfield) {
-                if (isset($this->current_row[$readyfield]) || isset($this->translations[$readyfield])) {
-                    $result_row[$readyfield]=$this->translate($readyfield, $this->current_row[$readyfield]);
+                if ($this->currentRowValue($readyfield) || isset($this->translations[$readyfield])) {
+                    $result_row[$readyfield] = $this->translate ( $readyfield, $this->currentRowValue($readyfield) );
                 } else {
                     $result_row[$readyfield]='';
                 }
@@ -215,7 +220,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     
     function readExpandedCheckGroup($field, $value) {
         if ($groupname = $this->parentGroup($field)) {
-            $group_set = $this->expandCheckgroup( $this->current_row[$groupname] );
+            $group_set = $this->expandCheckgroup( $this->currentRowValue($groupname) );
             $sought_value = substr($field, strlen($groupname)+1);
             if (isset($group_set[$sought_value])) return 1;
         }
@@ -233,13 +238,12 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
 
     function translate($field, $value) {
-        if (isset($this->translations[$field])) {
-            if (isset($this->translations[$field]['method'])) {
-                $method = $this->translations[$field]['method'];
-                if (method_exists($this, $method)) {
-                    return $this->$method($field, $value);
-                }
-            }
+        if (!isset($this->translations[$field])) return $value;
+        $translate_method = isset($this->translations[$field]['method']) ?
+                            $this->translations[$field]['method'] :
+                            false;
+        if ($translate_method && method_exists($this, $translate_method)) {
+            return $this->$translate_method($field, $value);
         }
         return $value;
     }

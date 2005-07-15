@@ -1,6 +1,7 @@
 <?php
 
 $modid = "31";
+$mod_name = "template";
   require_once("Connections/freedomrising.php");
 
 

@@ -69,7 +69,7 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 		}
 
         $fields[] = 'id';
-        $values[] = autoinc_check( userdata_fields, 50 );
+        $values[] = lowerlimitInsertID( 'userdata_fields', 50 );
 
 		$sql .= join( ", ", $fields );
 		$sql .= ") VALUES ( ";

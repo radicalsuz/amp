@@ -14,17 +14,20 @@ require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 
 #set_error_handler( 'e' );
-$admin = $userper[54]; //UDM All permission
+$modin = (isset($_REQUEST['modin']) && $_REQUEST['modin'])?$_REQUEST['modin']:false;
+if ($modin) {
+    $modidselect=$dbcon->GetRow("SELECT id, perid from modules where userdatamodid=" . $modin) or DIE($dbcon->ErrorMsg());
+    $modid=$modidselect['id'];
+    $modin_permission=$modidselect["perid"];
+} else {
+    ampredirect("modinput4_list.php");
+}
+
+$admin = (AMP_Authorized(AMP_PERMISSION_FORM_DATA_EDIT)
+       && AMP_Authorized($modin_permission) );
 
 // Fetch the form instance specified by submitted modin value.
-$udm = &new UserDataInput( $dbcon, $_REQUEST[ 'modin' ],$admin );
-
-
-
-$modidselect = $dbcon->Execute("SELECT id, perid from modules where userdatamodid=" . $dbcon->qstr($udm->instance) )
-                or die("Couldn't get module information for form: " . $dbcon->ErrorMsg());
-$modid = $modidselect->Fields("id");
-$modin_permission = $modidselect->Fields("perid");
+$udm = &new UserDataInput( $dbcon, $modin ,$admin );
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;

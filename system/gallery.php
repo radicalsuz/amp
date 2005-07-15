@@ -1,5 +1,6 @@
 <?php
 $modid = "8";
+$mod_name="gallery";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");

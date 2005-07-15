@@ -45,7 +45,6 @@ class UserDataPlugin_Read_AMPPayment extends UserDataPlugin {
         
         $paymentlist = new PaymentList ( $this->dbcon );
         $paymentlist->getCustomerTransactions( $uid );
-        $paymentlist->suppressHeader();
         $paymentlist->suppressAddlink();
 
         $this->removeSaveFieldset();

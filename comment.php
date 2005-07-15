@@ -11,8 +11,8 @@ if (isset($_POST["MM_insert"])){
 	$publish = $defualtpublish;
 	$MM_fieldsStr = "author|value|titlex|value|email|value|comment|value|articleid|value|publish|value|date|value";
 	$MM_columnsStr = "author|',none,''|title|',none,''|email|',none,''|comment|',none,''|articleid|none,none,NULL|publish|none,1,0|date|',none,now()";
-	require ("DBConnections/insetstuff.php");
-    require ("DBConnections/dataactions.php");
+	require ("Connections/insetstuff.php");
+    require ("Connections/dataactions.php");
 }
 ?>
 

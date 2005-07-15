@@ -1,5 +1,6 @@
 <?php
 $modid = "4";
+$mod_name = "faq";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");

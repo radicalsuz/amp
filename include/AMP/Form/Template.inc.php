@@ -18,9 +18,9 @@ class AMPFormTemplate {
             <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
             \t{label}</td>\n\t</tr>",
         'textarea'  =>
-		    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"%s\">
+		    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"%1\$s\">
             <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
-            {label}<br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
+            <span class=\"%1\$s\">{label}</span><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
             \t{element}</td></tr></table></td>\n\t</tr>",
         'header'    =>	
             "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\" ><span class=\"%s\">{header}</span></td>\n\t</tr>",
@@ -33,6 +33,11 @@ class AMPFormTemplate {
             <b>{label}</b><br>\n\t\t<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->
             \t{element}</td></tr></table></td>\n\t</tr>",
 		'checkgroup'=>
+            "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"%s\">
+            <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+            <span class=\"%s\">{label}</span><br>\n\t\t<!-- BEGIN error -->
+            <span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td></tr></table></td>\n\t</tr>",
+		'group'=>
             "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\"><table class=\"%s\">
             <tr><td><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
             <span class=\"%s\">{label}</span><br>\n\t\t<!-- BEGIN error -->
@@ -55,7 +60,9 @@ class AMPFormTemplate {
         'header' => array('header'),
         'static' => array('span'),
         'submit' => array('span'),
-        'checkgroup' => array('span', 'group'));
+        'checkgroup' => array('span', 'group'),
+        'group' => array('span', 'group')
+        );
         
 
     function AMPFormTemplate() {
@@ -68,6 +75,10 @@ class AMPFormTemplate {
         return $this->$template_method( $type );
 
 	}
+
+    function setClass( $elementType, $class ) {
+        $this->element_css_classes[ $elementType ] = $class;
+    }
 
     ############################################
     ### Private Template Constuction Methods ###

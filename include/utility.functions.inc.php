@@ -608,4 +608,35 @@ if (!function_exists('AMPbacktrace')) {
     }
 }
 
+if (!function_exists( 'lowerlimitInsertID' )) {
+    function lowerlimitInsertID( $table, $num ) {
+		global $dbcon;
+		$getid=$dbcon->Execute( "SELECT id FROM $table ORDER BY id DESC LIMIT 1") or die($dbcon->ErrorMsg());
+		if ($getid->Fields("id") < $num) { $id = $num; } else { $id = NULL;} 
+		return $id;
+	}
+}
+
+if (!function_exists( 'AMP_URL_Values' ) ) {
+    function AMP_URL_Values() {
+        parse_str($_SERVER['QUERY_STRING'], $url_criteria_set );
+        if (empty($url_criteria_set)) return false;
+        $url_criteria = array();
+
+        foreach($url_criteria_set as $ukey=>$uvalue) {
+            $url_criteria[$ukey] = $ukey."=".$uvalue;
+        }
+
+        return $url_criteria;
+    }
+}
+
+if (!function_exists('PHP_SELF_QUERY')) {
+    function PHP_SELF_QUERY() {
+        if (!( isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'])) return $SERVER['PHP_SELF'];
+        return $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+
+    }
+}
+
 ?>

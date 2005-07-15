@@ -81,7 +81,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
         //if neither the label nor the value
         if (!($fDef['label'].$value)) return '';
 
-        $label = (isset($fDef) ? strip_tags($fDef['label']) : $field);
+        $label = (isset($fDef) ? html_entity_decode(strip_tags($fDef['label'])) : $field);
         if ($label) $label .= ": ";
 
         switch ($fDef['type']) {
@@ -91,7 +91,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
             case 'static':
             case 'header':
                 if ($fDef['values']) $label = $fDef['values'];
-                return "\n:: " . strip_tags( $label ) . "\n\n";
+                return "\n:: " . html_entity_decode( strip_tags( $label ) ) . "\n\n";
                 break;
             case 'checkbox':
                 $value = $value?'yes':'no';

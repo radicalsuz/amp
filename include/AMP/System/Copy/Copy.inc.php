@@ -23,7 +23,7 @@ class AMPSystem_Copy {
         $this->init($dbcon);
     }
 
-    function init($dbcon, $original_id =null) {
+    function init($dbcon, $original_id = null) {
         $this->dbcon=&$dbcon;
         if (isset($original_id)) {
             $this->setOriginal("id=".$original_id);
@@ -114,14 +114,16 @@ class AMPSystem_Copy {
 
     function &makeCopier( $classname ) {
 
-        $filename = 'AMP/System/Copy/'.$classname.'.inc.php';
+        $filename = 'AMP/System/' . str_replace("_", DIRECTORY_SEPARATOR, $classname) . '/Copy.inc.php';
 
         if (file_exists_incpath($filename)) {
             include_once ($filename);
         }
-        $new_class = 'AMPSystem_Copy_' . $classname;
+        $new_class = 'AMPSystem_' . $classname . '_Copy' ;
 
         if (class_exists($new_class)) return new $new_class($this->dbcon);
+
+        trigger_error ( 'AMPSystem_Copier: '.$new_class.' not found' );
         return false;
     }
 

@@ -2,6 +2,8 @@
 #generic update page
 $modid = "45";
 
+$mod_name = "rss";
+
 require("Connections/freedomrising.php");
 $buildform = new BuildForm;
 

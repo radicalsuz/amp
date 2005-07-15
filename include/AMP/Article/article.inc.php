@@ -7,9 +7,19 @@ CSS:    text,  photocaption, subtitle, title,  author,  date,
 To Do:
 
 *********************/ 
+//allow for versioned info;
+$art_table = "articles";
+$art_id_field = "id";
+$art_id_value = $MM_id;
+if (isset($_GET['vid']) && $_GET['vid']) {
+    $art_table = "articles_version";
+    $art_id_field = "vid";
+    $art_id_value = $_GET['vid'];
+}
 //get data and check to see if we display the page or redirect
 if (isset($_GET['preview']) && $_GET["preview"] == 1) {
-	$Recordset1=$dbcon->CacheExecute("SELECT * FROM articles WHERE id = $MM_id") or DIE($dbcon->ErrorMsg());
+	$Recordset1=$dbcon->CacheExecute("SELECT * FROM $art_table WHERE $art_id_field = $art_id_value") or DIE($dbcon->ErrorMsg());
+    $MM_type = $Recordset1->Fields("type");
 } else {
 	$Recordset1=$dbcon->CacheExecute("SELECT * FROM articles WHERE id = $MM_id and publish=1") or ampredirect("search.php");				//DIE($dbcon->ErrorMsg());
 }

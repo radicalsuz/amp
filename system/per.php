@@ -53,11 +53,11 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 //build form
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Add/Edit '.$listtitle, 'banner');
-$html .= $buildform->add_header('Premission Group Settings');
+$html .= $buildform->add_header('Permission Group Settings');
 $html .= addfield('name','Permission Group','text',$R->Fields("name"));
 $html .= addfield('description','Description','textarea',$R->Fields("description"));
 $html .= addfield('subsite','Subsite','text',$R->Fields("subsite"));
-$html .= $buildform->add_header('Premissions');
+$html .= $buildform->add_header('Permissions');
 
 while (!$permissions->EOF) { 
 	$per_id = $permissions->Fields("id");
