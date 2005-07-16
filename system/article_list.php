@@ -373,7 +373,7 @@ for(i=1; i<t; i++) document.forms[1][i].checked=document.forms[1][7].checked;
             	<td><b><a href="article_list.php?sorder=title&<?php echo $MM_keepURL ?>" class="intitle">title</a></b></td>
       	      <td><b><a href="article_list.php?sorder=type&<?php echo $MM_keepURL ?>" class="intitle">section</a></b></td>
         	    <td><b><a href="article_list.php?sorder=date&<?php echo $MM_keepURL ?>" class="intitle">date</a></b></td>
-            	<td><b><a href="article_list.php?sorder=pageorder<?php echo $MM_keepURL ?>" class="intitle">order</a></b></td>
+            	<td><b><a href="article_list.php?sorder=pageorder&<?php echo $MM_keepURL ?>" class="intitle">order</a></b></td>
             	<td><b><a href="article_list.php?sorder=class&<?php echo $MM_keepURL ?>" class="intitle">class</a></b></td>
             	<td><b><a href="article_list.php?sorder=publish&<?php echo $MM_keepURL ?>" class="intitle">status</a></b></td>
             	<td>&nbsp;</td>
