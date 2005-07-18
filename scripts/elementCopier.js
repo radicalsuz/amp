@@ -26,6 +26,7 @@ function ElementCopier ( formname, start_qty ) {
 function addElement( name, element_type ) {
     newitem = document.createElement('input');
     newitem.type = element_type;
+    newitem.name = name;
 
     return newitem;
 }
@@ -34,6 +35,7 @@ function addImage (name, imgsrc) {
     newimage = document.createElement('image');
     newimage.setAttribute('src', imgsrc);
 }
+
 function addButton (name, caption, action) {
     newbutton = this.addElement( name, 'button');
     newbutton.value = caption;
@@ -66,13 +68,13 @@ function makenew( elementdef ) {
 }
 
 function defineElement( name, type, label, action, source ) {
-    elementmonkey = new elementDefinition();
-    elementmonkey.name = name;
-    elementmonkey.type = type;
-    elementmonkey.label = label;
-    elementmonkey.action = action;
-    elementmonkey.source = source;
-    this.dup_elements[this.dup_elements.length] = elementmonkey;
+    element_def = new elementDefinition();
+    element_def.name = name;
+    element_def.type = type;
+    element_def.label = label;
+    element_def.action = action;
+    element_def.source = source;
+    this.dup_elements[this.dup_elements.length] = element_def;
 }
 
 function elementDefinition() {
@@ -83,21 +85,28 @@ function elementDefinition() {
     var source;
 }
 
-    
 
 function DuplicateElementSet ( which ){
     which.set_qty++;
     which.ElementSets[which.set_qty]=new Array();
     
     for (i=0; i<which.dup_elements.length; i++) {
-        newrow=which.formtable.tBodies[0].appendChild(document.createElement('tr'));
+        //newrow=which.formtable.tBodies[0].appendChild(document.createElement('tr'));
+        newrow=which.formtable.tBodies[0].insertRow( which.formtable.rows.length - 1 );
         which.ElementSets[which.set_qty][i] = which.makenew( which.dup_elements[i] );
-        newlabel = document.createElement('td');
-        newlabel.innerHTML = which.dup_elements[i].label;
-        newrow.appendChild(newlabel);
-        newrow.appendChild( which.ElementSets[which.set_qty][i] );
+        newlabel = newrow.insertCell(newrow.cells.length);
+        labeltext =  document.createTextNode(which.dup_elements[i].label);
+        newlabel.appendChild( labeltext );
+        newinput = newrow.insertCell( newrow.cells.length );
+        newinput.appendChild(  which.ElementSets[which.set_qty][i] );
+        //newrow.appendChild( newinput );
 
     }
+}
+
+function getNewElement( el_index ) {
+    new_item = this.ElementSets[this.set_qty][el_index];
+    //new_item.name = new_item.name;
 }
 
 function SaveSet (rowindex) { //This is A Javascript Function

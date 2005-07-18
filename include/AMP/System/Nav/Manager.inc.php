@@ -37,7 +37,7 @@ class AMPSystem_NavManager {
         }
     }
 
-    function &addNav ( $nav_name, $desc ) {
+    function &addNav ( $nav_name, $desc=array() ) {
         $desc['id'] = $nav_name;
         $this->nav_set[$nav_name] = &new AMPSystem_Nav( $desc, $this );
         return $this->nav_set[$nav_name];

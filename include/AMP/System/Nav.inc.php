@@ -81,7 +81,7 @@
         $this->items[] = $new_item;
     }
 
-    function addToolOptions( $modid, $nav_name ) {
+    function addToolOptions( $modid ) {
         $this->addItem( 'module_header_list.php?modid='.$modid , 'Public Pages',  'page',       AMP_PERMISSION_TOOLS_INTROTEXT );
         $this->addItem( 'module_controllist.php?modid='.$modid , 'Tool Settings', 'settings',   AMP_PERMISSION_TOOLS_ADMIN );
     }

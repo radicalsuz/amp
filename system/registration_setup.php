@@ -4,8 +4,7 @@
  *  Registration Setup Wizard
  *  
  *  Dependencies:
- *  AMP/CustomForm.php  - defines the AMP_CustomForm class using
- *  HTML::QuickForm engine
+ *  AMP/System/Form.php 
  *  
  *
  *  URL vars: formname, action=list (shows list of records)
@@ -13,11 +12,10 @@
  *  5/23/2005
  */
 
-require_once('Connections/freedomrising.php');
-require_once('utility.functions.inc.php');
+require_once('AMP/System/Base.php');
 require_once('Modules/Registration/SetupWizard.inc.php');
 
-$form = & new AMP_CustomForm_Registration_Wizard($dbcon, true);
+$form = & new RegistrationSetupForm($dbcon, true);
 
 //Check if the form was Submitted with the Save or Delete buttons
 //whether the record ID was already set
@@ -53,10 +51,11 @@ if ($_REQUEST['action']=='list') {
     } elseif (!$sub && $id) {
         $form->getData($id);
     }
+    $form->Build();
 
     //Output the form
 
-    $output = "<h2>Setup " . str_replace("_", " ",$form->name) . "</h2>";
+    $output = "<h2>Setup " . str_replace("_", " ",$form->formname) . "</h2>";
     $output .= $form->output();
 #}
 

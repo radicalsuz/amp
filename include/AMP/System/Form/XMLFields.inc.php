@@ -5,7 +5,7 @@ class AMPSystem_Form_XMLFields {
     var $AMP_Object_Type;
     var $DataDescription = "Fields";
 
-    function AMPSystem_Form_XMLFields( $AMP_Object_Type, $DataDescription ) {
+    function AMPSystem_Form_XMLFields( $AMP_Object_Type, $DataDescription = "Fields" ) {
         $this->AMP_Object_Type = $AMP_Object_Type;
         $this->DataDescription = $DataDescription;
     }
