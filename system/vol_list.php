@@ -1,4 +1,6 @@
 <?php
+header("Location: userdata_list.php?modin=8");
+/*
  $modid=40;
   require("Connections/freedomrising.php");
 if (isset($HTTP_GET_VARS["repeat"])) {$repeat= $HTTP_GET_VARS["repeat"];}
@@ -207,4 +209,5 @@ include ("header.php");
 
 <?php
 include ("footer.php");
+*/
 ?>

@@ -1,7 +1,7 @@
 <?php 
+header( "Location: modinput4.php?modin=8" );
+/*
 ob_start();
-include ("includes/ampclass.php");
-$buildform = new BuildForm;
 
 if ($_GET["thank"] == ("1")) { 
 	$mod_id = 60;
@@ -68,7 +68,7 @@ if ((($_POST[MM_update]) && ($_POST[MM_recordId])) or ($_POST[MM_insert]) or (($
 	if ($_POST[MM_insert]) {
 		$uid = addcontact(4,2,$Organization,$FirstName,$LastName,$EmailAddress,$Phone,$Fax,$WebPage,$Address,$Address2,$City,$State,$PostalCode,$Country,$notes);
 		contactadduid($personid,$uid,'moduserdata');
-	} */
+	} 
 
       redirect ("vol_update2.php?thank=1");
       #die("dd");
@@ -121,12 +121,6 @@ $state_options = makelistarray($state,'state','statename','Select State');
 $statesel = & new Select('State',$state_options,$R->Fields("State"));
 echo  $buildform->add_row('State', $statesel);
 echo addfield('Zip','Zip','text',$R->Fields("Zip"),'',10); 
-
-/*if ($hood->RecordCount() > 0) {
-	$hood_options = makelistarray($hood,'id','hood','Select Region');
-	$hoodsel = & new Select('region',$hood_options,$R->Fields("region"));
-	echo  $buildform->add_row('Region', $hoodsel);
-}*/
 
 #if ($electoralwebsite  == 1) {echo addfield('custom1','Precinct:','text',$R->Fields("custom1")); }
 echo addfield('Company','Organization:','text',$R->Fields("Company")); 
@@ -212,7 +206,7 @@ echo addfield('custom4','Other Availability:','textarea',$R->Fields("custom4"));
 	$com1sel = & new Select('custom8',$com_options,$R->Fields("custom8"));
 	echo  $buildform->add_row('Committee 3', $com1sel);
  
-}*/
+}
 
 echo $buildform->add_header('Select Interests');  
 while  (!$interest->EOF)   { 
@@ -266,4 +260,6 @@ echo "</form>";
  
  }
 
-include("AMP/BaseFooter.php"); ?>
+include("AMP/BaseFooter.php"); 
+*/
+?>

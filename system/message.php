@@ -163,7 +163,7 @@ if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
           <br>
           <a href="<?php echo $filename;?>">Add 
           A <?php echo $formtitle ;?></a> 
-      </form><?php if ($userper[91] == 1){{} ?>
+      </form><?php if (AMP_Authorized( AMP_PERMISSION_MESSAGES_ADMIN )){ ?>
       <h2>Messages that have not been marked as received</h2>
     
      
@@ -190,8 +190,8 @@ if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
 }
 ?>
       </table>
-  <?php if ($userper[91] == 1){}} ?>
-  <?php if ($userper[90] == 1){{} ?>
+  <?php } 
+  if ( AMP_Authorized( AMP_PERMISSION_MESSAGES_ADMIN )) { ?>
 
       <h2>Messages that have been received or sent as email</h2>
       <table width="90%" border="0" cellspacing="2" cellpadding="3" align="center">
@@ -216,7 +216,7 @@ if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
   $old->MoveNext();
 }
 ?>
-      </table><?php if ($userper[90] == 1){}} ?>
+      </table><?php } ?>
       <p>&nbsp;</p>
       <?php
   include ("footer.php") ;?>

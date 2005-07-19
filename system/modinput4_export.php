@@ -8,6 +8,8 @@
  * Written by Blaine Cook, blaine@radicaldesigns.org
  *
  *****/
+header("Location: form_export.php?".$_SERVER['QUERY_STRING']);
+/*
 $mod_name='udm';
 require_once( 'AMP/UserData/Set.inc.php' );
 require_once( 'Connections/freedomrising.php' );
@@ -28,7 +30,6 @@ if (isset($_GET['sortby'])) { $options['sort_by']=$_GET['sortby'].", First_Name,
 }
 
 
-if ($userper[53]&&$userper[$modin_permission]) { 
 	$udm->admin = true;
 	$options['allow_publish']=true;
 	$udm->authorized = true;
@@ -51,9 +52,9 @@ if ($userper[$modin_permission]) {
 
 
 
-/* Output the file
+# Output the file
 
-*/
+
 
 $mod_id = $udm->modTemplateID;
 

@@ -4,15 +4,9 @@ require("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
 
 $obj = new SysMenu;
-if ($userper[1] ) { } else { header ("Location: index.php"); }
-if ($userper[97]){if ($sectional_per[$_GET[type]] ) {} else { header ("Location: index.php"); }}
+if (!AMP_Authorized(AMP_PERMISSION_CONTENT_EDIT )) ampredirect("index.php"); 
   
    
-	#$result = $obj->get_children($MX_top,1);	
-	#	for ($x=0; $x<sizeof($result); $x++)
-	#	{ $childlist[$result[$x]["id"]] =1;		}
-	#   if ($childlist[$_GET[type]] ) { } else { header ("Location: index.php"); }	
-
     /**
  * a function to take an array of IDs and set their publish status to 1
  */
@@ -347,7 +341,7 @@ for(i=1; i<t; i++) document.forms[1][i].checked=document.forms[1][7].checked;
 </script> 
 
             <form  action="<?= $PHP_SELF ?>" method="POST">
-				<?php  if ($userper[98]){ ?><input type="submit" name="act" value="Publish" class="name">
+				<?php  if (AMP_Authorized( AMP_PERMISSION_CONTENT_PUBLISH )){ ?><input type="submit" name="act" value="Publish" class="name">
 				<input type="submit" name="act" value="Unpublish" class="name">
         <input type="submit" name="act" value="Delete" class="name" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')">
         <input type="submit" name="act" value="Change Order" class="name">
@@ -383,7 +377,7 @@ while (!$Recordset1->EOF){
 	$i++;
 	$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
 ?>			<tr bordercolor="#333333" bgcolor="<?php echo $bgcolor; ?>" onMouseover="this.bgColor='#CCFFCC'" onMouseout="this.bgColor='<?php echo $bgcolor; ?>'"> 
-            	<td><?php  if ($userper[98]){ ?><input type="checkbox" name="id[]" value="<?php echo $Recordset1->Fields("id")?>"><?php } ?></td>
+            	<td><?php if ( AMP_Authorized( AMP_PERMISSION_CONTENT_EDIT)){ ?><input type="checkbox" name="id[]" value="<?php echo $Recordset1->Fields("id")?>"><?php } ?></td>
             	<td><a href="<?php if ($class==2) {echo "article_fpedit.php";} else { echo "article_edit.php"; } ?>?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>"><?php echo $Recordset1->Fields("id")?></a>&nbsp;</td>
             	<td><a href="<?php if ($class==2) {echo "article_fpedit.php";} else { echo "article_edit.php"; } ?>?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id")."&t=".$track ?>"><?php echo $Recordset1->Fields("title")?></a><br></td>
             	<td><?php if ($Recordset1->Fields("type")!= ("none")) {echo $Recordset1->Fields("type");}?></td>

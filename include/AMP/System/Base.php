@@ -30,12 +30,6 @@ if (!$AMP_Permission->authorizedPage()) {
     ampredirect( $AMP_Permission->userHome() );
 }
 
-/* The $userper var is deprecated, modules should now use this syntax:
- * if (AMP_Authorized( CONSTANT_PERMISSION ));
- */
-$userper = $AMP_Permission->permission_array;
-
-
 // Discover top of content hierarchy
 $gettop = $dbcon->Execute("SELECT subsite FROM per_group WHERE id = $userLevel")
             or die( "Couldn't find sub-site authentication information: " . $dbcon->ErrorMsg());

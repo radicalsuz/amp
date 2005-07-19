@@ -12,7 +12,7 @@ $obj = new SysMenu;
     print $ps_key.": ".$ps_value."<BR>";
   }
  */ 
-if ($userper[2] or  $userper[1] ) { } else { header ("Location: index.php"); }
+if (!AMP_Authorized( AMP_PERMISSION_CONTENT_EDIT )) ampredirect ("index.php"); 
 if (isset($preview)) {header ("Location: ../article.php?id=$id&preview=1");} 
 
 
@@ -99,14 +99,6 @@ if (isset($id)) {
 	$rvar=$r->Fields("type");
 	}
 else {$rvar=1;}
-
-// check for sectional permission settings 
-if ($_GET['id']) {
-	if ($userper[97]){
-		if ($sectional_per[$rvar] ) {}
-		else { redirect("index.php"); }
-	}
-}
 
 $rlab=$dbcon->Execute("SELECT id, type FROM articletype where id = ".$rvar."") or DIE("92".$dbcon->ErrorMsg());
 
@@ -263,7 +255,9 @@ function ValidateForm(){
 			</td>
 		</tr>
 </table><br>
-<input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"><?php  if ($userper[98]){ ?>&nbsp;&nbsp;&nbsp;<input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"><?php } ?><br>
+<input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes">
+<?php  
+if (AMP_Authorized( AMP_PERMISSION_CONTENT_USER_ADDED_CONTENT)){ ?>&nbsp;&nbsp;&nbsp;<input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"><?php } ?><br>
 <br>
 
 <script type="text/javascript">
@@ -289,7 +283,7 @@ function change2(which) {
 		  <table width="100%" border="0" align="center">       <tr class="intitle"> 
             <td colspan="2" valign="top"><?php echo helpme("Header"); ?>Title</td>
           </tr>
-		  <?php  if ($userper[98]){ ?>
+		  <?php  if (AMP_Authorized( AMP_PERMISSION_CONTENT_PUBLISH)){ ?>
 		   <tr> 
             <td colspan="2" valign="top"><input <?php If (($r->Fields("publish")) == "1") { echo "CHECKED";} If (($r->Fields("id")) == $NULL) { echo "CHECKED";}?>  type="checkbox" name="publish" value="1"> 
               <font color="#990000" size="3"><strong>PUBLISH </strong></font></td>
@@ -317,7 +311,7 @@ function change2(which) {
             <td class="text"> <select name="type">
                 <option value="<?php echo  $rlab->Fields("id")?>" selected><?php echo  $rlab->Fields("type")?></option>
                 <?php echo $obj->select_type_tree($MX_top); ?>
-              </select><?php if ($userper[4]) { ?>
+              </select><?php if (AMP_Authorized( AMP_PERMISSION_CONTENT_SECTION_EDIT)) { ?>
               <A href="type_edit.php" target="_blank">add new</a><?php }?></td>
 			  <?php if (isset($MM_reltype)) {?>
           </tr>
@@ -670,10 +664,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td colspan="2" valign="top">&nbsp;</td>
           </tr>
           <tr> 
-            <td colspan="2" valign="top"><input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes">
-			
-			
-            <?php  if ($userper[98]){ ?>  <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> 
+            <td colspan="2" valign="top"><input type="submit" name="<?php if (empty($_GET['id'])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"><?php  if ( AMP_Authorized( AMP_PERMISSION_CONTENT_DELETE ) ){ ?>  <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> 
             <?php }?>
               </td>
           </tr>

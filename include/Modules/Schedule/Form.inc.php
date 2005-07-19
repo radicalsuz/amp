@@ -1,6 +1,7 @@
 <?php
 require_once( 'AMP/System/Form.inc.php' );
 require_once('AMP/System/XMLEngine.inc.php');
+require_once ( 'AMP/UserData/Set.inc.php' );
 
 class ScheduleItem_Form extends AMPSystem_Form {
 
@@ -8,7 +9,7 @@ class ScheduleItem_Form extends AMPSystem_Form {
         $name = "AMP_ScheduleItem";
         $this->init( $name );
         if ($this->addFields( $this->getFields())) {
-            #$this->setDynamicValues();
+            $this->setDynamicValues();
         }
     }
 
@@ -18,7 +19,8 @@ class ScheduleItem_Form extends AMPSystem_Form {
 
     function setDynamicValues() {
         $reg = &AMP_Registry::instance();
-        $userset = new UserDataSet( $reg->getDbcon(), 50);
+        $userset = new UserDataSet( $reg->getDbcon(), 50, TRUE);
+        $userset->doAction('Search');
         $this->setFieldValueSet( 'owner_id',  $userset->getNameLookup());
     }
 

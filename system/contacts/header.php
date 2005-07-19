@@ -23,12 +23,12 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     <td>&nbsp;</td>
     <td> <div align="center"><a href="contact_add.php" class="unnamed1">add contact</a></div></td>
     <td> <div align="center"><a href="search.php" class="unnamed1">search</a></div></td>
-    <?php if ($userper[65] == 1 or $standalone == 1){{} ?>
+    <?php if (AMP_Authorized( AMP_PERMISSION_CONTACT_ADMIN )) {?> 
     <td> <div align="center"><a href="admin.php" class="unnamed1">system admin</a></div></td>
-    <?php if ($userper[65] == 1 or $standalone == 1){}} ?>
-    <?php if ($userper[72] == 1 ){{} ?>
+    <?php }
+    if ( AMP_Authorized( AMP_PERMISSION_CONTACT_ACCESS )) { ?>
     <td> <div align="center"><a href="../system/" class="unnamed1">content system</a></div></td>
-    <?php if ($userper[72] == 1 or $standalone == 1){}} ?>
+    <?php } ?>
     <td> <div align="center"><a href="logout.php" class="unnamed1">logout</a></div></td>
   </tr>
 </table>

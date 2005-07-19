@@ -199,7 +199,7 @@ $action_script="<script type=\"text/javascript\">
 	</script>";
 
 //Action Form only appears for authorized users
-if ($userper[54]) {
+if ( AMP_Authorized( AMP_PERMISSION_FORM_DATA_EDIT)) {
 	
 	$action_form="<form name=\"user_actions\" action=\"voterbloc_account.php\" method=\"POST\">";
 	$action_form.= "<input type=\"button\" value=\"Create Account\" onclick=\"makeAccount();\">";

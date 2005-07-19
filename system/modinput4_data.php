@@ -9,6 +9,7 @@
  *
  *****/
 header("Location: userdata_list.php?".$_SERVER['QUERY_STRING']);
+/*
 $mod_name='udm';
 require_once( 'AMP/UserData/Set.inc.php' );
 require_once( 'Connections/freedomrising.php' );
@@ -19,11 +20,6 @@ $udm = new UserDataSet( $dbcon, $_REQUEST[ 'modin' ] );
 $modidselect=$dbcon->Execute("SELECT id, perid from modules where publish=1 and userdatamodid=" . $udm->instance ) or DIE($dbcon->ErrorMsg());
 $modid=$modidselect->Fields("id");
 $modin_permission=$modidselect->Fields("perid");
-/*
-print $modin_permission;
-foreach ($userper as $perkey=>$pervalue) {
-	print $perkey.":  ".$pervalue."<BR>";
-}*/
 
 
 //Accept URL values for editlink and sortby options
@@ -34,7 +30,7 @@ if (isset($_GET['sortby'])) { $options['sort_by']=$_GET['sortby'].", First_Name,
 }
 
 
-if ($userper[53] && $userper[$modin_permission]) { 
+if (AMP_Authorized( AMP_PERMISSION_FORM_DATA_EDIT) && AMP_Authorized($modin_permission)) { 
 	$udm->admin = true;
 	$options['allow_publish']=true;
 	$udm->authorized = true;
@@ -62,10 +58,10 @@ if ($udm->authorized) {
     }
 }
 
-/* Now Output the List.
+# Now Output the List.
 
 
-*/
+
 
 $mod_id = $udm->modTemplateID;
 
@@ -79,5 +75,6 @@ echo $output;
 
 // Append the footer and clean up.
 require_once( 'footer.php' );
+*/
 
 ?>

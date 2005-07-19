@@ -1,4 +1,5 @@
 <?php
+define( 'AMP_CONTACT_NO_ID', 99999999999999999);
   require_once("../Connections/freedomrising.php");  
      if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or ((isset($MM_delete)) && (isset($MM_recordId))) )  {
 	 
@@ -15,8 +16,8 @@
 		 }
   
   
-  if ($_GET[id]) {$passed = $_GET[id];}
-  else {$passed = 99999999999999999;}
+  if ($_GET['id']) {$passed = $_GET['id'];}
+  else {$passed = AMP_CONTACT_NO_ID; }
   
    $Recordset1=$dbcon->Execute("SELECT * from contacts_fields where id  = $passed ") or DIE($dbcon->ErrorMsg());
     $camps=$dbcon->Execute("SELECT * from contacts_campaign ") or DIE($dbcon->ErrorMsg());
@@ -71,7 +72,7 @@
   </tr>
 </table>
 <input type="submit" name="<?php if (empty($HTTP_GET_VARS["id"])== TRUE) { echo "MM_insert";} else {echo "MM_update";} ?>" value="Save Changes"> 
-            <?php  if ($userper[98]){ ?>  <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> <?php }?>
+            <?php  if (AMP_Authorized( AMP_PERMISSION_CONTACT_DELETE )){ ?>  <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')"> <?php }?>
           </td>
           </tr>
         </table>

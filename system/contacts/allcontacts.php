@@ -212,7 +212,7 @@ if (strlen($MM_keepForm) > 0) $MM_keepForm = substr($MM_keepForm, 1);
         <?php echo $Recordset1->Fields("id")?>
         </td>
 		<td><a href="contact.php?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>">view</a></td>
-		<td><?php if ($userper[95] == 1 or $standalone == 1){{} ?><a href="contact_edit.php?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>">edit</a><?php if ($userper[95] == 1 or $standalone == 1){}} ?></td>
+		<td><?php if ( AMP_Authorized( AMP_PERMISSION_CONTACT_EDIT)) {?><a href="contact_edit.php?<?php echo $MM_keepNone.(($MM_keepNone!="")?"&":"")."id=".$Recordset1->Fields("id") ?>">edit</a><?php } ?></td>
     </tr>
     <?php
   $Repeat2__index++;

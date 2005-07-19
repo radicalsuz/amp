@@ -9,10 +9,6 @@ if (isset($_GET['action']) && $_GET['action'] == "list")  $page->showList( true 
 
 $page->execute();
 
-//until the header and footer are abstracted
-//the output takes place within the object
-#print $page->output();
-
 print $page->output( "Intro Text" );
 
 ?>

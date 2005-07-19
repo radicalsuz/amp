@@ -144,20 +144,21 @@ var $table;
 	// returns: HTML list
 	function print_menu_tree($id = 0,$y=0) 
 	{
-	global $sectional_per,  $userper;
 		$result = $this->get_children($id,1);	
 		for ($x=0; $x<sizeof($result); $x++)
 		{
 			$y++;
 			$typeid = $result[$x]["id"];
-			 if ($userper[97]){
+            /*
+			 if (AMP_Authorized( AMP_PERMISSION_SECTION_LIMIT)){
 		if ($sectional_per[$typeid])  {
 			$this->depth($y);
 		echo  "<a href=\"article_list.php?type=". $result[$x]["id"] ."\">".$result[$x]["type"] . "</a><br>"; }}
 		else {
+            */
 		$this->depth($y);
 		echo  "<a href=\"article_list.php?type=". $result[$x]["id"] ."\">".$result[$x]["type"] . "</a><br>";
-		}
+		#}
 			$this->print_menu_tree($result[$x]["id"],$y);
 			
 			$y--;	
@@ -214,128 +215,120 @@ var $table;
 	
 		
 function select_type_tree($id = 0,$y=0,$selcode) 
-	{	global $sectional_per,  $userper;
+	{
 		$result = $this->get_children($id);	
 		for ($x=0; $x<sizeof($result); $x++)
 		{
 			$y++;
-					$typeid = $result[$x]["id"];
-			 if ($userper[97]){
-		if ($sectional_per[$typeid])  {
-			
-		echo "<option value =\"".$selcode.$result[$x]["id"]."\">";
-		$this->depth($y);
-		echo  $result[$x]["type"] . "</option>"; }}
-		else {
-		echo "<option value =\"".$selcode.$result[$x]["id"]."\">";
-		$this->depth($y);
-		echo  $result[$x]["type"] . "</option>"; 
-		}
-		
-			$this->select_type_tree($result[$x]["id"],$y,$selcode);
-			$y--;	
-		}
-		echo "</option>";
-	}
+            $typeid = $result[$x]["id"];
+                /*
+                    CONSIDER SECTIONAL PERMISSIONS?
+            */
+
+            $this->select_type_tree($result[$x]["id"],$y,$selcode);
+            $y--;	
+        }
+        echo "</option>";
+    }
 
 // used in sectional list page
-	function section_type_tree_edit($id = 0,$y=0) {	
-		$result = $this->get_children($id);	
-		for ($x=0; $x<sizeof($result); $x++){
-			$y++;
-			$typeid = $result[$x]["id"];
-			$i++;
-			$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
-			echo "\n		<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
-			echo "\n			<td> <div align='center'><A HREF='type_edit.php?id=".$result[$x]["id"]."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=\"0\"></A></div></td>";
-			echo "\n			<td>".$this->depth2($y).$result[$x]["type"]."</td>";
-			echo "\n			<td>".$result[$x]["id"]."</td>";
-			if ($result[$x]["usenav"]) {$status ='live';} else {$status ='draft';}
-			echo "\n			<td>".$status."</td>";
-			echo "\n			<td><input name=\"order[".$result[$x]["id"]."]\" type=\"text\" value=\"".$result[$x]["textorder"]."\" size=2></td>";
-			
-			echo '<td><div align="right"><A HREF="nav_position.php?type='.$result[$x]["id"].'">Edit</A></div></td>';
-			echo '<td><div align="right"><A HREF="nav_position.php?typeid='.$result[$x]["id"].'">Edit</A></div></td>';
-			echo "\n		</tr>";
-			$this->section_type_tree_edit($result[$x]["id"],$y);
-			$y--;	
-		}
-	}
-	
-	function depth2($depth) {
-        $d = "";
-		for ($i=2; $i<= $depth; ++$i) {
-			$d .= "&nbsp;&nbsp;&nbsp;&nbsp;";
-		}
-		return $d;
-	}
+function section_type_tree_edit($id = 0,$y=0) {	
+    $result = $this->get_children($id);	
+    for ($x=0; $x<sizeof($result); $x++){
+        $y++;
+        $typeid = $result[$x]["id"];
+        $i++;
+        $bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
+        echo "\n		<tr bordercolor=\"#333333\" bgcolor=\"". $bgcolor."\" onMouseover=\"this.bgColor='#CCFFCC'\" onMouseout=\"this.bgColor='". $bgcolor ."'\"> "; 
+        echo "\n			<td> <div align='center'><A HREF='type_edit.php?id=".$result[$x]["id"]."'><img src=\"images/edit.png\" alt=\"Edit\" width=\"16\" height=\"16\" border=\"0\"></A></div></td>";
+        echo "\n			<td>".$this->depth2($y).$result[$x]["type"]."</td>";
+        echo "\n			<td>".$result[$x]["id"]."</td>";
+        if ($result[$x]["usenav"]) {$status ='live';} else {$status ='draft';}
+        echo "\n			<td>".$status."</td>";
+        echo "\n			<td><input name=\"order[".$result[$x]["id"]."]\" type=\"text\" value=\"".$result[$x]["textorder"]."\" size=2></td>";
 
-	function select_type_treedo($id = 0,$y=0,$list) {
-		$result = $this->get_children($id);	
-		for ($x=0; $x<sizeof($result); $x++) {
-			$y++;
-			$typeid = $result[$x]["id"];
-			$list[$typeid] = $this->depth2($y).$result[$x]["type"];
-			$list= $this->select_type_treedo($typeid,$y,$list);
-			$y--;	
-			
-			}
-		return $list;
-	}
+        echo '<td><div align="right"><A HREF="nav_position.php?type='.$result[$x]["id"].'">Edit</A></div></td>';
+        echo '<td><div align="right"><A HREF="nav_position.php?typeid='.$result[$x]["id"].'">Edit</A></div></td>';
+        echo "\n		</tr>";
+        $this->section_type_tree_edit($result[$x]["id"],$y);
+        $y--;	
+    }
+}
 
+function depth2($depth) {
+    $d = "";
+    for ($i=2; $i<= $depth; ++$i) {
+        $d .= "&nbsp;&nbsp;&nbsp;&nbsp;";
+    }
+    return $d;
+}
 
+function select_type_treedo($id = 0,$y=0,$list) {
+    $result = $this->get_children($id);	
+    for ($x=0; $x<sizeof($result); $x++) {
+        $y++;
+        $typeid = $result[$x]["id"];
+        $list[$typeid] = $this->depth2($y).$result[$x]["type"];
+        $list= $this->select_type_treedo($typeid,$y,$list);
+        $y--;	
+
+    }
+    return $list;
+}
 
 
-	function select_type_tree2($id = 0,$y=0) {	
-		$list = array('1'=>'Select Section');
-		$result = $this->get_children($id);	
-		
-		for ($x=0; $x<sizeof($result); $x++) {
-			//$y++;
-			$typeid = $result[$x]["id"];
-			$list[$typeid] = $result[$x]["type"];
-			$list =$this->select_type_treedo($typeid,$y,$list);
-			//$y--;
-			}
-		return $list;
-	}
 
 
-	
-	// function: add a record to the menu table
-	function create_node($label, $link, $parent) 
-	{
-	$this->query("INSERT INTO $this->table(type, link, parent) VALUES ('$label', '$link', '$parent')");
-	}
-	
-	// function: remove a record from the menu table
-	function remove_node($id) 
-	{
-	$this->query("DELETE FROM $this->table WHERE id = '$id'");
-	}
+function select_type_tree2($id = 0,$y=0) {	
+    $list = array('1'=>'Select Section');
+    $result = $this->get_children($id);	
 
-	// function: execute query $query
-	// returns: result identifier
-	function query($query)
-	{
-	// connect
-	$connection = mysql_connect($this->hostname, $this->user, $this->password) or die ("Cannot connect to database");
-	// run query
-	$ret = mysql_db_query($this->db, $query, $connection) or die ("Error in query: $query");
-	// return result identifier
-	return $ret;
-	}
+    for ($x=0; $x<sizeof($result); $x++) {
+        //$y++;
+        $typeid = $result[$x]["id"];
+        $list[$typeid] = $result[$x]["type"];
+        $list =$this->select_type_treedo($typeid,$y,$list);
+        //$y--;
+    }
+    return $list;
+}
 
-	// function: set database parameters
-	// returns: none 
-	function set_database_parameters($hostname, $user, $password, $db, $table)
-	{
-		$this->hostname = $hostname;
-		$this->user = $user;
-		$this->password = $password;
-		$this->db = $db;
-		$this->table = $table;
-	}
+
+
+// function: add a record to the menu table
+function create_node($label, $link, $parent) 
+{
+    $this->query("INSERT INTO $this->table(type, link, parent) VALUES ('$label', '$link', '$parent')");
+}
+
+// function: remove a record from the menu table
+function remove_node($id) 
+{
+    $this->query("DELETE FROM $this->table WHERE id = '$id'");
+}
+
+// function: execute query $query
+// returns: result identifier
+function query($query)
+{
+    // connect
+    $connection = mysql_connect($this->hostname, $this->user, $this->password) or die ("Cannot connect to database");
+    // run query
+    $ret = mysql_db_query($this->db, $query, $connection) or die ("Error in query: $query");
+    // return result identifier
+    return $ret;
+}
+
+// function: set database parameters
+// returns: none 
+function set_database_parameters($hostname, $user, $password, $db, $table)
+{
+    $this->hostname = $hostname;
+    $this->user = $user;
+    $this->password = $password;
+    $this->db = $db;
+    $this->table = $table;
+}
 
 // end
 }

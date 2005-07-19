@@ -197,7 +197,6 @@ class UserList {
 	}
 
 	function output_list ($link_action="modinput4_view.php") {
-		global $userper, $standalone;
 		$list_html_start.='<table cellpadding="1" cellspacing="1" width="95%">';
 		$list_html_start.='<tr class="toplinks">';
 		if ($this->current_list!=NULL) {
@@ -217,7 +216,7 @@ class UserList {
 			}
 			#$list_html_start.="<td><!--editlink column--></td>";
 			$list_html_start.=$list_row_end;
-			$allow_edit=($userper[87] == 1 || $standalone == 1);
+			$allow_edit=true;
 			$list_html=$this->showlist("id", $link_action, $allow_edit);			
 		}
 		$list_html_footer = "</table>";

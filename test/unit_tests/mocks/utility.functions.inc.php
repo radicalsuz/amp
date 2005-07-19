@@ -281,7 +281,7 @@ if ( !function_exists( 'evalhtml' ) ) {
     
     function evalhtml($string){
 
-        global $dbcon, $MM_type, $MM_parent, $MM_typename, $HTTP_GET_VARS, $list, $id, $MM_issue, $userper, $MM_region, $navalign;
+        global $dbcon, $MM_type, $MM_parent, $MM_typename, $HTTP_GET_VARS, $list, $id, $MM_issue, $MM_region, $navalign;
 
         $start = 0;
 

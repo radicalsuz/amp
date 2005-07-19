@@ -9,7 +9,7 @@ global $dbcon, $MM_email_from;
 $user_action=$_REQUEST['action'];
 
 
-if ($user_action=='create'&&($userper[51]==1)) {
+if ($user_action=='create'&&(AMP_Authorized( AMP_PERMISSION_SYSTEM_USERS )) {
 	$bloc_id=$_REQUEST['block'];
 	
 	$newuser_login=$_REQUEST['login'];

@@ -1,7 +1,5 @@
 <?php
-     
-  
-  require_once("../Connections/freedomrising.php");  
+require_once("../Connections/freedomrising.php");  
 
 ?>
 <?php
@@ -318,8 +316,8 @@ $MM_movePrev  = $urlStr.(max($MM_offset - $MM_size,0));
  
 </table>
 <form name="form1" method="POST" action="<?php echo $MM_editAction?>">
- <?php if ($userper[95] == 1 or $standalone == 1){{} ?> <p align="center"><strong><a href="contact_edit.php?id=<?php echo $calledrcd->Fields("id") ?>">EDIT 
-    THIS RECORD</a></strong></p><?php if ($userper[95] == 1 or $standalone == 1){}} ?>
+ <?php if (AMP_Authorized( AMP_PERMISSION_CONTACT_EDIT )) { ?> <p align="center"><strong><a href="contact_edit.php?id=<?php echo $calledrcd->Fields("id") ?>">EDIT 
+    THIS RECORD</a></strong></p><?php } ?>
 
   <input type="hidden" name="MM_update" value="true">
 
