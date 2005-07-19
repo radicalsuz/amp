@@ -224,6 +224,9 @@ function select_type_tree($id = 0,$y=0,$selcode)
                 /*
                     CONSIDER SECTIONAL PERMISSIONS?
             */
+            echo "<option value =\"".$selcode.$result[$x]["id"]."\">";
+            $this->depth($y);
+            echo  $result[$x]["type"] . "</option>";
 
             $this->select_type_tree($result[$x]["id"],$y,$selcode);
             $y--;	

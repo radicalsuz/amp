@@ -310,8 +310,8 @@ function change2(which) {
             <td valign="top"> <span align="left" class="name"> <?php if (isset($MM_reltype)) {?>Main <?php }?>Section</span><span class="red">*</span></td>
             <td class="text"> <select name="type">
                 <option value="<?php echo  $rlab->Fields("id")?>" selected><?php echo  $rlab->Fields("type")?></option>
-                <?php echo $obj->select_type_tree($MX_top); ?>
-              </select><?php if (AMP_Authorized( AMP_PERMISSION_CONTENT_SECTION_EDIT)) { ?>
+                <?php echo $obj->select_type_tree(1);  ?>
+              </select><?php  if (AMP_Authorized( AMP_PERMISSION_CONTENT_SECTION_EDIT)) { ?>
               <A href="type_edit.php" target="_blank">add new</a><?php }?></td>
 			  <?php if (isset($MM_reltype)) {?>
           </tr>

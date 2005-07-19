@@ -15,7 +15,7 @@
 require_once('AMP/System/Base.php');
 require_once('Modules/Registration/SetupWizard.inc.php');
 
-$form = & new RegistrationSetupForm($dbcon, true);
+$form = & new RegistrationSetup_Form($dbcon, true);
 
 //Check if the form was Submitted with the Save or Delete buttons
 //whether the record ID was already set

@@ -9,7 +9,7 @@ class PaymentList extends AMPSystem_List {
     var $editlink = "payment.php";
 
     function PaymentList ( &$dbcon ) {
-        $source = & new AMPSystem_Payment_Set ( $dbcon );
+        $source = & new Payment_Set ( $dbcon );
         $this->init(  $source );
     }
 

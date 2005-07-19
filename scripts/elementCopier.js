@@ -18,6 +18,7 @@ function ElementCopier ( formname, start_qty ) {
     this.MoveSet = MoveSet;
     this.RemoveSet = RemoveSet;
     this.ValidateItems = ValidateItems;
+    this.addTextArea = addTextArea;
     this.event = event;
 
 
@@ -26,6 +27,15 @@ function ElementCopier ( formname, start_qty ) {
 function addElement( name, element_type ) {
     newitem = document.createElement('input');
     newitem.type = element_type;
+    newitem.name = name;
+
+    return newitem;
+}
+
+function addTextArea ( name, txt_rows, txt_cols ) {
+    newitem = document.createElement('textarea');
+    if (txt_rows) newitem.rows = txt_rows;
+    if (txt_cols) newitem.cols = txt_cols;
     newitem.name = name;
 
     return newitem;
@@ -47,33 +57,43 @@ function addButton (name, caption, action) {
 
 
 function makenew( elementdef ) {
-    var model_name = elementdef.name;
-    elementdef.name = elementdef.name+'['+this.set_qty+']';
+    var model_name = elementdef.name + '[' + ( this.set_qty - 1 ) + ']';
+    var instance_name = elementdef.name + '[' + this.set_qty + ']';
 
     switch (elementdef.type) {
         case 'button':
-            newitem = this.addButton(elementdef.name, elementdef.label, elementdef.action);
+            newitem = this.addButton(instance_name, elementdef.label, elementdef.action);
             break;
         case 'image':
-            newitem = this.addImage(elementdef.name, elementdef.label);
+            newitem = this.addImage(instance_name, elementdef.label);
             break;
         case 'select':
-            newitem = this.CopySelect( this.formRef.elements[model_name+'['+(this.set_qty-1)+']'] );
+            if ( this.set_qty > 1 ) {
+                return this.CopySelect( instance_name,  this.formRef.elements[model_name] );
+            }
+            return this.BuildSelect (instance_name, elementdef );
+
+            break;
+        case 'textarea':
+            newitem = this.addTextArea( instance_name, 20, 50 ); 
             break;
         default:
-            newitem = this.addElement( elementdef.name, elementdef.type );
+            newitem = this.addElement( instance_name, elementdef.type );
     }
 
     return newitem;
 }
 
-function defineElement( name, type, label, action, source ) {
+function defineElement( name, type, label, action, source, size, required, values ) {
     element_def = new elementDefinition();
     element_def.name = name;
     element_def.type = type;
     element_def.label = label;
     element_def.action = action;
     element_def.source = source;
+    element_def.required = required;
+    element_def.size = size;
+    element_def.values = values;
     this.dup_elements[this.dup_elements.length] = element_def;
 }
 
@@ -180,14 +200,23 @@ function event(elem,handler,funct) {//This is A Javascript Function
     }
 }
 
-function CopySelect(model) {
+function CopySelect(newname, model) {
     var newselect=document.createElement('select');
-    newselect.name = model.name +'['+ this.set_qty +']';
-    for (n=0; n<selbox.options.length; n++) {
+    newselect.name = newname;
+    for (n=0; n<model.options.length; n++) {
         newselect.options[n] = new Option(model.options[n].text, model.options[n].value);
     }
     
     return(newselect);
+}
+
+function BuildSelect (newname, element_def) {
+    var newselect=document.createElement('select');
+    newselect.name = newname;
+    for (n=0; n<element_def.values.length; n++) {
+        newselect.options[n] = new Option(element_def.values[n].text, element_def.values[n].value);
+    }
+    return newselect;
 }
 
 function findFormTable ( formname ) {
