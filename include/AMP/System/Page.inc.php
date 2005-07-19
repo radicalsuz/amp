@@ -50,12 +50,13 @@ class AMPSystem_Page {
     var $results = array();
     var $errors = array();
 
-    function AMPSystem_Page ( &$dbcon, $source ) {
+    function AMPSystem_Page ( &$dbcon, $source=null ) {
         $this->init ($dbcon, $source);
     }
 
-    function init( &$dbcon, $source ) {
+    function init( &$dbcon, $source=null ) {
         $this->dbcon = &$dbcon;
+        if (!isset($this->source)) return;
         $this->_setIncludeFileValues($source);
         $this->_setComponentNames($source);
 
@@ -94,6 +95,14 @@ class AMPSystem_Page {
             }
             $this->includes[$type] = $filename;
         }
+    }
+
+    function setIncludeFile( $filename, $component ) {
+        $this->includes[$component] = $filename;
+    }
+
+    function setComponentName( $classname, $component ) {
+        $this->component_class[$component]['name'] = $classname;
     }
 
     function _setComponentNames( $source ) {

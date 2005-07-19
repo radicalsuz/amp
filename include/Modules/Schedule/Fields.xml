@@ -1,0 +1,53 @@
+<array>
+<id>
+<type>hidden</type>
+</id>
+<service>
+<type>hidden</type>
+<constant>1</constant>
+<default>AMP_SCHEDULE_TIMESLOT_USER</default>
+</service>
+<owner_id>
+<type>select</type>
+<label>Consultant</label>
+</owner_id>
+<capacity>
+<type>text</type>
+<label>Maximum Capacity</label>
+<size>5</size>
+</capacity>
+<start_date>
+<type>date</type>
+<label>Event Date</label>
+<default>
+today
+</default>
+</start_date>
+<start_time>
+<type>date</type>
+<label>Start Time</label>
+<default>
+<format>hia</format>
+</default>
+</start_time>
+<stop_time>
+<type>date</type>
+<label>Stop Time</label>
+<default>
+<format>hia</format>
+</default>
+</stop_time>
+<title>
+<label>Event Title</label>
+<type>text</type>
+</title>
+<description>
+<type>textarea</type>
+<label>Event Description</label>
+</description>
+<status>
+<type>select</type>
+<label>Status</label>
+<default>AMP_SCHEDULE_TIMESLOT_STATUS_OPEN</default>
+</status>
+</array>

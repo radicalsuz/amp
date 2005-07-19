@@ -111,6 +111,15 @@ class UserDataSet extends UserData {
         return $output_html;
     }
 
+    function getNameLookup() {
+        $totalset = $this->getData();
+        foreach ($totalset as $dataitem) {
+            $result[ $dataitem['id'] ] = join( " ", array( $dataitem['First_Name'], $dataitem['Last_Name'] ));
+        }
+        return $result;
+    }
+
+
     function setData(&$dataset) {
         if (is_object($dataset)) {
             $this->users_Recordset =& $dataset;
