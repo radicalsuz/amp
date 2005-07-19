@@ -1,7 +1,7 @@
 <?php
 
 require_once( 'AMP/System/List.inc.php' );
-require_once( 'Modules/Schedule.inc.php' );
+require_once( 'Modules/Schedule/Schedule.php' );
 
 class ScheduleList extends AMPSystem_List {
 	var $name = "Schedule";
@@ -11,15 +11,13 @@ class ScheduleList extends AMPSystem_List {
 	function ScheduleList( &$dbcon ) {
 		$source = & new Schedule( $dbcon );
 		$this->init( $source );
-		$this->lookups['attendees'] = $this->getParticipantCounts();
+		$this->lookups['attendees'] = $this->source->getParticipantCounts();
 	}
 
-	function getParticipantCounts() {
-		if (!($items = $this->source->getSlots())) return false; 
-		foreach ($items as $key => $slot) {
-			$itemcount[ $slot->id ] = $slot->participantCount(); 
-		} 
-		return $itemcount;
-	}
+    function getPersonalSchedule( $userdata_id ) {
+        $this->source->addCriteria( "userdata_id" . "=" . $userdata_id );
+        $this->source->readData();
+    }
+
 }
 ?>

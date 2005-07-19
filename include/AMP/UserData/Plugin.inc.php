@@ -590,6 +590,10 @@ class UserDataPlugin {
         return $defaults;
     }
 
+    function inForm( $raw_html ) {
+        return "<tr><td colspan=2 class = \"form_span_col\">". $raw_html ."</td></tr>\n";
+    }
+
 
 
 }

@@ -34,6 +34,10 @@ class AMPSystem_Data {
     function init( &$dbcon ) {
         $this->dbcon = &$dbcon;
         $this->setSource( $this->datatable );
+
+        if (method_exists( $this, '_register_criteria_dynamic' )) {
+            $this->_register_criteria_dynamic();
+        }
     }
 
     function setSource( $sourcename = null ) {

@@ -58,9 +58,5 @@ class UserDataPlugin_Read_AMPPayment extends UserDataPlugin {
             if ($local_name && !isset($this->fields[$local_name])) unset ($this->udm->fields[$fname]);
         }
     }
-
-    function inForm( $raw_html ) {
-        return "<tr><td colspan=2 class = \"form_span_col\">". $raw_html ."</td></tr>\n";
-    }
 }
 ?>

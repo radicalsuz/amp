@@ -1,4 +1,4 @@
-CREATE TABLE `payment` (
+CREATE TABLE IF NOT EXISTS `payment` (
   `id` int(11) NOT NULL auto_increment,
   `user_ID` int(11) NOT NULL default '0',
   `payment_item_ID` int(11) NULL,

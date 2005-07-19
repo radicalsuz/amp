@@ -20,7 +20,9 @@ class Schedule extends AMPSystem_Data_Set {
 
 	function buildSchedule() {
 		while ( $slot = $this->getData()) {	
-			$this->_slots[] = &new ScheduleTimeSlot( $dbcon, $slot['id'] );
+			$current_slot = &new ScheduleTimeSlot( $dbcon );
+            $current_slot->setData( $slot );
+            $this->_slots[] = &$current_slot;
 		}
 	}
 		
@@ -35,6 +37,16 @@ class Schedule extends AMPSystem_Data_Set {
 
 	function getSlots() {
 		return $this->_slots;
+	}
+
+	function getParticipantCounts() {
+        /*
+		if (!($items = $this->source->getSlots())) return false; 
+		foreach ($items as $key => $slot) {
+			$itemcount[ $slot->id ] = $slot->participantCount(); 
+		} 
+		return $itemcount;
+        */
 	}
 
 }
@@ -115,6 +127,7 @@ class UserData_Action_Schedule extends AMPSystem_Data_Item {
 
 }
 
+define( 'AMP_USERDATA_ACTION_SCHEDULE', 'schedule' );
 class UserData_Action_Schedule_Set extends AMPSystem_Data_Set {
 
 	var $datatable = "userdata_action";
@@ -122,5 +135,18 @@ class UserData_Action_Schedule_Set extends AMPSystem_Data_Set {
 	function UserData_Action_Schedule_Set ( &$dbcon ) {
 		$this->init( $dbcon );
 	}
+
+    function _register_criteria_dynamic() {
+        $this->addCriteria( "action="
+                    . $this->dbcon->qstr(AMP_USERDATA_ACTION_SCHEDULE));
+    }
+
+    function getParticpantCounts() {
+        return $this->getGroupedIndex($this->getUserdataId());
+    }
+
+    function getUserdataId() {
+        return "userdata_id";
+    }
 }
 ?>

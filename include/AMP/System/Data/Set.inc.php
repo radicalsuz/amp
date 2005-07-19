@@ -106,6 +106,13 @@
         if (!isset($this->offset)) return $this->limit;
         return $this->offset . ', ' . $this->limit;
     }
+
+    function getGroupedIndex($column) {
+        $sql = "SELECT $column, count(" . $this->id_field . ") as qty, FROM "
+            . $this->datatable . $this->_makeCriteria() . " GROUP BY $column";
+        return $this->dbcon->CacheGetAll($sql);
+    }
+
  }
 
  ?>
