@@ -24,7 +24,12 @@ class ElementCopierScript {
             window.'.$this->copier_name.' = new ElementCopier("'.$this->formname.'", '.$this->start_qty.');'."\n";
 
         foreach ($this->fields as $fieldname => $fDef ) {
-            $script .= $this->copier_name.".defineElement( '$fieldname', '".$fDef['type']."', '".$fDef['label']."');\n"; 
+            $valuevar = '""';
+            if (isset($fDef['values']) && $fDef['values']) {
+                $valuevar = $this->copier_name.'_'.$fieldname.'_values';
+                $script .= $this->script_value_array( $valuevar, $fDef ); 
+            }
+            $script .= $this->copier_name.".defineElement( '$fieldname', '".$fDef['type']."', '".$fDef['label']."', $valuevar);\n"; 
         }
 
         $script .= "}\n loadCopier();\n </script>";
@@ -32,6 +37,18 @@ class ElementCopierScript {
 
         return $script;
     }
+
+    function script_value_array( $valuevar, $fDef ) {
+        $script = "var $valuevar = new Array();\n var valuecounter=0;\n";
+        $script .= $valuevar . "[ valuecounter++] = new Option(\"Add New\",'');\n";
+
+        foreach ($fDef['values'] as $key => $value ) {
+            $script .= $valuevar . "[ valuecounter++] = new Option(\"". str_replace( "&nbsp;", " ", $value) . "\",'". $key . "');\n";
+        }
+
+        return $script;
+    }
+
 
     function output( ) {
         return $this->script_header();

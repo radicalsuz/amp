@@ -260,7 +260,7 @@ echo '</select>';
 
 
 /* CREATE THE LIST OF GALLERYS */
-if (!$_GET[gal]) { 
+if (!$_GET['gal']) { 
 	
 	while(!$gallerys->EOF) {
 		$galimage = $gallerys->Fields("img");
@@ -294,8 +294,8 @@ if (!$_GET[gal]) {
 	
 }
 elseif ($photo->Fields("img") == NULL) {	
-                        echo '<p>&nbsp;</p>';
-                        echo '<p class="text">There are no photos currently in this gallery.</p>';
+        echo '<p>&nbsp;</p>';
+        echo '<p class="text">There are no photos currently in this gallery.</p>';
 } 
 
 /* OR DISPLAY A SPECIFIC GALLERY */

@@ -12,13 +12,15 @@ function ElementCopier ( formname, start_qty ) {
     this.addElement = addElement;
     this.addImage = addImage;
     this.addButton = addButton;
+    this.addTextArea = addTextArea;
+
     this.makenew = makenew;
     this.CopySelect = CopySelect;
+    this.BuildSelect = BuildSelect;
     this.SaveSet = SaveSet;
     this.MoveSet = MoveSet;
     this.RemoveSet = RemoveSet;
     this.ValidateItems = ValidateItems;
-    this.addTextArea = addTextArea;
     this.event = event;
 
 
@@ -84,7 +86,7 @@ function makenew( elementdef ) {
     return newitem;
 }
 
-function defineElement( name, type, label, action, source, size, required, values ) {
+function defineElement( name, type, label, values, action, source, size, required ) {
     element_def = new elementDefinition();
     element_def.name = name;
     element_def.type = type;
@@ -214,7 +216,7 @@ function BuildSelect (newname, element_def) {
     var newselect=document.createElement('select');
     newselect.name = newname;
     for (n=0; n<element_def.values.length; n++) {
-        newselect.options[n] = new Option(element_def.values[n].text, element_def.values[n].value);
+        newselect.options[n] = element_def.values[n];
     }
     return newselect;
 }

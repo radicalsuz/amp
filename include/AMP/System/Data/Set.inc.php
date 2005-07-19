@@ -49,6 +49,7 @@
     function isReady() {
         if (!$this->hasData()) return false;
         $this->source->MoveFirst();
+        return true;
     }
 
     function setSort( $expression_set ) {

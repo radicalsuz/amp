@@ -1,0 +1,45 @@
+<array>
+<id>
+<type>hidden</type>
+</id>
+<publish>
+<type>checkbox</type>
+<label>PUBLISH</label>
+</publish>
+<name>
+<type>text</type>
+<size>50</size>
+<label>Event Name</label>
+</name>
+<sectionadd>
+<type>select</type>
+<label>Place in Section</label>
+</sectionadd>
+<app_input_text>
+<type>textarea</type>
+<size>20:50</size>
+<label>Application Input Page Header Text</label>
+</app_input_text>
+<app_response_text>
+<type>textarea</type>
+<size>20:50</size>
+<label>Application Response Page Text</label>
+</app_response_text>
+<reg_input_text>
+<type>textarea</type>
+<size>20:50</size>
+<label>Registration Input Page Header Text</label>
+</reg_input_text>
+<reg_response_text>
+<type>textarea</type>
+<size>20:50</size>
+<label>Registration Response Page Text</label>
+</reg_response_text>
+<use_payment>
+<type>button</type>
+<attr>
+<onClick>DuplicateElementSet( window.payment_type );</onClick>
+</attr>
+<label>Add Registration Fee Type</label>
+</use_payment>
+</array>
