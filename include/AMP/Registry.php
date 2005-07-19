@@ -1,11 +1,11 @@
 <?php
 
 define('AMP_REGISTRY_TEMPLATE','TEMPLATE');
+define('AMP_REGISTRY_DBCON','DBCON');
 define('AMP_REGISTRY_SETTING_ENCODING','SETTING_ENCODING');
 define('AMP_REGISTRY_SETTING_SITENAME','SETTING_SITENAME');
 define('AMP_REGISTRY_SETTING_SITEURL','SETTING_SITEURL');
 define('AMP_REGISTRY_SETTING_EMAIL_SYSADMIN','SETTING_EMAIL_SYSADMIN');
-//define('AMP_REGISTRY_DB','DB'); 
 
 //based on the Registry pattern described at
 //http://www.phppatterns.com/index.php/article/articleview/75/1/1/
@@ -52,6 +52,16 @@ class AMP_Registry {
 	function &getTemplate() {
 		$registry =& $this->instance();
 		return $registry->getEntry(AMP_REGISTRY_TEMPLATE);
+	}
+
+	function setDbcon(&$dbcon) {
+		$registry =& $this->instance();
+		return $this->setEntry(AMP_REGISTRY_DBCON, $dbcon);
+	}
+
+	function &getDbcon() {
+		$registry =& $this->instance();
+		return $registry->getEntry(AMP_REGISTRY_DBCON);
 	}
 }
 ?>

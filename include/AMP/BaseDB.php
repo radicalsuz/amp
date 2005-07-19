@@ -101,6 +101,8 @@ $dbcon =& ADONewConnection( AMP_DB_TYPE );
 $dbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME );
 
 require_once('AMP/Registry.php');
+$registry =& AMP_Registry::instance();
+$registry->setDbcon($dbcon);
 require_once('AMP/LegacyRegistry.inc.php');
 
 ?>
