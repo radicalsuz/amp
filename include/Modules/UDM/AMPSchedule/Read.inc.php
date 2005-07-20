@@ -22,7 +22,7 @@ class UserDataPlugin_Read_AMPSchedule extends UserDataPlugin {
                 'public'=>true,  
                 'enabled'=>true),
 
-            'transaction_list' => array(
+            'schedule_list' => array(
                 'type'=>'html',
                 'public'=>false,
                 'enabled'=>true
@@ -30,12 +30,12 @@ class UserDataPlugin_Read_AMPSchedule extends UserDataPlugin {
             );
     }
 
-    function execute() {
+    function execute( $options = null ) {
         $options = array_merge ($this->getOptions(), $options);
         if (!isset( $options['_userid'] ) ) return false;
         $uid = $options['_userid'];
         
-        $schedulelist = &new ScheduleList ( $this->dbcon );
+        $schedulelist = &new Schedule_List ( $this->dbcon );
         $schedulelist->getPersonalSchedule( $uid );
 
         $this->udm->fields[ $this->addPrefix('schedule_list') ]['values'] = $this->inForm($schedulelist->output());

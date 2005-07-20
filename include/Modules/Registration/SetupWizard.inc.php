@@ -1,10 +1,10 @@
 <?php
 
-require_once('AMP/System/XMLEngine.inc.php');
-require_once('AMP/System/Form.inc.php');
-require_once('AMP/Content/Map.inc.php');
-require_once('AMP/Form/ElementCopierScript.inc.php');
-require_once('Modules/Payment/ItemSet.inc.php');
+require_once(   'AMP/System/Form.inc.php'       );
+require_once(   'AMP/Content/Map.inc.php'       );
+require_once(   'AMP/Form/ElementCopierScript.inc.php');
+require_once(   'AMP/System/XMLEngine.inc.php'  );
+require_once(   'Modules/Payment/ItemSet.inc.php');
 
 class RegistrationSetup_Form extends AMPSystem_Form {
     
@@ -39,19 +39,17 @@ class RegistrationSetup_Form extends AMPSystem_Form {
     function RegistrationSetup_Form() {
         $name = "Registration_Wizard";
         $this->init( $name );
-        if ($this->addFields( $this->getFields() )) {
+        if ($this->addFields( $this->readFields() )) {
             $this->setDynamicValues();
         }
-        $this->addFields( $this->paymentTypeCopier() );
+        $this->registerPaymentTypeCopier() ;
     }
     
-    function paymentTypeCopier() {
+    function registerPaymentTypeCopier() {
         $PaymentAdder = &new ElementCopierScript( $this->getPaymentFields() );
         $PaymentAdder->formname = $this->formname;
         $PaymentAdder->copier_name = 'payment_type';
-        return array( "adder" =>
-            array( "type" => "html",
-                   "default" => $PaymentAdder->output()) );
+        $this->registerJavascript( $PaymentAdder->output() );
          
     }
 
@@ -65,7 +63,7 @@ class RegistrationSetup_Form extends AMPSystem_Form {
     }
 
 
-    function getFields() {
+    function readFields() {
         $xmlEngine = &new AMPSystem_XMLEngine( 'Registration/SetupFields' );
         if( $fields =  $xmlEngine->readData()) {
             return $fields;

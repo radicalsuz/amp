@@ -1,0 +1,23 @@
+<array>
+<id>
+<type>hidden</type>
+</id>
+<name>
+<type>text</type>
+<label>Name</label>
+<required>1</required>
+</name>
+<description>
+<type>textarea</type>
+<label>Description</label>
+</description>
+<Amount>
+<type>text</type>
+<label>Amount</label>
+</Amount>
+<taxtype>
+<type>select</type>
+<label>Tax Status</label>
+<values>501(c)3, 501(c)4</values>
+<taxtype>
+</array>

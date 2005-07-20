@@ -22,7 +22,7 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form {
     function AMPSystem_IntroText_Form () {
         $name = "AMP_IntroText"; 
         $this->init( $name );
-        if ($this->addFields( $this->getFields())) {
+        if ($this->addFields( $this->readFields())) {
             $this->setDynamicValues();
         }
         $this->HTMLEditorSetup();
@@ -50,7 +50,7 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form {
         $this->setFieldValueSet( 'type',       $map->selectOptions());
     }
 
-    function getFields() {
+    function readFields() {
 
         $fieldsource = & new AMPSystem_Form_XMLFields( $this->AMP_Object_Type, 'Fields' );
 

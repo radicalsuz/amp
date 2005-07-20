@@ -4,11 +4,12 @@ require_once('AMP/System/XMLEngine.inc.php');
 require_once ( 'AMP/UserData/Set.inc.php' );
 
 class ScheduleItem_Form extends AMPSystem_Form {
+    var $name_field = "title";
 
     function ScheduleItem_Form() {
         $name = "AMP_ScheduleItem";
         $this->init( $name );
-        if ($this->addFields( $this->getFields())) {
+        if ($this->addFields( $this->readFields())) {
             $this->setDynamicValues();
         }
     }
@@ -19,12 +20,12 @@ class ScheduleItem_Form extends AMPSystem_Form {
 
     function setDynamicValues() {
         $reg = &AMP_Registry::instance();
-        $userset = new UserDataSet( $reg->getDbcon(), 50, TRUE);
+        $userset = &new UserDataSet( $reg->getDbcon(), 50, TRUE);
         $userset->doAction('Search');
         $this->setFieldValueSet( 'owner_id',  $userset->getNameLookup());
     }
 
-    function getFields() {
+    function readFields() {
         $fieldsource = & new AMPSystem_XMLEngine( "Modules/Schedule/Fields" );
 
         if ( $fields = $fieldsource->readData() ) return $fields;
