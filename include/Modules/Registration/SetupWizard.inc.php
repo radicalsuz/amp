@@ -46,9 +46,9 @@ class RegistrationSetup_Form extends AMPSystem_Form {
     }
     
     function registerPaymentTypeCopier() {
-        $PaymentAdder = &new ElementCopierScript( $this->getPaymentFields() );
+        $PaymentAdder = &new ElementCopierScript();
         $PaymentAdder->formname = $this->formname;
-        $PaymentAdder->copier_name = 'payment_type';
+        $PaymentAdder->addCopier( 'payment_type', $this->getPaymentFields() );
         $this->registerJavascript( $PaymentAdder->output() );
          
     }

@@ -84,8 +84,8 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
         if (!$this->udm->admin) return false;
 
         //Allow admins to use Styles panel
-        $editor = &AMPFormElement_HTMLEditor::instance();
-        $editor->addPlugin('Stylist');
+        #$editor = &AMPFormElement_HTMLEditor::instance();
+        #$editor->addPlugin('Stylist');
 
 		//set PUBLISH field at the top of the form
 		if ( $this->udm->_module_def['publish']) { 

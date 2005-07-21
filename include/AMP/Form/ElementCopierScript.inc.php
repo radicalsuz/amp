@@ -6,13 +6,43 @@ class ElementCopierScript {
     var $formname;
     var $start_qty=0;
     var $copier_name = "copymaker";
+    var $copiers = array();
 
-    function ElementCopierScript( $fields ) {
+    function ElementCopierScript( $fields = null ) {
         $this->init($fields);
     }
 
-    function init($fields) {
-        $this->fields = $fields;
+    function init($fields = null) {
+        if (isset($fields)) $this->addCopier( $this->copier_name, $fields ); 
+    }
+
+    function addCopier( $name, $fieldset ) {
+        $this->setFields( $name, $fieldset );
+    }
+
+    function setFields( $copiername, $fieldset ) {
+        $this->copiers[$copiername] = array();
+        foreach ( $fieldset as $fieldname => $def ) {
+            $this->addField( $def, $fieldname, $copiername );
+        }
+        $this->addControlButtons( $copiername );
+    }
+
+    function addControlButtons( $copiername ) {
+        $add_button =
+            array( 'type' => 'button', 
+                   'action' => 'DuplicateElementSet( window.' . $copiername . " );",
+                   'label' => '+' );
+        $del_button =
+            array( 'type' => 'button',
+                   'action' => 'window.' . $copiername . ".RemoveSet( this.id.substring(14) );",
+                   'label' => '-' );
+        $this->addField( $add_button, 'add_btn', $copiername );
+        $this->addField( $del_button, 'del_btn', $copiername );
+    }
+
+    function addField( $field_def, $fieldname, $copiername ) {
+        $this->copiers[$copiername][$fieldname] = $field_def;
     }
 
 
@@ -20,18 +50,12 @@ class ElementCopierScript {
         $script ='
             <script type="text/javascript" src = "/scripts/elementCopier.js"></script>';
         $script .= '<script type="text/javascript">
-            function loadCopier() {
-            window.'.$this->copier_name.' = new ElementCopier("'.$this->formname.'", '.$this->start_qty.');'."\n";
+            function loadCopier() {'."\n";
 
-        foreach ($this->fields as $fieldname => $fDef ) {
-            $valuevar = '""';
-            if (isset($fDef['values']) && $fDef['values']) {
-                $valuevar = $this->copier_name.'_'.$fieldname.'_values';
-                $script .= $this->script_value_array( $valuevar, $fDef ); 
-            }
-            $script .= $this->copier_name.".defineElement( '$fieldname', '".$fDef['type']."', '".$fDef['label']."', $valuevar);\n"; 
+        foreach ($this->copiers as $copiername => $fieldset) {
+            $script.= 'window.'.$copiername.' = new ElementCopier("'.$this->formname.'", '.$this->start_qty.');'."\n";
+            $script.= $this->_js_initCopier( $fieldset, $copiername );
         }
-
         $script .= "}\n loadCopier();\n </script>";
 
 
@@ -48,6 +72,25 @@ class ElementCopierScript {
 
         return $script;
     }
+
+    function _js_initCopier( $fieldset, $copiername ) {
+        $script = "";
+        foreach ($fieldset as $fieldname => $fDef ) {
+            $valuevar = '""';
+            if (isset($fDef['values']) && $fDef['values']) {
+                $valuevar = $copiername.'_'.$fieldname.'_values';
+                $script .= $this->script_value_array( $valuevar, $fDef ); 
+            }
+            $actionvar = '""';
+            if (isset($fDef['action']) && $fDef['action']) $actionvar = "'".$fDef['action']."'";
+
+            $script .= $copiername.".defineElement( '$fieldname', '".$fDef['type']."', '".$fDef['label']."', $valuevar, $actionvar);\n"; 
+        }
+
+        return $script;
+    }
+
+
 
 
     function output( ) {
