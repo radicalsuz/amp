@@ -40,7 +40,7 @@ if ($_POST['MM_update']) {
 		$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
 		//echo $sql.'<br>';
 	}
-	redirect($redirect);
+	ampredirect($redirect);
 }
 
 

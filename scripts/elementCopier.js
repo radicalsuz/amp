@@ -54,6 +54,7 @@ function addButton (name, caption, action) {
     if (action){
         event (newbutton, 'onClick', action);
     }
+    newbutton.id = 'button_in_set_' + this.set_qty;
     return newbutton;
 }
 
@@ -105,10 +106,13 @@ function elementDefinition() {
     var label;
     var action;
     var source;
+    var values;
+    var required;
+    var size;
 }
 
 
-function DuplicateElementSet ( which ){
+function DuplicateElementSet ( which ) {
     which.set_qty++;
     which.ElementSets[which.set_qty]=new Array();
     
@@ -140,7 +144,6 @@ function SaveSet (rowindex) { //This is A Javascript Function
     }
     
 }
-//This is A Javascript Function
 //Which Moves values *from* one set of select boxes *to* another
 
 function MoveSet(from,to) {
@@ -153,7 +156,7 @@ function MoveSet(from,to) {
     }
 }	
 
-function ValidateItems () { //Javascript Function
+function ValidateItems () {
 
     //sets an indicator flag for which values should be kept
     var newrow=this.formtable.tBodies[0].appendChild(document.createElement('tr'));
@@ -167,10 +170,10 @@ function ValidateItems () { //Javascript Function
     }
 }
 
-function RemoveSet(which) { //This is A Javascript Function
+function RemoveSet( set_index ) {
     if (this.set_qty>=1) {
-        for (n=which; n<this.set_qty; n++) {
-            MoveRow(n+1, n);
+        for (n=set_index; n<this.set_qty; n++) {
+            this.MoveSet( (parseInt(n)+1), n);
         }
         
         this.set_qty=this.set_qty-1;
@@ -191,7 +194,6 @@ function RemoveSet(which) { //This is A Javascript Function
     }
 } 
 
-//This is A Javascript Function
 //To Ensure IE Compliance for assigning onClick action
 function event(elem,handler,funct) {//This is A Javascript Function
 
