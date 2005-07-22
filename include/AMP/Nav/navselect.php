@@ -72,7 +72,7 @@ if ( !function_exists( 'getnavs' ) ) {
 
     function getnavs($sql,$navside='l') {
 
-        global $dbcon, $MM_type, $intro_id, $modtemplate;
+        global $dbcon,$MM_parent, $MM_type, $intro_id, $modtemplate;
         $navsqlsel="SELECT navid FROM nav  ";
         $navsqlend =" and position like  '%$navside%' order by position asc";
         $navsql =$navsqlsel.$sql.$navsqlend;
@@ -117,7 +117,7 @@ if ( !function_exists( 'magpienav' ) ) {
 
 function getthenavs($navside) {
 
-    global $dbcon, $MM_type, $MX_top, $obj, $intro_id, $mod_template, $modtemplate, $sidelistcss;
+    global $dbcon, $MM_parent, $MM_type, $MX_top, $obj, $intro_id, $mod_template, $modtemplate, $sidelistcss;
     global $rNAV_HTML_1, $rNAV_HTML_2, $rNAV_HTML_3,$rNAV_HTML_4,$rNAV_HTML_5;
     global $lNAV_HTML_1, $lNAV_HTML_2, $lNAV_HTML_3,$lNAV_HTML_4,$lNAV_HTML_5;
     

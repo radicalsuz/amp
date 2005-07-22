@@ -167,6 +167,10 @@
 <per>CONTENT_HOTWORDS</per>
 </item>
 <item>
+<label>Regions</label>
+<href>region.php?action=list</href>
+</item>
+<item>
 <label>User Added Content</label>
 <href>article_list.php?class=9</href>
 <per>CONTENT_USER_ADDED_CONTENT</per>

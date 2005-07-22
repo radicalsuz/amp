@@ -8,9 +8,8 @@ class PaymentItem_Form extends AMPSystem_Form {
     function PaymentItem_Form () {
         $name = "AMP_PaymentItem";
         $this->init( $name );
-        if ($this->addFields( $this->readFields())) {
-            #$this->setDynamicValues();
-        }
+        $this->addFields( $this->readFields() ); 
+        
     }
 
     function readFields() {

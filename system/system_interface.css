@@ -190,15 +190,15 @@ li.side_home {
 
 span.page_result {
 		display:block;
-		width: 100%;
+		width: 60%;
 		background-color: #99CCFF;
 		color: #006666;
-		padding: 5px;
+		padding: 5px 10% 5px 10%;
 		text-align: center;
-		margin: 5px 20% 5px 20%;
+		margin: 5px 10% 5px 10%;
 }
 
-/* CONTENT LAYOOUT CLASSES */
+/* CONTENT LAYOUT CLASSES */
 
 /* top blue header for table layout */
 .intitle {
@@ -241,6 +241,10 @@ text-align: center;
 /* label text in forms */
 .name {
 	font-size: 11px;
+}
+
+td.name {
+		 padding-right:1em;
 }
 
 .text {

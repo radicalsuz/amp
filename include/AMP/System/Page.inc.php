@@ -14,6 +14,7 @@
  *
  * * * **/
 
+require_once( 'AMP/System/Base.php' );
 require_once( 'AMP/System/Page/Display.inc.php' );
 
 class AMPSystem_Page {
@@ -24,6 +25,7 @@ class AMPSystem_Page {
     var $source;
     
     var $includes = array();
+    /*
     var $filepaths = array(
         'form' => "AMP/System/%s/Form.inc.php",
         'list' => "AMP/System/%s/List.inc.php",
@@ -40,25 +42,28 @@ class AMPSystem_Page {
         'source' => array(
             'template' => "AMPSystem_%s")
         );
+    */
 
     var $action = 'View';
 
     var $dbcon;
     var $show = array();
     var $title;
+    var $component_map;
 
     var $results = array();
     var $errors = array();
 
-    function AMPSystem_Page ( &$dbcon, $source=null ) {
-        $this->init ($dbcon, $source);
+    function AMPSystem_Page ( &$dbcon, $component_map=null ) {
+        $this->init ($dbcon, $component_map);
     }
 
-    function init( &$dbcon, $source=null ) {
+    function init( &$dbcon, $component_map=null ) {
         $this->dbcon = &$dbcon;
-        if (!isset($this->source)) return;
-        $this->_setIncludeFileValues($source);
-        $this->_setComponentNames($source);
+        if (!isset($component_map)) return;
+        $this->component_map = &$component_map;
+        $this->_setIncludeFileValues();
+        $this->_setComponentNames();
 
     }
 
@@ -77,18 +82,24 @@ class AMPSystem_Page {
         }
     }
 
-    function output ( $title = null ) {
+    function output ( ) {
         $display = & new AMPSystem_Page_Display( $this );
-        if (isset($title)) $display->itemtype = $title;
+        $diplay_title = "Item";
+        
+        if (isset($this->component_map)) { 
+            $display_title = $this->component_map->getHeading();
+            $display->setNavName( $this->component_map->getNavName() );
+        }
+
+        $display->setItemType( $display_title );
         if ($this->showList()) $this->_initComponents('list');
-        #$this->list->setMessage ( $this->getMessage() );
+
         return $display->execute();
     }
 
-    function _setIncludeFileValues( $source ) {
-        $sourcefile = str_replace( "_", DIRECTORY_SEPARATOR, $source );
-        foreach ($this->filepaths as $type => $path ) {
-            $filename = sprintf( $path, $sourcefile );
+    function _setIncludeFileValues( ) {
+        $filepaths = $this->component_map->getFilePaths();
+        foreach ($filepaths as $type => $filename ) {
             if (!file_exists_incpath ($filename) ) {
                 trigger_error( 'System Page did not find component '.$type.' at: '.$filename );
                 continue;
@@ -102,13 +113,11 @@ class AMPSystem_Page {
     }
 
     function setComponentName( $classname, $component ) {
-        $this->component_class[$component]['name'] = $classname;
+        $this->component_class[$component] = $classname;
     }
 
-    function _setComponentNames( $source ) {
-        foreach ($this->component_class as $type => $component_def ) {
-            $this->component_class[$type]['name'] = sprintf( $component_def['template'], $source );
-        }
+    function _setComponentNames( ) {
+        $this->component_class = $this->component_map->getComponents();
     }
 
     function _requireComponents( $component_type=null ) {
@@ -137,7 +146,7 @@ class AMPSystem_Page {
 
         foreach ($init_classes as $type => $component_def ) {
             if (isset($this->$type) && (!$reset)) continue;
-            $classname = $component_def['name'];
+            $classname = $component_def;
 
             if (!class_exists( $classname )) continue;
             $this->$type = & new $classname ( $this->dbcon );

@@ -26,7 +26,7 @@ class AMPSystem_BaseTemplate {
         'Connections/popcalendar.js',
         '../Connections/functions.js' );
 
-    var $css_files = array( 'managment.css' );
+    var $css_files = array( 'system_interface.css' );
 
     var $page_title;
 

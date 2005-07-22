@@ -19,5 +19,5 @@
 <type>select</type>
 <label>Tax Status</label>
 <values>501(c)3, 501(c)4</values>
-<taxtype>
+</taxtype>
 </array>

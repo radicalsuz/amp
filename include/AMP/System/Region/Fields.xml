@@ -1,0 +1,15 @@
+<array>
+<id>
+<type>hidden</type>
+<size>8</size>
+<label>ID</label>
+</id>
+<title>
+<type>text</type>
+<label>Name</label>
+</title>
+<description>
+<type>textarea</type>
+<label>Description</label>
+</description>
+</array>

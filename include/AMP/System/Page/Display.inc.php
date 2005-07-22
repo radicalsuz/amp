@@ -34,6 +34,7 @@ class AMPSystem_Page_Display {
         return "<H2>$verb $item</H2>";
     }
 
+
     function execute() {
 
         $output  = $this->showMessages();
@@ -43,25 +44,38 @@ class AMPSystem_Page_Display {
             $output .= $this->page->$item->output( $args );
         }
 
-				return $this->_templateContent( $output );
-
+        return $this->_templateContent( $output );
 
     }
 
-		function _templateContent( $content ) {
-				if (!$this->show_template) return $content;
-				if (isset($GLOBALS['modid'])) $modid = $GLOBALS['modid'];
-				if (isset($GLOBALS['mod_name'])) $mod_name = $GLOBALS['mod_name'];
+    function setItemType( $itemtype ) {
+        $this->itemtype = $itemtype;
+    }
 
-				$template = & AMPSystem_BaseTemplate::instance();
+    function setNavName( $nav_name ) {
+        $this->nav_name = $nav_name;
+    }
 
-				if (isset($modid) && $modid) $template->setTool( $modid );
-				if (isset($mod_name) && $mod_name) $template->setToolName( $mod_name );
-				
-				return $template->outputHeader() .
-							 $content .
-							 $template->outputFooter();
-		}
+    function getNavName() {
+        if (isset($this->nav_name)) return $this->nav_name;
+        if (isset($GLOBALS['mod_name'])) $this->nav_name = $GLOBALS['mod_name'];
+        return $this->nav_name;
+    }
+
+
+    function _templateContent( $content ) {
+        if (!$this->show_template) return $content;
+        if (isset($GLOBALS['modid'])) $modid = $GLOBALS['modid'];
+
+        $template = & AMPSystem_BaseTemplate::instance();
+
+        if (isset($modid) && $modid) $template->setTool( $modid );
+        $template->setToolName( $this->getNavName() );
+        
+        return $template->outputHeader() .
+                        $content .
+                        $template->outputFooter();
+    }
 
     function showMessages() {
         $output = "";
