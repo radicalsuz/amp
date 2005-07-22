@@ -1,5 +1,14 @@
 <?php
 
+/*/Schedule object holds all the slots
+
+pulls data from db to populate itself
+
+determines characteristics of schedule such as availability
+
+this is a schedule table wrapper
+*/
+require ("Modules/Schedule/Item.inc.php");
 class Schedule extends AMPSystem_Data_Set {
 
 	// or $_timeslots or $_scheduleElements or something
@@ -12,15 +21,22 @@ class Schedule extends AMPSystem_Data_Set {
 		$this->init( $dbcon );
 		if (isset($id)) $this->getUserSchedule( $id );
 	}
-    function getUserSchedule( $userdata_id ) {
-        $this->source->addCriteria( "userdata_id = ".$userdata_id );
-        if ($this->source->readData()) $this->_owner = $userdata_id;
+
+    function getScheduleByOwner( $owner_id ) {
+        $this->addCriteria( "owner_id = ".$owner_id );
+        if ($this->readData()) $this->_owner = $owner_id;
 		$this->buildSchedule();
     }
 
+	function getUserSchedule( $id ) {
+	}
+		
+
 	function buildSchedule() {
+		if ( !$this->isReady() ) return false;
+
 		while ( $slot = $this->getData()) {	
-			$current_slot = &new ScheduleTimeSlot( $dbcon );
+			$current_slot = &new ScheduleItem( $dbcon );
             $current_slot->setData( $slot );
             $this->_slots[] = &$current_slot;
 		}
@@ -49,62 +65,13 @@ class Schedule extends AMPSystem_Data_Set {
         */
 	}
 
+	function makeAppointment($user, $slot) {
+		$appointment = Appointment::createAppointment($user, $slot);
+		return $appointment->save();
+	}
 }
 
-require ('AMP/System/Data/Item.inc.php');
-define ('AMP_TIMESLOT_STATUS_OPEN', 'open');
-define ('AMP_TIMESLOT_STATUS_CLOSED', 'closed');
-class ScheduleTimeSlot extends AMPSystem_Data_Item {
-
-	var $datatable = 'timeslots';
-
-	function ScheduleTimeSlot( &$dbcon, $id=null ) {
-		$this->init( $dbcon, $id );
-	}
-
-	function getStatus() {
-		return $this->getData('status');
-	}
-
-	function isOpen() {
-		if ($this->getStatus() == AMP_TIMESLOT_STATUS_OPEN) {
-			return true;
-		}
-	}
-
-	function isClosed() {
-		if ($this->getStatus() == AMP_TIMESLOT_STATUS_CLOSED) {
-			return true;
-		}
-	}
-	
-	function participantCount() {
-		$parp_set = &new UserData_Action_Schedule_Set( $this->dbcon,$this->id );
-		return $parp_set->RecordCount();
-	}
-
-	function addParticipant( $participant_id ) {
-		$new_slot = &new UserData_Action_Schedule( $this->dbcon,$this->id );
-		$new_slot->setParticipant( $participant_id );
-		$new_slot->save();
-		if ($this->participantCount() >= $this->getCapacity()) {
-			$this->setStatus( AMP_TIMESLOT_STATUS_CLOSED );
-		}
-	}
-
-	function getCapacity() {
-		return $this->getData('capacity');
-	}
-
-	function setStatus( $status ) {
-		$data = array ( 'status' => $status );
-		return $this->setData( $data );
-	}
-		 
-
-}
-
-class UserData_Action_Schedule extends AMPSystem_Data_Item {
+class Appointment extends AMPSystem_Data_Item {
 
 	var $_action;
 	var $_userId;
@@ -115,24 +82,62 @@ class UserData_Action_Schedule extends AMPSystem_Data_Item {
 
 	var $datatable = "userdata_action";
 
-	function UserData_Action_Schedule ( &$dbcon, $id = null ) {
+	function Appointment ( &$dbcon, $id=null) {
 		$this->init( $dbcon, $id );
 	}
 
-	function setParticipant( $id ) {
-		$person = array( "userdata_id" => $id );
+	function init( &$dbcon, $id=null ) {
+		PARENT::init( $dbcon, $id );
+		$this->setService();
+	}
+
+	function &createAppointment( $user, $scheduleItem ) {
+		$dbcon =& AMP_Registry::getDbcon;
+		$appointment =& new Appointment( $dbcon );
+
+		$appointment->setParticipant( $user );
+		$appointment->setScheduleItem( $scheduleItem );
+
+		return $appointment;
+	}
+
+	function setService() {
+		$service = array( "service" => AMP_USERDATA_ACTION_SCHEDULE );
+		$this->setData( $service );
+	}
+		
+	function setParticipant( $userdata_id ) {
+		$person = array( "userdata_id" => $userdata_id );
 		$this->setData( $person );
 	}
 
+	function setScheduleItem( $scheduleitem_id ) {
+		$scheduleItem = array( "action_id" => $scheduleitem_id );
+		$this->setData( $scheduleItem );
+	}	
 
+	function save() {
+		$status = PARENT::save();
+
+		if ($status) {
+		$scheduleItem =& new ScheduleItem($this->dbcon, $this->getData("action_id"));
+		if( !$scheduleItem->update($this) ) return false;
+
+		//-----
+		$status = false;
+		if($scheduleItem->contains($this) || $scheduleItem->isOpen()) {
+			$status = PARENT::save();
+		}
+		$scheduleItem->updateStatus();
+	}
 }
 
 define( 'AMP_USERDATA_ACTION_SCHEDULE', 'schedule' );
-class UserData_Action_Schedule_Set extends AMPSystem_Data_Set {
+class AppointmentSet extends AMPSystem_Data_Set {
 
 	var $datatable = "userdata_action";
 
-	function UserData_Action_Schedule_Set ( &$dbcon ) {
+	function AppointmentSet ( &$dbcon ) {
 		$this->init( $dbcon );
 	}
 
@@ -142,7 +147,7 @@ class UserData_Action_Schedule_Set extends AMPSystem_Data_Set {
     }
 
     function getParticpantCounts() {
-        return $this->getGroupedIndex($this->getUserdataId());
+        return $this->getGroupedIndex('userdata_id');
     }
 
     function getUserdataId() {
