@@ -80,6 +80,8 @@ class UserDataPlugin_Save_AMPVolunteer extends UserDataPlugin_Save {
 
         foreach ($data as $idnum=>$value) {
             $action_sql = sprintf($sql, $table, $field, $idnum, $this->udm->uid);
+            #if (isset($_GET['debug'])) print "Volunteer plugin: " . $action_sql . "<BR>";
+            print "Volunteer plugin: " . $action_sql . "<BR>";
             $this->dbcon->Execute( $action_sql) or $this->udm->errorMessage("Volunteer plugin save failed:".$this->dbcon->ErrorMsg());
             
         }
