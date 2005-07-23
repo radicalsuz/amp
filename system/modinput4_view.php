@@ -44,7 +44,7 @@ if ( $sub ) {
     // Save only if submitted data is present, and the user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
 	if($udm->saveUser()) {
-			#header ("Location:userdata_list.php?modin=".$udm->instance);
+			header ("Location:userdata_list.php?modin=".$udm->instance);
 	}
 	$udm->showForm = true;
 
