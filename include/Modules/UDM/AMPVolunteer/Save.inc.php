@@ -13,15 +13,10 @@ class UserDataPlugin_Save_AMPVolunteer extends UserDataPlugin_Save {
     var $vol; #the Volunteer Object
     var $_field_prefix = "plugin_AMPVolunteer";
 
-    function UserdataPlugin_Save_AMPVolunteer( &$udm ){
-        $this->init( $udm );
+    function UserdataPlugin_Save_AMPVolunteer( &$udm, $plugin_instance=null ){
+        $this->init( $udm, $plugin_instance );
     }
 
-
-    function _register_fields_dynamic() {
-        #$this->vol=new Volunteer( $this->dbcon );
-        #$this->fields+=$this->vol->fields;
-    }
 
     function getSaveFields(){
         $this->vol=new Volunteer( $this->dbcon );
@@ -35,25 +30,23 @@ class UserDataPlugin_Save_AMPVolunteer extends UserDataPlugin_Save {
     }
 
     function save ( $data ) {
-        if ($this->udm->uid) {
-            
-            $this->dbcon->StartTrans();
-	        $this->removeSet ("vol_relavailability");
-            $this->addSet ("vol_relavailability", "availabilityid", $this->specificSet($data, "avail"));
-            $this->dbcon->CompleteTrans();
-            
-            $this->dbcon->StartTrans();
-            $this->removeSet ("vol_relinterest");
-            $this->addSet ("vol_relinterest", "interestid", $this->specificSet($data, "interest"));
-            $this->dbcon->CompleteTrans();
+        if (!$this->udm->uid) return false; 
+        print 'userid: '. $this->udm->uid . '<BR>';
 
+        $vol_tables = array(
+            'vol_relavailability' => array( 'id_field' => 'availabilityid', 'prefix' => 'avail' ),
+            'vol_relinterest' => array( 'id_field' => 'interestid', 'prefix' => 'interest' ),
+            'vol_relskill' => array( 'id_field' => 'skillid', 'prefix' => 'skill' )
+            );
+
+        foreach ($vol_tables as $tablename => $tDef ) {
+        
             $this->dbcon->StartTrans();
-            $this->removeSet ("vol_relskill");
-            $this->addSet ("vol_relskill", "skillid", $this->specificSet($data, "skill"));
+	        $this->removeSet ( $tablename );
+            $this->addSet ( $tablename, $tDef['id_field'], $this->specificSet($data, $tDef['prefix']));
             $this->dbcon->CompleteTrans();
-            
         }
-	
+            
 	}
 
     function removeSet($table) {
