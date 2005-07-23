@@ -75,7 +75,7 @@ class UserDataPlugin_Save_AMPVolunteer extends UserDataPlugin_Save {
             
 
     function addSet ($table, $field, $data) {
-        $sql = "INSERT INTO %s ( %s, personid) VALUES (%s, %s);\n";
+        $sql = "INSERT INTO %s ( %s, personid) VALUES (%s, %s)\n";
         if (!is_array($data)) return false;
 
         foreach ($data as $idnum=>$value) {
