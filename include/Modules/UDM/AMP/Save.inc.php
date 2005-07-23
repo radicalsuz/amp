@@ -35,6 +35,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
     function save ( $data ) {
 
+        print 'Start:' . $this->udm->uid . '<BR>';
         $sql = ($this->udm->uid) ? $this->updateSQL( $data ) :
                                    $this->insertSQL( $data );
 
@@ -43,6 +44,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         if ($rs) {
             $this->udm->uid = $this->dbcon->Insert_ID();
+        print 'Done:' . $this->udm->uid. '<BR>';
             return true;
         }
 
