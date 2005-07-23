@@ -45,6 +45,8 @@ class UserDataPlugin_Save_AMPVolunteer extends UserDataPlugin_Save {
             $this->addSet ( $tablename, $tDef['id_field'], $this->specificSet($data, $tDef['prefix']));
             $this->dbcon->CompleteTrans();
         }
+
+        return true;
             
 	}
 
