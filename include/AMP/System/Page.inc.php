@@ -221,6 +221,7 @@ class AMPSystem_Page {
         if (!$id ) {
             $this->action = 'Add';
             $this->addComponent('form');
+            $this->form->applyDefaults();
             return false;
         }
 
