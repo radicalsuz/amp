@@ -9,6 +9,7 @@ require_once('AMP/BaseDB.php');
  *
  */
 require_once('AMP/System/Lookups.inc.php');
+require_once('AMP/Content/Lookups.inc.php');
 $lookup_factory = & AMPSystem_LookupFactory::instance();
 $lookup_factory->init( $dbcon );
 

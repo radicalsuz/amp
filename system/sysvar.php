@@ -135,7 +135,7 @@ $inupdate = $dbcon->Execute("Update moduletext set templateid = " . $_REQUEST['i
           </tr>
           <tr valign="baseline"> 
             <td nowrap align="right"><div align="left">Optimized Image Width (narrow 
-                iamges)</div></td>
+                images)</div></td>
             <td> <input name="optl" type="text" id="optl" value="<?php echo $setsysvar->Fields("optl")?>" size="32"> 
             </td>
           </tr><tr valign="baseline"> 

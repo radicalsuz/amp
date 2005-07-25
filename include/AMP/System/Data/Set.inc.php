@@ -47,6 +47,10 @@
     }
 
     function isReady() {
+        return $this->makeReady();
+    }
+
+    function makeReady() {
         if (!$this->hasData()) return false;
         $this->source->MoveFirst();
         return true;
@@ -71,6 +75,12 @@
 
         return ( $this->sort[] = $exp);
         return true;
+    }
+
+    function getSort() {
+        if (empty($this->sort)) return false;
+        reset ($this->sort);
+        return current( $this->sort );
     }
 
 
@@ -108,10 +118,31 @@
         return $this->offset . ', ' . $this->limit;
     }
 
+    function setLimit( $qty ) {
+        $this->limit = $qty;
+    }
+
+    function setOffset( $offset ) {
+        $this->offset = $offset;
+    }
+
     function getGroupedIndex($column) {
-        $sql = "SELECT $column, count(" . $this->id_field . ") as qty, FROM "
+        $sql = "SELECT $column, count(" . $this->id_field . ") as qty FROM "
             . $this->datatable . $this->_makeCriteria() . " GROUP BY $column";
-        return $this->dbcon->CacheGetAll($sql);
+        if (isset($_GET['debug'])) AMP_DebugSQL( $sql, get_class( $this ));
+        return $this->dbcon->CacheGetAssoc($sql);
+    }
+
+    function RecordCount() {
+        if (!isset($this->source)) return false;
+        return $this->source->RecordCount();
+    }
+
+    function NoLimitRecordCount() {
+        $sql = "SELECT count(" . $this->id_field . ") as qty from "
+            . $this->datatable . $this->_makeCriteria();
+        $set = $this->dbcon->Execute( $sql );
+        return $set->Fields( 'qty' );
     }
 
  }

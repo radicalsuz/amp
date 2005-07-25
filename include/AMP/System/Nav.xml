@@ -431,12 +431,12 @@
 <per>TOOLS_ACCESS</per>
 <item>
 <label>View Intro Text</label>
-<href>module_header.php?action=list</href>
+<href>introtext.php?action=list</href>
 <class>view</class>
 <per>TOOLS_INTROTEXT</per>
 </item>
 <item>
-<href>module_header.php</href>
+<href>introtext.php</href>
 <label>Add Intro Text</label>
 <class>add</class>
 <per>TOOLS_INTROTEXT</per>

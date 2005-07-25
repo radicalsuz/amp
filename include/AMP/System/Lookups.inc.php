@@ -32,6 +32,8 @@ class AMPSystem_LookupFactory {
         $sql = "Select ".$lookup->id_field.", ".$lookup->result_field." from ".$lookup->datatable;
         if ($lookup->criteria) $sql .= " where ". $lookup->criteria;
         if ($lookup->sortby) $sql .= " order by ". $lookup->sortby;
+
+        if (isset($_GET['debug_lookups'])) AMP_DebugSQL( $sql, get_class( $lookup ));
         return $sql;
     }
 }
@@ -54,9 +56,9 @@ class AMPSystem_Lookup {
         $this->dataset = $factory->readData( $this );
     }
 
-    function &instance( $type ) {
+    function &instance( $type, $lookup_baseclass="AMPSystemLookup" ) {
         static $lookup_set = false;
-        $req_class = 'AMPSystemLookup_' . $type;
+        $req_class = $lookup_baseclass . '_' . $type;
         if (!$lookup_set) $lookup_set = array();
         if (!isset($lookup_set[$type])) $lookup_set[$type] = new $req_class(); 
         return $lookup_set[$type]->dataset;

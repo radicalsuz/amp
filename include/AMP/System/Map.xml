@@ -477,12 +477,12 @@
 <per>TOOLS_ACCESS</per>
 <item>
 <label>View Intro Texts</label>
-<href>module_header.php?action=list</href>
+<href>introtext.php?action=list</href>
 <per>TOOLS_INTROTEXT</per>
 </item>
 <item>
 <label>Add Intro Text</label>
-<href>module_header.php</href>
+<href>introtext.php</href>
 <per>TOOLS_INTROTEXT</per>
 </item>
 <item>

@@ -45,6 +45,7 @@ function Menu(label, mw, mh, fnt, fs, fclr, fhclr, bg, bgh) {
     this.onMenuItemAction = onMenuItemAction;
     this.hideMenu = hideMenu;
     this.hideChildMenu = hideChildMenu;
+    this.changePageSelects = changePageSelects;
 
     if (!window.menus) window.menus = new Array();
     this.label = label || "menuLabel" + window.menus.length;
@@ -483,6 +484,7 @@ function fwDoHide()
     }
     fwDHFlag = false;
     hideActiveMenus();
+    this.changePageSelects('inline');
     FW_menuIconNormal(window.ActiveMenuItem);
     window.ActiveMenuItem = 0;
 }
@@ -490,6 +492,7 @@ function fwDoHide()
 function FW_showMenu(menu, x, y, child) {
     if (!window.fwWroteMenu) return;
     FW_clearTimeout();
+    this.changePageSelects('none');
     if (document.layers) {
         if (menu) {
             var l = menu.menuLayer || menu;
@@ -704,5 +707,12 @@ function FW_menuisActive() {
 function getWindowWidth() {
     if (!window.innerWidth) return document.body.offsetWidth;
     return window.innerWidth;
+}
+
+function changePageSelects( newstyle ) {
+    var select_set = document.getElementsByTagName( 'select' );
+    for ( sel_count = 0; sel_count < select_set.length; sel_count++ ) {
+        select_set[ sel_count ].style.display = newstyle;
+    }
 }
 

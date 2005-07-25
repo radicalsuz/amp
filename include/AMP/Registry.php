@@ -60,8 +60,12 @@ class AMP_Registry {
 	}
 
 	function &getDbcon() {
-		$registry =& $this->instance();
-		return $registry->getEntry(AMP_REGISTRY_DBCON);
+        static $dbcon = false;
+        if (!$dbcon) {
+            $registry = &AMP_Registry::instance();
+            $dbcon = &$registry->getEntry(AMP_REGISTRY_DBCON);
+        }
+        return $dbcon;
 	}
 }
 ?>

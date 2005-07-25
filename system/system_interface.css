@@ -166,6 +166,16 @@ li.side_home {
 	margin-left: 7px;
 }
 
+.standout {
+		font-weight: bold;
+		text-decoration: none;
+		font-size:16px;
+}
+
+a.standout {
+		text-decoration: none;
+}
+
 
 /* side title for section */
 .side_banner {
@@ -188,6 +198,18 @@ li.side_home {
 	margin-left: 3px;
 }
 
+.searchform_label, .searchform_element, .searchform_header, .searchform_table {
+		font-size: 11px;
+		text-decoration: none;
+		margin-left: 3px;
+}
+
+
+.searchform_header {
+		font-size: 11px;
+		font-weight: bold;
+}
+
 span.page_result {
 		display:block;
 		width: 60%;
@@ -207,9 +229,10 @@ span.page_result {
 	color: white;
 	background-color : #006699;
 	background: url('images/intitle-bg.png') top left repeat-x;
-	padding: 2px 4px;
+	padding: 4px 2px 2px 6px;
 	text-shadow: 2px 2px 1px black;
 	height: 25px;
+	margin: 20px 0px 10px 0px;
 }
 
 .intitle td {
@@ -219,11 +242,14 @@ span.page_result {
 a.intitle {
 	background: none;
 	padding: 0px 0px;
+	margin: 2px;
 }
 
 .list_table
 { 
 text-align: center;
+width: 100%;
+margin-top: 5px;
 }
 
 .list_table table {
@@ -382,3 +408,19 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 		background-image:url("images/norm_right_on.gif");
 		color:#333;
 		}
+		
+
+
+/*hidden divs class*/
+
+.AMPComponent_hidden {
+		display: none;
+}
+
+div.list_pager {
+		text-align: right;
+		float:right;
+		position: relative;
+		font-size: 11px;
+		display: inline;
+}

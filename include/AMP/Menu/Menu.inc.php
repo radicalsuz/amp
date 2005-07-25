@@ -47,6 +47,8 @@
      //the name of the menu and id of the top-level component
      var $name;
 
+     var $_baseComponent = 'AMP_MenuComponent_UL';
+
      //Constructor
      function AMP_Menu( &$menu_array, $name = "menu" ) {
          $this->init( $menu_array, $name );
@@ -63,7 +65,7 @@
      //constructs the object model
      //or, more accurately, asks the MenuComponents to construct it
      function &buildMenu (&$menu_array) {
-         $root_menu= new AMP_MenuComponent_UL ( $this, array('id'=>AMP_MENU_ROOT_ENTRY,'href'=>'','label'=>'') );
+         $root_menu= new $this->_baseComponent ( $this, array('id'=>AMP_MENU_ROOT_ENTRY,'href'=>'','label'=>'') );
 
          $root_menu->buildMenuSub ( $menu_array );
          return $root_menu;

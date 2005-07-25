@@ -9,11 +9,11 @@ class AMPSystem_IntroText_List extends AMPSystem_List {
         'Module Page'=>'name',
         'Module'=>'modid',
         'ID'=>'id');
+    var $editlink = 'introtext.php';
 
     function AMPSystem_IntroText_List( &$dbcon ) {
         $source   =  & new AMPSystem_IntroText_Set($dbcon);
-        $this->lookups['modid'] = $this->getModuleNames();
-        $this->editlink = $_SERVER['PHP_SELF'];
+        $this->addLookup( 'modid', $this->getModuleNames() );
         $this->init( $source );
     }
 

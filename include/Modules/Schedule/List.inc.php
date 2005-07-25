@@ -11,7 +11,7 @@ class Schedule_List extends AMPSystem_List {
 	function Schedule_List( &$dbcon ) {
 		$source = & new Schedule( $dbcon );
 		$this->init( $source );
-		$this->lookups['attendees'] = $this->source->getParticipantCounts();
+		$this->addLookup( 'attendees', $this->source->getParticipantCounts());
 	}
 
     function getPersonalSchedule( $userdata_id ) {

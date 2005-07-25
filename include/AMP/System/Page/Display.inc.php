@@ -31,7 +31,7 @@ class AMPSystem_Page_Display {
         if (!isset($item)) $item = $this->itemtype;
         $plural_actions = array('View');
         if ((array_search( $verb, $plural_actions )!==FALSE) && substr($item, -1)!='s' ) $item.='s';
-        return "<H2>$verb $item</H2>";
+        return "<div class = \"banner\">$verb $item</div>";
     }
 
 
@@ -39,14 +39,24 @@ class AMPSystem_Page_Display {
 
         $output  = $this->showMessages();
         $output .= $this->pagetitle();
+
+        $component_set = $this->page->getComponents();
         
-        foreach( $this->page->getComponents() as $item => $args ) {
-            $output .= $this->page->$item->output( $args );
+        foreach( $component_set as $item => $args ) {
+            $header = "";
+            if (!($item_output =  $this->page->$item->output( $args ))) continue;
+            if ($headertext = $this->page->getComponentHeader( $item )) $header = $this->makeHeader( $headertext );
+            $output .= $header . $item_output;
         }
 
         return $this->_templateContent( $output );
 
     }
+
+    function makeHeader( $text ) {
+        return '<div class="intitle">' . $text .'</div>';
+    }
+
 
     function setItemType( $itemtype ) {
         $this->itemtype = $itemtype;

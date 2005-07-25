@@ -19,7 +19,6 @@ require_once ('AMP/System/Map.inc.php');
 class AMPSystem_Menu extends AMP_Menu_FWTable {
     var $_baseComponentHTML = 'AMP_MenuComponent_TableRow';
     var $_baseComponentScript = 'AMP_MenuComponent_FWmenuScriptItem';
-    var $trans_set;
 
     function AMPSystem_Menu () {
         

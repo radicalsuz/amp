@@ -25,24 +25,6 @@ class AMPSystem_Page {
     var $source;
     
     var $includes = array();
-    /*
-    var $filepaths = array(
-        'form' => "AMP/System/%s/Form.inc.php",
-        'list' => "AMP/System/%s/List.inc.php",
-        'copier' => "AMP/System/%s/Copy.inc.php",
-        'source' => "AMP/System/%s.inc.php");
-
-    var $component_class = array(
-        'form' => array( 
-            'template' => "AMPSystem_%s_Form"),
-        'list' => array(
-            'template' => "AMPSystem_%s_List"),
-        'copier' => array(
-            'template' => "AMPSystem_%s_Copy"),
-        'source' => array(
-            'template' => "AMPSystem_%s")
-        );
-    */
 
     var $action = 'View';
 
@@ -50,6 +32,7 @@ class AMPSystem_Page {
     var $show = array();
     var $title;
     var $component_map;
+    var $component_headers;
 
     var $results = array();
     var $errors = array();
@@ -74,6 +57,11 @@ class AMPSystem_Page {
 
         $action = $this->form->submitted();
         if ( !$action ) $action = "read"; 
+
+        return $this->doAction ( $action );
+    }
+
+    function doAction( $action ) {
 
         $action_method = 'Commit' . ucfirst( $action );
 
@@ -181,6 +169,31 @@ class AMPSystem_Page {
         $this->show[$comp_name] = $vars;
     }
 
+    function orderComponents( $order_array ) {
+        if (!is_array( $order_array )) return false;
+        $new_show = array();
+        foreach ($order_array as $component) {
+            if (!isset($this->show[ $component ])) continue;
+            $new_show[ $component ] = $this->show[ $component ];
+        }
+
+
+        $this->show = $new_show;
+    }
+
+    function addComponentHeader( $comp_name, $header_value ) {
+        $this->component_headers[ $comp_name ] = $header_value;
+    }
+
+    function getComponentHeader( $comp_name ) {
+        if (!isset($this->component_headers[ $comp_name ])) {
+            if (!method_exists($this->$comp_name, 'getComponentHeader')) return false;
+            return $this->$comp_name->getComponentHeader();
+        }
+
+        return $this->component_headers[ $comp_name ];
+    }
+
     function CommitCancel() {
         return $this->showList( true );
     }
@@ -260,6 +273,7 @@ class AMPSystem_Page {
     }
 
     function &getComponents() {
+        $this->_initComponents( array_keys($this->show) );
         return $this->show;
     }
 

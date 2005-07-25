@@ -67,6 +67,7 @@ if (file_exists_incpath( 'SiteConfig.inc.php' )) {
 
 
 } elseif (file_exists_incpath( 'config.php' )) {
+    if (!defined( 'AMP_BASE_PATH' )) define( 'AMP_BASE_PATH', $_SERVER['DOCUMENT_ROOT'] );
 
     // Included for backwards-compatibility.
     require('config.php');

@@ -1,0 +1,47 @@
+<array>
+<!--
+<header1>
+<type>header</type>
+<label>Search By</label>
+</header1>
+<viewlink>
+<type>static</type>
+<label> &amp;nbsp;&amp;nbsp;&lt;a href="article_list.php"&gt;View All Articles&lt;/a&gt;&amp;nbsp;&amp;nbsp;</label>
+</viewlink>
+-->
+<type>
+<type>select</type>
+<label>Select Section</label>
+<attr><class>searchform_element</class></attr>
+</type>
+<class>
+<type>select</type>
+<label>Select Class</label>
+<attr><class>searchform_element</class></attr>
+</class>
+<id>
+<separator>newrow</separator>
+<type>text</type>
+<size>5</size>
+<label>ID</label>
+<attr><class>searchform_element</class></attr>
+</id>
+<title>
+<label>Title</label>
+<type>text</type>
+<size>25</size>
+<attr><class>searchform_element</class></attr>
+</title>
+<author>
+<label>Author</label>
+<size>20</size>
+<type>text</type>
+<attr><class>searchform_element</class></attr>
+</author>
+<date>
+<type>date</type>
+<default>last year</default>
+<label>Dated After: </label>
+<attr><class>searchform_element</class></attr>
+</date>
+</array>

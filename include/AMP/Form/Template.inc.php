@@ -3,8 +3,116 @@
 
 class AMPFormTemplate {
 
-    // here we specify patterns which have mutable class variables built in
+    var $pattern_parts = array(
+        'startrow' =>
+			"\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"%s\">",
+        'endrow' =>
+			"</td>\n\t</tr>",
+        'endform' =>
+			"</td>\n\t</tr>",
+        'required' =>
+			"<!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->\n",
+        'error' =>
+			"<!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t",
+        'newcolumn' =>
+			"</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"%s\">",
+        'spanlabelbr' =>
+            "<span class=\"%1\$s\">{label}</span><br>",
+        'spanlabel' =>
+            "<span class=\"%1\$s\">{label}</span>",
+        'label' =>
+			"{label}",
+        'element' =>
+            "{element}",
+        'spanelement' =>
+            "{element}",
+        'doublecolumn' =>
+		    "\n\t<tr>\n\t\t<td align=\"left\" valign=\"top\" colspan=\"2\">",
+        'spanheader' =>
+            "<span class=\"%s\">{header}</span>",
+        'starttable' =>
+            "<table class=\"%1\$s\"><tr><td>",
+        'endtable' =>
+            "</td></tr></table>"
+
+    );
+
+    var $pattern_defs = array(
+        'default'   => array(
+            'startrow',
+            'required',
+            'label',
+            'newcolumn',
+            'error',
+            'element',
+            'endrow'),
+
+        'checkbox'  => array(
+            'startrow',
+            'required',
+            'element',
+            'newcolumn',
+            'error',
+            'label',
+            'endrow'),
+
+        'textarea'  => array(
+            'doublecolumn',
+            'starttable',
+            'required',
+            'spanlabelbr',
+            'error',
+            'element',
+            'endtable', 
+            'endrow' ),
+
+        'header'    =>	array(
+            'doublecolumn',
+            'spanheader',
+            'endrow'),
+
+        'static'    =>  array(
+            'doublecolumn',
+            'starttable',
+            'element',
+            'endtable', 
+            'endrow'),
+
+        'submit'    => array(
+            'doublecolumn',
+            'starttable',
+            'spanlabel',
+            'element',
+            'endtable', 
+            'endrow'),
+
+		'checkgroup'=> array(
+            'doublecolumn',
+            'starttable',
+            'required',
+            'spanlabelbr',
+            'error',
+            'element',
+            'endtable',
+            'endrow'),
+
+		'group'=> array(
+            'doublecolumn',
+            'starttable',
+            'required',
+            'spanlabelbr',
+            'error',
+            'element',
+            'endtable',
+            'endrow')
+    
+        );
+
+    var $patterns = array();
+
+    /*
     var $patterns = array(
+
         'default'   =>
 			"\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"%s\">
 			<!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
@@ -43,6 +151,7 @@ class AMPFormTemplate {
             <span class=\"%s\">{label}</span><br>\n\t\t<!-- BEGIN error -->
             <span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td></tr></table></td>\n\t</tr>"
         );
+    */
 
     var $templates = array();
 
@@ -66,9 +175,16 @@ class AMPFormTemplate {
         
 
     function AMPFormTemplate() {
+        $this->init();
     }
 
-	function getTemplate( $type=null ) {
+    function init() {
+        $this->_buildPatterns();
+    }
+
+    //separator var is only used in TemplateSearch subclass
+
+	function getTemplate( $type=null, $separator = null ) {
         if (!isset($type)) return false;
 		$template_method =  "_getTemplate".ucfirst($type);
 		if (!method_exists($this, $template_method)) $template_method = '_getBaseTemplate';
@@ -111,5 +227,20 @@ class AMPFormTemplate {
         $this->templates[ $type ] = vsprintf( $pattern, $css_info );
         return $this->templates[ $type ];
     }
+
+    function _buildPatterns() {
+
+        foreach ($this->pattern_defs as $key => $def ) {
+            $this->patterns[ $key ] = $this->_buildPattern( $def );
+        }
+    }
+
+
+    function _buildPattern( $pattern_def ) {
+        $pattern_set = array_combine_key( $pattern_def, $this->pattern_parts );
+        return join( "", $pattern_set );
+    }
+
+
 }
 ?>

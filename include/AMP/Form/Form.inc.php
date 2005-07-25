@@ -113,6 +113,7 @@
 
         $this->_registerCustomElementTypes();
         $this->addFields(  $this->submit_button  );
+        if ( method_exists( $this, '_pastSubmitElements' )) $this->addFields ( $this->_pastSubmitElements() );
 		$this->renderer =& $this->form->defaultRenderer();
 
         if ( $this->hasFieldOrder() ) $this->_buildElements( $this->getFieldOrder() ); 
@@ -123,14 +124,33 @@
     }
 
     function output( $include_javascript = true ) {
+        $form_footer = "";
         $script = "";
         if ($include_javascript) $script = $this->getJavascript();
-        return  $this->form->display() . $script;
+        if (method_exists( $this, '_formFooter' )) $form_footer = $this->_formFooter();
+        return  $this->form->display() . $form_footer . $script;
     }
 
 
     function setValues( $data ) {
         $this->form->setDefaults( $data );
+    }
+
+    function applyDefaults() {
+        $default_set = array();
+        $types_to_avoid = array( "button", "submit" );
+
+        foreach ($this->fields as $fname => $fDef) {
+            if ( array_search( $fDef['type'], $types_to_avoid) !== FALSE ) continue;
+            if ( !( $value = $this->_getDefault( $fname ))) continue; 
+            $default_set[ $fname ] = $value;
+        }
+
+        $this->setValues( $default_set );
+    }
+
+    function setDefaultValue( $fieldname, $value ) {
+        $this->fields[ $fieldname ]['default'] = $value;
     }
 
     function getValues ( $fields = null ) {
@@ -191,14 +211,17 @@
     }
 
     function defineSubmit ( $value, $label = 'Submit' ) {
+
         $this->submit_button = array(
             $value => array(
                 'type' => 'submit',
-                'enabled'=> true,
+                'separator' => 'endform',
                 'public'=> true,
                 'label'=> $label,
                 'default'=>$value)
             );
+
+				if (method_exists( $this, 'adjustSubmit' )) $this->adjustSubmit();
     }
 
     function setConditional ( $key, $requirement ) {
@@ -411,7 +434,9 @@
 		$newdef['size']     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 40;
 		$newdef['attr']     = (isset($field_def['attr']))   ? $field_def['attr']       : null;
 		$newdef['elements'] = (isset($field_def['elements']))   ? $field_def['elements']       : null;
-        $newdef['template'] = (isset($field_def['template'])? $field_def['template']: $this->_getTemplate( $newdef['type'] ));
+
+        $separator = isset($field_def['separator'])? $field_def['separator'] : "";
+        $newdef['template'] = (isset($field_def['template'])? $field_def['template']: $this->_getTemplate( $newdef['type'], $separator ));
 
         return $newdef;
     }

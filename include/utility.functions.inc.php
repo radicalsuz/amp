@@ -243,6 +243,19 @@ if ( !function_exists( 'statelist' ) ) {
         $state->Close();
     }
 }
+if ( !function_exists( 'AMP_buildSelect' )) {
+
+    function AMP_buildSelect( $name, $values, $selected = null ) {
+        $option_set = array();
+        foreach ($values as $value => $text ) {
+            $selected_flag = "";
+            if (isset($selected) && $selected == $value ) $selected_flag = " selected";
+            $option_set[] = "<option value=\"$value\"$selected_flag>$text</option>";
+        }
+        return '<select name="'. $name . "\">\n".
+                join( "\n", $option_set ). "\n</select>";
+    }
+}
 
 if ( !function_exists( 'sectionimage' ) ) {
         
@@ -619,24 +632,60 @@ if (!function_exists( 'lowerlimitInsertID' )) {
 
 if (!function_exists( 'AMP_URL_Values' ) ) {
     function AMP_URL_Values() {
-        parse_str($_SERVER['QUERY_STRING'], $url_criteria_set );
-        if (empty($url_criteria_set)) return false;
+        if( !($url_criteria_set = AMP_URL_Read())) return false;
         $url_criteria = array();
 
         foreach($url_criteria_set as $ukey=>$uvalue) {
-            $url_criteria[$ukey] = $ukey."=".$uvalue;
+            $valueset = $ukey."=".$uvalue;
+            if (is_array($uvalue)) $valueset = urlencode_array( $uvalue, $ukey );
+            $url_criteria[$ukey] = $valueset;
         }
 
         return $url_criteria;
     }
 }
 
+if (!function_exists( 'AMP_URL_Read' )) {
+
+    function AMP_URL_Read() {
+        parse_str($_SERVER['QUERY_STRING'], $url_criteria_set );
+        if (empty($url_criteria_set)) return false;
+        return $url_criteria_set;
+    }
+}
+
+if (!function_exists( 'urlencode_array' )) {
+
+    function urlencode_array(
+        $var,                // the array value
+        $varName,            // variable name to be used in the query string
+        $separator = '&'    // what separating character to use in the query string
+        ) {
+        $toImplode = array();
+        foreach ($var as $key => $value) {
+            if (is_array($value)) {
+                $toImplode[] = urlencode_array($value, "{$varName}[{$key}]", $separator);
+            } else {
+                $toImplode[] = "{$varName}[{$key}]=".urlencode($value);
+            }
+        }
+        return implode($separator, $toImplode);
+    }
+}
+
 if (!function_exists('PHP_SELF_QUERY')) {
     function PHP_SELF_QUERY() {
-        if (!( isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'])) return $SERVER['PHP_SELF'];
+        if (!( isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'])) return $_SERVER['PHP_SELF'];
         return $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 
     }
 }
+
+if (!function_exists('AMP_DebugSQL')) {
+    function AMP_DebugSQL( $sql, $source_object ) {
+        print $source_object . ":<BR>\n". $sql . "<P>";
+    }
+}
+        
 
 ?>
