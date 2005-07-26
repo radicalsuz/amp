@@ -213,6 +213,7 @@ class AMPSystem_PermissionManager {
     }
 
     function getDescriptors() {
+		/*
         $constant_set = get_defined_constants();
         $per_flag =  'AMP_PERMISSION_';
         $descriptor_set = array();
@@ -222,8 +223,9 @@ class AMPSystem_PermissionManager {
             $desc = substr( $name, strlen($per_flag) );
             $descriptor_set[$desc] = $value;
         }
+		*/
 
-        return $descriptor_set;
+        return filterConstants( 'AMP_PERMISSION' );
     }
 
     function convertDescriptor( $desc ) {
