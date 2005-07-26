@@ -8,7 +8,7 @@ determines characteristics of schedule such as availability
 
 this is a schedule table wrapper
 */
-require ("Modules/Schedule/Item.inc.php");
+require_once ("Modules/Schedule/Item.inc.php");
 class Schedule extends AMPSystem_Data_Set {
 
 	// or $_timeslots or $_scheduleElements or something
@@ -92,7 +92,7 @@ class Appointment extends AMPSystem_Data_Item {
 	}
 
 	function &createAppointment( $user, $scheduleItem ) {
-		$dbcon =& AMP_Registry::getDbcon;
+		$dbcon =& AMP_Registry::getDbcon();
 		$appointment =& new Appointment( $dbcon );
 
 		$appointment->setParticipant( $user );
@@ -120,15 +120,16 @@ class Appointment extends AMPSystem_Data_Item {
 		$status = PARENT::save();
 
 		if ($status) {
-		$scheduleItem =& new ScheduleItem($this->dbcon, $this->getData("action_id"));
-		if( !$scheduleItem->update($this) ) return false;
+			$scheduleItem =& new ScheduleItem($this->dbcon, $this->getData("action_id"));
+			if( !$scheduleItem->update($this) ) return false;
 
-		//-----
-		$status = false;
-		if($scheduleItem->contains($this) || $scheduleItem->isOpen()) {
-			$status = PARENT::save();
+			//-----
+			$status = false;
+			if($scheduleItem->containsAppointment($this) || $scheduleItem->isOpen()) {
+				$status = PARENT::save();
+			}
+			$scheduleItem->updateStatus();
 		}
-		$scheduleItem->updateStatus();
 	}
 }
 

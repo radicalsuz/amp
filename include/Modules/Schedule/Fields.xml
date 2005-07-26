@@ -11,6 +11,14 @@
 <type>select</type>
 <label>Consultant</label>
 </owner_id>
+<title>
+<label>Event Title</label>
+<type>text</type>
+</title>
+<description>
+<type>textarea</type>
+<label>Event Description</label>
+</description>
 <capacity>
 <type>text</type>
 <label>Maximum Capacity</label>
@@ -37,17 +45,9 @@ today
 <format>hia</format>
 </default>
 </stop_time>
-<title>
-<label>Event Title</label>
-<type>text</type>
-</title>
-<description>
-<type>textarea</type>
-<label>Event Description</label>
-</description>
 <status>
 <type>select</type>
 <label>Status</label>
-<default>AMP_SCHEDULE_TIMESLOT_STATUS_OPEN</default>
+<default>open</default>
 </status>
 </array>

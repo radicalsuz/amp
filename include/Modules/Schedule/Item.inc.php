@@ -24,6 +24,15 @@ class ScheduleItem extends AMPSystem_Data_Item {
 		return $this->setData( $data );
 	}
 
+	function getStatusOptions() {
+		$options = filterConstants( 'AMP_TIMESLOT_STATUS' );
+		$result = array();
+		foreach (array_values($options) as $value) {
+			$result[$value] = $value;
+		}
+		return $result;
+	}
+		
 	function isOpen() {
 		if ($this->getStatus() == AMP_TIMESLOT_STATUS_OPEN) {
 			return true;
@@ -56,10 +65,11 @@ class ScheduleItem extends AMPSystem_Data_Item {
 		return $appointments->RecordCount();	
 	}
 
-	function update(&$appointment) {
-		//if we don't know about this appointment, increment count, and maybe close
-		if( $this->isOpen() )
+	function containsAppointment(&$appointment) {
+		$myAppointments = $this->getAppointments();
+		return (array_search($appointment, $myAppointments, true) !== false);
 	}
+		
 
 	function addAppointment() {
 		if ( $this->appointmentsCount()  >= $this->getCapacity() ) {
