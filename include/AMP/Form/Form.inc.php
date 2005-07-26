@@ -88,6 +88,8 @@
     var $javascript;
     var $javascript_register = array();
 
+	var $translations = array();
+
     var $submit_button = array(
         'submit' => array(
             'type' => 'submit',
@@ -131,9 +133,8 @@
         return  $this->form->display() . $form_footer . $script;
     }
 
-
     function setValues( $data ) {
-        $this->form->setDefaults( $data );
+        $this->form->setDefaults( $this->translate($data, 'set') );
     }
 
     function applyDefaults() {
@@ -154,8 +155,18 @@
     }
 
     function getValues ( $fields = null ) {
-        return $this->form->exportValues( $fields );
+        return $this->translate( $this->form->exportValues( $fields ) );
     }
+
+	function translate ( $data, $action = "get" ) {
+		if (empty( $this->translations )) return $data;
+		$result_data = $data;
+		foreach ( $this->translations[ $action] as $fieldname => $translate_method ) {
+			if (!method_exists( $this, $translate_method )) continue;
+			$result_data[ $fieldname ] = $this->$translate_method( $data, $fieldname );
+		}
+		return $result_data;
+	}
 
     function setJavascript() {
         $editor = &AMPFormElement_HTMLEditor::instance();
@@ -186,6 +197,10 @@
         }
         return true;
     }
+
+	function setTranslation( $fieldname, $method, $action="get" ) {
+		$this->translations[$action][ $fieldname ] = $method;
+	}
 
     function setFieldValueSet( $fieldname, $valueset ) {
         if (!isset($this->fields[$fieldname])) return false;
