@@ -1,6 +1,6 @@
 <?php
 $avoid_printing_breadcrumb = true;
-include( 'breadcrumb_new.php' );
+include( 'breadcrumb.php' );
 $breadcrumb->setSeparator( "<b>&nbsp;&#187;&nbsp;</b>");
 $breadcrumb->addActions();
 $breadcrumb->addTemplate();
