@@ -11,6 +11,10 @@ To Do:
 *********************/ 
 if (isset($mod_id) || isset($intro_id)) {
 	if (!$intro_id) { $intro_id = $mod_id; }
+
+    $reg = &AMP_Registry::instance();
+    $reg->setEntry( AMP_REGISTRY_CONTENT_INTRO_ID, $intro_id );
+
 	$module=$dbcon->CacheExecute("SELECT * FROM moduletext WHERE id = $intro_id") or DIE("Couldn't retrieve module text: " . $dbcon->ErrorMsg());
 	if (isset($moduleintroreplace) && $moduleintroreplace != NULL) { 
 		include ("$moduleintroreplace"); 

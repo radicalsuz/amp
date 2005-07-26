@@ -1,4 +1,6 @@
 <?php
+define ( 'AMP_CONTENT_LISTTYPE_CLASS', 'class' );
+define ( 'AMP_CONTENT_LISTTYPE_SECTION', 'type' );
 
 class AMPContent_Map {
 
@@ -33,7 +35,17 @@ class AMPContent_Map {
     }
 
     function getParent( $section_id ) {
+        if (!isset($this->dataset[$section_id]['parent'])) return false;
         return $this->dataset[$section_id]['parent'];
+    }
+
+    function getAncestors( $section_id ) {
+        if (!$section_id) return null;
+        if ($section_id == $this->top) return null;
+        $self = array( $section_id => $this->getName( $section_id ) );
+        $lineage = $this->getAncestors( $this->getParent( $section_id ) ); 
+        if (!empty($lineage)) return $self + $lineage;
+        return $self;
     }
 
     function getChildren( $section_id ) {
@@ -73,6 +85,10 @@ class AMPContent_Map {
         return $option_set;
     }
 
+    function selectSiteTree() {
+        return array( $this->top, $GLOBALS['SiteName']) + $this->selectOptions();
+    }
+
     function &instance() {
         static $content_map = false;
 
@@ -88,22 +104,6 @@ class AMPContent_Map {
         }
         return $menuset;
     }
-    /*
-        if (!isset($startLevel)) $startLevel = $this->top;
-        if (!( $name = $this->getName( $startLevel ))) return;
-        $menu_item_function = '_menuItem'. $itemtype;
-        $result = array();
-
-        $result[$startLevel] = $this->$menu_item_function( $startLevel );
-        if (!( $children = $this->getChildren($startLevel) )) return $result;
-
-        foreach ($children as $child_id ) {
-            $result[$startLevel] = array_merge( $result[$startLevel], $this->getMenu( $child_id, $itemtype ));
-        }
-
-        return $result;
-    }
-    */
 
     function _menuItemArticleList( $section_id ) {
         return array(

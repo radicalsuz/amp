@@ -89,5 +89,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return false;
     }
 
+    function getName() {
+        if (!isset($this->name_field)) return;
+        return $this->getData( $this->name_field );
+    }
+
 }
 ?>

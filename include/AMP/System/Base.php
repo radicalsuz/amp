@@ -4,9 +4,7 @@ require_once('AMP/BaseDB.php');
 
 /* * * * * * * *
  * Initialize Lookup Factory
- *
  * Global Object used for reference data
- *
  */
 require_once('AMP/System/Lookups.inc.php');
 require_once('AMP/Content/Lookups.inc.php');
@@ -38,8 +36,8 @@ $MX_top = $gettop->Fields("subsite");
 
 //initialize Content Map
 require_once('AMP/Content/Map.inc.php');
-$system_map = & AMPContent_Map::instance();
-$system_map->init( $dbcon, $MX_top );
+$content_map = & AMPContent_Map::instance();
+$content_map->init( $dbcon, $MX_top );
 
 //These items are deprecated 
 //used in the older form-processing engine

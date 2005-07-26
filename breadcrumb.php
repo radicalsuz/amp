@@ -1,94 +1,28 @@
 <?php
-/*********************
-07-22-2003  v3.01
-Module:  Template Include
-Description:  displays breadcrumb on page, added in via the template system
-CSS: breadcrumb
-To Do: 
 
-*********************/
-global $MM_type, $MM_class ,$area, $list, $MM_id, $mod_name, $MM_title, $mod_id, $isanarticle, $obj;
-//include("system/Connections/menu.class.php");
-//if (isset($area)){
-//$histate=$dbcon->CacheExecute("Select title from region where id = $area") or DIE($dbcon->ErrorMsg());
-//}
+require_once( 'AMP/Content/Map/Breadcrumb.inc.php' );
 
-$ar = "&nbsp;&nbsp;<b>&#187;</b>&nbsp;&nbsp;";
+$breadcrumb = &AMP_Breadcrumb_Content::instance();
+$urlvars = AMP_URL_Read();
+$reg = &AMP_Registry::instance();
+$intro_id = $reg->getEntry( AMP_REGISTRY_CONTENT_INTRO_ID );
 
-if (isset($_GET['list']) && $_GET["list"]=="class") {
-	$hiclass=$dbcon->CacheExecute("Select class from class where id = $MM_class")
-		or DIE($dbcon->ErrorMsg());
+if (isset($urlvars['list']) && $urlvars['list']== AMP_CONTENT_LISTTYPE_CLASS ) {
+    $breadcrumb->findClass( $urlvars[ AMP_CONTENT_LISTTYPE_CLASS ] );
 }
-if ($MM_id) {
-	$hiarticle=$dbcon->CacheExecute("Select title from articles where id = $MM_id")
-		or DIE($dbcon->ErrorMsg());
+if (isset($urlvars['id']) && $urlvars['id'] && (!isset($urlvars['list'])) && (strpos( $_SERVER['PHP_SELF'], 'article.php')!==FALSE) ) {
+    $breadcrumb->findArticle( $urlvars[ 'id' ] );
 }
-if (!(isset($MM_type) && $MM_type == 1) && !(isset($_GET['list']) && $_GET["list"]=="class")) {
-	$hitype=$dbcon->CacheExecute("Select type, id from articletype where id = $MM_type")
-		or DIE($dbcon->ErrorMsg());
+if (isset($urlvars['list']) && $urlvars['list']== AMP_CONTENT_LISTTYPE_SECTION ) {
+    $breadcrumb->findSection( $urlvars[ AMP_CONTENT_LISTTYPE_SECTION ] );
+}
+if (strpos($_SERVER['PHP_SELF'], 'article.php')===FALSE && isset( $intro_id ) && ($intro_id !== 1)) {
+    $breadcrumb->findIntroText( $intro_id );
 }
 
-if (!isset($Web_url)) $Web_url = '/';
-if (!isset($bchtml)) $bchtml = '';
-
-####start html #################
-$bchtml.= " <!-- BEGIN BREADCRUMB CODE -->
-			<span class=breadcrumb><a href=\"".$Web_url ."index.php\" class=breadcrumb>Home</a> ";
-
-//if (isset($isanarticle) or isset($MM_type)){
-if ($MM_type != 1) {
-
-    if (!isset($path)) $path = "";
-
-	$ancestors = $obj->get_ancestors($MM_type);
- 	for ($x=0; $x<sizeof($ancestors); $x++) { 
-		if ($ancestors[$x]["id"] != "1" ) {
-			$path .= $ar."<a href=\"" . $Web_url
-				   . "article.php?list=type&type=" . $ancestors[$x]["id"]
-				   . "\" class=\"breadcrumb\">" . $ancestors[$x]["type"]
-				   . "</a>" ;
-		}
-	} 
-    $bchtml .= $path; 
-
-    if ($MM_type != "1" && isset($hitype) ) {
-
-        if (!isset($path2)) {
-			$path2 = "";
-		}
-
-    	$path2 .= $ar."<a href=\"" . $Web_url
-				. "article.php?list=type&type=" . $hitype->Fields("id")
-				. "\" class=\"breadcrumb\">" . $hitype->Fields("type")
-				. "</a>";
-    	$bchtml.= $path2; 
-    }
-
-    if (!(isset($_GET['list']) && $_GET["list"]) && $MM_id && !$mod_name) { 
-    	$maxTextLength=35;
-      	$aspace=" ";
-        $tttext =strip_tags($hiarticle->Fields("title"));
-        if(strlen($tttext) > $maxTextLength ) {
-            $tttext = substr(trim($tttext),0,$maxTextLength); 
-            $tttext = substr($tttext,0,strlen($tttext)-strpos(strrev($tttext),$aspace));
-            $tttext = $tttext.'...';
-        }
-  	    $bchtml.=  $ar.$tttext;
-    }
+//this guard clause is a temporary measure until breadcrumb is reliably called
+//by the template
+if ( !isset( $avoid_printing_breadcrumb ) ) {
+    print $breadcrumb->execute();
 }
-
-
-if ((!isset($_GET['list']) || !$_GET["list"]) && $mod_name) { 
-	$bchtml.= $ar.$MM_title ;  
-}
-
-	
-if (isset($_GET['list']) && $_GET["list"] == "class") {
-	$bchtml.=  $ar."<a href=\"".$Web_url."article.php?list=class&class=".$MM_class."\" class=breadcrumb>".$hiclass->Fields("class")."</a>"; 
-}  
-  
-//  if  ($_GET[area]) { $bchtml.= "<b>&nbsp;&#187;&nbsp;</b>".$histate->Fields("title")."</a>"; }  
-
-$bchtml.="</span>";
-echo $bchtml;
 ?>

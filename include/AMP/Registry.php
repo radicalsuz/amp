@@ -6,6 +6,7 @@ define('AMP_REGISTRY_SETTING_ENCODING','SETTING_ENCODING');
 define('AMP_REGISTRY_SETTING_SITENAME','SETTING_SITENAME');
 define('AMP_REGISTRY_SETTING_SITEURL','SETTING_SITEURL');
 define('AMP_REGISTRY_SETTING_EMAIL_SYSADMIN','SETTING_EMAIL_SYSADMIN');
+define('AMP_REGISTRY_CONTENT_INTRO_ID', 'CONTENT_INTRO_ID' );
 
 //based on the Registry pattern described at
 //http://www.phppatterns.com/index.php/article/articleview/75/1/1/

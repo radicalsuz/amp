@@ -1,4 +1,5 @@
 <?php
+require_once('AMP/Content/Map.inc.php');
 
 // an attempt to reduce the number of global variables
 class AMP_Template {
@@ -175,6 +176,8 @@ if (!isset($obj)) {
     require_once('AMP/Article/menu.class.php');
     $obj = & new Menu; 
 }
+$content_map = &AMPContent_Map::instance();
+$content_map->init( $dbcon, $MX_top );
 while (!$MM_secure && ($sparent != $MX_top)) {
 	$sparent=$obj->get_parent($sparent);
 	$getsec=$dbcon->CacheExecute("SELECT secure FROM articletype WHERE id=" . $dbcon->qstr( $sparent )) 

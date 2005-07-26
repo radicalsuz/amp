@@ -246,14 +246,19 @@ if ( !function_exists( 'statelist' ) ) {
 if ( !function_exists( 'AMP_buildSelect' )) {
 
     function AMP_buildSelect( $name, $values, $selected = null ) {
+        return '<select name="'. $name . "\">\n".
+                AMP_buildSelectOptions( $values, $selected). "\n</select>";
+    }
+}
+if (!function_exists( 'AMP_buildSelectOptions' )) {
+    function AMP_buildSelectOptions( $values, $selected ) {
         $option_set = array();
         foreach ($values as $value => $text ) {
             $selected_flag = "";
             if (isset($selected) && $selected == $value ) $selected_flag = " selected";
             $option_set[] = "<option value=\"$value\"$selected_flag>$text</option>";
         }
-        return '<select name="'. $name . "\">\n".
-                join( "\n", $option_set ). "\n</select>";
+        return join( "\n", $option_set );
     }
 }
 
