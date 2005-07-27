@@ -691,6 +691,23 @@ if (!function_exists('AMP_DebugSQL')) {
         print $source_object . ":<BR>\n". $sql . "<P>";
     }
 }
+
+if (!function_exists('filterConstants')) {
+	function filterConstants( $prefix ) {
+		$constant_set = get_defined_constants();
+		$result_set = array();
+		$local_prefix = $prefix . ((substr($prefix, -1) != '_') ? '_': '');
+		
+		foreach ( $constant_set as $name => $value ) {
+			if ( strpos( $name, $local_prefix )!==0 ) continue;
+
+			$desc = substr( $name, strlen( $local_prefix ) );
+			$result_set[ $desc ] = $value;
+		}
+
+		return $result_set;
+	}
+}
         
 
 ?>
