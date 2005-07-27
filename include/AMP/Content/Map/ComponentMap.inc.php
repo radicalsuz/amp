@@ -10,6 +10,7 @@ class ComponentMap_ContentMap extends AMPSystem_ComponentMap {
 
     var $paths = array(
         'search' => 'AMP/Content/SearchForm.inc.php',
+        'search_fields' => 'AMP/Content/Search/Fields.xml',
         'source' => 'AMP/Content/Article.inc.php',
         'list' => 'AMP/Content/Article/ListForm.inc.php',
         'menu' => 'AMP/Content/Section/Menu.inc.php',
