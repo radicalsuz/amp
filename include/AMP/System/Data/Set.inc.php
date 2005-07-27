@@ -145,6 +145,19 @@
         return $set->Fields( 'qty' );
     }
 
+	function getLookup($field) {
+		if(!$this->hasData) {
+			$sql = "SELECT " . $this->id_field . ", $field " . $this->_makeSource()
+            . $this->_makeCriteria();
+			$set = $this->dbcon->CacheGetAssoc( $sql );
+		} else {
+			while($record = $this->getData()) {
+				$set[$record['id']] = $record[$field];
+			}
+		}
+
+		return $set;
+	}
  }
 
  ?>

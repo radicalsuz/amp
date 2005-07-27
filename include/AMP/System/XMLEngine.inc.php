@@ -32,7 +32,10 @@ class AMPSystem_XMLEngine {
 
     function describeFile($separator = DIRECTORY_SEPARATOR) {
 
-        if ((!isset ($this->AMP_Object_Type)) || !$this->AMP_Object_Type) return $this->filename . '.xml';
+        if ((!isset ($this->AMP_Object_Type)) || !$this->AMP_Object_Type) {
+			if (substr( $this->filename, -4) == '.xml') return $this->filename;
+			return $this->filename . '.xml';
+		}
         return $this->AMP_Object_Type .$separator . $this->filename . '.xml';
     }
     function locateFile ( ) {
