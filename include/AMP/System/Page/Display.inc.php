@@ -20,7 +20,7 @@ class AMPSystem_Page_Display {
     var $page;
     var $itemtype;
 
-		var $show_template = true;
+    var $show_template = true;
 
     function AMPSystem_Page_Display( &$page ) {
         $this->page = &$page;

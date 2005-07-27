@@ -17,15 +17,14 @@ class AMPSystem_Page_Content extends AMPSystem_Page {
         else $this->_setSearchFormDefaults();
         
         $this->_initComponents( "list" );
-        if ($action = $this->list->submitted()) {
-            if ( $qty = $this->list->doAction( $action ))
-                return $this->setMessage( $qty . " items " . AMP_PastParticiple($action) ." succesfully");
+        if ($list_action = $this->list->submitted()) {
+            if ( $qty = $this->list->doAction( $list_action ))
+                return $this->setMessage( $qty . " items " . AMP_PastParticiple($list_action) ." succesfully");
 
-            return $this->setMessage("Nothing was " . AMP_PastParticiple( $action ), ( $qty === FALSE ) ); 
+            return $this->setMessage("Nothing was " . AMP_PastParticiple( $list_action ), ( $qty === FALSE ) ); 
         }
 
-        if ( !$action ) $action = $this->default_action;
-        $this->doAction( $action );
+        if ( !$action ) $this->doAction( $this->default_action );
     }
 
     function _setSearchFormDefaults() {
