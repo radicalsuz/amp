@@ -14,11 +14,17 @@
 <title>
 <label>Event Title</label>
 <type>text</type>
+<size>33</size>
 </title>
 <description>
 <type>textarea</type>
 <label>Event Description</label>
 </description>
+<location>
+<type>text</type>
+<label>Location</label>
+<size>33</size>
+</location>
 <capacity>
 <type>text</type>
 <label>Maximum Capacity</label>
@@ -45,6 +51,17 @@ today
 <format>hia</format>
 </default>
 </stop_time>
+<timezone>
+<type>select</type>
+<label>Time Zone</label>
+<default>Pacific</default>
+<values>
+	<EST>Eastern</EST>
+	<CST>Central</CST>
+	<MST>Mountain</MST>
+	<PST>Pacific</PST>
+</values>
+</timezone>
 <status>
 <type>select</type>
 <label>Status</label>
