@@ -26,7 +26,8 @@ class Article_ListForm extends Article_List {
         $this->init( $source );
         $this->addTranslation( 'pageorder', '_makeInput' );
         $this->addTranslation( 'title', '_makeLink' );
-        $this->actions = &new ArticleActions();
+        $this->actions = &new ArticleActions( $source );
+        $this->actions->setSubmitGroup( 'submitListAction' ); 
         $this->pager = &new AMPSystem_ListPager( $source );
     }
 
@@ -38,6 +39,31 @@ class Article_ListForm extends Article_List {
     function _makeLink ( $value, $fieldname, $currentrow ) {
         $id = $currentrow['id'];
         return "<a href=\"". $this->editlink . "?id=$id\">$value</a>";
+    }
+
+    function submitted() {
+        if ( !(isset( $_REQUEST['submitListAction'] ) && is_array($_REQUEST['submitListAction']))) return false;
+
+        $action = key( $_REQUEST['submitListAction'] );
+        if ($this->actions->isAction( $action )) return $action;
+
+        return false;
+    }
+
+
+    function doAction ($action) {
+        $action_method = 'commit' . ucfirst( $action );
+        if (!isset( $this->actions )) return false;
+
+        if (method_exists( $this->actions, $action_method )) {
+            $args = $this->actions->getRequestedValues( $action, $_REQUEST );
+            $result = $this->actions->$action_method( $args );
+            if ($result) $this->source->refreshData();
+                
+            return $result;
+        }
+        trigger_error ( $action . ' is not defined.' );
+        return false;
     }
 
     function _HTML_header() {
@@ -57,7 +83,7 @@ class Article_ListForm extends Article_List {
 
 
     function _HTML_startForm() {
-        return '<form name="' . $this->formname .'" method="POST" target="' . PHP_SELF_QUERY() ."\">\n";
+        return '<form name="' . $this->formname .'" method="POST" action="' . PHP_SELF_QUERY() ."\">\n";
     }
 
     function _HTML_startRow( $id ) {

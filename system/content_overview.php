@@ -1,9 +1,9 @@
 <?php
 
 require_once( 'AMP/System/Page/Content.inc.php' );
-require_once( 'AMP/Content/Map/ComponentMap.inc.php' );
+require_once( 'AMP/Content/Article/ComponentMap.inc.php' );
 
-$map = &new ComponentMap_ContentMap();
+$map = &new ComponentMap_Article();
 $page = &new AMPSystem_Page_Content( $dbcon, $map );
 $page->addComponent('search');
 $page->default_action = "menu";

@@ -55,7 +55,7 @@ class AMPSystem_List {
         $this->name = $name;
         if (isset($col_headers)) $this->setColumns( $col_headers );
 
-        $source = & new $sourceclass ( $dbcon );
+        $source = & new $this->sourceclass ( $dbcon );
         $source->setSource( $datatable );
 
         $this->init($source);
@@ -311,7 +311,7 @@ class AMPSystem_List {
     }
 
     function _prepareData() {
-        if ($this->source->isReady()) return true;
+        if ($this->source->makeReady()) return true;
         $this->source->setSelect( $this->_defineFieldSet() );
         return $this->source->readData();
         

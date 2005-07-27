@@ -56,6 +56,8 @@
          *  elements:   used for group elements to denote the sub-elements of
                         the group;
 
+         *  options:    used for date elements to specify characteristics
+
          *  type:       type of form element to create.  For a list of types,
                         see the HTML::QuickForm documentation.  
                         In addition, the library supports the following types:
@@ -332,6 +334,13 @@
 
     function &_addElementDefault ( $name, $field_def ) {
         $defaults = $this->_getDefault( $name );
+        return $this->form->addElement( $field_def['type'], $name, $field_def['label'], $defaults );
+        
+    }
+    function &_addElementDate ( $name, $field_def ) {
+        $defaults = array();
+        $date_def = $this->getField( $name );
+        if (isset($date_def[ 'options' ])) $defaults = $date_def['options'];
         return $this->form->addElement( $field_def['type'], $name, $field_def['label'], $defaults );
         
     }

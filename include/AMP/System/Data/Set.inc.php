@@ -50,6 +50,11 @@
         return $this->makeReady();
     }
 
+    function refreshData() {
+        $this->dbcon->CacheFlush();
+        $this->readData();
+    }
+
     function makeReady() {
         if (!$this->hasData()) return false;
         $this->source->MoveFirst();
@@ -93,15 +98,25 @@
         return $sql;
     }
 
-    function deleteData($id) {
-        $sql = "DELETE" . $this->_makeSource(). " where id = ".$id;
+    function deleteData($criteria) {
+        if (!$criteria) return false;
+        $sql = "DELETE" . $this->_makeSource(). " where " . $criteria;
         if($this->dbcon->Execute($sql)) {
-            return true;
+            return $this->dbcon->Affected_Rows();
         }
 
         return false;
         
     }
+
+    function updateData( $update_actions, $criteria = "1" ) {
+        if (!is_array( $update_actions )) return false;
+        $sql = "UPDATE " . $this->datatable . " SET " . join( ", ", $update_actions ) .
+               " where " . $criteria;
+        if ($this->dbcon->Execute($sql)) return $this->dbcon->Affected_Rows();
+        return false;
+    }
+
 
     function _makeSort() {
         if (empty($this->sort)) return false;
@@ -146,7 +161,7 @@
     }
 
 	function getLookup($field) {
-		if(!$this->hasData) {
+		if( !$this->makeReady() ) {
 			$sql = "SELECT " . $this->id_field . ", $field " . $this->_makeSource()
             . $this->_makeCriteria();
 			$set = $this->dbcon->CacheGetAssoc( $sql );

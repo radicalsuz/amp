@@ -13,7 +13,17 @@ class AMPSystem_Page_Content extends AMPSystem_Page {
     function execute() {
         $this->_initComponents ( "search" );
         $this->search->Build( true );
-        if (!($action = $this->search->submitted() )) $this->_setSearchFormDefaults();
+        if ($action = $this->search->submitted() ) $this->doAction( $action );
+        else $this->_setSearchFormDefaults();
+        
+        $this->_initComponents( "list" );
+        if ($action = $this->list->submitted()) {
+            if ( $qty = $this->list->doAction( $action ))
+                return $this->setMessage( $qty . " items " . AMP_PastParticiple($action) ." succesfully");
+
+            return $this->setMessage("Nothing was " . AMP_PastParticiple( $action ), ( $qty === FALSE ) ); 
+        }
+
         if ( !$action ) $action = $this->default_action;
         $this->doAction( $action );
     }
@@ -22,16 +32,18 @@ class AMPSystem_Page_Content extends AMPSystem_Page {
         $this->search->applyDefaults();
     }
 
-    function CommitSearch() {
+    function commitSearch() {
         $this->_initComponents( 'list' );
         $this->list->source->applyValues ($this->search->getSearchValues());
         $this->showList( true );
+        $this->dropComponent( 'menu' );
     }
 
-    function CommitMenu() {
+    function commitMenu() {
         $this->_initComponents('menu');
         $this->addComponent( 'menu' );
     }
+
 
 }
 ?>

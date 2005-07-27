@@ -1,16 +1,17 @@
 <?php
 
-require_once( 'AMP/System/Form.inc.php' );
+require_once( 'AMP/Form/Form.inc.php' );
 require_once('AMP/System/XMLEngine.inc.php');
 require_once('AMP/System/ComponentLookup.inc.php');
 
-class AMPSystem_Form_XML extends AMPSystem_Form {
+class AMPForm_XML extends AMPForm {
 
-	var $fieldFile;
-	var $xml_pathtype = "fields";
-
-	function AMPSystem_Form_XML() {
-	}
+    var $fieldFile;
+    var $xml_pathtype = "fields";
+    
+    function AMPForm_XML ( $name, $method=null, $action=null) {
+        $this->init( $name, $method, $action );
+    }
 
 	function init( $name, $method=null, $action=null ) {
 		PARENT::init( $name, $method, $action );

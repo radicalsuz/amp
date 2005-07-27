@@ -1,4 +1,4 @@
- <?php
+<?php
 
 if  (isset($HTTP_GET_VARS["mod"])) {
 	$mod_id = $mod;
@@ -12,8 +12,9 @@ if  (isset($HTTP_GET_VARS["mod"])) {
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php"); 
+include('AMP/Content/Map/Select.inc.php');
 
-$obj = new Menu; 
+#$obj = new Menu; 
 // *** Edit Operations: declare Tables
 $MM_editAction = $PHP_SELF;
 if ($QUERY_STRING) {
@@ -41,7 +42,7 @@ if (isset($MM_insert)) {
 
 }
   
-if ($HTTP_GET_VARS["thank"] == ($null)) { ?>
+if ( !isset( $HTTP_GET_VARS["thank"] )) { ?>
 <form ACTION="<?php echo $MM_editAction?>" METHOD="POST">	
               
   <table width="90%" border="0" align="center" class="form">
@@ -63,8 +64,13 @@ if ($HTTP_GET_VARS["thank"] == ($null)) { ?>
       <td><input name="link" type="text" id="link" value="http://" size="50\"></td>
     </tr>
 	 <tr> 
-      <td valign="top">Link Type</td>
-      <td><select name="type"><option value="1" selected>Select Type</option> <?php echo $obj->select_type_tree(6); ?></select></td>
+      <td valign="top">Link in Section</td>
+      <!--
+      <td><select name="type"><option value="1" selected>Select Type</option> <?php //echo $obj->select_type_tree(6); ?></select></td>
+      -->
+      <td><select name="type"><option value="1" selected>Select Section</option> <?php 
+      echo ContentMap_Select::getIndentedOptions();
+      ?></select></td>
 	 </tr>
     <tr> 
       <td colspan="2" valign="top" class="text"> <p align="left"><span class="name"><strong><br>

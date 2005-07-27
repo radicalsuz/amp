@@ -48,15 +48,19 @@ class AMPContent_Map {
         return $self;
     }
 
-    function getChildren( $section_id ) {
+    function getChildren( $section_id=null ) {
+        if (!isset($section_id)) $section_id = $this->top;
+        if (!isset($this->map[ $section_id ])) return false;
+        return $this->map[ $section_id ];
+        /*
         $child_sections = array();
         foreach ( $this->dataset as $key => $valueset ) {
             if (!$valueset['parent']==$section_id) continue;
             $child_sections[] = $key;
         }
         if (empty($child_sections)) return false;
+        */
 
-        return $child_sections;
 
     }
 
@@ -71,10 +75,15 @@ class AMPContent_Map {
         return $this->getDepth( $this->getParent( $section_id )) + 1;
     }
 
+    function hasChildren( $section_id ) {
+        if (!isset( $this->map[$section_id] )) return false;
+        if (!is_array( $this->map[$section_id] )) return false;
+        return count( $this->map[$section_id] );
+    }
+
     function selectOptions( $startLevel=null ) {
         if (!isset($startLevel)) $startLevel = $this->top;
-        if (!isset( $this->map[$startLevel] )) return;
-        if (!is_array( $this->map[$startLevel] )) return;
+        if (!$this->hasChildren ($startLevel)) return;
 
         $option_set =array();
         foreach( $this->map[ $startLevel ] as $child_section ) {

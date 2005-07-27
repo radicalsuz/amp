@@ -63,7 +63,7 @@ class AMPSystem_Page {
 
     function doAction( $action ) {
 
-        $action_method = 'Commit' . ucfirst( $action );
+        $action_method = 'commit' . ucfirst( $action );
 
         if (method_exists( $this, $action_method )) {
             return $this->$action_method();
@@ -194,11 +194,11 @@ class AMPSystem_Page {
         return $this->component_headers[ $comp_name ];
     }
 
-    function CommitCancel() {
+    function commitCancel() {
         return $this->showList( true );
     }
 
-    function CommitSave() {
+    function commitSave() {
         $this->addComponent('form');
         if (!$this->form->validate()) return false;
         $value_set = $this->form->getValues();
@@ -216,7 +216,7 @@ class AMPSystem_Page {
         return false;
     }
 
-    function CommitRead() {
+    function commitRead() {
         $id = $this->form->getIdValue();
         if (!$id ) {
             $this->action = 'Add';
@@ -236,11 +236,11 @@ class AMPSystem_Page {
         return $this->showList( true );
     }
 
-    function CommitCopy() {
+    function commitCopy() {
         if (!$this->form->validate()) return false;
 
         $id = $this->form->getIdValue();
-        if (!$id) return $this->CommitSave();
+        if (!$id) return $this->commitSave();
 
         $this->_initComponents( array( 'source','copier' ) );
         $this->source->readData( $id );
@@ -258,7 +258,7 @@ class AMPSystem_Page {
     }
 
 
-    function CommitDelete() {
+    function commitDelete() {
         $id = $this->form->getIdValue();
         if (!$id) return false;
         

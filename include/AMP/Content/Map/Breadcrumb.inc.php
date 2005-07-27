@@ -83,7 +83,8 @@ class AMP_Breadcrumb_Content {
 
     function setBase( $page = "index.php" ) {
         $reg = &AMP_Registry::instance();
-        $this->baseURL = $reg->getEntry( AMP_REGISTRY_SETTING_SITEURL );
+        $this->baseURL="/";
+        #$this->baseURL = $reg->getEntry( AMP_REGISTRY_SETTING_SITEURL );
         $this->toplink = $this->baseURL . $page;
         $this->current_section = $this->top;
     }

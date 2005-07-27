@@ -251,7 +251,7 @@ if ( !function_exists( 'AMP_buildSelect' )) {
     }
 }
 if (!function_exists( 'AMP_buildSelectOptions' )) {
-    function AMP_buildSelectOptions( $values, $selected ) {
+    function AMP_buildSelectOptions( $values, $selected=null ) {
         $option_set = array();
         foreach ($values as $value => $text ) {
             $selected_flag = "";
@@ -707,6 +707,13 @@ if (!function_exists('filterConstants')) {
 
 		return $result_set;
 	}
+}
+
+if (!function_exists( 'AMP_PastParticiple' )) {
+    function AMP_PastParticiple( $word ) {
+        if (substr($word, -1) != "e" ) return $word ."ed";
+        return $word."d";
+    }
 }
         
 

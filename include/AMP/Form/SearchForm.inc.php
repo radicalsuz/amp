@@ -1,9 +1,10 @@
 <?php
 
-require_once( 'AMP/Form/Form.inc.php' );
+require_once( 'AMP/Form/XML.inc.php' );
 require_once( 'AMP/Form/TemplateSearch.inc.php' );
 
-class AMPSearchForm extends AMPForm {
+class AMPSearchForm extends AMPForm_XML {
+	var $xml_pathtype = "search_fields";
     var $submit_button = array(
         'submit' => array(
             'type' => 'submit',
