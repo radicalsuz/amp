@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `timeslots` (
+CREATE TABLE IF NOT EXISTS `scheduleitems` (
   `id` int(11) NOT NULL auto_increment,
   `service` varchar(30) NULL,
   `owner_id` int(11) NULL,
@@ -8,7 +8,18 @@ CREATE TABLE IF NOT EXISTS `timeslots` (
   `description` text NULL,
   `capacity` int(7),
   `status` varchar(20),
+  `location` text NULL,
+  `timezone` varchar(10),
+  `schedule_id` int(11),
   PRIMARY KEY (`id`)
+) TYPE = MyISAM;
+
+CREATE TABLE IF NOT EXISTS `schedules` (
+	`id` int(11) NOT NULL auto_increment,
+	`name` varchar (30) NULL,
+	`description` text null,
+	`userdata_fields_id` int(11) null,
+	PRIMARY KEY (`id`)
 ) TYPE = MyISAM;
 
 CREATE TABLE IF NOT EXISTS `userdata_actions` (
