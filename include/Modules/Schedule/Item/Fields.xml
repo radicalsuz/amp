@@ -1,0 +1,69 @@
+<array>
+<id>
+<type>hidden</type>
+</id>
+<schedule_id>
+	<type>select</type>
+	<label>Schedule</label>
+</schedule_id>
+<owner_id>
+<type>select</type>
+<label>Consultant</label>
+</owner_id>
+<title>
+<label>Event Title</label>
+<type>text</type>
+<size>33</size>
+</title>
+<description>
+<type>textarea</type>
+<label>Event Description</label>
+</description>
+<location>
+<type>text</type>
+<label>Location</label>
+<size>33</size>
+</location>
+<capacity>
+<type>text</type>
+<label>Maximum Capacity</label>
+<size>5</size>
+</capacity>
+<start_date>
+<type>date</type>
+<label>Event Date</label>
+<default>
+today
+</default>
+</start_date>
+<start_time>
+<type>date</type>
+<label>Start Time</label>
+<default>
+<format>hia</format>
+</default>
+</start_time>
+<stop_time>
+<type>date</type>
+<label>Stop Time</label>
+<default>
+<format>hia</format>
+</default>
+</stop_time>
+<timezone>
+<type>select</type>
+<label>Time Zone</label>
+<default>Pacific</default>
+<values>
+	<EST>Eastern</EST>
+	<CST>Central</CST>
+	<MST>Mountain</MST>
+	<PST>Pacific</PST>
+</values>
+</timezone>
+<status>
+<type>select</type>
+<label>Status</label>
+<default>open</default>
+</status>
+</array>

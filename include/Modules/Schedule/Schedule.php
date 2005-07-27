@@ -8,65 +8,48 @@ determines characteristics of schedule such as availability
 
 this is a schedule table wrapper
 */
-require_once ("Modules/Schedule/Item.inc.php");
-class Schedule extends AMPSystem_Data_Set {
+require_once ("Modules/Schedule/Item/Set.inc.php");
+require_once ("AMP/System/Data/Item.inc.php");
+require_once ("AMP/UserData/Set.inc.php");
+//class Schedule extends AMPSystem_Data_Set {
+class Schedule extends AMPSystem_Data_Item {
 
-	// or $_timeslots or $_scheduleElements or something
-	var $_slots = array();
+	//var $_scheduleItems = array();
+	var $_scheduleItems;
 
 	var $_owner;
-	var $datatable = "timeslots";
+	//var $datatable = "scheduleitems";
+	var $datatable = "schedules";
 
 	function Schedule( &$dbcon, $id = null) {
-		$this->init( $dbcon );
-		if (isset($id)) $this->getUserSchedule( $id );
+		$this->init( $dbcon, $id );
 	}
 
-    function getScheduleByOwner( $owner_id ) {
-        $this->addCriteria( "owner_id = ".$owner_id );
-        if ($this->readData()) $this->_owner = $owner_id;
-		$this->buildSchedule();
-    }
-
-	function getUserSchedule( $id ) {
-	}
-		
-
-	function buildSchedule() {
-		if ( !$this->isReady() ) return false;
-
-		while ( $slot = $this->getData()) {	
-			$current_slot = &new ScheduleItem( $dbcon );
-            $current_slot->setData( $slot );
-            $this->_slots[] = &$current_slot;
-		}
-	}
-		
-	function getOpenSlots() {
-		$openslots = array();
-		foreach ($this->_slots as $key => $item ) {
-			if (!$item->isOpen()) continue;
-			$openslots[] = &$this->_slots[$key];
-		}
-		return $openslots;
+	function readScheduleItems() {
+		$this->_scheduleItems =& new ScheduleItemSet($this->dbcon, $this->id);
+		$this->_scheduleItems->readData();
+		return $this->_scheduleItems;
 	}
 
-	function getSlots() {
-		return $this->_slots;
-	}
+	function getOpenItems_Options_OwnerTime() {
+		$slots = $this->_scheduleItems->getOpenItems();
+		$options = array();
 
-	function getParticipantCounts() {
-        /*
-		if (!($items = $this->source->getSlots())) return false; 
-		foreach ($items as $key => $slot) {
-			$itemcount[ $slot->id ] = $slot->participantCount(); 
+		$userset =& new UserDataSet($this->dbcon, 50, true);
+		$search_options = array( 'clear_criteria' => array( 'value' => 'true' ),
+								 'criteria' => array( 'value' => array('modin=50')) );
+		$userset->doAction('Search', $search_options);
+		$lookup = $userset->getNameLookup(); 
+
+		foreach( $slots as $item ) {
+			$useful_time = date( 'm/d/y \a\t h:i a', strtotime($item->getData('start_time')));
+			$options[ $item->id ] = $lookup[$item->getData('owner_id')] . " : " . $useful_time;
 		} 
-		return $itemcount;
-        */
+		return $options;
 	}
-
-	function makeAppointment($user, $slot) {
-		$appointment = Appointment::createAppointment($user, $slot);
+		
+	function makeAppointment($user, $scheduleitem_id) {
+		$appointment = Appointment::createAppointment($user, $scheduleitem_id);
 		return $appointment->save();
 	}
 }
@@ -80,7 +63,7 @@ class Appointment extends AMPSystem_Data_Item {
 	var $_created;
 	var $_status;
 
-	var $datatable = "userdata_action";
+	var $datatable = "userdata_actions";
 
 	function Appointment ( &$dbcon, $id=null) {
 		$this->init( $dbcon, $id );
@@ -130,6 +113,7 @@ class Appointment extends AMPSystem_Data_Item {
 			}
 			$scheduleItem->updateStatus();
 		}
+	
 	}
 }
 

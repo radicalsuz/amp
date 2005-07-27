@@ -4,10 +4,11 @@ require_once( 'AMP/System/Data/Item.inc.php' );
 
 define ('AMP_TIMESLOT_STATUS_OPEN', 'open');
 define ('AMP_TIMESLOT_STATUS_CLOSED', 'closed');
+define ('AMP_TIMESLOT_STATUS_DRAFT', 'draft');
 class ScheduleItem extends AMPSystem_Data_Item {
 
     var $name_field = "title";
-    var $datatable = "timeslots";
+    var $datatable = "scheduleitems";
 
 	var $_appointments = array();
     
