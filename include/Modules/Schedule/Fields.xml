@@ -10,5 +10,12 @@
 		<type>textarea</type>
 		<label>Description</label>
 	</description>
+    <form_id_AMPSchedule>
+        <type>select</type>
+        <label>Scheduling Form</label>
+    </form_id_AMPSchedule>
+    <form_id_AMPAppointment>
+        <type>select</type>
+        <label>Signup Form</label>
+    </form_id_AMPAppointment>
 </array>
-

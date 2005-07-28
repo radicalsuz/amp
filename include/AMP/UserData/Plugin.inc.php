@@ -594,6 +594,36 @@ class UserDataPlugin {
         return "<tr><td colspan=2 class = \"form_span_col\">". $raw_html ."</td></tr>\n";
     }
 
+    function saveRegistration( $namespace, $action) {
+        $reg_data = array(
+            "id" => $this->plugin_instance,
+            "instance_id" => $this->udm->instance,
+            "namespace" => $namespace, 
+            "action" => $action,
+            "active" => 1 );
+        print var_dump($this->udm->instance);
+
+        $result = $this->dbcon->Replace( 'userdata_plugins', $reg_data, 'id', $quote=true);
+        if ($result == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
+        if ($result) return true;
+
+        return false;
+
+    }
+
+    function saveOption( $name, $value ) {
+        $option_data = array(
+            "plugin_id" => $this->plugin_instance,
+            "name" => $name,
+            "value" => $value );
+        $primary = array( 'plugin_id', 'name' );
+        $result = $this->dbcon->Replace( 'userdata_plugins_options', $option_data, $primary, $quote=true);
+        if ($result == ADODB_REPLACE_INSERTED ) $this->plugin_instance = $this->dbcon->Insert_ID();
+        if ($result) return true;
+
+        return false;
+    }
+
 
 
 }

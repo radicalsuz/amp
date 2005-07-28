@@ -715,6 +715,14 @@ if (!function_exists( 'AMP_PastParticiple' )) {
         return $word."d";
     }
 }
+
+if (!function_exists ('AMP_varDump' )) {
+    function AMP_varDump ( &$var ) {
+        print '<pre>';
+        var_dump( $var );
+        print '</pre>';
+    }
+}
         
 
 ?>

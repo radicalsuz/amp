@@ -273,12 +273,31 @@
 <per>TOOLS_INTROTEXT</per>
 </item>
 <item>
-<label>Schedule</label>
-<href>schedule_item.php</href>
+<label>Schedules</label>
+<href>schedule.php?action=list</href>
+<child>schedule</child>
 </item>
 </tools>
 
 
+<schedule>
+    <item>
+        <label>View Schedules</label>
+        <href>schedule.php?action=list</href>
+    </item>
+    <item>
+        <label>Add Schedule</label>
+        <href>schedule.php</href>
+    </item>
+    <item>
+        <label>View Schedule Items</label>
+        <href>schedule_item.php?action=list</href>
+    </item>
+    <item>
+        <label>Add Item to Schedule</label>
+        <href>schedule_item.php</href>
+    </item>
+</schedule>
 
 
 <directories>

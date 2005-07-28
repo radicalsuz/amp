@@ -27,6 +27,8 @@ class AMPSystem_Form extends AMPForm {
             )
     ));
 
+    var $source;
+
 
     function AMPSystem_Form ( $name, $method = "POST", $action = null ) {
         $this->init ( $name, $method, $action );

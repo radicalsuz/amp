@@ -377,6 +377,7 @@ class UserData {
     function getData( $fields=null ) {
 
         if (!$this->form)  {
+            $data=array();
             foreach ($this->fields as $fname=>$fDef) {
                 if (isset($fields) && (array_search($fname, $fields)===FALSE)) continue;
                 if (isset($fDef['value']))
@@ -937,6 +938,12 @@ class UserData {
 
     function _register_lists_filter ( $var ) {
         return ( substr( $var, 0, 4 ) == "list" );
+    }
+
+    function &saveRegisteredPlugin ( $namespace, $action ) {
+        if (! ($plugin = &$this->registerPlugin( $namespace, $action ))) return false;
+        $plugin->saveRegistration( $namespace, $action );
+        return $plugin;
     }
 
 }

@@ -52,6 +52,27 @@ class Schedule extends AMPSystem_Data_Item {
 		$appointment = Appointment::createAppointment($user, $scheduleitem_id);
 		return $appointment->save();
 	}
+
+    function getScheduleOptionForm( $namespace, $schedule_id ) {
+        if( $result = $this->getScheduleOptionPlugin( $namespace, $schedule_id ) ) {
+            $formlist = &FormLookup::instance('FormsbyPlugin');
+            return $formlist[current( $result )];
+        }
+
+        return false;
+    }
+
+    function getScheduleOptionPlugin( $namespace, $schedule_id ) {
+        $option_plugins = FormLookup_PluginsbyOptionDef::instance( 'schedule_id', $schedule_id );
+        if (empty( $option_plugins )) return false;
+
+        $namespace_plugins = FormLookup_SavePluginsbyNamespace::instance( $namespace );
+        if (empty( $namespace_plugins )) return false;
+
+        $result = array_intersect( $option_plugins, $namespace_plugins ) ;
+        return $result;
+    }
+        
 }
 
 class Appointment extends AMPSystem_Data_Item {

@@ -16,11 +16,6 @@ class UserDataPlugin_Read_AMPSchedule extends UserDataPlugin {
 
     function _register_fields_dynamic() {
         $this->fields = array(
-		    'Schedule' => array(
-                'type'=>'header', 
-                'label'=>'Schedule Information', 
-                'public'=>true,  
-                'enabled'=>true),
 
             'schedule_list' => array(
                 'type'=>'html',
@@ -28,6 +23,7 @@ class UserDataPlugin_Read_AMPSchedule extends UserDataPlugin {
                 'enabled'=>true
                 )
             );
+        $this->insertAfterFieldOrder( array_keys( $this->fields ) );
     }
 
     function execute( $options = null ) {

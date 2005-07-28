@@ -1,39 +1,49 @@
 <?php
-require_once( 'AMP/System/Form/XML.inc.php' );
-require_once ( 'AMP/UserData/Set.inc.php' );
+require_once ( 'AMP/System/Form/XML.inc.php' );
+require_once ( 'AMP/UserData/Lookups.inc.php');
 require_once ( 'Modules/Schedule/Item.inc.php' );
 require_once ( 'Modules/Schedule/Set.inc.php' );
+require_once ( 'Modules/Schedule/Schedule.php' );
 
 class ScheduleItem_Form extends AMPSystem_Form_XML {
     var $name_field = "title";
-	var $fieldFile = "Modules/Schedule/Item/Fields";
 
     function ScheduleItem_Form() {
         $name = "AMP_ScheduleItem";
         $this->init( $name );
-		$this->setTranslation( 'start_time', '_dateArrayToString', 'get' );
-		$this->setTranslation( 'stop_time', '_dateArrayToString', 'get' );
-		$this->setTranslation( 'start_date', '_selectBaseDate', 'set' );
-    }
-
-    function setResource( $resource_name ) {
-        $this->resource_name = $resource_name;
+		$this->addTranslation( 'start_time', '_dateArrayToString', 'get' );
+		$this->addTranslation( 'stop_time', '_dateArrayToString', 'get' );
+		$this->addTranslation( 'start_date', '_selectBaseDate', 'set' );
     }
 
     function setDynamicValues() {
-        $reg = &AMP_Registry::instance();
-        $userset = &new UserDataSet( $reg->getDbcon(), 50, TRUE);
-        $userset->doAction('Search');
-        $this->setFieldValueSet( 'owner_id',  $userset->getNameLookup());
 
-		$scheduleItem =& new ScheduleItem( $reg->getDbcon() );
-		$statums = $scheduleItem->getStatusOptions();
-		$this->setFieldValueSet( 'status', $statums );
+        $this->verifyOwnedSet();
+        $this->setStatusOptionValues();
+        $this->setScheduleValues();
+    }
 
-		$scheduleset =& new ScheduleSet( $reg->getDbcon() );
+    function verifyOwnedSet() {
+        $this->setOwnerNames();
+    }
+
+    function setOwnerNames() {
+        $userset = FormLookup_Names::instance( 50 );
+        $this->setFieldValueSet( 'owner_id',  $userset );
+    }
+
+    function setScheduleValues() {
+		$scheduleset =& new ScheduleSet( AMP_Registry::getDbcon() );
 		$schedulenames = $scheduleset->getLookup('name');
 		$this->setFieldValueSet( 'schedule_id', $schedulenames );
     }
+
+    function setStatusOptionValues() {
+		$scheduleItem =& new ScheduleItem( AMP_Registry::getDbcon() );
+		$statums = $scheduleItem->getStatusOptions();
+		$this->setFieldValueSet( 'status', $statums );
+    }
+
 
 	function _selectBaseDate( $values, $fieldname = "start_date" ) {
 		if (isset( $values[$fieldname]) ) return $values[$fieldname];

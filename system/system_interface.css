@@ -41,6 +41,12 @@ p, td, select {
 	background: url('images/header-bg.png') top left repeat-x;
 }
 
+.udm_header {
+		display: block;
+		background-color: #e3e3e3;
+		color: #000000;
+}
+
 /* the site name in the header */
 .toptitle {
 	color : #FFFFFF; font-size: 22px; font-weight: bold; 

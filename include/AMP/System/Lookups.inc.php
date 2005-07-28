@@ -60,7 +60,7 @@ class AMPSystem_Lookup {
         static $lookup_set = false;
         $req_class = $lookup_baseclass . '_' . $type;
         if (!$lookup_set) $lookup_set = array();
-        if (!isset($lookup_set[$type])) $lookup_set[$type] = new $req_class(); 
+        if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
         return $lookup_set[$type]->dataset;
     }
 
@@ -100,6 +100,7 @@ class AMPSystemLookup_FormsbyTool extends AMPSystem_Lookup {
         $this->init();
     }
 }
+
 
 class AMPSystemLookup_Forms extends AMPSystem_Lookup {
     var $datatable = "userdata_fields";

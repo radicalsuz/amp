@@ -16,6 +16,7 @@ class ComponentMapSet {
 		$this->mapset = array();
 		$class_set = get_declared_classes();
 		foreach( $class_set as $name ) {
+            if (strtolower( $name ) == 'componentmapset') continue;
 			if (strpos( strtolower($name), 'componentmap') !== 0) continue;
 			$this->mapset[] = $name;
 		}

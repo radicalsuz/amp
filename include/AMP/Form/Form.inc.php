@@ -161,7 +161,7 @@
     }
 
 	function translate ( $data, $action = "get" ) {
-		if (empty( $this->translations )) return $data;
+		if (empty( $this->translations) || empty( $this->translations[ $action ])) return $data;
 		$result_data = $data;
 		foreach ( $this->translations[ $action] as $fieldname => $translate_method ) {
 			if (!method_exists( $this, $translate_method )) continue;
@@ -200,7 +200,13 @@
         return true;
     }
 
-	function setTranslation( $fieldname, $method, $action="get" ) {
+    function dropField( $fieldname ) {
+        if (!isset($this->fields[ $fieldname ])) return false; 
+        unset ( $this->fields[ $fieldname ] );
+        return true; 
+    }
+
+	function addTranslation( $fieldname, $method, $action="get" ) {
 		$this->translations[$action][ $fieldname ] = $method;
 	}
 
@@ -212,6 +218,10 @@
     function getField( $name ) {
         if (!isset( $this->fields[ $name ] )) return false;
         return $this->fields[$name];
+    }
+
+    function getFields() {
+        return $this->fields;
     }
 
     function setFieldOrder( $fieldOrder ) {

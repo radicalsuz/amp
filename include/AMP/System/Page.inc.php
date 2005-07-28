@@ -208,6 +208,9 @@ class AMPSystem_Page {
 
         if ($this->source->save()) {
             $this->setMessage( $this->form->getItemName()." has been saved." );
+            if ( method_exists( $this->form, 'postSave' )) {
+                $this->form->postSave( $this->source->getData() );
+            }
             $this->dropComponent('form');
             return $this->showList( true );
         }
