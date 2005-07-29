@@ -21,6 +21,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     var $itemdata;
     var $_itemdata_keys;
+	var $_allowed_keys;
 
     var $id;
 
@@ -31,8 +32,15 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function init ( &$dbcon, $item_id ) {
         $this->dbcon = & $dbcon;
         $this->_itemdata_keys = $this->dbcon->MetaColumnNames( $this->datatable );
+		$this->_allowed_keys = $this->_itemdata_keys;
         if (isset($item_id) && $item_id) $this->readData( $item_id );
     }
+
+	function _addAllowedKey( $key_name ) {
+		if (array_search( $key_name, $this->_allowed_keys )!==FALSE) return true;
+		$this->_allowed_keys[] = $key_name;
+	}
+		
 
     function readData ( $item_id ) {
         $sql = "Select * from ".$this->datatable." where ".$this->id_field." = ". $this->dbcon->qstr( $item_id );
@@ -62,10 +70,18 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $result = $this->dbcon->Replace( $this->datatable, $save_fields, $this->id_field, $quote=true);
 
         if ($result == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
+		if ( method_exists( $this, '_afterSave' )) 	$this->_afterSave();
         if ($result) return true;
 
         return false;
     }
+
+	function mergeData( $data ) {
+        $this->itemdata = array_merge( $this->itemdata, array_combine_key( $this->_itemdata_keys, $data ));
+        if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
+        if (isset($data['id']) && $data['id']) $this->id = $data['id'];
+    }
+
 
     function setData( $data ) {
         $this->itemdata = array_combine_key( $this->_itemdata_keys, $data );
