@@ -24,12 +24,14 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
     }
 
     function _register_fields_dynamic() {
+        $options=$this->getOptions();
         $this->schedule_form = &new ScheduleItem_Form ();
+        $schedule = &new Schedule( $this->udm->dbcon, $options['schedule_id'] );
 
         $fields = array (
         'Schedule' => array(
                 'type'=>'header', 
-                'label'=>'Schedule Information', 
+                'label'=> $schedule->getData( 'name' ) . ' Schedule Information', 
                 'public'=>true,  
                 'enabled'=>true) );
         $fields = array_merge( $fields, $this->schedule_form->getFields() );
@@ -41,7 +43,7 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
             $this->fields[ $fname ] = ($fDef + array('enabled'=>true));
         }
 
-        $this->insertBeforeFieldOrder( array_keys( $this->fields ) , 'schedule_list');
+        $this->insertAfterFieldOrder( array_keys( $this->fields ) );
 
     }
 

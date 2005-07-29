@@ -70,22 +70,24 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $result = $this->dbcon->Replace( $this->datatable, $save_fields, $this->id_field, $quote=true);
 
         if ($result == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
-		if ( method_exists( $this, '_afterSave' )) 	$this->_afterSave();
-        if ($result) return true;
+        
+        if ($result) {
+            if (method_exists( $this, '_afterSave' )) $this->_afterSave();
+            return true;
+        }
 
         return false;
     }
 
-	function mergeData( $data ) {
+    function mergeData( $data ) {
         $this->itemdata = array_merge( $this->itemdata, array_combine_key( $this->_itemdata_keys, $data ));
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
         if (isset($data['id']) && $data['id']) $this->id = $data['id'];
     }
 
-
     function setData( $data ) {
         $this->itemdata = array_combine_key( $this->_itemdata_keys, $data );
-        if (method_exists( $this, 'adjustSetData' ) ) $this->adjustSetData( $data );
+        if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
         if (isset($data['id']) && $data['id']) $this->id = $data['id'];
     }
 

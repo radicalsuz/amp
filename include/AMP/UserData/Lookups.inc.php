@@ -53,7 +53,7 @@ class FormLookup_PluginsbyNamespace extends FormLookup {
 class FormLookup_StartPluginsbyNamespace extends FormLookup {
     var $datatable = "userdata_plugins";
     var $result_field = "id";
-    var $id_field = "namespace";
+    var $id_field = "id";
     var $sortby = "namespace";
 
     function FormLookup_StartPluginsbyNamespace( $namespace ) {

@@ -21,6 +21,7 @@ class Schedule extends AMPSystem_Data_Item {
 	var $_owner;
 	//var $datatable = "scheduleitems";
 	var $datatable = "schedules";
+    var $adjust_fields =  array( "form_id_AMPAppointment", "form_id_AMPSchedule" );
 
 	function Schedule( &$dbcon, $id = null) {
 		$this->init( $dbcon, $id );
@@ -38,13 +39,6 @@ class Schedule extends AMPSystem_Data_Item {
 		$this->_readSchedulePlugins( 'AMPAppointment' );
 		return $result;
 	}
-
-/*
-	function setData( $values ) {
-		PARENT::setData( $values );
-	}
-		
-*/
 
 	function _readSchedulePlugins( $namespace ) {
 		if ($form_id = $this->_seekFormPlugin( $namespace, $this->getData() )) {
@@ -69,8 +63,7 @@ class Schedule extends AMPSystem_Data_Item {
 
 
 	function _adjustSetData( $data ) {
-		$allowed_keys = array( "form_id_AMPAppointment", "form_id_AMPSchedule" );
-		$allowed_data = array_combine_key( $allowed_keys, $data );
+		$allowed_data = array_combine_key( $this->adjust_fields, $data );
 		if (empty( $allowed_data )) return false;
 		$this->itemdata = array_merge( $this->itemdata, $allowed_data );
 	}
@@ -96,7 +89,6 @@ class Schedule extends AMPSystem_Data_Item {
 	}
 
     function getFormByOption( $namespace, $schedule_id ) {
-		print "seeking for " . $schedule_id .'<BR>';
         if( $result = $this->getPluginsByOption( $namespace, $schedule_id ) ) {
             $formlist = &FormLookup::instance('FormsbyPlugin');
             return $formlist[current( $result )];
@@ -130,7 +122,6 @@ class Schedule extends AMPSystem_Data_Item {
 		$form_id = $this->getFormId( $namespace );
 	
 		if ($udm = &$this->_getFormRef( $namespace ) ) {
-			print 'found UDM ' . $namespace;
 			if ($udm->instance == $form_id ) return true; 
 			$this->_deleteSchedulePlugin( $udm , $namespace );
 		}
@@ -139,14 +130,12 @@ class Schedule extends AMPSystem_Data_Item {
 	}
 
 	function _deleteSchedulePlugin ( &$udm, $namespace ) {
-		print 'deleting UDM ' . $udm->instance . '<BR>';
 		if ($plugin =& $udm->getPlugin( $namespace, 'Start' )) {
 			$plugin->deleteRegistration( $namespace, 'Start' );
 		}
 	}
 
     function _saveSchedulePlugin( $namespace, $form_id ) {
-		print 'saving UDM ' . $form_id . '<BR>';
         if (! $form_id ) return false;
 
         $udm = &new UserDataInput( $this->dbcon, $form_id );
