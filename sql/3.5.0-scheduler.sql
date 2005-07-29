@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS `schedules` (
 	`id` int(11) NOT NULL auto_increment,
 	`name` varchar (30) NULL,
 	`description` text null,
-	`userdata_fields_id` int(11) null,
 	PRIMARY KEY (`id`)
 ) TYPE = MyISAM;
 

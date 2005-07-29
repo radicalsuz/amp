@@ -8,7 +8,7 @@
 </schedule_id>
 <owner_id>
     <type>select</type>
-    <label>Consultant</label>
+    <label>Contact</label>
 </owner_id>
 <title>
     <label>Event Title</label>

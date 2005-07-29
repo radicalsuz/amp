@@ -75,6 +75,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             if (method_exists( $this, '_afterSave' )) $this->_afterSave();
             return true;
         }
+        trigger_error ( get_class( $this ) . ' save failed: '. $this->dbcon->ErrorMsg() );
 
         return false;
     }

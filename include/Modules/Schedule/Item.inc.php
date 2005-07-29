@@ -2,9 +2,9 @@
 
 require_once( 'AMP/System/Data/Item.inc.php' );
 
-define ('AMP_TIMESLOT_STATUS_OPEN', 'open');
-define ('AMP_TIMESLOT_STATUS_CLOSED', 'closed');
-define ('AMP_TIMESLOT_STATUS_DRAFT', 'draft');
+define ('AMP_SCHEDULE_STATUS_OPEN', 'open');
+define ('AMP_SCHEDULE_STATUS_CLOSED', 'closed');
+define ('AMP_SCHEDULE_STATUS_DRAFT', 'draft');
 class ScheduleItem extends AMPSystem_Data_Item {
 
     var $name_field = "title";
@@ -26,22 +26,49 @@ class ScheduleItem extends AMPSystem_Data_Item {
 	}
 
 	function getStatusOptions() {
-		$options = filterConstants( 'AMP_TIMESLOT_STATUS' );
+		$options = filterConstants( 'AMP_SCHEDULE_STATUS' );
 		$result = array();
 		foreach (array_values($options) as $value) {
 			$result[$value] = $value;
 		}
 		return $result;
 	}
+
+    function getContactNames() {
+        if (! $schedule_id = $this->getData('schedule_id')) return false;
+        
+        $form_search =  &new FormLookup_FindScheduleForm( $schedule_id );
+
+        if (! $form_id = $form_search->getResult() ) return false;
+
+        return FormLookup_Names::instance( $form_id );
+    }
+        
+
+    function describeSlot() {
+        $contact_names = $this->getContactNames();
+        $data = $this->getData();
+        $output = "<div>";
+        if (isset($data['title']) && $data['title']) {
+            $output .= str_replace( "'", "&rsquot;", $data['title'] );
+        }
+        if (isset($data['start_time']) && $data['start_time']) {
+            $output .= '<BR>' . date( 'M j, Y \a\t g:i A', strtotime($data['start_time']));
+        }
+        if (isset($data['owner_id']) && $data['owner_id'] && $contact_names ) {
+            $output .= '<BR>' . $contact_names[$data['owner_id']] . "<BR>";
+        }
+        return $output . '</div>';
+    }
 		
 	function isOpen() {
-		if ($this->getStatus() == AMP_TIMESLOT_STATUS_OPEN) {
+		if ($this->getStatus() == AMP_SCHEDULE_STATUS_OPEN) {
 			return true;
 		}
 	}
 
 	function isClosed() {
-		if ($this->getStatus() == AMP_TIMESLOT_STATUS_CLOSED) {
+		if ($this->getStatus() == AMP_SCHEDULE_STATUS_CLOSED) {
 			return true;
 		}
 	}
@@ -54,9 +81,10 @@ class ScheduleItem extends AMPSystem_Data_Item {
 		if (isset($this->_appointments)) {
 			return $this->_appointments;
 		}	
+        if (!isset($this->id)) return array();
 
 		$this->_appointments =  & new AppointmentSet ( $this->dbcon );
-		$this->_appointments->addCriteria( "action_id=" . $this->id );
+		$this->_appointments->setScheduleItemId( $this->id );
 		$this->_appointments->readData();
 		return $this->_appointments;
 	}
@@ -72,10 +100,12 @@ class ScheduleItem extends AMPSystem_Data_Item {
 	}
 		
 
-	function addAppointment() {
-		if ( $this->appointmentsCount()  >= $this->getCapacity() ) {
-			$this->setStatus( AMP_TIMESLOT_STATUS_CLOSED );
-			$this->save();
+	function updateStatus() {
+        $capacity = $this->getCapacity();
+        if (!$capacity && ($capacity !== 0)) return;
+		if ( $this->appointmentsCount()  >= $capacity ) {
+			$this->setStatus( AMP_SCHEDULE_STATUS_CLOSED );
+			return $this->save();
 		}
 	}
 

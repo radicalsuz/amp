@@ -1,6 +1,7 @@
 <?php
 
 require_once ( 'AMP/UserData/Plugin/Save.inc.php' );
+require_once ( 'Modules/Schedule/Appointment.inc.php' );
 require_once ( 'Modules/Schedule/Schedule.php' );
 
 class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
@@ -8,13 +9,11 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 	var $short_name = "Appointment";
 
 	var $options = array(
-		'_userid' => array( 'available' => false ),
 		'schedule_id' => array( 
 			'available' => true,
 			'type' 	=> 'select',
 			'default' => 1,
-			'values'  => 'Lookup(schedules, id, name)' ),
-		'_scheduleitem_id' => array( 'available' => false )
+			'values'  => 'Lookup(schedules, id, name)' )
 		);
 
 
@@ -28,13 +27,17 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 		$schedule->readScheduleItems();
 		
 		$this->fields = array(
+            'Appointments' => array(
+                'type'=> 'header',
+                'values' => 'Select a ' . $schedule->getData('name') . ' Appointment',
+                'public' => true,
+                'enabled' => true ),
 			'appointment' => array(
 				'type' => 'radiogroup',
 				'public' => true,
 				'enabled' => true,
-				'label' => 'Request Time',
 				'required' => true,
-				'values'  => $schedule->getOpenItems_Options_OwnerTime()
+				'values'  => $schedule->describeOpenItems()
 			)
 		);
 
@@ -47,7 +50,11 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 	function save( $data ) {
 		$options = $this->getOptions();
 		$schedule = &new Schedule( $this->udm->dbcon, $options['schedule_id'] );
-		$schedule->makeAppointment( $this->udm->uid, $data['appointment'] );
+		if (!$schedule->makeAppointment( $this->udm->uid, $data['appointment'] )) {
+            $this->udm->errorMessage( "The requested schedule time is not avaiable" );
+            return false;
+        }
+        return true;
 	}
 
 }

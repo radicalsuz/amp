@@ -10,8 +10,10 @@ this is a schedule table wrapper
 */
 require_once ('AMP/UserData/Lookups.inc.php');
 require_once ("Modules/Schedule/Item/Set.inc.php");
+require_once ("Modules/Schedule/Item.inc.php");
 require_once ("AMP/System/Data/Item.inc.php");
-require_once ("AMP/UserData/Set.inc.php");
+require_once ("AMP/UserData/Input.inc.php");
+require_once ('Modules/Schedule/Appointment.inc.php' );
 
 class Schedule extends AMPSystem_Data_Item {
 
@@ -33,6 +35,10 @@ class Schedule extends AMPSystem_Data_Item {
 		return $this->_scheduleItems;
 	}
 
+    function &getScheduleItem( $item_id ) {
+        return $this->_scheduleItems->getItem( $item_id );
+    }
+
 	function readData( $schedule_id ) {
 		$result =  PARENT::readData ($schedule_id );
 		$this->_readSchedulePlugins( 'AMPSchedule' );
@@ -41,26 +47,10 @@ class Schedule extends AMPSystem_Data_Item {
 	}
 
 	function _readSchedulePlugins( $namespace ) {
-		if ($form_id = $this->_seekFormPlugin( $namespace, $this->getData() )) {
+		if ($form_id = $this->seekFormPlugin( $namespace )) {
 			$this->mergeData( array( ('form_id_'.$namespace)  => $form_id ) );
 		}
 	}
-
-	function &_getFormRef( $namespace ) {
-		if ($form_id = $this->_seekFormPlugin( $namespace, $this->getData() )) {
-			return new UserDataInput( $this->dbcon, $form_id );
-		}
-		return false;
-	}
-
-
-    function _seekFormPlugin( $namespace, $values ) {
-        if (!isset($values['id'])) return false;
-
-        return $this->getFormByOption( $namespace, $values['id']);
-
-    }
-
 
 	function _adjustSetData( $data ) {
 		$allowed_data = array_combine_key( $this->adjust_fields, $data );
@@ -68,28 +58,46 @@ class Schedule extends AMPSystem_Data_Item {
 		$this->itemdata = array_merge( $this->itemdata, $allowed_data );
 	}
 
-	function getOpenItems_Options_OwnerTime() {
+	function describeOpenItems() {
+        if (!isset($this->_scheduleItemList)) $this->readScheduleItems();
+
 		$slots = $this->_scheduleItems->getOpenItems();
 		$options = array();
 
-		if (!($udm= &$this->_getFormRef('AMPSchedule'))) return false;
-		
-		$lookup = FormLookup_Names::instance( $udm->instance ); 
-
 		foreach( $slots as $item ) {
-			$useful_time = date( 'm/d/y \a\t h:i a', strtotime($item->getData('start_time')));
-			$options[ $item->id ] = $lookup[$item->getData('owner_id')] . " : " . $useful_time;
+            $options[$item->id ] = $item->describeSlot();
 		} 
+
 		return $options;
 	}
 		
 	function makeAppointment($user, $scheduleitem_id) {
-		$appointment = Appointment::createAppointment($user, $scheduleitem_id);
-		return $appointment->save();
-	}
+       //get schedule item and verify it and update the darn status 
+        if (!isset($this->_scheduleItemList)) $this->readScheduleItems();
+        $this->dbcon->StartTrans();
+        if (!$item = $this->getScheduleItem( $scheduleitem_id )) return false;
+        if (! $item->isOpen() )  {
+            $this->dbcon->FailTrans();
+            $this->dbcon->CompleteTrans();
+            return false;
+        }
+        $appointment = &new Appointment( $this->dbcon );
+        $data = array( 'userdata_id' => $user, 'action_id'=>$scheduleitem_id );
+        $appointment->setData( $data );
+		#$appointment = &Appointment::createAppointment($user, $scheduleitem_id);
+		if (!$appointment->save()) {
+            $this->dbcon->CompleteTrans();
+            return false;
+        }
+        print 'appointment saved';
+        $item->updateStatus();
+        return $this->dbcon->CompleteTrans();
+    }
 
-    function getFormByOption( $namespace, $schedule_id ) {
-        if( $result = $this->getPluginsByOption( $namespace, $schedule_id ) ) {
+/*
+
+    function getFormByOption( $namespace ) {
+        if( $result = $this->getPluginsByOption( $namespace ) ) {
             $formlist = &FormLookup::instance('FormsbyPlugin');
             return $formlist[current( $result )];
         }
@@ -97,8 +105,9 @@ class Schedule extends AMPSystem_Data_Item {
         return false;
     }
 
-    function getPluginsByOption( $namespace, $schedule_id ) {
-        $option_plugins = FormLookup_PluginsbyOptionDef::instance( 'schedule_id', $schedule_id );
+    function getPluginsByOption( $namespace ) {
+        if (!isset($this->id)) return false;
+        $option_plugins = FormLookup_PluginsbyOptionDef::instance( 'schedule_id', $this->id );
         if (empty( $option_plugins )) return false;
 
         $namespace_plugins = FormLookup_StartPluginsbyNamespace::instance( $namespace );
@@ -107,6 +116,7 @@ class Schedule extends AMPSystem_Data_Item {
         $result = array_intersect( $option_plugins, $namespace_plugins ) ;
         return $result;
     }
+    */
 
 	function _afterSave() {
 		$this->_updateFormRef( 'AMPSchedule' );
@@ -116,7 +126,25 @@ class Schedule extends AMPSystem_Data_Item {
 	function getFormId( $namespace ) {
 		return $this->getData( 'form_id_' . $namespace  );
 	}
+
+
+    function seekFormPlugin( $namespace ) {
+        if (!isset($this->id)) return false;
+        $lookup_class = "FormLookup_Find" . substr( $namespace, 3 ). "Form";
+        $lookup = &new $lookup_class( $this->id );
+
+        return $lookup->getResult();
+
+    }
+
 		
+	function &_getFormRef( $namespace ) {
+		if ($form_id = $this->seekFormPlugin( $namespace )) {
+			return new UserDataInput( $this->dbcon, $form_id );
+		}
+		return false;
+	}
+
 
 	function _updateFormRef( $namespace ) {
 		$form_id = $this->getFormId( $namespace );
@@ -149,89 +177,5 @@ class Schedule extends AMPSystem_Data_Item {
 
 }
 
-class Appointment extends AMPSystem_Data_Item {
 
-	var $_action;
-	var $_userId;
-	var $_actionId;
-	var $_timestamp;
-	var $_created;
-	var $_status;
-
-	var $datatable = "userdata_actions";
-
-	function Appointment ( &$dbcon, $id=null) {
-		$this->init( $dbcon, $id );
-	}
-
-	function init( &$dbcon, $id=null ) {
-		PARENT::init( $dbcon, $id );
-		$this->setService();
-	}
-
-	function &createAppointment( $user, $scheduleItem ) {
-		$dbcon =& AMP_Registry::getDbcon();
-		$appointment =& new Appointment( $dbcon );
-
-		$appointment->setParticipant( $user );
-		$appointment->setScheduleItem( $scheduleItem );
-
-		return $appointment;
-	}
-
-	function setService() {
-		$service = array( "service" => AMP_USERDATA_ACTION_SCHEDULE );
-		$this->setData( $service );
-	}
-		
-	function setParticipant( $userdata_id ) {
-		$person = array( "userdata_id" => $userdata_id );
-		$this->setData( $person );
-	}
-
-	function setScheduleItem( $scheduleitem_id ) {
-		$scheduleItem = array( "action_id" => $scheduleitem_id );
-		$this->setData( $scheduleItem );
-	}	
-
-	function save() {
-		$status = PARENT::save();
-
-		if ($status) {
-			$scheduleItem =& new ScheduleItem($this->dbcon, $this->getData("action_id"));
-			if( !$scheduleItem->update($this) ) return false;
-
-			//-----
-			$status = false;
-			if($scheduleItem->containsAppointment($this) || $scheduleItem->isOpen()) {
-				$status = PARENT::save();
-			}
-			$scheduleItem->updateStatus();
-		}
-	
-	}
-}
-
-define( 'AMP_USERDATA_ACTION_SCHEDULE', 'schedule' );
-class AppointmentSet extends AMPSystem_Data_Set {
-
-	var $datatable = "userdata_action";
-
-	function AppointmentSet ( &$dbcon ) {
-		$this->init( $dbcon );
-	}
-
-    function _register_criteria_dynamic() {
-        $this->addCriteria( "action="
-                    . $this->dbcon->qstr(AMP_USERDATA_ACTION_SCHEDULE));
-    }
-
-    function getParticpantCounts() {
-        return $this->getGroupedIndex('userdata_id');
-    }
-
-    function getUserdataId() {
-        return "userdata_id";
-    }
-}
 ?>

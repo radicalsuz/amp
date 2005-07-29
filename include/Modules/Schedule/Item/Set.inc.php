@@ -30,12 +30,15 @@ class ScheduleItemSet extends AMPSystem_Data_Set {
 
 		while($item = $this->getData() ) {
 			if (!$item['status'] == $status) continue;
-			$temp = &new ScheduleItem($this->dbcon);
-			$temp->setData($item);
-			$items[] =& $temp;
+            $id = $item[ 'id' ];
+			$items[ $id ] = &new ScheduleItem($this->dbcon);
+			$items[ $id ]->setData($item);
 		}
 		return $items;
 	}
 
+    function &getItem( $item_id ) {
+        return new ScheduleItem( $this->dbcon, $item_id );
+    }
 }
 ?>

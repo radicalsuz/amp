@@ -291,11 +291,11 @@ class UserData {
         $retarray = array();
         foreach ( $this->fields as $name => $fDef ) {
 
-            if ( count( $fields ) > 0 ) {
+            if ( !empty( $fields ) ) {
                 if ( !array_search( $name, $fields ) ) continue;
             }
 
-            if (!($valueKey = $this->getValueKey( $fDef ))) continue;
+            if ( ! ( $valueKey = $this->getValueKey( $fDef ) ) ) continue;
 
             if ( isset( $fDef[ $valueKey ] ) )
                 $retarray[ $name ] = $fDef[ $valueKey ];

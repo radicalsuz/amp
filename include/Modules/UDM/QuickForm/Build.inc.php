@@ -44,7 +44,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
         if (!$admin) $formEngine->enforceRequiredFields();
         
         //Populate the form
-		#$formEngine->setValues( $this->udm->getStoredValues() );
+		$formEngine->setValues( $this->udm->getStoredValues() );
 		$formEngine->setValues( $this->udm->getData() );
 		
         //register results with udm

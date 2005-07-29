@@ -140,4 +140,48 @@ class FormLookup_Names extends FormLookup {
     }
 }
 
+
+class FormLookup_FindScheduleForm  {
+
+    var $namespace = 'AMPSchedule';
+    var $id;
+    var $result_form;
+
+    function FormLookup_FindScheduleForm( $schedule_id ) {
+        return $this->init( $schedule_id );
+    }
+
+    function init( $schedule_id ) {
+        $this->id = $schedule_id;
+        if( $result = $this->getPluginsByOption( $this->namespace ) ) {
+            $formlist = &FormLookup::instance('FormsbyPlugin');
+            $this->result_form =  $formlist[current( $result )];
+        }
+    }
+
+    function getResult() {
+        return $this->result_form;
+    }
+    
+    function getPluginsByOption( $namespace ) {
+        if (!isset($this->id)) return false;
+        $option_plugins = FormLookup_PluginsbyOptionDef::instance( 'schedule_id', $this->id );
+        if (empty( $option_plugins )) return false;
+
+        $namespace_plugins = FormLookup_StartPluginsbyNamespace::instance( $namespace );
+        if (empty( $namespace_plugins )) return false;
+
+        $result = array_intersect( $option_plugins, $namespace_plugins ) ;
+        return $result;
+    }
+}
+
+class FormLookup_FindAppointmentForm extends FormLookup_FindScheduleForm {
+    var $namespace = 'AMPAppointment';
+
+    function FormLookup_FindAppointmentForm ( $schedule_id ) {
+        $this->init( $schedule_id );
+    }
+}
+
 ?>

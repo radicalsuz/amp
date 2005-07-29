@@ -3,7 +3,7 @@
 require_once ('AMP/UserData/Plugin/Save.inc.php' );
 require_once ('Modules/Schedule/Item.inc.php' );
 require_once ('Modules/Schedule/Item/Form.inc.php' );
-require_once ('Modules/Schedule/Item/ComponentMap.inc.php' );
+require_once ( 'Modules/Schedule/Schedule.php' );
 
 class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
 
@@ -25,7 +25,7 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
 
     function _register_fields_dynamic() {
         $options=$this->getOptions();
-        $this->schedule_form = &new ScheduleItem_Form ();
+        $this->schedule_form = &new ScheduleItem_Form ( $options['schedule_id'] );
         $schedule = &new Schedule( $this->udm->dbcon, $options['schedule_id'] );
 
         $fields = array (
@@ -40,7 +40,7 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
 		unset($fields['schedule_id']);
 
         foreach ($fields as $fname => $fDef ) {
-            $this->fields[ $fname ] = ($fDef + array('enabled'=>true));
+            $this->fields[ $fname ] = ($fDef + array('enabled'=>true, 'value'=>(isset($fDef['default'])?$fDef['default']:null)));
         }
 
         $this->insertAfterFieldOrder( array_keys( $this->fields ) );
@@ -48,7 +48,7 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
     }
 
     function getSaveFields() {
-        return $this->fields;
+        return array_keys($this->fields);
     }
 
     function save( $data ) {
@@ -58,8 +58,14 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
 		$data['schedule_id'] = $options['schedule_id'];
 
         $item = &new ScheduleItem($this->dbcon);
-        $item->setData( $this->schedule_form->translate($data, 'get') );
-        $item->save();
+        $itemdata = $this->schedule_form->translate($data, 'get') ;
+        AMP_varDump( $itemdata );
+        $item->setData( $itemdata );
+        return $item->save();
+    }
+
+    function dateFieldtoText( $value ) {
+        return $value;
     }
 
 }
