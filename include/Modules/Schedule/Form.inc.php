@@ -3,16 +3,15 @@
 require_once ('AMP/System/Form/XML.inc.php');
 require_once ('Modules/Schedule/Schedule.php' );
 require_once ('Modules/Schedule/ComponentMap.inc.php' );
-require_once ('AMP/UserData/Lookups.inc.php');
 require_once ('AMP/UserData/Input.inc.php');
 
 class Schedule_Form extends AMPSystem_Form_XML {
 
+	var $inital_form_links = array();
+
 	function Schedule_Form() {
 		$name = "Schedules";
 		$this->init( $name );
-        $this->addTranslation( 'form_id_AMPSchedule', '_seekScheduleOption', 'set' );
-        $this->addTranslation( 'form_id_AMPAppointment', '_seekScheduleOption', 'set' );
 	}
 
     function setDynamicValues() {
@@ -21,38 +20,23 @@ class Schedule_Form extends AMPSystem_Form_XML {
         $this->setFieldValueSet( 'form_id_AMPAppointment' , $formlist );
     }
 
-    function _seekScheduleOption( $values, $fieldname ) {
-        if (!isset($values['id'])) return false;
-        $desired_namespace = substr( $fieldname, strlen( "form_id_") );
-        $schedule= &new Schedule( AMP_Registry::getDbcon() );
+	function retainForm( $form_id, $namespace ) {
+		print '<BR>setting form' . $form_id;
+		$this->initial_forms_links[ $namespace ] = $form_id;
+	}
 
-        return $schedule->getScheduleOptionForm( $desired_namespace, $values['id']);
-
-    }
+	function getFormLink( $namespace ) {
+		if (empty( $this->initial_form_links )) return false;
+		if (!isset( $this->initial_form_links[ $namespace ] )) return false;
+		print '<BR>returning form' . $form_id;
+		return $this->initial_form_links[ $namespace ];
+	}
 
 
     function postSave( $values ) {
 
         if (!isset($values['id'])) return false;
-        $this->saveScheduleOption( 'AMPSchedule',$values['id'] ); 
-        $this->saveScheduleOption( 'AMPAppointment',$values['id'] ); 
     }
-
-    function saveScheduleOption( $namespace, $schedule_id ) {
-        if (! $form_id = current($this->getValues( 'form_id_' . $namespace ))) return false; 
-
-        $udm = &new UserDataInput( AMP_Registry::getDbcon(), $form_id );
-
-        if (!$plugin = $udm->getPlugin( $namespace, 'Save' )) {
-            $plugin = $udm->saveRegisteredPlugin( $namespace, 'Save' );
-        }
-        if (!$plugin) return false;
-
-        $plugin->saveOption( 'schedule_id', $schedule_id );
-    }
-
-        
-
 
 
 }

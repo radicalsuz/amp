@@ -50,26 +50,26 @@ class FormLookup_PluginsbyNamespace extends FormLookup {
     }
 }
 
-class FormLookup_SavePluginsbyNamespace extends FormLookup {
+class FormLookup_StartPluginsbyNamespace extends FormLookup {
     var $datatable = "userdata_plugins";
     var $result_field = "id";
     var $id_field = "namespace";
     var $sortby = "namespace";
 
-    function FormLookup_SavePluginsbyNamespace( $namespace ) {
+    function FormLookup_StartPluginsbyNamespace( $namespace ) {
         $this->setNamespace( $namespace );
         $this->init();
     }
 
     function setNamespace ( $value ) {
        $dbcon = AMP_Registry::getDbcon();
-       $this->criteria = "namespace=" . $dbcon->qstr($value) ." and action=" . $dbcon->qstr( 'Save' ); 
+       $this->criteria = "namespace=" . $dbcon->qstr($value) ." and action=" . $dbcon->qstr( 'Start' ); 
     }
 
     function &instance( $namespace ) {
         static $lookup  = false;
         if (!$lookup) {
-            $lookup = new FormLookup_SavePluginsbyNamespace( $namespace ) ;
+            $lookup = new FormLookup_StartPluginsbyNamespace( $namespace ) ;
         } else {
             $lookup->setNamespace( $namespace );
             $lookup->init();

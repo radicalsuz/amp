@@ -601,10 +601,9 @@ class UserDataPlugin {
             "namespace" => $namespace, 
             "action" => $action,
             "active" => 1 );
-        print var_dump($this->udm->instance);
 
         $result = $this->dbcon->Replace( 'userdata_plugins', $reg_data, 'id', $quote=true);
-        if ($result == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
+        if ($result == ADODB_REPLACE_INSERTED ) $this->plugin_instance = $this->dbcon->Insert_ID();
         if ($result) return true;
 
         return false;
@@ -612,6 +611,8 @@ class UserDataPlugin {
     }
 
     function saveOption( $name, $value ) {
+		if (! $this->plugin_instance ) die( "you suck" );
+
         $option_data = array(
             "plugin_id" => $this->plugin_instance,
             "name" => $name,
@@ -623,6 +624,21 @@ class UserDataPlugin {
 
         return false;
     }
+
+	function deleteRegistration( $namespace, $action ) {
+		if (!$this->plugin_instance) return false;
+		$this->deleteRegisteredOptions();
+		$sql = "DELETE FROM userdata_plugins where id = " . $this->plugin_instance;
+		$result = $this->dbcon->Execute( $sql );
+	}
+		
+
+	function deleteRegisteredOptions() {
+		if (!$this->plugin_instance) return false;
+		$sql = "DELETE FROM userdata_plugins_options where plugin_id = " . $this->plugin_instance;
+		$result = $this->dbcon->Execute( $sql );
+	}
+		
 
 
 
