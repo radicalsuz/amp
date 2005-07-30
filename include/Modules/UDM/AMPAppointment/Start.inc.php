@@ -9,7 +9,7 @@ class UserDataPlugin_Start_AMPAppointment extends UserDataPlugin {
             'type' => 'select',
             'available' => true,
             'default' => 1,
-            'label' => 'Appointment Name' )
+            'label' => 'Schedule Name' )
         );
 
     function UserDataPlugin_Start_AMPAppointment ( &$udm, $plugin_instance=null ) {
@@ -19,8 +19,8 @@ class UserDataPlugin_Start_AMPAppointment extends UserDataPlugin {
 	function init( &$udm, $plugin_instance=null ) {
 		PARENT::init( $udm, $plugin_instance );
 
-		$save =& $udm->registerPlugin('AMPAppointment', 'Save');
-		$save->setOptions($this->getOptions());
+		$save =& $udm->registerPlugin('AMPAppointment', 'Save', $plugin_instance );
+		#$save->setOptions($this->getOptions());
 
 //		$read = $udm->registerPlugin('AMPAppointment', 'Read');
 //		$read->setOptions($this->getOptions());

@@ -17,7 +17,6 @@ class ScheduleItemSet extends AMPSystem_Data_Set {
     function getItemsByOwner( $owner_id ) {
         $this->addCriteria( "owner_id = ".$owner_id );
         if ($this->readData()) $this->_owner = $owner_id;
-//		$this->buildSchedule();
     }
 
 	function getOpenItems() {

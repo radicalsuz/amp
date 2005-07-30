@@ -29,7 +29,7 @@ class UserData_Action_Set extends AMPSystem_Data_Set {
     }
 
     function _register_criteria_dynamic() {
-        $this->addCriteria( "action="
+        $this->addCriteria( "service="
                     . $this->dbcon->qstr( $this->service ));
     }
 

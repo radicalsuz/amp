@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/System/Data/Item.inc.php' );
+require_once( 'Modules/Schedule/Appointment/Set.inc.php' );
 
 define ('AMP_SCHEDULE_STATUS_OPEN', 'open');
 define ('AMP_SCHEDULE_STATUS_CLOSED', 'closed');
@@ -10,7 +11,7 @@ class ScheduleItem extends AMPSystem_Data_Item {
     var $name_field = "title";
     var $datatable = "scheduleitems";
 
-	var $_appointments = array();
+	var $_appointments;
     
     function ScheduleItem ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -78,10 +79,12 @@ class ScheduleItem extends AMPSystem_Data_Item {
 	}
 
 	function getAppointments() {
+        trigger_error( 'GETTING APPOINTMENTS'.$this->id );
 		if (isset($this->_appointments)) {
 			return $this->_appointments;
 		}	
         if (!isset($this->id)) return array();
+        trigger_error( 'GETTING APPOINTMENTS' );
 
 		$this->_appointments =  & new AppointmentSet ( $this->dbcon );
 		$this->_appointments->setScheduleItemId( $this->id );
@@ -90,7 +93,7 @@ class ScheduleItem extends AMPSystem_Data_Item {
 	}
 		
 	function appointmentsCount() {
-		$appointments = $this->getAppointments();
+		if(!( $appointments = $this->getAppointments())) return 0;
 		return $appointments->RecordCount();	
 	}
 
@@ -103,9 +106,13 @@ class ScheduleItem extends AMPSystem_Data_Item {
 	function updateStatus() {
         $capacity = $this->getCapacity();
         if (!$capacity && ($capacity !== 0)) return;
+        trigger_error( $capacity . ' CAPACITY' );
+        trigger_error ($this->appointmentsCount() . ' COUNT');
 		if ( $this->appointmentsCount()  >= $capacity ) {
 			$this->setStatus( AMP_SCHEDULE_STATUS_CLOSED );
-			return $this->save();
+			if (!$result = $this->save()) return false;
+            $this->dbcon->CacheFlush();
+            return $result;
 		}
 	}
 

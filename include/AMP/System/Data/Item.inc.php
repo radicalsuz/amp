@@ -113,5 +113,63 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $this->getData( $this->name_field );
     }
 
+    function debugSave() {
+        $save_sql = $this->id ? $this->debug_updateSQL():
+                                $this->debug_insertSQL();
+
+        $rs = $this->dbcon->CacheExecute( $save_sql ) or
+                    die( "Unable to save " . get_class( $this) . " data using SQL $save_sql: " . $this->dbcon->ErrorMsg() );
+
+        if ($rs) {
+            if (!$this->id) $this->id = $this->dbcon->Insert_ID();
+            return true;
+        }
+
+        return false;
+    }
+
+    function debug_updateSQL ( ) {
+        $data = $this->itemdata;
+
+        $dbcon =& $this->dbcon;
+
+        $sql = "UPDATE " . $this->datatable . " SET ";
+
+        $save_fields = $this->_itemdata_keys;
+
+        foreach ($save_fields as $field) {
+            $elements[] = $field . "=" . $dbcon->qstr( $data[$field] );
+        }
+
+        $sql .= implode( ", ", $elements );
+        $sql .= " WHERE id=" . $dbcon->qstr( $this->id );
+
+        return $sql;
+
+    }
+
+    function debug_insertSQL ( ) {
+
+        $dbcon =& $this->dbcon;
+        $data = $this->itemdata;
+
+        $fields = $this->_itemdata_keys;
+        $values_noescape = array_values( $data );
+
+        foreach ( $fields as $field ) {
+            $value = $data[$field];
+            $values[] = $dbcon->qstr( $value );
+        }
+
+        $sql  = "INSERT INTO " . $this->datatable . "(";
+        $sql .= join( ", ", $fields ) .
+                ") VALUES (" .
+                join( ", ", $values ) .
+                ")";
+
+        return $sql;
+
+    }
+
 }
 ?>

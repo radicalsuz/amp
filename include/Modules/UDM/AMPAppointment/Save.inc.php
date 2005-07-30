@@ -3,6 +3,7 @@
 require_once ( 'AMP/UserData/Plugin/Save.inc.php' );
 require_once ( 'Modules/Schedule/Appointment.inc.php' );
 require_once ( 'Modules/Schedule/Schedule.php' );
+require_once ( 'Modules/Schedule/Lookups.inc.php' );
 
 class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 
@@ -13,7 +14,15 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 			'available' => true,
 			'type' 	=> 'select',
 			'default' => 1,
-			'values'  => 'Lookup(schedules, id, name)' )
+			'values'  => 'Lookup(schedules, id, name)' ),
+        'appointments_header' => array(
+            'available' => true,
+            'default' => "Select %s Appointment",
+            'type' => 'text' ),
+        'appointments_unavailable_header' => array(
+            'available' => true,
+            'default' => "No %s Appointments Available",
+            'type' => 'text' )
 		);
 
 
@@ -24,33 +33,45 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 	function _register_fields_dynamic() {
 		$options = $this->getOptions();
 		$schedule = &new Schedule( $this->dbcon, $options['schedule_id'] );
-		$schedule->readScheduleItems();
+        $open_appts =  $schedule->describeOpenItems();
+        if (empty( $open_appts )) {
+            $this->fields = array( 
+                'Appointments' => array(
+                    'type' => 'header', 
+                    'values' => sprintf($options['appointments_unavailable_header'], $schedule->getData("name") ),
+                    'enabled' => true, 
+                    'public' => true )
+                );
+
+            return;
+        }
 		
 		$this->fields = array(
             'Appointments' => array(
                 'type'=> 'header',
-                'values' => 'Select a ' . $schedule->getData('name') . ' Appointment',
+                'values' => sprintf($options['appointments_header'], $schedule->getData("name") ),
                 'public' => true,
                 'enabled' => true ),
-			'appointment' => array(
+			'scheduleitem_id' => array(
 				'type' => 'radiogroup',
 				'public' => true,
 				'enabled' => true,
 				'required' => true,
-				'values'  => $schedule->describeOpenItems()
+				'values'  => $open_appts
 			)
 		);
 
 	}
 
 	function getSaveFields() {
-		return array( 'appointment' );
+		return array( 'scheduleitem_id' );
 	}
 
 	function save( $data ) {
 		$options = $this->getOptions();
-		$schedule = &new Schedule( $this->udm->dbcon, $options['schedule_id'] );
-		if (!$schedule->makeAppointment( $this->udm->uid, $data['appointment'] )) {
+		$schedule = &new Schedule( $this->dbcon, $options['schedule_id'] );
+        if (!( isset($data['scheduleitem_id']) && $data['scheduleitem_id'])) return true;
+		if (!$schedule->makeAppointment( $this->udm->uid, $data['scheduleitem_id'] )) {
             $this->udm->errorMessage( "The requested schedule time is not avaiable" );
             return false;
         }

@@ -723,6 +723,13 @@ if (!function_exists ('AMP_varDump' )) {
         print '</pre>';
     }
 }
+if (!function_exists ('AMP_jsAlert' )) {
+    function AMP_jsAlert( $alert ) {
+        print '<script type="text/javascript">';
+        print ' alert ( "'.$alert.'");';
+        print '</script>';
+    }
+}
         
 
 ?>

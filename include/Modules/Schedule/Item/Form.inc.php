@@ -56,8 +56,6 @@ class ScheduleItem_Form extends AMPSystem_Form_XML {
     function setOwnerNames( $form_id ) {
         $userset = FormLookup_Names::instance( $form_id );
 		$this->setFieldValueSet( 'owner_id', $userset );
-        $fRef = &$this->form->getElement( 'owner_id' );
-        $fRef->loadArray( $userset );
     }
 
     function setScheduleValues() {

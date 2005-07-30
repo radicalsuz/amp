@@ -36,6 +36,7 @@
             return true;
         }
 
+        print $sql;
         trigger_error ( get_class( $this ) . ' failed to get data : ' . $this->dbcon->ErrorMsg() );
         return false;
         

@@ -16,7 +16,7 @@ class AppointmentSet extends UserData_Action_Set {
     }
 
     function setScheduleItemId ( $scheduleitem_id ) {
-        $this->addCriteria( "action_id=" . $scheduleitemid );
+        $this->addCriteria( "action_id=" . $scheduleitem_id );
     }
 }
 ?>

@@ -101,6 +101,8 @@
             'default'=>'submit')
         );
 
+    var $isBuilt=false;
+
 
     function AMPForm( $name, $method="POST", $action = null ) {
         $this->init ( $name, $method, $action );
@@ -125,6 +127,7 @@
 
         $this->enforceConstants();
         $this->setJavascript();
+        $this->isBuilt = true;
     }
 
     function output( $include_javascript = true ) {
@@ -197,6 +200,7 @@
         foreach ( $fieldset as $key => $field_def ) {
             $this->fields[$key] = $field_def;
         }
+        if ($this->isBuilt) $this->_buildElements();
         return true;
     }
 
@@ -213,6 +217,10 @@
     function setFieldValueSet( $fieldname, $valueset ) {
         if (!isset($this->fields[$fieldname])) return false;
         $this->fields[$fieldname]['values'] = $valueset;
+        if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {
+            $fRef->loadArray( $valueset );
+        }
+            
     }
 
     function getField( $name ) {

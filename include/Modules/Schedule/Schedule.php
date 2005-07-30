@@ -62,6 +62,7 @@ class Schedule extends AMPSystem_Data_Item {
         if (!isset($this->_scheduleItemList)) $this->readScheduleItems();
 
 		$slots = $this->_scheduleItems->getOpenItems();
+        if (empty( $slots )) return false;
 		$options = array();
 
 		foreach( $slots as $item ) {
@@ -76,20 +77,22 @@ class Schedule extends AMPSystem_Data_Item {
         if (!isset($this->_scheduleItemList)) $this->readScheduleItems();
         $this->dbcon->StartTrans();
         if (!$item = $this->getScheduleItem( $scheduleitem_id )) return false;
+        trigger_error ($scheduleitem_id . ' GOT SHCITME<br>');
         if (! $item->isOpen() )  {
+            trigger_error ($scheduleitem_id . ' ITEM NOT OPEN');
             $this->dbcon->FailTrans();
             $this->dbcon->CompleteTrans();
             return false;
         }
         $appointment = &new Appointment( $this->dbcon );
-        $data = array( 'userdata_id' => $user, 'action_id'=>$scheduleitem_id );
+        $data = array( 'userdata_id' => $user, 'action_id'=>$scheduleitem_id, 'id'=>null );
         $appointment->setData( $data );
 		#$appointment = &Appointment::createAppointment($user, $scheduleitem_id);
 		if (!$appointment->save()) {
             $this->dbcon->CompleteTrans();
             return false;
         }
-        print 'appointment saved';
+        trigger_error( "APPOINTMENT SAVED");
         $item->updateStatus();
         return $this->dbcon->CompleteTrans();
     }
