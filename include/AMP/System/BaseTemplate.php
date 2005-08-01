@@ -52,8 +52,8 @@ class AMPSystem_BaseTemplate {
     function setTool( $modid ) {
         $module_names = AMPSystem_Lookup::instance('Modules');
         $form_lookup = AMPSystem_Lookup::instance('FormsbyTool');
-        $this->title = $module_names[$modid];
-        $this->form_id = isset ($form_lookup[$modid])?$form_lookup[$modid]:false;
+        $this->title =      isset($module_names[$modid]) ?  $module_names[$modid]   : false;
+        $this->form_id =    isset ($form_lookup[$modid]) ?  $form_lookup[$modid]    : false;
         $this->modid =$modid;
     }
 

@@ -1,4 +1,5 @@
 <?php
+require_once ( 'AMP/Content/Page/Urls.inc.php' );
 define ( 'AMP_CONTENT_LISTTYPE_CLASS', 'class' );
 define ( 'AMP_CONTENT_LISTTYPE_SECTION', 'type' );
 
@@ -6,7 +7,7 @@ class AMPContent_Map {
 
     var $dbcon;
     var $map;
-    var $fields = array("id","type","usenav","textorder","parent");
+    var $fields = array("id","type","usenav","textorder","parent", "secure", "templateid", "css");
     var $dataset;
     var $top;
 
@@ -121,6 +122,20 @@ class AMPContent_Map {
             'href'  =>  'article_list.php?type=' . $section_id
             );
     }
+
+    function readSection( $section_id, $fieldname ) {
+        if (!isset($this->dataset[ $section_id ][ $fieldname ])) return false;
+        return $this->dataset[ $section_id ][ $fieldname ];
+    }
+
+    function readAncestors( $section_id, $fieldname ) {
+        if (!$ancestors = $this->getAncestors( $section_id )) return false;
+        foreach ($ancestors as $id => $name ) {
+            if ($answer = $this->readSection( $id, $fieldname )) return $answer;
+        }
+        return false;
+    }
+        
 
 }
 ?>

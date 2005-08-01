@@ -11,5 +11,27 @@ class Section extends AMPSystem_Data_Item {
         $this->init( $dbcon, $id );
     }
 
+    function getParent() {
+        return $this->getData( 'parent' );
+    }
+
+    function getSecured() {
+        return $this->getData( 'secure' );
+    }
+
+    function getTemplate() {
+        return $this->getData( 'templateid' );
+    }
+
+    function getStylesheet() {
+        return $this->getData( 'css' );
+    }
+
+    function getRedirect() {
+        if (!$this->getData('uselink')) return false;
+        if (!( $target = $this->getData('linkurl'))) return false;
+        return $target;
+    }
+
 }
 ?>

@@ -1,21 +1,28 @@
 <?php
- /*********************
-06-11-2003  v3.01
-Module:  Template
-Description:  display footer and right nav of template. called from all display pages
-To Do: 
 
-*********************/ 
+/* * * * * * * * * *
+ * AMP Base Footer
+ */
+
+require_once ('AMP/Content/Page.inc.php' );
+
+$currentPage = AMPContent_Page::instance();
 if (isset($modulefooter) && $modulefooter){
-	echo $modulefooter;
-	$modulefooter=NULL;
+    $currentPage->addtoContentFooter( $modulefooter );
 }
 
-$bodydata = ob_get_clean();
+if (!isset($bodydata2)) $bodydata2 = "";
+$currentPage->setContent( ob_get_clean().$bodydata2 );
 
-if (!isset($bodydata2)) $bodydata2 = '';
-$bodydata =$bodydata2.$bodydata;
 
+if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) {
+    print $currentPage->output( AMP_CONTENT_PAGE_DISPLAY_PRINTSAFE );
+} else {
+    print $currentPage->output();
+}
+
+@ob_end_flush();
+/*
 $sidelistcss="sidelist";
 
 include("AMP/Nav/navselect.php"); 
@@ -31,14 +38,13 @@ $htmltemplate2 = str_replace("[-right nav-]", $rightnav, $htmltemplate);
 $htmltemplate2 = str_replace("[-left nav-]", $leftnav, $htmltemplate2);
 $htmltemplate2 = str_replace("[-body-]", $bodydata, $htmltemplate2);
 
+
 $htmloutput = $htmlheader . $htmltemplate2;
 
-if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) {
-	$printer_safe_top= "<div class=printer_safe_top></div>";
-	echo $htmlheader.$printer_safe_top.$bodydata;
 } else {
     echo $htmloutput;
 }
+*/
 
-@ob_end_flush();
+
 ?>

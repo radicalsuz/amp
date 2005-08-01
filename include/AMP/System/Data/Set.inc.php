@@ -36,8 +36,7 @@
             return true;
         }
 
-        print $sql;
-        trigger_error ( get_class( $this ) . ' failed to get data : ' . $this->dbcon->ErrorMsg() );
+        trigger_error ( get_class( $this ) . ' failed to get data : ' . $this->dbcon->ErrorMsg() . "\n statement: " . $sql );
         return false;
         
     }
@@ -174,6 +173,24 @@
 
 		return $set;
 	}
+
+    function filter( $fieldname, $value ) {
+        if (!$this->makeReady()) return false;
+        $result = array();
+        while( $data = $this->getData() ) {
+            if ($data[ $fieldname ] != $value) continue;
+            $result[ $data[$this->id_field]] = $data;
+        }
+
+        if (empty($result)) return false;
+        return $result;
+    }
+
+    function getArray() {
+        if (!$this->makeReady()) return false;
+        return $this->source->GetArray();
+    }
+
  }
 
  ?>

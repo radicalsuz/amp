@@ -50,6 +50,9 @@ $reg_manager->setEntry( AMP_REGISTRY_SETTING_ENCODING, $encoding );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_SITENAME, $SystemSettings['websitename'] );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_SITEURL, $SystemSettings['basepath'] );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_EMAIL_SYSADMIN, $SystemSettings['emfaq'] );
+$reg_manager->setEntry( AMP_REGISTRY_SETTING_METADESCRIPTION, $SystemSettings['metadescription'] );
+$reg_manager->setEntry( AMP_REGISTRY_SETTING_METACONTENT, $SystemSettings['metacontent'] );
+$reg_manager->setEntry( AMP_REGISTRY_CONTENT_TEMPLATE_ID_DEFAULT, $SystemSettings['template'] );
 
 		
 #SET DATABASE CACHING

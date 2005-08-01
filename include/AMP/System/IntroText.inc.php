@@ -35,6 +35,14 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
         return $this->getData( 'type' );
     }
 
+    function getTemplate() {
+        return $this->getData( 'templateid' );
+    }
+
+    function getTitle() {
+        return $this->getData( 'title' );
+    }
+
  }
 
  ?>

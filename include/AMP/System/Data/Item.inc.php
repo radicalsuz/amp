@@ -55,6 +55,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return false;
     }
 
+    function hasData() {
+        return (isset( $this->itemdata) && !empty($this->itemdata));
+    }
+
     function deleteData( $item_id ) {
         $sql = "Delete from " . $this->datatable . " where ". $this->id_field ." = ". $this->dbcon->qstr( $item_id );
         if ( $itemdata = $this->dbcon->Execute( $sql )) {

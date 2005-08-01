@@ -6,7 +6,18 @@ define('AMP_REGISTRY_SETTING_ENCODING','SETTING_ENCODING');
 define('AMP_REGISTRY_SETTING_SITENAME','SETTING_SITENAME');
 define('AMP_REGISTRY_SETTING_SITEURL','SETTING_SITEURL');
 define('AMP_REGISTRY_SETTING_EMAIL_SYSADMIN','SETTING_EMAIL_SYSADMIN');
+define('AMP_REGISTRY_SETTING_METADESCRIPTION', 'SETTING_METADESCRIPTION' );
+define('AMP_REGISTRY_SETTING_METACONTENT', 'SETTING_METACONTENT' );
+
+
 define('AMP_REGISTRY_CONTENT_INTRO_ID', 'CONTENT_INTRO_ID' );
+define('AMP_REGISTRY_CONTENT_ARTICLE_ID', 'MM_ID' );
+define('AMP_REGISTRY_CONTENT_ARTICLE', 'ARTICLE' );
+define('AMP_REGISTRY_CONTENT_PAGE_TITLE', 'MM_TITLE' );
+define('AMP_REGISTRY_CONTENT_SECTION_ID', 'MM_TYPE' );
+define('AMP_REGISTRY_CONTENT_SECTION', 'CURRENT_SECTION' );
+define('AMP_REGISTRY_CONTENT_CLASS_ID', 'MM_CLASS' );
+define('AMP_REGISTRY_CONTENT_TEMPLATE_ID_DEFAULT' , 'TEMPLATE_ID_DEFAULT' );
 
 //based on the Registry pattern described at
 //http://www.phppatterns.com/index.php/article/articleview/75/1/1/
@@ -20,6 +31,7 @@ class AMP_Registry {
         $this->_cache_stack[0][$key] = &$item;
     }
     function &getEntry($key) {
+        if (!isset($this->_cache_stack[0][$key])) return false;
         return $this->_cache_stack[0][$key];
     }
     function isEntry($key) {
@@ -68,5 +80,24 @@ class AMP_Registry {
         }
         return $dbcon;
 	}
+
+	function setArticle(&$article) {
+		$this->setEntry(AMP_REGISTRY_CONTENT_ARTICLE, $article);
+		$this->setEntry(AMP_REGISTRY_CONTENT_ARTICLE_ID, $article->id );
+		$this->setEntry(AMP_REGISTRY_CONTENT_PAGE_TITLE, $article->getName() );
+		$this->setEntry(AMP_REGISTRY_CONTENT_SECTION_ID, $article->getParent() );
+		$this->setEntry(AMP_REGISTRY_CONTENT_SECTION_ID, $article->getClass() );
+	}
+
+	function &getArticle() {
+		return $this->getEntry(AMP_REGISTRY_CONTENT_ARTICLE);
+	}
+	function setSection(&$section) {
+		$this->setEntry(AMP_REGISTRY_CONTENT_SECTION, $section);
+	}
+
+	function &getSection() {
+        return $this->getEntry( AMP_REGISTRY_CONTENT_SECTION );
+    }
 }
 ?>
