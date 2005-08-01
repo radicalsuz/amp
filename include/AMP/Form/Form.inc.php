@@ -218,7 +218,7 @@
         if (!isset($this->fields[$fieldname])) return false;
         $this->fields[$fieldname]['values'] = $valueset;
         if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {
-            $fRef->loadArray( $valueset );
+            $fRef->loadArray( $this->_selectAddNull($valueset) );
         }
             
     }
@@ -371,9 +371,13 @@
     function &_addElementSelect( $name, $field_def ) {
         $valueset = $this->_getValueSet( $name );
 		if ( is_array( $valueset ) ) {
-            $valueset = array('' => 'Select one') + $valueset;
+            $valueset = $this->_selectAddNull( $valueset );
         }
         return $this->form->addElement( 'select', $name, $field_def['label'], $valueset);
+    }
+
+    function _selectAddNull( $valueset ) {
+        return array('' => 'Select one') + $valueset;
     }
 
     function &_addElementMultiselect( $name, $field_def ) {
