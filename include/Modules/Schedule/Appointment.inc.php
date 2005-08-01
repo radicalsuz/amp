@@ -31,9 +31,10 @@ class Appointment extends UserData_Action {
 		$this->mergeData( $scheduleItem );
 	}	
 
-
+/*
     function save() {
         return $this->debugSave();
     }
+*/
 }
 ?>

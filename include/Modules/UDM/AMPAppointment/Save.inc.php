@@ -34,11 +34,11 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 		$options = $this->getOptions();
 		$schedule = &new Schedule( $this->dbcon, $options['schedule_id'] );
         $open_appts =  $schedule->describeOpenItems();
-        if (empty( $open_appts )) {
+        if (empty( $open_appts ) || !$open_appts) {
             $this->fields = array( 
                 'Appointments' => array(
                     'type' => 'header', 
-                    'values' => sprintf($options['appointments_unavailable_header'], $schedule->getData("name") ),
+                    'label' => sprintf($options['appointments_unavailable_header'], $schedule->getData("name") ) ,
                     'enabled' => true, 
                     'public' => true )
                 );
@@ -49,7 +49,7 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 		$this->fields = array(
             'Appointments' => array(
                 'type'=> 'header',
-                'values' => sprintf($options['appointments_header'], $schedule->getData("name") ),
+                'label' => sprintf($options['appointments_header'], $schedule->getData("name") ),
                 'public' => true,
                 'enabled' => true ),
 			'scheduleitem_id' => array(

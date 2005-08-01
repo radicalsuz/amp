@@ -24,16 +24,8 @@ class ScheduleItemSet extends AMPSystem_Data_Set {
 	}
 
 	function getItemsByStatus($status) {
-		$items = array();
-		if (!$this->makeReady()) return false;
-
-		while($item = $this->getData() ) {
-			if (!$item['status'] == $status) continue;
-            $id = $item[ 'id' ];
-			$items[ $id ] = &new ScheduleItem($this->dbcon);
-			$items[ $id ]->setData($item);
-		}
-		return $items;
+		$items = $this->filter('status', $status);
+		return $this->instantiateItems($items, 'ScheduleItem');
 	}
 
     function &getItem( $item_id ) {

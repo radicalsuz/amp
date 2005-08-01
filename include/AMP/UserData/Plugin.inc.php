@@ -600,6 +600,7 @@ class UserDataPlugin {
             "instance_id" => $this->udm->instance,
             "namespace" => $namespace, 
             "action" => $action,
+            "priority" => 10,
             "active" => 1 );
 
         $result = $this->dbcon->Replace( 'userdata_plugins', $reg_data, 'id', $quote=true);

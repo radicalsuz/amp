@@ -191,6 +191,18 @@
         return $this->source->GetArray();
     }
 
+	function instantiateItems($rows, $class) {
+		if(empty($rows) or !$rows or !$class or !(class_exists($class))) return false;
+
+		$items = array();
+		foreach ($rows as $row) {
+			$object =& new $class($this->dbcon);
+			$object->setData($row);
+			$items[$object->id] = $object;
+		}
+
+		return $items;
+	}
  }
 
  ?>

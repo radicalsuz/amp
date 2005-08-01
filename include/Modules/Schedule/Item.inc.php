@@ -23,7 +23,7 @@ class ScheduleItem extends AMPSystem_Data_Item {
 
 	function setStatus( $status ) {
 		$data = array ( 'status' => $status );
-		return $this->setData( $data );
+		return $this->mergeData( $data );
 	}
 
 	function getStatusOptions() {
@@ -115,6 +115,7 @@ class ScheduleItem extends AMPSystem_Data_Item {
             return $result;
 		}
 	}
+
 
 }
 ?>

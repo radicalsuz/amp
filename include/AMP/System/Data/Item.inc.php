@@ -70,6 +70,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function save() {
         $save_fields = array_combine_key($this->_itemdata_keys, $this->getData());
+		if (!isset($save_fields[ $this->id_field ])) $save_fields[ $this->id_field ] = "";
         
         $result = $this->dbcon->Replace( $this->datatable, $save_fields, $this->id_field, $quote=true);
 
