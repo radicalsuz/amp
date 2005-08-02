@@ -21,7 +21,9 @@ class NavEngine_RSS extends NavEngine {
         
         $items = $this->_feed->items;
         $this->nav->setCount( count($items) );
-        if ($this->nav->exceedsLimit()) $items = array_slice( $this->_feed->items, 0, $this->nav->getLimit() );
+        if ($this->nav->exceedsLimit())  {
+            $items = array_slice( $this->_feed->items, 0, $this->nav->getLimit() );
+        }
 
         return $this->_linksGetArray( $items );
     }

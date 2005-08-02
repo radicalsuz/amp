@@ -139,7 +139,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function getLinkTextField() {
-        if ($fieldname = $this->getData( 'linktext' )) return $fieldname;
+        if ($fieldname = $this->getData( 'linkfield' )) return $fieldname;
         return 'title';
     }
 
@@ -160,7 +160,9 @@ class NavigationElement extends AMPSystem_Data_Item {
     function exceedsLimit() {
         if (!($limit = $this->getLimit())) return false;
         if (!($total = $this->getTotalCount())) return false;
-        return ($total > $limit);
+        print ($total . ' vs ' . $limit .'<BR>');
+        if ($total>$limit) return true;
+        return false;
     }
 
     function setLimit( $qty ) {

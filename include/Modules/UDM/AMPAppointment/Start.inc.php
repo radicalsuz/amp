@@ -22,7 +22,7 @@ class UserDataPlugin_Start_AMPAppointment extends UserDataPlugin {
 		$save =& $udm->registerPlugin('AMPAppointment', 'Save', $plugin_instance );
 		#$save->setOptions($this->getOptions());
 
-//		$read = $udm->registerPlugin('AMPAppointment', 'Read');
+		$read = $udm->registerPlugin('AMPAppointment', 'Read', $plugin_instance);
 //		$read->setOptions($this->getOptions());
 	}
 

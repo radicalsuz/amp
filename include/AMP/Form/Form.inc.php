@@ -157,6 +157,12 @@
 
     function setDefaultValue( $fieldname, $value ) {
         $this->fields[ $fieldname ]['default'] = $value;
+        if (! ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname )))) return true;
+
+        $current = $fRef->getValue();
+        $current_default = $this->_getDefault( $name );
+        if ((!(isset($current)||isset($current_default))) 
+            || ($current_default == $current)) $fRef->setValue( $value );
     }
 
     function getValues ( $fields = null ) {
@@ -222,6 +228,14 @@
         }
             
     }
+    function addFieldAttr ( $fieldname, $attr ) {
+        if (!isset($this->fields[$fieldname])) return false;
+        $this->fields[$fieldname]['attr'] = $attr;
+        if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {
+            $fRef->updateAttributes( $attr );
+        }
+    }
+
 
     function getField( $name ) {
         if (!isset( $this->fields[ $name ] )) return false;
@@ -377,6 +391,7 @@
     }
 
     function _selectAddNull( $valueset ) {
+        if (!is_array($valueset)) return false;
         return array('' => 'Select one') + $valueset;
     }
 

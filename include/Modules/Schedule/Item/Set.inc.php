@@ -6,6 +6,7 @@ require_once ("Modules/Schedule/Item.inc.php");
 class ScheduleItemSet extends AMPSystem_Data_Set {
 
 	var $datatable = 'scheduleitems';
+    var $sort = array( "start_time" );
 
 	function ScheduleItemSet( &$dbcon, $schedule_id=null ) {
 		$this->init($dbcon);

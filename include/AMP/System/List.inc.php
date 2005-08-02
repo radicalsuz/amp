@@ -162,7 +162,7 @@ class AMPSystem_List {
     }
 
     function _HTML_editLink( $id ) {
-        return  "<A HREF='".$this->editlink."?id=".$id."' title='Edit this Item'>" .
+        return  "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$id ) ."' title='Edit this Item'>" .
                 "<img src=\"". AMP_SYSTEM_ICON_EDIT ."\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A>" ;
     }
 
@@ -329,6 +329,17 @@ class AMPSystem_List {
         $select_exps =  array_values($this->col_headers);
         $select_exps[] = "id";
         return $select_exps;
+    }
+
+    function addCriteria( $sql_criteria, $change_editlink=false) {
+        $this->source->addCriteria( $sql_criteria );
+        $result =  $this->source->readData(); 
+        if ($result && $change_editlink) $this->appendEditlinkVar( $sql_criteria );
+        return $result;
+    }
+
+    function appendEditlinkVar( $var ) {
+        $this->editlink = AMP_URL_AddVars( $this->editlink, $sql_criteria);
     }
 
 

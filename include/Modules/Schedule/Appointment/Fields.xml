@@ -1,0 +1,13 @@
+<array>
+    <id>
+        <type>hidden</type>
+    </id>
+    <userdata_id>
+        <type>select</type>
+        <label>Users</label>
+    </userdata_id>
+    <schedule_id>
+        <type>select</type>
+        <label>Schedule</label>
+    </schedule_id>
+</array>

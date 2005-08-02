@@ -20,25 +20,6 @@ class Schedule_Form extends AMPSystem_Form_XML {
         $this->setFieldValueSet( 'form_id_AMPAppointment' , $formlist );
     }
 
-	function retainForm( $form_id, $namespace ) {
-		print '<BR>setting form' . $form_id;
-		$this->initial_forms_links[ $namespace ] = $form_id;
-	}
-
-	function getFormLink( $namespace ) {
-		if (empty( $this->initial_form_links )) return false;
-		if (!isset( $this->initial_form_links[ $namespace ] )) return false;
-		print '<BR>returning form' . $form_id;
-		return $this->initial_form_links[ $namespace ];
-	}
-
-
-    function postSave( $values ) {
-
-        if (!isset($values['id'])) return false;
-    }
-
-
 }
 
 ?> 

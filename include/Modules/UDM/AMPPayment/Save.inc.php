@@ -191,15 +191,16 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         
         $selector_field['Payment_Type'] = $this->getPaymentSelect($options);
 
-        $fieldswapper = & new ElementSwapScript( $this->fieldswap_object_id );
-        $fieldswapper->formname = $this->udm->name;
+        $fieldswapper = &ElementSwapScript::instance(); 
+        $fieldswapper->addSwapper($this->fieldswap_object_id );
+        $fieldswapper->setForm( $this->udm->name, $this->fieldswap_object_id );
         $paymentType_fields = array();
 
         foreach ($this->getAllowedPaymentTypes( $options ) as $payment_type => $description) {
             $current = &new Payment ($this->dbcon, $payment_type);
             if ($payment_type == 'Check') $this->_setupCheck( $current, $options );
             
-            $fieldswapper->addSet( $payment_type, $this->convertFieldDefstoDOM($current->fields)) ;
+            $fieldswapper->addSet( $payment_type, $this->convertFieldDefstoDOM($current->fields), $this->fieldswap_object_id) ;
             $paymentType_fields = array_merge($paymentType_fields, $current->fields);
         }
 

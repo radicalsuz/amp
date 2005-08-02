@@ -10,7 +10,7 @@ class ScheduleItem_List extends AMPSystem_List {
 	var $col_headers = array( "Name" => "title", "Time" => "start_time", "Status" => "status", 'Schedule'=>'schedule_id' );
 	var $editlink = "schedule_item.php";
     var $schedule_id;
-    var $extra_columns = array( 'Participants'=>'schedule_appointments.php?schedule_id=' );
+    var $extra_columns = array( 'Participants'=>'schedule_appointment.php?action=list&scheduleitem_id=' );
 
 	function ScheduleItem_List( &$dbcon, $id = null ) {
 		$source = & new ScheduleItemSet( $dbcon );

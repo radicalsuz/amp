@@ -4,7 +4,7 @@ require_once ('AMP/System/Data/Set.inc.php' );
 
 class AMPSystem_Tool_Controls extends AMPSystem_Data_Set {
 
-    var $datatable = 'module_controls';
+    var $datatable = 'module_control';
 
     function AMPSystem_Tool_Controls ( &$dbcon, $modid = null ) {
         $this->init( $dbcon );

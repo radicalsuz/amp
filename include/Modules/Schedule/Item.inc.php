@@ -49,17 +49,18 @@ class ScheduleItem extends AMPSystem_Data_Item {
     function describeSlot() {
         $contact_names = $this->getContactNames();
         $data = $this->getData();
-        $output = "<div>";
-        if (isset($data['title']) && $data['title']) {
-            $output .= str_replace( "'", "&rsquot;", $data['title'] );
-        }
+        #$output = "<div>";
+        $output = "";
         if (isset($data['start_time']) && $data['start_time']) {
-            $output .= '<BR>' . date( 'M j, Y \a\t g:i A', strtotime($data['start_time']));
+            $output .= date( 'M j, Y \a\t g:ia', strtotime($data['start_time']));
+        }
+        if (isset($data['title']) && $data['title']) {
+            $output .= ' : ' . str_replace( "'", "&rsquot;", $data['title'] );
         }
         if (isset($data['owner_id']) && $data['owner_id'] && $contact_names ) {
-            $output .= '<BR>' . $contact_names[$data['owner_id']] . "<BR>";
+            $output .= ' : with ' . $contact_names[$data['owner_id']] . "<BR>";
         }
-        return $output . '</div>';
+        return $output; # . '</div>';
     }
 		
 	function isOpen() {

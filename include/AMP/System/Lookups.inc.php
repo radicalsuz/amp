@@ -22,7 +22,8 @@ class AMPSystem_LookupFactory {
         if (!isset($lookup->datatable)) return false;
         if (!isset($lookup->result_field)) return false;
         if ( ! ($data = $this->dbcon->CacheGetAssoc( $this->assembleSQL( $lookup ) ))) {
-            trigger_error( 'Failed to retrieve '.get_class($lookup).': '.$this->dbcon->ErrorMsg() );
+            if ($this->dbcon->ErrorMsg()) 
+                trigger_error( 'Failed to retrieve '.get_class($lookup).': '.$this->dbcon->ErrorMsg() );
             return false;
         }
         return $data;
@@ -139,6 +140,28 @@ class AMPSystemLookup_Templates extends AMPSystem_Lookup {
         $this->init();
     }
 
+}
+
+class AMPSystemLookup_UserDataNames extends AMPSystem_Lookup {
+    var $datatable = "userdata";
+    var $result_field = "Concat( First_Name, ' ', Last_Name ) as name";
+    var $sortby = "Last_Name, First_Name";
+    var $criteria = "( (!isnull(Last_Name) OR !isnull(First_Name)) AND (First_Name!='' OR Last_Name!='')) ";
+    
+    function AMPSystemLookup_UserDataNames() {
+        $this->init();
+    }
+}
+
+class AMPSystemLookup_UserDataFormalNames extends AMPSystem_Lookup {
+    var $datatable = "userdata";
+    var $result_field = "Concat( Last_Name, ', ', First_Name ) as name";
+    var $sortby = "Last_Name, First_Name";
+    var $criteria = "( (!isnull(Last_Name) OR !isnull(First_Name)) AND (First_Name!='' OR Last_Name!='')) ";
+    
+    function AMPSystemLookup_UserDataNames() {
+        $this->init();
+    }
 }
 
 ?>

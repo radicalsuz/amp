@@ -24,7 +24,7 @@ class AMPSystem_Data {
 
     var $_nativeColumns;
     var $id_field = "id";
-    var $name_field;
+    var $name_field = "name";
 
     var $errors = array();
 

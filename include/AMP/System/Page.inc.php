@@ -16,6 +16,8 @@
 
 require_once( 'AMP/System/Base.php' );
 require_once( 'AMP/System/Page/Display.inc.php' );
+define( 'AMP_PAGE_ACTION_COMPONENT_INIT', 'init' );
+define( 'AMP_PAGE_ACTION_COMPONENT_EXEC', 'execute' );
 
 class AMPSystem_Page {
 
@@ -138,6 +140,8 @@ class AMPSystem_Page {
 
             if (!class_exists( $classname )) continue;
             $this->$type = & new $classname ( $this->dbcon );
+            $this->doCallbacks( $type, AMP_PAGE_ACTION_COMPONENT_INIT ); 
+
         }
     }
 
@@ -294,6 +298,30 @@ class AMPSystem_Page {
     function getErrors() {
         return $this->errors;
     }
+
+    function addCallback( $component_type, $method_def, $args=array(), $trigger = AMP_PAGE_ACTION_COMPONENT_INIT ) {
+        if (!is_array($args)) $args = array( $args );
+        $this->callbacks[ $trigger ][ $component_type ][] = array('method'=>$method_def, 'args'=>$args );
+    }
+
+    function getCallbacks( $component_type, $trigger = AMP_PAGE_ACTION_COMPONENT_INIT ) {
+        if (!isset( $this->callbacks[ $trigger ] )) return false;
+        if (!isset( $this->callbacks[ $trigger ][$component_type] )) return false;
+        return $this->callbacks[$trigger][ $component_type ];
+    }
+
+    function doCallbacks( $component_type, $trigger = AMP_PAGE_ACTION_COMPONENT_INIT ) {
+        if (! ($actions = $this->getCallbacks( $component_type, $trigger ))) return false;
+        if (! isset($this->$component_type)) return false;
+        $component = &$this->$component_type;
+
+        foreach( $actions as $action_def ) {
+            if (!method_exists( $component, $action_def['method'])) continue;
+            call_user_func_array( array( &$component, $action_def['method'] ), $action_def['args'] );
+        }
+        return true;
+    }
+
 
 }
 ?>        

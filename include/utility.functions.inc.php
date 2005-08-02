@@ -736,6 +736,17 @@ if (!function_exists ('AMP_jsAlert' )) {
         print '</script>';
     }
 }
+
+if (!function_exists('AMP_Url_AddVar')) {
+    function AMP_Url_AddVars ( $current_value, $new_vars ) {
+        if (!is_array( $new_vars)) $new_vars = array( $new_vars );
+        if (strpos( $current_value, '?') === FALSE )  return $current_value . '?' . join( '&', $new_vars );
+
+        return $current_value . '&' . join( '&', $new_vars );
+    }
+}
+        
+
         
 
 ?>
