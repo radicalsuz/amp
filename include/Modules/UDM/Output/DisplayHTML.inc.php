@@ -128,7 +128,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
             if($inclass) {
                 $output.=$this->$display_function($dataitem);
             } else {
-                $output.=$display_function($dataitem, $this->options);
+                $output.=$display_function($dataitem, $options);
             }
         }
     
