@@ -1,0 +1,26 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<title>
+		<type>text</type>
+		<label>Title</label>
+	</title>
+	<type>
+		<type>select</type>
+		<label>Section</label>
+	</type>
+    <body>
+        <type>wysiwyg</type>
+        <label>Content</label>
+    </body>
+	<date>
+        <type>date</type>
+        <label>Date</label>
+		<options>
+			<format>MdY</format>
+		</options>
+		<default>today</default>
+	</date>
+    
+</array>
