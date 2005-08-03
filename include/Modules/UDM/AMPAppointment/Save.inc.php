@@ -30,6 +30,7 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
         $open_appts =  $schedule->describeOpenItems();
         $header_prefix  =  'AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_';
         $header_descriptor = 'AVAILABLE';
+        $choose_default = null;
         if (isset( $_GET['action_id'] ) && ( $item_id = $_GET['action_id'] )) {
             if (!isset( $open_appts[ $item_id ] )) {
                 $header_prefix .= 'REQUESTED_';
@@ -38,6 +39,7 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
                 $single_appt = array();
                 $single_appt[ $item_id ] = $open_appts[ $item_id ];
                 $open_appts = $single_appt;
+                $choose_default = $item_id;
             }
         }
 
@@ -58,6 +60,7 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 				'type' => 'radiogroup',
 				'public' => true,
 				'enabled' => true,
+				'default' => $choose_default,
                 'label' => 'Available Times',
 				'required' => true,
 				'values'  => $open_appts
