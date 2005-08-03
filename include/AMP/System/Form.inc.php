@@ -118,6 +118,7 @@ class AMPSystem_Form extends AMPForm {
     }
 
     function getItemName() {
+        if (!$this->getField( $this->name_field )) return false;
         $set = $this->getValues( array($this->name_field) );
         if (!$set) return false;
         return $set[$this->name_field];

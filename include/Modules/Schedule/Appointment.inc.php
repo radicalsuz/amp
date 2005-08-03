@@ -38,16 +38,17 @@ class Appointment extends UserData_Action {
         $this->dbcon->StartTrans();
         $result= (PARENT::save() && $item->updateStatus());
         if (!$result) {
+            $this->addError( 'Appointment status change failed' );
             $this->dbcon->FailTrans();
         }
         return $this->dbcon->CompleteTrans();
     }
 
     function deleteData( $id ) {
+        $action = &new Appointment( $this->dbcon, $id );
         $result = PARENT::deleteData( $id );
-
-        if (!($this->getData('action_id') && $id==$this->id)) return $result;
-        $item = &new ScheduleItem( $this->dbcon, $this->getData('action_id'));
+        if (!$action->getData('action_id')) return $result;
+        $item = &new ScheduleItem( $this->dbcon, $action->getData('action_id'));
         return ($result && $item->updateStatus());
     }
 

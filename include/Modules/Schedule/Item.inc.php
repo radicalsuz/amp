@@ -12,6 +12,11 @@ class ScheduleItem extends AMPSystem_Data_Item {
     var $datatable = "scheduleitems";
 
 	var $_appointments;
+    var $timezones = array(
+        'PST' => 'Pacific',
+        'EST' => 'Eastern',
+        'MST' => 'Mountain',
+        'CST' => 'Central' );
     
     function ScheduleItem ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -49,30 +54,35 @@ class ScheduleItem extends AMPSystem_Data_Item {
     function describeSlot() {
         $contact_names = $this->getContactNames();
         $data = $this->getData();
-        #$output = "<div>";
         $output = "";
         if (isset($data['start_time']) && $data['start_time']) {
             $output .= date( 'M j, Y \a\t g:ia', strtotime($data['start_time']));
+            if (isset($data['timezone']) && $data['timezone']) {
+                $output .= " " . $this->timezones[ $data[ 'timezone' ] ];
+            }
         }
         if (isset($data['title']) && $data['title']) {
             $output .= ' : ' . str_replace( "'", "&rsquot;", $data['title'] );
         }
         if (isset($data['owner_id']) && $data['owner_id'] && $contact_names ) {
-            $output .= ' : with ' . $contact_names[$data['owner_id']] . "<BR>";
+            $output .= ' : with ' . $contact_names[$data['owner_id']] ;
         }
-        return $output; # . '</div>';
+        if (isset($data['location']) && $data['location'] ) {
+            $output .= ' : ' . $data['location'] ;
+        }
+        return $output;
     }
 		
 	function isOpen() {
-		if ($this->getStatus() == AMP_SCHEDULE_STATUS_OPEN) {
-			return true;
-		}
+		return ($this->getStatus() == AMP_SCHEDULE_STATUS_OPEN) ;
 	}
 
 	function isClosed() {
-		if ($this->getStatus() == AMP_SCHEDULE_STATUS_CLOSED) {
-			return true;
-		}
+		return ($this->getStatus() == AMP_SCHEDULE_STATUS_CLOSED) ;
+	}
+
+	function isDraft() {
+		return ($this->getStatus() == AMP_SCHEDULE_STATUS_DRAFT) ;
 	}
 
 	function getCapacity() {
@@ -105,13 +115,18 @@ class ScheduleItem extends AMPSystem_Data_Item {
 	function updateStatus() {
         $capacity = $this->getCapacity();
         if (!$capacity && ($capacity !== 0)) return true;
+        if ($this->isDraft()) return true;
+        $new_status = AMP_SCHEDULE_STATUS_OPEN;
 		if ( $this->appointmentsCount()  >= $capacity ) {
-			$this->setStatus( AMP_SCHEDULE_STATUS_CLOSED );
-			if (!$result = $this->save()) return false;
-            $this->dbcon->CacheFlush();
-            return $result;
-		}
-        return true;
+            $new_status = AMP_SCHEDULE_STATUS_CLOSED;
+        } 
+        if ($this->getStatus() == $new_status) return true;
+
+        $this->setStatus( $new_status );
+        if (!$result = $this->save()) return false;
+
+        $this->dbcon->CacheFlush();
+        return $result;
 	}
 
 

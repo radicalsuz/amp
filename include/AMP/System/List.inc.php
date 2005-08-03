@@ -42,6 +42,7 @@ class AMPSystem_List {
         'mouseover' => '#CCFFCC');
 
     var $suppress = array( 'header'=>true );
+    var $currentrow;
 
     ####################
     ### Core Methods ###
@@ -79,8 +80,8 @@ class AMPSystem_List {
 
         $output = "";
 
-        while ( $currentrow = $this->source->getData()) {
-            $output .= $this->_HTML_listRow ( $this->_translateRow($currentrow));
+        while ( $this->currentrow = $this->source->getData()) {
+            $output .= $this->_HTML_listRow ( $this->_translateRow($this->currentrow));
         
         }		
         return $this->_HTML_header() .
@@ -171,12 +172,25 @@ class AMPSystem_List {
         $list_html='';
 
         //show extra links for each row
-        foreach ($this->extra_columns as $header=>$col) {
+        foreach ($this->extra_columns as $header=>$baselink) {
             $list_html .= " \n<td> <div align='right'>";
-            $list_html .= "<A HREF='".$col.$currentrow[$this->_requestedID( $header )]."'>$header</A>";
+            $list_html .= "<A HREF='". $this->_getColumnLink( $header, $currentrow )."'>$header</A>";
             $list_html .= "</div></td>";
         }
         return $list_html;
+    }
+
+    function _getColumnLink( $colname, $currentrow  ) {
+        if (isset($this->extra_columns[ $colname ])) {
+            if (!isset($this->column_callBacks[ $colname ] )) {
+                return $this->extra_columns[ $colname ].$currentrow[$this->_requestedID( $header )];
+            } else {
+                $method = $this->column_callBacks[ $colname ]['method'];
+                #$args =  $this->column_callBacks[ $colname ]['args'];
+                return call_user_func( $method, $currentrow );
+            }
+            return false;
+        }
     }
 
 

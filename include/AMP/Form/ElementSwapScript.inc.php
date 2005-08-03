@@ -36,8 +36,7 @@ class ElementSwapScript {
         return false;
     }
 
-    function addSet ($setname, $fields, $swapper_name = null ) {
-        if (!isset($swapper_name)) $swapper_name = $this->default_swapper_name;
+    function addSet ($setname, $fields, $swapper_name  ) {
         $this->swappers[ $swapper_name ][$setname ] = $fields;
     }
 
@@ -59,7 +58,7 @@ class ElementSwapScript {
                     $script .= $swapper_name.".addSwapElement( '$fieldname', '$setkey' );\n";
                 }
             }
-            $script .=  "ActivateSwap( window.".$swapper_name.", '".$this->getInitialValue( $swapper_name )."');\n".
+            $script .=  $this->js_ActivateInitial( $swapper_name ).
                         "} \n loadSwapper_".$swapper_name."();\n";
         }
         $script .= "</script>";
@@ -67,17 +66,19 @@ class ElementSwapScript {
         return $script;
     }
 
+    function js_ActivateInitial( $swapper_name ) {
+            return  "ActivateSwap( window.".$swapper_name.", '".$this->getInitialValue( $swapper_name )."');\n";
+    }
+
     function getInitialValue( $swapper_name ) {
         if (!isset($this->initial_sets[ $swapper_name ] )) return false;
         return $this->initial_sets[ $swapper_name ];
     }
-    function setInitialValue( $set_id, $swapper_name=null ) {
-        if (!isset($swapper_name)) $swapper_name = $this->default_swapper_name;
-        return ($this->initial_sets[ $swapper_name ] = $set_id );
+    function setInitialValue( $set_id, $swapper_name ) {
+        $this->initial_sets[ $swapper_name ] = $set_id ;
     }
 
-    function js_swapAction( $swapper_name = null ) {
-        if (!isset($swapper_name)) $swapper_name = $this->default_swapper_name;
+    function js_swapAction( $swapper_name ) {
         return 'ActivateSwap( window.'. $swapper_name .', this.value );';
     }
 

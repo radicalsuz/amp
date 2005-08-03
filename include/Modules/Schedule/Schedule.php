@@ -77,6 +77,7 @@ class Schedule extends AMPSystem_Data_Item {
        //get schedule item and verify it and update the darn status 
         if (!$item = &$this->getScheduleItem( $scheduleitem_id )) return false;
         if (! $item->isOpen() )  {
+            $this->addError( 'Requested appointment not open' );
             return false;
         }
         $appointment = &new Appointment( $this->dbcon );
@@ -85,30 +86,6 @@ class Schedule extends AMPSystem_Data_Item {
 
 		return $appointment->save();
     }
-
-/*
-
-    function getFormByOption( $namespace ) {
-        if( $result = $this->getPluginsByOption( $namespace ) ) {
-            $formlist = &FormLookup::instance('FormsbyPlugin');
-            return $formlist[current( $result )];
-        }
-
-        return false;
-    }
-
-    function getPluginsByOption( $namespace ) {
-        if (!isset($this->id)) return false;
-        $option_plugins = FormLookup_PluginsbyOptionDef::instance( 'schedule_id', $this->id );
-        if (empty( $option_plugins )) return false;
-
-        $namespace_plugins = FormLookup_StartPluginsbyNamespace::instance( $namespace );
-        if (empty( $namespace_plugins )) return false;
-
-        $result = array_intersect( $option_plugins, $namespace_plugins ) ;
-        return $result;
-    }
-    */
 
 	function _afterSave() {
 		$this->_updateFormRef( 'AMPSchedule' );

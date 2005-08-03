@@ -229,6 +229,18 @@
         }
             
     }
+
+    function addToFieldValueSet( $fieldname, $valueset) {
+        $full_valueset=$valueset;
+        if (is_array( $this->fields[$fieldname]['values'])) {
+            $full_valueset = array_merge( $this->fields[ $fieldname ][ 'values'] );
+        }
+        $this->fields[$fieldname]['values'] = $full_valueset;
+        if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {
+            $fRef->loadArray( $valueset );
+        }
+    }
+
     function addFieldAttr ( $fieldname, $attr ) {
         if (!isset($this->fields[$fieldname])) return false;
         $this->fields[$fieldname]['attr'] = $attr;

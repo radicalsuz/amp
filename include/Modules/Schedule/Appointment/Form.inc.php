@@ -23,6 +23,8 @@ class Appointment_Form extends AMPSystem_Form_XML {
         $this->swapper = &ElementSwapScript::instance();
         $this->init( $name );
         $schedule_set = AMPSystem_Lookup::instance( 'scheduleNames' ) ;
+
+        $this->addTranslation( 'schedule_id', '_locateActionSchedule', 'set' );
         foreach( $schedule_set as $schedule_id => $schedule_name ) {
             $this->addTranslation( 'action_id_'.$schedule_id , '_placeInScheduleSet', 'set' );
         }
@@ -35,12 +37,51 @@ class Appointment_Form extends AMPSystem_Form_XML {
         return $this->_scheduleItemLookup;
     }
 
+    function _locateActionSchedule ($data, $fieldname ) {
+        $schedset = $this->_getScheduleItemLookup();
+        if (!isset($data['action_id'])) return false;
+        if (!isset($schedset[ $data[ 'action_id' ] ])) return false;
+        $schedule_id = $schedset[ $data[ 'action_id' ] ];
+        $this->swapper->setInitialValue( $schedule_id, 'schedule_id' );
+        return $schedule_id;
+    }
+
+    /*
+    function setDefaultValue( $fieldname, $value ) {
+        if ($fieldname == 'action_id' ) {
+            $schedule_id = $this->_locateActionSchedule( array($fieldname => $value), $fieldname );
+            PARENT::setDefaultValue( 'schedule_id', $schedule_id );
+            PARENT::setDefaultValue( 'action_id_'.$schedule_id, $value );
+            return true;
+        }
+        PARENT::setDefaultValue( $fieldname, $value );
+    }*/
+
+    function _getFieldIncrement( $fieldname ) {
+        $last_dash = strrpos( $fieldname, "_" );
+        if ($last_dash === FALSE) return false;
+        return intval( substr($fieldname, $last_dash+1));
+    }
+
     function _placeInScheduleSet( $data, $fieldname ) {
         $itemset = $this->_getScheduleItemLookup();
-        if (isset($itemset[ $data['action_id'] ]) && ($schedule_id = $itemset[ $data['action_id'] ])) {
-            $data['action_id_'.$schedule_id] = $data['action_id'];
-            $data['schedule_id'] = $schedule_id;
-        }
+        if (!isset($data['action_id'])) return false;
+        if (!(isset($itemset[ $data['action_id'] ]) && ($schedule_id = $itemset[ $data['action_id'] ]))) return false;
+        if ($schedule_id != $this->_getFieldIncrement( $fieldname )) return false;
+        return $data['action_id'];
+    }
+
+    function setValues( $data ) {
+        $result = PARENT::setValues( $data ); 
+        if (!isset($data['action_id'])) return $result; 
+        $action = &new ScheduleItem( AMP_Registry::getDbcon(), $data['action_id'] );
+        if ($action->isOpen()) return $result;
+        if (!($schedule_id = $this->_locateActionSchedule( $data, 'schedule_id' ))) return $result;
+
+        $form_field = 'action_id_' . $schedule_id;
+        $current_set = $this->_getValueSet( $form_field );
+        $this->addToFieldValueSet( $form_field, array( $data['action_id']=>$action->describeSlot() ));
+        return $result;
     }
 
     function _pullFromScheduleSet( $data, $fieldname ) {
@@ -48,8 +89,6 @@ class Appointment_Form extends AMPSystem_Form_XML {
         return $data[ 'action_id_'.$data['schedule_id'] ];
     }
             
-
-
 
     function addSwapFieldSet( $swapname, $fields, $id ) {
         $set_fields = $this->incrementFields( $fields, $id );
@@ -67,7 +106,7 @@ class Appointment_Form extends AMPSystem_Form_XML {
 
     function addAppointmentSet( $appts, &$schedule ) {
         $hasAppts = ($appts && count($appts));
-        
+        $current = (isset( $_GET['action_id']) && $_GET['action_id'])?$_GET['action_id']:null; 
         if ($hasAppts) {
             $fields['action_id'] = array(
 				'type' => 'select',
@@ -98,7 +137,12 @@ class Appointment_Form extends AMPSystem_Form_XML {
         }
 
         $this->addFieldAttr( 'schedule_id', array( 'onChange' => $this->swapper->js_swapAction( 'schedule_id' ) ));
+    }
+
+    function output() {
         $this->registerJavascript( $this->swapper->output() );
+        $this->setJavascript();
+        return PARENT::output();
     }
 
 }

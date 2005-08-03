@@ -8,8 +8,15 @@ $page = &new AMPSystem_Page( $dbcon, $map );
 
 if (isset( $_GET[ 'action' ] ) && $_GET[ 'action' ]=='list' ) $page->showList( true );
 
+$item_id = false;
 // for single schedule items
-if (isset( $_GET[ 'scheduleitem_id' ]) && ($item_id = $_GET[ 'scheduleitem_id' ])) {
+if (isset( $_GET[ 'scheduleitem_id' ]) && ($_GET[ 'scheduleitem_id' ])) {
+    $item_id = $_GET[ 'scheduleitem_id'] ;
+}
+if (isset( $_GET[ 'action_id' ]) && ($_GET[ 'action_id' ])) {
+    $item_id = $_GET[ 'action_id'] ;
+}
+if ($item_id ) {
     $page->addCallback( 'form', 'setDefaultValue', array( 'action_id', $item_id ));
     $page->addCallback( 'list', 'addCriteria', array( 'action_id='.$item_id, true) );
 }
