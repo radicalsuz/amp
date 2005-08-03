@@ -40,5 +40,23 @@ class Article extends AMPSystem_Data_Item {
         if (! ($target = $this->getData( 'link' ))) return false;
         return $target;
     }
+
+    function isNews() {
+        if (!$this->getClass()) return false;
+        if ($this->getClass()== AMP_CONTENT_CLASS_NEWS) return true;
+        if ($this->getClass()== AMP_CONTENT_CLASS_MORENEWS) return true;
+        return false;
+    }
+
+    function isPressRelease() {
+        if (!$this->getClass()) return false;
+        return ($this->getClass()== AMP_CONTENT_CLASS_PRESSRELEASE);
+    }
+
+    function adjustSetData( $data ) {
+        $this->legacyFieldname( $data, 'test', 'body' );
+        $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
+    }
+
 }
 ?>

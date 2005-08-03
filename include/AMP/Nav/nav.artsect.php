@@ -17,7 +17,7 @@ if ($sec->RecordCount() > 0) {
     while (!$sec->EOF) {
         if (!isset($shownav)) $shownav = "";
         if ($x > 1) {$shownav.=$lNAV_HTML_3 ;} 
-        $shownav.='<a href="section.php?id='.$sec->Fields("id").'" class="sidelist">'.$sec->Fields("type").'</a>';
+        $shownav.='<a href="/section.php?id='.$sec->Fields("id").'" class="sidelist">'.$sec->Fields("type").'</a>';
         $shownav.=$lNAV_HTML_4 ;
         $sec->MoveNext();
         $x++;
@@ -30,7 +30,7 @@ if ($art->RecordCount() > 0) {
     while (!$art->EOF) {
         if (!isset($shownav)) $shownav = "";
         if ($y > 1) {$shownav.=$lNAV_HTML_3 ;} 
-        $shownav.='<a href="article.php?id='.$art->Fields("id").'" class="sidelist">'.$art->Fields("title").'</a>';
+        $shownav.='<a href="/article.php?id='.$art->Fields("id").'" class="sidelist">'.$art->Fields("title").'</a>';
         $shownav.=$lNAV_HTML_4 ; //start link text
         $art->MoveNext();
         $y++;

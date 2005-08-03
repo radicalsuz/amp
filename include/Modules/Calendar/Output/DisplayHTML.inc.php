@@ -2,13 +2,15 @@
 require_once ('Modules/Calendar/Plugin.inc.php');
 require_once ('AMP/Region.inc.php');
 
+if (!defined( 'AMP_CALENDAR_RSVP_FORM_DEFAULT' )) define( 'AMP_CALENDAR_RSVP_FORM_DEFAULT', 51);
+
 class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
     
     var $options= array( 
         'subheader'=>array('value'=>'lcity'),
         'display_format'=>array('value'=>'calendar_list_rsvp_format'),
         'detail_format'=>array('value'=>'calendar_output_detail_rsvp_mapped'),
-        'rsvp_modin'=>array('value'=>51));
+        'rsvp_modin'=>array('value'=>AMP_CALENDAR_RSVP_FORM_DEFAULT));
     
     var $current_subheader;
     var $regionset;
@@ -76,8 +78,8 @@ class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
 //utility output functions follow
 
 function calendar_list_rsvp_format($e, $options=null) {
-        if (isset ($e['modin'])&&$e['modin']) {
-            $meat .= "<a href=\"modinput4.php?modin=".$e['modin']."&calid=".$e['id']."\">RSVP</a>&nbsp; &bull; ";
+        if (isset ($e['registration_modin'])&&$e['registration_modin']) {
+            $meat .= "<a href=\"modinput4.php?modin=".$e['registration_modin']."&calid=".$e['id']."\">RSVP</a>&nbsp; &bull; ";
         }
         $meat .= '<a href="'.$_SERVER['PHP_SELF'].'?calid='. $e['id'] .'" class="eventtitle">'. $e['event'] .'</a></span><br />';
         if (($e['date'] != '0000-00-00' || $e['time'] != '')&& $e['recurring_options']==0) $meat .= '<span class="eventsubtitle">'. DoDate($e['date'], 'l, F jS Y') .' '.'</span>';
@@ -119,7 +121,7 @@ function calendar_list_rsvp_format($e, $options=null) {
 		$q = "select calendar.* from calendar where calendar.id = $id";
 		$event = $dbcon->CacheGetAll($q);
 		foreach ($event as $e) {
-			if ($e['modin']>0) $meat .="<br><a href=\"modinput4.php?modin=51&calid=$id\">RSVP</a>";
+			if ($e['registration_modin']>0) $meat .="<br><a href=\"modinput4.php?modin=" . $e['registration_modin'] . "&calid=$id\">RSVP</a>";
 			$meat .= "<p><span class=title>". $e['event'] .'</span>';
 			if ( $e['recurring_options'] == 1 ) $meat .= "<br/><i>Multi-Day Event</i>";
 			if ( $e['recurring_options'] == 2 ) $meat .= "<br/><i>Weekly Event </i>";

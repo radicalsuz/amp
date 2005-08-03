@@ -26,6 +26,7 @@ class AMPContent_Page {
     var $article;
     var $section;
     var $introtext;
+    var $class;
 
     //can't do nothing without dbcon
     var $dbcon;
@@ -118,6 +119,7 @@ class AMPContent_Page {
 
     function setClass( $class_id ) {
         $this->class_id = $class_id;
+        $this->class = &new ContentClass( $this->dbcon, $class_id );
         $this->globalizePageVars();
     }
 

@@ -8,7 +8,7 @@ class BlogSet extends AMPSystem_Data_Set {
 
     function BlogSet ( &$dbcon ) {
         $this->init ( $dbcon );
-		$this->setCriteria('class= '.AMP_CONTENT_CLASS_BLOG);
+		$this->addCriteria('class= '.AMP_CONTENT_CLASS_BLOG);
     }
 
 }

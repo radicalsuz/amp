@@ -19,6 +19,6 @@ class ComponentMap_Blog extends AMPSystem_ComponentMap {
 	var $components = array(
 		'list' => 'Blog_List',
 		'form' => 'Blog_Form',
-		'source' => 'Blog' );
+		'source' => 'Article_Blog' );
 }
 ?>

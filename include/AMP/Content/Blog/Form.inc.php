@@ -9,7 +9,7 @@ class Blog_Form extends AMPSystem_Form_XML {
 
 	var $inital_form_links = array();
 
-	function Schedule_Form() {
+	function Blog_Form() {
 		$name = "Blog";
 		$this->init( $name );
 	}
