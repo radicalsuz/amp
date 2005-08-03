@@ -1,5 +1,7 @@
 <?php
 
+define ('AMP_CONTENT_CLASS_BLOG', '20');
+
 require_once ( 'AMP/System/ComponentMap.inc.php' );
 
 class ComponentMap_Blog extends AMPSystem_ComponentMap {
