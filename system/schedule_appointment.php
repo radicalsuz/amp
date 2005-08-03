@@ -11,7 +11,7 @@ if (isset( $_GET[ 'action' ] ) && $_GET[ 'action' ]=='list' ) $page->showList( t
 // for single schedule items
 if (isset( $_GET[ 'scheduleitem_id' ]) && ($item_id = $_GET[ 'scheduleitem_id' ])) {
     $page->addCallback( 'form', 'setDefaultValue', array( 'action_id', $item_id ));
-    $page->addCallback( 'list', 'addCriteria', 'action_id='.$item_id );
+    $page->addCallback( 'list', 'addCriteria', array( 'action_id='.$item_id, true) );
 }
 
 // for single users

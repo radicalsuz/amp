@@ -6,6 +6,9 @@ if (!defined ('AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_AVAILABLE'))
 if (!defined ('AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_UNAVAILABLE')) 
     define ('AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_UNAVAILABLE',"No %s Appointments Available");
 
+if (!defined ('AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_REQUESTED_UNAVAILABLE')) 
+    define ('AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_REQUESTED_UNAVAILABLE',"The Requested %s Appointment is no longer available");
+    
 require_once ('AMP/System/Form/XML.inc.php' );
 require_once ('AMP/System/Form/XML.inc.php' );
 require_once ('Modules/Schedule/Appointment/ComponentMap.inc.php' );

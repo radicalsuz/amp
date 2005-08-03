@@ -4,6 +4,7 @@ require_once ( 'AMP/UserData/Plugin/Save.inc.php' );
 require_once ( 'Modules/Schedule/Appointment.inc.php' );
 require_once ( 'Modules/Schedule/Schedule.php' );
 require_once ( 'Modules/Schedule/Lookups.inc.php' );
+require_once ( 'Modules/Schedule/Appointment/Form.inc.php' );
 
 class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 
@@ -14,15 +15,7 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 			'available' => true,
 			'type' 	=> 'select',
 			'default' => 1,
-			'values'  => 'Lookup(schedules, id, name)' ),
-        'appointments_header' => array(
-            'available' => true,
-            'default' => "Select %s Appointment",
-            'type' => 'text' ),
-        'appointments_unavailable_header' => array(
-            'available' => true,
-            'default' => "No %s Appointments Available",
-            'type' => 'text' )
+			'values'  => 'Lookup(schedules, id, name)' )
 		);
 
 
@@ -33,33 +26,42 @@ class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 	function _register_fields_dynamic() {
 		$options = $this->getOptions();
 		$schedule = &new Schedule( $this->dbcon, $options['schedule_id'] );
-        $open_appts =  $schedule->describeOpenItems();
-        if (empty( $open_appts ) || !$open_appts) {
-            $this->fields = array( 
-                'Appointments' => array(
-                    'type' => 'header', 
-                    'label' => sprintf($options['appointments_unavailable_header'], $schedule->getData("name") ) ,
-                    'enabled' => true, 
-                    'public' => true )
-                );
 
-            return;
+        $open_appts =  $schedule->describeOpenItems();
+        $header_prefix  =  'AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_';
+        $header_descriptor = 'AVAILABLE';
+        if (isset( $_GET['action_id'] ) && ( $item_id = $_GET['action_id'] )) {
+            if (!isset( $open_appts[ $item_id ] )) {
+                $header_prefix .= 'REQUESTED_';
+                $open_appts = array();
+            } else {
+                $single_appt = array();
+                $single_appt[ $item_id ] = $open_appts[ $item_id ];
+                $open_appts = $single_appt;
+            }
         }
-		
-		$this->fields = array(
+
+        if (empty( $open_appts )|| !$open_appts)    $header_descriptor = 'UNAVAILABLE';
+
+        $this->fields = array( 
             'Appointments' => array(
-                'type'=> 'header',
-                'label' => sprintf($options['appointments_header'], $schedule->getData("name") ),
-                'public' => true,
-                'enabled' => true ),
-			'scheduleitem_id' => array(
+                'type' => 'header', 
+                'label' => sprintf( constant( $header_prefix . $header_descriptor ), $schedule->getName() ),
+                'enabled' => true, 
+                'public' => true )
+            );
+
+		
+        if (empty( $open_appts )|| !$open_appts) return;
+
+		$this->fields[ 'scheduleitem_id'] = array(
 				'type' => 'radiogroup',
 				'public' => true,
 				'enabled' => true,
+                'label' => 'Available Times',
 				'required' => true,
 				'values'  => $open_appts
-			)
-		);
+			);
 
 	}
 
