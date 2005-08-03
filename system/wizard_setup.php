@@ -6,7 +6,7 @@ $buildform = new BuildForm;
 
 function addsecart($name,$desc,$type) {
 	global $dbcon;
-	$sql = "insert into articles(title,test,type,class,publish) values ('$name','desc','$type','8','1')";
+	$sql = "insert into articles(title,test,type,class,publish) values ('$name','$desc','$type','8','1')";
 	$insert=$dbcon->Execute($sql) or DIE($dbcon->ErrorMsg());
 }
 
