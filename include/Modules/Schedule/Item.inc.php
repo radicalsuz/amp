@@ -80,12 +80,10 @@ class ScheduleItem extends AMPSystem_Data_Item {
 	}
 
 	function getAppointments() {
-        trigger_error( 'GETTING APPOINTMENTS'.$this->id );
 		if (isset($this->_appointments)) {
 			return $this->_appointments;
 		}	
         if (!isset($this->id)) return array();
-        trigger_error( 'GETTING APPOINTMENTS' );
 
 		$this->_appointments =  & new AppointmentSet ( $this->dbcon );
 		$this->_appointments->setScheduleItemId( $this->id );
@@ -106,15 +104,14 @@ class ScheduleItem extends AMPSystem_Data_Item {
 
 	function updateStatus() {
         $capacity = $this->getCapacity();
-        if (!$capacity && ($capacity !== 0)) return;
-        trigger_error( $capacity . ' CAPACITY' );
-        trigger_error ($this->appointmentsCount() . ' COUNT');
+        if (!$capacity && ($capacity !== 0)) return true;
 		if ( $this->appointmentsCount()  >= $capacity ) {
 			$this->setStatus( AMP_SCHEDULE_STATUS_CLOSED );
 			if (!$result = $this->save()) return false;
             $this->dbcon->CacheFlush();
             return $result;
 		}
+        return true;
 	}
 
 

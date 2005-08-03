@@ -39,6 +39,7 @@ class AMPSystem_Map {
         $this->menuset = 
             $this->_allowedItems($this->_convertPermissions( $xmlGet->readData() ));
         $this->_mapForms();
+        $this->_mapLists();
         $this->_buildMap();
 
     }
@@ -135,6 +136,25 @@ class AMPSystem_Map {
         return true;
     }
 
+    function _mapLists() {
+        foreach( $this->menuset as $menu_id => $menu_def ) {
+            if (!isset($menu_def['list'])) continue;
+            if (!isset($menu_def['list']['lookup'])) continue;
+            if (!($itemset = &AMPSystem_Lookup::instance( $menu_def['list']['lookup'] ))) continue;            
+            $sep = true;
+            foreach ($itemset as $id => $name ) {
+                $this->_addListItem( $id, $name, $menu_id, $menu_def['list']['href'], $sep );
+                $sep = false;
+            }
+        }
+        return true;
+    }
+    function _addListItem( $id, $name, $target, $href, $sep = false ) {
+        $link = AMP_Url_AddVars( $href['base'], $href['var'].'='.$id );
+        $def = array( 'href' => $link, 'label' => substr( $name, 0, 25), 'separator'=>$sep);
+        return $this->addItem( $target, $def );
+    }
+
 
     function _addFormItem( $id, $name ) {
         $def = array( 'href' => ('userdata_list.php?modin=' . $id), 'label' => substr( $name, 0, 25));
@@ -168,6 +188,7 @@ class AMPSystem_Map {
 
     function _allowedItems( $set ) {
         if (empty($set)) return false;
+        $result_set=array();
         foreach ($set as $key => $item ) {
             if (!is_array($item)) continue;
             if (isset($item['per']) && !AMP_Authorized($item['per'])) continue;

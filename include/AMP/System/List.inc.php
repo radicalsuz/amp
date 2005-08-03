@@ -334,12 +334,13 @@ class AMPSystem_List {
     function addCriteria( $sql_criteria, $change_editlink=false) {
         $this->source->addCriteria( $sql_criteria );
         $result =  $this->source->readData(); 
+
         if ($result && $change_editlink) $this->appendEditlinkVar( $sql_criteria );
         return $result;
     }
 
     function appendEditlinkVar( $var ) {
-        $this->editlink = AMP_URL_AddVars( $this->editlink, $sql_criteria);
+        $this->editlink = AMP_URL_AddVars( $this->editlink, $var );
     }
 
 

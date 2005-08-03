@@ -31,6 +31,26 @@ class Appointment extends UserData_Action {
 		$this->mergeData( $scheduleItem );
 	}	
 
+    function save() {
+        if (!$this->getData('action_id')) return false;
+        $item = &new ScheduleItem( $this->dbcon, $this->getData('action_id'));
+
+        $this->dbcon->StartTrans();
+        $result= (PARENT::save() && $item->updateStatus());
+        if (!$result) {
+            $this->dbcon->FailTrans();
+        }
+        return $this->dbcon->CompleteTrans();
+    }
+
+    function deleteData( $id ) {
+        $result = PARENT::deleteData( $id );
+
+        if (!($this->getData('action_id') && $id==$this->id)) return $result;
+        $item = &new ScheduleItem( $this->dbcon, $this->getData('action_id'));
+        return ($result && $item->updateStatus());
+    }
+
 /*
     function save() {
         return $this->debugSave();

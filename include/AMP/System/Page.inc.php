@@ -211,7 +211,8 @@ class AMPSystem_Page {
         $this->source->setData( $value_set );
 
         if ($this->source->save()) {
-            $this->setMessage( $this->form->getItemName()." has been saved." );
+            if (!($itemname = $this->form->getItemName())) $itemname = "Item";
+            $this->setMessage( $itemname . " has been saved." );
             if ( method_exists( $this->form, 'postSave' )) {
                 $this->form->postSave( $this->source->getData() );
             }
@@ -270,8 +271,10 @@ class AMPSystem_Page {
         if (!$id) return false;
         
         $this->_initComponents( 'source' );
+        $epitaph = "";
         if ($this->source->deleteData( $id )) {
-            $this->setMessage( "The record for ".$this->form->getItemName()." was deleted" );
+            if ($name = $this->form->getItemName()) $epitaph = " for $name";
+            $this->setMessage( "The record$epitaph was deleted" );
             return $this->showList( true );
         }
 

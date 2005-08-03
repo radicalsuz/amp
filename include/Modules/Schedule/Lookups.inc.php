@@ -11,9 +11,10 @@ class AMPSystemLookup_ScheduleNames extends AMPSystem_Lookup {
     }
 }
 
-class AMPSystemLookup_ItemScheduleNames extends AMPSystem_Lookup {
+class AMPSystemLookup_ScheduleItemDesc extends AMPSystem_Lookup {
     var $datatable = "schedules, scheduleitems";
-    var $result_field = "schedules.name";
+    var $result_field = "Concat( schedules.name, ': ', if(!isnull(scheduleitems.title), concat(scheduleitems.title, ': '), ''), start_time, ' ', timezone,  if(!isnull(location), concat(' : ', location),''), ' : ', status) as descrp ";
+
     var $id_field = "scheduleitems.id";
     var $criteria = " schedules.id = scheduleitems.schedule_id ";
 

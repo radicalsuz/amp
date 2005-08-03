@@ -36,6 +36,7 @@ class Schedule extends AMPSystem_Data_Item {
 	}
 
     function &getScheduleItem( $item_id ) {
+        if (!isset($this->_scheduleItemList)) $this->readScheduleItems();
         return $this->_scheduleItems->getItem( $item_id );
     }
 
@@ -74,27 +75,15 @@ class Schedule extends AMPSystem_Data_Item {
 		
 	function makeAppointment($user, $scheduleitem_id) {
        //get schedule item and verify it and update the darn status 
-        if (!isset($this->_scheduleItemList)) $this->readScheduleItems();
-        $this->dbcon->StartTrans();
-        if (!$item = $this->getScheduleItem( $scheduleitem_id )) return false;
-        trigger_error ($scheduleitem_id . ' GOT SHCITME<br>');
+        if (!$item = &$this->getScheduleItem( $scheduleitem_id )) return false;
         if (! $item->isOpen() )  {
-            trigger_error ($scheduleitem_id . ' ITEM NOT OPEN');
-            $this->dbcon->FailTrans();
-            $this->dbcon->CompleteTrans();
             return false;
         }
         $appointment = &new Appointment( $this->dbcon );
-        $data = array( 'userdata_id' => $user, 'action_id'=>$scheduleitem_id, 'id'=>null );
+        $data = array( 'userdata_id' => $user, 'action_id'=>$scheduleitem_id );
         $appointment->setData( $data );
-		#$appointment = &Appointment::createAppointment($user, $scheduleitem_id);
-		if (!$appointment->save()) {
-            $this->dbcon->CompleteTrans();
-            return false;
-        }
-        trigger_error( "APPOINTMENT SAVED");
-        $item->updateStatus();
-        return $this->dbcon->CompleteTrans();
+
+		return $appointment->save();
     }
 
 /*

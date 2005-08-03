@@ -1,4 +1,6 @@
 <?php
+require_once ( 'AMP/Content/Lookups.inc.php' );
+require_once ( 'Modules/Schedule/Lookups.inc.php' );
 
 class AMPSystem_LookupFactory {
 

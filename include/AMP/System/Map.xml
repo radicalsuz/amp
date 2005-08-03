@@ -248,6 +248,11 @@
 <child>boards</child>
 </item>
 <item>
+<label>Schedules</label>
+<href>schedule.php?action=list</href>
+<child>schedule</child>
+</item>
+<item>
 <label>Volunteer</label>
 <href>userdata_list.php?modin=8</href>
 <per>FORM_VOLUNTEER</per>
@@ -272,30 +277,28 @@
 <href>module_header_list.php?modid=17</href>
 <per>TOOLS_INTROTEXT</per>
 </item>
-<item>
-<label>Schedules</label>
-<href>schedule.php?action=list</href>
-<child>schedule</child>
-</item>
 </tools>
 
 
 <schedule>
+    <list>
+        <lookup>scheduleNames</lookup>
+        <href>
+            <base>schedule_item.php?action=list</base>
+            <var>schedule_id</var>
+        </href>
+    </list>
     <item>
-        <label>View Schedules</label>
-        <href>schedule.php?action=list</href>
+        <label>View Schedule Slots</label>
+        <href>schedule_item.php?action=list</href>
+    </item>
+    <item>
+        <label>Add Slot to Schedule</label>
+        <href>schedule_item.php</href>
     </item>
     <item>
         <label>Add Schedule</label>
         <href>schedule.php</href>
-    </item>
-    <item>
-        <label>View Schedule Items</label>
-        <href>schedule_item.php?action=list</href>
-    </item>
-    <item>
-        <label>Add Item to Schedule</label>
-        <href>schedule_item.php</href>
     </item>
 </schedule>
 

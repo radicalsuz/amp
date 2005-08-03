@@ -110,6 +110,7 @@
     
     function init ( $name , $method="POST", $action = null ) {
         $this->formname = $name;
+        if (!isset($action)) $action = PHP_SELF_QUERY();
         $this->form = &new HTML_QuickForm( $name, $method, $action );
         $this->template = &new AMPFormTemplate();
     }

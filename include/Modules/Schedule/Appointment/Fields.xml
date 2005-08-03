@@ -5,9 +5,11 @@
     <userdata_id>
         <type>select</type>
         <label>Users</label>
+        <required>1</required>
     </userdata_id>
     <schedule_id>
         <type>select</type>
         <label>Schedule</label>
+        <required>1</required>
     </schedule_id>
 </array>

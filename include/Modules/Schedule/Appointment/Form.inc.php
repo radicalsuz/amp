@@ -22,16 +22,20 @@ class Appointment_Form extends AMPSystem_Form_XML {
         $name = "Appointments";
         $this->swapper = &ElementSwapScript::instance();
         $this->init( $name );
-        $this->addTranslation( 'action_id', '_placeInScheduleSet', 'set' );
+        $schedule_set = AMPSystem_Lookup::instance( 'scheduleNames' ) ;
+        foreach( $schedule_set as $schedule_id => $schedule_name ) {
+            $this->addTranslation( 'action_id_'.$schedule_id , '_placeInScheduleSet', 'set' );
+        }
+        $this->addTranslation( 'action_id', '_pullfromScheduleSet', 'get' );
     }
 
     function _getScheduleItemLookup() {
-        if (isset($this->scheduleItemLookup)) return $this->scheduleItemLookup;
-        $this->scheduleItemLookup = &AMPSystem_Lookup::instance( 'SchedulesbyItem');
-        return $this->scheduleItemLookup;
+        if (isset($this->_scheduleItemLookup)) return $this->_scheduleItemLookup;
+        $this->_scheduleItemLookup = &AMPSystem_Lookup::instance( 'SchedulesbyItem');
+        return $this->_scheduleItemLookup;
     }
 
-    function _placeInScheduleSet( &$data, $fieldname ) {
+    function _placeInScheduleSet( $data, $fieldname ) {
         $itemset = $this->_getScheduleItemLookup();
         if (isset($itemset[ $data['action_id'] ]) && ($schedule_id = $itemset[ $data['action_id'] ])) {
             $data['action_id_'.$schedule_id] = $data['action_id'];
@@ -39,25 +43,15 @@ class Appointment_Form extends AMPSystem_Form_XML {
         }
     }
 
-
-/*
-    function getApptHeader( $schedule_name, $hasAppts = true) {
-        return array (
-            'Appointments' => array(
-                'type'=> 'textarea',
-                'attr' => array( 'style'=>'border:0; border-visibility:0;'),
-                'default' => sprintf( ($hasAppts ? AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_AVAILABLE :
-                                                    AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_UNAVAILABLE )
-                                    , $schedule_name ),
-                'public' => true,
-                'enabled' => true )
-            );
+    function _pullFromScheduleSet( $data, $fieldname ) {
+        if (!(isset($data['schedule_id']) && isset($data[  'action_id_'.$data['schedule_id']  ])))  return false;
+        return $data[ 'action_id_'.$data['schedule_id'] ];
     }
-    */
+            
 
-    function addSwapFieldSet( $swapfield, $fields, $id ) {
-        #$swapname = 'swap_' . $swapfield;
-        $swapname =  $swapfield;
+
+
+    function addSwapFieldSet( $swapname, $fields, $id ) {
         $set_fields = $this->incrementFields( $fields, $id );
         $this->swapper->addSet($id, $set_fields, $swapname );
         $this->addFields( $set_fields );
@@ -74,7 +68,6 @@ class Appointment_Form extends AMPSystem_Form_XML {
     function addAppointmentSet( $appts, &$schedule ) {
         $hasAppts = ($appts && count($appts));
         
-        #$fields = $this->getApptHeader( $schedule->getName(), $hasAppts );
         if ($hasAppts) {
             $fields['action_id'] = array(
 				'type' => 'select',
@@ -83,7 +76,6 @@ class Appointment_Form extends AMPSystem_Form_XML {
                                                     AMP_SCHEDULE_APPOINTMENT_FORM_TEXT_UNAVAILABLE )
                                     , $schedule->getName() ),
 				'enabled' => true,
-				'required' => true,
 				'values'  => $appts );
         }
             
