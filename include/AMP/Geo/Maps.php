@@ -275,10 +275,10 @@ Class Maps {
 		$html .= '<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" ';
 		$html .= 'codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" ';
 		$html .= 'WIDTH="'.$this->P['map_width'].'" HEIGHT="'.$this->P['map_height'].'" id="zoom_map" ALIGN="top"> ';
-		$html .= '<PARAM NAME=movie VALUE="'.$map.'.swf?data_file='.$file.$this->map_ID.'"> ';
+		$html .= '<PARAM NAME=movie VALUE="flash/'.$map.'.swf?data_file='.$file.$this->map_ID.'"> ';
 		$html .= '<PARAM NAME=quality VALUE=high>  ';
 		$html .= '<PARAM NAME=bgcolor VALUE='.$bgcolor.'>  ';
-		$html .= '<EMBED src="'.$map.'.swf?data_file='.$file.$this->map_ID.'" ';
+		$html .= '<EMBED src="flash/'.$map.'.swf?data_file='.$file.$this->map_ID.'" ';
 		$html .= 'quality=high bgcolor=#FFFFFF  WIDTH="'.$this->P['map_width'].'" HEIGHT="'.$this->P['map_height'].'" NAME="Clickable Map"';
 		$html .= 'ALIGN="" TYPE="application/x-shockwave-flash" '; 
 		$html .= 'PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"> ';
