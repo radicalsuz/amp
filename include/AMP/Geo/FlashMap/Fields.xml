@@ -1,0 +1,150 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+
+	<name>
+		<type>text</type>
+		<label>Name</label>
+	</name>
+	<title>
+		<type>text</type>
+		<label>Titile</label>
+	</title>
+	<header1>
+		<type>header</type>
+		<label>Map Introduction</label>
+	</header1>
+	<description>
+		<type>textarea</type>
+		<label>Description</label>
+	</description>
+	<intro>
+		<type>wysiwyg</type>
+		<label>Intro Text</label>
+	</intro>
+	<header2>
+		<type>header</type>
+		<label>Map Links and DBs</label>
+	</header2>
+	<map_table>
+		<type>text</type>
+		<label>Table</label>
+		<default>userdata</default>
+	</map_table>
+	<type>
+		<type>text</type>
+		<label>Table Instance ID</label>
+		<default>modin</default>
+	</type>
+	<extra_sql>
+		<type>textarea</type>
+		<label>Extra where conditions</label>
+	</extra_sql>
+	<label_field>
+		<type>text</type>
+		<label>Label Field</label>
+	</label_field>
+	<hover_field>
+		<type>text</type>
+		<label>Hover Field</label>
+	</hover_field>
+	<point_url>
+		<type>text</type>
+		<label>Point URL</label>
+	</point_url>
+	<state_url>
+		<type>text</type>
+		<label>State URL</label>
+	</state_url>
+	<header4>
+		<type>header</type>
+		<label>Flash Map Config</label>
+	</header4>
+	<default_color>
+		<type>text</type>
+		<label>Default Color</label>
+		<default>bbbbbb</default>
+	</default_color>
+	<background_color>
+		<type>text</type>
+		<label>Background Color</label>
+		<default>ffffff</default>
+	</background_color>
+	<outline_color>
+		<type>text</type>
+		<label>Outline Color</label>
+		<default>666666</default>
+	</outline_color>
+	<default_point_color>
+		<type>text</type>
+		<label>Default Point Color</label>
+		<default>ffff00</default>
+	</default_point_color>
+	<default_point_size>
+		<type>text</type>
+		<label>Default Point Size</label>
+		<default>3</default>
+	</default_point_size>
+	<default_point_src>
+		<type>text</type>
+		<label>Default Point SRC</label>
+	</default_point_src>
+	<font_size>
+		<type>text</type>
+		<label>Font Size</label>
+		<default>11</default>
+	</font_size>
+	<arc_color>
+		<type>text</type>
+		<label>Arc Color</label>
+		<default>0000ff</default>
+	</arc_color>
+	<map_height>
+		<type>text</type>
+		<label>Map Height</label>
+		<default>300</default>
+	</map_height>
+	<map_width>
+		<type>text</type>
+		<label>Map Width</label>
+		<default>550</default>
+	</map_width>
+	<line_color>
+		<type>text</type>
+		<label>Line Color</label>
+		<default>0000FF</default>
+	</line_color>
+	<state_info_icon>
+		<type>text</type>
+		<label>State Info Icon</label>
+	</state_info_icon>
+	<target>
+		<type>text</type>
+		<label>Browser Target</label>
+	</target>
+	<header5>
+		<type>header</type>
+		<label>Google Map Config</label>
+	</header5>
+	<center_lat>
+		<type>text</type>
+		<label>Center Lat</label>
+		<default>40</default>
+	</center_lat>
+	<center_long>
+		<type>text</type>
+		<label>Center Long</label>
+		<default>-100</default>
+	</center_long>
+	<span_lat>
+		<type>text</type>
+		<label>Span Lat</label>
+		<default>3</default>
+	</span_lat>
+	<span_long>
+		<type>text</type>
+		<label>Span long</label>
+		<default>3</default>
+	</span_long>
+</array>
