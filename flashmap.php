@@ -1,9 +1,7 @@
 <?php
-$mod_id = 1;
-$modid = 1;
+
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
-include("AMP/BaseModuleIntro.php");
 require_once("AMP/Geo/Maps.php");
 
 $map = new Maps($dbcon,$_GET['map']);

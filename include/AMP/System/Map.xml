@@ -277,6 +277,11 @@
 <href>module_header_list.php?modid=17</href>
 <per>TOOLS_INTROTEXT</per>
 </item>
+<item>
+<label>Maps</label>
+<href>maps.php?action=list</href>
+<per>TOOLS_INTROTEXT</per>
+</item>
 </tools>
 
 

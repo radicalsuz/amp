@@ -55,6 +55,21 @@
 </item>
 </faq>
 
+<flashmap>
+<title></title>
+<item>
+<href>map.php?action=list</href>
+<label>View Maps</label>
+<class>view</class>
+</item>
+<item>
+<href>map.php</href>
+<label>Add Map</label>
+<class>add</class>
+</item>
+</flashmap>
+
+
 
 <petition>
 <title>Petitions</title>
