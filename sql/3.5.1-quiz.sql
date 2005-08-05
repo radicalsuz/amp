@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `quiz` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`name` VARCHAR( 255 ) ,
+`question` TEXT,
+`answer_1` VARCHAR( 255 ) ,
+`answer_2` VARCHAR( 255 ) ,
+`answer_3` VARCHAR( 255 ) ,
+`answer_4` VARCHAR( 255 ) ,
+`answer_5` VARCHAR( 255 ) ,
+`answer_6` VARCHAR( 255 ) ,
+`answer_7` VARCHAR( 255 ) ,
+`correct_answer` VARCHAR( 255 ) ,
+`explanation` TEXT,
+`link` VARCHAR( 255 ) ,
+`link_2` VARCHAR( 255 ) ,
+`link_3` VARCHAR( 255 ) ,
+`section` INT,
+`date` DATE,
+`date_start` DATE,
+`date_end` DATE,
+`publish` TINYINT,
+PRIMARY KEY ( `id` )
+);

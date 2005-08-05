@@ -56,19 +56,32 @@
 </faq>
 
 <flashmap>
-<title></title>
+<title>Maps</title>
 <item>
-<href>map.php?action=list</href>
+<href>maps.php?action=list</href>
 <label>View Maps</label>
 <class>view</class>
 </item>
 <item>
-<href>map.php</href>
+<href>maps.php</href>
 <label>Add Map</label>
 <class>add</class>
 </item>
 </flashmap>
 
+<quiz>
+<title>Quiz</title>
+<item>
+<href>quiz.php?action=list</href>
+<label>View Quizes</label>
+<class>view</class>
+</item>
+<item>
+<href>quiz.php</href>
+<label>Add Quiz</label>
+<class>add</class>
+</item>
+</quiz>
 
 
 <petition>

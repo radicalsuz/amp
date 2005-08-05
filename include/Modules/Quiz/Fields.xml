@@ -1,0 +1,97 @@
+<array>
+		<id>
+			<type>hidden</type>
+		</id>
+	<publish>
+		<type>checkbox</type>
+		<label>Publish</label>
+		<default>1</default>
+	</publish>
+	<name>
+		<type>text</type>
+		<label>Quiz Name</label>
+	</name>
+	<question>
+		<type>textarea</type>
+		<label>Question</label>
+	</question>
+	
+	<answer_1>
+		<type>text</type>
+		<label>Answer 1</label>
+	</answer_1>
+	<answer_2>
+		<type>text</type>
+		<label>Answer 2</label>
+	</answer_2>
+	<answer_3>
+		<type>text</type>
+		<label>Answer 3</label>
+	</answer_3>
+	<answer_4>
+		<type>text</type>
+		<label>Answer 4</label>
+	</answer_4>
+	<answer_5>
+		<type>text</type>
+		<label>Answer 5</label>
+	</answer_5>
+<answer_6>
+		<type>text</type>
+		<label>Answer 6</label>
+	</answer_6>
+	<answer_7>
+		<type>text</type>
+		<label>Answer 7</label>
+	</answer_7>
+	<correct_answer>
+		<type>select</type>
+		<label>Correct Answer</label>
+
+	</correct_answer>
+
+	<explanation>
+		<type>textarea</type>
+		<label>Explanation</label>
+	</explanation>
+	<link>
+		<type>text</type>
+		<label>Link 1</label>
+	</link>
+	<link_2>
+		<type>text</type>
+		<label>Link 2</label>
+	</link_2>
+	<link_3>
+		<type>text</type>
+		<label>Link 3</label>
+	</link_3>
+	<section>
+		<type>select</type>
+		<label>Section</label>
+	</section>
+	<date>
+		<type>date</type>
+		<label>Quiz Date</label>
+			<options>
+				<format>MdY</format>
+			</options>
+			<default>today</default>
+	</date>
+	<date_start>
+		<type>date</type>
+		<label>Quiz Starts</label>
+			<options>
+				<format>MdY</format>
+			</options>
+	</date_start>
+	<date_end>
+		<type>date</type>
+		<label>Quiz Ends</label>
+			<options>
+				<format>MdY</format>
+			</options>
+	</date_end>
+
+-->
+</array>

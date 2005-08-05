@@ -28,9 +28,12 @@
 		<label>Map Links and DBs</label>
 	</header2>
 	<map_table>
-		<type>text</type>
+		<type>select</type>
+		<values><userdata>User Data Module</userdata>
+		<calendar>Calendar</calendar></values>
 		<label>Table</label>
 		<default>userdata</default>
+
 	</map_table>
 	<type>
 		<type>text</type>

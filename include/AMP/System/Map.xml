@@ -282,6 +282,11 @@
 <href>maps.php?action=list</href>
 <per>TOOLS_INTROTEXT</per>
 </item>
+<item>
+<label>Quiz</label>
+<href>quiz.php?action=list</href>
+<per>TOOLS_INTROTEXT</per>
+</item>
 </tools>
 
 
@@ -306,7 +311,6 @@
         <href>schedule.php</href>
     </item>
 </schedule>
-
 
 <directories>
 <title>Directories</title>
