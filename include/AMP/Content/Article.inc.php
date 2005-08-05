@@ -53,7 +53,7 @@ class Article extends AMPSystem_Data_Item {
     }
     function getSource() {
         if( $source = $this->getData( 'source' )) return $source;
-        return $this->getSourceURL() );
+        return $this->getSourceURL() ;
     }
 
     function getBody() {
@@ -133,7 +133,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function readVersion( $version_id ) {
-        $version = &new Article_Version( $this->dbcon, $version_id ));
+        $version = &new Article_Version( $this->dbcon, $version_id );
         if (!$version->hasData()) return false;
 
         $this->setData( $version->getData() );
