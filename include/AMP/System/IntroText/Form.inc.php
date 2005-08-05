@@ -29,10 +29,11 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form {
     }
 
     function HTMLEditorSetup() {
-        $fieldswapper = & new ElementSwapScript( $this->fieldswap_object_id );
-        $fieldswapper->formname = $this->formname;
-        $fieldswapper->addSet( 'no_editor', array('html')) ;
-        $fieldswapper->initial_set = 'no_editor';
+        $fieldswapper = &ElementSwapScript::instance();
+        $fieldswapper->addSwapper( $this->fieldswap_object_id );
+        $fieldswapper->setForm( $this->formname, $this->fieldswap_object_id );
+        $fieldswapper->addSet( 'no_editor', array('html'), $this->fieldswap_object_id ) ;
+        $fieldswapper->setInitialValue( 'no_editor', $this->fieldswap_object_id );
 
         $this->registerJavascript( $fieldswapper->output() );
 

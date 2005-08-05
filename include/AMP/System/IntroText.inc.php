@@ -26,7 +26,7 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
         $this->init( $dbcon, $text_id );
     }
     
-    function adjustSetData( $data ) {
+    function _adjustSetData( $data ) {
         $this->legacyFieldname( $data, 'test', 'body' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
     }
@@ -41,6 +41,15 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
 
     function getTitle() {
         return $this->getData( 'title' );
+    }
+
+    function getBody() {
+        return $this->getData( 'body' );
+    }
+
+    function mergeBodyFields( $fielddata ) {
+        $replace_values = AMP_makeMergeFields( array_keys($fielddata) );
+        return str_replace( $replace_values, $fielddata, $this->getBody() );
     }
 
  }

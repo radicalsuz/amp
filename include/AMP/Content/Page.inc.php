@@ -28,6 +28,8 @@ class AMPContent_Page {
     var $introtext;
     var $class;
 
+    var $region_id;
+
     //can't do nothing without dbcon
     var $dbcon;
 
@@ -121,6 +123,11 @@ class AMPContent_Page {
         $this->class_id = $class_id;
         $this->class = &new ContentClass( $this->dbcon, $class_id );
         $this->globalizePageVars();
+    }
+
+    function setRegion( $region_id ) {
+        $this->region_id = $region_id ;
+        $this->globalizeRegionVars();
     }
 
     function _setNullItem() {
@@ -280,6 +287,11 @@ class AMPContent_Page {
         $GLOBALS['NAV_IMG_PATH'] = $template->getNavImagePath();
         $GLOBALS['NAV_REPEAT'] = $template->getNavRepeat();
         $GLOBALS['htmltemplate'] = $template->getHtmlTemplate();
+    }
+
+    function globablizeRegionVars() {
+        $this->registry->setEntry( 'AMP_CONTENT_LIST_REGION', $this->region_id );
+        $GLOBALS['MM_region'] = $this->region_id;
     }
 
 }

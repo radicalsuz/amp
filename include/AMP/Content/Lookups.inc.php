@@ -46,5 +46,17 @@ class AMPContentLookup_ActiveClasses extends AMPContentLookup_Class {
     }
 }
 
+class AMPContentLookup_Hotwords extends AMPContent_Lookup {
+
+    var $datatable = "hotwords";
+    var $result_field = " Concat( ' <a href=\"', url, '\">', word, '</a> ') as newlink";
+    var $id_field = " Concat( ' ', word, ' ') as hotword";
+
+    function AMPContentLookup_Hotwords() {
+        $this->criteria = "publish=1";
+        $this->init();
+    }
+}
+
 
 ?>

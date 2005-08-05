@@ -36,7 +36,7 @@ class Schedule extends AMPSystem_Data_Item {
 	}
 
     function &getScheduleItem( $item_id ) {
-        if (!isset($this->_scheduleItemList)) $this->readScheduleItems();
+        if (!isset($this->_scheduleItems)) $this->readScheduleItems();
         return $this->_scheduleItems->getItem( $item_id );
     }
 
@@ -60,7 +60,7 @@ class Schedule extends AMPSystem_Data_Item {
 	}
 
 	function describeOpenItems() {
-        if (!isset($this->_scheduleItemList)) $this->readScheduleItems();
+        if (!isset($this->_scheduleItems)) $this->readScheduleItems();
 
 		$slots = $this->_scheduleItems->getOpenItems();
         if (empty( $slots )) return false;

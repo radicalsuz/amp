@@ -745,7 +745,17 @@ if (!function_exists('AMP_Url_AddVars')) {
         return $current_value . '&' . join( '&', $new_vars );
     }
 }
-        
+
+if (!function_exists('AMP_makeMergeField')) {
+    function AMP_makeMergeFields( $fieldnames ) {
+        if (!is_array( $fieldnames)) $fieldnames = array( $fieldnames );
+        $result= array();
+        foreach ($fieldnames as $fieldname ) {
+            $result[] = '%' . $fieldname . '%';
+        }
+        return $result;
+    }
+}
 
         
 

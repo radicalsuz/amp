@@ -1,0 +1,43 @@
+<array>
+    <MM_recordId>
+        <type>hidden</type>
+    </MM_recordId>
+    <blast_type>
+        <type>hidden</type>
+        <default>System-Email</default>
+    </blast_type>
+    <passedsql>
+        <type>hidden</type>
+    </passedsql>
+    <modin>
+        <type>hidden</type>
+    </modin>
+    <status>
+        <type>hidden</type>
+        <default>New</default>
+    </status>
+    <subject>
+        <label>Subject</label>
+        <type>text</type>
+    </subject>
+    <from_email>
+        <label>From Email</label>
+        <type>text</type>
+    </from_email>
+    <from_name>
+        <label>From Name</label>
+        <type>text</type>
+    </from_name>
+    <replyto_email>
+        <label>Reply To Address</label>
+        <type>text</type>
+    </replyto_email>
+    <messagehtml>
+        <label>HTML Email message</label>
+        <type>wysiwyg</type>
+    </messagehtml>
+    <messagetext>
+        <label>Text Email message</label>
+        <type>textarea</type>
+    </messagetext>
+</array>

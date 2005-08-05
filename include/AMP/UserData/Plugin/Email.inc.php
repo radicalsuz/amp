@@ -1,5 +1,7 @@
 <?php
 
+require_once ('AMP/System/IntroText.inc.php' );
+
 class UserDataPlugin_Email extends UserDataPlugin {
 
     // Store message.
@@ -56,26 +58,12 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
 
         // Header text.
-        if (isset($options['intro_text']) && $options['intro_text']) {
-            $sql      = "SELECT test FROM moduletext WHERE id=" . $this->dbcon->qstr( $options['intro_text'] );
-            if ($rs = $this->dbcon->CacheExecute($sql)) {
-                $this->message .= $rs->Fields('test') . "\n\n";
-            } else {
-                $this->message .= $options['intro_text'];
-            }
-        }
+        $this->message .= $this->_getBodyHeader ( $options );
 
         $this->message .= $this->prepareMessage( $options );
 
         // Footer Text.
-        if (isset($options['footer_text']) && $options['footer_text']) {
-            $sql            = "SELECT test FROM moduletext WHERE id=" . $this->dbcon->qstr( $options['footer_text'] );
-            if ($rs = $this->dbcon->CacheExecute($sql)) {
-                $this->message .= $rs->Fields('test');
-            } else {
-                $this->message .= $options['footer_text'];
-            }
-        }
+        $this->message .= $this->_getBodyFooter ( $options );
 
         // Construct the header.
         $this->header = $this->prepareHeader();
@@ -120,6 +108,25 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
         trigger_error( "There was an error submitting the form: Email message incomplete.", E_USER_WARNING );
     }
+
+    function _getBodyHeader( $options ) {
+        if (!(isset($options['intro_text']) && $options['intro_text'])) return false;
+        return $this->_readIntroText( $options['intro_text'] );
+    }
+
+    function _getBodyFooter ( $options ) {
+        if (!(isset($options['footer_text']) && $options['footer_text'])) return false;
+        return $this->_readIntroText( $options['footer_text'] );
+    }
+
+    function readIntroText( $id ) {
+        $system_texts = AMPSystemLookup::instance('introTexts');
+        if (!isset($system_texts[ $id ])) return $id;
+
+        $textdata = & new AMPSystem_IntroText( $this->dbcon, $id );
+        return $textdata->getBody() . "\n\n";
+    }
+
 }
 
 ?>

@@ -9,7 +9,17 @@ class UserDataPlugin_Start_AMPAppointment extends UserDataPlugin {
             'type' => 'select',
             'available' => true,
             'default' => 1,
-            'label' => 'Schedule Name' )
+            'label' => 'Schedule Name' ),
+        'email_contact_schedule' => array(
+            'type' => 'select',
+            'available' => true,
+            'default' => false,
+            'label' => 'Confirmation Email Template for Schedule Contact' ),
+        'email_contact_appointment' => array(
+            'type' => 'select',
+            'available' => true,
+            'default' => false,
+            'label' => 'Confirmation Email Template for Appointment Contact' )
         );
 
     function UserDataPlugin_Start_AMPAppointment ( &$udm, $plugin_instance=null ) {

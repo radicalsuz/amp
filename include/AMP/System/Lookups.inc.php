@@ -166,4 +166,24 @@ class AMPSystemLookup_UserDataFormalNames extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_UserDataEmails extends AMPSystem_Lookup {
+    var $datatable = "userdata";
+    var $result_field = "Email";
+    var $criteria = "( !(isnull(Email) OR (Email=''))) ";
+
+    function AMPSystemLookup_UserDataEmails() {
+        $this->init();
+    }
+}
+
+class AMPSystemLookup_IntroTexts extends AMPSystem_Lookup {
+    var $datatable = "moduletext";
+    var $result_field = "name";
+
+    function AMPSystemLookup_IntroTexts () {
+        $this->init();
+    }
+
+}
+
 ?>

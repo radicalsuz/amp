@@ -49,28 +49,50 @@ class ScheduleItem extends AMPSystem_Data_Item {
 
         return FormLookup_Names::instance( $form_id );
     }
+
+    function getTimeText( $which_time ="start") {
+        if (!($sql_date = $this->getData( $which_time . '_time'))) return false;
+        $output = date( 'M j, Y \a\t g:ia', strtotime($sql_date));
+        if (!($timezone = $this->getTimeZoneText() )) return $output;
+
+        return $output . " " . $timezone;
+    }
+
+    function getTimeZoneText() {
+        if (!( $tz = $this->getData( 'timezone' ))) return false;
+        return $this->timezones[ $tz ];
+    }
+
+    function getTitle() {
+        return $this->getData('title');
+    }
+
+    function _safeOption( $text ) {
+        return str_replace( "'", "&rsquot;", $text );
+    }
+
+    function getLocation() {
+        return $this->getData('location');
+    }
+
+    function getOwnerEmail() {
+        if (!($owner = $this->getOwnerId())) return false;
+        $emails = AMPSystem_Lookup::instance( 'userDataEmails' );
+        if (!isset($emails[ $owner ])) return false;
+        return $emails[ $owner ];
+    }
+
         
 
     function describeSlot() {
-        $contact_names = $this->getContactNames();
         $data = $this->getData();
-        $output = "";
-        if (isset($data['start_time']) && $data['start_time']) {
-            $output .= date( 'M j, Y \a\t g:ia', strtotime($data['start_time']));
-            if (isset($data['timezone']) && $data['timezone']) {
-                $output .= " " . $this->timezones[ $data[ 'timezone' ] ];
-            }
-        }
-        if (isset($data['title']) && $data['title']) {
-            $output .= ' : ' . str_replace( "'", "&rsquot;", $data['title'] );
-        }
-        if (isset($data['owner_id']) && $data['owner_id'] && $contact_names ) {
-            $output .= ' : with ' . $contact_names[$data['owner_id']] ;
-        }
-        if (isset($data['location']) && $data['location'] ) {
-            $output .= ' : ' . $data['location'] ;
-        }
-        return $output;
+        $output_items = array( $this->getTimeText() );
+
+        if ($title = $this->getTitle() )        $output_items[] = $title;
+        if ($contact = $this->getOwnerName() )  $output_items[] = "with ".$contact;
+        if ($location= $this->getLocation())    $output_items[] = $location;
+
+        return $this->_safeOption( join( " : ", $output_items ) );
     }
 		
 	function isOpen() {
@@ -88,6 +110,20 @@ class ScheduleItem extends AMPSystem_Data_Item {
 	function getCapacity() {
 		return $this->getData('capacity');
 	}
+
+    function getOwnerId() {
+        return $this->getData( 'owner_id' );
+    }
+
+    function getOwnerName() {
+        if (!($id = $this->getOwnerId() )) return false;
+        if (!($names = $this->getContactNames() )) return false;
+        if (!isset($names[ $id ])) return false;
+        return $names[ $id ];
+    }
+        
+        
+        
 
 	function getAppointments() {
 		if (isset($this->_appointments)) {

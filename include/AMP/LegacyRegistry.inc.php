@@ -49,6 +49,7 @@ $reg_manager = & AMP_Registry::instance();
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_ENCODING, $encoding );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_SITENAME, $SystemSettings['websitename'] );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_SITEURL, $SystemSettings['basepath'] );
+$reg_manager->setEntry( AMP_REGISTRY_SETTING_EMAIL_SENDER, $SystemSettings['emfrom'] );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_EMAIL_SYSADMIN, $SystemSettings['emfaq'] );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_METADESCRIPTION, $SystemSettings['metadescription'] );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_METACONTENT, $SystemSettings['metacontent'] );
@@ -63,7 +64,7 @@ $MM_HOSTNAME = AMP_DB_HOST;
 $MM_PASSWORD = AMP_DB_PASS;
 $MM_DATABASE = AMP_DB_NAME;
 
-define( "AMP_SYSTEM_VERSION_ID", '3.5.0');
+define( "AMP_SYSTEM_VERSION_ID", '3.5.1');
 
 #define browser detection global variables
 $browser_ie = NULL;

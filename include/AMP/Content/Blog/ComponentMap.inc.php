@@ -1,6 +1,6 @@
 <?php
 
-define ('AMP_CONTENT_CLASS_BLOG', '20');
+if (!defined( 'AMP_CONTENT_CLASS_BLOG' )) define ('AMP_CONTENT_CLASS_BLOG', '20');
 
 require_once ( 'AMP/System/ComponentMap.inc.php' );
 
