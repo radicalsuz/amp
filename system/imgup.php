@@ -58,7 +58,7 @@ if ($response) {
 	echo '<br>'.$response.'<br><br><br>'; 
 }	
 	?>
-<p><strong>Upload .JPG Image Files Only (<a href="imgother_upload.php">click here</a> for other formats) </strong></p>
+<p><strong>Upload .JPG Image Files Only (<a href="imgother_upload.php">click here</a> for other formats, <a href="crop_step1.php" target="_blank">click here</a> to upload a .JPG you want to crop) </strong></p>
 <form method="POST" action="<?php echo $MM_editAction ?>" enctype="multipart/form-data">
 <?php
 echo $buildform->start_table('name');
