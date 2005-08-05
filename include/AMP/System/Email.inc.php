@@ -75,7 +75,7 @@ class AMPSystem_Email {
         if (! ($from = $this->getSender())) return false;
         
         if ($sender_name = $this->getSenderName() ) {
-            $from = "<\"" . $sender_name ."\"> " . $from;
+            $from = $sender_name . " <" . $from .">";
         }
         $header  = "From: " . $from;
         $header .= "\nX-Mailer: AMP/SystemMail\n";

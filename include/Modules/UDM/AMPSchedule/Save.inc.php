@@ -40,7 +40,12 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
 		unset($fields['schedule_id']);
 
         foreach ($fields as $fname => $fDef ) {
-            $this->fields[ $fname ] = ($fDef + array('enabled'=>true, 'value'=>(isset($fDef['default'])?$fDef['default']:null)));
+            $this->fields[ $fname ] = 
+                ($fDef + array(
+                    'enabled'=>true, 
+                    'value'=>(isset($fDef['default'])?$fDef['default']:null)));
+            if (!isset($this->fields[ $fname ]['public'])) 
+                $this->fields[$fname]['public'] = true;
         }
 
         $this->insertAfterFieldOrder( array_keys( $this->fields ) );
@@ -56,6 +61,7 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
 
 		$data['owner_id'] = $this->udm->uid;
 		$data['schedule_id'] = $options['schedule_id'];
+        if (!isset($data['status'])) $data['status'] = AMP_SCHEDULE_STATUS_DRAFT;
 
         $item = &new ScheduleItem($this->dbcon);
         $itemdata = $this->schedule_form->translate($data, 'get') ;

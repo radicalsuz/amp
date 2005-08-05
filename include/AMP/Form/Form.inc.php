@@ -233,7 +233,7 @@
     function addToFieldValueSet( $fieldname, $valueset) {
         $full_valueset=$valueset;
         if (is_array( $this->fields[$fieldname]['values'])) {
-            $full_valueset = array_merge( $this->fields[ $fieldname ][ 'values'] );
+            $full_valueset = array_merge( $this->fields[ $fieldname ][ 'values'], $full_valueset );
         }
         $this->fields[$fieldname]['values'] = $full_valueset;
         if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {

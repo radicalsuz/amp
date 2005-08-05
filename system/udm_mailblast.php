@@ -1,5 +1,5 @@
 <?php
-
+require_once ('udm_mailblast2.php');
 # system email plugin
 #this will display the details of emails sent to a person 
 
@@ -9,6 +9,7 @@
 # build form
 # set hidden value as email array
 # 
+/*
 ob_start();
 $mod_name="email";
 
@@ -99,5 +100,5 @@ if ($response) {
 	echo $form->fetch();
 }
 include ("footer.php");
-
+*/
 ?>

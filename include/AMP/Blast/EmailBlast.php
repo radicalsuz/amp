@@ -148,7 +148,7 @@ class EmailBlast extends Blast {
 				// cutomize the email message for this user
 				$message_output =  $this->encode_blast_email($message['htmlmessage'],$message['textmessage'],$R->Fields("message_ID"));
 				$mail = new html_mime_mail(array("Reply-To: ".$message['reply_to_address'],
-			  		"X-Mailer: AMP v3.4",
+			  		"X-Mailer: AMP v3.5",
         		    "X-MessageId: ".$R->Fields("message_ID")));
 				 
 				 // cutomize the email message for this user

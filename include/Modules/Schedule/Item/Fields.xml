@@ -65,5 +65,6 @@
     <type>select</type>
     <label>Status</label>
     <default>open</default>
+    <public>0</public>
 </status>
 </array>

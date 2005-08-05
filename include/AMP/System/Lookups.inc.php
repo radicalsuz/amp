@@ -1,4 +1,5 @@
 <?php
+define ('AMP_ERROR_LOOKUP_SQL_FAILED', 'Failed to retrieve %s: %s' );
 require_once ( 'AMP/Content/Lookups.inc.php' );
 require_once ( 'Modules/Schedule/Lookups.inc.php' );
 
@@ -25,7 +26,7 @@ class AMPSystem_LookupFactory {
         if (!isset($lookup->result_field)) return false;
         if ( ! ($data = $this->dbcon->CacheGetAssoc( $this->assembleSQL( $lookup ) ))) {
             if ($this->dbcon->ErrorMsg()) 
-                trigger_error( 'Failed to retrieve '.get_class($lookup).': '.$this->dbcon->ErrorMsg() );
+                trigger_error( sprintf( AMP_ERROR_LOOKUP_SQL_FAILED, get_class($lookup), $this->dbcon->ErrorMsg()) );
             return false;
         }
         return $data;

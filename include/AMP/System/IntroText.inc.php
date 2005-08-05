@@ -49,7 +49,8 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
 
     function mergeBodyFields( $fielddata ) {
         $replace_values = AMP_makeMergeFields( array_keys($fielddata) );
-        return str_replace( $replace_values, $fielddata, $this->getBody() );
+        $merged = str_replace( $replace_values, $fielddata, $this->getBody() );
+        return preg_replace( "%\w+%", "", $merged );
     }
 
  }

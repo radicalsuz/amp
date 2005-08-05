@@ -1,9 +1,20 @@
 <?php
 
-require_once( 'AMP/Form/System/XML.inc.php' );
+require_once( 'AMP/System/Form/XML.inc.php' );
 require_once( 'AMP/System/Blast/ComponentMap.inc.php' );
 
-class Blast_Form extends AMPSystemForm_XML {
+class Blast_Form extends AMPSystem_Form_XML {
+
+    var $submit_button = array( 'submitAction' => array(
+        'type' => 'group',
+        'elements'=> array(
+            'send' => array(
+                'type' => 'submit',
+                'label' => 'Send Email'),
+            'cancel' => array(
+                'type' => 'submit',
+                'label' => 'Cancel')
+        )));
 
     function Blast_Form () {
         $name = "EnterEmail";
@@ -15,9 +26,8 @@ class Blast_Form extends AMPSystemForm_XML {
     }
 
     function setDynamicValues() {
-        $blast_form->setDefaultValue( 'MM_recordId', $_GET['id'] );
-        $blast_form->setDefaultValue( 'passedsql', stripslashes($_POST['sqlp'] ));
-        $blast_form->setDefaultValue( 'modin', $_REQUEST['modin'] );
+        $this->setFieldValueSet( 'modin', AMPSystem_Lookup::instance( 'Forms' ) );
     }
+
 }
 ?>

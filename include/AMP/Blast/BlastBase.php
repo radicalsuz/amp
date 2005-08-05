@@ -1,5 +1,7 @@
 <?php
 
+require_once( 'Net/POP3.php' );
+
 ## to do : figure out better way to load the emails into to message table
 
 class Blast {
@@ -7,6 +9,8 @@ class Blast {
 	var $dbcon;
 	var $blast_ID;
 	var $type ;
+    var $_blastdata;
+    var $_messageSet;
 
 	function Blast($dbcon){
 		$this->dbcon =$dbcon;
@@ -114,6 +118,7 @@ class Blast {
 		
 		$sql = "Select distinct b.blast_ID from messages_to_contacts m, blast b where m.blast_ID =b.blast_ID and   m.message_type = '".$this->type."' and m.status = 'New'  "	;
 		$R = $this->dbcon->Execute($sql)or DIE($sql.$this->dbcon->ErrorMsg());
+        $response = "";
 		while  (!$R->EOF) {
 				$this->blast_ID = $R->Fields("blast_ID");
 				$response  .= $this->send_messages();
@@ -124,15 +129,15 @@ class Blast {
 	
 	function blast_load(){
 		if ($this->type == 'Email-Admin') {
-			$sql = "insert into messages_to_contacts (blast_ID,system_user_ID,status,message_type)
-			select b.blast_ID,u.id,'New','".$this->type."'    
-			from blast b, blast_system_users u  
-			where  b.blast_ID=u.blast_ID and b.blast_ID = ".$this->blast_ID;
+			$sql = "insert into messages_to_contacts (blast_ID,system_user_ID,status,message_type) " .
+			"select b.blast_ID,u.id,'New','".$this->type."'   " . 
+			"from blast b, blast_system_users u " .
+			"where  b.blast_ID=u.blast_ID and b.blast_ID = ".$this->blast_ID;
 		} else {
-			$sql = "insert into messages_to_contacts (blast_ID,user_ID,status,message_type)
-			select b.blast_ID,u.id,'New','".$this->type."'    
-			from blast b, userdata u, lists_to_contacts s 
-			where u.id=s.user_ID and b.status ='New' and b.list_ID=s.list_ID and s.active = 1 and b.blast_ID = ".$this->blast_ID;		
+			$sql = "insert into messages_to_contacts (blast_ID,user_ID,status,message_type) ".
+			"select b.blast_ID,u.id,'New','".$this->type."'   ". 
+			"from blast b, userdata u, lists_to_contacts s ". 
+			"where u.id=s.user_ID and b.status ='New' and b.list_ID=s.list_ID and s.active = 1 and b.blast_ID = ".$this->blast_ID;		
 		}
 		$this->dbcon->Execute($sql)or DIE($sql.$this->dbcon->ErrorMsg());		
 		$this->set_blast_status('Loaded')		;
@@ -189,7 +194,7 @@ class Blast {
 		
 		$this->type ='Email-Admin';
 		$this->blast_load();
-		$response .= $this->process_que();
+		$response = $this->process_que();
 		return $response;
 	}
 		

@@ -3,7 +3,7 @@ $mod_name="email";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
-require_once("WYSIWYG/editor.php");
+#require_once("WYSIWYG/editor.php");
 
 $obj = new SysMenu; 
 $buildform = new BuildForm;
@@ -73,8 +73,10 @@ $html .= addfield('from_email','From Email','text',$R->Fields("from_email"));
 $html .= addfield('from_name','From Name','text',$R->Fields("from_name"));
 $html .= addfield('reply_to_address','Reply To Address','text',$R->Fields("reply_to_address"));
 
-$Text = WYSIWYG('article',$R->Fields("message_email_html"),1);
+/*/
+$Text = #WYSIWYG('article',$R->Fields("message_email_html"),1);
 $html .=  $buildform->add_row('HTML Email Message', $Text);
+*/
 
 $html .= addfield('message_email_text','Text Email Message','textarea',$R->Fields("message_email_text"));
 

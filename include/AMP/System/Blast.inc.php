@@ -5,6 +5,7 @@ define( 'AMP_BLAST_NO_RECORD_ID', 8000000);
 
 require_once( 'AMP/System/Data/Item.inc.php');
 require_once ('AMP/Blast/EmailBlast.php');
+require_once ('AMP/System/Blast/EmailSet.inc.php');
 
 class AMPSystem_Blast extends AMPSystem_Data_Item {
 
@@ -21,9 +22,13 @@ class AMPSystem_Blast extends AMPSystem_Data_Item {
     }
 
     function getEmails( $sql ) {
-        $emails = &new BlastEmailSet( $this->dbcon );
-        if (!$emails->doSQLStraight( "Select distinct Email ".$sql ) return false;
-        return ($this->emails = $emails->getArray());
+        $emails = array();
+        $emailset = &new BlastEmailSet( $this->dbcon );
+        if (!$emailset->doStraightSQL( "Select distinct Email ".$sql )) return false;
+        while( $row = $emailset->getData() ) {
+            $emails[] = $row['Email'];
+        }
+        return ($this->emails = $emails);
     }
 
     function send( $message ) {

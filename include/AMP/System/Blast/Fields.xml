@@ -1,7 +1,7 @@
 <array>
-    <MM_recordId>
+    <id>
         <type>hidden</type>
-    </MM_recordId>
+    </id>
     <blast_type>
         <type>hidden</type>
         <default>System-Email</default>
@@ -9,9 +9,6 @@
     <passedsql>
         <type>hidden</type>
     </passedsql>
-    <modin>
-        <type>hidden</type>
-    </modin>
     <status>
         <type>hidden</type>
         <default>New</default>
@@ -32,12 +29,18 @@
         <label>Reply To Address</label>
         <type>text</type>
     </replyto_email>
+    <modin>
+        <type>select</type>
+        <label>Recipients</label>
+    </modin>
     <messagehtml>
         <label>HTML Email message</label>
+        <size>30:60</size>
         <type>wysiwyg</type>
     </messagehtml>
     <messagetext>
         <label>Text Email message</label>
+        <size>30:60</size>
         <type>textarea</type>
     </messagetext>
 </array>
