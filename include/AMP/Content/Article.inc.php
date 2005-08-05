@@ -2,9 +2,9 @@
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
 //require_once ( 'AMP/Content/Article/Version.inc.php' );
-//require_once ( 'AMP/Content/Article/Comments.inc.php' );
-//require_once ( 'AMP/Content/Article/DocumentLink.inc.php' );
-//require_once ( 'AMP/Content/Image.inc.php' );
+require_once ( 'AMP/Content/Article/Comments.inc.php' );
+require_once ( 'AMP/Content/Article/DocumentLink.inc.php' );
+require_once ( 'AMP/Content/Image.inc.php' );
 
 define ('AMP_CONTENT_STATUS_LIVE', 1);
 define ('AMP_CONTENT_STATUS_DRAFT', 0);

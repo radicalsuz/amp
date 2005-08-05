@@ -4,7 +4,7 @@ class AMPDisplay_HTML {
 
     function _HTML_inSpan( $text, $class=null ) {
         $html_class_attr ="";
-        if (isset($class)) $html_class_attr = ' class="'.$class'."';
+        if (isset($class)) $html_class_attr = ' class="'.$class.'"';
         return '<span'.$html_class_attr.'>' . $text .'</span>';
     }
 
@@ -30,7 +30,7 @@ class AMPDisplay_HTML {
         $output = "";
 
         foreach($attr_set as $attr => $value ) {
-            $output .= $attr . "=" $this->_HTML_safeQuote( $value );
+            $output .= $attr . "=" . $this->_HTML_safeQuote( $value );
         }
         return $output;
     }

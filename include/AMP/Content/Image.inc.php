@@ -6,19 +6,19 @@ define( 'AMP_IMAGE_CLASS_OPTIMIZED', 'pic' );
 
 class Content_Image {
 
-    $style_def = array(
+    var $style_def = array(
        'hspace' => '4',
        'vspace' => '4',
        'border' => '0',
        'class'  => 'img_main' );
-    $_itemdata = array();
-    $_itemdata_keys = array( 'width', 'height', 'alttag', 'caption', 'alignment', 'filename', 'image_size');
+    var $_itemdata = array();
+    var $_itemdata_keys = array( 'width', 'height', 'alttag', 'caption', 'alignment', 'filename', 'image_size');
 
     function Content_Image( $filename=null ) {
         if (isset($filename)) $this->setFile( $filename );
     }
 
-    function setFile( $filename );
+    function setFile( $filename ){
         $this->filename = $filename;
         $this->setSize(getimagesize( $this->getPath() )); 
     }

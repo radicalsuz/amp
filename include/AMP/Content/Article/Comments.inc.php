@@ -1,7 +1,7 @@
 <?php
 
 require_once ( 'AMP/System/Data/Set.inc.php' );
-require_once ( 'AMP/Content/Display.inc.php' );
+require_once ( 'AMP/Content/Article/Display.inc.php' );
 
 
 class ArticleCommentSet extends AMPSystem_Data_Set {
@@ -57,7 +57,7 @@ class ArticleCommentDisplay extends AMPDisplay_HTML {
                             $this->_HTML_author( $data['author'], $data['email'] ),
                             $this->_HTML_date( $data['date'] )) 
                         ) .
-                        $this->_HTML_commentBody( $data['comment'] );
+                        $this->_HTML_commentBody( $data['comment'] ) );
         }
 
         return $output;

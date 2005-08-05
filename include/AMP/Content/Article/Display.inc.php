@@ -1,6 +1,6 @@
 <?php
 
-require_once ('AMP/Display/HTML.inc.php' );
+require_once ('AMP/Content/Display/HTML.inc.php' );
 
 class Article_Display extends AMPDisplay_HTML {
 
