@@ -11,11 +11,12 @@ if ($_REQUEST['url']) {
 
 } else if ($_REQUEST['feed']) {
 	$F->feed = $_REQUEST['feed'];
-	//$F->load_feed()
+	$F->load_feed();
 
 	// deal with sectional placement
-	if ($_GET['type'] ) { $F->section = $_GET['type'];}
+	if ($_GET['type'] ) { $F->section = $_GET['type']; }
 	$MM_type= $F->section;
+	include("AMP/BaseTemplate.php"); 
 	echo $F->content_display();
 
 } else {

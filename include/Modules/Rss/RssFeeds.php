@@ -26,8 +26,8 @@ class RssFeeds {
 		//print_r ($this->rss->items);
 		error_reporting( $error_level_tmp );		
 		$this->items = array_slice($this->rss->items, 0, $this->num_items);
-		$this->title = $this->$rss->channel['title'];
-		$this->description = $this->$rss->channel['description'];
+		if (!$this->title) $this->title = $this->rss->channel['title'];
+		if (!$this->description) $this->description = $this->rss->channel['description'];
 		
 	}
 	
@@ -58,10 +58,12 @@ class RssFeeds {
 	}
 
 	function load_feed(){
-		$sql = 'select url from px_feeds where id = ' . $this->feed;
+		$sql = 'select * from px_feeds where id = ' . $this->feed;
 		$F = $this->dbcon->CacheExecute($sql) or DIE($this->dbcon->ErrorMsg());
 		$this->url = $F->Fields("url");
-		
+		$this->title = $F->Fields("title");
+		$this->description = $F->Fields("description");
+
 	}
 
 	function load_list(){
