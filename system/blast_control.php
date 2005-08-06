@@ -16,17 +16,18 @@ $response = $bc->new_system_blast($emails,$message);
   */
 
 $mod_name="email";
-require("Connections/freedomrising.php");
+#require("Connections/freedomrising.php");
+require_once("AMP/System/Base.php");
 
 //set the blast type
 if ($_REQUEST['type'] == 'Email') {
-	require("AMP/Blast/EmailBlast.php");
+	require_once("AMP/Blast/EmailBlast.php");
 	$bc = new EmailBlast($dbcon);
 	$file = 'email';
 }
 
 if ($_REQUEST['type'] == 'SMS') {
-	require("AMP/Blast/SmsBlast.php");
+	require_once("AMP/Blast/SmsBlast.php");
 	$bc = new SmsBlast;
 	$file = 'sms';
 }

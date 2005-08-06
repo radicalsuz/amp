@@ -9,6 +9,7 @@ require_once ( 'Modules/Schedule/Lookups.inc.php' );
 require_once ( 'Modules/Schedule/Appointment/Form.inc.php' );
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/System/Email.inc.php' );
+require_once ( 'AMP/System/IntroText.inc.php' );
 
 class UserDataPlugin_Save_AMPAppointment extends UserDataPlugin_Save {
 

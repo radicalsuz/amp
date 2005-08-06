@@ -43,6 +43,8 @@ $meta_content        = $SystemSettings['metacontent'];			//meta content
 $systemplate_id      = $SystemSettings['template'];
 
 define('AMP_SITE_ADMIN', $admEmail);
+define ('AMP_SYSTEM_BLAST_EMAIL_SENDER', $SystemSettings['emmedia'] );
+define ('AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME', $SystemSettings['emailfromname'] );
 
 $encoding = isset($SystemSettings['encoding']) ? $SystemSettings['encoding'] : 'iso-8859-1';
 $reg_manager = & AMP_Registry::instance();

@@ -8,11 +8,13 @@
 // PHP/SWF Charts is a shareware. See http://www.maani.us/charts/ for
 // more information.
 // ------------------------------------------------------------------------
+if (!defined( 'AMP_CONTENT_URL_FLASH' )) define ('AMP_CONTENT_URL_FLASH', AMP_SITE_URL . '/flash/' );
 
 function DrawChart($chart){
 
 	if (file_exists("charts.swf")){$path="";}
-	else{$path=str_replace ("charts.php","",str_replace($_SERVER['DOCUMENT_ROOT' ],"",__FILE__));}
+	else{$path= AMP_CONTENT_URL_FLASH . "charts.php";}
+	#else{$path=str_replace ("charts.php","",str_replace($_SERVER['DOCUMENT_ROOT' ],"",__FILE__));}
 
 	//defaults
 	if(!isset($chart[ 'canvas_bg' ]['width' ])){$chart[ 'canvas_bg' ]['width' ] =400;}

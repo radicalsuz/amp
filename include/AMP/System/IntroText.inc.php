@@ -12,6 +12,7 @@
  *
  *****/
 
+require_once ( 'utility.functions.inc.php' );
 require_once ( 'AMP/System/Data/Item.inc.php' );
 
  class AMPSystem_IntroText extends AMPSystem_Data_Item {
@@ -49,8 +50,8 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
 
     function mergeBodyFields( $fielddata ) {
         $replace_values = AMP_makeMergeFields( array_keys($fielddata) );
-        $merged = str_replace( $replace_values, $fielddata, $this->getBody() );
-        return preg_replace( "%\w+%", "", $merged );
+        return str_replace( $replace_values, $fielddata, $this->getBody() );
+        #return ereg_replace( "%\w+%", "", $merged );
     }
 
  }

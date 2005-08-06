@@ -152,12 +152,14 @@
 <class>email</class>
 <per>BLAST_ADMIN</per>
 </item>
+<!-- page doesn't work
 <item>
 <href>blast_report.php?action=list</href>
 <label>View Reports</label>
 <class>email</class>
 <per>BLAST_ACCESS</per>
 </item>
+-->
 <item>
 <href>../lists/admin</href>
 <label>PHP List Admin</label>

@@ -1,7 +1,6 @@
 <?php
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
-//require_once ( 'AMP/Content/Article/Version.inc.php' );
 require_once ( 'AMP/Content/Article/Comments.inc.php' );
 require_once ( 'AMP/Content/Article/DocumentLink.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
@@ -133,11 +132,14 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function readVersion( $version_id ) {
-        $version = &new Article_Version( $this->dbcon, $version_id );
+        //$version = &new Article_Version( $this->dbcon, $version_id );
         if (!$version->hasData()) return false;
 
         $this->setData( $version->getData() );
     }
 
 }
+
+require_once ( 'AMP/Content/Article/Version.inc.php' );
+
 ?>

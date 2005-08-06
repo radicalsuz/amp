@@ -1,5 +1,5 @@
 <?php
-include_once ('Charts/charts.php');
+include_once ('AMP/Charts/charts.php');
 
 $blast_ID = $_REQUEST['blast_ID'];
 
@@ -54,8 +54,8 @@ function blast_details($blast_ID) {
 
 function open_rate($blast_ID) {
 	global $dbcon;	
-	$ct=$dbcon->Execute("select Count(message_ID) from messages_to_contacts where blast_ID = $blast_ID and status='Done' ")or DIE('line 23'.$dbcon->ErrorMsg());
-	$open=$dbcon->Execute("select Count(message_ID) from messages_to_contacts where blast_ID = $blast_ID and status='Done' and viewed > 1  ")or DIE('line 23'.$dbcon->ErrorMsg());
+	$ct   =  $dbcon->Execute("select Count(message_ID) from messages_to_contacts where blast_ID = $blast_ID and status='Done' ")or DIE(__LINE__.$dbcon->ErrorMsg());
+	$open =  $dbcon->Execute("select Count(message_ID) from messages_to_contacts where blast_ID = $blast_ID and status='Done' and viewed > 1  ")or DIE(__LINE__.$dbcon->ErrorMsg());
 
 
 	$out .= "<table>";

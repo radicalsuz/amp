@@ -46,14 +46,22 @@ class AMP_Breadcrumb_Content {
         $this->init( $dbcon );
     }
 
+
+    #####################
+    ###  core methods ###
+    #####################
+
     function init( &$dbcon ) {
         $this->dbcon = &$dbcon;
         $this->setBase();
-        $this->getMap();
+        $this->_getMap();
     }
 
-    function getMap() {
-        $this->map = &AMPContent_Map::instance();
+    function &instance() {
+        static $breadcrumb = false;
+        if (!$breadcrumb) $breadcrumb = new AMP_Breadcrumb_Content ( AMP_Registry::getDbcon() );
+
+        return $breadcrumb;
     }
 
     function execute() {
@@ -61,24 +69,8 @@ class AMP_Breadcrumb_Content {
         return $this->_HTML_wrapper( $this->_HTML_outputTemplated() );
     }
 
-    function _HTML_wrapper( $output ) {
-        return "<!-- BEGIN BREADCRUMB CODE -->\n". $output . "<!-- END BREADCRUMB CODE --><br>\n";
-    }
-
-    function addActions() {
-        $this->actions = true;
-    }
-
-    function hasActions() {
-        return $this->actions;
-    }
-
-    function addTemplate() {
-        $this->use_template = true;
-    }
-
-    function hasTemplate() {
-        return $this->use_template;
+    function _getMap() {
+        $this->map = &AMPContent_Map::instance();
     }
 
     function setBase( $page = "index.php" ) {
@@ -89,16 +81,9 @@ class AMP_Breadcrumb_Content {
         $this->current_section = $this->top;
     }
 
-    function setSeparator( $html ) {
-        $this->separator = $html;
-    }
-
-    function &instance() {
-        static $breadcrumb = false;
-        if (!$breadcrumb) $breadcrumb = new AMP_Breadcrumb_Content ( AMP_Registry::getDbcon() );
-
-        return $breadcrumb;
-    }
+    #######################################
+    ### public location setting methods ###
+    #######################################
 
     function findClass( $class_id ) {
         $location = &new ContentClass( $this->dbcon, $class_id );
@@ -129,6 +114,40 @@ class AMP_Breadcrumb_Content {
     }
 
 
+    ####################################
+    ### public configuration methods ###
+    ####################################
+
+    function addActions() {
+        $this->actions = true;
+    }
+
+    function hasActions() {
+        return $this->actions;
+    }
+
+    function addTemplate() {
+        $this->use_template = true;
+    }
+
+    function hasTemplate() {
+        return $this->use_template;
+    }
+
+    function setSeparator( $html ) {
+        $this->separator = $html;
+    }
+
+
+    #############################
+    ###  private HTML methods ###
+    #############################
+
+    function _HTML_wrapper( $output ) {
+        return "<!-- BEGIN BREADCRUMB CODE -->\n". $output . "<!-- END BREADCRUMB CODE --><br>\n";
+    }
+
+
     function _HTML_start() {
         return  
                 "<span class='". $this->css_class . "'>" .
@@ -154,33 +173,6 @@ class AMP_Breadcrumb_Content {
         }
 
         return $final_link . "</span>\n";
-    }
-
-    function _ancestryLinks() {
-        $links = array();
-        if (!isset($this->current_section)) return $links;
-        $ancestors = $this->map->getAncestors( $this->current_section );
-        if (empty($ancestors)) return $links;
-
-        foreach ( $ancestors as $id => $section_name ) {
-            $section_name = $this->_trimText( $section_name );
-			$new_item = "<a href=\"" . $this->baseURL . $this->itemHref . $id .
-                        "\" class=\"". $this->css_class . "\">" . $section_name . "</a>";
-            array_unshift( $links, $new_item );
-		}
-
-        return $links;
-    }
-
-    function _trimText( $text ) {
-        $trimmed = strip_tags( $text );
-        if (! (strlen( $trimmed ) > $this->max_text_length) ) return $trimmed; 
-
-        $end_item = " ...";
-        $trimmed = substr( trim($trimmed), 0, $this->max_text_length );
-        if ( !($pos = strrpos( $trimmed, " " ))) return $trimmed . $end_item;
-
-        return substr( $trimmed, 0, $pos ) . $end_item;
     }
 
     function _HTML_outputTemplated() {
@@ -215,6 +207,11 @@ class AMP_Breadcrumb_Content {
         return $output . $actions_end;
     }
 
+
+    ###################################
+    ### private html helper methods ###
+    ###################################
+
     function _buildActions() {
         $urlvars = AMP_URL_Values();
         $actions = array();
@@ -229,5 +226,33 @@ class AMP_Breadcrumb_Content {
 
         return $actions;
     }
+
+    function _ancestryLinks() {
+        $links = array();
+        if (!isset($this->current_section)) return $links;
+        $ancestors = $this->map->getAncestors( $this->current_section );
+        if (empty($ancestors)) return $links;
+
+        foreach ( $ancestors as $id => $section_name ) {
+            $section_name = $this->_trimText( $section_name );
+			$new_item = "<a href=\"" . $this->baseURL . $this->itemHref . $id .
+                        "\" class=\"". $this->css_class . "\">" . $section_name . "</a>";
+            array_unshift( $links, $new_item );
+		}
+
+        return $links;
+    }
+
+    function _trimText( $text ) {
+        $trimmed = strip_tags( $text );
+        if (! (strlen( $trimmed ) > $this->max_text_length) ) return $trimmed; 
+
+        $end_item = " ...";
+        $trimmed = substr( trim($trimmed), 0, $this->max_text_length );
+        if ( !($pos = strrpos( $trimmed, " " ))) return $trimmed . $end_item;
+
+        return substr( $trimmed, 0, $pos ) . $end_item;
+    }
+
 }
 ?>

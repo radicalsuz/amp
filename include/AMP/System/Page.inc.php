@@ -288,7 +288,12 @@ class AMPSystem_Page {
         return $this->show;
     }
 
-    function setMessage( $text, $is_error = false ) {
+    function setMessage( $message, $is_error = false ) {
+        $text = $message;
+        if (is_array( $message ) && isset($message['error']) && $message['error']) {
+            $is_error = true;
+            $text = $message['text'];
+        }
         if ($is_error) return ($this->errors[] = $text);
         return ($this->results[] = $text);
 

@@ -1,5 +1,7 @@
 <?php
 
+require_once( 'AMP/Content/Article.inc.php' );
+
 class Article_Version extends Article {
 
     var $datatable = "articles_version";

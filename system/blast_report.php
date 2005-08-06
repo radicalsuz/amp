@@ -1,8 +1,8 @@
 <?php
 $mod_name="email";
 require_once("Connections/freedomrising.php");
-require_once("../scripts/FCKeditor/fckeditor.php");
-$buildform = new BuildForm;
+#require_once("../scripts/FCKeditor/fckeditor.php");
+#$buildform = new BuildForm;
 
 include("AMP/Blast/Reporting.php");
 
@@ -19,7 +19,7 @@ echo '<a href="blast_control.php?type=Email&blast_new='.$_REQUEST['blast_ID'].'"
 echo "<h2>Open Rate</h2>";
 echo open_rate($_REQUEST['blast_ID']);
 echo "<h2>Message Details</h2>";
-echo blast_details($blast_ID);
+echo blast_details($_REQUEST['blast_ID']);
 
 include ("footer.php");
 ?>

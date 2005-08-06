@@ -746,7 +746,7 @@ if (!function_exists('AMP_Url_AddVars')) {
     }
 }
 
-if (!function_exists('AMP_makeMergeField')) {
+if (!function_exists('AMP_makeMergeFields')) {
     function AMP_makeMergeFields( $fieldnames ) {
         if (!is_array( $fieldnames)) $fieldnames = array( $fieldnames );
         $result= array();

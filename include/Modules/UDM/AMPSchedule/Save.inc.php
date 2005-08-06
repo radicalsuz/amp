@@ -65,7 +65,6 @@ class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
 
         $item = &new ScheduleItem($this->dbcon);
         $itemdata = $this->schedule_form->translate($data, 'get') ;
-        AMP_varDump( $itemdata );
         $item->setData( $itemdata );
         return $item->save();
     }

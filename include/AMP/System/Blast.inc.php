@@ -32,7 +32,7 @@ class AMPSystem_Blast extends AMPSystem_Data_Item {
     }
 
     function send( $message ) {
-        if (!isset($this->emails)) return false;
+        if (!(isset($this->emails)&&count($this->emails))) return array("No Emails Found", 1);
         return $this->blast->new_system_blast( $this->emails, $message );
     }
 

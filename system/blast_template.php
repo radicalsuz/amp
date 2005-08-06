@@ -3,6 +3,8 @@ $mod_name="email";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
+require_once( 'AMP/Form/HTMLEditor.inc.php' );
+
 $obj = new SysMenu; 
 $buildform = new BuildForm;
 
@@ -10,7 +12,7 @@ $table = "blast_templates";
 $listtitle ="Email Blast Template";
 $listsql ="select id, name  from $table  ";
 $orderby =" order by name asc  ";
-$fieldsarray=array( 'Tempalte'=>'name','ID'=>'id'
+$fieldsarray=array( 'Template'=>'name','ID'=>'id'
 					);
 $filename="blast_template.php";
 
@@ -40,9 +42,13 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Add/Edit '.$listtitle, 'banner');
 $html .= addfield('name','Template Name','text',$R->Fields("name"));
-$html .= addfield('description','Tempalte Description','textarea',$R->Fields("description"));
-$Text = WYSIWYG($R->Fields("tempalte"),1);
-$html .=  $buildform->add_row('HTML Email Tempalte<br>add [CONTENT] <br>where the content should appear', $Text);
+$html .= addfield('description','Template Description','textarea',$R->Fields("description"));
+$html .= addfield('template','HTML Email Template<br>add [CONTENT] <br>where the content should appear',
+                        'textarea',$R->Fields("template"));
+
+$WYSIWYG = AMPFormElement_HTMLEditor::instance();
+$WYSIWYG->addEditor( 'template' );
+
 
 $html .= $buildform->add_content($buildform->add_btn() .'&nbsp;'. $buildform->del_btn().$rec_id->fetch());
 $html .= $buildform->end_table();
@@ -55,6 +61,7 @@ if ($_GET['action'] == "list") {
 }
 else {
 	echo $form->fetch();
+    echo $WYSIWYG->output();
 }	
 include ("footer.php");
 ?>

@@ -27,6 +27,9 @@ class Blast_Form extends AMPSystem_Form_XML {
 
     function setDynamicValues() {
         $this->setFieldValueSet( 'modin', AMPSystem_Lookup::instance( 'Forms' ) );
+        $this->setDefaultValue(  'from_email', AMP_SYSTEM_BLAST_EMAIL_SENDER );
+        $this->setDefaultValue(  'from_name', AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME );
+        $this->setDefaultValue(  'replyto_email', AMP_SYSTEM_BLAST_EMAIL_SENDER );
     }
 
 }

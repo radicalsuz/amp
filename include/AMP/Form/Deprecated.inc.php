@@ -390,8 +390,8 @@ class TextArea {
 	}
 
 	function fetch() {
-		$area = '<textarea name="%s" cols="%d" rows="%d" class="%s">%s</textarea>';
-		return sprintf($area, $this->name, $this->cols, $this->rows, $this->class, $this->contents);
+		$area = '<textarea name="%s" cols="%d" rows="%d" class="%s" id="%s">%s</textarea>';
+		return sprintf($area, $this->name, $this->cols, $this->rows, $this->class, $this->name, $this->contents);
 	}
 }
 

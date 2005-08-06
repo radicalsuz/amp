@@ -85,7 +85,7 @@ class EmailBlast extends Blast {
 				if ($fields) {
 					$htmlmessage = merge_fields_email($htmlmessage,$message_ID,$fields);
 				}
-				$htmlmessage .='<img src="'.$Web_Site.'http://localhost/amp/ut.php?m='.$message_ID.'" width="1" height="1" border="0">';
+				$htmlmessage .='<img src="'.AMP_SITE_URL.'/ut.php?m='.$message_ID.'" width="1" height="1" border="0">';
 				$htmlmessage = ereg_replace("\[[A-Z\. ]+\]","",$htmlmessage);
 			
 			}
