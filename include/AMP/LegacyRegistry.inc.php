@@ -54,6 +54,9 @@ $reg_manager->setEntry( AMP_REGISTRY_SETTING_EMAIL_SYSADMIN, $SystemSettings['em
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_METADESCRIPTION, $SystemSettings['metadescription'] );
 $reg_manager->setEntry( AMP_REGISTRY_SETTING_METACONTENT, $SystemSettings['metacontent'] );
 $reg_manager->setEntry( AMP_REGISTRY_CONTENT_TEMPLATE_ID_DEFAULT, $SystemSettings['template'] );
+define('AMP_SITE_URL', $SystemSettings['basepath']);
+define('AMP_SITE_NAME', $SystemSettings['websitename']);
+define('AMP_SITE_META_DESCRIPTION', $SystemSettings['metadescription']);
 
 		
 #SET DATABASE CACHING
