@@ -1,0 +1,124 @@
+#view-page
+{
+	font-family: georgia;
+	margin-top: 0;
+}
+
+.header
+{
+	background: #dddddd;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+.headline
+{
+	font-size: 110%;
+	float: left;
+}
+
+.row
+{
+	padding: 5px;
+}
+
+.feed
+{
+	font-size: 110%;
+	float: right;
+}
+
+.meta
+{
+	font-size: 90%;
+	float: left;
+	clear: left;
+	position: relative;
+	top: 10px;
+}
+
+.controls
+{
+	font-size: 90%;
+	float: right;
+	clear: right;
+	position: relative;
+	top: 10px;
+}
+
+.menu ul
+{
+	padding: 5px;
+	margin: 0;
+}
+
+.menu li
+{
+	display: inline;
+	padding: 5px;
+}
+
+.menu
+{
+	text-align: center;
+	margin-bottom: 20px;
+	margin-top: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background: #eee;
+	float: left;
+}
+
+.body
+{
+	padding-bottom: 30px;
+}
+
+.nav
+{
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.clearer
+{
+	clear: both;
+}
+
+
+#panel-page
+{
+	font-family: verdana;
+	font-size: 10px;
+	margin-top: 0;
+}
+
+#panel-page table
+{
+	border-collapse: collapse;
+	margin-bottom: 20px;
+	width: 100%;
+}
+
+#panel-page td
+{
+	font-size: 10px;
+	padding: 2px;
+}
+
+
+.odd-row
+{
+	background: #dddddd;
+}
+
+.unread
+{
+	font-weight: bold;
+	color: red;
+}
+
+.item
+{
+	clear: both;
+}
