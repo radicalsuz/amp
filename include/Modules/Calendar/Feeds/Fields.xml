@@ -1,0 +1,13 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<service>
+		<type>hidden</type>
+		<default>Calendar</default>
+	</service>
+	<url>
+		<type>text</type>
+		<label>Link</label>
+	</url>
+</array>

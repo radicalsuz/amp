@@ -18,7 +18,7 @@ $sql = "select url, id, title from " . FOF_FEED_TABLE;
 
 if($feed)
 {
-  $sql .= " where id = $feed";
+  $sql .= " WHERE (isNull(service) OR service='Content') AND id = $feed";
 }
 
 $sql .= " order by title";

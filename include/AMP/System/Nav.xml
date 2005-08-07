@@ -1,37 +1,66 @@
 <array>
 
 <calendar>
-<title>Calendar</title>
-<per>CALENDAR_ACCESS</per>
+    <title>Calendar</title>
+    <per>CALENDAR_ACCESS</per>
 
-<item>
-<href>calendar_gxlist.php</href>
-<label>View Events</label>
-<class>view</class>
-<per>CALENDAR_ACCESS</per>
-</item>
+    <item>
+        <href>calendar_gxlist.php</href>
+        <label>View Events</label>
+        <class>view</class>
+        <per>CALENDAR_ACCESS</per>
+    </item>
 
-<item>
-<href>calendar_gxlist.php?old=1</href>
-<label>View Old Events</label>
-<class>view</class>
-<per>CALENDAR_ACCESS</per>
-</item>
+    <item>
+        <href>calendar_gxlist.php?old=1</href>
+        <label>View Old Events</label>
+        <class>view</class>
+        <per>CALENDAR_ACCESS</per>
+    </item>
 
-<item>
-<href>calendar_gxedit.php</href>
-<label>Add Event</label>
-<class>add</class>
-<per>CALENDAR_ACCESS</per>
-</item>
+    <item>
+        <href>calendar_gxedit.php</href>
+        <label>Add Event</label>
+        <class>add</class>
+        <per>CALENDAR_ACCESS</per>
+    </item>
 
-<item>
-<href>calendar_type.php?action=list</href>
-<label>Event Types</label>
-<per>CALENDAR_ACCESS</per>
-</item>
+    <item>
+        <href>calendar_feeds.php</href>
+        <label>Calendar RSS Feeds</label>
+        <per>CALENDAR_ACCESS</per>
+    </item>
+
+    <item>
+        <href>calendar_type.php?action=list</href>
+        <label>Event Types</label>
+        <per>CALENDAR_ACCESS</per>
+    </item>
 </calendar>
 
+<calendarfeeds>
+    <title>Calendar Feeds</title>
+    <per>CALENDAR_ACCESS</per>
+
+    <item>
+        <href>calendar_feeds.php</href>
+        <label>Add Calendar Feeds</label>
+        <class>add</class>
+        <per>CALENDAR_ACCESS</per>
+    </item>
+
+    <item>
+        <href>calendar_feeds.php?action=list</href>
+        <label>View Calendar Feeds</label>
+        <class>view</class>
+        <per>CALENDAR_ACCESS</per>
+	</item>
+
+	<item>
+		<label>Update Feeds</label>
+		<href>feeds_update.php</href>
+	</item>
+</calendarfeeds>
 
 <faq>
 <title>FAQs</title>

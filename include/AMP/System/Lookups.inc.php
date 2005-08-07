@@ -187,4 +187,13 @@ class AMPSystemLookup_IntroTexts extends AMPSystem_Lookup {
 
 }
 
+class AMPSystemLookup_EventTypes extends AMPSystem_Lookup {
+    var $datatable = "eventtype";
+    var $result_field = "name";
+
+    function AMPSystemLookup_EventTypes() {
+        $this->init();
+    }
+}
+
 ?>

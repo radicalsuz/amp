@@ -18,7 +18,7 @@ function feed_read($id) {
 
 function feed_publish($id,$type,$class) {
 	global $dbcon, $ID;
-	$d=$dbcon->execute("select p.*, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id and  p.id = $id ") or die($dbcon->errorMsg());
+	$d=$dbcon->execute("select p.*, f.title as ftitle from px_items p, px_feeds f WHERE (isNull(f.service) OR f.service='Content') AND f.id = p.feed_id AND p.id = $id ") or die($dbcon->errorMsg());
 	//pasre out date
 	$text = utf8_decode( preg_replace( "/\\n/", "<br/>", $d->Fields("content") ) );
 	if (strlen($d->Fields("content")) > 750 ) {
@@ -61,9 +61,9 @@ else { $limit=30;}
 
 
 
-$rs  = $dbcon->Execute("select p.*, p.dcdate as date, f.title as ftitle from px_items p, px_feeds f where f.id = p.feed_id  $feedsql order by p.id desc Limit  $offset, $limit") or die($dbcon->ErrorMsg() );
-$sqlct = "select p.id from px_items p, px_feeds f where f.id = p.feed_id $feedsql order by p.id desc ";
-$f  = $dbcon->Execute( "select id, title from px_feeds order by title asc" ) or die(  $dbcon->ErrorMsg() );
+$rs  = $dbcon->Execute("select p.*, p.dcdate as date, f.title as ftitle from px_items p, px_feeds f WHERE (isNull(f.service) OR f.service='Content') AND f.id = p.feed_id  $feedsql order by p.id desc Limit  $offset, $limit") or die($dbcon->ErrorMsg() );
+$sqlct = "select p.id from px_items p, px_feeds f WHERE (isNull(f.service) OR f.service='Content') AND f.id = p.feed_id $feedsql order by p.id desc ";
+$f  = $dbcon->Execute( "select id, title from px_feeds WHERE (isNull(service) OR service='Content') order by title asc" ) or die(  $dbcon->ErrorMsg() );
 
 
 ###########################KEEP PARAMATERS###########################

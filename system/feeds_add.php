@@ -11,7 +11,7 @@ include_once("FeedOnFeeds/init.php");
 
 $table = "px_feeds";
 $listtitle ="Subscribed Feeds";
-$listsql ="select * from $table  ";
+$listsql ="select * from $table WHERE(isNull(service) OR service='Content') ";
 $orderby =" order by id desc ";
 $fieldsarray=array('ID'=>'id',
 					'Title'=>'title',
