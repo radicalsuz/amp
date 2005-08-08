@@ -1,6 +1,6 @@
 <?php
 
-$mod_id = 62;
+//$mod_id = 62;
 //$modid = 21;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
