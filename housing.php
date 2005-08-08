@@ -18,7 +18,8 @@ $housing=$dbcon->CacheExecute("SELECT *  FROM userdata  Where  custom1='Have Hou
 $nhousing=$dbcon->CacheExecute("SELECT *  FROM userdata  Where   custom1='Need Housing' and custom19 =1 and modin= 11 ORDER BY id DESC") or DIE($dbcon->ErrorMsg());
  ?>
 
-<p class="text"><a href="#have">View Avalible Housing</a> | <a href="#need">View Requested Housing</a><br><a href="modinput4.php?modin=11">Offer/Request  Housing on the Housing Board </a><br>
+<p class="text"><a href="#have">View Available Housing</a> | <a href="#need">View Requested Housing</a><br>
+  <a href="modinput4.php?modin=11">Offer/Request  Housing on the Housing Board </a><br>
 <a href="modinput4_login.php?modin=11">Update Your Housing Board Listing </a></p>
 <p class="title"><a name="have"></a>Have Housing </p>
 <?php while (!$housing->EOF)   { ?>
