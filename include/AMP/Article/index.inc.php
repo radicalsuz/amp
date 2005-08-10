@@ -93,7 +93,7 @@ while  ( !$maintext->EOF ) {
     if ( $maintext->Fields( "html" ) == (1) ) {  //start of html text 
         echo $maintext->Fields( "test" ); 
     } //end of html text 
-	print '</p></span>'
+	print '</p></span>';
     if ($maintext->Fields("usemore") == ('1')) {  // start of more link
         print ' <span class="morelink">'; 
         print '<a href="' .
