@@ -94,7 +94,7 @@ if ( !function_exists( 'buildheader' ) ) {
         }
 
         if (!isset($mod_id) || $mod_id != 2) {
-            $headertitle = ":&nbsp;".$headertitle ;
+            $headertitle = "&nbsp;&nbsp;".$headertitle ;
         } else {
             $headertitle = "";
         }
