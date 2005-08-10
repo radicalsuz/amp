@@ -98,7 +98,7 @@ while  ( !$maintext->EOF ) {
         print '</span> <span class="morelink">'; 
         print '<a href="' .
                 $maintext->Fields( "morelink" ) .
-                '">Read More&nbsp;&#187;</a>&nbsp;&nbsp; </span>';
+                '" class="morelink">Read More&nbsp;&#187;</a>&nbsp;&nbsp; </span>';
      }
 
     print '</p></span><br></td></tr>';
