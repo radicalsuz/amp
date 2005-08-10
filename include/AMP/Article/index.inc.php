@@ -102,7 +102,7 @@ while  ( !$maintext->EOF ) {
      }
 
    
-	print '<br></td></tr>';
+	print '<br><br></td></tr>';
 
     $maintext->MoveNext();  
 
