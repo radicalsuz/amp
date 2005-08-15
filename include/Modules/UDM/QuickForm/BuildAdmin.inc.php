@@ -225,7 +225,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
                 if (isset( $plugin->fields )) {
                     foreach ( $plugin->fields as $field_name => $field ) {
-                        $plugin_fields[$field_name] = $this->_build_field( $field );
+                        $plugin_fields[$field_name] = $this->_build_field( $field_name, $field );
                     }
                 }
 
