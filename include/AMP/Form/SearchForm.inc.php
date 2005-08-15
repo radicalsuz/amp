@@ -27,15 +27,15 @@ class AMPSearchForm extends AMPForm_XML {
     }
 
     function submitted() {
-            if (!isset($_REQUEST['AMPSearch'])) return false;
-            return 'search';
+        if (!isset($_REQUEST['AMPSearch'])) return false;
+        return 'search';
     }
 
-		function adjustSubmit() {
-				foreach ($this->submit_button as $button_name => $bDef ) {
-						$this->submit_button[ $button_name ]['attr'] = array( 'class' => 'searchform_element' );
-				}
-		}
+    function adjustSubmit() {
+        foreach ($this->submit_button as $button_name => $bDef ) {
+            $this->submit_button[ $button_name ]['attr'] = array( 'class' => 'searchform_element' );
+        }
+    }
 
     function getSearchValues() {
         $search_values = array();

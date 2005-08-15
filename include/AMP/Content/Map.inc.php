@@ -53,17 +53,21 @@ class AMPContent_Map {
         if (!isset($section_id)) $section_id = $this->top;
         if (!isset($this->map[ $section_id ])) return false;
         return $this->map[ $section_id ];
-        /*
-        $child_sections = array();
-        foreach ( $this->dataset as $key => $valueset ) {
-            if (!$valueset['parent']==$section_id) continue;
-            $child_sections[] = $key;
-        }
-        if (empty($child_sections)) return false;
-        */
-
-
     }
+
+    function getDescendants( $section_id ) {
+        if (!$section_id ) return false;
+        if (!($children = $this->getChildren($section_id))) return false;
+        $results = array();
+        foreach( $children as $child ) {
+            $results[] = $child;
+            if (!($descendants = $this->getDescendants( $child ))) continue;
+            $results = $results + $descendants;
+        }
+        return $results;
+    }
+
+        
 
     function getName( $section_id ) {
         if (!isset($this->dataset[ $section_id ])) return false;

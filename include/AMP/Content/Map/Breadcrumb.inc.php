@@ -244,14 +244,7 @@ class AMP_Breadcrumb_Content {
     }
 
     function _trimText( $text ) {
-        $trimmed = strip_tags( $text );
-        if (! (strlen( $trimmed ) > $this->max_text_length) ) return $trimmed; 
-
-        $end_item = " ...";
-        $trimmed = substr( trim($trimmed), 0, $this->max_text_length );
-        if ( !($pos = strrpos( $trimmed, " " ))) return $trimmed . $end_item;
-
-        return substr( $trimmed, 0, $pos ) . $end_item;
+        return AMP_trimText( $text, $this->max_text_length );
     }
 
 }

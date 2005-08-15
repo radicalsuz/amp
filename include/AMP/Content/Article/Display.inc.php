@@ -4,14 +4,17 @@ require_once ('AMP/Content/Display/HTML.inc.php' );
 
 class Article_Display extends AMPDisplay_HTML {
 
-    var $article;
+    var $_article;
+    var $css_class = array(
+        'title' => 'title',
+        'subtitle' => 'subtitle' );
 
     function Article_Display( &$article ) {
         $this->init( $article );
     }
 
     function init( &$article ) {
-        $this->article = &$article; 
+        $this->_article = &$article; 
     }
 
     function execute() {
@@ -21,27 +24,27 @@ class Article_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_Header() {
-        $article = &$this->article;
+        $article = &$this->_article;
         
         return  $this->_HTML_start() .
                 $this->_HTML_title( $article->getTitle() ) .
                 $this->_HTML_subTitle( $article->getSubTitle() ) .
                 $this->_HTML_authorSource( $article->getAuthor(), $article->getSource(), $article->getSourceURL() ) .
                 $this->_HTML_contact( $article->getContact() ).
-                $this->_HTML_date( $article->getDate() ).
+                $this->_HTML_date( $article->getArticleDate() ).
                 $this->_HTML_endHeading();
     }
 
     function _HTML_Content() {
-        $body = $this->article->getBody();
+        $body = $this->_article->getBody();
 
-        if (!$this->article->isHtml()) $body = converttext( $body );
+        if (!$this->_article->isHtml()) $body = converttext( $body );
         if ($hw = &AMPContent_Lookup::instance('hotwords')) {
             $body = str_replace( array_keys($hw), array_values($hw), $body );
         }
         $body = $this->_HTML_bodyText( $body );
 
-        $image = &$this->article->getImageRef();
+        $image = &$this->_article->getImageRef();
         if ($image) return $this->_HTML_imageBlock( $image ) . $body;
 
         return $body;
@@ -49,10 +52,10 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _HTML_Footer() {
         $output = "";
-        if ($comments = &$this->article->getComments()) {
+        if ($comments = &$this->_article->getComments()) {
             $output .= $comments->display();
         }
-        if ($docbox = &$this->article->getDocLinkRef()) {
+        if ($docbox = &$this->_article->getDocLinkRef()) {
             $output .= $docbox->display();
         }
         return $output . $this->_HTML_end();
@@ -71,7 +74,7 @@ class Article_Display extends AMPDisplay_HTML {
     }
     function _HTML_subTitle( $subtitle ) {
         if (!$subtitle) return false;
-        return '<span class="subtitle">' . converttext( $subtitle ) . '</span><br>';
+        return $this->_HTML_inSpan( converttext( $subtitle ) , 'subtitle' ). $this->_HTML_newline();
     } 
 
     function _HTML_authorSource( $author, $source, $url ) {

@@ -547,14 +547,14 @@ function getBrowser() {
 }
   
 if (!function_exists('array_combine_key')) {
-		function array_combine_key(&$arr1, &$arr2) {
-				if (!is_array($arr1) || !is_array($arr2)) return false;
-                $result = array();
-				foreach ($arr1 as $key => $value) {
-						if (isset($arr2[$value])) $result[$value]=$arr2[$value];
-				}
-				return $result;
-		}
+    function array_combine_key(&$arr1, &$arr2) {
+        if (!is_array($arr1) || !is_array($arr2)) return false;
+        $result = array();
+        foreach ($arr1 as $key => $value) {
+            if (isset($arr2[$value])) $result[$value]=$arr2[$value];
+        }
+        return $result;
+    }
 }
 if (!function_exists('file_list')) {
 		function file_list($file){ 
@@ -754,6 +754,19 @@ if (!function_exists('AMP_makeMergeFields')) {
             $result[] = '%' . $fieldname . '%';
         }
         return $result;
+    }
+}
+
+if (!function_exists('AMP_trimText')) {
+    function AMP_trimText( $text, $max_length ) {
+        $trimmed = strip_tags( $text );
+        if (! (strlen( $trimmed ) > $max_length) ) return $trimmed; 
+
+        $end_item = " ...";
+        $trimmed = substr( trim($trimmed), 0, $max_length );
+        if ( !($pos = strrpos( $trimmed, " " ))) return $trimmed . $end_item;
+
+        return substr( $trimmed, 0, $pos ) . $end_item;
     }
 }
 

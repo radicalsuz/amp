@@ -51,7 +51,7 @@ if (isset($_GET['area']) && $_GET['area']) {
 }
 
 if (isset($_GET['year']) && $_GET['year']) {
-	$wyear =   " and YEAR(date) as date = $_GET[year] ";
+	$wyear =   " and YEAR(`date`) = $_GET[year] ";
 	$classselect ='';
 } else {
     if (!isset($wyear)) $wyear = "";

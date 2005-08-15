@@ -1,5 +1,8 @@
 <?php
 
+define ( 'AMP_CONTENT_URL_IMAGES', 'img' );
+define ( 'AMP_ICON_SPACER', 'spacer.gif' );
+
 class AMPDisplay_HTML {
 
     function _HTML_inSpan( $text, $class=null ) {
@@ -8,9 +11,41 @@ class AMPDisplay_HTML {
         return '<span'.$html_class_attr.'>' . $text .'</span>';
     }
 
-    function _HTML_link( $href, $text ) {
+    function _HTML_inTD( $text, $attr_set = array() ) {
+        $start_tag_ends = $this->_HTML_makeAttributes( $attr_set );
+        return "<td$start_tag_ends>$text</td>";
+    }
+
+    function _HTML_in_P ( $text, $attr_set = array() ) {
+        $p_attr= $this->_HTML_makeAttributes( $attr_set );
+        return "<p$p_attr>$text</p>\n";
+    }
+
+    function _HTML_inDiv( $text, $attr_set = array() ) {
+        $div_attr = $this->_HTML_makeAttributes( $attr_set );
+        return "<div$div_attr>$text</div>\n";
+    }
+
+    function _HTML_spacer( $width, $height ) {
+        return '<img src ="'.AMP_SITE_URL . AMP_CONTENT_URL_IMAGES.DIRECTORY_SEPARATOR. AMP_ICON_SPACER.'"'.
+                $this->_HTML_makeAttributes( array( 'width' =>$width, 'height' => $height ) ) . '>';
+                 
+    }
+
+    function _HTML_image( $url, $attr_set = array() ) {
+        $img_attr = array_merge( array( 'src'=>$url ), $attr_set );
+        return "<img" . $this->_HTML_makeAttributes( $img_attr ) . ">";
+    }
+
+    function _HTML_endTable() {
+
+        return "</tr></table>\n";
+    }
+
+    function _HTML_link( $href, $text, $attr = array() ) {
         if (!$href) return $text;
-        return "<a href=\"".$href."\">". $text . "</a>";
+        $link_attr = $this->_HTML_makeAttributes( $attr );
+        return "<a href=\"".$href."\"$link_attr>". $text . "</a>";
     }
 
     function _HTML_newline($qty=null) {
@@ -30,7 +65,7 @@ class AMPDisplay_HTML {
         $output = "";
 
         foreach($attr_set as $attr => $value ) {
-            $output .= $attr . "=" . $this->_HTML_safeQuote( $value );
+            $output .= " " . $attr . "=" . $this->_HTML_safeQuote( $value );
         }
         return $output;
     }

@@ -9,7 +9,7 @@ define ('AMP_CONTENT_DOCUMENT_TYPE_IMAGE', 'img');
 define ('AMP_ICON_WORD', 'worddoc.gif' );
 define ('AMP_ICON_PDF', 'pdf.gif' );
 define ('AMP_ICON_IMAGE', 'img.gif' );
-define ('AMP_CONTENT_URL_IMAGES', '/img/' );
+if (!defined( 'AMP_CONTENT_URL_IMAGES' )) define ('AMP_CONTENT_URL_IMAGES', '/img/' );
 define ('AMP_CONTENT_URL_DOCUMENTS', '/downloads/' );
 
 class DocumentLink  {

@@ -58,5 +58,17 @@ class AMPContentLookup_Hotwords extends AMPContent_Lookup {
     }
 }
 
+class AMPContentLookup_SectionHeaders extends AMPContent_Lookup {
+
+    var $datatable = "articles";
+    var $result_field = "Max(id) as art_id";
+    var $id_field = "type";
+    
+    function AMPContentLookup_SectionHeaders() {
+        $this->criteria = "class = ".AMP_CONTENT_CLASS_SECTIONHEADER." AND publish=".AMP_CONTENT_STATUS_LIVE . " group by type";
+        $this->init();
+    }
+
+}
 
 ?>

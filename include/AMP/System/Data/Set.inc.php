@@ -51,7 +51,7 @@
     }
 
     function refreshData() {
-        $this->dbcon->CacheFlush();
+        $this->dbcon->CacheFlush( $this->_assembleSQL() );
         $this->readData();
     }
 
@@ -61,14 +61,15 @@
         return true;
     }
 
-    function setSort( $expression_set ) {
+    function setSort( $expression_set, $hold_priority = true ) {
         if (!(is_array($expression_set) || is_string($expression_set)) ) return false;
         $this->sort = array();
 
         if (is_string($expression_set)) return $this->addSort( $expression_set, false );
+        if ($hold_priority) $expression_set = array_reverse( $expression_set, true );
 
         foreach ($expression_set as $exp) {
-            $this->addSort ( $exp, false );
+            $this->addSort ( $exp, false);
         }
     }
 
@@ -161,6 +162,7 @@
     }
 
 	function getLookup($field) {
+        $set = array();
 		if( !$this->makeReady() ) {
 			$sql = "SELECT " . $this->id_field . ", $field " . $this->_makeSource()
             . $this->_makeCriteria();
@@ -174,10 +176,11 @@
 		return $set;
 	}
 
-    function filter( $fieldname, $value ) {
+    function filter( $fieldname, $value, $max_qty=null ) {
         if (!$this->makeReady()) return false;
         $result = array();
         while( $data = $this->getData() ) {
+            if (isset($max_qty) && count($result)==$max_qty) break;
             if ($data[ $fieldname ] != $value) continue;
             $result[ $data[$this->id_field]] = $data;
         }
@@ -198,7 +201,7 @@
 		foreach ($rows as $row) {
 			$object =& new $class($this->dbcon);
 			$object->setData($row);
-			$items[$object->id] = $object;
+			$items[$object->id] = &$object;
 		}
 
 		return $items;

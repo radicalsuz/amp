@@ -33,6 +33,9 @@ class AMPContent_Page {
     //can't do nothing without dbcon
     var $dbcon;
 
+    //content-specific legacy controls
+    var $_show_list_intro;
+
     function AMPContent_Page( &$dbcon ) {
         $this->init( $dbcon );
     }
@@ -43,7 +46,7 @@ class AMPContent_Page {
         $this->registry =           & AMP_Registry::instance();
         $this->map =                & AMPContent_Map::instance();
         $this->header =         & new AMPContent_Header( $this );
-        $this->contentManager = & new AMPContent_Manager();
+        $this->contentManager = &AMPContent_Manager::instance();
     }
 
     function &instance() {
@@ -88,7 +91,7 @@ class AMPContent_Page {
         $article= &new Article( $this->dbcon, $article_id );
         if (!$article->hasData()) ampredirect( AMP_CONTENT_URL_SEARCH );
 
-        if ($target = $articleinfo->getRedirect() ) ampredirect($target);
+        if ($target = $article->getRedirect() ) ampredirect($target);
         $this->section_id = $article->getParent();
         $this->class_id = $article->getClass();
         $this->globalizeArticleVars( $article );
@@ -172,7 +175,6 @@ class AMPContent_Page {
         if (!isset($this->introtext)) return false;
         return $this->introtext->id;
     }
-
 
     ##############################
     ###  StyleSheet accessors  ###

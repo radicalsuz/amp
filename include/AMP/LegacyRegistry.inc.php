@@ -80,5 +80,7 @@ $browser_checked = false;
 define('ADODB_REPLACE_INSERTED', 2);
 define('ADODB_REPLACE_UPDATED', 1);
 define('AMP_NAV_NO_LIMIT', 700);
+define('AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS', (isset($MM_reltype)&&$MM_reltype) );
+define('AMP_NULL_DATE_VALUE', '0000-00-00' );
 
 ?>

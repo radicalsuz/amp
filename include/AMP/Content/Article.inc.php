@@ -1,12 +1,19 @@
 <?php
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
-require_once ( 'AMP/Content/Article/Comments.inc.php' );
-require_once ( 'AMP/Content/Article/DocumentLink.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
 
 define ('AMP_CONTENT_STATUS_LIVE', 1);
 define ('AMP_CONTENT_STATUS_DRAFT', 0);
+
+define ('AMP_CONTENT_CLASS_DEFAULT' , 1 );
+define ('AMP_CONTENT_CLASS_FRONTPAGE' , 2 );
+define ('AMP_CONTENT_CLASS_SECTIONHEADER' , 8 );
+define ('AMP_CONTENT_CLASS_NEWS' , 3 );
+define ('AMP_CONTENT_CLASS_MORENEWS' , 4 );
+define ('AMP_CONTENT_CLASS_PRESSRELEASE' , 10 );
+define ('AMP_CONTENT_CLASS_USERSUBMITTED' , 9 );
+define ('AMP_CONTENT_CLASS_ACTIONITEM' , 5 );
 
 class Article extends AMPSystem_Data_Item {
 
@@ -46,6 +53,12 @@ class Article extends AMPSystem_Data_Item {
         if (! ($target = $this->getData( 'link' ))) return false;
         return $target;
     }
+
+    function getURL() {
+        if ($url = $this->getRedirect() ) return $url;
+        if (!$this->id ) return false;
+        return AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, "id=".$this->id );
+    }
     
     function getContact() {
         return $this->getData( 'contact' );
@@ -66,6 +79,19 @@ class Article extends AMPSystem_Data_Item {
     function getImageFileName() {
         if (!$this->getData( 'picuse' )) return false;
         return $this->getData( 'picture' );
+    }
+
+    function getArticleDate() {
+        if (!$this->isPublicDate()) return false;
+        return $this->getData('date');
+    }
+
+    function isPublicDate() {
+        return !($this->getData( 'usedate' ));
+    }
+
+    function getItemDate() {
+        return $this->getArticleDate();
     }
 
     function &getImageRef() {
@@ -89,6 +115,7 @@ class Article extends AMPSystem_Data_Item {
 
     function &getComments() {
         if (!$this->allowsComments()) return false;
+        require_once ( 'AMP/Content/Article/Comments.inc.php' );
         return new ArticleComments( $this->dbcon, $this->id );
     }
 
@@ -101,6 +128,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function &getDocLinkRef() {
+        require_once ( 'AMP/Content/Article/DocumentLink.inc.php' );
         if (!($doc = $this->getDocumentLink() )) return false;
         $doclink = &new DocumentLink();
         $doclink->setFileName( $doc, $this->getDocLinkType() );
@@ -132,7 +160,8 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function readVersion( $version_id ) {
-        //$version = &new Article_Version( $this->dbcon, $version_id );
+        require_once ( 'AMP/Content/Article/Version.inc.php' );
+        $version = &new Article_Version( $this->dbcon, $version_id );
         if (!$version->hasData()) return false;
 
         $this->setData( $version->getData() );
@@ -140,6 +169,5 @@ class Article extends AMPSystem_Data_Item {
 
 }
 
-require_once ( 'AMP/Content/Article/Version.inc.php' );
 
 ?>

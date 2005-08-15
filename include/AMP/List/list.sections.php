@@ -53,4 +53,3 @@ while (!$list->EOF) { ?><table width="100%" border="0" cellspacing="0" cellpaddi
 	$list->MoveNext();
 }
 ?>
-

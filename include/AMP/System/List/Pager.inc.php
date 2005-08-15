@@ -2,9 +2,9 @@
 
 class AMPSystem_ListPager {
 
-    var $default_qty = 50;
-    var $offset = 0;
-    var $qty = 50;
+    var $_default_qty = 50;
+    var $_offset = 0;
+    var $_qty = 50;
     var $source;
 
     var $source_total;
@@ -18,38 +18,70 @@ class AMPSystem_ListPager {
 
     function init( &$source ) {
         $this->source = &$source;
-        $this->_setPage();
-        $this->source->setLimit( $this->qty );
-        $this->source->setOffset( $this->offset );
+        $this->_readRequestPage();
+        $this->setPage();
     }
 
-    function _setPage() {
+    function setPage() {
+        $this->source->setLimit( $this->_qty );
+        $this->source->setOffset( $this->_offset );
+    }
+
+    function setLimit( $limit ) {
+        $this->_qty = $limit;
+    }
+
+    function setOffset( $offset ) {
+        $this->_offset = $offset;
+    }
+
+    function getOffset() {
+        return $this->_offset;
+    }
+
+    function getLimit() {
+        return $this->_qty;
+    }
+
+    function _readRequestPage() {
         if (!($varset = AMP_URL_Read())) return false;
 
         if (isset($varset['offset']) && $varset['offset'] && is_numeric($varset['offset'])) {
-            $this->offset = $varset['offset'];
+            $this->setOffset( $varset['offset']);
         }
 
         if (isset($varset['qty']) && $varset['qty'] && is_numeric($varset['qty'])) {
-            $this->offset = $varset['qty'];
+            $this->setLimit($varset['qty']);
+        }
+        if (isset($varset['all']) && $varset['all'] === '1') {
+            $this->setOffset( 0 );
+            $this->setLimit( $this->getSourceTotal() );
         }
     }
 
     function output() {
-        $this->source_total = $this->source->NoLimitRecordCount();
-        $this->page_total = $this->offset + $this->qty;
+        $this->getSourceTotal();
+        $this->page_total = $this->_offset + $this->_qty;
         return '<div class="list_pager">' . $this->_positionText() . $this->_pageLinks() . '</div><BR>';
     }
+
+    function getSourceTotal( $reset = false ) {
+        if ((!$reset) && isset($this->source_total)) return $this->source_total;
+
+        $this->source_total = $this->source->NoLimitRecordCount();
+        return $this->source_total;
+    }
+
 
     function _positionText() {
         if ($this->page_total > $this->source_total) $this->page_total = $this->source_total;
         if ($this->page_total) $start = 1;
-        if ($this->offset) $start = $this->offset;
+        if ($this->_offset) $start = $this->_offset;
         return "Displaying $start-".$this->page_total." of ".$this->source_total;
     }
 
     function _pageLinks() {
-        if ($this->source_total <= $this->qty ) return false;
+        if ($this->source_total <= $this->_qty ) return false;
         $output = "<BR>" . $this->_jumpPageLinks() . "<BR>";
         $output .= $this->_prevPageLink() . $this->_nextPageLink();
         #$output .= '<BR><div style="float:right;">' .$this->_prevPageLink() . $this->_nextPageLink() . '</div><BR>';
@@ -58,8 +90,8 @@ class AMPSystem_ListPager {
 
     function _jumpPageLinks() {
         $output ="";
-        for( $n=0; ($n * $this->qty ) < $this->source_total; $n++ ) {
-            $link = $this->offsetURL( ($n * $this->qty) );
+        for( $n=0; ($n * $this->_qty ) < $this->source_total; $n++ ) {
+            $link = $this->offsetURL( ($n * $this->_qty) );
             $output .= "<a href='$link'>" . ($n+1) . '</a>&nbsp;';
         }
         return $output;
@@ -70,9 +102,9 @@ class AMPSystem_ListPager {
     }
 
     function _prevPageLink() {
-        if (!$this->offset) return false;
-        $href = $this->offsetURL( ($this->offset - $this->qty ) );
-        if ($this->offset <= $this->qty ) $href = $this->offsetURL(0);
+        if (!$this->_offset) return false;
+        $href = $this->offsetURL( ($this->_offset - $this->_qty ) );
+        if ($this->_offset <= $this->_qty ) $href = $this->offsetURL(0);
 
         return '<a class="standout" href="'. $href . '">< Prev</a>&nbsp;';
     }
@@ -91,7 +123,7 @@ class AMPSystem_ListPager {
         $values = AMP_URL_Values();
         unset ($values['offset']);
         unset ($values['qty']);
-        if ($this->qty != $this->default_qty) $values['qty'] = 'qty=' . $this->qty;
+        if ($this->_qty != $this->_default_qty) $values['qty'] = 'qty=' . $this->_qty;
         $this->_prepared_URL = join( '&', $values );
         return $this->_prepared_URL;
     }
