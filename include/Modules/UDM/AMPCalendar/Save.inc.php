@@ -11,7 +11,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
         'reg_modin' => array(
             'description'=>'Registration Form',
             'name'=>'Registration',
-            'values'=>'Lookup(userdata_fields, name, id)',
+            //'values'=>'Lookup(userdata_fields, name, id)',
             'default'=>51,
             'type'=>'select',
             'available'=>true),
@@ -43,7 +43,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 
     function _register_fields_dynamic() {
         $options=$this->getOptions();
-        if (isset($options['reg_modin']) && $options['reg_modin']) {
+        if (isset($options['reg_modin']) ) {
             $this->cal->allowRegistration( $options['reg_modin'] );
         }
         if (isset ($options['recurring_events']) && $options['recurring_events']) {
