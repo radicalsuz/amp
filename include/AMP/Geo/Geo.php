@@ -25,8 +25,8 @@ Class Geo {
 	var $long;
 	
 	
-	function Geo($dbcon,$Street=NULL,$City=NULL,$State=NULL,$Zip=NULL) {
-		$this->dbcon = $dbcon;
+	function Geo(&$dbcon,$Street=NULL,$City=NULL,$State=NULL,$Zip=NULL) {
+		$this->dbcon =& $dbcon;
 		$this->Street =$Street;
 		$this->City =$City;
 		$this->State =$State;
