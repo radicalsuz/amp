@@ -2,7 +2,7 @@
 
 require_once( 'AMP/System/Data/Set.inc.php' );
 
-class SectionRelatedSet extends AMPSystemData_Set {
+class SectionRelatedSet extends AMPSystem_Data_Set {
 
     var $datatable = "articlereltype";
     var $id_field = "articleid";

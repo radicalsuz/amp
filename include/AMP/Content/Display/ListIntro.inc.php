@@ -1,6 +1,7 @@
 <?php
 
 require_once ('AMP/Content/Display/HTML.inc.php' );
+require_once ('AMP/Content/Article/Display.inc.php' );
 
 class ListIntro_Display extends AMPDisplay_HTML {
 

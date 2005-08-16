@@ -2,6 +2,7 @@
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
+require_once ( 'AMP/Content/Section/Contents/Manager.inc.php' );
 
 class Section extends AMPSystem_Data_Item {
 
@@ -16,7 +17,7 @@ class Section extends AMPSystem_Data_Item {
     function &getContents() {
         if (isset($this->_contents)) return $this->_contents;
 
-        $this->_contents = &new SectionContents( $this );
+        $this->_contents = &new SectionContents_Manager( $this );
         return $this->_contents;
     }
 

@@ -194,6 +194,7 @@ class AMPSystem_BaseTemplate {
     function _HTML_systemNav() {
         $navEngine = &new AMPSystem_NavManager();
         $nav_name = $this->nav_name;
+        if (isset($this->modid)) $navEngine->setToolId( $this->modid );
 
         if ($this->form_id) {
             $form_name = $navEngine->buildFormNav( $this->form_id );

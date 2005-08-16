@@ -13,28 +13,18 @@
  *
  * * * * * **/
 
-require_once ('AMP/Menu/FWTable.inc.php');
+require_once ('AMP/Menu/FWTableRow.inc.php');
 require_once ('AMP/System/Map.inc.php');
 
-class AMPSystem_Menu extends AMP_Menu_FWTable {
-    var $_baseComponentHTML = 'AMP_MenuComponent_TableRow';
-    var $_baseComponentScript = 'AMP_MenuComponent_FWmenuScriptItem';
-
+class AMPSystem_Menu extends AMP_Menu_FWTableRow {
+    var $_baseComponentHTML = 'AMP_MenuComponent_TableRow_System';
+    
     function AMPSystem_Menu () {
         
         $this->init( $this->loadMap(), 'AMPSystem_Menu'  );
         $this->setStyles();
         
 
-    }
-
-    function output($item_name=null) {
-
-            $this->getCSS();
-            $this->script_set->setCSS();
-            $this->addCSS(  $this->script_set->getCSS() );
-
-            return ($this->outputCSS() . $this->script_set->output() . $this->menuset->output() );
     }
 
     function loadMap() {
@@ -64,8 +54,7 @@ class AMPSystem_Menu extends AMP_Menu_FWTable {
     }
 }
 
-class AMP_MenuComponent_TableRow extends AMP_MenuComponent_Table {
-    var $_child_component = "AMP_MenuComponent_FWmenuTD";
+class AMP_MenuComponent_TableRow_System extends AMP_MenuComponent_TableRow {
 
     var $css_template = "
 
@@ -82,48 +71,11 @@ class AMP_MenuComponent_TableRow extends AMP_MenuComponent_Table {
             font-weight: bold;
             white-space: nowrap;
             height: 100%;
-            border: opx; color: #%1\$s; padding-bottom: 5px;}
+            border: 0px; color: #%1\$s; padding-bottom: 5px;}
         ";
-    var $css_template_vars = array( 'color', 'bgcolor', 'bg_image', 'bg_image_hover', 'id'); 
-    var $columnWidth =80;
-
-    function AMP_MenuComponent_TableRow (&$menu, $def ) {
+    function AMP_MenuComponent_TableRow_System (&$menu, $def ) {
         $this->init($menu, $def);
     }
-
-    function setCSS() {
-        $totalwidth = count($this->getChildren()) * $this->columnWidth;
-        $this->template = "<table border=\"0\" width=\"". ($totalwidth) ."\" cellspacing=\"0\" id=\"%1\$s\" cellpadding=\"3\" class=\"AMPmenu\"><tr>\n%2\$s</tr></table>\n";
-        parent::setCSS();
-    }
-}
-
-class AMP_MenuComponent_FWmenuTD extends AMP_MenuComponent {
-
-    var $core_template = "%1\$s";
-
-    function AMP_MenuComponent_FWmenuTD (&$menu, $def ) {
-        $this->init($menu, $def);
-    }
-
-    function setCSS() {
-        $childMenu = &$this->menu->script_set->getChild( $this->id );
-        $childStyle = $childMenu->getStyle();
-        $width = $childStyle['width'];
-
-        $this->template =  "\n<td class=\"AMPmenu\" onMouseOut=\"window.FW_startTimeout();\"\n". 
-                "onClick=\"FW_showMenu(window.fw_menu_%1\$s,". 
-                "( window.getWindowWidth() < (window.getOffLeft( this ) + ". $width . 
-                ") ? (window.getOffLeft(this)+this.offsetWidth-".$width.") :  window.getOffLeft(this) ),".
-                "( window.getOffTop(this) + this.offsetHeight ) );\"\n".
-                "onMouseOver=\"if (FW_menuisActive()) { this.onclick(); FW_clearTimeout(); }\"".
-                "id=\"mrow_%1\$s\" NOWRAP>%2\$s</td>";
-    }
-
-    function make_core() {
-        return sprintf($this->core_template, $this->label);
-    }
-
 }
 
 ?>

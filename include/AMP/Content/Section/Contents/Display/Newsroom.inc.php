@@ -12,7 +12,7 @@ class SectionContentsDisplay_Newsroom extends AMPContent_DisplayList_HTML {
     var $_pager_display = false;
 
     function SectionContentsDisplay_Newsroom ( &$articleSet ) {
-        $this->init( &$articleSet );
+        $this->init( $articleSet );
     }
 
     function execute() {

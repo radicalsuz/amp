@@ -2,7 +2,7 @@
 
 require_once( 'AMP/Content/Section/Contents/Articles.inc.php' ); 
 
-class SectionContentSource_Newsroom extends SectionContents_Articles {
+class SectionContentSource_Newsroom extends SectionContentSource_Articles {
 
     var $_included_classes = array(
         AMP_CONTENT_CLASS_NEWS,

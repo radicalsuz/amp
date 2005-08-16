@@ -156,7 +156,7 @@ var $id;
                 'public' =>false,
                 'type' => 'select',
                 'required' => false,
-                'values'=>'Lookup(userdata_fields, name, id)',
+                //'values'=>'Lookup(userdata_fields, name, id)',
                 'default'=> $this->registrationForm(),
                 'enabled' => true,
                 'size' => null,

@@ -13,7 +13,7 @@ class AMPContent_Pager extends AMPSystem_ListPager {
     function _pageLinks() {
         if ($this->source_total <= $this->_qty ) return false;
         $output .= $this->_prevPageLink() . $this->_nextPageLink();
-        $output .= "<BR>" . $this->_firstPageLink() . $this->_lastPageLink() 
+        $output .= "<BR>" . $this->_firstPageLink() . $this->_lastPageLink(); 
         $output .= "<BR>" . $this->_allItemsLink();
         return $output;
     }
@@ -39,7 +39,7 @@ class AMPContent_Pager extends AMPSystem_ListPager {
 
     function getSubsetTotal( $subset_field, $subset_value ) {
         if (!($countset = $this->source->getGroupedIndex( $subset_field ))) return false;
-        if (isset($countset[ $subset_value ]) return $countset[ $subset_value ];
+        if (isset($countset[ $subset_value ])) return $countset[ $subset_value ];
         return 0;
     }
 }

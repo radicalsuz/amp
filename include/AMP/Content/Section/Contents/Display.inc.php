@@ -1,10 +1,10 @@
 <?php
 
-require_once( 'AMP/Content/Articles/SetDisplay.inc.php' );
-require_once( 'AMP/Content/Sections/SetDisplay.inc.php' );
-require_once( 'AMP/Content/Sections/Contents/Display/Newsroom.inc.php' );
-require_once( 'AMP/Content/Sections/Contents/Display/ArticlesBySubsection.inc.php' );
-require_once( 'AMP/Content/Sections/Contents/Display/SubsectionsPlusArticles.inc.php' );
+require_once( 'AMP/Content/Article/SetDisplay.inc.php' );
+require_once( 'AMP/Content/Section/SetDisplay.inc.php' );
+require_once( 'AMP/Content/Section/Contents/Display/Newsroom.inc.php' );
+require_once( 'AMP/Content/Section/Contents/Display/ArticlesBySubsection.inc.php' );
+require_once( 'AMP/Content/Section/Contents/Display/SubsectionsPlusArticles.inc.php' );
 
 require_once( 'AMP/Content/Display/ListIntro.inc.php' );
 
@@ -25,10 +25,10 @@ class SectionContents_Display  extends AMPDisplay_HTML {
     }
 
     function init( &$contents_manager ) {
-        $this->_manager = &$content_manager;
+        $this->_manager = &$contents_manager;
         $this->_section = &$this->_manager->getSection();
 
-        $display_class = $this->getDisplayClass();
+        $display_class = $this->_getDisplayClass();
         $this->_display = &new $display_class( $this->_manager->getContents() );
 
         if (!method_exists( $this->_display, 'setParentSection' )) return;
@@ -48,7 +48,7 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         $intro = &$this->getIntroDisplay();
         if (!$this->_section->showContentList()) return ($intro ? $intro->execute() : $intro ) ;
 
-        if ($intro) $this->_setListIntro( $intro->execute() ) ;
+        if ($intro) $this->setListIntro( $intro->execute() ) ;
         
         return  $this->_HTML_listIntro() . 
                 $this->_display->execute();

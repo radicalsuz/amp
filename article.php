@@ -7,6 +7,7 @@ To Do:
 
 *********************/ 
 //set modle id
+#include( 'article2.php' );
 
 $mod_id = 1 ; 
 

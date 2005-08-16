@@ -132,6 +132,36 @@ function &AMP_Menu_ArticleType($articletype_format_menuset, $format = "FWTable",
     return new $classname($menuset, $name); 
 }
 
+function &AMP_Menu_XML( $xml_filename, $format = "FWTable", $name = "menu", $top = AMP_MENU_ROOT_ENTRY ) {
+    require_once( 'AMP/System/XMLEngine.inc.php' );
+
+    $xmlGet = &new AMPSystem_XMLEngine($xml_filename);
+    if (!$menuset =  $xmlGet->readData()) {
+        trigger_error( 'Failed to read Menu XML '.$xml_filename );
+        return false;
+    }
+    $menumap = AMP_Menu_XML_getMenu( $menuset, $top );
+    $menumap[ AMP_MENU_ROOT_ENTRY ] = $menumap[ $top ];
+    $classname = "AMP_Menu_".$format;
+    return new $classname($menumap, $name); 
+}
+
+function AMP_Menu_XML_getMenu( &$menuset, $startLevel ) {
+    if (!(isset ($menuset[$startLevel]) && isset( $menuset[$startLevel]['item'] ))) return;
+    if (!is_array( $menuset[$startLevel]['item'] )) return;
+    $currentSet = $menuset[$startLevel]['item'] ;
+    if (isset( $menuset[$startLevel]['item']['href'] )) $currentSet = array( $menuset[$startLevel]['item'] );
+
+    foreach ($currentSet as $id => $desc) {
+        $unique_id = isset($desc['child'])? $desc['child'] : $startLevel .'_'. $id;
+        $result[$startLevel][ $unique_id ] = 
+            $desc;
+        if (isset($desc['child'])) $result = array_merge( $result, AMP_Menu_XML_getMenu( $menuset, $desc['child'] ));
+
+    }
+    return $result;
+}
+
 
 //Alias for the default format behavior of the class
 class AMP_Menu_UL extends AMP_Menu {

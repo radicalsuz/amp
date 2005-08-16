@@ -21,6 +21,7 @@ class AMPSystem_NavManager {
 
     var $nav_set;
     var $per_manager;
+    var $_tool_id;
 
     function AMPSystem_NavManager() {
         $this->per_manager =  & AMPSystem_PermissionManager::instance();
@@ -43,9 +44,14 @@ class AMPSystem_NavManager {
         return $this->nav_set[$nav_name];
     }
 
+    function setToolId( $modid ) {
+        $this->_tool_id = $modid;
+    }
+
 
     function render( $nav_name ) {
         if (!($nav = &$this->getNav($nav_name))) return false;
+        if (isset($this->_tool_id)) $nav->addToolOptions( $this->_tool_id );
         return $nav->output();
     }
 
@@ -99,7 +105,8 @@ class AMPSystem_NavManager {
         $tool_lookup = AMPSystem_Lookup::instance('ToolsbyForm');
         if (!isset($tool_lookup[$form_id])) return $nav_name;
 
-        $nav->addToolOptions( $tool_lookup[$form_id] );
+        $this->setToolId( $tool_lookup[ $form_id ] );
+        #$nav->addToolOptions( $tool_lookup[$form_id] );
 
         return $nav_name;
     }

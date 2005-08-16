@@ -2,7 +2,7 @@
 
 require_once( 'AMP/Content/Section/Contents/Articles.inc.php' ); 
 
-class SectionContentSource_ArticlesAggregator extends SectionContents_Articles {
+class SectionContentSource_ArticlesAggregator extends SectionContentSource_Articles {
 
     var $_map;
 

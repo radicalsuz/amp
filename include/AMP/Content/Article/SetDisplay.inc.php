@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/Content/Article/Set.inc.php' );
+require_once( 'AMP/Content/Display/List.inc.php' );
 
 class ArticleSet_Display extends AMPContent_DisplayList_HTML {
 

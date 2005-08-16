@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'AMP/Content/Section/Contents/Base.inc.php' );
+require_once( 'AMP/Content/Section/Contents/Source.inc.php' );
 require_once( 'AMP/Content/Section/Contents/Display.inc.php' );
 
 require_once( 'AMP/Content/Section/Contents/Articles.inc.php' );
@@ -46,7 +46,7 @@ class SectionContents_Manager {
         $this->_contentSourceType = str_replace( " ", "", ucwords( str_replace( "_", " ", strtolower( $display_type ) ) ) );
         
         $contentSource_class = 'SectionContentSource_'.$this->_contentSourceType;
-        return &new $contentSource_class( $this->_section );
+        return new $contentSource_class( $this->_section );
     }
 
     function _setContentSourceSet( $result_dataset ) {
@@ -54,7 +54,7 @@ class SectionContents_Manager {
     }
 
     function &getContents() {
-        return $this->_contentSourceSet();
+        return $this->_contentSourceSet;
     }
 
     function &getSection() {
