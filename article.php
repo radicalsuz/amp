@@ -8,7 +8,6 @@
 *********************/ 
 //set modle id
 if (!defined( 'AMP_USE_NEW_CONTENT_ENGINE' )) define ('AMP_USE_NEW_CONTENT_ENGINE', false );
-if (!defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
 
 
 if ( AMP_USE_NEW_CONTENT_ENGINE ) {

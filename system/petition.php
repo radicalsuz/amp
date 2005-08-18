@@ -5,6 +5,7 @@ $modid = "7";
 $mod_name = 'petition';
 
 
+define ('AMP_PETITION_FORM_ID_TEMPLATE', 4 );
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
 $obj = new SysMenu; 
@@ -28,20 +29,30 @@ ob_start();
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
 
 	if ($_POST['MM_insert']) {
+        require_once('AMP/System/UserData/Module/Copy.inc.php');
 		require_once( 'AMP/UserData/Input.inc.php' );
-		require_once( 'utility.functions.inc.php');
-		$chsql = "select id from userdata_fields where id =4";
+		$chsql = "select id from userdata_fields where id =". AMP_PETITION_FORM_ID_TEMPLATE;
 	    $check  = $dbcon->Execute($chsql) or die('petition setup failed ' . $chsql . $dbcon->ErrorMsg());
 
 		if (!$check->Fields("id")) {
 		
-			$addsql = "INSERT INTO `userdata_fields` VALUES (4, 'Petition', 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'text', 'text', 'text', 'text', 'text', 'text', 'textarea', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'select', 'text', 'select', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'checkbox', 'header', 'header', 'header', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'Title', 'First Name', 'Last Name', 'Suffix', 'MI', 'Organization', 'Comments to display on website', 'Email', 'Phone', 'Call Phone', 'Phone Provider', 'Work Phone', 'Pager', 'Work Fax', 'Home Fax', 'Web Page', 'Street', 'Street 2', 'Street 3', 'City', 'State', 'Zip', 'Country', 'Title/Position', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Show my name and comments on this site', 'Personal Information', 'Contact Information', 'Other Information', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '1', 'Personal Information', 'Contact Information', 'Other Information', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'US', 0, 'WORLD', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00', '', 0, 0, 0, '', '', 3, 2, 0, 0, 0, 0, 0, 'custom20,First_Name,Last_Name,Company,occupation,custom21,Email,Phone,Web_Page,Street,Street_2,City,State,Zip,Country,custom22,Notes,custom19', 1)";
+			$addsql = "INSERT INTO `userdata_fields` VALUES (" . AMP_PETITION_FORM_ID_TEMPLATE .", 'Petition', 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'text', 'text', 'text', 'text', 'text', 'text', 'textarea', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'select', 'text', 'select', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'checkbox', 'header', 'header', 'header', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'Title', 'First Name', 'Last Name', 'Suffix', 'MI', 'Organization', 'Comments to display on website', 'Email', 'Phone', 'Call Phone', 'Phone Provider', 'Work Phone', 'Pager', 'Work Fax', 'Home Fax', 'Web Page', 'Street', 'Street 2', 'Street 3', 'City', 'State', 'Zip', 'Country', 'Title/Position', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Show my name and comments on this site', 'Personal Information', 'Contact Information', 'Other Information', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '1', 'Personal Information', 'Contact Information', 'Other Information', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'US', 0, 'WORLD', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0000-00-00', '', 0, 0, 0, '', '', 3, 2, 0, 0, 0, 0, 0, 'custom20,First_Name,Last_Name,Company,occupation,custom21,Email,Phone,Web_Page,Street,Street_2,City,State,Zip,Country,custom22,Notes,custom19', 1)";
 	        $dbcon->Execute($addsql) or die('pettion setup faild ' . $addsql . $dbcon->ErrorMsg());
 		}
   
-		$_POST['core_name'] = "Petition - ".$_POST['title'];
+		$new_name = "Petition - ".$_POST['title'];
 		
-		$udm = new UserDataInput( $dbcon, '4', true );
+        //proceed to make a copy
+		$udm = new UserDataInput( $dbcon, AMP_PETITION_FORM_ID_TEMPLATE, true );
+        $copier = new AMPSystem_UserData_Module_Copy ($dbcon, AMP_PETITION_FORM_ID_TEMPLATE );
+        $copier->setOverride('name', $new_name, $udm->name);
+        if($new_copy = $copier->execute()) {
+            #ampredirect("modinput4_edit.php?modin=".$new_copy);
+            $udmid = $new_copy;
+        } else {
+            $copier_output = "Copy failed: ".$copier->ErrorMsg();
+        }
+        /*
 	    $udm->doPlugin( "QuickForm", "BuildAdmin" );
     	$new_modin = $udm->doPlugin( "AMPsystem", "CopyAdmin" );
 		if ($new_modin) {
@@ -49,18 +60,21 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 		} else {
 		    die("copy failed");
 		}
+        */
 	}
-	$datestarted =DateConvertIn($datestarted);
-	$dateended =DateConvertIn($dateended);
-    $MM_editTable  = $table;
-    $MM_recordId = $_POST['MM_recordId'];
-    $MM_editRedirectUrl = $filename."?action=list";
-	$MM_editColumn = "id";
-    $MM_fieldsStr = "title|',none,''|addressedto|value|shortdesc|value|text|value|intsigner|value|intsignerad|value|intsignerem|value|org|value|url|value|datestarted|value|dateended|value|udmid|value";
-    $MM_columnsStr = "title|',none,''|addressedto|',none,''|shortdesc|',none,''|text|',none,''|intsigner|',none,''|intsignerad|',none,''|intsignerem|',none,''|org|',none,''|url|',none,''|datestarted|',none,''|dateended|',none,''|udmid|',none,''";
-	require ("../Connections/insetstuff.php");
-    require ("../Connections/dataactions.php");
-    ob_end_flush();	
+    if ((!isset($_POST['MM_insert'])) || ($_POST['MM_insert'] && isset($udmid ))) {
+        $datestarted =DateConvertIn($datestarted);
+        $dateended =DateConvertIn($dateended);
+        $MM_editTable  = $table;
+        $MM_recordId = $_POST['MM_recordId'];
+        $MM_editRedirectUrl = $filename."?action=list";
+        $MM_editColumn = "id";
+        $MM_fieldsStr = "title|',none,''|addressedto|value|shortdesc|value|text|value|intsigner|value|intsignerad|value|intsignerem|value|org|value|url|value|datestarted|value|dateended|value|udmid|value";
+        $MM_columnsStr = "title|',none,''|addressedto|',none,''|shortdesc|',none,''|text|',none,''|intsigner|',none,''|intsignerad|',none,''|intsignerem|',none,''|org|',none,''|url|',none,''|datestarted|',none,''|dateended|',none,''|udmid|',none,''";
+        require ("../Connections/insetstuff.php");
+        require ("../Connections/dataactions.php");
+        ob_end_flush();	
+    }
 }
 
 if (isset($_GET['id'])) {	$R__MMColParam = $_GET['id']; }
@@ -98,6 +112,7 @@ if ($_GET['action'] == "list") {
 	listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby,$sort,$extra,$extramap);
 }
 else {
+    if (isset($copier_output )) print  "<span class=\"page_error\">$copier_output</span>\n";
 	echo $form->fetch();
 }	
 include ("footer.php");

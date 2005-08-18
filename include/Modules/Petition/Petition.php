@@ -106,7 +106,7 @@ Class Petition {
 	
 		if ($this->pq->Fields("intsigner") != NULL) {
 			$out .='<p><B><span class="bodystrong">Initiated By:</span>'.$this->pq->Fields("intsigner").', '.$this->pq->Fields("org").'<a href="http://'.$this->pq->Fields("url").'">'.$this->pq->Fields("url").'</a><br>';
-			$out .='a href="mailto:'.$this->pq->Fields("intsignerem").'">'. $this->pq->Fields("intsignerem").'</a></span></B></p>';
+			$out .='<a href="mailto:'.$this->pq->Fields("intsignerem").'">'. $this->pq->Fields("intsignerem").'</a></span></B></p>';
 		}
 		//$out .='<br>' ;
 		return $out;	 

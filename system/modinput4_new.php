@@ -9,6 +9,7 @@ require_once("Connections/sysmenu.class.php");
 $obj = new SysMenu; 
 $buildform = new BuildForm;
 
+/*
 if ( !function_exists( 'autoinc_check' ) ) {
 
 	function autoinc_check ($table,$num) {
@@ -19,12 +20,13 @@ if ( !function_exists( 'autoinc_check' ) ) {
 	}
 
 }
+*/
 
 if ($_POST['MM_insert']) {
 		$MM_insert = 1;
 
 # check auto incrament
-	$id = autoinc_check('userdata_fields',50);
+	$id = lowerlimitInsertID('userdata_fields',50);
 
 ## insert UDM
     $MM_editTable  = "userdata_fields";
@@ -37,7 +39,7 @@ if ($_POST['MM_insert']) {
 	$modid = $dbcon->Insert_ID();
 
 # check auto incrament
-	$id = autoinc_check('per_description',200);
+	$id = lowerlimitInsertID('per_description',200);
 
 ## insert new permission
 	$pname="$name Module";
@@ -52,7 +54,7 @@ if ($_POST['MM_insert']) {
 	$udmper = $dbcon->Insert_ID();
 
 # check auto incrament
-	$id = autoinc_check('modules',100);
+	$id = lowerlimitInsertID('modules',100);
 
 ##make new module
 	$addmodule=$dbcon->Execute( "insert into modules (id,name) values ('$id','$name')") or DIE($dbcon->ErrorMsg());
@@ -61,7 +63,7 @@ if ($_POST['MM_insert']) {
 	$udmmodid =  $dbcon->Insert_ID();
 
 # check auto incrament
-	$id = autoinc_check('moduletext',100);
+	$id = lowerlimitInsertID('moduletext',100);
 
 	## insert header page
 	$hname = "$name Input";

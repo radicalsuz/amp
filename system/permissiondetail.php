@@ -21,7 +21,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 
 #check auto inc value
 	if ($_POST['MM_insert']) {
-		$id = autoinc_check('per_description',200);
+		$id = lowerlimitInsertID('per_description',200);
 	}
 	
     $MM_editTable  = $table;
