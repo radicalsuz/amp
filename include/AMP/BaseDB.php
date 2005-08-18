@@ -110,4 +110,5 @@ $lookup_factory->init( $dbcon );
 
 require_once('AMP/LegacyRegistry.inc.php');
 
+if ( AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
 ?>

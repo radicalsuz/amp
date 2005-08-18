@@ -10,7 +10,6 @@
 if (!defined( 'AMP_USE_NEW_CONTENT_ENGINE' )) define ('AMP_USE_NEW_CONTENT_ENGINE', false );
 if (!defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
 
-if ( AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
 
 if ( AMP_USE_NEW_CONTENT_ENGINE ) {
 #include( 'article2.php' );
