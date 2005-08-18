@@ -31,6 +31,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         $this->_source = &$source;
         if (!$this->_pager_active) return;
         $this->_pager = &new AMPContent_Pager( $this->_source );
+        $this->_source->readData();
     }
 
     function execute() {
@@ -79,6 +80,12 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
                 $this->_HTML_endTable() . 
                 $this->_HTML_newline();
     }
+
+    function _HTML_listItemTitle( &$source ) {
+        return  $this->_HTML_link( $source->getURL(), $source->getTitle(), array( "class"=>"listtitle" ) ). 
+                $this->_HTML_newline();
+    }
+
    
     function _HTML_listItemBlurb( $blurb ) {
         if (!$blurb) return false;

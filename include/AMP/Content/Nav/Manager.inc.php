@@ -47,7 +47,8 @@ class NavigationManager {
     function output( $position ) {
         $output = "";
         if (!isset($this->_navSet[ $position ])) return false;
-        foreach( $this->_navSet[ $position ] as $nav ) {
+        foreach( $this->_navSet[ $position ] as $navid => $navcopy ) {
+            $nav = &$this->getElement( $navid );
             $output .= $nav->output();
         }
         return $output;
@@ -104,7 +105,7 @@ class NavigationManager {
     ###################################
 
     function findNavs_Article() {
-        return findNavs_listType( AMP_CONTENT_NAV_SECTION_PAGE_FIELD );
+        return $this->findNavs_listSection( AMP_CONTENT_NAV_SECTION_PAGE_FIELD );
     }
 
     function findNavs_listClass() {

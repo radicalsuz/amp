@@ -133,4 +133,7 @@ class Article_Display extends AMPDisplay_HTML {
     }
 
 }
+
+require_once ('AMP/Content/Article/Display/PressRelease.inc.php' );
+require_once ('AMP/Content/Article/Display/News.inc.php' );
 ?>

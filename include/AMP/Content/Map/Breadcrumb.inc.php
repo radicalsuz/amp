@@ -87,7 +87,7 @@ class AMP_Breadcrumb_Content {
 
     function findClass( $class_id ) {
         $location = &new ContentClass( $this->dbcon, $class_id );
-        $this->current_section = $section;
+        $this->current_section = $location->getSection();
         $this->current_element = $this->_trimText( $location->getName() );
         $this->content_type = AMP_CONTENT_PAGETYPE_LIST;
     }

@@ -6,6 +6,10 @@ Description:  display footer and right nav of template. called from all display 
 To Do: 
 
 *********************/ 
+if (AMP_USE_NEW_TEMPLATE_ENGINE) {
+    require_once( 'AMP/BaseFooter2.php' );
+} else {
+
 if (isset($modulefooter) && $modulefooter){
 	echo $modulefooter;
 	$modulefooter=NULL;
@@ -41,4 +45,5 @@ if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) {
 }
 
 @ob_end_flush();
+}
 ?>

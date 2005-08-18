@@ -7,6 +7,7 @@ Searches redirect table for matching pages, then sends
 the user to search page if no matches are found.*/
 
 require_once("AMP/BaseDB.php");
+$no_search_extensions = array( 'jpeg', 'jpg', 'gif', 'png' );
 
 // Check for a custom handler.
 $uri = $_SERVER['REQUEST_URI'];
@@ -42,6 +43,7 @@ if (file_exists($customHandler)) {
     // We haven't found what we're looking for, so flag a 404 error, and try to
     // redirect.
     header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found' );
+    $redirected = false;
 
     // Search for something to redirect to, based on our redirect table.
     $myURI = $dbcon->qstr(substr($_SERVER['REQUEST_URI'], 1));
@@ -56,7 +58,13 @@ if (file_exists($customHandler)) {
         }
     }
 
-    if (!$redirected) ampredirect ($GLOBALS['Web_url'] . "search.php");
+    trigger_error( 'Requested resource missing: '.$_SERVER['REQUEST_URI'] );
+    $extension_start = strrpos( $_SERVER['PHP_SELF'], '.' );
+    $extension = substr( $_SERVER['PHP_SELF'], $extension_start+1 );
+
+    if (array_search($extension, $no_search_extensions) === FALSE ) {
+        if (!$redirected) ampredirect (AMP_SITE_URL . "search.php");
+    }
 
 }
 

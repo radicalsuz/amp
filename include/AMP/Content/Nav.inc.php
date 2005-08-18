@@ -21,6 +21,7 @@ class NavigationElement extends AMPSystem_Data_Item {
 
     var $totalCount;
     var $_engine;
+    var $_exceedsLimit;
 
     function NavigationElement( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -98,8 +99,8 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function getMoreLink() {
-        if (isset($this->_engine) && method_exists($this->_engine, 'getMoreLink')) {
-            $this->_engine->getMoreLink();
+        if (isset($this->_engine) && method_exists($this->_engine, 'processMoreLink')) {
+            return $this->_engine->processMoreLink();
         }
         return $this->getMoreLinkPage();
     }
@@ -158,11 +159,14 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function exceedsLimit() {
-        if (!($limit = $this->getLimit())) return false;
-        if (!($total = $this->getTotalCount())) return false;
-        print ($total . ' vs ' . $limit .'<BR>');
-        if ($total>$limit) return true;
-        return false;
+        if (isset($this->_exceedsLimit )) return $this->_exceedsLimit;
+        
+        if (!(($limit = $this->getLimit()) && ($total = $this->getTotalCount()))) {
+            $this->_exceedsLimit = false;
+            return $this->_exceedsLimit;
+        }
+        $this->_exceedsLimit = ( $total > $limit ); 
+        return $this->_exceedsLimit;
     }
 
     function setLimit( $qty ) {

@@ -13,15 +13,10 @@ class ArticleSet_Display extends AMPContent_DisplayList_HTML {
         return
             $this->_HTML_listItemTitle( $article ) . 
             $this->_HTML_listItemSource( $article->getAuthor(), $article->getSource(), $article->getSourceURL()) .
-            $this->_HTML_listItemDate( $article->getDate() ) .
+            $this->_HTML_listItemDate( $article->getItemDate() ) .
             $this->_HTML_listItemBlurb( $article->getBlurb() );
     }
 
-
-    function _HTML_listItemTitle( &$source ) {
-        return  $this->_HTML_link( $source->getURL(), $source->getTitle(), array( "class"=>"listtitle" ) ). 
-                $this->_HTML_newline();
-    }
 
     function _HTML_listItemSource( $author, $source, $url ) {
         if (!(trim($author) || $source || $url)) return false;

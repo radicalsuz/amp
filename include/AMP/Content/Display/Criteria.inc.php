@@ -2,6 +2,7 @@
 
 class AMPContent_DisplayCriteria {
 
+    var $_include_draft_status = false;
     var $_status_field = "publish";
 
     var $_excluded_classes = array(
@@ -28,6 +29,10 @@ class AMPContent_DisplayCriteria {
 
     function _getStatusField() {
         return $this->_status_field;
+    }
+
+    function _includeDraftStatus() {
+        return $this->_include_draft_status;
     }
 
 }

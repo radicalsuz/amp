@@ -26,7 +26,7 @@ class NavEngine_SQL extends NavEngine {
         if (strpos($title, AMP_NAV_TITLE_SQL_FIELD_FLAG )!==0) return $title;
 
         $fieldname = substr($title, strlen(AMP_NAV_TITLE_SQL_FIELD_FLAG));
-        if (!($items = $this->runSQL())) return $fieldname;
+        if (!($items = $this->_runSQL())) return $fieldname;
         foreach( $items as $result_row ) {
             if (isset($result_row[ $fieldname ])) return $result_row[ $fieldname ];
         }
@@ -35,14 +35,14 @@ class NavEngine_SQL extends NavEngine {
 
     function processMoreLink() {
         $currentPage = & AMPContent_Page::instance();
-        if (!$pagename = $this->nav->getData('mfile')) return false;
+        if (!$pagename = $this->nav->getMoreLinkPage()) return false;
         $url_vars = array();
         if ($listType = $this->nav->getData('mcall1')) {
             $url_vars[] = "list=" . $listType;
             if ($listType == "classt" && isset($currentPage->section_id)) $url_vars[] = "type=" . $currentPage->section_id;
         }
 
-        if (!($result = $this->runSQL())) return false;
+        if (!($result = $this->_runSQL())) return false;
         $item = current($result);
         if (($result_field = $this->nav->getData('mvar2')) && ($result_field_sql = $this->nav->getData('mcall2'))) {
             if (isset( $item[ $result_field_sql ] )) $url_vars[] = $result_field . '=' . $item[ $result_field_sql ];
@@ -55,8 +55,10 @@ class NavEngine_SQL extends NavEngine {
     ### private sql evaluation methods ###
     ######################################
 
-    function _runSQL( $db_sql ) {
+    function _runSQL( $db_sql=null ) {
         if (isset($this->_sql_result)) return $this->_sql_result;
+        if (!isset($db_sql)) $db_sql = $this->nav->getSQL();
+        if (!$db_sql) return false;
 
         $sql = $this->_evalSQL( $db_sql );
         

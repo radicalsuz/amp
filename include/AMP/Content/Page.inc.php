@@ -2,6 +2,7 @@
 
 require_once('AMP/Content/Article.inc.php');
 require_once('AMP/Content/Section.inc.php');
+require_once('AMP/Content/Class.inc.php');
 require_once('AMP/System/IntroText.inc.php');
 require_once('AMP/Content/Template.inc.php' );
 require_once('AMP/Content/Header.inc.php' );
@@ -262,7 +263,7 @@ class AMPContent_Page {
 
     function globalizeArticleVars( &$articleinfo ) {
         $this->registry->setArticle( $articleinfo );
-        $this->registry->setEntry( AMP_REGISTRY_CONTENT_PAGE_TITLE, $articleinfo->getTitle() );
+        #$this->registry->setEntry( AMP_REGISTRY_CONTENT_PAGE_TITLE, $articleinfo->getTitle() );
 
         $GLOBALS['MM_class'] =$articleinfo->getClass();
         $GLOBALS['MM_type'] =$articleinfo->getParent();

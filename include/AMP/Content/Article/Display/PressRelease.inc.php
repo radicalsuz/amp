@@ -12,7 +12,7 @@ class ArticleDisplay_PressRelease extends ArticleDisplay_News {
         $article = &$this->_article;
 
         return  $this->_HTML_start().
-                $this->_HTML_date    ( $article->getDate() ) .
+                $this->_HTML_date    ( $article->getItemDate() ) .
                 $this->_HTML_contact ( $article->getContact() ).
                 $this->_HTML_endHeadingPR() .
                 $this->_HTML_title   ( $article->getTitle() ).
@@ -37,6 +37,10 @@ class ArticleDisplay_PressRelease extends ArticleDisplay_News {
     function _HTML_endHeadingPR() {
         return "</td></tr>\n<td>". $this->_HTML_spacer( $width=8, $height=5 ). 
                 "</td><tr>" .'<td  class="text">' . $this->_HTML_newline();
+    }
+
+    function _HTML_end() {
+        return "</td></tr></table>";
     }
 }
 ?>

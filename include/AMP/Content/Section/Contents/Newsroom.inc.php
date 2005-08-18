@@ -5,8 +5,8 @@ require_once( 'AMP/Content/Section/Contents/Articles.inc.php' );
 class SectionContentSource_Newsroom extends SectionContentSource_Articles {
 
     var $_included_classes = array(
-        AMP_CONTENT_CLASS_NEWS,
-        AMP_CONTENT_CLASS_PRESSRELEASE
+        'news'  => AMP_CONTENT_CLASS_NEWS,
+        'pr'    => AMP_CONTENT_CLASS_PRESSRELEASE
         );
 
 
@@ -20,12 +20,16 @@ class SectionContentSource_Newsroom extends SectionContentSource_Articles {
     ###################################
 
     function _setCriteria() {
-        $this->_getBaseCriteria();
+        $this->_setBaseCriteria();
     }
 
     function _getClassCriteria() {
         if (empty($this->_included_classes)) return false;
         return "class in (" . join( ", ", $this->_included_classes ) . ")" ;
+    }
+
+    function _setSort() {
+        $this->_setBaseSort();
     }
 
 }

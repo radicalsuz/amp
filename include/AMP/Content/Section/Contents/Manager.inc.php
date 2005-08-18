@@ -6,6 +6,7 @@ require_once( 'AMP/Content/Section/Contents/Display.inc.php' );
 require_once( 'AMP/Content/Section/Contents/Articles.inc.php' );
 require_once( 'AMP/Content/Section/Contents/ArticlesBySubsection.inc.php' );
 require_once( 'AMP/Content/Section/Contents/Subsections.inc.php' );
+require_once( 'AMP/Content/Section/Contents/SubsectionsPlusArticles.inc.php' );
 require_once( 'AMP/Content/Section/Contents/Newsroom.inc.php' );
 require_once( 'AMP/Content/Section/Contents/ArticlesAggregator.inc.php' );
 
@@ -53,7 +54,10 @@ class SectionContents_Manager {
         $this->_contentSourceSet = &$result_dataset;
     }
 
-    function &getContents() {
+    function &getContents( $auto_read = false ) {
+        if (!isset($this->_contentSourceSet)) return false;
+        if ((!$this->_contentSourceSet->makeReady()) && $auto_read ) $this->_contentSourceSet->readData();
+
         return $this->_contentSourceSet;
     }
 

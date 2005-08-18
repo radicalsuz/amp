@@ -85,9 +85,11 @@ class AMP_Registry {
 	function setArticle(&$article) {
 		$this->setEntry(AMP_REGISTRY_CONTENT_ARTICLE, $article);
 		$this->setEntry(AMP_REGISTRY_CONTENT_ARTICLE_ID, $article->id );
+        /*
 		$this->setEntry(AMP_REGISTRY_CONTENT_PAGE_TITLE, $article->getName() );
 		$this->setEntry(AMP_REGISTRY_CONTENT_SECTION_ID, $article->getParent() );
 		$this->setEntry(AMP_REGISTRY_CONTENT_SECTION_ID, $article->getClass() );
+        */
 	}
 
 	function &getArticle() {

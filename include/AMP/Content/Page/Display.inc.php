@@ -30,13 +30,13 @@ class AMPContent_PageDisplay {
     }
 
     function output_Content() {
-        return $this->contentManager->output();
+        return $this->page->contentManager->output();
     }
 
     function output_PrinterSafe() {
         return  $this->page->header->output() .
                 $this->_HTML_printSafeHead() . 
-                $this->output( AMP_CONTENT_PAGE_DISPLAY_CONTENT ) .
+                $this->execute( AMP_CONTENT_PAGE_DISPLAY_CONTENT ) .
                 $this->_HTML_endPage();
     }
 

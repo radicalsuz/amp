@@ -54,7 +54,7 @@ if ($_GET['typeid']){
 	$where ='where typeid= '.$_GET['typeid'];
 }	
 if ($_GET['class']) {
-	$where ='where class= '.$_GET['class'];
+	$where ='where classlist= '.$_GET['class'];
 }	
 
 $sql="SELECT * FROM nav $where  order by position asc";

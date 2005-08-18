@@ -27,8 +27,8 @@ class ContentClass_Display extends ArticleSet_Display {
     }
 
     function _HTML_listIntro( &$intro ) {
-        if (!($this->isFirstPage()&&$intro)) return false;
-        return $intro->execute() . $this->_HTML_newline();
+        if (!($this->isFirstPage()&&$intro)) return $this->_pager->_HTML_topNotice( $this->_class->getName() );
+        return $intro->execute(); # . $this->_HTML_newline();
     }
 }
 ?>

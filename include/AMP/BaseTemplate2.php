@@ -18,7 +18,7 @@ $currentPage = & AMPContent_Page::instance();
 ### FIND CURRENT LOCATION ##
 
 //confirm intro_id values
-if (! (isset($intro_id) && $intro_id)) { $intro_id = $mod_id; }
+if ((isset($mod_id) && $mod_id) && (! (isset($intro_id) && $intro_id))) { $intro_id = $mod_id; }
 if (! (isset($intro_id) && $intro_id)) { $intro_id = AMP_CONTENT_INTRO_ID_DEFAULT; }
 	
 if ( $intro_id == AMP_CONTENT_INTRO_ID_DEFAULT ) {

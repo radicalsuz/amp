@@ -44,9 +44,11 @@ class NavEngine_RSS extends NavEngine {
         if (isset($this->feed->channel['title'])) return $this->feed->channel['title'];
     }
 
+    /** pretty sure this will cause an infinite loop if active
     function processMoreLink() {
         if ($link = $this->nav->getMoreLink()) return $link;
     }
+    */
 
     #####################################
     ### private link creation methods ###

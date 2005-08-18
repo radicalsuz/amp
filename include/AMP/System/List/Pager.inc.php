@@ -1,6 +1,8 @@
 <?php
 
-class AMPSystem_ListPager {
+require_once ( 'AMP/Content/Display/HTML.inc.php' );
+
+class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     var $_default_qty = 50;
     var $_offset = 0;
@@ -60,9 +62,13 @@ class AMPSystem_ListPager {
     }
 
     function output() {
+        $this->readPosition();
+        return '<div class="list_pager">' . $this->_positionText() . $this->_pageLinks() . '</div><BR>';
+    }
+
+    function readPosition() {
         $this->getSourceTotal();
         $this->page_total = $this->_offset + $this->_qty;
-        return '<div class="list_pager">' . $this->_positionText() . $this->_pageLinks() . '</div><BR>';
     }
 
     function getSourceTotal( $reset = false ) {
@@ -106,7 +112,7 @@ class AMPSystem_ListPager {
         $href = $this->offsetURL( ($this->_offset - $this->_qty ) );
         if ($this->_offset <= $this->_qty ) $href = $this->offsetURL(0);
 
-        return '<a class="standout" href="'. $href . '">< Prev</a>&nbsp;';
+        return '<a class="standout" href="'. $href . '">< Prev</a>&nbsp;&nbsp;';
     }
 
     function _nextPageLink() {

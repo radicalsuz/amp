@@ -20,7 +20,7 @@ class AMPSystem_Data {
     var $source;
 
     var $sql_criteria = array();
-    var $sql_select = array();
+    var $_sql_select = array();
 
     var $_nativeColumns;
     var $id_field = "id";
@@ -50,7 +50,7 @@ class AMPSystem_Data {
 
     function setSelect( $expression_set ) {
         if (!is_array($expression_set)) return false;
-        $this->sql_select = array();
+        $this->_sql_select = array();
         foreach ($expression_set as $exp) {
             $this->addSelectExpression( $exp );
         }
@@ -61,6 +61,11 @@ class AMPSystem_Data {
         foreach ($expression_set as $exp) {
             $this->addCriteria ( $exp );
         }
+    }
+
+    function getCriteria () {
+        if (empty($this->sql_criteria)) return false;
+        return $this->sql_criteria;
     }
 
     function addColumn ( $name ) {
@@ -75,8 +80,8 @@ class AMPSystem_Data {
 
     function addSelectExpression( $exp ) {
         if (!is_string($exp)) return false;
-        if (array_search( $exp, $this->sql_select )!==FALSE) return true;
-        $this->sql_select[] = $exp;
+        if (array_search( $exp, $this->_sql_select )!==FALSE) return true;
+        $this->_sql_select[] = $exp;
         return true;
     }
     function addCriteria( $exp ) {

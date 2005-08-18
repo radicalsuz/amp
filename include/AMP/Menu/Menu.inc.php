@@ -173,7 +173,7 @@ class AMP_Menu_UL extends AMP_Menu {
 
 //UL Menu component
 class AMP_MenuComponent_UL extends AMP_MenuComponent {
-    var $template = "<UL id = 'listfolder_%1\$s' class='AMPmenu'>%2\$s</UL>\n";
+    var $template = "\n<UL id = 'listfolder_%1\$s' class='AMPmenu'>%2\$s</UL>\n";
     var $_child_component = "AMP_MenuComponent_LI";
 
     function AMP_MenuComponent_UL( &$menu, $def ) {
@@ -189,7 +189,7 @@ class AMP_MenuComponent_UL extends AMP_MenuComponent {
 //LI Menu Component
 class AMP_MenuComponent_LI extends AMP_MenuComponent {
     var $template = "<LI id = 'listitem_%1\$s' class='AMPmenu'>%2\$s</LI>\n";
-    var $folder_template = "<UL class = 'AMPMenu' id = 'listfolder_%1\$s'>\n%2\$s</UL>\n";
+    var $folder_template = "\n<UL class = 'AMPMenu' id = 'listfolder_%1\$s'>\n%2\$s\n</UL>\n";
 
     function AMP_MenuComponent_LI( &$menu, $def ) {
         $this->init($menu, $def);

@@ -1,59 +1,3 @@
-<?php
-
-$menu_header = 
-
-'<!-- this prevents \'events fall through the menu\' bug in win/ie --><!--[if gte IE 5]>
-<STYLE type=text/css>UL#menu DIV {
-	BACKGROUND-COLOR: #'.$menu_bg_bgcolor.'
-}
-</STYLE>
-<![endif]-->
-
-
-<UL id=menu>
-';
-
-
-function CSSMenu_showmenu($typeid, &$menuset){
-    $menu_entry="<li><a href=\"%s\">%s</a></li>\r\n";
-    $menu_folder="<li><a href=\"%s\" class=\"menufolder\">%s</a>\r\n<ul>\r\n     ";
-    $menu_folder_end="</ul></li>\r\n";
-    $output = "";
-    if (isset($menuset[$typeid]['link'])) {
-        $linktext=$menuset[$typeid]['link'];
-    } else {
-        $linktext = "article.php?list=type&type=".$typeid;
-    }
-
-    $currentset = array();
-    foreach ($menuset as $testtype=>$typeinfo) {
-        if ($typeinfo['parent']==$typeid) {
-            $currentset[]=$testtype;
-        }
-    $numtabs=count($currentset);
-
-    if ($numtabs==0) {
-        $output .= sprintf($menu_entry, $linktext, $menuset[$typeid]['type']);
-    } else {
-        $output .= sprintf ($menu_folder, $linktext,  $menuset[$typeid]['type']);
-        foreach ($currentset as $currenttype) {
-            $output.= CSSMenu_showmenu($currenttype, $menuset);
-        }
-        $output .= $menu_folder_end;
-        
-    }
-    return $output;
-
-}
-
-
-$menu_footer="
-</UL>
-
-<SCRIPT type=text/javascript>
-
-
-
 /*
 	list menu script by Brothercake (http://www.brothercake.com/)
 	you may use the code providing this message remains intact
@@ -94,8 +38,8 @@ function menuInitTrigger(menuTrigger)
 	{
 
 		//rollover
-		menuTrigger.firstChild.style.backgroundColor = '".$menu_bg_color_hover."';
-		menuTrigger.firstChild.style.color = '".$menu_txt_color_hover."';
+		menuTrigger.firstChild.style.backgroundColor = menu.bgcolor_hover;
+		menuTrigger.firstChild.style.color = menu.txt_color_hover;
 
 		//if trigger has menu
 		if(menuMenu != null)
@@ -121,8 +65,8 @@ function menuInitTrigger(menuTrigger)
 		if(!menuTrigger.contains(e.relatedTarget || e.toElement))
 		{
 			//rollout
-			menuTrigger.firstChild.style.backgroundColor = '".$menu_bg_color."';
-			menuTrigger.firstChild.style.color = '".$menu_txt_color."';
+			menuTrigger.firstChild.style.backgroundColor = menu.bgcolor;
+			menuTrigger.firstChild.style.color = menu.txt_color;
 
 			//if trigger has menu
 			if(menuMenu != null)
@@ -231,7 +175,7 @@ menu.xdom = (menu.dom&&typeof document.write=='undefined')?true:false;
 
 
 //initiate
-window.onload = function()
+function loadCSSMenu( menu_name )
 {
 
 	//if browser is supported
@@ -239,7 +183,7 @@ window.onload = function()
 	{
 
 		//tree object
-		tree = document.getElementById('menu');
+		tree = document.getElementById( menu_name );
 
 		if(tree != null)
 		{
@@ -251,7 +195,3 @@ window.onload = function()
 
 
 }
-
-</SCRIPT>
-";
-?>

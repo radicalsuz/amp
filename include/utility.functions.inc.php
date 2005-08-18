@@ -78,7 +78,7 @@ if ( !function_exists( 'makesmall' ) ) {
 if ( !function_exists( 'ampredirect' ) ) {
 
     function ampredirect($url) {
-        if ($_REQUEST['pageredirect']) {
+        if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
             header("Location: ".$_REQUEST['pageredirect']);
         } else {
             header("Location: $url");

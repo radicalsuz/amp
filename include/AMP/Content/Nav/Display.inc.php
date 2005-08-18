@@ -66,7 +66,9 @@ class NavigationDisplay {
             $output .= $this->_templateBodyItem( $html );
         }
 
-        if ( $this->nav->exceedsLimit())    $output .= $this->_HTML_moreLink();
+        if ( $this->nav->exceedsLimit()) {
+            $output .= $this->_HTML_moreLink();
+        }
 
         return $output . $this->_templateBodyClose();
     }
@@ -92,7 +94,6 @@ class NavigationDisplay {
     }
 
     function _HTML_moreLink() {
-        print 'hoonka';
         if (!($href = $this->nav->getMoreLink())) return false;
         $item = array( 'href' => $href, 'css' => $this->_morelink_css_class, 'label'=> $this->_morelink_text );
         $link = $this->_HTML_link( $item );

@@ -198,11 +198,12 @@ if (isset($HTTP_GET_VARS["id"]))
   		<input type="hidden" name="MM_delete" value="true">
   		<input type="hidden" name="MM_recordId" value="<?php echo $subtype->Fields("id")?>">
 </form>
-             <p><a href="classlist_nav_edit.php?id=<?php echo $HTTP_GET_VARS["id"]; ?>"> 
+             <p><a href="nav_position.php?class=<?php echo $HTTP_GET_VARS["id"]; ?>"> 
                 Edit Navigation Files for Lists</a>
 				<br>
+                <!--
 				<a href="class_nav_edit.php?id=<?php echo $HTTP_GET_VARS["id"]; ?>"> 
-                Edit Navigation Files for Content</a></p>
+                Edit Navigation Files for Content</a>--></p>
               <?php
   $subtype->Close();
 ?>

@@ -5,6 +5,7 @@ require_once ('AMP/Menu/FWTable.inc.php');
 class AMP_Menu_FWTableRow extends AMP_Menu_FWTable {
     var $_baseComponentHTML = 'AMP_MenuComponent_TableRow';
     var $_baseComponentScript = 'AMP_MenuComponent_FWmenuScriptItem';
+    var $_activationLocation = AMP_MENU_ACTIVATION_LOCATION_BELOW;
 
     function AMP_Menu_FWTableRow( &$menu_array, $name="rowmenu" ) {
 
@@ -100,12 +101,19 @@ class AMP_MenuComponent_FWmenuTD extends AMP_MenuComponent {
         $this->template =  
                 ( $this->_use_separator ? $this->separator : "" ) . 
                 "\n<td class=\"AMPmenu\" onMouseOut=\"window.FW_startTimeout();\"\n". 
+                $this->menu->getActivationScript( $width ) .
+                "id=\"mrow_%1\$s\" NOWRAP>%2\$s</td>" ;
+        /*
+        $this->template =  
+                ( $this->_use_separator ? $this->separator : "" ) . 
+                "\n<td class=\"AMPmenu\" onMouseOut=\"window.FW_startTimeout();\"\n". 
                 "onClick=\"FW_showMenu(window.fw_menu_%1\$s,". 
                 "( window.getWindowWidth() < (window.getOffLeft( this ) + ". $width . 
                 ") ? (window.getOffLeft(this)+this.offsetWidth-".$width.") :  window.getOffLeft(this) ),".
                 "( window.getOffTop(this) + this.offsetHeight ) );\"\n".
                 "onMouseOver=\"if (FW_menuisActive()) { this.onclick(); FW_clearTimeout(); }\"".
                 "id=\"mrow_%1\$s\" NOWRAP>%2\$s</td>" ;
+                */
     }
 
     function make_core() {

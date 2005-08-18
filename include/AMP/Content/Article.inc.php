@@ -2,6 +2,7 @@
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
+require_once ( 'AMP/Content/Article/Display.inc.php' );
 
 define ('AMP_CONTENT_STATUS_LIVE', 1);
 define ('AMP_CONTENT_STATUS_DRAFT', 0);
@@ -24,6 +25,14 @@ class Article extends AMPSystem_Data_Item {
         $this->init ($dbcon, $id);
     }
 
+    function &getDisplay() {
+        $classes = filterConstants( 'AMP_CONTENT_CLASS' );
+        $display_class_custom  = 'ArticleDisplay_' . array_search( $this->getClass() , $classes );
+        $display_class = 'Article_Display';
+        if (class_exists( $display_class_custom )) $display_class = $display_class_custom;
+        return new $display_class( $this );
+    }
+
     function getParent() {
         return $this->getData( 'type' );
     }
@@ -38,6 +47,10 @@ class Article extends AMPSystem_Data_Item {
 
     function getTitle() {
         return $this->getData( 'title' );
+    }
+
+    function getSubTitle() {
+        return $this->getData( 'subtitle' );
     }
 
     function getAuthor() {
@@ -83,7 +96,9 @@ class Article extends AMPSystem_Data_Item {
 
     function getArticleDate() {
         if (!$this->isPublicDate()) return false;
-        return $this->getData('date');
+        $date_value =  $this->getData('date');
+        if ($date_value == AMP_NULL_DATE_VALUE) return false;
+        return $date_value;
     }
 
     function isPublicDate() {
@@ -154,7 +169,11 @@ class Article extends AMPSystem_Data_Item {
         return ($this->getData('publish')==AMP_CONTENT_STATUS_LIVE);
     }
 
-    function adjustSetData( $data ) {
+    function isHtml() {
+        return $this->getData( 'html' );
+    }
+
+    function _adjustSetData( $data ) {
         $this->legacyFieldname( $data, 'test', 'body' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
     }

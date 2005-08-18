@@ -9,7 +9,7 @@ class AMPContent_Header {
 
     var $link_rel = array( 'Search'=> '/search.php' );
     var $javaScripts = array( 'functions' => '/scripts/functions.js' );
-    var $styleSheets = array();
+    var $styleSheets = array( 'default'		=> '/styles_default.css');
 
     function AMPContent_Header( &$page ) {
         $this->init( $page );

@@ -2,6 +2,7 @@
 define( 'AMP_IMAGE_CLASS_ORIGINAL', 'original' );
 define( 'AMP_IMAGE_CLASS_THUMB', 'thumb' );
 define( 'AMP_IMAGE_CLASS_OPTIMIZED', 'pic' );
+define( 'AMP_IMAGE_DEFAULT_ALIGNMENT', 'right' );
 
 
 class Content_Image {
@@ -43,7 +44,9 @@ class Content_Image {
     }
 
     function getStyleAttrs() {
-        return $this->style_def;
+        $extra = array();
+        if ($align = $this->getAlignment() ) $extra = array( 'align' => $align );
+        return $this->style_def + $extra;
     }
 
     function getAltTag() {
@@ -52,6 +55,11 @@ class Content_Image {
 
     function getCaption() {
         return $this->getData( 'caption' );
+    }
+
+    function getAlignment() {
+        $align = $this->getData( 'alignment' );
+        return ($align? $align : AMP_IMAGE_DEFAULT_ALIGNMENT );
     }
 
     function getURL( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {

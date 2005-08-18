@@ -28,11 +28,17 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         $this->_manager = &$contents_manager;
         $this->_section = &$this->_manager->getSection();
 
-        $display_class = $this->_getDisplayClass();
-        $this->_display = &new $display_class( $this->_manager->getContents() );
+        if (!($contents = &$this->_manager->getContents())) return;
+        $this->initDisplay( $contents );
+    }
 
-        if (!method_exists( $this->_display, 'setParentSection' )) return;
-        $this->_display->setParentSection( $this->_section->id );
+    function initDisplay( &$contents ) {
+
+        $display_class = $this->_getDisplayClass();
+        $this->_display = &new $display_class( $contents );
+
+        if (!method_exists( $this->_display, 'setSection' )) return;
+        $this->_display->setSection( $this->_section );
     }
 
     function _getDisplayClass() {
@@ -46,11 +52,10 @@ class SectionContents_Display  extends AMPDisplay_HTML {
 
     function execute() {
         $intro = &$this->getIntroDisplay();
-        if (!$this->_section->showContentList()) return ($intro ? $intro->execute() : $intro ) ;
+        if (! ( $this->_section->showContentList() && isset($this->_display))) 
+            return ($intro ? $intro->execute() : $intro ) ;
 
-        if ($intro) $this->setListIntro( $intro->execute() ) ;
-        
-        return  $this->_HTML_listIntro() . 
+        return  $this->_HTML_listIntro( $intro ) . 
                 $this->_display->execute();
     }
         
@@ -65,18 +70,9 @@ class SectionContents_Display  extends AMPDisplay_HTML {
     }
 
 
-    function setListIntro( $html ) {
-        $this->_listIntro = $html;
-    }
-
-    function getListIntro() {
-        if (!isset($this->_listIntro)) return false;
-        return $this->_listIntro;
-    }
-
-    function _HTML_listIntro() {
-        if (!$this->isFirstPage()) return false;
-        return $this->getListIntro() . $this->_HTML_newline();
+    function _HTML_listIntro( &$intro ) {
+        if (!($this->_display->isFirstPage() && $intro)) return $this->_pager->_HTML_topNotice( $this->_section->getName() );
+        return $intro->execute() . $this->_HTML_newline();
     }
 }
 ?>

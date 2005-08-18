@@ -133,69 +133,73 @@ function processWindow(&$content, $width, $height, $q) {
     <input name="Search" type="submit"  class="name"><hr>
 </form> 
 <?php
-if ($_GET['q']) {
-if ($_GET['offset']) {$offset=$_GET['offset'];}
-else { $offset=0;}
-if ($_GET['limit']) {$limit=$_GET['limit'];}
-else { $limit=25;}
+if (isset($_GET['q']) && $_GET['q'] ) {
+    if ($_GET['offset']) {$offset=$_GET['offset'];}
+    else { $offset=0;}
+    if ($_GET['limit']) {$limit=$_GET['limit'];}
+    else { $limit=25;}
 
-if ($_GET['date']){ 
-$date = $_GET['date'] ;
-$dsql = " and  date > '$date' "; }
+    if ($_GET['date']){ 
+    $date = $_GET['date'] ;
+    $dsql = " and  date > '$date' "; }
 
- if ($_GET['section']){ 
-$section = $_GET['section'] ;
-$ssql = " and $MX_type = $section "; } 
+    if ($_GET['section']){ 
+    $section = $_GET['section'] ;
+    $ssql = " and $MX_type = $section "; } 
 
 
-$sql= "select test, title, id, type, class from articles where match(test, author, shortdesc, title) against('".$_GET['q']."') and publish =1 $dsql $ssql   ";
-$sqlct= "SELECT  COUNT(DISTINCT id) from articles where match(test, author, shortdesc, title) against('".$_GET['q']."') and publish =1  $dsql  $ssql  ";
-$sql = $sql." Limit  $offset, $limit";
-$searchx=$dbcon->CacheExecute($sql);//  or DIE($sql.$dbcon->ErrorMsg());
+    $sql= "select test, title, id, type, class from articles where match(test, author, shortdesc, title) against('".$_GET['q']."') and publish =1 $dsql $ssql   ";
+    $sqlct= "SELECT  COUNT(DISTINCT id) from articles where match(test, author, shortdesc, title) against('".$_GET['q']."') and publish =1  $dsql  $ssql  ";
+    $sql = $sql." Limit  $offset, $limit";
+    $searchx=$dbcon->CacheExecute($sql);//  or DIE($sql.$dbcon->ErrorMsg());
 
-if  (!$searchx->Fields('id')) {
-$sql = "select distinct test, title, id from articles where  (title like '%".$_GET['q']."%'  or test like '%$_GET[q]%'  or author like '%".$_GET['q']."%'  or shortdesc like '%".$_GET['q']."%'   )and publish =1 $dsql  $ssql  order by id desc ";
-$sqlct = "SELECT  COUNT(DISTINCT id) from articles where  (title like '%".$_GET['q']."%'  or test like '%".$_GET['q']."%'  or author like '%".$_GET['q']."%'  or shortdesc like '%".$_GET['q']."%'   )and publish =1 $dsql $ssql   order by id desc ";
-$searchx=$dbcon->CacheExecute($sql."Limit  $offset, $limit;") ;
+    if  (!$searchx->Fields('id')) {
+        $sql = "select distinct test, title, id from articles where  (title like '%".$_GET['q']."%'  or test like '%$_GET[q]%'  or author like '%".$_GET['q']."%'  or shortdesc like '%".$_GET['q']."%'   )and publish =1 $dsql  $ssql  order by id desc ";
+        $sqlct = "SELECT  COUNT(DISTINCT id) from articles where  (title like '%".$_GET['q']."%'  or test like '%".$_GET['q']."%'  or author like '%".$_GET['q']."%'  or shortdesc like '%".$_GET['q']."%'   )and publish =1 $dsql $ssql   order by id desc ";
+        $searchx=$dbcon->CacheExecute($sql."Limit  $offset, $limit;") ;
+    }
+    //echo $sql;
+    $listct=$dbcon->CacheExecute("$sqlct");
+    $count = $listct->fields[0];
+
+    echo "Displaying results ".($offset +1)."-".($offset +$limit)." of ".$count." matches for query  <b>".$q."</b> <br><br>";
+
+    $pages = ceil(($count/$limit));
+
+    if ($pages > 1) {
+        $i = 0;
+        $io =0;
+        echo "<b>Pages:</b>&nbsp;";
+        while ($i != $pages) {
+            echo "<a  href=\"search.php?q=".$_GET['q']."&offset=";
+            echo $io;
+            echo "\">";
+            echo ($i +1);
+            echo "</a> ";
+            $io = ($io+$limit);
+            $i++;
+        }
+        echo "<br><br>"; 
+    }
+    $i = ($offset+1);
+    while (!$searchx->EOF)   {  ?>
+        <span class =listtitle><?php echo $i;?>.&nbsp;
+        <?php 
+        //if text appears in a section header, return the section listing
+        $search_url_vars = ($searchx->Fields("class")=="8")?
+            "list=type&type=".$searchx->Fields("type")
+            :"id=".$searchx->Fields("id");?>
+        <a href="article.php?<?php echo $search_url_vars."\"  class=listtitle>".strip_tags($searchx->Fields('title')); ?></a> <br></span>
+        <?php $desc = processWindow($searchx->Fields('test'), 80, 1, $_GET[q]); 
+        if ($desc[0]) {echo $desc[0];}
+        else {echo $searchx->Fields('shortdesc');}
+        $i++;
+        ?>
+        <br><br>
+
+        <?php $searchx->MoveNext(); 
+    }  
 }
-//echo $sql;
-$listct=$dbcon->CacheExecute("$sqlct");
-$count = $listct->fields[0];
-
-echo "Displaying results ".($offset +1)."-".($offset +$limit)." of ".$count." matches for query  <b>".$q."</b> <br><br>";
-
- $pages = ceil(($count/$limit));
-
-if ($pages > 1) {
-$i = 0;
-$io =0;
-echo "<b>Pages:</b>&nbsp;";
-while ($i != $pages) {
-echo "<a  href=\"search.php?q=".$_GET['q']."&offset=";
-echo $io;
-echo "\">";
-echo ($i +1);
-echo "</a> ";
-$io = ($io+$limit);
-$i++;
-}
-echo "<br><br>"; }
-$i = ($offset+1);
- while (!$searchx->EOF)   {  ?>
-<span class =listtitle><?php echo $i;?>.&nbsp;
-<?php 
-//if text appears in a section header, return the section listing
-$search_url_vars = ($searchx->Fields("class")=="8")?
-    "list=type&type=".$searchx->Fields("type")
-    :"id=".$searchx->Fields("id");?>
-<a href="article.php?<?php echo $search_url_vars."\"  class=listtitle>".strip_tags($searchx->Fields('title')); ?></a> <br></span>
-<?php $desc = processWindow($searchx->Fields('test'), 80, 1, $_GET[q]); 
-if ($desc[0]) {echo $desc[0];}
-else {echo $searchx->Fields('shortdesc');}
-$i++;
+    
+include ("AMP/BaseFooter.php");
 ?>
-<br><br>
-
- <?php $searchx->MoveNext(); }  }
- 
-include ("AMP/BaseFooter.php");?>

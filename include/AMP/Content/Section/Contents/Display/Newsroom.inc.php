@@ -1,8 +1,9 @@
 <?php
 
-require_once( 'AMP/Content/Display/List.inc.php' );
+require_once( 'AMP/Content/Article/SetDisplay.inc.php' );
+require_once( 'AMP/Content/Display/Criteria.inc.php' );
 
-class SectionContentsDisplay_Newsroom extends AMPContent_DisplayList_HTML {
+class SectionContentDisplay_Newsroom extends ArticleSet_Display {
 
     var $_subcategories = array( 
         AMP_CONTENT_CLASS_PRESSRELEASE,
@@ -11,7 +12,7 @@ class SectionContentsDisplay_Newsroom extends AMPContent_DisplayList_HTML {
 
     var $_pager_display = false;
 
-    function SectionContentsDisplay_Newsroom ( &$articleSet ) {
+    function SectionContentDisplay_Newsroom ( &$articleSet ) {
         $this->init( $articleSet );
     }
 
@@ -19,12 +20,20 @@ class SectionContentsDisplay_Newsroom extends AMPContent_DisplayList_HTML {
         if (!$this->_source->makeReady()) return false;
         $listBody = "";
         foreach( $this->_subcategories as $current_class ) {
-            if( !($article_data = &$this->_source->filter( 'class', $current_class, $this->_pager->getLimit() ))) continue;
-            $articles  = &$this->_source->instantiateItems ( $article_data, $this->_sourceItem_class );
+            
+            #if( !($article_data = &$this->_source->filter( 'class', $current_class, $this->_pager->getLimit() ))) continue;
+            #$articles  = &$this->_source->instantiateItems ( $article_data, $this->_sourceItem_class );
+            
+            $subsource = &$this->_getSubSource($current_class);
+            if (!$subsource->hasData()) continue;
+            $articles = &$subsource->instantiateItems( $subsource->getArray(), $this->_sourceItem_class );
+
             $listBody .=    
-                $this->_HTML_subheader( $this->getSubheading( $current_class ) ) .
+                $this->_HTML_subheader( $this->_getSubheading( $current_class ) ) .
                 $this->_HTML_listing( $articles ) .
-                $this->_HTML_moreLink( $this->_getMoreLinkHref( $current_class ) ) ;
+                $this->_HTML_moreLink( $this->_getMoreLinkHref( $current_class ), $this->_getClassName($current_class) ) .
+                $this->_HTML_newline();
+
         }
 
 
@@ -32,10 +41,22 @@ class SectionContentsDisplay_Newsroom extends AMPContent_DisplayList_HTML {
 
     }
 
+    function &_getSubSource( $current_class ) {
+        $subsource = $this->_source;
+        $subsource->addCriteria( "class=".$current_class );
+        $subsource->readData();
+        return $subsource;
+    }
+
     function _getSubheading( $class_id ) {
+        if (!($name  = $this->_getClassName( $class_id ))) return false;
+        return 'Recent&nbsp;' . $name;
+    }
+
+    function _getClassName( $class_id ) {
         $classNames = AMPContent_Lookup::instance('class');
         if (!isset($classNames[ $class_id ] )) return false;
-        return 'Recent&nbsp;' . $classNames[ $class_id ];
+        return $classNames[ $class_id ];
     }
 
     function _getMoreLinkHref( $class_id ) {
@@ -46,6 +67,14 @@ class SectionContentsDisplay_Newsroom extends AMPContent_DisplayList_HTML {
                 array(  "class=$class_id",
                         "offset=".$this->_pager->getLimit()
             ) );
+    }
+    function _HTML_moreLink( $href, $name=false ) {
+
+        $text = 'More&nbsp;' . $name . '&nbsp;' . $this->_HTML_bold( '&raquo;' );
+        return $this->_HTML_inDiv( 
+                    $this->_HTML_inSpan( $this->_HTML_link( $href, $text ), "standout" ),
+                    array( 'class'=>'list_pager' )
+                    );
     }
 
 }

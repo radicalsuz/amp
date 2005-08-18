@@ -1,4 +1,9 @@
 <?php
+if (!defined( AMP_USE_NEW_TEMPLATE_ENGINE )) define ('AMP_USE_NEW_TEMPLATE_ENGINE', false );
+
+if ( AMP_USE_NEW_TEMPLATE_ENGINE ) {
+    require_once( 'AMP/BaseTemplate2.php' );
+} else {
 require_once('AMP/Content/Map.inc.php');
 
 // an attempt to reduce the number of global variables
@@ -267,5 +272,6 @@ if ($MM_secure) {
 
 # Start Output Buffering
 ob_start();
+}
 
 ?>
