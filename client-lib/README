@@ -1,0 +1,3 @@
+this folder contains custom patches for clients.  by placing these apps in the /lib folder in a client directory such that the structure mirrors the directory paths in /include, you can override the /include files.
+
+in most cases these are patches that haven't worked their way into the code yet, so hopefully will get deleted at some point.
