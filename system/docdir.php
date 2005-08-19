@@ -7,7 +7,7 @@ $listtitle ="Documents";
 $filename="docdir.php";
 
 //delete file 
-if ( isset($_GET['actdel']) ){
+if ( isset($_GET['actdel']) && $actdel=$_GET['actdel'] ){
 	$dir_name=AMP_LOCAL_PATH."/downloads/";
 	unlink($dir_name.$actdel);
 }
@@ -40,7 +40,7 @@ for($t=0;$t<$numberOfFiles;$t++){
 	
 	$fieldsarray[$t]['Document'] = '<a href="../downloads/'.$thisName.'" target="_blank">'.$thisName.'</a>';
 	$fieldsarray[$t]['Date'] = $thisTime;
-	$fieldsarray[$t]['Delete'] = '<a href="docdir.php?actdel='.$thisName.'">delete</a>';
+	$fieldsarray[$t]['Delete'] = '<a href="docdir.php?actdel='.urlencode($thisName).'">delete</a>';
 }
 closedir ($dir);
 
