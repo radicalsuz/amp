@@ -3,6 +3,7 @@ require_once('AMP/Region.inc.php');
 require_once('HTML/QuickForm.php');
 require_once('AMP/Geo/Geo.php');
 require_once('AMP/UserData/Plugin.inc.php');
+require_once( 'AMP/Form/SearchForm.inc.php' );
 
 class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	var $regionset;
@@ -82,7 +83,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
                 $zipset.=")";
                 $sql_criteria[]="zip IN $zipset";
 			} else {
-                $this->udm->errorMessage("Sorry, US zip codes only");
+                $this->udm->errorMessage("Sorry, no match found for that zip code");
             }
 		} 
 		//State Request from index page
@@ -353,6 +354,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$this->lookups['country']=array('name'=>'Country');
 		$this->lookups['state']=array('LookupName'=>'State');
 		$this->lookups['city']=array('name'=>'City', 'LookupTable' => 'userdata', 'LookupField' => 'city', 'LookupDistinctField' => 1, 'LookupSearchby' => 'city', 'LookupSortby' => 'city' );
+
 		//Region is for backwards compatibility with older Region udms
 		$this->lookups['area']=array('name'=>'Region', 'LookupField'=>'title', 'LookupTable'=>'region');
 	

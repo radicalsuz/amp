@@ -1,5 +1,7 @@
 <?php
 
+require_once ('AMP/System/Lookups.inc.php' );
+
 function articleversion($id) {
 	global $dbcon;
 	$get=$dbcon->Execute("select * from articles where id = $id") or DIE($dbcon->ErrorMsg());
@@ -47,7 +49,8 @@ function articleversionrestore($vid) {
 
 function articleversionlist($id) {
 	global $dbcon;
-	$get=$dbcon->Execute("select a.vid, DATE_FORMAT(a.updated, '%c/%e/%Y %H:%i ') as updated, u.name, a.type from articles_version a left join users u on u.id = a.updatedby where a.id = $id") or DIE($dbcon->ErrorMsg());
+	$get=$dbcon->Execute("select a.vid, DATE_FORMAT(a.updated, '%c/%e/%Y %H:%i ') as updated, a.enteredby, a.type from articles_version a where a.id = $id") or DIE( $dbcon->ErrorMsg() );
+    $names_lookup = &AMPSystem_Lookup::instance( 'users' );
 	if ($get->Fields("vid")) {
 	?><h2>Version History</h2>
 	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -63,7 +66,7 @@ function articleversionlist($id) {
   <tr>
     <td><?php echo $get->Fields("vid");?></td>
     <td><?php echo $get->Fields("updated");?></td>
-    <td><?php echo $get->Fields("name");?></td>
+    <td><?php if ($u_id = $get->Fields("enteredby")) echo $names_lookup[ $u_id ];?></td>
     <td><a href="../article.php?vid=<?php echo $get->Fields("vid");?>&preview=1" target="_blank">View</a></td>
 	<td><a href="article_edit.php?vid=<?php echo $get->Fields("vid");?>">Edit</a></td>
 	<td><a href="article_edit.php?restore=<?php echo $get->Fields("vid");?>&id=<? echo $id;?>">Restore</a></td>

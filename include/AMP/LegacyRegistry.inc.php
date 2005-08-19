@@ -82,5 +82,6 @@ define('ADODB_REPLACE_UPDATED', 1);
 define('AMP_NAV_NO_LIMIT', 700);
 define('AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS', (isset($MM_reltype)&&$MM_reltype) );
 define('AMP_NULL_DATE_VALUE', '0000-00-00' );
+if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
 
 ?>

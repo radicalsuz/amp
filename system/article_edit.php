@@ -13,7 +13,7 @@ $obj = new SysMenu;
   }
  */ 
 if (!AMP_Authorized( AMP_PERMISSION_CONTENT_EDIT )) ampredirect ("index.php"); 
-if (isset($preview)) {header ("Location: ../article.php?id=$id&preview=1");} 
+if (isset($_GET['preview'])) ampredirect( AMP_URL_AddVars( AMP_CONTENT_URL_ARTICLE, array("id=".$_GET['id'],"preview=1"))); 
 
 
 ob_start();
@@ -21,16 +21,17 @@ ob_start();
 if ($_GET['restore']) {
 	articleversionrestore($_GET['restore']);
     $org_id = ($_GET['id']);
-    redirect("article_edit.php?id=$org_id");
+    ampredirect("article_edit.php?id=$org_id");
 }
-
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
+
    //set non POST passed varablies
+    $sql = "Select id, name from users where name='".$_SERVER['REMOTE_USER']."'";
+    $editor_user_id=$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
+    $_POST['enteredby'] = $editor_user_id->Fields("id");
+
 	if (isset($_POST['MM_insert'])) {
 		$_POST['datecreated'] = date("y-n-j");
-		$sql = "Select id, name from users where name='".$_SERVER['REMOTE_USER']."'";
-		$editor_user_id=$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
-		$_POST['enteredby'] = $editor_user_id->Fields("id");
 		
 	}
 	// add version control
@@ -53,7 +54,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 	$MM_editColumn = "id";  
     $MM_editTable  = "articles";
     $MM_recordId = $_POST['MM_recordId'];
-    $MM_editRedirectUrl = "article_list.php?type=".$_POST['type'];
+    #$MM_editRedirectUrl = "article_list.php?type=".$_POST['type'];
 	$MM_fieldsStr = "relsection1|value|relsection2|value|type|value|subtype|value|select3|value|uselink|value|publish|value|title|value|subtitle|value|html|value|article|value|textfield|value|author|value|linktext|value|date|value|usedate|value|doc|value|radiobutton|value|link|value|linkuse|value|new|value|actionitem|value|actionlink|value|piccap|value|picture|value|usepict|value|morelink|value|usemore|value|pageorder|value|class|value|source|value|contact|value|alignment|value|alttag|value|state|value|pselection|value|fplink|value|ID|value|enteredby|value|datecreated|value|sourceurl|value|notes|value|comments|value|navtext|value|custom1|value|custom2|value|custom3|value|custom4|value ";
     $MM_columnsStr = "relsection1|none,none,1|relsection2|none,none,1|type|none,none,NULL|subtype|none,none,NULL|catagory|none,none,NULL|uselink|none,1,0|publish|none,none,0|title|',none,''|subtitile|',none,''|html|none,1,0|test|',none,''|shortdesc|',none,''|author|',none,''|linktext|',none,''|date|',none,NULL|usedate|none,1,0|doc|',none,''|doctype|',none,''|link|',none,''|linkover|none,1,0|new|none,1,0|actionitem|none,1,0|actionlink|',none,''|piccap|',none,''|picture|',none,''|picuse|none,none,NULL|morelink|',none,''|usemore|none,1,0|pageorder|none,none,NULL|class|none,none,NULL|source|',none,''|contact|',none,''|alignment|',none,''|alttag|',none,''|state|none,none,NULL|pselection|',none,''|fplink|',none,''|updatedby|',none,''|enteredby|',none,''|datecreated|',none,''|sourceurl|',none,''|notes|',none,''|comments|none,1,0|navtext|',none,''|custom1|',none,''|custom2|',none,''|custom3|',none,''|custom4|',none,''";
 	//databaseactions();

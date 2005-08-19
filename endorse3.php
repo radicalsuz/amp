@@ -10,19 +10,19 @@ To Do:  make modular so that  it can be passed  data from new modules
 				write a better sql statement
 *********************/ 
 
-$modid = 6;
+if (!defined( 'AMP_ENDORSE_FORM_ID_DEFAULT' )) define( 'AMP_ENDORSE_FORM_ID_DEFAULT', 1 );
+if (!defined( 'AMP_ENDORSE_MODULE_ID_DEFAULT' )) define( 'AMP_ENDORSE_MODULE_ID_DEFAULT', 1 );
+
+$modid = AMP_ENDORSE_MODULE_ID_DEFAULT;
 $mod_id = (is_numeric($_GET['modtext']))?$_GET['modtext']:67;
-$userdata_modin=(is_numeric($_GET['modin']))?$_GET['modin']:1;
+$userdata_modin=(is_numeric($_GET['modin']))?$_GET['modin']:AMP_ENDORSE_FORM_ID_DEFAULT;
 
 require_once( 'AMP/BaseDB.php' );
 require_once( 'AMP/BaseTemplate.php' );
-require_once('Modules/UDM/Output/userlist_html2.inc.php');
-require_once( 'AMP/UserData.php' );
+#require_once('Modules/UDM/Output/userlist_html2.inc.php');
+require_once( 'AMP/UserData/Set.inc.php' );
 
 #set_error_handler( 'e' );
-
-// Fetch the form instance specified by submitted modin value.
-$udm = new UserData( $dbcon, $userdata_modin );
 
  function udm_endorser_display($data_record) {
 	$output.='<span class ="eventtitle">'; 
@@ -57,19 +57,38 @@ $udm = new UserData( $dbcon, $userdata_modin );
 # $areacalled= $_GET["area"];
 #include area designator for listing
 
-$start_options['item_display_function']="udm_endorser_display";
-$start_options['list_criteria']="publish=1 AND modin=$userdata_modin";
-$start_options['sort_by']="Company";
-$start_options['display_fields']="First_Name, Last_Name, Web_Page, Email, Phone, City, State, Company";
-$udm->authorized=true;
-$endorselist=new UserList_HTML($udm, $start_options);
-if($output= $endorselist->output($dbcon)) {
-	print $output;
+$list_options['display_format']="udm_endorser_display";
+$sort_options['default_sortname']="Organization";
+$sort_options['default_select']="Company";
+$sort_options['default_orderby']="Company";
 
-} else {
-	print $endorselist->error;
+// Fetch the form instance specified by submitted modin value.
+$admin=false;
+$userlist = new UserDataSet( $dbcon, $userdata_modin );
 
+//setup sort
+if (is_array($sort_options)) {
+    $sort = $userlist->getPlugins("Sort");
+    $sort_plugin = current($sort);
+    $sort_plugin->setOptions($sort_options);
 }
+
+//require searching to be possible
+$search = $userlist->getPlugins('Search');
+if (!$search) $userlist->registerPlugin('AMP', 'Search');
+$searchform = $userlist->getPlugins('SearchForm');
+if (!$searchform) $userlist->registerPlugin('Output', 'SearchForm');
+
+//display result list
+$order = null;
+$output=$userlist->output_list('DisplayHTML', $list_options, $order ); 
+
+$intro_id = $userlist->modTemplateID;
+require_once( 'AMP/BaseTemplate.php' );
+if ($intro_id != AMP_CONTENT_INTRO_ID_DEFAULT) require_once( 'AMP/BaseModuleIntro.php' );
+
+print $output;
+
 
 // Append the footer and clean up.
 require_once( 'AMP/BaseFooter.php' );

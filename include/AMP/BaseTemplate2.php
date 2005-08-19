@@ -4,7 +4,6 @@ require_once('AMP/System/Tool/Controls.inc.php');
 require_once('AMP/Content/Page.inc.php' );
 
 if (!defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
-if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
 
 $registry =& AMP_Registry::instance();
 

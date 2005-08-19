@@ -137,6 +137,7 @@ class NavigationManager {
     }
 
     function findNavs_listSection( $target_column = AMP_CONTENT_NAV_SECTION_LIST_FIELD ){
+
         $locationSet = &new NavigationLocationSet( $this->dbcon );
         $parent_set = $this->page->map->getAncestors( $this->page->section_id );
         if (empty($parent_set)) return false;
@@ -147,6 +148,7 @@ class NavigationManager {
             $locationSet->addCriteria( 'position like ' . $this->dbcon->qstr( $position.'%' ));
         }
         $locationSet->readData();
+        trigger_error( $locationSet->_assembleSQL() );
         if (!$locationSet->RecordCount()) return $this->findNavs_default();
 
         foreach( $parent_set as $section_id => $name ) {
