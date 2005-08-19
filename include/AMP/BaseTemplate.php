@@ -1,5 +1,5 @@
 <?php
-if (!defined( AMP_USE_NEW_TEMPLATE_ENGINE )) define ('AMP_USE_NEW_TEMPLATE_ENGINE', false );
+if (!defined( 'AMP_USE_NEW_TEMPLATE_ENGINE' )) define ('AMP_USE_NEW_TEMPLATE_ENGINE', false );
 
 if ( AMP_USE_NEW_TEMPLATE_ENGINE ) {
     require_once( 'AMP/BaseTemplate2.php' );

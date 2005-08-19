@@ -107,7 +107,7 @@ class AMPSystem_Copy {
     function updateParent() {
         if (isset($this->UpdateParent_Field)) {
             $sql = $this->updateSQL( $this->parent->current_copy['id'], array($this->UpdateParent_Field=>$this->current_copy[$this->UpdateParent_Child]), $this->parent->datatable );
-            print $sql.'<BR>';
+            #print $sql.'<BR>';
             $this->dbcon->Execute($sql) or $this->error_throw($this->dbcon->ErrorMsg().'<BR>Update Parent<BR>'.$sql);
         }
     }

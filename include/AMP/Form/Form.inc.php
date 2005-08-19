@@ -356,7 +356,7 @@
         $add_method     =   '_addElement'   . ucfirst( $field_def['type'] );
         $adjust_method  =   '_adjustElement'. ucfirst( $field_def['type'] );
 
-        if (!method_exists ( $this, $add_method    )) $add_method    = "_addElementDefault"; 
+        if (! ( method_exists ( $this, $add_method    ) && $field_def['type']) ) $add_method    = "_addElementDefault"; 
         if (!method_exists ( $this, $adjust_method )) $adjust_method = false;
 
         $fRef = & $this->$add_method( $name, $field_def );
