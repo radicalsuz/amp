@@ -58,7 +58,11 @@
 
 	<item>
 		<label>Update Feeds</label>
-		<href>feeds_update.php</href>
+		<href>calendar_feeds.php?action=update</href>
+	</item>
+	<item>
+		<label>Calendar</label>
+		<href>calendar_gxlist.php</href>
 	</item>
 </calendarfeeds>
 
