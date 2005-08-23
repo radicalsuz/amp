@@ -62,7 +62,7 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 				  "ev:organizer" => $event['contact1'],
 				  "ev:type" => $this->types[$event['typeid']]));
 
-		return $event['datestamp'];
+		return strtotime($event['datestamp']);
 	}
 
 	function add_eventlist_rss(&$rss) {
@@ -71,8 +71,9 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 
 		$timestamp = 0;
 		foreach ($this->calendar->events as $event) {
-			if($event['datestamp'] && ($timestamp < $event['datestamp'])) {
-				$timestamp = $event['datestamp'];
+			$datestamp = strtotime($event['datestamp']);
+			if($datestamp && ($timestamp < $datestamp)) {
+				$timestamp = $datestamp;
 			}
 			$id = $event['id'];
 
