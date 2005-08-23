@@ -22,15 +22,33 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 		$rss->useModule('ev', 'http://purl.org/rss/1.0/modules/event/');
 
 		if ($id = $options['calid']['value']) {
-			$this->add_event_rss($rss, $id);
+			$timestamp = $this->add_event_rss($rss, $id);
 		} else {
-			$this->add_eventlist_rss($rss);
+			$timestamp = $this->add_eventlist_rss($rss);
+		}
+
+		if($timestamp) {
+			$this->httpConditionalGet($timestamp);
 		}
 
 		while(@ob_end_clean());
 		$rss->serialize();
 		exit;
 	}
+
+	function httpConditionalGet($timestamp) {
+		header('Last-Modified: '.($last_modified = gmdate('r', $timestamp)));
+		header('ETag: "'.$timestamp.'"');
+		$client_etag = isset($_SERVER['HTTP_IF_NONE_MATCH'])
+						? $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
+		$client_lm   = isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
+						? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : NULL;
+
+		if( ($client_etag and $client_etag == '"'.$timestamp.'"') #etag
+			or
+			($client_lm and ($client_lm == $last_modified or $timestamp == strtotime($client_lm))) #last-modified
+		) header('HTTP/1.1 304 Not Modified') and exit;
+}
 
 	function add_event_rss(&$rss, $id) {
 
@@ -43,13 +61,19 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 				  "ev:location" => $event['location'],
 				  "ev:organizer" => $event['contact1'],
 				  "ev:type" => $this->types[$event['typeid']]));
+
+		return $event['datestamp'];
 	}
 
 	function add_eventlist_rss(&$rss) {
 
 		$this->calendar->doAction('Search');
 
+		$timestamp = 0;
 		foreach ($this->calendar->events as $event) {
+			if($event['datestamp'] && ($timestamp < $event['datestamp'])) {
+				$timestamp = $event['datestamp'];
+			}
 			$id = $event['id'];
 
 			$item = 
@@ -61,6 +85,8 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 				  "ev:type" => $this->types[$event['typeid']]);
 			$rss->addItem(AMP_SITE_URL . "calendar.php?calid=$id", $event['event'], $item);
 		}
+
+		return $timestamp;
 	}
 
 /*
