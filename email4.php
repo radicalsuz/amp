@@ -1,4 +1,10 @@
 <?php  
+if (!defined( 'AMP_FORM_ID_EMAIL' )) define( 'AMP_FORM_ID_EMAIL', 3 );
+require_once( 'AMP/BaseDB.php' );
+require_once( 'AMP/Content/Page/Urls.inc.php' );
+ampredirect( AMP_URL_AddVars( AMP_CONTENT_URL_FORM, "modin=".AMP_FORM_ID_EMAIL ));
+/*
+
 $modid=9;
 $source = 11;
 $enteredby =2;
@@ -64,7 +70,7 @@ if ($emailck->Fields("id") == NULL){
   require ("DBConnections/insetstuff.php");
   require ("DBConnections/dataactions.php");
  } */
-
+/*
 $MM_editTable  = "contacts2";
   ##add sourceid and enteredby and date enetered
    $MM_fieldsStr = "firstname|value|email|value|lastname|value|organization|value|address|value|address2|value|city|value|state|value|zip|value|country|value|phone|value|fax|value|website|value|enteredby|value|sourceid|value|notes|value";
@@ -243,4 +249,6 @@ function addFieldToCheck(value,name) {
 <?php }
 
  
- include("AMP/BaseFooter.php"); ?>
+ include("AMP/BaseFooter.php"); 
+ */
+?>

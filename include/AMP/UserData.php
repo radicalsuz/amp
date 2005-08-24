@@ -836,7 +836,7 @@ class UserData {
         $sql  = "SELECT id, namespace, action FROM userdata_plugins WHERE instance_id=";
         $sql .= $dbcon->qstr( $this->instance ) . " AND active='1' ORDER BY priority";
 
-        if (isset( $_GET['debug_plugins'] )) AMP_DebugSQL( $sql, get_class($this));
+        if (AMP_DISPLAYMODE_DEBUG_PLUGINS) AMP_DebugSQL( $sql, get_class($this));
 
         $rs = $dbcon->CacheExecute( $sql ) or
             die( "Couldn't register module data: " . $dbcon->ErrorMsg() );

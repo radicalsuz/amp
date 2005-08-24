@@ -31,7 +31,7 @@
 
     function readData() {
         $sql = $this->_assembleSQL();
-        if (isset($_REQUEST['debug'])) print get_class($this).':<BR>'.$sql.'<P>';
+        if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)); 
         if ($this->source = $this->dbcon->CacheExecute($sql)) {
             return true;
         }
@@ -66,7 +66,12 @@
         $this->sort = array();
 
         if (is_string($expression_set)) return $this->addSort( $expression_set, false );
-        if ($hold_priority) $expression_set = array_reverse( $expression_set, true );
+				/*
+        if ($hold_priority) {
+						$expression_set = array_reverse( $expression_set, true );
+						AMP_varDump( $expression_set );
+				}
+				*/
 
         foreach ($expression_set as $exp) {
             $this->addSort ( $exp, false);
@@ -145,7 +150,7 @@
     function getGroupedIndex($column) {
         $sql = "SELECT $column, count(" . $this->id_field . ") as qty FROM "
             . $this->datatable . $this->_makeCriteria() . " GROUP BY $column";
-        if (isset($_GET['debug'])) AMP_DebugSQL( $sql, get_class( $this ));
+        if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." index"); 
         return $this->dbcon->CacheGetAssoc($sql);
     }
 

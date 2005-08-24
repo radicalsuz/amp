@@ -37,7 +37,7 @@ class AMPSystem_LookupFactory {
         if ($lookup->criteria) $sql .= " where ". $lookup->criteria;
         if ($lookup->sortby) $sql .= " order by ". $lookup->sortby;
 
-        if (isset($_GET['debug_lookups'])) AMP_DebugSQL( $sql, get_class( $lookup ));
+        if (AMP_DISPLAYMODE_DEBUG_LOOKUPS) AMP_DebugSQL( $sql, get_class( $lookup ));
         return $sql;
     }
 }

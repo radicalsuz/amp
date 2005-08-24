@@ -116,7 +116,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 
 		$index_sql="SELECT count(id) as qty from userdata ";
         if (is_array($criteria)) $index_sql.="where ".join(" AND ", $criteria);
-        if ($_REQUEST['debug']) print 'count:<BR>'.$index_sql."<BR>";
+        if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $index_sql,  "udmcount");
         if ($indexset=$this->dbcon->CacheExecute($index_sql)) {
 		    $total_qty=$indexset->Fields("qty");
             return $total_qty;
@@ -138,7 +138,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
             $sql.=($return_qty!="*")?" LIMIT ".strval($offset). ", ".strval($return_qty):"";
         } 
 
-		if ($_GET['debug']) print $sql."<BR>";
+        if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $sql,  "udmsearch");
 
 		if ($dataset=$this->dbcon->CacheExecute($sql)) {
             return $dataset;

@@ -2,6 +2,7 @@
 require_once ( 'AMP/Content/Page/Urls.inc.php' );
 define ( 'AMP_CONTENT_LISTTYPE_CLASS', 'class' );
 define ( 'AMP_CONTENT_LISTTYPE_SECTION', 'type' );
+define ( 'MEMCACHE_KEY_CONTENTMAP', 'ContentMap' );
 
 class AMPContent_Map {
 
@@ -9,6 +10,7 @@ class AMPContent_Map {
     var $map;
     var $fields = array("id","type","usenav","textorder","parent", "secure", "templateid", "css");
     var $dataset;
+    var $childset;
     var $top;
 
     function AMPContent_Map() {
@@ -17,21 +19,25 @@ class AMPContent_Map {
     function init( &$dbcon, $top = null ) {
         $this->dbcon = &$dbcon;
         if (!isset($top) || !$top ) $top = 1;
+        $this->top = $top;
+
         $this->buildMap( $top );
     }
 
-    function buildMap( $top ) {
-        $this->top = $top;
+    function buildMap() {
         $sql = "Select " . join(", ", $this->fields ) ." from articletype order by parent, textorder, type";
-        $this->dataset = $this->dbcon->CacheGetAssoc( $sql );
-        $this->buildLevel( $top );
+        $this->dataset = &$this->dbcon->CacheGetAssoc( $sql );
+        $this->childset = &AMPContent_Lookup::instance( 'sectionParents' );
+        $this->buildLevel( $this->top );
     }
 
-    function buildLevel( $parent, $recursive=true ) {
-        foreach( $this->dataset as $id => $mapitem ) {
-            if( $mapitem['parent'] != $parent ) continue;
-            $this->map[$parent][] = $id;
-            if ($recursive) $this->buildLevel( $id );
+    function buildLevel( $current_parent, $recursive=true ) {
+        if (!( $keys = array_keys( $this->childset, $current_parent ) )) return false;
+
+        $this->map[$current_parent] = $keys;
+        foreach( $keys as $child_id ) {
+            unset( $this->childset[ $child_id ] );
+            if ($recursive) $this->buildLevel( $child_id );
         }
     }
 
@@ -99,6 +105,10 @@ class AMPContent_Map {
         return $option_set;
     }
 
+    function hasMap() {
+        return (is_array( $this->map ));
+    }
+
     function selectSiteTree() {
         return array( $this->top, $GLOBALS['SiteName']) + $this->selectOptions();
     }
@@ -109,6 +119,7 @@ class AMPContent_Map {
         if(!$content_map) $content_map = new AMPContent_Map();
         return $content_map;
     }
+
 
     function getMenu( $startLevel = null, $itemtype = 'ArticleList' ) {
         $menu_item_method = '_menuItem'. $itemtype;

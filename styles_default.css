@@ -2,12 +2,17 @@
 
 div.list_pager {
 		text-align: right;
-		float: right;
-		width: 100%;
+		/*float: right; */
+		width: 100%; 
 		position: relative;
 		font-size: 11px;
-		display: inline;
+		display: block;
 		padding-bottom: 10px;
+}
+
+div.list_pager a.pager_link {
+		font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 9px
+		margin-bottom: 5px;
 }
 
 .AMPComponent_hidden {
@@ -23,3 +28,5 @@ div.list_pager {
 
 a.standout {
 		text-decoration: none;
+}
+

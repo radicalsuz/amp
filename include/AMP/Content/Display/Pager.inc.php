@@ -19,7 +19,7 @@ class AMPContent_Pager extends AMPSystem_ListPager {
         $this->getSourceTotal();
         $this->page_total = $this->_offset + $this->_qty;
         return  '<div class="list_pager">' . 
-                $this->_HTML_inSpan( $this->_positionText(), 'go') . 
+                $this->_HTML_inSpan( $this->_positionText(), 'pager_link') . 
                 str_repeat( '&nbsp;', 2 ) .  $this->_HTML_newline() . 
                 $this->_pageLinks() .
                 '</div><BR>';
@@ -28,7 +28,7 @@ class AMPContent_Pager extends AMPSystem_ListPager {
     function _HTML_topNotice( $text = null ) {
         $output = "";
         if (isset($text)) $output = $text. '&nbsp;:&nbsp;';
-        return $this->_HTML_inDiv( $this->_HTML_inSpan( $output .$this->_positionText(), 'go' ), array('class'=>'list_pager' ) );
+        return $this->_HTML_inDiv( $this->_HTML_inSpan( $output .$this->_positionText(), 'pager_link' ), array('class'=>'list_pager' ) );
     }
 
 
@@ -36,7 +36,7 @@ class AMPContent_Pager extends AMPSystem_ListPager {
         $this->readPosition();
         if ( (!($this->source_total> $this->page_total)) && !$this->getOffset() ) return false;
         return  PARENT::_positionText();
-        #return $this->_HTML_inSpan( PARENT::_positionText(), 'go' );
+        #return $this->_HTML_inSpan( PARENT::_positionText(), 'pager_link' );
     }
 
     function _pageLinks() {
@@ -50,20 +50,20 @@ class AMPContent_Pager extends AMPSystem_ListPager {
     function _firstPageLink() {
         if (!$this->_offset) return false;
         $href = $this->offsetURL( 0 ); 
-        return '<a class="go" href="'. $href . '">&laquo; First Page</a>&nbsp;';
+        return '<a class="pager_link" href="'. $href . '">&laquo; First Page</a>&nbsp;';
     }
 
     function _lastPageLink() {
         if ($this->page_total >= $this->source_total ) return false;
         $href = $this->offsetURL( $this->source_total - $this->_qty );
 
-        return '<a class="go" href="'. $href . '">Last Page &raquo;</a>&nbsp;';
+        return '<a class="pager_link" href="'. $href . '">Last Page &raquo;</a>&nbsp;';
     }
 
     function _allItemsLink() {
         if ($this->page_total >= $this->source_total && (!$this->getOffset()) ) return false;
         $href = AMP_URL_AddVars( $this->offsetURL( 0 ), "all=1" );
-        return '<a class="go" href="'. $href . '">&laquo; Show Complete List &raquo;</a>&nbsp;';
+        return '<a class="pager_link" href="'. $href . '">&laquo; Show Complete List &raquo;</a>&nbsp;';
     }
 
     function getSubsetTotal( $subset_field, $subset_value ) {

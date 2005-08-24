@@ -33,8 +33,8 @@ $SystemSettings = $getsysvars->FetchRow();
 
 $SiteName            = $SystemSettings["websitename"];
 $Web_url             = $SystemSettings["basepath"];
-//Set caching to 0 for AMP-authenticated system side users
-$cacheSecs           = (isset($_SERVER['REMOTE_USER']) && ($_SERVER['REMOTE_USER'])) ? 1 : $SystemSettings["cacheSecs"];
+#$cacheSecs           = (isset($_SERVER['REMOTE_USER']) && ($_SERVER['REMOTE_USER'])) ? 1 : $SystemSettings["cacheSecs"];
+$cacheSecs           = $SystemSettings["cacheSecs"];
 $admEmail            = $SystemSettings["emfaq"];			//needed for admin only
 $MM_email_usersubmit = $SystemSettings["emendorse"];			//User Submitted Article
 $MM_email_from       = $SystemSettings["emfrom"];			//return email web sent emails
@@ -59,6 +59,7 @@ $reg_manager->setEntry( AMP_REGISTRY_CONTENT_TEMPLATE_ID_DEFAULT, $SystemSetting
 define('AMP_SITE_URL', $SystemSettings['basepath']);
 define('AMP_SITE_NAME', $SystemSettings['websitename']);
 define('AMP_SITE_META_DESCRIPTION', $SystemSettings['metadescription']);
+define('AMP_SITE_CACHE_TIMEOUT', $cacheSecs );
 
 		
 #SET DATABASE CACHING
@@ -82,6 +83,11 @@ define('ADODB_REPLACE_UPDATED', 1);
 define('AMP_NAV_NO_LIMIT', 700);
 define('AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS', (isset($MM_reltype)&&$MM_reltype) );
 define('AMP_NULL_DATE_VALUE', '0000-00-00' );
+define('AMP_DISPLAYMODE_DEBUG', (isset($_GET['debug']) && $_GET['debug']));
+define('AMP_DISPLAYMODE_DEBUG_PLUGINS', (isset($_GET['debug_plugins']) && $_GET['debug_plugins']));
+define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups']) && $_GET['debug_lookups']));
+define('AMP_DISPLAYMODE_DEBUG_NAVS', (isset($_GET['debug_navs']) && $_GET['debug_navs']));
+
 if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
 
 ?>

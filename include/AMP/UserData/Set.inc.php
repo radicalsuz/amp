@@ -215,7 +215,7 @@ class UserDataSet extends UserData {
     //are confirmed-working
 	function getSet($options) {
 		$list_sql=$this->_render_sql();
-		if ($_REQUEST['debug']==1) print $list_sql;
+		if (AMP_DISPLAYMODE_DEBUG) AMP_DebugSQL( $list_sql, get_class( $this ). $this->instance );
 		$this->results=$this->dbcon->CacheGetAll($list_sql);
 		return (is_array($this->results));
 	}

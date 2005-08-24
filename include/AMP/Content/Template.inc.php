@@ -10,6 +10,7 @@
  *
  * * * * * */
 
+define ( 'MEMCACHE_KEY_TEMPLATE' , 'CurrentTemplate' );
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'AMP/Content/Nav/Manager.inc.php' );
 
@@ -39,7 +40,9 @@ class AMPContent_Template extends AMPSystem_Data_Item {
             if (! $this->containsNav( $position ) ) continue;
             $this->_placeNav( $position, $this->_navManager->output( strtoupper($prefix) ) );
         }
+
     }
+
 
     #############################
     ### public data accessors ###

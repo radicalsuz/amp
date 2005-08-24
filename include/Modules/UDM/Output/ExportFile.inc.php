@@ -78,7 +78,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
 	    	
         
-        if (!isset($_GET['debug'])) { 
+        if (!AMP_DISPLAYMODE_DEBUG) { 
             header("Content-type: application/".$this->file_extension);
             header("Content-Disposition: attachment; filename=".$this->setFileName());
         }

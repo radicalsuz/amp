@@ -1,5 +1,6 @@
 <?php
 
+define ( 'MEMCACHE_KEY_CONTENT' , 'PageContent' );
 class AMPContent_Manager {
 
     var $_html_body;
@@ -40,11 +41,11 @@ class AMPContent_Manager {
     }
 
     function output() {
-        return  $this->_html_body .
+        $output=$this->_html_body .
                 $this->doDisplays().
                 $this->_html_footer ;
+        return $output;
     }
-
 
     ######################################
     ### public display control methods ###

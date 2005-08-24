@@ -45,7 +45,7 @@ class AMPContent_Page {
         $this->dbcon = &$dbcon;
         
         $this->registry =           & AMP_Registry::instance();
-        $this->map =                & AMPContent_Map::instance();
+        $this->map =                & AMPContent_Map_instance();
         $this->header =         & new AMPContent_Header( $this );
         $this->contentManager = &AMPContent_Manager::instance();
     }
@@ -93,6 +93,7 @@ class AMPContent_Page {
         if (!$article->hasData()) ampredirect( AMP_CONTENT_URL_SEARCH );
 
         if ($target = $article->getRedirect() ) ampredirect($target);
+        $this->article_id = $article_id;
         $this->section_id = $article->getParent();
         $this->class_id = $article->getClass();
         $this->globalizeArticleVars( $article );

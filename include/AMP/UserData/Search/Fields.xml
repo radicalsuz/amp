@@ -1,0 +1,39 @@
+<array>
+    <start_text>
+        <type>header</type>
+        <default>Search</default>
+        <attr><class>searchform_element</class></attr>
+    </start_text>
+    <country>
+        <type>select</type>
+        <label>By Country</label>
+        <public>1</public>
+        <attr><class>searchform_element</class></attr>
+    </country>
+    <state>
+        <type>select</type>
+        <label>By State</label>
+        <public>1</public>
+        <attr><class>searchform_element</class></attr>
+    </state>
+    <bydate>
+        <type>select</type>
+        <separator>newrow</separator>
+        <label>Entered Since: </label>
+        <attr><class>searchform_element</class></attr>
+    </bydate>
+    <publish>
+        <type>select</type>
+        <label>Status</label>
+        <attr><class>searchform_element</class></attr>
+    </publish>
+    <modin>
+        <type>hidden</type>
+        <public>1</public>
+    </modin>
+    <sortby>
+        <type>hidden</type>
+        <public>1</public>
+        <attr><class>searchform_element</class></attr>
+    </sortby>
+</array>

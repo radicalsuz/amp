@@ -148,7 +148,6 @@ class NavigationManager {
             $locationSet->addCriteria( 'position like ' . $this->dbcon->qstr( $position.'%' ));
         }
         $locationSet->readData();
-        trigger_error( $locationSet->_assembleSQL() );
         if (!$locationSet->RecordCount()) return $this->findNavs_default();
 
         foreach( $parent_set as $section_id => $name ) {

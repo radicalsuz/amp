@@ -67,7 +67,7 @@ class NavEngine_SQL extends NavEngine {
             $sql .= $limit;
         }
 
-        if (isset($_GET['debug_nav'])) AMP_DebugSQL( $sql, $this->nav->getName() );
+        if (AMP_DISPLAYMODE_DEBUG_NAVS) AMP_DebugSQL( $sql, $this->nav->getName() );
         if ($result = $this->nav->dbcon->CacheGetArray( $sql )) {
             $this->_sql_result = $result;
             return $result;
@@ -83,7 +83,7 @@ class NavEngine_SQL extends NavEngine {
         if ($start_crit === FALSE) return;
 
         $count_sql = "SELECT count(*) as AMPqty " . substr( $sql, $start_crit );
-        if (isset($_GET['debug_nav'])) AMP_DebugSQL( $count_sql, ($this->nav->getName() . " count"));
+        if (AMP_DISPLAYMODE_DEBUG_NAVS) AMP_DebugSQL( $count_sql, ($this->nav->getName() . " count"));
         if ($result = $this->nav->dbcon->CacheExecute( $count_sql )) {
             return $this->nav->setCount( $result->Fields( "AMPqty" ));
         }

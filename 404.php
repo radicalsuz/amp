@@ -6,13 +6,22 @@ and no resulting page is returned from the database.
 Searches redirect table for matching pages, then sends 
 the user to search page if no matches are found.*/
 
-require_once("AMP/BaseDB.php");
 $no_search_extensions = array( 'jpeg', 'jpg', 'gif', 'png' );
+	 
+$extension_start = strrpos( $_SERVER['PHP_SELF'], '.' );
+$extension = substr( $_SERVER['PHP_SELF'], $extension_start+1 );
+
+if (array_search($extension, $no_search_extensions) !== FALSE ) {
+    header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found' );
+		exit;
+}
+
 
 // Check for a custom handler.
 $uri = $_SERVER['REQUEST_URI'];
 $pos = strpos( $uri, '?' );
 $PHP_SELF = $_SERVER['PHP_SELF'] = substr( $uri, 1, ($pos) ? $pos - 1 : strlen( $uri ) - 1 );
+require_once("AMP/BaseDB.php");
 
 if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
     parse_str( $_SERVER['REDIRECT_QUERY_STRING'], $_GET );

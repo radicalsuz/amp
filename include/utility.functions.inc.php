@@ -769,7 +769,42 @@ if (!function_exists('AMP_trimText')) {
         return substr( $trimmed, 0, $pos ) . $end_item;
     }
 }
+if (!function_exists( 'AMPContent_Map_instance' )) {
+    function &AMPContent_Map_instance( $map_root = AMP_CONTENT_MAP_ROOT_SECTION ) {
+				$content_map = &AMPContent_Map::instance();
 
-        
+				if ( $content_map->hasMap() ) return $content_map;
+				$content_map->init( AMP_Registry::getDbcon(), $map_root );
 
+        return $content_map;
+    }
+}
+
+if (!function_exists( 'AMP_getCachedSiteItem' )) {
+    function &AMP_getCachedSiteItem( $item_key ) {
+        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
+        return $memcache->getSiteItem( $item_key );
+    }
+}
+
+if (!function_exists( 'AMP_cacheSiteItem' )) {
+    function AMP_cacheSiteItem( $item_key, $item ) {
+        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
+        return $memcache->setSiteItem( $item_key, $item );
+    }
+}
+
+if (!function_exists( 'AMP_getCachedPageItem' )) {
+    function &AMP_getCachedPageItem( $item_key ) {
+        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
+        return $memcache->getPageItem( $item_key );
+    }
+}
+
+if (!function_exists( 'AMP_cachePageItem' )) {
+    function AMP_cachePageItem( $item_key, $item ) {
+        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
+        return $memcache->setPageItem( $item_key, $item );
+    }
+}
 ?>

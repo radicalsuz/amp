@@ -31,7 +31,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function init ( &$dbcon, $item_id ) {
         $this->dbcon = & $dbcon;
-        $this->_itemdata_keys = $this->dbcon->MetaColumnNames( $this->datatable );
+        $this->_itemdata_keys = $this->_getColumnNames( $this->datatable );
 		$this->_allowed_keys = $this->_itemdata_keys;
         if (isset($item_id) && $item_id) $this->readData( $item_id );
     }
@@ -49,9 +49,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             $this->setData( $itemdata );
             return true;
         }
-        if (isset($_REQUEST['debug'])) print get_class($this) .": ". $sql .'<BR><BR>';
 
-        trigger_error ( get_class( $this ) . ' failed to read the database :' . $this->dbcon->ErrorMsg() );
+        if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)); 
+
+        if ($dbcon->ErrorMsg() ) trigger_error ( get_class( $this ) . ' failed to read the database :' . $this->dbcon->ErrorMsg() );
         return false;
     }
 

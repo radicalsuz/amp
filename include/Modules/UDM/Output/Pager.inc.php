@@ -190,7 +190,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         if (is_array($criteria)) $index_sql.="where ".join(" AND ", $criteria);
         if (isset($orderby)) $index_sql.= " ORDER BY ".$orderby;
         
-        if ($_REQUEST['debug']) print "index:<BR>".$index_sql."<P>";
+        if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $index_sql,  "udm_pager");
 
 		if($indexset=&$this->dbcon->CacheGetAll($index_sql))  return $indexset;
         else return false;

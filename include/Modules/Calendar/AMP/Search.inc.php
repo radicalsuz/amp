@@ -98,7 +98,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
         }
 
 		$index_sql="SELECT count(id) as qty from calendar where ".join(" AND ", $criteria);
-        if ($_REQUEST['debug']) print 'count:<BR>'.$index_sql."<BR>";
+        if (AMP_DISPLAYMODE_DEBUG) AMP_DebugSQL( $index_sql, "calendarCount" );
         if ($indexset=$this->dbcon->Execute($index_sql)) {
 		    $total_qty=$indexset->Fields("qty");
             return $total_qty;
@@ -117,7 +117,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
         if (!isset($orderby)) $orderby=$this->sortby['orderby'];
 		$index_sql="SELECT id from calendar where ".join(" AND ", $criteria);
         if (isset($orderby)) $index_sql.= " ORDER BY ".$orderby;
-        if ($_REQUEST['debug']) print "index1:<BR>".$index_sql."<P>";
+        if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $index_sql,  "calendar_index1");
 		if($indexset=&$this->dbcon->CacheGetAll($index_sql))  {
             for ($n=0;$n<=count($indexset);$n=$n+$qty) {
                 $index_jumpset[]=$indexset[$n]['id'];
@@ -125,7 +125,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
             $index_ids=join(",", $index_jumpset);
             $index_sql="SELECT ".$index_col." FROM calendar where id in(".$index_ids.")";
             if (isset($orderby)) $index_sql.= " ORDER BY ".$orderby;
-            if ($_REQUEST['debug']) print "index2:<BR>".$index_sql."<P>";
+            if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $index_sql,  "calendar_index2");
             if($indexset=&$this->dbcon->CacheGetAll($index_sql)) return $indexset;
             else return false;
         } else { 
@@ -141,7 +141,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
         } else {
             $sql.=($return_qty!="*")?" LIMIT ".strval($offset). ", ".strval($return_qty):"";
         } 
-		if ($_GET['debug']) print "main:<BR>".$sql."<P>";
+        if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $sql,  "calendar_main");
 		if ($eventset=$this->dbcon->CacheGetAll($sql)) {
             return $eventset;
         } else {

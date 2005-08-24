@@ -1,49 +1,38 @@
 <?php
- /*********************
-06-11-2003  v3.01
-Module:  Template
-Description:  display footer and right nav of template. called from all display pages
-To Do: 
 
-*********************/ 
-if (AMP_USE_NEW_TEMPLATE_ENGINE) {
+/* * * * * * * * * *
+ * AMP Base Footer
+ *
+ * Send buffers to content Manager for processing
+ * return final output
+ *
+ */
+
+if (AMP_USE_OLD_CONTENT_ENGINE) {
     require_once( 'AMP/BaseFooter2.php' );
-} else {
+    exit;
+}
 
+require_once ('AMP/Content/Page.inc.php' );
+
+$currentPage = AMPContent_Page::instance();
 if (isset($modulefooter) && $modulefooter){
-	echo $modulefooter;
-	$modulefooter=NULL;
+    $currentPage->addtoContentFooter( $modulefooter );
 }
 
-$bodydata = ob_get_clean();
+$currentPage->setContent( ob_get_clean() );
 
-if (!isset($bodydata2)) $bodydata2 = '';
-$bodydata =$bodydata2.$bodydata;
+$displayType = AMP_CONTENT_PAGE_DISPLAY_DEFAULT;
 
-$sidelistcss="sidelist";
+if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) $displayType = AMP_CONTENT_PAGE_DISPLAY_PRINTERSAFE ;
+    
+$final_page_html = $currentPage->output( $displayType );
 
-include("AMP/Nav/navselect.php"); 
-$navside="l";
-$leftnav  = getthenavs($navside);
+print $final_page_html;
 
-$navside= "r";
-$rightnav  = getthenavs($navside);
-
-
-$htmltemplate = evalhtml($htmltemplate);
-$htmltemplate2 = str_replace("[-right nav-]", $rightnav, $htmltemplate);
-$htmltemplate2 = str_replace("[-left nav-]", $leftnav, $htmltemplate2);
-$htmltemplate2 = str_replace("[-body-]", $bodydata, $htmltemplate2);
-
-$htmloutput = $htmlheader . $htmltemplate2;
-
-if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) {
-	$printer_safe_top= "<div class=printer_safe_top></div>";
-	echo $htmlheader.$printer_safe_top.$bodydata;
-} else {
-    echo $htmloutput;
+if (AMP_SITE_MEMCACHE_ON && isset($GLOBALS['cached_page'])) {
+    $cached_page->save( $final_page_html );
 }
 
-@ob_end_flush();
-}
+#ob_end_flush();
 ?>

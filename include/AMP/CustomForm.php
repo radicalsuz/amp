@@ -84,7 +84,6 @@ class AMP_CustomForm {
         $sql = "Select ".join(",",$fieldset)." from ".$this->datatable;
         if (isset($id) && $id) {
             $sql.=" where id=".$id;
-            if ($_REQUEST['debug']) print $sql;
             $datablock = $this->dbcon->Execute($sql);
             $dataset = $datablock->FetchRow();
             $this->form->setDefaults($dataset);
@@ -95,9 +94,9 @@ class AMP_CustomForm {
             if (isset($this->list['sort'])) {
                 $sql .= " ORDER BY ".$this->list['sort'];
             }
-            if ($_REQUEST['debug']) print $sql;
             $dataset = $this->dbcon->CacheGetAll($sql);
         }
+        if (AMP_DISPLAYMODE_DEBUG) AMP_DebugSQL( $sql, get_class($this));
         return $dataset;
     }
 

@@ -1,7 +1,7 @@
 <?php
 
-require("AMP/System/Base.php");
-require("AMP/System/BaseTemplate.php");
+require_once("AMP/System/Base.php");
+require_once("AMP/System/BaseTemplate.php");
 
 $template = &new AMPSystem_BaseTemplate();
 $template->setToolName( 'system' );
@@ -10,6 +10,12 @@ $flush_command = "rm -f `find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' 
 #$flush_command2 = "rm -f `find ". AMP_BASE_PATH . DIRECTORY_SEPARATOR . 'cache' ." -name adodb_*.cache`"; 
 
 system($flush_command);
+
+if (AMP_SITE_MEMCACHE_ON) {
+    require_once("AMP/System/Memcache.inc.php");
+    $memcache = &AMPSystem_Memcache::instance();
+    $memcache->memcache_connection->flush();
+}
 //$dbcon->CacheFlush() or DIE($dbcon->ErrorMsg()); //flushes adodb cache
 //$dbcon->CacheFlush();
 

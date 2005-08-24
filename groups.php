@@ -10,6 +10,7 @@
  *
  *****/
 $modid=5;
+if (!defined( 'AMP_FORM_ID_GROUPS' )) define( 'AMP_FORM_ID_GROUPS', 2 );
 require_once( 'AMP/BaseDB.php' );
 require_once('AMP/UserData/Set.inc.php');
 
@@ -66,7 +67,7 @@ switch ($gdisplay) {
 
 
 
-if (!(isset($_REQUEST['modin']) && $_REQUEST['modin'])) $_REQUEST['modin'] = 2;
+if (!(isset($_REQUEST['modin']) && $_REQUEST['modin'])) $_REQUEST['modin'] = AMP_FORM_ID_GROUPS;
 $modin=$_REQUEST['modin'];
 
 $admin=false;

@@ -101,7 +101,10 @@ ADOLoadCode(AMP_DB_TYPE);
 $dbcon =& ADONewConnection( AMP_DB_TYPE );
 $dbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME );
 
+if (!defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
+
 require_once('AMP/Registry.php');
+if (AMP_SITE_MEMCACHE_ON) require_once('AMP/System/Memcache.inc.php');
 require_once('AMP/System/Lookups.inc.php');
 $registry =& AMP_Registry::instance();
 $registry->setDbcon($dbcon);
@@ -110,6 +113,8 @@ $lookup_factory->init( $dbcon );
 
 require_once('AMP/LegacyRegistry.inc.php');
 
+
+if (!defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
 if (!defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
 if ( AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
 ?>

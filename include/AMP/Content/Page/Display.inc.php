@@ -24,9 +24,12 @@ class AMPContent_PageDisplay {
     }
 
     function output_Standard() {
+
         $this->page->template->placeNavigation();
-        return  $this->page->header->output().
+        $output =  
+                $this->page->header->output().
                 $this->page->template->execute( $this->page->contentManager->output() );
+        return $output;
     }
 
     function output_Content() {

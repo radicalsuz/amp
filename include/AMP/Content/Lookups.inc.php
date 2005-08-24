@@ -71,4 +71,14 @@ class AMPContentLookup_SectionHeaders extends AMPContent_Lookup {
 
 }
 
+class AMPContentLookup_SectionParents extends AMPContent_Lookup {
+
+    var $datatable = "articletype";
+    var $result_field = "parent";
+
+    function AMPContentLookup_SectionParents() {
+        $this->init();
+    }
+}
+
 ?>

@@ -20,12 +20,17 @@ class SectionContentSource_ArticlesAggregator extends SectionContentSource_Artic
 
         $base_section = "type=".$this->_section->id ;
         if (!($child_ids = $this->_getAllSubsections())) return $base_section;
+				return "(" . $child_ids . ' OR '. $base_section . ")";
     }
 
     function _getAllSubsections() {
         if (!($id_set = $this->_map->getDescendants( $this->_section->id ))) return false;
         return "type in (" . join( ", ", ( $id_set) ). ")";
     }
+
+		function _setSort() {
+				$this->_setBaseSort();
+		}
 
 }
 ?>
