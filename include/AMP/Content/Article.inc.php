@@ -89,6 +89,11 @@ class Article extends AMPSystem_Data_Item {
         return $this->getData( 'sourceurl' );
     }
 
+    function getMoreLinkURL() {
+        if (!$this->getData('usemore')) return false;
+        return $this->getData( 'morelink' );
+    }
+
     function getImageFileName() {
         if (!$this->getData( 'picuse' )) return false;
         return $this->getData( 'picture' );
@@ -121,8 +126,13 @@ class Article extends AMPSystem_Data_Item {
                         'caption'   =>  $this->getData( 'piccap' ),
                         'alignment' =>  $this->getData( 'alignment' ),
                         'alttag'    =>  $this->getData( 'alttag' ),
-                        'image_size'=>  $this->getData( 'pselection' ) );
+                        'image_size'=>  $this->getImageClass() );
     }
+
+    function getImageClass() {
+        return $this->getData( 'pselection' );
+    }
+
 
     function allowsComments() {
         return $this->getData( 'comments' );

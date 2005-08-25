@@ -21,7 +21,7 @@ class Content_Image {
 
     function setFile( $filename ){
         $this->filename = $filename;
-        $this->setSize(getimagesize( $this->getPath() )); 
+        $this->setSize(getimagesize( $this->getPath( $this->getImageClass() ) )); 
     }
 
     function setSize( $size_data ) {
@@ -48,6 +48,19 @@ class Content_Image {
         if ($align = $this->getAlignment() ) $extra = array( 'align' => $align );
         return $this->style_def + $extra;
     }
+
+    function setStyleAttrs( $styledef ) {
+        if (!is_array($styledef)) return false;
+        foreach( $styledef as $styleKey => $styleItem ) {
+            $this->style_def[ $styleKey ] = $styleItem;
+        }
+    }
+
+    function getImageClass() {
+        if(!$picSize = $this->getData( 'image_size' )) return AMP_IMAGE_CLASS_OPTIMIZED;
+        return $picSize;
+    }
+
 
     function getAltTag() {
         return $this->getData( 'alttag' );

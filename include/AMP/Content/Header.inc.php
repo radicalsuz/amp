@@ -80,7 +80,7 @@ class AMPContent_Header {
         foreach ( $this->link_rel as $relationship => $url ) {
             $output .= "<link rel=\"" . $relationship . "\" href=\"" . $url . "\">\n";
         }
-        return $output . $this->_HTML_FavIcon() . $this->_HTML_styleSheets();
+        return $output . $this->_HTML_FavIcon() . $this->_HTML_styleSheets() . $this->_HTML_feed();
     }
 
     function _HTML_FavIcon() {
@@ -91,6 +91,10 @@ class AMPContent_Header {
 
     function _HTML_pageTitle() {
         return "<title>". $this->_pageTitle ."</title>\n";
+    }
+
+    function _HTML_feed() {
+        return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"".AMP_SITE_URL.AMP_CONTENT_URL_RSSFEED."\">";
     }
 
 

@@ -26,6 +26,7 @@ class ContentClass extends AMPSystem_Data_Item {
         $this->_contents->setSort( array( 'date DESC', 'id DESC' ) );
 
         $criteria_set = new AMPContent_DisplayCriteria();
+        $criteria_set->allowClass( $this->id );
         $criteria_set->clean( $this->_contents );
 
         return $this->_contents;

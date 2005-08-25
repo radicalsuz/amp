@@ -29,8 +29,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     function init( &$source ) {
         $this->_source = &$source;
-        if (!$this->_pager_active) return;
-        $this->_pager = &new AMPContent_Pager( $this->_source );
+        if ($this->_pager_active) $this->_pager = &new AMPContent_Pager( $this->_source );
         $this->_source->readData();
     }
 
@@ -39,7 +38,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         $sourceItems = &$this->_buildItems( $this->_source->getArray() );
 
         return  $this->_HTML_listing( $sourceItems ). 
-                ( $this->_pager_display ? $this->_pager->execute() : false ) ;
+                ( ($this->_pager_active && $this->_pager_display ) ? $this->_pager->execute() : false ) ;
 
     }
 

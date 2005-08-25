@@ -81,6 +81,7 @@ class AMPContent_Page {
 
         $this->globalizeIntroVars( $introtext );
         $this->introtext = &$introtext;
+        $this->intro_id = $introtext->id;
         if ($template = $introtext->getTemplate()) $this->template_id = $template;
         if ($section = $introtext->getSection())  {
             $this->section_id = $template;

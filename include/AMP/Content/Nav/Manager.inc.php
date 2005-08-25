@@ -113,12 +113,13 @@ class NavigationManager {
     }
 
     function findNavs_IntroText() {
-        return $this->findNavs_standardBase( 'moduleid', $this->page->intro_id );
+        return $this->findNavs_standardBase( 'moduleid', $this->page->getIntroId() );
     }
 
     function findNavs_default() {
         return $this->findNavs_standardBase( NAVIGATION_STANDARD_SEARCH , NAVIGATION_STANDARD_VALUE);
     }
+
 
     function findNavs_standardBase( $target_field, $target_value ) {
         $locationSet = &new NavigationLocationSet( $this->dbcon );
@@ -134,6 +135,10 @@ class NavigationManager {
         }
 
         return $locationSet->getArray();
+    }
+
+    function findNavs_listFrontpage() {
+        return $this->findNavs_standardBase( "moduleid", AMP_CONTENT_CLASS_FRONTPAGE );
     }
 
     function findNavs_listSection( $target_column = AMP_CONTENT_NAV_SECTION_LIST_FIELD ){
@@ -184,8 +189,10 @@ class NavigationManager {
     }
 
     function _localizeListType( $listType ) {
-        $descriptor = 'AMP_CONTENT_LISTTYPE_' . strtoupper( $listType );
-        return ( defined( $descriptor ) ?  ucfirst(constant( $descriptor )) : false);
+        $prefix = 'AMP_CONTENT_LISTTYPE_' ;
+        $global_listTypes = filterConstants( $prefix ); 
+        if (!($local_listType = array_search( $listType, $global_listTypes ))) return false;
+        return ucfirst( strtolower($local_listType));
     }
 
 

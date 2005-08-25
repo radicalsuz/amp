@@ -1,8 +1,8 @@
 <?php
 
-/*
+/*******************************************
     Activist Mobilization Platform (AMP)
-    Copyright (C) 2000-2005  David Taylor
+    Copyright (C) 2000-2005  David Taylor & Radical Designs
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,29 +20,30 @@
 
     For further information, contact Radical Designs at info@radicaldesigns.org
 
-*/
+*******************************************/
 
-/*********************
-07-09-2003  v3.01
-Module:  Index
-Description:  Index template page
-SYS VARS: $NAV_IMG_PATH, $indexreplace
-functions  evalhtml
-To Do: 
-*********************/ 
-if (isset($_GET['filelink'])) header ("Location: " . $_GET['filelink']);
 
 $mod_id = 2 ;
 include("AMP/BaseDB.php");
-include("AMP/BaseTemplate.php");
-ob_start(); 
+if (!defined( 'AMP_USE_OLD_CONTENT_ENGINE' )) define ('AMP_USE_OLD_CONTENT_ENGINE', false );
 
-if (isset($indexreplace) && $indexreplace) {
-    require ("$indexreplace");
+if (AMP_USE_OLD_CONTENT_ENGINE) {
+    require_once( 'index2.php' );
+
 } else {
-    include("AMP/Article/index.inc.php");
-}
+    if (AMP_SITE_MEMCACHE_ON) {
+        require_once( "AMP/Content/Page/Cached.inc.php" );
+        $cached_page = &new AMPContent_Page_Cached();
+        $cached_page->execute();
+    }
+    require_once ("AMP/BaseTemplate.php");
+    require_once ("AMP/Content/Class/Display_FrontPage.inc.php");
+    $currentPage = &AMPContent_Page::instance();
+    $currentPage->setListType( AMP_CONTENT_LISTTYPE_FRONTPAGE );
 
-include("AMP/BaseFooter.php");
+    $display = &new ContentClass_Display_FrontPage( $dbcon ); 
+    $currentPage->contentManager->addDisplay( $display );
+    require_once( 'AMP/BaseFooter.php' );
+}
 
 ?>

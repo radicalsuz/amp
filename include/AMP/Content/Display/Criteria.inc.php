@@ -16,6 +16,13 @@ class AMPContent_DisplayCriteria {
         $articleSet->addCriteria( $this->_getClassCriteria() );
     }
 
+    function allowClass( $class_id ) {
+        if (empty($this->_excluded_classes)) return true;
+        $classKey = array_search( $class_id, $this->_excluded_classes );
+        if ($classKey === FALSE ) return true;
+        unset( $this->_excluded_classes[ $classKey ] );
+    }
+
     function _getClassCriteria() {
         if (empty($this->_excluded_classes )) return false;
         return "class not in (" . join( ", ", $this->_excluded_classes ) . ")" ;
