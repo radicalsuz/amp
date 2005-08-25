@@ -12,7 +12,7 @@ $sql = $sqlsel.$sql.$sqlorder.$sqloffset;
 $rheader=$dbcon->CacheExecute("$sql")or DIE($dbcon->ErrorMsg());
 if ($rheader->Fields("id")){
 	$MM_id = $rheader->Fields("id");
- 	include ("article.inc.php");
+ 	include ("AMP/Article/article.inc.php");
 }
 else {
 	$rname=$dbcon->CacheExecute("select  title from region where id = $area ;")or DIE($dbcon->ErrorMsg());
