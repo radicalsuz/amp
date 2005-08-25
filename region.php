@@ -54,7 +54,7 @@ $sql = $sqlsel.$sql.$sqlorder.$sqloffset;
 $list=$dbcon->CacheExecute("$sql")or DIE($dbcon->ErrorMsg());
 if ($list->Fields("id")){
 	echo "<hr><p class= subtitle>Action Alerts</p>";
-	include ("list.layout.inc.php");
+	include ("AMP/List/list.layout.inc.php");
 }
 //groups
 if (!$groupslayout) {$groupslayout="groups.layout.php";}
@@ -78,7 +78,7 @@ $sql = $sqlsel.$sql.$sqlorder.$sqloffset;
 $list=$dbcon->CacheExecute("$sql")or DIE($dbcon->ErrorMsg());
 if ($list->Fields("id")){
 	echo "<hr><p class= subtitle>Information</p>";
- 	include ("list.layout.inc.php");
+ 	include ("AMP/List/list.layout.inc.php");
 }
 //news 
 $sql="WHERE state = $area and publish=1 and  Class =  3 ";
@@ -86,7 +86,7 @@ $sql = $sqlsel.$sql.$sqlorder.$sqloffset;
 $list=$dbcon->CacheExecute("$sql")or DIE($dbcon->ErrorMsg());
 if ($list->Fields("id")){
 	echo "<hr><p class= subtitle>News</p>";
- 	include ("list.layout.inc.php");
+ 	include ("AMP/List/list.layout.inc.php");
 }
 //press releases
 $sql="WHERE state = $area and publish=1 and  Class =  10" ;
@@ -94,7 +94,7 @@ $sql = $sqlsel.$sql.$sqlorder.$sqloffset;
 $list=$dbcon->CacheExecute("$sql")or DIE($dbcon->ErrorMsg());
 if ($list->Fields("id")){
 	echo "<hr><p class= subtitle>Press Releases</p>";
- 	include ("list.layout.inc.php");
+ 	include ("AMP/List/list.layout.inc.php");
 }
 
 include("AMP/BaseFooter.php"); 
