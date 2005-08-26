@@ -46,7 +46,7 @@ class NavigationDisplay {
     function _HTML_title() {
         $title_html = "";
         if ($image = $this->nav->getTitleImage()) {
-            $title_html = "<img src=\"". $this->_template->getNavImgPath() . $image ."\">";
+            $title_html = "<img src=\"". $this->_template->getNavImagePath() . $image ."\">";
         }
         if ($text = $this->nav->getTitle()) {
             $title_html = converttext( $text );
