@@ -2,7 +2,7 @@
 
 require_once ('AMP/Content/Article/Display.inc.php' );
 
-class ArticleDisplay_Frontpage extends Article_Display {
+class ArticleDisplay_FrontPage extends Article_Display {
 
     var $_more_link_text = "Read More&nbsp;&#187;&nbsp;&nbsp;";
     var $css_class = array(

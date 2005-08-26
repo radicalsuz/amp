@@ -88,6 +88,7 @@ if (file_exists_incpath( 'SiteConfig.inc.php' )) {
 
     die( "Couldn't find a local site configuration file. Please contact your system administrator." );
 }
+if (!defined( 'AMP_BASE_INCLUDE_PATH' )) define( 'AMP_BASE_INCLUDE_PATH', $_SERVER['DOCUMENT_ROOT'].'/include/' );
 
 // Connect to the database.
 if (!defined('AMP_DB_TYPE'))

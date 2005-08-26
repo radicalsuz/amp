@@ -16,6 +16,11 @@ define ('AMP_CONTENT_CLASS_PRESSRELEASE' , 10 );
 define ('AMP_CONTENT_CLASS_USERSUBMITTED' , 9 );
 define ('AMP_CONTENT_CLASS_ACTIONITEM' , 5 );
 
+if (!defined( 'AMP_ARTICLE_DISPLAY_DEFAULT')) define( 'AMP_ARTICLE_DISPLAY_DEFAULT', 'Article_Display' );
+if (!defined( 'AMP_ARTICLE_DISPLAY_FRONTPAGE')) define( 'AMP_ARTICLE_DISPLAY_FRONTPAGE', 'ArticleDisplay_FrontPage' );
+if (!defined( 'AMP_ARTICLE_DISPLAY_NEWS')) define( 'AMP_ARTICLE_DISPLAY_NEWS', 'ArticleDisplay_News' );
+if (!defined( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE')) define( 'AMP_ARTICLE_DISPLAY_FRONTPAGE', 'ArticleDisplay_PressRelease' );
+
 class Article extends AMPSystem_Data_Item {
 
     var $datatable = "articles";
@@ -27,8 +32,10 @@ class Article extends AMPSystem_Data_Item {
 
     function &getDisplay() {
         $classes = filterConstants( 'AMP_CONTENT_CLASS' );
-        $display_class_custom  = 'ArticleDisplay_' . array_search( $this->getClass() , $classes );
-        $display_class = 'Article_Display';
+        $display_def_constant= 'AMP_ARTICLE_DISPLAY_' . array_search( $this->getClass() , $classes );
+        $display_class_custom = constant( $display_def_constant );
+
+        $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
         if (class_exists( $display_class_custom )) $display_class = $display_class_custom;
         return new $display_class( $this );
     }
