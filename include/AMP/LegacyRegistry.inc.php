@@ -61,6 +61,9 @@ define('AMP_SITE_NAME', $SystemSettings['websitename']);
 define('AMP_SITE_META_DESCRIPTION', $SystemSettings['metadescription']);
 define('AMP_SITE_CACHE_TIMEOUT', $cacheSecs );
 
+#REAL LEGACY GLOBALS
+$MM_website_name = AMP_SITE_NAME;
+$Web_url = AMP_SITE_URL;
 		
 #SET DATABASE CACHING
 $dbcon->cacheSecs = $cacheSecs;

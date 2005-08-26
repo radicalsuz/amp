@@ -37,18 +37,26 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _HTML_Content() {
         $body = $this->_article->getBody();
+        $body = $this->_processBody( $body );
 
-        if (!$this->_article->isHtml()) $body = converttext( $body );
+        return $this->_addImage( $body );
+    }
+
+    function _processBody( $body ) {
+        $htmlbody = $body;
+        if (!$this->_article->isHtml()) $htmlbody = converttext( $body );
         if ($hw = &AMPContent_Lookup::instance('hotwords')) {
-            $body = str_replace( array_keys($hw), array_values($hw), $body );
+            $htmlbody = str_replace( array_keys($hw), array_values($hw), $htmlbody );
         }
-        $body = $this->_HTML_bodyText( $body );
+        return $this->_HTML_bodyText( $htmlbody );
+    }
 
+    function _addImage( $body ) {
         $image = &$this->_article->getImageRef();
         if ($image) return $this->_HTML_imageBlock( $image ) . $body;
-
         return $body;
     }
+
 
     function _HTML_Footer() {
         $output = "";
@@ -70,11 +78,12 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _HTML_title( $title ) {
         if (!$title) return false;
-        return  '<p class="title">'  .  converttext( $title )  .  '</p>';
+        return  $this->_HTML_in_P(  converttext( $title ),  array( 'class' => $this->css_class['title'] ) ); 
+
     }
     function _HTML_subTitle( $subtitle ) {
         if (!$subtitle) return false;
-        return $this->_HTML_inSpan( converttext( $subtitle ) , 'subtitle' ). $this->_HTML_newline();
+        return $this->_HTML_inSpan( converttext( $subtitle ) , $this->css_class['subtitle'] ). $this->_HTML_newline();
     } 
 
     function _HTML_authorSource( $author, $source, $url ) {
@@ -120,7 +129,7 @@ class Article_Display extends AMPDisplay_HTML {
         
         
     function _HTML_photoCaption( $caption, $width ) { 
-        if (!$caption) return false;
+        #if (!$caption) return false;
         return '<tr align="center"><td width="' .  $width  . '" class="photocaption">' . $caption . '</td></tr>';
     }
 
@@ -136,4 +145,5 @@ class Article_Display extends AMPDisplay_HTML {
 
 require_once ('AMP/Content/Article/Display/PressRelease.inc.php' );
 require_once ('AMP/Content/Article/Display/News.inc.php' );
+require_once ('AMP/Content/Article/Display/FrontPage.inc.php' );
 ?>

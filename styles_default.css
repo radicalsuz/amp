@@ -30,3 +30,6 @@ a.standout {
 		text-decoration: none;
 }
 
+img.image_frontpage {
+		border: 1px solid #000000;
+}

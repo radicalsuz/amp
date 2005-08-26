@@ -145,7 +145,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function getTitleImage() {
-        if (!$this->getData( 'titlei' )) return false;
+        if (!$this->getData( 'titleti' )) return false;
         return $this->getData( 'titleimg' );
     }
 
