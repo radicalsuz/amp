@@ -39,8 +39,8 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
 
 ### CONTENT SYSTEM PAGES  ###
         if ( isset( $_GET['id']   ) && $_GET['id']   ) $currentPage->setArticle( $_GET['id'] );
-        if ( isset( $_GET['type'] ) && $_GET['type'] ) $currentPage->setSection( $_GET['type'] );
         if ( isset( $_GET['class']) && $_GET['class']) $currentPage->setClass(   $_GET['class'] );
+        if ( isset( $_GET['type'] ) && $_GET['type'] ) $currentPage->setSection( $_GET['type'] );
         if ( isset( $_GET['list'] ) && $_GET['list'] ) $currentPage->setListType($_GET['list'] );
 
     } else {

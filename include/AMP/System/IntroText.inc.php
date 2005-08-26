@@ -14,6 +14,7 @@
 
 require_once ( 'utility.functions.inc.php' );
 require_once ( 'AMP/System/Data/Item.inc.php' );
+require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
 
  class AMPSystem_IntroText extends AMPSystem_Data_Item {
 
@@ -32,6 +33,11 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
     }
 
+    function &getDisplay() {
+        return new ArticleDisplay_IntroText( $this );
+    }
+
+
     function getSection() {
         return $this->getData( 'type' );
     }
@@ -43,15 +49,28 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     function getTitle() {
         return $this->getData( 'title' );
     }
+    function getSubTitle() {
+        return $this->getData( 'subtitle' );
+    }
+
 
     function getBody() {
         return $this->getData( 'body' );
+    }
+
+    function isHtml() {
+        return $this->getData( 'html' );
     }
 
     function mergeBodyFields( $fielddata ) {
         $replace_values = AMP_makeMergeFields( array_keys($fielddata) );
         return str_replace( $replace_values, $fielddata, $this->getBody() );
         #return ereg_replace( "%\w+%", "", $merged );
+    }
+
+    function getImageRef() {
+        //for now, no images for introtexts
+        return false;
     }
 
  }

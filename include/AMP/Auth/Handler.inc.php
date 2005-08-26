@@ -222,6 +222,7 @@ class AMP_Authentication_Handler {
     }
 
     function validate_password ( $password, $hash ) {
+        if (!$password) return false;
 
         $hashtype = substr($hash, 0, strpos($hash, "}"));
 

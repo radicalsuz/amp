@@ -46,4 +46,3 @@ class AMPSystem_Memcache {
 
 }
 ?>
-

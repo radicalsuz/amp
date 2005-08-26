@@ -43,7 +43,9 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 		
 
     function readData ( $item_id ) {
-        $sql = "Select * from ".$this->datatable." where ".$this->id_field." = ". $this->dbcon->qstr( $item_id );
+        $this->addCriteria( $this->id_field." = ".$this->dbcon->qstr( $item_id ) );
+        $sql = $this->_assembleSQL();
+        #$sql = "Select * from ".$this->datatable." where ".$this->id_field." = ". $this->dbcon->qstr( $item_id );
 
         if ( $itemdata = $this->dbcon->CacheGetRow( $sql )) {
             $this->setData( $itemdata );
@@ -63,11 +65,19 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function deleteData( $item_id ) {
         $sql = "Delete from " . $this->datatable . " where ". $this->id_field ." = ". $this->dbcon->qstr( $item_id );
         if ( $itemdata = $this->dbcon->Execute( $sql )) {
+            $this->dbcon->CacheFlush( $this->_assembleSqlByID( $item_id ));
             return true;
         }
 
         return false ;
     }
+
+    function _assembleSqlByID( $id ) {
+         return $this->_makeSelect().
+                $this->_makeSource().
+                " WHERE ".$this->id_field." = ". $this->dbcon->qstr( $id );
+    }
+
 
     function save() {
         $save_fields = array_combine_key($this->_itemdata_keys, $this->getData());
@@ -78,6 +88,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ($result == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
         
         if ($result) {
+            $sql = $this->_assembleSqlByID( $this->id );
+            $this->dbcon->CacheFlush( $sql );
             if (method_exists( $this, '_afterSave' )) $this->_afterSave();
             return true;
         }

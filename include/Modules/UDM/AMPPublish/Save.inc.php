@@ -20,9 +20,11 @@ class UserDataPlugin_Save_AMPPublish extends UserDataPlugin {
 
     function execute() {
         if ( !$this->udm->uid ) return false;
-        if ($this->udm->admin) return false;
+        if ($this->udm->admin) return true;
         
         $sql = "update userdata set publish=1 where id=".$this->udm->uid;
         $this->dbcon->Execute($sql);
+        return true;
     }
 }
+?>

@@ -84,7 +84,7 @@ class AMPContent_Page {
         $this->intro_id = $introtext->id;
         if ($template = $introtext->getTemplate()) $this->template_id = $template;
         if ($section = $introtext->getSection())  {
-            $this->section_id = $template;
+            $this->section_id = $section;
             $this->globalizePageVars();
         }
     }
@@ -126,8 +126,13 @@ class AMPContent_Page {
     }
 
     function setClass( $class_id ) {
+        $contentClass = &new ContentClass( $this->dbcon, $class_id );
+        if (!$contentClass->hasData()) return false;
+
         $this->class_id = $class_id;
-        $this->class = &new ContentClass( $this->dbcon, $class_id );
+        $this->class = &$contentClass;
+
+        $this->section_id = $contentClass->getSection();
         $this->globalizePageVars();
     }
 
@@ -242,6 +247,7 @@ class AMPContent_Page {
 
     function globalizeIntroVars( &$introtext ) {
         $GLOBALS['intro_id'] = $introtext->id;
+        $this->registry->setEntry( AMP_REGISTRY_CONTENT_INTRO_ID, $introtext->id );
 
         if ($title = $introtext->getTitle() ) {
             $GLOBALS['MM_title'] = $GLOBALS['mod_name'] = $title;

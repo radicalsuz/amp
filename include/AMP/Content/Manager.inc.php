@@ -8,6 +8,7 @@ class AMPContent_Manager {
 
     var $_show_list_intro = true;
     var $_displays = array();
+    var $_intro_display;
 
     function AMPContent_Manager() {
         $this->init();
@@ -41,7 +42,8 @@ class AMPContent_Manager {
     }
 
     function output() {
-        $output=$this->_html_body .
+        $output=$this->doIntroDisplay().
+                $this->_html_body .
                 $this->doDisplays().
                 $this->_html_footer ;
         return $output;
@@ -57,6 +59,15 @@ class AMPContent_Manager {
             return true;
         }
         $this->_displays[] = &$display;
+    }
+
+    function setIntroDisplay( &$display ) {
+        $this->_intro_display = &$display;
+    }
+
+    function doIntroDisplay() {
+        if (!isset($this->_intro_display)) return false;
+        return $this->_intro_display->execute();
     }
 
     function doDisplays() {

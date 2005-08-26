@@ -109,11 +109,11 @@ class NavigationManager {
     }
 
     function findNavs_listClass() {
-        return $this->findNavs_standardBase( "classlist", $this->page->class_id );
+        return $this->findNavs_standardBase( "classlist", $this->page->class_id, 'findNavs_listSection' );
     }
 
     function findNavs_IntroText() {
-        return $this->findNavs_standardBase( 'moduleid', $this->page->getIntroId() );
+        return $this->findNavs_standardBase( 'moduleid', $this->page->getIntroId(), 'findNavs_listSection' );
     }
 
     function findNavs_default() {
@@ -121,7 +121,7 @@ class NavigationManager {
     }
 
 
-    function findNavs_standardBase( $target_field, $target_value ) {
+    function findNavs_standardBase( $target_field, $target_value, $default_find_method = 'findNavs_default'  ) {
         $locationSet = &new NavigationLocationSet( $this->dbcon );
         $locationSet->addCriteria( $target_field . "=" . $this->dbcon->qstr( $target_value ) );
         if ($position = $this->_getFindPosition()) {
@@ -130,8 +130,8 @@ class NavigationManager {
         $locationSet->readData();
 
         if (!$locationSet->RecordCount()) {
-            if ($target_field==NAVIGATION_STANDARD_SEARCH && $target_value==NAVIGATION_STANDARD_VALUE) return false;
-            return $this->findNavs_default();
+            if ( $target_field==NAVIGATION_STANDARD_SEARCH && $target_value==NAVIGATION_STANDARD_VALUE ) return false;
+            return $this->$default_find_method();
         }
 
         return $locationSet->getArray();
@@ -141,7 +141,7 @@ class NavigationManager {
         return $this->findNavs_standardBase( "moduleid", AMP_CONTENT_CLASS_FRONTPAGE );
     }
 
-    function findNavs_listSection( $target_column = AMP_CONTENT_NAV_SECTION_LIST_FIELD ){
+    function findNavs_listSection( $target_column = AMP_CONTENT_NAV_SECTION_LIST_FIELD ) {
 
         $locationSet = &new NavigationLocationSet( $this->dbcon );
         $parent_set = $this->page->map->getAncestors( $this->page->section_id );
