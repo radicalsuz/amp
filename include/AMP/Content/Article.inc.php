@@ -16,10 +16,10 @@ define ('AMP_CONTENT_CLASS_PRESSRELEASE' , 10 );
 define ('AMP_CONTENT_CLASS_USERSUBMITTED' , 9 );
 define ('AMP_CONTENT_CLASS_ACTIONITEM' , 5 );
 
-if (!defined( 'AMP_ARTICLE_DISPLAY_DEFAULT')) define( 'AMP_ARTICLE_DISPLAY_DEFAULT', 'Article_Display' );
+if (!defined( 'AMP_ARTICLE_DISPLAY_DEFAULT'))   define( 'AMP_ARTICLE_DISPLAY_DEFAULT', 'Article_Display' );
 if (!defined( 'AMP_ARTICLE_DISPLAY_FRONTPAGE')) define( 'AMP_ARTICLE_DISPLAY_FRONTPAGE', 'ArticleDisplay_FrontPage' );
-if (!defined( 'AMP_ARTICLE_DISPLAY_NEWS')) define( 'AMP_ARTICLE_DISPLAY_NEWS', 'ArticleDisplay_News' );
-if (!defined( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE')) define( 'AMP_ARTICLE_DISPLAY_FRONTPAGE', 'ArticleDisplay_PressRelease' );
+if (!defined( 'AMP_ARTICLE_DISPLAY_NEWS'))      define( 'AMP_ARTICLE_DISPLAY_NEWS', 'ArticleDisplay_News' );
+if (!defined( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE')) define( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE', 'ArticleDisplay_PressRelease' );
 
 class Article extends AMPSystem_Data_Item {
 
@@ -114,7 +114,13 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function isPublicDate() {
-        return !($this->getData( 'usedate' ));
+        //frontpage articles have the opposite 'display date' logic as standard
+        //articles
+        //this is the dumbest hack ever, but until we
+        //re-tool the backend forms, I have no choice
+
+        if ($this->getClass() != AMP_CONTENT_CLASS_FRONTPAGE ) return !($this->getData( 'usedate' ));
+        return $this->getData( 'usedate' );
     }
 
     function getItemDate() {

@@ -33,3 +33,7 @@ a.standout {
 img.image_frontpage {
 		border: 1px solid #000000;
 }
+
+span.morelink {
+		margin-right: 10px;
+}

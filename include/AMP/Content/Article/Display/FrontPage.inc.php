@@ -4,7 +4,7 @@ require_once ('AMP/Content/Article/Display.inc.php' );
 
 class ArticleDisplay_FrontPage extends Article_Display {
 
-    var $_more_link_text = "Read More&nbsp;&#187;&nbsp;&nbsp;";
+    var $_more_link_text = "Read More&nbsp;&#187;";
     var $css_class = array(
         'title' => 'hometitle',
         'subtitle' => 'subtitle' );
@@ -49,9 +49,14 @@ class ArticleDisplay_FrontPage extends Article_Display {
         return  $this->_HTML_in_P( $title, array("class" => "hometitle" ) );
     }
 
+    function _HTML_subTitle( $subtitle ) {
+        if (!$subtitle) return false;
+        return $this->_HTML_inSpan( $subtitle , $this->css_class['subtitle'] ). $this->_HTML_newline();
+    }
+
 
     function _HTML_bodyText ( $text ) {
-        return $this->_HTML_inSpan( $this->_HTML_in_P( $text, array('class' => 'homebody') ), array('class' => 'homebody' ) );
+        return $this->_HTML_inSpan( $this->_HTML_in_P( $text, array('class' => 'homebody') ), 'homebody' );
     }
 
     function _HTML_moreLink( $href ) {
@@ -61,7 +66,7 @@ class ArticleDisplay_FrontPage extends Article_Display {
                                         $this->_getMoreLinkText(), 
                                         array( 'class' => 'morelink' )
                                       ), 
-                    array('class' => 'morelink' ) 
+                    'morelink'  
                 ).
                 $this->_HTML_newline();
     }
@@ -73,11 +78,5 @@ class ArticleDisplay_FrontPage extends Article_Display {
     function _HTML_end () {
         return $this->_HTML_newline();
     }
-/*
-    function _HTML_listItemSubtitle( $subtitle ) {
-        if (!$subtitle) return false;
-        return $this->_HTML_inSpan( $subtitle, 'subtitle' );
-    }
-    */
 }
 ?>

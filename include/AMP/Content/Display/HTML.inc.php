@@ -5,10 +5,10 @@ define ( 'AMP_ICON_SPACER', 'spacer.gif' );
 
 class AMPDisplay_HTML {
 
-    function _HTML_inSpan( $text, $class=null ) {
-        $html_class_attr ="";
-        if (isset($class)) $html_class_attr = ' class="'.$class.'"';
-        return '<span'.$html_class_attr.'>' . $text .'</span>';
+    function _HTML_inSpan( $text, $class=array() ) {
+        $html_attr =$class;
+        if (is_string($class)) $html_attr = array('class'=>$class);
+        return '<span'.$this->_HTML_makeAttributes( $html_attr ).'>' . $text .'</span>';
     }
 
     function _HTML_inTD( $text, $attr_set = array() ) {

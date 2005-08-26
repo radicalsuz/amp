@@ -120,7 +120,6 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function getData( $fieldname = null ) {
         if (!isset($fieldname)) return $this->itemdata;
-
         if (isset($this->itemdata[$fieldname])) return $this->itemdata[$fieldname];
 
         return false;
