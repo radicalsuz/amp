@@ -45,11 +45,13 @@ class NavigationDisplay {
 
     function _HTML_title() {
         $title_html = "";
-        if ($image = $this->nav->getTitleImage()) {
-            $title_html = "<img src=\"". $this->_template->getNavImagePath() . $image ."\">";
-        }
         if ($text = $this->nav->getTitle()) {
             $title_html = converttext( $text );
+        }
+        if ($image_name = $this->nav->getTitleImage()) {
+            $imgpath = $this->_template->getNavImagePath();
+            if (strpos( $image_name, $imgpath ) === FALSE) $image_name = $imgpath .$image_name;
+            $title_html = "<img src=\"". $image_name ."\">";
         }
         return $this->_templateTitle( $title_html );
     }

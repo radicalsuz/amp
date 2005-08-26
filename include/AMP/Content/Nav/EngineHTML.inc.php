@@ -55,6 +55,8 @@ class NavEngine_HTML extends NavEngine {
             'MM_type'   =>  $page->section_id,
             'MM_parent' =>  $page->section->getParent(),
             'MM_typename'=> $page->section->getName(),
+            'MM_website_name'=> AMP_SITE_NAME,
+            'Web_url'		=> 	AMP_SITE_URL,
             'MM_region' =>  $GLOBALS['MM_region'],
             'list'      =>  $page->isList(),
             'id'        =>  $page->article_id 
