@@ -1,6 +1,6 @@
 <?php
 
-$modid = "31";
+#$modid = "31";
 $mod_name = "template";
 require_once("AMP/BaseDB.php");
 require_once("Connections/freedomrising.php");
@@ -61,12 +61,14 @@ if (file_exists($filepath)) {
 
     if ($filedir = opendir($filepath)) {
         
+        $fileset = array();
         while (false !== ($file = readdir($filedir))) { 
             if (is_file($filepath.$file) && is_writable($filepath.$file)) {
                 $fileset[]=$file;
             }
 
         }
+        sort( $fileset );
         $searchbox = "File to edit:<BR>";
         if (count($fileset)) {
             $searchbox .= "<FORM NAME = 'filegrab' action='".$_SERVER['PHP_SELF']."' method='GET'>";

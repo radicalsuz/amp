@@ -245,10 +245,19 @@ class AMPSystem_Page {
     }
 
     function commitCopy() {
+        $this->addComponent('form');
         if (!$this->form->validate()) return false;
 
         $id = $this->form->getIdValue();
         if (!$id) return $this->commitSave();
+
+        $this->_initComponents( 'source' );
+        
+        $value_set = $this->form->getValues();
+        unset($value_set[ $this->source->id_field ] );
+        $this->source->setData( $value_set );
+
+        /* This is a great DB item copier, but not a good Save As method -ap 2005-08-19
 
         $this->_initComponents( array( 'source','copier' ) );
         $this->source->readData( $id );
@@ -256,12 +265,15 @@ class AMPSystem_Page {
 
         $namefield = $this->form->name_field;
         $this->copier->setOverride($namefield, $this->form->getItemName(), $this->source->getData($namefield));
-        if ($this->copier->execute() ) {
-            $this->setMessage(  "Your working copy of ".$this->source->getData($namefield)." was saved as ". $this->form->getItemName() );
+
+        */
+        if ($this->source->save() ) {
+            $this->setMessage(  "Your working copy was saved as ". $this->form->getItemName() );
+            $this->dropComponent('form');
             return $this->showList( true );
         }
 
-        $this->setMessage("Save As ".$this->form->getItemName()." failed: ".$this->copier->ErrorMsg(), true );
+        $this->setMessage("Save As ".$this->form->getItemName()." failed: ".$this->source->getErrors(), true );
         return false;
     }
 

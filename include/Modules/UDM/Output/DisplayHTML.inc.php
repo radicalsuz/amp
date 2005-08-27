@@ -56,7 +56,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
                 'f_alias'=>'Name',
                 'f_orderby'=>'Last_Name,First_Name',
                 'f_type'=>'text',
-                'f_sqlname'=>"Concat(First_Name, ' ', Last_Name)"
+                'f_sqlname'=>"Concat(if(!isnull(First_Name), First_Name, ''), ' ', if(!isnull(Last_Name), Last_Name, '') )"
              ),
              'Location'=>array(
                 'f_alias'=>'Location',

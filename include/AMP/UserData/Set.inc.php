@@ -185,16 +185,7 @@ class UserDataSet extends UserData {
     }
 
     function parse_URL_crit () {
-        parse_str($_SERVER['QUERY_STRING'], $parsed_criteria);
-        foreach ($parsed_criteria as $pkey=>$pvalue) {
-
-            if (isset($pvalue)&&($pvalue||$pvalue==='0')) {
-
-                if ($pkey!='offset'&&$pkey!='qty') {
-                    $this->url_criteria[]=$pkey.'='.$pvalue;
-                }
-            }
-        }
+        $this->url_criteria = AMP_URL_Values();
         return $this->url_criteria;
     }
 

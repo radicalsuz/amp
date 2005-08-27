@@ -49,12 +49,14 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
         if (isset($_REQUEST['sortby'])&&$_REQUEST['sortby']) {
 
             //If the request is set, see if the userdata fields are defined
+            /*
             if ($searches = &$this->udm->getPlugins('Search')){
                 $search_obj = $searches[key($searches)];
             }
+            */
             
-            if ($search_obj && isset($search_obj->alias[$_REQUEST['sortby']])) {
-                $sortalias=$search_obj->alias[$_REQUEST['sortby']];
+            if (isset($this->udm->alias[$_REQUEST['sortby']])) {
+                $sortalias=$this->udm->alias[$_REQUEST['sortby']];
                 $this->sortname=ucwords($_REQUEST['sortby']);
                 $this->select=$sortalias['f_sqlname'].' AS `'.$sortalias['f_alias'].'`';
                 $this->orderby=$sortalias['f_orderby'];
@@ -91,8 +93,9 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
         #    $link=sprintf("<a href=\"javascript: document.forms['%1\$s'].elements['sortby'].value = '%2\$s'; 
         #        document.forms['%1\$s'].submit();\">%3\$s</a>", $searchform->options['form_name']['value'], $sortname, $sortname);
 
-        if (!isset($this->udm->url_criteria)) $this->udm->parse_URL();
-        $link='<a href="'.$_SERVER['PHP_SELF'].'?'.join('&', $this->udm->url_criteria).'&sortby='.$sortname.'">'.$sortname.'</a>';
+        $url_set = $this->udm->parse_URL_crit();
+        unset($url_set['sortby']);
+        $link='<a href="'.$_SERVER['PHP_SELF'].'?'.join('&', $url_set).'&sortby='.$sortname.'">'.$sortname.'</a>';
 
         return $link;
     }
