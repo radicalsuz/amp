@@ -149,7 +149,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
 		foreach ($this->fields_def as $field=>$fdef) {
 			if (!isset($criteria_set[$field])) continue;
-            if (!($criteria_set[$field]||$criteria_set[$field]==='0'))) continue;
+            if (!($criteria_set[$field]||($criteria_set[$field]==='0'))) continue;
 
             $vetted_set[ $field ] = $criteria_set[ $field ];
 		}
