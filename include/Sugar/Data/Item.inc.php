@@ -27,6 +27,8 @@ class Sugar_Data_Item {
     var $_source;
     var $_session_id;
 
+    var $_id_field = 'id';
+
     function Sugar_Data_Item( $module = null ) {
         $this->init( $module );
     }
@@ -55,22 +57,33 @@ class Sugar_Data_Item {
 
         return false;
     }
-
-    function _isSoapError( $result ) {
-        return ( $result['error']['number'] );
+    
+    function _getSaveArgs() {
+        return 
+            array ( 'session'     => $this->_session_id, 
+                    'module_name' => $this->_module, 
+                    'name_value_list' => $this->_makeSoapHash( $this->getData() )
+                  );
     }
 
-    function _doSoapErrorCheck( $result ) {
-        AMP_varDump( $result );
-        if (!($error_no = $this->_isSoapError( $result ))) return false; 
-
-        $this->_addSoapError( $result['error'] );
-        return $error_no;
+    function _makeSoapHash( $data ) {
+        $result = array();
+        foreach( $data as $fieldname => $fieldvalue ) {
+            $result[] = array( 'name' => $fieldname, 'value' => $fieldvalue );
+        }
+        return $result;
     }
 
-    function _addSoapError( $error_args ) {
-        $errormsg =  $error_args['name']. " ".$error_args['number'].":<BR>".$error_args['description'];
-        return $this->_addError( $error_msg );
+    function save() {
+        $result = $this->_source->call( 'set_entry', $this->_getSaveArgs() );
+
+        if (!$this->_doSoapErrorCheck( $result )) {
+            AMP_varDump( $result );
+            #$this->setData( current( $result['entry_list'] ) );
+            $this->mergeData( array( $this->_id_field => $result[ 'id' ] ) );
+            return $this->id ;
+        }
+        return false;
     }
 
     function _getLoginArgs() {
@@ -85,8 +98,9 @@ class Sugar_Data_Item {
 
     function setData( $data ) {
         $this->_itemdata = array_combine_key( $this->_itemdata_keys, $this->_translateKeys( $data ) );
+        #AMP_varDump( $this->_itemdata ) ;
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
-        if (isset($data[$this->id_field]) && $data[$this->id_field]) $this->id = $data[$this->id_field];
+        if (isset($data[$this->_id_field]) && $data[$this->_id_field]) $this->id = $data[$this->_id_field];
     }
 
     function _translateKeys( $data_array ) {
@@ -100,39 +114,53 @@ class Sugar_Data_Item {
     function mergeData( $data ) {
         $this->_itemdata = array_merge( $this->_itemdata, array_combine_key( $this->_itemdata_keys, $data ));
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
-        if (isset($data[$this->id_field]) && $data[$this->id_field]) $this->id = $data[$this->id_field];
+        if (isset($data[$this->_id_field]) && $data[$this->_id_field]) $this->id = $data[$this->_id_field];
     }
 
 
     function getColumnNames( $module, $reset=false ) {
-        print $module;
         if (isset($this->_itemdata_keys) && (!$reset)) return $this->_itemdata_keys;
-        $result = $this->_source->call( 'get_module_fields', array( 'session' => $this->_session_id, 'module'=> ucfirst( $module ) ) );
+        $result = $this->_source->call( 'get_module_fields', 
+                                    array(  'session'   =>  $this->_session_id, 
+                                            'module'    =>  ucfirst( $module ) ) );
         if (!$this->_doSoapErrorCheck( $result )) {
-            return $result['module_fields'];
+            return $this->_returnFieldNames( $result['module_fields'] );
         }
         return false;
     }
+
+    function _returnFieldNames( $fieldDefs ) {
+        $names = array();
+
+        foreach( $fieldDefs as $fieldDef ) {
+            $names[] = $fieldDef[ 'name' ];
+        }
+
+        return $names;
+    }
+
+    function _isSoapError( $result ) {
+        return ( $result['error']['number'] );
+    }
+
+    function _doSoapErrorCheck( $result ) {
+        if (!($error_no = $this->_isSoapError( $result ))) return false; 
+
+        $this->_addSoapError( $result['error'] );
+        return $error_no;
+    }
+
+    function _addSoapError( $error_args ) {
+        $errormsg =  $error_args['name']. " ".$error_args['number'].":<BR>".$error_args['description'];
+        return $this->_addError( $error_msg );
+    }
+
     function _addError( $error ) {
         $this->_errors[] = $error;
     }
 
     function getErrors() {
         return join("<BR>" , $this->_errors);
-    }
-
-    function save() {
-        $result = 
-            $this->_source->call( 'set_entry', 
-                array(  'session'     => $this->_session_id, 
-                        'module_name' => $this->_module, 
-                        'name_value_list' => $this->getData() 
-                      ) );
-        if (!$this->_doSoapErrorCheck( $result )) {
-            $this->setData( current( $result['entry_list'] ) );
-            return $this->id;
-        }
-        return false;
     }
 
 }
