@@ -1,6 +1,5 @@
 <?php
 
-define ( 'AMP_CONTENT_URL_IMAGES', 'img' );
 define ( 'AMP_ICON_SPACER', 'spacer.gif' );
 
 class AMPDisplay_HTML {
@@ -27,7 +26,7 @@ class AMPDisplay_HTML {
     }
 
     function _HTML_spacer( $width, $height ) {
-        return '<img src ="'.AMP_SITE_URL . AMP_CONTENT_URL_IMAGES.DIRECTORY_SEPARATOR. AMP_ICON_SPACER.'"'.
+        return '<img src ="'. AMP_CONTENT_URL_IMAGES . AMP_ICON_SPACER.'"'.
                 $this->_HTML_makeAttributes( array( 'width' =>$width, 'height' => $height ) ) . '>';
                  
     }

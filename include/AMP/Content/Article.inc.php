@@ -169,7 +169,7 @@ class Article extends AMPSystem_Data_Item {
         require_once ( 'AMP/Content/Article/DocumentLink.inc.php' );
         if (!($doc = $this->getDocumentLink() )) return false;
         $doclink = &new DocumentLink();
-        $doclink->setFileName( $doc, $this->getDocLinkType() );
+        $doclink->setFile( $doc, $this->getDocLinkType() );
         return $doclink;
     }
 

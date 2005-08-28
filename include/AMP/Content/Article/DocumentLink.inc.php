@@ -9,8 +9,7 @@ define ('AMP_CONTENT_DOCUMENT_TYPE_IMAGE', 'img');
 define ('AMP_ICON_WORD', 'worddoc.gif' );
 define ('AMP_ICON_PDF', 'pdf.gif' );
 define ('AMP_ICON_IMAGE', 'img.gif' );
-if (!defined( 'AMP_CONTENT_URL_IMAGES' )) define ('AMP_CONTENT_URL_IMAGES', '/img/' );
-define ('AMP_CONTENT_URL_DOCUMENTS', '/downloads/' );
+define ('AMP_ICON_PATH', '/system/images/' );
 
 class DocumentLink  {
 
@@ -53,11 +52,11 @@ class ArticleDocumentLink_Display extends AMPDisplay_HTML {
     var $document_link;
     var $icon_styleAttr = array(
         'border' => '0',
-        'width'  => '20',
-        'height' => '16',
+        #'width'  => '20',
+        #'height' => '16',
         'align'  => 'absmiddle' );
 
-    var $file_descriptions = array(
+    var $_file_descriptions = array(
         AMP_CONTENT_DOCUMENT_TYPE_WORD  =>  'Microsoft Word Document',
         AMP_CONTENT_DOCUMENT_TYPE_PDF   =>  'PDF',
         AMP_CONTENT_DOCUMENT_TYPE_DEFAULT =>  'File',
@@ -94,17 +93,20 @@ class ArticleDocumentLink_Display extends AMPDisplay_HTML {
     }
 
     function getIcon() {
-        $icon = constant( 'AMP_ICON_' . strtoupper( $this->document_link->getFileType() ));
-        if ( !file_exists_incpath($icon) ) return false;
+        $icon_descriptor = 'AMP_ICON_' . strtoupper( $this->document_link->getFileType() );
+        if (!defined( $icon_descriptor )) return false;
+        $icon_file = AMP_LOCAL_PATH . AMP_IMAGE_PATH . constant( $icon_descriptor );
+        if ( !file_exists_incpath($icon_file) ) return false;
+        $icon_url = AMP_CONTENT_URL_IMAGES . constant( $icon_descriptor );
         
-        return '<IMG SRC="'.$icon.'" '. $this->_HTML_makeAttributes( $this->getIconAttr() ) .'>';
+        return '<IMG SRC="'.$icon_url.'" '. $this->_HTML_makeAttributes( $this->getIconAttr() ) .'>';
     }
 
     function _HTML_docLink() {
 
-        $linkhtml.= $this->getIcon() . " Download as " . $this->getFileDescription();
+        $linkhtml = $this->getIcon() . " Download as " . $this->getFileDescription();
 
-        return $this->_HTML_makeLink( $this->document_link->getURL(), $linkhtml );
+        return $this->_HTML_link( $this->document_link->getURL(), $linkhtml );
     }
 
     function _HTML_end() {

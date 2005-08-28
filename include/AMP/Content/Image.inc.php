@@ -3,6 +3,7 @@ define( 'AMP_IMAGE_CLASS_ORIGINAL', 'original' );
 define( 'AMP_IMAGE_CLASS_THUMB', 'thumb' );
 define( 'AMP_IMAGE_CLASS_OPTIMIZED', 'pic' );
 define( 'AMP_IMAGE_DEFAULT_ALIGNMENT', 'right' );
+define( 'AMP_IMAGE_PATH', DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR ); 
 
 
 class Content_Image {
@@ -76,7 +77,7 @@ class Content_Image {
     }
 
     function getURL( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {
-        return DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $image_type . DIRECTORY_SEPARATOR . $this->filename;
+        return AMP_IMAGE_PATH . $image_type . DIRECTORY_SEPARATOR . $this->filename;
     }
 
     function getPath( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {

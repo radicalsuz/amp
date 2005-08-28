@@ -121,7 +121,7 @@ class AMPContent_Header {
     }
 
     function _HTML_metaTags() {
-        return "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$this->encoding."\">\n";
+        return "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$this->encoding."\">\n".
                "<meta http-equiv=\"Description\" content=\"". $this->getMetaDesc(). "\">\n" .
                "<meta name=\"Keywords\" content=\"" . $this->getMetaContent() . "\">\n" ;
     }

@@ -1,5 +1,6 @@
 <?php
 require_once ( 'nuSoap/nusoap.php' );
+require_once ( 'Sugar/Data/Translator.inc.php' );
 
 /* * * * * * * * * * *
  *  Sugar Data Item
@@ -19,15 +20,16 @@ require_once ( 'nuSoap/nusoap.php' );
 
 class Sugar_Data_Item {
 
+    var $id;
     var $_itemdata;
     var $_itemdata_keys;
+    var $_id_field = 'id';
 
     var $_module;
     var $_errors;
     var $_source;
     var $_session_id;
 
-    var $_id_field = 'id';
 
     function Sugar_Data_Item( $module = null ) {
         $this->init( $module );
@@ -50,12 +52,21 @@ class Sugar_Data_Item {
         $this->_source = &new soapclient( SUGAR_URL_SOAP, true );
         $result = $this->_source->call( 'login', $this->_getLoginArgs() );
 
-        if (!$this->_doSoapErrorCheck( $result )) {
-            $this->_session_id = $result['id'];
-            return true;
-        }
+        if ($this->_doSoapErrorCheck( $result )) return false; 
 
-        return false;
+        $this->setSession( $result['id'] );
+        $this->_setTranslator();
+        return true;
+    }
+
+    function _setTranslator() {
+        $translator = &new SugarData_Translator();
+        if (!$translator->hasTranslation( $this->_module )) return false;
+        $this->_translator = &$translator;
+    }
+
+    function setSession( $session_id ) {
+        $this->_session_id = $session_id;
     }
     
     function _getSaveArgs() {
@@ -77,13 +88,12 @@ class Sugar_Data_Item {
     function save() {
         $result = $this->_source->call( 'set_entry', $this->_getSaveArgs() );
 
-        if (!$this->_doSoapErrorCheck( $result )) {
-            AMP_varDump( $result );
-            #$this->setData( current( $result['entry_list'] ) );
-            $this->mergeData( array( $this->_id_field => $result[ 'id' ] ) );
-            return $this->id ;
-        }
-        return false;
+        if ($this->_doSoapErrorCheck( $result )) return false; 
+
+        #AMP_varDump( $result );
+        #$this->setData( current( $result['entry_list'] ) );
+        $this->mergeData( array( $this->_id_field => $result[ 'id' ] ) );
+        return $this->id ;
     }
 
     function _getLoginArgs() {
@@ -97,36 +107,37 @@ class Sugar_Data_Item {
     }
 
     function setData( $data ) {
-        $this->_itemdata = array_combine_key( $this->_itemdata_keys, $this->_translateKeys( $data ) );
-        #AMP_varDump( $this->_itemdata ) ;
+        $this->_itemdata = $this->_filterKeys( $data );
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
         if (isset($data[$this->_id_field]) && $data[$this->_id_field]) $this->id = $data[$this->_id_field];
-    }
-
-    function _translateKeys( $data_array ) {
-        $result_data = array();
-        foreach( $data_array as $dKey => $dValue ) {
-            $result_data[ strtolower( $dKey ) ] = $dValue;
-        }
-        return $result_data;
     }
 
     function mergeData( $data ) {
-        $this->_itemdata = array_merge( $this->_itemdata, array_combine_key( $this->_itemdata_keys, $data ));
+        $this->_itemdata = array_merge( $this->_itemdata, $this->_filterKeys( $data ));
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
         if (isset($data[$this->_id_field]) && $data[$this->_id_field]) $this->id = $data[$this->_id_field];
+    }
+
+    function _filterKeys( $data ) {
+        $translated_data = $data;
+        if (isset($this->_translator)) {
+            $translated_data = $this->_translator->translateKeys( $data, $this->_module ) ;
+        }
+        return array_combine_key(   $this->_itemdata_keys, $translated_data  );
     }
 
 
     function getColumnNames( $module, $reset=false ) {
         if (isset($this->_itemdata_keys) && (!$reset)) return $this->_itemdata_keys;
         $result = $this->_source->call( 'get_module_fields', 
-                                    array(  'session'   =>  $this->_session_id, 
-                                            'module'    =>  ucfirst( $module ) ) );
-        if (!$this->_doSoapErrorCheck( $result )) {
-            return $this->_returnFieldNames( $result['module_fields'] );
-        }
-        return false;
+                                array(    'session' =>  $this->_session_id, 
+                                          'module'  =>  ucfirst( $module ) 
+                                        ) 
+                                    );
+
+        if ($this->_doSoapErrorCheck( $result )) return false;
+
+        return $this->_returnFieldNames( $result['module_fields'] );
     }
 
     function _returnFieldNames( $fieldDefs ) {
@@ -140,6 +151,7 @@ class Sugar_Data_Item {
     }
 
     function _isSoapError( $result ) {
+        if (!isset($result['error']['number'])) return false;
         return ( $result['error']['number'] );
     }
 
