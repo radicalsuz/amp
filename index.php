@@ -37,6 +37,8 @@ if (AMP_USE_OLD_CONTENT_ENGINE) {
         $cached_page->execute();
     }
     require_once ("AMP/BaseTemplate.php");
+    if ( 'index.php' != AMP_CONTENT_URL_FRONTPAGE ) ampredirect( AMP_CONTENT_URL_FRONTPAGE );
+
     require_once ("AMP/Content/Class/Display_FrontPage.inc.php");
     $currentPage = &AMPContent_Page::instance();
     $currentPage->setListType( AMP_CONTENT_LISTTYPE_FRONTPAGE );

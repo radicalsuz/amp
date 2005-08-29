@@ -121,9 +121,14 @@ class AMPContent_Header {
     }
 
     function _HTML_metaTags() {
-        return "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$this->encoding."\">\n".
-               "<meta http-equiv=\"Description\" content=\"". $this->getMetaDesc(). "\">\n" .
-               "<meta name=\"Keywords\" content=\"" . $this->getMetaContent() . "\">\n" ;
+        $tags = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$this->encoding."\">\n";
+        if ( $metadesc = $this->getMetaDesc() ) {
+            $tags .= "<meta http-equiv=\"Description\" content=\"". $metadesc. "\">\n" ;
+        }
+        if ( $metacontent = $this->getMetaContent() ) {
+            $tags .= "<meta name=\"Keywords\" content=\"" . $metacontent . "\">\n" ;
+        }
+        return $tags;
     }
 
     function _HTML_templateHead() {

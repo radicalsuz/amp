@@ -1,10 +1,11 @@
 <?php
 
 require_once ('AMP/Content/Article/Display.inc.php' );
+if (!defined( 'AMP_TEXT_CONTENT_FRONTPAGE_MORELINK' )) define( 'AMP_TEXT_CONTENT_FRONTPAGE_MORELINK', 'Read More&nbsp;&raquo;' );
 
 class ArticleDisplay_FrontPage extends Article_Display {
 
-    var $_more_link_text = "Read More&nbsp;&#187;";
+    var $_more_link_text = AMP_TEXT_CONTENT_FRONTPAGE_MORELINK;
     var $css_class = array(
         'title' => 'hometitle',
         'subtitle' => 'subtitle' );

@@ -5,6 +5,7 @@ require_once ( 'AMP/Content/Section.inc.php' );
 
 class SectionSet_Display extends AMPContent_DisplayList_HTML {
     var $_sourceItem_class = 'Section';
+    var $_pager_active = false;
 
     function SectionSet_Display( &$sectionSet ) {
         $this->init( $sectionSet );

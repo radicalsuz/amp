@@ -87,7 +87,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
    
     function _HTML_listItemBlurb( $blurb ) {
-        if (!$blurb) return false;
+        if (!trim( $blurb )) return false;
         return $this->_HTML_inSpan( AMP_trimText( $blurb, $this->_max_blurb_length) , "text" ) ; 
     }
 
