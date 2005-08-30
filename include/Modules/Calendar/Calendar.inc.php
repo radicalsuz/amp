@@ -88,7 +88,7 @@ var $id;
 		$fields['time'] = array('type'=>'text', 'label'=>'Event Start Time', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>10, 'enabled'=>true);
 		$fields['endtime'] = array('type'=>'text', 'label'=>'Event End Time', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>10, 'enabled'=>true);
 		$fields['cost']=array('type'=>'text', 'label'=>'Event Cost', 'required'=>false, 'public'=>true, 'size'=>'10', 'enabled'=>true);
-		$fields['url']=array('type'=>'text', 'label'=>'Website', 'required'=>false, 'public'=>true, 'enabled'=>true);
+		$fields['url']=array('type'=>'text', 'label'=>'Website', 'required'=>false, 'public'=>true, 'enabled'=>true, 'default' => 'http://');
 		$fields['shortdesc'] = array('type'=>'textarea', 'label'=>'Brief description of the Event', 'required'=>true, 'public'=>true,  'values'=>null, 'size'=>"5:40", 'enabled'=>true);
 		$fields['org']= array('type'=>'textarea', 'label'=>'Endorsing Organizations (if any)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>"4:40", 'enabled'=>true);
 
