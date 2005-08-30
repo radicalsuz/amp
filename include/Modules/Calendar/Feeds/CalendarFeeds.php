@@ -48,7 +48,7 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 		$feed = array('id'=>$id,'url'=>$url,'title'=>$rss->channel['title'],
 											 'link' =>$rss->channel['link'],
 											 'description'=>$rss->channel['description']);
-		$result = $this->dbcon->Replace( 'calendar_feeds', $feed, 'id', true );
+		$result = $this->dbcon->Replace( 'calendar_feeds', $feed, array('id', 'url'), true );
 		if(!$result) {
 			$this->error="Could not save feed";
 			return false;
@@ -58,6 +58,8 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 		$num_events = 0;
 		foreach($rss->items as $item) {
 			$event = $item['ev'];
+			$vcardAdr = $item['vcard'];
+			$geo = $item['geo'];
 			if(!$event) continue;
 			$num_events++;
 
@@ -68,10 +70,17 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 							  'shortdesc'=>$item['description'],
 							  'url'=>$item['link'],
 							  'contact1'=>$event['organizer'],
-							  'location'=>$event['location'],
 							  'date'=>$event['startdate'],
+							  'location'=>$event['location'],
 							  'enddate'=>$event['enddate'],
 							  'typeid'=>$type,
+							  'lcity'=>$vcardAdr['adr_locality'],
+							  'lstate'=>$vcardAdr['adr_region'],
+							  'lcountry'=>$vcardAdr['adr_country'],
+							  'laddress'=>$vcardAdr['adr_street'],
+							  'lzip'=>$vcardAdr['adr_pcode'],
+							  'lat'=>$geo['lat'],
+							  'lon'=>$geo['long'],
 							  'feed_id'=>$id);
 
 			$result = $this->dbcon->Replace( 'calendar', $calendar, array('feed_id', 'url'), true );
