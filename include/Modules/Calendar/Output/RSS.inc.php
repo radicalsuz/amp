@@ -1,6 +1,6 @@
 <?php
 require_once ('Modules/Calendar/Plugin.inc.php');
-require_once ('RSSWriter/rss10.inc');
+require_once ('RSSWriter/AMP_RSSWriter.php');
 
 class CalendarPlugin_RSS_Output extends CalendarPlugin {
 
@@ -17,9 +17,11 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 
     function execute ($options=null) {
 
-		$rss =& new RSSWriter(AMP_SITE_URL, AMP_SITE_NAME, AMP_SITE_META_DESCRIPTION);
+		$rss =& new AMP_RSSWriter(AMP_SITE_URL, AMP_SITE_NAME, AMP_SITE_META_DESCRIPTION);
 
 		$rss->useModule('ev', 'http://purl.org/rss/1.0/modules/event/');
+		$rss->useModule('vCard', 'http://www.w3.org/2001/vcard-rdf/3.0#');
+		$rss->useModule('geo', 'http://www.w3.org/2003/01/geo/wgs84_pos#');
 
 		if ($id = $options['calid']['value']) {
 			$timestamp = $this->add_event_rss($rss, $id);
@@ -28,7 +30,7 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 		}
 
 		if($timestamp) {
-			$this->httpConditionalGet($timestamp);
+//			$this->httpConditionalGet($timestamp);
 		}
 
 		while(@ob_end_clean());
@@ -53,14 +55,9 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 	function add_event_rss(&$rss, $id) {
 
 		$event = $this->calendar->readData($id);
+		$event['id'] = $id;
 
-		$rss->addItem(AMP_SITE_URL . "calendar.php?calid=$id", $event['event'],
-			array("description" => $event['shortdesc'],
-				  "ev:startdate" => $event['date'],
-				  "ev:enddate" => $event['enddate'],
-				  "ev:location" => $event['location'],
-				  "ev:organizer" => $event['contact1'],
-				  "ev:type" => $this->types[$event['typeid']]));
+		$this->add_event_item($rss, $event);
 
 		return strtotime($event['datestamp']);
 	}
@@ -75,19 +72,34 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 			if($datestamp && ($timestamp < $datestamp)) {
 				$timestamp = $datestamp;
 			}
-			$id = $event['id'];
 
-			$item = 
-			array("description" => $event['shortdesc'],
-				  "ev:startdate" => $event['date'],
-				  "ev:enddate" => $event['enddate'],
-				  "ev:location" => $event['location'],
-				  "ev:organizer" => $event['contact1'],
-				  "ev:type" => $this->types[$event['typeid']]);
-			$rss->addItem(AMP_SITE_URL . "calendar.php?calid=$id", $event['event'], $item);
+			$this->add_event_item($rss, $event);
 		}
 
 		return $timestamp;
+	}
+
+	function add_event_item(&$rss, $event) {
+		$id = $event['id'];
+		$item = array("description" => $event['shortdesc'],
+						"ev:startdate" => $event['date'],
+						"ev:enddate" => $event['enddate'],
+						"ev:location" => $event['location'],
+						"ev:organizer" => $event['contact1'],
+						"ev:type" => $this->types[$event['typeid']],
+						"vCard:Adr" => array(
+							"vCard:Street" => $event['laddress'],
+							"vCard:Extadd" => '',
+							"vCard:Locality" => $event['lcity'],
+							"vCard:Region" => ($event['lstate'] != 'Intl')?$event['lstate']:'',
+							"vCard:Pcode" => $event['lzip'],
+							"vCard:Country" => $event['lcountry']));
+		if($event['lat'] && $event['lon']) {
+			$item["geo:lat"] = $event['lat'];
+			$item["geo:long"] = $event['lon'];
+		}
+
+		$rss->addItem(AMP_SITE_URL . "calendar.php?calid=$id", $event['event'], $item);
 	}
 
 /*
