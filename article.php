@@ -23,7 +23,6 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
         $cached_page = &new AMPContent_Page_Cached();
         $cached_page->execute();
     }
-
     require_once("AMP/BaseTemplate.php");
     
     $currentPage = &AMPContent_Page::instance();
@@ -36,6 +35,7 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
     if ($listType && $listType == AMP_CONTENT_LISTTYPE_CLASS ) {
         $currentPage->setSection( $currentPage->class->getSection());
     }
+    if (!( $listType || $currentPage->isArticle() )) ampredirect( AMP_CONTENT_URL_FRONTPAGE );
 
     //set article or list inc
     if (isset($_GET['region']) && ($_GET['region'])) {

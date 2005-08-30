@@ -97,8 +97,8 @@ $html .= addfield('nosqlcode','Navigation HTML','textarea',$R->Fields("nosqlcode
 
 $html .= $buildform->add_header('Navigation Template', 'intitle');
 $template_options = makelistarray($T,'id','name','Select Template');
-$Tempalte = & new Select('tempateid',$template_options,$R->Fields("tempateid"));
-$html .=  $buildform->add_row('Template Override', $Tempalte);
+$Template = & new Select('templateid',$template_options,$R->Fields("templateid"));
+$html .=  $buildform->add_row('Template Override', $Template);
 $html .= addfield('linkextra','Link CSS Override','text',$R->Fields("linkextra"));
 
 $html .= $buildform->end_table();

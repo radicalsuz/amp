@@ -65,6 +65,7 @@ class AMPContent_Page {
         if ( $result = $this->map->readAncestors( $this->section_id, 'secure' )) {
             $this->registry->setEntry( AMP_REGISTRY_CONTENT_SECURE, $result );
             $GLOBALS['MM_secure'] = $result;
+            return $result;
         }
         return false;
     }

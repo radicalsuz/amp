@@ -7,7 +7,7 @@ div.list_pager {
 		position: relative;
 		font-size: 11px;
 		display: block;
-		padding-bottom: 10px;
+		padding: 5px 5px 10px 5px;
 }
 
 div.list_pager a.pager_link {

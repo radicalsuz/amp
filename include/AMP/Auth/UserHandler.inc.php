@@ -1,5 +1,5 @@
 <?php
-
+define( 'AMP_FORM_ID_CONTENT_LOGIN', 20 );
 class AMP_Authentication_Handler {
 
     var $user;
@@ -194,7 +194,7 @@ class AMP_Authentication_Handler {
 
         $dbcon = $this->dbcon;
 
-        if ($_REQUEST['logout']=='logout') $this->do_logout();
+        if (isset($_REQUEST['logout']) && ($_REQUEST['logout']=='logout')) $this->do_logout();
 
         if (isset($_REQUEST['username'])) {
             $username = $_REQUEST['username'];
@@ -204,7 +204,7 @@ class AMP_Authentication_Handler {
             $password = $_SERVER['PHP_AUTH_PW'];
         }
 
-        $user_sql = "SELECT id, custom1, custom2, custom3 FROM userdata WHERE modin = 20 and publish=1 and custom1=" . $dbcon->qstr( $username ) . " ORDER BY custom3 DESC";
+        $user_sql = "SELECT id, custom1, custom2, custom3 FROM userdata WHERE modin = ". AMP_FORM_ID_CONTENT_LOGIN." and publish=1 and custom1=" . $dbcon->qstr( $username ) . " ORDER BY custom3 DESC";
         $authdata = $dbcon->GetRow( $user_sql );
 
         if ($this->validate_password( $password, $authdata['custom2'] )) {
@@ -277,6 +277,8 @@ class AMP_Authentication_Handler {
 
     }
     function hidden_post_vars() {
+        return false;
+        /*
         if ($post_vars=$this->collect_post_vars()) {
             foreach ($post_vars as $key=>$value) {
                 $output='<div id="hidden_post" style="display: none;">';
@@ -290,6 +292,7 @@ class AMP_Authentication_Handler {
             }
             return $output;
         }
+        */
     }
 
     function collect_post_vars() {

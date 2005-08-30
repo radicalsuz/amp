@@ -11,8 +11,8 @@
 
 ob_start();
 
-require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'AMP/BaseDB.php' );
+require_once( 'AMP/UserData/Input.inc.php' );
 
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );

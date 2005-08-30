@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title><?= $_GLOBAL['SiteName'] ?> Administration</title>
+    <title><?= AMP_SITE_NAME ?> Private Area</title>
     <style type="text/css">
 
         * {
@@ -104,7 +104,7 @@
 
         <?= (isset($this->message)) ? "<p class=\"login {$this->message_type}\">{$this->message}</p>" : '' ?>
 
-        <form id="login" method="post" action="<?= $_SYSTEM['PHP_SELF']; ?>" />
+        <form id="login" method="post" action="<?= PHP_SELF_QUERY(); ?>" />
 
             <div id="formWrap">
                 <label for="username">Username:</label> <input type="text" name="username" />
