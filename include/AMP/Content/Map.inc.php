@@ -3,6 +3,7 @@ require_once ( 'AMP/Content/Page/Urls.inc.php' );
 define ( 'AMP_CONTENT_LISTTYPE_CLASS', 'class' );
 define ( 'AMP_CONTENT_LISTTYPE_SECTION', 'type' );
 define ( 'AMP_CONTENT_LISTTYPE_FRONTPAGE', 'index' );
+define ( 'AMP_CONTENT_LISTTYPE_REGION', 'region' );
 define ( 'MEMCACHE_KEY_CONTENTMAP', 'ContentMap' );
 
 class AMPContent_Map {

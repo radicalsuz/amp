@@ -103,6 +103,8 @@ class NavEngine_SQL extends NavEngine {
         return array(
             'MM_parent' =>  $page->map->getParent( $page->section_id ),
             'MM_type'   =>  $page->section_id,
+            'MM_author' =>  ($page->isArticle() ? $page->article->getAuthor(): "" ),
+            'MM_id'     =>  $page->article_id,
             'MX_top'    =>  $page->map->top,
             'intro_id'  =>  $page->getIntroId()
             );

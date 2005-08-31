@@ -10,15 +10,15 @@ class AMPContentDisplay_Region extends ArticleSet_Display  {
     }
 
     function &initArticleSet( &$dbcon ) {
-        $articleSet = &new ArticleSet( $region->dbcon );
-        $articleSet->addCriteria( "state=".$region->id );
+        $articleSet = &new ArticleSet( $dbcon );
+        $articleSet->addCriteria( "state=".$this->_region->id );
         $criteria = new AMPContent_DisplayCriteria();
         $criteria->clean( $articleSet );
         return $articleSet;
     }
 
     function execute() {
-        if ($this->_source->RecordCount === 1) return $this->displayArticle();
+        if ($this->_source->RecordCount() === 1) return $this->displayArticle();
 
         return $this->_HTML_listTitle( $this->_region->getName() ).
                 PARENT::execute();
@@ -31,6 +31,7 @@ class AMPContentDisplay_Region extends ArticleSet_Display  {
     function displayArticle() {
         $data = $this->_source->getData();
         $article = &new Article( $this->_region->dbcon, $data['id'] );
+
         $display = &new Article_Display( $article );
         return $display->execute();
     }

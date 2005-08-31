@@ -74,6 +74,7 @@ class AMPContent_Manager {
         if (empty($this->_displays)) return false;
         $output = "";
         foreach ($this->_displays as $display ) {
+            if (!is_object( $display )) continue;
             $output .= $display->execute();
         }
 

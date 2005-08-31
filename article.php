@@ -1,12 +1,13 @@
 <?php
 /********************
- *  Article.php
+ *  article.php
  *
- *  Standard Content display page
+ *  Standard Content display page for lists and articles
  *
- *  2005-08-22 
- *  austin@radicaldesigns.org
- *  AMP 3.5.3
+ *  @author Austin Putman <austin@radicaldesigns.org>
+ *  @version AMP 3.5.3
+ *  @copyright Radical Designs 2005, released under GPL 2+
+ *  @package AMP::Content
  *
  ******/
 
@@ -18,48 +19,63 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
     require_once ( 'article2.php' );
 } else {
 
+    #################################
+    ###  Check for a cached page  ###
+    #################################
+
     if (AMP_SITE_MEMCACHE_ON) {
         require_once( "AMP/Content/Page/Cached.inc.php" );
         $cached_page = &new AMPContent_Page_Cached();
-        $cached_page->execute();
+        if ($cached_page->execute()) exit;
+        
     }
+
+    #################################
+    ###  Load the Template  ###
+    #################################
+
     require_once("AMP/BaseTemplate.php");
-    
     $currentPage = &AMPContent_Page::instance();
-
     $listType = $currentPage->isList();
-    if ($listType && $listType != AMP_CONTENT_LISTTYPE_CLASS ) $isanarticle  = 1;
 
-
-    if (isset($_GET["id"]) && !isset($currentPage->article)) ampredirect ( AMP_CONTENT_URL_SEARCH ); 
-    if ($listType && $listType == AMP_CONTENT_LISTTYPE_CLASS ) {
-        $currentPage->setSection( $currentPage->class->getSection());
+    
+    //************************/
+    // before redirecting, check if a valid Region has been passed
+    if (!($listType || $currentPage->isArticle()) && $currentPage->isRegion() ) {
+        $listType = AMP_CONTENT_LISTTYPE_REGION;
+        $currentPage->setListType( $listType );
     }
-    if (!( $listType || $currentPage->isArticle() )) ampredirect( AMP_CONTENT_URL_FRONTPAGE );
 
-    //set article or list inc
-    if (isset($_GET['region']) && ($_GET['region'])) {
-        $currentPage->setRegion( $_GET['region'] ); 
-        $display = &new ArticleSet_Region_Display( $currentPage );
+    //************************/
+    // Redirect to Search for invalid page types
+    // No Valid List or Article
+    if (!( $listType || $currentPage->isArticle() ))        ampredirect ( AMP_CONTENT_URL_SEARCH );
+
+    // Article is Not Live, Preview Mode is Not on
+    if ( !AMP_DISPLAYMODE_PREVIEW ) {    
+        if ($currentPage->isArticle() && (!$currentPage->article->isLive() )) ampredirect( AMP_CONTENT_URL_SEARCH );
     }
+
+    //************************/
+    // check if section criteria exists for class lists
+    if ($listType == AMP_CONTENT_LISTTYPE_CLASS) {
+        if ( isset( $_GET['type']) && ($classType = $_GET['type']) ) {
+            $currentPage->class->addContentsCriteria( 'type='.$classType );
+        }
+    }
+    // get Listing Display
     if ($listType) {
-        if ($listType == AMP_CONTENT_LISTTYPE_SECTION ) {
-            $display = &$currentPage->section->getDisplay();
-        }
-        if ($listType == AMP_CONTENT_LISTTYPE_CLASS ) {
-            $display = &$currentPage->class->getDisplay();
-        }
-        if (isset($_GET['nointro']) && $_GET['nointro']==1) {
-            $currentPage->contentManager->setListIntro( false );
-        }
+        $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
+        $display = &$currentPage->getListDisplay( $show_intro );
     } 
 
+    //************************/
+    // get Article Display
     if ( $currentPage->isArticle() ) {
-        if (!(isset($_GET['preview']) || $currentPage->article->isLive())) ampredirect( AMP_CONTENT_URL_INDEX );
         if (isset($_GET['vid']) && $_GET['vid']) $currentPage->article->readVersion( $_GET['vid']);
-
         $display = $currentPage->article->getDisplay(); 
     }
+
 
     $currentPage->contentManager->addDisplay( $display );
 

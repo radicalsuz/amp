@@ -42,6 +42,7 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
         if ( isset( $_GET['class']) && $_GET['class']) $currentPage->setClass(   $_GET['class'] );
         if ( isset( $_GET['type'] ) && $_GET['type'] ) $currentPage->setSection( $_GET['type'] );
         if ( isset( $_GET['list'] ) && $_GET['list'] ) $currentPage->setListType($_GET['list'] );
+        if ( isset( $_GET['region'])&& $_GET['region'])$currentPage->setRegion(  $_GET['region'] ); 
 
     } else {
 
@@ -62,6 +63,9 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
         $controls = &new AMPSystem_Tool_Controls( $dbcon, $modid );
         $controls->globalizeSettings();
     }
+
+    // Activate Preview Mode
+    define( 'AMP_DISPLAYMODE_PREVIEW', ( isset( $_GET['preview'] ) && $_GET['preview'] ) );
 
     # Start Output Buffering
     ob_start();

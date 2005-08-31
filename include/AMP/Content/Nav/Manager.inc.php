@@ -1,6 +1,6 @@
 <?php
 
-define( 'AMP_CONTENT_LISTTYPE_TYPE', 'section' );
+#define( 'AMP_CONTENT_LISTTYPE_TYPE', 'section' );
 define( 'AMP_CONTENT_NAV_SECTION_LIST_FIELD', 'typelist' );
 define( 'AMP_CONTENT_NAV_SECTION_PAGE_FIELD', 'typeid' );
 define( 'NAVIGATION_STANDARD_SEARCH', 'moduleid' );
@@ -145,7 +145,7 @@ class NavigationManager {
 
         $locationSet = &new NavigationLocationSet( $this->dbcon );
         $parent_set = $this->page->map->getAncestors( $this->page->section_id );
-        if (empty($parent_set)) return false;
+        if (empty($parent_set)) return $this->findNavs_default();
 
         $target_crit = $target_column . " in (" . join( ', ', array_keys( $parent_set )) . ")" ;
         $locationSet->addCriteria( $target_crit );
@@ -182,18 +182,19 @@ class NavigationManager {
         if ($this->page->isArticle()) return 'findNavs_Article';
         if ($this->page->isTool() ) return 'findNavs_IntroText';
 
-        if ($listType = $this->page->isList()) $find_method = 'findNavs_list'.$this->_localizeListType( $listType );
+        if ($listType = $this->page->isList()) $find_method = 'findNavs_list'. ucfirst($this->page->getBaseListType( $listType ));
         if (! method_exists( $this, $find_method ) ) $find_method = "findNavs_default"; 
 
         return $find_method;
     }
-
+/*
     function _localizeListType( $listType ) {
         $prefix = 'AMP_CONTENT_LISTTYPE_' ;
         $global_listTypes = filterConstants( $prefix ); 
         if (!($local_listType = array_search( $listType, $global_listTypes ))) return false;
         return ucfirst( strtolower($local_listType));
     }
+    */
 
 
 }

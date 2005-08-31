@@ -33,10 +33,11 @@ class Article extends AMPSystem_Data_Item {
     function &getDisplay() {
         $classes = filterConstants( 'AMP_CONTENT_CLASS' );
         $display_def_constant= 'AMP_ARTICLE_DISPLAY_' . array_search( $this->getClass() , $classes );
-        $display_class_custom = constant( $display_def_constant );
 
         $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
-        if (class_exists( $display_class_custom )) $display_class = $display_class_custom;
+        if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
+
+        if (!class_exists( $display_class )) $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
         return new $display_class( $this );
     }
 

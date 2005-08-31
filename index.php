@@ -1,4 +1,14 @@
 <?php
+/**
+ *  index.php
+ *
+ *  Display Page
+ *
+ *  @author Austin Putman <austin@radicaldesigns.org>
+ *  @version AMP 3.5.3
+ *  @copyright Radical Designs 2005, released under GPL 2+
+ *  @package AMP::Content
+ */
 
 /*******************************************
     Activist Mobilization Platform (AMP)
@@ -8,8 +18,6 @@
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -34,7 +42,7 @@ if (AMP_USE_OLD_CONTENT_ENGINE) {
     if (AMP_SITE_MEMCACHE_ON) {
         require_once( "AMP/Content/Page/Cached.inc.php" );
         $cached_page = &new AMPContent_Page_Cached();
-        $cached_page->execute();
+        if ($cached_page->execute()) exit;
     }
     require_once ("AMP/BaseTemplate.php");
     if ( 'index.php' != AMP_CONTENT_URL_FRONTPAGE ) ampredirect( AMP_CONTENT_URL_FRONTPAGE );

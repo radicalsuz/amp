@@ -104,7 +104,7 @@ if ($type->Fields("id") != NULL) {
 
 #defualt list
 if ($type->Fields("id") == NULL) { 
-	echo '<p class="subtitile">Recently Asked Questions</p><p></p>'
+	echo '<p class="subtitile">Recently Asked Questions</p><p></p>';
 	$questions=$dbcon->CacheExecute("SELECT *  FROM faq  where publish = 1") or DIE($dbcon->ErrorMsg());
 	while (!$questions->EOF) { 
 		echo '<p><b class="question">' . $questions->Fields("question") . '</b></p>';

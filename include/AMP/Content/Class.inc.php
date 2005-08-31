@@ -8,6 +8,7 @@ class ContentClass extends AMPSystem_Data_Item {
 
     var $datatable = "class";
     var $name_field = "class";
+    var $_contents_criteria = array();
 
     function ContentClass( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -24,12 +25,21 @@ class ContentClass extends AMPSystem_Data_Item {
         $this->_contents = &new ArticleSet( $this->dbcon );
         $this->_contents->addCriteria( 'class='.$this->id );
         $this->_contents->setSort( array( 'date DESC', 'id DESC' ) );
+        foreach ($this->_contents_criteria as $criteria ) {
+            $this->_contents->addCriteria( $criteria );
+        }
+
 
         $criteria_set = new AMPContent_DisplayCriteria();
         $criteria_set->allowClass( $this->id );
         $criteria_set->clean( $this->_contents );
 
         return $this->_contents;
+    }
+
+    function addContentsCriteria( $criteria ) {
+        if ( array_search( $criteria, $this->_contents_criteria ) !== FALSE ) return true;
+        $this->_contents_criteria[] = $criteria;
     }
 
     function &getDisplay() {

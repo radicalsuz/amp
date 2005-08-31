@@ -7,9 +7,7 @@ $mod_name = "nav";
 if ($_POST['moduleid']) {
 	$field= 'moduleid';
 	$field_value= $_POST['moduleid'];
-	$sql ="select modid from moduletext where id = ".$_POST['moduleid'];
-	$M =$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
-	$redirect = "module_control_list.php?modid=".$M->fields("modid");
+	$redirect = "introtext.php?id=".$_POST['moduleid'];
 	//Default content modules should just return to nav_order page
 	if ($field_value==1||$field_value==2) $redirect=$_SERVER['PHP_SELF'].'?mod_id='.$field_value;
 }	

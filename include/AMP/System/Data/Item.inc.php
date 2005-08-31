@@ -54,7 +54,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
         if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)); 
 
-        if ($dbcon->ErrorMsg() ) trigger_error ( get_class( $this ) . ' failed to read the database :' . $this->dbcon->ErrorMsg() );
+        if ($this->dbcon->ErrorMsg() ) trigger_error ( get_class( $this ) . ' failed to read the database :' . $this->dbcon->ErrorMsg() );
         return false;
     }
 

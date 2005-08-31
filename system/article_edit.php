@@ -26,18 +26,21 @@ if ($_GET['restore']) {
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
 
    //set non POST passed varablies
-    $sql = "Select id, name from users where name='".$_SERVER['REMOTE_USER']."'";
-    $editor_user_id=$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());
-    $_POST['enteredby'] = $editor_user_id->Fields("id");
+
+    $userlookup = AMPSystem_Lookup::instance( 'users' );
+    $article = trim( $_POST['article'] );
+    $_POST['updatedby'] = array_search($_SERVER['REMOTE_USER'], $userlookup);
 
 	if (isset($_POST['MM_insert'])) {
 		$_POST['datecreated'] = date("y-n-j");
+        $_POST['enteredby'] = $_POST['updatedby'];
 		
 	}
 	// add version control
 	else if ( (isset($_POST['MM_update'])) or (isset($_POST['MM_delete'])) ) {
 		articleversion($_POST['MM_recordId']);
 	}
+
 
 	//upload picture
 	$getimgset=$dbcon->Execute("SELECT thumb, optw, optl FROM sysvar where id =1") or DIE($dbcon->ErrorMsg());
@@ -46,7 +49,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 	}
 	
 	$date =  DateConvertIn($date);
-	$_POST['textfield'] =htmlspecialchars($textfield);
+	$_POST['textfield'] =htmlspecialchars($_POST['textfield']);
 	if ($_POST['mlink']) { 
 		$link = $_POST['mlink'];
 		$linkuse = 1;
@@ -55,7 +58,8 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
     $MM_editTable  = "articles";
     $MM_recordId = $_POST['MM_recordId'];
     $MM_editRedirectUrl = "article_list.php?type=".$_POST['type'];
-	$MM_fieldsStr = "relsection1|value|relsection2|value|type|value|subtype|value|select3|value|uselink|value|publish|value|title|value|subtitle|value|html|value|article|value|textfield|value|author|value|linktext|value|date|value|usedate|value|doc|value|radiobutton|value|link|value|linkuse|value|new|value|actionitem|value|actionlink|value|piccap|value|picture|value|usepict|value|morelink|value|usemore|value|pageorder|value|class|value|source|value|contact|value|alignment|value|alttag|value|state|value|pselection|value|fplink|value|ID|value|enteredby|value|datecreated|value|sourceurl|value|notes|value|comments|value|navtext|value|custom1|value|custom2|value|custom3|value|custom4|value ";
+
+	$MM_fieldsStr = "relsection1|value|relsection2|value|type|value|subtype|value|select3|value|uselink|value|publish|value|title|value|subtitle|value|html|value|article|value|textfield|value|author|value|linktext|value|date|value|usedate|value|doc|value|radiobutton|value|link|value|linkuse|value|new|value|actionitem|value|actionlink|value|piccap|value|picture|value|usepict|value|morelink|value|usemore|value|pageorder|value|class|value|source|value|contact|value|alignment|value|alttag|value|state|value|pselection|value|fplink|value|updatedby|value|enteredby|value|datecreated|value|sourceurl|value|notes|value|comments|value|navtext|value|custom1|value|custom2|value|custom3|value|custom4|value ";
     $MM_columnsStr = "relsection1|none,none,1|relsection2|none,none,1|type|none,none,NULL|subtype|none,none,NULL|catagory|none,none,NULL|uselink|none,1,0|publish|none,none,0|title|',none,''|subtitile|',none,''|html|none,1,0|test|',none,''|shortdesc|',none,''|author|',none,''|linktext|',none,''|date|',none,NULL|usedate|none,1,0|doc|',none,''|doctype|',none,''|link|',none,''|linkover|none,1,0|new|none,1,0|actionitem|none,1,0|actionlink|',none,''|piccap|',none,''|picture|',none,''|picuse|none,none,NULL|morelink|',none,''|usemore|none,1,0|pageorder|none,none,NULL|class|none,none,NULL|source|',none,''|contact|',none,''|alignment|',none,''|alttag|',none,''|state|none,none,NULL|pselection|',none,''|fplink|',none,''|updatedby|',none,''|enteredby|',none,''|datecreated|',none,''|sourceurl|',none,''|notes|',none,''|comments|none,1,0|navtext|',none,''|custom1|',none,''|custom2|',none,''|custom3|',none,''|custom4|',none,''";
 	//databaseactions();
 	require ("../Connections/insetstuff.php");
@@ -68,11 +72,10 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 			$MM_recordId = $dbcon->Insert_ID();
  		} 
 		$reldelete=$dbcon->Execute("Delete FROM articlereltype WHERE articleid =$MM_recordId") or DIE($dbcon->ErrorMsg());
-			if (!$MM_delete) {
-    			while (list($k, $v) = each($reltype)) 
-    		{ 
-			$relupdate=$dbcon->Execute("INSERT INTO articlereltype VALUES ( $MM_recordId,$v)") or DIE($dbcon->ErrorMsg());
-			}
+			if (!$MM_delete && is_array($_POST['reltype'])) {
+    			while (list($k, $v) = each($_POST['reltype'])) { 
+                    $relupdate=$dbcon->Execute("INSERT INTO articlereltype VALUES ( $MM_recordId,$v)") or DIE($dbcon->ErrorMsg());
+                }
 		}	
 	}
 
@@ -89,6 +92,7 @@ if (isset($_GET["id"])) {
 	$id = $_GET["id"];
 	}
 $r=$dbcon->Execute("SELECT * FROM articles WHERE id = " . ($r__MMColParam) . "") or DIE("71".$dbcon->ErrorMsg());
+$r->MoveFirst();
 
 //pull from version table if called
 if (isset($_GET['vid'])) {
@@ -240,16 +244,17 @@ function ValidateForm(){
         				<td width="25%">Date Created</td>
                   		<td width="25%"><div align="left"><?php echo DoDateTime($r->Fields("datecreated"),("n/j/y"))?></div></td>
                   		<td width="25%">Date Modified</td>
-                  		<td width="25%"> <div align="left"> <?php if ($r->Fields("updated")!= NULL) { echo DoTimeStamp($r->Fields("updated"),("n/j/y"));}?></div></td>
+                  		<td width="25%"> <div align="left"> <?php if ($updated_time = $r->Fields("updated")) { echo $updated_time;}?></div></td>
+                  		<!--<td width="25%"> <div align="left"> <?php if ($updated_time = $r->Fields("updated")) { echo DoTimeStamp(strtotime($updated_time),("n/j/y"));}?></div></td>-->
                 	</tr>
                 	<tr> 
                   		<td>Created By</td>
-                  		<td><div align="left"> <?php if ($r->Fields("enteredby")!= NULL) {
-								$users=$dbcon->Execute("SELECT name FROM users where id =".$r->Fields("enteredby")."") or DIE($dbcon->ErrorMsg());
+                  		<td><div align="left"> <?php if ($user_id_creator = $r->Fields("enteredby")) {
+								$users=$dbcon->Execute("SELECT name FROM users where id =".$user_id_creator."") or DIE($dbcon->ErrorMsg());
 								echo $users->Fields("name");}?></div></td>
-                  		<td>Last Modified BY</td>
-                  		<td><div align="left"> <?php if ($r->Fields("updatedby")!= NULL) {
-	$users=$dbcon->Execute("SELECT name FROM users where id =".$r->Fields("updatedby")."") or DIE($dbcon->ErrorMsg());
+                  		<td>Last Modified By</td>
+                  		<td><div align="left"> <?php if ($user_id_editor = $r->Fields("updatedby")) {
+	$users=$dbcon->Execute("SELECT name FROM users where id =".$user_id_editor."") or DIE($dbcon->ErrorMsg());
 	echo $users->Fields("name");}?></div></td>
                 	</tr>
               	</table>

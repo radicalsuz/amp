@@ -4,6 +4,7 @@ require_once('AMP/Content/Article.inc.php');
 require_once('AMP/Content/Section.inc.php');
 require_once('AMP/Content/Class.inc.php');
 require_once('AMP/System/IntroText.inc.php');
+require_once('AMP/System/Region.inc.php');
 require_once('AMP/Content/Template.inc.php' );
 require_once('AMP/Content/Header.inc.php' );
 require_once('AMP/Content/Page/Display.inc.php');
@@ -22,14 +23,15 @@ class AMPContent_Page {
     var $intro_id;
     var $class_id;
     var $section_id;
+    var $region_id;
 
     //content types
     var $article;
     var $section;
     var $introtext;
     var $class;
+    var $region;
 
-    var $region_id;
 
     //can't do nothing without dbcon
     var $dbcon;
@@ -138,7 +140,12 @@ class AMPContent_Page {
     }
 
     function setRegion( $region_id ) {
+        $region = & new AMPSystem_Region( $this->dbcon, $region_id );
+        if (!$region->hasData()) return false;
+
         $this->region_id = $region_id ;
+        $this->region = &$region;
+
         $this->globalizeRegionVars();
     }
 
@@ -221,6 +228,26 @@ class AMPContent_Page {
         $this->contentManager->appendFooter( $html );
     }
 
+    ##############################
+    ###  SubDisplay Accessors  ###
+    ##############################
+
+    function &getListDisplay( $show_intro = true ) {
+        if (!$listType = $this->isList()) return false;
+
+        $this->contentManager->setListIntro( $show_intro );
+        $displaySource = strtolower( $this->getBaseListType( $listType ) );
+        if (!($displaySource && isset($this->$displaySource) && method_exists( $this->$displaySource, 'getDisplay' ))) return false;
+
+        return  $this->$displaySource->getDisplay();
+
+    }
+
+    function getBaseListType( $listType ) {
+        $listTypeSet = filterConstants( 'AMP_CONTENT_LISTTYPE' );
+        return strtolower( array_search( $listType, $listTypeSet ));
+    }
+
     ############################
     ###  PAGETYPE accessors  ###
     ############################
@@ -231,14 +258,19 @@ class AMPContent_Page {
     }
 
     function isArticle() {
-        if (isset($this->article)) return true;
+        return (isset($this->article));
     }
 
     function isTool() {
-        if (isset($this->introtext)) return true;
+        return (isset($this->introtext));
+    }
+
+    function isRegion() {
+        return (isset($this->region));
     }
 
     function setListType( $list_type ) {
+        if ($list_type == 'classt') $list_type = 'class';
         $this->listType = $list_type;
     }
 
@@ -301,7 +333,7 @@ class AMPContent_Page {
         $GLOBALS['htmltemplate'] = $template->getHtmlTemplate();
     }
 
-    function globablizeRegionVars() {
+    function globalizeRegionVars() {
         $this->registry->setEntry( 'AMP_CONTENT_LIST_REGION', $this->region_id );
         $GLOBALS['MM_region'] = $this->region_id;
     }
