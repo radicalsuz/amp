@@ -36,11 +36,11 @@ class SectionContentSource_Articles extends SectionContentSource {
 
     function _setCriteria() {
         $this->_setBaseCriteria();
-        $this->_source->addCriteria( $this->_getSectionCriteria() );
+        $this->_source->addCriteria( $this->getSectionCriteria() );
         $this->_addLegacyCriteria() ;
     }
 
-    function _getSectionCriteria() { 
+    function getSectionCriteria() { 
         $base_section = "type=".$this->_section->id ;
         if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return $base_section;
         if (!($related_ids = $this->_getRelatedArticles())) return $base_section;

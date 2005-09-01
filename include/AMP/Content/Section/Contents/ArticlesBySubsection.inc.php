@@ -8,7 +8,7 @@ class SectionContentSource_ArticlesBySubsection extends SectionContentSource_Art
         $this->init( $section );
     }
 
-    function _getSectionCriteria() {
+    function getSectionCriteria() {
         $map = &AMPContent_Map::instance();
         if (!($subsection_set = $map->getChildren( $this->_section->id ))) return 'false';
         return "type in (" . join( ", ", $subsection_set ) . ")";

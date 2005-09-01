@@ -16,7 +16,7 @@ class SectionContentSource_ArticlesAggregator extends SectionContentSource_Artic
     ### private data source methods ###
     ###################################
 
-    function _getSectionCriteria() {
+    function getSectionCriteria() {
 
         $base_section = "type=".$this->_section->id ;
         if (!($child_ids = $this->_getAllSubsections())) return $base_section;

@@ -18,11 +18,11 @@ class SectionContentSource_Subsections extends SectionContentSource {
     }
 
     function _setCriteria() {
-        $this->_source->addCriteria( $this->_getSectionCriteria() );
+        $this->_source->addCriteria( $this->getSectionCriteria() );
         $this->_source->addCriteria( $this->_getStatusCriteria() );
     }
 
-    function _getSectionCriteria() {
+    function getSectionCriteria() {
         return "parent=". $this->_section->id;
     }
 

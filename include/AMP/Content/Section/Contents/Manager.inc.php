@@ -50,6 +50,11 @@ class SectionContents_Manager {
         return new $contentSource_class( $this->_section );
     }
 
+    function getSectionCriteria() {
+        if (!method_exists( $this->_contentSource, 'getSectionCriteria' )) return false;
+        return $this->_contentSource->getSectionCriteria();
+    }
+
     function _setContentSourceSet( $result_dataset ) {
         $this->_contentSourceSet = &$result_dataset;
     }

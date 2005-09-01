@@ -59,8 +59,9 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
     //************************/
     // check if section criteria exists for class lists
     if ($listType == AMP_CONTENT_LISTTYPE_CLASS) {
-        if ( isset( $_GET['type']) && ($classType = $_GET['type']) ) {
-            $currentPage->class->addContentsCriteria( 'type='.$classType );
+        if ( isset( $_GET['type']) && isset( $currentPage->section ) ) {
+            $currentPage->class->addContentsCriteria( 
+                $currentPage->section->getCriteriaForContent() );
         }
     }
     // get Listing Display
