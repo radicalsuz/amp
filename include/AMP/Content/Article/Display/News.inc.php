@@ -1,11 +1,18 @@
 <?php
 
-define ('AMP_TEXT_CONTENT_FAIR_USE_HEADING', 'Fair Use Notice' );
-if (!defined( 'AMP_CONTENT_FAIR_USE_NOTICE' )) define ('AMP_CONTENT_FAIR_USE_NOTICE', false );
+if (!defined( 'AMP_TEXT_CONTENT_FAIR_USE_HEADING' ))define ('AMP_TEXT_CONTENT_FAIR_USE_HEADING', 'Fair Use Notice' );
+if (!defined( 'AMP_CONTENT_FAIR_USE_NOTICE' ))      define ('AMP_CONTENT_FAIR_USE_NOTICE', false );
 
 require_once( 'AMP/Content/Article/Display.inc.php' );
 
 class ArticleDisplay_News extends Article_Display {
+
+    var $_css_class_fairuse = 'fairUse';
+    var $_css_class_contact = 'newssubtitle';
+    var $_css_class_date    = 'newssubtitle';
+    var $_css_class_author  = 'newssubtitle';
+    var $_css_class_subtitle= 'newssubtitle';
+    var $_css_class_title   = 'newstitle';
 
     function ArticleDisplay_News( &$article ) {
         $this->init( $article );
@@ -32,13 +39,13 @@ class ArticleDisplay_News extends Article_Display {
 
     function _HTML_title( $title ) {
         if (!$title) return false;
-        return  $this->_HTML_inSpan( converttext( $title ), 'newstitle') . $this->_HTML_newline(2);
+        return  $this->_HTML_inSpan( converttext( $title ), $this->_css_class_title ) . $this->_HTML_newline(2);
     }
 
     
     function _HTML_subTitle( $subtitle ) {
         if (!$subtitle) return false;
-        return $this->_HTML_inSpan( converttext( $subtitle ) , 'newssubtitle' ). $this->_HTML_newline(2);
+        return $this->_HTML_inSpan( converttext( $subtitle ) , $this->_css_class_subtitle ). $this->_HTML_newline(2);
     } 
 
     function fairUseURL() {
@@ -54,10 +61,12 @@ class ArticleDisplay_News extends Article_Display {
         $notice =   $this->_HTML_bold( AMP_TEXT_CONTENT_FAIR_USE_HEADING ) . 
                     $this->_HTML_newline() . 
                     $this->getUseNotice() ;
-        return $this->_HTML_newline(3) . $this->_HTML_inDiv( $notice, array( 'class' => 'fairUse' ) ) ; 
+        return $this->_HTML_newline(3) . $this->_HTML_inDiv( $notice, array( 'class' => $this->_css_class_fairuse ) ) ; 
     }
 
     function getUseNotice() {
+        if (defined( 'AMP_TEXT_CONTENT_FAIR_USE_NOTICE' )) return AMP_TEXT_CONTENT_FAIR_USE_NOTICE;
+
         return 
         "This site contains copyrighted material the use of which has not always been ".
         "specifically authorized by the copyright owner. We are making such material ".

@@ -8,10 +8,7 @@ $mod_name = "template";
 
 
   // *** Edit Operations: declare Tables
-  $MM_editAction = $PHP_SELF;
-  if ($QUERY_STRING) {
-    $MM_editAction = $MM_editAction . "?" . $QUERY_STRING;
-  }
+  $MM_editAction = PHP_SELF_QUERY();
   $MM_editQuery = "";
   
 	if (!$_REQUEST['filename']) {

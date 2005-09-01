@@ -6,9 +6,11 @@ if (!defined( 'AMP_TEXT_CONTENT_FRONTPAGE_MORELINK' )) define( 'AMP_TEXT_CONTENT
 class ArticleDisplay_FrontPage extends Article_Display {
 
     var $_more_link_text = AMP_TEXT_CONTENT_FRONTPAGE_MORELINK;
-    var $css_class = array(
-        'title' => 'hometitle',
-        'subtitle' => 'subtitle' );
+
+    var $_css_class_title = "hometitle";
+    var $_css_class_text = "homebody";
+    var $_css_class_morelink = "morelink";
+    var $_css_class_image = "image_frontpage";
 
 
     function ArticleDisplay_Frontpage ( &$article ) {
@@ -36,28 +38,28 @@ class ArticleDisplay_FrontPage extends Article_Display {
     function _HTML_imageBlock( &$image ) {
         if (!$image) return false;
         #$image->setStyleAttrs( array( 'border' => '1', 'style' => 'border-color:#000000' ));
-        $image->setStyleAttrs( array( 'class' => 'image_frontpage' ));
+        $image->setStyleAttrs( array( 'class' => $this->_css_class_image ));
         return PARENT::_HTML_imageBlock( $image );
     }
         
 
     function _HTML_title( $base_title ) {
         if ($href = $this->_article->getMoreLinkURL() ) {
-            $title = $this->_HTML_link( $href, $base_title, array( "class"=>$this->css_class['title'] ) ); 
+            $title = $this->_HTML_link( $href, $base_title, array( "class"=>$this->_css_class_title ) ); 
         } else {
-            $title = $this->_HTML_inSpan( $base_title, $this->css_class['title'] );
+            $title = $this->_HTML_inSpan( $base_title, $this->_css_class_title );
         }
-        return  $this->_HTML_in_P( $title, array("class" => "hometitle" ) );
+        return  $this->_HTML_in_P( $title, array("class" => $this->_css_class_title ) );
     }
 
     function _HTML_subTitle( $subtitle ) {
         if (!$subtitle) return false;
-        return $this->_HTML_inSpan( $subtitle , $this->css_class['subtitle'] ). $this->_HTML_newline();
+        return $this->_HTML_inSpan( $subtitle , $this->_css_class_subtitle ). $this->_HTML_newline();
     }
 
 
     function _HTML_bodyText ( $text ) {
-        return $this->_HTML_inSpan( $this->_HTML_in_P( $text, array('class' => 'homebody') ), 'homebody' );
+        return $this->_HTML_inSpan( $this->_HTML_in_P( $text, array('class' => $this->_css_class_text ) ), $this->_css_class_text );
     }
 
     function _HTML_moreLink( $href ) {
@@ -65,9 +67,9 @@ class ArticleDisplay_FrontPage extends Article_Display {
         return  $this->_HTML_inSpan( 
                     $this->_HTML_link(  $href, 
                                         $this->_getMoreLinkText(), 
-                                        array( 'class' => 'morelink' )
+                                        array( 'class' => $this->_css_class_morelink )
                                       ), 
-                    'morelink'  
+                    $this->_css_class_morelink  
                 ).
                 $this->_HTML_newline();
     }

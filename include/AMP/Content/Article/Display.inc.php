@@ -8,6 +8,15 @@ class Article_Display extends AMPDisplay_HTML {
     var $css_class = array(
         'title' => 'title',
         'subtitle' => 'subtitle' );
+    var $_css_class_author = "author";
+    var $_css_class_author = "author";
+    var $_css_class_title = "title";
+    var $_css_class_subtitle = "subtitle";
+    var $_css_class_photocaption = "photocaption";
+    var $_css_class_text = "text";
+    var $_css_class_date = "date";
+    var $_css_class_label = "bodygreystrong";
+    var $_css_class_subheading = "bodygrey";
 
     function Article_Display( &$article ) {
         $this->init( $article );
@@ -73,17 +82,17 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _HTML_start() {
         #table frame
-        return '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="text"><tr><td>';
+        return '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="'.$this->_css_class_text.'"><tr><td>';
     }
 
     function _HTML_title( $title ) {
         if (!$title) return false;
-        return  $this->_HTML_in_P(  converttext( $title ),  array( 'class' => $this->css_class['title'] ) ); 
+        return  $this->_HTML_in_P(  converttext( $title ),  array( 'class' => $this->_css_class_title ) ); 
 
     }
     function _HTML_subTitle( $subtitle ) {
         if (!$subtitle) return false;
-        return $this->_HTML_inSpan( converttext( $subtitle ) , $this->css_class['subtitle'] ). $this->_HTML_newline();
+        return $this->_HTML_inSpan( converttext( $subtitle ) , $this->_css_class_subtitle ). $this->_HTML_newline();
     } 
 
     function _HTML_authorSource( $author, $source, $url ) {
@@ -92,11 +101,11 @@ class Article_Display extends AMPDisplay_HTML {
         $output_source = "";
 
         if (trim($author)) {
-            $output_author =  $this->_HTML_inSpan( 'by&nbsp;' . converttext($author), 'author');
+            $output_author =  $this->_HTML_inSpan( 'by&nbsp;' . converttext($author), $this->_css_class_author );
             if (!$source) return $output_author . $this->_HTML_newline();
         }
 
-        if ($source) $output_source = $this->_HTML_inSpan( $this->_HTML_link( $url, $source  ), 'author' );
+        if ($source) $output_source = $this->_HTML_inSpan( $this->_HTML_link( $url, $source  ), $this->_css_class_author );
 
         if ($output_author && $output_source) return $output_author . ',&nbsp;' . $output_source . $this->_HTML_newline();
 
@@ -105,16 +114,16 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _HTML_contact( $contact ) {
         if (!$contact) return false;
-        return $this->_HTML_inSpan( 'Contact:&nbsp;' . converttext($contact), 'author') . $this->_HTML_newline();
+        return $this->_HTML_inSpan( 'Contact:&nbsp;' . converttext($contact), $this->_css_class_author ) . $this->_HTML_newline();
     }
 
     function _HTML_date ( $date ) {
 		if (!$date) return false;
-        return $this->_HTML_inSpan( DoDate( $date, 'F jS, Y'), 'date') . $this->_HTML_newline();
+        return $this->_HTML_inSpan( DoDate( $date, 'F jS, Y'), $this->_css_class_date) . $this->_HTML_newline();
     }
 
     function _HTML_endHeading() {
-        return "</td></tr>\n<td></td><tr>" .'<td  class="text">' . $this->_HTML_newline();
+        return "</td></tr>\n<td></td><tr>" .'<td  class="'.$this->_css_class_text.'">' . $this->_HTML_newline();
     }
 
     function _HTML_imageBlock( &$image ) {
@@ -130,11 +139,11 @@ class Article_Display extends AMPDisplay_HTML {
         
     function _HTML_photoCaption( $caption, $width ) { 
         #if (!$caption) return false;
-        return '<tr align="center"><td width="' .  $width  . '" class="photocaption">' . $caption . '</td></tr>';
+        return '<tr align="center"><td width="' .  $width  . '" class="'.$this->_css_class_photocaption.'">' . $caption . '</td></tr>';
     }
 
     function _HTML_bodyText( $html ) {
-        return '<p class="text">'.$html;
+        return '<p class="'.$this->_css_class_text.'">'.$html;
     }
 
     function _HTML_end() {
