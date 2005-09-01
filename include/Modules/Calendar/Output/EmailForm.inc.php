@@ -272,3 +272,4 @@ class CalendarPlugin_EmailForm_Output extends CalendarPlugin {
 		return 1;
 	}
 }
+?>

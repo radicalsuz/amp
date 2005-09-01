@@ -84,4 +84,3 @@ $calledrcd=$dbcon->CacheExecute("SELECT articles.author, articles.".$MX_type.", 
    </td></tr></table>
 </body>
 </html>
-  

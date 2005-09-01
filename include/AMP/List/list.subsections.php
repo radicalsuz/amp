@@ -53,4 +53,3 @@ echo "<p class=title>".$lists->Fields("type")."</p>";
   $lists->MoveNext();
 }
 ?>
-

@@ -128,5 +128,5 @@ mail ( "$sendemail","" ,"" , "From: $email\nX-Mailer: My PHP Script\n");}
 	  $mod_id = 24 ;
 	  include("AMP/BaseModuleIntro.php"); ?>
 <?php } //end thank you
- include("AMP/BaseFooter.php"); ?>
-
+ include("AMP/BaseFooter.php"); 
+?>

@@ -367,6 +367,3 @@ $MM_moveNext  = $urlStr.($MM_offset + $MM_size);
 $MM_movePrev  = $urlStr.(max($MM_offset - $MM_size,0));
 
 ?>
-
-
-

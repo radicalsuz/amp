@@ -77,4 +77,3 @@ if ($newsfeed->RecordCount() > 0) {
     <td colspan="3"><img src="<?php echo $MM_website_name ?>images/s.gif" width="7" height="8" border="0"></td>
   </tr>
   <?php }?>
-

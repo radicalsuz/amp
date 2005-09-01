@@ -11,4 +11,3 @@ include ("AMP/List/list.pr.php");
 echo "<br>";
 include ("AMP/List/list.news.php"); 
 ?>
-

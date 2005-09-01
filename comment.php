@@ -64,4 +64,6 @@ function addFieldToCheck(value,name) {
     </tr>
   </table>
         </form>
-<?php include("AMP/BaseFooter.php"); ?>
+<?php 
+include("AMP/BaseFooter.php"); 
+?>

@@ -279,4 +279,6 @@ if (isset($HTTP_GET_VARS["id"]))
 		
       </form>
 
-      <?php require_once("footer.php"); ?>
+<?php 
+require_once("footer.php"); 
+?>

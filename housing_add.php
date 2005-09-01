@@ -148,4 +148,5 @@ if (isset($_POST["MM_insert"])){
                       </td>
         </tr>
       </table>
-<?php include("AMP/BaseFooter.php");  ?>
+<?php include("AMP/BaseFooter.php");  
+?>

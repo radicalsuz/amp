@@ -116,4 +116,4 @@ if ($type->Fields("id") == NULL) {
 echo '</td></tr></table>';
 
 include("AMP/BaseFooter.php"); 
-?>    
+?>

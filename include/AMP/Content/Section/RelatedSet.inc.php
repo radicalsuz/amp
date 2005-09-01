@@ -13,5 +13,3 @@ class SectionRelatedSet extends AMPSystem_Data_Set {
     }
 }
 ?>
-
-        

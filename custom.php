@@ -1,5 +1,5 @@
 <?php
-ob_start();
+
 include("AMP/BaseDB.php");
 
 $fileinfo= $dbcon->Execute("Select * from custom where id = $file ");
@@ -21,13 +21,5 @@ include ($file);
 //if  (!$fileinfo->Fields("noincludes") == 0 ){
 include("AMP/BaseFooter.php");
 //}
+
 ?>
-
-
-
-
-
-
-
-
-

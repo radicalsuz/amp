@@ -96,10 +96,9 @@ require ("DBConnections/dataactions.php");
 
 </form>
 <p></p>
- <?php } //end if not thank you ?>
+ <?php } //end if not thank you 
  
 	 
 
-<?php include("AMP/BaseFooter.php"); ?>
-
-
+include("AMP/BaseFooter.php"); 
+?>

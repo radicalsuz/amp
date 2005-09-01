@@ -21,4 +21,3 @@ class ComponentMap_IntroText extends AMPSystem_ComponentMap {
 
 }
 ?>
-

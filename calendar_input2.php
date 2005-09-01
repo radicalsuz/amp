@@ -352,5 +352,5 @@ function MM_validateForm() { //v4.0
       <?php } //end thank you
   $state->Close();
   $eventtype->Close();
+include("AMP/BaseFooter.php"); 
 ?>
-<?php include("AMP/BaseFooter.php"); ?>

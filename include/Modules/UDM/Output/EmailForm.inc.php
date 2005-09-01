@@ -272,3 +272,4 @@ class UserDataPlugin_EmailForm_Output extends UserDataPlugin {
 		return 1;
 	}
 }
+?>

@@ -289,3 +289,4 @@ class AMP_CustomForm {
     }
 
 }
+?>
