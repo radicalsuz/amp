@@ -21,6 +21,11 @@ class Section extends AMPSystem_Data_Item {
         return $this->_contents;
     }
 
+    function getContentSectionCriteria() {
+        $contents = & $this->getContents();
+        return $contents->_getSectionCriteria();
+    }
+
     function &getDisplay() {
         $contents = &$this->getContents();
         return $contents->getDisplay();
