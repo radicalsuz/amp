@@ -28,16 +28,16 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
 
     $currentPage = & AMPContent_Page::instance();
 
-### FIND CURRENT LOCATION ##
+    ### FIND CURRENT LOCATION ##
 
-    //confirm intro_id values
+    //confirm intro_id value
     if ((isset($mod_id) && $mod_id) && (! (isset($intro_id) && $intro_id))) { $intro_id = $mod_id; }
     if (! (isset($intro_id) && $intro_id)) { $intro_id = AMP_CONTENT_INTRO_ID_DEFAULT; }
 
 
     if ( $intro_id == AMP_CONTENT_INTRO_ID_DEFAULT ) {
 
-### CONTENT SYSTEM PAGES  ###
+        ### CONTENT SYSTEM PAGES  ###
         if ( isset( $_GET['id']   ) && $_GET['id']   ) $currentPage->setArticle( $_GET['id'] );
         if ( isset( $_GET['class']) && $_GET['class']) $currentPage->setClass(   $_GET['class'] );
         if ( isset( $_GET['type'] ) && $_GET['type'] ) $currentPage->setSection( $_GET['type'] );

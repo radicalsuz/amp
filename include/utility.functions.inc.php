@@ -81,7 +81,6 @@ if ( !function_exists( 'ampredirect' ) ) {
         if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
             header("Location: ".$_REQUEST['pageredirect']);
         } else {
-            trigger_error( 'Redirecting '.$url );
             header("Location: $url");
         }
     }
