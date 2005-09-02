@@ -179,4 +179,4 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 }
 
-?>    
+?>
