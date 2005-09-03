@@ -65,7 +65,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     function output() {
         $this->readPosition();
-        return  $this->_HTML_inDiv(  $this->_positionText() . $this->_pageLinks(), $this->_css_class_container ). 
+        return  $this->_HTML_inDiv(  $this->_positionText() . $this->_pageLinks(), array( 'class' => $this->_css_class_container ) ). 
                 $this->_HTML_newline();
     }
 

@@ -62,6 +62,11 @@ class AMPDisplay_HTML {
     function _HTML_makeAttributes( $attr_set ) {
         if (empty($attr_set)) return false;
         $output = "";
+        if (!is_array( $attr_set)) {
+            trigger_error( 'Non array passed to makeAttributes' );
+            return false;
+            #print AMPbacktrace();
+        }
 
         foreach($attr_set as $attr => $value ) {
             $output .= " " . $attr . "=" . $this->_HTML_safeQuote( $value );

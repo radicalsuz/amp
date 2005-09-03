@@ -24,7 +24,7 @@ class AMPContent_Pager extends AMPSystem_ListPager {
                     $this->_HTML_inSpan( $this->_positionText(), $this->_css_class_link ) . 
                     str_repeat( '&nbsp;', 2 ) .  $this->_HTML_newline() . 
                     $this->_pageLinks() ,
-                    $this->_css_class_container ) .
+                    array( 'class' => $this->_css_class_container ) ).
                 $this->_HTML_newline();
     }
 
