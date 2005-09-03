@@ -1,5 +1,5 @@
 <?php
-if (!defined( 'MAGPIE_DIR' )) define('MAGPIE_DIR', 'FeedOnFeeds/magpierss/');
+if (!defined( 'MAGPIE_DIR' )) define('MAGPIE_DIR', 'magpierss'.DIRECTORY_SEPARATOR);
 if (!defined( 'AMP_NAVTYPE_RSS_LINK_FORMAT')) define( 'AMP_NAVTYPE_RSS_LINK_FORMAT', '_HTML_link' );
 
 require_once( MAGPIE_DIR.'rss_fetch.inc' );
