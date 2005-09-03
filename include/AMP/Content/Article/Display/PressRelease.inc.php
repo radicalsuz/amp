@@ -35,11 +35,14 @@ class ArticleDisplay_PressRelease extends ArticleDisplay_News {
     }
 
     function _HTML_endHeadingPR() {
+        if ( AMP_CONTENT_LAYOUT_CSS ) return $this->_HTML_newline();
+
         return "</td></tr>\n<td>". $this->_HTML_spacer( $width=8, $height=5 ). 
                 "</td><tr>" .'<td  class="'.$this->_css_class_text.'">' . $this->_HTML_newline();
     }
 
     function _HTML_end() {
+        if ( AMP_CONTENT_LAYOUT_CSS ) return false;
         return "</td></tr></table>";
     }
 }

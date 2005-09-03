@@ -1,7 +1,6 @@
 <?php
 
 require_once ('AMP/Content/Article/SetDisplay.inc.php' );
-
 class ContentClass_Display extends ArticleSet_Display {
 
     var $_class;

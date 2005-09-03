@@ -5,6 +5,7 @@ require_once( 'AMP/Content/Class/Display.inc.php' );
 class ContentClass_Display_FrontPage extends ContentClass_Display {
 
     var $_pager_active = false;
+    var $_css_class_container_list = "home";
 
     function ContentClass_Display_FrontPage( &$dbcon ) {
         $this->_class = &new ContentClass ( $dbcon, AMP_CONTENT_CLASS_FRONTPAGE );
@@ -20,12 +21,12 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
         foreach ($sourceItems as $sourceKey => $contentItem ) {
             $output .= $this->_HTML_listItem( $sourceItems[ $sourceKey ] );
         }
-        return $this->_HTML_inDiv( $this->_HTML_listTable($output), array('class' => 'home' ) );
+        return $this->_HTML_inDiv( $this->_HTML_listTable($output), array('class' => $this->_css_class_container_list ) );
     }
 
     function _HTML_listTable( $content ) {
         if (!$content ) return false;
-        return  '<table width="100%" class="text">' . $content . '</table>';
+        return  '<table width="100%" class="'.$this->_css_class_text.'">' . $content . '</table>';
     }
 
 

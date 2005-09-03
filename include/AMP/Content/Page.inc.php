@@ -110,6 +110,7 @@ class AMPContent_Page {
         $template->setPage( $this );
         if (!$template->hasData()) return false;
 
+        $this->template_id = $template_id;
         $this->template = &$template;
         $this->globalizeTemplateVars( $this->template );
     }
@@ -118,7 +119,7 @@ class AMPContent_Page {
         $section = &new Section($this->dbcon, $section_id);
         if (!$section->hasData() ) return false;
         if ($target = $section->getRedirect()) ampredirect( $target );
-        if ($template = $section->getTemplate()) $this->template_id = $template;
+        if (!isset($this->template_id) && ( $template = $section->getTemplate())) $this->template_id = $template;
 
         $this->section = &$section;
         $this->section_id = $section->id;
@@ -173,11 +174,10 @@ class AMPContent_Page {
 
     function getTemplateId () {
         if (isset($this->template_id) && $this->template_id) return $this->template_id;
-        if ($this->section_id == AMP_CONTENT_MAP_ROOT_SECTION) {
-            $this->template_id = $this->getDefaultTemplate();
-            return $this->template_id;
+        if ($template_id = $this->map->readAncestors( $this->section_id, 'templateid' ) ) {
+            $this->template_id = $template_id;
         }
-        $this->template_id = $this->registry->getEntry( AMP_REGISTRY_CONTENT_TEMPLATE_ID_DEFAULT );
+        if (!isset($this->template_id)) $this->template_id = $this->getDefaultTemplate();
         return $this->template_id;
     }
 
@@ -304,7 +304,9 @@ class AMPContent_Page {
 
     function globalizeArticleVars( &$articleinfo ) {
         $this->registry->setArticle( $articleinfo );
-        #$this->registry->setEntry( AMP_REGISTRY_CONTENT_PAGE_TITLE, $articleinfo->getTitle() );
+        if ($title = $articleinfo->getTitle() ) {
+            $this->registry->setEntry( AMP_REGISTRY_CONTENT_PAGE_TITLE, $title );
+        }
 
         $GLOBALS['MM_class'] =$articleinfo->getClass();
         $GLOBALS['MM_type'] =$articleinfo->getParent();

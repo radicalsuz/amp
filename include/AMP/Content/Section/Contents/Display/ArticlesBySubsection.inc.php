@@ -3,6 +3,7 @@
 class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
 
     var $_subsections_display;
+    var $_css_class_title = "title";
 
     function SectionContentDisplay_ArticlesBySubsection ( &$articleSet ) {
         $this->init( $articleSet );
@@ -39,7 +40,7 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
     }
 
     function _HTML_subheaderTitle( $title ) {
-        return $this->_HTML_in_P( $title, array( 'class' => 'title' ) );
+        return $this->_HTML_in_P( $title, array( 'class' => $this->_css_class_title ) );
     }
 
 }

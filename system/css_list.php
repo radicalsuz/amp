@@ -17,32 +17,25 @@ $sql="(SELECT css, Concat('articletype, type, id=,', templateid) as db_id FROM a
 	#array($datafiles);
 	#$datafiles = $mysql_fetch_array($Recordset1->Fields("css, db_id"));
 	$i=0;
+    $allcss_set = array();
 	while (!$Recordset1->EOF) {
 #		printf("%s //  %s <BR>\r", $Recordset1->Fields("css"), $Recordset1->Fields("db_id"));
-		$datafiles[$i]['css']=$Recordset1->Fields("css");
-		#$datafiles[$i]['id']=$Recordset1->Fields("db_id");
-		$filename_css=explode(",", $datafiles[$i]['css']);
-		#$dblocation_css[$i]=explode(",", $datafiles[$i]['dbid']);
-		for ($j=0; $j<count($filename_css); $j++) {
-			$datafiles[$i]['css']=$filename_css[$j];
-			if (strpos($allcss, trim($datafiles[$i]['css']))===FALSE) {
-				$allcss.= trim($datafiles[$i]['css']).",";}
-			$i++;
+		#$datafiles[$i]['css']=
+		#$filename_css=split("[ ]?,[ ]?", $datafiles[$i]['css']);
+        $localcss_set = split( "[ ]?,[ ]?",$Recordset1->Fields("css"));
+		foreach ($localcss_set as $cssfile ) {
+			//$datafiles[$i]['css']=$filename_css[$j];
+			if (array_search($cssfile, $allcss_set) !== FALSE) continue;
+            $allcss_set[]= $cssfile;
+        }
 			
-			/*if ($j>0) {
-			
-					$datafiles[$i]['id']=$datafiles[$i-1]['id'];
-					$dblocation_css[$i]  = $dblocation_css[$i-1];
-			}*/
-			
-		}
 	
-	$Recordset1->MoveNext();
+        $Recordset1->MoveNext();
 	#$i++;
 	}
 	$Recordset1->MoveFirst();
-	$allcss=substr($allcss, 0, strlen($allcss)-1);
-	$allcss_set=explode(",", $allcss);	
+	//$allcss=substr($allcss, 0, strlen($allcss)-1);
+	//$allcss_set=split("[ ]?,[ ]?", $allcss);	
 
 	?>
 <?php include("header.php"); ?>
@@ -57,6 +50,7 @@ $sql="(SELECT css, Concat('articletype, type, id=,', templateid) as db_id FROM a
         <?php #while (($Repeat1__numRows-- != 0) && (!$Recordset1->EOF)) 
    for ($i=0; $i<count($allcss_set); $i++)
    { 
+    if (!$allcss_set[$i]) continue;
 	$sql = "(SELECT Concat('Section: ', type) as location, css FROM articletype where css like '%".$allcss_set[$i]."%' and css <> '' and !(isnull(css))) UNION (SELECT Concat('Template: ', name) as location, css from template where css like'%".$allcss_set[$i]."%' and css <> '' and !(isnull(css))) ORDER BY location ASC;";
 	$locations=$dbcon->Execute($sql) or DIE($dbcon->Errormsg());
 	

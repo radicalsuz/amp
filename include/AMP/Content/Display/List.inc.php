@@ -23,6 +23,12 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     var $_source;
     var $_sourceItem_class = 'Article';
 
+    var $_css_class_title    = "listtitle";
+    var $_css_class_subtitle = "subtitle";
+    var $_css_class_morelink = "go";
+    var $_css_class_text     = "text";
+    var $_css_class_date     = "bodygreystrong";
+
     function AMPContent_DisplayList_HTML ( &$source ) {
         $this->init( $source );
     }
@@ -81,19 +87,19 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     }
 
     function _HTML_listItemTitle( &$source ) {
-        return  $this->_HTML_link( $source->getURL(), $source->getTitle(), array( "class"=>"listtitle" ) ). 
+        return  $this->_HTML_link( $source->getURL(), $source->getTitle(), array( "class"=>$this->_css_class_title ) ). 
                 $this->_HTML_newline();
     }
 
    
     function _HTML_listItemBlurb( $blurb ) {
         if (!trim( $blurb )) return false;
-        return $this->_HTML_inSpan( AMP_trimText( $blurb, $this->_max_blurb_length) , "text" ) ; 
+        return $this->_HTML_inSpan( AMP_trimText( $blurb, $this->_max_blurb_length) , $this->_css_class_text ) ; 
     }
 
     function _HTML_listItemDate ( $date ) {
 		if (!$date) return false;
-        return $this->_HTML_inSpan( DoDate( $date, 'F jS, Y'), 'bodygreystrong') . $this->_HTML_newline();
+        return $this->_HTML_inSpan( DoDate( $date, 'F jS, Y'), $this->_css_class_date ) . $this->_HTML_newline();
     }
 
     function _HTML_thumbnail( &$image ) {
@@ -102,13 +108,13 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     }
 
     function _HTML_subheader( $subheader ) {
-        return $this->_HTML_in_P( $subheader, array( 'class'=>'subtitle' ) );
+        return $this->_HTML_in_P( $subheader, array( 'class'=>$this->_css_class_subtitle ) );
     }
 
     function _HTML_moreLink( $href ) {
 
         $text = 'More&nbsp;'.$this->_HTML_bold( '&raquo;' );
-        return $this->_HTML_inSpan( $this->_HTML_link( $href, $text ), "go" );
+        return $this->_HTML_inSpan( $this->_HTML_link( $href, $text ), $this->_css_class_morelink );
     }
 
 }

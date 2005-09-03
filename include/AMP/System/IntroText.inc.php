@@ -72,6 +72,32 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
         //for now, no images for introtexts
         return false;
     }
+    function getDocLinkRef() {
+        return false;
+    }
+
+    function getAuthor() {
+        return false;
+    }
+
+    function getSource() {
+        return false;
+
+    }
+
+    function getSourceURL() {
+        return false;
+    }
+
+    function getContact() {
+        return false;
+    }
+    function getArticleDate() {
+        return false;
+    }
+    function getComments() {
+        return false;
+    }
 
  }
 

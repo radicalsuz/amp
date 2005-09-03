@@ -4,6 +4,8 @@ require_once( 'AMP/Content/Article/Set.inc.php' );
 require_once( 'AMP/Content/Display/List.inc.php' );
 
 class ArticleSet_Display extends AMPContent_DisplayList_HTML {
+    var $_css_class_author = "bodygreystrong";
+    var $_css_class_source = "bodygreystrong";
 
     function ArticleSet_Display( &$articleSet ) {
         $this->init( $articleSet );
@@ -24,11 +26,11 @@ class ArticleSet_Display extends AMPContent_DisplayList_HTML {
         $output_source = FALSE;
 
         if (trim($author)) {
-            $output_author =  $this->_HTML_inSpan( 'by&nbsp;' . converttext($author), 'bodygreystrong');
+            $output_author =  $this->_HTML_inSpan( 'by&nbsp;' . converttext($author), $this->_css_class_author );
             if (!$source) return $output_author . $this->_HTML_newline();
         }
 
-        if ($source) $output_source = $this->_HTML_inSpan( $this->_HTML_link( $url, $source  ), 'bodygreystrong' );
+        if ($source) $output_source = $this->_HTML_inSpan( $this->_HTML_link( $url, $source  ), $this->_css_class_source );
 
         if ($output_author && $output_source) return $output_author . ',&nbsp;' . $output_source . $this->_HTML_newline();
 

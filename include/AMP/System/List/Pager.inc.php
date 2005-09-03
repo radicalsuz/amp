@@ -14,6 +14,8 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     var $_prepared_URL;
 
+    var $_css_class_container = "list_pager";
+
     function AMPSystem_ListPager( &$source ) {
         $this->init ( $source );
     }
@@ -63,7 +65,8 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     function output() {
         $this->readPosition();
-        return '<div class="list_pager">' . $this->_positionText() . $this->_pageLinks() . '</div><BR>';
+        return  $this->_HTML_inDiv(  $this->_positionText() . $this->_pageLinks(), $this->_css_class_container ). 
+                $this->_HTML_newline();
     }
 
     function readPosition() {

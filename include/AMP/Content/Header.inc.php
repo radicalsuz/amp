@@ -19,7 +19,6 @@ class AMPContent_Header {
         $this->registry = &AMP_Registry::instance();
         $this->page = &$page;
         $this->verifyEncoding();
-        $this->setPageTitle();
     }
 
     function verifyEncoding() {
@@ -30,10 +29,11 @@ class AMPContent_Header {
     function setPageTitle() {
         $this->_pageTitle = $this->registry->getEntry( AMP_REGISTRY_SETTING_SITENAME );
         if (!($title = $this->registry->getEntry( AMP_REGISTRY_CONTENT_PAGE_TITLE ))) return false;
-        $this->_pageTitle = join( $this->title_separator , array( $this->_pageTitle, $title));
+        $this->_pageTitle = join( $this->title_separator, array( $this->_pageTitle, strip_tags($title) ) );
     }
 
     function output () {
+        $this->setPageTitle();
         return      $this->_HTML_startHeader() . 
                     $this->_HTML_header() .
                     $this->_HTML_endHeader();
@@ -132,8 +132,8 @@ class AMPContent_Header {
     }
 
     function _HTML_templateHead() {
-        $template = &$this->registry->getTemplate();
-        if (!($html = $template->getPageHeader() )) return false;
+        $page = &AMPContent_Page::instance();
+        if (!($html = $page->template->getPageHeader() )) return false;
         return $html;
     }
 

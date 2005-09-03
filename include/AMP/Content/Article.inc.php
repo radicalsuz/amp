@@ -155,7 +155,7 @@ class Article extends AMPSystem_Data_Item {
     function &getComments() {
         if (!$this->allowsComments()) return false;
         require_once ( 'AMP/Content/Article/Comments.inc.php' );
-        return new ArticleComments( $this->dbcon, $this->id );
+        return new ArticleCommentSet( $this->dbcon, $this->id );
     }
 
     function getDocumentLink() {
@@ -173,9 +173,6 @@ class Article extends AMPSystem_Data_Item {
         $doclink->setFile( $doc, $this->getDocLinkType() );
         return $doclink;
     }
-
-
-
 
     function isNews() {
         if (!$this->getClass()) return false;

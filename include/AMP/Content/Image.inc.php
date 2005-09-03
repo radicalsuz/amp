@@ -2,7 +2,7 @@
 define( 'AMP_IMAGE_CLASS_ORIGINAL', 'original' );
 define( 'AMP_IMAGE_CLASS_THUMB', 'thumb' );
 define( 'AMP_IMAGE_CLASS_OPTIMIZED', 'pic' );
-define( 'AMP_IMAGE_DEFAULT_ALIGNMENT', 'right' );
+if (!defined('AMP_IMAGE_DEFAULT_ALIGNMENT')) define( 'AMP_IMAGE_DEFAULT_ALIGNMENT', 'right' );
 define( 'AMP_IMAGE_PATH', DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR ); 
 
 
@@ -87,6 +87,12 @@ class Content_Image {
     function setData( $data ) {
         $this->_itemdata = array_combine_key( $this->_itemdata_keys, $data );
         if ($filename = $this->getData( 'filename' )) $this->setFile( $filename );
+    }
+
+    function unsetData( $fieldname ) {
+        if (!isset($this->_itemdata[ $fieldname ] )) return true;
+        unset( $this->_itemdata[ $fieldname ] );
+        return true;
     }
 }
 

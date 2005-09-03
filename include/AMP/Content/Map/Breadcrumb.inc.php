@@ -13,10 +13,6 @@
  * * * */
 
 require_once( 'AMP/Content/Map.inc.php' );
-require_once( 'AMP/Content/Article.inc.php' );
-require_once( 'AMP/Content/Section.inc.php' );
-require_once( 'AMP/Content/Class.inc.php' );
-require_once( 'AMP/System/IntroText.inc.php' );
 
 define( 'AMP_CONTENT_PAGETYPE_ARTICLE', 'article' );
 define( 'AMP_CONTENT_PAGETYPE_LIST', 'list' );
@@ -248,4 +244,8 @@ class AMP_Breadcrumb_Content {
     }
 
 }
+require_once( 'AMP/Content/Article.inc.php' );
+require_once( 'AMP/Content/Section.inc.php' );
+require_once( 'AMP/Content/Class.inc.php' );
+require_once( 'AMP/System/IntroText.inc.php' );
 ?>

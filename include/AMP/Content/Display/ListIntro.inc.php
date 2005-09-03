@@ -6,6 +6,7 @@ require_once ('AMP/Content/Article/Display.inc.php' );
 class ListIntro_Display extends AMPDisplay_HTML {
 
     var $_source;
+    var $_css_id_container = 'content_header';
 
     function ListIntro_Display( &$source ) {
         $this->_source = &$source;
@@ -22,7 +23,7 @@ class ListIntro_Display extends AMPDisplay_HTML {
                 $this->_HTML_date( $this->_source->getItemDate() );
         } 
 
-        return $this->_HTML_inDiv( $output, array( 'id'=>'content_header') );
+        return $this->_HTML_inDiv( $output, array( 'id'=> $this->_css_id_container ) );
                     
     }
 

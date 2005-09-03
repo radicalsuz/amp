@@ -1,6 +1,7 @@
 <?php
 
 require_once ('AMP/Content/Display/HTML.inc.php' );
+if (!defined( 'AMP_CONTENT_LAYOUT_CSS' )) define( 'AMP_CONTENT_LAYOUT_CSS', false );
 
 class Article_Display extends AMPDisplay_HTML {
 
@@ -82,6 +83,8 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _HTML_start() {
         #table frame
+        if ( AMP_CONTENT_LAYOUT_CSS ) return false;
+
         return '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="'.$this->_css_class_text.'"><tr><td>';
     }
 
@@ -123,6 +126,7 @@ class Article_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_endHeading() {
+        if ( AMP_CONTENT_LAYOUT_CSS ) return $this->_HTML_newline();
         return "</td></tr>\n<td></td><tr>" .'<td  class="'.$this->_css_class_text.'">' . $this->_HTML_newline();
     }
 
@@ -147,6 +151,7 @@ class Article_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_end() {
+        if ( AMP_CONTENT_LAYOUT_CSS ) return false;
         return "</td></tr></table>";
     }
 

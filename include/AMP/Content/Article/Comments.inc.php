@@ -40,14 +40,14 @@ class ArticleCommentSet extends AMPSystem_Data_Set {
     }
 }
 
-class ArticleCommentDisplay extends AMPDisplay_HTML {
+class ArticleCommentSet_Display extends AMPDisplay_HTML {
 
-    function ArticleCommentDisplay( &$comment_set ) {
+    function ArticleCommentSet_Display( &$comment_set ) {
         $this->comment_set = &$comment_set;
     }
 
     function execute() {
-        $output = $this->_HTML_addCommentLink( $this->comment_set->getArticle() );
+        $output = $this->_HTML_addCommentLink( $this->comment_set->getArticleId() );
         if (!$this->comment_set->makeReady()) return $output;
 
         while( $data = $this->comment_set->getData() ) {
@@ -64,19 +64,19 @@ class ArticleCommentDisplay extends AMPDisplay_HTML {
     }
 
     function _HTML_addCommentLink ($article_id) {
-	    return '<br><p>' . $this->_HTML_makeLink( AMP_URL_AddVars( "comment.php", 'cid=' . $article_id ), "add a comment" ) ."</p>\n";
+	    return '<br><p>' . $this->_HTML_link( AMP_URL_AddVars( "comment.php", 'cid=' . $article_id ), "add a comment" ) ."</p>\n";
     }
     function _HTML_title( $title ) {
 		return "<hr><p>" .$this->_HTML_bold( $title ). $this->_HTML_newline();
     }
 
     function _HTML_author( $author, $email ) {
-        if ($email) $href = 'mailto: '.$email;
-        return $this->_HTML_italics( 'by ' . $this->_HTML_makeLink( $author, $href ));
+        if ($email) $href = 'mailto:'.$email;
+        return $this->_HTML_italics( 'by ' . $this->_HTML_link( $href, $author ));
     }
     function _HTML_date( $date ) {
         if (!$date) return false;
-        return $this->_HTML_italics( DoDateTime( $date, "l, M j, Y g:iA" ) );
+        return $this->_HTML_italics( DoDateTime( $date, "l, M jS, Y g:ia" ) );
     }
 
     function _HTML_commentBody( $comment ) {
