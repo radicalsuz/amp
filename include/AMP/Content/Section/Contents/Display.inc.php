@@ -71,8 +71,8 @@ class SectionContents_Display  extends AMPDisplay_HTML {
 
 
     function _HTML_listIntro( &$intro ) {
-        if (!(isset($this->_display) && isset($this->_display->_pager) && isset($this->_section))) return false;
-        if (!($this->_display->isFirstPage() && $intro)) return $this->_display->_pager->_HTML_topNotice( $this->_section->getName() );
+        if (!(isset($this->_display) && isset($this->_section))) return false;
+        if ( isset( $this->_display->_pager ) && !($this->_display->isFirstPage() && $intro)) return $this->_display->_pager->_HTML_topNotice( $this->_section->getName() );
         return $intro->execute() . $this->_HTML_newline();
     }
 }
