@@ -13,8 +13,9 @@ system($flush_command);
 
 if (AMP_SITE_MEMCACHE_ON) {
     require_once("AMP/System/Memcache.inc.php");
-    $memcache = &AMPSystem_Memcache::instance();
-    $memcache->memcache_connection->flush();
+    if ( $memcache = &AMPSystem_Memcache::instance() ) {
+        $memcache->memcache_connection->flush();
+    }
 }
 //$dbcon->CacheFlush() or DIE($dbcon->ErrorMsg()); //flushes adodb cache
 //$dbcon->CacheFlush();
