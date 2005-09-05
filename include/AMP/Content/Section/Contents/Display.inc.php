@@ -1,5 +1,7 @@
 <?php
 
+if (!defined( 'AMP_CONTENT_LIST_INTRO_DISPLAY' )) define ('AMP_CONTENT_LIST_INTRO_DISPLAY', 'ListIntro_Display' );
+
 require_once( 'AMP/Content/Article/SetDisplay.inc.php' );
 require_once( 'AMP/Content/Section/SetDisplay.inc.php' );
 require_once( 'AMP/Content/Section/Contents/Display/Newsroom.inc.php' );
@@ -8,17 +10,24 @@ require_once( 'AMP/Content/Section/Contents/Display/SubsectionsPlusArticles.inc.
 
 require_once( 'AMP/Content/Display/ListIntro.inc.php' );
 
+if ( !defined( 'AMP_SECTION_DISPLAY_DEFAULT' ))             define( 'AMP_SECTION_DISPLAY_DEFAULT',          'ArticleSet_Display' );
+if ( !defined( 'AMP_SECTION_DISPLAY_ARTICLES' ))            define( 'AMP_SECTION_DISPLAY_ARTICLES',         'ArticleSet_Display' );
+if ( !defined( 'AMP_SECTION_DISPLAY_SUBSECTIONS' ))         define( 'AMP_SECTION_DISPLAY_SUBSECTIONS',      'SectionSet_Display' );
+if ( !defined( 'AMP_SECTION_DISPLAY_ARTICLESAGGREGATOR' ))  define( 'AMP_SECTION_DISPLAY_ARTICLESAGGREGATOR','ArticleSet_Display' );
+if ( !defined( 'AMP_PREFIX_SECTION_DISPLAY' ))              define( 'AMP_PREFIX_SECTION_DISPLAY',           'SectionContentDisplay_' );
+
 class SectionContents_Display  extends AMPDisplay_HTML {
 
     var $_manager;
     var $_section;
     var $_listIntro;
-
+/*
     var $_custom_displays = array(
         'Articles'          => 'ArticleSet_Display',
         'Subsections'       => 'SectionSet_Display',
         'ArticlesAggregator'=> 'ArticleSet_Display'
         );
+    */
 
     function SectionContents_Display( &$contents_manager ) {
         $this->init( $contents_manager );
@@ -42,11 +51,12 @@ class SectionContents_Display  extends AMPDisplay_HTML {
     }
 
     function _getDisplayClass() {
-        $result = 'SectionContentDisplay_' . $this->_manager->getContentsType();
-        if (isset($this->_custom_displays [ $this->_manager->getContentsType() ] )) {
-            $result = $this->_custom_displays [ $this->_manager->getContentsType() ];
+        $result = AMP_PREFIX_SECTION_DISPLAY . $this->_manager->getContentsType();
+        $custom_displays = filterConstants( 'AMP_SECTION_DISPLAY' );
+        if (isset($custom_displays [ strtoupper( $this->_manager->getContentsType() ) ] )) {
+            $result = $custom_displays [ strtoupper( $this->_manager->getContentsType() ) ];
         }
-        if (!class_exists( $result )) return 'ArticleSet_Display';
+        if (!class_exists( $result )) return AMP_SECTION_DISPLAY_DEFAULT;
         return $result;
     }
 
@@ -64,7 +74,8 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         $intro = false;
         $currentPage = &AMPContent_Page::instance();
         if ($currentPage->contentManager->showListIntro()) {
-            $intro = &new ListIntro_Display( $this->_section );
+            $introClass = AMP_CONTENT_LIST_INTRO_DISPLAY;
+            $intro = &new $introClass( $this->_section );
         }
         return $intro;
     }

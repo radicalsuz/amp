@@ -1,9 +1,11 @@
 <?php
 
+if (!defined( 'AMP_CONTENT_LIST_SUBHEADER_CLASS' )) define( 'AMP_CONTENT_LIST_SUBHEADER_CLASS', 'title' );
+
 class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
 
     var $_subsections_display;
-    var $_css_class_title = "title";
+    var $_css_class_subheader = AMP_CONTENT_LIST_SUBHEADER_CLASS;
 
     function SectionContentDisplay_ArticlesBySubsection ( &$articleSet ) {
         $this->init( $articleSet );
@@ -40,7 +42,7 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
     }
 
     function _HTML_subheaderTitle( $title ) {
-        return $this->_HTML_in_P( $title, array( 'class' => $this->_css_class_title ) );
+        return $this->_HTML_in_P( $title, array( 'class' => $this->_css_class_subheader ) );
     }
 
 }

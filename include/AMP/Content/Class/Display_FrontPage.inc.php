@@ -6,6 +6,7 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
 
     var $_pager_active = false;
     var $_css_class_container_list = "home";
+    var $_css_class_container_listentry = 'list_entry' ;
 
     function ContentClass_Display_FrontPage( &$dbcon ) {
         $this->_class = &new ContentClass ( $dbcon, AMP_CONTENT_CLASS_FRONTPAGE );
@@ -26,6 +27,7 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
 
     function _HTML_listTable( $content ) {
         if (!$content ) return false;
+        if ( AMP_CONTENT_LAYOUT_CSS ) return $content;
         return  '<table width="100%" class="'.$this->_css_class_text.'">' . $content . '</table>';
     }
 
@@ -33,6 +35,8 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
     function _HTML_listItem( &$contentItem ) {
        
         if (!($display = &$contentItem->getDisplay())) return false;
+
+        if ( AMP_CONTENT_LAYOUT_CSS ) return $this->_HTML_inDiv( $display->execute(), $this->_css_class_container_listentry );
         return  "<tr>".
                 $this->_HTML_inTD( $display->execute() ). 
                 "</tr>";

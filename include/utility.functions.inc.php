@@ -99,11 +99,12 @@ if ( !function_exists( 'DoDateTime' ) ) {
 
     //Date functions
     function DoDateTime($theObject, $NamedFormat) {
-    if ($theObject == ($null)){ $parsedDate = '';}
-        else {
+        if (!isset($theObject))  return '';
+
         ereg("([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})", $theObject, $tgRegs);
-        $parsedDate=date($NamedFormat, mktime($tgRegs[4],$tgRegs[5],$tgRegs[6],$tgRegs[2],$tgRegs[3],$tgRegs[1])); }
-        if ($parsedDate == "12/31/69") { $parsedDate = NULL;}
+        $parsedDate=date($NamedFormat, mktime($tgRegs[4],$tgRegs[5],$tgRegs[6],$tgRegs[2],$tgRegs[3],$tgRegs[1])); 
+
+        if ($parsedDate == "12/31/69") return '';
         return $parsedDate;
     }
 

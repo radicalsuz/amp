@@ -2,6 +2,7 @@
 
 require_once('adodb/adodb.inc.php');
 require_once('utility.functions.inc.php');
+require_once('AMP/Registry.php');
 
 $ampdbcon = null;
 
@@ -104,7 +105,6 @@ $dbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME );
 
 if (!defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
 
-require_once('AMP/Registry.php');
 if (AMP_SITE_MEMCACHE_ON) require_once('AMP/System/Memcache.inc.php');
 require_once('AMP/System/Lookups.inc.php');
 $registry =& AMP_Registry::instance();

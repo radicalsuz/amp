@@ -1,5 +1,7 @@
 <?php
 
+if (!defined( 'AMP_CONTENT_LIST_INTRO_DISPLAY' )) define ('AMP_CONTENT_LIST_INTRO_DISPLAY', 'ListIntro_Display' );
+
 require_once ('AMP/Content/Article/SetDisplay.inc.php' );
 class ContentClass_Display extends ArticleSet_Display {
 
@@ -20,13 +22,13 @@ class ContentClass_Display extends ArticleSet_Display {
         $intro = false;
         $currentPage = &AMPContent_Page::instance();
         if ($currentPage->contentManager->showListIntro()) {
-            $intro = &new ListIntro_Display( $this->_class );
+            $intro = &new AMP_CONTENT_LIST_INTRO_DISPLAY( $this->_class );
         }
         return $intro;
     }
 
     function _HTML_listIntro( &$intro ) {
-        if (!( $this->isFirstPage() && $intro )) return $this->_pager->_HTML_topNotice( $this->_class->getName() );
+        if ( isset ($this->_pager) && !( $this->isFirstPage() && $intro )) return $this->_pager->_HTML_topNotice( $this->_class->getName() );
         return $intro->execute(); # . $this->_HTML_newline();
     }
 }

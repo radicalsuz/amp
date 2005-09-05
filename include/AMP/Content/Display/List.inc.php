@@ -2,6 +2,8 @@
 
 require_once( 'AMP/Content/Display/HTML.inc.php' );
 require_once( 'AMP/Content/Display/Pager.inc.php' );
+if (!defined( 'AMP_CONTENT_MAIN_HEADER_HTML' )) define( 'AMP_CONTENT_MAIN_HEADER_HTML', false );
+if (!defined( 'AMP_CONTENT_LAYOUT_CSS' )) define( 'AMP_CONTENT_LAYOUT_CSS', false );
 
 class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
@@ -28,6 +30,9 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     var $_css_class_morelink = "go";
     var $_css_class_text     = "text";
     var $_css_class_date     = "bodygreystrong";
+
+    var $_css_id_container_content = "main_content";
+    var $_css_class_container_listentry = "list_entry";
 
     function AMPContent_DisplayList_HTML ( &$source ) {
         $this->init( $source );
@@ -63,11 +68,16 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     }
 
     function _HTML_listing( &$sourceItems ) {
-        $output = "";
+        $output = AMP_CONTENT_MAIN_HEADER_HTML;
         foreach ($sourceItems as $contentItem ) {
             $output .= $this->_HTML_listItem( $contentItem );
         }
-        return $output;
+        return $this->_HTML_listingLayout( $output );
+    }
+
+    function _HTML_listingLayout( $html ) {
+        if (!AMP_CONTENT_LAYOUT_CSS ) return $html;
+        return $this->_HTML_inDiv( $html, array( 'id' => $this->_css_id_container_content ) );
     }
 
     function _HTML_listItem( &$contentItem ) {
@@ -79,9 +89,18 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
         $text_description   = $this->_HTML_listItemDescription( $contentItem );
 
+        return $this->_HTML_listItemLayout( $text_description, $thumb );
+
+    }
+
+    function _HTML_listItemLayout ( $text, $image ) {
+        if ( AMP_CONTENT_LAYOUT_CSS ) {
+            return  $this->_HTML_inDiv( $image . $text, array( 'class' => $this->_css_class_container_listentry ) );
+        }
+
         return  "<table" . $this->_HTML_makeAttributes( $this->_layout_table_attr ) . "><tr>" . 
-                $this->_HTML_inTD( $thumb ) . 
-                $this->_HTML_inTD( $text_description ). 
+                $this->_HTML_inTD( $image ) . 
+                $this->_HTML_inTD( $text ). 
                 $this->_HTML_endTable() . 
                 $this->_HTML_newline();
     }
@@ -104,6 +123,10 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     function _HTML_thumbnail( &$image ) {
         if (!$image) return false;
+        $reg = &AMP_Registry::instance();
+        if ($thumb_attr = $reg->getEntry( AMP_REGISTRY_CONTENT_IMAGE_THUMB_ATTRIBUTES )) {
+            $this->_thumb_attr = array_merge( $this->_thumb_attr, $thumb_attr );
+        }
         return $this->_HTML_image( $image->getURL( AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ) ;
     }
 

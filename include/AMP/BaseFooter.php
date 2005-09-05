@@ -23,7 +23,6 @@ if (isset($modulefooter) && $modulefooter){
 $currentPage->setContent( ob_get_clean() );
 
 $displayType = AMP_CONTENT_PAGE_DISPLAY_DEFAULT;
-
 if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) $displayType = AMP_CONTENT_PAGE_DISPLAY_PRINTERSAFE ;
     
 $final_page_html = $currentPage->output( $displayType );

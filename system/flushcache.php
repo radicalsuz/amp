@@ -34,4 +34,3 @@ print $script;
 print $template->outputFooter();
 
 ?>
-  

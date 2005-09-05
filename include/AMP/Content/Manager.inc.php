@@ -1,7 +1,11 @@
 <?php
 
 define ( 'MEMCACHE_KEY_CONTENT' , 'PageContent' );
-class AMPContent_Manager {
+if (!defined( 'AMP_CONTENT_BUFFER_CONTAINER_CLASS' )) define ('AMP_CONTENT_BUFFER_CONTAINER_CLASS', false );
+
+require_once( 'AMP/Content/Display/HTML.inc.php' );
+
+class AMPContent_Manager extends AMPDisplay_HTML {
 
     var $_html_body;
     var $_html_footer;
@@ -41,9 +45,14 @@ class AMPContent_Manager {
         $this->_html_footer .= $html;
     }
 
+    function doBufferHtml() {
+        if (!AMP_CONTENT_BUFFER_CONTAINER_CLASS) return $this->_html_body ;
+        return $this->_HTML_inDiv( $this->_html_body, array( 'class' => AMP_CONTENT_BUFFER_CONTAINER_CLASS ));
+    }
+
     function output() {
         $output=$this->doIntroDisplay().
-                $this->_html_body .
+                $this->doBufferHtml().
                 $this->doDisplays().
                 $this->_html_footer ;
         return $output;

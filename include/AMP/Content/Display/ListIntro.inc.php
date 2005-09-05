@@ -7,6 +7,9 @@ class ListIntro_Display extends AMPDisplay_HTML {
 
     var $_source;
     var $_css_id_container = 'content_header';
+    var $_css_class_title = "title";
+    var $_css_class_text = "text";
+    var $_css_class_date = "text";
 
     function ListIntro_Display( &$source ) {
         $this->_source = &$source;
@@ -14,7 +17,7 @@ class ListIntro_Display extends AMPDisplay_HTML {
     
     function execute() {
         if ($article = &$this->_source->getHeaderRef() ) {
-            $display = &new Article_Display( $article );
+            $display = &$article->getDisplay();
             $output = $display->execute();
         } else {
             $output =
@@ -29,17 +32,17 @@ class ListIntro_Display extends AMPDisplay_HTML {
 
     function _HTML_title( $title ) {
         if (!$title) return false;
-        return $this->_HTML_in_P( $title, array('class'=>'title'));
+        return $this->_HTML_in_P( $title, array('class'=>$this->_css_class_title));
     }
 
     function _HTML_blurb( $blurb ) {
         if (!$blurb) return false;
-        return $this->_HTML_in_P( converttext($blurb), array('class'=>'text'));
+        return $this->_HTML_in_P( converttext($blurb), array('class'=>$this->_css_class_text));
     }
 
     function _HTML_date( $date_value ) {
         if (!$date_value ) return false;
-        return $this->_HTML_in_P( DoDate( $date_value, 'F j, Y').$this->_HTML_newline(), array('class'=>'text'));
+        return $this->_HTML_in_P( DoDate( $date_value, 'F j, Y').$this->_HTML_newline(), array('class'=>$this->_css_class_date));
     }
 }
 ?>
