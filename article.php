@@ -49,7 +49,7 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
     //************************/
     // Redirect to Search for invalid page types
     // No Valid List or Article
-    if (!( $listType || $currentPage->isArticle() ))        ampredirect ( AMP_CONTENT_URL_SEARCH );
+    if (!( $currentPage->getListSource()  || $currentPage->isArticle() ))   ampredirect ( AMP_CONTENT_URL_SEARCH );
 
     // Article is Not Live, Preview Mode is Not on
     if ( !AMP_DISPLAYMODE_PREVIEW ) {    
@@ -59,7 +59,7 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
     //************************/
     // check if section criteria exists for class lists
     if ($listType == AMP_CONTENT_LISTTYPE_CLASS) {
-        if ( isset( $_GET['type']) && isset( $currentPage->section ) ) {
+        if ( isset( $_GET['type']) && isset( $currentPage->section ) && isset( $currentPage->class ) ) {
             $currentPage->class->addContentsCriteria( 
                 $currentPage->section->getCriteriaForContent() );
         }

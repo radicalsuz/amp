@@ -72,10 +72,10 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         foreach ($sourceItems as $contentItem ) {
             $output .= $this->_HTML_listItem( $contentItem );
         }
-        return $this->_HTML_listingLayout( $output );
+        return $this->_HTML_listingFormat( $output );
     }
 
-    function _HTML_listingLayout( $html ) {
+    function _HTML_listingFormat( $html ) {
         if (!AMP_CONTENT_LAYOUT_CSS ) return $html;
         return $this->_HTML_inDiv( $html, array( 'id' => $this->_css_id_container_content ) );
     }
@@ -113,7 +113,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
    
     function _HTML_listItemBlurb( $blurb ) {
         if (!trim( $blurb )) return false;
-        return $this->_HTML_inSpan( AMP_trimText( $blurb, $this->_max_blurb_length) , $this->_css_class_text ) ; 
+        return $this->_HTML_inSpan( AMP_trimText( $blurb, $this->_max_blurb_length ) , $this->_css_class_text ) ; 
     }
 
     function _HTML_listItemDate ( $date ) {

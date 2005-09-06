@@ -8,7 +8,7 @@
  *
  * AMP 3.5.0
  * 2005-07-26
- * Author: austin@radicaldesigns.org
+ * @author: austin@radicaldesigns.org
  *
  * * * */
 
@@ -240,7 +240,7 @@ class AMP_Breadcrumb_Content {
     }
 
     function _trimText( $text ) {
-        return AMP_trimText( $text, $this->max_text_length );
+        return AMP_trimText( $text, $this->max_text_length, false );
     }
 
 }

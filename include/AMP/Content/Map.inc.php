@@ -10,7 +10,7 @@ class AMPContent_Map {
 
     var $dbcon;
     var $map;
-    var $fields = array("id","type","usenav","textorder","parent", "secure", "templateid", "css");
+    var $fields = array("id","type","usenav","textorder","parent", "secure", "templateid", "css", "flash");
     var $dataset;
     var $childset;
     var $top;

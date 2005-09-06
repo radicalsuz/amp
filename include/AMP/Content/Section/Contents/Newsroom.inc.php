@@ -23,6 +23,11 @@ class SectionContentSource_Newsroom extends SectionContentSource_Articles {
         $this->_setBaseCriteria();
     }
 
+    function _setBaseCriteria() {
+        $this->_source->addCriteria( $this->_getClassCriteria() );
+        $this->_display_crit_source->cleanStatus( $this->_source );
+    }
+
     function _getClassCriteria() {
         if (empty($this->_included_classes)) return false;
         return "class in (" . join( ", ", $this->_included_classes ) . ")" ;

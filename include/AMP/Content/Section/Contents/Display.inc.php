@@ -66,7 +66,8 @@ class SectionContents_Display  extends AMPDisplay_HTML {
             return ($intro ? $intro->execute() : $intro ) ;
 
         return  $this->_HTML_listIntro( $intro ) . 
-                $this->_display->execute();
+                $this->_display->execute() .
+                $this->_HTML_listFooter() ;
     }
         
 
@@ -85,6 +86,17 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         if (!(isset($this->_display) && isset($this->_section))) return false;
         if ( isset( $this->_display->_pager ) && !($this->_display->isFirstPage() && $intro)) return $this->_display->_pager->_HTML_topNotice( $this->_section->getName() );
         return $intro->execute() . $this->_HTML_newline();
+    }
+
+    function _HTML_listFooter() {
+        if (!AMP_CONTENT_CLASS_SECTIONFOOTER) return false;
+        $footer = false;
+        $currentPage = &AMPContent_Page::instance();
+
+        if (!($currentPage->contentManager->showListIntro() && ($footer = &$this->_section->getFooterRef() ))) return false;
+
+        $display = &$footer->getDisplay();
+        return $display->execute();
     }
 }
 ?>

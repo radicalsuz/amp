@@ -19,7 +19,7 @@ class SectionContentSource_Subsections extends SectionContentSource {
 
     function _setCriteria() {
         $this->_source->addCriteria( $this->getSectionCriteria() );
-        $this->_source->addCriteria( $this->_getStatusCriteria() );
+        $this->_display_crit_source->cleanStatus( $this->_source );
     }
 
     function getSectionCriteria() {
@@ -27,9 +27,9 @@ class SectionContentSource_Subsections extends SectionContentSource {
     }
 
     function _setSort() {
-        $this->_source->setSort( $this->_base_sort);
+        $this->_source->setSort( $this->_base_sort );
         $this->_source->addSort(
-        "if(isnull(textorder) or textorder='', ". AMP_CONTENT_LISTORDER_MAX .", textorder) ASC");
+            "if(isnull(textorder), ". AMP_CONTENT_LISTORDER_MAX .", textorder) ASC");
     }
 }
 ?>

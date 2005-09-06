@@ -22,7 +22,8 @@ class ContentClass_Display extends ArticleSet_Display {
         $intro = false;
         $currentPage = &AMPContent_Page::instance();
         if ($currentPage->contentManager->showListIntro()) {
-            $intro = &new AMP_CONTENT_LIST_INTRO_DISPLAY( $this->_class );
+            $introClass = AMP_CONTENT_LIST_INTRO_DISPLAY;
+            $intro = &new $introClass( $this->_class );
         }
         return $intro;
     }

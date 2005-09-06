@@ -40,7 +40,13 @@ class Section extends AMPSystem_Data_Item {
         if (!$this->getData( 'header' )) return false;
         if ($id = $this->getHeaderTextId() ) return new Article( $this->dbcon, $id );
         if (!($headers = &AMPContent_Lookup::instance( 'sectionHeaders' ))) return false;
-        if (isset($headers[ $this->id ])) return new Article( $this->dbcon, $headers[ $this->id ] );
+        if (isset( $headers[ $this->id ] )) return new Article( $this->dbcon, $headers[ $this->id ] );
+        return false;
+    }
+    function &getFooterRef() {
+        if (!AMP_CONTENT_CLASS_SECTIONFOOTER) return false;
+        if (!($footers = &AMPContent_Lookup::instance( 'sectionFooters' ))) return false;
+        if (isset( $footers[ $this->id ] )) return new Article( $this->dbcon, $footers[ $this->id ] );
         return false;
     }
 

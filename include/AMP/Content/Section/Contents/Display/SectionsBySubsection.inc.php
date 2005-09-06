@@ -1,14 +1,14 @@
 <?php
 
-if (!defined( 'AMP_CONTENT_LIST_SUBHEADER_CLASS' )) define( 'AMP_CONTENT_LIST_SUBHEADER_CLASS', 'title' );
+require_once ( 'AMP/Content/Section/SetDisplay.inc.php' );
 
-class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
+class SectionContentDisplay_SectionsBySubsection extends SectionSet_Display {
 
     var $_subsections_display;
     var $_css_class_subheader = AMP_CONTENT_LIST_SUBHEADER_CLASS;
 
-    function SectionContentDisplay_ArticlesBySubsection ( &$articleSet ) {
-        $this->init( $articleSet );
+    function SectionContentDisplay_SectionsBySubSection( &$sectionSet ) {
+        $this->init( $sectionSet );
     }
 
     function execute() {
@@ -17,10 +17,10 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
         $listBody = "";
 
         foreach ($subsections as $subsection ) {
-            if( !($article_data = &$this->_source->filter( 'type', $subsection->id , $this->_pager->getLimit() ))) continue;
-            $articles  = &$this->_buildItems( $article_data );
+            if( !($section_data = &$this->_source->filter( 'parent', $subsection->id ))) continue;
+            $sections = &$this->_buildItems( $section_data );
             $listBody .= $this->_HTML_subheader( $subsection ).
-                         $this->_HTML_listing( $articles )  ;
+                         $this->_HTML_listing( $sections )  ;
         }
         return $listBody;
 

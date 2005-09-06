@@ -1,4 +1,5 @@
 <?php
+require_once( 'AMP/Content/Display/Criteria.inc.php' );
 
 class SectionContentSource {
 
@@ -13,6 +14,8 @@ class SectionContentSource {
 
     function init( &$section ) {
         $this->_section = &$section;
+        $this->_display_crit_source = &new AMPContent_DisplayCriteria();
+        $this->_display_crit_source->setStatusField( $this->_status_field );
     }
 
     function execute() {
@@ -30,16 +33,17 @@ class SectionContentSource {
         $this->_source->setSort( $this->_base_sort );
     }
 
+    /*
     function _includeDraftStatus() {
         return $this->_include_draft_status;
     }
-
 
     function _getStatusCriteria() {
         if ( $this->_includeDraftStatus() ) return false;
         $status_field = $this->_getStatusField(); 
         return "$status_field=" . AMP_CONTENT_STATUS_LIVE;
     }
+    */
 
     function _getStatusField() {
         return $this->_status_field;

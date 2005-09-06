@@ -236,10 +236,11 @@ class AMPContent_Page {
         if (!$listType = $this->isList()) return false;
 
         $this->contentManager->setListIntro( $show_intro );
-        $displaySource = strtolower( $this->getBaseListType( $listType ) );
-        if (!($displaySource && isset($this->$displaySource) && method_exists( $this->$displaySource, 'getDisplay' ))) return false;
+        if ( ( $displaySource = $this->getListSource() ) && method_exists( $this->$displaySource, 'getDisplay' )) {
+            return  $this->$displaySource->getDisplay();
+        }
 
-        return  $this->$displaySource->getDisplay();
+        return false;
 
     }
 
@@ -251,6 +252,12 @@ class AMPContent_Page {
     ############################
     ###  PAGETYPE accessors  ###
     ############################
+
+    function getListSource() {
+        if (!$listType = $this->isList()) return false;
+        $listSource = strtolower( $this->getBaseListType( $listType ) );
+        return (($listSource && isset( $this->$listSource )) ? $listSource : false );
+    }
 
     function isList() {
         if (!isset($this->listType)) return false;

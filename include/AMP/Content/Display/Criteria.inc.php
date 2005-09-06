@@ -11,9 +11,17 @@ class AMPContent_DisplayCriteria {
         AMP_CONTENT_CLASS_USERSUBMITTED
         );
 
-    function clean( &$articleSet ) {
-        $articleSet->addCriteria( $this->_getStatusCriteria() );
-        $articleSet->addCriteria( $this->_getClassCriteria() );
+    function AMPContent_DisplayCriteria() {
+        if (AMP_CONTENT_CLASS_SECTIONFOOTER) $this->_excluded_classes[] = AMP_CONTENT_CLASS_SECTIONFOOTER;
+    }
+
+    function clean( &$contentSource ) {
+        $contentSource->addCriteria( $this->_getClassCriteria() );
+        $this->cleanStatus( $contentSource );
+    }
+
+    function cleanStatus( &$contentSource ) {
+        $contentSource->addCriteria( $this->_getStatusCriteria() );
     }
 
     function allowClass( $class_id ) {
@@ -40,6 +48,14 @@ class AMPContent_DisplayCriteria {
 
     function _includeDraftStatus() {
         return $this->_include_draft_status;
+    }
+
+    function setStatusField( $fieldname ) {
+        $this->_status_field = $fieldname;
+    }
+
+    function setIncludeDraft( $new_value = true ) {
+        $this->_include_draft_status = $new_value;
     }
 
 }

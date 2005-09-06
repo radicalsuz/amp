@@ -759,8 +759,8 @@ if (!function_exists('AMP_makeMergeFields')) {
 }
 
 if (!function_exists('AMP_trimText')) {
-    function AMP_trimText( $text, $max_length ) {
-        $trimmed = strip_tags( $text );
+    function AMP_trimText( $text, $max_length, $preserve_tags=true ) {
+        $trimmed = ($preserve_tags ? $text : strip_tags( $text ));
         if (! (strlen( $trimmed ) > $max_length) ) return $trimmed; 
 
         $end_item = " ...";

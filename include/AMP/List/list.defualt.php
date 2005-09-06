@@ -78,8 +78,8 @@ if (isset($_GET['all'])) {
 }
 
 $sql = $sqlsel.$sql.$sqloffset;
+if ( isset( $_GET['debug'] )) AMP_DebugSQL( $sql, 'list_default' );
 $list=$dbcon->CacheExecute("$sql")or DIE("Could not build list:<br>".$sql.'<br>'.$dbcon->ErrorMsg());
-if (isset($_GET['debug'])) print $sql;
 
 
 // calll the layout file

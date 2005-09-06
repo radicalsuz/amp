@@ -17,6 +17,7 @@ $sqloffset = " LIMIT $soffset,$limit ";
 if (isset($_GET[all])) {$sqloffset ="";}
 
 $sql = $sqlsel.$sql.$sqloffset;
+if ( isset( $_GET['debug'] )) AMP_DebugSQL( $sql, 'list_general' );
 $list=$dbcon->CacheExecute("$sql")or DIE($dbcon->ErrorMsg());
 
 

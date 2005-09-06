@@ -101,7 +101,9 @@ if (!is_dir($ADODB_CACHE_DIR) || !is_writable($ADODB_CACHE_DIR))
 ADOLoadCode(AMP_DB_TYPE);
 
 $dbcon =& ADONewConnection( AMP_DB_TYPE );
-$dbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME );
+if (! $dbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME )) {
+    die( 'Connection to database '.AMP_DB_NAME.' was refused.  Please check your site configuration file.' );
+}
 
 if (!defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
 
