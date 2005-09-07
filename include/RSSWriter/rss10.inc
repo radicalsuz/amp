@@ -30,7 +30,7 @@ function RSSWriter($uri, $title, $description, $meta=array()) {
 	$this->items=array();
 	$this->modules=array("dc" => "http://purl.org/dc/elements/1.1/");
 	// thanks James Mills for bugfix to this line
-	$this->channelURI=str_replace("&", "&amp;", "http://" . $GLOBALS["SERVER_NAME"] . $GLOBALS["REQUEST_URI"]);
+	$this->channelURI=str_replace("&", "&amp;", "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
 	foreach ($meta as $key => $value) {
 		$this->chaninfo[$key]=$value;
 	}

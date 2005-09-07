@@ -26,7 +26,7 @@ $sql="(SELECT css, Concat('articletype, type, id=,', templateid) as db_id FROM a
 		foreach ($localcss_set as $cssfile ) {
 			//$datafiles[$i]['css']=$filename_css[$j];
 			if (array_search($cssfile, $allcss_set) !== FALSE) continue;
-            $allcss_set[]= $cssfile;
+            $allcss_set[]= trim($cssfile);
         }
 			
 	

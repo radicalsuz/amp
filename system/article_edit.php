@@ -49,7 +49,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 	}
 	
 	$date =  DateConvertIn($date);
-	$_POST['textfield'] =htmlspecialchars($_POST['textfield']);
+	#$_POST['textfield'] =htmlspecialchars($_POST['textfield']);
 	if ($_POST['mlink']) { 
 		$link = $_POST['mlink'];
 		$linkuse = 1;

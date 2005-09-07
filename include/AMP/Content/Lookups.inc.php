@@ -93,4 +93,14 @@ class AMPContentLookup_SectionParents extends AMPContent_Lookup {
     }
 }
 
+class AMPConstantLookup_Listtypes extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_SECTIONLIST";
+    var $_prefix_labels = "AMP_TEXT_SECTIONLIST";
+
+    function AMPConstantLookup_Listtypes() {
+        $this->init();
+    }
+
+}
+
 ?>

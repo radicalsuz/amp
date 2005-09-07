@@ -34,4 +34,8 @@ class AMP_RSSWriter extends RSSWriter {
 			print "  </item>\n\n";
 		}
 	}
+    function execute() {
+        $this->serialize();
+    }
 }
+?>

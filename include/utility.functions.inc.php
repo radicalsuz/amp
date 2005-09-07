@@ -707,6 +707,7 @@ if (!function_exists('filterConstants')) {
 		
 		foreach ( $constant_set as $name => $value ) {
 			if ( strpos( $name, $local_prefix )!==0 ) continue;
+            if (!isset( $value )) continue;
 
 			$desc = substr( $name, strlen( $local_prefix ) );
 			$result_set[ $desc ] = $value;

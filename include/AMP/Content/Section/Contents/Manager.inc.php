@@ -22,6 +22,7 @@ if (!defined( 'AMP_SECTIONLIST_SUBSECTIONS_PLUS_ARTICLES'))
 if (!defined( 'AMP_SECTIONLIST_ARTICLES_AGGREGATOR')) 
                                                 define( 'AMP_SECTIONLIST_ARTICLES_AGGREGATOR', '7' );
 if ( file_exists_incpath( 'custom.layouts.inc.php' )) include_once ('custom.layouts.inc.php' );
+if ( file_exists_incpath( 'custom.sources.inc.php' )) include_once ('custom.sources.inc.php' );
 
 class SectionContents_Manager {
 

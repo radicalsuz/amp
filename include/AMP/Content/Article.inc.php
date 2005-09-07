@@ -129,6 +129,10 @@ class Article extends AMPSystem_Data_Item {
         return $this->getArticleDate();
     }
 
+    function getItemDateChanged() {
+        return $this->getData( 'updated');
+    }
+
     function &getImageRef() {
         if (! ($img_path = $this->getImageFileName())) return false;
         $image = &new Content_Image();

@@ -204,5 +204,37 @@ class AMPSystemLookup_Users extends AMPSystem_Lookup {
         $this->init();
     }
 }
+class AMPConstant_Lookup {
+
+    var $dataset;
+    var $prefix_values;
+    var $prefix_labels;
+
+    function init() {
+        if (isset($this->_prefix_values)) {
+            $this->dataset = array_flip(filterConstants( $this->_prefix_values ));
+        }
+        if (isset($this->_prefix_labels)) {
+            $this->_swapLabels( filterConstants( $this->_prefix_labels ) );
+        }
+        ksort( $this->dataset );
+    }
+
+    function _swapLabels ( $new_labels ) {
+        if (!$new_labels || empty( $new_labels )) return false;
+        foreach ($new_labels as $label_key => $label_value ) {
+            $applied_key = array_search( $label_key, $this->dataset );
+            if ($applied_key === FALSE ) continue;
+            $this->dataset[ $applied_key ] = $label_value;
+        }
+    }
+
+    function &instance( $type, $lookup_baseclass="AMPConstantLookup" ) {
+        static $lookup_set = false;
+        $req_class = $lookup_baseclass . '_' . ucfirst($type);
+        if (!$lookup_set) $lookup_set = new $req_class(); 
+        return $lookup_set->dataset;
+    }
+}
 
 ?>

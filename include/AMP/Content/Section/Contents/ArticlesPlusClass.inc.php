@@ -1,5 +1,4 @@
 <?php
-
 require_once ('AMP/Content/Section/Contents/Articles.inc.php' );
 if (!defined( 'AMP_CONTENT_SECTION_PLUS_CLASS' )) define ( 'AMP_CONTENT_SECTION_PLUS_CLASS', 5 );
 

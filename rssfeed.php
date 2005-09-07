@@ -1,4 +1,17 @@
 <?php 
+require_once( 'AMP/BaseDB.php' );
+if (!defined( 'AMP_USE_OLD_CONTENT_ENGINE' )) define( 'AMP_USE_OLD_CONTENT_ENGINE' , false );
+
+if (!AMP_USE_OLD_CONTENT_ENGINE) {
+    require_once( 'AMP/Content/RSS/Feed.inc.php' );
+    $feed_id = (isset($_GET['feed'])&&$_GET['feed']) ? $_GET['feed'] : null;
+    $feed = &new AMPContent_RSSFeed( $dbcon, $feed_id );
+
+    if ($display=&$feed->getDisplay()) {
+        $display->execute();
+    }
+} else {
+
 header('Content-type: text/xml');
 print '<?xml version="1.0" encoding="ISO-8859-1"?>
 ';
@@ -6,7 +19,6 @@ print '<?xml version="1.0" encoding="ISO-8859-1"?>
 $sqllimit= 15;
 $orderby = "date";
 $orderbyorder ="desc";
-require_once( 'AMP/BaseDB.php' );
 
 if ($_GET['feed']) {
 	$f =$dbcon->CacheExecute("select * from rssfeed where id = ".$_GET['feed']." ") or DIE($dbcon->ErrorMsg());
@@ -36,6 +48,7 @@ $R =$dbcon->CacheExecute($sql) or DIE($sql.$dbcon->ErrorMsg());
 	<generator>Activist Mobilization Platform</generator>
 	<webMaster><?= $admEmail ?></webMaster>
 <?php 
+/*
 function makesmall($ttext) {
 	$aspace=" ";
 	$maxTextLenght=9000;
@@ -46,6 +59,7 @@ function makesmall($ttext) {
 	  }
 	return $ttext;
 }
+*/
 while (!$R->EOF) {
 $description = NULL;
 if ($R->Fields("title")) {
@@ -84,3 +98,6 @@ if ($R->Fields("title")) {
 
 </channel>
 </rss>
+<?php
+}
+?>

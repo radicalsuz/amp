@@ -2,6 +2,9 @@
 $mod_name="content";
 require_once("Connections/freedomrising.php"); 
 require_once("Connections/sysmenu.class.php");
+require_once ('AMP/Content/Section/Contents/Manager.inc.php');
+require_once('AMP/Content/Lookups.inc.php');
+require_once ('AMP/Content/Labels.inc.php');
 
 // create Menu
 $obj = new SysMenu;
@@ -148,28 +151,37 @@ document.getElementById('advanced').style.display = 'none';
           </tr>
           <tr> 
             <td class="name">List Format</td>
-            <td> <select name="listtype" id="listtype">
+            <td> <!--<select name="listtype" id="listtype">
                 <?php
+                /*
   if ($listtypes__totalRows > 0){
     $listtypes__index=0;
     $listtypes->MoveFirst();
     WHILE ($listtypes__index < $listtypes__totalRows){
+        */
 ?>
-                <OPTION VALUE="<?php echo  $listtypes->Fields("id")?>"<?php if ($listtypes->Fields("id")==$subtype->Fields("listtype")) echo "SELECTED";?>> 
+                <OPTION VALUE="<?php #echo  $listtypes->Fields("id")?>"<?php #if ($listtypes->Fields("id")==$subtype->Fields("listtype")) echo "SELECTED";?>> 
                 <?php 
 				
 				
-				echo  $listtypes->Fields("name");?>
+				#echo  $listtypes->Fields("name");?>
                 </OPTION>
                 <?php
+                /*
       $listtypes->MoveNext();
       $listtypes__index++;
     }
     $listtypes__index=0;  
     $listtypes->MoveFirst();
   }
+  */
 ?>
-              </select> </td>
+              </select>--> 
+              <?php
+              print AMP_buildSelect( 'listtype', AMPConstantLookup_Listtypes::instance('listtypes'), $subtype->Fields( 'listtype' ));
+              ?>
+              </td>
+
           </tr>
           <tr> 
             <td class="name">Use Section Header</td>
@@ -306,4 +318,5 @@ document.getElementById('advanced').style.display = 'none';
          
 </form>
   
-      <?php include ("footer.php");?>
+      <?php include ("footer.php");
+?>
