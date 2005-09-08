@@ -77,7 +77,7 @@ class AMPSystem_NavManager {
     }
 
     function getNav( $nav_name ) {
-		strtolower($nav_name);
+		$nav_name = strtolower($nav_name);
         if (!$this->isNav( $nav_name )) return false;
         return $this->nav_set[$nav_name];
     }
