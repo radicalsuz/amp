@@ -32,6 +32,8 @@ class AMPSystem_BaseTemplate {
 
     var $nav_name;
 
+	var $_use_form_nav = true;
+
     function AMPSystem_BaseTemplate() {
         $this->page_title = $GLOBALS['SiteName'] . ' Administration';
         $reg = & AMP_Registry::instance();
@@ -61,6 +63,13 @@ class AMPSystem_BaseTemplate {
         if ($nav_name == 'module') return $this->setToolName('tools');
         $this->nav_name = $nav_name;
     }
+
+	function useFormNav( $usenav = null ) {
+		if(isset($usenav)) {
+			$this->_use_form_nav = $usenav;
+		}
+		return $this->_use_form_nav;
+	}
 
     #############################
     ### Public Output Methods ###
@@ -196,7 +205,7 @@ class AMPSystem_BaseTemplate {
         $nav_name = $this->nav_name;
         if (isset($this->modid)) $navEngine->setToolId( $this->modid );
 
-        if ($this->form_id) {
+        if ($this->form_id && $this->useFormNav()) {
             $form_name = $navEngine->buildFormNav( $this->form_id );
             if ($form_name) $nav_name = $form_name;
         }
