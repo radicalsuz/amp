@@ -39,6 +39,7 @@ class AMPSystem_NavManager {
     }
 
     function &addNav ( $nav_name, $desc=array() ) {
+		$nav_name = strtolower($nav_name);
         $desc['id'] = $nav_name;
         $this->nav_set[$nav_name] = &new AMPSystem_Nav( $desc, $this );
         return $this->nav_set[$nav_name];
@@ -71,10 +72,12 @@ class AMPSystem_NavManager {
     }
 
     function isNav( $nav_name ) {
+		$nav_name = strtolower($nav_name);
         return isset($this->nav_set[$nav_name]);
     }
 
     function getNav( $nav_name ) {
+		strtolower($nav_name);
         if (!$this->isNav( $nav_name )) return false;
         return $this->nav_set[$nav_name];
     }
