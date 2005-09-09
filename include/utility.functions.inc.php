@@ -809,4 +809,11 @@ if (!function_exists( 'AMP_cachePageItem' )) {
         return $memcache->setPageItem( $item_key, $item );
     }
 }
+
+if (!function_exists( 'AMP_removeExtension' )) {
+    function AMP_removeExtension( $filename ) {
+        if (!($dotpoint = strrpos( $filename, "." ) )) return $filename;
+        return substr( $filename, 0, $dotpoint);
+    }
+}
 ?>

@@ -36,6 +36,10 @@ class Content_Image {
         return $this->_itemdata[ $fieldname ];
     }
 
+    function getName() {
+        return $this->filename;
+    }
+
     function getWidth() {
         return $this->getData( 'width' );
     }

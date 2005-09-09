@@ -42,7 +42,7 @@ $meta_description    = $SystemSettings["metadescription"];		//meta desc
 $meta_content        = $SystemSettings['metacontent'];			//meta content
 $systemplate_id      = $SystemSettings['template'];
 
-define('AMP_SITE_ADMIN', $admEmail);
+define ('AMP_SITE_ADMIN', $admEmail);
 define ('AMP_SYSTEM_BLAST_EMAIL_SENDER', $SystemSettings['emmedia'] );
 define ('AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME', $SystemSettings['emailfromname'] );
 
@@ -60,6 +60,10 @@ define('AMP_SITE_URL', $SystemSettings['basepath']);
 define('AMP_SITE_NAME', $SystemSettings['websitename']);
 define('AMP_SITE_META_DESCRIPTION', $SystemSettings['metadescription']);
 define('AMP_SITE_CACHE_TIMEOUT', $cacheSecs );
+
+define('AMP_IMAGE_WIDTH_THUMB', $SystemSettings[ 'thumb' ] );
+define('AMP_IMAGE_WIDTH_TALL', $SystemSettings[ 'optl' ] );
+define('AMP_IMAGE_WIDTH_WIDE', $SystemSettings[ 'optw' ] );
 
 #SET DATABASE CACHING
 $dbcon->cacheSecs = $cacheSecs;

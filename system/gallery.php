@@ -4,7 +4,11 @@ $mod_name="gallery";
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
+require_once( 'AMP/System/Upload.inc.php');
+require_once( 'AMP/Content/Image/Resize.inc.php');
+
 $obj = new SysMenu; 
+
 $buildform = new BuildForm;
 
 //SELECT DISTINCT g.season, g.section, g.relsection1, g.relsection2, g.img, g.id, g.publish,  gt.galleryname  From gallery g, gallerytype gt where   g.galleryid=gt.id $order 
@@ -21,16 +25,29 @@ ob_start();
 // insert, update, delete
 if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) or (($_POST['MM_delete']) && ($_POST['MM_recordId']))) {
 
-	$getimgset=$dbcon->Execute("SELECT thumb, optw, optl FROM sysvar where id =1") or DIE($dbcon->ErrorMsg());
-if ($_FILES['file']['name']) {
-	$img = upload_image('',$getimgset->Fields("optw"),$getimgset->Fields("optl"),$getimgset->Fields("thumb"));
-}
+    if ( isset ($_FILES['file']['tmp_name']) && file_exists( $_FILES['file']['tmp_name'])){
+        $upLoader = &new AMPSystem_Upload( $_FILES['file']['name'] );
+        $image_path = AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL ; 
+
+        if ($upLoader->setFolder( $image_path ) && $upLoader->execute( $_FILES['file']['tmp_name'] )) {
+            $new_file_name = basename( $upLoader->getTargetPath() ) ;
+            $reSizer = &new ContentImage_Resize();
+            if ( ! ( $reSizer->setImageFile( $upLoader->getTargetPath() ) && $reSizer->execute() )) {
+                $result_message = "Resize failed:<BR>". join( "<BR>", $reSizer->getErrors() ) . $result_message ;
+            } 
+
+        } else {
+            $result_message =  "File Upload Failed<BR>\n" . join( '<BR>', $upLoader->getErrors() );
+        }
+    }
+
+	#$img = upload_image('',$getimgset->Fields("optw"),$getimgset->Fields("optl"),$getimgset->Fields("thumb"));
 
     $MM_editTable  = $table;
     $MM_recordId = $_POST['MM_recordId'];
     $MM_editRedirectUrl = "gallery_list.php";
 	$MM_editColumn = "id";
-    $MM_fieldsStr = "section|value|img|value|caption|value|photoby|value|date|value|byemail|value|publish|value|galleryid|value";
+    $MM_fieldsStr = "section|value|new_file_name|value|caption|value|photoby|value|date|value|byemail|value|publish|value|galleryid|value";
     $MM_columnsStr = "section|',none,''|img|',none,''|caption|',none,''|photoby|',none,''|date|',none,''|byemail|',none,''|publish|',none,''|galleryid|',none,''";
 	require ("../Connections/insetstuff.php");
     require ("../Connections/dataactions.php");
@@ -57,7 +74,7 @@ elseif ($_GET['p']) {
 	$html .= addfield('img','Image','text',$_GET['p']);
 }
 else {
-	$html .= addfield('file','Uplaod File <br>(jpg files only)','file');
+	$html .= addfield('file','Upload File <br>','file');
 }
 
 $html .= addfield('publish','Publish','checkbox',$R->Fields("publish"),1);

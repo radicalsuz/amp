@@ -1,16 +1,17 @@
 <?php
 $mod_name="content";
 require("Connections/freedomrising.php");
+require_once( 'AMP/Content/Page/Urls.inc.php' );
 
 if (isset($_REQUEST['actdel'])){
-	$dir_name1="".$base_path_amp."img/thumb/";
-	$dir_name2="".$$base_path_amp."img/pic/";
-	$dir_name3="".$base_path_amp."img/original/";
+	$dir_name1= AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_URL_IMAGES . "thumb/";
+	$dir_name2= AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_URL_IMAGES . "pic/";
+	$dir_name3= AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_URL_IMAGES . "original/";
 	unlink($dir_name1.$_REQUEST['actdel']);
 	unlink($dir_name2.$_REQUEST['actdel']);
 	unlink($dir_name3.$_REQUEST['actdel']);
 }
-$dir_name= $base_path_amp."img/thumb";  
+$dir_name=  AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_URL_IMAGES . "thumb";  
 $dir = opendir($dir_name);
 $basename = basename($dir_name);
 $fileArr = array();
