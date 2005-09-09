@@ -67,13 +67,13 @@ if (file_exists($customHandler)) {
         }
     }
 
-    trigger_error( 'Requested resource missing: '.$_SERVER['REQUEST_URI'] );
     $extension_start = strrpos( $_SERVER['PHP_SELF'], '.' );
     $extension = substr( $_SERVER['PHP_SELF'], $extension_start+1 );
 
     if (array_search($extension, $no_search_extensions) === FALSE ) {
         if (!$redirected) ampredirect (AMP_SITE_URL . "search.php");
     }
+    trigger_error( 'Requested resource missing: '.$_SERVER['REQUEST_URI'] );
 
 }
 
