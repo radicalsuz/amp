@@ -125,6 +125,10 @@ class ContentImage_Resize {
         $start_width =  imagesx( $this->versions[ AMP_IMAGE_CLASS_ORIGINAL ] );
         $this->_widths[ AMP_IMAGE_CLASS_ORIGINAL ] = $start_width;
         $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ] = $this->_getOptimizedWidth( $start_height, $start_width );
+        if ($start_width < $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ])
+                $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ] = $start_width;
+        if ($start_width < $this->_widths[ AMP_IMAGE_CLASS_THUMB ])
+                $this->_widths[ AMP_IMAGE_CLASS_THUMB ] = $start_width;
     }
 
     function _getOptimizedWidth( $start_height, $start_width ) {
