@@ -112,9 +112,8 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function getRedirect() {
-        $header_target = $this->getHeaderRedirect();
-        if (!$this->getData('uselink')) return $header_target;
-        if (!( $target = $this->getData('linkurl'))) return $header_target;
+        if (!$this->getData('uselink')) return false;
+        if (!( $target = $this->getData('linkurl'))) return false;
         return $target;
     }
 

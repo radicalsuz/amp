@@ -55,6 +55,10 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
     if ( !AMP_DISPLAYMODE_PREVIEW ) {    
         if ($currentPage->isArticle() && (!$currentPage->article->isLive() )) ampredirect( AMP_CONTENT_URL_SEARCH );
     }
+    // Section List page has a redirect in the SectionHeader
+    if ( $listType == AMP_CONTENT_LISTTYPE_SECTION ) {
+        if ( $target = $currentPage->section->getHeaderRedirect() ) ampredirect( $target );
+    }
 
     //************************/
     // check if section criteria exists for class lists
@@ -64,6 +68,7 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
                 $currentPage->section->getCriteriaForContent() );
         }
     }
+
     // get Listing Display
     if ($listType) {
         $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
