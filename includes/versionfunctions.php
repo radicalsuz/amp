@@ -67,7 +67,7 @@ function articleversionlist($id) {
     <td><?php echo $get->Fields("vid");?></td>
     <td><?php echo $get->Fields("updated");?></td>
     <td><?php if ($u_id = $get->Fields("enteredby")) echo $names_lookup[ $u_id ];?></td>
-    <td><a href="../article.php?vid=<?php echo $get->Fields("vid");?>&preview=1" target="_blank">View</a></td>
+    <td><a href="../article.php?id=<?php echo $id;?>&vid=<?php echo $get->Fields("vid");?>&preview=1" target="_blank">View</a></td>
 	<td><a href="article_edit.php?vid=<?php echo $get->Fields("vid");?>">Edit</a></td>
 	<td><a href="article_edit.php?restore=<?php echo $get->Fields("vid");?>&id=<? echo $id;?>">Restore</a></td>
   </tr>

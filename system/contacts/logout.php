@@ -1,8 +1,7 @@
-<?PHP $logout = true; 
+<?php 
 
+// Unset the cookie, and redirect to the login page.
 
-require_once("../Connections/freedomrising.php");  
-if ($standalone != 1) {
-require("../password/secure.php");}
-else  { require("password/secure.php");}?>
-<?php  header ("Location: index.php");		?>
+setcookie( 'AMPLoginCredentials', 'logout' );
+header( 'Location: index.php' );
+?>

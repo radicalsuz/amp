@@ -18,12 +18,12 @@ if($_REQUEST['MM_haveMaster']&&$_REQUEST['master_dbname']){
 	
 	##### GRAB CURRENT DB DEF ###
 		$currentDB = &new dbDefinition;
-		$currentDB->dbLoadDef($dbcon, $MM_DATABASE);
+		$currentDB->dbLoadDef($dbcon, AMP_DB_NAME);
 		$master_template->dbCheckTables($currentDB);
 	
 	#####OUTPUT REPORT######
 
-    $thisDB=$MM_DATABASE;
+    $thisDB= AMP_DB_NAME;
 		$db_divided_output=array();
 		$db_menu ="";
 		//MOVE ERROR RECORD FROM master_template OBJECT into HTML array for OUTPUT

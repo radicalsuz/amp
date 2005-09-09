@@ -25,9 +25,8 @@ var $table;
 	// constructor
 	function Menu()
 	{
-	global $MM_USERNAME, $MM_HOSTNAME, $MM_PASSWORD, $MX_type, $MM_DATABASE;
-	$this->set_database_parameters($MM_HOSTNAME, $MM_USERNAME, $MM_PASSWORD, $MM_DATABASE, "articletype");
-		}
+	    $this->set_database_parameters( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME, "articletype");
+    }
 
 	// function: get next level of menu tree
 	// returns: array

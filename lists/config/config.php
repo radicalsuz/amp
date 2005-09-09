@@ -1,10 +1,4 @@
 <?
-// $MM_HOSTNAME = "localhost";
-  // $MM_DBTYPE = "mysql";
- // $MM_DATABASE = "test";
-  // $MM_USERNAME = "root";
-  // $MM_PASSWORD = "x";
-
 # select the language module to use
 # at the moment we have german, danish, dutch, italian, italian2
 # and a few more. Look for <country>.inc files in the admin directory
@@ -13,16 +7,16 @@
 $language_module = "english.inc";
 
 # what is your Mysql database server
-$database_host = $MM_HOSTNAME;
+$database_host = AMP_DB_HOST;
 
 # what is the name of the database we are using
-$database_name = $MM_DATABASE;
+$database_name = AMP_DB_NAME;
 
 # who do we log in as?
-$database_user = $MM_USERNAME;
+$database_user = AMP_DB_USER;
 
 # and what password do we use
-$database_password = $MM_PASSWORD;
+$database_password = AMP_DB_PASS;
 
 
 # if you use multiple installations of PHPlist you can set this to

@@ -683,7 +683,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 
 <?php
 
-if ($_GET[id] or $_GET[vid]) { articleversionlist($id);}
+if ($_GET['id'] or $_GET['vid']) { articleversionlist($id);}
 
 include ("footer.php");
 
