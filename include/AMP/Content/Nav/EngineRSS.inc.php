@@ -59,7 +59,7 @@ class NavEngine_RSS extends NavEngine {
 
         foreach( $items as $item ) {
             $new_set = array( 'href'=>$item['link'], 'label' => $item['title']);
-            if (isset($item['pubdate'])) $new_set['date'] = $item['pubdate'] ;
+            if (isset($item['pubdate'])) $new_set['date'] = date("r",$item['pubdate']);
             $result[] = $new_set;
         }
 
