@@ -1,9 +1,12 @@
 <?php
-$mod_id = 13;
-include("AMP/BaseDB.php");
-include("AMP/BaseTemplate.php");
-include("AMP/BaseModuleIntro.php");  
+$intro_id = 13;
+require_once("AMP/BaseDB.php");
+require_once("AMP/BaseTemplate.php");
+require_once("AMP/BaseModuleIntro.php");  
+require_once('Connections/menu.class.php');
 
+$obj = &new Menu();
 echo $obj->print_full_menu_tree($MX_top); 
-include("AMP/BaseFooter.php"); 
+
+require_once("AMP/BaseFooter.php"); 
 ?>

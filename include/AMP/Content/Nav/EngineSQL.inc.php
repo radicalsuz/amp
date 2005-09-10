@@ -137,9 +137,19 @@ class NavEngine_SQL extends NavEngine {
 
     function _getLink( $item ) {
         if (!($pagename = $this->nav->getLinkPage())) return false;
+        $pagename = $this->_getDynamicVar( $pagename, $item );
         if (!($url_var = $this->nav->getLinkVarName())) return $pagename;
-        return $pagename . '?' . $url_var . '=' . $this->_getLinkVarValue( $item );
+        return AMP_Url_AddVars( $pagename ,  $url_var . '=' . $this->_getLinkVarValue( $item ));
     }
+
+    function _getDynamicVar( $var, $item ) {
+        if ( strpos( $var, AMP_NAV_TITLE_SQL_FIELD_FLAG ) === FALSE ) return $var;
+        
+        $sqlfield = str_replace( AMP_NAV_TITLE_SQL_FIELD_FLAG, "", $var ); 
+        if (isset( $item[ $sqlfield ] ))  return $item[ $sqlfield ];
+        return $var;
+    }
+        
 
     function _getLinkVarValue( $item ) {
         if ($varname = $this->nav->getData('mvar1val')) {

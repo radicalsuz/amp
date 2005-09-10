@@ -1,4 +1,5 @@
 <?php
+
 /* * * * * * * * * * *
  * ContentMap_Select
  *
@@ -6,10 +7,10 @@
  * to use as sources for select boxes
  * and other 2 dimensional arrays
  *
- * AMP 3.5.0
- * 2005-07-27
+ * @version AMP 3.5.0
+ * @date 2005-07-27
  *
- * Author: austin@radicaldesigns.org
+ * @author Austin Putman <austin@radicaldesigns.org>
  * * * * */
 
 require_once( 'AMP/Content/Map.inc.php' ) ;

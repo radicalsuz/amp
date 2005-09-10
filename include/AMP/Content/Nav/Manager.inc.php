@@ -48,7 +48,8 @@ class NavigationManager {
         $output = "";
         if (!isset($this->_navSet[ $position ])) return false;
         foreach( $this->_navSet[ $position ] as $navid => $navcopy ) {
-            $nav = &$this->getElement( $navid );
+
+            $nav = &$this->getElement( $navid, $position );
             $output .= $nav->output();
         }
         return $output;
@@ -58,10 +59,8 @@ class NavigationManager {
     ### public accessor methods ###
     ###############################
 
-    function &getElement( $navid ) {
-        foreach ($this->_navSet as $position => $positionSet ) {
-            if (isset($positionSet[ $navid ])) return $this->_navSet[ $position ][ $navid ];
-        }
+    function &getElement( $navid, $position ) {
+        if (isset($this->_navSet[ $position ][ $navid ])) return $this->_navSet[ $position ][ $navid ];
         return false;
     }
 

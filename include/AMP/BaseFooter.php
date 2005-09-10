@@ -16,6 +16,12 @@ if (AMP_USE_OLD_CONTENT_ENGINE) {
 require_once ('AMP/Content/Page.inc.php' );
 
 $currentPage = AMPContent_Page::instance();
+
+if ($currentPage->isRedirected()) {
+    ob_end_flush();
+    exit;
+}
+
 if (isset($modulefooter) && $modulefooter){
     $currentPage->addtoContentFooter( $modulefooter );
 }
@@ -29,7 +35,7 @@ $final_page_html = $currentPage->output( $displayType );
 
 print $final_page_html;
 
-if (AMP_SITE_MEMCACHE_ON && isset($GLOBALS['cached_page'])) {
+if (AMP_SITE_MEMCACHE_ON && isset($GLOBALS['cached_page']) && empty( $_POST) && (!$currentPage->isRedirected()) ) {
     $cached_page->save( $final_page_html );
 }
 

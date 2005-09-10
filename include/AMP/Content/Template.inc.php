@@ -130,18 +130,21 @@ class AMPContent_Template extends AMPSystem_Data_Item {
     ### legacy compatibility method ###
     ###################################
 
-    function globalizeNavLayout() {
+    function globalizeNavLayout( $return_layout = false ) {
 
-        $GLOBALS['lNAV_HTML_1'] = $this->getNavHtml('left', 'start_heading');
-        $GLOBALS['lNAV_HTML_2'] = $this->getNavHtml('left', 'close_heading');
-        $GLOBALS['lNAV_HTML_3'] = $this->getNavHtml('left', 'start_content');
-        $GLOBALS['lNAV_HTML_4'] = $this->getNavHtml('left', 'close_content');
-        $GLOBALS['lNAV_HTML_5'] = $this->getNavHtml('left', 'content_spacer');
-        $GLOBALS['rNAV_HTML_1'] = $this->getNavHtml('right', 'start_heading');
-        $GLOBALS['rNAV_HTML_2'] = $this->getNavHtml('right', 'close_heading');
-        $GLOBALS['rNAV_HTML_3'] = $this->getNavHtml('right', 'start_content');
-        $GLOBALS['rNAV_HTML_4'] = $this->getNavHtml('right', 'close_content');
-        $GLOBALS['rNAV_HTML_5'] = $this->getNavHtml('right', 'content_spacer');
+        $layout = array();
+        $layout['lNAV_HTML_1'] = $this->getNavHtml('left', 'start_heading');
+        $layout['lNAV_HTML_2'] = $this->getNavHtml('left', 'close_heading');
+        $layout['lNAV_HTML_3'] = $this->getNavHtml('left', 'start_content');
+        $layout['lNAV_HTML_4'] = $this->getNavHtml('left', 'close_content');
+        $layout['lNAV_HTML_5'] = $this->getNavHtml('left', 'content_spacer');
+        $layout['rNAV_HTML_1'] = $this->getNavHtml('right', 'start_heading');
+        $layout['rNAV_HTML_2'] = $this->getNavHtml('right', 'close_heading');
+        $layout['rNAV_HTML_3'] = $this->getNavHtml('right', 'start_content');
+        $layout['rNAV_HTML_4'] = $this->getNavHtml('right', 'close_content');
+        $layout['rNAV_HTML_5'] = $this->getNavHtml('right', 'content_spacer');
+        $GLOBALS = array_merge( $GLOBALS, $layout );
+        if ($return_layout) return $layout;
     }
 }
 ?>

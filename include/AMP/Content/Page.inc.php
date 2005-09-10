@@ -259,6 +259,10 @@ class AMPContent_Page {
         return (($listSource && isset( $this->$listSource )) ? $listSource : false );
     }
 
+    function isRedirected() {
+        return (defined('AMP_CONTENT_PAGE_REDIRECT')? AMP_CONTENT_PAGE_REDIRECT : false );
+    }
+
     function isList() {
         if (!isset($this->listType)) return false;
         return $this->listType;

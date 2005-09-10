@@ -78,11 +78,12 @@ if ( !function_exists( 'makesmall' ) ) {
 if ( !function_exists( 'ampredirect' ) ) {
 
     function ampredirect($url) {
+        $target_url = $url;
         if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
-            header("Location: ".$_REQUEST['pageredirect']);
-        } else {
-            header("Location: $url");
+            $target_url = $_REQUEST['pageredirect'];
         }
+        define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
+        header("Location: $target_url");
     }
 
 }

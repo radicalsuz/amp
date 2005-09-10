@@ -81,6 +81,7 @@ class Content_Image {
     }
 
     function getURL( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {
+        if ( strpos( $this->filename, "/" ) !== FALSE ) return $this->filename;
         return AMP_IMAGE_PATH . $image_type . DIRECTORY_SEPARATOR . $this->filename;
     }
 

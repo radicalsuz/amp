@@ -386,14 +386,14 @@ else {
                               </table>
                               <p class="text">&nbsp; </p>
                               <p class="gallerycaption"> 
-                                <?php echo $photo->Fields("caption")?>
+                                <?php echo $photo->Fields("caption");?>
                               </p>
                               <p class="gallerycredit"> 
-                                <?php if ($photo->Fields("photoby") != ($null)) { ?>
+                                <?php if ($photo->Fields("photoby")) { ?>
                                 by:  <?php if ($photo->Fields("byemail") != NULL) {?><a href="mailto:<?php echo $photo->Fields("byemail")?>"> <?php } ?>
                                 
                              
-                                <?php echo $photo->Fields("photoby")?>
+                                <?php echo $photo->Fields("photoby");?>
                                 </a><br><?php }?>
                                 <?php if ($photo->Fields("date") != ("0000-00-00 00:00:00")) { ?><?php echo DoDate( $photo->Fields("date"), 'F jS Y') ?><?php }
 /* if ($photo->Fields("date") != ("0000-00-00 00:00:00")) */
@@ -414,4 +414,5 @@ else {
                
 
 <?php 
- include("AMP/BaseFooter.php"); ?>
+ include("AMP/BaseFooter.php"); 
+?>

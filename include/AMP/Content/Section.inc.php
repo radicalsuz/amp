@@ -118,7 +118,7 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function getHeaderRedirect() {
-        $article = &$this->getHeaderRef();
+        if (!($article = &$this->getHeaderRef())) return false;
         return $article->getRedirect();
     }
 

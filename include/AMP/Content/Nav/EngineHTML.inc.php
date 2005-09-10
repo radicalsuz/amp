@@ -60,7 +60,7 @@ class NavEngine_HTML extends NavEngine {
             'MM_region' =>  $GLOBALS['MM_region'],
             'list'      =>  $page->isList(),
             'id'        =>  $page->article_id 
-        );
+        ) + $this->nav->template->globalizeNavLayout( true );
     }
 
     function _findPhpStartTag( $html, $offset = 0 ) {
