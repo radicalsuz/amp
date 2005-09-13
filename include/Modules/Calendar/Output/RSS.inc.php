@@ -29,28 +29,12 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 			$timestamp = $this->add_eventlist_rss($rss);
 		}
 
-		if($timestamp) {
-//			$this->httpConditionalGet($timestamp);
-		}
+		$rss->lastModified($timestamp);
 
 		while(@ob_end_clean());
-		$rss->serialize();
+		$rss->execute();
 		exit;
 	}
-
-	function httpConditionalGet($timestamp) {
-		header('Last-Modified: '.($last_modified = gmdate('r', $timestamp)));
-		header('ETag: "'.$timestamp.'"');
-		$client_etag = isset($_SERVER['HTTP_IF_NONE_MATCH'])
-						? $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
-		$client_lm   = isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
-						? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : NULL;
-
-		if( ($client_etag and $client_etag == '"'.$timestamp.'"') #etag
-			or
-			($client_lm and ($client_lm == $last_modified or $timestamp == strtotime($client_lm))) #last-modified
-		) header('HTTP/1.1 304 Not Modified') and exit;
-}
 
 	function add_event_rss(&$rss, $id) {
 
@@ -63,8 +47,6 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 	}
 
 	function add_eventlist_rss(&$rss) {
-
-		$this->calendar->doAction('Search');
 
 		$timestamp = 0;
 		foreach ($this->calendar->events as $event) {
@@ -85,7 +67,6 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 						"ev:startdate" => $event['date'],
 						"ev:enddate" => $event['enddate'],
 						"ev:location" => $event['location'],
-						"ev:organizer" => $event['contact1'],
 						"ev:type" => $this->types[$event['typeid']],
 						"vCard:Adr" => array(
 							"vCard:Street" => $event['laddress'],
@@ -94,6 +75,26 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 							"vCard:Region" => ($event['lstate'] != 'Intl')?$event['lstate']:'',
 							"vCard:Pcode" => $event['lzip'],
 							"vCard:Country" => $event['lcountry']));
+		if($event['email1'] || $event['phone1']) {
+
+			$item["ev:organizer"] = array(
+							"vCard:FN" => $event['contact1']);
+
+			if($event['email1']) {
+				$item["ev:organizer"]["vCard:EMAIL"] = $event['email1'];
+			}
+			if($event['phone1']) {
+				$item["ev:organizer"]["vCard:TEL"] = $event['phone1'];
+			}
+			if($event['uid']) {
+				$item["ev:organizer"]["vCard:UID"] = $event['uid'];
+			}
+		} else {
+			$item["ev:organizer"] = $event['contact1'];
+		}
+
+		if(!$item["ev:organizer"]) return false;
+
 		if($event['lat'] && $event['lon']) {
 			$item["geo:lat"] = $event['lat'];
 			$item["geo:long"] = $event['lon'];
