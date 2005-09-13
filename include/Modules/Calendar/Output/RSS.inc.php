@@ -26,7 +26,8 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 		if ($id = $options['calid']['value']) {
 			$timestamp = $this->add_event_rss($rss, $id);
 		} else {
-			$timestamp = $this->add_eventlist_rss($rss);
+			$this->calendar->doAction('Search');
+			$timestamp = $this->add_eventlist_rss($rss, $this->calendar->events);
 		}
 
 		$rss->lastModified($timestamp);
@@ -46,10 +47,10 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 		return strtotime($event['datestamp']);
 	}
 
-	function add_eventlist_rss(&$rss) {
+	function add_eventlist_rss(&$rss, $events) {
 
 		$timestamp = 0;
-		foreach ($this->calendar->events as $event) {
+		foreach ($events as $event) {
 			$datestamp = strtotime($event['datestamp']);
 			if($datestamp && ($timestamp < $datestamp)) {
 				$timestamp = $datestamp;
