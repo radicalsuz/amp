@@ -1,4 +1,5 @@
 <?php
+if(!defined(AMP_CALENDAR_ENTRY_FORM_DEFAULT)) define(AMP_CALENDAR_ENTRY_FORM_DEFAULT, 50);
 
 require_once ("AMP/System/Data/Item.inc.php");
 require_once ("AMP/UserData/Input.inc.php");
@@ -13,17 +14,6 @@ class CalendarFeeds extends AMPSystem_Data_Item {
 		$this->types = AMPSystem_Lookup::instance('EventTypes');
 	}
 
-	/*
-	fetch rss from url
-	save to px_feeds and px_items
-	save event info to calendar table, tag it as a syndicated event
-	make sure it gets updated/deleted when the px_item it's associated with does?
-
-in px_feeds - service=Calendar
-in px_items where feed_id in px_feeds where service=Calendar and link = calendar.url
-
-fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
-	*/
 	function save() {
 		$data = $this->getData();
 
@@ -42,7 +32,7 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 		$rss = fetch_rss($url);
 
 		if(!$rss->channel && !$rss->items) {
-			$this->error="URL is not RSS or is invalid";
+			$this->addError("URL is not RSS or is invalid");
 			return false;
 		}
 
@@ -51,7 +41,7 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 											 'description'=>$rss->channel['description']);
 		$result = $this->dbcon->Replace( 'calendar_feeds', $feed, array('id', 'url'), true );
 		if(!$result) {
-			$this->error="Could not save feed";
+			$this->addError("Could not save feed");
 			return false;
 		}
 		if ($result == ADODB_REPLACE_INSERTED ) $id = $this->dbcon->Insert_ID();
@@ -61,7 +51,7 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 			$event = $item['ev'];
 			$vcard = $item['vcard'];
 
-			if($contact = $event['organizer']) {
+			if($contact = trim($event['organizer'])) {
 
 			} else {
 				$contact = $vcard['organizer_fn'];
@@ -108,7 +98,7 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 		}
 
 		if(!$num_events) {
-			$this->error="Feed did not contain event information!";
+			$this->addError("Feed did not contain event information!");
 			return false;
 		}
 
