@@ -58,7 +58,24 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 		$num_events = 0;
 		foreach($rss->items as $item) {
 			$event = $item['ev'];
-			$vcardAdr = $item['vcard'];
+			$vcard = $item['vcard'];
+
+			if($contact = $event['organizer']) {
+
+			} else {
+				$contact = $vcard['organizer_fn'];
+				$email = $vcard['organizer_email'];
+				$phone = $vcard['organizer_tel'];
+				$uid = $vcard['organizer_uid'];
+			}
+
+			$udm =& new UserDataInput($this->dbcon,AMP_CALENDAR_ENTRY_FORM_DEFAULT);
+			$udm->setData(array('Last_Name' => $contact,
+								'Email'		=> $email,
+								'Phone'		=> $phone));
+			if(!$udm->saveUser()) continue;
+			$local_uid = $udm->uid;
+
 			$geo = $item['geo'];
 			if(!$event) continue;
 			$num_events++;
@@ -69,18 +86,21 @@ fof_add_feed, then rss_fetch, cause it'll be cached, right?  how to test this...
 			$calendar = array('event'=>$item['title'],
 							  'shortdesc'=>$item['description'],
 							  'url'=>$item['link'],
-							  'contact1'=>$event['organizer'],
+							  'contact1'=>$contact,
+							  'email1'=>$email,
+							  'phone1'=>$phone,
 							  'date'=>$event['startdate'],
 							  'location'=>$event['location'],
 							  'enddate'=>$event['enddate'],
 							  'typeid'=>$type,
-							  'lcity'=>$vcardAdr['adr_locality'],
-							  'lstate'=>$vcardAdr['adr_region'],
-							  'lcountry'=>$vcardAdr['adr_country'],
-							  'laddress'=>$vcardAdr['adr_street'],
-							  'lzip'=>$vcardAdr['adr_pcode'],
+							  'lcity'=>$vcard['adr_locality'],
+							  'lstate'=>$vcard['adr_region'],
+							  'lcountry'=>$vcard['adr_country'],
+							  'laddress'=>$vcard['adr_street'],
+							  'lzip'=>$vcard['adr_pcode'],
 							  'lat'=>$geo['lat'],
 							  'lon'=>$geo['long'],
+							  'uid'=>$local_uid,
 							  'feed_id'=>$id);
 
 			$result = $this->dbcon->Replace( 'calendar', $calendar, array('feed_id', 'url'), true );
