@@ -16,12 +16,20 @@ ob_start();
 
 require_once( 'AMP/System/Base.php' );
 require_once('Modules/Calendar/Calendar.inc.php');
-require_once( 'header.php' );
+//require_once( 'header.php' );
+require_once("AMP/System/BaseTemplate.php");
+$template =& AMPSystem_BaseTemplate::instance();
+$template->setTool($modid);
+$template->setToolName($mod_name);
+$template->useFormNav(false);
+
+$output = $template->outputHeader();
+
 	if ($_REQUEST['id']) {//display single event, specify calid value
         $list_options['calid']= array('value'=> $_REQUEST['id']);
         $eventsearch=new Calendar($dbcon,null,$admin);
         $eventlist=$eventsearch->find_events("publish=1", $searchform->sortby);
-        $output= $eventlist->output('DisplayHTML', $list_options); 
+        $output .= $eventlist->output('DisplayHTML', $list_options); 
 
 	} else { 
         //display result list
@@ -32,7 +40,7 @@ require_once( 'header.php' );
         $actionbar=&$eventsearch->getPlugin('Output','Actions');
         
         if ($eventsearch->doAction('Search')) {
-            $output= (isset($eventsearch->error)? $eventsearch->error.'<BR>':"").
+            $output .= (isset($eventsearch->error)? $eventsearch->error.'<BR>':"").
                     ($searchform?   $searchform->search_text_header()
                                     .$eventsearch->output('SearchForm'):"").
                     ($pager?$pager->execute():"").
@@ -41,7 +49,7 @@ require_once( 'header.php' );
                     ($pager?$pager->execute():"").
                     $eventsearch->output('Index');
         } else {
-            $output=$eventsearch->error.'<BR>'.$eventsearch->output('SearchForm');
+            $output .= $eventsearch->error.'<BR>'.$eventsearch->output('SearchForm');
         }
     }
     print $output;

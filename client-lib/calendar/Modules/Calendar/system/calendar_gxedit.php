@@ -80,7 +80,14 @@ if ( $sub ) {
 
 $mod_id = $udm->modTemplateID;
 
-require_once( 'header.php' );
+//require_once( 'header.php' );
+require_once("AMP/System/BaseTemplate.php");
+$template =& AMPSystem_BaseTemplate::instance();
+$template->setTool($modid);
+$template->setToolName($mod_name);
+$template->useFormNav(false);
+
+print $template->outputHeader();
 
 print "<h2>Add/Edit Event</h2>";
 print $udm->output();
