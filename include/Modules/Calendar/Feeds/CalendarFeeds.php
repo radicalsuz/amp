@@ -1,7 +1,7 @@
 <?php
 
 require_once ("AMP/System/Data/Item.inc.php");
-require_once ("AMP/UserData/Input.php");
+require_once ("AMP/UserData/Input.inc.php");
 
 class CalendarFeeds extends AMPSystem_Data_Item {
 
