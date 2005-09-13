@@ -4,6 +4,8 @@ require_once('RSSWriter/rss10.inc');
 
 class AMP_RSSWriter extends RSSWriter {
 
+	var $_lastModified;
+
 	function AMP_RSSWriter($uri, $title, $description, $meta=array()) {
 		parent::RSSWriter($uri, $title, $description, $meta);
 	}
@@ -34,8 +36,39 @@ class AMP_RSSWriter extends RSSWriter {
 			print "  </item>\n\n";
 		}
 	}
+
+	function lastModified($timestamp = null) {
+		if(isset($timestamp)) {
+			$this->_lastModified = $timestamp;
+		}
+		return $this->_lastModified;
+	}
+
     function execute() {
-        $this->serialize();
+
+		if($this->httpConditionalGet($this->lastModified())) {
+			$this->serialize();
+		}
     }
+
+
+    function httpConditionalGet($timestamp) {
+        header('Last-Modified: '.($last_modified = gmdate('r', $timestamp)));
+        header('ETag: "'.$timestamp.'"');
+        $client_etag = isset($_SERVER['HTTP_IF_NONE_MATCH'])
+                        ? $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
+        $client_lm   = isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
+                        ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : NULL;
+
+        if( ($client_etag and $client_etag == '"'.$timestamp.'"') #etag
+            or
+            ($client_lm and ($client_lm == $last_modified or $timestamp == strtotime($client_lm))) #last-modified
+        ) {
+			header('HTTP/1.1 304 Not Modified');
+			return false;
+		}
+
+		return true;
+	}
 }
 ?>
