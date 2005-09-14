@@ -456,7 +456,7 @@ class UserData {
         $this->setFieldOrder( $newfieldOrder );
      }
 
-     function InsertAfterFieldOrder( $fields ) {
+     function insertAfterFieldOrder( $fields ) {
         $fieldOrderSet = $this->getFieldOrder();
 
         foreach ( $fields as $fieldname ) {
@@ -643,9 +643,10 @@ class UserData {
 
     function unregisterPlugin ( $action, $namespace ) {
 
-        if ( isset($this->plugins[$action][$namespace]) ) {
+        if ($plugin = &$this->getPlugin( $namespace, $action ) ) {
 
             unset( $this->plugins[$action][$namespace] );
+            $this->unregisterFields( $plugin->fields, $plugin->_field_prefix );
 
         }
 
@@ -814,6 +815,31 @@ class UserData {
         foreach ( $fields_def as $field_name => $field ) {
             if (!$field['enabled']) continue;
             $this->fields[ $prefix . $field_name ] = $field;
+        }
+    }
+
+    /****
+     *
+     * unregisterFields
+     *
+     * unregisters fields from an array definition.
+     *
+     ****/
+
+    function unregisterFields( $fields_def, $prefix = '' ) {
+
+        if ( $prefix ) $prefix .= "_";
+        $fieldOrder = $this->getFieldOrder();
+
+        foreach ( $fields_def as $field_name => $field ) {
+            $prefixedname  = $prefix.$field_name;
+            if (!isset($this->fields[ $prefixedname ])) continue;
+            unset ($this->fields[ $prefixedname  ]);
+
+            $fieldOrderKey = array_search( $prefixedname, $fieldOrder );
+            if ($fieldOrderKey === FALSE ) continue;
+            unset ($this->fieldOrder[ $fieldOrderKey ] );
+
         }
     }
 

@@ -44,7 +44,7 @@ class AMPSystem_Memcache {
     function setSiteItem( $item_key, $item_value ) {
         $cachekey = $_SERVER['SERVER_NAME'] . $item_key;
         if ( $this->memcache_connection->set( $cachekey, $item_value , MEMCACHE_COMPRESSED, AMP_SITE_MEMCACHE_TIMEOUT  )) {
-            if ( $item_key != MEMCACHE_KEY_INDEX ) $this->addSiteKey($_SERVER['SERVER_NAME'], $cachekey);
+            if ( $item_key != MEMCACHE_KEY_INDEX ) $this->addSiteKey( $cachekey );
             return true;
         }
         return false;
@@ -60,10 +60,10 @@ class AMPSystem_Memcache {
         return $this->memcache_connection->delete( $item_key );
     }
 
-	function addSiteKey( $item_key ) {
+	function addSiteKey( $cachekey ) {
 		$key_index = &$this->getSiteKeys();
-        if ( array_search( $key, $key_index ) !== FALSE ) return true;
-		$key_index[] = $item_key;
+        if ( array_search( $cachekey, $key_index ) !== FALSE ) return true;
+		$key_index[] = $cachekey;
 		return $this->setSiteItem( MEMCACHE_KEY_INDEX, $key_index );
 	}
 

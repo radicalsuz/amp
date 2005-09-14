@@ -386,6 +386,7 @@
         return $this->form->addElement( $field_def['type'], $name, $field_def['label'], $defaults );
         
     }
+
     function &_addElementDate ( $name, $field_def ) {
         $defaults = array();
         $date_def = $this->getField( $name );
@@ -423,8 +424,9 @@
 
     function &_addElementHeader( $name, $field_def ) {
         $defaults = $this->_getDefault( $name );
+        $label = $field_def['label'];
 		if (strlen($defaults) > 0)  $label = $defaults;
-        return $this->form->addElement( 'header', $name, $field_def['label']);
+        return $this->form->addElement( 'header', $name, $label);
     }
 
     function &_addElementCheckgroup ( $name, $field_def ) {
