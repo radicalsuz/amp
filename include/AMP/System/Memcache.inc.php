@@ -68,9 +68,10 @@ class AMPSystem_Memcache {
 	}
 
 	function &getSiteKeys() {
-        if (!isset( $this->_key_index)) return $this->_key_index;
+        if (isset( $this->_key_index)) return $this->_key_index;
 		if(!$key_index = &$this->getSiteItem( MEMCACHE_KEY_INDEX )) {
-			return false;
+            $key_index = array();
+			return $key_index;
 		}
         $this->_key_index = &$key_index;
 		return $this->_key_index;
