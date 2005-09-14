@@ -1,0 +1,60 @@
+<array>
+    <PositionHeader>
+        <type>header</type>
+        <default>Position</default>
+        <public>1</public>
+        <enabled>1</enabled>
+    </PositionHeader>
+    <id>
+        <type>hidden</type>
+        <public>1</public>
+        <enabled>1</enabled>
+    </id>
+    <headline>
+        <type>text</type>
+        <public>1</public>
+        <label>Headline</label>
+        <enabled>1</enabled>
+    </headline>
+    <infojot>
+        <type>static</type>
+        <values>For search purposes, please be as accurate as possible</values>
+        <attr>
+            <class>photocaption</class>
+        </attr>
+    </infojot>
+    <item>
+        <type>text</type>
+        <public>1</public>
+        <label>Candidate/Item</label>
+        <enabled>1</enabled>
+    </item>
+    <position>
+        <type>select</type>
+        <label>Position</label>
+        <public>1</public>
+						<values>Hell Yeah</values>
+						<values>Yes</values>
+						<values>No</values>
+						<values>No Way</values>
+						<values>No Endorsement</values>
+        <enabled>1</enabled>
+        <required>1</required>
+    </position>
+    <comments>
+        <type>textarea</type>
+        <label>Reason</label>
+        <public>1</public>
+        <enabled>1</enabled>
+    </comments>
+    <voterguide_id>
+        <type>hidden</type>
+        <public>1</public>
+        <enabled>1</enabled>
+    </voterguide_id>
+    <textorder>
+        <type>hidden</type>
+        <public>true</public>
+        <enabled>1</enabled>
+    </textorder>
+</array>

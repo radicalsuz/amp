@@ -1,0 +1,61 @@
+<array>
+    <guideHeader>
+        <type>header</type>
+        <default>Voter Guide Info</default>
+        <public>1</public>
+        <enabled>1</enabled>
+    </guideHeader>
+    <id>
+        <type>hidden</type>
+        <enabled>1</enabled>
+        <public>1</public>
+    </id>
+    <name>
+        <type>text</type>
+        <label>Voter Guide Name</label>
+        <required>1</required>
+        <enabled>1</enabled>
+        <public>1</public>
+    </name>
+    <city>
+        <type>text</type>
+        <label>Voter Guide City</label>
+        <required>1</required>
+        <enabled>1</enabled>
+        <public>1</public>
+    </city>
+    <election_date>
+        <type>date</type>
+        <default>October 5, 2005</default>
+        <label>Voter Guide Election Date</label>
+        <required>1</required>
+        <enabled>1</enabled>
+        <public>1</public>
+    </election_date>
+    <filelink>
+        <type>file</type>
+        <label>Upload a PDF of your Voter Guide</label>
+        <enabled>1</enabled>
+        <public>1</public>
+    </filelink>
+    <blurb>
+        <type>textarea</type>
+        <label>Introduction</label>
+        <enabled>1</enabled>
+        <public>1</public>
+    </blurb>
+    <affiliation>
+        <type>select</type>
+        <label>Endorsed By</label>
+        <values>
+            <array>League</array>
+        </values>
+        <enabled>1</enabled>
+    </affiliation>
+    <guidePositionsHeader>
+        <type>header</type>
+        <default>Candidate/Ballot Info</default>
+        <public>1</public>
+        <enabled>1</enabled>
+    </guidePositionsHeader>
+</array>
