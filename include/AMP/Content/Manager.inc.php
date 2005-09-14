@@ -1,7 +1,7 @@
 <?php
 
 define ( 'MEMCACHE_KEY_CONTENT' , 'PageContent' );
-if (!defined( 'AMP_CONTENT_BUFFER_CONTAINER_CLASS' )) define ('AMP_CONTENT_BUFFER_CONTAINER_CLASS', false );
+if (!defined( 'AMP_CONTENT_BUFFER_CONTAINER_ID' )) define ('AMP_CONTENT_BUFFER_CONTAINER_ID', false );
 
 require_once( 'AMP/Content/Display/HTML.inc.php' );
 
@@ -46,8 +46,8 @@ class AMPContent_Manager extends AMPDisplay_HTML {
     }
 
     function doBufferHtml() {
-        if (!AMP_CONTENT_BUFFER_CONTAINER_CLASS) return $this->_html_body ;
-        return $this->_HTML_inDiv( $this->_html_body, array( 'class' => AMP_CONTENT_BUFFER_CONTAINER_CLASS ));
+        if (!AMP_CONTENT_BUFFER_CONTAINER_ID ) return $this->_html_body ;
+        return $this->_HTML_inDiv( $this->_html_body, array( 'id' => AMP_CONTENT_BUFFER_CONTAINER_ID ));
     }
 
     function output() {

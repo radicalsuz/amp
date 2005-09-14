@@ -290,6 +290,10 @@
         $this->conditionals[ $key ] = $requirement;
     }
 
+    function getFormName() {
+        return $this->formname;
+    }
+
     ######################################
     ### Public Form Validation Methods ###
     ######################################
@@ -519,6 +523,7 @@
         if (!isset( $this->conditionals )) return true;
         
         foreach ($this->conditionals as $key => $requirement ) {
+            if (!isset( $field_def[ $key ] )) return false;
             if ( $field_def [ $key ] != $requirement ) return false;
         }
 

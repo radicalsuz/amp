@@ -40,12 +40,15 @@ class AMPContent_Header {
     }
 
     function getMetaDesc() {
+        $alt_text = "";
         if ( $article = &$this->registry->getArticle() ) {
-            return $this->stripQuotes( $article->getBlurb());
+            $alt_text = $this->stripQuotes( $article->getBlurb());
         }
-        if ( $section = &$this->registry->getSection() ) {
-            return $this->stripQuotes( $section->getBlurb());
+        if ( $section = &$this->registry->getSection() && ($section->id != AMP_CONTENT_MAP_ROOT_SECTION) ) {
+            $alt_text = $this->stripQuotes( $section->getBlurb());
         }
+
+        if ( $alt_text ) return $alt_text;
 
         return $this->stripQuotes( $this->registry->getEntry( AMP_REGISTRY_SETTING_METADESCRIPTION ));
     }

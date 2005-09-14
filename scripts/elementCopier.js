@@ -12,17 +12,27 @@ function ElementCopier ( formname, start_qty ) {
     this.addElement = addElement;
     this.addImage = addImage;
     this.addButton = addButton;
+    this.addHeader = addHeader;
+    this.addStatic = addStatic;
     this.addTextArea = addTextArea;
+    this.addLabel = addLabel;
+    this.isSpan = isSpan;
+    this.findSetbyRow = findSetbyRow;
 
+    this.getInstanceName = getInstanceName;
+    this.findDupElementIndex = findDupElementIndex;
+    this.populateSet = populateSet;
     this.makenew = makenew;
     this.CopySelect = CopySelect;
     this.BuildSelect = BuildSelect;
     this.SaveSet = SaveSet;
     this.MoveSet = MoveSet;
     this.RemoveSet = RemoveSet;
-    this.ValidateItems = ValidateItems;
-    this.event = event;
-
+    this.RemoveCurrentSet = RemoveCurrentSet;
+    //this.ValidateItems = ValidateItems;
+    //this.event = event;
+    this.pushValue = pushValue;
+    this.pullValue = pullValue;
 
 }
 
@@ -46,22 +56,38 @@ function addTextArea ( name, txt_rows, txt_cols ) {
 function addImage (name, imgsrc) {
     newimage = document.createElement('image');
     newimage.setAttribute('src', imgsrc);
+    return newimage;
 }
 
+function addHeader ( label ){
+    newheader = document.createElement('span');
+    newheader.setAttribute ( 'class', 'udm_header' );
+    newheader.className = 'udm_header';
+    newheader.appendChild( document.createTextNode( label ));
+    return newheader;
+}
+
+function addStatic ( label ){
+    newheader = document.createTextNode( label );
+    return newheader;
+}
 function addButton (name, caption, action) {
     newbutton = this.addElement( name, 'button');
     newbutton.value = caption;
     if (action){
-        event (newbutton, 'onClick', action);
+        event (newbutton, 'onclick', action);
     }
-    newbutton.id = 'button_in_set_' + this.set_qty;
     return newbutton;
+}
+
+function getInstanceName( set_qty, elementDef ) {
+    return elementDef.name + '[' + set_qty + ']';
 }
 
 
 function makenew( elementdef ) {
-    var model_name = elementdef.name + '[' + ( this.set_qty - 1 ) + ']';
-    var instance_name = elementdef.name + '[' + this.set_qty + ']';
+   // var model_name = elementdef.name + '[' + ( this.set_qty - 1 ) + ']';
+    var instance_name = this.getInstanceName( this.set_qty, elementdef ); 
 
     switch (elementdef.type) {
         case 'button':
@@ -70,9 +96,15 @@ function makenew( elementdef ) {
         case 'image':
             newitem = this.addImage(instance_name, elementdef.label);
             break;
+        case 'header':
+            newitem = this.addHeader( elementdef.values );
+            break;
+        case 'static':
+            newitem = this.addStatic( elementdef.values );
+            break;
         case 'select':
             if ( this.set_qty > 1 ) {
-                return this.CopySelect( instance_name,  this.formRef.elements[model_name] );
+                return this.CopySelect( instance_name,  elementdef.values );
             }
             return this.BuildSelect (instance_name, elementdef );
 
@@ -87,16 +119,19 @@ function makenew( elementdef ) {
     return newitem;
 }
 
-function defineElement( name, type, label, values, action, source, size, required ) {
+function defineElement( name, type, label, values, action, source, size, required, attr ) {
     element_def = new elementDefinition();
     element_def.name = name;
     element_def.type = type;
     element_def.label = label;
     element_def.action = action;
+    element_def.values = values;
+    element_def.attr = attr;
+    /*
     element_def.source = source;
     element_def.required = required;
     element_def.size = size;
-    element_def.values = values;
+    */
     this.dup_elements[this.dup_elements.length] = element_def;
 }
 
@@ -105,57 +140,116 @@ function elementDefinition() {
     var type;
     var label;
     var action;
+    var attr;
+    /*
     var source;
     var values;
     var required;
     var size;
+    */
 }
 
 
-function DuplicateElementSet ( which ) {
+function DuplicateElementSet ( which, startRow ) {
     which.set_qty++;
     which.ElementSets[which.set_qty]=new Array();
+    which.ElementSets[which.set_qty]['elements']=new Array();
+
+    if (!startRow) startRow = which.formtable.tBodies[0].rows.length-1;
+    which.ElementSets[which.set_qty]['start_row'] = startRow;
     
     for (i=0; i<which.dup_elements.length; i++) {
         //newrow=which.formtable.tBodies[0].appendChild(document.createElement('tr'));
-        newrow=which.formtable.tBodies[0].insertRow( which.formtable.rows.length - 1 );
-        which.ElementSets[which.set_qty][i] = which.makenew( which.dup_elements[i] );
-        newlabel = newrow.insertCell(newrow.cells.length);
-        labeltext =  document.createTextNode(which.dup_elements[i].label);
-        newlabel.appendChild( labeltext );
-        newinput = newrow.insertCell( newrow.cells.length );
-        newinput.appendChild(  which.ElementSets[which.set_qty][i] );
+        newrow=which.formtable.tBodies[0].insertRow( startRow+i  );
+        newcell = newrow.insertCell(newrow.cells.length);
+        which.addLabel( newcell, which.dup_elements[i] );
+        if ( !which.isSpan( which.dup_elements[i].type )) {
+            newrow.appendChild( newcell );
+            newinput = newrow.insertCell( newrow.cells.length );
+        } else {
+            newinput = newcell;
+            newinput.setAttribute( 'colspan', 2 );
+            newinput.colSpan = 2;
+        }
+        which.ElementSets[which.set_qty]['elements'][i] = which.makenew( which.dup_elements[i] );
+        if ( which.ElementSets[ which.set_qty ]['elements'][ i ] ) {
+            newinput.appendChild(  which.ElementSets[which.set_qty]['elements'][i] );
+        }
         //newrow.appendChild( newinput );
 
     }
 }
 
+function restoreSet( which, startElementName, dataFieldSet, dataNameSet ) {
+    DuplicateElementSet( which, parentRow( which.formRef.elements[ startElementName ]).rowIndex ); 
+    which.populateSet( which.set_qty, dataFieldSet, dataNameSet );
+}
+
+function addLabel( newcell, element_def ) {
+    if (element_def.type == 'button') return false;
+    if ( labeltext =  document.createTextNode(element_def.label)) {
+        newcell.appendChild( labeltext );
+        if ( element_def.type == 'textarea' ) {
+            newcell.appendChild( document.createElement( 'br' ) );
+        }
+    }
+}
+
+function isSpan( element_type ) {
+    if ( element_type == 'button' ) return true; 
+    if ( element_type == 'header' ) return true; 
+    if ( element_type == 'static' ) return true; 
+    if ( element_type == 'textarea' ) return true; 
+    return false;
+}
+
 function getNewElement( el_index ) {
-    new_item = this.ElementSets[this.set_qty][el_index];
+    new_item = this.ElementSets[this.set_qty]['elements'][el_index];
     //new_item.name = new_item.name;
 }
 
-function SaveSet (rowindex) { //This is A Javascript Function
+function SaveSet (set_index) { //This is A Javascript Function
     //wont work in IE for rows generated by script
     //used to commit the first row, which serves as a template
-    this.ElementSets[rowindex]=new Array();
+    this.ElementSets[set_index]['elements']=new Array();
     for (i=0; i<this.dup_elements.length; i++) {
-        this.ElementSets[rowindex][i]=this.formRef.elements[ this.dup_elements[i].name +'['+rowindex+']'];
+        this.ElementSets[set_index]['elements'][i]=this.formRef.elements[ this.dup_elements[i].name +'['+set_index+']'];
     }
     
 }
-//Which Moves values *from* one set of select boxes *to* another
 
-function MoveSet(from,to) {
+function MoveSet(source_set,target_set) {
+    if ( target_set <= 0 ) return false;
     for (i=0; i<this.dup_elements.length; i++) {
-        if (this.dup_elements[i].type == "select") {
-            this.ElementSets[to][i].selectedIndex=this.ElementSets[from][i].selectedIndex;
-        } else {
-            this.ElementSets[to][i].value = this.ElementSets[from][i].value;
-        }
+        this.pushValue( this.pullValue( this.ElementSets[source_set]['elements'][i] ), this.ElementSets[target_set]['elements'][i] );
     }
 }	
 
+function pullValue( elementRef ) {
+    if (elementRef.type == "select") {
+        return elementRef.selectedIndex;
+    } else {
+        return elementRef.value;
+    }
+
+}
+
+function pushValue( pvalue, elementRef ) {
+    if (elementRef.type == "select") {
+        elementRef.selectedIndex = pvalue;
+    } else {
+        elementRef.value = pvalue;
+    }
+    /*
+    if (this.dup_elements[i].type == "select") {
+        this.ElementSets[target_set]['elements'][i].selectedIndex=this.ElementSets[source_set]['elements'][i].selectedIndex;
+    } else {
+        this.ElementSets[target_set]['elements'][i].value = this.ElementSets[source_set]['elements'][i].value;
+    }
+    */
+}
+
+/*
 function ValidateItems () {
 
     //sets an indicator flag for which values should be kept
@@ -169,19 +263,29 @@ function ValidateItems () {
         newrow.appendChild(newflag);
     }
 }
+*/
+
+function RemoveCurrentSet( elementRef ) {
+    row_index = parentRow( elementRef ).rowIndex;
+    set_index = this.findSetbyRow( row_index );
+    this.RemoveSet( set_index );
+}
 
 function RemoveSet( set_index ) {
-    if (this.set_qty>=1) {
-        for (n=set_index; n<this.set_qty; n++) {
-            this.MoveSet( (parseInt(n)+1), n);
-        }
+    if (this.set_qty<=0)  return false;
+
+    for (n=set_index; n<this.set_qty; n++) {
+        this.MoveSet( (parseInt(n)+1), n);
+    }
+    
+    startrow = this.ElementSets[this.set_qty]['start_row'];
+    this.set_qty=this.set_qty-1;
+    //startrow = this.set_qty*this.dup_elements.length;
+    for (n=this.dup_elements.length-1; n>=0; n--) {
+        this.formtable.deleteRow(startrow + n);
+    }
         
-        this.set_qty=this.set_qty-1;
-        startrow = this.set_qty*this.dup_elements.length;
-        for (n=0; n<this.dup_elements.length; n++) {
-            this.formtable.deleteRow(startrow + n);
-        }
-        
+        /*
     } else {
         for (n=0; n<this.dup_elements.length; n++) {
             if (this.dup_elements[n].type == 'select') {
@@ -190,8 +294,9 @@ function RemoveSet( set_index ) {
                 this.dup_elements[n].value = '';
             }
         }
-        this.formRef.elements[this.dup_elements[0].name+'[1]'].focus;
+        this.formRef.elements[ (this.dup_elements[0].name+'[1]') ].focus;
     }
+    */
 } 
 
 //To Ensure IE Compliance for assigning onClick action
@@ -204,12 +309,35 @@ function event(elem,handler,funct) {//This is A Javascript Function
     }
 }
 
-function CopySelect(newname, model) {
+function populateSet( set_index, dataSetValues, dataSetNames ) {
+    for ( k=0; k<dataSetNames.length; k++ ) {
+        nameIndex = this.findDupElementIndex( dataSetNames[k] );
+        if (! nameIndex ) continue;
+        elementRef = this.ElementSets[ set_index ][ 'elements' ][nameIndex]
+        this.pushValue( dataSetValues[ k ], elementRef );
+    }
+}
+
+function findDupElementIndex( elementName ) {
+    for ( whichelement =0; whichelement < this.dup_elements.length; whichelement++ ) {
+        if ( this.dup_elements[ whichelement ].name == elementName ) return whichelement;
+    }
+    return false;
+}
+
+
+function CopySelect(newname, modelvalues) {
     var newselect=document.createElement('select');
     newselect.name = newname;
+    for (n=0; n<modelvalues.length; n++) {
+        newselect.options[n] = new Option( modelvalues[n].text, modelvalues[n].value );
+    }
+
+    /*
     for (n=0; n<model.options.length; n++) {
         newselect.options[n] = new Option(model.options[n].text, model.options[n].value);
     }
+    */
     
     return(newselect);
 }
@@ -221,6 +349,16 @@ function BuildSelect (newname, element_def) {
         newselect.options[n] = element_def.values[n];
     }
     return newselect;
+}
+
+function findSetbyRow( row_index ) {
+    if (this.set_qty <= 0) return false;
+    for (k = 1; k<=this.set_qty; k++) {
+        if ( (row_index  > this.ElementSets[ k ]['start_row']) && row_index < parseInt(this.ElementSets[ k ]['start_row'] + this.dup_elements.length )) {
+            return k;
+        }
+    }
+    return 0;
 }
 
 function findFormTable ( formname ) {
@@ -237,4 +375,14 @@ function hasParent(testchild, desired_parent) {
     if (testchild.parentNode == desired_parent) return true;
     if (testchild.parentNode == document ) return false;
     return hasParent(testchild.parentNode, desired_parent);
+}
+
+function parentRow( elementRef ) {
+    if ( elementRef.parentNode.tagName == 'BODY' ) {
+        return false;
+    }
+    if ( elementRef.parentNode.tagName == 'TR' ) {
+        return elementRef.parentNode;
+    }
+    return parentRow( elementRef.parentNode );
 }

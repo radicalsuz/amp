@@ -810,6 +810,12 @@ if (!function_exists( 'AMP_cachePageItem' )) {
         return $memcache->setPageItem( $item_key, $item );
     }
 }
+if (!function_exists( 'AMP_cacheFlush' )) {
+    function AMP_cacheFlush() {
+        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
+        return $memcache->flushSite();
+    }
+}
 
 if (!function_exists( 'AMP_removeExtension' )) {
     function AMP_removeExtension( $filename ) {

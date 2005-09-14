@@ -53,7 +53,7 @@ class Section extends AMPSystem_Data_Item {
     function getHeaderTextId() {
         if (!$this->getData( 'header' )) return false;
         if (!($id =  $this->getData( 'url' ))) return false;
-        if ($id === 1) return false;
+        if ( $id == 1 ) return false;
         return $id;
     }
 

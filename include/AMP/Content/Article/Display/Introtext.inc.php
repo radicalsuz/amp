@@ -13,7 +13,7 @@ class ArticleDisplay_Introtext extends Article_Display {
     function _HTML_Header() {
         $article = &$this->_article;
 
-        return $this->_HTML_start() .
+        return  $this->_HTML_start() .
                 $this->_HTML_title( $article->getTitle() ) .
                 $this->_HTML_subTitle( $article->getSubTitle() ) ;
     }

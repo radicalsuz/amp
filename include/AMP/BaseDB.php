@@ -1,8 +1,5 @@
 <?php
-
-require_once('adodb/adodb.inc.php');
 require_once('utility.functions.inc.php');
-require_once('AMP/Registry.php');
 
 /*
 $ampdbcon = null;
@@ -52,6 +49,9 @@ if ( AMP_LOCAL_PATH ) {
                              AMP_LOCAL_PATH . "/lib:" . PATH_SEPARATOR .
                              ini_get('include_path') );
 }
+
+require_once('adodb/adodb.inc.php');
+require_once('AMP/Registry.php');
 
 // Look for a local site configuration.
 if (file_exists_incpath( 'SiteConfig.php' )) {

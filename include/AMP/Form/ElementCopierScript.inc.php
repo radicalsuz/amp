@@ -3,9 +3,9 @@
 class ElementCopierScript {
 
     var $fields;
-    var $formname;
-    var $start_qty=0;
-    var $copier_name = "copymaker";
+    var $formname_default;
+    var $start_qty_default =0;
+    var $copier_name_default = "copymaker";
     var $copiers = array();
 
     function ElementCopierScript( $fields = null ) {
@@ -13,15 +13,42 @@ class ElementCopierScript {
     }
 
     function init($fields = null) {
-        if (isset($fields)) $this->addCopier( $this->copier_name, $fields ); 
+        if (isset($fields)) $this->addCopier( $this->copier_name_default, $fields ); 
     }
 
-    function addCopier( $name, $fieldset ) {
+    function addCopier( $name, $fieldset, $formname = null, $start_qty = null ) {
+				if (!isset($formname)) $formname = $this->formname_default;
+				if (!isset($start_qty)) $start_qty = $this->start_qty_default;
         $this->setFields( $name, $fieldset );
+				$this->setFormName( $name, $formname );
+				$this->setQuantity( $name, $start_qty );
     }
+
+		function setQuantity( $copier, $qty ) {
+				$this->copiers[ $copier ]['start_qty'] = $qty;
+		}
+
+		function setPrefix( $copier, $prefix ) {
+				$this->copiers[ $copier ]['prefix'] = $prefix;
+		}
+
+		function setFormName( $copier, $formname ) {
+				$this->copiers[ $copier ]['formname'] = $formname;
+		}
+
+		function instance() {
+				static $copier_script = false;
+				if (!$copier_script) $copier_script = new ElementCopierScript();
+				return $copier_script;
+		}
+
+		function setCoreField( $copiername , $fieldname ) {
+				$this->copiers[ $copiername ]['core_field'] = $fieldname;
+		}
 
     function setFields( $copiername, $fieldset ) {
         $this->copiers[$copiername] = array();
+				$this->setCoreField( $copiername, key( $fieldset ) );
         foreach ( $fieldset as $fieldname => $def ) {
             $this->addField( $def, $fieldname, $copiername );
         }
@@ -29,20 +56,23 @@ class ElementCopierScript {
     }
 
     function addControlButtons( $copiername ) {
+				/*
         $add_button =
             array( 'type' => 'button', 
                    'action' => 'DuplicateElementSet( window.' . $copiername . " );",
                    'label' => '+' );
+									 */
+									 
         $del_button =
             array( 'type' => 'button',
-                   'action' => 'window.' . $copiername . ".RemoveSet( this.id.substring(14) );",
-                   'label' => '-' );
-        $this->addField( $add_button, 'add_btn', $copiername );
-        $this->addField( $del_button, 'del_btn', $copiername );
+                   'action' => 'window.' . $copiername . ".RemoveCurrentSet( this );",
+                   'label' => 'Remove' );
+        #$this->addField( $add_button, 'add_btn', $copiername );
+        $this->addField( $del_button, 'form_del_btn', $copiername );
     }
 
     function addField( $field_def, $fieldname, $copiername ) {
-        $this->copiers[$copiername][$fieldname] = $field_def;
+        $this->copiers[$copiername]['fields'][$fieldname] = $field_def;
     }
 
 
@@ -52,9 +82,11 @@ class ElementCopierScript {
         $script .= '<script type="text/javascript">
             function loadCopier() {'."\n";
 
-        foreach ($this->copiers as $copiername => $fieldset) {
-            $script.= 'window.'.$copiername.' = new ElementCopier("'.$this->formname.'", '.$this->start_qty.');'."\n";
+        foreach ($this->copiers as $copiername => $copierDef ) {
+						$fieldset = $copierDef[ 'fields' ];
+            $script.= 'window.'.$copiername.' = new ElementCopier("'.$copierDef['formname'].'", '.$copierDef['start_qty'].');'."\n";
             $script.= $this->_js_initCopier( $fieldset, $copiername );
+						$script.= $this->_js_outputSets( $copiername );
         }
         $script .= "}\n loadCopier();\n </script>";
 
@@ -77,44 +109,77 @@ class ElementCopierScript {
         $script = "";
         foreach ($fieldset as $fieldname => $fDef ) {
             $valuevar = '""';
+            if (isset($fDef['default']) && $fDef['default']) $valuevar = $this->_delimit( $fDef['default'] );
             if (isset($fDef['values']) && $fDef['values']) {
-                $valuevar = $copiername.'_'.$fieldname.'_values';
-                $script .= $this->script_value_array( $valuevar, $fDef ); 
-            }
-            $actionvar = '""';
-            if (isset($fDef['action']) && $fDef['action']) $actionvar = "'".$fDef['action']."'";
+								if (is_array( $fDef['values'] )) {
+										$valuevar = $copiername.'_'.$fieldname.'_values';
+										$script .= $this->script_value_array( $valuevar, $fDef ); 
+								} else {
+										$valuevar = $this->_delimit( $fDef['values'] );
+								}
+            } 
+            $actionvar = (isset($fDef['action']) && $fDef['action']) ? $this->_delimit( $fDef['action'] ) : "''";
+						$label =  (isset($fDef['label']) && $fDef['label']) ? $this->_delimit( $fDef['label'] ) : "''";
+						$fieldname = $this->_delimit( $this->_addPrefix( $copiername , $fieldname ) );
+						$type = $this->_delimit( $fDef['type'] );
 
-            $script .= $copiername.".defineElement( '$fieldname', '".$fDef['type']."', '".$fDef['label']."', $valuevar, $actionvar);\n"; 
+            $script .= "$copiername.defineElement( $fieldname, $type, $label, $valuevar, $actionvar );\n"; 
         }
 
         return $script;
     }
 
+		function _addPrefix( $copier, $fieldname ) {
+				if (!isset($this->copiers[ $copier ][ 'prefix' ])) return $fieldname;
+				return $this->copiers[ $copier ][ 'prefix' ] . '_' . $fieldname;
+		}
 
+		function _delimit( $text ) {
+				if (strpos( $text, "'" ) !== FALSE ) return '"'. $text . '"';
+				return "'". $text . "'";
+		}
 
+		function getAddButton ($copier_name ) {
+				return array( 'add_'.$copier_name =>
+					array( 'type' => 'button',
+								'attr' => array( 'onClick' => 'DuplicateElementSet( window.'.$copier_name .', parentRow( this ).rowIndex );' ),
+								'label' => 'Add New Item',
+								'public' => true,
+								'enabled' => true ) );
+		}
 
     function output( ) {
         return $this->script_header();
     }
 
     function validateSets( $data ) {
-        $validation_mark = 'AMP_elementCopier_' . $this->copier_name . '_validated';
-        if (!is_array($data[ $validation_mark ])) return false;
+				$result_set = array();
+				foreach ($this->copiers as $copier_name => $copierDef ) {
+						$validation_mark = 'AMP_elementCopier_' . $copier_name . '_validated';
+						if (!is_array($data[ $validation_mark ])) continue;
 
-        $result_set = array();
-        foreach ($data[ $validation_mark ] as $key => $valid) {
-            if ($valid) $result_set[] = $key;
-        }
+						foreach ($data[ $validation_mark ] as $key => $valid) {
+								if ($valid) $result_set[] = $key;
+						}
+				}
 
-        return $result_set;
+				return $result_set;
     }
+
+		function getValidationField( $copier_name ) {
+				return array( 'AMP_elementCopier_'.$copier_name.'_validated' =>
+					array( 		'type' => 'hidden',
+										'public' => true,
+										'enabled' => true ) );
+		}
 
         
 
-    function parseCopiedElements( $all_data ) {
-        if (!($valid_element_sets = $this->validateSets( $all_data ))) return false;
+    function parseCopiedElements( $copier, $all_data ) {
+        //if (!($valid_element_sets = $this->validateSets( $all_data ))) return false;
         $result_set = array();
-        foreach ($this->valid_element_sets as $set_id) {
+				$set_type =  &$all_data[ $this->copiers[ $copier ][ 'core_field' ] ];
+        foreach ($set_type as $set_id => $set_values ) {
             $result_set[] = $this->parseSingleSet( $set_id, $all_data );
         }
 
@@ -129,6 +194,74 @@ class ElementCopierScript {
         }
         return $result_set;
     }
+
+    function makeSets( $copier, $data ) {
+        $sets = array();
+				$core_field = $this->_addPrefix( $copier, $this->copiers[ $copier ][ 'core_field' ] );
+				if (!isset( $data[ $core_field ])) return false;
+
+        foreach( $data[ $core_field ] as $set_index => $data_item ) {
+            foreach( $this->copiers[ $copier]['fields'] as $fieldName => $fieldDef ) {
+                if ( !isset( $data[ $this->_addPrefix( $copier, $fieldName) ] )) continue;
+                $sets [ $set_index ][ $fieldName ] = $data[ $this->_addPrefix( $copier, $fieldName ) ][ $set_index ] ;
+            }
+        }
+        return $sets;
+    }
+
+
+		function addSets( $copier, $data ) {
+				$real_sets = $this->makeSets( $copier, $data );
+				if (empty( $real_sets )) return false;
+
+				$this->copiers[ $copier ][ 'valuesets' ] = $real_sets;
+		}
+
+		function returnSets( $copier ) {
+				if (!isset( $this->copiers[ $copier ][ 'valuesets' ])) return false;
+				return $this->copiers[ $copier ][ 'valuesets' ];
+		}
+	  
+		function _js_outputSets( $copier_name ) {
+				$copierDef = $this->copiers[ $copier_name ];
+				if (!isset( $copierDef['valuesets'])) return false;
+				$script = "";
+				
+				$valuevar = $copier_name . '_activeValues';
+				$namevar = $copier_name . '_activeNames';
+
+				$script .= $this->_js_outputNameSet( $namevar, current( $copierDef['valuesets'] ), $copier_name ) . "\n";
+					  
+				foreach( $copierDef['valuesets'] as $valueSet ) {
+						$script .= $this->_js_outputValueSet( $valuevar, $valueSet ) . "\n";
+						$script .= 'restoreSet( window.' . $copier_name . ', ' . 
+												$this->_delimit( $this->_addPrefix( $copier_name, 'add_' . $copier_name ) ) . ', ' .
+												$valuevar . ', ' .
+												$namevar . " );\n\n\n ";
+				}
+						
+
+        return $script;
+    }
+		function _js_outputNameSet( $namevar, $data, $copier_name ) {
+				$script = "var $namevar = new Array();\n var valuecounter=0;\n";
+				foreach ( $data as $key => $value ) {
+						$script .= $namevar . "[ valuecounter++] = " . $this->_delimit( $this->_addPrefix( $copier_name, $key) ) . "\n";
+				}
+				return $script;
+		}
+
+		function _js_outputValueSet( $valuevar, $data ) {
+				$script = "var $valuevar = new Array();\n var valuecounter=0;\n";
+				foreach ( $data as $key => $value ) {
+						$script .= $valuevar . "[ valuecounter++] = " . $this->_delimit( $value ) . "\n";
+				}
+				return $script;
+		}
+
+
+
+
 
 }
 ?>
