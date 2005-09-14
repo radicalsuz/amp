@@ -55,7 +55,9 @@ class AMPSystem_Memcache {
 	}
 
 	function getSiteKeys( $site_name ) {
-		$key_index = $this->memcache_connection->get( AMP_SITE_KEY_INDEX.$site_name );
+		if(!$key_index = $this->memcache_connection->get( AMP_SITE_KEY_INDEX.$site_name )) {
+			return false;
+		}
 		return array_keys( $key_index );
 	}
 
