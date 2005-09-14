@@ -83,6 +83,7 @@ class AMPSystem_Memcache {
             trigger_error( 'Deleting cacheEntry: '.$key );
 			$this->memcache_connection->delete( $key );
 		}
+        trigger_error( 'killing the keys' );
 
 		$this->deleteSiteItem( MEMCACHE_KEY_INDEX );
         $this->_key_index = null;
