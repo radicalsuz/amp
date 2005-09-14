@@ -21,4 +21,11 @@ if ( !$AMP_Authen_Handler->is_authenticated() )
     $AMP_Authen_Handler->do_login();
 unset ($_POST['AMPLogin_username']);
 unset ($_POST['AMPLogin_password']);
+
+if ( !empty($_POST) ) {
+	require_once( 'AMP/System/Memcache.inc.php' );
+	$memcache =& AMPSystem_Memcache::instance();
+	$memcache->flushSite($_SERVER['SERVER_NAME']);
+}
+
 ?>
