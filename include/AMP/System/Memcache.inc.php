@@ -81,10 +81,8 @@ class AMPSystem_Memcache {
 
         $keys_index = &$this->getSiteKeys();
 		foreach($keys_index as $key) {
-            trigger_error( 'Deleting cacheEntry: '.$key );
 			$this->memcache_connection->delete( $key );
 		}
-        trigger_error( 'killing the keys' );
 
 		$this->deleteSiteItem( MEMCACHE_KEY_INDEX );
         $this->_key_index = null;
