@@ -1,6 +1,7 @@
 <?php
 
 if (!defined( 'AMP_SITE_MEMCACHE_TIMEOUT')) define ( 'AMP_SITE_MEMCACHE_TIMEOUT', 180 );
+if (!defined( 'AMP_SITE_KEY_INDEX')) define ( 'AMP_SITE_KEY_INDEX', 'AMP_SITE_KEY_INDEX' );
 
 class AMPSystem_Memcache {
 
@@ -32,11 +33,13 @@ class AMPSystem_Memcache {
 
     function setPageItem( $item_key, $item_value ) {
         $cachekey = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . $item_key;
+		$this->addSiteKey($_SERVER['SERVER_NAME'], $cachekey);
         return $this->memcache_connection->set( $cachekey, $item_value , MEMCACHE_COMPRESSED, AMP_SITE_MEMCACHE_TIMEOUT  );
     }
 
     function setSiteItem( $item_key, $item_value ) {
         $cachekey = $_SERVER['SERVER_NAME'] . $item_key;
+		$this->addSiteKey($_SERVER['SERVER_NAME'], $cachekey);
         return $this->memcache_connection->set( $cachekey, $item_value , MEMCACHE_COMPRESSED, AMP_SITE_MEMCACHE_TIMEOUT  );
     }
 
@@ -44,6 +47,24 @@ class AMPSystem_Memcache {
         $cachekey = $_SERVER['SERVER_NAME'] . $item_key;
         return $this->memcache_connection->get( $cachekey );
     }
+
+	function addSiteKey( $site_name, $key ) {
+		$key_index = $this->getSiteKeys( $site_name );
+		$key_index[$key] = time();
+		$this->memcache_connection->set( AMP_SITE_KEY_INDEX.$site_name, $key_index );
+	}
+
+	function getSiteKeys( $site_name ) {
+		$key_index = $this->memcache_connection->get( AMP_SITE_KEY_INDEX.$site_name );
+		return array_keys( $key_index );
+	}
+
+	function flushSite( $site_name ) {
+		foreach($this->getSiteKeys( $site_name ) as $key) {
+			$this->memcache_connection->delete( $key );
+		}
+		$this->memcache_connection->delete( AMP_SITE_KEY_INDEX.$site_name );
+	}
 
 }
 ?>
