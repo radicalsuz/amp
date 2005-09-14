@@ -78,8 +78,9 @@ class AMPSystem_Memcache {
 
 	function flushSite() {
 
-        $keys = &$this->getSiteKeys();
-		foreach($keys as $key) {
+        $keys_index = &$this->getSiteKeys();
+		foreach($keys_index as $key) {
+            trigger_error( 'Deleting cacheEntry: '.$key );
 			$this->memcache_connection->delete( $key );
 		}
 
