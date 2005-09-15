@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `voterguides` (
   `name` varchar( 255 ) NOT NULL,
   `blurb` text NULL,
   `city` varchar( 50 ) NULL,
+  `state` varchar( 10 ) NULL,
   `owner_id` int(11) NULL,
   `election_date` datetime NULL,    
   `publish` tinyint(4) NULL,

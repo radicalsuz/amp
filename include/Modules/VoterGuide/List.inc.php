@@ -8,7 +8,7 @@ require_once( 'Modules/VoterGuide/Set.inc.php' );
 
 class VoterGuide_List extends AMPSystem_List {
     var $name = "VoterGuides";
-    var $col_headers = array( "Name" => 'name', "City" => 'city', 'Status' => 'publish', 'Affiliate' => 'affiliation' );
+    var $col_headers = array( "Guide Name" => 'name', "City" => 'city', 'Status' => 'publish', 'Affiliate' => 'affiliation' );
     var $editlink = "voterguide.php";
 
     function VoterGuide_List( &$dbcon, $id = null ) {

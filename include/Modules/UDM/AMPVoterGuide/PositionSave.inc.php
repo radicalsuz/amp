@@ -68,6 +68,8 @@ class UserDataPlugin_PositionSave_AMPVoterGuide extends UserDataPlugin_Save {
 
         $datasets = $this->_copier->returnSets( $this->_copierName );
         $position_count = 0; 
+        if (empty( $datasets )) return true;
+
         foreach( $datasets as $dataSet ) {
             $position_count++;
             $dataSet['voterguide_id'] = $options['voterguide_id'];

@@ -68,7 +68,9 @@ function addHeader ( label ){
 }
 
 function addStatic ( label ){
-    newheader = document.createTextNode( label );
+    newheader = document.createElement( 'span' );
+    newheader.className = 'udm_label';
+    newheader.innerHTML = label;
     return newheader;
 }
 function addButton (name, caption, action) {
@@ -187,11 +189,15 @@ function restoreSet( which, startElementName, dataFieldSet, dataNameSet ) {
 
 function addLabel( newcell, element_def ) {
     if (element_def.type == 'button') return false;
-    if ( labeltext =  document.createTextNode(element_def.label)) {
-        newcell.appendChild( labeltext );
-        if ( element_def.type == 'textarea' ) {
-            newcell.appendChild( document.createElement( 'br' ) );
-        }
+    if (element_def.label == "" ) return false;
+
+    labelspan =  document.createElement('SPAN'); 
+    labelspan.className = 'form_label_col';
+    labelspan.innerHTML = element_def.label;
+    newcell.appendChild( labelspan );
+    if ( element_def.type == 'textarea' ) {
+        labelspan.className = 'form_span_col';
+        newcell.appendChild( document.createElement( 'br' ) );
     }
 }
 

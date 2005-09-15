@@ -152,7 +152,7 @@
 </item>
 <item>
 <href>gallery_type.php?action=list</href>
-<label>Edit Gallery Settings</label>
+<label>View Gallery Settings</label>
 <per>GALLERY_ADMIN</per>
 </item>
 </gallery>

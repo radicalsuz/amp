@@ -280,7 +280,7 @@ class UserDataPlugin {
         foreach($udmdata as $keyname => $value) {
             if ( !($localkey = $this->checkPrefix($keyname)) ) continue;
 
-            $data[$localkey] = $this->checkData( $this->udm->fields[$keyname], $value );
+            $data[$localkey] = $this->checkData( $this->udm->fields[$keyname], $value, $keyname );
         }
 
         if (!empty ($request_fields)) $data = array_combine_key($request_fields, $data);
@@ -331,14 +331,28 @@ class UserDataPlugin {
     }
 
 
-    function checkData( $fDef, $value ) {
+    function checkData( $fDef, $value, $keyname=null ) {
 
         $translation_method = $fDef['type']."FieldtoText";
         if (method_exists( $this, $translation_method )) {
             return $this->$translation_method( $value );
         }
+        if ( $fDef[ 'type' ] == 'file' ) {
+            return $this->manageUpload( $fDef, $value, $keyname );
+        }
 
         return $value;
+    }
+
+    function manageUpload( $fDef, $value, $filefield=null ) {
+        if (!isset( $filefield)) return false;
+        if (!isset( $_FILES[ $filefield ][ 'tmp_name' ] )) return false;
+
+        require_once( 'AMP/System/Upload.inc.php' );
+        $upLoader = &new AMPSystem_Upload( $_FILES[ $filefield ][ 'name' ] );
+        if (!$upLoader->execute( $_FILES[ $filefield ][ 'tmp_name' ] )) return false;
+
+        return basename( $upLoader->getTargetPath() );
     }
 
     function dateFieldtoText( $value ) {

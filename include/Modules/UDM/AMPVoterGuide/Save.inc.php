@@ -16,6 +16,12 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         $this->_guideForm = &new VoterGuide_Form();
         $this->fields = $this->_guideForm->getFields();
 
+        $fieldnames =  array_keys( $this->fields ) ;
+        if ($header_key = array_search( 'guidePositionsHeader', $fieldnames )) {
+            unset( $fieldnames [ $header_key ] );
+        }
+        $this->insertBeforeFieldOrder( $fieldnames );
+        $this->insertAfterFieldOrder( array('guidePositionsHeader') );
     }
 
     function getSaveFields() {

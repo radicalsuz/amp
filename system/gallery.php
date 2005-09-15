@@ -39,6 +39,9 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
         } else {
             $result_message =  "File Upload Failed<BR>\n" . join( '<BR>', $upLoader->getErrors() );
         }
+    } else {
+
+        if (isset( $_POST['img'])) $new_file_name = $_POST['img'];
     }
 
 	#$img = upload_image('',$getimgset->Fields("optw"),$getimgset->Fields("optl"),$getimgset->Fields("thumb"));
@@ -72,8 +75,7 @@ if ($_GET['id'])  {
 elseif ($_GET['p']) {
 	$html .= $buildform->add_colspan("<div align=center><img src =\"../img/pic/".$_GET['p']."\" align=center></div>");
 	$html .= addfield('img','Image','text',$_GET['p']);
-}
-else {
+} else {
 	$html .= addfield('file','Upload File <br>','file');
 }
 

@@ -56,6 +56,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
         
         if (count($order)>1) { 
             foreach ($order as $field) {
+                if (!isset($data[ $field ] )) continue;
                 $output .= $this->elementToText ($field, $data[$field]);
                 $finishedElements[ $field ] = 1;
             }
@@ -72,6 +73,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
     }
 
     function elementToText($field, $value) {
+        if (!isset( $this->udm->fields[ $field ])) return false;
         $fDef = $this->udm->fields[$field];
 
         //if the field is not explicitly enabled, return no data

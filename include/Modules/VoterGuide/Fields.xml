@@ -24,6 +24,14 @@
         <enabled>1</enabled>
         <public>1</public>
     </city>
+    <state>
+        <type>select</type>
+        <label>Voter Guide State</label>
+        <region>US</region>
+        <required>1</required>
+        <enabled>1</enabled>
+        <public>1</public>
+    </state>
     <election_date>
         <type>date</type>
         <default>October 5, 2005</default>
