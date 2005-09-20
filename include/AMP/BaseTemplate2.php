@@ -140,7 +140,7 @@ if ($intro_id == 1) {
         $MM_author = $articleinfo->Fields("author");
         $MM_title = $articleinfo->Fields("title");
         $MM_shortdesc = $articleinfo->Fields("shortdesc");
-        if ($articleinfo->Fields("linkover")) redirect($articleinfo->Fields("link"));
+        if ($articleinfo->Fields("linkover")) ampredirect($articleinfo->Fields("link"));
     }
     
     if (isset($_GET["type"])  && $_GET['type'] ) $MM_type  = $_GET["type"];
@@ -189,7 +189,7 @@ $typetemplate_id = $gettype->Fields("templateid");
 $css = $gettype->Fields("css");
 
 #Redirect section
-if ($gettype->Fields("uselink")) {redirect($gettype->Fields("linkurl")) ;}
+if ($gettype->Fields("uselink")) {ampredirect($gettype->Fields("linkurl")) ;}
 
 #SET MODULE SPECIFIC VARS
 if (isset($modid)) {

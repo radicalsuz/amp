@@ -36,10 +36,10 @@ class ElementCopierScript {
 				$this->copiers[ $copier ]['formname'] = $formname;
 		}
 
-		function instance() {
-				static $copier_script = false;
-				if (!$copier_script) $copier_script = new ElementCopierScript();
-				return $copier_script;
+		function &instance() {
+            static $copier_script = false;
+            if (!$copier_script) $copier_script = new ElementCopierScript();
+            return $copier_script;
 		}
 
 		function setCoreField( $copiername , $fieldname ) {

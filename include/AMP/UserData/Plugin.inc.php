@@ -279,6 +279,7 @@ class UserDataPlugin {
         //retain only local-prefixed data
         foreach($udmdata as $keyname => $value) {
             if ( !($localkey = $this->checkPrefix($keyname)) ) continue;
+            if ( !isset( $this->udm->fields[ $keyname ] )) continue;
 
             $data[$localkey] = $this->checkData( $this->udm->fields[$keyname], $value, $keyname );
         }
@@ -337,31 +338,23 @@ class UserDataPlugin {
         if (method_exists( $this, $translation_method )) {
             return $this->$translation_method( $value );
         }
+        /*
         if ( $fDef[ 'type' ] == 'file' ) {
             return $this->manageUpload( $fDef, $value, $keyname );
         }
+        */
 
         return $value;
     }
 
-    function manageUpload( $fDef, $value, $filefield=null ) {
-        if (!isset( $filefield)) return false;
-        if (!isset( $_FILES[ $filefield ][ 'tmp_name' ] )) return false;
-
-        require_once( 'AMP/System/Upload.inc.php' );
-        $upLoader = &new AMPSystem_Upload( $_FILES[ $filefield ][ 'name' ] );
-        if (!$upLoader->execute( $_FILES[ $filefield ][ 'tmp_name' ] )) return false;
-
-        return basename( $upLoader->getTargetPath() );
-    }
 
     function dateFieldtoText( $value ) {
         if (!is_array($value)) return $value;
 
-        $month = isset($value['M'])? $value['M']:(isset($value['m'])?$value['m']:0);
-        $day  = isset($value['D'])? $value['D']:(isset($value['d'])?$value['d']:false);
-        $year = isset($value['Y'])? $value['Y']:(isset($value['y'])?$value['y']:0);
-        $hour = isset($value['H'])? $value['H']:0;
+        $month  = isset($value['M'])? $value['M']:(isset($value['m'])?$value['m']:0);
+        $day    = isset($value['D'])? $value['D']:(isset($value['d'])?$value['d']:false);
+        $year   = isset($value['Y'])? $value['Y']:(isset($value['y'])?$value['y']:0);
+        $hour   = isset($value['H'])? $value['H']:0;
         $minute = isset($value['i'])? $value['i']:0;
         $second = isset($value['s'])? $value['s']:0;
 
@@ -586,7 +579,7 @@ class UserDataPlugin {
         if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
 
             $just_values = str_replace(")", "", substr($defaults, 7));
-            $valueset = split("[ ]?,[ ]?", $just_values );
+            $valueset = preg_split("/\s?,\s?/", $just_values );
             if (isset($valueset[4])) $field_def['default'] = $valueset[4];
             return $this->returnLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
         }

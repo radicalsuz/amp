@@ -9,14 +9,29 @@ define ('AMP_CONTENT_DOCUMENT_TYPE_IMAGE', 'img');
 define ('AMP_ICON_WORD', 'worddoc.gif' );
 define ('AMP_ICON_PDF', 'pdf.gif' );
 define ('AMP_ICON_IMAGE', 'img.gif' );
-define ('AMP_ICON_PATH', '/system/images/' );
+define ('AMP_CONTENT_URL_ICONS', '/img/' );
 
 class DocumentLink  {
 
     var $_filename;
     var $_filetype;
 
-    function DocumentLink() {
+    var $_mime_translations = array( 
+        'application/pdf' => 'pdf',
+        'application/msword' => 'word',
+        'image/jpeg' => 'img',
+        'image/gif' => 'img',
+        'image/tiff' => 'img',
+        'image/png' => 'img',
+        'video/mpeg' => 'file');
+
+    function DocumentLink( $filename = null ) {
+        if ( isset( $filename )) $this->init( $filename );
+    }
+
+    function init( $filename ) {
+        $this->setFile( $filename );
+        $this->verifyFileType( );
     }
 
     function setFile( $filename, $filetype = AMP_CONTENT_DOCUMENT_TYPE_DEFAULT ) {
@@ -24,12 +39,27 @@ class DocumentLink  {
         $this->setFileType( $filetype );
     }
 
+    function verifyFileType( ) {
+        if ( !( $mime_filetype = mime_content_type( $this->getPath() )) ) return false;
+        $this->setFileType( $this->_simpleFileType( $mime_filetype ));
+    }
+
+    function _simpleFileType( $mime_filetype ) {
+        if ( !isset( $this->_mime_translations[ $mime_filetype ])) return AMP_CONTENT_DOCUMENT_TYPE_DEFAULT;
+        return $this->_mime_translations[ $mime_filetype ];
+    }
+
     function setFileType( $filetype ) {
         $this->_filetype = $filetype;
     }
 
-    function display() {
-        $display = & new ArticleDocumentLink_Display( $this );
+    function display( $display_type = null ) {
+        $default_display = 'ArticleDocumentLink_Display';
+        $requested_display = $default_display;
+        if ( isset( $display_type ) && class_exists( $default_display.ucfirst( $display_type ))) {
+            $requested_display = $default_display . ucfirst( $display_type );
+        }
+        $display = & new $requested_display( $this );
         return $display->execute();
     }
 
@@ -43,6 +73,10 @@ class DocumentLink  {
 
     function getURL() {
         return AMP_CONTENT_URL_DOCUMENTS . $this->getFileName();
+    }
+
+    function getPath() {
+        return AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_DOCUMENT_PATH . DIRECTORY_SEPARATOR . $this->getFileName();
     }
 
 }
@@ -97,7 +131,7 @@ class ArticleDocumentLink_Display extends AMPDisplay_HTML {
         if (!defined( $icon_descriptor )) return false;
         $icon_file = AMP_LOCAL_PATH . AMP_IMAGE_PATH . constant( $icon_descriptor );
         if ( !file_exists_incpath($icon_file) ) return false;
-        $icon_url = AMP_CONTENT_URL_IMAGES . constant( $icon_descriptor );
+        $icon_url = AMP_CONTENT_URL_ICONS . constant( $icon_descriptor );
         
         return '<IMG SRC="'.$icon_url.'" '. $this->_HTML_makeAttributes( $this->getIconAttr() ) .'>';
     }
@@ -112,5 +146,33 @@ class ArticleDocumentLink_Display extends AMPDisplay_HTML {
     function _HTML_end() {
         return  "</div>\n</td></tr></table>";
     }
+}
+class ArticleDocumentLink_DisplayDiv extends ArticleDocumentLink_Display {
+
+    function ArticleDocumentLink_DisplayName( $document_link ) {
+        $this->setDocument( $document_link );
+    }
+
+    function _HTML_docLink() {
+
+        $linkhtml = $this->getIcon() . " ". basename( $this->document_link->getPath( ) );
+
+        return $this->_HTML_inDiv( 
+                    $this->_HTML_link( $this->document_link->getURL(), $linkhtml ),
+                    array( 'class'=>'filelink')
+                    );
+    }
+
+    function _HTML_start( ) {
+        return $this->_HTML_newline( );
+    }
+
+    function _HTML_end( ) {
+        return false;
+    }
+
+
+
+
 }
 ?>

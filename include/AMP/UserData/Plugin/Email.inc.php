@@ -119,8 +119,8 @@ class UserDataPlugin_Email extends UserDataPlugin {
         return $this->_readIntroText( $options['footer_text'] );
     }
 
-    function readIntroText( $id ) {
-        $system_texts = AMPSystemLookup::instance('introTexts');
+    function _readIntroText( $id ) {
+        $system_texts = AMPSystem_Lookup::instance('introTexts');
         if (!isset($system_texts[ $id ])) return $id;
 
         $textdata = & new AMPSystem_IntroText( $this->dbcon, $id );

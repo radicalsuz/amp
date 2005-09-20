@@ -205,11 +205,78 @@
     function addFields ( $fieldset ) {
         if (!is_array($fieldset)) return false;
         foreach ( $fieldset as $key => $field_def ) {
-            $this->fields[$key] = $field_def;
+            $this->addField( $field_def, $key );
         }
         if ($this->isBuilt) $this->_buildElements();
         return true;
     }
+
+    function addField ( $field_def, $name ) {
+        $this->fields[ $name ] = $field_def;
+
+        if ($this->isBuilt)  $this->_rebuildFormField( $name );
+    }
+
+    function _rebuildFormField( $fieldname ) {
+        if (!$this->isBuilt)  return;
+        if (!$current_field = &$this->form->getElement( $fieldname )) return;
+
+        $temp_fieldname = $fieldname. '_temp';
+        $this->fields[$temp_fieldname] = $this->fields[ $fieldname ];
+
+        $this->_addElement( $temp_fieldname );
+        $this->form->insertElementBefore( $this->form->removeElement( $temp_fieldname ), $fieldname );
+        $this->form->removeElement( $fieldname );
+
+        unset($this->fields[ $temp_fieldname ] );
+        $this->_addElement( $fieldname );
+        $this->form->insertElementBefore( $this->form->removeElement( $fieldname ), $temp_fieldname );
+        $this->form->removeElement( $temp_fieldname );
+    }
+
+    function _manageUpload( $data, $filefield ) {
+        if (!( isset( $_FILES[ $filefield ][ 'tmp_name' ] ) && $_FILES[$filefield]['tmp_name'])) {
+            return ( isset( $data[$filefield.'_value']) ? $data[$filefield.'_value'] : false) ;
+        }
+
+        require_once( 'AMP/System/Upload.inc.php' );
+        $upLoader = &new AMPSystem_Upload( $_FILES[ $filefield ][ 'name' ] );
+        if (!$upLoader->execute( $_FILES[ $filefield ][ 'tmp_name' ] )) return false;
+
+        return basename( $upLoader->getTargetPath() );
+    }
+
+    function _addFileLink( $data, $fieldname ) {
+        if (!( isset($data[ $fieldname ] ) && $data[ $fieldname ])) return null;
+        require_once( 'AMP/Content/Article/DocumentLink.inc.php' );
+
+        $fileLink = &new DocumentLink( $data[$fieldname] ); 
+        $this->setFieldLabel(  $fieldname, $this->fields[$fieldname]['label'] . $fileLink->display( 'div' ) );
+        $this->form->setDefaults( array( $fieldname.'_value' => $data[$fieldname] ));
+    }
+
+    function _addHiddenField( $fieldname ) {
+        $this->addFields( array(  $fieldname => array( 'type'=>'hidden', 'enabled'=>true, 'public'=>true )));
+    }
+
+	function _makeDbDateTime( $data, $fieldname ) {
+        if ( !isset( $data[$fieldname])) return false;
+        if ( !is_array( $data[$fieldname])) return false;
+        $value = $data[ $fieldname ];
+
+        $month  = isset($value['M'])? $value['M']:(isset($value['m'])?$value['m']:0);
+        $day    = isset($value['D'])? $value['D']:(isset($value['d'])?$value['d']:false);
+        $year   = isset($value['Y'])? $value['Y']:(isset($value['y'])?$value['y']:0);
+        $hour   = isset($value['H'])? $value['H']:0;
+        $minute = isset($value['i'])? $value['i']:0;
+        $second = isset($value['s'])? $value['s']:0;
+
+		if ( isset( $value['a']) && ( $value['a'] == 'pm')) $hour+=12;
+        $time_stamped = mktime($hour,$minute,$second,$month,$day,$year);
+        if (!$time_stamped) return false;
+
+		return date( 'YmdHis', $time_stamped );
+	}
 
     function dropField( $fieldname ) {
         if (!isset($this->fields[ $fieldname ])) return false; 
@@ -226,6 +293,15 @@
         $this->fields[$fieldname]['values'] = $valueset;
         if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {
             $fRef->loadArray( $this->_selectAddNull($valueset) );
+        }
+            
+    }
+
+    function setFieldLabel ( $fieldname, $label ) {
+        if (!isset($this->fields[$fieldname])) return false;
+        $this->fields[$fieldname]['label'] = $label;
+        if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {
+            $fRef->setLabel( $label );
         }
             
     }
@@ -385,6 +461,17 @@
         $defaults = $this->_getDefault( $name );
         return $this->form->addElement( $field_def['type'], $name, $field_def['label'], $defaults );
         
+    }
+
+    function &_addElementFile ( $name, $field_def ) {
+        $this->addTranslation( $name, '_manageUpload', 'get' );
+        $this->addTranslation( $name, '_addFileLink', 'set' );
+        $this->_addHiddenField( $name . '_value');
+        $this->form->addElement( 'hidden', $name.'_value');
+
+        $defaults = $this->_getDefault( $name );
+        return $this->form->addElement( 'file', $name, $field_def['label'], $defaults );
+
     }
 
     function &_addElementDate ( $name, $field_def ) {

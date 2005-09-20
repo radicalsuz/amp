@@ -84,13 +84,6 @@ class ScheduleItem_Form extends AMPSystem_Form_XML {
 		return $this->_makeDbDateTime( $initial_time );
 	}
 
-	function _makeDbDateTime( $date_array ) {
-		if ($date_array ['a'] == 'pm') $date_array['h']+=12;
-
-		$stamp = mktime($date_array['h'], $date_array['i'], 0, $date_array['M'], $date_array['d'], $date_array['Y']);
-		return date('YmdHis', $stamp);
-	}
-
     function output() {
         $this->verifyOwnedItem();
         return PARENT::output();

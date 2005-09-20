@@ -98,7 +98,7 @@ if ($section->Fields($usevar) == ("1")){
 
 //check if section is redirected
 if ($section->Fields("uselink") == ("1")){
-	amp_redirect($section->Fields("linkurl"));
+	ampredirect($section->Fields("linkurl"));
 }  
 
 

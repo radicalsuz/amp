@@ -1,22 +1,33 @@
 <?php 
 /*****
  *
- * AMP UserData Form View
+ * AMP VoterGuide Edit View
  *
- * (c) 2004 Radical Designs
- * Written by David Taylor, david@radicaldesigns.org
+ * @copyright 2005 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org>
  *
  *****/
 
-//ob_start();
+require_once( 'Modules/VoterGuide/ComponentMap.inc.php' );
+require_once( 'AMP/System/Page.inc.php' );
 
-// Set default module.
+$modin = (isset($_GET['modin']) ? $_GET[ 'modin' ] : AMP_FORM_ID_VOTERGUIDES );
+
+$map = &new ComponentMap_VoterGuide();
+$page = &new AMPSystem_Page ($dbcon, $map);
+if (isset($_GET['action']) && $_GET['action'] == "list")  $page->showList( true );
+
+$page->execute();
+
+print $page->output( );
 
 
+/*
 require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
-if (!isset($_GET[modin])){ $modin=52;} else {$modin=$_GET[modin];}
+
+// Set default module.
 
 
 // Fetch the form instance specified by submitted modin value.
@@ -230,7 +241,7 @@ if ( AMP_Authorized( AMP_PERMISSION_FORM_DATA_EDIT)) {
    and any database-backed intro text to the appropriate module.
 
 */
-
+/*
 
 $mod_id = $udm->modTemplateID;
 
@@ -257,5 +268,5 @@ print "</td></tr></table></center>";
 
 // Append the footer and clean up.
 require_once( 'footer.php' );
-
+*/
 ?>

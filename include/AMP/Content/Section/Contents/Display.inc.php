@@ -20,14 +20,7 @@ class SectionContents_Display  extends AMPDisplay_HTML {
 
     var $_manager;
     var $_section;
-    var $_listIntro;
-/*
-    var $_custom_displays = array(
-        'Articles'          => 'ArticleSet_Display',
-        'Subsections'       => 'SectionSet_Display',
-        'ArticlesAggregator'=> 'ArticleSet_Display'
-        );
-    */
+    var $_showListIntro = true;
 
     function SectionContents_Display( &$contents_manager ) {
         $this->init( $contents_manager );
@@ -72,17 +65,18 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         
 
     function &getIntroDisplay() {
-        $intro = false;
-        $currentPage = &AMPContent_Page::instance();
-        if ($currentPage->contentManager->showListIntro()) {
-            $introClass = AMP_CONTENT_LIST_INTRO_DISPLAY;
-            $intro = &new $introClass( $this->_section );
-        }
-        return $intro;
+        if (! $this->_showListIntro) return false; 
+
+        $introClass = AMP_CONTENT_LIST_INTRO_DISPLAY;
+        return new $introClass( $this->_section );
     }
 
+    function setListIntro( $show_intro = true ) {
+        $this->_showListIntro = $show_intro;
+    }
 
     function _HTML_listIntro( &$intro ) {
+        if ( !$intro ) return false;
         if (!(isset($this->_display) && isset($this->_section))) return false;
         if ( isset( $this->_display->_pager ) && !($this->_display->isFirstPage() && $intro)) return $this->_display->_pager->_HTML_topNotice( $this->_section->getName() );
         return $intro->execute() . $this->_HTML_newline();

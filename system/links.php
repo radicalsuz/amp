@@ -39,7 +39,7 @@ if ((($_POST['MM_update']) && ($_POST['MM_recordId'])) or ($_POST['MM_insert']) 
 			}
 		}
 	}
-	redirect($filename."?action=list");
+	ampredirect($filename."?action=list");
 
     ob_end_flush();	
 }

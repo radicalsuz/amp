@@ -22,6 +22,18 @@ if (!defined( 'AMP_ARTICLE_DISPLAY_FRONTPAGE')) define( 'AMP_ARTICLE_DISPLAY_FRO
 if (!defined( 'AMP_ARTICLE_DISPLAY_NEWS'))      define( 'AMP_ARTICLE_DISPLAY_NEWS', 'ArticleDisplay_News' );
 if (!defined( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE')) define( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE', 'ArticleDisplay_PressRelease' );
 
+/**
+ * Article 
+ * 
+ * @uses AMPSystem
+ * @uses _Data_Item
+ * @package 
+ * @version $id$
+ * @copyright 1997-2005 The PHP Group
+ * @author Tobias Schlitt <toby@php.net> 
+ * @license PHP Version 3.0 {@link http://www.php.net/license/3_0.txt}
+ */
+
 class Article extends AMPSystem_Data_Item {
 
     var $datatable = "articles";
@@ -179,6 +191,12 @@ class Article extends AMPSystem_Data_Item {
         return $doclink;
     }
 
+    /**
+     * isNews 
+     * 
+     * @access public
+     * @return void
+     */
     function isNews() {
         if (!$this->getClass()) return false;
         if ($this->getClass()== AMP_CONTENT_CLASS_NEWS) return true;
@@ -186,6 +204,12 @@ class Article extends AMPSystem_Data_Item {
         return false;
     }
 
+    /**
+     * isPressRelease 
+     * 
+     * @access public
+     * @return void
+     */
     function isPressRelease() {
         if (!$this->getClass()) return false;
         return ($this->getClass()== AMP_CONTENT_CLASS_PRESSRELEASE);

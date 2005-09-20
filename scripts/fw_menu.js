@@ -484,7 +484,7 @@ function fwDoHide()
     }
     fwDHFlag = false;
     hideActiveMenus();
-    this.changePageSelects('inline');
+    if ( document.all ) this.changePageSelects('inline');
     FW_menuIconNormal(window.ActiveMenuItem);
     window.ActiveMenuItem = 0;
 }
@@ -492,7 +492,7 @@ function fwDoHide()
 function FW_showMenu(menu, x, y, child) {
     if (!window.fwWroteMenu) return;
     FW_clearTimeout();
-    this.changePageSelects('none');
+    if ( document.all ) this.changePageSelects('none');
     if (document.layers) {
         if (menu) {
             var l = menu.menuLayer || menu;

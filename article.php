@@ -72,7 +72,8 @@ if ( AMP_USE_OLD_CONTENT_ENGINE ) {
     // get Listing Display
     if ($listType) {
         $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
-        $display = &$currentPage->getListDisplay( $show_intro );
+        $display = &$currentPage->getListDisplay();
+        if ( method_exists( $display, 'setListIntro') ) $display->setListIntro( $show_intro );
     } 
 
     //************************/

@@ -137,7 +137,6 @@ class AMPSystem_Page {
         foreach ($init_classes as $type => $component_def ) {
             if (isset($this->$type) && (!$reset)) continue;
             $classname = $component_def;
-
             if (!class_exists( $classname )) continue;
             $this->$type = & new $classname ( $this->dbcon );
             $this->doCallbacks( $type, AMP_PAGE_ACTION_COMPONENT_INIT ); 

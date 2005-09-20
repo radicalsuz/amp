@@ -88,6 +88,8 @@ if ( !function_exists( 'ampredirect' ) ) {
 
 }
 
+/* this function is causing trouble by conflicting with PHPList /
+/* it is no longer permitted in AMP 3.5.3 Bugfix 5 
 if ( !function_exists( 'redirect' ) ) {
 
     function redirect($url) {
@@ -95,6 +97,7 @@ if ( !function_exists( 'redirect' ) ) {
     }
 
 }
+*/
 
 if ( !function_exists( 'DoDateTime' ) ) {
 

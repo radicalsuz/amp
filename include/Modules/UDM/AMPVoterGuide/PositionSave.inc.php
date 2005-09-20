@@ -28,18 +28,19 @@ class UserDataPlugin_PositionSave_AMPVoterGuide extends UserDataPlugin_Save {
     }
 
     function _showAddFields() {
-        $this->_positionForm = &new VoterGuidePosition_Form();
+        #$this->_positionForm = &new VoterGuidePosition_Form();
         $this->_copier = &ElementCopierScript::instance();
-        $this->_copier->addCopier( $this->_copierName, $this->_positionForm->getFields(), $this->udm->name );
+        $this->_copier->setFormName( $this->_copierName, $this->udm->name );
+        #$this->_copier->addCopier( $this->_copierName, $this->_positionForm->getFields(), $this->udm->name );
         $this->_copier->setPrefix( $this->_copierName, $this->_field_prefix );
-        $this->_copier->setCoreField( $this->_copierName, $this->_coreField );
+        #$this->_copier->setCoreField( $this->_copierName, $this->_coreField );
 
         if (!empty($_POST)) {
             $this->_copier->addSets( $this->_copierName, $_POST );
         }
 
         $this->_register_javascript( $this->_copier->output() );
-        $this->fields = $this->_copier->getAddButton( $this->_copierName );
+        #$this->fields = $this->_copier->getAddButton( $this->_copierName );
         
     }
     

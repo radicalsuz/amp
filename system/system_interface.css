@@ -45,6 +45,7 @@ p, td, select {
 		display: block;
 		background-color: #e3e3e3;
 		color: #000000;
+        width: 100%;
 }
 
 /* the site name in the header */
@@ -250,6 +251,11 @@ span.page_error {
 	margin: 20px 0px 10px 0px;
 }
 
+span.intitle {
+    display: block;
+    width: 100%;
+}
+
 .intitle td {
 		padding: 2px 2px 2px 4px;
 		vertical-align: middle;
@@ -440,4 +446,13 @@ div.list_pager {
 		position: relative;
 		font-size: 11px;
 		display: inline;
+}
+
+div.filelink {
+    display: block;
+    padding: 10px;
+}
+
+div.filelink a {
+    text-decoration: none;
 }

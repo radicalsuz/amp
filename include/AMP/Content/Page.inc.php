@@ -36,9 +36,6 @@ class AMPContent_Page {
     //can't do nothing without dbcon
     var $dbcon;
 
-    //content-specific legacy controls
-    var $_show_list_intro;
-
     function AMPContent_Page( &$dbcon ) {
         $this->init( $dbcon );
     }
@@ -224,18 +221,13 @@ class AMPContent_Page {
         $this->contentManager->appendBody( $html );
     }
 
-    function addtoContentFooter( $html ) {
-        $this->contentManager->appendFooter( $html );
-    }
-
     ##############################
     ###  SubDisplay Accessors  ###
     ##############################
 
-    function &getListDisplay( $show_intro = true ) {
+    function &getListDisplay() {
         if (!$listType = $this->isList()) return false;
 
-        $this->contentManager->setListIntro( $show_intro );
         if ( ( $displaySource = $this->getListSource() ) && method_exists( $this->$displaySource, 'getDisplay' )) {
             return  $this->$displaySource->getDisplay();
         }

@@ -4,6 +4,21 @@ define ( 'AMP_ICON_SPACER', 'spacer.gif' );
 
 class AMPDisplay_HTML {
 
+    var $_html_value;
+
+    function setContent( $html ) {
+        $this->_html_value = $html;
+    }
+
+    function addtoContent( $html ){
+        $this->_html_value .= $html;
+    }
+
+    function execute() {
+        if ( !isset( $this->_html_value )) return false;
+        return $this->_html_value;
+    }
+
     function _HTML_inSpan( $text, $class=array() ) {
         $html_attr =$class;
         if (is_string($class)) $html_attr = array('class'=>$class);

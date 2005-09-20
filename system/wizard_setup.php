@@ -47,7 +47,7 @@ if ($_POST['MM_insert']) {
 	$htmltemplate = str_replace("navigation", $fnav, $htmltemplate);
 	$sql = "update template set header2 = '$htmltemplate' where id=1 ";
 	$updateit=$dbcon->Execute($sql) or DIE($dbcon->ErrorMsg());
-	redirect("articlelist.php");
+	ampredirect("articlelist.php");
 }
 
 //declare form objects

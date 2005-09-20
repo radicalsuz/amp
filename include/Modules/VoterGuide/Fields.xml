@@ -56,7 +56,7 @@
         <type>select</type>
         <label>Endorsed By</label>
         <values>
-            <array>League</array>
+            <League>League</League>
         </values>
         <enabled>1</enabled>
     </affiliation>

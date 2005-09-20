@@ -70,7 +70,7 @@ if ((($_POST[MM_update]) && ($_POST[MM_recordId])) or ($_POST[MM_insert]) or (($
 		contactadduid($personid,$uid,'moduserdata');
 	} 
 
-      redirect ("vol_update2.php?thank=1");
+      ampredirect ("vol_update2.php?thank=1");
       #die("dd");
 }
 	 

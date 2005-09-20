@@ -1,5 +1,6 @@
 <?php
 
+if (!defined( 'AMP_FORM_ID_VOTERGUIDES' )) define( 'AMP_FORM_ID_VOTERGUIDES', 52 );
 require_once ( 'AMP/System/ComponentMap.inc.php' );
 
 class ComponentMap_VoterGuide extends AMPSystem_ComponentMap {
@@ -9,12 +10,14 @@ class ComponentMap_VoterGuide extends AMPSystem_ComponentMap {
 
     var $paths = array( 
         'fields' => 'Modules/VoterGuide/Fields.xml',
+        'list'   => 'Modules/VoterGuide/List.inc.php',
         'form'   => 'Modules/VoterGuide/Form.inc.php',
         'source' => 'Modules/VoterGuide/VoterGuide.php' );
 
     var $components = array(
         'form' => 'VoterGuide_Form',
-        'source ' => 'VoterGuide' );
+        'list' => 'VoterGuide_List',
+        'source' => 'VoterGuide' );
 
 }
 ?>

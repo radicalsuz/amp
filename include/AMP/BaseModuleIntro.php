@@ -6,7 +6,7 @@ if (AMP_USE_OLD_CONTENT_ENGINE) {
         $currentPage = &AMPContent_Page::instance();
         $introtext = &$currentPage->introtext;
         $intro_display = &$introtext->getDisplay();
-        $currentPage->contentManager->setIntroDisplay( $intro_display );
+        $currentPage->contentManager->addDisplay( $intro_display, AMP_CONTENT_DISPLAY_KEY_INTRO );
     }
 }
 ?>

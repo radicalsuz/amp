@@ -53,6 +53,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
         $order = $this->udm->getFieldOrder();
         $finishedElements = array();
         $finishedElements['modin'] = 1;
+        $output = "";
         
         if (count($order)>1) { 
             foreach ($order as $field) {
@@ -74,17 +75,17 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
 
     function elementToText($field, $value) {
         if (!isset( $this->udm->fields[ $field ])) return false;
-        $fDef = $this->udm->fields[$field];
+        $fDef = $this->udm->fields[ $field ];
 
         //if the field is not explicitly enabled, return no data
         //no non-public fields are sent via insecure e-mail
         if (!($fDef['enabled'] && $fDef['public'])) return ''; 
 
-        //if neither the label nor the value
-        if (!($fDef['label'].$value)) return '';
+        //no output if neither the label nor the value
+        if (!( $value || (isset($fDef['label']) && $fDef['label']) )) return '';
 
-        $label = (isset($fDef) ? html_entity_decode(strip_tags($fDef['label'])) : $field);
-        if ($label) $label .= ": ";
+        $label = (isset($fDef['label']) ? html_entity_decode( strip_tags( $fDef['label'] )) : $field);
+        if ($label && (substr($label, -1) != ":") ) $label .= ": ";
 
         switch ($fDef['type']) {
             case 'html':

@@ -7,6 +7,9 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
     var $_field_prefix = 'plugin_AMPVoterGuide';
     var $_guideForm;
+    var $_copierName = 'voterguidePositions';
+    var $_coreField = 'item';
+    var $_copier;
 
     function UserDataPlugin_Save_AMPVoterGuide ( &$udm, $plugin_instance=null ) {
         $this->init ( $udm, $plugin_instance );
@@ -17,11 +20,21 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         $this->fields = $this->_guideForm->getFields();
 
         $fieldnames =  array_keys( $this->fields ) ;
+        $end_form_fieldnames =  array('guidePositionsHeader', 'add_voterguidePositions') ;
         if ($header_key = array_search( 'guidePositionsHeader', $fieldnames )) {
             unset( $fieldnames [ $header_key ] );
         }
         $this->insertBeforeFieldOrder( $fieldnames );
-        $this->insertAfterFieldOrder( array('guidePositionsHeader') );
+        $this->insertAfterFieldOrder( $end_form_fieldnames );
+
+        $this->_copier = &ElementCopierScript::instance();
+        $this->_copier->setFormName( $this->_copierName, $this->udm->name );
+        $this->_copier->setPrefix( $this->_copierName, $this->_field_prefix );
+        if (!empty($_POST)) {
+            $this->_copier->addSets( $this->_copierName, $_POST );
+        }
+
+        $this->_register_javascript( $this->_copier->output() );
     }
 
     function getSaveFields() {
