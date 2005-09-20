@@ -1,3 +1,9 @@
+amp (3.4.6.1) urgency=low
+
+    * wonderful. test test. (subversion)
+
+-- Blaine Cook <blaine@radicaldesigns.org> Tue Sep 20 11:17:00 PDT 2005
+
 amp (3.4.6) urgency=rabid
 
     * construct UDM radio-group and checkbox-group display types
