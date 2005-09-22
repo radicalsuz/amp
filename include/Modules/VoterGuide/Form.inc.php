@@ -12,6 +12,7 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
     var $_positionForm;
     var $_copierName = 'voterguidePositions';
     var $_coreField = 'item';
+    var $_positionPrefix = '_pos_';
 
     function VoterGuide_Form () {
         $name = "VoterGuides";
@@ -23,26 +24,37 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
         $this->setFieldValueSet( 'state' , $region->regions['US']);
         $this->addTranslation( 'election_date', '_makeDbDateTime' );
         $this->_showPositions( );
-        #$this->addTranslation( 'id', '_loadPositions' );
+        $this->addTranslation( $this->_copierName, '_loadPositions', 'set' );
     }
 
     function _loadPositions( $data, $fieldname ) {
-
+        $this->_copier->addRealSets( $this->_copierName, $data );
+        $this->registerJavascript( $this->_copier->output(), 'copier' );
+        $this->setJavascript();
     }
 
     function _showPositions() {
         $this->_positionForm = &new VoterGuidePosition_Form();
+
         $this->_copier = &ElementCopierScript::instance();
         $this->_copier->addCopier( $this->_copierName, $this->_positionForm->getFields(), "VoterGuides" );
-        #$this->_copier->setPrefix( $this->_copierName, $this->_field_prefix );
         $this->_copier->setCoreField( $this->_copierName, $this->_coreField );
-
+        #$this->_copier->setPrefix( $this->_copierName, $this->_positionPrefix );
+        
         if (!empty($_POST)) {
             $this->_copier->addSets( $this->_copierName, $_POST );
         }
-
-        $this->registerJavascript( $this->_copier->output() );
+        
+        $this->registerJavascript( $this->_copier->output(), 'copier' );
         $this->addFields( $this->_copier->getAddButton( $this->_copierName ) );
+    }
+
+    function getValues( $fields=null ) {
+        $base_data = PARENT::getValues( $fields );
+        if ( $copier_data = $this->_copier->returnSets(  $this->_copierName ) ) {
+            $base_data[ $this->_copierName ] = $copier_data;
+        }
+        return $base_data;
     }
         
         

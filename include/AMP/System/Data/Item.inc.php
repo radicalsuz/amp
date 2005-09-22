@@ -99,13 +99,13 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     function mergeData( $data ) {
-        $this->itemdata = array_merge( $this->itemdata, array_combine_key( $this->_itemdata_keys, $data ));
+        $this->itemdata = array_merge( $this->itemdata, array_combine_key( $this->_allowed_keys, $data ));
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
         if (isset($data[$this->id_field]) && $data[$this->id_field]) $this->id = $data[$this->id_field];
     }
 
     function setData( $data ) {
-        $this->itemdata = array_combine_key( $this->_itemdata_keys, $data );
+        $this->itemdata = array_combine_key( $this->_allowed_keys, $data );
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
         if (isset($data[$this->id_field]) && $data[$this->id_field]) $this->id = $data[$this->id_field];
     }

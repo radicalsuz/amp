@@ -40,6 +40,7 @@ class DocumentLink  {
     }
 
     function verifyFileType( ) {
+        if ( !function_exists( 'mime_content_type')) return false;
         if ( !( $mime_filetype = mime_content_type( $this->getPath() )) ) return false;
         $this->setFileType( $this->_simpleFileType( $mime_filetype ));
     }
@@ -50,6 +51,7 @@ class DocumentLink  {
     }
 
     function setFileType( $filetype ) {
+        if ( !$filetype ) $filetype = AMP_CONTENT_DOCUMENT_TYPE_DEFAULT;
         $this->_filetype = $filetype;
     }
 

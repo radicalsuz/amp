@@ -7,5 +7,6 @@ class VoterGuide_Position extends AMPSystem_Data_Item {
     function VoterGuide_Position( &$dbcon, $id=null) {
         $this->init( $dbcon, $id );
     }
+
 }
 ?>

@@ -19,7 +19,7 @@
     <item>
         <type>text</type>
         <public>1</public>
-        <label>Candidate/Item&lt;BR&gt;&lt;span class="photocaption"&gt;For searchability, &lt;BR&gt;please be as accurate as possible&lt;/span&gt;</label>
+        <label>&lt;span style="color: #ff0000"&gt;*&lt;/span&gt;&amp;nbsp;Candidate/Item&lt;BR&gt;&lt;span class="photocaption"&gt;For searchability, &lt;BR&gt;please be as accurate as possible&lt;/span&gt;</label>
         <enabled>1</enabled>
     </item>
     <position>

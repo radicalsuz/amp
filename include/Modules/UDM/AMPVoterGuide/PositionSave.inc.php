@@ -72,7 +72,7 @@ class UserDataPlugin_PositionSave_AMPVoterGuide extends UserDataPlugin_Save {
         if (empty( $datasets )) return true;
 
         foreach( $datasets as $dataSet ) {
-            $position_count++;
+            ++$position_count;
             $dataSet['voterguide_id'] = $options['voterguide_id'];
             if (!$dataSet['textorder']) $dataSet['textorder'] = $position_count;
 

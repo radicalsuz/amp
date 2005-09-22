@@ -456,3 +456,7 @@ div.filelink {
 div.filelink a {
     text-decoration: none;
 }
+
+.photocaption {
+    font-size: 9px;
+}

@@ -69,7 +69,6 @@
 				/*
         if ($hold_priority) {
 						$expression_set = array_reverse( $expression_set, true );
-						AMP_varDump( $expression_set );
 				}
 				*/
 
@@ -108,6 +107,7 @@
         if (!$criteria) return false;
         $sql = "DELETE" . $this->_makeSource(). " where " . $criteria;
         if($this->dbcon->Execute($sql)) {
+            $this->dbcon->CacheFlush( $this->_assembleSql() );
             return $this->dbcon->Affected_Rows();
         }
 
@@ -187,7 +187,7 @@
         while( $data = $this->getData() ) {
             if (isset($max_qty) && count($result)==$max_qty) break;
             if ($data[ $fieldname ] != $value) continue;
-            $result[ $data[$this->id_field]] = $data;
+            $result[ $data[$this->id_field] ] = $data;
         }
 
         if (empty($result)) return false;

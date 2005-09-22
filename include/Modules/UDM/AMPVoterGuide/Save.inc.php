@@ -24,15 +24,17 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         if ($header_key = array_search( 'guidePositionsHeader', $fieldnames )) {
             unset( $fieldnames [ $header_key ] );
         }
-        $this->insertBeforeFieldOrder( $fieldnames );
+        $this->insertBeforeFieldOrder( array_diff( $fieldnames, $end_form_fieldnames) );
         $this->insertAfterFieldOrder( $end_form_fieldnames );
 
         $this->_copier = &ElementCopierScript::instance();
         $this->_copier->setFormName( $this->_copierName, $this->udm->name );
         $this->_copier->setPrefix( $this->_copierName, $this->_field_prefix );
+        /*
         if (!empty($_POST)) {
             $this->_copier->addSets( $this->_copierName, $_POST );
         }
+        */
 
         $this->_register_javascript( $this->_copier->output() );
     }
