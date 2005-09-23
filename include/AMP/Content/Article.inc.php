@@ -25,20 +25,26 @@ if (!defined( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE')) define( 'AMP_ARTICLE_DISPLAY_
 /**
  * Article 
  * 
- * @uses AMPSystem
- * @uses _Data_Item
- * @package 
- * @version $id$
- * @copyright 1997-2005 The PHP Group
- * @author Tobias Schlitt <toby@php.net> 
- * @license PHP Version 3.0 {@link http://www.php.net/license/3_0.txt}
+ * @uses AMPSystem_Data_Item
+ * @package Content
+ * @version 3.5.4
+ * @copyright 2005 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org> 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
-
 class Article extends AMPSystem_Data_Item {
 
     var $datatable = "articles";
     var $name_field = "title";
 
+    /**
+     * Article 
+     * 
+     * @param       & $dbcon      a reference to the current database connection 
+     * @param mixed $id           the id of the desired article 
+     * @access public
+     * @return void
+     */
     function Article( &$dbcon, $id = null ) {
         $this->init ($dbcon, $id);
     }

@@ -22,7 +22,7 @@ class AMPContent_Pager extends AMPSystem_ListPager {
         $this->page_total = $this->_offset + $this->_qty;
 
         $this->readPosition();
-        if ( (!($this->source_total> $this->page_total)) && !$this->getOffset() ) return false;
+        if ( (!($this->source_total > $this->page_total)) && !$this->getOffset() ) return false;
 
         return  $this->_HTML_inDiv( 
                     $this->_HTML_inSpan( $this->_positionText(), $this->_css_class_link ) . 

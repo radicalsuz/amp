@@ -39,6 +39,10 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         $display_class = $this->_getDisplayClass();
         $this->_display = &new $display_class( $contents );
 
+        if ( ( $limit = $this->_section->getListItemLimit( )) && method_exists( $this->_display, 'setPageLimit')) {
+            $this->_display->setPageLimit( $limit );
+        }
+
         if (!method_exists( $this->_display, 'setSection' )) return;
         $this->_display->setSection( $this->_section );
     }
@@ -87,7 +91,7 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         $footer = false;
         $currentPage = &AMPContent_Page::instance();
 
-        if (!($currentPage->contentManager->showListIntro() && ($footer = &$this->_section->getFooterRef() ))) return false;
+        if (!($this->_showListIntro && ($footer = &$this->_section->getFooterRef() ))) return false;
 
         $display = &$footer->getDisplay();
         return $display->execute();

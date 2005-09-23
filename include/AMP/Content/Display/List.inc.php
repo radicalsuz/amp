@@ -21,6 +21,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     var $_pager;
     var $_pager_active  = true;
     var $_pager_display = true;
+    var $_pager_limit = false;
 
     var $_source;
     var $_sourceItem_class = 'Article';
@@ -41,6 +42,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     function init( &$source ) {
         $this->_source = &$source;
         if ($this->_pager_active) $this->_pager = &new AMPContent_Pager( $this->_source );
+        if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
         $this->_source->readData();
     }
 
@@ -55,6 +57,15 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     function getSourceArray() {
         return $this->_source->getArray();
+    }
+
+    function setPageLimit( $limit ) {
+        $this->_pager_limit = $limit;
+        if ( isset( $this->_source ) && isset( $this->_pager)) {
+            $this->_pager->setLimit( $limit );
+            $this->_pager->setPage( );
+            $this->_source->readData( );
+        }
     }
 
     function &_buildItems( $dataset ) {

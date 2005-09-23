@@ -826,4 +826,11 @@ if (!function_exists( 'AMP_removeExtension' )) {
         return substr( $filename, 0, $dotpoint);
     }
 }
+
+if ( !function_exists( 'mime_content_type')) {
+    function mime_content_type($filepath) {
+         $f = escapeshellarg($filepath);
+         return trim( `file -bi $f` );
+   }
+}
 ?>

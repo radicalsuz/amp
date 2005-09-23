@@ -17,6 +17,18 @@
         <enabled>1</enabled>
         <public>1</public>
     </name>
+	<redirect_nameHeader>
+		<type>static</type>
+		<values>&lt;span class="photocaption"&gt;To make it easier to find your Voter Guide, it will be given a web address like "http://www.indyvoter.org/guides/2005/your_short_name".  If you don&amp;rsquo;t type in a name, one will be created from your guide title.&lt;/span&gt;</values>
+        <enabled>1</enabled>
+        <public>1</public>
+	</redirect_nameHeader>
+	<redirect_name>
+		<type>text</type>
+        <label>Short Name</label>
+        <enabled>1</enabled>
+        <public>1</public>
+	</redirect_name>
     <city>
         <type>text</type>
         <label>Voter Guide City</label>
@@ -40,6 +52,12 @@
         <enabled>1</enabled>
         <public>1</public>
     </election_date>
+    <picture>
+        <type>file</type>
+        <label>Upload a Photo to Show with Your Guide</label>
+        <enabled>1</enabled>
+        <public>1</public>
+    </picture>
     <filelink>
         <type>file</type>
         <label>Upload a PDF of your Voter Guide</label>
@@ -52,6 +70,12 @@
         <enabled>1</enabled>
         <public>1</public>
     </blurb>
+    <footer>
+        <type>textarea</type>
+        <label>Closing Words</label>
+        <enabled>1</enabled>
+        <public>1</public>
+    </footer>
     <affiliation>
         <type>select</type>
         <label>Endorsed By</label>

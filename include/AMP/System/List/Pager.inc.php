@@ -107,7 +107,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     }
 
     function offsetURL( $new_offset ) {
-         return $_SERVER['PHP_SELF'] . '?' . $this->_prepURLValues() . ($new_offset? ('&offset=' . $new_offset ):"");
+         return AMP_Url_AddVars( $_SERVER['PHP_SELF'] , array( $this->_prepURLValues() , ($new_offset? ('offset=' . $new_offset ):"")));
     }
 
     function _prevPageLink() {

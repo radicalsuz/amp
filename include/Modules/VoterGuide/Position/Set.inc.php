@@ -5,6 +5,7 @@ require_once ('AMP/System/Data/Set.inc.php' );
 class VoterGuidePositionSet extends AMPSystem_Data_Set {
 
 	var $datatable = "voterguide_positions";
+    var $sort = array( "voterguide_id", "textorder");
 
 	function VoterGuidePositionSet ( &$dbcon, $guide_id =null ) {
 		$this->init ($dbcon );

@@ -3,10 +3,24 @@
 $modid = 109;
 $mod_id = 74;
 
-include("AMP/BaseDB.php"); 
-include("AMP/BaseTemplate.php"); 
-include("AMP/BaseModuleIntro.php");
+require_once("AMP/BaseDB.php"); 
+require_once("AMP/BaseTemplate.php"); 
+require_once("AMP/BaseModuleIntro.php");
+require_once( "Modules/VoterGuide/VoterGuide.php");
+require_once( "Modules/VoterGuide/SetDisplay.inc.php");
 
+$currentPage = &AMPContent_Page::instance( );
+
+if ( isset( $_GET['id']) && $_GET['id']) {
+    $guide = &new VoterGuide( $dbcon, $_GET['id']);
+    $currentPage->contentManager->addDisplay( $guide->getDisplay( ));
+} else {
+    $display = &new VoterGuideSet_Display( $dbcon );
+    $currentPage->contentManager->addDisplay( $display );
+}
+
+include("AMP/BaseFooter.php"); 
+/*
 function vg_postition($can,$pos,$reason=NULL) {
 		$position = "<p><i>Candidate/Ballot Item</i>:&nbsp;<B>$can</b><br><i>Position:</i>&nbsp;<B>$pos</B><br><i>Reason:</i>&nbsp;$reason</p><BR>";
 		return $position;
@@ -65,4 +79,5 @@ else {
 }
 
  include("AMP/BaseFooter.php"); 
+ */
 ?>
