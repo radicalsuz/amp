@@ -12,7 +12,6 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
     var $_positionForm;
     var $_copierName = 'voterguidePositions';
     var $_coreField = 'item';
-    var $_positionPrefix = '_pos_';
 
     function VoterGuide_Form () {
         $name = "VoterGuides";
@@ -23,7 +22,7 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
         $region = &new Region();
         $this->setFieldValueSet( 'state' , $region->regions['US']);
         $this->addTranslation( 'election_date', '_makeDbDateTime' );
-        $this->_showPositions( );
+        $this->showPositions( );
         $this->addTranslation( $this->_copierName, '_loadPositions', 'set' );
     }
 
@@ -33,13 +32,12 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
         $this->setJavascript();
     }
 
-    function _showPositions() {
+    function showPositions( ) {
         $this->_positionForm = &new VoterGuidePosition_Form();
 
         $this->_copier = &ElementCopierScript::instance();
         $this->_copier->addCopier( $this->_copierName, $this->_positionForm->getFields(), "VoterGuides" );
         $this->_copier->setCoreField( $this->_copierName, $this->_coreField );
-        #$this->_copier->setPrefix( $this->_copierName, $this->_positionPrefix );
         
         if (!empty($_POST)) {
             $this->_copier->addSets( $this->_copierName, $_POST );

@@ -19,22 +19,22 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         $this->_guideForm = &new VoterGuide_Form();
         $this->fields = $this->_guideForm->getFields();
 
+        $this->_copier = &ElementCopierScript::instance();
+        $this->_copier->setFormName( $this->_copierName, $this->udm->name );
+        $add_button = &$this->_copier->getAddButton( $this->_copierName );
+        $this->_copier->setPrefix( $this->_copierName, $this->_field_prefix );
+
         $fieldnames =  array_keys( $this->fields ) ;
-        $end_form_fieldnames =  array('guidePositionsHeader', 'add_voterguidePositions') ;
-        if ($header_key = array_search( 'guidePositionsHeader', $fieldnames )) {
-            unset( $fieldnames [ $header_key ] );
-        }
+        $end_form_fieldnames =  array( 'guidePositionsHeader', key( $add_button ) ) ;
+
         $this->insertBeforeFieldOrder( array_diff( $fieldnames, $end_form_fieldnames) );
         $this->insertAfterFieldOrder( $end_form_fieldnames );
 
-        $this->_copier = &ElementCopierScript::instance();
-        $this->_copier->setFormName( $this->_copierName, $this->udm->name );
-        $this->_copier->setPrefix( $this->_copierName, $this->_field_prefix );
-        /*
+        
         if (!empty($_POST)) {
             $this->_copier->addSets( $this->_copierName, $_POST );
         }
-        */
+        
 
         $this->_register_javascript( $this->_copier->output() );
     }
@@ -47,15 +47,18 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
     function save( $data ) {
 
         $data['owner_id'] = $this->udm->uid;
+        if ( $copier_data = $this->_copier->returnSets(  $this->_copierName ) ) {
+            $data[ $this->_copierName ] = $copier_data;
+        }
 
         $voterGuide = &new VoterGuide( $this->udm->dbcon );
         $voterGuide->setData( $data );
-        if ( ! $voterGuide->save() ) {
-            $this->udm->errorMessage( 'VoterGuide Save Failed' );
-            return false;
-        }
+        if ( $voterGuide->save() ) return true; 
+       
+        $this->udm->errorMessage( $voterGuide->getErrors() );
+        return false;
         
-        return $this->udm->doPlugin( 'AMPVoterGuide', 'PositionSave', array( 'voterguide_id' => $voterGuide->id ) );
+        //$this->udm->doPlugin( 'AMPVoterGuide', 'PositionSave', array( 'voterguide_id' => $voterGuide->id ) );
     }
 
 }

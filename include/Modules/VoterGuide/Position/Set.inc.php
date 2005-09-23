@@ -34,7 +34,7 @@ class VoterGuidePositionSet extends AMPSystem_Data_Set {
         foreach ( $positions as $position ) {
             ++$position_count;
             $position['voterguide_id'] = $guide_id;
-            if (!( isset( $position['textorder'] ) && $position['textorder'])) $position['textorder'] = $position_count;
+            $position['textorder'] = $position_count;
 
             $vgPosition = &new VoterGuide_Position( $this->dbcon );
             $vgPosition->setData( $position );

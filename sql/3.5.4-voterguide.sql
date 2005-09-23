@@ -21,5 +21,6 @@ CREATE TABLE IF NOT EXISTS `voterguides` (
   `publish` tinyint(4) NULL,
   `affiliation` varchar( 60 ) NULL,
   `filelink` varchar( 60 ) NULL,
+  `block_id` int( 11 ) NULL,
   PRIMARY KEY (id)
 )

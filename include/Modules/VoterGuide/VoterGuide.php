@@ -1,4 +1,5 @@
 <?php
+
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'Modules/VoterGuide/Position/Set.inc.php');
 
@@ -24,7 +25,10 @@ class VoterGuide extends AMPSystem_Data_Item {
 
     function save() {
         if ( !( $result=PARENT::save())) return $result;
-        return $this->_positionSet->reviseGuide( $this->getData( $this->_positions_key ), $this->id );
+        if ( $result = $this->_positionSet->reviseGuide( $this->getData( $this->_positions_key ), $this->id ) ) return $result;
+
+        $this->addError( $this->_positionSet->getErrors( ));
+        return false;
 
     }
 
