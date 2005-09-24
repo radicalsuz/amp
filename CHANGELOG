@@ -1,3 +1,8 @@
+amp (3.5.4) urgency=low
+	* VoterGuide module now has front end list and detail display, which are functional, if unsightly
+	* Quotes module was restored to the system menu
+-- Austin Putman <austin@radicaldesigns.org> Fri Sep 22 17:30:00 PDT 2005
+ 
 amp (3.4.6) urgency=rabid
 
     * construct UDM radio-group and checkbox-group display types

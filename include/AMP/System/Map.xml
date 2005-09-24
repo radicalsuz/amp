@@ -171,6 +171,11 @@
 <href>region.php?action=list</href>
 </item>
 <item>
+<label>Quotes</label>
+<per>QUOTES_ACCESS</per>
+<href>quotes.php?action=list</href>
+</item>
+<item>
 <label>User Added Content</label>
 <href>article_list.php?class=9</href>
 <per>CONTENT_USER_ADDED_CONTENT</per>

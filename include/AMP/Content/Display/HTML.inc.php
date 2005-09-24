@@ -57,7 +57,7 @@ class AMPDisplay_HTML {
     }
 
     function _HTML_link( $href, $text, $attr = array() ) {
-        if (!$href) return $text;
+        if (!$href) return $this->_HTML_inSpan( $text, $attr);
         $link_attr = $this->_HTML_makeAttributes( $attr );
         return "<a href=\"".$href."\"$link_attr>". $text . "</a>";
     }

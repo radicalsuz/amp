@@ -12,7 +12,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     var $source_total;
     var $page_total;
 
-    var $_prepared_URL;
+    var $_pageless_UrlVars = array( );
 
     var $_css_class_container = "list_pager";
 
@@ -107,7 +107,11 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     }
 
     function offsetURL( $new_offset ) {
-         return AMP_Url_AddVars( $_SERVER['PHP_SELF'] , array( $this->_prepURLValues() , ($new_offset? ('offset=' . $new_offset ):"")));
+        $page_url_vars = array();
+        if ( $new_offset ) $page_url_vars['offset'] ='offset=' . $new_offset ;
+        if ( $this->_qty != $this->_default_qty) $page_url_vars['qty'] = 'qty=' . $this->_qty;
+
+         return AMP_Url_AddVars( $_SERVER['PHP_SELF'] , array_merge( $this->_getURLValues() , $page_url_vars )); 
     }
 
     function _prevPageLink() {
@@ -126,15 +130,13 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     }
 
 
-    function _prepURLValues() {
-        if (isset($this->_prepared_URL) && $this->_prepared_URL) return $this->_prepared_URL;
+    function _getURLValues() {
+        if (!empty($this->_pageless_UrlVars) ) return $this->_pageless_UrlVars;
         
-        $values = AMP_URL_Values();
-        unset ($values['offset']);
-        unset ($values['qty']);
-        if ($this->_qty != $this->_default_qty) $values['qty'] = 'qty=' . $this->_qty;
-        $this->_prepared_URL = join( '&', $values );
-        return $this->_prepared_URL;
+        $this->_pageless_UrlVars =  AMP_URL_Values();
+        unset ($this->_pageless_UrlVars['offset']);
+        unset ($this->_pageless_UrlVars['qty']);
+        return $this->_pageless_UrlVars;
     }
 }
 ?>

@@ -21,12 +21,13 @@ class VoterGuide_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_guideHeader( ) {
-        $output =   $this->_HTML_title( $this->_voterguide->getName( ) ).
+        $output =   $this->_HTML_affiliations( $this->_voterguide->getAffiliation( ) ).    
+                    $this->_HTML_title( $this->_voterguide->getName( ) ).
                     $this->_HTML_location( $this->_voterguide->getLocation( ) ).
                     $this->_HTML_date( $this->_voterguide->getItemDate( ) ).
                     $this->_HTML_blurb( $this->_voterguide->getBlurb( ) ).
-                    $this->_HTML_affliations( $this->_voterguide->getAffliation( ) ).    
-                    $this->_HTML_docLink( $this->_voterguide->getDocumentRef( ));
+                    $this->_HTML_docLink( $this->_voterguide->getDocumentRef( )) .
+                    $this->_HTML_newline();
 
         return $this->_HTML_addImage( $output );
 
@@ -34,7 +35,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_addImage( $html ) {
         if ( !( $imageRef = &$this->_voterguide->getImageRef( ))) return $html;
-        return $this->_HTML_inDiv( $this->_HTML_image( $imageRef->getURL ), array( 'style'=>'float:right;position:relative;')) . $html;
+        return $this->_HTML_inDiv( $this->_HTML_image( $imageRef->getURL( AMP_IMAGE_CLASS_OPTIMIZED ) ), array( 'style'=>'float:right;position:relative;')) . $html;
 
     }
 
@@ -61,9 +62,10 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_affiliations ( $affiliations ) {
         if ( !$affiliations ) return false;
-        $icon_path = AMP_LOCAL_PATH . "/img/original/" . $affiliations . "_icon.gif";
-        if ( !file_exists( $icon_path )) return false;
-        return $this->_HTML_inDiv( $this->_HTML_image( $icon_path ), array( 'class' => 'vg_endorsement_logos'));
+        require_once( 'AMP/Content/Image.inc.php');
+        $iconRef = &new Content_Image( $affiliations . "_icon.gif");
+        if ( !file_exists( $iconRef->getPath( AMP_IMAGE_CLASS_ORIGINAL ))) return false;
+        return $this->_HTML_inDiv( $this->_HTML_image( $iconRef->getURL( AMP_IMAGE_CLASS_ORIGINAL )), array( 'class' => 'voterguide_endorsement_logos'));
     }
 
     function _HTML_docLink ( &$doc ) {
@@ -71,13 +73,16 @@ class VoterGuide_Display extends AMPDisplay_HTML {
         return $doc->display( 'div' );
     }
 
-    function _HTML_footer( ) {
+    function _HTML_guideFooter( ) {
         if ( !( $footer_blurb =  $this->_voterguide->getFooter( ))) return false;
         return $this->_HTML_in_P( $footer_blurb, array( 'class' => $this->_css_class_text));
     }
 
 
     function _HTML_positionsList( ) {
+        require_once( 'Modules/VoterGuide/Position/SetDisplay.inc.php');
         $this->_positionDisplay = &new VoterGuidePositionSet_Display( $this->_voterguide->dbcon, $this->_voterguide->id );
+        return $this->_HTML_inDiv( $this->_positionDisplay->execute( ), array( 'style' => 'border:1px solid silver; padding: 10px;'));
     }
 }
+?>

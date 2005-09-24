@@ -41,7 +41,7 @@ $rec_id = & new Input('hidden', 'MM_recordId', $_GET['id']);
 $html  = $buildform->start_table('name');
 $html .= $buildform->add_header('Edit '.$listtitle, 'banner');
 $html .= addfield('publish','Publish','checkbox',$R->Fields("publish"),1);
-$html .= addfield('quote','Qutoe','text',$R->Fields("quote"));
+$html .= addfield('quote','Quote','text',$R->Fields("quote"));
 $html .= addfield('source','Source','text',$R->Fields("source"));
 $html .= addfield('date','Date','text',DateOut($R->Fields("date")));
 

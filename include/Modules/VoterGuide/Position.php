@@ -5,6 +5,8 @@ class VoterGuide_Position extends AMPSystem_Data_Item {
     var $datatable = 'voterguide_positions';
     var $name_field = "item";
 
+    var $_votes = array( 'Hell Yeah', 'Yeah', 'No', 'No Way', 'No Endorsement');
+
     function VoterGuide_Position( &$dbcon, $id=null) {
         $this->init( $dbcon, $id );
     }
@@ -21,12 +23,23 @@ class VoterGuide_Position extends AMPSystem_Data_Item {
         return $this->getData( 'comments' );
     }
 
-    function getPosition( ) {
+    function getPositionValue( ) {
         return $this->getData( 'position' );
     }
 
+    function translateVote( $vote_key ) {
+        if ( !isset( $this->_votes[$vote_key])) return false;
+        return $this->_votes[$vote_key];
+    }
+
+    function getPosition( ) {
+        $position = $this->getPositionValue();
+        if ( $position !== false ) return $this->translateVote( $position );
+        return false;
+    }
+
     function getSubtitle( ) {
-        return "Vote: " . $this->getPosition( ) . "  " . $this->getName( );
+        $output = "";
     }
 
 }

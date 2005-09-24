@@ -12,9 +12,9 @@ class VoterGuide extends AMPSystem_Data_Item {
     var $_positions_key = 'voterguidePositions';
 
     function VoterGuide ( &$dbcon, $id=null ) {
+        $this->_positionSet = &new VoterGuidePositionSet( $dbcon );
         $this->init( $dbcon, $id );
         $this->_addAllowedKey( $this->_positions_key );
-        $this->_positionSet = &new VoterGuidePositionSet( $this->dbcon );
     }
 
     function readData( $guide_id ) {
@@ -80,7 +80,7 @@ class VoterGuide extends AMPSystem_Data_Item {
     }
 
     function getAffiliation( ) {
-        return $this->getData( 'affliation');
+        return $this->getData( 'affiliation');
     }
 
     function &getDocumentRef( ) {
