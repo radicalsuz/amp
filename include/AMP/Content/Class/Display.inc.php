@@ -3,6 +3,8 @@
 if (!defined( 'AMP_CONTENT_LIST_INTRO_DISPLAY' )) define ('AMP_CONTENT_LIST_INTRO_DISPLAY', 'ListIntro_Display' );
 
 require_once ('AMP/Content/Article/SetDisplay.inc.php' );
+require_once ('AMP/Content/Class.inc.php' );
+
 class ContentClass_Display extends ArticleSet_Display {
 
     var $_class;

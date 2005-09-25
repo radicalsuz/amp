@@ -1,20 +1,27 @@
 <?php
-
-define ('AMP_CONTENT_PAGE_DISPLAY_DEFAULT', 'standard' );
-define ('AMP_CONTENT_PAGE_DISPLAY_PRINTERSAFE', 'printerSafe' );
-define ('AMP_CONTENT_PAGE_DISPLAY_CONTENT', 'content' );
+require_once( 'AMP/Content/Page.inc.php');
 
 class AMPContent_PageDisplay {
 
-    var $page;
-    var $_requires_navigation;
+    var $_page;
+    var $_template;
+
+    /**
+     * References the Page Header object 
+     * 
+     * @var AMPContent_Header       
+     * @since 3.5.3
+     * @access public
+     */
+    var $_header;
 
     function AMPContent_PageDisplay( &$page ) {
         $this->init( $page );
     }
 
     function init( &$page ) {
-        $this->page = &$page;
+        $this->_page = &$page;
+        $this->_header = & new AMPContent_Header( $this->_page );
     }
 
     function execute($display_type = AMP_CONTENT_PAGE_DISPLAY_DEFAULT ) {
@@ -25,19 +32,20 @@ class AMPContent_PageDisplay {
 
     function output_Standard() {
 
-        $this->page->template->placeNavigation();
+        $this->initTemplate( );
+        $this->_template->placeNavigation( $this->_page );
         $output =  
-                $this->page->header->output().
-                $this->page->template->execute( $this->page->contentManager->output() );
+                $this->_header->output().
+                $this->_template->execute( $this->_page->contentManager->output() );
         return $output;
     }
 
     function output_Content() {
-        return $this->page->contentManager->output();
+        return $this->_page->contentManager->output();
     }
 
     function output_PrinterSafe() {
-        return  $this->page->header->output() .
+        return  $this->_header->output() .
                 $this->_HTML_printSafeHead() . 
                 $this->execute( AMP_CONTENT_PAGE_DISPLAY_CONTENT ) .
                 $this->_HTML_endPage();
@@ -51,5 +59,81 @@ class AMPContent_PageDisplay {
         return "</body></html>";
     }
 
+    /**
+     * initializes an AMPContent_Template  
+     * 
+     * @access public
+     * @return void
+     */
+    function initTemplate() {
+        $this->setTemplate( $this->_page->getTemplateId());
+        $this->_initStyleSheets();
+        $this->_addExtraHeader( );
+    }
+
+    /**
+     * set the Template for use on the current page 
+     * 
+     * @param   integer     $template_id    The database id of the Template to use 
+     * @access  public
+     * @since   3.5.3
+     * @return  void
+     */
+    function setTemplate( $template_id ) {
+        require_once('AMP/Content/Template.inc.php' );
+        $template = & new AMPContent_Template( $this->_page->dbcon, $template_id );
+        if (!$template->hasData()) return false;
+        $template->setPage( $this->_page );
+
+        $this->_template = &$template;
+        $template->globalizeNavLayout();
+    }
+
+    function _addExtraHeader( ) {
+        if ( !( $extraHeader = $this->_template->getPageHeader( ))) return false;
+        $this->_header->addExtraHtml( $extraHeader );
+    }
+
+
+    ##############################
+    ###  StyleSheet accessors  ###
+    ##############################
+
+
+    /**
+     * addStyleSheets 
+     * 
+     * @param mixed $css 
+     * @access public
+     * @return void
+     */
+    function addStyleSheets( $css ) {
+        $stylesheet_array = array( $css );
+        if (strpos($css, ",")!==FALSE) $stylesheet_array = preg_split( "/\s?,\s?/", $css );
+        foreach ($stylesheet_array as $sheet_url ) {
+            $this->_header->addStyleSheet( $sheet_url );
+        }
+    }
+
+    /**
+     * _initStyleSheets 
+     * 
+     * @access protected
+     * @return void
+     */
+    function _initStyleSheets() {
+        $map = &AMPContent_Map::instance( );
+        if (!($css = $map->readAncestors( $this->_page->getSectionId(), 'css' ))) {
+            $css = $this->_template->getCSS();
+        }
+        $this->addStyleSheets( $css );
+
+        if ( !( $extra_sheets = $this->_page->getStyleSheets( ))) return true;
+
+        foreach( $extra_sheets as $sheet ) {
+            $this->addStyleSheets( $sheet );
+        }
+        return true;
+    }
 }
 ?>

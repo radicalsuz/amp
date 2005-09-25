@@ -24,7 +24,7 @@
 			//deal with magic qoutes
 			else if ($delim == "'") 
 			{ 
-         	if ($MM_sysvar_mq != ("1"))
+         	if (!MAGIC_QUOTES_ACTIVE)
 				{
 				$formVal = "'" . str_replace("'","\'",$formVal) . "'";
 				}
@@ -96,7 +96,7 @@ if (isset($MM_insert)) {
       }			//deal with magic qoutes
 			else if ($delim == "'") 
 			{ 
-         	if ($MM_sysvar_mq != ("1"))
+         	if (!MAGIC_QUOTES_ACTIVE)
 				{
 				$formVal = "'" . str_replace("'","\'",$formVal) . "'";
 				}
@@ -156,7 +156,7 @@ if (isset($WF_update) && (isset($MM_recordId))) {
 			//deal with magic qoutes
 			else if ($delim == "'") 
 			{ 
-         	if ($MM_sysvar_mq != ("1"))
+         	if (!MAGIC_QUOTES_ACTIVE)
 				{
 				$formVal = "'" . str_replace("'","\'",$formVal) . "'";
 				}
@@ -217,7 +217,7 @@ if (isset($WF_insert)) {
 			//deal with magic qoutes
 			else if ($delim == "'") 
 			{ 
-         	if ($MM_sysvar_mq != ("1"))
+         	if (!MAGIC_QUOTES_ACTIVE)
 				{
 				$formVal = "'" . str_replace("'","\'",$formVal) . "'";
 				}

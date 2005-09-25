@@ -2,63 +2,67 @@
 
 class AMPContent_Header {
 
-    var $title_separator =  "&nbsp;:&nbsp;";
-    var $encoding = 'iso-8859-1';
-    var $registry;
-    var $page;
+    var $_title_separator =  "&nbsp;:&nbsp;";
+    var $encoding = AMP_SITE_CONTENT_ENCODING ;
+    var $_page;
 
     var $link_rel = array( 'Search'=> '/search.php' );
     var $javaScripts = array( 'functions' => '/scripts/functions.js' );
     var $styleSheets = array( 'default'		=> '/styles_default.css');
+    var $_extraHtml;
 
     function AMPContent_Header( &$page ) {
         $this->init( $page );
     }
 
     function init( &$page ) {
-        $this->registry = &AMP_Registry::instance();
-        $this->page = &$page;
-        $this->verifyEncoding();
+        $this->_page = &$page;
     }
 
-    function verifyEncoding() {
-        if (!($encoding = $this->registry->getEntry( AMP_REGISTRY_SETTING_ENCODING ))) return false;
-        $this->encoding = $encoding;
-    }
+    function getPageTitle() {
+        $pageTitle = array( AMP_SITE_NAME );
+        $article = &$this->_page->getArticle( );
+        $section = &$this->_page->getSection( );
+        $introtext = &$this->_page->getIntroText( );
 
-    function setPageTitle() {
-        $this->_pageTitle = $this->registry->getEntry( AMP_REGISTRY_SETTING_SITENAME );
-        if (!($title = $this->registry->getEntry( AMP_REGISTRY_CONTENT_PAGE_TITLE ))) return false;
-        $this->_pageTitle = join( $this->title_separator, array( $this->_pageTitle, strip_tags($title) ) );
+        if ($introtext && ( $title = $introtext->getTitle( ))) {
+            $pageTitle[] = strip_tags($title);
+        } elseif ($article && ( $title = $article->getTitle( ))) {
+            $pageTitle[] = strip_tags($title);
+        } elseif ($section && ( $title = $section->getName( ))) {
+            $pageTitle[] = strip_tags($title);
+        }
+        
+        $this->_pageTitle = join( $this->_title_separator, $pageTitle ); 
+        return $this->_pageTitle;
     }
 
     function output () {
-        $this->setPageTitle();
         return      $this->_HTML_startHeader() . 
                     $this->_HTML_header() .
                     $this->_HTML_endHeader();
     }
 
     function getMetaDesc() {
-        $alt_text = "";
-        if ( $article = &$this->registry->getArticle() ) {
-            $alt_text = $this->stripQuotes( $article->getBlurb());
+        $metadesc = AMP_SITE_META_DESCRIPTION ;
+
+        if ( $section = &$this->_page->getSection() && ($section->id != AMP_CONTENT_MAP_ROOT_SECTION) ) {
+            $metadesc = $section->getBlurb();
         }
-        if ( $section = &$this->registry->getSection() && ($section->id != AMP_CONTENT_MAP_ROOT_SECTION) ) {
-            $alt_text = $this->stripQuotes( $section->getBlurb());
+        if ( $article = &$this->_page->getArticle() ) {
+            $metadesc = $article->getBlurb();
         }
 
-        if ( $alt_text ) return $alt_text;
+        return $this->stripQuotes($metadesc);
 
-        return $this->stripQuotes( $this->registry->getEntry( AMP_REGISTRY_SETTING_METADESCRIPTION ));
     }
 
     function stripQuotes( $text ) {
         return str_replace( '"', '', $text );
     }
 
-    function getMetaContent() {
-        return $this->stripQuotes( $this->registry->getEntry( AMP_REGISTRY_SETTING_METACONTENT ));
+    function getMetaKeywords() {
+        return $this->stripQuotes( AMP_SITE_META_KEYWORDS );
     }
 
     function addJavaScript( $script_url, $id = null) {
@@ -71,6 +75,10 @@ class AMPContent_Header {
         if (!$link) return false;
         if (isset($id)) return ($this->styleSheets[ $id ] = $link);
         return ($this->styleSheets[] = $link );
+    }
+
+    function addExtraHtml( $html ) {
+        $this->_extraHtml .= $html;
     }
 
 
@@ -93,7 +101,7 @@ class AMPContent_Header {
     }
 
     function _HTML_pageTitle() {
-        return "<title>". $this->_pageTitle ."</title>\n";
+        return "<title>". $this->getPageTitle( )."</title>\n";
     }
 
     function _HTML_feed() {
@@ -129,16 +137,14 @@ class AMPContent_Header {
         if ( $metadesc = $this->getMetaDesc() ) {
             $tags .= "<meta http-equiv=\"Description\" content=\"". $metadesc. "\">\n" ;
         }
-        if ( $metacontent = $this->getMetaContent() ) {
+        if ( $metacontent = $this->getMetaKeywords() ) {
             $tags .= "<meta name=\"Keywords\" content=\"" . $metacontent . "\">\n" ;
         }
         return $tags;
     }
 
-    function _HTML_templateHead() {
-        $page = &AMPContent_Page::instance();
-        if (!($html = $page->template->getPageHeader() )) return false;
-        return $html;
+    function _HTML_extra() {
+        return $this->_extraHtml;
     }
 
 
@@ -147,7 +153,7 @@ class AMPContent_Header {
                 $this->_HTML_linkRels() . 
                 $this->_HTML_pageTitle() . 
                 $this->_HTML_javaScripts() .
-                $this->_HTML_templateHead();
+                $this->_HTML_extra();
     }
 
     function _HTML_endHeader() {

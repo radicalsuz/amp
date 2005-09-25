@@ -35,13 +35,10 @@ class AMPSystem_BaseTemplate {
 	var $_use_form_nav = true;
 
     function AMPSystem_BaseTemplate() {
-        $this->page_title = $GLOBALS['SiteName'] . ' Administration';
-        $reg = & AMP_Registry::instance();
-
-        $this->page_encoding = $reg->getEntry( AMP_REGISTRY_SETTING_ENCODING );
+        $this->page_title = AMP_SITE_NAME . ' Administration';
     }
 
-    function instance() {
+    function &instance() {
         static $basetemplate = false;
         if (!$basetemplate) $basetemplate = new AMPSystem_BaseTemplate();
         return $basetemplate;
@@ -90,11 +87,8 @@ class AMPSystem_BaseTemplate {
     #####################################
 
     function _systemFooterText() {
-        $reg = AMP_Registry::instance();
-        $name = $reg->getEntry(AMP_REGISTRY_SETTING_SITENAME);
-        $admEmail = $reg->getEntry(AMP_REGISTRY_SETTING_EMAIL_SYSADMIN);
-        return  "AMP " . AMP_SYSTEM_VERSION_ID . " for $name\n" .
-                "Please report problems to $admEmail";
+        return  "AMP " . AMP_SYSTEM_VERSION_ID . " for ". AMP_SITE_NAME ."\n" .
+                "Please report problems to " . AMP_SITE_ADMIN;
     }
 
 
@@ -116,7 +110,7 @@ class AMPSystem_BaseTemplate {
 
     function _HTML_docType() {
         
-        return '<meta http-equiv="Content-Type" content="text/html; charset=' . $this->page_encoding .'">';
+        return '<meta http-equiv="Content-Type" content="text/html; charset=' . AMP_SITE_CONTENT_ENCODING .'">';
     }
 
     function _HTML_styleSheets() {
@@ -158,10 +152,7 @@ class AMPSystem_BaseTemplate {
     }
 
     function _HTML_systemTitle() {
-        $reg = AMP_Registry::instance();
-        $url = $reg->getEntry(AMP_REGISTRY_SETTING_SITEURL);
-        $name = $reg->getEntry(AMP_REGISTRY_SETTING_SITENAME);
-        return '<span class="toptitle"><a href="' . $url .'" class="toptitle">' . $name . '</a> Administration</span></nobr>';
+        return '<span class="toptitle"><a href="' . AMP_SITE_URL .'" class="toptitle">' . AMP_SITE_NAME . '</a> Administration</span></nobr>';
     }
 
     function _HTML_topLinks() {

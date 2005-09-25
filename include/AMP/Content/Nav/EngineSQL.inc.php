@@ -39,7 +39,7 @@ class NavEngine_SQL extends NavEngine {
         $url_vars = array();
         if ($listType = $this->nav->getData('mcall1')) {
             $url_vars[] = "list=" . $listType;
-            if ($listType == "classt" && isset($currentPage->section_id)) $url_vars[] = "type=" . $currentPage->section_id;
+            if ($listType == "classt" && ($section_id = $currentPage->getSectionId( ))) $url_vars[] = "type=" . $section_id;
         }
 
         if (!($result = $this->_runSQL())) return false;
@@ -100,12 +100,13 @@ class NavEngine_SQL extends NavEngine {
 
     function _getEvalVars() {
         if (!($page = &AMPContent_Page::instance())) return array();
+        $map = &AMPContent_Map::instance( );
         return array(
-            'MM_parent' =>  $page->map->getParent( $page->section_id ),
-            'MM_type'   =>  $page->section_id,
-            'MM_author' =>  ($page->isArticle() ? $page->article->getAuthor(): "" ),
-            'MM_id'     =>  $page->article_id,
-            'MX_top'    =>  $page->map->top,
+            'MM_parent' =>  $map->getParent( $page->getSectionId( )),
+            'MM_type'   =>  $page->getSectionId( ),
+            'MM_author' =>  ($article = &$page->getArticle() ? $article->getAuthor(): "" ),
+            'MM_id'     =>  $page->getArticleId( ),
+            'MX_top'    =>  AMP_CONTENT_MAP_ROOT_SECTION,
             'intro_id'  =>  $page->getIntroId()
             );
     }

@@ -64,9 +64,9 @@ top.location=history.back(1);
 	
 function amp_createUser($login, $pwd, $email, $permission, $new_home='', $allow_only='') {
 	global $dbcon;
-	$email=$dbcon->qstr($email, $MM_sysvar_mq);
-	$pwd=$dbcon->qstr($pwd, $MM_sysvar_mq);
-	$login=$dbcon->qstr($login, $MM_sysvar_mq);
+	$email=$dbcon->qstr($email, MAGIC_QUOTES_ACTIVE);
+	$pwd=$dbcon->qstr($pwd, MAGIC_QUOTES_ACTIVE);
+	$login=$dbcon->qstr($login, MAGIC_QUOTES_ACTIVE);
 	$new_home=$dbcon->qstr($new_home);
 	$allow_only=$dbcon->qstr($allow_only);
 

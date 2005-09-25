@@ -7,7 +7,7 @@
 
 // *** Update Record: construct a sql update statement and execute it
 function update_record($MM_editTable,$MM_recordId,$MM_fieldsStr,$MM_columnsStr,$MM_editRedirectUrl=null,$MM_editColumn ="id"){
-	global $MM_sysvar_mq, $dbcon;
+	global $dbcon;
 	set_time_limit(0); 
 	
 	$MM_fields = Explode("|", $MM_fieldsStr);
@@ -36,7 +36,7 @@ function update_record($MM_editTable,$MM_recordId,$MM_fieldsStr,$MM_columnsStr,$
 				$formVal = $altVal;
 			} elseif ($delim == "'") { 
 				//deal with magic qoutes
-	   			if ($MM_sysvar_mq != ("1")) {
+	   			if (!MAGIC_QUOTES_ACTIVE) {
 					$formVal = "'" . str_replace("'","\'",$formVal) . "'";
 				} else {
 					$formVal = "'" .$formVal . "'";
@@ -80,7 +80,7 @@ function delete_record($MM_editTable,$MM_recordId,$MM_editRedirectUrl=null,$MM_e
   
 // *** Insert Record: construct a sql insert statement and execute it
 function insert_record($MM_editTable, $MM_fieldsStr, $MM_columnsStr, $MM_editRedirectUrl=NULL) {
-	global $MM_sysvar_mq, $dbcon;
+	global $dbcon;
 	
 	$MM_fields = Explode("|", $MM_fieldsStr);
 	$MM_columns = Explode("|", $MM_columnsStr);
@@ -120,7 +120,7 @@ function insert_record($MM_editTable, $MM_fieldsStr, $MM_columnsStr, $MM_editRed
 			} elseif ($delim == "'") { 
 	
 		       		//deal with magic qoutes
-	 			if ($MM_sysvar_mq != ("1")) {
+	 			if (!MAGIC_QUOTES_ACTIVE) {
 					$formVal = "'" . str_replace("'","\'",$formVal) . "'";
 				} else {
 					$formVal = "'" .$formVal . "'";

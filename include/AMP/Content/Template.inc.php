@@ -32,10 +32,10 @@ class AMPContent_Template extends AMPSystem_Data_Item {
         return $this->_placeContent( $html );
     }
 
-    function placeNavigation() {
+    function placeNavigation( &$page ) {
         if (isset($this->_navManager)) return true;
 
-        $this->_navManager = & new NavigationManager( $this );
+        $this->_navManager = & new NavigationManager( $this, $page );
         foreach( $this->_nav_positions as $position => $prefix ) {
             if (! $this->containsNav( $position ) ) continue;
             $this->_placeNav( $position, $this->_navManager->output( strtoupper($prefix) ) );

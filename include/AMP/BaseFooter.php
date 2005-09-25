@@ -1,17 +1,14 @@
 <?php
 
-/* * * * * * * * * *
- * AMP Base Footer
+/**
+ * Determine the status of the current Page and send the correct output
  *
- * Send buffers to content Manager for processing
- * return final output
- *
+ * @package Content 
+ * @author Austin Putman <austin@radicaldesigns.org
+ * @copyright Radical Designs 2005
+ * @version 3.5.3
+ * @since 2.0
  */
-
-if (AMP_USE_OLD_CONTENT_ENGINE) {
-    require_once( 'AMP/BaseFooter2.php' );
-    exit;
-}
 
 require_once ('AMP/Content/Page.inc.php' );
 
@@ -22,24 +19,31 @@ if ($currentPage->isRedirected()) {
     exit;
 }
 
-if ( $buffer_contents = ob_get_clean() ) {
-    $buffer_display = &new AMPDisplay_HTML( );
-    $buffer_display->setContent( $buffer_contents );
-    $currentPage->contentManager->addDisplay( $buffer_display, AMP_CONTENT_DISPLAY_KEY_BUFFER );
+if ( $buffer_contents = ob_get_clean() ) AMP_directDisplay( $buffer_contents, AMP_CONTENT_DISPLAY_KEY_BUFFER );
 
-}
-//$currentPage->setContent( ob_get_clean() );
-
+/**
+ * displayType controls the formatting of the Page output  
+ *
+ * @var string
+ */
 $displayType = AMP_CONTENT_PAGE_DISPLAY_DEFAULT;
 if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) $displayType = AMP_CONTENT_PAGE_DISPLAY_PRINTERSAFE ;
     
-$final_page_html = $currentPage->output( $displayType );
+/**
+ * finalPageHtml is the complete representation of the Page  
+ *
+ * @var string
+ */
+$finalPageHtml = $currentPage->output( $displayType );
+print $finalPageHtml;
 
-print $final_page_html;
-
-if (AMP_SITE_MEMCACHE_ON && isset($GLOBALS['cached_page']) && empty( $_POST) && (!$currentPage->isRedirected()) ) {
-    $cached_page->save( $final_page_html );
+/**
+ *  GLOBALS['cached_page'] is a signal that some part of the script checked the Memcache
+ *
+ *  @var    AMPContentPage_Cached
+ */
+if ( AMP_SITE_MEMCACHE_ON && isset($GLOBALS['cached_page']) && empty( $_POST) && (!$currentPage->isRedirected()) ) {
+    $cached_page->save( $finalPageHtml );
 }
 
-#ob_end_flush();
 ?>

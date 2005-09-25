@@ -2,8 +2,8 @@
 
 class AMPSystem_Email {
 
-    var $_sender;
-    var $_senderName;
+    var $_sender = AMP_SITE_EMAIL_SENDER;
+    var $_senderName = AMP_SITE_NAME;
 
     var $_mailto;
     var $_message;
@@ -12,13 +12,6 @@ class AMPSystem_Email {
 
 
     function AMPSystem_Email() {
-        $this->init();
-    }
-
-    function init() {
-        $reg = &AMP_Registry::instance();
-        $this->setSenderName( $reg->getEntry( AMP_REGISTRY_SETTING_SITENAME ) ); 
-        $this->setSender( $reg->getEntry( AMP_REGISTRY_SETTING_EMAIL_SENDER ) ); 
     }
 
     function setMessage($message) {

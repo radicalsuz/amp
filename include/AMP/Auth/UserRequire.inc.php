@@ -15,7 +15,7 @@ ob_start();
 require_once( 'AMP/Auth/UserHandler.inc.php' );
 require_once( 'AMP/BaseDB.php' );
 
-$AMP_Authen_Handler = new AMP_Authentication_Handler( $dbcon );
+$AMP_Authen_Handler = new AMP_Authentication_Handler( AMP_Registry::getDbcon() );
 
 if ( !$AMP_Authen_Handler->is_authenticated() )
     $AMP_Authen_Handler->do_login();

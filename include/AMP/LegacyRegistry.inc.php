@@ -1,23 +1,14 @@
 <?php
 
-$ampasp = (defined('AMP_HOSTED') && AMP_HOSTED) ? '1' : '0';
-
-if (defined( 'AMP_BASE_PATH' ) ) $base_path = AMP_BASE_PATH;
+$base_path = AMP_BASE_PATH;
 
 // Not Quite Sure what these do.
 $MX_type = "type";
-$MX_top = 1;
-
-// Superceded. Custom path is incorporated into include_path. Use
-// require_once('SiteConfig.inc.php') first, failing over to
-// require_once('config.php').
-$ConfigPath = AMP_LOCAL_PATH . "custom/config.php";
-$ConfigPath2 = $ConfigPath;
-$ConfigPath3 = $ConfigPath;
+$MX_top = AMP_CONTENT_MAP_ROOT_SECTION;
 
 $PHP_SELF = $_SERVER['PHP_SELF'];
 
-$MM_sysvar_mq = (get_magic_quotes_gpc()) ? true : false;
+define( 'MAGIC_QUOTES_ACTIVE', get_magic_quotes_gpc());
 
 #load menu class	
 if (file_exists($base_path."Connections/menu.class.php")) {
@@ -33,7 +24,6 @@ $SystemSettings = $getsysvars->FetchRow();
 
 $SiteName            = $SystemSettings["websitename"];
 $Web_url             = $SystemSettings["basepath"];
-#$cacheSecs           = (isset($_SERVER['REMOTE_USER']) && ($_SERVER['REMOTE_USER'])) ? 1 : $SystemSettings["cacheSecs"];
 $cacheSecs           = $SystemSettings["cacheSecs"];
 $admEmail            = $SystemSettings["emfaq"];			//needed for admin only
 $MM_email_usersubmit = $SystemSettings["emendorse"];			//User Submitted Article
@@ -45,20 +35,16 @@ $systemplate_id      = $SystemSettings['template'];
 define ('AMP_SITE_ADMIN', $admEmail);
 define ('AMP_SYSTEM_BLAST_EMAIL_SENDER', $SystemSettings['emmedia'] );
 define ('AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME', $SystemSettings['emailfromname'] );
+define ('AMP_SITE_EMAIL_SENDER', $SystemSettings['emfrom'] );
 
 $encoding = isset($SystemSettings['encoding']) ? $SystemSettings['encoding'] : 'iso-8859-1';
-$reg_manager = & AMP_Registry::instance();
-$reg_manager->setEntry( AMP_REGISTRY_SETTING_ENCODING, $encoding );
-$reg_manager->setEntry( AMP_REGISTRY_SETTING_SITENAME, $SystemSettings['websitename'] );
-$reg_manager->setEntry( AMP_REGISTRY_SETTING_SITEURL, $SystemSettings['basepath'] );
-$reg_manager->setEntry( AMP_REGISTRY_SETTING_EMAIL_SENDER, $SystemSettings['emfrom'] );
-$reg_manager->setEntry( AMP_REGISTRY_SETTING_EMAIL_SYSADMIN, $SystemSettings['emfaq'] );
-$reg_manager->setEntry( AMP_REGISTRY_SETTING_METADESCRIPTION, $SystemSettings['metadescription'] );
-$reg_manager->setEntry( AMP_REGISTRY_SETTING_METACONTENT, $SystemSettings['metacontent'] );
-$reg_manager->setEntry( AMP_REGISTRY_CONTENT_TEMPLATE_ID_DEFAULT, $SystemSettings['template'] );
+
+define('AMP_CONTENT_TEMPLATE_ID_DEFAULT', $SystemSettings['template'] );
+define('AMP_SITE_CONTENT_ENCODING', $encoding );
 define('AMP_SITE_URL', $SystemSettings['basepath']);
 define('AMP_SITE_NAME', $SystemSettings['websitename']);
 define('AMP_SITE_META_DESCRIPTION', $SystemSettings['metadescription']);
+define('AMP_SITE_META_KEYWORDS', $SystemSettings['metacontent']);
 define('AMP_SITE_CACHE_TIMEOUT', $cacheSecs );
 
 define('AMP_IMAGE_WIDTH_THUMB', $SystemSettings[ 'thumb' ] );

@@ -7,12 +7,12 @@ if (!defined( 'AMP_CONTENT_DISPLAY_KEY_BUFFER' )) define ('AMP_CONTENT_DISPLAY_K
 
 require_once( 'AMP/Content/Display/HTML.inc.php' );
 /**
- * AMPContent_Manager 
+ * Controller for the main body of the page 
  *
- * The AMPContent_Manager is a controller which manages the sequence and execution of the defined 
- * displays for the page.  Each display component is specified using the 
- * {@link AMPContent_Manager::addDisplay() addDisplay} method.  Final output is retrieved using the 
- * {@link AMPContent_Manager::output() output} method.
+ * Defines the sequence of content items making up the main body of the current page.  
+ * Any number of individual "displays" can be added using the {@link AMPContent_Manager::addDisplay() addDisplay} method.  
+ * To get the output produced by these displays, use the {@link AMPContent_Manager::output() output} method.  Unless otherwise specified
+ * ( see {@link AMPContent_Manager::setDisplayOrder() setDisplayOrder} ), display output is returned in the order the displays were added to the AMPContent_Manager.
  * 
  * Output from this controller is used by {@link AMPContent_Page} to replace the [-body-] tag of the template.
  * 
@@ -27,12 +27,13 @@ require_once( 'AMP/Content/Display/HTML.inc.php' );
  */
 class AMPContent_Manager extends AMPDisplay_HTML {
 
-// {{{ private attributes: _displays, _display_order, _displays_executed 
+// {{{ private properties: _displays, _display_order, _displays_executed 
 
     /**
      * The local collection of display objects added via {@link addDisplay}.
      * 
      * @var array
+     * @since 3.5.3 
      * @access protected
      */
     var $_displays = array();
@@ -48,6 +49,7 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      *
      * @var array
      * @access protected
+     * @since 3.5.3 
      * @see setDisplayOrder
      */
     var $_display_order = array( AMP_CONTENT_DISPLAY_KEY_INTRO, AMP_CONTENT_DISPLAY_KEY_BUFFER );
@@ -59,6 +61,7 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      * Names are added when passed as an optional argument to {@link _doDisplay}.
      * 
      * @var array
+     * @since 3.5.3 
      * @access protected
      * @see resetDisplay
      */
@@ -72,7 +75,7 @@ class AMPContent_Manager extends AMPDisplay_HTML {
     /**
      * AMPContent_Manager 
      *
-     * Constructor is inactive
+     * Constructor doesn't do anything
      *
      * @ignore
      * @access public
@@ -91,6 +94,7 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      * If no displays have been defined, this method returns false.
      * 
      * @access public
+     * @since 3.5.3
      * @return string 
      */
     function output() {
@@ -104,6 +108,7 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      *
      * @ignore
      * @access public
+     * @since 3.5.3
      * @return string 
      */
     function execute() {
@@ -114,11 +119,12 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      * Returns an instance of the global Content Manager.
      * 
      * @access public
+     * @since 3.5.3
      * @return AMPContent_Manager 
      */
     function &instance() {
         static $manager = false;
-        if (!$manager) $manager = new AMPContent_Manager;
+        if (!$manager) $manager = new AMPContent_Manager();
         return $manager;
     }
 
@@ -133,10 +139,11 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      * If a display with the specified name is already present in the collection, the new
      * item will replace it. Displays added without a name will be assigned a numeric index.  
      * 
-     * @param object - must support the execute method to return output
-     * @param string 
-     * @access public
-     * @return void
+     * @param   object   $display   display object, must support the 'execute' method to return output
+     * @param   string   $name      string key for ordering displays, a number is assigned if null 
+     * @since   3.5.3
+     * @access  public
+     * @return  void
      */
     function addDisplay( &$display, $name = null ) {
         if (isset($name)) {
@@ -156,9 +163,10 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      *
      * If your script needs to support these displays, please include the constant keys in your specified order.
      * 
-     * @param array - an array of display names corresponding to values added using the {@link addDisplay} method.  Unmatched values will be ignored.
-     * @access public
-     * @return void 
+     * @param   array   $order      an array of display names corresponding to values added using the {@link addDisplay} method.  Unmatched values will be ignored.
+     * @access  public
+     * @since   3.5.3
+     * @return  void 
      */
     function setDisplayOrder( $order=array() ) {
         if ( !is_array( $order)) return;
@@ -170,9 +178,10 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      *
      * If an optional name parameter is passed, only the specified display will be cleared.
      * 
-     * @param string 
-     * @access public
-     * @return void
+     * @param   string  $name   string key for the display to be reset - if null, all displays are reset
+     * @access  public
+     * @since   3.5.3
+     * @return  void
      */
     function resetDisplay( $name=null ) {
         if ( !isset( $name )) return ( $this->_displays_executed = array() );
@@ -193,9 +202,10 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      * If no order parameter is passed, all registered displays will be executed that have not been executed previously, 
      * in the order they were appended to the collection.
      *
-     * @param array 
-     * @access protected
-     * @return string 
+     * @param   array   $order      array of string keys for displays to be executed 
+     * @access  protected
+     * @since   3.5.3
+     * @return  string  output from executed displays
      */
     function _doDisplays( $order=array() ) {
         if (empty($this->_displays)) return false;
@@ -222,10 +232,11 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      *
      * If no such method is found, the "execute" method of the display object is called and the result returned.
      * 
-     * @param object 
-     * @param string 
-     * @access protected
-     * @return string 
+     * @param   object  $display    Display object to be executed
+     * @param   string  $name       String key of display object 
+     * @since   3.5.3
+     * @access  protected
+     * @return  string  Output from the display 
      */
     function _doDisplay( &$display, $name = null ) {
         if ( !isset( $name ) )  return $display->execute();
@@ -252,9 +263,10 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      * If constant( AMP_CONTENT_BUFFER_CONTAINER_ID ) is false, the "execute" method of the display object 
      * is called and the result returned.
      * 
-     * @param object 
-     * @access protected
-     * @return string 
+     * @param   object      $display    Display to be executed
+     * @since   3.5.3
+     * @access  protected
+     * @return  string      Output from display 
      */
     function _doDisplayBuffer( &$display ) {
         if (!AMP_CONTENT_BUFFER_CONTAINER_ID ) return $display->execute() ;

@@ -15,7 +15,8 @@ class AMPContent_Map {
     var $childset;
     var $top;
 
-    function AMPContent_Map() {
+    function AMPContent_Map( &$dbcon, $top = AMP_CONTENT_MAP_ROOT_SECTION ) {
+        $this->init( $dbcon, $top );
     }
 
     function init( &$dbcon, $top = null ) {
@@ -118,7 +119,7 @@ class AMPContent_Map {
     function &instance() {
         static $content_map = false;
 
-        if(!$content_map) $content_map = new AMPContent_Map();
+        if(!$content_map) $content_map = new AMPContent_Map( AMP_Registry::getDbcon() );
         return $content_map;
     }
 

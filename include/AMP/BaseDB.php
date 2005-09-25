@@ -1,43 +1,6 @@
 <?php
 require_once('utility.functions.inc.php');
 
-/*
-$ampdbcon = null;
-
-// Check for a hosted configuration.
-if (file_exists_incpath( 'AMP/HostConfig.inc.php' )) {
-
-    // Hosted Mode Configuration Present, load configuration
-    require_once('AMP/HostConfig.inc.php');
-
-    if (AMP_HOSTED) {
-
-        // Try to fetch configuration from a central service provider database.
-        if ( !defined('AMP_DB_TYPE') ) define('AMP_DB_TYPE', 'mysql');
-        ADOLoadCode( AMP_DB_TYPE );
-
-        // If enabled, fetch information about our config.
-        $ampdbcon = &ADONewConnection('mysql');
-        $ampdbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME );
-
-        $AMPsql = "SELECT * FROM system WHERE server='".$_SERVER['SERVER_NAME']."'";
-
-        $ampconfig = $ampdbcon->Execute( $AMPsql ) 
-                    or die( "Couldn't fetch local configuration: " . $ampdbcon->ErrorMsg());
-
-        if ( is_dir($ampconfig->Fields('amppath')) )
-            define( 'AMP_LOCAL_PATH', $ampconfig->Fields('amppath') );
-
-    }
-
-    // Clean up constants for security.
-    define('AMP_DB_HOST', null);
-    define('AMP_DB_NAME', null);
-    define('AMP_DB_USER', null);
-    define('AMP_DB_PASS', null);
-}
-*/
-
 // If we don't yet have a local path, find one.
 if (!defined('AMP_LOCAL_PATH'))
      define( 'AMP_LOCAL_PATH', find_local_path() );
@@ -121,9 +84,9 @@ require_once('AMP/System/Lookups.inc.php');
 $lookup_factory = & AMPSystem_LookupFactory::instance();
 $lookup_factory->init( $dbcon );
 
+if (!defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
 require_once('AMP/LegacyRegistry.inc.php');
 
-if (!defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
 
 // turn on APD debugger when set by config file
 if (!defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );

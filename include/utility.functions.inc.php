@@ -775,16 +775,6 @@ if (!function_exists('AMP_trimText')) {
         return substr( $trimmed, 0, $pos ) . $end_item;
     }
 }
-if (!function_exists( 'AMPContent_Map_instance' )) {
-    function &AMPContent_Map_instance( $map_root = AMP_CONTENT_MAP_ROOT_SECTION ) {
-				$content_map = &AMPContent_Map::instance();
-
-				if ( $content_map->hasMap() ) return $content_map;
-				$content_map->init( AMP_Registry::getDbcon(), $map_root );
-
-        return $content_map;
-    }
-}
 
 if (!function_exists( 'AMP_getCachedSiteItem' )) {
     function &AMP_getCachedSiteItem( $item_key ) {
@@ -832,5 +822,14 @@ if ( !function_exists( 'mime_content_type')) {
          $f = escapeshellarg($filepath);
          return trim( `file -bi $f` );
    }
+}
+
+if ( !function_exists( 'AMP_directDisplay')) {
+    function AMP_directDisplay( $html, $display_name = null ) {
+        $direct_display = &new AMPDisplay_HTML( );
+        $direct_display->setContent( $html );
+        $currentPage = &AMPContent_Page::instance( );
+        $currentPage->contentManager->addDisplay( $direct_display, $display_name );
+    }
 }
 ?>

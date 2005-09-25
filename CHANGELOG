@@ -1,4 +1,9 @@
 amp (3.5.4) urgency=low
+	* Exchanged global variable $MM_sysvar_mq for constant MAGIC_QUOTES_ACTIVE
+	* Created new utility function AMP_directDisplay for initializing a buffer and sending it to the ContentManager
+-- Austin Putman <austin@radicaldesigns.org> Sat Sep 24 13:23:00 PDT 2005
+
+amp (3.5.4) urgency=low
 	* VoterGuide module now has front end list and detail display, which are functional, if unsightly
 	* Quotes module was restored to the system menu
 -- Austin Putman <austin@radicaldesigns.org> Fri Sep 22 17:30:00 PDT 2005

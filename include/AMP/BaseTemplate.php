@@ -1,73 +1,83 @@
 <?php
+/**
+ * Initializes the template for the current page
+ *
+ * @package Content
+ * @since 3.5.3
+ * @access public
+ * @author Austin Putman <austin@radicaldesigns.org>
+ * @copyright 2005 Radical Designs
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+
 require_once( 'AMP/BaseDB.php' );
+require_once( 'AMP/Content/Map.inc.php' );
+require_once( 'AMP/Content/Page.inc.php' );
 
-if (!defined( 'AMP_USE_OLD_CONTENT_ENGINE' )) define ('AMP_USE_OLD_CONTENT_ENGINE', false );
+/**
+ * Filelink is used by link navs
+ * TODO remove this when built-in navs are upgraded
+ */
+if (isset($_GET['filelink']) && $_GET['filelink']) ampredirect ($_GET['filelink']);
 
-if ( AMP_USE_OLD_CONTENT_ENGINE ) {
-    require_once( 'AMP/BaseTemplate2.php' );
-} else {
+/* TODO: check the cache for the current page, once all front-end pages support caching */
+   
+/**
+ * Initialize the current Page object  
+ *
+ * When the page is initialized, it is given a context within the current site hierarchy.  This
+ * tells it which template to use, which navs to display, and what kind of metadata is needed in the header.
+ *
+ * @var AMPContent_Page
+ */
 
-    require_once('AMP/Content/Map.inc.php');
-    require_once('AMP/System/Tool/Controls.inc.php');
-    require_once('AMP/Content/Page.inc.php' );
+$currentPage = & AMPContent_Page::instance();
 
-    //this seems not to be used anywhere - leaving it active for 3.5.3
-    //but this should be removed by 3.5.5 unless we know who uses it
-    if (isset($_GET['filelink']) && $_GET["filelink"]) ampredirect ($_GET["filelink"]);
+/**
+ *  If an intro_id or mod_id value is set to a non-default value , the page is not a content page 
+ */
+if ((isset($mod_id) && $mod_id) && (! (isset($intro_id) && $intro_id))) $intro_id = $mod_id; 
+if (! (isset($intro_id) && $intro_id)) $intro_id = AMP_CONTENT_INTRO_ID_DEFAULT; 
 
-    /*
-        // check the cache for the current page
-        // this is not in use until all front-end pages support caching
-        if (!( AMP_SITE_MEMCACHE_ON && $cache_output = &AMP_getCachedPageItem( MEMCACHE_KEY_PAGEHTML ) )) {
-        define ('AMP_DISPLAYMODE_USECACHED', false );
-    */
-       
-    ### create Content Map ###
-    if ( !isset($MX_top) ) $MX_top = AMP_CONTENT_MAP_ROOT_SECTION;
-    $content_map = & AMPContent_Map_instance( $MX_top );
+if ( $intro_id == AMP_CONTENT_INTRO_ID_DEFAULT ) {
 
-    $currentPage = & AMPContent_Page::instance();
+    /**
+     * Initialize Content System Pages  
+     */
+    if ( isset( $_GET['id']   ) && $_GET['id']   ) $currentPage->setArticle( $_GET['id'] );
+    if ( isset( $_GET['class']) && $_GET['class']) $currentPage->setClass(   $_GET['class'] );
+    if ( isset( $_GET['type'] ) && $_GET['type'] ) $currentPage->setSection( $_GET['type'] );
+    if ( isset( $_GET['list'] ) && $_GET['list'] ) $currentPage->setListType($_GET['list'] );
+    if ( isset( $_GET['region'])&& $_GET['region'])$currentPage->setRegion(  $_GET['region'] ); 
 
-    ### FIND CURRENT LOCATION ##
-
-    //confirm intro_id value
-    if ((isset($mod_id) && $mod_id) && (! (isset($intro_id) && $intro_id))) { $intro_id = $mod_id; }
-    if (! (isset($intro_id) && $intro_id)) { $intro_id = AMP_CONTENT_INTRO_ID_DEFAULT; }
-
-
-    if ( $intro_id == AMP_CONTENT_INTRO_ID_DEFAULT ) {
-
-        ### CONTENT SYSTEM PAGES  ###
-        if ( isset( $_GET['id']   ) && $_GET['id']   ) $currentPage->setArticle( $_GET['id'] );
-        if ( isset( $_GET['class']) && $_GET['class']) $currentPage->setClass(   $_GET['class'] );
-        if ( isset( $_GET['type'] ) && $_GET['type'] ) $currentPage->setSection( $_GET['type'] );
-        if ( isset( $_GET['list'] ) && $_GET['list'] ) $currentPage->setListType($_GET['list'] );
-        if ( isset( $_GET['region'])&& $_GET['region'])$currentPage->setRegion(  $_GET['region'] ); 
-
-    } else {
-
-        ### TOOL OR FORM PAGES ####
-        $currentPage->setIntroText( $intro_id );
-
-    } 
-
-    $currentPage->initSection();
-
-    ### Check if section requires user login ###
-    if ($currentPage->requiresLogin() ) require ( "AMP/Auth/UserRequire.inc.php" );
-
-    $currentPage->initTemplate();
-
-    #SET MODULE SPECIFIC VARS
-    if (isset($modid) && $modid ) {
-        $controls = &new AMPSystem_Tool_Controls( $dbcon, $modid );
-        $controls->globalizeSettings();
-    }
-
-    // Activate Preview Mode
+    /**
+     * Activate Preview Mode if requested
+     * TODO: Preview mode should only be available to authenticated admin users
+     */
     define( 'AMP_DISPLAYMODE_PREVIEW', ( isset( $_GET['preview'] ) && $_GET['preview'] ) );
 
-    # Start Output Buffering
-    ob_start();
+} else {
+
+    /**
+     * Initialize all other kinds of pages 
+     */
+    $currentPage->setIntroText( $intro_id );
+
+} 
+
+$currentPage->initLocation();
+
+/**
+ * Retrieve tools settings from the modules_control table  
+ */
+if (isset($modid) && $modid ) {
+    require_once( 'AMP/System/Tool/Controls.inc.php' );
+    $controls = &new AMPSystem_Tool_Controls( $dbcon, $modid );
+    $controls->globalizeSettings();
 }
+
+/**
+ * Start Output Buffering 
+ */
+ob_start();
 ?>

@@ -48,18 +48,19 @@ class NavEngine_HTML extends NavEngine {
     }
 
     function _globalVars() {
-        $page = AMPContent_Page::instance();
+        $page = &AMPContent_Page::instance();
+        $map =  &AMPContent_Map::instance( ); 
         return array(
             'base_path' =>  ( AMP_BASE_PATH . DIRECTORY_SEPARATOR ),
             'dbcon'     =>  &$page->dbcon,
-            'MM_type'   =>  $page->section_id,
-            'MM_parent' =>  $page->section->getParent(),
-            'MM_typename'=> $page->section->getName(),
+            'MM_type'   =>  $page->getSectionId( ),
+            'MM_parent' =>  $map->getParent( $page->getSectionId() ),
+            'MM_typename'=> $map->getName( $page->getSectionId() ),
             'MM_website_name'=> AMP_SITE_NAME,
             'Web_url'		=> 	AMP_SITE_URL,
             'MM_region' =>  $GLOBALS['MM_region'],
-            'list'      =>  $page->isList(),
-            'id'        =>  $page->article_id 
+            'list'      =>  $page->getLegacyListType(),
+            'id'        =>  $page->getArticleId()
         ) + $this->nav->template->globalizeNavLayout( true );
     }
 

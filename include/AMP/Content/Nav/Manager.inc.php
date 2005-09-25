@@ -30,15 +30,15 @@ class NavigationManager {
     var $_navSet;
     var $_current_seek_position;
 
-    function NavigationManager( &$template) {
-        $this->init( $template );
+    function NavigationManager( &$template, &$page ) {
+        $this->init( $template, $page );
     }
 
-    function init( &$template ) {
+    function init( &$template, &$page) {
         $this->template = &$template;
-        $this->dbcon = &$template->dbcon;
+        $this->page     = &$page;
+        $this->dbcon    = &$template->dbcon;
 
-        if (!($this->page = &$template->page)) return;
         if (!($local_navs = $this->_locateNavs())) return;
         $this->_loadNavs( $local_navs );
        
@@ -108,7 +108,7 @@ class NavigationManager {
     }
 
     function findNavs_listClass() {
-        return $this->findNavs_standardBase( "classlist", $this->page->class_id, 'findNavs_listSection' );
+        return $this->findNavs_standardBase( "classlist", $this->page->getClassId(), 'findNavs_listSection' );
     }
 
     function findNavs_IntroText() {
@@ -142,8 +142,9 @@ class NavigationManager {
 
     function findNavs_listSection( $target_column = AMP_CONTENT_NAV_SECTION_LIST_FIELD ) {
 
+        $map = &AMPContent_Map::instance( );
         $locationSet = &new NavigationLocationSet( $this->dbcon );
-        $parent_set = $this->page->map->getAncestors( $this->page->section_id );
+        $parent_set = $map->getAncestors( $this->page->getSectionId() );
         if (empty($parent_set)) return $this->findNavs_default();
 
         $target_crit = $target_column . " in (" . join( ', ', array_keys( $parent_set )) . ")" ;
@@ -181,20 +182,11 @@ class NavigationManager {
         if ($this->page->isArticle()) return 'findNavs_Article';
         if ($this->page->isTool() ) return 'findNavs_IntroText';
 
-        if ($listType = $this->page->isList()) $find_method = 'findNavs_list'. ucfirst($this->page->getBaseListType( $listType ));
+        if ($listType = $this->page->isList()) $find_method = 'findNavs_list'. ucfirst( $listType );
         if (! method_exists( $this, $find_method ) ) $find_method = "findNavs_default"; 
 
         return $find_method;
     }
-/*
-    function _localizeListType( $listType ) {
-        $prefix = 'AMP_CONTENT_LISTTYPE_' ;
-        $global_listTypes = filterConstants( $prefix ); 
-        if (!($local_listType = array_search( $listType, $global_listTypes ))) return false;
-        return ucfirst( strtolower($local_listType));
-    }
-    */
-
 
 }
 ?>
