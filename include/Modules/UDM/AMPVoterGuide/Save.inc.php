@@ -28,8 +28,8 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         $fieldnames =  array_keys( $this->fields ) ;
         $end_form_fieldnames =  array( 'guidePositionsHeader', key( $add_button ) ) ;
 
-        $this->insertBeforeFieldOrder( array_diff( $fieldnames, $end_form_fieldnames) );
-        $this->insertAfterFieldOrder( $end_form_fieldnames );
+//        $this->insertBeforeFieldOrder( array_diff( $fieldnames, $end_form_fieldnames) );
+//       $this->insertAfterFieldOrder( $end_form_fieldnames );
 
         
         if (!empty($_POST)) {
