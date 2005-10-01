@@ -10,15 +10,19 @@ if(!defined('DIA_DIR')) {
 
 if(!defined('DIA_API_DIR')) define('DIA_API_DIR', DIA_DIR.'API'.DIR_SEP);
 
-require_once('DIA/dia_config.php');
-
 class DIA_API {
+
+	var $ERROR = "";
+	var $WARNING = "";
 
 	function DIA_API() {
 		$this->init();
 	}
 
 	function init() {
+		if( !defined('DIA_DEBUG') ) {
+			define('DIA_DEBUG', false);
+		}
 	}
 
 	//factory method
@@ -29,7 +33,7 @@ class DIA_API {
             return new $classname();
         }
 
-        return false;
+		return $this->error('Could not create new DIA API');
     }
 
 	function getDefaultAPI() {
@@ -46,6 +50,26 @@ class DIA_API {
 		trigger_error( "process must be overwritten" );
 	}
 
+	//thank you magpie
+	function error ($errormsg, $lvl=E_USER_WARNING) {
+        // append PHP's error message if track_errors enabled
+        if ( $php_errormsg ) {
+            $errormsg .= " ($php_errormsg)";
+        }
+        if ( DIA_DEBUG ) {
+            trigger_error( $errormsg, $lvl);        
+        }
+        else {
+            error_log( $errormsg, 0);
+        }
+
+        $notices = E_USER_NOTICE|E_NOTICE;
+        if ( $lvl&$notices ) {
+            $this->WARNING = $errormsg;
+        } else {
+            $this->ERROR = $errormsg;
+        }
+    }
 	//object support methods
 	function readObject(&$object, $type=null) {
 		if(!is_object($object)) {
@@ -98,5 +122,15 @@ class DIA_API {
 
 	}
 
+}
+
+function dia_api_get($table, $options) {
+	$api =& new DIA_API();
+	return $api->get($table, $options);
+}
+
+function dia_api_process($table, $data) {
+	$api =& new DIA_API();
+	return $api->process($table, $data);
 }
 ?>
