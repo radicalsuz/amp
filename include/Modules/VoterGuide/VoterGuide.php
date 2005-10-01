@@ -26,6 +26,9 @@ class VoterGuide extends AMPSystem_Data_Item {
     }
 
     function save() {
+		if(!isset($this->id)) {
+			$this->mergeData(array('block_id' => $this->createVoterBloc()));
+		}
         if ( !( $result=PARENT::save())) return $result;
         if ( $result = $this->_positionSet->reviseGuide( $this->getData( $this->_positions_key ), $this->id ) ) return $result;
 
@@ -33,6 +36,36 @@ class VoterGuide extends AMPSystem_Data_Item {
         return false;
 
     }
+
+    function createVoterBloc() {
+        require_once( 'DIA/API.php' );
+        $api =& DIA_API::create();
+        $group = array('Group_Name' => $this->getShortName(),
+                        'external_ID' => 'AMP_'.$this->getID(),
+                        'Display_To_User' => 0,
+                        'Listserve_Type' => 'Restrict Posts to Allowed Users');
+        if(defined('VOTERGUIDE_DIA_GROUP_PARENT_KEY')) {
+            $group['parent_KEY'] = VOTERGUIDE_DIA_GROUP_PARENT_KEY;
+        }
+        $group_id = $api->addGroup( $group );
+        return trim($group_id);
+    }
+
+//this should be just organizer, use getBlocID()
+    function setBlocOrganizer($bloc_id, $organizer_id) {
+        require_once( 'DIA/API.php' );
+        $api =& DIA_API::create();
+        return $api->process('supporter_groups', array('supporter_KEY' => $organizer_id,
+                                                      'groups_KEY' => $bloc_id,
+                                                      'Properties' => 'Allowed to send Email,Moderator'));
+    }
+
+	function addVoterToBloc($voter_id, $bloc_id) {
+        require_once( 'DIA/API.php' );
+        $api =& DIA_API::create();
+        return $api->process('supporter_groups', array('supporter_KEY' => $voter_id,
+                                                      'groups_KEY' => $bloc_id));
+	}
 
     function &getDisplay( ) {
         require_once( 'Modules/VoterGuide/Display.inc.php');
@@ -101,5 +134,21 @@ class VoterGuide extends AMPSystem_Data_Item {
     function getTitle( ) {
         return $this->getName( );
     }
+
+	function getName( ) {
+		return $this->getData( 'name' );
+	}
+
+	function getShortName() {
+		return $this->getData('redirect_name');
+	}
+
+	function getID() {
+		return $this->getData('id');
+	}
+
+	function getBlocID() {
+		return $this->getData('block_id');
+	}
 }
 ?>
