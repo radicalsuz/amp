@@ -2,6 +2,7 @@
 
 require_once( 'AMP/UserData/Plugin/Save.inc.php' );
 require_once( 'Modules/VoterGuide/Form.inc.php' );
+require_once( 'Modules/UDM/DIA/SupporterSave.inc.php' );
 
 class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
@@ -53,13 +54,16 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
         $voterGuide = &new VoterGuide( $this->udm->dbcon );
         $voterGuide->setData( $data );
-        if ( $voterGuide->save() ) return true; 
+        if ( $voterGuide->save() ) {
+			$organizer_id = $this->udm->doPlugin( 'DIA', 'SupporterSave' );
+			$link = $voterGuide->setBlocOrganizer($bloc_id, $organizer_id);
+
+			return true;
+		}
        
         $this->udm->errorMessage( $voterGuide->getErrors() );
         return false;
-        
-        //$this->udm->doPlugin( 'AMPVoterGuide', 'PositionSave', array( 'voterguide_id' => $voterGuide->id ) );
-    }
 
+    }
 }
 ?>
