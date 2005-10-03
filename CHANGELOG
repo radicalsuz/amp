@@ -1,4 +1,6 @@
 amp (3.5.4) urgency=low
+	* Exciting new AMPSystem_Data_Search allows for flexible searching of recordsets
+amp (3.5.4) urgency=low
 	* Fixed issue with random indentation on list pages -- display list formatting now is controllable via 2 new css classes 'list_entry' and 'list_image'.  These selectors apply to the TD elements on standard AMP content display pages.
 	* Increased efficiency for the pager -- article lists should now only do one database call, even when a user-defined page qty is in place. This required adding a new $read_data parameter to all ArticleSet_Display subclasses.  $read_data defaults to true.
 	* Fixed the pager problem for ArticleBySubsection lists -- these lists should now show up to the requested qty for each subsection, rather than arbitrarily limiting content for the entire list to the requested qty.  Still some inefficiency since all articles in all subsections are being requested from the db, rather than calling multiple limited queries.
