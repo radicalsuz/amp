@@ -1,4 +1,6 @@
 amp (3.5.4) urgency=low
+	* VoterGuide search form is ready
+amp (3.5.4) urgency=low
 	* Exciting new AMPSystem_Data_Search allows for flexible searching of recordsets
 amp (3.5.4) urgency=low
 	* Fixed issue with random indentation on list pages -- display list formatting now is controllable via 2 new css classes 'list_entry' and 'list_image'.  These selectors apply to the TD elements on standard AMP content display pages.
