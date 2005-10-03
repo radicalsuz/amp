@@ -22,7 +22,6 @@ class VoterGuide_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_guideHeader( ) {
-print 'bloc: '.$this->_HTML_blocJoin();
         $output =   $this->_HTML_blocJoin(). 
 					$this->_HTML_affiliations( $this->_voterguide->getAffiliation( ) ).    
                     $this->_HTML_title( $this->_voterguide->getName( ) ).
