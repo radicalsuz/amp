@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `voterguide_positions` (
   `comments` text,
   `voterguide_id` int(11) default NULL,
   `textorder` int(11) default NULL,
-  FULLTEXT ( headline, position, item, comments ),
+  FULLTEXT ( headline, item, comments ),
   PRIMARY KEY  (`id`)
 );
 

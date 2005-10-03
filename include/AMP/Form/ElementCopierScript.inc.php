@@ -56,12 +56,12 @@ class ElementCopierScript {
     }
 
     function addControlButtons( $copiername ) {
-				/*
+        /*
         $add_button =
             array( 'type' => 'button', 
                    'action' => 'DuplicateElementSet( window.' . $copiername . " );",
                    'label' => '+' );
-									 */
+         */
 									 
         $del_button =
             array( 'type' => 'button',

@@ -22,19 +22,21 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
         $this->_copier = &ElementCopierScript::instance();
         $this->_copier->setFormName( $this->_copierName, $this->udm->name );
+
+        //Add Button has to be reconfigured for UDM
         $add_button = key( $this->_copier->getAddButton( $this->_copierName ) );
         unset(  $this->fields[ $add_button ]);
 
-        $this->_copier->setPrefix( $this->_copierName, $this->_field_prefix );
+        $this->_copier->setPrefix( $this->_copierName, ( $this->_field_prefix . '_' . $this->_copierName ));
         $add_button = $this->_copier->getAddButton( $this->_copierName );
         $add_button_name = $this->dropPrefix(key( $add_button) );
         $this->fields[ $add_button_name ] =  current( $add_button ) ;
+        
+        //Position ID field has to be reconfigured for udm
 
-        $fieldnames =  array_keys( $this->fields ) ;
-        //$end_form_fieldnames =  array( 'guidePositionsHeader', key( $add_button ) ) ;
+        $this->insertAfterFieldOrder( array_keys( $this->fields ));
 
-//        $this->insertBeforeFieldOrder( array_diff( $fieldnames, $end_form_fieldnames) );
-//       $this->insertAfterFieldOrder( $end_form_fieldnames );
+
 
         
         if (!empty($_POST)) {
