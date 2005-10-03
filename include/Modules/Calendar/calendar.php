@@ -16,63 +16,66 @@ require_once("AMP/BaseModuleIntro.php");
 
 //$bydate= $_GET[bydate];
 //$caltype = $caltype;
-//$area = $_GET[area];
-//$calid = $_GET[calid];
- ?>
-<?php
- if  (isset($_GET[area])){ 
-  if ($nonstateregion !=1) {
-  $sqlarea = " and lstate = ".$_GET[area]." " ;
-   $area=$dbcon->CacheExecute("SELECT statename from states where id = ".$_GET[area]."") or DIE($dbcon->ErrorMsg());
-   }
-   else {  
-    $area=$dbcon->CacheExecute("SELECT title as statename from region where id = ".$_GET[area]."") or DIE($dbcon->ErrorMsg());
-  $sqlarea = " and region = ".$_GET[area]." " ;
+//$area = $_GET['area'];
+//$calid = $_GET['calid'];
+if (isset($_GET['area'])) {
+	if ($nonstateregion !=1) {
+		$sqlarea = " and lstate = ".$_GET['area']." " ;
+		$area=$dbcon->CacheExecute("SELECT statename from states where id = ".$_GET['area']."") or DIE($dbcon->ErrorMsg());
+	} else {  
+		$area=$dbcon->CacheExecute("SELECT title as statename from region where id = ".$_GET['area']."") or DIE($dbcon->ErrorMsg());
+		$sqlarea = " and region = ".$_GET['area']." " ;
+	}
+}
 
-   }
- }
- if  (isset($caltype)  and ($caltype != "By Event Type") and ($caltype != "student")){ $sqltype = "and typeid = $caltype" ;}
-   if  ($caltype == "student"){ $sqltype = "and student = 1" ;}
- if ($old == "old")
- {$sqldate = " and calendar.date <=  CURDATE()" ;}
- else if ($old == "all")
- {$sqldate = "" ;}
-  else if ($caltype == "8")
- {$sqldate = "" ;}
- else {
- $sqldate = " and calendar.date >=  CURDATE()" ;}
- 
- 
- $repeatvar = "repeat = 0 and";
- if  (isset($_GET[calid])){ $sqlid = "and calendar.id = $calid" ;
-  $sqldate = " " ;
-  $repeatvar ="";
- }
- 
+if (isset($caltype)  and ($caltype != "By Event Type") and ($caltype != "student")) {
+	$sqltype = "and typeid = $caltype";
+}
 
-  
+if ($caltype == "student") {
+	$sqltype = "and student = 1";
+}
+
+if (1 == $_REQUEST['old']) {
+	$sqldate = " and calendar.date <=  CURDATE()" ;
+} else if ("all" == $_REQUEST['old']) {
+	$sqldate = "" ;
+} else if ($caltype == "8") {
+	$sqldate = "" ;
+} else {
+	$sqldate = " and calendar.date >=  CURDATE()" ;
+}
  
-if  (isset($bydate) and ($bydate != "By Date (ex 01-28-03)")){ 
- if ((ereg ("([0-9]{1,2})-([0-9]{1,2})-([0-9]{2})", $bydate, $regs)) ) {
-   $bydate2 = $bydate;
-    $bydate = "$regs[3]$regs[1]$regs[2]";}
- $sqldate = "and calendar.date = $bydate" ;
- $sqldate2 =$sqldate;}
+$repeatvar = "repeat = 0 and";
+if (isset($_GET['calid'])) {
+	$sqlid = "and calendar.id = $calid" ;
+	$sqldate = " " ;
+	$repeatvar ="";
+}
+ 
+if (isset($bydate) and ($bydate != "By Date (ex 01-28-03)")) {
+	if ((ereg ("([0-9]{1,2})-([0-9]{1,2})-([0-9]{2})", $bydate, $regs)) ) {
+		$bydate2 = $bydate;
+		$bydate = "$regs[3]$regs[1]$regs[2]";
+	}
+	$sqldate = "and calendar.date = $bydate" ;
+	$sqldate2 =$sqldate;
+}
 
-   $event=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id,
-calendar.shortdesc  ,calendar.contact1  , calendar.event ,calendar.time ,calendar.date ,calendar.fulldesc ,calendar.email1 ,calendar.location ,calendar.org ,calendar.url ,calendar.typeid ,calendar.lcity ,calendar.lstate, calendar.lzip, calendar.phone1, calendar.laddress ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and  $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid order by calendar.date asc") or DIE($dbcon->ErrorMsg());
-   $revent=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id,
-calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and repeat=1 and publish=1 $sqldate2 $sqlarea  $sqltype $sqlid order by calendar.date asc") or DIE($dbcon->ErrorMsg());
+$event=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id, calendar.shortdesc  ,calendar.contact1  , calendar.event ,calendar.time ,calendar.date ,calendar.fulldesc ,calendar.email1 ,calendar.location ,calendar.org ,calendar.url ,calendar.typeid ,calendar.lcity ,calendar.lstate, calendar.lzip, calendar.phone1, calendar.laddress ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and  $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid order by calendar.date asc") or DIE($dbcon->ErrorMsg());
 
-   $event_numRows=0;
-   $event__totalRows=$event->RecordCount();
-   $revent_numRows=0;
-   $revent__totalRows=$revent->RecordCount();
-?>
-<?php $typelist=$dbcon->CacheExecute("SELECT id, name from eventtype order by name asc");
+$revent=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id, calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and repeat=1 and publish=1 $sqldate2 $sqlarea  $sqltype $sqlid order by calendar.date asc") or DIE($dbcon->ErrorMsg());
+
+$event_numRows=0;
+$event__totalRows=$event->RecordCount();
+$revent_numRows=0;
+$revent__totalRows=$revent->RecordCount();
+
+$typelist=$dbcon->CacheExecute("SELECT id, name from eventtype order by name asc");
+
 if ($searchon == 1) {
 ?>
- <form name="form1" method="post" action="calendar.php<?php if  (isset($HTTP_GET_VARS["area"])){?>?area=<?php echo $HTTP_GET_VARS[area]; }?>" class="go">Search the Calendar<br> &nbsp;&nbsp;&nbsp;<select name="caltype" id="bytype" class="go">
+ <form name="form1" method="post" action="calendar.php<?php if  (isset($_GET["area"])){?>?area=<?php echo $_GET['area']; }?>" class="go">Search the Calendar<br> &nbsp;&nbsp;&nbsp;<select name="caltype" id="bytype" class="go">
 <option selected>By Event Type </option>
 <?php while (!$typelist->EOF) { ?>
 <option value="<?php echo $typelist->Fields("id"); ?>"><?php echo $typelist->Fields("name"); ?></option>
@@ -89,7 +92,7 @@ if ($searchon == 1) {
 </form>
 <p> 
 <?php } ?>
-  <?php if  (isset($HTTP_GET_VARS["area"])) { ?>
+  <?php if  (isset($_GET["area"])) { ?>
   <span class="title"><?php echo $area->Fields("statename"); ?> Events</span><br>
   <br>
   <?php
@@ -102,7 +105,7 @@ if  (isset($caltype) and ($caltype == "student")) { ?><span class="title">Studen
   <br> <?php }
 
 
- if  (isset($HTTP_GET_VARS["area"])) { //start area called
+ if  (isset($_GET["area"])) { //start area called
  if (($revent__totalRows == 0) && ($event__totalRows == 0)){ //start failed area called?>
 </p>
 <p class="text">There are currently no events planned in this area.</p>
