@@ -11,6 +11,8 @@ class VoterGuide extends AMPSystem_Data_Item {
     var $_positions;
     var $_positions_key = 'voterguidePositions';
 
+	var $disallowedShortNameCharsRegex = '/\W/';
+
     function VoterGuide ( &$dbcon, $id=null ) {
         $this->_positionSet = &new VoterGuidePositionSet( $dbcon );
         $this->init( $dbcon, $id );
@@ -25,8 +27,23 @@ class VoterGuide extends AMPSystem_Data_Item {
         return $result;
     }
 
+	function isNew() {
+		return !($this->id);
+	}
+
     function save() {
-		if(!isset($this->id)) {
+		//is this the first time we're saving this voterguide?
+		if($this->isNew()) {
+			$short_name = $this->getShortName();
+			if( !(isset( $short_name ) ) ) {
+				$short_name = $this->generateShortName($this->getName());
+			}
+			if(!$this->isUniqueShortName($short_name)) {
+				$this->addError( $short_name.' already exists as a short name.  please try a different short name');
+				return false;
+			}
+			$this->mergeData(array('redirect_name' => $short_name));
+
 			$this->mergeData(array('block_id' => $this->createVoterBloc()));
 		}
         if ( !( $result=PARENT::save())) return $result;
@@ -34,8 +51,18 @@ class VoterGuide extends AMPSystem_Data_Item {
 
         $this->addError( $this->_positionSet->getErrors( ));
         return false;
-
     }
+
+	function generateShortName($string) {
+		if(!preg_match('/^\w+$/', $string)) {
+			$string = preg_replace($this->dissallowedShortNameCharsRegex, '', $string);
+		}
+		return $string;
+	}
+
+	function isUniqueShortName($string) {
+		return !$this->existsValue('redirect_name', $string);
+	}
 
     function createVoterBloc() {
         require_once( 'DIA/API.php' );

@@ -130,6 +130,16 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $this->getData( $this->name_field );
     }
 
+	function existsValue($column, $value) {
+		$records = $this->dbcon->Execute('SELECT * FROM '.$this->datatable
+										.' WHERE '.$column.' = '. $this->dbcon->qstr($value));
+		if($records->RecordCount() != 0) {
+			return true;
+		}
+
+		return false;
+	}
+
     function debugSave() {
         $save_sql = $this->id ? $this->debug_updateSQL():
                                 $this->debug_insertSQL();
