@@ -2,6 +2,7 @@
 
 require_once('AMP/Content/Header.inc.php' );
 require_once('AMP/Content/Manager.inc.php');
+require_once('AMP/Content/Map.inc.php');
 
 define ('AMP_CONTENT_PAGE_DISPLAY_DEFAULT', 'standard' );
 define ('AMP_CONTENT_PAGE_DISPLAY_PRINTERSAFE', 'printerSafe' );
@@ -143,6 +144,15 @@ class AMPContent_Page {
      * @access private
      */
     var $_legacyListType;
+
+    /**
+     * a local object cache
+     * 
+     * @var array
+     * @since 3.5.4
+     * @access private
+     */
+    var $_objectCache;
 
 // }}}     properties     content components 
 
@@ -386,6 +396,33 @@ class AMPContent_Page {
         if ( !isset( $this->introtext)) return false;
         return $this->introtext;
     }
+
+    /**
+     * Adds an object to the page's object cache by key
+     * 
+     * @access  public
+     * @since   3.5.4
+     * @return  void
+     */
+    function addObject($key, &$object) {
+		$this->_objectCache[$key] = $object;
+	}
+
+    /**
+     * Returns a reference to the object in the local cache by key
+	 * or false if none exists
+     * 
+     * @access  public
+     * @since   3.5.4
+     * @return  mixed	Object by key or false
+     */
+    function &getObject($key) {
+		if(isset($this->_objectCache[$key])) {
+			return $this->_objectCache[$key];
+		}
+		return false;
+	}
+
 // }}}  public methods         content object accessors
 // {{{  public methods         content object id access
     /**
