@@ -37,7 +37,8 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_addImage( $html ) {
         if ( !( $imageRef = &$this->_voterguide->getImageRef( ))) return $html;
-        return $this->_HTML_inDiv( $this->_HTML_image( $imageRef->getURL( AMP_IMAGE_CLASS_OPTIMIZED ) ), array( 'style'=>'float:right;position:relative;')) . $html;
+        return $this->_HTML_inDiv( $this->_HTML_image( '/downloads/' . $imageRef->getName( ) ), array( 'style'=>'float:right;position:relative;')) . $html;
+ //       return $this->_HTML_inDiv( $this->_HTML_image( $imageRef->getURL( AMP_IMAGE_CLASS_OPTIMIZED ) ), array( 'style'=>'float:right;position:relative;')) . $html;
 
     }
 
