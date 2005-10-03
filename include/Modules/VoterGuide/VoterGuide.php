@@ -35,7 +35,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 		//is this the first time we're saving this voterguide?
 		if($this->isNew()) {
 			$short_name = $this->getShortName();
-			if( !(isset( $short_name ) ) ) {
+			if( !$short_name ) {
 				$short_name = $this->generateShortName($this->getName());
 			}
 			if(!$this->isUniqueShortName($short_name)) {
@@ -55,7 +55,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 
 	function generateShortName($string) {
 		if(!preg_match('/^\w+$/', $string)) {
-			$string = preg_replace($this->dissallowedShortNameCharsRegex, '', $string);
+			$string = preg_replace($this->disallowedShortNameCharsRegex, '', $string);
 		}
 		return $string;
 	}
