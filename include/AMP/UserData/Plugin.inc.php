@@ -336,19 +336,27 @@ class UserDataPlugin {
 
         $translation_method = $fDef['type']."FieldtoText";
         if (method_exists( $this, $translation_method )) {
-            return $this->$translation_method( $value );
+            return $this->$translation_method( $value, $keyname );
         }
+        
         /*
         if ( $fDef[ 'type' ] == 'file' ) {
             return $this->manageUpload( $fDef, $value, $keyname );
         }
-        */
+        */ 
 
         return $value;
     }
 
+    function fileFieldtoText( $value, $keyname ) {
+        $builder = &$this->udm->getPlugin( 'QuickForm', 'Build');
+        $engine = &$builder->getFormEngine( );
+        if ( !( $text = $engine->getValues(  array( $keyname )))) return false;
+        return current( $text ); 
+    }
 
-    function dateFieldtoText( $value ) {
+
+    function dateFieldtoText( $value, $keyname ) {
         if (!is_array($value)) return $value;
 
         $month  = isset($value['M'])? $value['M']:(isset($value['m'])?$value['m']:0);
@@ -370,12 +378,12 @@ class UserDataPlugin {
     }
 
 
-    function checkgroupFieldtoText ($value) {
+    function checkgroupFieldtoText ($value, $keyname ) {
         if (!is_array($value)) return $value;
         return join (", ",array_keys($value));
     }
 
-    function multiselectFieldtoText ( $value ) {
+    function multiselectFieldtoText ( $value , $keyname ) {
         if (!is_array($value)) return $value;
         return join (", ", $value);
     }

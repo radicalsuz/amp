@@ -22,6 +22,8 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		'default'=>'Submit')
 		);
 
+    var $_formEngine;
+
 
     function UserDataPlugin_Build_QuickForm ( &$udm, $plugin_instance=null ) {
         $this->init( $udm, $plugin_instance );
@@ -56,10 +58,15 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		if ( $this->udm->submitted ) {
 			if ( !$formEngine->validate() ) return false;
 		}
+        $this->_formEngine = &$formEngine;
 
 		return $formEngine->form;
 		
 
+    }
+
+    function &getFormEngine( ) {
+        return $this->_formEngine;
     }
 
     #############################
