@@ -174,9 +174,9 @@ li.side_home {
 }
 
 .standout {
-		font-weight: bold;
-		text-decoration: none;
-		font-size:16px;
+	font-weight: bold;
+	text-decoration: none;
+	font-size:16px;
 }
 
 a.standout {
@@ -265,6 +265,7 @@ a.intitle {
 	padding: 0px 0px;
 	margin: 2px;
 }
+
 
 .list_table
 { 
@@ -440,12 +441,28 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 }
 
 div.list_pager {
-		text-align: right;
-		align: right;
-		width: 100%;
-		position: relative;
-		font-size: 11px;
-		display: inline;
+	text-align: right;
+	float: right;
+	width: 40%;
+	font-size: 11px;
+	display: block;
+	margin-right: 20px;
+	padding: 5px;
+	margin-bottom: 20px;
+	position:relative;
+}
+div.list_pager_block {
+	text-align: right;
+	float: right;
+	width: 40%;
+	font-size: 11px;
+	display: block;
+	margin-right: 20px;
+	padding: 5px;
+	margin-bottom: 20px;
+	position:relative;
+	background-color: #99EE99;
+	border: solid 2px #006699;
 }
 
 div.filelink {

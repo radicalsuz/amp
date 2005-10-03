@@ -108,7 +108,15 @@ function item_select (b_deselect) {
 }
 
 function item_upstatus (b_clear) {
-	window.setTimeout('window.status="' + (b_clear ? '' : this.a_config[0] + (this.a_config[1] ? ' ('+ this.a_config[1] + ')' : '')) + '"', 10);
+	//window.setTimeout('window.status="' + (b_clear ? '' : this.a_config[0] + (this.a_config[1] ? ' ('+ this.a_config[1] + ')' : '')) + '"', 10);
+	timeoutStatus = '';
+	if ( ! b_clear  ) {
+		timeoutStatus = this.a_config[0];
+	}
+	if ( this.a_config[1] ) {
+		timeoutStatus = timeoutStatus + ' (' + this.a_config[1] + ')';
+	}
+	window.setTimeout('window.status="' + timeoutStatus + '"', 10);
 }
 
 function item_init () {
