@@ -16,6 +16,17 @@ class AMPContent_Header {
     }
 
     function init( &$page ) {
+        $this->setPage( $page );
+    }
+
+
+    function &instance( &$page ) {
+        static $request_header = false;
+        if ( !$request_header ) $request_header = new AMPContent_Header( $page );
+        return $request_header;
+    }
+
+    function setPage( &$page ) {
         $this->_page = &$page;
     }
 

@@ -7,25 +7,10 @@ class SectionContentSource_Articles extends SectionContentSource {
         "date DESC", 
         "id DESC "
         ) ;
-/*
-
-    var $_status_field = 'publish';
-    var $_excluded_classes = array(
-        AMP_CONTENT_CLASS_SECTIONHEADER,
-        AMP_CONTENT_CLASS_FRONTPAGE,
-        AMP_CONTENT_CLASS_USERSUBMITTED
-        );
-    */
 
     function SectionContentSource_Articles( &$section ) {
         $this->init( $section );
     }
-/*
-    function init( &$section ) {
-        #if (AMP_CONTENT_CLASS_SECTIONFOOTER) $this->_excluded_classes[] = AMP_CONTENT_CLASS_SECTIONFOOTER;
-        return PARENT::init( $section );
-    }
-    */
 
 
     ###################################
@@ -59,12 +44,6 @@ class SectionContentSource_Articles extends SectionContentSource {
         $this->_source->addSort(
         "if(isnull(pageorder) or pageorder='', ". AMP_CONTENT_LISTORDER_MAX .", pageorder) ASC");
     }
-    /*
-    function _getClassCriteria() {
-        if (empty($this->_excluded_classes )) return false;
-        return "class not in (" . join( ", ", $this->_excluded_classes ) . ")" ;
-    }
-    */
 
     function _getRelatedArticles( $section_id = null) {
         require_once( 'AMP/Content/Section/RelatedSet.inc.php' );

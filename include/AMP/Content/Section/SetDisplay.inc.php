@@ -7,8 +7,8 @@ class SectionSet_Display extends AMPContent_DisplayList_HTML {
     var $_sourceItem_class = 'Section';
     var $_pager_active = false;
 
-    function SectionSet_Display( &$sectionSet ) {
-        $this->init( $sectionSet );
+    function SectionSet_Display( &$sectionSet, $read_data = true ) {
+        $this->init( $sectionSet, $read_data );
     }
 
     function _HTML_listItemDate ( $date ) {

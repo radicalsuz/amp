@@ -127,15 +127,6 @@ class AMPContent_Page {
     var $region;
 
     /**
-     * Additional stylesheets for the current page 
-     * 
-     * @var     array   
-     * @since 3.5.4
-     * @access protected
-     */
-    var $_stylesheets = array();
-
-    /**
      * Refers to the current List Type
      * 
      * @var string 
@@ -221,7 +212,7 @@ class AMPContent_Page {
      */
     function output( $display_type = null) {
         require_once('AMP/Content/Page/Display.inc.php');
-        $display = &new AMPContent_PageDisplay( $this );
+        $display = &AMPContent_PageDisplay::instance( $this );
         return $display->execute( $display_type );
     }
 
@@ -603,37 +594,6 @@ class AMPContent_Page {
 
 // }}}  public methods         list accessors
 
-// {{{  public methods         stylesheet access
-
-    /**
-     * Returns an array of stylesheets if any are set
-     * 
-     * @access  public
-     * @since   3.5.4
-     * @return  mixed   Array of string urls for stylesheets if any are set, false otherwise 
-     */
-    function getStyleSheets( ) {
-        if ( empty( $this->_stylesheets )) return false;
-        return $this->_stylesheets;
-    }
-
-    /**
-     * Add a stylesheet to the current page 
-     *
-     * If the optional $name parameter is used and multiple stylesheets with the same name are added, only the last one
-     * will be included in the display
-     * 
-     * @param   string  $sheet_url  String URL for desired CSS stylesheet
-     * @param   string  $name       String key to act as a name for the stylesheet 
-     * @since   3.5.4
-     * @access  public
-     * @return  void
-     */
-    function addStyleSheet( $sheet_url, $name = null ) {
-        if ( isset( $name )) return( $this->_stylesheets[$name] = $sheet_url );
-        return $this->_stylesheets[] = $sheet_url;
-    }
-// }}}  public methods         stylesheet accessors
 // {{{  public methods         location: initLocation, requiresLogin
 
     /**

@@ -12,4 +12,5 @@ class SectionRelatedSet extends AMPSystem_Data_Set {
         if (isset($section_id )) $this->addCriteria( "typeid=".$section_id );
     }
 }
+
 ?>

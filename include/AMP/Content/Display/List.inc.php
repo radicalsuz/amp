@@ -34,16 +34,22 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     var $_css_id_container_content = "main_content";
     var $_css_class_container_listentry = "list_entry";
+    var $_css_class_container_listimage = "list_image";
 
-    function AMPContent_DisplayList_HTML ( &$source ) {
-        $this->init( $source );
+    function AMPContent_DisplayList_HTML ( &$source, $read_data = true ) {
+        $this->init( $source, $read_data );
     }
 
-    function init( &$source ) {
+    function init( &$source, $read_data = true ) {
         $this->_source = &$source;
-        if ($this->_pager_active) $this->_pager = &new AMPContent_Pager( $this->_source );
+        $this->_activatePager( );
+        if ( $read_data ) $this->_source->readData();
+    }
+
+    function _activatePager() {
+        if ( !$this->_pager_active ) return false;
+        $this->_pager = &new AMPContent_Pager( $this->_source );
         if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
-        $this->_source->readData();
     }
 
     function execute() {
@@ -70,6 +76,10 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     function &_buildItems( $dataset ) {
         return $this->_source->instantiateItems( $dataset, $this->_sourceItem_class );
+    }
+
+    function applySearch( $search_values, $run_query = true ){
+        return $this->_source->applySearch( $search_values, $run_query );
     }
 
     function isFirstPage() {
@@ -110,8 +120,8 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         }
 
         return  "<table" . $this->_HTML_makeAttributes( $this->_layout_table_attr ) . "><tr>" . 
-                $this->_HTML_inTD( $image ) . 
-                $this->_HTML_inTD( $text ). 
+                $this->_HTML_inTD( $image, array( 'class' => $this->_css_class_container_listimage ) ) .
+                $this->_HTML_inTD( $text , array( 'class' => $this->_css_class_container_listentry ) ) . 
                 $this->_HTML_endTable() . 
                 $this->_HTML_newline();
     }

@@ -36,9 +36,12 @@ class ArticleSearch extends ArticleSet {
     }
 
     function _addCriteriaDate ( $key, $value ) {
-        $date_value = date( 'Y-m-d', mktime(0,0,0, $value['M'], $value['d'], $value['Y']));
+        $timestamp_value = mktime(0,0,0, $value['M'], $value['d'], $value['Y']);
+        $date_value = date( 'Y-m-d', $timestamp_value );
+        
         $sql_criterion = $key . ' >= ' . $this->dbcon->qstr( $date_value );
-        $sql_criterion = '('. $sql_criterion . ' OR ' . $key . ' = ' . $this->dbcon->qstr( $this->null_date ) . ')';
+        #$updated_sql_criterion = 'updated >= ' . $timestamp_value ;
+        #$sql_criterion = '('. $explicit_sql_criterion . ' OR ' . $updated_sql_criterion . ')';
         $this->addCriteria( $sql_criterion );
     }
 

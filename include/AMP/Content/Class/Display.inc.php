@@ -10,8 +10,8 @@ class ContentClass_Display extends ArticleSet_Display {
     var $_class;
     var $_showListIntro = true;
 
-    function ContentClass_Display( &$classRef ) {
-        $this->init( $classRef->getContents() );
+    function ContentClass_Display( &$classRef, $read_data = true ) {
+        $this->init( $classRef->getContents(), $read_data );
         $this->_class = &$classRef;
     }
 

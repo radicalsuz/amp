@@ -1,4 +1,11 @@
 amp (3.5.4) urgency=low
+	* Fixed issue with random indentation on list pages -- display list formatting now is controllable via 2 new css classes 'list_entry' and 'list_image'.  These selectors apply to the TD elements on standard AMP content display pages.
+	* Increased efficiency for the pager -- article lists should now only do one database call, even when a user-defined page qty is in place. This required adding a new $read_data parameter to all ArticleSet_Display subclasses.  $read_data defaults to true.
+	* Fixed the pager problem for ArticleBySubsection lists -- these lists should now show up to the requested qty for each subsection, rather than arbitrarily limiting content for the entire list to the requested qty.  Still some inefficiency since all articles in all subsections are being requested from the db, rather than calling multiple limited queries.
+	* Traded in a new articlelist.php page for the administrative homepage.  We've been seeing some problems with the javascript on this page, and the new version doesn't show the same issues.  Easier to trade than to debug jscript all day.  This page is Not Really Done, but offers the same level of function that the old one did, and slightly more.
+	* Abstracted some elements of AMP/Auth/Handler library so it can be subclassed more easily.
+
+amp (3.5.4) urgency=low
 	* Exchanged global variable $MM_sysvar_mq for constant MAGIC_QUOTES_ACTIVE
 	* Created new utility function AMP_directDisplay for initializing a buffer and sending it to the ContentManager
 -- Austin Putman <austin@radicaldesigns.org> Sat Sep 24 13:23:00 PDT 2005

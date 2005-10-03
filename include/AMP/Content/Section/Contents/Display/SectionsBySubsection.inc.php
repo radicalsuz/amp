@@ -7,8 +7,8 @@ class SectionContentDisplay_SectionsBySubsection extends SectionSet_Display {
     var $_subsections_display;
     var $_css_class_subheader = AMP_CONTENT_LIST_SUBHEADER_CLASS;
 
-    function SectionContentDisplay_SectionsBySubSection( &$sectionSet ) {
-        $this->init( $sectionSet );
+    function SectionContentDisplay_SectionsBySubSection( &$sectionSet, $read_data = true ) {
+        $this->init( $sectionSet, $read_data );
     }
 
     function execute() {

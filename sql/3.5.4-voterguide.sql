@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `voterguide_positions` (
   `comments` text,
   `voterguide_id` int(11) default NULL,
   `textorder` int(11) default NULL,
+  FULLTEXT ( headline, position, item, comments ),
   PRIMARY KEY  (`id`)
 );
 
@@ -25,5 +26,6 @@ CREATE TABLE IF NOT EXISTS `voterguides` (
   `filelink` varchar( 60 ) NULL,
   `picture` varchar( 60 ) NULL,
   `block_id` int( 11 ) NULL,
+  FULLTEXT ( name, city, blurb, footer, redirect_name, affiliation ),
   PRIMARY KEY (id)
 )

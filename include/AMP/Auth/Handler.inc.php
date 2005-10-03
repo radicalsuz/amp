@@ -16,6 +16,10 @@ class AMP_Authentication_Handler {
 
     var $userid;
 
+    var $_cookie_name = 'AMPLoginCredentials';
+    var $_login_username_field = "AMPLogin_username";
+    var $_login_password_field = "AMPLogin_password";
+
     function AMP_Authentication_Handler ( $dbcon, $timeout = null ) {
 
         $this->dbcon = $dbcon;
@@ -39,10 +43,10 @@ class AMP_Authentication_Handler {
     function check_authen_credentials() {
 
         // First check for an existing authentication token.
-        if (isset($_COOKIE['AMPLoginCredentials']))
-            return $this->check_cookie($_COOKIE['AMPLoginCredentials']);
+        if (isset($_COOKIE[ $this->_cookie_name ]))
+            return $this->check_cookie($_COOKIE[ $this->_cookie_name ]);
 
-        if (isset($_REQUEST['AMPLogin_username']) || isset($_SERVER['PHP_AUTH_USER']))
+        if (isset($_REQUEST[ $this->_login_username_field ]) || isset($_SERVER['PHP_AUTH_USER']))
             return $this->check_password();
 
         return false;
@@ -84,9 +88,9 @@ class AMP_Authentication_Handler {
         $hash = $this->make_secure_cookie( $c_user, $c_perm, $secret );
         $old_hash = $this->has_cookie;
 
-        if (setcookie( 'AMPLoginCredentials', "$hash:$c_user:$c_perm:$c_userid" )) {
+        if (setcookie( $this->_cookie_name, "$hash:$c_user:$c_perm:$c_userid" )) {
 
-            // Quick Hack, to be replaced by a more robust databas versioning
+            // Quick Hack, to be replaced by a more robust database versioning
             // system.
 
             $tables = $dbcon->MetaTables();
@@ -127,7 +131,7 @@ class AMP_Authentication_Handler {
 
 		$dbcon = $this->dbcon;
 
-        $cookie = explode( ':', $_COOKIE['AMPLoginCredentials'] );
+        $cookie = explode( ':', $_COOKIE[ $this->_cookie_name ] );
 
         $cookie['hash'] = $cookie[0];
         $cookie['user'] = $cookie[1];
@@ -186,7 +190,7 @@ class AMP_Authentication_Handler {
         $this->message = $message;
 
         $c_domain = preg_replace( "/([^\.]*)\.([^\.]*)$/", "/.\$1.\$2/", $_SERVER['SERVER_NAME'] );
-        return setcookie( 'AMPLoginCredentials', '*', time() - 86400 );
+        return setcookie( $this->_cookie_name, '*', time() - 86400 );
 
     }
 
@@ -196,9 +200,9 @@ class AMP_Authentication_Handler {
 
         if (isset($_REQUEST['logout']) && $_REQUEST['logout']=='logout') $this->do_logout();
 
-        if (isset($_REQUEST['AMPLogin_username'])) {
-            $username = $_REQUEST['AMPLogin_username'];
-            $password = $_REQUEST['AMPLogin_password'];
+        if (isset($_REQUEST[ $this->_login_username_field ])) {
+            $username = $_REQUEST[ $this->_login_username_field ];
+            $password = $_REQUEST[ $this->_login_password_field ];
         } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
             $username = $_SERVER['PHP_AUTH_USER'];
             $password = $_SERVER['PHP_AUTH_PW'];
@@ -297,7 +301,7 @@ class AMP_Authentication_Handler {
         if (is_array($_POST)) {
             $post_vars = array();
             foreach ($_POST as $key=>$value) {
-                if ($key!='AMPLogin_username' && $key!='AMPLogin_password') 
+                if ($key!=$this->_login_username_field && $key!=$this->_login_password_field ) 
                     $post_vars[$key]=$value;
             }
             return $post_vars;
@@ -305,3 +309,4 @@ class AMP_Authentication_Handler {
         return false;
     }
 }
+?>

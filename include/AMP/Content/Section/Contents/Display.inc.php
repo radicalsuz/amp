@@ -37,11 +37,14 @@ class SectionContents_Display  extends AMPDisplay_HTML {
     function initDisplay( &$contents ) {
 
         $display_class = $this->_getDisplayClass();
-        $this->_display = &new $display_class( $contents );
+        $read_source = true;
+        if ( $limit = $this->_section->getListItemLimit( ) ) $read_source = false; 
+        $this->_display = &new $display_class( $contents, $read_source );
 
-        if ( ( $limit = $this->_section->getListItemLimit( )) && method_exists( $this->_display, 'setPageLimit')) {
+        if ( $limit && method_exists( $this->_display, 'setPageLimit')) {
             $this->_display->setPageLimit( $limit );
         }
+        if ( !$contents->hasData( )) $contents->readData( );
 
         if (!method_exists( $this->_display, 'setSection' )) return;
         $this->_display->setSection( $this->_section );

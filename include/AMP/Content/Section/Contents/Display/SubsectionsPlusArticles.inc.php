@@ -6,8 +6,8 @@ class SectionContentDisplay_SubsectionsPlusArticles extends ArticleSet_Display {
 
     var $_subsections_display;
 
-    function SectionContentDisplay_SubsectionsPlusArticles ( &$articleSet ) {
-        $this->init( $articleSet );
+    function SectionContentDisplay_SubsectionsPlusArticles ( &$articleSet, $read_data = true ) {
+        $this->init( $articleSet, $read_data );
     }
 
     function setSection( &$section ) {

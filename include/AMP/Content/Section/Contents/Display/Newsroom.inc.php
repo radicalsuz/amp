@@ -12,8 +12,8 @@ class SectionContentDisplay_Newsroom extends ArticleSet_Display {
 
     var $_pager_display = false;
 
-    function SectionContentDisplay_Newsroom ( &$articleSet ) {
-        $this->init( $articleSet );
+    function SectionContentDisplay_Newsroom ( &$articleSet, $read_data = true ) {
+        $this->init( $articleSet, $read_data );
     }
 
     function execute() {

@@ -33,18 +33,6 @@ class SectionContentSource {
         $this->_source->setSort( $this->_base_sort );
     }
 
-    /*
-    function _includeDraftStatus() {
-        return $this->_include_draft_status;
-    }
-
-    function _getStatusCriteria() {
-        if ( $this->_includeDraftStatus() ) return false;
-        $status_field = $this->_getStatusField(); 
-        return "$status_field=" . AMP_CONTENT_STATUS_LIVE;
-    }
-    */
-
     function _getStatusField() {
         return $this->_status_field;
     }

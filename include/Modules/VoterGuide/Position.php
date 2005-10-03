@@ -27,6 +27,10 @@ class VoterGuide_Position extends AMPSystem_Data_Item {
         return $this->getData( 'position' );
     }
 
+    function getVoteSet( ) {
+        return $this->_votes;
+    }
+
     function translateVote( $vote_key ) {
         if ( !isset( $this->_votes[$vote_key])) return false;
         return $this->_votes[$vote_key];

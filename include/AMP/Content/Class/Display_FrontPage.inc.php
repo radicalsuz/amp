@@ -8,13 +8,13 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
     var $_css_class_container_list = "home";
     var $_css_class_container_listentry = 'list_entry' ;
 
-    function ContentClass_Display_FrontPage( &$dbcon ) {
+    function ContentClass_Display_FrontPage( &$dbcon, $read_data = true ) {
         $this->_class = &new ContentClass ( $dbcon, AMP_CONTENT_CLASS_FRONTPAGE );
 
         $fp_articles =  &$this->_class->getContents() ;
         $fp_articles->addSort( 'pageorder' );
 
-        $this->init( $fp_articles );
+        $this->init( $fp_articles, $read_data );
     }
 
     function _HTML_listing( &$sourceItems ) {

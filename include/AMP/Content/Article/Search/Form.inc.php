@@ -22,7 +22,7 @@ class ContentSearch_Form extends AMPSearchForm {
     }
 
     function _formFooter() {
-        return '&nbsp;&nbsp;&nbsp;<a href="article_list.php" class="standout">View All Articles</a>';
+        return '&nbsp;&nbsp;<a href="article_list.php" class="standout">View All Articles</a><BR />';
     }
 
 

@@ -15,6 +15,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     var $_pageless_UrlVars = array( );
 
     var $_css_class_container = "list_pager";
+    var $_css_class_container_block = "list_pager_block";
 
     function AMPSystem_ListPager( &$source ) {
         $this->init ( $source );
@@ -65,8 +66,13 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     function output() {
         $this->readPosition();
-        return  $this->_HTML_inDiv(  $this->_positionText() . $this->_pageLinks(), array( 'class' => $this->_css_class_container ) ). 
+        return  $this->_HTML_inDiv(  $this->_positionText() . $this->_HTML_newline( ). $this->_pageLinks(), array( 'class' => $this->_css_class_container_block ) ). 
                 $this->_HTML_newline();
+    }
+    function outputTop() {
+        $this->readPosition();
+        return  $this->_HTML_inDiv(  $this->_positionText() . $this->_HTML_newline( ) . $this->_pageLinks( false ), array( 'class' => $this->_css_class_container ) ). 
+                $this->_HTML_newline( 2);
     }
 
     function readPosition() {
@@ -83,17 +89,17 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
 
     function _positionText() {
+        if ( !$this->source_total) return false;
         if ($this->page_total > $this->source_total) $this->page_total = $this->source_total;
         if ($this->page_total) $start = 1;
         if ($this->_offset) $start = $this->_offset;
         return "Displaying $start-".$this->page_total." of ".$this->source_total;
     }
 
-    function _pageLinks() {
+    function _pageLinks( $show_jumps = true ) {
         if ($this->source_total <= $this->_qty ) return false;
-        $output = "<BR>" . $this->_jumpPageLinks() . "<BR>";
-        $output .= $this->_prevPageLink() . $this->_nextPageLink();
-        #$output .= '<BR><div style="float:right;">' .$this->_prevPageLink() . $this->_nextPageLink() . '</div><BR>';
+        $output = $this->_prevPageLink() . $this->_nextPageLink() . $this->_HTML_newline( );
+        if ( $show_jumps ) $output .= $this->_jumpPageLinks() . $this->_HTML_newline( );
         return $output;
     }
 
@@ -101,7 +107,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         $output ="";
         for( $n=0; ($n * $this->_qty ) < $this->source_total; $n++ ) {
             $link = $this->offsetURL( ($n * $this->_qty) );
-            $output .= "<a href='$link'>" . ($n+1) . '</a>&nbsp;';
+            $output .= "<a href='$link'>" . ($n+1) . '</a> ';
         }
         return $output;
     }

@@ -832,4 +832,23 @@ if ( !function_exists( 'AMP_directDisplay')) {
         $currentPage->contentManager->addDisplay( $direct_display, $display_name );
     }
 }
+if ( !function_exists( 'AMP_removeBlankElements')) {
+    function AMP_removeBlankElements( $value_array ) {
+        if ( empty ( $value_array ) ) return $value_array;
+        $results = array();
+        foreach( $value_array as $key => $value ) {
+            if ( !( trim( $value ))) continue;
+            $results[ $key ] = $value;
+        }
+        return $results;
+    }
+}
+
+if (  !function_exists(  'AMP_clearSpecialChars')) {
+    function AMP_clearSpecialChars( $text ) {
+        $special_chars = array ( '&' => '&amp;' , "'" => '&rsquo;');
+        return str_replace( array_keys( $special_chars ), array_values( $special_chars ), $text );
+    }
+}
+
 ?>

@@ -6,6 +6,8 @@ class VoterGuidePositionSet extends AMPSystem_Data_Set {
 
 	var $datatable = "voterguide_positions";
     var $sort = array( "voterguide_id", "textorder");
+    var $_search_exact_values = array( 'position', 'state');
+    var $_search_fulltext = array ( 'headline', 'item', 'comments' );
 
 	function VoterGuidePositionSet ( &$dbcon, $guide_id =null ) {
 		$this->init ($dbcon );
@@ -46,6 +48,10 @@ class VoterGuidePositionSet extends AMPSystem_Data_Set {
 
         }
         return true;
+    }
+
+    function addCriteriaFullText( $value ){
+
     }
 }
 ?>

@@ -7,8 +7,8 @@ class ArticleSet_Display extends AMPContent_DisplayList_HTML {
     var $_css_class_author = "bodygreystrong";
     var $_css_class_source = "bodygreystrong";
 
-    function ArticleSet_Display( &$articleSet ) {
-        $this->init( $articleSet );
+    function ArticleSet_Display( &$articleSet, $read_data = true ) {
+        $this->init( $articleSet, $read_data );
     }
 
     function _HTML_listItemDescription( $article ) {

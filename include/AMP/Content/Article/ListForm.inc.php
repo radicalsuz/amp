@@ -69,7 +69,7 @@ class Article_ListForm extends Article_List {
     function _HTML_header() {
         //Starter HTML
         $start_html = $this->_HTML_listTitle() .
-                      $this->pager->output().
+                      $this->pager->outputTop().
                       $this->_HTML_startForm() .
                       $this->actions->output() ;
         $start_html .= "\n<div class='list_table'>\n<table class='list_table'>\n<tr class='intitle'> ";

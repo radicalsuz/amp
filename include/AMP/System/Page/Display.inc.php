@@ -54,7 +54,7 @@ class AMPSystem_Page_Display {
     }
 
     function makeHeader( $text ) {
-        return '<div class="intitle">' . $text .'</div>';
+        return '<span class="intitle">' . $text .'</span>';
     }
 
 

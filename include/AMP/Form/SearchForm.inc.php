@@ -3,6 +3,16 @@
 require_once( 'AMP/Form/XML.inc.php' );
 require_once( 'AMP/Form/TemplateSearch.inc.php' );
 
+/**
+ * AMPSearchForm 
+ * 
+ * @uses AMPForm_XML
+ * @package Form 
+ * @version 3.5.4
+ * @copyright 2005 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org> 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 class AMPSearchForm extends AMPForm_XML {
 	var $xml_pathtype = "search_fields";
     var $submit_button = array(
@@ -15,12 +25,21 @@ class AMPSearchForm extends AMPForm_XML {
             'default'=>'AMPSearch')
         );
 
+    /**
+     * AMPSearchForm 
+     * 
+     * @param mixed $name 
+     * @param string $method 
+     * @param mixed $action 
+     * @access public
+     * @return void
+     */
     function AMPSearchForm( $name, $method="GET", $action=null) {
         $this->init( $name, $method, $action );
     }
 
     function init( $name, $method="GET", $action=null ) {
-        parent::init( $name, $method, $action );
+        PARENT::init( $name, $method, $action );
         $this->defineSubmit( 'AMPSearch', 'Search' );
         unset ($this->template);
         $this->template = &new AMPFormTemplate_Search();
@@ -35,6 +54,13 @@ class AMPSearchForm extends AMPForm_XML {
         foreach ($this->submit_button as $button_name => $bDef ) {
             $this->submit_button[ $button_name ]['attr'] = array( 'class' => 'searchform_element' );
         }
+    }
+
+    function _confirmFieldDef( $field_def ) {
+        if ( !( isset( $field_def['attr']) && isset( $field_def['attr']['class']))) {
+            $field_def['attr']['class'] = 'searchform_element';
+        }
+        return PARENT::_confirmFieldDef(  $field_def );
     }
 
     function getSearchValues() {

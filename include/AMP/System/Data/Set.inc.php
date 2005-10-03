@@ -20,6 +20,9 @@
     var $sort = array();
     var $limit;
     var $offset;
+    var $_search_class = 'AMPSystem_Data_Search';
+    var $_search_exact_values = array();
+    var $_search_fulltext = array( );
     
     var $source;
 
@@ -172,6 +175,7 @@
 			$sql = "SELECT " . $this->id_field . ", $field " . $this->_makeSource()
             . $this->_makeCriteria();
 			$set = $this->dbcon->CacheGetAssoc( $sql );
+            if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." lookup " .$field); 
 		} else {
 			while($record = $this->getData()) {
 				$set[$record['id']] = $record[$field];
@@ -211,6 +215,49 @@
 
 		return $items;
 	}
- }
+
+    function applySearch( $search_values, $run_query=true ) {
+        require_once( 'AMP/System/Data/Search.inc.php');
+        $search = &$this->getSearch( );
+        $search->applyValues( $search_values );
+        if ( $run_query ) $this->readData( );
+    }
+
+    function &getSearch() {
+        if ( !isset( $this->_search )) {
+            $this->_search = & new $this->_search_class( $this );
+        }
+        return $this->_search;
+    }
+
+    /**
+     * Returns an array of fields which should be searched via exact, rather than %contains% methods 
+     * 
+     * @access public
+     * @return array 
+     */
+    function &getLiteralCriteria( ){
+        return $this->_search_exact_values;
+    }
+
+    /**
+     * Search all defined text fields for relevance to a search string 
+     * 
+     * @param mixed $search_string 
+     * @access public
+     * @return void
+     */
+    function addCriteriaFulltext( $search_string, $sortby_relevance = false ) {
+        $search = &$this->getSearch( );
+        $fulltext_criteria = $search->getCriteriaFulltext( $search_string );
+        $this->addCriteria( $fulltext_criteria );
+        if ( $sortby_relevance ) $this->addSort( $fulltext_criteria . ' DESC' );
+    }
+
+    function getFullTextFields( ){
+        return $this->_search_fulltext;
+    }
+
+}
 
 ?>

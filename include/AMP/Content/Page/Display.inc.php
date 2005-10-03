@@ -21,7 +21,14 @@ class AMPContent_PageDisplay {
 
     function init( &$page ) {
         $this->_page = &$page;
-        $this->_header = & new AMPContent_Header( $this->_page );
+        $this->_header = &AMPContent_Header::instance( $page );
+        $this->initTemplate( );
+    }
+
+    function &instance( &$page ) {
+        static $page_display = false;
+        if ( !$page_display ) $page_display = new AMPContent_PageDisplay( $page );
+        return $page_display;
     }
 
     function execute($display_type = AMP_CONTENT_PAGE_DISPLAY_DEFAULT ) {
@@ -32,7 +39,6 @@ class AMPContent_PageDisplay {
 
     function output_Standard() {
 
-        $this->initTemplate( );
         $this->_template->placeNavigation( $this->_page );
         $output =  
                 $this->_header->output().
@@ -128,11 +134,6 @@ class AMPContent_PageDisplay {
         }
         $this->addStyleSheets( $css );
 
-        if ( !( $extra_sheets = $this->_page->getStyleSheets( ))) return true;
-
-        foreach( $extra_sheets as $sheet ) {
-            $this->addStyleSheets( $sheet );
-        }
         return true;
     }
 }

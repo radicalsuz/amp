@@ -9,12 +9,15 @@ class ComponentMap_VoterGuide extends AMPSystem_ComponentMap {
     var $nav_name = "voterguide";
 
     var $paths = array( 
+        'search' => 'Modules/VoterGuide/Search/Form.inc.php',
+        'search_fields' => 'Modules/VoterGuide/Search/Fields.xml',
         'fields' => 'Modules/VoterGuide/Fields.xml',
         'list'   => 'Modules/VoterGuide/List.inc.php',
         'form'   => 'Modules/VoterGuide/Form.inc.php',
         'source' => 'Modules/VoterGuide/VoterGuide.php' );
 
     var $components = array(
+        'search' => 'VoterGuideSearch_Form',
         'form' => 'VoterGuide_Form',
         'list' => 'VoterGuide_List',
         'source' => 'VoterGuide' );

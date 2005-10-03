@@ -44,3 +44,23 @@ span.udm_header {
 		padding: 5px;
 }
 
+.searchform_label, .searchform_element, .searchform_header, .searchform_table, searchform_table.input {
+		font-size: 11px;
+		text-decoration: none;
+		margin-left: 3px;
+		/*text-align:left;*/
+}
+
+.searchform_table {
+	text-align: left;
+}
+
+
+.searchform_header {
+		font-size: 11px;
+		font-weight: bold;
+}
+
+td.list_entry {
+	width: 90%;
+}

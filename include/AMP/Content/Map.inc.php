@@ -136,7 +136,7 @@ class AMPContent_Map {
     function _menuItemArticleList( $section_id ) {
         return array(
             'id'    =>  $section_id,
-            'label' =>  $this->getName( $section_id ),
+            'label' =>  AMP_clearSpecialChars( $this->getName( $section_id ) ),
             'href'  =>  'article_list.php?type=' . $section_id
             );
     }
