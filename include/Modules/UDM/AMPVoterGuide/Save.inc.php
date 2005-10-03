@@ -3,6 +3,7 @@
 require_once( 'AMP/UserData/Plugin/Save.inc.php' );
 require_once( 'Modules/VoterGuide/Form.inc.php' );
 require_once( 'Modules/UDM/DIA/SupporterSave.inc.php' );
+require_once( 'AMP/Content/Page.inc.php' );
 
 class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
@@ -62,9 +63,11 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         $voterGuide = &new VoterGuide( $this->udm->dbcon );
         $voterGuide->setData( $data );
         if ( $voterGuide->save() ) {
-			$organizer_id = $this->udm->doPlugin( 'DIA', 'SupporterSave' );
+			$organizer_id = $this->udm->tryPlugin( 'DIA', 'SupporterSave' );
 			$link = $voterGuide->setBlocOrganizer($voterGuide->getData('block_id'), $organizer_id);
 
+			$currentPage =& AMPContent_Page::instance();
+			$currentPage->addObject(strtolower(__CLASS__), $voterGuide);
 			return true;
 		}
        
