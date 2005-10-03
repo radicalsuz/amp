@@ -238,11 +238,12 @@ class ElementCopierScript {
         $namevar = $copier_name . '_activeNames';
 
         $script .= $this->_js_outputNameSet( $namevar, current( $copierDef['valuesets'] ), $copier_name ) . "\n";
+        $add_button_name = key( $this->getAddButton( $copier_name ));
               
         foreach( $copierDef['valuesets'] as $valueSet ) {
             $script .= $this->_js_outputValueSet( $valuevar, $valueSet ) . "\n";
             $script .= 'restoreSet( window.' . $copier_name . ', ' . 
-                                    $this->_delimit( $this->_addPrefix( $copier_name, 'add_' . $copier_name ) ) . ', ' .
+                                    $this->_delimit( $add_button_name ) . ', ' .
                                     $valuevar . ', ' .
                                     $namevar . " );\n\n\n ";
         }

@@ -44,7 +44,8 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
         }
         
         $this->registerJavascript( $this->_copier->output(), 'copier' );
-        $this->addFields( $this->_copier->getAddButton( $this->_copierName ) );
+        
+        $this->addFields( $this->_copier->getAddButton( $this->_copierName )  );
     }
 
     function getValues( $fields=null ) {
