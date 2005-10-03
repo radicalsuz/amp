@@ -243,6 +243,12 @@
         $upLoader = &new AMPSystem_Upload( $_FILES[ $filefield ][ 'name' ] );
         if (!$upLoader->execute( $_FILES[ $filefield ][ 'tmp_name' ] )) return false;
 
+        require_once( 'AMP/Content/Image/Resize.inc.php');
+        $reSizer=&new ContentImage_Resize();
+        if ( $reSizer->setImageFile( $upLoader->getTargetPath( ))) {
+            $reSizer->execute( );
+        }
+
         return basename( $upLoader->getTargetPath() );
     }
 

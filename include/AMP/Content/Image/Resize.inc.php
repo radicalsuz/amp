@@ -2,6 +2,8 @@
 define( 'AMP_TEXT_ERROR_IMAGE_NOT_ALLOWED', "Could not determine the type of image. JPG, GIF, and PNG format only"); 
 define( 'AMP_TEXT_ERROR_FILE_EXISTS', "File already exists: " );
 define( 'AMP_TEXT_ERROR_FILE_WRITE_FAILED', "Failed to write :" );
+define( 'AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND', 'Your installation of PHP does not support resizing images of this type.  Update your GD library configuration.');
+
 require_once( 'AMP/Content/Image.inc.php' );
 
 class ContentImage_Resize {
@@ -109,8 +111,13 @@ class ContentImage_Resize {
     function _setOriginal( $filename ) {
         if (!isset( $this->_imagecreate_methods[ $this->_file_extension ] )) return false;
         $create_method = $this->_imagecreate_methods[ $this->_file_extension ];
+        if ( !function_exists( $create_method )) {
+            trigger_error( AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND );
+            $this->addError( AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND );
+            return false;
+        }
 
-        if ($this->versions[ AMP_IMAGE_CLASS_ORIGINAL ] = &$create_method( $filename )) {
+        if ($this->versions[ AMP_IMAGE_CLASS_ORIGINAL ] = ( $create_method( $filename ))) {
             $this->_setWidths();
             return true;
         }
