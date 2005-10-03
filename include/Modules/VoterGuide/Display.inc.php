@@ -1,5 +1,6 @@
 <?php
 require_once( "Modules/VoterGuide/VoterGuide.php");
+require_once('utility.functions.inc.php');
 
 class VoterGuide_Display extends AMPDisplay_HTML {
 
@@ -21,7 +22,9 @@ class VoterGuide_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_guideHeader( ) {
-        $output =   $this->_HTML_affiliations( $this->_voterguide->getAffiliation( ) ).    
+print 'bloc: '.$this->_HTML_blocJoin();
+        $output =   $this->_HTML_blocJoin(). 
+					$this->_HTML_affiliations( $this->_voterguide->getAffiliation( ) ).    
                     $this->_HTML_title( $this->_voterguide->getName( ) ).
                     $this->_HTML_location( $this->_voterguide->getLocation( ) ).
                     $this->_HTML_date( $this->_voterguide->getItemDate( ) ).
@@ -84,5 +87,13 @@ class VoterGuide_Display extends AMPDisplay_HTML {
         $this->_positionDisplay = &new VoterGuidePositionSet_Display( $this->_voterguide->dbcon, $this->_voterguide->id );
         return $this->_HTML_inDiv( $this->_positionDisplay->execute( ), array( 'style' => 'border:1px solid silver; padding: 10px;'));
     }
+
+	function _HTML_blocJoin() {
+		$blocURL = AMP_Url_AddVars(AMP_FORM_URL_VOTERBLOC,'guide='.$this->_voterguide->id);
+		if( !$blocURL ) {
+			return false;
+		}
+		return $this->_HTML_link($blocURL, AMP_VOTERBLOC_LINK_TEXT);
+	}
 }
 ?>
