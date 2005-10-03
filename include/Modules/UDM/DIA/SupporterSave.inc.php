@@ -36,7 +36,6 @@ class UserDataPlugin_SupporterSave_DIA extends UserDataPlugin_Save {
 
 		$api =& DIA_API::create();
 		$result = $api->addSupporter( $data[ 'Email'], $data );
-print "supporter ID: $result.";
 //        $diaRequest = new diaRequest( $options[ 'orgCode' ] );
 //        $result = $diaRequest->addSupporter( $data[ 'Email' ], $data);
 
