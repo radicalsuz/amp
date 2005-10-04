@@ -177,5 +177,10 @@ class VoterGuide extends AMPSystem_Data_Item {
 	function getBlocID() {
 		return $this->getData('block_id');
 	}
+
+	function getBlocList() {
+		return DIA_ORGANIZATION_SHORT_NAME.'+'.$this->getShortName().'-'.$this->getBlocID().
+			'@lists.democracyinaction.org';
+	}
 }
 ?>
