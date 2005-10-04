@@ -109,8 +109,10 @@ class VoterGuide extends AMPSystem_Data_Item {
 	function addVoterToBloc($voter_id, $bloc_id) {
         require_once( 'DIA/API.php' );
         $api =& DIA_API::create();
-        return $api->process('supporter_groups', array('supporter_KEY' => $voter_id,
+        $api->process('supporter_groups', array('supporter_KEY' => $voter_id,
                                                       'groups_KEY' => $bloc_id));
+		//no meaningful info returned (0 if already exists, supporter_groups key if new)
+		return true;
 	}
 
     function &getDisplay( ) {
