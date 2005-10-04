@@ -295,7 +295,7 @@ $ADODB_INCLUDED_CSV = 1;
 			}
 			return $ok;
 		}
-		if (!($fd = fopen($filename, 'a'))) return false;
+		if (!($fd = @fopen($filename, 'a'))) return false;
 		if (flock($fd, LOCK_EX) && ftruncate($fd, 0)) {
 			$ok = fwrite( $fd, $contents );
 			fclose($fd);
