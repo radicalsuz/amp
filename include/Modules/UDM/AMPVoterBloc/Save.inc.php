@@ -30,7 +30,7 @@ class UserDataPlugin_Save_AMPVoterBloc extends UserDataPlugin_SupporterSave_DIA 
 
 	function save($data) {
 		$voter = parent::save($data);
-		VoterGuide::addVoterToBloc($voter, $data['bloc_id']);
+		return VoterGuide::addVoterToBloc($voter, $data['bloc_id']);
 	}
 }
 ?>
