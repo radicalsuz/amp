@@ -1,11 +1,9 @@
 <?php
 
 define(  'AMP_CONTENT_URL_VOTERGUIDE', 'voterguide.php');
-define( 'AMP_VOTERGUIDE_REDIRECT_PREFIX', 'guides/2005/');
 
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'Modules/VoterGuide/Position/Set.inc.php');
-require_once( 'AMP/Redirect.inc.php' );
 
 class VoterGuide extends AMPSystem_Data_Item {
 
