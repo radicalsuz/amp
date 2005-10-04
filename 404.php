@@ -5,7 +5,7 @@ Displayed when a user queries an AMP website
 and no resulting page is returned from the database.
 Searches redirect table for matching pages, then sends 
 the user to search page if no matches are found.*/
-exit;
+
 $no_search_extensions = array( 'jpeg', 'jpg', 'gif', 'png' );
 	 
 $extension_start = strrpos( $_SERVER['PHP_SELF'], '.' );
