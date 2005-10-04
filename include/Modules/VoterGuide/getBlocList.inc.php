@@ -1,12 +1,15 @@
 <?php
 
-require_once('AMP/Registry.php');
+require_once('AMP/Content/Page.inc.php');
 require_once('Modules/VoterGuide/VoterGuide.php');
 
-$guide_id = $_REQUEST['id'];
-$guide =& new VoterGuide(AMP_Registry::getDbcon(), $guide_id);
+$currentPage =& AMPContent_Page::instance();
+$guide =& $currentPage->getObject(strtolower('UserDataPlugin_Save_AMPVoterGuide'));
 
-print DIA_ORGANIZATION_SHORT_NAME.'+'.$guide->getShortName().'-'.$guide->getBlocID().
-		'@lists.democracyinaction.org';
+if($guide) {
+	print $guide->getBlocList();
+} else {
+	trigger_error('no guide for getBlocList');
+}
 
 ?>
