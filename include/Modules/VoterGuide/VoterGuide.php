@@ -1,9 +1,11 @@
 <?php
 
 define(  'AMP_CONTENT_URL_VOTERGUIDE', 'voterguide.php');
+define( 'AMP_VOTERGUIDE_REDIRECT_PREFIX', 'guides/2005/');
 
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'Modules/VoterGuide/Position/Set.inc.php');
+require_once( 'AMP/Redirect.inc.php' );
 
 class VoterGuide extends AMPSystem_Data_Item {
 
@@ -47,11 +49,28 @@ class VoterGuide extends AMPSystem_Data_Item {
 			$this->mergeData(array('block_id' => $this->createVoterBloc()));
 		}
         if ( !( $result=PARENT::save())) return $result;
+		$this->setRedirect();
         if ( $result = $this->_positionSet->reviseGuide( $this->getData( $this->_positions_key ), $this->id ) ) return $result;
 
         $this->addError( $this->_positionSet->getErrors( ));
         return false;
     }
+
+	function setRedirect() {
+		$redirect = array('old' => $this->getPublicURL(),
+						  'new' => AMP_CONTENT_URL_VOTERGUIDE . '?id=' . $this->id,
+						  'publish' => 1,
+						  'conditional' => 1);
+		$result = $this->dbcon->Replace( 'redirect', $redirect, 'old', $autoquote = true);
+	}
+
+	function getRedirectPrefix() {
+		return AMP_VOTERGUIDE_REDIRECT_PREFIX;
+	}
+
+	function getPublicURL() {
+		return $this->getRedirectPrefix() . $this->getShortName();
+	}
 
 	function generateShortName($string) {
 		if(!preg_match('/^\w+$/', $string)) {
@@ -68,7 +87,7 @@ class VoterGuide extends AMPSystem_Data_Item {
         require_once( 'DIA/API.php' );
         $api =& DIA_API::create();
         $group = array('Group_Name' => $this->getShortName(),
-                        'external_ID' => 'AMP_'.$this->getID(),
+                        'external_ID' => 'AMP_'.$this->id,
                         'Display_To_User' => 0,
                         'Listserve_Type' => 'Restrict Posts to Allowed Users');
         if(defined('VOTERGUIDE_DIA_GROUP_PARENT_KEY')) {
@@ -171,7 +190,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function getID() {
-		return $this->getData('id');
+		return $this->id;
 	}
 
 	function getBlocID() {
