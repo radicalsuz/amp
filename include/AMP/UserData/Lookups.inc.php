@@ -184,4 +184,30 @@ class FormLookup_FindAppointmentForm extends FormLookup_FindScheduleForm {
     }
 }
 
+class FormLookup_IntroTexts {
+    var $datatable = "moduletext";
+    var $result_field = "name";
+
+    function FormLookup_IntroTexts( ) {
+        $this->init( );
+    }
+
+    function &instance( $form_id ) {
+        static $results = array( );
+        if ( isset( $results[ $form_id] )) return $results[ $form_id ];
+
+        $results[ $form_id ] = array( );
+        $tools = &AMPSystem_Lookup::instance( 'ToolsByForm' );
+        if ( isset( $tools[ $form_id ])) {
+            $modidsByIntrotext = &AMPSystem_Lookup::instance( 'toolsByIntrotext' );
+            $result_ids = array_keys( $modidsByIntrotext, $tools[ $form_id ]);
+            if ( !empty( $result_ids )) {
+                $introtext = &AMPSystem_Lookup::instance( 'introtexts');
+                $results[ $form_id ] = array_combine_key ( $result_ids, $introtext );
+            }
+        }
+        return $results[ $form_id ];
+    }
+}
+
 ?>

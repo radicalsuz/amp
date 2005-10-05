@@ -102,6 +102,7 @@
         );
 
     var $isBuilt=false;
+    var $_fileNames = array( );
 
 
     function AMPForm( $name, $method="POST", $action = null ) {
@@ -235,6 +236,7 @@
     }
 
     function _manageUpload( $data, $filefield ) {
+        if ( isset( $this->_fileNames[$filefield])) return $this->_fileNames[ $filefield ];
         if (!( isset( $_FILES[ $filefield ][ 'tmp_name' ] ) && $_FILES[$filefield]['tmp_name'])) {
             return ( isset( $data[$filefield.'_value']) ? $data[$filefield.'_value'] : false) ;
         }
@@ -249,7 +251,8 @@
             $reSizer->execute( );
         }
 
-        return basename( $upLoader->getTargetPath() );
+        $this->_fileNames[ $filefield ] = basename( $upLoader->getTargetPath() );
+        return $this->_fileNames[ $filefield ];
     }
 
     function _addFileLink( $data, $fieldname ) {

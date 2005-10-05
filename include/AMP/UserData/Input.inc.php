@@ -114,9 +114,9 @@ class UserDataInput extends UserData {
 
         $r = $this->registerPlugin( 'AMP', 'Read'           ) and $r;
         $r = $this->registerPlugin( 'AMP', 'Save'           ) and $r;
-        $r = $this->registerPlugin( 'AMP', 'DuplicateCheck' ) and $r;
-        $r = $this->registerPlugin( 'AMP', 'Authenticate'   ) and $r;
-        $r = $this->registerPlugin( 'AMP', 'EmailAdmin'     ) and $r;
+        #$r = $this->registerPlugin( 'AMP', 'DuplicateCheck' ) and $r;
+        #$r = $this->registerPlugin( 'AMP', 'Authenticate'   ) and $r;
+        #$r = $this->registerPlugin( 'AMP', 'EmailAdmin'     ) and $r;
 
     }
 }

@@ -78,5 +78,6 @@ define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups']) && $_GET[
 define('AMP_DISPLAYMODE_DEBUG_NAVS', (isset($_GET['debug_navs']) && $_GET['debug_navs']));
 
 if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
+if (!defined( 'AMP_DBTABLE_BLAST_LISTS')) define ( 'AMP_DBTABLE_BLAST_LISTS', false );
 
 ?>

@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/Region.inc.php' );
+require_once( 'AMP/System/UserData.php');
 
 /*****
  *
@@ -124,6 +125,8 @@ class UserData {
      *****/
 
     function init () {
+
+        if ( !isset( $this->instance)) return false;
 
         // Register the base module definition
         $this->_register_base();
@@ -715,6 +718,7 @@ class UserData {
 
     function _register_base () {
 
+        /*
         $dbcon = &$this->dbcon;
 
         // Fetch database definition of module.
@@ -724,6 +728,11 @@ class UserData {
             or trigger_error( "Error retreiving module information from database: " . $dbcon->ErrorMsg() );
 
         $md = $this->_module_def = $rs->FetchRow();
+        */
+        $moduleSource = &new AMPSystem_UserData( $this->dbcon, $this->instance );
+        if ( !$moduleSource->hasData( )) return false;
+
+        $md = $this->_module_def = $moduleSource->getData();
 
         // Define module class
         $this->class = ( isset($md[ 'class' ]) ) ? $md['class'] : 1;

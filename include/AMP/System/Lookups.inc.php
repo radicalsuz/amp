@@ -186,6 +186,15 @@ class AMPSystemLookup_IntroTexts extends AMPSystem_Lookup {
     }
 
 }
+class AMPSystemLookup_ToolsByIntroText extends AMPSystem_Lookup {
+    var $datatable = "moduletext";
+    var $result_field = "modid";
+
+    function AMPSystemLookup_ToolsByIntroText () {
+        $this->init();
+    }
+
+}
 
 class AMPSystemLookup_EventTypes extends AMPSystem_Lookup {
     var $datatable = "eventtype";
@@ -199,11 +208,33 @@ class AMPSystemLookup_EventTypes extends AMPSystem_Lookup {
 class AMPSystemLookup_Users extends AMPSystem_Lookup {
     var $datatable = "users";
     var $result_field = "name";
+    var $sortby = "name";
 
     function AMPSystemLookup_Users () {
         $this->init();
     }
 }
+class AMPSystemLookup_Lists extends AMPSystem_Lookup {
+    var $datatable = 'lists';
+    var $result_field = 'name';
+    var $criteria = 'publish=1';
+    var $sortby = 'name';
+
+    function AMPSystemLookup_Lists( ) {
+        if ( isset( $GLOBALS['MM_listtable'])) {
+            $this->datatable = $GLOBALS['MM_listtable'];
+            $this->criteria = 'active=1';
+        }
+        if ( AMP_DBTABLE_BLAST_LISTS ) {
+            $this->datatable = AMP_DBTABLE_BLAST_LISTS;
+            $this->criteria = 'active=1';
+        }
+        $this->init();
+    }
+
+}
+
+
 class AMPConstant_Lookup {
 
     var $dataset;

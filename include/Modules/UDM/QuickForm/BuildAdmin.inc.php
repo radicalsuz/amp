@@ -14,6 +14,7 @@ require_once( 'HTML/QuickForm/Renderer/Savant.php' );
 require_once( 'Savant/Savant2.php' );
 require_once( 'AMP/Region.inc.php' );
 require_once( 'AMP/UserData/Plugin.inc.php' );
+require_once( 'AMP/UserData/Lookups.inc.php');
 
 class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
@@ -35,7 +36,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $form_action = ( isset($options['frmAction']) ) ?
                        $options['frmAction'] : null;
 
-        $this->form = new HTML_QuickForm( $form_name, $form_method, $form_action );
+        $this->form = &new HTML_QuickForm( $form_name, $form_method, $form_action );
 
         $this->form->addElement( 'hidden', 'modin',        'Module Instance' );
         $this->form->addElement( 'submit', 'btnUdmSubmit', 'Submit' );
@@ -83,7 +84,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
         /* Fetch module information.
             this should be moved to some generic AMP class or somesuch.
-        */
+        
 
         $udm_mod_id  = $dbcon->qstr( $this->udm->instance );
         $modlist_sql = "SELECT   moduletext.id, moduletext.name FROM moduletext, modules
@@ -97,39 +98,13 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         while ( $row = $modlist_rs->FetchRow() ) {
             $modules[ $row['id'] ] = $row['name'];
         }
+            */
 
-        /* Get possible sources. Again, should be moved out of here */
+        $modules_blank_row[ '' ] = '--';
+        $modules = $modules_blank_row + FormLookup_IntroTexts::instance( $this->udm->instance );
 
-        $source_sql = "SELECT id, title FROM source ORDER BY title ASC";
-        $source_rs  = $dbcon->CacheExecute( $source_sql )
-            or die( "Error fetching data source information: " . $dbcon->ErrorMsg() );
-
-        while ( $row = $source_rs->FetchRow() ) {
-            $sources[ $row[ 'id' ] ] = $row[ 'title' ];
-        }
-
-        /* Yet another thing to move outta here */
-
-        $enteredby_sql = "SELECT id, name FROM users ORDER BY name ASC";
-        $enteredby_rs  = $dbcon->CacheExecute( $enteredby_sql )
-            or die( "Error fetching user information: " . $dbcon->ErrorMsg() );
-
-        while ( $row = $enteredby_rs->FetchRow() ) {
-            $users[ $row['id'] ] = $row['name'];
-        }
-
-        /* Another one. This will be removed entirely, and is only here for the
-        ** purposes of, well laziness. The functionality will be subsumed by
-        ** the list plugins. */
-        $list_table = ( isset($GLOBALS['MM_listtable']) ) ? $GLOBALS['MM_listtable'] : 'lists';
-        $lists_sql = "SELECT id, name FROM $list_table ORDER BY name ASC";
-        $lists_rs  = $dbcon->Execute( $lists_sql )
-            or die( "Couldn't obtain list information: " . $dbcon->ErrorMsg() );
-
-        $lists[ '' ] = 'none';
-        while ( $row = $lists_rs->FetchRow() ) {
-            $lists[ $row['id'] ] = $row['name'];
-        }
+        $lists_blank_row[ '' ] = 'none';
+        $lists = $lists_blank_row + AMPSystem_Lookup::instance( 'lists' );
 
         $fields =& $this->fields;
 
@@ -140,8 +115,8 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $fields['core']['publish']       = array( 'label' => 'Publish Data',         'type' => 'checkbox' );
         $fields['core']['modidinput']    = array( 'label' => 'Intro Text',           'type' => 'select', 'values' => $modules );
         $fields['core']['modidresponse'] = array( 'label' => 'Response Text',        'type' => 'select', 'values' => $modules );
-        $fields['core']['sourceid']      = array( 'label' => 'Source',               'type' => 'select', 'values' => $sources );
-        $fields['core']['enteredby']     = array( 'label' => 'Entered By',           'type' => 'select', 'values' => $users );
+        #$fields['core']['sourceid']      = array( 'label' => 'Source',               'type' => 'select', 'values' => $sources );
+        #$fields['core']['enteredby']     = array( 'label' => 'Entered By',           'type' => 'select', 'values' => AMPSystem_Lookup::instance( 'users' ));
         $fields['core']['uselists']      = array( 'label' => 'Use Lists',            'type' => 'checkbox' );
         $fields['core']['list1']         = array( 'label' => 'List #1',              'type' => 'select', 'values' => $lists );
         $fields['core']['list2']         = array( 'label' => 'List #2',              'type' => 'select', 'values' => $lists );
@@ -313,10 +288,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $udm_copy->form = null;
         $udm_copy->showForm = true;
 
-        ob_start();
-        $udm_copy->output('html');
-        $html = ob_get_contents();
-        ob_end_clean();
+        $html = $udm_copy->output('html');
 
         preg_replace( "/<[^>]*form[^>]*>/", "", $html );
 
@@ -372,7 +344,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 }
 
 $GLOBALS['regionObj'] = new Region();
-
+/*
 function udm_QuickForm_build_admin ( &$udm, $options = null ) {
 
     $frmName    = $udm->name;
@@ -388,7 +360,7 @@ function udm_QuickForm_build_admin ( &$udm, $options = null ) {
 
     /* Fetch module information.
         this should be moved to some generic AMP class or somesuch.
-    */
+    *//*
 
     $modlist_rs = $udm->dbcon->CacheExecute( "SELECT moduletext.id, moduletext.name FROM moduletext, modules" .
                                              " WHERE modules.id=moduletext.modid AND " .
@@ -402,7 +374,7 @@ function udm_QuickForm_build_admin ( &$udm, $options = null ) {
     }
 
     /* Get possible sources. Again, should be moved out of here */
-
+/*
     $source_rs = $udm->dbcon->CacheExecute( "SELECT id, title FROM source ORDER BY title ASC" )
         or die( $udm->dbcon->ErrorMsg() );
 
@@ -411,7 +383,7 @@ function udm_QuickForm_build_admin ( &$udm, $options = null ) {
     }
 
     /* Yet another thing to move outta here */
-
+/*
     $enteredby_rs = $udm->dbcon->CacheExecute( "SELECT id, name FROM users ORDER BY name ASC" );
 
     while ( $row = $enteredby_rs->FetchRow() ) {
@@ -419,7 +391,7 @@ function udm_QuickForm_build_admin ( &$udm, $options = null ) {
     }
 
     /* Another one. */
-    $MM_listtable = ( isset($GLOBALS['MM_listtable']) ) ? $GLOBALS['MM_listtable'] : 'lists';
+ /*   $MM_listtable = ( isset($GLOBALS['MM_listtable']) ) ? $GLOBALS['MM_listtable'] : 'lists';
     $lists_rs = $udm->dbcon->Execute( "SELECT id, name FROM $MM_listtable ORDER BY name ASC" ) or die( "Couldn't obtain list information: " . $udm->dbcon->ErrorMsg() );
 
     $lists[ '' ] = 'none';
@@ -463,7 +435,7 @@ function udm_QuickForm_build_admin ( &$udm, $options = null ) {
                    "</td><td>", // default values -> field size
                    "</td></tr></table></div></td></tr></table>\n\n", // field size -> end of row
                  ); */
-                 $fSep = '';
+/*                 $fSep = '';
 
     $panels = array( 'core', 'standard', 'custom', 'plugins', 'preview' );
 /*    foreach ( $panels as $panel ) {
@@ -471,7 +443,7 @@ function udm_QuickForm_build_admin ( &$udm, $options = null ) {
         $renderer->setGroupElementTemplate( "{label}&nbsp;{element}\n", $panel );
         $renderer->setElementTemplate("{label}&nbsp;{element}</div>", $panel);
     } */
-
+/*
     $form->addGroup( array(), 'core', null, '&nbsp;', false );
     $form->addGroup( array(), 'standard', null, $fSep, false );
     $form->addGroup( array(), 'custom', null, $fSep, false );
@@ -495,7 +467,7 @@ function udm_QuickForm_build_admin ( &$udm, $options = null ) {
     $renderer->setGroupElementTemplate( "{label}&nbsp;{element}\n", 'preview' );
     $renderer->setGroupElementTemplate( "{label}&nbsp;{element}\n", 'custom' );
 */
-
+/*
     foreach ( $udm->fields as $field => $field_def ) {
         udm_QuickForm_build_admin_addElement( $form, $field, $field_def );
     }
@@ -637,5 +609,6 @@ function udm_QuickForm_build_admin_addElement( &$form, $name, $field_def ) {
     return 1;
 
 }
+*/
 
 ?>
