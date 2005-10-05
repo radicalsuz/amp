@@ -13,6 +13,16 @@ class ElementCopierScript {
     }
 
     function init($fields = null) {
+		if(!defined('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON')) {
+			define('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON', 'Add New Item');
+		}
+		if(!defined('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT')) {
+			define('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT', 'Add New');
+		}
+		if(!defined('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON')) {
+			define('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON', 'Remove');
+		}
+
         if (isset($fields)) $this->addCopier( $this->copier_name_default, $fields ); 
     }
 
@@ -66,7 +76,7 @@ class ElementCopierScript {
         $del_button =
             array( 'type' => 'button',
                    'action' => 'window.' . $copiername . ".RemoveCurrentSet( this );",
-                   'label' => 'Remove' );
+                   'label' => AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON );
         #$this->addField( $add_button, 'add_btn', $copiername );
         $this->addField( $del_button, 'form_del_btn', $copiername );
     }
@@ -95,7 +105,7 @@ class ElementCopierScript {
 
     function script_value_array( $valuevar, $fDef ) {
         $script = "var $valuevar = new Array();\n var valuecounter=0;\n";
-        $script .= $valuevar . "[ valuecounter++] = new Option(\"Add New\",'');\n";
+        $script .= $valuevar . "[ valuecounter++] = new Option(\"".AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT."\",'');\n";
 
         foreach ($fDef['values'] as $key => $value ) {
             $script .= $valuevar . "[ valuecounter++] = new Option(\"". str_replace( "&nbsp;", " ", $value) . "\",'". $key . "');\n";
@@ -142,7 +152,7 @@ class ElementCopierScript {
             return array( $this->_addPrefix( $copier_name, 'add_'.$copier_name ) =>
                 array( 'type' => 'button',
                             'attr' => array( 'onClick' => 'DuplicateElementSet( window.'.$copier_name .', parentRow( this ).rowIndex );' ),
-                            'label' => 'Add New Item',
+                            'label' => AMP_FORM_ELEMENT_COPIER_ADD_BUTTON,
                             'public' => true,
                             'enabled' => true ) );
     }
