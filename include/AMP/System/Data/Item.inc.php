@@ -133,7 +133,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 	function existsValue($column, $value) {
 		$records = $this->dbcon->Execute('SELECT * FROM '.$this->datatable
 										.' WHERE '.$column.' = '. $this->dbcon->qstr($value));
-		if($records->RecordCount() != 0) {
+		if(false != $records && $records->RecordCount() != 0) {
 			return true;
 		}
 
