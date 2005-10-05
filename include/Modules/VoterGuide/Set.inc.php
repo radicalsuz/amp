@@ -7,7 +7,7 @@ class VoterGuideSet extends AMPSystem_Data_Set {
 	var $datatable = "voterguides";
     var $sort = array( "state", "city", "election_date" );
     var $_positionSet;
-    var $_search_fulltext = array( 'name', 'city', 'blurb', 'footer', 'redirect_name', 'affiliation' );
+    var $_search_fulltext = array( 'name', 'city', 'blurb', 'footer', 'short_name', 'affiliation' );
 
 	function VoterGuideSet ( &$dbcon ) {
 		$this->init ($dbcon );

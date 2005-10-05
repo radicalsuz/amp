@@ -42,9 +42,9 @@ class VoterGuide extends AMPSystem_Data_Item {
 				$this->addError( $short_name.' already exists as a short name.  please try a different short name');
 				return false;
 			}
-			$this->mergeData(array('redirect_name' => $short_name));
+			$this->mergeData(array('short_name' => $short_name));
 
-			$this->mergeData(array('block_id' => $this->createVoterBloc()));
+			$this->mergeData(array('bloc_id' => $this->createVoterBloc()));
 		}
         if ( !( $result=PARENT::save())) return $result;
 		$this->setRedirect();
@@ -78,7 +78,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function isUniqueShortName($string) {
-		return !$this->existsValue('redirect_name', $string);
+		return !$this->existsValue('short_name', $string);
 	}
 
     function createVoterBloc() {
@@ -186,7 +186,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function getShortName() {
-		return $this->getData('redirect_name');
+		return $this->getData('short_name');
 	}
 
 	function getID() {
@@ -194,7 +194,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function getBlocID() {
-		return $this->getData('block_id');
+		return $this->getData('bloc_id');
 	}
 
 	function getBlocList() {
