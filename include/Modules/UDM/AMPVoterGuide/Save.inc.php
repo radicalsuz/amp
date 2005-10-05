@@ -64,7 +64,7 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         $voterGuide->setData( $data );
         if ( $voterGuide->save() ) {
 			$organizer_id = $this->udm->tryPlugin( 'DIA', 'SupporterSave' );
-			$link = $voterGuide->setBlocOrganizer($voterGuide->getData('block_id'), $organizer_id);
+			$link = $voterGuide->setBlocOrganizer($voterGuide->getBlocID(), $organizer_id);
 
 			$currentPage =& AMPContent_Page::instance();
 			$currentPage->addObject(strtolower(__CLASS__), $voterGuide);
