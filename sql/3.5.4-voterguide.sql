@@ -21,11 +21,11 @@ CREATE TABLE IF NOT EXISTS `voterguides` (
   `owner_id` int(11) NULL,
   `election_date` datetime NULL,    
   `publish` tinyint(4) NULL,
-  `redirect_name` varchar( 20 ) NULL,
+  `short_name` varchar( 20 ) NULL,
   `affiliation` varchar( 60 ) NULL,
   `filelink` varchar( 60 ) NULL,
   `picture` varchar( 60 ) NULL,
-  `block_id` int( 11 ) NULL,
+  `bloc_id` int( 11 ) NULL,
   FULLTEXT ( name, city, blurb, footer, redirect_name, affiliation ),
   PRIMARY KEY (id)
 )
