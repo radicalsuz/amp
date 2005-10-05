@@ -18,6 +18,13 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
         $this->init( $name );
     }
 
+	function init( $name ) {
+		define('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON', 'Add New Endorsement');
+		define('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT', 'Select One');
+		define('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON', 'Remove This Endorsement');
+		parent::init($name);
+	}
+		
     function setDynamicValues() {
         $region = &new Region();
         $this->setFieldValueSet( 'state' , $region->regions['US']);

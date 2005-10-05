@@ -17,18 +17,18 @@
         <enabled>1</enabled>
         <public>1</public>
     </name>
-	<redirect_nameHeader>
+	<short_nameHeader>
 		<type>static</type>
 		<values>&lt;span class="photocaption"&gt;To make it easier to find your Voter Guide, it will be given a web address like "http://www.indyvoter.org/guides/2005/your_short_name".  If you don&amp;rsquo;t type in a name, one will be created from your guide title.&lt;/span&gt;</values>
         <enabled>1</enabled>
         <public>1</public>
-	</redirect_nameHeader>
-	<redirect_name>
+	</short_nameHeader>
+	<short_name>
 		<type>text</type>
         <label>Short Name</label>
         <enabled>1</enabled>
         <public>1</public>
-	</redirect_name>
+	</short_name>
     <city>
         <type>text</type>
         <label>Voter Guide City</label>
