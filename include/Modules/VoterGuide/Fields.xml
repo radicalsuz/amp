@@ -46,7 +46,7 @@
     </state>
     <election_date>
         <type>date</type>
-        <default>October 5, 2005</default>
+        <default>November 8, 2005</default>
         <label>Voter Guide Election Date</label>
         <required>1</required>
         <enabled>1</enabled>
