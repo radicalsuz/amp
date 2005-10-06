@@ -35,6 +35,10 @@ class VoterGuide extends AMPSystem_Data_Item {
 		//is this the first time we're saving this voterguide?
 		$today = time();
 		$election = strtotime($this->getItemDate());
+		if(AMP_VOTERGUIDE_DEBUG) {
+			print "today: " . gmdate('r',$today);
+			pritn "election: " . gmdate('r',$election);
+		}
 		if($today - $election >= 0) {
 			$this->addError('That date has already passed!');
 			return false;
