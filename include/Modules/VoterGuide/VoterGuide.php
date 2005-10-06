@@ -33,6 +33,14 @@ class VoterGuide extends AMPSystem_Data_Item {
 
     function save() {
 		//is this the first time we're saving this voterguide?
+		$today = time();
+		$election = strtotime($this->getItemDate());
+		if($today - $election >= 0) {
+			$this->addError('That date has already passed!');
+			return false;
+		}
+
+		
 		if($this->isNew()) {
 			$short_name = $this->getShortName();
 			if( !$short_name ) {
