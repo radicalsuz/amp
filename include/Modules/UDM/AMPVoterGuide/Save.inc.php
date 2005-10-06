@@ -37,6 +37,15 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         
         //Position ID field has to be reconfigured for udm
 
+        if(defined('AMP_VOTERGUIDE_SUBMIT_TEXT')) {
+            $this->fields['submit_text'] = array(
+                                'type' => 'static',
+                                'enabled' => true,
+                                'public' => true,
+                                'required' => false,
+                                'values' => AMP_VOTERGUIDE_SUBMIT_TEXT);
+        }
+
         $this->insertAfterFieldOrder( array_keys( $this->fields ));
 
 
