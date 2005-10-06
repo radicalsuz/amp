@@ -63,6 +63,11 @@ class ElementCopierScript {
             $this->addField( $def, $fieldname, $copiername );
         }
         $this->addControlButtons( $copiername );
+		if(defined('AMP_FORM_ELEMENT_COPIER_DELIMITER')) {
+			$delimiter = array( 'type' => 'static',
+							    'values' => AMP_FORM_ELEMENT_COPIER_DELIMITER);
+			$this->addField( $delimiter, 'delimiter', $copiername );
+		}
     }
 
     function addControlButtons( $copiername ) {
