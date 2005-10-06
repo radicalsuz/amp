@@ -20,6 +20,8 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
     function _register_fields_dynamic() {
         $this->_guideForm = &new VoterGuide_Form();
         $this->fields = $this->_guideForm->getFields();
+		$current = getdate();
+		$this->fields['election_date']['options']['minYear'] = $current['year'];
 
         $this->_copier = &ElementCopierScript::instance();
         $this->_copier->setFormName( $this->_copierName, $this->udm->name );
