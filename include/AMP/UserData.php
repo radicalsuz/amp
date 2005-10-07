@@ -140,6 +140,10 @@ class UserData {
         // Register methods for data access / manipulation.
         $this->_register_plugins();
 
+		// Allow for overriding, but don't set (yet)
+		if(!defined('AMP_UDM_FORM_INVALID_ERROR')) {
+			define('AMP_UDM_FORM_INVALID_ERROR', '');
+		}
     }
 
     ###############################
@@ -250,14 +254,43 @@ class UserData {
 
     }
 
+//apps can register error handlers and pass the error message as a parameter array
     function outputErrors () {
         if (!isset($this->errors)) return false;
         $output = "";
         foreach ($this->errors as $type => $message) {
-            $output .= $message."<BR>";
+			$handler =& $this->getErrorHandler($type);
+			if($handler) {
+				if(!is_array($message)) {
+					$message = array($message);
+				}
+				$message = call_user_func_array($handler, $message);
+			} 
+			if($message && is_string($message)) {
+				$output .= $this->formatError($message)."<BR>";
+			}
         }
         return $output;
     }
+
+	function formatError($error) {
+		if(function_exists('udm_format_error')) {
+			return udm_format_error($error);
+		}
+		return $error;
+	}
+
+	function &getErrorHandler($type) {
+		$callback =& $this->_error_handlers[$type];
+		if(isset($callback)) {
+			return $callback;
+		}
+		return false;
+	}
+
+	function setErrorHandler($type, $callback) {
+		$this->_error_handlers[$type] = $callback;
+	}
 
     ################################
     ### Public Utility Functions ###
