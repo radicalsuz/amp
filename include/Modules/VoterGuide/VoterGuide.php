@@ -13,6 +13,8 @@ class VoterGuide extends AMPSystem_Data_Item {
 
 	var $disallowedShortNameCharsRegex = '/\W/';
 
+	var $_custom_errors;
+
     function VoterGuide ( &$dbcon, $id=null ) {
         $this->_positionSet = &new VoterGuidePositionSet( $dbcon );
         $this->init( $dbcon, $id );
@@ -31,6 +33,14 @@ class VoterGuide extends AMPSystem_Data_Item {
 		return !($this->id);
 	}
 
+	function getCustomErrors() {
+		return $this->_custom_errors;
+	}
+
+	function addCustomError($field, $message) {
+		$this->_custom_errors[] = array('field' => $field, 'message' => $message);
+	}
+
     function save() {
 		//is this the first time we're saving this voterguide?
 		$today = time();
@@ -39,10 +49,9 @@ class VoterGuide extends AMPSystem_Data_Item {
 			$election = strtotime(DoTimeStamp($this->getItemDate(),'r'));
 		}
 		if($today - $election >= 0) {
-			$this->addError('That date has already passed!');
-			return false;
+			$this->addError('Date must be for an upcoming election');
+			$this->addCustomError('election_date', 'Please use a date in the future');
 		}
-
 		
 		if($this->isNew()) {
 			$short_name = $this->getShortName();
@@ -51,12 +60,19 @@ class VoterGuide extends AMPSystem_Data_Item {
 			}
 			if(!$this->isUniqueShortName($short_name)) {
 				$this->addError( $short_name.' already exists as a short name.  please try a different short name');
-				return false;
+				$this->addCustomError('short_name', $short_name.' already exists as a short name.  please try a different short name');
 			}
 			$this->mergeData(array('short_name' => $short_name));
 
-			$this->mergeData(array('bloc_id' => $this->createVoterBloc()));
+			if(!$this->getErrors()) {
+				$this->mergeData(array('bloc_id' => $this->createVoterBloc()));
+			}
 		}
+
+		if($this->getErrors()) {
+			return false;
+		}
+
         if ( !( $result=PARENT::save())) return $result;
 		$this->setRedirect();
         if ( $result = $this->_positionSet->reviseGuide( $this->getData( $this->_positions_key ), $this->id ) ) return $result;
