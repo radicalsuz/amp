@@ -284,7 +284,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
     function _build_preview () {
 
-        $udm_copy = $this->udm;
+        $udm_copy = &new UserDataInput( $this->dbcon, $this->udm->instance, true );
         $udm_copy->form = null;
         $udm_copy->showForm = true;
 

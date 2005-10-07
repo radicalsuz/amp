@@ -76,7 +76,7 @@
             color: #333333;
         }
 
-        form#login label[FOR="<?php print $this->getPasswordFieldname( );?>"] {
+        form#login label[FOR="<?php print $this->getFieldnamePassword( );?>"] {
             display: block;
             margin-top: 1.5ex;
         }

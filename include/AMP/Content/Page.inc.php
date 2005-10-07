@@ -642,7 +642,12 @@ class AMPContent_Page {
      */
     function initLocation() {
         if ( !isset( $this->section ) && $this->section) $this->setSection( $this->getSectionId() );
-        if ( $this->requiresLogin() ) require ( "AMP/Auth/UserRequire.inc.php" );
+        if ( $this->requiresLogin() ) {
+            require_once( 'AMP/Auth/Handler.inc.php');
+            $AMP_Authen_Handler = &new AMP_Authentication_Handler( AMP_Registry::getDbcon(), 'content' );
+            if ( !$AMP_Authen_Handler->is_authenticated() ) $AMP_Authen_Handler->do_login();
+
+        }
     }
 
     /**

@@ -21,11 +21,6 @@ if ( !$AMP_Authen_Handler->is_authenticated() ) {
     $AMP_Authen_Handler->do_login();
 }
 
-if ( isset( $_POST['AMPLogin_username'])){
-    unset ($_POST['AMPLogin_username']);
-    unset ($_POST['AMPLogin_password']);
-}
-
 if ( !empty($_POST) && AMP_SITE_MEMCACHE_ON ) {
     AMP_cacheFlush();
 }

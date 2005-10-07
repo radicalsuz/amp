@@ -198,6 +198,7 @@ class AMP_Authentication_Handler {
         */
         if ( $this->_loginType->validateUser( $username, $password )) {
             $this->user = $username;
+            $this->_loginType->clearAuthFields( );
             return true;
         }
 
