@@ -143,7 +143,7 @@ class AMPSystem_PermissionManager {
     }
 
     function readLevel(&$dbcon, $userLevel ) {
-        $sql = "SELECT id, perid FROM permission WHERE groupid = $userLevel";
+        $sql = "SELECT id, perid FROM permission WHERE groupid = ". $dbcon->qstr( $userLevel );
         if (!$valper = $dbcon->GetAll($sql)) return false;
         $this->clear();
         $this->userLevel = $userLevel;
@@ -154,7 +154,7 @@ class AMPSystem_PermissionManager {
     }
 
     function readUser(&$dbcon, $userID ) {
-        if (!$uservals = $dbcon->GetAll("Select id, system_allow_only, system_home from users where id=" . $userID)) return false;
+        if (!$uservals = $dbcon->GetAll("Select id, system_allow_only, system_home from users where id=" . $dbcon->qstr( $userID ))) return false;
         $this->setUser( $uservals );
     }
         

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title><?= $GLOBALS['SiteName'] ?> Administration</title>
+    <title><?php print AMP_SITE_NAME . $this->_loginScreenText; ?> </title>
     <style type="text/css">
 
         * {
@@ -76,7 +76,7 @@
             color: #333333;
         }
 
-        form#login label[FOR="AMPLogin_password"] {
+        form#login label[FOR="<?php print $this->getPasswordFieldname( );?>"] {
             display: block;
             margin-top: 1.5ex;
         }
@@ -97,28 +97,26 @@
 <div id="wrapper">
 
     <div id="header">
-        <h1><?= $GLOBALS['SiteName']; ?> Administrative Login</h1>
+        <h1><? print AMP_SITE_NAME . $this->_loginScreenText; ?> </h1>
     </div>
 
     <div id="content">
 
-        <?= (isset($this->message)) ? "<p class=\"login {$this->message_type}\">{$this->message}</p>" : '' ?>
+        <?php print (isset($this->_handler->message)) ? "<p class=\"login {$this->_handler->message_type}\">{$this->_handler->message}</p>" : '' ?>
 
-        <form id="login" method="post" action="<? PHP_SELF_QUERY()?>" />
+        <form id="login" method="post" action="<? print PHP_SELF_QUERY(); ?>" />
 
             <div id="formWrap">
-                <label for="AMPLogin_username">Username:</label> <input type="text" name="AMPLogin_username" />
-                <label for="AMPLogin_password">Password:</label> <input type="password" name="AMPLogin_password" />
+                <?php print $this->getFormFields();?>
 
                 <input type="submit" value="Login" id="login" />
-                <? echo $this->hidden_post_vars(); ?>
             </div>
 
         </form>
 
     </div>
 
-    <p class="loginNote">If you are having trouble logging in, please contact the <a href="mailto:<?= AMP_SITE_ADMIN ?>">site administrator</a>.</p>
+    <p class="loginNote"><?php print $this->getHelpLinks(); ?></p>
 
 </div>
 

@@ -13,6 +13,7 @@ $userLevel = $_SERVER['REMOTE_GROUP'];
 $AMP_Permission = & AMPSystem_PermissionManager::instance();
 $AMP_Permission->readLevel( $dbcon, $userLevel );
 if (!AMP_Authorized( AMP_PERMISSION_CONTENT_ACCESS)) header ("Location: index.php");
+if ( $dbcon->ErrorMsg() ) trigger_error( 'CURRENT MESSAGE:'.$dbcon->ErrorMsg( ));
 
 //ENSURE THAT THE current user is allowed to see this page
 $AMP_Permission->readUser( $dbcon, $_SERVER['REMOTE_USER'] );

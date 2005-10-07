@@ -25,8 +25,8 @@ class AMPSystem_LookupFactory {
         if (!isset($lookup->datatable)) return false;
         if (!isset($lookup->result_field)) return false;
         if ( ! ($data = $this->dbcon->CacheGetAssoc( $this->assembleSQL( $lookup ) ))) {
-            if ($this->dbcon->ErrorMsg()) 
-                trigger_error( sprintf( AMP_ERROR_LOOKUP_SQL_FAILED, get_class($lookup), $this->dbcon->ErrorMsg()) );
+            if ($dbError = $this->dbcon->ErrorMsg()) 
+                trigger_error( sprintf( AMP_ERROR_LOOKUP_SQL_FAILED, get_class($lookup), $dbError ) );
             return false;
         }
         return $data;
@@ -214,6 +214,7 @@ class AMPSystemLookup_Users extends AMPSystem_Lookup {
         $this->init();
     }
 }
+
 class AMPSystemLookup_Lists extends AMPSystem_Lookup {
     var $datatable = 'lists';
     var $result_field = 'name';
@@ -232,6 +233,49 @@ class AMPSystemLookup_Lists extends AMPSystem_Lookup {
         $this->init();
     }
 
+}
+
+class AMPSystemLookup_CellProviders {
+
+    function AMPSystemLookup_CellProviders( ) {
+        $this->init(); 
+    }
+
+    function init( ) {
+        $this->dataset = array( 
+
+            "airmessage" =>"airmessage",
+            "alltel" =>"alltel",
+            "ameritech/acs" => "ameritech/acs",
+            "att wireless" => "att wireless",
+
+            "bell mobility (canada)" => "bell mobility (canada)",
+            "cellular one" => "cellular one",
+            "cellular south" => "cellular south",
+            "cinbell" => "cinbell",
+            "cingular" => "cingular",
+            "fido (canada)" => "fido (canada)",
+
+            "manitoba telecom" => "manitoba telecom",
+            "metrocall pagers" => "metrocall pagers",
+            "metropcs" => "metropcs",
+            "midwest wireless" => "midwest wireless",
+            "nextel" => "nextel",
+            "qwest" => "qwest",
+            "rcc/unicel" => "rcc/unicel",
+            "rogers (canada)" => "rogers (canada)",
+            "simple freedom" => "simple freedom",
+
+            "skytell" => "skytell",
+            "sprint pcs" => "sprint pcs",
+            "suncom" => "suncom",
+            "t-mobile" => "t-mobile",
+            "telus/clearnet (canada)" => "telus/clearnet (canada)",
+            "US cellular" => "US cellular",
+            "verizon pagers" => "verizon pagers",
+            "verizon wireless" => "verizon wireless",
+            "virgin mobile usa" => "virgin mobile usa" );
+    }
 }
 
 

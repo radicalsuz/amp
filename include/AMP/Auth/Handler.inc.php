@@ -10,46 +10,34 @@ class AMP_Authentication_Handler {
     var $message_type = 'Error';
     var $message;
 
-    var $timeout = 43200;					// default timeout of 12 hours.
-
     var $dbcon;
+    var $_loginType;
 
     var $userid;
 
-    var $_cookie_name = 'AMPLoginCredentials';
-    var $_login_username_field = "AMPLogin_username";
-    var $_login_password_field = "AMPLogin_password";
-
-    function AMP_Authentication_Handler ( $dbcon, $timeout = null ) {
+    function AMP_Authentication_Handler ( $dbcon, $logintype_name = 'admin', $timeout = null ) {
 
         $this->dbcon = $dbcon;
 
-        if (is_int($timeout)) {
-            $this->timeout = $timeout;
+        $loginType = 'AMP_Authentication_LoginType_' . ucfirst( $logintype_name );
+        include_once( 'AMP/Auth/LoginType/' . ucfirst( $logintype_name) . '.inc.php' );
+
+        if ( class_exists( $loginType )) {
+            $this->_loginType = &new $loginType( $this );
+            $this->_loginType->setTimeout( $timeout );
         }
+
 
     }
 
     function is_authenticated () {
+        if ( !isset( $this->_loginType )) return false;
 
-        if ( $this->check_authen_credentials() ) {
+        if ( $this->_loginType->check_authen_credentials() ) {
            return $this->set_authen_tokens();
         } else {
            return false;
         }
-
-    }
-
-    function check_authen_credentials() {
-
-        // First check for an existing authentication token.
-        if (isset($_COOKIE[ $this->_cookie_name ]))
-            return $this->check_cookie($_COOKIE[ $this->_cookie_name ]);
-
-        if (isset($_REQUEST[ $this->_login_username_field ]) || isset($_SERVER['PHP_AUTH_USER']))
-            return $this->check_password();
-
-        return false;
 
     }
 
@@ -66,8 +54,6 @@ class AMP_Authentication_Handler {
     }
 
     function set_cookie () {
-
-        $dbcon = $this->dbcon;
 
         mt_srand((double)microtime()*1000000);
 
@@ -88,18 +74,18 @@ class AMP_Authentication_Handler {
         $hash = $this->make_secure_cookie( $c_user, $c_perm, $secret );
         $old_hash = $this->has_cookie;
 
-        if (setcookie( $this->_cookie_name, "$hash:$c_user:$c_perm:$c_userid" )) {
+        if (setcookie( $this->_loginType->getCookieName( ), "$hash:$c_user:$c_perm:$c_userid" )) {
 
             // Quick Hack, to be replaced by a more robust database versioning
             // system.
 
-            $tables = $dbcon->MetaTables();
+            $tables = $this->dbcon->MetaTables();
 
             if ( !array_search( 'users_sessions', $tables ) ) {
 
                 $sql = 'CREATE TABLE users_sessions ( id INT AUTO_INCREMENT PRIMARY KEY, hash char(40), INDEX(hash), secret char(32), last_time INT, INDEX(last_time), in_time INT )';
-                $dbcon->Execute( $sql ) or
-                    die( "Couldn't fixup database structure: " . $dbcon->ErrorMsg() );
+                $this->dbcon->Execute( $sql ) or
+                    die( "Couldn't fixup database structure: " . $this->dbcon->ErrorMsg() );
             }
 
             // By this time, we've validated the data, so we don't need to
@@ -112,7 +98,7 @@ class AMP_Authentication_Handler {
                 $sql = "INSERT INTO users_sessions (hash, secret, in_time, last_time) VALUES ('$hash', '$secret', '$now', '$now')";
 //            }
 
-            $dbcon->Execute( $sql );
+            $this->dbcon->Execute( $sql );
 
             return true;
         }
@@ -127,16 +113,11 @@ class AMP_Authentication_Handler {
 
     }
 
-    function check_cookie ( $cookie ) {
+    function check_cookie ( $raw_cookie ) {
 
-		$dbcon = $this->dbcon;
-
-        $cookie = explode( ':', $_COOKIE[ $this->_cookie_name ] );
+        $cookie = explode( ':', $raw_cookie );
 
         $cookie['hash'] = $cookie[0];
-        $cookie['user'] = $cookie[1];
-        $cookie['permission'] = $cookie[2];
-        $cookie['userid'] = $cookie[3];
 
         if ($cookie['hash']=='logout' || (isset($_REQUEST['logout']) && $_REQUEST['logout']=='logout')) {
             $this->invalidate_cookie('Successfully logged out.', 'OK');
@@ -145,8 +126,12 @@ class AMP_Authentication_Handler {
             return false;
         }
 
-        $cookie_sql = "SELECT hash, secret, last_time FROM users_sessions WHERE hash=" . $dbcon->qstr( $cookie['hash'] );
-        $authdata = $dbcon->GetRow( $cookie_sql );
+        $cookie['user'] = $cookie[1];
+        $cookie['permission'] = $cookie[2];
+        $cookie['userid'] = $cookie[3];
+
+        $cookie_sql = "SELECT hash, secret, last_time FROM users_sessions WHERE hash=" . $this->dbcon->qstr( $cookie['hash'] );
+        $authdata = $this->dbcon->GetRow( $cookie_sql );
 
         if ($authdata) {
 
@@ -176,7 +161,7 @@ class AMP_Authentication_Handler {
 
     function cookie_still_valid ( $last_seen ) {
 
-        $expire_time = time() - $this->timeout;
+        $expire_time = time() - $this->_loginType->getTimeout( );
         
         if ( $expire_time < $last_seen ) return true;
 
@@ -190,31 +175,29 @@ class AMP_Authentication_Handler {
         $this->message = $message;
 
         $c_domain = preg_replace( "/([^\.]*)\.([^\.]*)$/", "/.\$1.\$2/", $_SERVER['SERVER_NAME'] );
-        return setcookie( $this->_cookie_name, '*', time() - 86400 );
+        return setcookie( $this->_loginType->getCookieName(), '*', time() - 86400 );
 
     }
 
     function check_password () {
 
-        $dbcon = $this->dbcon;
-
         if (isset($_REQUEST['logout']) && $_REQUEST['logout']=='logout') $this->do_logout();
-
-        if (isset($_REQUEST[ $this->_login_username_field ])) {
-            $username = $_REQUEST[ $this->_login_username_field ];
-            $password = $_REQUEST[ $this->_login_password_field ];
+        if ( $username = $this->_loginType->submittedUser() ) {
+             $password = $this->_loginType->submittedPassword();
         } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
             $username = $_SERVER['PHP_AUTH_USER'];
             $password = $_SERVER['PHP_AUTH_PW'];
         }
-
-        $user_sql = "SELECT id, name, password, permission FROM users WHERE name=" . $dbcon->qstr( $username ) . " ORDER BY permission DESC";
-        $authdata = $dbcon->GetRow( $user_sql );
-
+        /*
         if ($this->validate_password( $password, $authdata['password'] )) {
             $this->user = $username;
             $this->permission = $authdata['permission'];
             $this->userid = $authdata['id'];
+            return true;
+        }
+        */
+        if ( $this->_loginType->validateUser( $username, $password )) {
+            $this->user = $username;
             return true;
         }
 
@@ -261,7 +244,7 @@ class AMP_Authentication_Handler {
 
         } else {
 
-            include( 'AMP/Auth/LoginScreen.inc.php' );
+            $this->_loginType->showLoginScreen( );
             exit;
 
         }
@@ -281,6 +264,15 @@ class AMP_Authentication_Handler {
         }
 
     }
+
+    function setPermissionLevel( $level ){
+        $this->permission = $level;
+    }
+
+    function setUserId( $id ) {
+        $this->userid = $id;
+    }
+    /*
     function hidden_post_vars() {
         if ($post_vars=$this->collect_post_vars()) {
             foreach ($post_vars as $key=>$value) {
@@ -308,5 +300,6 @@ class AMP_Authentication_Handler {
         }
         return false;
     }
+    */
 }
 ?>
