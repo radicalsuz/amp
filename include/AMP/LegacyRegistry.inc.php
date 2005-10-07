@@ -76,6 +76,7 @@ define('AMP_DISPLAYMODE_DEBUG', (isset($_GET['debug']) && $_GET['debug']));
 define('AMP_DISPLAYMODE_DEBUG_PLUGINS', (isset($_GET['debug_plugins']) && $_GET['debug_plugins']));
 define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups']) && $_GET['debug_lookups']));
 define('AMP_DISPLAYMODE_DEBUG_NAVS', (isset($_GET['debug_navs']) && $_GET['debug_navs']));
+define( 'AMP_TEXT_LOGIN_HELP_ADMIN', 'If you are having trouble logging in, please contact the <a href="mailto:%s">site administrator</a>.' );
 
 if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
 if (!defined( 'AMP_DBTABLE_BLAST_LISTS')) define ( 'AMP_DBTABLE_BLAST_LISTS', false );

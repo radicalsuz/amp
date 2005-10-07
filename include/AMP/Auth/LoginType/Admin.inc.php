@@ -1,6 +1,5 @@
 <?php
 
-define( 'AMP_TEXT_LOGIN_HELP_ADMIN', 'If you are having trouble logging in, please contact the <a href="mailto:%s">site administrator</a>.' );
 require_once( 'AMP/Auth/LoginType.php');
 
 class AMP_Authentication_LoginType_Admin extends AMP_Authentication_LoginType {

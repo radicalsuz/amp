@@ -3,7 +3,7 @@ if ( !defined( 'AMP_FORM_ID_CONTENT_LOGIN')) define( 'AMP_FORM_ID_CONTENT_LOGIN'
 require_once( 'AMP/Auth/LoginType.php');
 
 class AMP_Authentication_LoginType_Content extends AMP_Authentication_LoginType {
-    var $_cookie_name = "AMPUserLoginCredentials";
+    var $_cookie_name = "AMPContentLoginCredentials";
     var $_loginScreenText = ' User Login';
 
     function AMP_Authentication_LoginType_Content ( &$handler ){

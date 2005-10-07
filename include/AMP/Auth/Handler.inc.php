@@ -54,11 +54,7 @@ class AMP_Authentication_Handler {
     }
 
     function set_cookie () {
-
-        mt_srand((double)microtime()*1000000);
-
-        $now = time();
-        $secret = md5(mt_rand());
+        $secret = $this->get_seed();
 
         $c_user   = $this->user;
         $c_userid = $this->userid;
@@ -75,36 +71,37 @@ class AMP_Authentication_Handler {
         $old_hash = $this->has_cookie;
 
         if (setcookie( $this->_loginType->getCookieName( ), "$hash:$c_user:$c_perm:$c_userid" )) {
-
-            // Quick Hack, to be replaced by a more robust database versioning
-            // system.
-
-            $tables = $this->dbcon->MetaTables();
-
-            if ( !array_search( 'users_sessions', $tables ) ) {
-
-                $sql = 'CREATE TABLE users_sessions ( id INT AUTO_INCREMENT PRIMARY KEY, hash char(40), INDEX(hash), secret char(32), last_time INT, INDEX(last_time), in_time INT )';
-                $this->dbcon->Execute( $sql ) or
-                    die( "Couldn't fixup database structure: " . $this->dbcon->ErrorMsg() );
-            }
-
-            // By this time, we've validated the data, so we don't need to
-            // escape it.
-
-/*
-            if ($old_hash) {
-                $sql = "UPDATE users_sessions SET hash='$hash', secret='$secret', last_time='$now' WHERE hash='$old_hash'";
-            } else { */
-                $sql = "INSERT INTO users_sessions (hash, secret, in_time, last_time) VALUES ('$hash', '$secret', '$now', '$now')";
-//            }
-
-            $this->dbcon->Execute( $sql );
-
+            $this->save_session( $hash, $secret );
             return true;
         }
 
         return false;
 
+    }
+
+    function get_seed ( ) {
+        mt_srand((double)microtime()*1000000);
+        return md5(mt_rand());
+
+    }
+
+    function save_session(  $hash, $secret ) {
+        // Quick Hack, to be replaced by a more robust database versioning
+        // system.
+        $now = time();
+
+        $tables = $this->dbcon->MetaTables();
+
+        if ( !array_search( 'users_sessions', $tables ) ) {
+
+            $sql = 'CREATE TABLE users_sessions ( id INT AUTO_INCREMENT PRIMARY KEY, hash char(40), INDEX(hash), secret char(32), last_time INT, INDEX(last_time), in_time INT )';
+            $this->dbcon->Execute( $sql ) or
+                die( "Couldn't fixup database structure: " . $this->dbcon->ErrorMsg() );
+        }
+
+        $sql = "INSERT INTO users_sessions (hash, secret, in_time, last_time) VALUES ('$hash', '$secret', '$now', '$now')";
+
+        $this->dbcon->Execute( $sql );
     }
 
     function make_secure_cookie ( $user, $permission, $secret ) {
@@ -188,14 +185,7 @@ class AMP_Authentication_Handler {
             $username = $_SERVER['PHP_AUTH_USER'];
             $password = $_SERVER['PHP_AUTH_PW'];
         }
-        /*
-        if ($this->validate_password( $password, $authdata['password'] )) {
-            $this->user = $username;
-            $this->permission = $authdata['permission'];
-            $this->userid = $authdata['id'];
-            return true;
-        }
-        */
+
         if ( $this->_loginType->validateUser( $username, $password )) {
             $this->user = $username;
             $this->_loginType->clearAuthFields( );
