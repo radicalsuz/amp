@@ -83,8 +83,27 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 		}
        
         $this->udm->errorMessage( $voterGuide->getErrors() );
+
+		$customErrors = $voterGuide->getCustomErrors();
+		if($customErrors) {
+			foreach($customErrors as $error) {
+				$field = $this->_field_prefix.'_'.$error['field'];
+				$this->udm->setErrorHandler($field, array(&$this->udm->form, 'setElementError'));
+				$this->udm->addError($field, array($field,$error['message']));
+//				ok, so it turns out this is overkill right now,
+//				but i really like this customErrorHandler, so there.
+//				also, now all error output is handled in the same place
+//				$this->customErrorHandler($error[0], $error[1]);
+			}
+		}
         return false;
 
     }
+
+/*
+	function customErrorHandler($field, $message) {
+		$this->udm->form->setElementError($this->_field_prefix.'_'.$field, $message);
+	}
+*/
 }
 ?>
