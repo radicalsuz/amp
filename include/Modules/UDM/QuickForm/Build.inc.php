@@ -56,7 +56,10 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
         }
 
 		if ( $this->udm->submitted ) {
-			if ( !$formEngine->validate() ) return false;
+			if ( !$formEngine->validate() ) {
+				$this->udm->addError('AMP_UDM_FORM_INVALID', AMP_UDM_FORM_INVALID_ERROR);
+				return false;
+			}
 		}
         $this->_formEngine = &$formEngine;
 
