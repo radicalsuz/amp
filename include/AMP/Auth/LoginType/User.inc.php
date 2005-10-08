@@ -29,7 +29,7 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
     }
 
     function validateUser( $username, $password ){
-        $user_sql = "SELECT id, Email, password FROM userdata WHERE Email=" . $this->_dbcon->qstr( $username ); 
+        $user_sql = "SELECT id, Email, password FROM userdata WHERE Email=" . $this->_dbcon->qstr( $username ) . ' AND !isnull( password )'; 
         $authdata = $this->_dbcon->GetRow( $user_sql );
 
         if ($this->_handler->validate_password( $password, $authdata['password'] )) {
