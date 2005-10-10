@@ -1,6 +1,9 @@
 <?php
 require_once( 'unit_tests/config.php' );
 
+define('DIA_API_ORGCODE', 'pLxGeID1N0t4mAsoHTRA3CqPsfU/EsU8EuvTaUFa/wwDzkADR5zl1g==');
+define('DIA_API_ORGANIZATION_KEY', 315);
+
 require_once( 'DIA/API.php' );
 
 require_once( 'XML/Unserializer.php' );
@@ -8,7 +11,6 @@ require_once( 'XML/Unserializer.php' );
 class TestDIA_API extends UnitTestCase {
 
 	var $api;
-	var $orgKey = 'pLxGeID1N0t4mAsoHTRA3CqPsfU/EsU8EuvTaUFa/wwDzkADR5zl1g==';
 
     function TestDIA_API () {
         $this->UnitTestCase('DIA API Test');
@@ -34,6 +36,51 @@ class TestDIA_API extends UnitTestCase {
 //		$this->dump($results);
 	}
 
+	function testGroupExists() {
+		$results = $this->api->get('groups', array('where' => 'Group_Name="testmonday0509"',
+													'column' => 'groups_KEY'));
+		$xmlparser =& new XML_Unserializer();
+		$status = $xmlparser->unserialize($results);
+		$this->dump($xmlparser->getUnserializedData());
+	}
+
+	function testGroupNoExists() {
+		$results = $this->api->get('groups', array('where' => 'Group_Name="doesnotexists123"'));
+		$xmlparser =& new XML_Unserializer();
+		$status = $xmlparser->unserialize($results);
+		$this->dump($xmlparser->getUnserializedData());
+	}
+		
+/*
+	function testGetLimit() {
+//		$big_bloc_xml = $this->api->get('supporter_groups', array('where' => 'groups_KEY=22291'));
+		$big_bloc_xml = $this->api->get('supporter_groups', array('where' => 'groups_KEY=24222'));
+//		$big_bloc_xml = $this->api->get('supporter_groups', array('where' => 'groups_KEY=24917'));
+		$xmlparser =& new XML_Unserializer();
+		$status = $xmlparser->unserialize($big_bloc_xml);
+		$big_bloc = $xmlparser->getUnserializedData();
+
+		foreach ($big_bloc['supporter_groups']['item'] as $item) {
+			if($key = intval($item['supporter_KEY'])) {
+				$supporters[] = $key;
+			}
+		}
+print "count: ".count($supporters);
+
+//		for($subset = 100; $subset += 100; $subset < count($supporters)) {
+set_time_limit(200);
+			$little_bloc_xml = $this->api->get('supporter', array('key' => $supporters));
+			$parser =& new XML_Unserializer();
+			$status = $parser->unserialize($little_bloc_xml);
+			$this->assertFalse(PEAR::isError($status));
+//$this->dump($parser->getUnserializedData());
+//			if(PEAR::isError($status)) break;
+//		}
+	}
+*/
+
+/*
+works.  trust me.
 	function testProcessSupporter() {
 		$now = date('mdHi');
 		$data = array("First_Name" => "TestAMP".$now,
@@ -83,6 +130,7 @@ class TestDIA_API extends UnitTestCase {
 													  'simple' => true));
 		$this->dump($result);
 	}
+*/
 }
 
 UnitRunner_instantiate( __FILE__ );
