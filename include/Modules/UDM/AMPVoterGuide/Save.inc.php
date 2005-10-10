@@ -15,6 +15,9 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
     function UserDataPlugin_Save_AMPVoterGuide ( &$udm, $plugin_instance=null ) {
         $this->init ( $udm, $plugin_instance );
+		$callback = array('callback' => array(&$this, 'invalidForm'));
+        $udm->addFormCallback('AMP_UDM_FORM_INVALID', $callback);
+		$this->setValidationRules();
     }
 
     function _register_fields_dynamic() {
@@ -85,6 +88,15 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         $this->udm->errorMessage( $voterGuide->getErrors() );
 
 		$customErrors = $voterGuide->getCustomErrors();
+
+		if($voterGuide->getErrors || $customErrors) {
+			if($_FILES[$this->_field_prefix.'_'.'filelink']) {
+				$customErrors[] = array('field' => 'filelink', 'message' => 'You will need to select your file again');
+			}
+			if($_POST[$this->_field_prefix.'_'.'filelink']) {
+				$customErrors[] = array('field' => 'picture', 'message' => 'You will need to select your file again');
+			}
+		}
 		if($customErrors) {
 			foreach($customErrors as $error) {
 				$field = $this->_field_prefix.'_'.$error['field'];
@@ -96,10 +108,20 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 //				$this->customErrorHandler($error[0], $error[1]);
 			}
 		}
+
         return false;
 
     }
 
+    function invalidForm() {
+		if($_FILES[$this->_field_prefix.'_'.'filelink']['name']) {
+			$this->udm->form->setElementError($this->_field_prefix.'_'.'filelink', 'You will need to select your file again');
+		}
+		if($_FILES[$this->_field_prefix.'_'.'picture']['name']) {
+			$this->udm->form->setElementError($this->_field_prefix.'_'.'picture', 'You will need to select your file again');
+		}
+    } 
+ 
 /*
 	function customErrorHandler($field, $message) {
 		$this->udm->form->setElementError($this->_field_prefix.'_'.$field, $message);
