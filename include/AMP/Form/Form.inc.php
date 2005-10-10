@@ -135,7 +135,7 @@
     function output( $include_javascript = true ) {
         $form_footer = "";
         $script = "";
-        if ($include_javascript) $script = $this->getJavascript();
+        if ( $include_javascript ) $script = $this->getJavascript();
         if (method_exists( $this, '_formFooter' )) $form_footer = $this->_formFooter();
         return  $this->form->display() . $form_footer . $script;
     }

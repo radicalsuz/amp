@@ -2,55 +2,53 @@
 require_once("AMP/Menu/Menu.inc.php");
 require_once("AMP/Menu/FWmenuScript.inc.php");
 
-/* * * * * * * * *
- * AMP_Menu_FWTable
- * 
- * use the fw_menu.js script
- * anchored in a table
- * to produce a dynamic menu
- *
- * Author: austin@radicaldesigns.org
- *
- * Date: 6/1/2005
- *
- * * */
 
  define( 'AMP_MENU_ACTIVATION_LOCATION_RIGHT', 'right' );
  define( 'AMP_MENU_ACTIVATION_LOCATION_BELOW', 'below' );
 
+/**
+ * Creates a dynamic javascript dropdown menu 
+ * 
+ * @uses AMP_Menu
+ * @package Menu 
+ * @version 3.4.8
+ * @copyright 2005 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org> 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 class AMP_Menu_FWTable extends AMP_Menu {
 
-		//Script set is an additional menu hierarchy object
-		var $script_set;
+    //Script set is an additional menu hierarchy object
+    var $script_set;
 
-        var $_baseComponentHTML = 'AMP_MenuComponent_Table';
-        var $_baseComponentScript = 'AMP_MenuComponent_FWmenuScriptItem';
+    var $_baseComponentHTML = 'AMP_MenuComponent_Table';
+    var $_baseComponentScript = 'AMP_MenuComponent_FWmenuScriptItem';
 
-        var $_activationMethod = 'MouseOver';
-        var $_activationLocation = AMP_MENU_ACTIVATION_LOCATION_RIGHT;
+    var $_activationMethod = 'MouseOver';
+    var $_activationLocation = AMP_MENU_ACTIVATION_LOCATION_RIGHT;
 
-		function AMP_Menu_FWTable( &$menu_array, $name="menu" ) {
+    function AMP_Menu_FWTable( &$menu_array, $name="menu" ) {
 
-				$this->init( $menu_array, $name );
-		}
+        $this->init( $menu_array, $name );
+    }
 
-		function &buildMenu ( &$menu_array ) {
+    function &buildMenu ( &$menu_array ) {
 
-				//First build the table
-                $component = $this->_baseComponentHTML;
-				$root_menu = new $component( $this, array('id'=>$this->name, 'label'=>'', 'href'=>'') );
+            //First build the table
+            $component = $this->_baseComponentHTML;
+            $root_menu = &new $component( $this, array('id'=>$this->name, 'label'=>'', 'href'=>'') );
 
-				// the build call is not recursive, the table is only an anchor
-				$root_menu->buildMenuSub ( $menu_array, false );
+            // the build call is not recursive, the table is only an anchor
+            $root_menu->buildMenuSub ( $menu_array, false );
 
-				$lastChild = end($root_menu->getChildren());
-				$this->script_set = & new AMP_MenuComponent_FWmenuScriptHeader( $this, array('id'=>$this->name, 'label'=>$lastChild->id, 'href'=>'') ); 
-                $this->script_set->setChildComponent( $this->_baseComponentScript );
+            $lastChild = end($root_menu->getChildren());
+            $this->script_set = & new AMP_MenuComponent_FWmenuScriptHeader( $this, array('id'=>$this->name, 'label'=>$lastChild->id, 'href'=>'') ); 
+            $this->script_set->setChildComponent( $this->_baseComponentScript );
 
-				$this->script_set->buildMenuSub ( $menu_array );
+            $this->script_set->buildMenuSub ( $menu_array );
 
-				return $root_menu;
-		}
+            return $root_menu;
+    }
 
 		function output($item_name=null) {
 

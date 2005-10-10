@@ -36,6 +36,7 @@ class AMPForm_XML extends AMPForm {
 		if (isset($this->fieldFile)) return $this->fieldFile;
 		$map = &ComponentLookup::instance( get_class($this));
 		if (!$map) return false;
+        
 		return $map->getPath( $this->xml_pathtype );
 	}
 	

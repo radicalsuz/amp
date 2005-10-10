@@ -9,6 +9,8 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
     var $nav_name = "content";
 
     var $paths = array(
+        'search_user' => 'AMP/Content/Article/Search/User/Form.inc.php',
+        'search_fields_user' => 'AMP/Content/Article/Search/User/Fields.xml',
         'search' => 'AMP/Content/Article/Search/Form.inc.php',
         'search_fields' => 'AMP/Content/Article/Search/Fields.xml',
         'source' => 'AMP/Content/Article.inc.php',
@@ -17,6 +19,7 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'classlinks' => 'AMP/Content/Class/Links.inc.php' );
 
     var $components = array (
+        'search_user' => 'ContentSearch_Form_User',
         'search' => 'ContentSearch_Form',
         'menu' => 'SectionMenu',
         'classlinks' => 'Class_Links',

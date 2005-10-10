@@ -1,6 +1,7 @@
 <?php
 
 require_once ( 'AMP/Form/SearchForm.inc.php' );
+require_once ( 'AMP/Content/Article/ComponentMap.inc.php');
 
 class ContentSearch_Form extends AMPSearchForm {
 

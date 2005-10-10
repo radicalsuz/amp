@@ -88,6 +88,16 @@ class SectionContents_Manager {
         return $display->execute();
     }
 
+    function getRelatedArticles( $section_id ) {
+        require_once( 'AMP/Content/Section/RelatedSet.inc.php' );
+        if ( !isset( $section_id )) return false;
+
+        $related = &new SectionRelatedSet( AMP_Registry::getDbcon(), $section_id );
+        $relatedContent = &$related->getLookup( 'typeid' );
+        if (empty( $relatedContent )) return false;
+
+        return "id in (" . join( ", ", array_keys( $relatedContent ) ). ")";
+    }
 
 }
 ?>
