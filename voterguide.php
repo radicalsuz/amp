@@ -8,6 +8,7 @@ require_once( "AMP/UserData/Input.inc.php" );
 require_once( "AMP/Content/Page.inc.php" );
 require_once( "AMP/Content/Map.inc.php" );
 require_once( "Modules/VoterGuide/ComponentMap.inc.php" );
+require_once( "Modules/VoterGuide/Lookups.inc.php" );
 
 
 require_once( "Modules/VoterGuide/VoterGuide.php" );
@@ -17,8 +18,49 @@ require_once( "Modules/VoterGuide/SetDisplay.inc.php" );
 $currentPage = &AMPContent_Page::instance();
 
 if ( isset( $_GET['id']) && $_GET['id']) {
-    $guide = &new VoterGuide( $dbcon, $_GET['id']);
-    $currentPage->contentManager->addDisplay( $guide->getDisplay() );
+	$guide = &new VoterGuide( $dbcon, $_GET['id']);
+
+	if ( isset( $_GET['action']) && $_GET['action'] == 'edit' ) {
+		$udm = &new UserDataInput( $dbcon, AMP_FORM_ID_VOTERGUIDES );
+		 
+		$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+		if(!$uid && $_REQUEST['id']) {
+			$lookup = AMPSystem_Lookup::instance('OwnerByGuideID');
+			$uid = $lookup[$_REQUEST['id']];
+		}
+		$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
+
+		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
+		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
+		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
+	    if ( $uid && $auth && !$sub ) {
+			$udm->submitted = false;
+			$udm->getUser( $uid ); 
+			$udm->registerPlugin('AMPVoterGuide','Save');
+	    }
+		$mod_id = $udm->modTemplateID;
+		AMP_directDisplay( $udm->output( ));
+
+	} elseif ( isset( $_GET['action']) && $_GET['action'] == 'download' ) {
+//		print "Please be patient while we build your voter bloc";
+		ampredirect('voterbloc.php?id='.$guide->id);
+		
+	} elseif ( isset( $_GET['action']) && $_GET['action'] == 'join' ) {
+		$_REQUEST['guide'] = $_GET['id'];
+		$udm = &new UserDataInput( $dbcon, AMP_FORM_ID_VOTERBLOC );
+		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
+		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
+		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
+		if ( $uid && $auth && !$sub ) {
+			$udm->submitted = false;
+			$udm->getUser( $uid ); 
+		}
+		$mod_id = $udm->modTemplateID;
+		AMP_directDisplay( $udm->output( ));
+	} else {
+
+		$currentPage->contentManager->addDisplay( $guide->getDisplay() );
+	}
 
 } elseif ( isset( $_GET['action']) && $_GET['action'] == 'new' ) {
     $udm = &new UserDataInput( $dbcon, AMP_FORM_ID_VOTERGUIDES );
