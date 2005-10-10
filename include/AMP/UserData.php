@@ -70,6 +70,9 @@ class UserData {
     // flag to enable / disable display of form to user.
     var $showForm;
 
+	// form callbacks for form post processing
+	var $_form_callbacks;
+
     // Flag to indicate administrator access.
     var $admin;
 
@@ -530,6 +533,22 @@ class UserData {
         return false;
      }
 
+	function formInvalidCallback() {
+		if(defined('AMP_UDM_FORM_INVALID_ERROR')) {
+			$this->addError('AMP_UDM_FORM_INVALID', AMP_UDM_FORM_INVALID_ERROR);
+		}
+		foreach($this->getFormCallbacks('AMP_UDM_FORM_INVALID') as $callback) {
+			call_user_func_array($callback['callback'], $this);
+		}
+	}
+
+	function getFormCallbacks($type) {
+		return $this->_form_callbacks[$type];
+	}
+
+	function addFormCallback($type, $callback) {
+		$this->_form_callbacks[$type][] = $callback;
+	}
 
     #############################
     ### Public Plugin Methods ###
