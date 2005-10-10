@@ -1,1 +1,1 @@
-alter table userdata_fields add column password varchar(40);
+alter table userdata add column password varchar(40);
