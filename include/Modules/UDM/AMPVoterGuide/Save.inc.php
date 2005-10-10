@@ -17,7 +17,6 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         $this->init ( $udm, $plugin_instance );
 		$callback = array('callback' => array(&$this, 'invalidForm'));
         $udm->addFormCallback('AMP_UDM_FORM_INVALID', $callback);
-		$this->setValidationRules();
     }
 
     function _register_fields_dynamic() {
