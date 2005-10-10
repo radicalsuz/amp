@@ -26,6 +26,6 @@ CREATE TABLE IF NOT EXISTS `voterguides` (
   `filelink` varchar( 60 ) NULL,
   `picture` varchar( 60 ) NULL,
   `bloc_id` int( 11 ) NULL,
-  FULLTEXT ( name, city, blurb, footer, redirect_name, affiliation ),
+  FULLTEXT ( name, city, blurb, footer, short_name, affiliation ),
   PRIMARY KEY (id)
 )
