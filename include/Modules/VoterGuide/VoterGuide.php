@@ -5,6 +5,10 @@ define(  'AMP_CONTENT_URL_VOTERGUIDE', 'voterguide.php');
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'Modules/VoterGuide/Position/Set.inc.php');
 
+
+require_once( 'DIA/API.php' );
+require_once( 'XML/Unserializer.php' );
+
 class VoterGuide extends AMPSystem_Data_Item {
 
     var $datatable = 'voterguides';
@@ -58,7 +62,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 			if( !$short_name ) {
 				$short_name = $this->generateShortName($this->getName());
 			}
-			if(!$this->isUniqueShortName($short_name)) {
+			if(!$this->isUniqueShortName($short_name, true)) {
 				$this->addError( $short_name.' already exists as a short name.  please try a different short name');
 				$this->addCustomError('short_name', $short_name.' already exists as a short name.  please try a different short name');
 			}
@@ -104,12 +108,16 @@ class VoterGuide extends AMPSystem_Data_Item {
 		return $string;
 	}
 
-	function isUniqueShortName($string) {
-		return !$this->existsValue('short_name', $string);
+	function isUniqueShortName($string, $check_external = false) {
+		$isUnique = !$this->existsValue('short_name', $string);
+		if($check_external) {
+			$api =& DIA_API::create();
+			$isUnique = $isUnique && !$this->getBlocGroupIDByName($string);
+		}
+		return $isUnique;
 	}
 
     function createVoterBloc() {
-        require_once( 'DIA/API.php' );
         $api =& DIA_API::create();
         $group = array('Group_Name' => $this->getShortName(),
                         'external_ID' => 'AMP_'.$this->id,
@@ -124,7 +132,6 @@ class VoterGuide extends AMPSystem_Data_Item {
 
 //this should be just organizer, use getBlocID()
     function setBlocOrganizer($bloc_id, $organizer_id) {
-        require_once( 'DIA/API.php' );
         $api =& DIA_API::create();
         return $api->process('supporter_groups', array('supporter_KEY' => $organizer_id,
                                                       'groups_KEY' => $bloc_id,
@@ -132,13 +139,26 @@ class VoterGuide extends AMPSystem_Data_Item {
     }
 
 	function addVoterToBloc($voter_id, $bloc_id) {
-        require_once( 'DIA/API.php' );
         $api =& DIA_API::create();
         $api->process('supporter_groups', array('supporter_KEY' => $voter_id,
                                                       'groups_KEY' => $bloc_id));
 		//no meaningful info returned (0 if already exists, supporter_groups key if new)
 		return true;
 	}
+
+	function getBlocGroupIDByName($name) {
+        $api =& DIA_API::create();
+		$results = $api->get('groups', array('where' => 'Group_Name="'.$name.'"',
+											 'column' => 'groups_key'));
+
+        $xmlparser =& new XML_Unserializer();
+        $status = $xmlparser->unserialize($results);
+        $group_data = $xmlparser->getUnserializedData();
+		if($key = $group_data['groups']['item']['key']) {
+			return $key;
+		}
+		return false;
+    }
 
     function &getDisplay( ) {
         require_once( 'Modules/VoterGuide/Display.inc.php');
