@@ -851,4 +851,18 @@ if (  !function_exists(  'AMP_clearSpecialChars')) {
     }
 }
 
+if (!function_exists('amp_writecsv')) {
+	function amp_writecsv($rows, $delimiter = ',', $enclosure = '"') {
+		foreach($rows as $row) {
+			$strings = array();	
+			foreach($row as $field) {
+				$strings[] = $enclosure.str_replace('"','""',$field).$enclosure;
+			}
+			$lines[] = join($delimiter, $strings);
+		}
+		return join("\n", $lines);
+	}
+}
+			
+
 ?>
