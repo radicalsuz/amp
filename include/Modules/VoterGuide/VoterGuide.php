@@ -1,6 +1,7 @@
 <?php
 
 define(  'AMP_CONTENT_URL_VOTERGUIDE', 'voterguide.php');
+define('AMP_VOTERGUIDE_UNSUBSCRIBE', 'id=%d&action=unsubscribe&Email=[[Email]]');
 
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'Modules/VoterGuide/Position/Set.inc.php');
@@ -24,6 +25,13 @@ class VoterGuide extends AMPSystem_Data_Item {
         $this->init( $dbcon, $id );
         $this->_addAllowedKey( $this->_positions_key );
     }
+
+	function init( &$dbcon, $id=null ) {
+		parent::init($dbcon, $id);
+		if(!defined('AMP_VOTERGUIDE_UNSUBSCRIBE')) {
+			define('AMP_VOTERGUIDE_UNSUBSCRIBE', false);
+		}
+	}
 
     function readData( $guide_id ) {
         if ( !( $result = PARENT::readData( $guide_id ))) return $result;
@@ -126,10 +134,20 @@ class VoterGuide extends AMPSystem_Data_Item {
         if(defined('VOTERGUIDE_DIA_GROUP_PARENT_KEY')) {
             $group['parent_KEY'] = VOTERGUIDE_DIA_GROUP_PARENT_KEY;
         }
-        $group_id = $api->addGroup( $group );
-        return trim($group_id);
+        $group_id = trim($api->addGroup( $group ));
+
+//		$this->addUnsubscribeFooter($group_id);
+		return $group_id;
     }
 
+	function addUnsubscribeFooter($group_id) {
+        $api =& DIA_API::create();
+		$group = array('key' => $group_id,
+					  'Append_Footer' => sprintf(AMP_Url_AddVars(AMP_CONTENT_URL_VOTERGUIDE, AMP_VOTERGUIDE_UNSUBSCRIBE), $group_id));
+		$id = $api->process('groups', $group);
+		return $id; 
+	}
+		
 //this should be just organizer, use getBlocID()
     function setBlocOrganizer($bloc_id, $organizer_id) {
         $api =& DIA_API::create();
