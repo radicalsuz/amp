@@ -19,13 +19,13 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
     }
 
 	function init( $name ) {
-		if(!defined('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON', 'Add New Endorsement')) {
+		if(!defined('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON')) {
 			define('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON', 'Add New Endorsement');
 		}
-		if(!defined('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT', 'Select One')) {
+		if(!defined('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT')) {
 			define('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT', 'Select One');
 		}
-		if(defined('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON', 'Remove This Endorsement')) {
+		if(defined('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON')) {
 			define('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON', 'Remove This Endorsement');
 		}
 		$this->defineSubmit('save', 'Submit My Voter Guide');
