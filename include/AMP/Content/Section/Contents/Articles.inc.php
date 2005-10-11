@@ -66,5 +66,9 @@ class SectionContentSource_Articles extends SectionContentSource {
         return true;
     }
 
+    function addFilter( $filter_name ){
+        $this->_source->addFilter( $filter_name );
+    }
+
 }
 ?>

@@ -77,7 +77,9 @@ if ($currentPage->isList( AMP_CONTENT_LISTTYPE_CLASS )
  */
 if ($listType) {
     $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
+    $filter = ( isset( $_GET['filter']) && $_GET['filter'])? $_GET['filter'] : false;
     $display = &$currentPage->getListDisplay();
+    if ( $filter ) $display->addFilter( $filter );
     if ( method_exists( $display, 'setListIntro') ) $display->setListIntro( $show_intro );
 } 
 

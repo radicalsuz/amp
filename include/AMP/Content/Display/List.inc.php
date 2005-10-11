@@ -61,6 +61,13 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     }
 
+    function addFilter( $filter_name ) {
+        if ( method_exists( $this->_source, 'addFilter')) {
+            return $this->_source->addFilter( $filter_name );
+        }
+        return false;
+    }
+
     function getSourceArray() {
         return $this->_source->getArray();
     }

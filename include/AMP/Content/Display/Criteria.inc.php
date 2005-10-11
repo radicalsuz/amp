@@ -21,6 +21,9 @@ class AMPContent_DisplayCriteria {
     }
 
     function cleanStatus( &$contentSource ) {
+        if ( method_exists( $contentSource, 'addCriteriaStatus')) {
+            return $contentSource->addCriteriaStatus( AMP_CONTENT_STATUS_LIVE );
+        }
         $contentSource->addCriteria( $this->_getStatusCriteria() );
     }
 

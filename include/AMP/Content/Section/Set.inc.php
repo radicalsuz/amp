@@ -13,6 +13,11 @@ class SectionSet extends AMPSystem_Data_Set {
         return $this->instantiateItems( $this->getArray() );
     }
 
+    function addCriteriaStatus( $value ){
+        if ( !( $value || $value==='0')) return false;
+        $this->addCriteria( 'usenav='.$value ) ;
+    }
+
 }
 
 ?>

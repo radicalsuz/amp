@@ -34,5 +34,25 @@ class ArticleSet extends AMPSystem_Data_Set {
         return $this->addCriteria( "( ". $base_section . ' OR ' . $related_ids . ")" );
     }
 
+    function addCriteriaStatus( $value ){
+        if ( !( $value || $value==='0')) return false;
+        $this->addCriteria( 'publish='.$value ) ;
+    }
+
+    function addFilter( $filter_name ) {
+        $filter_path = 'AMP/Content/Article/Filter/'. ucfirst( $filter_name) . '.inc.php';
+        if ( !file_exists_incpath( $filter_path )) return false;
+        include_once( $filter_path );
+        $filter_class = 'ContentFilter_' . ucfirst( $filter_name );
+        $sourceFilter = &new $filter_class();
+        return $sourceFilter->execute( $this );
+    }
+
+    function addCriteriaClass( $class_value ) {
+        if ( !$class_value ) return false;
+        if ( is_array( $class_value ) && !empty( $class_value )) return $this->addCriteria( 'class in ( ' . join( ',', $class_value ) . ' )');
+        return $this->addCriteria( 'class=' . $class_value ) ;
+    }
+
 }
 ?>

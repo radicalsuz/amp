@@ -1,6 +1,7 @@
 <?php
 require_once( 'AMP/Content/Article/Search/User/Form.inc.php');
 require_once( 'AMP/Content/Article/SetDisplay.inc.php');
+require_once( 'AMP/Content/Display/Criteria.inc.php');
 
 class ContentSearch_Display_User extends ArticleSet_Display {
 
@@ -31,7 +32,9 @@ class ContentSearch_Display_User extends ArticleSet_Display {
     function initResults() {
         $source_set = &new ArticleSet( AMP_Registry::getDbcon( ));
         PARENT::init( $source_set , false);
-        $this->_source->applySearch( $this->_searchForm->getValues() );
+        $display_criteria = &new AMPContent_DisplayCriteria( );
+        $display_criteria->clean( $this->_source );
+        $this->_source->applySearch( $this->_searchForm->getSearchValues() );
     }
 }
 ?>
