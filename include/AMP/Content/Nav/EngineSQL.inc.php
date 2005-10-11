@@ -46,7 +46,7 @@ class NavEngine_SQL extends NavEngine {
         $item = current($result);
        
         if (($result_field = $this->nav->getData('mvar2')) && ($result_field_sql = $this->nav->getSecondLinkValue() )) {
-           if ( is_numeric( $result_field_sql )) $url_vars[] = $results_field . '=' . $result_field_sql;
+           if ( is_numeric( $result_field_sql )) $url_vars[] = $result_field . '=' . $result_field_sql;
            elseif (isset( $item[ $result_field_sql ] )) $url_vars[] = $result_field . '=' . $item[ $result_field_sql ];
         }
 	   
