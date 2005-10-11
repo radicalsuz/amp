@@ -34,6 +34,7 @@ class NavEngine_SQL extends NavEngine {
     }
 
     function processMoreLink() {
+        $currentPage = &AMPContent_Page::instance();
         if (!$pagename = $this->nav->getMoreLinkPage()) return false;
         $url_vars = array();
         if ($listType = $this->nav->getData('mcall1')) {
