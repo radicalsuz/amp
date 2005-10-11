@@ -130,6 +130,15 @@ class NavigationElement extends AMPSystem_Data_Item {
         return $name;
     }
 
+    function getSecondLinkValue( ) {
+        $result = $this->getData( 'mcall2' );
+        if ( 'typeid' != $result ) return $result;
+        
+        $currentPage = & AMPContent_Page::instance();
+        return $currentPage->getSectionId();
+
+    }
+
     function getLimit() {
         return $this->getData( 'repeat' );
     }
