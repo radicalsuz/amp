@@ -88,6 +88,11 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         return true;
     }
 
+    function allResultsRequested( ){
+        if ( !isset( $this->_pager )) return true;
+        return $this->_pager->allResultsRequested( );
+    }
+
     function _HTML_listing( &$sourceItems ) {
         $output = AMP_CONTENT_MAIN_HEADER_HTML;
         foreach ($sourceItems as $contentItem ) {

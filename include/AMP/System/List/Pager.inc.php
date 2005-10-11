@@ -58,10 +58,15 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         if (isset($varset['qty']) && $varset['qty'] && is_numeric($varset['qty'])) {
             $this->setLimit($varset['qty']);
         }
-        if (isset($varset['all']) && $varset['all'] === '1') {
+        if ( $this->allResultsRequested() ){
             $this->setOffset( 0 );
             $this->setLimit( $this->getSourceTotal() );
         }
+    }
+
+    function allResultsRequested( ){
+        if (!($varset = AMP_URL_Read())) return false;
+        return (isset($varset['all']) && $varset['all'] === '1') ;
     }
 
     function output() {

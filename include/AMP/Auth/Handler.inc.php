@@ -110,6 +110,12 @@ class AMP_Authentication_Handler {
 
     }
 
+    function set_message( $message, $type = 'Error') {
+        $this->message_type = $type;
+        $this->message = $message;
+
+    }
+
     function check_cookie ( $raw_cookie ) {
 
         $cookie = explode( ':', $raw_cookie );
@@ -168,8 +174,7 @@ class AMP_Authentication_Handler {
 
     function invalidate_cookie ( $message, $type = 'Error', $attack = false ) {
 
-        $this->message_type = $type;
-        $this->message = $message;
+        $this->set_message( $message, $type );
 
         $c_domain = preg_replace( "/([^\.]*)\.([^\.]*)$/", "/.\$1.\$2/", $_SERVER['SERVER_NAME'] );
         return setcookie( $this->_loginType->getCookieName(), '*', time() - 86400 );

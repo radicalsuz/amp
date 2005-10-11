@@ -41,7 +41,7 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         if ( $limit = $this->_section->getListItemLimit( ) ) $read_source = false; 
         $this->_display = &new $display_class( $contents, $read_source );
 
-        if ( $limit && method_exists( $this->_display, 'setPageLimit')) {
+        if ( $limit && method_exists( $this->_display, 'setPageLimit') && (!$this->_display->allResultsRequested()) ) {
             $this->_display->setPageLimit( $limit );
         }
         if ( !$contents->hasData( )) $contents->readData( );

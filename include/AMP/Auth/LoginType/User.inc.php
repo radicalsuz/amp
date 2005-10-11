@@ -10,7 +10,7 @@ require_once( 'AMP/Auth/LoginType.php');
 class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 
     var $_cookie_name = 'AMPUserLoginCredentials';
-    var $_loginScreenText = ' Login';
+    var $_loginScreenText = ' User Login';
     var $_formFields = array(
         'AMPLogin_username' => 
             array( 'label' => 'Email Address:', 'type' => 'text'),
@@ -69,13 +69,13 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
         }
         if ( isset( $_REQUEST[ $this->_login_username_field ])) {
             if ( !array_search( $_REQUEST[ $this->_login_username_field ], $emailsLookup )) {
-                return $this->_handler->invalidate_cookie( 'Account Not Found', 'Error', true );
+                return $this->_handler->set_message( 'Account Not Found', 'Error', true );
             }
             $this->sendOtp( $_REQUEST[ $this->_login_username_field ], $_REQUEST['uid']);
-            return $this->_handler->invalidate_cookie( 'A special passcode has been sent to the account owner', 'OK' );
+            return $this->_handler->set_message 'A special passcode has been sent to the account owner', 'OK' );
         }
         unset( $this->_formFields['AMPLogin_password'] );
-        $this->_loginScreenText = '<BR>' . ucfirst( $action ) . ' Password';
+        $this->_handler->set_message( ucfirst( $action ) . ' Password', 'OK')
 
     }
 
@@ -93,11 +93,6 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
     }
 
     function do_set_password( ){
-        return $this->do_create( );
-
-    }
-
-    function do_create( ){
         if ( !( $new_password = $this->create_confirmed_password( ))) return false;
         $sql = "UPDATE userdata set password = " . $this->_dbcon->qstr( $new_password ) . " where id = " . $_REQUEST['uid'];
         $this->_dbcon->Execute( $sql );
@@ -116,7 +111,7 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
         $password_match = ( $_REQUEST[ $this->_login_password_field_confirmed ] == $_REQUEST[ $this->_login_password_field ] ) ;
         if (!$password_match ) {
             $matchset = join( " : ", array( $_REQUEST[ $this->_login_password_field_confirmed ], $_REQUEST[ $this->_login_password_field ]));
-            $this->_handler->invalidate_cookie( 'Passwords did not match '. $matchset, 'Error' );
+            $this->_handler->set_message( 'Passwords did not match '. $matchset, 'Error' );
             $this->add_confirm_field( );
             return false;
         }
