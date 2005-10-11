@@ -88,14 +88,18 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ($result == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
         
         if ($result) {
-            $sql = $this->_assembleSqlByID( $this->id );
-            $this->dbcon->CacheFlush( $sql );
+            $this->clearItemCache( $this->id );
             if (method_exists( $this, '_afterSave' )) $this->_afterSave();
             return true;
         }
         trigger_error ( get_class( $this ) . ' save failed: '. $this->dbcon->ErrorMsg() );
 
         return false;
+    }
+
+    function clearItemCache( $id ) {
+        $sql = $this->_assembleSqlByID( $id );
+        $this->dbcon->CacheFlush( $sql );
     }
 
     function mergeData( $data ) {

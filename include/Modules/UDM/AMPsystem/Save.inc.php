@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/UserData/Plugin/Save.inc.php' );
+require_once( 'AMP/System/UserData.php');
 
 class UserDataPlugin_Save_AMPsystem extends UserDataPlugin_Save {
 
@@ -26,7 +27,7 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 
 	$dbcon = $udm->dbcon;
 
-    $udm->doPlugin( 'AMP', 'FixupDB' );
+    #$udm->doPlugin( 'AMP', 'FixupDB' );
 
 	// Insert or Update?
 	if (isset( $udm->instance )) {
@@ -82,6 +83,9 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 		die( "There was an error completing the request: " . $dbcon->ErrorMsg() );
 
 	if ( $rs ) {
+
+        $udmDef = &new AMPSystem_UserData( $dbcon );
+        $udmDef->clearItemCache( $udm->instance );
 
 		// Run some default plugins. Plugins will not be run unless
 		// they are pre-registered.
