@@ -68,8 +68,9 @@ class VoterGuide extends AMPSystem_Data_Item {
 		if($this->isNew()) {
 			$short_name = $this->getShortName();
 			if( !$short_name ) {
-				$short_name = $this->generateShortName($this->getName());
+				$short_name = $this->getName();
 			}
+			$short_name = $this->generateShortName($short_name);
 			if(!$this->isUniqueShortName($short_name, true)) {
 				$this->addError( $short_name.' already exists as a short name.  please try a different short name');
 				$this->addCustomError('short_name', $short_name.' already exists as a short name.  please try a different short name');
