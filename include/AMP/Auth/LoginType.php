@@ -99,6 +99,9 @@ class AMP_Authentication_LoginType {
             unset( $_POST[ $authfield ]);
         }
     }
+    function getNewLogin( ){
+        return false;
+    }
 
 }
 ?>

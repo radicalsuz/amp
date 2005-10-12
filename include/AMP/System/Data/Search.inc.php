@@ -35,17 +35,19 @@ class AMPSystem_Data_Search  {
             }
 
             $crit_method = substr( $crit_method, 1 );
-            if (method_exists( $this->_source, $crit_method )) {
+            if ( method_exists( $this->_source, $crit_method )) {
                 $this->_source->$crit_method( $value );
                 continue;
             }
 
-            $crit_method = $this->_getCriteriaMethod( $key );
-            $this->$crit_method( $key, $value );
+            if ( $crit_method = $this->_getCriteriaMethod( $key )){
+                $this->$crit_method( $key, $value );
+            }
         }
     }
 
     function _getCriteriaMethod( $fieldname ) {
+        if ( !$this->_source->isColumn( $fieldname )) return false;
         if (array_search( $fieldname, $this->_exact_value_fields ) !==FALSE) return '_addCriteriaEquals';
         return '_addCriteriaContains';
     }

@@ -38,10 +38,16 @@
     <type>text</type>
     <attr><class>searchform_element</class></attr>
 </author>
+<search_by_date>
+    <separator>newrow</separator>
+    <type>checkbox</type>
+    <label>Find Items by Date</label>
+    <attr><class>searchform_element</class></attr>
+</search_by_date>
 <date>
     <type>date</type>
     <default>last year</default>
-    <label>Dated After: </label>
+    <label>After: </label>
     <attr><class>searchform_element</class></attr>
 </date>
 </array>

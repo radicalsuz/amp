@@ -26,6 +26,12 @@ class ContentSearch_Form extends AMPSearchForm {
         return '&nbsp;&nbsp;<a href="article_list.php" class="standout">View All Articles</a><BR />';
     }
 
+    function getSearchValues( ) {
+        $results = &PARENT::getSearchValues( );
+        if ( !(isset( $results['search_by_date']) && $results['search_by_date'])) unset ( $results['date'] );
+        return $results;
+    }
+
 
 }
 ?>

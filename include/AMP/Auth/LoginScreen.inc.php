@@ -81,6 +81,12 @@
             margin-top: 1.5ex;
         }
 
+        p.newLogin {
+            font-size: 95%;
+            color: #999999; 
+            text-align: center;
+            clear: both;
+        }
         p.loginNote {
             font-size: 65%;
             color: #999999; 
@@ -110,6 +116,7 @@
                 <?php print $this->getFormFields();?>
 
                 <input type="submit" value="Login" id="login" />
+                <p class="newLogin"><?php print $this->getNewLogin(); ?></p>
             </div>
 
         </form>
