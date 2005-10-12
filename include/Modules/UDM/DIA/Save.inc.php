@@ -41,9 +41,15 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
     function save ( $data ) {
         $options=$this->getOptions();
 
-		if(!defined('DIA_API_ORGKEY') && isset($options[ 'orgKey' ])) define('DIA_API_ORGKEY', $options[ 'orgKey' ]);
-		if(!defined('DIA_API_USERNAME') && isset($options[ 'user' ])) define('DIA_API_USERNAME', $options[ 'user' ]);
-		if(!defined('DIA_API_PASSWORD') && isset($options[ 'password' ])) define('DIA_API_PASSWORD', $options[ 'password' ]);
+		if(!defined('DIA_API_ORGCODE') && isset($options[ 'orgKey' ])) {
+			define('DIA_API_ORGCODE', $options[ 'orgKey' ]);
+		}
+		if(!defined('DIA_API_USERNAME') && isset($options[ 'user' ])) {
+			define('DIA_API_USERNAME', $options[ 'user' ]);
+		}
+		if(!defined('DIA_API_PASSWORD') && isset($options[ 'password' ])) {
+			define('DIA_API_PASSWORD', $options[ 'password' ]);
+		}
 
 		$data = $this->translate($data);
 		$data['uid'] = $this->udm->uid;
