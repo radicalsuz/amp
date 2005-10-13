@@ -35,8 +35,10 @@ class UserDataPlugin_Read_AMPVoterGuide extends UserDataPlugin {
         if (!isset( $options['_userid'] ) ) return false;
         $uid = $options['_userid'];
         
-        $this->udm->unregisterPlugin( 'Save', 'AMPVoterGuide' );
-        $this->udm->unregisterPlugin( 'PositionSave', 'AMPVoterGuide' );
+        if ( $this->udm->admin ) {
+            $this->udm->unregisterPlugin( 'Save', 'AMPVoterGuide' );
+            $this->udm->unregisterPlugin( 'PositionSave', 'AMPVoterGuide' );
+        }
 
         $vgList = &new VoterGuide_List ( $this->dbcon );
         $vgList->getGuidesByOwner( $uid );
