@@ -23,6 +23,10 @@ class DIA_API {
 		if( !defined('DIA_DEBUG') ) {
 			define('DIA_DEBUG', false);
 		}
+
+		if( !defined('DIA_MESSAGE_DATA_NOT_FOUND') ) {
+			define('DIA_MESSAGE_DATA_NOT_FOUND', 'No data found');
+		}
 	}
 
 	//factory method
@@ -70,6 +74,7 @@ class DIA_API {
             $this->ERROR = $errormsg;
         }
     }
+
 	//object support methods
 	function readObject(&$object, $type=null) {
 		if(!is_object($object)) {
@@ -97,14 +102,15 @@ class DIA_API {
 
         $supporter_id = $this->process( "supporter", $info );
 
-        // nasty-ass hack. See DIAlist/save.inc.php.
-        $GLOBALS['diaSupporter'] = trim( $supporter_id );
         return $supporter_id;
 
     }
 
     function linkSupporter ( $list, $supporter ) {
 
+		$this->process('supporter_groups', array('groups_KEY' => $list,
+												 'supporter_KEY' => $supporter));
+/*
         $data = array();
         
         $data[ 'link' ] = 'groups';
@@ -113,6 +119,7 @@ class DIA_API {
         $data[ 'updateRowValues' ] = 1;
 
         return $this->process( "supporter", $data );
+*/
 
     }
 
