@@ -43,7 +43,7 @@ class AMPSystemLookup_LocationsNames extends AMPSystem_Lookup {
 	var $sortby = "state, city, name";
 }
 
-class AMPSystemLookup_voterguidesByShortName extends AMPSystem_Lookup {
+class AMPSystemLookup_VoterGuideByShortName extends AMPSystem_Lookup {
 	var $datatable = "voterguides";
 	var $id_field = "short_name";
 	var $result_field = "id";
