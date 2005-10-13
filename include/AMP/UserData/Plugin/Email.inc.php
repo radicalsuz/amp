@@ -15,6 +15,10 @@ class UserDataPlugin_Email extends UserDataPlugin {
                                         'required'    => true ,
                                         'available'   => true),
 
+                'from'	      => array( 'label' => 'Email From',
+                                        'type'        => 'text',
+                                        'available'   => true),
+
                 'subject'     => array( 'label' => 'Email Subject',
                                         'available'   => true,
                                         'type'        => 'text',
@@ -66,7 +70,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
         $this->message .= $this->_getBodyFooter ( $options );
 
         // Construct the header.
-        $this->header = $this->prepareHeader();
+        $this->header = $this->prepareHeader( $options );
 
         // Allow for post-processing. Returrn anything but true to abort
         // message send.
@@ -91,11 +95,19 @@ class UserDataPlugin_Email extends UserDataPlugin {
      *
      *****/
 
-    function prepareHeader () {
+    function prepareHeader ( $options = null) {
 
-        $header  = "From: " . $GLOBALS['MM_email_from'];
+		if(isset($options['from']) && $options['from']) {
+			$header  = "From: " . $options['from'];
+		} else {
+			$header  = "From: " . $GLOBALS['MM_email_from'];
+		}
         $header .= "\nX-Mailer: AMP/UserDataMail\n";
 
+		if('html' == strtolower($options['format'])) {
+			$header .= "Content-Type: text/html; charset=utf-8\r\n" .
+					   "Content-Transfer-Encoding: 8bit\r\n\r\n";
+		}
         return $header;
 
     }
@@ -124,8 +136,16 @@ class UserDataPlugin_Email extends UserDataPlugin {
         if (!isset($system_texts[ $id ])) return $id;
 
         $textdata = & new AMPSystem_IntroText( $this->dbcon, $id );
+		if($textdata->isHtml()) $this->containsHTML(true);
         return $textdata->getBody() . "\n\n";
     }
+
+	function containsHTML( $flag = null ) {
+		if(isset($flag)) {
+			$this->_containsHTML = $flag;
+		}
+		return $this->_containsHTML;
+	}
 
 }
 
