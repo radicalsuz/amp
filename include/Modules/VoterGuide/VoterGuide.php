@@ -87,7 +87,9 @@ class VoterGuide extends AMPSystem_Data_Item {
 		}
 
         if ( !( $result=PARENT::save())) return $result;
-		$this->setRedirect();
+		if(defined('AMP_VOTERGUIDE_SET_REDIRECTS') && AMP_VOTERGUIDE_SET_REDIRECTS) {
+			$this->setRedirect();
+		}
         if ( $result = $this->_positionSet->reviseGuide( $this->getData( $this->_positions_key ), $this->id ) ) return $result;
 
         $this->addError( $this->_positionSet->getErrors( ));
