@@ -17,6 +17,13 @@ require_once( "Modules/VoterGuide/SetDisplay.inc.php" );
 
 $currentPage = &AMPContent_Page::instance();
 
+if ( ( isset( $_GET['name']) && $short_name = $_GET['name']) && ( !isset( $_GET['id']) ) ) {
+	$idByName = AMPSystem_Lookup::instance('VoterGuideByShortName');
+	if(isset($idByName[$short_name])) {
+		$_GET['id'] = $idByName[$short_name];
+	}
+}
+
 if ( isset( $_GET['id']) && $_GET['id']) {
 	$guide = &new VoterGuide( $dbcon, $_GET['id']);
 
