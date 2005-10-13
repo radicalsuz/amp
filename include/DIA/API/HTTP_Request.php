@@ -100,19 +100,23 @@ class DIA_API_HTTP_Request extends DIA_API {
         $req->addQueryString( 'table', $table );
 
         foreach ( $data as $key => $val ) {
-//            $req->addQueryString( $key, $val );
-            $req->addPostData( $key, $val );
+            $req->addQueryString( $key, $val );
+//            $req->addPostData( $key, $val );
         }
 
         $req->addQueryString( 'simple', true );
 
 		if( DIA_API_DEBUG ) {
 			print "requesting URL: ".$req->_url->getURL()."<br/>";
+			AMP_varDump($req->_postData);
 		}
 
         if ( !PEAR::isError( $req->sendRequest() ) ) {
             $out = trim($req->getResponseBody());
         } else {
+			if( DIA_API_DEBUG ) {
+				$this->print($out);
+			}
             $out = null;
         }
 
@@ -151,9 +155,10 @@ class DIA_API_HTTP_Request extends DIA_API {
 					} else {
 						$value = $keys;
 					}
+					$req->addPostData( $option, $value );
+					continue;
 				}
-//				$req->addQueryString( $option, $value );
-				$req->addPostData( $option, $value );
+				$req->addQueryString( $option, $value );
 			}
 		}
 
@@ -161,11 +166,15 @@ class DIA_API_HTTP_Request extends DIA_API {
 
 		if( DIA_API_DEBUG ) {
 			print "requesting URL: ".$req->_url->getURL()."<br/>";
+			AMP_varDump($req->_postData);
 		}
 
         if ( !PEAR::isError( $req->sendRequest() ) ) {
             $out = $req->getResponseBody();
         } else {
+			if( DIA_API_DEBUG ) {
+				$this->print($out);
+			}
             $out = null;
         }
 	
