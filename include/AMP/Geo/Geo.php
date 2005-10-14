@@ -24,13 +24,15 @@ Class Geo {
 	var $lat;
 	var $long;
 	
+	var $city_fulltext = false;
 	
-	function Geo(&$dbcon,$Street=NULL,$City=NULL,$State=NULL,$Zip=NULL) {
+	function Geo(&$dbcon,$Street=NULL,$City=NULL,$State=NULL,$Zip=NULL, $city_fulltext = false) {
 		$this->dbcon =& $dbcon;
 		$this->Street =$Street;
 		$this->City =$City;
 		$this->State =$State;
 		$this->Zip =$Zip;
+		$this->city_fulltext = $city_fulltext;
 
 		if  ( isset($this->Street) ) {
             if  ( (isset($this->City) && $this->City && isset($this->State) && $this->State ) 
@@ -141,6 +143,12 @@ Class Geo {
 	function city_lookup() {
 		$sql = "select latitude,longitude from zipcodes where city = ".$this->dbcon->qstr($this->City)." and  state = ".$this->dbcon->qstr($this->State); 
 		$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting location list in functon get_latlong ".$sql.$this->dbcon->ErrorMsg());
+
+		if ( $this->city_fulltext && !(($R->Fields("latitude")) && ($R->Fields("longitude"))) ){
+			$sql = "SELECT latitude, longitude from zipcodes WHERE MATCH (city) AGAINST (".$this->dbcon->qstr($this->City).") AND state = ".$this->dbcon->qstr($this->State); 
+			$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting location list in functon get_latlong ".$sql.$this->dbcon->ErrorMsg());
+		}
+
 		if ( ($R->Fields("latitude")) && ($R->Fields("longitude")) ){
 			$this->lat = $R->Fields("latitude") ;
 			$this->long = $R->Fields("longitude");			
