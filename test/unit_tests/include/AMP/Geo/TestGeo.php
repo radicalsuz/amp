@@ -43,8 +43,14 @@ class TestGeo extends UnitTestCase {
 		$this->assertEqual($geo->long, -122.727802);
 	}
 
-	function testNewFromStPaul() {
-		$geo =& new Geo($this->dbcon, null, 'St. Paul', 'MN', null, true);
+	function testFullText() {
+		$geo =& new Geo($this->dbcon, null, 'St. Paul', 'MN', null, 'city_fulltext');
+		$this->assertNotNull($geo->lat);
+		$this->assertNotNull($geo->long);
+	}
+
+	function testSoundex() {
+		$geo =& new Geo($this->dbcon, null, 'minapolis', 'MN', null, 'city_soundex');
 		$this->assertNotNull($geo->lat);
 		$this->assertNotNull($geo->long);
 	}

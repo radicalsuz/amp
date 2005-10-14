@@ -24,15 +24,20 @@ Class Geo {
 	var $lat;
 	var $long;
 	
+	//options
 	var $city_fulltext = false;
+	var $city_soundex = false;
 	
-	function Geo(&$dbcon,$Street=NULL,$City=NULL,$State=NULL,$Zip=NULL, $city_fulltext = false) {
+	function Geo(&$dbcon,$Street=NULL,$City=NULL,$State=NULL,$Zip=NULL, $options=null) {
 		$this->dbcon =& $dbcon;
 		$this->Street =$Street;
 		$this->City =$City;
 		$this->State =$State;
 		$this->Zip =$Zip;
-		$this->city_fulltext = $city_fulltext;
+
+		if(isset($options)) {
+			$this->setOptions($options);
+		}
 
 		if  ( isset($this->Street) ) {
             if  ( (isset($this->City) && $this->City && isset($this->State) && $this->State ) 
@@ -49,6 +54,20 @@ Class Geo {
         }
 	}
 	
+	function setOptions($options) {
+		if(!is_array($options)) {
+			$options = array($options);
+		}
+		foreach($options as $option => $value) {
+			$settings = get_class_vars(get_class($this));
+			if(array_key_exists($value, $settings)) {
+				$this->$value = true;
+			} else {
+				$this->$option = $value;
+			}
+		}
+	}
+
 	function google_getdata(){
 		$req =& new HTTP_Request( "http://google.com" );
 		$req->setMethod( HTTP_REQUEST_METHOD_GET );
@@ -146,6 +165,10 @@ Class Geo {
 
 		if ( $this->city_fulltext && !(($R->Fields("latitude")) && ($R->Fields("longitude"))) ){
 			$sql = "SELECT latitude, longitude from zipcodes WHERE MATCH (city) AGAINST (".$this->dbcon->qstr($this->City).") AND state = ".$this->dbcon->qstr($this->State); 
+			$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting location list in functon get_latlong ".$sql.$this->dbcon->ErrorMsg());
+		}
+		if ( $this->city_soundex && !(($R->Fields("latitude")) && ($R->Fields("longitude"))) ){
+			$sql = "SELECT latitude, longitude from zipcodes WHERE city SOUNDS LIKE ".$this->dbcon->qstr($this->City)." AND state = ".$this->dbcon->qstr($this->State); 
 			$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting location list in functon get_latlong ".$sql.$this->dbcon->ErrorMsg());
 		}
 
