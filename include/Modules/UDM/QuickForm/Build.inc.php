@@ -56,7 +56,7 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
         }
 
 		if ( $this->udm->submitted ) {
-			if ( !$formEngine->validate() ) {
+			if ( !$formEngine->validate() && !$admin ) {
                 $this->udm->formInvalidCallback();
                 return false;
 			}
@@ -64,8 +64,6 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
         $this->_formEngine = &$formEngine;
 
 		return $formEngine->form;
-		
-
     }
 
     function &getFormEngine( ) {
