@@ -149,7 +149,7 @@ class ElementCopierScript {
     }
 
     function _delimit( $text ) {
-        if (strpos( $text, "'" ) !== FALSE ) return '"'. $text . '"';
+//        if (strpos( $text, "'" ) !== FALSE ) return '"'. $text . '"';
         return "'". $text . "'";
     }
 
@@ -285,7 +285,7 @@ class ElementCopierScript {
     }
 
     function _js_cleanValue( $value ) {
-        return str_replace( "\r\n", "\\n", $value);
+        return addslashes(str_replace( "\r\n", "\\n", $value));
     }
 
 
