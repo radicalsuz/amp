@@ -3,6 +3,7 @@ if(!defined(AMP_CALENDAR_ENTRY_FORM_DEFAULT)) define(AMP_CALENDAR_ENTRY_FORM_DEF
 
 require_once ("AMP/System/Data/Item.inc.php");
 require_once ("AMP/UserData/Input.inc.php");
+require_once ("Modules/Calendar/Lookups.inc.php");
 
 class CalendarFeeds extends AMPSystem_Data_Item {
 
@@ -39,7 +40,7 @@ class CalendarFeeds extends AMPSystem_Data_Item {
 		$feed = array('id'=>$id,'url'=>$url,'title'=>$rss->channel['title'],
 											 'link' =>$rss->channel['link'],
 											 'description'=>$rss->channel['description']);
-		$result = $this->dbcon->Replace( 'calendar_feeds', $feed, array('id', 'url'), true );
+		$result = $this->dbcon->Replace( 'calendar_feeds', $feed, 'url', true );
 		if(!$result) {
 			$this->addError("Could not save feed");
 			return false;
@@ -47,8 +48,15 @@ class CalendarFeeds extends AMPSystem_Data_Item {
 		if ($result == ADODB_REPLACE_INSERTED ) $id = $this->dbcon->Insert_ID();
 
 		$num_events = 0;
+/*XXX: need to check here for:
+get all events that already have this feed_id
+if any events already here have publish=1 and are missing out of the current feed,
+turn them to publish=0;
+*/
 		foreach($rss->items as $item) {
 			$event = $item['ev'];
+			if(!$event) continue;
+			$num_events++;
 			$vcard = $item['vcard'];
 
 			if($contact = trim($event['organizer'])) {
@@ -60,16 +68,7 @@ class CalendarFeeds extends AMPSystem_Data_Item {
 				$uid = $vcard['organizer_uid'];
 			}
 
-			$udm =& new UserDataInput($this->dbcon,AMP_CALENDAR_ENTRY_FORM_DEFAULT);
-			$udm->setData(array('Last_Name' => $contact,
-								'Email'		=> $email,
-								'Phone'		=> $phone));
-			if(!$udm->saveUser()) continue;
-			$local_uid = $udm->uid;
-
 			$geo = $item['geo'];
-			if(!$event) continue;
-			$num_events++;
 
 			$typemap = array_flip($this->types);
 			$type = $typemap[$event['type']];
@@ -91,17 +90,43 @@ class CalendarFeeds extends AMPSystem_Data_Item {
 							  'lzip'=>$vcard['adr_pcode'],
 							  'lat'=>$geo['lat'],
 							  'lon'=>$geo['long'],
-							  'uid'=>$local_uid,
+//							  'uid'=>$local_uid,
 							  'feed_id'=>$id);
 
 			$result = $this->dbcon->Replace( 'calendar', $calendar, array('feed_id', 'url'), true );
+
+			//test for uid in return record, update that, 
+			//else add new and set it in calendar table
+			if ($result == ADODB_REPLACE_INSERTED ) {
+				$calendar_id = $this->dbcon->Insert_ID();
+				$calendaruids = AMPSystem_Lookup::instance('CalendarUid');
+				$uid = $calendaruids[$calendar_id];
+
+				$user = array('Last_Name' => $contact,
+							  'Email'		=> $email,
+							  'Phone'		=> $phone
+							 );
+
+				if(isset($uid) && $uid) {
+					$user['id'] = $uid;
+					$this->dbcon->Replace( 'userdata', $user, null, true);
+				} else {
+					$udm =& new UserDataInput($this->dbcon,AMP_CALENDAR_ENTRY_FORM_DEFAULT,true);
+					$udm->setData($user);
+//need better error handling here
+					if(!$udm->saveUser()) continue;
+					$local_uid = $udm->uid;
+					$uid_update = array('id' => $calendar_id,
+										'uid' => $local_uid);
+					$result = $this->dbcon->Replace( 'calendar', $uid_update, 'id', true );
+				}
+			}
 		}
 
 		if(!$num_events) {
 			$this->addError("Feed did not contain event information!");
 			return false;
 		}
-
 
 		return true;
 	}
@@ -116,9 +141,11 @@ class CalendarFeeds extends AMPSystem_Data_Item {
 		$sql = "SELECT url, id FROM calendar_feeds";
 		$feeds = $this->dbcon->Execute($sql);
 		if(!$feeds) {
+print "returning false";
 			return false;
 		}
 		while(!$feeds->EOF) {
+print "subscribing";
 			$this->subscribe($feeds->Fields('url'), $feeds->Fields('id'));
 			$feeds->MoveNext();
 		}
