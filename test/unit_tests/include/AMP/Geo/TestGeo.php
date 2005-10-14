@@ -37,6 +37,24 @@ class TestGeo extends UnitTestCase {
 		$this->assertNotNull($geo->long);
 	}
 
+	function testNewFromSanFrancisco() {
+		$geo =& new Geo($this->dbcon, null, 'San Francisco', 'CA');
+		$this->assertEqual($geo->lat, 37.784827);
+		$this->assertEqual($geo->long, -122.727802);
+	}
+
+	function testNewFromStPaul() {
+		$geo =& new Geo($this->dbcon, null, 'St. Paul', 'MN', null, true);
+		$this->assertNotNull($geo->lat);
+		$this->assertNotNull($geo->long);
+	}
+
+	function testZipFromCityState() {
+		$geo =& new Geo($this->dbcon, null, 'San Francisco', 'CA');
+		$zips = $geo->zip_radius(0);
+		$this->assertNotNull(array_shift($zips));
+	}
+
 	function testZipRadius() {
 		$geo =& new Geo($this->dbcon, null, null, null, AMP_CALENDAR_LOCAL_ZIP);
 		$zips = $geo->zip_radius(15);
