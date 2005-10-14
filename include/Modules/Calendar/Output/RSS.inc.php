@@ -1,6 +1,7 @@
 <?php
 require_once ('Modules/Calendar/Plugin.inc.php');
 require_once ('RSSWriter/AMP_RSSWriter.php');
+require_once ('AMP/System/Lookups.inc.php');
 
 class CalendarPlugin_RSS_Output extends CalendarPlugin {
 
@@ -64,6 +65,10 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 
 	function add_event_item(&$rss, $event) {
 		$id = $event['id'];
+		if(is_numeric($state_id = $event['lstate'])) {
+			$states = AMPSystem_Lookup::instance('States');
+			$event['lstate'] = $states[$state_id];
+		}
 		$item = array("description" => $event['shortdesc'],
 						"ev:startdate" => $event['date'],
 						"ev:enddate" => $event['enddate'],

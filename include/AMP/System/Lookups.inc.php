@@ -235,6 +235,11 @@ class AMPSystemLookup_Lists extends AMPSystem_Lookup {
 
 }
 
+class AMPSystemLookup_States extends AMPSystem_Lookup {
+	var $datatable = 'states';
+	var $result_field = 'state';
+}
+
 class AMPSystemLookup_CellProviders {
 
     function AMPSystemLookup_CellProviders( ) {
