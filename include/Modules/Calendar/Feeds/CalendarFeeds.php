@@ -30,16 +30,19 @@ class CalendarFeeds extends AMPSystem_Data_Item {
 	}
 
 	function subscribe($url, $id=null) {
-		$rss = fetch_rss($url);
+		$rss = fetch_rss(trim($url));
 
 		if(!$rss->channel && !$rss->items) {
 			$this->addError("URL is not RSS or is invalid");
 			return false;
 		}
 
-		$feed = array('id'=>$id,'url'=>$url,'title'=>$rss->channel['title'],
-											 'link' =>$rss->channel['link'],
-											 'description'=>$rss->channel['description']);
+		$feed = array('url'=>$url,'title'		=> $rss->channel['title'],
+								  'link' 		=> $rss->channel['link'],
+								  'description'	=> $rss->channel['description']);
+		if(isset($id) && $id) {
+			$feed['id'] = $id;
+		}
 		$result = $this->dbcon->Replace( 'calendar_feeds', $feed, 'url', true );
 		if(!$result) {
 			$this->addError("Could not save feed");
@@ -69,6 +72,35 @@ turn them to publish=0;
 			}
 
 			$geo = $item['geo'];
+			//if no zip, figure it out if possible
+			if(!$vcard['adr_pcode'] && include_once('AMP/Geo/Geo.php')) {
+				$zip = false;
+				if($geo['lat'] && $geo['long']) {
+					$geo_lookup =& new Geo($this->dbcon);
+					$geo_lookup->lat  = $geo['lat'];
+					$geo_lookup->long = $geo['long'];
+					$info = $geo_lookup->zip_radius(0);
+					if($info && is_array($info)) {
+						$zips = array_keys($info);
+						$zip = (isset($zips[0]) && $zips[0])?$zips[0]:false;
+					}
+				}
+				if(!$zip && $vcard['adr_locality'] && $vcard['adr_region']) {
+					$geo_lookup =& new Geo($this->dbcon, $vcard['adr_street'],
+														 $vcard['adr_locality'],
+														 $vcard['adr_region'],
+														 null,
+														 array('city_fulltext', 'city_soundex'));
+					$info = $geo_lookup->zip_radius(0);
+					if($info && is_array($info)) {
+						$zips = array_keys($info);
+						$zip = (isset($zips[0]) && $zips[0])?$zips[0]:false;
+					}
+				}
+				if($zip) {
+					$vcard['adr_pcode'] = $zip;
+				}
+			}
 
 			$typemap = array_flip($this->types);
 			$type = $typemap[$event['type']];
@@ -141,11 +173,9 @@ turn them to publish=0;
 		$sql = "SELECT url, id FROM calendar_feeds";
 		$feeds = $this->dbcon->Execute($sql);
 		if(!$feeds) {
-print "returning false";
 			return false;
 		}
 		while(!$feeds->EOF) {
-print "subscribing";
 			$this->subscribe($feeds->Fields('url'), $feeds->Fields('id'));
 			$feeds->MoveNext();
 		}
