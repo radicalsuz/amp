@@ -20,6 +20,7 @@ class AMP_Authentication_LoginType {
         'AMPLogin_password' => 
             array( 'label' => 'Password:', 'type' => 'password')
             );
+    var $_invalid_message = 'Invalid Password';
 
 
     function AMP_Authentication_LoginType ( &$handler ) {
@@ -63,6 +64,10 @@ class AMP_Authentication_LoginType {
         include( $this->_loginScreen );
     }
 
+    function getLoginUrl( ){
+        return PHP_SELF_QUERY( );
+    }
+
     function getCookieName( ){
         return $this->_cookie_name;
     }
@@ -101,6 +106,10 @@ class AMP_Authentication_LoginType {
     }
     function getNewLogin( ){
         return false;
+    }
+
+    function getInvalidMessage( ){
+        return $this->_invalid_message;
     }
 
 }

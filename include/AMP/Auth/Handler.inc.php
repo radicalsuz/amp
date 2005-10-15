@@ -25,6 +25,7 @@ class AMP_Authentication_Handler {
         if ( class_exists( $loginType )) {
             $this->_loginType = &new $loginType( $this );
             $this->_loginType->setTimeout( $timeout );
+            if( method_exists( $this->_loginType, 'initLoginState')) $this->_loginType->initLoginState( $this );
         }
 
 
@@ -196,9 +197,9 @@ class AMP_Authentication_Handler {
             $this->_loginType->clearAuthFields( );
             return true;
         }
-
-        $this->message = "Invalid Password.";
-        $this->message_type = 'Error';
+        if ( $message = $this->_loginType->getInvalidMessage( )) {
+            $this->set_message( $message, 'Error');
+        }
 
         return false;
 

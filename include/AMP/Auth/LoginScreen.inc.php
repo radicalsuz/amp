@@ -81,7 +81,7 @@
             margin-top: 1.5ex;
         }
 
-        p.newLogin {
+        p.authOptions{
             font-size: 95%;
             color: #999999; 
             text-align: center;
@@ -110,13 +110,13 @@
 
         <?php print (isset($this->_handler->message)) ? "<p class=\"login {$this->_handler->message_type}\">{$this->_handler->message}</p>" : '' ?>
 
-        <form id="login" method="post" action="<? print PHP_SELF_QUERY(); ?>" />
+        <form id="login" method="post" action="<? print $this->getLoginUrl(); ?>" />
 
             <div id="formWrap">
                 <?php print $this->getFormFields();?>
 
                 <input type="submit" value="Login" id="login" />
-                <p class="newLogin"><?php print $this->getNewLogin(); ?></p>
+                <p class="authOptions"><?php print $this->getAuthOptions(); ?></p>
             </div>
 
         </form>

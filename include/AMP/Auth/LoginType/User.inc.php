@@ -6,27 +6,31 @@ define( 'AMP_LOGIN_LOOKUPTYPE_OTP', 'otp');
 define( 'AMP_LOGIN_LOOKUPTYPE_PASSWORD', 'pass');
 
 require_once( 'AMP/Auth/LoginType.php');
+require_once( 'AMP/Auth/LoginState.php');
 
 class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 
     var $_cookie_name = 'AMPUserLoginCredentials';
     var $_loginScreenText = ' User Login';
-    var $_formFields = array(
-        'AMPLogin_username' => 
-            array( 'label' => 'Email Address:', 'type' => 'text'),
-        'AMPLogin_password' => 
-            array( 'label' => 'Password:', 'type' => 'password')
-            );
-    var $_passwordEditUrl;
-    var $_allowedActions = array( 'reset', 'create' );
-    var $_lookupType = AMP_LOGIN_LOOKUPTYPE_PASSWORD;
     var $_default_permission = 0;
-    var $_login_password_field_confirmed = 'AMPLogin_password_confirm';
     var $_current_action;
+    var $_state;
+    var $_invalid_message=false;
 
     function AMP_Authentication_LoginType_User( &$handler ) {
         $this->init( $handler );
-        $this->_passwordEditUrl = PHP_SELF_QUERY();
+    }
+
+    function init( &$handler ) {
+        PARENT::init( $handler );
+    }
+
+    function initLoginState( ){
+        $state = &new AMP_Authentication_LoginState_Base( $this->_handler );
+        $this->_state = &$state->initState( );
+        if ( $message = $this->_state->getMessage( )) {
+            $this->_handler->set_message( $message, $this->_state->getMessageType( ));
+        }
     }
 
     function validateUser( $username, $password ){
@@ -40,26 +44,43 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
             
     }
 
-    function getNewLogin( ) {
-        if ( 'create' == $this->_current_action ) return false;
-        return  sprintf( AMP_TEXT_LOGIN_PASSWORD_NEW, AMP_Url_AddVars( $this->_passwordEditUrl, 'action=create')) ;
-
+    function getAuthOptions( ) {
+        return $this->_state->getAuthOptions( );
     }
 
     function getHelpLinks() {
-        $output = "";
-        if ( "reset" != $this->_current_action ) $output .= sprintf( AMP_TEXT_LOGIN_PASSWORD_RESET, AMP_Url_AddVars( $this->_passwordEditUrl, 'action=reset') ). '<BR>';
-        return $output . sprintf( AMP_TEXT_LOGIN_HELP_ADMIN, AMP_SITE_ADMIN );
+        return $this->_state->getHelpLinks( );
     }
 
-    function getMessageCreate( ) {
-        return "Create Password<BR>Step 1: Enter your email address" ;
+    function getFormFields( ) {
+        $this->_formFields = $this->_state->getFormFields( );
+        return PARENT::getFormFields( );
     }
 
-    function getMessageReset( ) {
-        return "Reset Password<BR>Step 1: Enter your email address" ;
+    function getMessage( ) {
+        return $this->_state->getMessage( );
     }
 
+    function getLoginUrl( ){
+        if ( $url = $this->_state->getLoginUrl( )) return $url;
+        return PARENT::getLoginUrl( );
+    }
+
+
+
+    function getFieldnamePassword( ) {
+        if ( $pname = $this->_state->getFieldnamePassword( )) return $pname;
+        return PARENT::getFieldnamePassword( );
+    }
+
+    function check_authen_credentials( ) {
+        $valid = PARENT::check_authen_credentials( );
+        if ( $valid  && isset( $_REQUEST['uid']) && $_REQUEST['uid'] != $this->_handler->userid ) {
+            return false;
+        }
+        return $valid;
+    }
+/*
     function check_authen_credentials() {
         if ( !( isset( $_REQUEST['action']) && $_REQUEST['action'])) return PARENT::check_authen_credentials( );
         
@@ -76,11 +97,6 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
         $message_action = 'getMessage'.ucfirst( $action );
         if ( method_exists( $this, $message_action )) $this->_handler->set_message( $this->$message_action(), 'OK');
         return false;
-    }
-
-    function getFieldnamePassword( ) {
-        if ( $this->_lookupType = AMP_LOGIN_LOOKUPTYPE_OTP ) return 'otp';
-        return PARENT::getFieldnamePassword( );
     }
 
     function validateAction( $action ) {
@@ -142,9 +158,7 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
     }
 
     function do_set_password( $action ){
-        print 'bananas';
         if ( !( $new_password = $this->create_confirmed_password( $action ))) return false;
-        print 'yesllow';
         $sql = "UPDATE userdata set password = " . $this->_dbcon->qstr( $new_password ) . " where id = " . $_REQUEST['uid'];
         $this->_dbcon->Execute( $sql );
         $this->_handler->set_cookie( );
@@ -178,6 +192,6 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
         $this->_formFields[ $this->_login_password_field_confirmed ] = 
                 array( 'label' => 'Confirm Password:', 'type'=>'password');
     }
-
+*/
 }
 ?>
