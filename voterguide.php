@@ -3,6 +3,8 @@
 $modid = 109;
 $mod_id = 74;
 
+define('AMP_VOTERGUIDE_OLD_STYLE', false);
+
 require_once( "AMP/BaseDB.php" );
 require_once( "AMP/UserData/Input.inc.php" );
 require_once( "AMP/Content/Page.inc.php" );
@@ -16,6 +18,129 @@ require_once( "Modules/VoterGuide/Search/Form.inc.php" );
 require_once( "Modules/VoterGuide/SetDisplay.inc.php" );
 
 $currentPage = &AMPContent_Page::instance();
+
+$voterguide =& new VoterGuide_Controller($currentPage);
+$voterguide->execute();
+
+require_once( "AMP/BaseTemplate.php" );
+require_once( "AMP/BaseModuleIntro.php" );
+include("AMP/BaseFooter.php"); 
+
+class VoterGuide_Controller {
+
+	var $page;
+	var $dbcon;
+
+	function VoterGuide_Controller(&$page) {
+		$this->page = $page;
+		$this->dbcon = AMP_Registry::getDbcon(); 
+	}
+
+	function execute() {
+		if ( ( isset( $_GET['name']) && $short_name = $_GET['name']) && ( !isset( $_GET['id']) ) ) {
+			$idByName = AMPSystem_Lookup::instance('VoterGuideByShortName');
+			if(isset($idByName[$short_name])) {
+				$_GET['id'] = $idByName[$short_name];
+			}
+		}
+
+		if ( isset( $_GET['id']) && $_GET['id']) {
+			$guide = &new VoterGuide( $this->dbcon, $_GET['id']);
+
+			if ( isset( $_GET['action']) && $_GET['action'] == 'edit' ) {
+				$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
+				 
+				$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+				if(!$uid && $_REQUEST['id']) {
+					$lookup = AMPSystem_Lookup::instance('OwnerByGuideID');
+					$uid = $lookup[$_REQUEST['id']];
+				}
+				$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
+
+				$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
+				if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
+				if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
+				if ( $uid && $auth && !$sub ) {
+					$udm->submitted = false;
+					$udm->getUser( $uid ); 
+					$udm->registerPlugin('AMPVoterGuide','Save');
+				}
+				$mod_id = $udm->modTemplateID;
+				AMP_directDisplay( $udm->output( ));
+
+			} elseif ( isset( $_GET['action']) && $_GET['action'] == 'download' ) {
+		//		print "Please be patient while we build your voter bloc";
+				ampredirect('voterbloc.php?id='.$guide->id);
+				
+			} elseif ( isset( $_GET['action']) && $_GET['action'] == 'join' ) {
+				$_REQUEST['guide'] = $_GET['id'];
+				$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERBLOC );
+				$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
+				if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
+				if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
+				if ( $uid && $auth && !$sub ) {
+					$udm->submitted = false;
+					$udm->getUser( $uid ); 
+				}
+				$mod_id = $udm->modTemplateID;
+				AMP_directDisplay( $udm->output( ));
+			} else {
+
+				$this->page->contentManager->addDisplay( $guide->getDisplay() );
+			}
+
+		} elseif ( isset( $_GET['action']) && $_GET['action'] == 'new' ) {
+			$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
+			 
+			$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+			$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
+
+			$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
+			if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
+			if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
+			if ( $uid && $auth && !$sub ) {
+				$udm->submitted = false;
+				$udm->getUser( $uid ); 
+			}
+			$mod_id = $udm->modTemplateID;
+			AMP_directDisplay( $udm->output( ));
+
+		} else {
+			$display = &new VoterGuideSet_Display( $this->dbcon );
+
+			$searchForm = &new VoterGuideSearch_Form();
+			$searchForm->Build( true );
+			if ( $action = $searchForm->submitted( ) ) {
+				$display->applySearch( $searchForm->getSearchValues() ); 
+			} else {
+				$searchForm->applyDefaults();
+
+			}
+
+			AMP_directDisplay( $searchForm->output() );
+			$this->page->contentManager->addDisplay( $display );
+		}
+
+		
+/*
+		if(AMP_VOTERGUIDE_ACTION_EDIT == $this->getAction()) {
+			$this->doEdit();
+		} elseif(AMP_VOTERGUIDE_ACTION_JOIN == $this->getAction()) {
+			$this->doJoin();
+		}
+*/
+	}
+
+	function doEdit() {
+		return true;
+	}
+
+	function doJoin() {
+		return true;
+	}
+}
+
+if(defined('AMP_VOTERGUIDE_OLD_STYLE') && AMP_VOTERGUIDE_OLD_STYLE) {
 
 if ( ( isset( $_GET['name']) && $short_name = $_GET['name']) && ( !isset( $_GET['id']) ) ) {
 	$idByName = AMPSystem_Lookup::instance('VoterGuideByShortName');
@@ -104,6 +229,7 @@ if ( isset( $_GET['id']) && $_GET['id']) {
 require_once( "AMP/BaseTemplate.php" );
 require_once( "AMP/BaseModuleIntro.php" );
 include("AMP/BaseFooter.php"); 
+} //end defined old style
 /*
 function vg_postition($can,$pos,$reason=NULL) {
 		$position = "<p><i>Candidate/Ballot Item</i>:&nbsp;<B>$can</b><br><i>Position:</i>&nbsp;<B>$pos</B><br><i>Reason:</i>&nbsp;$reason</p><BR>";
