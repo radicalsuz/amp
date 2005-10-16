@@ -42,9 +42,9 @@ class ElementCopierScript {
         $this->copiers[ $copier ]['prefix'] = $prefix;
     }
 
-	function getPrefix( $copier ) {
-		return $this->copiers[ $copier ]['prefix'];
-	}
+    function getPrefix( $copier ) {
+        return $this->copiers[ $copier ]['prefix'];
+    }
 
     function setFormName( $copier, $formname ) {
         $this->copiers[ $copier ]['formname'] = $formname;
