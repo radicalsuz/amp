@@ -265,6 +265,10 @@ class VoterGuide extends AMPSystem_Data_Item {
 		return $this->getData('bloc_id');
 	}
 
+	function getOwner() {
+		return $this->getData('owner_id');
+	}
+
 	function getBlocList() {
 		return DIA_ORGANIZATION_SHORT_NAME.'+'.$this->getShortName().'-'.$this->getBlocID().
 			'@lists.democracyinaction.org';
