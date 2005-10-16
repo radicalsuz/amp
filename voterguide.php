@@ -32,8 +32,9 @@ class VoterGuide_Controller {
 	var $page;
 	var $dbcon;
 
-	var $action = null;
+	var $action_method = null;
 	var $action_id = null;
+	var $action_object = null;
 
 	var $protected_methods;
 
@@ -45,10 +46,10 @@ class VoterGuide_Controller {
 
 	function init() {
 		$this->setProtectedMethods();
-		$this->action = (isset($_GET['action']) && $_GET['action'])?
+		$this->action_method = (isset($_GET['action']) && $_GET['action'])?
 							$_GET['action']:null;
-		if('new' == $this->action || 'post' == $this->action) {
-			$this->action = 'create';
+		if('new' == $this->action_method) {
+			$this->action_method = 'post';
 		}
 
 		if ( isset( $_GET['id']) && $_GET['id']) {
@@ -59,62 +60,106 @@ class VoterGuide_Controller {
 				$this->action_id = $idByName[$short_name];
 			}
 		}
+
+		if( !isset($this->action_method) ) {
+			if(isset($this->action_id)) {
+				$this->action_method = 'view';
+			} else {
+				$this->action_method = 'search';
+			}
+		}
+
 	}
 
 	function execute() {
 
-		if ( isset($this->action_id) && $this->action_id ) {
-			$guide = &new VoterGuide( $this->dbcon, $this->action_id);
+		return $this->doAction();
 
-			$this->doAction($guide) or $this->view($guide);
-
-		} elseif ( isset( $_GET['action']) && $_GET['action'] == 'new' ) {
-			$this->create();	
-		} else {
-			$this->search();
-		}
 	}
 
 	function setProtectedMethods() {
 	}
 
-	function can($action) {
+	function &getActionObject() {
+		if(!isset($this->action_object)) {
+			if(!isset($this->action_id)) {
+				return false;
+			} else {
+				$this->action_object =& new VoterGuide($this->dbcon, $this->action_id);
+			}
+		}
+		return $this->action_object;
+	}
+				
+				
+	function allowed($action) {
 		return method_exists($this, $action) && !$this->protected_methods[$action];
 	}
 
-	function doAction(&$guide) {
-		$action = $this->action;
-		if(isset($action) && $action && $this->can($action)) {
-			$this->$action($guide);
+	function doAction() {
+		$action = $this->action_method;
+		if(isset($action) && $action && $this->allowed($action)) {
+			$this->$action();
 			return true;
 		}
 		return false;
 	}
 
-	function view(&$guide) {
+	function view() {
+		$guide =& $this->getActionObject();
 		$this->page->contentManager->addDisplay( $guide->getDisplay() );
 	}
 
-	function edit(&$guide) {
+	function getUid($guide_id = null) {
+		$uid = false;
+		$object_id = isset($guide_id)?$guide_id:$this->action_id;
+		if($object_id) {
+			$lookup = AMPSystem_Lookup::instance('OwnerByGuideID');
+			$uid = $lookup[$object_id];
+		}
+		if(!$uid) {
+			$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+		}
+		return $uid;
+	}
+
+	function create_password() {
+		return $this->create();
+	}
+
+	function create() {
+		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
+		$uid = $this->getUid($this->action_id);
+		$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
+		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
+		if (!$auth) {
+			return $this->edit();
+		}
+		return $this->edit();	
+	}
+		
+	function edit() {
 		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
 		 
-		$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
-		if(!$uid && $_REQUEST['id']) {
-			$lookup = AMPSystem_Lookup::instance('OwnerByGuideID');
-			$uid = $lookup[$_REQUEST['id']];
-		}
+		$uid = $this->getUid();
 		$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
 
 		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
-//		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
-//		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
+		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
+		if(!$udm->authorized) {
+			print "you suck";
+			return false;
+		}
+		$udm->uid = $uid;
+		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
 //		if ( $uid && $auth && !$sub ) {
-		if ( true ) {
+		if ( $uid && !$sub ) {
 			$udm->submitted = false;
 			$udm->getUser( $uid ); 
 
 //			$udm->registerPlugin('AMPVoterGuide', 'Save');
 			$save =& $udm->getPlugin('AMPVoterGuide','Save');
+			$guide =& $this->getActionObject();
 			$guide->readData($guide->id);
 			$positions = $guide->getData($save->_copierName);
 			$prefix = $save->_copier->getPrefix($save->_copierName);
@@ -140,8 +185,8 @@ class VoterGuide_Controller {
 		AMP_directDisplay( $udm->output( ));
 	}
 
-	function join(&$guide) {
-		$_REQUEST['guide'] = $_GET['id'];
+	function join() {
+		$_REQUEST['guide'] = $this->action_id;
 		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERBLOC );
 		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
 		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
@@ -154,7 +199,8 @@ class VoterGuide_Controller {
 		AMP_directDisplay( $udm->output( ));
 	}
 
-	function create() {
+//	function create() {
+	function post() {
 		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
 		 
 		$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
@@ -171,9 +217,9 @@ class VoterGuide_Controller {
 		AMP_directDisplay( $udm->output( ));
 	}
 
-	function download(&$guide) {
+	function download() {
 //		print "Please be patient while we build your voter bloc";
-		ampredirect('voterbloc.php?id='.$guide->id);
+		ampredirect('voterbloc.php?id='.$this->action_id);
 	}
 
 	function search() {
