@@ -42,6 +42,10 @@ class ElementCopierScript {
         $this->copiers[ $copier ]['prefix'] = $prefix;
     }
 
+	function getPrefix( $copier ) {
+		return $this->copiers[ $copier ]['prefix'];
+	}
+
     function setFormName( $copier, $formname ) {
         $this->copiers[ $copier ]['formname'] = $formname;
     }
@@ -149,7 +153,10 @@ class ElementCopierScript {
     }
 
     function _delimit( $text ) {
-//        if (strpos( $text, "'" ) !== FALSE ) return '"'. $text . '"';
+//        if ( (strpos( $text, "'" ) !== FALSE ) || (strpos( $text, "\\" ) !== FALSE ) ) {
+        if (strpos( $text, "'" ) !== FALSE ) {
+			return '"'. $text . '"';
+		}
         return "'". $text . "'";
     }
 
@@ -279,12 +286,13 @@ class ElementCopierScript {
         $script = "var $valuevar = new Array();\n var valuecounter=0;\n";
         foreach ( $data as $key => $value ) {
             if ( is_numeric( $key )) continue;
-            $script .= $valuevar . "[ valuecounter++] = " . $this->_delimit( $this->_js_cleanvalue( $value ) ) . "\n";
+            $script .= $valuevar . "[ valuecounter++] = '" . $this->_js_cleanvalue( $value ) . "'\n";
         }
         return $script;
     }
 
     function _js_cleanValue( $value ) {
+    //    return addslashes(str_replace( "\r\n", "\n", $value));
         return addslashes(str_replace( "\r\n", "\\n", $value));
     }
 
