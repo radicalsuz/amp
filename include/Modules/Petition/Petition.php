@@ -89,7 +89,7 @@ Class Petition {
 			$P->MoveNext();
 		}
 		if ($count > $this->limit) {
-			$html .= '<tr><div align=right><td colspan=4 class="text"><a href="petition.php?pid='.$pid.'&signers=1&offset='.($offset + $this->limit).'#namelist">Next Page</a></div></td></tr>';
+			$html .= '<tr><div align=right><td colspan=4 class="text"><a href="petition.php?pid='. $this->pid .'&signers=1&offset='.($offset + $this->limit).'#namelist">Next Page</a></div></td></tr>';
 		} 
 		$html .= '</table><P><a href="petition.php?pid='. $this->pid.'">Sign the Petition</a></P><br><br>';
 		return $html;
