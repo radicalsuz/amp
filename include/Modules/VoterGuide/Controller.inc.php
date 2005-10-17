@@ -14,6 +14,8 @@ class VoterGuide_Controller {
 
 	var $protected_methods;
 
+	var $intro_id;
+
 	function VoterGuide_Controller(&$page) {
 		$this->page =& $page;
 		$this->dbcon = AMP_Registry::getDbcon(); 
@@ -99,6 +101,10 @@ class VoterGuide_Controller {
 		return $uid;
 	}
 
+	function getIntroID() {
+		return $this->intro_id;
+	}
+
 	function create_password() {
 		return $this->create();
 	}
@@ -131,7 +137,6 @@ class VoterGuide_Controller {
 //trigger_error("authenticate returned: $auth", E_USER_WARNING);
 		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
 		if ( $uid && $auth && !$sub ) {
-			define('AMP_VOTERGUIDE_EDIT_HEADER', 376);
 			if(defined('AMP_VOTERGUIDE_EDIT_HEADER')) {
 				$this->page->addObject(strtolower('UserDataPlugin_Save_AMPVoterGuide'), $guide);
 				$this->page->setIntroText(AMP_VOTERGUIDE_EDIT_HEADER);
@@ -166,6 +171,7 @@ class VoterGuide_Controller {
 //			$copier->addSets('voterguidePositions', $guide->_positionSet->getArray());
 		}
 		$mod_id = $udm->modTemplateID;
+		$this->intro_id = $mod_id;
 		AMP_directDisplay( $udm->output( ));
 	}
 
@@ -198,6 +204,7 @@ class VoterGuide_Controller {
 			$udm->getUser( $uid ); 
 		}
 		$mod_id = $udm->modTemplateID;
+		$this->intro_id = $mod_id;
 		AMP_directDisplay( $udm->output( ));
 	}
 
