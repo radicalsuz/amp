@@ -27,5 +27,10 @@ class AMP_Authentication_LoginType_Admin extends AMP_Authentication_LoginType {
         return sprintf( AMP_TEXT_LOGIN_HELP_ADMIN, AMP_SITE_ADMIN );
     }
 
+    function getAuthOptions( ) {
+        return false;
+    }
+
+
 }
 ?>
