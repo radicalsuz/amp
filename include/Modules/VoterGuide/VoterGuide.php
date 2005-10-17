@@ -114,7 +114,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 
 	function generateShortName($string) {
 		if(!preg_match('/^\w+$/', $string)) {
-			$string = preg_replace($this->disallowedShortNameCharsRegex, '', $string);
+			$string = strtolower(preg_replace($this->disallowedShortNameCharsRegex, '', $string));
 		}
 		return $string;
 	}
