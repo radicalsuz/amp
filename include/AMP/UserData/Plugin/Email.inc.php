@@ -137,7 +137,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
         $textdata = & new AMPSystem_IntroText( $this->dbcon, $id );
 		if($textdata->isHtml()) $this->containsHTML(true);
-        return $textdata->getBody() . "\n\n";
+        return AMPDisplay_HTML::_activateIncludes($textdata->getBody()) . "\n\n";
     }
 
 	function containsHTML( $flag = null ) {
