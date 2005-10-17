@@ -88,14 +88,6 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
 		$customErrors = $voterGuide->getCustomErrors();
 
-		if($voterGuide->getErrors || $customErrors) {
-			if($_FILES[$this->_field_prefix.'_'.'filelink']) {
-				$customErrors[] = array('field' => 'filelink', 'message' => 'You will need to select your file again');
-			}
-			if($_POST[$this->_field_prefix.'_'.'filelink']) {
-				$customErrors[] = array('field' => 'picture', 'message' => 'You will need to select your file again');
-			}
-		}
 		if($customErrors) {
 			foreach($customErrors as $error) {
 				$field = $this->_field_prefix.'_'.$error['field'];
@@ -116,8 +108,15 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 		if($_FILES[$this->_field_prefix.'_'.'filelink']['name']) {
 			$this->udm->form->setElementError($this->_field_prefix.'_'.'filelink', 'You will need to select your file again');
 		}
-		if($_FILES[$this->_field_prefix.'_'.'picture']['name']) {
+		if(isset($_FILES[$this->_field_prefix.'_'.'picture']) && $_FILES[$this->_field_prefix.'_'.'picture']['name']) {
 			$this->udm->form->setElementError($this->_field_prefix.'_'.'picture', 'You will need to select your file again');
+		}
+
+		if(!$_POST[$this->_field_prefix.'_'.'accurate_checkbox']) {
+			$this->udm->form->setElementError($this->_field_prefix.'_'.'accurate_checkbox', 'This is a required field');
+		}
+		if(!$_POST[$this->_field_prefix.'_'.'trust_checkbox']) {
+			$this->udm->form->setElementError($this->_field_prefix.'_'.'trust_checkbox', 'This is a required field');
 		}
     } 
  
