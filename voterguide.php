@@ -150,6 +150,7 @@ class VoterGuide_Controller {
 
 		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
 		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
+		$guide =& $this->getActionObject();
 //		$udm->uid = $uid;
 //trigger_error("authenticate returned: $auth", E_USER_WARNING);
 		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
@@ -159,7 +160,6 @@ class VoterGuide_Controller {
 
 //			$udm->registerPlugin('AMPVoterGuide', 'Save');
 			$save =& $udm->getPlugin('AMPVoterGuide','Save');
-			$guide =& $this->getActionObject();
 			$guide->readData($guide->id);
 			$positions = $guide->getData($save->_copierName);
 			$prefix = $save->_copier->getPrefix($save->_copierName);
@@ -175,6 +175,9 @@ class VoterGuide_Controller {
 			foreach($guide->getData() as $property => $value) {
 				$data[$save->_field_prefix.'_'.$property] = $value;
 			}
+			$data[$save->_field_prefix.'_accurate_checkbox']['default'] = 'checked';
+			$data[$save->_field_prefix.'_trust_checkbox']['default'] = 'checked';
+
 			$udm->setData($data);
 
 //			$udm->setData($guide->getData());
