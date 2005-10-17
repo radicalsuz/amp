@@ -31,6 +31,7 @@ class UserDataPlugin_Authenticate_AMPPassword extends UserDataPlugin {
         $options = array_merge($this->getOptions(), $options);
         require_once( 'AMP/Auth/Handler.inc.php');
         $AMP_Auth_Handler = &new AMP_Authentication_Handler( $this->udm->dbcon, 'user' );
+		$AMP_Auth_Handler->userid = $options['uid'];
         if ( !( $this->udm->authorized = $AMP_Auth_Handler->is_authenticated( ) )) $AMP_Auth_Handler->do_login( );
 
 /*
