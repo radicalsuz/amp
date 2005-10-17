@@ -21,6 +21,7 @@ $currentPage = &AMPContent_Page::instance();
 
 $voterguide =& new VoterGuide_Controller($currentPage);
 $voterguide->execute();
+$intro_id = $voterguide->getIntroID();
 
 require_once( "AMP/BaseTemplate.php" );
 require_once( "AMP/BaseModuleIntro.php" );
