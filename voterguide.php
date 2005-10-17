@@ -127,6 +127,10 @@ class VoterGuide_Controller {
 		return $this->create();
 	}
 
+	function reset() {
+		return $this->create();
+	}
+
 	function create() {
 		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
 		$uid = $this->getUid($this->action_id);
@@ -146,14 +150,10 @@ class VoterGuide_Controller {
 
 		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
 		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
-		if(!$udm->authorized) {
-			print "you suck";
-			return false;
-		}
-		$udm->uid = $uid;
+//		$udm->uid = $uid;
+//trigger_error("authenticate returned: $auth", E_USER_WARNING);
 		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
-//		if ( $uid && $auth && !$sub ) {
-		if ( $uid && !$sub ) {
+		if ( $uid && $auth && !$sub ) {
 			$udm->submitted = false;
 			$udm->getUser( $uid ); 
 
