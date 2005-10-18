@@ -78,7 +78,7 @@ class AMP_Authentication_LoginState {
 
 class AMP_Authentication_LoginState_Base extends AMP_Authentication_LoginState {
 
-    var $_allowedActions = array( 'reset', 'create' );
+    var $_allowedActions = array( 'reset_password', 'create_password' );
     var $_sequentialStates = array( 'action_requested' => 'AMP_Authentication_LoginState_AuthRequest',
                                     'login_failed' => 'AMP_Authentication_LoginState_InvalidLogin');
 
@@ -94,12 +94,12 @@ class AMP_Authentication_LoginState_Base extends AMP_Authentication_LoginState {
     }
 
     function getHelpLinks() {
-        return  sprintf( AMP_TEXT_LOGIN_PASSWORD_RESET, $this->getLoginUrl( array( 'action' => 'action=reset' ))). '<BR>'
+        return  sprintf( AMP_TEXT_LOGIN_PASSWORD_RESET, $this->getLoginUrl( array( 'action' => 'action=reset_password' ))). '<BR>'
               . sprintf( AMP_TEXT_LOGIN_HELP_ADMIN, AMP_SITE_ADMIN );
     }
 
     function getAuthOptions() {
-        return  sprintf( AMP_TEXT_LOGIN_PASSWORD_NEW, $this->getLoginUrl(  array( 'action' =>'action=create' ))) ;
+        return  sprintf( AMP_TEXT_LOGIN_PASSWORD_NEW, $this->getLoginUrl(  array( 'action' =>'action=create_password' ))) ;
     }
 
 }
@@ -144,13 +144,13 @@ class AMP_Authentication_LoginState_AuthRequest extends AMP_Authentication_Login
     
     function getHelpLinks( ){
         $output = "";
-        if ( "reset" != $this->_current_action ) $output .= sprintf( AMP_TEXT_LOGIN_PASSWORD_RESET,  $this->getLoginUrl( array( 'action' => 'action=reset') )). '<BR>';
+        if ( "reset_password" != $this->_current_action ) $output .= sprintf( AMP_TEXT_LOGIN_PASSWORD_RESET,  $this->getLoginUrl( array( 'action' => 'action=reset_password') )). '<BR>';
         return $output . sprintf( AMP_TEXT_LOGIN_HELP_ADMIN, AMP_SITE_ADMIN );
     }
 
     function getAuthOptions() {
-        if ( 'create' != $this->_current_action ) return false;
-        return  sprintf( AMP_TEXT_LOGIN_PASSWORD_NEW, $this->getLoginUrl( array(  'action'=>'action=create') )) ;
+        if ( 'create_password' != $this->_current_action ) return false;
+        return  sprintf( AMP_TEXT_LOGIN_PASSWORD_NEW, $this->getLoginUrl( array(  'action'=>'action=create_password') )) ;
     }
 
     function getMessage( ) {
