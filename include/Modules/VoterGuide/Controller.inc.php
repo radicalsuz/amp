@@ -23,6 +23,10 @@ class VoterGuide_Controller {
 	}
 
 	function init() {
+		if(!defined('AMP_VOTERGUIDE_DEBUG')) {
+			define('AMP_VOTERGUIDE_DEBUG', false);
+		}
+
 		$this->setProtectedMethods();
 		$this->action_method = (isset($_GET['action']) && $_GET['action'])?
 							$_GET['action']:null;
@@ -106,22 +110,33 @@ class VoterGuide_Controller {
 	}
 
 	function create_password() {
-		return $this->create();
+		return $this->login();
 	}
 
-	function reset() {
-		return $this->create();
+	function reset_password() {
+		return $this->login();
 	}
 
-	function create() {
+	function login() {
 		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
 		$uid = $this->getUid($this->action_id);
 		$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
-		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
-		if (!$auth) {
-			return $this->edit();
+		if ( $uid ) {
+			$this->notice('have uid, trying to authenticate');
+			$auth = $udm->authenticate( $uid, $otp );
+			$this->notice('returned from authenticate, auth = ' . $auth . '.');
 		}
-		return $this->edit();	
+		if (!$auth) {
+			return ampredirect('voterguide.php?action=create_password');
+		}
+
+		if(!$id = $this->action_id) {
+			$this->notice('looking up guide by logged in owner');
+			$ids = AMPSystem_Lookup::instance('VoterGuideByOwner');
+			$id = $ids[$uid];
+		}
+
+		return ampredirect('voterguide.php?id='.$id.'&action=edit');
 	}
 		
 	function edit() {
@@ -134,12 +149,13 @@ class VoterGuide_Controller {
 		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
 		$guide =& $this->getActionObject();
 //		$udm->uid = $uid;
-//trigger_error("authenticate returned: $auth", E_USER_WARNING);
+		$this->error("authenticate returned: $auth", E_USER_NOTICE);
 		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
 		if ( $uid && $auth && !$sub ) {
 			if(defined('AMP_VOTERGUIDE_EDIT_HEADER')) {
 				$this->page->addObject(strtolower('UserDataPlugin_Save_AMPVoterGuide'), $guide);
-				$this->page->setIntroText(AMP_VOTERGUIDE_EDIT_HEADER);
+//				$this->page->setIntroText(AMP_VOTERGUIDE_EDIT_HEADER);
+				$this->intro_id = AMP_VOTERGUIDE_EDIT_HEADER;
 			}
 			$udm->submitted = false;
 			$udm->getUser( $uid ); 
@@ -171,7 +187,6 @@ class VoterGuide_Controller {
 //			$copier->addSets('voterguidePositions', $guide->_positionSet->getArray());
 		}
 		$mod_id = $udm->modTemplateID;
-		$this->intro_id = $mod_id;
 		AMP_directDisplay( $udm->output( ));
 	}
 
@@ -187,6 +202,13 @@ class VoterGuide_Controller {
 		}
 		$mod_id = $udm->modTemplateID;
 		AMP_directDisplay( $udm->output( ));
+	}
+
+	function unsubscribe() {
+		$email = $_REQUEST['Email'];
+
+		$guide =& $this->getActionObject();
+		$guide->removeVoterFromBloc($email);
 	}
 
 //	function create() {
@@ -227,6 +249,17 @@ class VoterGuide_Controller {
 
 		AMP_directDisplay( $searchForm->output() );
 		$this->page->contentManager->addDisplay( $display );
+	}
+
+	function error($message, $level = null) {
+		if(defined('AMP_VOTERGUIDE_DEBUG') && AMP_VOTERGUIDE_DEBUG) {
+			trigger_error($message, $level);
+		}
+		$this->errors[] = $message;
+	}
+
+	function notice($message) {
+		$this->error($message, E_USER_NOTICE);
 	}
 }
 
