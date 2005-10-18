@@ -191,6 +191,10 @@ class VoterGuide_Controller {
 	}
 
 	function join() {
+		$guide =& $this->getActionObject();
+		$this->page->addObject(strtolower('UserDataPlugin_Save_AMPVoterGuide'), $guide);
+		$this->intro_id = AMP_VOTERGUIDE_EDIT_HEADER;
+		
 		$_REQUEST['guide'] = $this->action_id;
 		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERBLOC );
 		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
