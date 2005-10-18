@@ -137,6 +137,11 @@ class VoterGuide extends AMPSystem_Data_Item {
         if(defined('VOTERGUIDE_DIA_GROUP_PARENT_KEY')) {
             $group['parent_KEY'] = VOTERGUIDE_DIA_GROUP_PARENT_KEY;
         }
+		if(defined('AMP_VOTERGUIDE_UNSUBSCRIBE_FOOTER')) {
+			$group['Append_Footer'] = sprintf(AMP_VOTERGUIDE_UNSUBSCRIBE_FOOTER,
+											  $this->getName(),
+											  AMP_SITE_URL.'voterguide.php?id='.$this->id.'&action=unsubscribe&Email=[[Supporter.Email]]');
+		}
         $group_id = trim($api->addGroup( $group ));
 
 //		$this->addUnsubscribeFooter($group_id);
@@ -167,6 +172,17 @@ class VoterGuide extends AMPSystem_Data_Item {
 		return true;
 	}
 
+	function removeVoterFromBloc($email, $bloc_id = null) {
+		if(isset($this) && $this->getBlocID()) {
+			$bloc_id = $this->getBlocID();
+		}
+		if(!isset($bloc_id) || !$bloc_id) {
+			return false;
+		}
+        $api =& DIA_API::create();
+		$api->unsubscribe(array('Email' => $email, 'groups_KEY' => $bloc_id));
+	}
+		
 	function getBlocGroupIDByName($name) {
         $api =& DIA_API::create();
 		$results = $api->get('groups', array('where' => 'Group_Name="'.$name.'"',
