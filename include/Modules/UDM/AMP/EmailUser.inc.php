@@ -17,17 +17,11 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
     var $long_name   = 'Email User';
     var $description = 'Notifies the user that their record has been created.';
 
-    /*
-    var $options = array(
-        'subject' => array( 
-            'default' => 'Update Your Posting',
-            'available'=>true,
-            'type'=>'text'
-            'label'=>'Email Subject Line'),
-        'format' => array( 
-            'default' => 'Text' )
-        );
-    */
+    var $options = array('form_data_intro' => 
+					array('available'=>true,
+						  'type'=>'text',
+						  'label'=>'Introduction to form data'));
+
     var $available = true;
 
     function UserDataPlugin_EmailUser_AMP ( &$udm, $plugin_instance=null ) {
@@ -44,9 +38,13 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
         $options = array_merge($this->getOptions(), $options);
 
         //Update Link
-        $message = "\n\nPlease go to http://" . $_SERVER['SERVER_NAME'] .
-                   "/" . $options['update_page'] . "?modin=" . $udm->instance .
-                   "&uid=" . $udm->uid . " to update your information.\n\n";
+		if($options['form_data_intro']) {
+			$message = "\n\n".$options['form_data_intro']."\n\n";
+		} else {
+			$message = "\n\nPlease go to http://" . $_SERVER['SERVER_NAME'] .
+					   "/" . $options['update_page'] . "?modin=" . $udm->instance .
+					   "&uid=" . $udm->uid . " to update your information.\n\n";
+		}
 
 		$udm->disable_javascript();
         // Output the form data - default is 'text' as defined in
