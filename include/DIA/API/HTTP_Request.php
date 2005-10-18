@@ -85,6 +85,28 @@ class DIA_API_HTTP_Request extends DIA_API {
 		}
 	}
 
+	//options are supporter_KEY, Email, groups_KEY
+	function unsubscribe($data) {
+        $req =& new HTTP_Request( DIA_REST_API_UNSUBSCRIBE_URL );
+
+		$this->setAuth($req);
+
+        foreach ( $data as $key => $val ) {
+            $req->addQueryString( $key, $val );
+        }
+
+        if ( !PEAR::isError( $req->sendRequest() ) ) {
+            $out = trim($req->getResponseBody());
+        } else {
+			if( DIA_API_DEBUG ) {
+				$this->print($out);
+			}
+            $out = null;
+        }
+
+        return $out;
+	}
+
 	//options are key, debug
 	function process( $table, $data ) {
         $req =& new HTTP_Request( DIA_REST_API_PROCESS_URL );
@@ -166,7 +188,6 @@ class DIA_API_HTTP_Request extends DIA_API {
 
 		if( DIA_API_DEBUG ) {
 			print "requesting URL: ".$req->_url->getURL()."<br/>";
-			AMP_varDump($req->_postData);
 		}
 
         if ( !PEAR::isError( $req->sendRequest() ) ) {
