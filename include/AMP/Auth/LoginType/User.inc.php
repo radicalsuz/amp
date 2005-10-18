@@ -23,6 +23,9 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 
     function init( &$handler ) {
         PARENT::init( $handler );
+		if(!defined('AMP_AUTHENTICATION_DEBUG')) {
+			define('AMP_AUTHENTICATION_DEBUG', false);
+		}
     }
 
     function initLoginState( ){
@@ -75,11 +78,21 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 
     function check_authen_credentials( ) {
         $valid = PARENT::check_authen_credentials( );
-        if ( $valid  && isset( $_REQUEST['uid']) && $_REQUEST['uid'] != $this->_handler->userid ) {
+        if ( $valid  && (isset($_REQUEST['uid']) && $_REQUEST['uid'])
+			&& $_REQUEST['uid'] != $this->_handler->userid ) {
+			$this->error('auth creds do not match request : \n'
+				.'request - '.$_REQUEST['uid'].', handler - '.$this->_handler->userid);
             return false;
         }
         return $valid;
     }
+
+	function error($message, $level = null) {
+		if(defined('AMP_AUTHENTICATION_DEBUG') && AMP_AUTHENTICATION_DEBUG ) {
+			trigger_error($message, $level);
+		}
+		$this->errors[] = $message;
+	}
 /*
     function check_authen_credentials() {
         if ( !( isset( $_REQUEST['action']) && $_REQUEST['action'])) return PARENT::check_authen_credentials( );

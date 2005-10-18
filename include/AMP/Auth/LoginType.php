@@ -22,6 +22,7 @@ class AMP_Authentication_LoginType {
             );
     var $_invalid_message = 'Invalid Password';
 
+	var $errors;
 
     function AMP_Authentication_LoginType ( &$handler ) {
         $this->init( $handler );
