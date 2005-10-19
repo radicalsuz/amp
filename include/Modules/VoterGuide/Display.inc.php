@@ -89,7 +89,9 @@ class VoterGuide_Display extends AMPDisplay_HTML {
     }
 
 	function _HTML_blocJoin() {
-		$blocURL = AMP_Url_AddVars(AMP_FORM_URL_VOTERBLOC,'guide='.$this->_voterguide->id);
+		require_once('Modules/VoterGuide/Controller.inc.php');
+		$blocURL = VoterGuide_Controller::getJoinURL($this->_voterguide);
+//		$blocURL = AMP_Url_AddVars(AMP_FORM_URL_VOTERBLOC,'guide='.$this->_voterguide->id);
 		if( !$blocURL ) {
 			return false;
 		}
