@@ -5,7 +5,7 @@ class VoterGuide_Position extends AMPSystem_Data_Item {
     var $datatable = 'voterguide_positions';
     var $name_field = "item";
 
-    var $_votes = array( 'Hell Yeah', 'Yeah', 'No', 'No Way', 'No Endorsement');
+    var $_votes = array( 'Hell Yeah', 'Yes', 'No', 'No Way', 'No Endorsement');
 
     function VoterGuide_Position( &$dbcon, $id=null) {
         $this->init( $dbcon, $id );
