@@ -109,6 +109,10 @@ class VoterGuide_Controller {
 		return $this->intro_id;
 	}
 
+	function getJoinURL($guide) {
+		return 'voterguide.php?action=join&name='.$guide->getShortName();
+	}
+
 	function create_password() {
 		return $this->login();
 	}
@@ -148,8 +152,12 @@ class VoterGuide_Controller {
 		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
 		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
 		$guide =& $this->getActionObject();
+		if(!$guide->isOwner($auth)) {
+			$this->error('authenticated but does not own this guide');
+			return false;
+		}
 //		$udm->uid = $uid;
-		$this->error("authenticate returned: $auth", E_USER_NOTICE);
+		$this->notice("authenticate returned: $auth");
 		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
 		if ( $uid && $auth && !$sub ) {
 			if(defined('AMP_VOTERGUIDE_EDIT_HEADER')) {
