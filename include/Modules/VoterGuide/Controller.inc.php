@@ -201,7 +201,6 @@ class VoterGuide_Controller {
 	function join() {
 		$guide =& $this->getActionObject();
 		$this->page->addObject(strtolower('UserDataPlugin_Save_AMPVoterGuide'), $guide);
-		$this->intro_id = AMP_VOTERGUIDE_EDIT_HEADER;
 		
 		$_REQUEST['guide'] = $this->action_id;
 		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERBLOC );
@@ -213,6 +212,7 @@ class VoterGuide_Controller {
 			$udm->getUser( $uid ); 
 		}
 		$mod_id = $udm->modTemplateID;
+		$this->intro_id = $mod_id;
 		AMP_directDisplay( $udm->output( ));
 	}
 
