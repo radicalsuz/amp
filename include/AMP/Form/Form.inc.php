@@ -14,6 +14,7 @@
  *
  **********/
 
+define('AMP_FORM_UPLOAD_MAX',8388608);
  require_once( 'HTML/QuickForm.php' );
  require_once( 'AMP/Form/HTMLEditor.inc.php');
  require_once( 'AMP/Form/Template.inc.php');
@@ -477,6 +478,7 @@
         $this->addTranslation( $name, '_addFileLink', 'set' );
         $this->_addHiddenField( $name . '_value');
         $this->form->addElement( 'hidden', $name.'_value');
+		$this->form->setMaxFileSize(AMP_FORM_UPLOAD_MAX);
 
         $defaults = $this->_getDefault( $name );
         return $this->form->addElement( 'file', $name, $field_def['label'], $defaults );
