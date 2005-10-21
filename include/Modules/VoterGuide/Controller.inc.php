@@ -3,10 +3,18 @@ require_once( "AMP/BaseDB.php" );
 require_once( "Modules/VoterGuide/ComponentMap.inc.php" );
 require_once( "Modules/VoterGuide/Lookups.inc.php" );
 
+require_once( "AMP/UserData/Input.inc.php" );
+require_once( "AMP/Content/Map.inc.php" );
+require_once( "AMP/Form/ElementCopierScript.inc.php" );
+require_once( "Modules/VoterGuide/VoterGuide.php" );
+require_once( "Modules/VoterGuide/Search/Form.inc.php" );
+require_once( "Modules/VoterGuide/SetDisplay.inc.php" );
+
 class VoterGuide_Controller {
 
 	var $page;
 	var $dbcon;
+	var $udm;
 
 	var $action_method = null;
 	var $action_id = null;
@@ -73,6 +81,12 @@ class VoterGuide_Controller {
 		return $this->action_object;
 	}
 				
+	function &getForm() {
+		if(!isset($this->udm)) {
+			$this->udm =& new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
+		}
+		return $this->udm;
+	}
 				
 	function allowed($action) {
 		return method_exists($this, $action) && !$this->protected_methods[$action];
@@ -90,19 +104,29 @@ class VoterGuide_Controller {
 	function view() {
 		$guide =& $this->getActionObject();
 		$this->page->contentManager->addDisplay( $guide->getDisplay() );
+/*
+		if($guide->isPublished()) {
+			$this->page->contentManager->addDisplay( $guide->getDisplay() );
+		}
+*/
 	}
 
-	function getUid($guide_id = null) {
+	function getActionObjectOwner($object_id = null) {
 		$uid = false;
-		$object_id = isset($guide_id)?$guide_id:$this->action_id;
-		if($object_id) {
-			$lookup = AMPSystem_Lookup::instance('OwnerByGuideID');
-			$uid = $lookup[$object_id];
+		if(!isset($object_id) && !$this->action_id) {
+			return false;
+		} else {
+			$object_id = $this->action_id;
 		}
-		if(!$uid) {
-			$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
-		}
+
+		$lookup = AMPSystem_Lookup::instance('OwnerByGuideID');
+		$uid = $lookup[$object_id];
+
 		return $uid;
+	}
+
+	function getUid() {
+		return (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
 	}
 
 	function getIntroID() {
@@ -110,6 +134,9 @@ class VoterGuide_Controller {
 	}
 
 	function getJoinURL($guide) {
+		if(defined('AMP_VOTERGUIDE_JOIN_REDIRECT')) {
+			return AMP_VOTERGUIDE_JOIN_REDIRECT.$guide->getShortName();
+		}
 		return 'voterguide.php?action=join&name='.$guide->getShortName();
 	}
 
@@ -122,54 +149,63 @@ class VoterGuide_Controller {
 	}
 
 	function login() {
-		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
-		$uid = $this->getUid($this->action_id);
-		$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
-		if ( $uid ) {
-			$this->notice('have uid, trying to authenticate');
-			$auth = $udm->authenticate( $uid, $otp );
-			$this->notice('returned from authenticate, auth = ' . $auth . '.');
-		}
+		$auth = $this->authorized();
 		if (!$auth) {
-			return ampredirect('voterguide.php?action=create_password');
+			//this should probably never happen
+			$auth_plugin = $this->udm->getPlugin('AMPPassword','Authenticate');
+			$auth_plugin->_handler->invalidate_cookie('Error', 'OK');
+			$auth_plugin->_handler->do_logout();
+			$redirect = 'voterguide.php?action=edit&id='.$this->action_id;
+			$this->error('authenticate did not return a uid, redirecting to '.$redirect);
+			return ampredirect($redirect);
 		}
 
-		if(!$id = $this->action_id) {
-			$this->notice('looking up guide by logged in owner');
-			$ids = AMPSystem_Lookup::instance('VoterGuideByOwner');
-			$id = $ids[$uid];
-		}
-
-		return ampredirect('voterguide.php?id='.$id.'&action=edit');
+		//need to modify auth handling to account for other possible actions to pass to
+		return $this->edit();
 	}
-		
-	function edit() {
-		$udm = &new UserDataInput( $this->dbcon, AMP_FORM_ID_VOTERGUIDES );
-		 
-		$uid = $this->getUid();
-		$otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
 
-		$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
-		if ( $uid ) $auth = $udm->authenticate( $uid, $otp );
-		$guide =& $this->getActionObject();
-		if(!$guide->isOwner($auth)) {
-			$this->error('authenticated but does not own this guide');
-			return false;
+	//am i logged in?
+	//what userid owns this guide?
+	//am i logged in as that userid?
+	function authorized() {
+		if(isset($this->authorized_user) && $this->authorized_user) {
+			return $this->authorized_user;
 		}
-//		$udm->uid = $uid;
-		$this->notice("authenticate returned: $auth");
-		if ( ( !$uid || $auth ) && $sub ) $udm->saveUser() ;
-		if ( $uid && $auth && !$sub ) {
+		$udm =& $this->getForm();
+		$guide =& $this->getActionObject();
+		$owner = $guide->getOwner();
+		$one_time_password = $this->getOtp();
+		$_REQUEST['uid'] = $owner;
+		$authorized_user = $udm->authenticate( $owner, $one_time_password );
+		return $this->authorized_user = $authorized_user;
+	}
+
+	function getOtp() {
+		return (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
+	}
+
+	function edit() {
+		if(!$this->authorized()) {
+			//should never happen, since udm auth assumes control
+			return $this->login();
+		}
+
+		$sub = isset($_REQUEST['btnUdmSubmit']) && $this->udm->formNotBlank();
+
+		if ( $sub ) {
+			$this->udm->saveUser() ;
+		} else {
+			$guide =& $this->getActionObject();
 			if(defined('AMP_VOTERGUIDE_EDIT_HEADER')) {
 				$this->page->addObject(strtolower('UserDataPlugin_Save_AMPVoterGuide'), $guide);
 //				$this->page->setIntroText(AMP_VOTERGUIDE_EDIT_HEADER);
 				$this->intro_id = AMP_VOTERGUIDE_EDIT_HEADER;
 			}
-			$udm->submitted = false;
-			$udm->getUser( $uid ); 
+			$this->udm->submitted = false;
+			$this->udm->getUser( $uid ); 
 
 //			$udm->registerPlugin('AMPVoterGuide', 'Save');
-			$save =& $udm->getPlugin('AMPVoterGuide','Save');
+			$save =& $this->udm->getPlugin('AMPVoterGuide','Save');
 			$guide->readData($guide->id);
 			$positions = $guide->getData($save->_copierName);
 			$prefix = $save->_copier->getPrefix($save->_copierName);
@@ -188,14 +224,14 @@ class VoterGuide_Controller {
 			$data[$save->_field_prefix.'_accurate_checkbox']['default'] = 'checked';
 			$data[$save->_field_prefix.'_trust_checkbox']['default'] = 'checked';
 
-			$udm->setData($data);
+			$this->udm->setData($data);
 
 //			$udm->setData($guide->getData());
 //			$copier =& ElementCopierScript::instance();
 //			$copier->addSets('voterguidePositions', $guide->_positionSet->getArray());
 		}
-		$mod_id = $udm->modTemplateID;
-		AMP_directDisplay( $udm->output( ));
+		$mod_id = $this->udm->modTemplateID;
+		AMP_directDisplay( $this->udm->output( ));
 	}
 
 	function join() {
@@ -263,7 +299,7 @@ class VoterGuide_Controller {
 		$this->page->contentManager->addDisplay( $display );
 	}
 
-	function error($message, $level = null) {
+	function error($message, $level = E_USER_WARNING) {
 		if(defined('AMP_VOTERGUIDE_DEBUG') && AMP_VOTERGUIDE_DEBUG) {
 			trigger_error($message, $level);
 		}
