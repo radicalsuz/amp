@@ -152,7 +152,7 @@ class VoterGuide_Controller {
 		$auth = $this->authorized();
 		if (!$auth) {
 			//this should probably never happen
-			$auth_plugin = $this->udm->getPlugin('AMPPassword','Authenticate');
+			$auth_plugin =& $this->udm->getPlugin('AMPPassword','Authenticate');
 			$auth_plugin->_handler->invalidate_cookie('Error', 'OK');
 			$auth_plugin->_handler->do_logout();
 			$redirect = 'voterguide.php?action=edit&id='.$this->action_id;
