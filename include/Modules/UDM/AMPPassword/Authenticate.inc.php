@@ -1,5 +1,7 @@
 <?php
 
+require_once('AMP/UserData/Plugin.inc.php');
+
 class UserDataPlugin_Authenticate_AMPPassword extends UserDataPlugin {
 
     var $short_name  = 'AMPAUTHPW';
