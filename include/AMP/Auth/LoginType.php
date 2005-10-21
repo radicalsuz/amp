@@ -36,12 +36,17 @@ class AMP_Authentication_LoginType {
     function check_authen_credentials() {
 
         // First check for an existing authentication token.
-        if (isset($_COOKIE[ $this->_cookie_name ]))
+        if (isset($_COOKIE[ $this->_cookie_name ])) {
+			$this->notice('cookie exists');
             return $this->_handler->check_cookie($_COOKIE[ $this->_cookie_name ]);
+		}
 
-        if (isset($_REQUEST[ $this->_login_username_field ]) || isset($_SERVER['PHP_AUTH_USER']))
+        if (isset($_REQUEST[ $this->_login_username_field ]) || isset($_SERVER['PHP_AUTH_USER'])) {
+			$this->notice('checking password');
             return $this->_handler->check_password();
+		}
 
+		$this->error('neither cookie nor password found');
         return false;
 
     }
@@ -112,6 +117,17 @@ class AMP_Authentication_LoginType {
     function getInvalidMessage( ){
         return $this->_invalid_message;
     }
+
+	function error($message, $level = E_USER_WARNING) {
+		if(defined('AMP_AUTHENTICATION_DEBUG') && AMP_AUTHENTICATION_DEBUG ) {
+			trigger_error($message, $level);
+		}
+		$this->errors[] = $message;
+	}
+
+	function notice($message) {
+		return $this->error($message, E_USER_NOTICE);
+	}
 
 }
 ?>

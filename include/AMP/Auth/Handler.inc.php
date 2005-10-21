@@ -16,6 +16,7 @@ class AMP_Authentication_Handler {
     var $userid;
 
     function AMP_Authentication_Handler ( $dbcon, $logintype_name = 'admin', $timeout = null ) {
+		$this->notice('creating new handler');
 
         $this->dbcon = $dbcon;
 
@@ -32,15 +33,32 @@ class AMP_Authentication_Handler {
     }
 
     function is_authenticated () {
-        if ( !isset( $this->_loginType )) return false;
+		$this->notice('in is_authenticated');
+        if ( !isset( $this->_loginType )) {
+			$this->error('login type not set');
+			return false;
+		}
 
         if ( $this->_loginType->check_authen_credentials() ) {
+			$this->notice('authen creds check out, setting tokens');
            return $this->set_authen_tokens();
         } else {
+			$this->error('authen creds did not check out, returning false');
            return false;
         }
 
     }
+
+	function error($message, $level = E_USER_WARNING) {
+		if(defined('AMP_AUTHENTICATION_DEBUG') && AMP_AUTHENTICATION_DEBUG ) {
+			trigger_error($message, $level);
+		}
+		$this->errors[] = $message;
+	}
+
+	function notice($message) {
+		return $this->error($message, E_USER_NOTICE);
+	}
 
     function set_authen_tokens () {
 
@@ -72,10 +90,12 @@ class AMP_Authentication_Handler {
         $old_hash = $this->has_cookie;
 
         if (setcookie( $this->_loginType->getCookieName( ), "$hash:$c_user:$c_perm:$c_userid" )) {
+			$this->notice('handler set cookie');
             $this->save_session( $hash, $secret );
             return true;
         }
 
+		$this->error('could not setcookie, no session saved');
         return false;
 
     }
@@ -186,13 +206,16 @@ class AMP_Authentication_Handler {
 
         if (isset($_REQUEST['logout']) && $_REQUEST['logout']=='logout') $this->do_logout();
         if ( $username = $this->_loginType->submittedUser() ) {
+			$this->notice('getting user info from form');
              $password = $this->_loginType->submittedPassword();
         } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
+			$this->notice('getting user info from server vars');
             $username = $_SERVER['PHP_AUTH_USER'];
             $password = $_SERVER['PHP_AUTH_PW'];
         }
 
         if ( $this->_loginType->validateUser( $username, $password )) {
+			$this->notice('user has been validated');
             $this->user = $username;
             $this->_loginType->clearAuthFields( );
             return true;
@@ -267,6 +290,7 @@ class AMP_Authentication_Handler {
     }
 
     function setUserId( $id ) {
+		$this->notice('setting handler userid to '.$id);
         $this->userid = $id;
     }
     /*

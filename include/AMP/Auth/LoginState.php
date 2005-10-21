@@ -22,7 +22,11 @@ class AMP_Authentication_LoginState {
     }
 
     function &initState( ){
-        if ( !( $new_state = $this->_validateState() )) return $this;
+        if ( !( $new_state = $this->_validateState() )) {
+			$this->notice('no interesting state validating, returning this: '.get_class($this));
+			return $this;
+		}
+		$this->notice('instantiating a new valid state: '.$new_state);
         $state = &new $new_state( $this->_handler );
         $this->_passState( $state );
         return $state->initState();
@@ -34,7 +38,12 @@ class AMP_Authentication_LoginState {
     }
 
     function _validateState( ){
-        if ( $this->_readAuthRequest( )) return $this->_sequentialStates[ 'action_requested'];
+        if ( $this->_readAuthRequest( )) {
+			$action = $this->_sequentialStates[ 'action_requested'];
+			$this->notice('valid state is '.$action);
+			return $action;
+		}
+		$this->error('validateState failed');
         return false;
     }
 
@@ -74,6 +83,20 @@ class AMP_Authentication_LoginState {
         return AMP_Url_AddVars( $_SERVER['PHP_SELF'] , $vars );
     }
 
+	function error($message, $level = E_USER_WARNING) {
+		if(defined('AMP_AUTHENTICATION_DEBUG') && AMP_AUTHENTICATION_DEBUG ) {
+			trigger_error($message, $level);
+		}
+		$this->errors[] = $message;
+	}
+
+	function notice($message) {
+		return $this->error($message, E_USER_NOTICE);
+	}
+
+	function isAuthenticated() {
+		return false;
+	}
 }
 
 class AMP_Authentication_LoginState_Base extends AMP_Authentication_LoginState {
@@ -88,8 +111,15 @@ class AMP_Authentication_LoginState_Base extends AMP_Authentication_LoginState {
 
 
     function _readAuthRequest( ) {
-        if ( !( isset( $_REQUEST['action']) && $_REQUEST['action'])) return false;
-        if ( array_search( $_REQUEST['action'], $this->_allowedActions ) === FALSE ) return false;
+        if ( !( isset( $_REQUEST['action']) && $_REQUEST['action'])) {
+			$this->error('in LoginState_Base::_readAuthRequest, no action requested');
+			return false;
+		}
+        if ( array_search( $_REQUEST['action'], $this->_allowedActions ) === FALSE ) {
+			$this->error('in LoginState_Base::_readAuthRequest, action not allowed');
+			return false;
+		}
+		$this->notice('returning current action as '.$_REQUEST['action']);
         return ( $this->_current_action = $_REQUEST['action'] );
     }
 
@@ -113,15 +143,23 @@ class AMP_Authentication_LoginState_AuthRequest extends AMP_Authentication_Login
         'AMPLogin_username' => 
             array( 'label' => 'Email Address:', 'type' => 'text'));
 
-    function AMP_Authentication_LoginState_AuthRequest( $handler ) {
+    function AMP_Authentication_LoginState_AuthRequest( &$handler ) {
         $this->init( $handler );
     }
 
     function _readAuthRequest( ){
-        if ( isset( $_REQUEST[ $this->_login_otp_field]) && $_REQUEST[ $this->_login_otp_field ])  return true;
-        if ( !( isset( $_REQUEST[ $this->_login_username_field]) && $_REQUEST[ $this->_login_username_field ]) ) return false;
-        $emailsLookup = &AMPSystem_Lookup::instance( 'userDataEmails' );
-        if ( !array_search( $_REQUEST[ $this->_login_username_field ], $emailsLookup )) {
+        if ( isset( $_REQUEST[ $this->_login_otp_field]) && $_REQUEST[ $this->_login_otp_field ]) {
+			$this->notice('in LoginState_AuthRequest::_readAuthRequest, otp field is set');
+			return true;
+		}
+        if ( !( isset( $_REQUEST[ $this->_login_username_field]) && $_REQUEST[ $this->_login_username_field ]) ) {
+			$this->error('in LoginState_AuthRequest::_readAuthRequest, no otp or username');
+			return false;
+		}
+        $emailsLookup = &AMPSystem_Lookup::instance( 'UserDataEmails' );
+		$uids = array_keys($emailsLookup, $_REQUEST[ $this->_login_username_field ]);
+        if ( !array_search( $_REQUEST['uid'], $uids)) {
+			$this->notice('username field not found in userdata');
             $this->_message_OK = false;
             return false;
         }
@@ -138,7 +176,7 @@ class AMP_Authentication_LoginState_AuthRequest extends AMP_Authentication_Login
         $emailMessage = &new AMPSystem_Email( );
         $emailMessage->setRecipient( $email_address );
         $emailMessage->setSubject( AMP_SITE_NAME . ' Password ' . ucfirst( $this->_current_action) );
-        $emailMessage->setMessage( 'Login here: ' .  AMP_SITE_URL . substr( $this->getLoginUrl(array( 'uid=' . $uid, 'otp='. $hash )  ), 1 )); 
+        $emailMessage->setMessage( 'Passcode: '.$hash.'\n\n or login here: ' .  AMP_SITE_URL . substr( $this->getLoginUrl(array( 'uid=' . $uid, 'otp='. $hash )  ), 1 )); 
         return $emailMessage->execute( );
     }
     
@@ -178,7 +216,10 @@ class AMP_Authentication_LoginState_OtpConfirm extends AMP_Authentication_LoginS
     }
 
     function _readAuthRequest( ){
-        if ( !( isset( $_REQUEST[ $this->_login_otp_field ]) && $_REQUEST[ $this->_login_otp_field ]) ) return false;
+        if ( !( isset( $_REQUEST[ $this->_login_otp_field ]) && $_REQUEST[ $this->_login_otp_field ]) ) {
+			$this->error('in LoginState_OtpConfirm::_readAuthRequest, otp field not set');
+			return false;
+		}
         return $this->_validateOtp( );
     }
 
@@ -188,11 +229,14 @@ class AMP_Authentication_LoginState_OtpConfirm extends AMP_Authentication_LoginS
             $fake_cookie = array( $_REQUEST['otp'], $emailsLookup[ $_REQUEST['uid']], $this->_default_permission, $_REQUEST['uid'] );
             $this->_formFields['otp'] = array( 'type' => 'hidden', 'label'=>'');
             if ( $this->_handler->check_cookie( join( ":", $fake_cookie) )) {
+				$this->notice('fake cookie checks out');
                 
                 #$this->_passwordEditUrl = AMP_Url_AddVars( $this->_passwordEditUrl, "otp=".$_REQUEST['otp']);
                 return $this->_validated = true;
             }
+			$this->error('fake cookie not valid');
         }
+		$this->error('uid and otp not set');
         return false;
     }
 
@@ -217,19 +261,35 @@ class AMP_Authentication_LoginState_SetPassword extends AMP_Authentication_Login
     var $_login_password_field_confirmed = 'AMPLogin_password_confirm';
     var $_login_otp_field = 'otp';
 
-    function AMP_Authentication_LoginState_SetPassword( $handler ){
+	var $_authenticated = false;
+
+    function AMP_Authentication_LoginState_SetPassword( &$handler ){
         $this->init( $handler );
     }
 
     function _validateState( ) {
-        $this->_readAuthRequest( );
+        if($this->_readAuthRequest( )) {
+			$this->_authenticated = true;
+		}
+		$this->notice('in validate state, returning false, just cause');
         return false;
     }
+
+	function isAuthenticated() {
+		return $this->_authenticated;
+	}
+
     function _readAuthRequest() {
         if ( !( isset( $_REQUEST[ $this->_login_password_field_confirmed ]) && $_REQUEST[ $this->_login_password_field_confirmed ])) return false;
 
         $password_match = ( $_REQUEST[ $this->_login_password_field_confirmed ] == $_REQUEST[ $this->_login_password_field ] ) ;
-        if ( $password_match )  return $this->setPassword( $_REQUEST[ $this->_login_password_field_confirmed ]);
+        if ( $password_match ) {
+			$setpass = $this->setPassword( $_REQUEST[ $this->_login_password_field_confirmed ]);
+			$this->notice('readAuthRequest returning results of setPassword: '.$setpass);
+			return $setpass;
+		} else {
+			$this->error('passwords do not match');
+		}
 
         return ( $this->_message_OK = false );
         
@@ -243,7 +303,12 @@ class AMP_Authentication_LoginState_SetPassword extends AMP_Authentication_Login
     function setPassword( $new_password ){
         #$sql = "UPDATE userdata set password = " . $this->_dbcon->qstr( $new_password ) . " where id = " . $_REQUEST['uid'];
         $sql = "UPDATE userdata set password = " . $this->_handler->dbcon->qstr( $new_password ) . " where Email = " . $this->_handler->dbcon->qstr( $this->_lookupEmail( $_REQUEST['uid'] ));
-        if ( !$this->_handler->dbcon->Execute( $sql )) return false;
+        if ( !$this->_handler->dbcon->Execute( $sql )) {
+			$this->error('could not execute '.$sql);
+			return false;
+		} else {
+			$this->notice('did update - '.$sql);
+		}
         $this->_handler->set_cookie( );
         $this->_handler->setUserId( $_REQUEST['uid']);
         return true;
@@ -252,7 +317,10 @@ class AMP_Authentication_LoginState_SetPassword extends AMP_Authentication_Login
     function _lookupEmail( $uid ){
         static $emailsLookup=false;
         if ( !$emailsLookup ) $emailsLookup = &AMPSystem_Lookup::instance( 'userDataEmails');
-        if ( !isset( $emailsLookup[ $uid ])) return false;
+        if ( !isset( $emailsLookup[ $uid ])) {
+			$this->error('no email for uid: '.$uid);
+			return false;
+		}
         return $emailsLookup[ $uid ];
     }
     function getLoginUrl( ){

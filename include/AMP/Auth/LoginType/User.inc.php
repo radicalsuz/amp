@@ -37,13 +37,22 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
     }
 
     function validateUser( $username, $password ){
-        $user_sql = "SELECT id, Email, password FROM userdata WHERE Email=" . $this->_dbcon->qstr( $username ) . ' AND !isnull( password )'; 
+        $user_sql = "SELECT id, Email, password FROM userdata WHERE Email=" . $this->_dbcon->qstr( $username ) . ' AND !(isnull( password ) OR password=\'\')'; 
+		if($this->_handler->userid) {
+			$user_sql .= ' AND id='.$this->_handler->userid;
+		}
         $authdata = $this->_dbcon->GetRow( $user_sql );
+		if(!$authdata) {
+			$this->error('no rows returned with login email and not null password');
+		}
 
+		$this->notice('validating password '.$password.' against '.$authdata['password']);
         if ($this->_handler->validate_password( $password, $authdata['password'] )) {
             $this->_handler->setUserId( $authdata['id'] );
             return true;
         }
+
+		$this->error('user not validated');
             
     }
 
@@ -77,22 +86,21 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
     }
 
     function check_authen_credentials( ) {
-        $valid = PARENT::check_authen_credentials( );
-        if ( $valid  && (isset($_REQUEST['uid']) && $_REQUEST['uid'])
-			&& $_REQUEST['uid'] != $this->_handler->userid ) {
-			$this->error('auth creds do not match request : \n'
-				.'request - '.$_REQUEST['uid'].', handler - '.$this->_handler->userid);
-            return false;
+		$this->notice('in user::check_authen_credentials');
+        $valid = PARENT::check_authen_credentials( ) || $this->_state->isAuthenticated();
+        if ( $valid ) {
+			if( (isset($_REQUEST['uid']) && $_REQUEST['uid'])
+				&& $_REQUEST['uid'] != $this->_handler->userid ) {
+				$this->error('auth creds do not match request : '
+					.'request - '.$_REQUEST['uid'].', handler - '.$this->_handler->userid);
+				return false;
+			}
+			$this->notice('parent auth check returned true');
         }
+		$this->error('base authen credential check failed');
         return $valid;
     }
 
-	function error($message, $level = null) {
-		if(defined('AMP_AUTHENTICATION_DEBUG') && AMP_AUTHENTICATION_DEBUG ) {
-			trigger_error($message, $level);
-		}
-		$this->errors[] = $message;
-	}
 /*
     function check_authen_credentials() {
         if ( !( isset( $_REQUEST['action']) && $_REQUEST['action'])) return PARENT::check_authen_credentials( );
