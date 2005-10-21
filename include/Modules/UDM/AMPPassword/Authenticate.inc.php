@@ -22,17 +22,36 @@ class UserDataPlugin_Authenticate_AMPPassword extends UserDataPlugin {
 
     var $available = true;
 
+	var $_handler = null;
+
     function UserDataPlugin_Authenticate_AMPPassword ( &$udm, $plugin_instance=null ) {
         $this->init($udm, $plugin_instance);
     }
+
+	function init(&$udm, $plugin_instance=null) {
+		parent::init($udm, $plugin_instance);
+		if(!defined('AMP_AUTHENTICATION_DEBUG')) {
+			define('AMP_AUTHENTICATION_DEBUG', false);
+		}
+	}
 
     function execute ( $options = null ) {
 
         $options = array_merge($this->getOptions(), $options);
         require_once( 'AMP/Auth/Handler.inc.php');
         $AMP_Auth_Handler = &new AMP_Authentication_Handler( $this->udm->dbcon, 'user' );
+		$this->notice('just created auth handler');
+		$this->_handler =& $AMP_Auth_Handler;
+		$this->notice('just set handler');
 		$AMP_Auth_Handler->userid = $options['uid'];
-        if ( !( $this->udm->authorized = $AMP_Auth_Handler->is_authenticated( ) )) $AMP_Auth_Handler->do_login( );
+		$authenticated = $AMP_Auth_Handler->is_authenticated();
+		$this->notice('just checked is_authenticated');
+        if ( !$authenticated ) {
+			$this->notice('not authenticated, doing login');
+			$AMP_Auth_Handler->do_login( );
+		}
+		$this->udm->authorized = $authenticated;
+		$this->notice('we are authenticated');
 
 /*
         $authStatus = false;
@@ -59,6 +78,7 @@ class UserDataPlugin_Authenticate_AMPPassword extends UserDataPlugin {
         $authStatus = true;
         $this->udm->authorized = true;
         */
+		$this->notice('setting udm->uid to auth handlers - '.$AMP_Auth_Handler->userid);
         $this->udm->uid = $AMP_Auth_Handler->userid;
         return $this->udm->uid;
         /*
@@ -83,6 +103,17 @@ class UserDataPlugin_Authenticate_AMPPassword extends UserDataPlugin {
         $sql  = "INSERT INTO userdata_auth ( uid, otp ) VALUES ( ";
         $sql .= join( ", ", array( $dbcon->qstr( $uid ), $dbcon->qstr( $otp ) ) ) . " )";
 
+    }
+
+    function error($message, $level = null) {
+        if(defined('AMP_AUTHENTICATION_DEBUG') && AMP_AUTHENTICATION_DEBUG) {
+            trigger_error($message, $level);
+        }
+        $this->errors[] = $message;
+    }   
+        
+    function notice($message) {
+        $this->error($message, E_USER_NOTICE);
     }
 }
 ?>
