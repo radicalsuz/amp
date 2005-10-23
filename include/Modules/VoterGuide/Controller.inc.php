@@ -185,7 +185,7 @@ class VoterGuide_Controller {
 	}
 
 	function edit() {
-		if(!$this->authorized()) {
+		if(!$authorized_user = $this->authorized()) {
 			//should never happen, since udm auth assumes control
 			return $this->login();
 		}
@@ -198,11 +198,10 @@ class VoterGuide_Controller {
 			$guide =& $this->getActionObject();
 			if(defined('AMP_VOTERGUIDE_EDIT_HEADER')) {
 				$this->page->addObject(strtolower('UserDataPlugin_Save_AMPVoterGuide'), $guide);
-//				$this->page->setIntroText(AMP_VOTERGUIDE_EDIT_HEADER);
 				$this->intro_id = AMP_VOTERGUIDE_EDIT_HEADER;
 			}
 			$this->udm->submitted = false;
-			$this->udm->getUser( $uid ); 
+			$this->udm->getUser( $authorized_user ); 
 
 //			$udm->registerPlugin('AMPVoterGuide', 'Save');
 			$save =& $this->udm->getPlugin('AMPVoterGuide','Save');
@@ -226,9 +225,6 @@ class VoterGuide_Controller {
 
 			$this->udm->setData($data);
 
-//			$udm->setData($guide->getData());
-//			$copier =& ElementCopierScript::instance();
-//			$copier->addSets('voterguidePositions', $guide->_positionSet->getArray());
 		}
 		$mod_id = $this->udm->modTemplateID;
 		AMP_directDisplay( $this->udm->output( ));
