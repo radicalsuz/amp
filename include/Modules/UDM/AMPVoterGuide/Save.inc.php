@@ -112,10 +112,10 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 			$this->udm->form->setElementError($this->_field_prefix.'_'.'picture', 'You will need to select your file again');
 		}
 
-		if(!$_POST[$this->_field_prefix.'_'.'accurate_checkbox']) {
+		if(!empty($_POST) && !$_POST[$this->_field_prefix.'_'.'accurate_checkbox']) {
 			$this->udm->form->setElementError($this->_field_prefix.'_'.'accurate_checkbox', 'This is a required field');
 		}
-		if(!$_POST[$this->_field_prefix.'_'.'trust_checkbox']) {
+		if(!empty($_POST) && !$_POST[$this->_field_prefix.'_'.'trust_checkbox']) {
 			$this->udm->form->setElementError($this->_field_prefix.'_'.'trust_checkbox', 'This is a required field');
 		}
     } 
