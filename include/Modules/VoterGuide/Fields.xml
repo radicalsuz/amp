@@ -1,4 +1,10 @@
 <array>
+	<publish>
+		<type>checkbox</type>
+		<default>checked</default>
+		<public>0</public>
+		<enabled>1</enabled>
+	</publish>
     <guideHeader>
         <type>header</type>
         <default>Voter Guide Info</default>
