@@ -176,12 +176,12 @@ class AMP_Authentication_LoginState_AuthRequest extends AMP_Authentication_Login
         $emailMessage = &new AMPSystem_Email( );
         $emailMessage->setRecipient( $email_address );
         $emailMessage->setSubject( AMP_SITE_NAME . ' Password ' . ucfirst( $this->_current_action) );
-        $emailMessage->setMessage( 'Passcode: '.$hash.'\n\n or login here: ' .  AMP_SITE_URL . substr( $this->getLoginUrl(array( 'uid=' . $uid, 'otp='. $hash )  ), 1 )); 
+        $emailMessage->setMessage( 'Passcode: '.$hash.'\n or login here: ' .  AMP_SITE_URL . substr( $this->getLoginUrl(array( 'uid=' . $uid, 'otp='. $hash )  ), 1 )); 
         return $emailMessage->execute( );
     }
     
     function getHelpLinks( ){
-        $output = "";
+        $output = sprintf( AMP_TEXT_LOGIN_PASSWORD_MAIN,  $this->getLoginUrl( array( 'action' => 'action=login') )). '<BR>';
         if ( "reset_password" != $this->_current_action ) $output .= sprintf( AMP_TEXT_LOGIN_PASSWORD_RESET,  $this->getLoginUrl( array( 'action' => 'action=reset_password') )). '<BR>';
         return $output . sprintf( AMP_TEXT_LOGIN_HELP_ADMIN, AMP_SITE_ADMIN );
     }
@@ -239,6 +239,12 @@ class AMP_Authentication_LoginState_OtpConfirm extends AMP_Authentication_LoginS
 		$this->error('uid and otp not set');
         return false;
     }
+
+	function getHelpLinks() {
+        $output = sprintf( AMP_TEXT_LOGIN_PASSWORD_MAIN,  $this->getLoginUrl( array( 'action' => 'action=login') )). '<BR>';
+        return $output . sprintf( AMP_TEXT_LOGIN_HELP_ADMIN, AMP_SITE_ADMIN );
+	}
+
 
     function getAuthOptions() {
         return false;

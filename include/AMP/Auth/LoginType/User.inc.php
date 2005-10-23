@@ -2,6 +2,7 @@
 
 define( 'AMP_TEXT_LOGIN_PASSWORD_NEW', 'Haven\'t logged in before?<BR><a href="%s">Create password</a>');
 define( 'AMP_TEXT_LOGIN_PASSWORD_RESET', 'Forgot your password? <a href="%s">Reset password</a>');
+define( 'AMP_TEXT_LOGIN_PASSWORD_MAIN', 'Already have a password? <a href="%s">Login</a>');
 define( 'AMP_LOGIN_LOOKUPTYPE_OTP', 'otp');
 define( 'AMP_LOGIN_LOOKUPTYPE_PASSWORD', 'pass');
 
