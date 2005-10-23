@@ -176,7 +176,7 @@ class AMP_Authentication_LoginState_AuthRequest extends AMP_Authentication_Login
         $emailMessage = &new AMPSystem_Email( );
         $emailMessage->setRecipient( $email_address );
         $emailMessage->setSubject( AMP_SITE_NAME . ' Password ' . ucfirst( $this->_current_action) );
-        $emailMessage->setMessage( 'Passcode: '.$hash.'\n or login here: ' .  AMP_SITE_URL . substr( $this->getLoginUrl(array( 'uid=' . $uid, 'otp='. $hash )  ), 1 )); 
+        $emailMessage->setMessage( 'Passcode: '.$hash."\n or login here: " .  AMP_SITE_URL . substr( $this->getLoginUrl(array( 'uid=' . $uid, 'otp='. $hash )  ), 1 )); 
         return $emailMessage->execute( );
     }
     
