@@ -194,6 +194,7 @@ class VoterGuide_Controller {
 
 		if ( $sub ) {
 			$this->udm->saveUser() ;
+			return $this->view();
 		} else {
 			$guide =& $this->getActionObject();
 			if(defined('AMP_VOTERGUIDE_EDIT_HEADER')) {
@@ -275,8 +276,59 @@ class VoterGuide_Controller {
 	}
 
 	function download() {
+		if(!$authorized_user = $this->authorized()) {
+			//should never happen, since udm auth assumes control
+			return $this->login();
+		}
+		
+		require_once('DIA/API.php');
+		require_once('XML/Unserializer.php');
+
+		$api =& DIA_API::create();
+		$guide =& $this->getActionObject();
+
+		if(!$guide) return false;
+		$link_xml = $api->get('supporter_groups', array('where' => 'groups_KEY='.$guide->getBlocID()));
+
+		$xmlparser =& new XML_Unserializer();
+		$status = $xmlparser->unserialize($link_xml);
+		$links = $xmlparser->getUnserializedData();
+
+		if($links['supporter_groups']['count'] > 1) {
+			foreach ($links['supporter_groups']['item'] as $item) {
+				if($item['supporter_KEY']) {
+					$supporters[] = $item['supporter_KEY'];
+				}
+			}
+		} else {
+			$supporters = array($links['supporter_groups']['item']['supporter_KEY']);
+		}
+
+		$bloc_xml = $api->get('supporter', array('key' => $supporters));
+
+		$xmlparser2 =& new XML_Unserializer();
+		$status = $xmlparser2->unserialize($bloc_xml);
+		$bloc = $xmlparser2->getUnserializedData();
+
+		header("Content-type: text/plain");
+		$csv = "First Name\tLast Initial\tZip Code\tHas Email\n";
+		print $csv;
+
+		if($bloc['supporter']['count'] == 1) {
+			$bloc['supporter']['item'] = array($bloc['supporter']['item']);
+		}
+
+		foreach($bloc['supporter']['item'] as $supporter) {
+			$fields = array($supporter['First_Name'],
+							substr($supporter['Last_Name'], 0, 1),
+							$supporter['Zip'],
+							($supporter['Email'] && 'NONE' != $supporter['Email'])?'Yes':'No');
+			print join("\t", $fields)."\n";
+			$available[] = $fields;
+		}
+		exit;
 //		print "Please be patient while we build your voter bloc";
-		ampredirect('voterbloc.php?id='.$this->action_id);
+//		ampredirect('voterbloc.php?id='.$this->action_id);
 	}
 
 	function search() {
