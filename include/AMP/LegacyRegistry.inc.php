@@ -81,4 +81,6 @@ define( 'AMP_TEXT_LOGIN_HELP_ADMIN', 'If you are having trouble logging in, plea
 if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
 if (!defined( 'AMP_DBTABLE_BLAST_LISTS')) define ( 'AMP_DBTABLE_BLAST_LISTS', false );
 
+require_once( 'AMP/System/Permission/Config.inc.php' );
+
 ?>

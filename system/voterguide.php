@@ -9,9 +9,10 @@
  *****/
 
 require_once( 'Modules/VoterGuide/ComponentMap.inc.php' );
+$modin = (isset($_GET['modin']) ? $_GET[ 'modin' ] : AMP_FORM_ID_VOTERGUIDES );
+
 require_once( 'AMP/System/Page.inc.php' );
 
-$modin = (isset($_GET['modin']) ? $_GET[ 'modin' ] : AMP_FORM_ID_VOTERGUIDES );
 
 $map = &new ComponentMap_VoterGuide();
 $page = &new AMPSystem_Page ($dbcon, $map);

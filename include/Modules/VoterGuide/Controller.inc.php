@@ -49,7 +49,12 @@ class VoterGuide_Controller {
 			if(isset($idByName[$short_name])) {
 				$this->action_id = $idByName[$short_name];
 			}
-		}
+		} elseif ( ( isset( $_GET['uid']) && $uid=$_GET['uid'])) {
+            $guideset = AMPSystem_Lookup::instance( 'voterGuideByOwner' );
+            if ( isset( $guideset[$uid] ) ) {
+                $this->action_id = $guideset[ $uid ];
+            }
+        }
 
 		if( !isset($this->action_method) ) {
 			if(isset($this->action_id)) {
@@ -138,6 +143,7 @@ class VoterGuide_Controller {
 			return AMP_VOTERGUIDE_JOIN_REDIRECT.$guide->getShortName();
 		}
 		return 'voterguide.php?action=join&name='.$guide->getShortName();
+        return AMP_Url_AddVars(  AMP_URL_VOTERGUIDE, array(  'action=join', 'name='.$name ));
 	}
 
 	function create_password() {
@@ -172,7 +178,7 @@ class VoterGuide_Controller {
 			return $this->authorized_user;
 		}
 		$udm =& $this->getForm();
-		$guide =& $this->getActionObject();
+		if ( !( $guide =& $this->getActionObject())) return false;
 		$owner = $guide->getOwner();
 		$one_time_password = $this->getOtp();
 		$_REQUEST['uid'] = $owner;
@@ -221,8 +227,8 @@ class VoterGuide_Controller {
 			foreach($guide->getData() as $property => $value) {
 				$data[$save->_field_prefix.'_'.$property] = $value;
 			}
-			$data[$save->_field_prefix.'_accurate_checkbox']['default'] = 'checked';
-			$data[$save->_field_prefix.'_trust_checkbox']['default'] = 'checked';
+			$data[$save->_field_prefix.'_accurate_confirm']['default'] = 'checked';
+			$data[$save->_field_prefix.'_trust_confirm']['default'] = 'checked';
 
 			$this->udm->setData($data);
 

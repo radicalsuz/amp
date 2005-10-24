@@ -2,7 +2,7 @@
 <headingText>
     <type>header</type>
     <attr><class>form_header</class></attr>
-    <default>Search the Guides</default>
+    <default>Search the Guides&lt;br /&gt;&lt;br /&gt;</default>
 </headingText>
 <fulltext>
     <separator>newrow</separator>

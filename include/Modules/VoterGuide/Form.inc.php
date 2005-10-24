@@ -19,19 +19,8 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
     }
 
 	function init( $name ) {
-		if(!defined('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON')) {
-			define('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON', 'Add New Endorsement');
-		}
-		if(!defined('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT')) {
-			define('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT', 'Select One');
-		}
-		if(defined('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON')) {
-			define('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON', 'Remove This Endorsement');
-		}
 		$this->defineSubmit('save', 'Submit My Voter Guide');
 		parent::init($name);
-//		AMP_varDump($result);
-//        $this->form->addRule('plugin_AMPVoterGuide_short_name', 'BLAH!', 'callback', 'blah', 'VoterGuide_Form');
 	}
 		
     function setDynamicValues() {
@@ -54,6 +43,9 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
         $this->_copier = &ElementCopierScript::instance();
         $this->_copier->addCopier( $this->_copierName, $this->_positionForm->getFields(), "VoterGuides" );
         $this->_copier->setCoreField( $this->_copierName, $this->_coreField );
+        $this->_copier->setButtonText( 'Add New Endorsement', 'add', $this->_copierName);
+        $this->_copier->setButtonText( 'Remove This Endorsement', 'remove', $this->_copierName);
+        $this->_copier->addControlButtons( $this->_copierName );
         
         if (!empty($_POST)) {
             $this->_copier->addSets( $this->_copierName, $_POST );

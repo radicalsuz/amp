@@ -6,7 +6,7 @@ require_once ( 'AMP/System/ComponentMap.inc.php' );
 class ComponentMap_VoterGuide extends AMPSystem_ComponentMap {
 
     var $heading = "Voter Guide";
-    var $nav_name = "voterguide";
+    var $nav_name = "voterguides";
 
     var $paths = array( 
         'search' => 'Modules/VoterGuide/Search/Form.inc.php',

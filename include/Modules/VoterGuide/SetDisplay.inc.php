@@ -17,9 +17,10 @@ class VoterGuideSet_Display extends AMPContent_DisplayList_HTML {
     function _HTML_listItemDescription( &$guide ) {
         $guide_display = &$guide->getDisplay( );
         return 
+            $this->_HTML_newline().
             $this->_HTML_listItemTitle( $guide ).
-            $guide_display->_HTML_location( $guide->getLocation( ) ).
             $guide_display->_HTML_affiliations( $guide->getAffiliation( )).
+            $guide_display->_HTML_location( $guide->getLocation( ) ).
             $guide_display->_HTML_date( $guide->getItemDate( ) ).
             $guide_display->_HTML_blurb( AMP_trimText( $guide->getBlurb( ), $this->_blurb_size_limit));
     }

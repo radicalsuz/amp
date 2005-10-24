@@ -261,7 +261,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         require_once( 'AMP/Content/Article/DocumentLink.inc.php' );
 
         $fileLink = &new DocumentLink( $data[$fieldname] ); 
-        $this->setFieldLabel(  $fieldname, $this->fields[$fieldname]['label'] . $fileLink->display( 'div' ) );
+        if ( strpos( $this->fields[$fieldname]['label'], $data[ $fieldname ] ) === FALSE ) {
+            $this->setFieldLabel( $fieldname, $this->fields[$fieldname]['label'] . $fileLink->display( 'div' ) );
+        }
+
         $this->form->setDefaults( array( $fieldname.'_value' => $data[$fieldname] ));
     }
 
@@ -369,7 +372,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
                 'default'=>$value)
             );
 
-				if (method_exists( $this, 'adjustSubmit' )) $this->adjustSubmit();
+        if (method_exists( $this, 'adjustSubmit' )) $this->adjustSubmit();
     }
 
     function setConditional ( $key, $requirement ) {
@@ -483,6 +486,16 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $defaults = $this->_getDefault( $name );
         return $this->form->addElement( 'file', $name, $field_def['label'], $defaults );
 
+    }
+
+    function &_addElementCheckBox( $name, $field_def ){
+        $this->addTranslation( $name, '_returnBlankCheckbox', 'get' );
+        return $this->_addElementDefault( $name, $field_def );
+    }
+
+    function _returnBlankCheckbox( $data, $fieldname ){
+        if ( !isset( $data[$fieldname])) return false;
+        return $data[$fieldname];
     }
 
     function &_addElementDate ( $name, $field_def ) {

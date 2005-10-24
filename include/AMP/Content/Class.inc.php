@@ -30,7 +30,7 @@ class ContentClass extends AMPSystem_Data_Item {
         }
 
 
-        $criteria_set = new AMPContent_DisplayCriteria();
+        $criteria_set = &new AMPContent_DisplayCriteria();
         $criteria_set->allowClass( $this->id );
         $criteria_set->clean( $this->_contents );
 

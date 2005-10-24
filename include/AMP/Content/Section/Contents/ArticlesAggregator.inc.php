@@ -28,9 +28,9 @@ class SectionContentSource_ArticlesAggregator extends SectionContentSource_Artic
         return "type in (" . join( ", ", ( $id_set) ). ")";
     }
 
-		function _setSort() {
-				$this->_setBaseSort();
-		}
+    function _setSort() {
+            $this->_setBaseSort();
+    }
 
 }
 ?>

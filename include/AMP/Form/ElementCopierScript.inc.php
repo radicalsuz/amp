@@ -13,14 +13,14 @@ class ElementCopierScript {
     }
 
     function init($fields = null) {
-		if(!defined('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON')) {
-			define('AMP_FORM_ELEMENT_COPIER_ADD_BUTTON', 'Add New Item');
+		if(!defined('AMP_TEXT_FORM_ELEMENT_COPIER_ADD_BUTTON')) {
+			define('AMP_TEXT_FORM_ELEMENT_COPIER_ADD_BUTTON', 'Add New Item');
 		}
-		if(!defined('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT')) {
-			define('AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT', 'Add New');
+		if(!defined('AMP_TEXT_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT')) {
+			define('AMP_TEXT_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT', 'Select One');
 		}
-		if(!defined('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON')) {
-			define('AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON', 'Remove');
+		if(!defined('AMP_TEXT_FORM_ELEMENT_COPIER_REMOVE_BUTTON')) {
+			define('AMP_TEXT_FORM_ELEMENT_COPIER_REMOVE_BUTTON', 'Remove');
 		}
 
         if (isset($fields)) $this->addCopier( $this->copier_name_default, $fields ); 
@@ -60,14 +60,14 @@ class ElementCopierScript {
         $this->copiers[ $copiername ]['core_field'] = $fieldname;
     }
 
-    function setFields( $copiername, $fieldset ) {
+    function setFields( $copiername, $fieldset, $add_controls = true ) {
         $this->copiers[$copiername] = array();
         $this->setCoreField( $copiername, key( $fieldset ) );
         foreach ( $fieldset as $fieldname => $def ) {
             $this->addField( $def, $fieldname, $copiername );
         }
-        $this->addControlButtons( $copiername );
-		if(defined('AMP_FORM_ELEMENT_COPIER_DELIMITER')) {
+        if ( $add_controls ) $this->addControlButtons( $copiername );
+		if( defined('AMP_FORM_ELEMENT_COPIER_DELIMITER') ) {
 			$delimiter = array( 'type' => 'static',
 							    'values' => AMP_FORM_ELEMENT_COPIER_DELIMITER);
 			$this->addField( $delimiter, 'delimiter', $copiername );
@@ -75,19 +75,25 @@ class ElementCopierScript {
     }
 
     function addControlButtons( $copiername ) {
-        /*
-        $add_button =
-            array( 'type' => 'button', 
-                   'action' => 'DuplicateElementSet( window.' . $copiername . " );",
-                   'label' => '+' );
-         */
 									 
         $del_button =
-            array( 'type' => 'button',
+            array( 'type'   => 'button',
                    'action' => 'window.' . $copiername . ".RemoveCurrentSet( this );",
-                   'label' => AMP_FORM_ELEMENT_COPIER_REMOVE_BUTTON );
-        #$this->addField( $add_button, 'add_btn', $copiername );
+                   'label'  => $this->getButtonText( 'remove', $copiername ) );
+
         $this->addField( $del_button, 'form_del_btn', $copiername );
+
+    }
+
+    function getButtonText( $button, $copiername ) {
+        if ( !( isset( $this->copiers[$copiername]['text'] ) && isset( $this->copiers[$copiername]['text'][$button]))) {
+            return constant( 'AMP_TEXT_FORM_ELEMENT_COPIER_' . strtoupper( $button ) . '_BUTTON');
+        }
+        return $this->copiers[$copiername]['text'][$button];
+    }
+
+    function setButtonText( $buttontext, $button, $copiername) {
+        $this->copiers[$copiername]['text'][$button] = $buttontext; 
     }
 
     function addField( $field_def, $fieldname, $copiername ) {
@@ -112,15 +118,29 @@ class ElementCopierScript {
         return $script;
     }
 
-    function script_value_array( $valuevar, $fDef ) {
+    function script_value_array( $valuevar, $fDef, $null_value = AMP_TEXT_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT ) {
         $script = "var $valuevar = new Array();\n var valuecounter=0;\n";
-        $script .= $valuevar . "[ valuecounter++] = new Option(\"".AMP_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT."\",'');\n";
+        if ( $null_value ) $script .= $valuevar . "[ valuecounter++] = new Option(\"". $null_value ."\",'');\n";
+        
 
         foreach ($fDef['values'] as $key => $value ) {
             $script .= $valuevar . "[ valuecounter++] = new Option(\"". str_replace( "&nbsp;", " ", $value) . "\",'". $key . "');\n";
         }
 
         return $script;
+    }
+
+    function _getNullSelectOption( $fieldname, $copiername ) {
+        if (!( isset( $this->copiers[$copiername]['fields'][$fieldname]) 
+            && isset( $this->copiers[$copiername]['fields'][$fieldname]['default_option'])  )) {
+            return AMP_TEXT_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT ;
+        }
+        
+        return $this->copiers[ $copiername ][ 'fields' ][ $fieldname ][ 'default_option' ]  ;
+    }
+
+    function setNullSelectOption(  $null_value, $fieldname, $copiername ) {
+        $this->copiers[ $copiername ][ 'fields' ][ $fieldname ][ 'default_option' ] = $null_value;
     }
 
     function _js_initCopier( $fieldset, $copiername ) {
@@ -131,7 +151,7 @@ class ElementCopierScript {
             if (isset($fDef['values']) && $fDef['values']) {
                 if (is_array( $fDef['values'] )) {
                     $valuevar = $copiername.'_'.$fieldname.'_values';
-                    $script .= $this->script_value_array( $valuevar, $fDef ); 
+                    $script .= $this->script_value_array( $valuevar, $fDef, $this->_getNullSelectOption( $fieldname, $copiername ) ); 
                 } else {
                     $valuevar = $this->_delimit( $fDef['values'] );
                 }
@@ -164,7 +184,7 @@ class ElementCopierScript {
             return array( $this->_addPrefix( $copier_name, 'add_'.$copier_name ) =>
                 array( 'type' => 'button',
                             'attr' => array( 'onClick' => 'DuplicateElementSet( window.'.$copier_name .', parentRow( this ).rowIndex );' ),
-                            'label' => AMP_FORM_ELEMENT_COPIER_ADD_BUTTON,
+                            'label' => $this->getButtonText( 'add', $copier_name ),
                             'public' => true,
                             'enabled' => true ) );
     }
@@ -292,8 +312,9 @@ class ElementCopierScript {
     }
 
     function _js_cleanValue( $value ) {
-    //    return addslashes(str_replace( "\r\n", "\n", $value));
-        return addslashes(str_replace( "\r\n", "\\n", $value));
+        $base_values = array( "\r\n", "'");
+        $replace_values = array( "\\n" , "\'");
+        return str_replace( $base_values, $replace_values,  $value );
     }
 
 

@@ -23,8 +23,8 @@ class VoterGuidePositionSet_Display extends AMPContent_DisplayList_HTML {
 
     function _HTML_listItemVote( &$position ) {
         if ( !$issue = $position->getName( ) ) return false;
-        $output = "Issue:" . $issue;
-        if ( $vote = $position->getPosition( )) $output .= $this->_HTML_newline() . "Vote: " . $vote ;
+        $output = "<span class='text'><em>Candidate/Issue: </em></span>" . $issue;
+        if ( $vote = $position->getPosition( )) $output .= $this->_HTML_newline() . "<span class='text'><em>Endorsed Vote: </em></span>" . $vote ;
         return $this->_HTML_inSpan( $output, $this->_css_class_subtitle ) . $this->_HTML_newline( );
     }
 }

@@ -242,12 +242,29 @@
 <per>LINKS_ACCESS</per>
 </item>
 <item>
-<href>link_type.php?action=list</href>
-<label>View Link Types</label>
-<class>view</class>
-<per>LINKS_ACCESS</per>
+    <href>link_type.php?action=list</href>
+    <label>View Link Types</label>
+    <class>view</class>
+    <per>LINKS_ACCESS</per>
 </item>
 </links>
+
+<voterguides>
+    <title>Voter Guides</title>
+    <per>VOTERGUIDE_ACCESS</per>
+    <item>
+        <label>View Guides</label>
+        <per>VOTERGUIDE_ACCESS</per>
+        <href>voterguide.php?action=list</href>
+        <class>view</class>
+    </item>
+    <item>
+        <label>Add Guide</label>
+        <per>VOTERGUIDE_ACCESS</per>
+        <href>modinput4_view.php?modin=200</href>
+        <class>add</class>
+    </item>
+</voterguides>
 
 
 <payments>

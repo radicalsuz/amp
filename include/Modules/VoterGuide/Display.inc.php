@@ -1,6 +1,10 @@
 <?php
 require_once( "Modules/VoterGuide/VoterGuide.php");
 require_once('utility.functions.inc.php');
+if ( !defined( 'AMP_TEXT_VOTERGUIDE_DISCLAIMER')) define ( 'AMP_TEXT_VOTERGUIDE_DISCLAIMER' ,
+        'This section paid for by League of Independent '
+        . 'Voters Political Action Committee ( LIV PAC) 226 W. 135th St. 4th Fl. NY NY 10030. '
+        . 'Not paid for by any candidate or candidate\'s committee.');
 
 class VoterGuide_Display extends AMPDisplay_HTML {
 
@@ -18,18 +22,25 @@ class VoterGuide_Display extends AMPDisplay_HTML {
     function execute ( ) {
         return  $this->_HTML_guideHeader( ).
                 $this->_HTML_positionsList( ).
-                $this->_HTML_guideFooter( );
+                $this->_HTML_guideFooter( ).
+                $this->_HTML_disclaimer( );
+    }
+
+    function _HTML_disclaimer( ) {
+        return $this->_HTML_newline( ) . $this->_HTML_inSpan( AMP_TEXT_VOTERGUIDE_DISCLAIMER , array('style' => 'font-size: 10px;' ));
     }
 
     function _HTML_guideHeader( ) {
-        $output =   $this->_HTML_blocJoin(). 
-					$this->_HTML_affiliations( $this->_voterguide->getAffiliation( ) ).    
+        $output =  $this->_HTML_affiliations( $this->_voterguide->getAffiliation( ) ).    
                     $this->_HTML_title( $this->_voterguide->getName( ) ).
                     $this->_HTML_location( $this->_voterguide->getLocation( ) ).
                     $this->_HTML_date( $this->_voterguide->getItemDate( ) ).
                     $this->_HTML_blurb( $this->_voterguide->getBlurb( ) ).
+                    $this->_HTML_newline().
                     $this->_HTML_docLink( $this->_voterguide->getDocumentRef( )) .
-                    $this->_HTML_newline();
+                    $this->_HTML_newline().
+                    $this->_HTML_blocJoin(). 
+                    $this->_HTML_newline(2);
 
         return $this->_HTML_addImage( $output );
 
@@ -73,12 +84,13 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_docLink ( &$doc ) {
         if ( !$doc ) return false;
-        return $doc->display( 'div' );
+        return 'Download PDF of guide:'.$doc->display( 'div' );
     }
 
     function _HTML_guideFooter( ) {
         if ( !( $footer_blurb =  $this->_voterguide->getFooter( ))) return false;
-        return $this->_HTML_in_P( $footer_blurb, array( 'class' => $this->_css_class_text));
+        return $this->_HTML_in_P( $footer_blurb, array( 'class' => $this->_css_class_text)).
+                    $this->_HTML_blocJoin();
     }
 
 

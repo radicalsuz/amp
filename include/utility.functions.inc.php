@@ -863,6 +863,19 @@ if (!function_exists('amp_writecsv')) {
 		return join("\n", $lines);
 	}
 }
+
+if ( !function_exists( 'AMP_Authorized')) {
+
+    function AMP_Authorized( $id ) {
+        static $permissions = false;
+        if ( !$permissions ) {
+            require_once( 'AMP/System/Permission/Manager.inc.php');
+            $permissions = & AMPSystem_PermissionManager::instance();
+        }
+        return $permissions->authorized ($id);
+    }
+
+}
 			
 
 ?>

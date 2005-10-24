@@ -362,6 +362,11 @@
 <title>Advocacy Tools</title>
 <per>TOOLS_ADVOCACY_ACCESS</per>
 <item>
+<label>Voter Guides</label>
+<href>voterguide.php?action=list</href>
+<per>VOTERGUIDE_ACCESS</per>
+</item>
+<item>
 <label>Web Actions</label>
 <href>sendfax_list.php</href>
 <per>ACTION_ACCESS</per>

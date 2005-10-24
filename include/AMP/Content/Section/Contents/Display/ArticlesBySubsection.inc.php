@@ -21,7 +21,7 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
         if ( !( $page_limit = $this->_source_section->getListItemLimit( ))) $page_limit = $this->_pager_limit;
 
         foreach ($subsections as $subsection ) {
-            if( !($article_data = &$this->_source->filter( 'type', $subsection->id , $this->_pager_limit ))) continue;
+            if( !($article_data = &$this->_source->filter( 'type', $subsection->id , $page_limit ))) continue;
             $articles  = &$this->_buildItems( $article_data );
             $listBody .= $this->_HTML_subheader( $subsection ).
                          $this->_HTML_listing( $articles )  ;
