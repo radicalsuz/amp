@@ -6,6 +6,7 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
 
     var $_subsections_display;
     var $_css_class_subheader = AMP_CONTENT_LIST_SUBHEADER_CLASS;
+    var $_css_class_morelink= "go";
     var $_pager_active = false;
     var $_pager_limit = 20;
     var $_source_section;
@@ -23,8 +24,9 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
         foreach ($subsections as $subsection ) {
             if( !($article_data = &$this->_source->filter( 'type', $subsection->id , $page_limit ))) continue;
             $articles  = &$this->_buildItems( $article_data );
-            $listBody .= $this->_HTML_subheader( $subsection ).
-                         $this->_HTML_listing( $articles )  ;
+            $listBody .= $this->_HTML_subheader( $subsection )
+                         . $this->_HTML_listing( $articles )
+                         . $this->_checkMoreLink( $subsection, $page_limit );
         }
         return $listBody;
 
@@ -49,6 +51,30 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
 
     function _HTML_subheaderTitle( $title ) {
         return $this->_HTML_in_P( $title, array( 'class' => $this->_css_class_subheader ) );
+    }
+
+    function _checkMoreLink( $section, $limit ) {
+        if ( !isset( $this->_subsection_counts )) $this->_subsection_counts = $this->_source->getGroupedIndex( 'type' ) ;
+        if ( !( isset( $this->_subsection_counts[ $section->id ]) && $this->_subsection_counts[ $section->id ] > $limit )) return false; 
+        return $this->_HTML_moreLink( $this->_getMoreLinkHref( $section->id, $limit ), $section->getName( ));
+        
+    }
+
+    function _HTML_moreLink( $href, $name=false ) {
+
+        $text = 'More&nbsp;' . $name . '&nbsp;' . $this->_HTML_bold( '&raquo;' );
+        return $this->_HTML_inDiv( 
+                    $this->_HTML_inSpan( $this->_HTML_link( $href, $text ), $this->_css_class_morelink ),
+                    array( 'class'=>'list_pager' )
+                    );
+    }
+    function _getMoreLinkHref( $section_id, $limit ) {
+        return  
+            AMP_URL_AddVars( 
+                AMP_CONTENT_URL_LIST_SECTION, 
+                array(  "type=$section_id",
+                        "offset=".$limit ) 
+                );
     }
 
 }
