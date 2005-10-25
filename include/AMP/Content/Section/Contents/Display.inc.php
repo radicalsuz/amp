@@ -53,8 +53,8 @@ class SectionContents_Display  extends AMPDisplay_HTML {
     function _getDisplayClass() {
         $result = AMP_PREFIX_SECTION_DISPLAY . $this->_manager->getContentsType();
         $custom_displays = filterConstants( 'AMP_SECTION_DISPLAY' );
-        if (isset($custom_displays [ strtoupper( $this->_manager->getContentsType() ) ] )) {
-            $result = $custom_displays [ strtoupper( $this->_manager->getContentsType() ) ];
+        if (isset($custom_displays [ strtoupper( $this->_manager->getDisplayType() ) ] )) {
+            $result = $custom_displays [ strtoupper( $this->_manager->getDisplayType() ) ];
         }
         if (!class_exists( $result )) return AMP_SECTION_DISPLAY_DEFAULT;
         return $result;

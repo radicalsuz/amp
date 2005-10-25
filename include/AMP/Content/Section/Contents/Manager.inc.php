@@ -42,13 +42,19 @@ class SectionContents_Manager {
     }
 
     function &_getContentSource( $listType ) {
-        $listTypes = filterConstants( 'AMP_SECTIONLIST' );
-        if (!$display_type = array_search( $listType, $listTypes )) $display_type = "ARTICLES";
 
-        $this->_contentSourceType = str_replace( " ", "", ucwords( str_replace( "_", " ", strtolower( $display_type ) ) ) );
+        $this->_contentSourceType = str_replace( " ", "", ucwords( str_replace( "_", " ", strtolower( $this->getDisplayType( $listType ) ) ) ) );
         
         $contentSource_class = 'SectionContentSource_'.$this->_contentSourceType;
         return new $contentSource_class( $this->_section );
+    }
+
+    function getDisplayType( $listType=null ) {
+        if ( !isset( $listType )) $listType = $this->_section->getListType( );
+        $listTypes = filterConstants( 'AMP_SECTIONLIST' );
+        if (!$display_type = array_search( $listType, $listTypes )) return "ARTICLES";
+        return $display_type;
+
     }
 
     function getSectionCriteria() {
