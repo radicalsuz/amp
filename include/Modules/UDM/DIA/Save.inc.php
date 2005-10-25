@@ -55,11 +55,15 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
 		$data['uid'] = $this->udm->uid;
 
 		$api =& DIA_API::create();
-		$result = $api->addSupporter( $data[ 'Email'], $data );
+		$supporter_id = $api->addSupporter( $data[ 'Email'], $data );
 //        $diaRequest = new diaRequest( $options[ 'orgCode' ] );
 //        $result = $diaRequest->addSupporter( $data[ 'Email' ], $data);
 
-        return $result;
+		if(isset($options['link'])) {
+			$api->linkSupporter($options['link'], $supporter_id);
+		}
+
+        return $supporter_id;
 
     }
 
