@@ -26,6 +26,7 @@ class AMPSystem_Data_Search  {
 
 
     function applyValues( $data ) {
+        if ( !( isset( $data ) && is_array( $data ))) return false;
         foreach ($data as $key => $value) {
             $crit_method = '_addCriteria' . ucfirst( $key );
 

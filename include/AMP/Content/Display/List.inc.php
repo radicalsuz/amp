@@ -53,12 +53,16 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     }
 
     function execute() {
-        if (!$this->_source->makeReady()) return false;
+        if (!$this->_source->makeReady()) return $this->noResultsDisplay();
         $sourceItems = &$this->_buildItems( $this->_source->getArray() );
 
         return  $this->_HTML_listing( $sourceItems ). 
                 ( ($this->_pager_active && $this->_pager_display ) ? $this->_pager->execute() : false ) ;
 
+    }
+
+    function noResultsDisplay( ) {
+        return false;
     }
 
     function addFilter( $filter_name ) {

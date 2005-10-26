@@ -16,7 +16,7 @@ class VoterGuideSet extends AMPSystem_Data_Set {
     function applySearch( $data, $run_query = true ){
         PARENT::applySearch( $data, false );
         $this->_applyPositionSetCriteria();
-        if ( !AMP_Authorized( AMP_PERMISSION_VOTERGUIDE_PUBLISH  )) $this->_addCriteriaLive( );
+        if ( !AMP_Authorized( AMP_PERMISSION_VOTERGUIDE_PUBLISH  )) $this->addCriteriaLive( );
         if ( $run_query ) $this->readData( );
     }
 
@@ -49,7 +49,7 @@ class VoterGuideSet extends AMPSystem_Data_Set {
         return $this->_addPositionSetCriteria( 'item', $value );
     }
 
-    function _addCriteriaLive() {
+    function addCriteriaLive() {
         return $this->addCriteria( 'publish=1' );
     }
 

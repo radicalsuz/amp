@@ -346,6 +346,7 @@ class VoterGuide_Controller {
 			$display->applySearch( $searchForm->getSearchValues() ); 
 		} else {
 			$searchForm->applyDefaults();
+            $display->applySearch( false );
 
 		}
 

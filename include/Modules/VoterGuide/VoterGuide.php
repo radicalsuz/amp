@@ -198,6 +198,10 @@ class VoterGuide extends AMPSystem_Data_Item {
     }
 
     function &getDisplay( ) {
+        if ( !$this->isLive( )) {
+            require_once( 'AMP/Content/Display/NotFound.inc.php');
+            return new Display_NotFound( );
+        }
         require_once( 'Modules/VoterGuide/Display.inc.php');
         return new VoterGuide_Display( $this );
     }
@@ -296,7 +300,11 @@ trigger_error( "is $user == ".$this->getOwner());
 	}
 
 	function isPublished() {
-		return $this->getData('publish');
+        return $this->isLive( );
 	}
+
+    function isLive( ) {
+		return $this->getData('publish');
+    }
 }
 ?>

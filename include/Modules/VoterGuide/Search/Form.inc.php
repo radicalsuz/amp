@@ -24,6 +24,11 @@ class VoterGuideSearch_Form extends AMPSearchForm {
     function getComponentHeader() {
         return $this->_component_header;
     }
+
+    function _formFooter( ){
+        return  '<span class="listtitle">Search Results</span>'
+                . '<p class="go">[<a href="/voterguide.php">List All Voter Guides</a>] [<a href="/guides">Voter Guide map</a> ]</p>';
+    }
 }
 
 ?>
