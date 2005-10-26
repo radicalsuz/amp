@@ -26,7 +26,9 @@ class VoterGuideSearch_Form extends AMPSearchForm {
     }
 
     function _formFooter( ){
-        return  '<span class="listtitle">Search Results</span>'
+        $title = "Browse Voter Guides";
+        if ( $this->submitted( )) $title = "Search Results";
+        return  '<span class="listtitle">' . $title . '</span>'
                 . '<p class="go">[<a href="/voterguide.php">List All Voter Guides</a>] [<a href="/guides">Voter Guide map</a> ]</p>';
     }
 }

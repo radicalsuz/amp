@@ -35,6 +35,10 @@ class VoterGuideSet_Display extends AMPContent_DisplayList_HTML {
     function noResultsDisplay(){
         return $this->_HTML_inDiv( $this->_no_results_message_html , array( 'class' => $this->_css_class_search_empty ));
     }
+
+    function _HTML_listingFormat( $html ) {
+        return $this->_pager->_HTML_topNotice( 'Voter Guides' ) . $html;
+    }
 }
 
 ?>

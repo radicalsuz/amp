@@ -34,8 +34,9 @@ class AMPContent_Pager extends AMPSystem_ListPager {
 
     function _HTML_topNotice( $text = null ) {
         $output = "";
+        if ( !( $position = $this->_positionText( ))) return $output;
         if (isset($text)) $output = $text. '&nbsp;:&nbsp;';
-        return $this->_HTML_inDiv( $this->_HTML_inSpan( $output .$this->_positionText(), $this->_css_class_link ), array('class'=> $this->_css_class_container ) );
+        return $this->_HTML_inDiv( $this->_HTML_inSpan( $output .$position, $this->_css_class_link ), array('class'=> $this->_css_class_container ) );
     }
 
 

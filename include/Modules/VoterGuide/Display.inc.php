@@ -23,11 +23,17 @@ class VoterGuide_Display extends AMPDisplay_HTML {
         return  $this->_HTML_guideHeader( ).
                 $this->_HTML_positionsList( ).
                 $this->_HTML_guideFooter( ).
-                $this->_HTML_disclaimer( );
+                $this->_HTML_disclaimer( )
+                . $this->_HTML_notifyAdmin( );
     }
 
     function _HTML_disclaimer( ) {
         return $this->_HTML_newline( ) . $this->_HTML_inSpan( AMP_TEXT_VOTERGUIDE_DISCLAIMER , array('style' => 'font-size: 10px;' ));
+    }
+
+    function _HTML_notifyAdmin( ) {
+        $notifyLink = "if this guide is offensive, send email to: <a href=\"mailto:voterguides@indyvoter.org?subject=guide%20". $this->_voterguide->getShortName() . "%20is%20pissing%20me%20off\"> the League</a>";
+        return $this->_HTML_newline(2) . $this->_HTML_inSpan( $notifyLink, array('style' => 'font-size: 10px;' ));
     }
 
     function _HTML_guideHeader( ) {
