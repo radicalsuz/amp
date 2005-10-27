@@ -268,7 +268,8 @@ class ElementCopierScript {
 
     function returnSets( $copier ) {
         if (!isset( $this->copiers[ $copier ][ 'valuesets' ])) return false;
-        return $this->copiers[ $copier ][ 'valuesets' ];
+		$sets = $this->_js_uncleanValueSet($this->copiers[$copier]['valuesets']);		
+        return $sets;
     }
   
     function _js_outputSets( $copier_name ) {
@@ -316,6 +317,14 @@ class ElementCopierScript {
         $replace_values = array( "\\n" , "\'");
         return str_replace( $base_values, $replace_values,  $value );
     }
+
+	function _js_uncleanValueSet($value) {
+		$value = is_array($value) ?
+               array_map(array($this, '_js_uncleanValueSet'), $value) :
+               str_replace("\'", "'", $value);
+
+		return $value;
+	}
 
 
 
