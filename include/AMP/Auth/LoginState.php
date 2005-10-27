@@ -158,7 +158,7 @@ class AMP_Authentication_LoginState_AuthRequest extends AMP_Authentication_Login
 		}
         $emailsLookup = &AMPSystem_Lookup::instance( 'UserDataEmails' );
 		$uids = array_keys($emailsLookup, $_REQUEST[ $this->_login_username_field ]);
-        if ( !array_search( $_REQUEST['uid'], $uids)) {
+        if ( !in_array( $_REQUEST['uid'], $uids)) {
 			$this->notice('username field not found in userdata');
             $this->_message_OK = false;
             return false;
