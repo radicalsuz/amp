@@ -80,6 +80,8 @@ class VoterGuide extends AMPSystem_Data_Item {
 			if(!$this->getErrors()) {
 				$this->mergeData(array('bloc_id' => $this->createVoterBloc()));
 			}
+
+			$this->mergeData(array('publish' => true));
 		}
 
 		if($this->getErrors()) {
