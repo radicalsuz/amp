@@ -24,7 +24,7 @@ class DIA_API_HTTP_Request extends DIA_API {
 			define('DIA_REST_API_UNSUBSCRIBE_URL', 'http://api.demaction.org/dia/api/processUnsubscribe.jsp');
 		}
 
-		if(!defined('DIA_REST_API_RESPORTS_URL')) {
+		if(!defined('DIA_REST_API_REPORTS_URL')) {
 			define('DIA_REST_API_REPORTS_URL', 'http://api.demaction.org/dia/api/reports.jsp');
 		}
 

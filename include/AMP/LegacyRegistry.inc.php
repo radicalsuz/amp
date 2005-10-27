@@ -51,6 +51,15 @@ define('AMP_IMAGE_WIDTH_THUMB', $SystemSettings[ 'thumb' ] );
 define('AMP_IMAGE_WIDTH_TALL', $SystemSettings[ 'optl' ] );
 define('AMP_IMAGE_WIDTH_WIDE', $SystemSettings[ 'optw' ] );
 
+#PHPLIST SETTINGS
+define( 'PHPLIST_BOUNCE_HOST', $SystemSettings['phplist_bounce_host']);
+define( 'PHPLIST_BOUNCE_USER', $SystemSettings['phplist_bounce_user']);
+define( 'PHPLIST_BOUNCE_PASSWORD', $SystemSettings['phplist_bounce_password']);
+
+#DIA SETTINGS
+if ( !defined( 'DIA_API_ORGANIZATION_KEY')) define( 'DIA_API_ORGANIZATION_KEY', $SystemSettings['dia_user']);
+if ( !defined( 'DIA_API_ORGCODE')) define( 'DIA_API_ORGCODE', $SystemSettings['dia_key']);
+
 #SET DATABASE CACHING
 $dbcon->cacheSecs = $cacheSecs;
 
@@ -59,7 +68,7 @@ $MM_HOSTNAME = AMP_DB_HOST;
 $MM_PASSWORD = AMP_DB_PASS;
 $MM_DATABASE = AMP_DB_NAME;
 
-define( "AMP_SYSTEM_VERSION_ID", '3.5.4');
+define( "AMP_SYSTEM_VERSION_ID", '3.5.6');
 
 #define browser detection global variables
 $browser_ie = NULL;

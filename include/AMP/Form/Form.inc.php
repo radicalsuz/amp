@@ -480,7 +480,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $this->addTranslation( $name, '_manageUpload', 'get' );
         $this->addTranslation( $name, '_addFileLink', 'set' );
         $this->_addHiddenField( $name . '_value');
-        $this->form->addElement( 'hidden', $name.'_value');
 		$this->form->setMaxFileSize(AMP_FORM_UPLOAD_MAX);
 
         $defaults = $this->_getDefault( $name );
