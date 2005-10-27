@@ -98,7 +98,7 @@ class DIA_API_HTTP_Request extends DIA_API {
         if ( !PEAR::isError( $req->sendRequest() ) ) {
             $out = trim($req->getResponseBody());
         } else {
-			if( DIA_API_DEBUG ) {
+			if( defined('DIA_API_DEBUG') && DIA_API_DEBUG ) {
 				$this->print($out);
 			}
             $out = null;
@@ -128,7 +128,7 @@ class DIA_API_HTTP_Request extends DIA_API {
 
         $req->addQueryString( 'simple', true );
 
-		if( DIA_API_DEBUG ) {
+		if( defined('DIA_API_DEBUG') && DIA_API_DEBUG ) {
 			print "requesting URL: ".$req->_url->getURL()."<br/>";
 			AMP_varDump($req->_postData);
 		}
@@ -136,7 +136,7 @@ class DIA_API_HTTP_Request extends DIA_API {
         if ( !PEAR::isError( $req->sendRequest() ) ) {
             $out = trim($req->getResponseBody());
         } else {
-			if( DIA_API_DEBUG ) {
+			if( defined('DIA_API_DEBUG') && DIA_API_DEBUG ) {
 				$this->print($out);
 			}
             $out = null;
@@ -186,20 +186,28 @@ class DIA_API_HTTP_Request extends DIA_API {
 
         $req->addQueryString( 'simple', true );
 
-		if( DIA_API_DEBUG ) {
+		if( defined('DIA_API_DEBUG') && DIA_API_DEBUG ) {
 			print "requesting URL: ".$req->_url->getURL()."<br/>";
 		}
 
         if ( !PEAR::isError( $req->sendRequest() ) ) {
             $out = $req->getResponseBody();
         } else {
-			if( DIA_API_DEBUG ) {
+			if( defined('DIA_API_DEBUG') && DIA_API_DEBUG ) {
 				$this->print($out);
 			}
             $out = null;
         }
 	
         return $out;
+	}
+
+    function addSupporter ( $email, $info = array() ) {
+		if(isset($info['link']) && $info['link'] && is_array($info['link'])) {
+			list($link, $key) = each($info['link']);
+			$info['link'] = $link.'|'.$key;
+		}
+		return parent::addSupporter($email, $info);
 	}
 
 }

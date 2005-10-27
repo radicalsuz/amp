@@ -20,8 +20,8 @@ class DIA_API {
 	}
 
 	function init() {
-		if( !defined('DIA_DEBUG') ) {
-			define('DIA_DEBUG', false);
+		if( !defined('DIA_API_DEBUG') ) {
+			define('DIA_API_DEBUG', false);
 		}
 
 		if( !defined('DIA_MESSAGE_DATA_NOT_FOUND') ) {
@@ -60,7 +60,7 @@ class DIA_API {
         if ( $php_errormsg ) {
             $errormsg .= " ($php_errormsg)";
         }
-        if ( DIA_DEBUG ) {
+        if ( defined('DIA_API_DEBUG') && DIA_API_DEBUG ) {
             trigger_error( $errormsg, $lvl);        
         }
         else {
