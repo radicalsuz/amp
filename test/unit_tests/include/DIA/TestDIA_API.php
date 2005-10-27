@@ -1,8 +1,8 @@
 <?php
 require_once( 'unit_tests/config.php' );
 
-define('DIA_API_ORGCODE', 'pLxGeID1N0t4mAsoHTRA3CqPsfU/EsU8EuvTaUFa/wwDzkADR5zl1g==');
-define('DIA_API_ORGANIZATION_KEY', 315);
+define('DIA_API_ORGCODE', 'l++RvwZnm4yzhC61MnxPlmbddmr6TYQIJuvn0MbYfOMDzkADR5zl1g==');
+define('DIA_API_ORGANIZATION_KEY', 962);
 
 require_once( 'DIA/API.php' );
 
@@ -24,6 +24,7 @@ class TestDIA_API extends UnitTestCase {
 		unset($this->api);
 	}
 
+/*
 	function testGetSeth() {
 		$results = $this->api->get('supporter', array('key'=>3088498));
 		$this->assertNotNull($results);
@@ -46,6 +47,14 @@ class TestDIA_API extends UnitTestCase {
 
 	function testGroupNoExists() {
 		$results = $this->api->get('groups', array('where' => 'Group_Name="doesnotexists123"'));
+		$xmlparser =& new XML_Unserializer();
+		$status = $xmlparser->unserialize($results);
+		$this->dump($xmlparser->getUnserializedData());
+	}
+*/
+
+	function testAppendFooter() {
+		$results = $this->api->get('groups', array('key' => '25670'));
 		$xmlparser =& new XML_Unserializer();
 		$status = $xmlparser->unserialize($results);
 		$this->dump($xmlparser->getUnserializedData());
@@ -131,6 +140,14 @@ works.  trust me.
 		$this->dump($result);
 	}
 */
+	function testAddLinkSupporter() {
+		
+		$now = date('mdHi');
+		$data = array("First_Name" => "TestAMP".$now,
+					  "link" => array('groups' => 25670)); 
+		$result = $this->api->addSupporter('test'.$now.'@radicaldesigns.org',$data);
+		$this->assertTrue($result);
+	}
 }
 
 UnitRunner_instantiate( __FILE__ );
