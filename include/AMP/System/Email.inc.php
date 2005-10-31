@@ -12,7 +12,14 @@ class AMPSystem_Email {
 
 
     function AMPSystem_Email() {
+		$this->init();
     }
+
+	function init() {
+		if(!defined('AMP_MAIL_ENVELOPE_SENDER')) {
+			define('AMP_MAIL_ENVELOPE_SENDER', 'automated@radicaldesigns.org');
+		}
+	}
 
     function setMessage($message) {
         $this->_message = $message;
@@ -70,8 +77,8 @@ class AMPSystem_Email {
         if ($sender_name = $this->getSenderName() ) {
             $from = $sender_name . " <" . $from .">";
         }
-        $header  = "From: " . $from;
-        $header .= "\nX-Mailer: AMP/SystemMail\n";
+        $header  = "From: " . $from . "\n";
+        $header .= "X-Mailer: AMP/SystemMail\n";
 
         return $header;
     }
@@ -86,8 +93,20 @@ class AMPSystem_Email {
         if (!($message  =  $this->getMessage() ))   return false;
         if (!($mailto   =  $this->getRecipient() ))    return false;
 
-        return mail( $mailto, $this->getSubject(), $message, $header );
+        return mail( $mailto, $this->getSubject(), $message, $header, $this->getAdditionalParameters() );
     }
 
+
+	function getAdditionalParameters() {
+		if(defined('AMP_MAIL_ENVELOPE_SENDER') && AMP_MAIL_ENVELOPE_SENDER) {
+			$parameters[] = '-f'.AMP_MAIL_ENVELOPE_SENDER;
+		}
+
+		if(empty($parameters)) {
+			return null;
+		}
+
+		return join(' ', $parameters);
+	}
 }
 ?>
