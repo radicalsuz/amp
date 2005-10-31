@@ -1,4 +1,13 @@
 <?php
+
+if(!defined('AMP_VOTERGUIDE_UNSUBSCRIBE_CONFIRM')) {
+	define('AMP_VOTERGUIDE_UNSUBSCRIBE_CONFIRM', "The email address %s has been unsubscribed from the %s bloc.  You can always add yourself again by going to %s");
+}
+
+if(!defined('AMP_URL_VOTERGUIDE')) {
+	define('AMP_URL_VOTERGUIDE', 'voterguide.php');
+}
+
 require_once( "AMP/BaseDB.php" );
 require_once( "Modules/VoterGuide/ComponentMap.inc.php" );
 require_once( "Modules/VoterGuide/Lookups.inc.php" );
@@ -259,7 +268,19 @@ class VoterGuide_Controller {
 		$email = $_REQUEST['Email'];
 
 		$guide =& $this->getActionObject();
-		$guide->removeVoterFromBloc($email);
+		if($email && $guide) {
+			$guide->unsubscribeVoterFromBlocList($email);
+			$confirm = sprintf(AMP_VOTERGUIDE_UNSUBSCRIBE_CONFIRM, $email, $guide->getName(), 
+				AMP_Url_AddVars(  AMP_SITE_URL.AMP_URL_VOTERGUIDE, array(  'action=join', 'name='.$guide->getShortName() )));
+			require_once('AMP/System/Email.inc.php');
+			$mail =& new AMPSystem_Email();
+			$mail->setRecipient($email);
+			$mail->setSubject('unsubscribed from '.$guide->getName()) . ' voter bloc';
+			$mail->setMessage($confirm);
+			$mail->execute();
+			AMP_directDisplay($confirm);
+		} else {
+		}
 	}
 
 //	function create() {

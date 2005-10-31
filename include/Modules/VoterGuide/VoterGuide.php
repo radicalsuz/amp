@@ -180,7 +180,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 		return true;
 	}
 
-	function removeVoterFromBloc($email, $bloc_id = null) {
+	function unsubscribeVoterFromBlocList($email, $bloc_id = null) {
 		if(isset($this) && $this->getBlocID()) {
 			$bloc_id = $this->getBlocID();
 		}
@@ -188,7 +188,20 @@ class VoterGuide extends AMPSystem_Data_Item {
 			return false;
 		}
         $api =& DIA_API::create();
-		$api->unsubscribe(array('Email' => $email, 'groups_KEY' => $bloc_id));
+		$results = $api->get('supporter', array('where' => 'Email="'.$email.'"'));
+        $xmlparser =& new XML_Unserializer();
+        $status = $xmlparser->unserialize($results);
+        $supporter_data = $xmlparser->getUnserializedData();
+		if(!$supporter_id = $supporter_data['supporter']['item']['key']) {
+			return false;
+		}
+
+		$results = $api->get('supporter_groups', array('where' => '(supporter_KEY='.$supporter_id.')and(groups_KEY='.$bloc_id.')'));
+        $xmlparser2 =& new XML_Unserializer();
+        $status = $xmlparser2->unserialize($results);
+        $record_data = $xmlparser2->getUnserializedData();
+		$record_id = $record_data['supporter_groups']['item']['key'];
+		$api->process('supporter_groups', array('key' => $record_id, 'Properties' => 'Receive No Emails'));
 	}
 		
 	function getBlocGroupIDByName($name) {
