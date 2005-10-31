@@ -350,7 +350,9 @@ class UserDataPlugin {
 
     function fileFieldtoText( $value, $keyname ) {
         $value_key = $keyname . '_value';
-        if ( $filevalue = current( $this->udm->getData( $value_key )) ) return $filevalue;
+        if (!( isset( $_FILES[ $keyname ][ 'tmp_name' ] ) && $_FILES[ $keyname ]['tmp_name'])) {
+            if ( $filevalue = current( $this->udm->getData( $value_key )) ) return $filevalue;
+        }
         
         $builder = &$this->udm->getPlugin( 'QuickForm', 'Build');
         $engine = &$builder->getFormEngine( );

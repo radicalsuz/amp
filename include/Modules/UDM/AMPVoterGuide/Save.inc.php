@@ -31,6 +31,7 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         //Add Button has to be reconfigured for UDM
         $add_button = key( $this->_copier->getAddButton( $this->_copierName ) );
         unset(  $this->fields[ $add_button ]);
+        unset(  $this->fields[ 'owner_id' ]);
 
         $this->_copier->setPrefix( $this->_copierName, ( $this->_field_prefix . '_' . $this->_copierName ));
         $add_button = $this->_copier->getAddButton( $this->_copierName );

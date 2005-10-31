@@ -6,6 +6,7 @@ require_once( 'Modules/VoterGuide/ComponentMap.inc.php' );
 require_once( 'Modules/VoterGuide/VoterGuide.php' );
 require_once( 'AMP/Form/ElementCopierScript.inc.php' );
 require_once( 'Modules/VoterGuide/Position/Form.inc.php' );
+require_once ( 'AMP/UserData/Lookups.inc.php');
 
 class VoterGuide_Form extends AMPSystem_Form_XML {
 
@@ -26,6 +27,7 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
     function setDynamicValues() {
         $region = &new Region();
         $this->setFieldValueSet( 'state' , $region->regions['US']);
+        $this->setFieldValueSet( 'owner_id' , FormLookup_Names::instance( AMP_FORM_ID_VOTERGUIDES ));
         $this->addTranslation( 'election_date', '_makeDbDateTime' );
         $this->showPositions( );
         $this->addTranslation( $this->_copierName, '_loadPositions', 'set' );

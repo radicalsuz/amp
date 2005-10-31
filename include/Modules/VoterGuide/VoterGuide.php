@@ -53,7 +53,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 		$this->_custom_errors[] = array('field' => $field, 'message' => $message);
 	}
 
-    function save() {
+    function _validateElectionDate( ){
 		//is this the first time we're saving this voterguide?
 		$today = time();
 		$election = strtotime($this->getItemDate(),'r');
@@ -63,29 +63,35 @@ class VoterGuide extends AMPSystem_Data_Item {
 		if($today - $election >= 0) {
 			$this->addError('Date must be for an upcoming election');
 			$this->addCustomError('election_date', 'Please use a date in the future');
+            return false;
 		}
+        return true;
+
+    }
+    function _validateShortname( ) {
+        $short_name = $this->getShortName();
+        if( !$short_name ) {
+            $short_name = $this->getName();
+        }
+        $short_name = $this->generateShortName($short_name);
+        if(!$this->isUniqueShortName($short_name, true)) {
+            $this->addError( $short_name.' already exists as a short name.  please try a different short name');
+            $this->addCustomError('short_name', $short_name.' already exists as a short name.  please try a different short name');
+            return false;
+        }
+        $this->mergeData(array('short_name' => $short_name));
+        return true;
+
+    }
+
+    function _validateNewGuide( ){
+        return ( $this->_validateShortname( ) && $this->_validateElectionDate( ));
+    }
+
+    function save() {
 		
 		if($this->isNew()) {
-			$short_name = $this->getShortName();
-			if( !$short_name ) {
-				$short_name = $this->getName();
-			}
-			$short_name = $this->generateShortName($short_name);
-			if(!$this->isUniqueShortName($short_name, true)) {
-				$this->addError( $short_name.' already exists as a short name.  please try a different short name');
-				$this->addCustomError('short_name', $short_name.' already exists as a short name.  please try a different short name');
-			}
-			$this->mergeData(array('short_name' => $short_name));
-
-			if(!$this->getErrors()) {
-				$this->mergeData(array('bloc_id' => $this->createVoterBloc()));
-			}
-
-			$this->mergeData(array('publish' => true));
-		}
-
-		if($this->getErrors()) {
-			return false;
+			if(!$this->_validateNewGuide()) return false;
 		}
 
         if ( !( $result=PARENT::save())) return $result;

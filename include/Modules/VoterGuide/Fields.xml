@@ -1,4 +1,10 @@
 <array>
+    <owner_id>
+        <type>select</type>
+        <public>0</public>
+        <label>Author</label>
+        <enabled>1</enabled>
+    </owner_id>
     <guideHeader>
         <type>header</type>
         <default>Step 2: Voter Guide Info</default>
