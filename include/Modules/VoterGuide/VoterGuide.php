@@ -74,9 +74,18 @@ class VoterGuide extends AMPSystem_Data_Item {
             $short_name = $this->getName();
         }
         $short_name = $this->generateShortName($short_name);
+
+		if(20 < strlen($short_name)) {
+			$error_msg = $short_name.' is too long, short name must be 20 characters or less';
+            $this->addError($error_msg);
+            $this->addCustomError('short_name', $error_msg);
+            return false;
+		}
+
         if(!$this->isUniqueShortName($short_name, true)) {
-            $this->addError( $short_name.' already exists as a short name.  please try a different short name');
-            $this->addCustomError('short_name', $short_name.' already exists as a short name.  please try a different short name');
+			$error_msg = $short_name.' already exists as a short name.  please try a different short name';
+            $this->addError($error_msg);
+            $this->addCustomError('short_name', $error_msg);
             return false;
         }
         $this->mergeData(array('short_name' => $short_name));
