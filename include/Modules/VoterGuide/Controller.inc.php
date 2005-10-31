@@ -53,8 +53,9 @@ class VoterGuide_Controller {
 
 		if ( isset( $_GET['id']) && $_GET['id']) {
 			$this->action_id = $_GET['id'];
-		} elseif ( ( isset( $_GET['name']) && $short_name = $_GET['name']) ) {
+		} elseif ( ( isset( $_GET['name']) && $short_name = strtolower($_GET['name'])) ) {
 			$idByName = AMPSystem_Lookup::instance('VoterGuideByShortName');
+			$idByName = array_change_key_case($idByName, CASE_LOWER);
 			if(isset($idByName[$short_name])) {
 				$this->action_id = $idByName[$short_name];
 			}
