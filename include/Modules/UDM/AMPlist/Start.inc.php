@@ -14,6 +14,7 @@ class UserDataPlugin_Start_AMPlist extends UserDataPlugin {
     function init( &$udm, $plugin_instance = null) {
         PARENT::init( $udm, $plugin_instance );
         $init_blaster_method = 'init'. AMP_MODULE_BLAST;
+        print $init_blaster_method;
         if (method_exists( $this, $init_blaster_method) ) $this->$init_blaster_method( $udm, $plugin_instance ) ;
     }
     function initPHPlist( &$udm, $plugin_instance ){
