@@ -391,8 +391,11 @@ class PHPlist_API {
      */
     function add_subscribers($subscribers, $list_id) {
         $result_count = 0;
-        foreach ($subscribers as $subscriber_data) {
-            if( !$subscriber = &$this->create_subscriber( $subscriber_data['Email'], $use_html = true, $subscriber_data['id'] )) continue;
+        foreach ($subscribers as $subscriber_id => $subscriber_email) {
+            if ( !$subscriber = &$this->get_subscriber_by_email( $subscriber_email )){
+                if( !$subscriber = &$this->create_subscriber( $subscriber_email, $use_html = true, $subscriber_id )) continue;
+            }
+            if ( $this->is_subscribed( $subscriber->id, $list_id )) continue;
             $this->set_subscriber( $subscriber->id, $list_id, true );
             ++$result_count;
         }

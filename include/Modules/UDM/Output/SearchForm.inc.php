@@ -279,12 +279,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
 	function form_addElement( &$form, $name, &$field_def, $admin = false ) {
 
-		if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
+        if (  !( isset( $field_def['public']) && $field_def[ 'public' ] ) && !$admin ) return false;
 
-		$type     = $field_def[ 'type'   ];
-		$label    = $field_def[ 'label'  ];
-		$defaults = $field_def[ 'values' ];
-		$size     = $field_def[ 'size' ];
+        $type     = isset( $field_def['type']) ? $field_def[ 'type'   ]:'';
+        $label    = isset( $field_def['label']) ? $field_def[ 'label'  ] : '';
+        $defaults = isset( $field_def['values']) ? $field_def[ 'values' ] : null; 
+        $size     = isset( $field_def['size']) ? $field_def[ 'size' ]:null;
 		$renderer =& $form->defaultRenderer();
 
 		// Check to see if we have an array of values.
@@ -308,7 +308,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 				$defaults = array('' => $label) + $defaults;
 				$label="";
 			} 
-			if ($field_def['value']&&isset($field_def['value'])) $selected=$field_def['value'];
+            if ( isset($field_def['value']) && $field_def['value'] ) $selected = $field_def['value'];
 		}
 		
 		//add the element

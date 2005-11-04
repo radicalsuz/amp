@@ -41,6 +41,13 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
             'available'=>true,
             'label'=>'Allow user to UnPublish records'),
 
+        'allow_subscribe'=>array(
+            'default'=>true,
+            'type'=>'checkbox',
+            'available'=>true,
+            'label'=>'Allow subscribing to Email lists'),
+
+
         'form_name'=>array(
             'default'=>'udm_actions',
             'type'=>'text',
@@ -160,6 +167,20 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                                     array('class'=>$options['control_class'],
                                     'onClick'=>"list_DoAction( 'email' );"),
                                 'enabled'=>$options['allow_email']);
+        //Subscribe Options
+        $def['blastlist_id'] = array(  'type' =>'select',
+                                'label' =>'Subscribe to',
+                                'enabled'=>AMP_authorized( AMP_PERMISSION_BLAST_ACCESS ),
+                                'attr'=>
+                                    array('class'=>$options['control_class']),
+                                'values' => AMPSystem_Lookup::instance( 'lists'));
+        //Subscribe Button
+        $def['subscribe']=array(  'type'=>'button',
+                                'label'=>'Subscribe',
+                                'attr'=>
+                                    array('class'=>$options['control_class'],
+                                    'onClick'=>"list_DoAction( 'subscribe' );"),
+                                'enabled'=>AMP_authorized( AMP_PERMISSION_BLAST_ACCESS ));
         //list_action form items
         $def['list_action']=array(  'type'=>'hidden',
                                 'value'=>'',
@@ -264,7 +285,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
            }*/
 
         $output .= $form->toHtml();
-        $output .= (isset($this->message)?$this->message."<BR>":"");
+        $output .= (isset($this->message) ? "<span class='page_result'>" . $this->message."</span><BR>" : "");
 
         return  $output;
 
@@ -341,15 +362,31 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         }
     }
 
+    function subscribe_set( $set ){
+        trigger_error( 'in sub');
+        if ( !( isset( $_POST['blastlist_id'] ) && $list_id = $_POST['blastlist_id'])) return 'Please select a list';
+        require_once( 'Modules/Blast/API.inc.php');
+        $ids = split( ",", $set );
+
+        $_PHPlist = &new PHPlist_API( $this->dbcon );
+        $emailSet = &AMPSystem_Lookup::instance( 'userDataEmails');
+        $new_subscribers = &array_combine_key( $ids, $emailSet );
+
+        $count = $_PHPlist->add_subscribers( $new_subscribers, $list_id );
+        $listSet = &AMPSystem_Lookup::instance( 'lists');
+        return ( $count . ' users subscribed to '.$listSet[$list_id]);
+    }
+
     function form_addElement( &$form, $name, &$field_def, $admin = false ) {
+        $options = $this->getOptions( );
 
-        if ( $field_def[ 'public' ] != 1 && !$admin ) return false;
-        if ( $field_def[ 'enabled' ] != 1) return false;
+        if (  !( isset( $field_def['public']) && $field_def[ 'public' ] ) && !$admin ) return false;
+        if (  !( isset( $field_def['enabled']) && $field_def[ 'enabled' ] ) ) return false;
 
-        $type     = $field_def[ 'type'   ];
-        $label    = $field_def[ 'label'  ];
-        $defaults = $field_def[ 'values' ];
-        $size     = $field_def[ 'size' ];
+        $type     = isset( $field_def['type']) ? $field_def[ 'type'   ]:'';
+        $label    = isset( $field_def['label']) ? $field_def[ 'label'  ] : '';
+        $defaults = isset( $field_def['values']) ? $field_def[ 'values' ] : null; 
+        $size     = isset( $field_def['size']) ? $field_def[ 'size' ]:null;
         $renderer =& $form->defaultRenderer();
 
         // Check to see if we have an array of values.
@@ -373,7 +410,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                 $defaults = array('' => $label) + $defaults;
                 $label="";
             } 
-            if ($field_def['value']&&isset($field_def['value'])) $selected=$field_def['value'];
+            if ( isset($field_def['value']) && $field_def['value'] ) $selected = $field_def['value'];
         }
 
         //add the element
@@ -381,7 +418,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
 
         //get the element reference
         $fRef =& $form->getElement( $name );
-        $fRef->updateAttributes($field_def['attr']);
+        if ( isset( $field_def['attr'])) $fRef->updateAttributes($field_def['attr']);
         if ( isset( $selected ) ) {
             $fRef->setSelected( $selected );
         }
@@ -392,7 +429,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         } elseif ($type=='submit') {
             $renderer->setElementTemplate("{element}", $name);
         } else {
-            $renderer->setElementTemplate("\n\t\t<span align=\"right\" valign=\"top\" class=\"".$this->control_class."\">{label} {element}\n\t", $name);
+            $renderer->setElementTemplate("\n\t\t<span align=\"right\" valign=\"top\" class=\"".$options['control_class']."\">{label} {element}\n\t", $name);
         }
 
 
