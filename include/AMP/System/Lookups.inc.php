@@ -230,6 +230,10 @@ class AMPSystemLookup_Lists extends AMPSystem_Lookup {
             $this->datatable = AMP_DBTABLE_BLAST_LISTS;
             $this->criteria = 'active=1';
         }
+        if ( AMP_MODULE_BLAST == 'PHPlist') {
+            $this->datatable = 'phplist_list';
+            $this->criteria = 'active=1';
+        }
         $this->init();
     }
 
