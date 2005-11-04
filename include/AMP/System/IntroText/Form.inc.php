@@ -5,9 +5,9 @@
  *  a system-side form definition
  *  for moduletext
  *
- *  AMP 3.5.0
- *  2005-06-27
- *  Author: austin@radicaldesigns.org
+ *  @version AMP 3.5.0
+ *  @date 2005-06-27
+ *  @author Austin Putman <austin@radicaldesigns.org>
  */
 
 

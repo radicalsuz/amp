@@ -23,6 +23,7 @@
     var $_search_class = 'AMPSystem_Data_Search';
     var $_search_exact_values = array();
     var $_search_fulltext = array( );
+    var $_id_field_lookups;
     
     var $source;
 
@@ -113,6 +114,7 @@
             $this->dbcon->CacheFlush( $this->_assembleSql() );
             return $this->dbcon->Affected_Rows();
         }
+        trigger_error ( get_class( $this ) . ' failed to delete data : ' . $this->dbcon->ErrorMsg() . "\n statement: " . $sql );
 
         return false;
         
@@ -169,10 +171,19 @@
         return $set->Fields( 'qty' );
     }
 
+    function getIdFieldLookups( ) {
+        if ( isset( $this->_id_field_lookups )) return $this->_id_field_lookups;
+        return $this->id_field;
+    }
+
+    function setIdFieldLookups( $field ) {
+        $this->_id_field_lookups = $field; 
+    }
+
 	function getLookup($field) {
         $set = array();
 		if( !$this->makeReady() ) {
-			$sql = "SELECT " . $this->id_field . ", $field " . $this->_makeSource()
+			$sql = "SELECT " . $this->getIdFieldLookups( ). ", $field " . $this->_makeSource()
             . $this->_makeCriteria();
 			$set = $this->dbcon->CacheGetAssoc( $sql );
             if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." lookup " .$field); 
@@ -225,6 +236,7 @@
 
     function &getSearch() {
         if ( !isset( $this->_search )) {
+            require_once( 'AMP/System/Data/Search.inc.php');
             $this->_search = & new $this->_search_class( $this );
         }
         return $this->_search;

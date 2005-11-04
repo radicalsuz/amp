@@ -29,7 +29,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $this->init($dbcon);
     }
 
-    function init ( &$dbcon, $item_id ) {
+    function init ( &$dbcon, $item_id = null ) {
         $this->dbcon = & $dbcon;
         $this->_itemdata_keys = $this->_getColumnNames( $this->datatable );
 		$this->_allowed_keys = $this->_itemdata_keys;
@@ -81,7 +81,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function save() {
         $save_fields = array_combine_key($this->_itemdata_keys, $this->getData());
-		if (!isset($save_fields[ $this->id_field ])) $save_fields[ $this->id_field ] = "";
+		if ( !is_array( $this->id_field ) && !isset($save_fields[ $this->id_field ]) ) $save_fields[ $this->id_field ] = "";
         
         $result = $this->dbcon->Replace( $this->datatable, $save_fields, $this->id_field, $quote=true);
 
@@ -111,7 +111,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function setData( $data ) {
         $this->itemdata = array_combine_key( $this->_allowed_keys, $data );
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );
-        if (isset($data[$this->id_field]) && $data[$this->id_field]) $this->id = $data[$this->id_field];
+        if (is_string( $this->id_field ) && isset($data[$this->id_field]) && $data[$this->id_field]) $this->id = $data[$this->id_field];
     }
 
     function legacyFieldname( $data, $oldname, $newname ) {

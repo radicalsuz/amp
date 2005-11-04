@@ -66,6 +66,7 @@ class UserData {
     var $mailto;
     var $subject;
     var $uselists;
+    var $_lists;
 
     // flag to enable / disable display of form to user.
     var $showForm;
@@ -138,10 +139,11 @@ class UserData {
         $this->_register_fields();
 
         // Register the mailing lists.
-        $this->_register_lists();
+        #$this->_register_lists();
 
         // Register methods for data access / manipulation.
         $this->_register_plugins();
+
 
 		// Allow for overriding, but don't set (yet)
 		if(!defined('AMP_UDM_FORM_INVALID_ERROR')) {
@@ -732,7 +734,6 @@ class UserData {
         
         $result = false;
         foreach ( array_keys($plugins) as $plugin_name ) {
-
             $plugin =& $plugins[$plugin_name];
 
             $plugin->setOptions( $options );
@@ -949,6 +950,7 @@ class UserData {
             }
 
         }
+        $this->_register_lists( );
 
         return $r;
 
@@ -966,55 +968,8 @@ class UserData {
 
     function _register_lists () {
 
-        /* This is currently hard-coded, but should be replaced by
-           objects at some point in the (near) future */
-
-        $md = $this->_module_def;
-        $this->uselists = $md[ 'uselists' ];
-
-        $lists = array_filter( array_keys( $md ), array( &$this, "_register_lists_filter" ) );
-
-        $list_id = array();
-        foreach ( $lists as $list ) {
-            if ( $md[ $list ] ) {
-                $list_id[] = $md[ $list ];
-            }
-        }
-
-        if (count($list_id) == 0) return false;
-
-        $table = $GLOBALS['MM_listtable'];
-        if ( !isset( $table ) ) $table = 'lists';
-
-        $sql = 'SELECT name, id FROM ' . $table . ' WHERE id IN ( ';
-        $sql .= join( ", ", $list_id ) . ' )';
-
-        $rs = $this->dbcon->CacheExecute( $sql )
-            or die( "Error fetching list info from database: " . $this->dbcon->ErrorMsg() );
-
-        if ( $this->uselists && (count( $lists ) > 0)) {
-            $listField = array( 'label' => 'Subscribe to the following lists:',
-                                'public' => true,
-                                'type' => 'header' );
-            $this->fields[ 'list_header' ] = $listField;
-        }
-
-        while ( $list = $rs->FetchRow() ) {
-
-            $this->lists[ $list['id'] ] = $list[ 'name' ];
-
-            // Add lists to fields. This is a *temporary* change, and should be
-            // removed, along with all changes in SVN r121
-            if ( $this->uselists ) {
-                $listField = array( 'label'    => $list[ 'name' ],
-                                    'public'   => true,
-                                    'type'     => 'checkbox',
-                                    'required' => false,
-                                    'values'   => 1 );
-
-                $this->fields[ 'list_' . $list['id'] ] = $listField;
-            }
-
+        if ( $this->uselists = $this->_module_def[ 'uselists' ] ) {
+            $this->registerPlugin( 'AMPlist', 'Start');
         }
 
     }
@@ -1031,10 +986,30 @@ class UserData {
         return ( substr( $var, 0, 4 ) == "list" );
     }
 
+
     function &saveRegisteredPlugin ( $namespace, $action ) {
         if (! ($plugin = &$this->registerPlugin( $namespace, $action ))) return false;
         $plugin->saveRegistration( $namespace, $action );
         return $plugin;
+    }
+
+    function getRegisteredLists( ){
+        if( !$this->uselists ) return false;
+        if( isset( $this->lists )) return $this->lists;
+        $md = $this->_module_def;
+        $lists = array_filter( array_keys( $md ), array( &$this, "_register_lists_filter" ) );
+
+        $list_id = array();
+        foreach ( $lists as $list ) {
+            if (! $md[ $list ] ) continue; 
+            $list_id[] = $md[ $list ];
+            
+        }
+
+        if (count($list_id) == 0) return false;
+        $this->lists = array_combine_key( $list_id, AMPSystem_Lookup::instance( 'lists' ));
+        return $this->lists;
+
     }
 
 }

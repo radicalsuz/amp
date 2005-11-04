@@ -9,95 +9,89 @@
  *  6/1/2005
  */
  
-require_once ('AMP/UserData/Plugin.inc.php');
+require_once ('AMP/UserData/Plugin/Save.inc.php');
+require_once ('Modules/Blast/API.inc.php');
 
-class UserDataPlugin_Save_PHPlist extends UserDataPlugin {
+class UserDataPlugin_Save_PHPlist extends UserDataPlugin_Save {
     
     var $name = 'PHPlist';
 	var $long_name   = 'PHP List Subscription ';
     var $description = 'Subscribes users to PHPlist Lists';
     var $available = true;
 
-     function UserdataPlugin_Save_PHPlist ( &$udm , $plugin_instance=null){
+    var $_field_prefix = 'PHPlist';
+    var $_listfield_template = array( 
+                'public'   => true,
+                'enabled'  => true,
+                'type'     => 'checkbox',
+                'required' => false,
+                'default'  => 1 );
+
+    var $_listfield_header = array( 
+            'label'     => 'Subscribe to the following lists:',
+            'public'    => true,
+            'enabled'   => true,
+            'type'      => 'header' );
+    var $_listfield_footer = array( 
+            'label'     => 'Email preferences:',
+            'public'    => true,
+            'enabled'   => true,
+            'type'      => 'header' );
+
+    function UserDataPlugin_Save_PHPlist ( &$udm , $plugin_instance=null){
         $this->init( $udm, $plugin_instance );
-		 
+    }
+
+    function _register_fields_dynamic( ) {
+        if( !( $lists = $this->udm->getRegisteredLists( ))) return;
+        $this->fields[ 'list_header' ] = $this->_listfield_header;
+
+        foreach ( $lists as $list_id => $list_name ){
+            $listField = array( 'label'    => $list_name );
+            $this->fields[ 'list_' . $list_id] = $listField + $this->_listfield_template;
+        }
+
+        $this->fields[ 'list_footer' ] = $this->_listfield_footer;
+        $this->fields[ 'list_htmlemail_ok'] = array( 'label' => 'I can receive email formatted as HTML' ) + $this->_listfield_template;
+        
+		$this->_PHPlist = &new PHPlist_API ( $this->dbcon ) ;
+    }
+
+    function getSaveFields( ){
+        return $this->getAllDataFields( );
     }
 	 
-    function execute ( $options = null ) {
-		$options = $this->getOptions();
-		$this->_field_prefix='';
-		$data = $this->getData();
-		
-		if ( $this->udm->uselists ) {
-			$emailid = $this->check_email($data['Email']);
-			if (!$emailid) {
-				$rndVal = md5(uniqid(mt_rand()));
-				$sql  = "INSERT INTO phplist_user_user (";
-				$sql .= " email, confirmed, uniqid, htmlemail, entered,  foreignkey ) VALUES ('";
-				$sql .= $data['Email'];
-				$sql .= "', 1, '" . $rndVal . "', ".$data['custom1'].", NOW(), '".$this->udm->uid."' )";
-				$rs = $this->dbcon->Execute( $sql )or DIE("add to phplist error ".$sql.$this->dbcon->ErrorMsg()); ;
-				
-				$emailid = $this->dbcon->Insert_ID( );
-				$this->add_att($emailid,$data);
-			}
-			
-			foreach ( array_keys( $this->udm->lists ) as $list_id ) {
-				$list_fields[] = 'list_' . $list_id;
-			}
-			$listValues = $this->udm->form->exportValues( $list_fields );
-			foreach ( $listValues as $listField => $value ) {
-	
-				$listid = substr( $listField, 5 );
-				if ( $value ) {
-					if (!$this->check_sub($emailid,$listid)) {
-						$sql ="INSERT INTO phplist_listuser (userid, listid, entered) VALUES ('".$emailid."', '".$listid."', NOW())";
-						$rs = $this->dbcon->Execute( $sql )or DIE("add to phplist error ".$sql.$this->dbcon->ErrorMsg());
-					}
-				}
-			
-			}
+    function save ( $data, $options = null ) {
+		$options = array_merge( $this->getOptions(), $options );
 
-	    }
-	}
+        if( !( $lists = $this->udm->getRegisteredLists( ))) return true;
+        $contact_info = $this->udm->getData( );
+        if( $subscriber = &$this->_PHPlist->get_subscriber_by_email( $contact_info['Email'] )) {
+            if ( $subscriber->getHtmlFlag( ) != $data['list_htmlemail_ok'] ){
+                $subscriber->setHtmlFlag( $data['list_htmlemail_ok']);
+                $subscriber->save( );
+            }
+        } else {
+            $subscriber = &$this->_PHPlist->create_subscriber( $contact_info['Email'], $data['list_htmlemail_ok'], $this->udm->uid );
+        }
 
-	function check_email($email) {
-		$rs = $this->dbcon->Execute( "select id from phplist_user_user where email = '".$email."'" );
-		if ($rs->Fields("id")) {
-			return $rs->Fields("id");
-		} else  {
-			return FALSE;
-		}
-	}
+        if ( !$subscriber ) {
+            $this->udm->errorMessage( 'Failed to create subcriber');
+            return false;
+        }
+        if ( !$subscriber->setAttributes( $contact_info )) {
+            $this->udm->errorMessage( 'Failed to update subcriber');
+            return false;
+        }
+        
+        foreach( $lists as $list_id => $list_name ) {
+           $new_status = $data[ 'list_' . $list_id ];
+           if( $this->_PHPlist->is_subscribed( $subscriber->id, $list_id) == ( $new_status )) continue;
+           $this->_PHPlist->set_subscriber( $subscriber->id, $list_id, $new_status ) ;
+        }
 
-	function check_sub($email,$list) {
-		$rs = $this->dbcon->Execute( "select userid from phplist_listuser where userid = '".$email."' and listid = '".$list."' " );
-		if ($rs->Fields("userid")) {
-			return TRUE;
-		} else  {
-			return FALSE;
-		}
-	}
-	function add_att($emailid,$data) {
-		$d = array('1'=>'First_Name',
-					'2'=>'Country',
-					'20'=>'Zip',
-					'19'=>'Company',
-					'13'=>'Street',
-					'14'=>'City',
-					'12'=>'Last_Name',
-					'22'=>'State',
-					'23'=>'notes',
-					'24'=>'Fax',
-					'25'=>'Phone',
-					'26'=>'Street_2',
-					'27'=>'Web_Page');
-		foreach ( $d as $att_id => $field ) {	
-			$sql ="Insert into phplist_user_user_attribute (attributeid,userid,value) VALUES('".$att_id."','".$emailid."','".$data[$field]."') ";
-			$rs = $this->dbcon->Execute( $sql )or DIE("add to phplist error ".$sql.$this->dbcon->ErrorMsg());
-		
-		}
-	}
+        return true;
+    }
 
 }
 

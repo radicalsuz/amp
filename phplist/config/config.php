@@ -36,7 +36,8 @@ $database_password = AMP_DB_PASS;
 # if you use multiple installations of PHPlist you can set this to
 # something to identify this one. it will be prepended to email report
 # subjects
-$installation_name = 'PHPlist';
+$installation_name = AMP_SITE_NAME;
+define( 'NAME', AMP_SITE_NAME );
 
 # if you want a prefix to all your tables, specify it here,
 $table_prefix = "phplist_";
@@ -128,7 +129,7 @@ Security related settings
 # you will be able to add administrators who control their own lists
 # default login is "admin" with password "phplist"
 #
-$require_login = 1;
+$require_login = 0;
 
 # if you use login, how many lists can be created per administrator
 define("MAXLIST",1);

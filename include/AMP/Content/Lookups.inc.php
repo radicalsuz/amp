@@ -65,7 +65,7 @@ class AMPContentLookup_SectionHeaders extends AMPContent_Lookup {
     var $id_field = "type";
     
     function AMPContentLookup_SectionHeaders() {
-        $this->criteria = "class = ".AMP_CONTENT_CLASS_SECTIONHEADER." AND publish=".AMP_CONTENT_STATUS_LIVE . " group by type";
+        $this->criteria = "class = ".AMP_CONTENT_CLASS_SECTIONHEADER." AND publish=".AMP_CONTENT_STATUS_LIVE . " AND !isnull( type ) group by type";
         $this->init();
     }
 

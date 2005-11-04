@@ -1,0 +1,27 @@
+<array>
+    <name>
+        <type>text</type>
+        <label>Name</label>
+        <size>40</size>
+    </name>
+    <description>
+        <type>textarea</type>
+        <label>Description</label>
+        <size>40:5</size>
+    </description>
+    <listorder>
+        <type>text</type>
+        <label>Order</label>
+        <size>4</size>
+    </listorder>
+    <public>
+        <type>checkbox</type>
+        <label>Public</label>
+    </public>
+    <id>
+        <type>hidden</type>
+    </id>
+    <owner>
+        <type>hidden</type>
+    </owner>
+</array>

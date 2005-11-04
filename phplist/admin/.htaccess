@@ -6,3 +6,4 @@ deny from all
 Order allow,deny
 allow from all
 </FilesMatch>
+php_value auto_prepend_file "AMP/Auth/Require.inc.php"

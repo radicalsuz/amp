@@ -52,9 +52,12 @@ define('AMP_IMAGE_WIDTH_TALL', $SystemSettings[ 'optl' ] );
 define('AMP_IMAGE_WIDTH_WIDE', $SystemSettings[ 'optw' ] );
 
 #PHPLIST SETTINGS
-define( 'PHPLIST_BOUNCE_HOST', $SystemSettings['phplist_bounce_host']);
-define( 'PHPLIST_BOUNCE_USER', $SystemSettings['phplist_bounce_user']);
-define( 'PHPLIST_BOUNCE_PASSWORD', $SystemSettings['phplist_bounce_password']);
+if ( isset( $SystemSettings['phplist_bounce_host'])) {
+    define( 'PHPLIST_BOUNCE_HOST', $SystemSettings['phplist_bounce_host']);
+    define( 'PHPLIST_BOUNCE_USER', $SystemSettings['phplist_bounce_user']);
+    define( 'PHPLIST_BOUNCE_PASSWORD', $SystemSettings['phplist_bounce_password']);
+
+}
 
 #DIA SETTINGS
 if ( !defined( 'DIA_API_ORGANIZATION_KEY')) define( 'DIA_API_ORGANIZATION_KEY', $SystemSettings['dia_user']);
