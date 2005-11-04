@@ -388,16 +388,18 @@
 <per>BLAST_ADMIN</per>
 <item>
 <label>PHPList Admin</label>
-<href>../lists/admin</href>
+<href>../phplist/admin</href>
 <per>BLAST_ADMIN</per>
 <class>email</class>
 </item>
+<!-- AMP BLASTER OFFLINE as of 3.5.6
 <item>
 <label>AMP Email Blast</label>
 <href>email_lists.php</href>
 <per>BLAST_ADMIN</per>
 <class>email</class>
 </item>
+-->
 </blasttools>
 
 
