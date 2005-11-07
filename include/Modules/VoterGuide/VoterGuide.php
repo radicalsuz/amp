@@ -16,6 +16,9 @@ class VoterGuide extends AMPSystem_Data_Item {
     var $_positions;
     var $_positions_key = 'voterguidePositions';
 
+	var $_dia_supporter;
+	var $_dia_group;
+
 	var $disallowedShortNameCharsRegex = '/\W/';
 
 	var $_custom_errors;
@@ -101,6 +104,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 		
 		if($this->isNew()) {
 			if(!$this->_validateNewGuide()) return false;
+			$this->mergeData(array('publish' => true));
 		}
 
         if ( !( $result=PARENT::save())) return $result;
