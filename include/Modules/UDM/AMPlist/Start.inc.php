@@ -15,6 +15,9 @@ class UserDataPlugin_Start_AMPlist extends UserDataPlugin {
         PARENT::init( $udm, $plugin_instance );
         $init_blaster_method = 'init'. AMP_MODULE_BLAST;
         if (method_exists( $this, $init_blaster_method) ) $this->$init_blaster_method( $udm, $plugin_instance ) ;
+        if ( isset( $_GET['email']) && email_is_valid( $_GET['email']) && !$this->udm->uid) {
+            $this->udm->setData( array( 'Email'=>$_GET['email']));
+        }
     }
     function initPHPlist( &$udm, $plugin_instance ){
         $save = & $udm->registerPlugin( 'PHPlist', 'Save', $plugin_instance );
