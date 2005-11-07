@@ -7,6 +7,7 @@ require_once('AMP/Content/Lookups.inc.php');
 require_once ('AMP/Content/Labels.inc.php');
 
 // create Menu
+$buildform = new BuildForm;
 $obj = new SysMenu;
 
   // *** Edit Operations: declare Tables
@@ -23,6 +24,12 @@ $obj = new SysMenu;
   // *** Update Record: set variables
   
 if ( ((isset($_REQUEST['MM_update'])) && (isset($_REQUEST['MM_recordId'])) ) or (isset($_REQUEST['MM_insert'])) or ((isset($_REQUEST['MM_delete'])) && (isset($_REQUEST['MM_recordId']))) )  {
+
+	$getimgset=$dbcon->Execute("SELECT thumb, optw, optl FROM sysvar where id =1") or DIE($dbcon->ErrorMsg());
+	if ($_FILES['file']['name']) {
+		$image2 = upload_image('',$getimgset->Fields("optw"),$getimgset->Fields("optl"),$getimgset->Fields("thumb"));
+	}
+
   
  if (!$_REQUEST['MM_insert']) { $MM_editRedirectUrl = "edittypes.php";}
     $MM_editTable  = "articletype";
@@ -87,8 +94,13 @@ else {$typevar=1;}
 function change(which) {
     document.getElementById('main').style.display = 'none';
 document.getElementById('advanced').style.display = 'none'; 
+document.getElementById('picture').style.display = 'none'; 
     document.getElementById(which).style.display = 'block';
 	
+    }
+    function change2(which) {
+    document.getElementById('upload').style.display = 'none';
+	document.getElementById(which).style.display = 'block';
     }
 
 
@@ -109,8 +121,8 @@ document.getElementById('advanced').style.display = 'none';
 
   <br><ul id="topnav">
 	<li class="tab1"><a href="#" id="a0" onclick="change('main');" >Section Information</a></li>
-	
-	<li class="tab2"><a href="#" id="a1" onclick="change('advanced');" >Advanced Options </a></li>
+	<li class="tab2"><a href="#" id="a1" onclick="change('picture');" >Images   </a></li>
+	<li class="tab3"><a href="#" id="a2" onclick="change('advanced');" >Advanced Options </a></li>
 </ul>
 <div id="main" class="main" style="display: block;">
         <table width="100%" border="0">
@@ -201,6 +213,77 @@ document.getElementById('advanced').style.display = 'none';
 					 else  {
 			 echo $subtype->Fields("up");}	 ?>" size="10" > </td>
           </tr>
+          
+          
+     </table>
+    	  </div>
+		<div id="picture"  style="display: none;">
+		  <table width="100%" border="0">
+            <tr class="intitle"> 
+            <td colspan="2"><?php echo helpme("images"); ?>Images</td>
+          </tr>
+<?php		$filelist = file_list('img/thumb'); 
+        $galattr= 'onChange="art_showThumb(\'img/thumb/\'+this.value);"';
+		$Gal = & new Select('image2',$filelist,$subtype->Fields("image2"),false,10,null,null,$galattr);
+        $th_style = $subtype->Fields("image2")?null:" style='display:none' ";
+        $th_img= '<P><img align="center" width=100 src="http://'.$_SERVER['SERVER_NAME'].'/img/thumb/'.$subtype->Fields("image2").'" id="active_thumb"'.$th_style.'>';
+		echo $buildform->add_row('Section Image (for lists)'.$th_img, $Gal);
+ 	 
+ ?>
+            <script type="text/javascript"> 
+            function art_showThumb(imgname) {
+                th_img = document.getElementById('active_thumb');
+                th_img.src='http://'+window.location.host+"/"+imgname;
+                th_img.style.display="block";
+            }
+            </script>
+          <tr class="text"> 
+            <td valign="top"><div align="right"></div></td> 
+            <td><p><a href="#"  onclick="change2('upload');" >Upload Image</a></td>
+          </tr><tr><td colspan="2"><div id="upload" style="display:none;"><table width="100%" border="0" align="center"> 
+		<?php	echo  addfield('file','Upload New Image <br>(jpg files only)','file','','Select image');?>	</table></div>
+          </td></tr><tr class="text"> 
+            <td valign="top"><div align="right"></div></td> 
+      
+          </tr>
+                    </tr>
+     
+    
+          <tr> 
+          <?php		
+          
+$filelist = file_list('img/'); 
+$galattr= 'onChange="art_showThumb2(\'img/\'+this.value);"';
+$Gal = & new Select('flash',$filelist,$subtype->Fields("flash"),false,10,null,null,$galattr);
+$th_style2 = $subtype->Fields("flash")?null:" style='display:none' ";
+$th_img2= '<P><img align="center" width=100 src="http://'.$_SERVER['SERVER_NAME'].'/img/'.$subtype->Fields("flash").'" id="active_thumb2"'.$th_style2.'>';
+echo $buildform->add_row('Section Banner Image'.$th_img2, $Gal);
+ 	 
+ ?>
+            <script type="text/javascript"> 
+            function art_showThumb2(imgname) {
+                th_img2 = document.getElementById('active_thumb2');
+                th_img2.src='http://'+window.location.host+"/"+imgname;
+                th_img2.style.display="block";
+            }
+            </script>
+          
+          
+
+          </tr>
+   
+          <tr> 
+            <td class="name">Section title image for navigation component</td>
+            <td> <input type="text" name="image" size="50" value="<?php echo $subtype->Fields("image")?>"> 
+            </td>
+          </tr>
+          <tr> 
+            <td class="name">&nbsp;</td>
+            <td class="name"> <input <?php If (($subtype->Fields("useimage")) == "1") { echo "CHECKED";} ?> type="checkbox" name="checkbox" value="checkbox">
+              Use above image</td>
+          </tr>
+ 
+          
      </table>
 		  </div>
 		<div id="advanced"  style="display: none;">
@@ -210,62 +293,21 @@ document.getElementById('advanced').style.display = 'none';
           </tr>
 		
           <tr> 
-            <td class="name">Other URL to link to</td>
+            <td class="name">Redirect the section to this URL</td>
             <td class="name"> <input type="text" name="linkurl" size="45" value="<?php echo $subtype->Fields("linkurl")?>"> 
-              <br> <input name="uselink" type="checkbox" id="uselink" value="checkbox" <?php If (($subtype->Fields("uselink")) == "1") { echo "CHECKED";} ?>>
-              Link to above URL </td>
+              <br> <input name="uselink" type="checkbox" id="uselink" value="checkbox" <?php If (($subtype->Fields("uselink")) == "1") { echo "CHECKED";} ?>>Enable above redirect</td>
           </tr>
 		    <tr> 
-            <td class="name">Date</td>
-            <td class="text"><input type="text" name="date2" size="25" value="<?php echo DateConvertOut($subtype->Fields("date2"))?>">
-              (12-30-2002) </td>
-          </tr>
-		    <tr> 
-            <td class="name">Override Default Section Header with Content ID#</td>
-            <td><input name="url" type="text" id="url" value="<?php 
-			
-				
-			 echo $subtype->Fields("url");	 ?>" size="10" > </td>
-          </tr>
-		         <tr> 
-            <td class="name">Show List Search Bar</td>
-            <td><input name="searchbar" type="checkbox" id="searchbar" value="1" <?php If (($subtype->Fields("searchbar")) == "1") { echo "CHECKED";} ?>></td>
-          </tr>
-          <tr class="intitle"> 
-            <td colspan="2"><?php echo helpme("images"); ?>Images</td>
-          </tr>
-          <tr> 
-            <td class="name">Image for navigation component</td>
-            <td> <input type="text" name="image" size="50" value="<?php echo $subtype->Fields("image")?>"> 
-            </td>
-          </tr>
-          <tr> 
-            <td class="name">&nbsp;</td>
-            <td class="name"> <input <?php If (($subtype->Fields("useimage")) == "1") { echo "CHECKED";} ?> type="checkbox" name="checkbox" value="checkbox">
-              Use image instead of section name </td>
-          </tr>
-          <tr> 
-            <td class="name">Small Section Image(for index pages, <br>
-              provide full path)</td>
-            <td> <input type="text" name="image2" size="50" value="<?php echo $subtype->Fields("image2")?>"> 
-            </td>
-          </tr>
-          <tr> 
-            <td class="name">Banner Image</td>
-            <td><input name="flash" type="text" id="flash" value="<?php echo $subtype->Fields("flash")?>" size="45" ></td>
-          </tr>
-          <tr> 
-            <td class="name">Image 2 Caption (not used)</td>
-            <td> <textarea name="cap" wrap="VIRTUAL" cols="45" rows="3"><?php echo $subtype->Fields("imgcap")?></textarea></td>
-          </tr><tr class="intitle"> 
+		    <tr class="intitle"> 
             <td colspan="2"><?php echo helpme("protect"); ?>Section Security</td>
           </tr>
-          <tr> 
+		  <tr> 
             <td class="name">Require login to view section</td>
             <td><input name="secure" type="checkbox" id="secure" value="1" <?php If (($subtype->Fields("secure")) == "1") { echo "CHECKED";} ?>> 
             </td>
           </tr>
-          <tr class="intitle"> 
+          
+             <tr class="intitle"> 
             <td colspan="2"><?php echo helpme("style"); ?>Style Features </td>
           </tr>
           <tr> 
@@ -295,7 +337,34 @@ document.getElementById('advanced').style.display = 'none';
 ?>
               </select></td>
           </tr>
-        </table></div>
+
+ <tr class="intitle"> 
+            <td colspan="2">Other Settings</td>
+          </tr>
+		             
+		    
+		    
+		    
+            <td class="name">Date</td>
+            <td class="text"><input type="text" name="date2" size="25" value="<?php echo DateConvertOut($subtype->Fields("date2"))?>">
+              (12-30-2002) </td>
+          </tr>
+		    <tr> 
+            <td class="name">Override Default Section Header with Content ID#</td>
+            <td><input name="url" type="text" id="url" value="<?php 
+			
+				
+			 echo $subtype->Fields("url");	 ?>" size="10" > </td>
+          </tr>
+		         <tr> 
+            <td class="name">Show List Search Bar</td>
+            <td><input name="searchbar" type="checkbox" id="searchbar" value="1" <?php If (($subtype->Fields("searchbar")) == "1") { echo "CHECKED";} ?>></td>
+
+                   <tr> 
+            <td class="name">Custom Field</td>
+            <td> <textarea name="cap" wrap="VIRTUAL" cols="45" rows="3"><?php echo $subtype->Fields("imgcap")?></textarea></td>
+          </tr>
+               </table></div>
 		
 		 <table width = "100%" border="0">
           <tr class="intitle"> 
