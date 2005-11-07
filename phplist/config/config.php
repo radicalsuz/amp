@@ -190,7 +190,7 @@ Debugging and informational
 
 # if test is true (not 0) it will not actually send ANY messages,
 # but display what it would have sent
-define ("TEST",1);
+define ("TEST",0);
 
 # if you set verbose to 1, it will show the messages that will be sent. Do not do this
 # if you have a lot of users, because it is likely to crash your browser
