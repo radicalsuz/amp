@@ -237,7 +237,7 @@
 </item>
 <item>
 <label>Email Blast</label>
-<href>../phplist/admin/</href>
+<href>email_redirect.php</href>
 <per>BLAST_ADMIN</per>
 </item>
 <item>
