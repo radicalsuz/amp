@@ -88,5 +88,13 @@ class AMP_Registry {
 	function &getSection() {
         return $this->getEntry( AMP_REGISTRY_CONTENT_SECTION );
     }
+
+    function adminEmail( ) {
+        return AMP_SYSTEM_BLAST_EMAIL_SENDER;
+    }
+
+    function adminName( ) {
+        return AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME;
+    }
 }
 ?>

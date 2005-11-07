@@ -2,6 +2,7 @@
 ######### Code that makes it work with AMP
 
 require_once('AMP/BaseDB.php');
+$GLOBALS['admin_auth'] = &AMP_Registry::instance( );
 
 /*
 
@@ -129,7 +130,7 @@ Security related settings
 # you will be able to add administrators who control their own lists
 # default login is "admin" with password "phplist"
 #
-$require_login = 1;
+$require_login = 0;
 
 # if you use login, how many lists can be created per administrator
 define("MAXLIST",1);
@@ -331,7 +332,7 @@ define('EMPTY_VALUE_PREFIX','--');
 # details of the logged in administrator who is sending the message
 # otherwise it will default to the values set in the configure page that identify
 # the From for system messages
-define('USE_ADMIN_DETAILS_FOR_MESSAGES',0);
+define('USE_ADMIN_DETAILS_FOR_MESSAGES',1);
 
 /*
 
