@@ -12,6 +12,10 @@
  *
  */
 
+if (!defined('AMP_CONTENT_RSS_CUSTOMFORMAT')) define ('AMP_CONTENT_RSS_CUSTOMFORMAT', false);
+
+if (!defined('AMP_CONTENT_RSS_FULLTEXT')) define ('AMP_CONTENT_RSS_FULLTEXT', false);
+
 require_once("FeedOnFeeds/config.php");
 
 define('MAGPIE_CACHE_AGE', 60*15);
@@ -550,7 +554,15 @@ function fof_update_feed($url)
 
 	foreach ($items as $item)
 	{
-		$link = mysql_escape_string($item['link']);
+		if (AMP_CONTENT_RSS_CUSTOMFORMAT == 'true') {
+			$link = mysql_escape_string($item['source']);
+        	$contacts = mysql_escape_string($item['contacts']);
+        	$subtitle = mysql_escape_string($item['subtitle']);
+        	$custom1 = mysql_escape_string($item['media_text']);
+        } else {
+        	$link = mysql_escape_string($item['link']);
+        }
+        
 		$title = mysql_escape_string($item['title']);
 		$content = mysql_escape_string($item['description']);
 
@@ -593,7 +605,13 @@ function fof_update_feed($url)
 		if(mysql_num_rows($result) == 0)
 		{
 			$n++;
-			$sql = "insert into $FOF_ITEM_TABLE (feed_id,link,title,content,dcdate,dccreator,dcsubject) values ('$feed_id','$link','$title','$content','$dcdate','$dccreator','$dcsubject')";
+
+			if (AMP_CONTENT_RSS_CUSTOMFORMAT == 'true') {
+				$sql = "insert into $FOF_ITEM_TABLE (feed_id,link,title,content,dcdate,dccreator,dcsubject,contacts,subtitle,custom1) values ('$feed_id','$link','$title','$content','$dcdate','$dccreator','$dcsubject','$contacts','$subtitle','$custom1')";
+			} else {
+						$sql = "insert into $FOF_ITEM_TABLE (feed_id,link,title,content,dcdate,dccreator,dcsubject) values ('$feed_id','$link','$title','$content','$dcdate','$dccreator','$dcsubject')";
+			}
+
 			$result = fof_do_query($sql);
 		}
 		else
