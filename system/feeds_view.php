@@ -21,7 +21,7 @@ function feed_publish($id,$type,$class) {
 	$d=$dbcon->execute("select p.*, f.title as ftitle from px_items p, px_feeds f WHERE (isNull(f.service) OR f.service='Content') AND f.id = p.feed_id AND p.id = $id ") or die($dbcon->errorMsg());
 	//pasre out date
 	$text = utf8_decode( preg_replace( "/\\n/", "<br/>", $d->Fields("content") ) );
-	if (strlen($d->Fields("content")) > 750 ) {
+    if (strlen($d->Fields("content")) > 750 ) {
 		$text = addslashes($text);
 		$aspace=" ";
 		$ttext = addslashes($d->Fields("content"));
@@ -34,8 +34,20 @@ function feed_publish($id,$type,$class) {
 		$shortdesc = addslashes($d->Fields("content"));
 		$linkover = 1 ;
 	}
-	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".addslashes($d->Fields("title"))."','".$class."','".$type."','".$shortdesc."','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
-	//die($q);
+    
+    $title = utf8_decode( $d->Fields("title"));
+    $title = addslashes($title);
+    
+    if (AMP_CONTENT_RSS_FULLTEXT == 'true') {
+   
+    $contact = addslashes( $d->Fields("contacts"));
+	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,sourceurl,source,publish,enteredby,updatedby,datecreated,contact) values('".$title."','".$class."','".$type."','','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','','1','1','".$ID."','".$ID."',now(),'".$contact."')";  
+	
+	} else {
+
+	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".$title."','".$class."','".$type."','".$shortdesc."','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
+}
+
 	$dbcon->execute($q) or die($dbcon->errorMsg());
 	feed_read($id);
 }
@@ -99,7 +111,8 @@ document.forms[0][i].checked=document.forms[0][1].checked;
 <p class="name">&nbsp;&nbsp;Display:&nbsp;&nbsp;<select name="repeat" onChange="MM_jumpMenu('parent',this,0)" class="name">
                 <option selected>Select Feed</option>
 				<?php while (!$f->EOF) { ?>
-                <option value="feeds_view.php?feed=<?= $f->Fields("id") ?>"><?= $f->Fields("title") ?></option>
+                <option value="feeds_view.php?feed=<?= $f->Fields("id") 
+                ?>"><?= $f->Fields("title") ?></option>
 				<?php $f->MoveNext(); }?>
 				<option value="feeds_view.php">All Feeds</option>      
               </select>&nbsp;&nbsp;&nbsp;<select name="repeat" onChange="MM_jumpMenu('parent',this,0)" class="name">
@@ -149,27 +162,53 @@ $i = ($offset+1);
     <th align="left">ID</th>
 	<th align="left">Title</th>
     <th  align="left">Date</th>
-	<th  align="left">View</th>
+	<th  align="left">Source</th>
   </tr>
 
   <?php
-    while (!$rs->EOF) {
-$i++;
-  $bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
-        ?>
 
-	<tr bgcolor="<?= $bgcolor ?>" class=name>
-		<td><input type="checkbox" name="read[<?= $rs->Fields("id") ?>]" value="1" <?= ($rs->Fields("read")) ? "checked" : '' ?> ></td>
+    while (!$rs->EOF) {
+		$i++;
+  		$bgcolor =($i % 2) ? "#D5D5D5" : "#E5E5E5";
+ 
+
+	echo "<tr bgcolor=\"$bgcolor\" class=name>";
+	echo "<td><input type=\"checkbox\" name=\"read[" . $rs->Fields("id") ."]\" value=\"1\"" . ($rs->Fields("read")) . " \"checked\" : ''></td>";
+?>
 		<td><?= $rs->Fields("id") ?></td>
-		<td><b><?= $rs->Fields("ftitle") ?>:</b> <?= utf8_decode( $rs->Fields("title") ) ?></td>
+		<td><b><?= $rs->Fields("ftitle") ?>:</b> <?= utf8_decode( $rs->Fields("title") );  
+		if (AMP_CONTENT_RSS_CUSTOMFORMAT == 'true') {
+			echo '<p>Custom Feild Subtitle:   '. $rs->Fields("subtitle");
+		} 
+
+?></td>
 		
 		<td><?= preg_replace( "/ /", "&nbsp;", $rs->Fields("date") ) ?></td>
-		<td><a href="<?= $rs->Fields("link") ?>" target="_blank">view</a></td>
+		 <?php
+		 
+		  if (AMP_CONTENT_RSS_CUSTOMFORMAT == 'true') {
+		  	echo '<td>' . $rs->Fields("link") . '</td>';
+		  } else {
+		  	echo '<td><a href="' . $rs->Fields("link") . '" target="_blank">view</a></td>'; 							  
+			} 
+			
+			?>
 	</tr>
 	
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
 		<td></td>
-		<td colspan="4" charset="utf-8"><?= utf8_decode( preg_replace( "/\\n/", "<br/>", $rs->Fields("content") ) ) ?></td>
+		
+	<?php 
+	
+		echo '<td colspan="4" charset="utf-8">' . utf8_decode( preg_replace( "/\\n/", "<br/>", $rs->Fields("content") ) ); 
+		if (AMP_CONTENT_RSS_CUSTOMFORMAT == 'true') {
+			echo '<p>Custom Feild Contacts:  '. $rs->Fields("contacts");
+		}  
+		echo '</td>'; 
+		
+
+	?>
+	
 	</tr>
 	<tr bgcolor="<?php echo $bgcolor ?>" class=name>
 	  <td colspan = '5'>
