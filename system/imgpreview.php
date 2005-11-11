@@ -2,7 +2,7 @@
 
 require_once('AMP/BaseDB.php');
 
-$filelist = file_list('img/thumb/'); 
+$filelist = AMPfile_list('img/thumb/'); 
 unset($filelist['']);
 $script = '
 <SCRIPT TYPE="text/javascript">

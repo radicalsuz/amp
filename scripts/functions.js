@@ -77,4 +77,23 @@ function MM_swapImage() { //v3.0
    if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
 }
 
+function AMP_swapLoadImage( imgsrc, elementid ) {
+    target_image = document.getElementById( elementid );
+    if ( !target_image ) return false;
+    target_image.src = 'http://' + window.location.host + "/" + imgsrc;
+    target_image.style.display="block";
+}
 
+function AMP_swapLinkTarget( target_url, elementid ) {
+    target_element = document.getElementById(  elementid );
+    if ( !target_element ) return false;
+    target_element.href = target_url;
+}
+
+function AMP_showValid( item_value, elementid ) {
+    target_element = document.getElementById(  elementid );
+    if ( !target_element ) return false;
+	if (item_value) target_element.style.display = "block";
+	else target_element.style.display = "none";
+	
+}

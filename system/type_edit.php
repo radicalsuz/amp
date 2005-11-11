@@ -222,7 +222,7 @@ document.getElementById('picture').style.display = 'none';
             <tr class="intitle"> 
             <td colspan="2"><?php echo helpme("images"); ?>Images</td>
           </tr>
-<?php		$filelist = file_list('img/thumb'); 
+<?php		$filelist = AMPfile_list('img/thumb'); 
         $galattr= 'onChange="art_showThumb(\'img/thumb/\'+this.value);"';
 		$Gal = & new Select('image2',$filelist,$subtype->Fields("image2"),false,10,null,null,$galattr);
         $th_style = $subtype->Fields("image2")?null:" style='display:none' ";
@@ -252,7 +252,7 @@ document.getElementById('picture').style.display = 'none';
           <tr> 
           <?php		
           
-$filelist = file_list('img/'); 
+$filelist = AMPfile_list('img/'); 
 $galattr= 'onChange="art_showThumb2(\'img/\'+this.value);"';
 $Gal = & new Select('flash',$filelist,$subtype->Fields("flash"),false,10,null,null,$galattr);
 $th_style2 = $subtype->Fields("flash")?null:" style='display:none' ";

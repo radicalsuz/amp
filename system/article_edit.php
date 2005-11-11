@@ -456,7 +456,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 
 	 
   
-<?php		$filelist = file_list('img/thumb/'); 
+<?php		$filelist = AMPfile_list('img/thumb/'); 
 		//$img_options = makelistarray($G,'id','galleryname','Select Gallery');
         $galattr= 'onChange="art_showThumb(\'img/thumb/\'+this.value);"';
 		$Gal = & new Select('picture',$filelist,$r->Fields("picture"),false,10,null,null,$galattr);
@@ -476,7 +476,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td valign="top"><div align="right"></div></td> 
             <td><p> &nbsp;<a href="imgdir.php" target="_blank">View Images</a> | <a href="#"  onclick="change2('upload');" >Upload Image</a></td>
           </tr><tr><td colspan="2"><div id="upload" style="display:none;"><table width="100%" border="0" align="center"> 
-		<?php	echo  addfield('file','Upload New Image <br>(jpg files only)','file','','Select image');?>	</table></div>
+		<?php	echo  addfield('file','Upload New Image <br>(jpg/gif/png files only)','file','','Select image');?>	</table></div>
           </td></tr><tr class="text"> 
             <td valign="top"><div align="right"></div></td> 
             <td>
@@ -513,7 +513,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td colspan="2" valign="top"><?php echo helpme("Attached Document"); ?> 
               Attached Document</td>
           </tr>
-		  <?php		$doc_filelist = file_list('downloads/'); 
+		  <?php		$doc_filelist = AMPfile_list('downloads/'); 
 		$Doc = & new Select('doc',$doc_filelist,$r->Fields("doc"));
 		echo $buildform->add_row('Document Name', $Doc);
  ?>

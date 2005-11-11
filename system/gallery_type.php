@@ -1,5 +1,16 @@
 <?php
-$modid = "8";
+#$modid = "8";
+require_once("Modules/Gallery/ComponentMap.inc.php");
+require_once("AMP/System/Page.inc.php");
+
+$map = &new ComponentMap_Gallery();
+$page = &new AMPSystem_Page ($dbcon, $map);
+if (isset($_GET['action']) && $_GET['action'] == "list")  $page->showList( true );
+
+$page->execute();
+print $page->output( );
+
+/*
 $mod_name="gallery";
 
 require("Connections/freedomrising.php");
@@ -57,4 +68,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>
