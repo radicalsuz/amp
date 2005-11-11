@@ -78,7 +78,6 @@ function udm_amp_save_admin ( &$udm, $options = null ) {
 		$sql .= " )";
 
 	}
-
 	$rs = $dbcon->Execute( $sql ) or
 		die( "There was an error completing the request: " . $dbcon->ErrorMsg() );
 

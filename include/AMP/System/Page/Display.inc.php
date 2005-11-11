@@ -30,7 +30,7 @@ class AMPSystem_Page_Display {
         if (!isset($verb)) $verb = $this->page->action;
         if (!isset($item)) $item = $this->itemtype;
         $plural_actions = array('View');
-        if ((array_search( $verb, $plural_actions )!==FALSE) && substr($item, -1)!='s' ) $item.='s';
+        if ((array_search( $verb, $plural_actions )!==FALSE)) $item = AMP_Pluralize( $item );
         return "<div class = \"banner\">$verb $item</div>";
     }
 

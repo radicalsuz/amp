@@ -1,0 +1,44 @@
+<array>
+    <id>
+        <type>hidden</type>
+    </id>
+	<img>
+		<type>imagepicker</type>
+		<label>Upload File</label>
+		<size>45</size>
+	</img>
+    <publish>
+        <type>checkbox</type>
+        <label>Publish</label>
+    </publish>
+    <galleryid>
+        <type>select</type>
+        <label>Photo Gallery</label>
+        <lookup>
+            <instance>galleries</instance>
+            <module>content</module>
+        </lookup>
+	    <required>1</required>
+    </galleryid>
+	<caption>
+		<type>textarea</type>
+		<label>Caption</label>
+	</caption>
+	<photoby>
+		<type>text</type>
+		<label>Photo By</label>
+	</photoby>
+	<date>
+		<type>date</type>
+		<label>Date</label>
+		<default>today</default>
+	</date>
+	<section>
+		<type>select</type>
+		<label>Section</label>
+		<lookup>
+			<module>content</module>
+			<instance>sectionMap</instance>
+		</lookup>
+	</section>
+</array>

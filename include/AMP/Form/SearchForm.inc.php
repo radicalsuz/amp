@@ -70,7 +70,7 @@ class AMPSearchForm extends AMPForm_XML {
 
         foreach ($values as $ukey => $uvalue) {
             if (!isset( $this->fields[ $ukey ] )) continue;
-            if (!$uvalue) continue;
+            if ( $uvalue==="" ) continue;
             if ( ($this->fields[$ukey]['type']=='text') && ($uvalue == $this->fields[$ukey]['label'])) continue;
             
             $search_values[ $ukey ] = $uvalue;

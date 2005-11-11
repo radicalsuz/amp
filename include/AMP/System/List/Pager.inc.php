@@ -71,8 +71,13 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     function output() {
         $this->readPosition();
+        if ( !$this->getSourceTotal( )) return false;
         return  $this->_HTML_inDiv(  $this->_positionText() . $this->_HTML_newline( ). $this->_pageLinks(), array( 'class' => $this->_css_class_container_block ) ). 
                 $this->_HTML_newline();
+    }
+
+    function execute( ){
+        return $this->output( );
     }
     function outputTop() {
         $this->readPosition();
@@ -147,6 +152,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         $this->_pageless_UrlVars =  AMP_URL_Values();
         unset ($this->_pageless_UrlVars['offset']);
         unset ($this->_pageless_UrlVars['qty']);
+        unset ($this->_pageless_UrlVars['id']);
         return $this->_pageless_UrlVars;
     }
 }

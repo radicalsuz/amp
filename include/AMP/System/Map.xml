@@ -227,7 +227,7 @@
 </item>
 <item>
 <label>Photo Gallery</label>
-<href>gallery_list.php</href>
+<href>gallery_image.php?action=list</href>
 <per>GALLERY_ACCESS</per>
 </item>
 <item>

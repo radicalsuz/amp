@@ -44,6 +44,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
          *  values:     set of values to choose from for select and group
                         elements
 
+         *  lookup:     provides a dynamic set of values for select/group elements
+         *      instance:   the name of the lookup
+         *      module:     the type of lookup, currently ampsystem( default ), content, or form
+
          *  constant:   value of the field will not accept change from the user
                         side
 
@@ -313,9 +317,12 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
             
     }
 
-    function setFieldLabel ( $fieldname, $label ) {
-        if (!isset($this->fields[$fieldname])) return false;
-        $this->fields[$fieldname]['label'] = $label;
+    function setFieldLabel ( $fieldname, $label, $override = false ) {
+        if ( !$override ) {
+            if (!isset($this->fields[$fieldname])) return false;
+            $this->fields[$fieldname]['label'] = $label;
+        }
+
         if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {
             $fRef->setLabel( $label );
         }
@@ -483,11 +490,73 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $this->addTranslation( $name, '_manageUpload', 'get' );
         $this->addTranslation( $name, '_addFileLink', 'set' );
         #$this->_addHiddenField( $name . '_value');
-        $this->form->addElement(  'hidden', $name.'_value');
+        $this->_addFileValue( $name );
 		$this->form->setMaxFileSize(AMP_FORM_UPLOAD_MAX);
 
         $defaults = $this->_getDefault( $name );
         return $this->form->addElement( 'file', $name, $field_def['label'], $defaults );
+
+    }
+
+    function _addFileValue( $name ){
+        $this->form->addElement(  'hidden', $name.'_value');
+
+    }
+
+
+    function &_addElementImagepicker( $name, $field_def ){
+        $this->addTranslation( $name, '_manageUpload', 'get' );
+        $this->addTranslation( $name, '_addImageLink', 'set' );
+        $this->_addImageSelect( $name );
+		$this->form->setMaxFileSize(AMP_FORM_UPLOAD_MAX);
+
+        $defaults = $this->_getDefault( $name );
+        return $this->form->addElement( 'file', $name, $field_def['label'], $defaults );
+
+    }
+
+    function _addImageLink( $data, $fieldname ) {
+        
+        $displayfield_name = $fieldname . '_display';
+        require_once( 'AMP/Form/ImageLink.inc.php' );
+
+        $fileLink = &new ImageLink( );
+        if ( isset( $data[$fieldname] ) ) $fileLink->setFile( $data[$fieldname]); 
+        $fileLink->setImageId( $displayfield_name );
+        $this->form->setDefaults( array( $displayfield_name  => $fileLink->display( 'div' ) ));
+
+        if (!( isset($data[ $fieldname ] ) && $data[ $fieldname ])) return null;
+        $valuefield_name = $fieldname . '_value';
+        $this->form->setDefaults( array( $valuefield_name  => $data[$fieldname] ));
+    }
+
+    function _addImageDisplay( $fieldname ){
+
+        $displayfield_name = $fieldname . '_display';
+
+        if ( !$this->getField( $displayfield_name )){
+            $this->addField( array( 
+                    'type'  =>  'static', 'default' => null ), $displayfield_name);
+            $this->_addElement( $displayfield_name );
+        }
+        return $displayfield_name;
+    }
+
+    function _addImageSelect( $name ) {
+        $valuefield_name = $name . '_value';
+        $label = isset( $this->fields[$valuefield_name]['label']) ? 
+                    $this->fields[$valuefield_name]['label'] :
+                    "Choose Image";
+        $display_name = $this->_addImageDisplay( $name );
+        $picker = &$this->form->addElement(  'select', $name.'_value', $label, AMPfile_list( 'img/thumb') );
+        $srcpath = AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_OPTIMIZED . DIRECTORY_SEPARATOR;
+        $linkpath = AMP_SITE_URL . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL. DIRECTORY_SEPARATOR;
+        $picker->updateAttributes( 
+            array( 'onChange' => 
+                    "AMP_swapLoadImage( '$srcpath' + this.value, '$display_name' );" 
+                    ."AMP_swapLinkTarget( '$linkpath' + this.value, '$display_name'+'_link');"
+                    ."AMP_showValid( this.value, '$display_name'+'_container');"
+                    ));
 
     }
 
@@ -581,6 +650,15 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $fRef->setSize( $size );
     }
 
+    function _adjustElementFile( &$fRef, $field_def ) {
+        if (!( $size = $field_def['size'])) return;
+        $fRef->setSize( $size );
+    }
+    function _adjustElementImagepicker( &$fRef, $field_def ) {
+        if (!( $size = $field_def['size'])) return;
+        $fRef->setSize( $size );
+    }
+
     function _adjustElementTextarea ( &$fRef, $field_def ) {
 		if (! ( $size = $field_def[ 'size' ] ) ) return false; 
 
@@ -606,8 +684,30 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     function _getValueSet ( $name ) {
         if (!($def = $this->getField( $name ))) return null;
-        if (!isset($def['values'])) return null;
-        return $def['values'];
+        if (isset($def['values'])) return $def['values'];
+        
+        if ( isset( $def['lookup'] ) && $values = $this->_evalLookup( $def['lookup']) ) {
+            $this->setFieldValueSet( $name, $values );
+            return $values;
+        }
+
+        return null;
+    }
+
+    function _evalLookup( $lookup_def ){
+        if ( !is_array( $lookup_def )) return AMPSystem_Lookup::instance( $lookup_def );
+        if ( isset( $lookup_def['module'])){
+            return AMPSystem_Lookup::locate( $lookup_def );
+            /*
+            if ( "content" == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
+            $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
+            $cat = eval( 'return ' . $lookup_class . '::instance( $lookup_def["instance"] );');
+            #AMP_varDump( $cat );
+            return $cat;
+            #return call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;
+            */
+        }
+        return array( );
     }
 
 	function _getTemplate( $type=null ) {

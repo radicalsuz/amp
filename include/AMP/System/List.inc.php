@@ -17,8 +17,9 @@ define ('AMP_SYSTEM_ICON_PREVIEW', '/system/images/view.gif' );
 define ('AMP_SYSTEM_ICON_DELETE', '/system/images/delete.png' );
 
 require_once ( 'AMP/System/Data/Set.inc.php' );
+require_once ( 'AMP/Content/Display/HTML.inc.php');
 
-class AMPSystem_List {
+class AMPSystem_List extends AMPDisplay_HTML {
     
     var $name;
     var $message;
@@ -43,6 +44,12 @@ class AMPSystem_List {
 
     var $suppress = array( 'header'=>true );
     var $currentrow;
+    var $column_callBacks;
+
+    var $_pager;
+    var $_pager_active  = false;
+    var $_pager_display = true;
+    var $_pager_limit = false;
 
     ####################
     ### Core Methods ###
@@ -67,12 +74,23 @@ class AMPSystem_List {
      
         $this->source = &$source;
         $this->_setSort();
+        $this->_activatePager( );
         $this->_prepareData();
         if (array_search( 'publish', $this->col_headers ) !== FALSE ) {
             $this->addTranslation( 'publish', '_showPublishStatus' );
         }
 
     }
+
+    function _activatePager() {
+        if ( !$this->_pager_active ) return false;
+
+        require_once( 'AMP/System/List/Pager.inc.php');
+        $this->_pager = &new AMPSystem_ListPager( $this->source );
+        
+        if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
+    }
+
 
     function output() {
 
@@ -173,17 +191,26 @@ class AMPSystem_List {
 
         //show extra links for each row
         foreach ($this->extra_columns as $header=>$baselink) {
-            $list_html .= " \n<td> <div align='right'>";
-            $list_html .= "<A HREF='". $this->_getColumnLink( $header, $currentrow )."'>$header</A>";
-            $list_html .= "</div></td>";
+            $list_html .= " \n<td>";
+            $list_html .= ( isset( $this->translations[$baselink])) ?
+                                $currentrow[$baselink] :
+                                $this->_HTML_extraColumnsDefault( $currentrow, $header );
+            $list_html .= "</td>";
         }
         return $list_html;
+    }
+
+    function _HTML_extraColumnsDefault(  $header, $currentrow ){
+        return  " <div align='right'>Ma"
+                . "<A HREF='". $this->_getColumnLink( $header, $currentrow )."'>$header</A>"
+                . "</div>";
+
     }
 
     function _getColumnLink( $colname, $currentrow  ) {
         if (isset($this->extra_columns[ $colname ])) {
             if (!isset($this->column_callBacks[ $colname ] )) {
-                return $this->extra_columns[ $colname ].$currentrow[$this->_requestedID( $header )];
+                return $this->extra_columns[ $colname ].$currentrow[$this->_requestedID( $colname )];
             } else {
                 $method = $this->column_callBacks[ $colname ]['method'];
                 #$args =  $this->column_callBacks[ $colname ]['args'];
@@ -245,7 +272,10 @@ class AMPSystem_List {
     }
 
     function _HTML_footer() {
-        return "\n	</table>\n</div>\n<br>&nbsp;&nbsp;" . $this->_HTML_addLink();
+        return  "\n	</table>\n"
+                . ( ($this->_pager_active && $this->_pager_display ) ? $this->_pager->execute() : false ) 
+                . "</div>\n<br>&nbsp;&nbsp;" 
+                . $this->_HTML_addLink();
     }
 
     function _HTML_addLink () {

@@ -71,6 +71,11 @@ class AMPFormTemplate {
             'spanheader',
             'endrow'),
 
+        'image'    =>	array(
+            'doublecolumn',
+            'spanelement',
+            'endrow'),
+
         'static'    =>  array(
             'doublecolumn',
             'starttable',

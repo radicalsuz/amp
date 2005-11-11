@@ -20,7 +20,7 @@ class ArticleSearch extends ArticleSet {
     }
 
     function _getCriteriaMethod( $fieldname ) {
-        $exact_value_fields = array( "id", "class", "type" );
+        $exact_value_fields = array( "id", "class", "type", "publish" );
         if (array_search( $fieldname, $exact_value_fields ) !==FALSE) return '_addCriteriaEquals';
         return '_addCriteriaContains';
     }

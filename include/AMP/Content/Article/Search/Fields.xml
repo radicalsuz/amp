@@ -38,6 +38,10 @@
     <type>text</type>
     <attr><class>searchform_element</class></attr>
 </author>
+<publish>
+    <label>Status</label>
+    <type>select</type>
+</publish>
 <search_by_date>
     <separator>newrow</separator>
     <type>checkbox</type>

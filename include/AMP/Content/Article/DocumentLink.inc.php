@@ -16,6 +16,7 @@ class DocumentLink  {
     var $_filename;
     var $_filetype;
 
+    var $_default_display = 'ArticleDocumentLink_Display';
     var $_mime_translations = array( 
         'application/pdf' => 'pdf',
         'application/msword' => 'word',
@@ -56,10 +57,9 @@ class DocumentLink  {
     }
 
     function display( $display_type = null ) {
-        $default_display = 'ArticleDocumentLink_Display';
-        $requested_display = $default_display;
-        if ( isset( $display_type ) && class_exists( $default_display.ucfirst( $display_type ))) {
-            $requested_display = $default_display . ucfirst( $display_type );
+        $requested_display = $this->_default_display;
+        if ( isset( $display_type ) && class_exists( $this->_default_display.ucfirst( $display_type ))) {
+            $requested_display = $this->_default_display . ucfirst( $display_type );
         }
         $display = & new $requested_display( $this );
         return $display->execute();

@@ -24,7 +24,7 @@ class AMPSystem_BaseTemplate {
     var $script_files = array(
         '../scripts/system_header.js',
         'Connections/popcalendar.js',
-        '../Connections/functions.js' );
+        '../scripts/functions.js' );
 
     var $css_files = array( 'system_interface.css' );
 

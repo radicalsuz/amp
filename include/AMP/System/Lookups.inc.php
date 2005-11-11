@@ -68,6 +68,22 @@ class AMPSystem_Lookup {
         return $lookup_set[$type]->dataset;
     }
 
+    function &locate( $lookup_def ){
+        if ( "content" == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
+        $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
+        if ( !class_exists( $lookup_class ) && !$this->_loadLookups( $lookup_def['module'], $lookup_class )) return false;
+        return call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;
+    }
+    function _loadLookups( $module, $class ){
+        if ( 'form' == $module ) {
+            include_once( 'AMP/UserData/Lookups.inc.php');
+        } else {
+            include_once( 'Modules/'.ucfirst( $module ).'Lookups.inc.php');
+        }
+        return class_exists( $class );
+
+    }
+
 }
 
 class AMPSystemLookup_Modules extends AMPSystem_Lookup {

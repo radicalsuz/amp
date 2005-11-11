@@ -1,0 +1,22 @@
+<array>
+    <id>
+        <type>hidden</type>
+    </id>
+    <galleryname>
+        <type>text</type>
+        <label>Gallery Name</label>
+    </galleryname>
+    <date>
+        <type>date</type>
+        <label>Date</label>
+        <default>today</default>
+    </date>
+    <img>
+        <type>text</type>
+        <label>Primary Image</label>
+    </img>
+    <description>
+        <type>textarea</type>
+        <label>Description</label>
+    </description>
+</array>

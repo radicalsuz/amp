@@ -16,6 +16,7 @@ class ContentSearch_Form extends AMPSearchForm {
         $map = &AMPContent_Map::instance();
         $this->setFieldValueSet( 'type',    $map->selectOptions() );
         $this->setFieldValueSet( 'class',   AMPContent_Lookup::instance('activeClasses'));
+        $this->setFieldValueSet( 'publish',   AMPConstant_Lookup::instance('status'));
     }
 
     function getComponentHeader() {
@@ -29,6 +30,7 @@ class ContentSearch_Form extends AMPSearchForm {
     function getSearchValues( ) {
         $results = &PARENT::getSearchValues( );
         if ( !(isset( $results['search_by_date']) && $results['search_by_date'])) unset ( $results['date'] );
+        unset( $results['search_by_date']);
         return $results;
     }
 

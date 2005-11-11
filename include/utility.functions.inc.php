@@ -561,8 +561,8 @@ if (!function_exists('array_combine_key')) {
         return $result;
     }
 }
-if (!function_exists('file_list')) {
-		function file_list($file){ 
+if (!function_exists('AMPfile_list')) {
+		function AMPfile_list($file){ 
 				$dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
 				//die($dir_name);
 				$dir = opendir($dir_name);
@@ -727,6 +727,15 @@ if (!function_exists( 'AMP_PastParticiple' )) {
         return $word."d";
     }
 }
+if (!function_exists( 'AMP_Pluralize' )) {
+    function AMP_Pluralize( $word ) {
+        $term_end = substr( $word, -1 );
+        if ("y" == $term_end ) return substr( $word, 0, strlen( $word )-1 ). "ies" ;
+        if ($term_end != "s" ) return $word ."s";
+        return $word;
+    }
+}
+
 
 if (!function_exists ('AMP_varDump' )) {
     function AMP_varDump ( &$var ) {

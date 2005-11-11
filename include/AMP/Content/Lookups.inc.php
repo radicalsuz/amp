@@ -28,7 +28,7 @@ class AMPContentLookup_Sections extends AMPContent_Lookup {
     var $datatable = "articletype";
     var $result_field = "type";
 
-    function AMPContentLookup_Section() {
+    function AMPContentLookup_Sections() {
         $this->init();
     }
 }
@@ -93,12 +93,44 @@ class AMPContentLookup_SectionParents extends AMPContent_Lookup {
     }
 }
 
+class AMPContentLookup_SectionMap {
+    var $dataset;
+
+    function AMPContentLookup_SectionMap() {
+        $mapsource = &AMPContent_Map::instance( );
+        $this->dataset = &$mapsource->selectOptions( );
+
+    }
+    
+}
+
 class AMPConstantLookup_Listtypes extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_SECTIONLIST";
     var $_prefix_labels = "AMP_TEXT_SECTIONLIST";
 
     function AMPConstantLookup_Listtypes() {
         $this->init();
+    }
+
+}
+class AMPConstantLookup_Status extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_CONTENT_STATUS";
+    #var $_prefix_labels = "AMP_TEXT_SECTIONLIST";
+
+    function AMPConstantLookup_Status() {
+        $this->init();
+    }
+
+}
+
+
+class AMPContentLookup_Galleries extends AMPContent_Lookup{
+    var $datatable = 'gallerytype';
+    var $result_field = 'galleryname';
+    var $sortby = 'galleryname';
+    
+    function AMPContentLookup_Galleries( ){
+        $this->init( );
     }
 
 }
