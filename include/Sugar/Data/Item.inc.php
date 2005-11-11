@@ -36,9 +36,37 @@ class Sugar_Data_Item {
     }
 
     function init( $module=null ) {
-        if (isset($module)) $this->setSource ( $module );
-        $this->_itemdata_keys = $this->getColumnNames( $this->_module );
+        if (isset($module)) {
+			if(!$this->setSource ( $module )) return false;
+			$this->_itemdata_keys = $this->getColumnNames( $this->_module );
+		}
+		return true;
     }
+
+	function doLogin() {
+		$source =& $this->getSource();
+		if($this->getSession()) {
+			return true;
+		}
+        $result = $source->call( 'login', $this->_getLoginArgs() );
+
+//var_dump($this->_getLoginArgs());
+//var_dump($result);
+        if ($this->_doSoapErrorCheck( $result )) return false; 
+
+        $this->setSession( $result['id'] );
+		return true;
+	}
+
+	function doLogout() {
+		if(!$this->getSession()) return true;
+
+		$source =& $this->getSource();
+		
+		$result = $source->call( 'logout', $this->getSession() );
+        if ($this->_doSoapErrorCheck( $result )) return false; 
+		return true;
+	}
 
     function getData( $fieldname = null ) {
         if (! isset( $fieldname )) return $this->_itemdata;
@@ -47,14 +75,19 @@ class Sugar_Data_Item {
         return false;
     }
 
+	function &getSource() {
+		if(!isset($this->_source)) {
+			$this->_source = &new soapclient( SUGAR_URL_SOAP, true );
+		}
+		return $this->_source;
+	}
+
+
     function setSource( $module ) {
         $this->_module = ucfirst( $module );
         $this->_source = &new soapclient( SUGAR_URL_SOAP, true );
-        $result = $this->_source->call( 'login', $this->_getLoginArgs() );
+		if( !$this->doLogin() ) return false;
 
-        if ($this->_doSoapErrorCheck( $result )) return false; 
-
-        $this->setSession( $result['id'] );
         $this->_setTranslator();
         return true;
     }
@@ -69,6 +102,11 @@ class Sugar_Data_Item {
         $this->_session_id = $session_id;
     }
     
+	function getSession() {
+		if(isset($this->_session_id)) return $this->_session_id;
+		return false;
+	}
+
     function _getSaveArgs() {
         return 
             array ( 'session'     => $this->_session_id, 
@@ -96,6 +134,23 @@ class Sugar_Data_Item {
         return $this->id ;
     }
 
+	function read($fields) {
+		$source =& $this->getSource();
+		$result = $source->call( 'get_entry', $this->_getReadArgs($fields) );
+		
+        if ($this->_doSoapErrorCheck( $result )) return false; 
+
+		return true;
+	}
+
+	function _getReadArgs($fields) {
+        return 
+            array ( 'session'     => $this->_session_id, 
+                    'module_name' => $this->_module, 
+					'id'		  => $this->id,
+                    'select_fields' => $fields );
+	}
+
     function _getLoginArgs() {
        return   array( 'user_auth' => 
                     array(  'user_name' =>  AMP_SUGAR_LOGIN_USERNAME_ADMIN,
@@ -104,6 +159,15 @@ class Sugar_Data_Item {
                           ), 
                      'application_name' =>  'AMP'.get_class( $this ) 
                 ); 
+    }
+
+    function sugar_encrypt_password($user_name, $user_password)
+    {   
+        // encrypt the password.
+        $salt = substr($user_name, 0, 2);
+        $encrypted_password = crypt($user_password, $salt);
+
+        return $encrypted_password;
     }
 
     function setData( $data ) {
@@ -157,6 +221,7 @@ class Sugar_Data_Item {
 
     function _doSoapErrorCheck( $result ) {
         if (!($error_no = $this->_isSoapError( $result ))) return false; 
+//print "error_no: $error_no";
 
         $this->_addSoapError( $result['error'] );
         return $error_no;
@@ -172,6 +237,7 @@ class Sugar_Data_Item {
     }
 
     function getErrors() {
+		if(empty($this->_errors)) return false;
         return join("<BR>" , $this->_errors);
     }
 
