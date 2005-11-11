@@ -27,20 +27,15 @@ class AMPSystem_Page_Content extends AMPSystem_Page {
         if ( !$action ) $this->doAction( $this->default_action );
     }
 
-    function _setSearchFormDefaults() {
-        $this->search->applyDefaults();
-    }
-
-    function commitSearch() {
-        $this->_initComponents( 'list' );
-        $this->list->source->applyValues ($this->search->getSearchValues());
-        $this->showList( true );
-        $this->dropComponent( 'menu' );
-    }
 
     function commitMenu() {
         $this->_initComponents('menu');
         $this->addComponent( 'menu' );
+    }
+
+    function commitSearch( ){
+        PARENT::commitSearch( );
+        $this->dropComponent( 'menu' );
     }
 
 

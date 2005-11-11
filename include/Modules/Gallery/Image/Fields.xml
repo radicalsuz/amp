@@ -4,8 +4,7 @@
     </id>
 	<img>
 		<type>imagepicker</type>
-		<label>Upload File</label>
-		<size>45</size>
+		<label>Choose Image</label>
 	</img>
     <publish>
         <type>checkbox</type>

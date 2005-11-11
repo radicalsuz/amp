@@ -20,5 +20,8 @@ class GalleryImageSet extends AMPSystem_Data_Set {
     function addCriteriaSection( $section_id ){
         return $this->addCriteria( 'section='.$section_id );
     }
+    function addCriteriaStatus($value ){
+        return $this->addCriteria( 'publish='.$value);
+    }
 }
 ?>

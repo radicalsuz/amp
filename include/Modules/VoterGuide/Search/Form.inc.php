@@ -21,10 +21,6 @@ class VoterGuideSearch_Form extends AMPSearchForm {
         $this->setFieldValueSet( 'position', $position->getVoteSet( ));
     }
 
-    function getComponentHeader() {
-        return $this->_component_header;
-    }
-
     function _formFooter( ){
         $title = "Browse Voter Guides";
         if ( $this->submitted( )) $title = "Search Results";

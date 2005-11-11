@@ -505,13 +505,16 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
 
     function &_addElementImagepicker( $name, $field_def ){
-        $this->addTranslation( $name, '_manageUpload', 'get' );
+        #$this->addTranslation( $name, '_manageUpload', 'get' );
         $this->addTranslation( $name, '_addImageLink', 'set' );
+        return $this->_addImageSelect( $name, $field_def );
+        /*
         $this->_addImageSelect( $name );
-		$this->form->setMaxFileSize(AMP_FORM_UPLOAD_MAX);
+		#$this->form->setMaxFileSize(AMP_FORM_UPLOAD_MAX);
 
         $defaults = $this->_getDefault( $name );
         return $this->form->addElement( 'file', $name, $field_def['label'], $defaults );
+        */
 
     }
 
@@ -526,7 +529,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $this->form->setDefaults( array( $displayfield_name  => $fileLink->display( 'div' ) ));
 
         if (!( isset($data[ $fieldname ] ) && $data[ $fieldname ])) return null;
-        $valuefield_name = $fieldname . '_value';
+        $valuefield_name = $fieldname;# . '_value';
         $this->form->setDefaults( array( $valuefield_name  => $data[$fieldname] ));
     }
 
@@ -542,13 +545,12 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         return $displayfield_name;
     }
 
-    function _addImageSelect( $name ) {
-        $valuefield_name = $name . '_value';
-        $label = isset( $this->fields[$valuefield_name]['label']) ? 
-                    $this->fields[$valuefield_name]['label'] :
-                    "Choose Image";
+    function &_addImageSelect( $name, $field_def ) {
+        $valuefield_name = $name;
+        #$valuefield_name = $name . '_value';
         $display_name = $this->_addImageDisplay( $name );
-        $picker = &$this->form->addElement(  'select', $name.'_value', $label, AMPfile_list( 'img/thumb') );
+        $picker = &$this->form->addElement(  'select', $valuefield_name, $field_def['label'], AMPfile_list( 'img/thumb') );
+
         $srcpath = AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_OPTIMIZED . DIRECTORY_SEPARATOR;
         $linkpath = AMP_SITE_URL . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL. DIRECTORY_SEPARATOR;
         $picker->updateAttributes( 
@@ -557,6 +559,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
                     ."AMP_swapLinkTarget( '$linkpath' + this.value, '$display_name'+'_link');"
                     ."AMP_showValid( this.value, '$display_name'+'_container');"
                     ));
+        return $picker;
 
     }
 
@@ -654,11 +657,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         if (!( $size = $field_def['size'])) return;
         $fRef->setSize( $size );
     }
-    function _adjustElementImagepicker( &$fRef, $field_def ) {
-        if (!( $size = $field_def['size'])) return;
-        $fRef->setSize( $size );
-    }
-
     function _adjustElementTextarea ( &$fRef, $field_def ) {
 		if (! ( $size = $field_def[ 'size' ] ) ) return false; 
 

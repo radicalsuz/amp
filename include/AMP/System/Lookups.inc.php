@@ -70,6 +70,7 @@ class AMPSystem_Lookup {
 
     function &locate( $lookup_def ){
         if ( "content" == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
+        if ( "constant" == $lookup_def['module']) $lookup_def['module'] = "AMPConstant";
         $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
         if ( !class_exists( $lookup_class ) && !$this->_loadLookups( $lookup_def['module'], $lookup_class )) return false;
         return call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;

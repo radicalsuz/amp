@@ -15,6 +15,7 @@ require_once( 'AMP/Form/TemplateSearch.inc.php' );
  */
 class AMPSearchForm extends AMPForm_XML {
 	var $xml_pathtype = "search_fields";
+    var $_component_header = "Search Items";
     var $submit_button = array(
         'submit' => array(
             'type' => 'submit',
@@ -77,6 +78,10 @@ class AMPSearchForm extends AMPForm_XML {
         }
 
         return $search_values;
+    }
+
+    function getComponentHeader() {
+        return $this->_component_header;
     }
 
 

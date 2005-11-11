@@ -143,6 +143,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->message .= $text .'<BR>';
     }
 
+    function applySearch( $values ){
+        return $this->source->applySearch( $values );
+    }
+
 
     #########################################
     ### Private HTML Construction Methods ###

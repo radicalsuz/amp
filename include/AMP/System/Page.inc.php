@@ -53,6 +53,7 @@ class AMPSystem_Page {
     }
 
     function execute() {
+        $this->_initSearch( );
         if ($this->showList()) return true;
 
         $this->_initForm();
@@ -87,6 +88,34 @@ class AMPSystem_Page {
         return $display->execute();
     }
 
+    function hasSearch( ){
+        if ( !isset( $this->component_map )) return false;
+
+        $components = $this->component_map->getComponents( );
+        return ( isset( $components['search']));
+    }
+
+    function _initSearch( ){
+        if( !$this->hasSearch( )) return false;
+
+        $this->_initComponents ( "search" );
+        $this->search->Build( true );
+
+        if ($action = $this->search->submitted() ) $this->doAction( $action );
+        else $this->_setSearchFormDefaults();
+
+    }
+        
+
+    function _setSearchFormDefaults() {
+        $this->search->applyDefaults();
+    }
+
+    function commitSearch() {
+        $this->_initComponents( 'list' );
+        $this->list->applySearch($this->search->getSearchValues());
+        $this->showList( true );
+    }
     function _setIncludeFileValues( ) {
         $filepaths = $this->component_map->getFilePaths();
         foreach ($filepaths as $type => $filename ) {
@@ -160,6 +189,7 @@ class AMPSystem_Page {
                                         $this->show['list']
                                         : false);
         if (!$value) return $this->dropComponent('list');
+        if ( $this->hasSearch( ))$this->addComponent('search', $value);
         $this->addComponent('list', $value);
         return $value;
     }

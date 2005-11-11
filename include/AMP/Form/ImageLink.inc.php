@@ -15,12 +15,15 @@ class ImageLink extends DocumentLink {
     }
     function setFile( $filename, $filetype = AMP_CONTENT_DOCUMENT_TYPE_DEFAULT ) {
         PARENT::setFile( $filename, $filetype );
-        if ( 'img' == $this->getFileType( )) $this->_image = &new Content_Image( $filename );
+        if ( $this->verifyFileType( )){
+            if ( 'img' != $this->getFileType( )) return false;
+        }
         $this->_image = &new Content_Image( $filename );
+
     }
 
     function display( $display_type = null ) {
-        if ( 'img' != $this->getFileType( )) $this->_default_display = 'ArticleDocumentLink_Display';
+        if ( !isset( $this->_image)) $this->_default_display = 'ArticleDocumentLink_Display';
         return PARENT::display( $display_type );
     }
     function getURL( $image_class = AMP_IMAGE_CLASS_ORIGINAL ) {
