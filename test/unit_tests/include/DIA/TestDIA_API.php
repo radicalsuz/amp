@@ -24,21 +24,23 @@ class TestDIA_API extends UnitTestCase {
 		unset($this->api);
 	}
 
-/*
-	function testGetSeth() {
-		$results = $this->api->get('supporter', array('key'=>3088498));
+	function testGetSupporterByKey() {
+		$results = $this->api->get('supporter', array('key'=>7561369));
 		$this->assertNotNull($results);
-//		$this->dump($results);
+	}
+
+	function testGetSupporterByEmail() {
+		$results = $this->api->get('supporter', array('where'=>'Email="seth@indyvoter.org"'));
+		$this->assertNotNull($results);
 	}
 
 	function testGetMultiple() {
-		$results = $this->api->get('supporter', array('key' => array(3088498, 4447457)));
+		$results = $this->api->get('supporter', array('key' => array(7561369, 7818225)));
 		$this->assertNotNull($results);
-//		$this->dump($results);
 	}
 
 	function testGroupExists() {
-		$results = $this->api->get('groups', array('where' => 'Group_Name="testmonday0509"',
+		$results = $this->api->get('groups', array('where' => 'Group_Name="testeroo"',
 													'column' => 'groups_KEY'));
 		$xmlparser =& new XML_Unserializer();
 		$status = $xmlparser->unserialize($results);
@@ -51,16 +53,15 @@ class TestDIA_API extends UnitTestCase {
 		$status = $xmlparser->unserialize($results);
 		$this->dump($xmlparser->getUnserializedData());
 	}
-*/
 
+/*
 	function testAppendFooter() {
-		$results = $this->api->get('groups', array('key' => '25670'));
+		$results = $this->api->get('groups', array('key' => '25669'));
 		$xmlparser =& new XML_Unserializer();
 		$status = $xmlparser->unserialize($results);
 		$this->dump($xmlparser->getUnserializedData());
 	}
 		
-/*
 	function testGetLimit() {
 //		$big_bloc_xml = $this->api->get('supporter_groups', array('where' => 'groups_KEY=22291'));
 		$big_bloc_xml = $this->api->get('supporter_groups', array('where' => 'groups_KEY=24222'));
