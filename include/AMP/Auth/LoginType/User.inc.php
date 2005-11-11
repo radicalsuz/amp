@@ -97,8 +97,9 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 				return false;
 			}
 			$this->notice('parent auth check returned true');
-        }
-		$this->error('base authen credential check failed');
+        } else {
+			$this->error('user check_authen_credentials failed');
+		}
         return $valid;
     }
 
