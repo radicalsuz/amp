@@ -16,7 +16,7 @@ class UserDataPlugin_Save_Sugar extends UserDataPlugin_Save {
             'type'      => 'select' )
         );
 
-    function UserDataPlugin_Sugar_Save( &$udm, $plugin_instance = null ) {
+    function UserDataPlugin_Save_Sugar( &$udm, $plugin_instance = null ) {
 
         $this->init ( $udm, $plugin_instance );
 
