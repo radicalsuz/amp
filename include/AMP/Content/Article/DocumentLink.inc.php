@@ -66,6 +66,7 @@ class DocumentLink  {
     }
 
     function getFileName() {
+        if ( !isset( $this->_filename)) return false;
         return $this->_filename;
     }
 

@@ -7,6 +7,13 @@ class UserDataPlugin_Start_AMPlist extends UserDataPlugin {
     var $available = true;
     var $name = 'Use Mailing Lists';
 
+    var $options = array( 
+    
+        "lists" => array( 
+            "type"  => "text",
+            "label" => "Available Lists",
+            "available" => true
+            ));
     function UserDataPlugin_Start_AMPlist( &$udm, $plugin_instance ) {
         $this->init( $udm, $plugin_instance );
     }
@@ -22,6 +29,9 @@ class UserDataPlugin_Start_AMPlist extends UserDataPlugin {
     function initPHPlist( &$udm, $plugin_instance ){
         $save = & $udm->registerPlugin( 'PHPlist', 'Save', $plugin_instance );
         $read = & $udm->registerPlugin( 'PHPlist', 'Read', $plugin_instance );
+    }
+    function initListserve( &$udm, $plugin_instance ){
+        $save = & $udm->registerPlugin( 'Listserve', 'Save', $plugin_instance );
     }
 
     function execute() {

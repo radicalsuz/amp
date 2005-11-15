@@ -477,3 +477,9 @@ div.filelink a {
 .photocaption {
     font-size: 9px;
 }
+
+.publish_label {
+	color: #990000;
+	font-weight: bold;
+	text-transform: uppercase;
+}

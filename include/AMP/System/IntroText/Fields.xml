@@ -1,47 +1,47 @@
 <array>
-<id>
-<type>hidden</type>
-</id>
-<modid>
-<type>select</type>
-<label>Module</label>
-<required>1</required>
-</modid>
-<name>
-<type>text</type>
-<required>1</required>
-<label>Page Name</label>
-</name>
-<title>
-<type>text</type>
-<label>Title</label>
-<public>1</public>
-</title>
-<subtitle>
-<type>text</type>
-<public>1</public>
-<label>Subtitle</label>
-</subtitle>
-<body>
-<type>wysiwyg</type>
-<label>Body</label>
-<public>1</public>
-<size>20:65</size>
-</body>
-<html>
-<type>checkbox</type>
-<label>The text in this field is pre-formatted as HTML</label>
-</html>
-<type>
-<type>select</type>
-<label>Section</label>
-</type>
-<templateid>
-<type>select</type>
-<label>Template</label>
-</templateid>
-<searchtype>
-<type>text</type>
-<label>Display Page Link</label>
-</searchtype>
+	<id>
+		<type>hidden</type>
+	</id>
+	<modid>
+		<type>select</type>
+		<label>Module</label>
+		<required>1</required>
+	</modid>
+	<name>
+		<type>text</type>
+		<required>1</required>
+		<label>Page Name</label>
+	</name>
+	<title>
+		<type>text</type>
+		<label>Title</label>
+		<public>1</public>
+	</title>
+	<subtitle>
+		<type>text</type>
+		<public>1</public>
+		<label>Subtitle</label>
+	</subtitle>
+	<body>
+		<type>wysiwyg</type>
+		<label>Body</label>
+		<public>1</public>
+		<size>20:65</size>
+	</body>
+	<html>
+		<type>checkbox</type>
+		<label>The text in this field is pre-formatted as HTML</label>
+	</html>
+	<type>
+		<type>select</type>
+		<label>Section</label>
+	</type>
+	<templateid>
+		<type>select</type>
+		<label>Template</label>
+	</templateid>
+	<searchtype>
+		<type>text</type>
+		<label>Display Page Link</label>
+	</searchtype>
 </array>

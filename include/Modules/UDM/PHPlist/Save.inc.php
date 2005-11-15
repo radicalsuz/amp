@@ -2,18 +2,16 @@
 
 /* * * * * * *
  *  PhpList Plugin
- *  Automatically publishes a record when it is saved
- *  only works from the user side
  *
- *  Author: david@radicaldesigns.org
- *  6/1/2005
+ *  @author Austin Putman <austin@radicaldesigns.org> 
+ *  @date 2005-11-07
  */
  
 require_once ('AMP/UserData/Plugin/Save.inc.php');
 require_once ('Modules/Blast/API.inc.php');
 
 class UserDataPlugin_Save_PHPlist extends UserDataPlugin_Save {
-    
+
     var $name = 'PHPlist';
 	var $long_name   = 'PHP List Subscription ';
     var $description = 'Subscribes users to PHPlist Lists';

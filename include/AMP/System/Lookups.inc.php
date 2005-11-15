@@ -251,9 +251,24 @@ class AMPSystemLookup_Lists extends AMPSystem_Lookup {
             $this->datatable = 'phplist_list';
             $this->criteria = 'active=1';
         }
+        if ( AMP_MODULE_BLAST == 'Listserve'){
+            $this->criteria = "publish=1 and !isnull( subscribe_address) and subscribe_address != ''";
+        }
+
         $this->init();
+        
     }
 
+}
+
+class AMPSystemLookup_ListHosts extends AMPSystem_Lookup {
+    var $datatable = 'lists';
+    var $result_field = 'subscribe_address';
+    var $criteria = "!isnull( subscribe_address) and subscribe_address != ''";
+
+    function AMPSystemLookup_ListHosts( ) {
+        $this->init( );
+    }
 }
 
 class AMPSystemLookup_States extends AMPSystem_Lookup {

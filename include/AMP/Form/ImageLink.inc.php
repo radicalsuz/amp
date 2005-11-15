@@ -23,7 +23,7 @@ class ImageLink extends DocumentLink {
     }
 
     function display( $display_type = null ) {
-        if ( !isset( $this->_image)) $this->_default_display = 'ArticleDocumentLink_Display';
+        if ( $this->getFileName() && !isset( $this->_image) ) $this->_default_display = 'ArticleDocumentLink_Display';
         return PARENT::display( $display_type );
     }
     function getURL( $image_class = AMP_IMAGE_CLASS_ORIGINAL ) {
