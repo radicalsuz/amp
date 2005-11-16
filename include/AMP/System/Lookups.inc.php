@@ -69,6 +69,7 @@ class AMPSystem_Lookup {
     }
 
     function &locate( $lookup_def ){
+        if ( !isset( $lookup_def['module'])) $lookup_def['module'] = 'AMPSystem';
         if ( "content" == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
         if ( "constant" == $lookup_def['module']) $lookup_def['module'] = "AMPConstant";
         $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
@@ -93,7 +94,7 @@ class AMPSystemLookup_Modules extends AMPSystem_Lookup {
     var $sortby = "name";
 
     function AMPSystemLookup_Modules() {
-        $permissions = & AMPSystem_PermissionManager::instance();
+        $permissions = &AMPSystem_PermissionManager::instance();
         $this->criteria = "perid in (" . join(',', $permissions->entireSet()) .") AND publish = 1";
         $this->init();
     }
@@ -203,6 +204,18 @@ class AMPSystemLookup_IntroTexts extends AMPSystem_Lookup {
     }
 
 }
+class AMPSystemLookup_ToolLinks extends AMPSystem_Lookup {
+    var $datatable = "moduletext";
+    var $id_field = "searchtype";
+    var $result_field = "name";
+
+    function AMPSystemLookup_ToolLinks() {
+        $modules = &AMPSystem_Lookup::instance( 'modules');
+        $allowed = array_keys( $modules );
+        $this->criteria = "( !isnull( searchtype) and searchtype !='') and modid in (".join( ",", $allowed ) . " )";
+        $this->init();
+    }
+}
 class AMPSystemLookup_ToolsByIntroText extends AMPSystem_Lookup {
     var $datatable = "moduletext";
     var $result_field = "modid";
@@ -274,6 +287,14 @@ class AMPSystemLookup_ListHosts extends AMPSystem_Lookup {
 class AMPSystemLookup_States extends AMPSystem_Lookup {
 	var $datatable = 'states';
 	var $result_field = 'state';
+}
+
+class AMPSystemLookup_Regions extends AMPSystem_Lookup {
+	var $datatable = 'region';
+	var $result_field = 'title';
+    function AMPSystemLookup_Regions( ){
+        $this->init( );
+    }
 }
 
 class AMPSystemLookup_CellProviders {

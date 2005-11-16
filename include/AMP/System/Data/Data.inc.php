@@ -142,6 +142,13 @@ class AMPSystem_Data {
         return join("<BR>" , $this->errors);
     }
 
+    function _setSourceIncrement( $new_value ){
+        if ( $lowest_id = lowerlimitInsertID($this->datatable, $new_value)) {
+            $this->dbcon->Execute( "ALTER TABLE ".$this->datatable." AUTO_INCREMENT = ".$lowest_id);
+        }
+
+    }
+
 
 }
 ?>

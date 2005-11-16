@@ -78,14 +78,23 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
                 " WHERE ".$this->id_field." = ". $this->dbcon->qstr( $id );
     }
 
+    function _blankIdAction( ){
+        //interface
+    }
+
 
     function save() {
         $save_fields = array_combine_key($this->_itemdata_keys, $this->getData());
-		if ( !is_array( $this->id_field ) && !isset($save_fields[ $this->id_field ]) ) $save_fields[ $this->id_field ] = "";
+		if ( !is_array( $this->id_field ) && !isset($save_fields[ $this->id_field ]) ){
+            $save_fields[ $this->id_field ] = "";
+            $this->_blankIdAction();
+        }
         
         $result = $this->dbcon->Replace( $this->datatable, $save_fields, $this->id_field, $quote=true);
 
-        if ($result == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
+        if ($result == ADODB_REPLACE_INSERTED ) {
+            $this->mergeData( array( $this->id_field => $this->dbcon->Insert_ID() ));
+        }
         
         if ($result) {
             $this->clearItemCache( $this->id );

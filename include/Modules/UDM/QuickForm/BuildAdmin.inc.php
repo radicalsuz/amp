@@ -16,6 +16,7 @@ require_once( 'AMP/Region.inc.php' );
 require_once( 'AMP/UserData/Plugin.inc.php' );
 require_once( 'AMP/UserData/Lookups.inc.php');
 
+$GLOBALS['regionObj'] = new Region();
 class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
     var $fields = Array();
@@ -343,7 +344,6 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
 }
 
-$GLOBALS['regionObj'] = new Region();
 /*
 function udm_QuickForm_build_admin ( &$udm, $options = null ) {
 

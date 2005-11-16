@@ -198,14 +198,14 @@ class AMPSystem_List extends AMPDisplay_HTML {
             $list_html .= " \n<td>";
             $list_html .= ( isset( $this->translations[$baselink])) ?
                                 $currentrow[$baselink] :
-                                $this->_HTML_extraColumnsDefault( $currentrow, $header );
+                                $this->_HTML_extraColumnsDefault( $header, $currentrow );
             $list_html .= "</td>";
         }
         return $list_html;
     }
 
     function _HTML_extraColumnsDefault(  $header, $currentrow ){
-        return  " <div align='right'>Ma"
+        return  " <div align='right'>"
                 . "<A HREF='". $this->_getColumnLink( $header, $currentrow )."'>$header</A>"
                 . "</div>";
 

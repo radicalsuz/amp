@@ -13,6 +13,8 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'search_fields_user' => 'AMP/Content/Article/Search/User/Fields.xml',
         'search' => 'AMP/Content/Article/Search/Form.inc.php',
         'search_fields' => 'AMP/Content/Article/Search/Fields.xml',
+        'fields' => 'AMP/Content/Article/Fields.xml',
+        'form'          => 'AMP/Content/Article/Form.inc.php',
         'source' => 'AMP/Content/Article.inc.php',
         'list' => 'AMP/Content/Article/ListForm.inc.php',
         'menu' => 'AMP/Content/Section/Menu.inc.php',
@@ -24,6 +26,7 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'menu' => 'SectionMenu',
         'classlinks' => 'Class_Links',
         'list' => 'Article_ListForm',
+        'form' => 'Article_Form',
         'source' => 'Article' );
 }
 ?>

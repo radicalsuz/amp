@@ -969,7 +969,11 @@ class UserData {
     function _register_lists () {
 
         if ( $this->uselists = $this->_module_def[ 'uselists' ] ) {
-            $this->registerPlugin( 'AMPlist', 'Start');
+            $list = &$this->registerPlugin( 'AMPlist', 'Start');
+            $options = $list->getOptions( );
+
+            if( !isset( $options['lists'])) return;
+            $this->lists = explode( ",", $options['lists']);
         }
 
     }

@@ -294,6 +294,10 @@ margin-top: 5px;
 td.name {
 		 padding-right:1em;
 }
+td.name input{
+	float: right;
+	position: relative;
+}
 
 .text {
 	font-size: 10px;
@@ -482,4 +486,40 @@ div.filelink a {
 	color: #990000;
 	font-weight: bold;
 	text-transform: uppercase;
+	font-size: 1.5em;
+}
+.form_hider {
+	display:none;
+}
+div.fieldextra {
+	border: 1px solid grey;
+	background: #fffff0;
+	padding: 0.5em;
+	margin: 1em 0;
+}
+div.fieldset {
+	clear: both;
+	padding: 0;
+}
+
+div.fieldset a.trigger {
+	margin: 5px;
+	padding-left: 20px;
+	text-decoration: none;
+	font-size: 13px;
+}
+div.fieldextra a.trigger {
+	display: block;
+	padding-top: 5px;
+	padding-left: 0px;
+	width: 100%;
+/*	background-color: #006699;*/
+	background: url('images/intitle-bg.png') top left repeat-x;
+	color: #FFFFFF;
+	font-size: 13px;
+	font-weight: bold;
+}
+img.field_arrow {
+	float: left;
+	margin: 3px;
 }

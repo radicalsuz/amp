@@ -37,6 +37,10 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
         return new ArticleDisplay_IntroText( $this );
     }
 
+    function _blankIdAction( ){
+        $this->_setSourceIncrement( 100 );
+    }
+
 
     function getSection() {
         return $this->getData( 'type' );

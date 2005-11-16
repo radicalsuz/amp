@@ -5,6 +5,7 @@
 	<img>
 		<type>imagepicker</type>
 		<label>Choose Image</label>
+	    <required>1</required>
 	</img>
     <publish>
         <type>checkbox</type>

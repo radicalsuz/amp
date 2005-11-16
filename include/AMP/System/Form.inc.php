@@ -7,6 +7,7 @@ class AMPSystem_Form extends AMPForm {
     var $id_field = 'id';
     var $name_field = 'name';
     var $allow_copy = true;
+    var $_editor_fieldswap_object_id = 'HTML_Override_Hider';
 
     var $submit_button = array( 'submitAction' => array(
         'type' => 'group',
@@ -123,5 +124,21 @@ class AMPSystem_Form extends AMPForm {
         if (!$set) return false;
         return $set[$this->name_field];
     }
+
+    function HTMLEditorSetup( $checkbox_fieldname = 'html') {
+        require_once ('AMP/Form/ElementSwapScript.inc.php');
+        $fieldswapper = &ElementSwapScript::instance();
+        $fieldswapper->addSwapper( $this->_editor_fieldswap_object_id );
+        $fieldswapper->setForm( $this->formname, $this->_editor_fieldswap_object_id );
+        $fieldswapper->addSet( 'no_editor', array($checkbox_fieldname), $this->_editor_fieldswap_object_id ) ;
+        $fieldswapper->setInitialValue( 'no_editor', $this->_editor_fieldswap_object_id );
+
+        $this->registerJavascript( $fieldswapper->output() );
+
+        $editor = & AMPFormElement_HTMLEditor::instance();
+        $editor->register_config_action( 'ActivateSwap( window.'.$this->_editor_fieldswap_object_id.', "" );'); 
+        $editor->register_config_action( 'document.forms["'.$this->formname.'"].elements["'.$checkbox_fieldname.'"].checked = true;' );
+    }
+
 }
 ?>

@@ -33,7 +33,13 @@ class AMPFormTemplate {
         'starttable' =>
             "<table class=\"%1\$s\"><tr><td>",
         'endtable' =>
-            "</td></tr></table>"
+            "</td></tr></table>",
+        'startblock' =>
+            "\n\n<!-- BLOCK %2\$s start --><tr><td colspan=2><div class=\"fieldset\" id=\"%2\$s_parent\"><table id=\"%2\$s\" class=\"%1\$s\">\n",
+        'endblock' =>
+            "\n\n<!-- BLOCK %1\$s end --></table></div></td></tr>\n",
+        'triggerblock' =>
+            "\n\n<!-- BLOCK %2\$s start --><tr><td colspan=2><div class=\"fieldset\" id=\"%2\$s_parent\">%3\$s<table id=\"%2\$s\" class=\"%1\$s\">\n"
 
     );
 
@@ -165,7 +171,8 @@ class AMPFormTemplate {
         'element' => 'form_data_col',
         'span'  =>  'form_span_col',
         'header'=>  'udm_header',
-        'group' =>  'udm_group_label' 
+        'group' =>  'udm_group_label', 
+        'block' =>  'form_hider' 
     );
 
     var $element_css_keys = array(
@@ -199,6 +206,27 @@ class AMPFormTemplate {
 
     function setClass( $elementType, $class ) {
         $this->element_css_classes[ $elementType ] = $class;
+    }
+
+    function getPatternPart( $pattern_part ){
+        if ( !isset( $this->pattern_parts[$pattern_part])) return false;
+        return $this->pattern_parts[ $pattern_part ];
+    }
+
+    function setPatternPart( $pattern_part, $new_value ){
+        $this->pattern_parts[$pattern_part] = $new_value;
+    }
+
+    function startBlock( $block_id, $template ){
+        return sprintf( $this->pattern_parts['startblock'], $this->element_css_classes['block'], $block_id ).$template;
+    }
+    function triggerBlock( $block_id, $template ){
+        $result= sprintf( $this->pattern_parts['triggerblock'], $this->element_css_classes['block'], $block_id, $template );
+        return $result;
+    }
+
+    function endBlock( $block_id, $template) {
+        return sprintf( $this->pattern_parts['endblock'], $block_id).$template;
     }
 
     ############################################

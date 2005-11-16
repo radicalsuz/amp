@@ -47,6 +47,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
          *  lookup:     provides a dynamic set of values for select/group elements
          *      instance:   the name of the lookup
          *      module:     the type of lookup, currently ampsystem( default ), content, or form
+         
+         *  block:      include this element in a block set
+         
+         *  block_trigger: display the block named for this element if this value is set
 
          *  constant:   value of the field will not accept change from the user
                         side
@@ -86,6 +90,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     // the template factory
     var $template;
+    var $_current_block = "";
 
     // conditionals define arbitrary requirements of field definitions
     // the most common is 'public' == true;
@@ -470,11 +475,13 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 		}
 
         if ( !$field_def['template'] ) return true;
-
+/*
 		$template_function = ($field_def['type']=='header')?
                                 'setHeaderTemplate':
                                 'setElementTemplate';
 		$this->renderer->$template_function( $field_def['template'], $name);
+        */
+		$this->renderer->setElementTemplate( $field_def['template'], $name);
 
 		return true;
 
@@ -501,6 +508,32 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     function _addFileValue( $name ){
         $this->form->addElement(  'hidden', $name.'_value');
 
+    }
+
+    function &_addElementBlocktrigger( $name, $field_def ){
+        $jscript = "change_form_block( '".$name."' );";
+        $div = "";
+        if ( isset( $field_def['block_trigger'])){
+             $this->addTranslation($name,'_showDynamicBlock', 'set');   
+        }
+		$name_block =   "<a href=\"javascript:$jscript\" class=\"trigger\">"
+                        . "<img src=\"images/arrow-right.gif\" border=\"0\" class=\"field_arrow\" id=\"arrow_$name\" />"
+                        . $field_def['label'] ."</a>";
+        $this->setDefaultValue( $name, $name_block );
+        return $this->_addElementHtml( $name, $field_def );
+    }
+
+    function _showDynamicBlock( $data, $fieldname ){
+        $def = $this->getField( $fieldname );
+        if ( !$trigger = $def['block_trigger'] ) return false;
+        if ( !( isset( $data[$trigger]) && $data[$trigger])) return false;
+        $script =   '<script type="text/javascript" language="Javascript"><!--'."\n"
+                    . 'change_form_block( "'.$fieldname.'");'."\n"
+                    . "--></script>";
+        $this->registerJavascript( $script );
+        $this->setJavascript( );
+        #$this->javascript.=$script;
+        return true;
     }
 
 
@@ -582,7 +615,8 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function &_addElementHtml( $name, $field_def ) {
-        $name = $this->_getDefault( $name );
+  #      $name = $this->_getDefault( $name );
+        $name = $this->_readTemplateBlock( $this->_getDefault( $name ), $field_def );
         return $this->form->addElement( 'html', $name );
     }
 
@@ -632,6 +666,13 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
                 $group_set[] = &HTML_QuickForm::createElement('radio', null, null, $def_value ,$def_key );
         }
         return $this->form->addGroup( $group_set, $name, $field_def['label'], '<BR>');
+    }
+
+    function &_addElementGroup( $name, $field_def ){
+        $elementSet = $this->_getGroupElements( $name );
+        foreach( $elementSet as $element_id => $element_def ){
+
+        }
     }
 
     function &_addElementWysiwyg ( $name, $field_def ) {
@@ -726,11 +767,49 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 		$newdef['size']     = (isset($field_def['size']) && ($field_def['size'] != 0))   ? $field_def[ 'size' ]   : 40;
 		$newdef['attr']     = (isset($field_def['attr']))   ? $field_def['attr']       : null;
 		$newdef['elements'] = (isset($field_def['elements']))   ? $field_def['elements']       : null;
+		$newdef['block']    = (isset($field_def['block']))   ? $field_def['block']       : null;
+		$newdef['block_trigger']    = (isset($field_def['block_trigger']))   ? $field_def['block_trigger']       : null;
+
+        $no_template_set = array( 'html', 'blocktrigger');
+        if ( array_search( $newdef['type'], $no_template_set)!==FALSE) return $newdef + array( 'template' => null );   
 
         $separator = isset($field_def['separator'])? $field_def['separator'] : "";
         $newdef['template'] = (isset($field_def['template'])? $field_def['template']: $this->_getTemplate( $newdef['type'], $separator ));
 
+        $newdef['template'] = $this->_readTemplateBlock( $newdef['template'], $field_def );
+
         return $newdef;
+    }
+
+    function _readTemplateBlock( $template, $field_def ) {
+        //no block set
+        if ( !( isset( $field_def['block']) && $field_def['block'] )){
+
+            //none requested
+            if ( !$current_block = $this->_current_block ) return $template;
+            
+            //current block ends
+            $this->_current_block = "";
+            return $this->template->endBlock( $current_block, $template );
+        }
+        //current block is continued
+        if ( $field_def['block'] == $this->_current_block) return $template;
+
+        //start a new block
+        if ( !$block = $this->_current_block ) {
+            $this->_current_block = $field_def['block'];
+            if ( $field_def['type'] == 'blocktrigger') {
+                return $this->template->triggerBlock( $field_def['block'], $template);
+            }
+            return $this->template->startBlock( $field_def['block'], $template );
+        }
+        //start a new block and end the last one
+        $this->_current_block = $field_def['block'];
+        if ( $field_def['type'] == 'blocktrigger') {
+            return $this->template->endBlock( $block,$this->template->triggerBlock( $field_def['block'], $template));
+        }
+        return $this->template->endBlock( $block, $this->template->startBlock( $field_def['block'], $template));
+
     }
 
     function _verifyConditionals( $field_def ) {
@@ -741,7 +820,20 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
             if ( $field_def [ $key ] != $requirement ) return false;
         }
 
+        if ( isset( $field_def['per'])) {
+            $this->_loadPermissionManager( );
+            $per = $this->_per_manager->convertDescriptor( $field_def['per']);
+            return AMP_Authorized( $per );
+        }
+
         return true;
+    }
+
+    function &_loadPermissionManager( ){
+        if ( isset( $this->_per_manager)) return true;
+
+        require_once( 'AMP/System/Permission/Manager.inc.php');
+        $this->_per_manager = &AMPSystem_PermissionManager::instance();
     }
 
  }

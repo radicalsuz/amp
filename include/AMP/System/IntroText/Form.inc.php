@@ -38,8 +38,6 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form {
         $this->registerJavascript( $fieldswapper->output() );
 
         $editor = & AMPFormElement_HTMLEditor::instance();
-        #$editor->width=700;
-        #$editor->addPlugin('Stylist');
         $editor->register_config_action( 'ActivateSwap( window.'.$this->fieldswap_object_id.', "" );'); 
         $editor->register_config_action( 'document.forms["'.$this->formname.'"].elements["html"].checked = true;' );
     }

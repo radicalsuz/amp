@@ -195,6 +195,21 @@ function change_any(which, whatkind) {
 		document.getElementById(which).style.display = 'block';
 	}
 }
+
+function change_form_block(which) {
+    var setting = document.getElementById(which).style.display;
+    if ( setting == 'block' ) {
+        var parentDiv = document.getElementById(which + "_parent");
+        parentDiv.className = 'fieldset';
+        document.getElementById(which).style.display = 'none';
+        document.getElementById( "arrow_" + which ).src = 'images/arrow-right.gif';
+    } else {
+        var parentDiv = document.getElementById(which + "_parent");
+        parentDiv.className = 'fieldset fieldextra';
+        document.getElementById(which).style.display = 'block';
+        document.getElementById( "arrow_" + which ).src = 'images/arrow-down.gif';
+    }
+}
 	
 function showUploadWindow (parentform, calledfield, dtype) {
     url  = 'http://'+location.host+'/upload_popup.php?pform='+parentform+'&pfield='+calledfield;

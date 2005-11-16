@@ -126,7 +126,7 @@ $class__totalRows=$class->RecordCount();
 $state=$dbcon->Execute("SELECT * FROM region order by title asc") or DIE($dbcon->ErrorMsg());
 $state_numRows=0;
 $state__totalRows=$state->RecordCount();
-$modsel=$dbcon->Execute("SELECT a.link, a.title FROM articles a, articletype t where a.type = t.id and  t.type = 'Module Pages' ORDER BY a.title ASC") or DIE($dbcon->ErrorMsg());
+$modsel=$dbcon->Execute("SELECT a.link, a.title FROM articles a, articletype t where a.type = t.id and  t.type = 'Module Pages' ORDER BY a.title ASC") or DIE($dbcon->ErrorMsg() );
 	
 
 include ("header.php"); ?>
