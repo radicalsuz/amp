@@ -13,22 +13,23 @@ $sql = "select title from action_text where id = ".$_REQUEST['report']	;
 $N= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
 
 
-echo "<p>".$N->Fields("title")."</p>";
-echo "Actions Taken: ".$R->Fields("number");
+echo "<p>".$N->Fields("title")."</p><br>";
+echo '<table>';
+echo "<tr><td>Total Actions Taken </td><td>".$R->Fields("number")."</td></tr>";
 
 $sql = "select distinct MONTH(date) as month,  YEAR(date) as year from action_history where actionid = ".$_REQUEST['report']	;
 $M= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
 while (!$M->EOF) {
 	$sql = 'select count(id) as number from action_history where actionid = '.$_REQUEST['report'] .' and MONTH(date) = '. $M->Fields('month')	;
 	$C= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
-	echo '<table>';
+	
 	echo '<tr><td>'.date("F Y", mktime(0, 0, 0, $M->Fields('month'), 1, $M->Fields('year'))) ."</td><td> ".$C->Fields("number").'</td></tr>';
-	echo '</table>';
+	
 
 	
 	$M->MoveNext();
 }
-
+echo '</table>';
 include ("footer.php");
 ?>
 	
