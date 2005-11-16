@@ -4,6 +4,7 @@ $mod_name = 'actions';
 
 require("Connections/freedomrising.php");
 include ("header.php");
+#require_once("AMP/Charts/charts.php");
 echo "<h2>Action Center Report</h2>";
 
 $sql = "select count(id) as number from action_history where actionid = ".$_REQUEST['report']	;
@@ -20,7 +21,9 @@ $M= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
 while (!$M->EOF) {
 	$sql = 'select count(id) as number from action_history where actionid = '.$_REQUEST['report'] .' and MONTH(date) = '. $M->Fields('month')	;
 	$C= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
-	echo '<br>'.date("F Y", mktime(0, 0, 0, $M->Fields('month'), 1, $M->Fields('year'))) .": ".$C->Fields("number");
+	echo '<table>';
+	echo '<tr><td>'.date("F Y", mktime(0, 0, 0, $M->Fields('month'), 1, $M->Fields('year'))) ."</td><td> ".$C->Fields("number").'</td></tr>';
+	echo '</table>';
 
 	
 	$M->MoveNext();
