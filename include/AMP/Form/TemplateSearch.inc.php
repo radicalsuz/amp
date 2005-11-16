@@ -28,7 +28,6 @@ class AMPFormTemplate_Search extends AMPFormTemplate {
     
     function AMPFormTemplate_Search() {
         $this->init();
-        $this->_addPatternParts();
     }
 
 	function getTemplate( $type=null, $separator = null ) {
@@ -55,10 +54,5 @@ class AMPFormTemplate_Search extends AMPFormTemplate {
         return $separator_template . $template ;
     }
         
-
-    function _addPatternParts() {
-        $this->pattern_parts['newrow'] = $this->pattern_parts['endrow'] . $this->pattern_parts['startrow'];
-        $this->pattern_parts['space'] = "&nbsp;&nbsp;";
-    }
 }
 ?>

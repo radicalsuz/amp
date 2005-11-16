@@ -188,6 +188,7 @@ class AMPFormTemplate {
 
     function AMPFormTemplate() {
         $this->init();
+        $this->_addPatternParts();
     }
 
     function init() {
@@ -274,6 +275,10 @@ class AMPFormTemplate {
         return join( "", $pattern_set );
     }
 
+    function _addPatternParts() {
+        $this->pattern_parts['newrow'] = $this->pattern_parts['endrow'] . $this->pattern_parts['startrow'];
+        $this->pattern_parts['space'] = "&nbsp;&nbsp;";
+    }
 
 }
 ?>

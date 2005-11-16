@@ -458,8 +458,8 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
 
-    function _addElement( $name ) {
-        if (!( $field_def = $this->_confirmFieldDef($this->getField( $name )))) return false;
+    function _addElement( $name, $field_def = null ) {
+        if (!( isset( $field_def ) || $field_def = $this->_confirmFieldDef($this->getField( $name )))) return false;
 
         $add_method     =   '_addElement'   . ucfirst( $field_def['type'] );
         $adjust_method  =   '_adjustElement'. ucfirst( $field_def['type'] );
@@ -669,10 +669,15 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function &_addElementGroup( $name, $field_def ){
-        $elementSet = $this->_getGroupElements( $name );
+        if ( !isset( $field_def['elements'])) return false;
+        $elementSet = $field_def['elements'];
+        $formSet = array( );
         foreach( $elementSet as $element_id => $element_def ){
-
+            $this->_addElement( $element_id, $this->_confirmFieldDef( $element_def ));
+            $formSet[$element_id] = &$this->form->removeElement( $element_id );
         }
+        $separator = $this->template->getPatternPart( 'newrow ') ;
+        return $this->form->addGroup( $formSet, $name, $field_def['label'], $separator );
     }
 
     function &_addElementWysiwyg ( $name, $field_def ) {
