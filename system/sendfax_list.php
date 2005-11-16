@@ -14,7 +14,7 @@ $fieldsarray=array( 'ID'=>'id',
 $extra = array('Add to Content System'=>'module_contentadd.php?action=');
 
 $filename="sendfax_edit.php";
-$extra = array( 'reports'=>'sendfax_reports.php?report=',
+$extra = array( 'report'=>'sendfax_report.php?report=',
 				//'delete'=>'sendfax_reports.php?del='
 					);
 
