@@ -26,8 +26,10 @@ class AMPSystem_UserData extends AMPSystem_Data_Item {
     }
 
     function save( ){
-        if ( !isset( $this->id) && !isset( $this->itemdata[$this->id_field]) ) $this->mergeData( array( $this->id_field => lowerlimitInsertID() ));
-        return PARENT::save( );
+        if ( !isset( $this->id) && !isset( $this->itemdata[$this->id_field]) ){
+			if ( $lowest_id = lowerlimitInsertID($this->datatable,50))  $this->mergeData( array( $this->id_field => (string) $lowest_id ));	
+        }
+		return PARENT::save( );
     }
 
 }
