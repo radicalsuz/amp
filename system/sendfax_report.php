@@ -13,10 +13,10 @@ $sql = "select title from action_text where id = ".$_REQUEST['report']	;
 $N= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
 
 
-echo "<h3>".$N->Fields("title")."</h3>";
+echo "<h3>Action:  ".$N->Fields("title")."</h3>";
 echo '<table>';
-echo "<tr><td><br>Total Actions Taken</b> </td><td>".$R->Fields("number")."</td></tr>";
-
+echo "<tr><td><b>Total Actions Taken</b> </td><td>".$R->Fields("number")."</td></tr>";
+echo "<tr><td><b>By Month</b> </td><td></td></tr>";
 $sql = "select distinct MONTH(date) as month,  YEAR(date) as year from action_history where actionid = ".$_REQUEST['report']	;
 $M= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
 while (!$M->EOF) {
