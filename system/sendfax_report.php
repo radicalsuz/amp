@@ -20,7 +20,7 @@ $M= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
 while (!$M->EOF) {
 	$sql = 'select count(id) as number from action_history where actionid = '.$_REQUEST['report'] .' and MONTH(date) = '. $M->Fields('month')	;
 	$C= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
-	echo date("M", mktime(0, 0, 0, $M->Fields('month'), 1, 2005)) .": ".$C->Fields("number");
+	echo '<br>'.date("F", mktime(0, 0, 0, $M->Fields('month'), 1, 2005)) .": ".$C->Fields("number");
 
 	
 	$M->MoveNext();
