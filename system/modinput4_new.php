@@ -1,9 +1,8 @@
 <?php
 
-
 $mod_name='udm';
 require_once( 'AMP/System/Base.php');
-require_once( "AMP/Form/Deprecated.inc.php");
+#require_once( "AMP/Form/Deprecated.inc.php");
 #require("Connections/freedomrising.php");
 #require_once("Connections/sysmenu.class.php");
 require_once ( 'AMP/System/IntroText.inc.php' );
@@ -25,7 +24,8 @@ if ( 'save'==$sub && $form->validate( ) ) {
 
 ## insert UDM
 	$UDM = &new AMPSystem_UserData ( $dbcon );
-	$udm_data= array('name' =>$name);
+    $field_order = "First_Name,Last_Name,Email,Company,occupation,Web_Page,Phone,Street,Street_2,City,State,Zip,Country,Home_Fax,custom1,custom2,custom3,custom4,custom5,custom6,custom7,custom8,custom9,custom10,Notes";
+	$udm_data= array('name' =>$name, 'field_order' => $field_order );
 	$UDM->setData($udm_data);
 	$UDM->save();
 
@@ -72,7 +72,7 @@ function &_buildNewFormForm ( ){
         'name'      =>  array( 'label'  =>  'Form Name',            'type'  =>  'text',     'required'  => true),
         'it_header' =>  array( 'label'  =>  'Input Page',           'type'  =>  'header'),
         'htitle'    =>  array( 'label'  =>  'Input Page Title',     'type'  =>  'text'),
-        'harticle'  =>  array( 'label'  =>  'Intro Page Text',      'type'  =>  'textarea', 'size'  => '10:60'),
+        'harticle'  =>  array( 'label'  =>  'Input Page Text',      'type'  =>  'textarea', 'size'  => '10:60'),
         'rp_header' =>  array( 'label'  =>  'Response Page',        'type'  =>  'header'),
         'rtitle'    =>  array( 'label'  =>  'Response Page Title',  'type'  =>  'text'),
         'rarticle'  =>  array( 'label'  =>  'Response Page Text',   'type'  =>  'textarea', 'size'  => '10:60')

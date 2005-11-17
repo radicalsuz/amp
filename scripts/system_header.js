@@ -202,12 +202,13 @@ function change_form_block(which) {
         var parentDiv = document.getElementById(which + "_parent");
         parentDiv.className = 'fieldset';
         document.getElementById(which).style.display = 'none';
+        document.getElementById( "arrow_" + which ).style.display = 'block';
         document.getElementById( "arrow_" + which ).src = 'images/arrow-right.gif';
     } else {
         var parentDiv = document.getElementById(which + "_parent");
         parentDiv.className = 'fieldset fieldextra';
         document.getElementById(which).style.display = 'block';
-        document.getElementById( "arrow_" + which ).src = 'images/arrow-down.gif';
+        document.getElementById( "arrow_" + which ).style.display = 'none';
     }
 }
 	

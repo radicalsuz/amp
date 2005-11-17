@@ -188,11 +188,11 @@ class AMPFormTemplate {
 
     function AMPFormTemplate() {
         $this->init();
-        $this->_addPatternParts();
     }
 
     function init() {
         $this->_buildPatterns();
+        $this->_addPatternParts();
     }
 
     //separator var is only used in TemplateSearch subclass

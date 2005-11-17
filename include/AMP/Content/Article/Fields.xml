@@ -1,0 +1,306 @@
+<array>
+    <publish>
+        <type>checkbox</type>
+        <label>&lt;span class='publish_label'&gt;PUBLISH&lt;/span&gt;</label>
+        <per>CONTENT_PUBLISH</per>
+    </publish>
+    <title_header>
+        <label>Title</label>
+        <type>header</type>
+    </title_header>
+    <title>
+        <label>Title</label>
+        <required>1</required>
+        <type>textarea</type>
+    </title>
+	<title_options>
+		<type>blocktrigger</type>
+        <label>Title Options</label>
+		<block_trigger>subtitle</block_trigger>
+		<block>title_options</block>
+	</title_options>
+    <subtitle>
+        <label>Subtitle</label>
+        <type>textarea</type>
+		<block>title_options</block>
+    </subtitle>
+     <linktext>
+        <label>Abbreviated Title for Navigation</label>
+        <type>text</type>
+		<block>title_options</block>
+     </linktext>
+    <LocationHeader>
+        <label>Section and Locations</label>
+        <type>header</type>
+    </LocationHeader>
+    <type>
+        <label>Main Section</label>
+        <required>1</required>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>sectionmap</instance>
+        </lookup>
+    </type>
+    <new_section_link>
+        <type>static</type>
+        <per>CONTENT_SECTION_EDIT</per>
+        <label>&lt;a href="type_edit.php"&gt;add new&lt;/a&gt;</label>
+    </new_section_link>
+	<location_trigger>
+		<type>blocktrigger</type>
+        <label>Add Locations</label>
+		<block_trigger>reltype</block_trigger>
+		<block>location_trigger</block>
+	</location_trigger>
+    <reltype>
+		<block>location_trigger</block>
+        <label>Related Sections</label>
+        <type>multiselect</type>
+        <size>8</size>
+        <lookup>
+            <module>content</module>
+            <instance>sectionmap</instance>
+        </lookup>
+    </reltype>
+    <class>
+		<block>location_trigger</block>
+        <label>Class</label>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>class</instance>
+        </lookup>
+        <default>1</default>
+    </class>
+     <state>
+        <type>select</type>
+        <label>Region</label>
+		<lookup>regions</lookup>
+		<block>location_trigger</block>
+     </state>
+     <uselink>
+        <type>checkbox</type>
+        <label>Show Article in Navigation</label>
+        <default>1</default>
+		<block>location_trigger</block>
+     </uselink>
+     <fplink>
+		<block>location_trigger</block>
+        <type>checkbox</type>
+        <label>Mark as &quot;Front Page&quot;</label>
+     </fplink>
+     <new>
+        <type>checkbox</type>
+        <label>Mark as &quot;New&quot;</label>
+		<block>location_trigger</block>
+     </new>
+    <body_header>
+        <type>header</type>
+        <default>Content Body</default>
+    </body_header>
+    <shortdesc>
+        <type>textarea</type>
+        <label>Short Description</label>
+        <size>5:65</size>
+    </shortdesc>
+    <body>
+        <type>wysiwyg</type>
+        <label>Full Text</label>
+        <size>60:80</size>
+    </body>
+    <html>
+        <type>checkbox</type>
+        <label>The text in this field is pre-formatted as HTML</label>
+    </html>
+	<attach_header>
+		<type>header</type>
+		<label>Attach Content</label>
+	</attach_header>
+	<image_header>
+        <type>blocktrigger</type>
+		<block>image_header</block>
+		<block_trigger>picture</block_trigger>
+		<label>Attach Image ( for list thumbnails )</label>
+	</image_header>
+    <picture>
+		<block>image_header</block>
+        <type>imagepicker</type>
+        <label>Image Filename</label>
+    </picture>
+    <image_actions>
+		<block>image_header</block>
+        <type>static</type>
+        <default>Upload Image</default>
+    </image_actions>
+    <picuse>
+        <type>hidden</type>
+        <default>1</default>
+    </picuse>
+    <image_details>
+        <type>blocktrigger</type>
+        <label>Image Details</label>
+		<block_trigger>piccap</block_trigger>
+		<block>image_details</block>
+    </image_details>
+    <pselection>
+        <type>radiogroup</type>
+		<block>image_details</block>
+        <label>Image Size</label>
+        <values>
+            <original>Original Size</original>
+            <pic>Optimized for Web</pic>
+        </values>
+        <default>pic</default>
+    </pselection>
+    <alignment>
+		<block>image_details</block>
+        <type>radiogroup</type>
+        <label>Image Alignment</label>
+        <values>
+            <left>Left</left>
+            <right>Right</right>
+        </values>
+        <default>AMP_IMAGE_DEFAULT_ALIGNMENT</default>
+    </alignment>
+    <piccap>
+		<block>image_details</block>
+        <type>text</type>
+        <size>50</size>
+        <label>Image Caption</label>
+    </piccap>
+    <alttag_header>
+		<block>image_details</block>
+        <type>static</type>
+        <default>Brief description of image for sightless users:</default>
+    </alttag_header>
+    <alttag>
+		<block>image_details</block>
+        <type>text</type>
+        <label>( Alt tag )</label>
+    </alttag>
+    <doc_header>
+        <type>blocktrigger</type>
+        <label>Attach Document</label>
+		<block_trigger>doc</block_trigger>
+		<block>doc_header</block>
+    </doc_header>
+	<doc>
+		<type>select</type>
+		<label>Document Name</label>
+		<block>doc_header</block>
+	</doc>
+	<doc_actions>
+		<type>static</type>
+		<block>doc_header</block>
+		<label>&lt;a href="docdir.php" target="_blank"&gt;View Documents&lt;/a&gt; | &lt;a href="doc_upload.php" target="_blank"&gt;Upload Document&lt;/a&gt;</label>
+	</doc_actions>
+	<attributes_header>
+		<type>header</type>
+		<label>Article Attributes</label>
+	</attributes_header>
+    <byline_header>
+        <type>blocktrigger</type>
+        <label>Byline Information</label>
+		<block_trigger>source</block_trigger>
+		<block>byline_header</block>
+    </byline_header>
+    <author>
+        <type>text</type>
+        <label>Author</label>
+		<block>byline_header</block>
+    </author>
+    <source>
+        <type>text</type>
+        <label>Source</label>
+		<block>byline_header</block>
+    </source>
+    <sourceurl>
+        <type>text</type>
+        <label>Source URL</label>
+		<block>byline_header</block>
+    </sourceurl>
+    <contact>
+        <type>textarea</type>
+        <label>Press Release Contact</label>
+		<block>byline_header</block>
+    </contact>
+    <order_header>
+        <type>blocktrigger</type>
+        <label>Ordering and Date</label>
+		<block_trigger>pageorder</block_trigger>
+		<block>order_header</block>
+    </order_header>
+    <date>
+        <type>date</type>
+        <label>Date</label>
+        <default>today</default>
+		<block>order_header</block>
+    </date>
+    <usedate>
+        <type>checkbox</type>
+        <label>DO NOT DISPLAY DATE</label>
+		<block>order_header</block>
+    </usedate>
+    <pageorder>
+        <type>text</type>
+        <size>4</size>
+        <label>Order &lt;br /&gt;(sorts by date&lt;br /&gt; if blank)</label>
+		<block>order_header</block>
+    </pageorder>
+	<fancy_header>
+		<type>header</type>
+		<label>Fancy Options</label>
+	</fancy_header>
+	<redirects_trigger>
+		<type>blocktrigger</type>
+        <label>Redirection and Tools</label>
+		<block_trigger>link</block_trigger>
+		<block>redirects_trigger</block>
+	</redirects_trigger>
+     <link>
+        <label>Redirect Viewers&lt;br /&gt; to URL</label>
+        <type>text</type>
+		<block>redirects_trigger</block>
+     </link>
+     <module_link>
+        <type>select</type>
+        <label>Link to Tool Page</label>
+        <lookup>toolLinks</lookup>
+		<block>redirects_trigger</block>
+     </module_link>
+     <linkover>
+        <type>hidden</type>
+        <default>1</default>
+     </linkover>
+	<adv_header>
+        <type>blocktrigger</type>
+		<block>adv_header</block>
+		<block_trigger>comments</block_trigger>
+        <label>Navigation, Notes, Comments</label>
+     </adv_header>
+     <comments>
+		<block>adv_header</block>
+        <type>checkbox</type>
+        <label>Allow User Comments</label>
+     </comments>
+     <comments_actions>
+		<block>adv_header</block>
+        <type>static</type>
+        <label>view/edit user comments</label>
+     </comments_actions>
+     <navtext>
+		<block>adv_header</block>
+        <type>textarea</type>
+        <label>Custom Navigation Element</label>
+     </navtext>
+     <notes>
+		<block>adv_header</block>
+        <type>textarea</type>
+        <label>Editor Notes</label>
+     </notes>
+     <wysiwyg_actions>
+        <type>static</type>
+        <label>Wysiwyg on/off</label>
+     </wysiwyg_actions>
+</array>

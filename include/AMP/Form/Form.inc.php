@@ -570,9 +570,12 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
         $displayfield_name = $fieldname . '_display';
 
-        if ( !$this->getField( $displayfield_name )){
-            $this->addField( array( 
-                    'type'  =>  'static', 'default' => null ), $displayfield_name);
+        if ( !$field_def = $this->getField( $displayfield_name )){
+            $basefield = array( 'type'  =>  'static', 'default' => null);
+            $field_def = $this->getField( $fieldname );
+            if ( isset( $field_def['block'])) $basefield['block'] = $field_def['block'];
+            
+            $this->addField( $basefield, $displayfield_name);
             $this->_addElement( $displayfield_name );
         }
         return $displayfield_name;
@@ -685,6 +688,9 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $fRef = &$this->_addElementDefault( $name, $field_def );
         $fRef->updateAttributes ( array( "id"=>$name ) );
         $this->_adjustElementTextarea( $fRef, $field_def );
+
+        if ( isset( $_COOKIE['AMPWYSIWYG']) && 'none' == $_COOKIE['AMPWYSIWYG'] ) return $fRef;
+        if ( array_search( getBrowser( ), array( 'win/ie', 'mozilla' )) === FALSE) return $fRef; 
         $editor = &AMPFormElement_HTMLEditor::instance();
         $editor->addEditor( $name );
         return $fRef;
@@ -788,6 +794,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     function _readTemplateBlock( $template, $field_def ) {
         //no block set
+        if ( 'hidden' == $field_def['type']) return $template;
         if ( !( isset( $field_def['block']) && $field_def['block'] )){
 
             //none requested

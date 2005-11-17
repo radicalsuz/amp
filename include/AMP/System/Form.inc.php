@@ -138,6 +138,11 @@ class AMPSystem_Form extends AMPForm {
         $editor = & AMPFormElement_HTMLEditor::instance();
         $editor->register_config_action( 'ActivateSwap( window.'.$this->_editor_fieldswap_object_id.', "" );'); 
         $editor->register_config_action( 'document.forms["'.$this->formname.'"].elements["'.$checkbox_fieldname.'"].checked = true;' );
+        $this->_configHTMLEditor( $editor );
+    }
+
+    function _configHTMLEditor( &$editor ){
+        //interface
     }
 
 }

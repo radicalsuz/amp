@@ -205,14 +205,18 @@ class AMPSystemLookup_IntroTexts extends AMPSystem_Lookup {
 
 }
 class AMPSystemLookup_ToolLinks extends AMPSystem_Lookup {
-    var $datatable = "moduletext";
-    var $id_field = "searchtype";
-    var $result_field = "name";
+    #var $datatable = "moduletext";
+    #var $id_field = "searchtype";
+    #var $result_field = "name";
+    var $datatable = "articles";
+    var $id_field = "link";
+    var $result_field = "title";
 
     function AMPSystemLookup_ToolLinks() {
         $modules = &AMPSystem_Lookup::instance( 'modules');
         $allowed = array_keys( $modules );
-        $this->criteria = "( !isnull( searchtype) and searchtype !='') and modid in (".join( ",", $allowed ) . " )";
+        $this->criteria = "( !isnull( link) and link !='') and type = 2";
+        #$this->criteria = "( !isnull( searchtype) and searchtype !='') and modid in (".join( ",", $allowed ) . " )";
         $this->init();
     }
 }
