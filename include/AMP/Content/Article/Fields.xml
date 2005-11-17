@@ -4,6 +4,9 @@
         <label>&lt;span class='publish_label'&gt;PUBLISH&lt;/span&gt;</label>
         <per>CONTENT_PUBLISH</per>
     </publish>
+	<id>
+		<type>hidden</type>
+	</id>
     <title_header>
         <label>Title</label>
         <type>header</type>
