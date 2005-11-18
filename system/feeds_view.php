@@ -41,7 +41,7 @@ function feed_publish($id,$type,$class) {
     if (AMP_CONTENT_RSS_FULLTEXT == 'true') {
    
     $contact = addslashes( $d->Fields("contacts"));
-	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,sourceurl,source,publish,enteredby,updatedby,datecreated,contact) values('".$title."','".$class."','".$type."','','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','','1','1','".$ID."','".$ID."',now(),'".$contact."')";  
+	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,sourceurl,source,publish,enteredby,updatedby,datecreated,contact) values('".$title."','".$class."','".$type."','','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','','1','0','".$ID."','".$ID."',now(),'".$contact."')";  
 	
 	} else {
 
