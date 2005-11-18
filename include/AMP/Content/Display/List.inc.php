@@ -49,7 +49,10 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     function _activatePager() {
         if ( !$this->_pager_active ) return false;
         $this->_pager = &new AMPContent_Pager( $this->_source );
-        if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
+        if ( !$this->_pager_limit ) return true;
+        
+        $this->_pager->setLimit( $this->_pager_limit ); 
+        $this->_pager->init( $this->_source );
     }
 
     function execute() {

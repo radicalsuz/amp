@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/System/Data/Set.inc.php');
+require_once( 'Modules/Gallery/Image.inc.php');
 
 class GalleryImageSet extends AMPSystem_Data_Set {
     var $datatable = 'gallery';

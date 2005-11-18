@@ -1,141 +1,69 @@
 <?php
+require_once( 'AMP/Content/Display/List.inc.php');
+require_once( 'Modules/Gallery/Image/Set.inc.php');
 
-Class Gallery_Display {
+class Gallery_Display extends AMPContent_DisplayList_HTML {
+    var $_css_class_title    = "gallerytitle";
+    var $_css_class_photocaption = "gallerycap";
+    var $_css_class_container_listentry = "gallerycon";
+    var $_css_id_container_content = "gallery";
 
-	var $gals;
-	var $photo;
-	var $galleryname;
-	var $dbcon;
-	var $list_img_size = "thumb";
-	var $dir = "thumb";
-	var $off =0;
-	var $limit ;
-	var $amount;
-	var $moveFirst;
-	var $moveNext;
-	var $movePrev;
-	var $moveLast;
-	
-	function Gallery_Display($dbcon) {
-		$this->dbcon = $dbcon;
-	}
+    var $_gallery;
+    var $_sourceItem_class = "GalleryImage";
+    var $_pager_limit = 6;
 
-    function execute( ){
-        return $this->build_gallery( );
+    function Gallery_Display( &$gallery, $read_data=true ){
+        $this->_gallery = &$gallery;
+        $source = &new GalleryImageSet( $gallery->dbcon, $gallery->id );
+        $this->init( $source, $read_data );
     }
 
-	function build_gallery() {
-		$this->$gals = $this->dbcon->CacheExecute("SELECT * FROM gallerytype where galleryname != 'none'  order by galleryname asc") or DIE($this->dbcon->ErrorMsg());
-				
-		if ($_GET["gal"]) {
-		// set the current gallery name
-			$galn = $gals = $this->dbcon->CacheExecute("SELECT * FROM gallerytype where id = ".$_GET["gal"]) or DIE($this->dbcon->ErrorMsg());
-			$this->galleryname = $galn->Fields("galleryname");
+    function _HTML_listingFormat( $html ) {
+        $intro =  $this->_HTML_title( $this->_gallery->getName( ))
+                . $this->_HTML_blurb( $this->_gallery->getBlurb( ));
+        return $intro . $this->_HTML_inDiv( $html, array( 'id' => $this->_css_id_container_content ) );
+    }
 
-		// get the count 	
-			$sqlct  = "SELECT  COUNT(DISTINCT id)  from gallery where publish =1 and galleryid = ".$_GET["gal"];
-			$listct=$this->dbcon->CacheExecute($sqlct)or DIE("could not get gallerycount".$this->dbcon->ErrorMsg());
-			$this->amount = $listct->fields[0];
-			if (!$this->limit) {$this->limit = $this->amount;}
+    function _HTML_title( $name ){
+        if ( !$name ) return false;
+        return $this->_HTML_in_P( $name, array( "class"=>$this->_css_class_title ) ); 
+    }
 
-		// set up offset varaibales
-			if ($_GET["offset"]) {
-				$this->off = $_GET['offset'];
-			}
-			$slimit = " LIMIT ".$this->off.",".$this->limit;
+    function _HTML_blurb( $blurb ) {
+        if (!$blurb) return false;
+        return $this->_HTML_in_P( converttext($blurb), array('class'=>$this->_css_class_text));
+    }
 
-		// do the query		
-			$this->photo = $this->dbcon->CacheExecute("SELECT * FROM gallery where  gallery.publish=1 and galleryid = ".$_GET["gal"]." ORDER BY date, id DESC ".$slimit) or DIE($this->dbcon->ErrorMsg());
-		
-		// get the big list
-		} else {
- 			$this->photo=$this->dbcon->CacheExecute("SELECT * FROM gallery where publish=1") or DIE($this->dbcon->ErrorMsg());
-		}
+    function _HTML_listItemLayout ( $text, $image ) {
+        return  $this->_HTML_inDiv( $image . $text, array( 'class' => $this->_css_class_container_listentry ) );
+    }
 
-		$this->set_moves();
-	}
-	
-
-	function set_moves() {
-		//if ( $this->amount > 1) {;
-			$MM_removeList = "&offset=";
-			reset ($_GET);
-			while (list ($key, $val) = each ($_GET)) {
-				$nextItem = "&".strtolower($key)."=";
-				if (!stristr($MM_removeList, $nextItem)) {
-					$MM_keepURL .= "&".$key."=".urlencode($val);
-				}
-			}
-			
-			$this->moveFirst=   $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=0";
-//			if ($this->amount <= $this->off) {
-				$this->moveNext =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($this->off+$this->limit);
-		//	}
-			$this->movePrev =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($this->off-$this->limit);
-			$loffset = (floor($this->amount / $this->limit) * $this->limit);
-			$this->moveLast =  $_SERVER['PHP_SELF']."?".$MM_keepURL."&offset=".($loffset);	
-		//}
-	}
-
-//display move links
-	function display_moves($first_icon,$last_icon,$css) {
-		
-		return $html;
-	
-	}
-
-	function gal_index() {
-		while(!$this->gals->EOF) {
-			// get the image that will be display in the list
-			$galimage = $this->gals->Fields("img");
-			if (!$galimage) {
-				$gphoto=$this->dbcon->CacheExecute("SELECT img FROM gallery where publish=1 and galleryid = ".$this->gals->Fields("id")." order by RAND()") or DIE($this->dbcon->ErrorMsg());
-				$galimage = $gphoto->Fields("img");
-			}
-		
-   			$daimg = AMP_LOCAL_PATH.DIRECTORY_SEPARATOR."img/pic/".$galimage;
-			echo '<div class="gallerylist">';
-			if (file_exists($daimg) && ($galimage)) { 
-				echo '<a href="gallery.php?gal=' 
-					. $this->gals->Fields("id") 
-					. '"><img src="img/'.$this->list_img_size.'/' 
-					. $galimage 
-					. '"></a>';         
-			} 
+    function _HTML_listItemDescription( &$image ) {
+        $caption = $image->getCaption( ); 
+        $imagedate = $this->_HTML_listItemDate( $image->getItemDate( ));
+        $source = $this->_HTML_listItemSource( $image->getSource( ) );
+        if ( $complete_caption = $caption ) {
+            if ( $imagedate ) $complete_caption .= "&nbsp;" . $imagedate;
+        } else {
+            $complete_caption = $imagedate ? $imagedate : false;
+        }
+        return $this->_HTML_inDiv( $complete_caption . $source, array( 'class' => $this->_css_class_photocaption ));
         
-        	echo '<a href="gallery.php?gal='
-        	 . $this->gals->Fields("id")
-        	 . '">' 
-        	 . $this->gals->Fields("galleryname")
-        	 . '</a><p>'
-        	 . $this->gals->Fields("description")
-        	 . '</p> <br />';
-        	 echo '</div>';
-   
-			$this->gals->MoveNext();
-		}
-		return $html;
-	}	
 
-		
-	function gal_ddmenu() {
-		$html = '<br>
-		<select onChange="MM_jumpMenu(\'parent\',this,0)" class="name">
-					  <option SELECTED value="gallery.php">Select Photo Gallery</option>
-					  <option value="gallery.php">-----</option>';
-		
-		while (!$this->gals->EOF) { 
-			$html .=  '<option value="gallery.php?gal='. $this->gals->Fields("id") .'" >'. $this->gals->Fields("galleryname");
-			$html .= '</option>';
-			$this->gals->MoveNext();
-		}
-		$html .='</select>';
-		if ($this->gals->RecordCount() > 1) {
-			return $html;
-		}
-	}
+    }
+
+    function _HTML_listItemSource( $source ){
+        if ( !$source ) return false;
+        return    $this->_HTML_newline( )
+                . $this->_HTML_italic( $source )
+                . $this->_HTML_newline( );
+    }
+
+    function _HTML_thumbnail( &$image ){
+        if ( !$result = PARENT::_HTML_thumbnail( $image )) return false;
+        return $this->_HTML_link( $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $result, array( 'target' => '_blank') );
+    }
+
 
 }
-
-
 ?>
