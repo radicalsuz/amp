@@ -25,7 +25,14 @@ class ContentClass_Display extends ArticleSet_Display {
         if (! $this->_showListIntro) return false; 
 
         $introClass = AMP_CONTENT_LIST_INTRO_DISPLAY;
-        return new $introClass( $this->_class );
+        $path = split( '_', $introClass );
+        include_once( 'AMP/Content/'.join( '/', array_reverse( $path ) ) .'.inc.php' );
+
+        if( class_exists( $introClass ) ) {
+            return new $introClass( $this->_class );
+        }
+        trigger_error( $introClass.'is not declared');
+        return false;
     }
 
     function setListIntro( $show_intro = true ) {
