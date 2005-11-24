@@ -10,8 +10,8 @@ require_once(DIA_TEST_DIR.'config.php');
 class GroupTest_DIA extends GroupTest {
 	function GroupTest_DIA($name = 'DIA Test Suite') {
 		$this->GroupTest($name);
-		$this->addTestFile('TestDIA_API.php');
-		$this->addTestFile('TestDIA_Object.php');
+		$this->addTestFile(DIA_TEST_DIR.'TestDIA_API.php');
+		$this->addTestFile(DIA_TEST_DIR.'TestDIA_Object.php');
 	}
 
 }
