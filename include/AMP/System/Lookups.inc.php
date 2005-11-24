@@ -268,9 +268,23 @@ class AMPSystemLookup_Lists extends AMPSystem_Lookup {
             $this->datatable = 'phplist_list';
             $this->criteria = 'active=1';
         }
-        if ( AMP_MODULE_BLAST == 'Listserve'){
+        if ( AMP_MODULE_BLAST == 'Listserve') {
             $this->criteria = "publish=1 and !isnull( subscribe_address) and subscribe_address != ''";
         }
+        if ( AMP_MODULE_BLAST == 'DIA') {
+			require_once('DIA/API.php');
+			$api =& DIA_API::create();
+			$groups = $api->getGroupNamesAssoc();
+			$this->dataset = $groups;
+
+			//update our local copy of available DIA lists
+			$dbcon =& AMP_Registry::getDbcon();
+			foreach($groups as $id => $name) {
+				$list = array('id' => $id, 'name' => $name, 'description' => 'DIA Group', 'service_type' => 'DIA');
+				$dbcon->Replace('lists', $list, array('id', 'service_type'), $quote=true); 
+			}
+			return;
+		}
 
         $this->init();
         

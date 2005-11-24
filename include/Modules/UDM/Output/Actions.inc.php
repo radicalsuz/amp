@@ -362,17 +362,24 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         }
     }
 
-    function subscribe_set( $set ){
-        trigger_error( 'in sub');
+    function subscribe_set( $set, $api = null ){
         if ( !( isset( $_POST['blastlist_id'] ) && $list_id = $_POST['blastlist_id'])) return 'Please select a list';
-        require_once( 'Modules/Blast/API.inc.php');
         $ids = split( ",", $set );
-
-        $_PHPlist = &new PHPlist_API( $this->dbcon );
         $emailSet = &AMPSystem_Lookup::instance( 'userDataEmails');
         $new_subscribers = &array_combine_key( $ids, $emailSet );
 
-        $count = $_PHPlist->add_subscribers( $new_subscribers, $list_id );
+		if(AMP_MODULE_BLAST == 'PHPlist') {
+			require_once( 'Modules/Blast/API.inc.php');
+			$_PHPlist = &new PHPlist_API( $this->dbcon );
+			$count = $_PHPlist->add_subscribers( $new_subscribers, $list_id );
+		} elseif(AMP_MODULE_BLAST == 'DIA') {
+			require_once('DIA/API.php');
+			if(!isset($api)) {
+				$api =& DIA_API::create();
+			}
+			$result = $api->addMembersByEmail($new_subscribers, $list_id);
+			$count = sizeof($result);
+		}
         $listSet = &AMPSystem_Lookup::instance( 'lists');
         return ( $count . ' users subscribed to '.$listSet[$list_id]);
     }

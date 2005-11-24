@@ -1,14 +1,24 @@
 <?php
 
+if(!defined('DIR_SEP')) {
+	define('DIR_SEP', DIRECTORY_SEPARATOR);
+}
+
+if(!defined('DIA_DIR')) {
+	define('DIA_DIR', dirname(__FILE__) . DIR_SEP);
+}
+
+if(!defined('DIA_OBJECT_DIR')) define('DIA_OBJECT_DIR', DIA_DIR.'Object'.DIR_SEP);
+
 require_once('DIA/API.php');
 require_once('XML/Unserializer.php');
 
 class DIA_Object {
 
-	var $_interface;
+	var $_api;
 
 	var $_key;
-	var $_table = 'supporter';
+	var $_table;
 	var $_properties;
 
 	function DIA_Object($key = null, $properties = null, $interface = null) {
@@ -16,10 +26,14 @@ class DIA_Object {
 	}
 
 	function init($key = null, $properties = null, $interface = null) {
+		if( !defined('DIA_API_DEBUG') ) {
+			define('DIA_API_DEBUG', false);
+		}
+
 		$this->_key = $key;
 		$this->set($properties);
 		if(!isset($interface)) {
-			$interface = DIA_API::getDefaultAPI();
+			$interface = DIA_API::create();
 		}
 		$this->interface($interface);
 	}
@@ -28,17 +42,38 @@ class DIA_Object {
 	function &create($type = null, $key = null, $properties = null, $interface = null) {
 		if(!isset($type)) $type = 'Object';
 		$type = ucfirst($type);
-		if(include_once($type.'.php')) {
+		if(include_once(DIA_OBJECT_DIR.$type.'.php')) {
 			$classname = 'DIA_'.$type;
 			return new $classname($key, $properties, $interface);
 		}
 	}
 
-	function set($properties) {
-		if(!(isset($properties) && is_array($properties))) return;
+	function setProperty($name, $value) {
+		$this->_properties[$name] = $value;
+	}
+
+	function getProperty($name) {
+		if(isset($this->_properties[$name])) {
+			return $this->_properties[$name];
+		} else {
+			return null;
+		}
+	}
+
+	function set($properties, $value = null) {
+		if(!isset($properties)) return;
+
+		if(!is_array($properties)) {
+			if(isset($value)) {
+				$properties = array($properties => $value);
+			} else {
+				$this->error('set called with no value');
+				return false;
+			}
+		}
 
 		foreach($properties as $name => $value) {
-			$this->_properties[$name] = $value;
+			$this->setProperty($name, $value);
 		}
 	}
 
@@ -47,16 +82,19 @@ class DIA_Object {
 
 		if(is_array($properties)) {
 			foreach($properties as $name) {
-				$return[$name] = $this->_properties[$name];
+				$return[$name] = $this->getProperty($name);
 			}
 			return $return;
 		}
 
-		return $this->_properties[$property];
+		return $this->getProperty($property);
+	}
+
+	function cacheGet() {
 	}
 		
 	function read() {
-		$api =& $this->interface();
+		$api =& $this->api();
 		$xml = $api->get($this->getTable(), array('key' => $this->getKey()));
 		$xmlparser =& new XML_Unserializer();
 		$status = $xmlparser->unserialize($xml);
@@ -66,8 +104,8 @@ class DIA_Object {
 	}
 
 	function save() {
-		$api =& $this->interface();
-		return $api->saveObject($this);
+		$api =& $this->_api;
+		return $api->process($this);
 	}
 
 	function &interface($api = null) {

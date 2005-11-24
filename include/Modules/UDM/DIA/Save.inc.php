@@ -15,18 +15,42 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             'type'=>'text',
             'size'=>'5',
             'available'=>true,
-            'label'=>'DIA Organization Key'
+            'label'=>'DIA AMP User Name'
 			),
 		'password' => array(
             'type'=>'text',
             'size'=>'5',
             'available'=>true,
-            'label'=>'DIA Organization Key'
+            'label'=>'DIA AMP User Password'
 			)
         );
 
+    var $_field_prefix = 'DIA';
+    var $_listfield_template = array(
+                'public'   => true,
+                'enabled'  => true,
+                'type'     => 'checkbox',
+                'required' => false,
+                'default'  => 1 );
+
+    var $_listfield_header = array(
+            'label'     => 'Subscribe to the following lists:',
+            'public'    => true,
+            'enabled'   => true,
+            'type'      => 'header' );
+
     function UserDataPlugin_Save_DIA(&$udm, $plugin_instance) {
         $this->init($udm, $plugin_instance);
+    }
+
+	function _register_fields_dynamic() {
+        if( !( $lists = $this->udm->getRegisteredLists( ))) return;
+        $this->fields[ 'list_header' ] = $this->_listfield_header;
+
+        foreach ( $lists as $list_id => $list_name ){
+            $listField = array( 'label'    => $list_name );
+            $this->fields[ 'list_' . $list_id] = $listField + $this->_listfield_template;
+        }
     }
 
     function getSaveFields() {
@@ -56,15 +80,20 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
 
 		$api =& DIA_API::create();
 		$supporter_id = $api->addSupporter( $data[ 'Email'], $data );
-//        $diaRequest = new diaRequest( $options[ 'orgCode' ] );
-//        $result = $diaRequest->addSupporter( $data[ 'Email' ], $data);
 
+/*XXX: there is an api for linking with one step in the addSupporter method
+  TODO: make that api clearer and use that
+*/
 		if(isset($options['link'])) {
 			$api->linkSupporter($options['link'], $supporter_id);
 		}
 
-        return $supporter_id;
+		$lists = $this->udm->getRegisteredLists();
+		foreach( $lists as $list_id => $list_name ) {
+			$api->linkSupporter($list_id, $supporter_id);
+		}
 
+        return $supporter_id;
     }
 
 	function translate( $data ) {

@@ -34,6 +34,10 @@ class UserDataPlugin_Start_AMPlist extends UserDataPlugin {
         $save = & $udm->registerPlugin( 'Listserve', 'Save', $plugin_instance );
     }
 
+	function initDIA( &$udm, $plugin_instance ) {
+        $save = & $udm->registerPlugin( 'DIA', 'Save', $plugin_instance );
+	}
+
     function execute() {
         //do nothing
     }

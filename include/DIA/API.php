@@ -35,9 +35,11 @@ class DIA_API {
         if(include_once(DIA_API_DIR . $api . '.php')) {
             $classname = 'DIA_API_'.$api;
             return new $classname();
-        }
+        } else {
+			return DIA_API::error('failed to include API package');
+		}
 
-		return $this->error('Could not create new DIA API');
+		return DIA_API::error('Could not create new DIA API using '.$api.' as the interface.');
     }
 
 	function getDefaultAPI() {
@@ -45,13 +47,24 @@ class DIA_API {
 	}
 
 	//options are key, column, order, limit, where, desc
-	function get( $table, $options ) {
-		trigger_error( "get must be overwritten" );
+	function get( $table, $options = null ) {
+		if(defined('DIA_API_CACHE_ON') && DIA_API_CACHE_ON && !(true == $options['DIA_API_CACHE_OFF'])) {
+			$this->cacheGet($table, $options);
+		}
+		$this->error( "get must be overwritten" );
 	}
 
 	//options are key, debug
 	function process( $table, $data, $options = null ) {
-		trigger_error( "process must be overwritten" );
+		$this->error( "process must be overwritten" );
+	}
+
+	function cacheGet($table, $options) {
+		$this->error( "cacheGet must be overwritten" );
+	}
+
+	function cacheProcess() {
+		$this->error( "cacheProcess must be overwritten" );
 	}
 
 	//thank you magpie
@@ -75,41 +88,106 @@ class DIA_API {
         }
     }
 
-	//object support methods
-	function readObject(&$object, $type=null) {
-		if(!is_object($object)) {
-			$key = $object;
-			$object = DIA_Object::create($type, $key);
-		}
-		$options = array('key' => $object->getKey());
-		$result = $this->get($object->getTable(), $options);
-		return $result;
-	}
-
-	function saveObject(&$object) {
-		$result = $this->process($object->getTable(), array('key' => $object->getKey()));
-		return $result;
-	}
-
 	//convenience
 	function describe( $table ) {
 		return $this->get( $table, array('desc'=>true));
 	}
 
-    function addSupporter ( $email, $info = array() ) {
+    function addSupporter ( $data, $deprecated_info = array() ) {
 
-        $info[ 'Email' ] = $email;
+		if(!is_array($data)) {
+			$data = array('Email' => $data);
+		}
+		//not for long
+		$data = array_merge($data, $deprecated_info);
 
-        $supporter_id = $this->process( "supporter", $info );
+//        $info[ 'Email' ] = $email;
+
+		$links = $data['link'];
+		unset($data['link']);
+
+        $supporter_id = $this->process( "supporter", $data );
+
+		$this->processLinks($supporter_id, $links);
 
         return $supporter_id;
 
     }
 
-    function linkSupporter ( $list, $supporter ) {
+	function getSupporter($key) {
+		return $this->get('supporter', $key);
+	}
 
-		$this->process('supporter_groups', array('groups_KEY' => $list,
-												 'supporter_KEY' => $supporter));
+	function addGroup( $data ) {
+		return $this->process( "groups", $data );
+	}
+
+	function isMember($supporter_key, $group_key) {
+		return $this->getRecordKey('supporter_groups', array('supporter_KEY' => $supporter_key,
+															 'groups_KEY' => $group_key));
+	}
+
+	function isMemberByEmail($email, $group_key) {
+		$supporter_key = $this->getSupporterKeyByEmail($email);
+		return $this->isMember($supporter_key, $group_key);
+	}
+
+	function getSupporterKeyByEmail($email) {
+		return $this->getSupporterKey(array('Email' => $email));
+	}
+
+	function getSupporterKey($criteria) {
+		return $this->getRecordKey('supporter', $criteria);
+	}
+
+	function getRecordKey($table, $criteria) {
+		foreach($criteria as $key => $value) {
+			$where[] = $key.'="'.$value.'"';
+		}
+		$record = $this->get($table, array('where' => '('.join(' AND ', $where).')',
+										   'column' => $table.'_KEY'));
+		return $record['key'];
+	}
+
+	/***
+	returns an array of groups data
+	*/
+	function getGroups($options=null) {
+		return $this->get("groups", $options);
+	}
+
+	function getGroupNames() {
+		return $this->getGroups(array('column' => 'Group_Name'));
+	}
+
+	function getGroupNamesAssoc() {
+		$names = $this->getGroupNames();
+		foreach($names as $name) {
+			$names_assoc[$name['groups_KEY']] = $name['Group_Name'];
+		}
+		return $names_assoc;
+	}
+		
+	function processLinks($supporter_key, $links) {
+		foreach($links as $link => $keys) {
+			if(!is_array($keys)) {
+				$keys = array($keys);
+			}
+			foreach($keys as $key) {
+				$results[] = $this->linkSupporter($key, $supporter_key, $link);
+			}
+		}
+		return $results;
+	}
+
+    function linkSupporter ( $key, $supporter, $link = 'groups' ) {
+		$link_table = 'supporter_'.$link;
+		$link_key = $link.'_KEY';
+
+		return $this->process($link_table,
+							  array('supporter_KEY' => $supporter,
+									$link_key => $key)
+							 );
 /*
         $data = array();
         
@@ -123,21 +201,15 @@ class DIA_API {
 
     }
 
-	function addGroup( $data ) {
-
-		return $this->process( "groups", $data );
-
-	}
-
 }
 
 function dia_api_get($table, $options) {
-	$api =& new DIA_API();
+	$api =& DIA_API::create();
 	return $api->get($table, $options);
 }
 
-function dia_api_process($table, $data) {
-	$api =& new DIA_API();
-	return $api->process($table, $data);
+function dia_api_process($table, $data, $options=null) {
+	$api =& DIA_API::create();
+	return $api->process($table, $data, $options);
 }
 ?>
