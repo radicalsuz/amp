@@ -66,7 +66,7 @@ td.list_entry {
 }
 /* GALLERY MODULE */
 /* list of gallerys */
-.gallerylist { padding: 5px; }
+.gallerylist { padding: 5px; text-align: left; }
 .gallerylist a { font-size: 14px; }
 .gallerylist img { float: left; margin: 8px; border: 1px solid #666; }
 .gallerylist br { clear: both; }
@@ -77,7 +77,7 @@ font-size: 11px; font-weight: normal; font-style: italic; color: #666; }
 /* indiv gallery page */
 .gallerytitle { font-size: 16px; font-weight: bold; color: #333333; }
 div.gallery { padding: 0; margin: 0; border: 0; width: 100%; border: 1px solid #666; float:left;}
-.gallerycon { width: 200px; height: 200px; float: left; margin: 10px; text-align: center; border: 0px solid #666; }
+div.gallerycon { width: 200px; height: 200px; float: left; margin: 10px; text-align: center; border: 0px solid #666; }
 .gallerycon img { float: center; padding: 5px; border: 1px solid #666; }
 .gallerycap { padding: 5px; border: 0px solid #666; margin: 5px; }
 div.gallery_pager { padding: 10px 0px 40px 0px; }
