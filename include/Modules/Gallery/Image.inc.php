@@ -58,6 +58,12 @@ class GalleryImage extends AMPSystem_Data_Item {
     function getItemDate( ){
         return $this->getData( 'date');
     }
+    function getGalleryName( ){
+        if ( !$id = $this->getGallery( )) return false;
+        $galleries = &AMPContent_Lookup::instance( 'galleries');
+        if ( !isset( $galleries[$id])) return false;
+        return $galleries[$id];
+    }
 
 }
 ?>

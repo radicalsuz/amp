@@ -12,6 +12,13 @@ class Gallery_Form extends AMPSystem_Form_XML {
 
     function setDynamicValues( ){
         $this->addTranslation( 'date', '_makeDbDateTime', 'get');
+        $this->addTranslation( 'id', '_showGalleryImages', 'set');
+    }
+
+    function _showGalleryImages( $data, $fieldname ) {
+        if ( isset( $data['id'])) {
+            $this->setFieldValueSet( 'img', AMPContentLookup_GalleryImages::instance( $data['id']));
+        }
     }
 }
 ?>

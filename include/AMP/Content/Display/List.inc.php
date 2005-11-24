@@ -36,6 +36,8 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     var $_css_class_container_listentry = "list_entry";
     var $_css_class_container_listimage = "list_image";
 
+    var $_list_image_class = AMP_IMAGE_CLASS_THUMB;
+
     function AMPContent_DisplayList_HTML ( &$source, $read_data = true ) {
         $this->init( $source, $read_data );
     }
@@ -163,11 +165,13 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     function _HTML_thumbnail( &$image ) {
         if (!$image) return false;
-        $reg = &AMP_Registry::instance();
-        if ($thumb_attr = $reg->getEntry( AMP_REGISTRY_CONTENT_IMAGE_THUMB_ATTRIBUTES )) {
-            $this->_thumb_attr = array_merge( $this->_thumb_attr, $thumb_attr );
+        if ( AMP_IMAGE_CLASS_THUMB == $this->_list_image_class ){
+            $reg = &AMP_Registry::instance();
+            if ($thumb_attr = $reg->getEntry( AMP_REGISTRY_CONTENT_IMAGE_THUMB_ATTRIBUTES )) {
+                $this->_thumb_attr = array_merge( $this->_thumb_attr, $thumb_attr );
+            }
         }
-        return $this->_HTML_image( $image->getURL( AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ) ;
+        return $this->_HTML_image( $image->getURL( $this->_list_image_class ), $this->_thumb_attr ) ;
     }
 
     function _HTML_subheader( $subheader ) {

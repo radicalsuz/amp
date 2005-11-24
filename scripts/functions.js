@@ -97,3 +97,7 @@ function AMP_showValid( item_value, elementid ) {
 	else target_element.style.display = "none";
 	
 }
+
+function AMP_openURL( target_url_here ) {
+	parent.location = target_url_here;
+}

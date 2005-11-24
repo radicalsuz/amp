@@ -48,7 +48,7 @@ $html .=  $buildform->add_row('Module', $Mod);
 
 $html .= addfield('description','Setting Description','text',$R->Fields("description"));
 $html .= addfield('setting','Value','textarea',$R->Fields("setting"));
-$html .= $buildform->add_header('Advanced Seetings', 'intitle');
+$html .= $buildform->add_header('Advanced Settings', 'intitle');
 $html .= addfield('var','Var Name','text',$R->Fields("var"));
 $html .= addfield('display','Public','text',$R->Fields("display"),1);
 

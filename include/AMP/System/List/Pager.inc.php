@@ -102,8 +102,13 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         if ( !$this->source_total) return false;
         if ($this->page_total > $this->source_total) $this->page_total = $this->source_total;
         if ($this->page_total) $start = 1;
-        if ($this->_offset) $start = $this->_offset;
-        return "Displaying $start-".$this->page_total." of ".$this->source_total;
+        if ($this->_offset) $start = $this->_offset + 1;
+        return "Displaying ".$this->_positionRange( $start )." of ".$this->source_total;
+    }
+    function _positionRange( $start ){
+        if ( 1 == $this->_qty ) return $start;
+        return $start . "-".$this->page_total;
+
     }
 
     function _pageLinks( $show_jumps = true ) {

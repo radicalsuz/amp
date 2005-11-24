@@ -33,7 +33,7 @@ class AMPContentLookup_Sections extends AMPContent_Lookup {
     }
 }
 
-class AMPContentLookup_ActiveClasses extends AMPContentLookup_Class {
+class AMPContentLookup_ActiveClasses {
     
     var $dataset;
     
@@ -41,8 +41,8 @@ class AMPContentLookup_ActiveClasses extends AMPContentLookup_Class {
         $articleset = & new ArticleSet ( AMP_Registry::getDbcon() );
         if (!( $counts = $articleset->getGroupedIndex( 'class' ))) return false;
         $class_set = & AMPContent_Lookup::instance( 'class' );
-        $this->criteria = "id in (" . join( ', ', array_keys( $counts ) ). ")";
-        $this->init();
+        $this->dataset = array_combine_key( array_keys( $counts ), $class_set );
+        asort( $this->dataset );
     }
 }
 
@@ -133,6 +133,32 @@ class AMPContentLookup_Galleries extends AMPContent_Lookup{
         $this->init( );
     }
 
+}
+
+class AMPContentLookup_GalleryImages extends AMPContent_Lookup {
+    var $datatable = 'gallery';
+    var $result_field = 'img';
+    var $sortby = 'img';
+
+    function AMPContentLookup_GalleryImages( $gallery_id = null ){
+        if ( isset( $gallery_id )) $this->_addCriteriaGallery( $gallery_id );
+        $this->init( );
+    }
+
+    function _addCriteriaGallery( $gallery_id ){
+        $this->criteria = "galleryid =" . $gallery_id;
+    }
+
+    function &instance( $gallery_id ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new AMPContentLookup_GalleryImages( $gallery_id );
+        } else {
+            $lookup->_addCriteriaGallery( $gallery_id );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
 }
 
 ?>

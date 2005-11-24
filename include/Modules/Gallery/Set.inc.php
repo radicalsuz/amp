@@ -22,5 +22,9 @@ class GallerySet extends AMPSystem_Data_Set {
         return $display->execute();
     }
 
+    function addCriteriaLive( ){
+        $this->addCriteria( 'publish=1');
+    }
+
 }
 ?>

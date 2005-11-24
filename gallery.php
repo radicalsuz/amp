@@ -1,27 +1,39 @@
 <?php
-/*********************
-01-04-2004  v3.01
-Module:  Photo Gallery
-Description:  displays images in  the photo gallery
-CSS: text, title
-VARS: $fullgal, $divz
-GET VARS: gal
-To Do:  gallery by type
-	better sql
-	make vars data vars
 
-*********************/ 
-//$fullgal =0;
-//$divz =2;  //numer of rows 
-
+/**
+ *  Gallery Display Page
+ *
+ *  @version 3.5.7
+ *  @author Austin Putman <austin@radicaldesigns.org>
+ *  @module Content
+ */
 $modid =8;
 $mod_id = 27 ;
-#include("sysfiles.php");
-#include("header.php"); 
+
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");
+require_once( 'Modules/Gallery/Gallery.php');
 
+$currentPage = &AMPContent_Page::instance( );
+$gallery_id = ( isset( $_GET['gal']) && $_GET['gal']) ? $_GET['gal'] : false; 
+$gallery_id = ( isset( $_GET['id']) && $_GET['id']) ? $_GET['id'] : $gallery_id; 
+
+if ( isset( $fullgal ) && 2 == $fullgal && !defined( 'AMP_GALLERY_DISPLAYTYPE')) define( 'AMP_GALLERY_DISPLAYTYPE' , 'Single');
+if ( !defined( 'AMP_GALLERY_DISPLAYTYPE')) define( 'AMP_GALLERY_DISPLAYTYPE', 'Full');
+
+if ( $gallery_id ){
+    $gallery = &new Gallery( $dbcon, $gallery_id ) ;
+    $currentPage->contentManager->addDisplay( $gallery->getDisplay( AMP_GALLERY_DISPLAYTYPE ));
+} else {
+    require_once( 'Modules/Gallery/SetDisplay.inc.php');
+    $gallerySet = &new GallerySet( $dbcon );
+    $currentPage->contentManager->addDisplay( $gallerySet->getDisplay( ));
+}
+
+require_once( 'AMP/BaseFooter.php');
+
+/*
 
 if ($_GET["gal"]) {
 	$photo = $dbcon->CacheExecute("SELECT gallery.*, gallerytype.galleryname FROM gallery, gallerytype where gallery.galleryid=gallerytype.id and gallery.galleryid = ".$_GET["gal"]." and gallery.publish=1 ORDER BY gallery.date DESC") or DIE($dbcon->ErrorMsg());
@@ -260,6 +272,7 @@ echo '</select>';
 
 
 /* CREATE THE LIST OF GALLERYS */
+/*
 if (!$_GET['gal']) { 
 	
 	while(!$gallerys->EOF) {
@@ -299,6 +312,7 @@ elseif ($photo->Fields("img") == NULL) {
 } 
 
 /* OR DISPLAY A SPECIFIC GALLERY */
+/*
 elseif ($fullgal == 1) {
 	## fullgallery -set to 1 in module control then show entire gallery
 	if (!$dir) { 
@@ -397,6 +411,7 @@ else {
                                 </a><br><?php }?>
                                 <?php if ($photo->Fields("date") != ("0000-00-00 00:00:00")) { ?><?php echo DoDate( $photo->Fields("date"), 'F jS Y') ?><?php }
 /* if ($photo->Fields("date") != ("0000-00-00 00:00:00")) */
+/*
 ?><br>Click <a href="img/original/<?php echo $photo->Fields("img")?>">Here</a> For Full Size Image
                               </p>
                               <p> 
@@ -415,4 +430,6 @@ else {
 
 <?php 
  include("AMP/BaseFooter.php"); 
+?>
+*/
 ?>

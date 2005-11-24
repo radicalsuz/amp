@@ -250,8 +250,8 @@ if ( !function_exists( 'statelist' ) ) {
 }
 if ( !function_exists( 'AMP_buildSelect' )) {
 
-    function AMP_buildSelect( $name, $values, $selected = null ) {
-        return '<select name="'. $name . "\">\n".
+    function AMP_buildSelect( $name, $values, $selected = null, $attr = false ) {
+        return '<select name="'. $name . "\"$attr>\n".
                 AMP_buildSelectOptions( $values, $selected). "\n</select>";
     }
 }

@@ -12,7 +12,7 @@
         <default>today</default>
     </date>
     <img>
-        <type>text</type>
+        <type>imagepicker</type>
         <label>Primary Image</label>
     </img>
     <description>
