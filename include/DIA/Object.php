@@ -10,8 +10,10 @@ if(!defined('DIA_DIR')) {
 
 if(!defined('DIA_OBJECT_DIR')) define('DIA_OBJECT_DIR', DIA_DIR.'Object'.DIR_SEP);
 
-require_once('DIA/API.php');
-require_once('XML/Unserializer.php');
+require_once(DIA_DIR.'API.php');
+
+if(!defined('DIA_PEAR_DIR')) define('DIA_PEAR_DIR', DIA_DIR.'PEAR'.DIR_SEP);
+require_once(DIA_PEAR_DIR.'XML/Unserializer.php');
 
 class DIA_Object {
 

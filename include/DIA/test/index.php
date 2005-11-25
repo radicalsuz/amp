@@ -1,11 +1,16 @@
 <?php
-define('SIMPLE_TEST', '../../../test/simpletest/');
-
 if(!defined('DIR_SEP')) {
     define('DIR_SEP', DIRECTORY_SEPARATOR);
 }
 
-if(!defined('DIA_TEST_DIR')) define('DIA_TEST_DIR', dirname(__FILE__).DIR_SEP);
+if(!defined('SIMPLE_TEST')) {
+	define('SIMPLE_TEST', 'simpletest'.DIR_SEP);
+}
+
+if(!defined('DIA_TEST_DIR')) {
+	define('DIA_TEST_DIR', dirname(__FILE__).DIR_SEP);
+}
+
 require_once(DIA_TEST_DIR.'config.php');
 
 define('DIA_TEST_RUNNER', true);

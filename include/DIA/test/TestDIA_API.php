@@ -5,7 +5,7 @@ require_once( DIA_TEST_DIR.'config.php' );
 require_once( DIA_DIR.'API.php' );
 
 require_once(SIMPLE_TEST.'mock_objects.php');
-require_once('HTTP/Request.php');
+require_once(DIA_PEAR_DIR.'HTTP/Request.php');
 Mock::generate('HTTP_Request', 'MockHttpRequest');
 
 class TestDIA_API extends UnitTestCase {

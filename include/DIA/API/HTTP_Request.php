@@ -1,7 +1,7 @@
 <?php
 
-require_once('DIA/API.php');
-require_once('HTTP/Request.php');
+require_once(DIA_DIR.'API.php');
+require_once(DIA_PEAR_DIR.'HTTP/Request.php');
 
 class DIA_API_HTTP_Request extends DIA_API {
 

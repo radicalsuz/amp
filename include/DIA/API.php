@@ -10,6 +10,12 @@ if(!defined('DIA_DIR')) {
 
 if(!defined('DIA_API_DIR')) define('DIA_API_DIR', DIA_DIR.'API'.DIR_SEP);
 
+if(defined('DIA_PEAR_DIR') &&
+	(false === strpos(get_include_path(), DIA_PEAR_DIR))) {
+	set_include_path(get_include_path().PATH_SEPARATOR.DIA_PEAR_DIR);
+}
+	
+
 class DIA_API {
 
 	var $ERROR = "";
