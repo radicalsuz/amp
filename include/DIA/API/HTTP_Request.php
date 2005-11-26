@@ -1,7 +1,13 @@
 <?php
 
 require_once(DIA_DIR.'API.php');
-require_once(DIA_PEAR_DIR.'HTTP/Request.php');
+
+//probably a better way of going about this
+if(defined('DIA_PEAR_DIR') &&
+	(false === strpos(get_include_path(), DIA_PEAR_DIR))) {
+	set_include_path(get_include_path().PATH_SEPARATOR.DIA_PEAR_DIR);
+}
+require_once('HTTP/Request.php');
 
 class DIA_API_HTTP_Request extends DIA_API {
 
