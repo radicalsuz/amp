@@ -26,6 +26,10 @@ if(! defined('SIMPLE_TEST')) {
     define('SIMPLE_TEST', DIA_TEST_DIR.'simpletest/');
 }
 
+if(!defined('DIA_PEAR_DIR')) {
+	define('DIA_PEAR_DIR', DIA_DIR.'extlib'.DIR_SEP.'PEAR'.DIR_SEP);
+}
+
 require_once(SIMPLE_TEST.'unit_tester.php');
 require_once(SIMPLE_TEST.'reporter.php');
 
