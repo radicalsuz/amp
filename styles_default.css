@@ -64,6 +64,18 @@ span.udm_header {
 td.list_entry {
 	width: 90%;
 }
+
+.pullquote {
+	width:25%;
+	padding:10px;
+	float:right; 
+	background-color:#999999; 
+	margin-top:0px; 
+	margin-left:10px; 
+	margin-right:10px;
+	margin-bottom:10px;
+}	
+
 /* GALLERY MODULE */
 /* list of gallerys */
 .gallerylist { padding: 5px; text-align: left; }
