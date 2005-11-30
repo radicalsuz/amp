@@ -262,4 +262,5 @@ else {
   $event->Close();
   $revent->Close();
    
- include("AMP/BaseFooter.php"); ?>
+ include("AMP/BaseFooter.php"); 
+ ?>

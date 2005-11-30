@@ -1,46 +1,46 @@
 <array>
 
 <home>
-<title>Home</title>
-<item>
-<label>Content</label>
-<child>content</child>
-<per>CONTENT_ACCESS</per>
-</item>
-<item>
-<label>Docs and Images</label>
-<child>documents</child>
-<per>CONTENT_FILES_ACCESS</per>
-</item>
-<item>
-<label>Tools</label>
-<child>tools</child>
-<per>TOOLS_ACCESS</per>
-</item>
-<item>
-<label>Forms</label>
-<child>forms</child>
-<per>FORM_DATA_EDIT</per>
-</item>
-<item>
-<label>Navigation</label>
-<child>navigation</child>
-<per>CONTENT_NAVIGATION</per>
-</item>
-<item>
-<label>Site Template</label>
-<child>template</child>
-<per>CONTENT_TEMPLATE</per>
-</item>
-<item>
-<label>Settings</label>
-<child>system</child>
-<per>SYSTEM_ACCESS</per>
-</item>
-<item>
-<label>Help</label>
-<child>help</child>
-</item>
+	<title>Home</title>
+	<item>
+		<label>Content</label>
+		<child>content</child>
+		<per>CONTENT_ACCESS</per>
+	</item>
+	<item>
+		<label>Docs and Images</label>
+		<child>documents</child>
+		<per>CONTENT_FILES_ACCESS</per>
+	</item>
+	<item>
+		<label>Tools</label>
+		<child>tools</child>
+	<per>TOOLS_ACCESS</per>
+	</item>
+	<item>
+		<label>Forms</label>
+		<child>forms</child>
+		<per>FORM_DATA_EDIT</per>
+	</item>
+	<item>
+		<label>Navigation</label>
+		<child>navigation</child>
+		<per>CONTENT_NAVIGATION</per>
+	</item>
+	<item>
+		<label>Site Template</label>
+		<child>template</child>
+		<per>CONTENT_TEMPLATE</per>
+	</item>
+	<item>
+		<label>Settings</label>
+		<child>system</child>
+		<per>SYSTEM_ACCESS</per>
+	</item>
+	<item>
+		<label>Help</label>
+		<child>help</child>
+	</item>
 </home>
 
 <content>
@@ -48,65 +48,65 @@
 <per>CONTENT_ACCESS</per>
 <width>190</width>
 
-<item>
-<href>articlelist.php</href>
-<label>View Content</label>
-<class>view</class>
-<per>CONTENT_EDIT</per>
-</item>
-<item>
-<href>article_edit.php</href>
-<label>Add Content</label>
-<class>add</class>
-<per>CONTENT_EDIT</per>
-</item>
-<item>
-<separator>1</separator>
-<href>article_list.php?&amp;class=2</href>
-<label>View Front Page Content</label>
-<class>home</class>
-<per>CONTENT_EDIT</per>
-</item>
+	<item>
+		<href>articlelist.php</href>
+		<label>View Content</label>
+		<class>view</class>
+		<per>CONTENT_EDIT</per>
+	</item>
+	<item>
+		<href>article_edit.php</href>
+		<label>Add Content</label>
+		<class>add</class>
+		<per>CONTENT_EDIT</per>
+	</item>
+	<item>
+		<separator>1</separator>
+		<href>article_list.php?&amp;class=2</href>
+		<label>View Front Page Content</label>
+		<class>home</class>
+		<per>CONTENT_EDIT</per>
+	</item>
 
-<item>
-<href>article_fpedit.php</href>
-<label>Add Front Page Content</label>
-<class>add</class>
-<per>CONTENT_EDIT</per>
-</item>
+	<item>
+		<href>article_fpedit.php</href>
+		<label>Add Front Page Content</label>
+		<class>add</class>
+		<per>CONTENT_EDIT</per>
+	</item>
 
-<item>
-<separator>1</separator>
-<href>edittypes.php</href>
-<label>View Sections</label>
-<class>view</class>
-<per>CONTENT_SECTION_EDIT</per>
-</item>
-<item>
-<href>type_edit.php</href>
-<label>Add Section</label>
-<class>add</class>
-<per>CONTENT_SECTION_EDIT</per>
-</item>
-<item>
-<href>class.php</href>
-<label>Add Class</label>
-<class>add</class>
-<per>CONTENT_CLASS_EDIT</per>
-</item>
-<item>
-<separator>1</separator>
-<label>RSS Syndication</label>
-<href>system_map.php?id=rss</href>
-<child>rss</child>
-<per>CONTENT_RSS_ACCESS</per>
-</item>
-<item>
-<label>Content Tools</label>
-<href>system_map.php?id=contenttools</href>
-<child>contenttools</child>
-<per>CONTENT_TOOLS_ACCESS</per>
-</item>
+	<item>
+		<separator>1</separator>
+		<href>edittypes.php</href>
+		<label>View Sections</label>
+		<class>view</class>
+		<per>CONTENT_SECTION_EDIT</per>
+	</item>
+	<item>
+		<href>type_edit.php</href>
+		<label>Add Section</label>
+		<class>add</class>
+		<per>CONTENT_SECTION_EDIT</per>
+	</item>
+	<item>
+		<href>class.php</href>
+		<label>Add Class</label>
+		<class>add</class>
+		<per>CONTENT_CLASS_EDIT</per>
+	</item>
+	<item>
+		<separator>1</separator>
+		<label>RSS Syndication</label>
+		<href>system_map.php?id=rss</href>
+		<child>rss</child>
+		<per>CONTENT_RSS_ACCESS</per>
+	</item>
+	<item>
+		<label>Content Tools</label>
+		<href>system_map.php?id=contenttools</href>
+		<child>contenttools</child>
+		<per>CONTENT_TOOLS_ACCESS</per>
+	</item>
 </content>
 
 <rss>
@@ -224,79 +224,79 @@
 </documents>
 
 <tools>
-<title>Tools</title>
-<per>TOOLS_ACCESS</per>
-<item>
-<label>Calendar</label>
-<href>calendar_gxlist.php</href>
-<per>CALENDAR_ACCESS</per>
-</item>
-<item>
-<label>Photo Gallery</label>
-<href>gallery_image.php?action=list</href>
-<per>GALLERY_ACCESS</per>
-</item>
-<item>
-<label>Advocacy Tools</label>
-<href>system_map.php?id=advocacy</href>
-<child>advocacy</child>
-</item>
-<item>
-<label>Email Blast</label>
-<href>email_redirect.php</href>
-<per>BLAST_ADMIN</per>
-</item>
-<item>
-<label>Directories</label>
-<href>system_map.php?id=directories</href>
-<child>directories</child>
-<per>TOOLS_DIRECTORIES_ACCESS</per>
-</item>
-<item>
-<label>Boards</label>
-<href>system_map.php?id=boards</href>
-<child>boards</child>
-</item>
-<item>
-<label>Schedules</label>
-<href>schedule.php?action=list</href>
-<child>schedule</child>
-</item>
-<item>
-<label>Volunteer</label>
-<href>userdata_list.php?modin=8</href>
-<per>FORM_VOLUNTEER</per>
-</item>
-<item>
-<label>Media Sign In</label>
-<href>userdata_list.php?modin=7</href>
-<per>FORM_MEDIA</per>
-</item>
-<item>
-<label>FAQs</label>
-<href>faq.php?action=list</href>
-<per>FAQ_ACCESS</per>
-</item>
-<item>
-<label>Tell A Friend</label>
-<href>module_header_list.php?modid=22</href>
-<per>TOOLS_INTROTEXT</per>
-</item>
-<item>
-<label>Contact Us</label>
-<href>module_header_list.php?modid=17</href>
-<per>TOOLS_INTROTEXT</per>
-</item>
-<item>
-<label>Maps</label>
-<href>maps.php?action=list</href>
-<per>TOOLS_INTROTEXT</per>
-</item>
-<item>
-<label>Quiz</label>
-<href>quiz.php?action=list</href>
-<per>TOOLS_INTROTEXT</per>
-</item>
+    <title>Tools</title>
+    <per>TOOLS_ACCESS</per>
+    <item>
+        <label>Calendar</label>
+        <href>calendar_gxlist.php</href>
+        <per>CALENDAR_ACCESS</per>
+    </item>
+    <item>
+        <label>Photo Gallery</label>
+        <href>gallery_image.php?action=list</href>
+        <per>GALLERY_ACCESS</per>
+    </item>
+    <item>
+        <label>Advocacy Tools</label>
+        <href>system_map.php?id=advocacy</href>
+        <child>advocacy</child>
+    </item>
+    <item>
+        <label>Email Blast</label>
+        <href>email_redirect.php</href>
+        <per>BLAST_ADMIN</per>
+    </item>
+    <item>
+        <label>Directories</label>
+        <href>system_map.php?id=directories</href>
+        <child>directories</child>
+        <per>TOOLS_DIRECTORIES_ACCESS</per>
+    </item>
+    <item>
+        <label>Boards</label>
+        <href>system_map.php?id=boards</href>
+        <child>boards</child>
+    </item>
+    <item>
+        <label>Schedules</label>
+        <href>schedule.php?action=list</href>
+        <child>schedule</child>
+    </item>
+    <item>
+        <label>Volunteer</label>
+        <href>userdata_list.php?modin=8</href>
+        <per>FORM_VOLUNTEER</per>
+    </item>
+    <item>
+        <label>Media Sign In</label>
+        <href>userdata_list.php?modin=7</href>
+        <per>FORM_MEDIA</per>
+    </item>
+    <item>
+        <label>FAQs</label>
+        <href>faq.php?action=list</href>
+        <per>FAQ_ACCESS</per>
+    </item>
+    <item>
+        <label>Tell A Friend</label>
+        <href>module_header_list.php?modid=22</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
+    <item>
+        <label>Contact Us</label>
+        <href>module_header_list.php?modid=17</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
+    <item>
+        <label>Maps</label>
+        <href>maps.php?action=list</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
+    <item>
+        <label>Quiz</label>
+        <href>quiz.php?action=list</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
 </tools>
 
 
@@ -323,92 +323,92 @@
 </schedule>
 
 <directories>
-<title>Directories</title>
-<per>TOOLS_DIRECTORIES_ACCESS</per>
-<item>
-<label>Links</label>
-<href>links.php?action=list</href>
-<per>LINKS_ACCESS</per>
-</item>
-<item>
-<label>Groups</label>
-<href>userdata_list.php?modin=2</href>
-<per>FORM_GROUPS</per>
-</item>
-<item>
-<label>Speakers Database</label>
-<href>userdata_list.php?modin=6</href>
-<per>FORM_SPEAKER</per>
-</item>
-<item>
-<label>Trainers Database</label>
-<href>userdata_list.php?modin=5</href>
-<per>FORM_TRAINER</per>
-</item>
+    <title>Directories</title>
+    <per>TOOLS_DIRECTORIES_ACCESS</per>
+    <item>
+        <label>Links</label>
+        <href>links.php?action=list</href>
+        <per>LINKS_ACCESS</per>
+    </item>
+    <item>
+        <label>Groups</label>
+        <href>userdata_list.php?modin=2</href>
+        <per>FORM_GROUPS</per>
+    </item>
+    <item>
+        <label>Speakers Database</label>
+        <href>userdata_list.php?modin=6</href>
+        <per>FORM_SPEAKER</per>
+    </item>
+    <item>
+        <label>Trainers Database</label>
+        <href>userdata_list.php?modin=5</href>
+        <per>FORM_TRAINER</per>
+    </item>
 </directories>
 
 <boards>
-<title>Boards</title>
-<per>TOOLS_BOARDS_ACCESS</per>
-<item>
-<label>Housing</label>
-<href>userdata_list.php?modin=11</href>
-<per>FORM_BOARD_HOUSING</per>
-</item>
-<item>
-<label>Ride</label>
-<href>userdata_list.php?modin=12</href>
-<per>FORM_BOARD_RIDE</per>
-</item>
+    <title>Boards</title>
+    <per>TOOLS_BOARDS_ACCESS</per>
+    <item>
+        <label>Housing</label>
+        <href>userdata_list.php?modin=11</href>
+        <per>FORM_BOARD_HOUSING</per>
+    </item>
+    <item>
+        <label>Ride</label>
+        <href>userdata_list.php?modin=12</href>
+        <per>FORM_BOARD_RIDE</per>
+    </item>
 </boards>
 
 
 <advocacy>
-<title>Advocacy Tools</title>
-<per>TOOLS_ADVOCACY_ACCESS</per>
-<item>
-<label>Voter Guides</label>
-<href>voterguide.php?action=list</href>
-<per>VOTERGUIDE_ACCESS</per>
-</item>
-<item>
-<label>Web Actions</label>
-<href>sendfax_list.php</href>
-<per>ACTION_ACCESS</per>
-</item>
-<item>
-<label>Petitions</label>
-<href>petition.php?action=list</href>
-<per>PETITION_ACCESS</per>
-</item>
-<item>
-<label>Endorsements</label>
-<href>userdata_list.php?modin=1</href>
-<per>FORM_ENDORSE</per>
-</item>
+    <title>Advocacy Tools</title>
+    <per>TOOLS_ADVOCACY_ACCESS</per>
+    <item>
+        <label>Voter Guides</label>
+        <href>voterguide.php?action=list</href>
+        <per>VOTERGUIDE_ACCESS</per>
+    </item>
+    <item>
+        <label>Web Actions</label>
+        <href>action_center.php?action=list</href>
+        <per>ACTION_ACCESS</per>
+    </item>
+    <item>
+        <label>Petitions</label>
+        <href>petition.php?action=list</href>
+        <per>PETITION_ACCESS</per>
+    </item>
+    <item>
+        <label>Endorsements</label>
+        <href>userdata_list.php?modin=1</href>
+        <per>FORM_ENDORSE</per>
+    </item>
 </advocacy>
 
 
 
 
 <forms>
-<title>Forms</title>
-<per>FORM_ACCESS</per>
-<item>
-<label>View Forms</label>
-<href>modinput4_list.php</href>
-<per>FORM_ADMIN</per>
-</item>
-<item>
-<label>Add Form</label>
-<href>modinput4_new.php</href>
-<per>FORM_ADMIN</per>
-</item>
-<item>
-<label>Search Form Data</label>
-<href>modinput4_search.php</href>
-<per>FORM_ADMIN</per>
-</item>
+    <title>Forms</title>
+    <per>FORM_ACCESS</per>
+    <item>
+        <label>View Forms</label>
+        <href>modinput4_list.php</href>
+        <per>FORM_ADMIN</per>
+    </item>
+    <item>
+        <label>Add Form</label>
+        <href>modinput4_new.php</href>
+        <per>FORM_ADMIN</per>
+    </item>
+    <item>
+        <label>Search Form Data</label>
+        <href>modinput4_search.php</href>
+        <per>FORM_ADMIN</per>
+    </item>
 </forms>
 
 <navigation>

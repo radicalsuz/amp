@@ -73,14 +73,15 @@ class AMPSystem_Lookup {
         if ( "content" == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
         if ( "constant" == $lookup_def['module']) $lookup_def['module'] = "AMPConstant";
         $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
-        if ( !class_exists( $lookup_class ) && !$this->_loadLookups( $lookup_def['module'], $lookup_class )) return false;
+        if ( !class_exists( $lookup_class ) && !AMPSystem_Lookup::loadLookups( $lookup_def['module'], $lookup_class )) return false;
         return call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;
     }
-    function _loadLookups( $module, $class ){
+
+    function loadLookups( $module, $class ){
         if ( 'form' == $module ) {
             include_once( 'AMP/UserData/Lookups.inc.php');
         } else {
-            include_once( 'Modules/'.ucfirst( $module ).'Lookups.inc.php');
+            include_once( 'Modules' . DIRECTORY_SEPARATOR . ucfirst( $module ) . DIRECTORY_SEPARATOR . 'Lookups.inc.php');
         }
         return class_exists( $class );
 
@@ -389,6 +390,24 @@ class AMPConstant_Lookup {
         $req_class = $lookup_baseclass . '_' . ucfirst($type);
         if (!$lookup_set) $lookup_set = new $req_class(); 
         return $lookup_set->dataset;
+    }
+}
+
+class AMPSystemLookup_Permissions extends AMPSystem_Lookup {
+    var $datatable = "per_description";
+    var $sortby = 'name';
+    var $result_field = 'concat( name, " ( ", id, " )") as pername';
+
+    function AMPSystemLookup_Permissions( ){
+        $perManager = &AMPSystem_PermissionManager::instance( );
+        $this->criteria = 
+            join( " AND ",
+                    array( 'publish=1',
+                            'id in ('
+                                .  join( ',', $perManager->entireSet( )) 
+                                .  ' )')
+                    );
+        $this->init( );
     }
 }
 

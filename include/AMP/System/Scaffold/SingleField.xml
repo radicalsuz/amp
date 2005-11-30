@@ -1,0 +1,5 @@
+	<%1\$s>
+		<type>%2\$s</type>
+		<label>%3\$s</label>
+		<!-- extra_scaffold_items %4\$s /extra_scaffold_items -->
+	</%1\$s>

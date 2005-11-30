@@ -1,0 +1,42 @@
+<array>
+    <id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class="publish_label"&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<name>
+		<type>text</type>
+		<label>Tool Name</label>
+	</name>
+	<perid>
+		<type>select</type>
+		<label>Access Permission</label>
+        <lookup>permissions</lookup>
+		<default>305</default>
+	</perid>
+	<userdatamod>
+		<type>hidden</type>
+        <default>1</default>
+	</userdatamod>
+	<userdatamodid>
+		<type>select</type>
+		<label>Linked Form</label>
+        <lookup>Forms</lookup>
+	</userdatamodid>
+    <!--
+	<file>
+		<type>text</type>
+		<label>Admin Page</label>
+	</file>
+	<navhtml>
+		<type>textarea</type>
+		<label>Nav HTML</label>
+	</navhtml>
+	<module_type>
+		<type>text</type>
+		<label>Module_type</label>
+	</module_type>
+    -->
+</array>

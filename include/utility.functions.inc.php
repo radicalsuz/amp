@@ -893,6 +893,21 @@ if ( !function_exists( 'AMP_Authorized')) {
     }
 
 }
+if ( !function_exists( 'AMP_mkdir')) {
+    function AMP_mkdir( $new_path, $per_level = 0775 ){
+        if ( file_exists( $new_path )) return true;
+        $dir_set = split( DIRECTORY_SEPARATOR, $new_path );
+
+        $child_folder = array_pop( $dir_set );
+        $parent_path = join( DIRECTORY_SEPARATOR, $dir_set );
+
+        if ( AMP_mkdir( $parent_path )){
+            mkdir( $new_path );
+            return true;
+        }
+        return false;
+    }
+}
 			
 
 ?>

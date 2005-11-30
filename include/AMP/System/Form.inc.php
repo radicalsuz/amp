@@ -109,13 +109,12 @@ class AMPSystem_Form extends AMPForm {
     }
 
     function getIdValue() {
-        if (!isset($_REQUEST['id'])) return false;
-        return $_REQUEST['id'];
-        /*
+        
+        if (isset($_REQUEST['id']) && is_numeric( $_REQUEST['id'])) return $_REQUEST['id'];
+        
         $set = $this->getValues( 'id' );
-        if (!$set) return false;
-        return $set['id'];
-        */
+        if ($set) return $set['id'];
+        return false;
     }
 
     function getItemName() {

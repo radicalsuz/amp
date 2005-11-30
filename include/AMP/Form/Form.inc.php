@@ -8,9 +8,9 @@
  *  maintains common assumptions for field definition characteristics across
  *  modules
  *
- *  AMP v3.5.0
- *  2005-06-27
- *  Author: austin@radicaldesigns.org
+ *  @version AMP v3.5.0
+ *  @date 2005-06-27
+ *  @author  Austin Putman <austin@radicaldesigns.org>
  *
  **********/
 
