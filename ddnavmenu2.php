@@ -86,4 +86,3 @@ url=section.php?id=<?php echo $navtop3->Fields("id")?>;status=<?php echo $navtop
 drawMenus();	
 	
 </script>
-

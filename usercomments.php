@@ -101,5 +101,3 @@ require ("DBConnections/dataactions.php");
 	 
 
 <?php include("AMP/BaseFooter.php"); ?>
-
-
