@@ -130,6 +130,7 @@
 <class>add</class>
 <per>CONTENT_RSS_AGGREGATOR</per>
 </item>
+
 <item>
 <label>Update Incoming Feeds</label>
 <href>feeds_update.php</href>
@@ -139,6 +140,11 @@
 <href>feeds_view.php?action=list</href>
 <label>View Incoming Content</label>
 <per>CONTENT_RSS_AGGREGATOR</per>
+<class>view</class>
+</item>
+<item>
+<href>podcast.php?action=list</href>
+<label>Podcasts</label>
 <class>view</class>
 </item>
 </rss>

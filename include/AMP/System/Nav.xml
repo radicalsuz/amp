@@ -134,6 +134,30 @@
 </item>
 </petition>
 
+<podcast>
+<title>Podcast</title>
+<item>
+<href>podcast_item.php?action=list</href>
+<label>View/Edit Items</label>
+<class>view</class>
+</item>
+<item>
+<href>podcast_item.php</href>
+<label>Add Item</label>
+<class>add</class>
+</item>
+<item>
+<href>podcast.php?action=list</href>
+<label>View/Edit Podcasts</label>
+<class>View</class>
+</item>
+<item>
+<href>podcast.php</href>
+<label>Add Podcast</label>
+<class>add</class>
+</item>
+</podcast>
+
 
 <gallery>
 <title>Photo Gallery</title>

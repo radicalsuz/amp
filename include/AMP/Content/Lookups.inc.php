@@ -135,6 +135,17 @@ class AMPContentLookup_Galleries extends AMPContent_Lookup{
 
 }
 
+class AMPContentLookup_Podcasts extends AMPContent_Lookup{
+    var $datatable = 'podcast';
+    var $result_field = 'title';
+    var $sortby = 'title';
+    
+    function AMPContentLookup_Podcasts( ){
+        $this->init( );
+    }
+
+}
+
 class AMPContentLookup_GalleryImages extends AMPContent_Lookup {
     var $datatable = 'gallery';
     var $result_field = 'img';

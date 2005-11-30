@@ -562,19 +562,27 @@ if (!function_exists('array_combine_key')) {
     }
 }
 if (!function_exists('AMPfile_list')) {
-		function AMPfile_list($file){ 
+		function AMPfile_list($file,$ext=NULL){ 
 				$dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
 				//die($dir_name);
 				$dir = opendir($dir_name);
 				$basename = basename($dir_name);
 				$fileArr = array();
 				$fileArr[''] = 'Select';
-				while ($file_name = readdir($dir))
-				{
-						if (($file_name !=".") && ($file_name != "..")) {
-						$fileArr[$file_name] = $file_name;
+				while ($file_name = readdir($dir)) {
+					if (($file_name !=".") && ($file_name != "..")) {
+						if ($dotspot = strrpos( $file_name, "." )) {
+            					$file_ext = strtolower( substr( $file_name, $dotspot+1) );
+        				}
+						if ($ext) {
+							if ($ext == $file_ext ){
+								$fileArr[$file_name] = $file_name;
+							}
+						} else {
+							$fileArr[$file_name] = $file_name;
 						}
-				}
+					}
+				}	
 				uksort($fileArr, "strnatcasecmp");
 				return $fileArr;
 		} 

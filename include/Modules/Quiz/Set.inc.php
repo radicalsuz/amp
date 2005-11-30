@@ -2,11 +2,11 @@
 
 require_once ('AMP/System/Data/Set.inc.php' );
 
-class QuizSet extends AMPSystem_Data_Set {
+class PodcastSet extends AMPSystem_Data_Set {
 
-	var $datatable = "quiz";
+	var $datatable = "podcast";
 
-	function QuizSet ( &$dbcon ) {
+	function PodcastSet ( &$dbcon ) {
 		$this->init ($dbcon );
 	}
 }
