@@ -55,8 +55,15 @@ class Article_Display extends AMPDisplay_HTML {
     function _processBody( $body ) {
         $htmlbody = $body;
         if (!$this->_article->isHtml()) $htmlbody = converttext( $body );
-        if ($hw = &AMPContent_Lookup::instance('hotwords')) {
+        // link hot words
+		if ($hw = &AMPContent_Lookup::instance('hotwords')) {
             $htmlbody = str_replace( array_keys($hw), array_values($hw), $htmlbody );
+        }
+		//insert pull quote
+		if ($pq = &$this->_article->getPullquote() ) {
+			$find = '[-pullquote-]';
+			$replace = '<div class="pullquote">'.nl2br($pq).'</div>';
+			$htmlbody = str_replace( $find, $replace, $htmlbody );
         }
         return $this->_HTML_bodyText( $htmlbody );
     }

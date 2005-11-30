@@ -112,6 +112,10 @@ class Article extends AMPSystem_Data_Item {
         return $this->getData( 'body' );
     }
 
+    function getPullquote() {
+        return $this->getData( 'navtext' );
+    }
+	
     function getSourceURL() {
         return $this->getData( 'sourceurl' );
     }
