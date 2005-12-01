@@ -1,56 +1,57 @@
 .htmlarea .toolbar { background-color:#f7f8fd;}
 
-.htmlarea .toolbar .toolbarRow
+.htmlarea .toolbarRow
 {
   /*background-image: url(button-background.png);*/
   background-color: #C5DCEC;
-  border:1px solid #DEDEDE;
-  -moz-border-radius:5px;
-  margin: 1px;
-}
-.htmlarea .toolbar .toolbarRow .container,
-.htmlarea .toolbar .toolbarRow .label {
-  background-image: url(button-background.png);
-}
-
-.htmlarea .toolbar .toolbarRow .button {
-  background-image: url(button-background.png);
-  padding: 1px;
-  border: 0px;
+  margin-top:2px;
+  margin-bottom:2px;
+  border:1px solid #7A8A99;
+  padding:2px;
+  -moz-border-radius:4px;
+  margin:4px;
+  height:25px;
 }
 
-.htmlarea .toolbar .toolbarRow .separator {
+.htmlarea .toolbar .button {
+  background-image: url(button-background.png);
+  width:20px;
+  height:21px;
+  padding:1px;
+  border:0px;
+}
+
+.buttonImageContainer
+{
+  position:relative;
+  left:1px;
+  top :1px;
+}
+
+.htmlarea .toolbar .separator
+{
+  margin:0px;
   background-image: url(separator.gif);
-  padding: 1px;
-  border: 0px;
-  margin: 2px;
-  width: 7px;
+  border:1px #f7f8fd;
+  width:   7px;
+  height: 21px;
+  padding: 0px;
 }
 
-.htmlarea .toolbar .toolbarRow .buttonHover
+.htmlarea .toolbar a.button:hover,
+.htmlarea .toolbar a.buttonDisabled:hover
 {
   padding: 0px;
   border: 1px solid;
-  border-color: #316AC5;
-  background-image: none !important;
-  background-color : #FFE1AC !important;
+  border-color: #7A8A99;
 }
 
-.htmlarea .toolbar .toolbarRow .buttonDisabled
-{
-  padding: 1px;
-  border: 0px;
-  border-color: #f7f8fd;
-}
-
-.htmlarea .toolbar .toolbarRow .button.buttonActive,
-.htmlarea .toolbar .toolbarRow .button.buttonPressed
+.htmlarea .toolbar .button.buttonActive,
+.htmlarea .toolbar .button.buttonPressed
 {
   padding: 0px;
   border: 1px solid;
   border-color: #79A4CC #FFFFFF #FFFFFF #79A4CC;
-  background-image: none !important;
-  background-color : #FFBE6D !important;
 }
 
 .htmlarea .statusBar {
@@ -85,11 +86,11 @@
 }
 
 .dialog {
-  background-color:#f7f8fd;
+  background-color: #EEEEEE;
 }
 .dialog .title {
   background-image: url(button-background.png);
-}  
+}
 .dialog button{
   background-image: url(button-background.png);
 }

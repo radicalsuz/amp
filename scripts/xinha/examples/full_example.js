@@ -5,17 +5,18 @@
     --  from full_example-body.html.
     --
     --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/full_example.js $
-    --  $LastChangedDate: 2005-06-23 00:01:59 -0700 (Thu, 23 Jun 2005) $
-    --  $LastChangedRevision: 239 $
-    --  $LastChangedBy: gocher $
+    --  $LastChangedDate: 2005-10-29 09:28:08 -0700 (Sat, 29 Oct 2005) $
+    --  $LastChangedRevision: 416 $
+    --  $LastChangedBy: gogo $
     --------------------------------------------------------------------------*/
 
   var num     = 1;
   if(window.parent && window.parent != window)
   {
     var f = window.parent.menu.document.forms[0];
-    _editor_lang = f.lang.value;
-    _editor_skin = f.skin.value;
+    _editor_lang = f.lang[f.lang.selectedIndex].value;
+    _editor_skin = f.skin[f.skin.selectedIndex].value;
+    
     num = parseInt(f.num.value);
     if(isNaN(num))
     {
@@ -83,6 +84,28 @@
                { options: keywrds2, context: "li" } ]
       }
 
+    }
+    
+    if (typeof ListType != 'undefined')
+    {
+      if(window.parent && window.parent != window)
+      {
+        var f = window.parent.menu.document.forms[0];
+        config.ListType.mode = f.elements['ListTypeMode'].options[f.elements['ListTypeMode'].selectedIndex].value;
+      }
+    }
+
+    if (typeof CharacterMap != 'undefined')
+    {
+      if(window.parent && window.parent != window)
+      {
+        var f = window.parent.menu.document.forms[0];
+        config.CharacterMap.mode = f.elements['CharacterMapMode'].options[f.elements['CharacterMapMode'].selectedIndex].value;
+      }
+    }
+    
+    if(typeof Filter != 'undefined') {
+      xinha_config.Filters = ["Word", "Paragraph"]
     }
 
     return config;

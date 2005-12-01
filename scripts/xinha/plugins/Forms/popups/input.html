@@ -72,7 +72,7 @@ function Init() {
   }
   window.resizeTo(320,height);
 	document.getElementById("f_name").focus();
-};
+}
 
 function onOK() {
 	var el = document.getElementById("f_name");
@@ -99,28 +99,14 @@ function onOK() {
   }
   __dlg_close(param);
   return false;
-};
+}
 
 function onCancel() {
 	__dlg_close(null);
 	return false;
-};
+}
 </script>
-<style rel="stylesheet" type="text/css">
-DIV.line	{	clear: both;	}
 
-LABEL	{
-	padding-top: 3px;
-	padding-left: 3px;		
-	padding-right: 3px;	
-	}
-	
-LABEL.label	{
-	float: left;
-	width: 8em;
-	text-align: right;
-	}	
-</style>  
 </head>
 
 <body class="dialog" onload="Init()">

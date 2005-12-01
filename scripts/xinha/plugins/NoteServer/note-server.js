@@ -26,9 +26,9 @@ function NoteServer(editor) {
                 action   : function(editor) {
                                 self.buttonPress(editor);
                            }
-            })
+            });
 	cfg.addToolbarElement("insertscore", "insertimage", 1);
-};
+}
 
 NoteServer._pluginInfo = {
   name          : "NoteServer",
@@ -43,7 +43,7 @@ NoteServer._pluginInfo = {
 
 NoteServer.prototype._lc = function(string) {
   return HTMLArea._lc(string, 'NoteServer');
-}
+};
 
 NoteServer.prototype.buttonPress = function(editor) {
   editor._popupDialog( "plugin://NoteServer/codenote", function(param) {
@@ -51,7 +51,7 @@ NoteServer.prototype.buttonPress = function(editor) {
       return false;
     } else IncludeGuido(editor,param);
   }, null);
-}
+};
 
 // this variable is the address of the noteserver
 // can be set to another address (local address if availalble) 
@@ -174,15 +174,18 @@ if (param["f_applet"] == false ){
   string2 = string2 + stringapplet + "<br>";
 }
 
-if (param["f_affcode"]) string2 = string2 + _lc("NoteServer") + ":"  + param["f_code"] + "<br>";
-if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + _lc("NodeServer") + "</a> <br>";
+// To test code source in textarea
+//if (param["f_affcode"]) string2 = string2 + HTMLArea._lc("Source Code","NoteServer") + " :" + '<br> <textarea  cols=60 rows=10 style = "background: #FFFFE6">' +  param["f_code"] + '</textarea> <br>';
+
+if (param["f_affcode"]) string2 = string2 + HTMLArea._lc("GUIDO Code","NoteServer") + " : "  + param["f_code"] + "<br>";
+if (param["f_midi"]) string2 = string2 + "<a href=" + stringmidi + ">" + HTMLArea._lc("MIDI File","NoteServer") + "</a> <br>";
 
   editor.focusEditor();
   editor.insertHTML(string2);
 
     //var html = linktext.link(stringmidi);
     //editor.insertHTML(html);
-};
+}
 
 // this routine includes the applet-definition 
 function IncludeGuidoStringAsApplet(editor, gmnstring, zoom) {
@@ -202,4 +205,4 @@ function IncludeGuidoStringAsApplet(editor, gmnstring, zoom) {
   alert(string);
   editor.focusEditor();
   editor.insertHTML(string);
-};
+}

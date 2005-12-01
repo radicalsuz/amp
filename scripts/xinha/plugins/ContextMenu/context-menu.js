@@ -6,13 +6,13 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id: context-menu.js 203 2005-05-30 14:49:54Z niko $
+// $Id: context-menu.js 419 2005-10-31 05:33:41Z mokhet $
 
 HTMLArea.loadStyle("menu.css", "ContextMenu");
 
 function ContextMenu(editor) {
 	this.editor = editor;
-};
+}
 
 ContextMenu._pluginInfo = {
 	name          : "ContextMenu",
@@ -60,7 +60,7 @@ ContextMenu.prototype.getContextMenu = function(target) {
 
 	function tableOperation(opcode) {
 		tbo.buttonPress(editor, opcode);
-	};
+	}
 
 	function insertPara(after) {
 		var el = currentTarget;
@@ -80,7 +80,7 @@ ContextMenu.prototype.getContextMenu = function(target) {
 			range.collapse(true);
 			range.select();
 		}
-	};
+	}
 
 	for (; target; target = target.parentNode) {
 		var tag = target.tagName;
@@ -213,7 +213,7 @@ ContextMenu.prototype.getContextMenu = function(target) {
 
 	if (!/html|body/i.test(currentTarget.tagName))
 		menu.push(null,
-			  [ HTMLArea._lc("Remove the $elem Element...", "ContextMenu", {elem: "&lt;" + currentTarget.tagName + "&gt;"}),
+			  [ HTMLArea._lc({string: "Remove the $elem Element...", replace: {elem: "&lt;" + currentTarget.tagName + "&gt;"}}, "ContextMenu"),
 			    function() {
 				    if (confirm(HTMLArea._lc("Please confirm that you want to remove this element:", "ContextMenu") + " " +
 						currentTarget.tagName)) {
@@ -258,7 +258,7 @@ ContextMenu.prototype.popupMenu = function(ev) {
 			r.y += tmp.y;
 		}
 		return r;
-	};
+	}
 	function documentClick(ev) {
 		ev || (ev = window.event);
 		if (!self.currentMenu) {
@@ -271,7 +271,7 @@ ContextMenu.prototype.popupMenu = function(ev) {
 			self.closeMenu();
 		//HTMLArea._stopEvent(ev);
 		//return false;
-	};
+	}
 	var keys = [];
 	function keyPress(ev) {
 		ev || (ev = window.event);
@@ -286,7 +286,7 @@ ContextMenu.prototype.popupMenu = function(ev) {
 			if (k[0].toLowerCase() == key)
 				k[1].__msh.activate();
 		}
-	};
+	}
 	self.closeMenu = function() {
 		self.currentMenu.parentNode.removeChild(self.currentMenu);
 		self.currentMenu = null;
@@ -296,7 +296,7 @@ ContextMenu.prototype.popupMenu = function(ev) {
 			HTMLArea._removeEvent(self.editordoc, "keypress", keyPress);
 		if (HTMLArea.is_ie)
 			self.iePopup.hide();
-	};
+	}
 	var target = HTMLArea.is_ie ? ev.srcElement : ev.target;
      var ifpos = getPos(self.editor._htmlArea);//_iframe);
 	var x = ev.clientX + ifpos.x;
@@ -426,14 +426,12 @@ ContextMenu.prototype.popupMenu = function(ev) {
 		div.style.left = x + "px";
 		div.style.top = y + "px";
 	} else {
-		// determine the size (did I mention that IE stinks?)
-		var foobar = document.createElement("div");
-		foobar.className = "htmlarea-context-menu";
-		foobar.innerHTML = div.innerHTML;
-		document.body.appendChild(foobar);
-		var w = foobar.offsetWidth;
-		var h = foobar.offsetHeight;
-		document.body.removeChild(foobar);
+    // To get the size we need to display the popup with some width/height
+    // then we can get the actual size of the div and redisplay the popup at the
+    // correct dimensions.
+    this.iePopup.show(ev.screenX, ev.screenY, 300,50);
+		var w = div.offsetWidth;
+		var h = div.offsetHeight;
 		this.iePopup.show(ev.screenX, ev.screenY, w, h);
 	}
 

@@ -27,9 +27,9 @@ function Equation(editor) {
 	action   : function(editor, id) {
 			self.buttonPress(editor, id);
 		}
-	})
+	});
 	 cfg.addToolbarElement("equation", "inserthorizontalrule", -1);
-};
+}
 
 Equation._pluginInfo = {
 	name          : "Equation",
@@ -44,7 +44,7 @@ Equation._pluginInfo = {
 
 Equation.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'Equation');
-}
+};
 
 Equation.prototype.buttonPress = function(editor, id) {
 	var self = this;
@@ -143,4 +143,4 @@ Equation.prototype.insertOperation = function(editor,params) {
 			editor.insertHTML(tstr);
 		break;
 	}
-}
+};

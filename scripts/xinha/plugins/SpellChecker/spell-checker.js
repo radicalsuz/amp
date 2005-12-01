@@ -6,7 +6,7 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id: spell-checker.js 135 2005-05-09 14:51:52Z gocher $
+// $Id: spell-checker.js 419 2005-10-31 05:33:41Z mokhet $
 
 HTMLArea.Config.prototype.SpellChecker = { 'backend': 'php', 'personalFilesDir' : '', 'defaultDictionary' : 'en_GB' };
 
@@ -26,7 +26,7 @@ function SpellChecker(editor) {
              });
 
   cfg.addToolbarElement("SC-spell-check", "htmlmode", 1);
-};
+}
 
 SpellChecker._pluginInfo = {
   name          : "SpellChecker",
@@ -41,7 +41,7 @@ SpellChecker._pluginInfo = {
 
 SpellChecker.prototype._lc = function(string) {
     return HTMLArea._lc(string, 'SpellChecker');
-}
+};
 
 SpellChecker.btnList = [
   null, // separator

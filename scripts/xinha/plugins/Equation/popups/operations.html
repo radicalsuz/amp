@@ -21,8 +21,11 @@ Last Modified : 2004-09-22 19:15:16
 <script type="text/javascript">
 function Init() {
   window.resizeTo(190, 225);
+  __dlg_translate('Equation');
+  __dlg_init();
   var selected_op="none";
-};
+  document.getElementById("cancel").focus();
+}
 
 function SelectOperation(sop,sop_name) {
    document.getElementById('less_equal').style.backgroundColor='ButtonFace';
@@ -50,7 +53,7 @@ function onOK() {
 function onCancel() {
   __dlg_close(null);
   return false;
-};
+}
 </script>
 </head>
 
@@ -80,7 +83,7 @@ function onCancel() {
 </table>
 <div id="buttons">
   <button type="button" name="ok" onclick="return onOK();"><span>Insert</span></button>
-  <button type="button" name="cancel" onclick="return onCancel();"><span>Cancel</span></button>
+  <button type="button" name="cancel" id="cancel" onclick="return onCancel();"><span>Cancel</span></button>
 </div>
 </body>
 </html>

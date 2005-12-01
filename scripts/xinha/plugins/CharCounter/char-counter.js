@@ -5,7 +5,7 @@
 
 function CharCounter(editor) {
     this.editor = editor;
-};
+}
 
 CharCounter._pluginInfo = {
     name : "CharCounter",
@@ -24,10 +24,11 @@ CharCounter.prototype._lc = function(string) {
 
 
 CharCounter.prototype.onGenerate = function() {
-    var self = this;
+  var self = this;
+  if (this.charCount==null) {
     var charCount = document.createElement("span");
     charCount.style.padding = "2px 5px";
-     if(HTMLArea.is_ie) {
+    if(HTMLArea.is_ie) {
       charCount.style.styleFloat = "right";
     } else {
       charCount.style.cssFloat = "right";
@@ -46,11 +47,12 @@ CharCounter.prototype.onGenerate = function() {
     this.editor._statusBar.appendChild(charCount);
     this.editor._statusBar.appendChild(brk);
     this.charCount = charCount;
+  }
 };
 
 CharCounter.prototype.onUpdateToolbar = function() {
     this.updateCharCount();
-}
+};
 
 CharCounter.prototype.onMode = function (mode)
 {
@@ -67,24 +69,21 @@ CharCounter.prototype.onMode = function (mode)
       alert("Mode <" + mode + "> not defined!");
       return false;
   }
-}
-
-CharCounter.prototype.onKeyPress = function(ev) {
-    var cnt = this.updateCharCount();
-
-    //return true makes xinha ignoring the keypress, although for EVERY
-    //keypress (incl. navigating, deleting etc...)
-    //if(cnt > 100) return(true);
-}
+};
 
 CharCounter.prototype.updateCharCount = function(ev) {
     editor = this.editor;
     var contents = editor.getHTML();
     contents = contents.replace(/<(.+?)>/g, '');//Don't count HTML tags
-    contents = contents.replace(/([\n\r\t])/g, ' ');//convert newlines and tabs into space    
+    contents = contents.replace(/([\n\r\t])/g, ' ');//convert newlines and tabs into space
     contents = contents.replace(/(  +)/g, ' ');//count spaces only once
     contents = contents.replace(/&(.*);/g, ' ');//Count htmlentities as one keystroke
     contents = contents.replace(/^\s*|\s*$/g, '');//trim
+//    var words=0;
+//    for (var x=0;x<contents.length;x++) {
+//      if (contents.charAt(x) == " " )  {words++}
+//    }
+//    this.charCount.innerHTML = this._lc("Words") + ": " + words + " | " + this._lc("Chars") + ": " + contents.length;
     this.charCount.innerHTML = this._lc("Chars") + ": " + contents.length;
     return(contents.length);
-}
+};

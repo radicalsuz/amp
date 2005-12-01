@@ -3,8 +3,8 @@
     --  when the Stylist plugin is included in an auto-generated example.
     --
     --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/stylist.css $
-    --  $LastChangedDate: 2005-02-18 20:10:03 -0800 (Fri, 18 Feb 2005) $
-    --  $LastChangedRevision: 14 $
+    --  $LastChangedDate: 2005-07-18 23:23:58 -0700 (Mon, 18 Jul 2005) $
+    --  $LastChangedRevision: 277 $
     --  $LastChangedBy: gogo $
     --------------------------------------------------------------------------*/
 
@@ -28,3 +28,4 @@ h1.webdings_lvl_1
   font-family:webdings;
 }
 
+img.polaroid { border:1px solid black; background-color:white; padding:10px; padding-bottom:30px; }

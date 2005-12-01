@@ -6,7 +6,7 @@
 // Distributed under the same terms as HTMLArea itself.
 // This notice MUST stay intact for use (see license.txt).
 //
-// $Id: css.js 152 2005-05-11 09:32:40Z gocher $
+// $Id: css.js 419 2005-10-31 05:33:41Z mokhet $
 // @TODO This is the default and won't be very useful to others.
 // We should make this better.
 HTMLArea.Config.prototype.cssPluginConfig =
@@ -70,7 +70,7 @@ function CSS(editor, params) {
 		cfg.registerDropdown(css_class);
     cfg.addToolbarElement(["T[" + combo.label + "]", id, "separator"] , "formatblock", -1);
  	}
-};
+}
 
 CSS._pluginInfo = {
 	name          : "CSS",
