@@ -112,7 +112,7 @@ class Article extends AMPSystem_Data_Item {
         return $this->getData( 'body' );
     }
 
-    function getPullquote() {
+    function getSidebar() {
         return $this->getData( 'navtext' );
     }
 	

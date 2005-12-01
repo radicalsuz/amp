@@ -93,6 +93,10 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
         return false;
     }
 
+    function getSidebar() {
+        return false;
+    }
+
     function getContact() {
         return false;
     }

@@ -59,12 +59,12 @@ class Article_Display extends AMPDisplay_HTML {
 		if ($hw = &AMPContent_Lookup::instance('hotwords')) {
             $htmlbody = str_replace( array_keys($hw), array_values($hw), $htmlbody );
         }
-		//insert pull quote
-		//if ($pq = &$this->_article->getPullquote() ) {
-		//	$find = '[-pullquote-]';
-		//	$replace = '<div class="pullquote">'.nl2br($pq).'</div>';
-		//	$htmlbody = str_replace( $find, $replace, $htmlbody );
-        //}
+		//insert sidebar
+		if ($sb = &$this->_article->getSidebar() ) {
+			$find = '[-sidebar-]';
+			$replace = '<div class="sidebar">'.nl2br($sb).'</div>';
+			$htmlbody = str_replace( $find, $replace, $htmlbody );
+        }
         return $this->_HTML_bodyText( $htmlbody );
     }
 
