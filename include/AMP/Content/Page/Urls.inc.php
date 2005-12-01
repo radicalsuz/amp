@@ -11,6 +11,7 @@ if (!defined( 'AMP_CONTENT_URL_INDEX' ))    define ('AMP_CONTENT_URL_INDEX',    
 define ('AMP_CONTENT_URL_FORM',         'modinput4.php');
 define ('AMP_CONTENT_URL_FORM_DISPLAY', 'userdata_display.php');
 define ('AMP_CONTENT_URL_GROUPS',       'groups.php');
+define ('AMP_CONTENT_URL_TRACKBACKS',       AMP_SITE_URL . 'article_trackback.php');
 define ('AMP_CONTENT_URL_DOCUMENTS', '/downloads/' );
 if (!defined( 'AMP_CONTENT_URL_IMAGES' )) define ('AMP_CONTENT_URL_IMAGES', 'img/' );
 

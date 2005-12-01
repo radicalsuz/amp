@@ -64,7 +64,25 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_addCommentLink ($article_id) {
-	    return '<br><p>' . $this->_HTML_link( AMP_URL_AddVars( "comment.php", 'cid=' . $article_id ), "add a comment" ) ."</p>\n";
+	    return  $this->_RDF_trackbacks( $article_id ). 
+                '<br><p>' . $this->_HTML_link( AMP_URL_AddVars( "comment.php", 'cid=' . $article_id ), "add a comment" ) ."</p>\n";
+    }
+    function _RDF_trackbacks( $article_id ){
+        require_once( 'AMP/Content/Article.inc.php');
+        $article = &new Article( $this->comment_set->dbcon, $article_id );
+        return
+            '<!--
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                     xmlns:dc="http://purl.org/dc/elements/1.1/"
+                     xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+
+            <rdf:Description
+                rdf:about="'.$article->getURL( ) .'"
+                dc:identifier="'.$article->getURL( ).'"
+                dc:title="'.$article->getTitle( ).'"
+                trackback:ping="' . AMP_Url_AddVars( AMP_CONTENT_URL_TRACKBACKS, 'id='.$article_id) . '" />
+            </rdf:RDF>
+            -->';
     }
     function _HTML_title( $title ) {
 		return "<hr><p>" .$this->_HTML_bold( $title ). $this->_HTML_newline();
