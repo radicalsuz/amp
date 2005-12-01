@@ -1,0 +1,110 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>	
+	<title>
+		<type>text</type>
+		<label>Title</label>
+		<required>1</required>
+	</title>
+	<subtitle>
+		<type>text</type>
+		<label>Subtitle</label>
+	</subtitle>
+	<author>
+		<type>text</type>
+		<label>Owner Name</label>
+	</author>
+	<email>
+		<type>text</type>
+		<label>Owner Email</label>
+	</email>
+	<description>
+		<type>textarea</type>
+		<label>Description</label>
+		<required>1</required>
+	</description>
+	<image>
+		<type>imagepicker</type>
+        <label>Image Filename</label>
+	</image>
+	<copyright>
+		<type>text</type>
+		<label>Copyright</label>
+	</copyright>
+	<language>
+		<type>text</type>
+		<label>Language</label>
+		<default>en-us</default>
+	</language>
+	<category>
+		<type>text</type>
+		<label>Category</label>
+	</category>
+	<ttl>
+		<type>text</type>
+		<label>Time To Live</label>
+		<default>40</default>
+	</ttl>
+</array>
+
+
+
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+        <type>checkbox</type>
+        <label>&lt;span class='publish_label'&gt;PUBLISH&lt;/span&gt;</label>
+    </publish>
+	<file_header>
+		<type>header</type>
+		<label>File Info</label>
+	</file_header>	
+	<podcast>
+		<type>select</type>
+		<label>Podcast</label>
+		<required>1</required>
+	</podcast>
+	<file>
+		<type>select</type>
+		<label>File Name</label>
+		<required>1</required>
+	</file>
+	<length>
+		<type>text</type>
+		<label>Length (format: 03:54)</label>
+		<required>1</required>
+	</length>
+	<file_desc>
+		<type>header</type>
+		<label>File Description</label>
+	</file_desc>	
+	<title>
+		<type>text</type>
+		<label>Title</label>
+		<required>1</required>
+	</title>
+	<subtitle>
+		<type>text</type>
+		<label>Subtitle</label>
+	</subtitle>
+	<description>
+		<type>textarea</type>
+		<label>Description</label>
+	</description>
+	<author>
+		<type>text</type>
+		<label>Owner Name</label>
+	</author>
+	<date>
+		 <type>date</type>
+        <label>Date</label>
+        <default>today</default>
+	</date>
+	<keywords>
+		<type>textarea</type>
+		<label>Keywords</label>
+	</keywords>
+</array>
