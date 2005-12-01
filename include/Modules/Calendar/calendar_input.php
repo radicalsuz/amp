@@ -12,60 +12,63 @@ $modid=1;
 require_once("AMP/BaseDB.php"); 
 require_once("dropdown.php"); 
 
-  // *** Edit Operations: declare Tables
-  $MM_editAction = $_SERVER['PHP_SELF'];
-  if ($_SERVER['QUERY_STRING']) {
-    $MM_editAction = $MM_editAction . "?" . $_SERVER['QUERY_STRING'];
-  }
+// *** Edit Operations: declare Tables
+$MM_editAction = $_SERVER['PHP_SELF'];
+if ($_SERVER['QUERY_STRING']) {
+	$MM_editAction = $MM_editAction . "?" . $_SERVER['QUERY_STRING'];
+}
 
-  $MM_abortEdit = 0;
-  $MM_editQuery = "";
+$MM_abortEdit = 0;
+$MM_editQuery = "";
 
 // *** Insert Record: set Variables
 
-if (isset($_POST['MM_insert'])&&$_POST['MM_insert']){
+if (isset($_POST['MM_insert'])&&$_POST['MM_insert']) {
 
-   // $MM_editConnection = MM__STRING;
-   $startdate = DateConvertIn($_REQUEST['startdate']);
-   $MM_editTable  = "calendar";
-    if ($nonstateregion !=1) {$region = $_POST[lstate];} 
-   $MM_fieldsStr = "type|value|startdate|value|time|value|event|value|description|value|longdescription|value|organization|value|contact|value|email|value|phone1|value|url|value|location|value|city|value|lstate|value|lcountry|value|laddress|value|lzip|value|fname2|value|lname2|value|organization2|value|address2|value|city2|value|state2|value|zip2|value|country2|value|email2|value|phone2|value|endorse|value|publish|value|repeat|value|student|value|region|value";
-   $MM_columnsStr = "typeid|none,none,NULL|date|',none,NULL|time|',none,''|event|',none,''|shortdesc|',none,''|fulldesc|',none,''|org|',none,''|contact1|',none,''|email1|',none,''|phone1|',none,''|url|',none,''|location|',none,''|lcity|',none,''|lstate|',none,''|lcountry|',none,''|laddress|',none,''|lzip|',none,''|fname2|',none,''|lname2|',none,''|orgaznization2|',none,''|address2|',none,''|city2|',none,''|state2|',none,''|zip2|',none,''|country2|',none,''|email2|',none,''|phone2|',none,''|endorse|',none,''|publish|none,none,NULL|repeat|none,1,0|student|none,1,0|region|',none,''";
+	// $MM_editConnection = MM__STRING;
+	$startdate = DateConvertIn($_REQUEST['startdate']);
+	$MM_editTable  = "calendar";
+	if ($nonstateregion !=1) {
+		$region = $_POST[lstate];
+	}
+	$MM_fieldsStr = "type|value|startdate|value|time|value|event|value|description|value|longdescription|value|organization|value|contact|value|email|value|phone1|value|url|value|location|value|city|value|lstate|value|lcountry|value|laddress|value|lzip|value|fname2|value|lname2|value|organization2|value|address2|value|city2|value|state2|value|zip2|value|country2|value|email2|value|phone2|value|endorse|value|publish|value|repeat|value|student|value|region|value";
+	$MM_columnsStr = "typeid|none,none,NULL|date|',none,NULL|time|',none,''|event|',none,''|shortdesc|',none,''|fulldesc|',none,''|org|',none,''|contact1|',none,''|email1|',none,''|phone1|',none,''|url|',none,''|location|',none,''|lcity|',none,''|lstate|',none,''|lcountry|',none,''|laddress|',none,''|lzip|',none,''|fname2|',none,''|lname2|',none,''|orgaznization2|',none,''|address2|',none,''|city2|',none,''|state2|',none,''|zip2|',none,''|country2|',none,''|email2|',none,''|phone2|',none,''|endorse|',none,''|publish|none,none,NULL|repeat|none,1,0|student|none,1,0|region|',none,''";
  
-    
- require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php");
-$recent=$dbcon->Execute("SELECT id FROM calendar order by id desc LIMIT 1") or DIE($dbcon->ErrorMsg());
- $idval= $recent->Fields("id");
- $recent->Close();
+	require ("Connections/insetstuff.php"); 
+	require ("Connections/dataactions.php");
+	$recent=$dbcon->Execute("SELECT id FROM calendar order by id desc LIMIT 1")
+		or DIE($dbcon->ErrorMsg());
+	$idval= $recent->Fields("id");
+	$recent->Close();
 
- $mailtext = "Event Name: $event \n Date: $startdate \n Time: $time \n Description: $description \n Long Description: $longdescription \n Organization: $organization \n Contact: $contact \n Email: $email \n Phone: $phone1 \n Website: $url \n Location: $location \n City: $city \n State Code: $lstate \n Country: $lcountry \n Address: $laddress \n Zip: $lzip \n Student Event: $studnet \n Endorse: $endorse \n Repeating Event: $repeat \n     \nPlease visit ";
- $mailtext .= $Web_url."system/calendar_gxedit.php?id=$idval to edit";
-   mail ( "$MM_email_calendar", "new calendar posting", "$mailtext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
+	$mailtext = "Event Name: $event \n Date: $startdate \n Time: $time \n Description: $description \n Long Description: $longdescription \n Organization: $organization \n Contact: $contact \n Email: $email \n Phone: $phone1 \n Website: $url \n Location: $location \n City: $city \n State Code: $lstate \n Country: $lcountry \n Address: $laddress \n Zip: $lzip \n Student Event: $studnet \n Endorse: $endorse \n Repeating Event: $repeat \n     \nPlease visit ";
+	$mailtext .= $Web_url."system/calendar_gxedit.php?id=$idval to edit";
+	mail ( "$MM_email_calendar", "new calendar posting", "$mailtext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
 
 	$recent->Close();
-    if ( ($fname2==($null)) && ($lname2==($null)) && ($organization2==($null)))
-	{ header ("Location: calendar_input.php?thank=1");	}
-	else {
-	 $MM_editTable  = "contacts2";
-   $MM_editRedirectUrl = "calendar_input.php?thank=1";
-  if ($student == 1) {$classid = 8; }
-   $MM_fieldsStr = "fname2|value|lname2|value|organization2|value|address2|value|city2|value|state2|value|zip2|value|country2|value|email2|value|phone2|value|source|value|enteredby|value|classid|value";
- 
-   $MM_columnsStr = "FirstName|',none,''|LastName|',none,''|Company|',none,''|BusinessStreet|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|EmailAddress|',none,''|BusinessPhone|',none,''|source|none,none,NULL|enteredby|none,none,NULL|classid|none,none,NULL";
-   require ("Connections/insetstuff.php"); 
-require ("Connections/dataactions.php"); }
-  
-  }
+	if ( ($fname2==($null)) && ($lname2==($null)) && ($organization2==($null))) {
+		header ("Location: calendar_input.php?thank=1");
+	} else {
+		$MM_editTable  = "contacts2";
+		$MM_editRedirectUrl = "calendar_input.php?thank=1";
+		if ($student == 1) {
+			$classid = 8;
+		}
+		$MM_fieldsStr = "fname2|value|lname2|value|organization2|value|address2|value|city2|value|state2|value|zip2|value|country2|value|email2|value|phone2|value|source|value|enteredby|value|classid|value";
+		$MM_columnsStr = "FirstName|',none,''|LastName|',none,''|Company|',none,''|BusinessStreet|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|EmailAddress|',none,''|BusinessPhone|',none,''|source|none,none,NULL|enteredby|none,none,NULL|classid|none,none,NULL";
+		require ("Connections/insetstuff.php"); 
+		require ("Connections/dataactions.php");
+	}
+}
 
-
-   $state=$dbcon->CacheExecute("SELECT * FROM states") or DIE($dbcon->ErrorMsg());
-   $state_numRows=0;
-   $state__totalRows=$state->RecordCount();
-   $eventtype=$dbcon->CacheExecute("SELECT * FROM eventtype order by name asc") or DIE($dbcon->ErrorMsg());
-   $eventtype_numRows=0;
-   $eventtype__totalRows=$eventtype->RecordCount();
+$state=$dbcon->CacheExecute("SELECT * FROM states") or DIE($dbcon->ErrorMsg());
+$state_numRows=0;
+$state__totalRows=$state->RecordCount();
+$eventtype=$dbcon->CacheExecute("SELECT * FROM eventtype order by name asc") or DIE($dbcon->ErrorMsg());
+$eventtype_numRows=0;
+$eventtype__totalRows=$eventtype->RecordCount();
 ?>
+
 <script language="JavaScript" type="text/JavaScript">
 <!--
 function MM_findObj(n, d) { //v4.01
