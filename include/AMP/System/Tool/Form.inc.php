@@ -20,24 +20,14 @@ class Tool_Form extends AMPSystem_Form_XML {
         if ( !( $modid = $this->getIdValue( ) )) return false;
         
         require_once( 'AMP/System/IntroText/List.inc.php');
-        /*
-        require_once( 'AMP/Content/Nav/List.inc.php');
         require_once( 'AMP/System/Tool/Control/List.inc.php');
-        require_once( 'AMP/System/Page/Display.inc.php');
-        */
-
-        #$intro_list = &new AMPSystem_IntroText_List( $dbcon ) ;
-        $list_array = array( 
-            'Public Pages'  =>  'AMPSystem_IntroText_List');
-/*
-        $nav_list = &new Nav_List( $dbcon ) ;
-
-        $controls_list = &new ToolControl_List( $dbcon );
+        require_once( 'AMP/Content/Nav/List.inc.php');
+        
         $list_array = array( 
             'Public Pages'  =>  'AMPSystem_IntroText_List',
-            'Tool Settings' =>  'ToolControl_List',
-            'Navigation Files'  => 'Nav_List' );
-        */
+            'Navigation Files'  => 'Nav_List', 
+            'Tool Settings' =>  'ToolControl_List');
+
         $linked_lists = "";
         foreach ( $list_array as $header => $list_class ) {
             $linked_lists .= $this->_outputLinkedList( $list_class, $header );
@@ -47,11 +37,16 @@ class Tool_Form extends AMPSystem_Form_XML {
     
 
     function _outputLinkedList( $list_class, $header ){
+        if ( !( $modid = $this->getIdValue( ) )) return false;
         $dbcon = &AMP_Registry::getDbcon( );
+
         $list = &new $list_class( $dbcon ) ;
-        $list->addCriteria( 'modid='.$modid);
+        $list->setTool( $modid );
+        if ( !$list_html = $list->output( )) return false;
+
+        require_once( 'AMP/System/Page/Display.inc.php');
         return AMPSystem_Page_Display::makeHeader( $header )
-                . $list->output( ) ;
+                . $list_html ;
 
     }
     

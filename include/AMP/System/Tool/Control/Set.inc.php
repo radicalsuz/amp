@@ -1,12 +1,13 @@
 <?php
 
-require_once ('AMP/System/Data/Set.inc.php' );
+require_once( 'AMP/System/Data/Set.inc.php');
+require_once( 'AMP/System/Tool/Control/Control.php');
 
-class AMPSystem_Tool_Controls extends AMPSystem_Data_Set {
-
+class ToolControlSet extends AMPSystem_Data_Set {
     var $datatable = 'module_control';
+    var $sort = array( "description");
 
-    function AMPSystem_Tool_Controls ( &$dbcon, $modid = null ) {
+    function ToolControlSet ( &$dbcon, $modid= null ){
         $this->init( $dbcon );
         if (isset($modid)) $this->setTool( $modid );
     }

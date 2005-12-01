@@ -71,8 +71,8 @@ $currentPage->initLocation();
  * Retrieve tools settings from the modules_control table  
  */
 if (isset($modid) && $modid ) {
-    require_once( 'AMP/System/Tool/Controls.inc.php' );
-    $controls = &new AMPSystem_Tool_Controls( $dbcon, $modid );
+    require_once( 'AMP/System/Tool/Control/Set.inc.php' );
+    $controls = &new ToolControlSet( $dbcon, $modid );
     $controls->globalizeSettings();
 }
 

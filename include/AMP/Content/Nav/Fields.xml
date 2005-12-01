@@ -1,0 +1,161 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<name>
+		<type>text</type>
+		<label>Name</label>
+	</name>
+	<modid>
+		<type>select</type>
+		<label>Tool</label>
+        <lookup>tools</lookup>
+	</modid>
+    <content_header>
+        <type>header</type>
+        <label>Navigation Content</label>
+    </content_header>
+	<titletext>
+		<type>text</type>
+		<label>Title</label>
+	</titletext>
+	<titleimg>
+		<type>text</type>
+		<label>Title Image</label>
+	</titleimg>
+	<titleti>
+		<type>checkbox</type>
+		<label>Use Image as Title</label>
+	</titleti>
+	<nosqlcode>
+		<type>textarea</type>
+		<label>Navigation HTML</label>
+        <size>20:60</size>
+	</nosqlcode>
+    <template_header>
+        <type>blocktrigger</type>
+        <label>Navigation Template</label>
+        <block>template_header</block>
+        <block_trigger>templateid</block_trigger>
+    </template_header>
+	<templateid>
+		<type>select</type>
+		<label>Template Override</label>
+        <lookup>templates</lookup>
+        <block>template_header</block>
+	</templateid>
+	<linkextra>
+		<type>text</type>
+		<label>Link CSS Override</label>
+        <block>template_header</block>
+	</linkextra>
+    <rss_header>
+        <type>blocktrigger</type>
+        <label>RSS Based Navigation</label>
+        <block>rss_header</block>
+        <block_trigger>rss</block_trigger>
+    </rss_header>
+	<rss>
+		<type>text</type>
+		<label>RSS Feed URL</label>
+        <block>rss_header</block>
+	</rss>
+    <dynamic_header>
+        <type>blocktrigger</type>
+        <label>Dynamic Navigation</label>
+        <block>dynamic_header</block>
+        <block_trigger>sql</block_trigger>
+    </dynamic_header>
+    <section>
+        <type>select</type>
+        <label>Pull Content From Section</label>
+        <block>dynamic_header</block>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
+    </section>
+    <class>
+        <type>select</type>
+        <label>Pull Content From Class</label>
+        <block>dynamic_header</block>
+        <lookup>
+            <module>content</module>
+            <instance>class</instance>
+        </lookup>
+    </class>
+	<sql>
+		<type>textarea</type>
+		<label>SQL</label>
+        <block>dynamic_header</block>
+		<size>20:60</size>
+	</sql>
+    <link_header>
+        <type>header</type>
+        <label>Link for Dynamic Content</label>
+        <block>dynamic_header</block>
+    </link_header>
+    <link_explanation>
+        <type>static</type>
+        <default>&lt;div align="center"&gt;&amp;lt;a href=1?2(or id)=3(or 
+              $id)&amp;gt; 4 (or $linktext) &amp;lt;/a&amp;gt;&lt;br&gt;
+              (where 3 and 4 are field values from above sql)&lt;/div&gt;
+        </default>
+        <block>dynamic_header</block>
+    </link_explanation>
+	<linkfile>
+		<type>text</type>
+        <block>dynamic_header</block>
+		<label>Link File ( 1 )</label>
+	</linkfile>
+	<mvar1>
+		<type>text</type>
+        <block>dynamic_header</block>
+		<label>Other File Var ( 2 )</label>
+	</mvar1>
+	<mvar1val>
+		<type>text</type>
+        <block>dynamic_header</block>
+		<label>Other File Var Value ( 3 )</label>
+	</mvar1val>
+	<linkfield>
+		<type>text</type>
+        <block>dynamic_header</block>
+		<label>Other Link Fieldi ( 4 )</label>
+	</linkfield>
+    <morelink_header>
+        <type>header</type>
+        <label>More Link</label>
+        <block>dynamic_header</block>
+    </morelink_header>
+	<repeat>
+		<type>text</type>
+		<label>Maximum Items Before More Link</label>
+        <block>dynamic_header</block>
+	</repeat>
+    <morelink_explanation>
+        <type>static</type>
+        <default>&lt;div align=center>&amp;lt;A HREF=1?list=2&amp;amp;3=4&amp;gt;more&amp;lt;/a&amp;gt;&lt;br&gt; (where 4 is the db field from above sql)&lt;/div&gt;</default>
+        <block>dynamic_header</block>
+    </morelink_explanation>
+	<mfile>
+		<type>text</type>
+        <block>dynamic_header</block>
+        <label>Morelink file ( 1 )</label>
+	</mfile>
+	<mcall1>
+		<type>text</type>
+        <block>dynamic_header</block>
+		<label>Morelink list name( 2 )</label>
+	</mcall1>
+	<mvar2>
+		<type>text</type>
+		<label>More Var #2 ( 3 )</label>
+        <block>dynamic_header</block>
+	</mvar2>
+	<mcall2>
+		<type>text</type>
+		<label>More Field #2 ( 4 )</label>
+        <block>dynamic_header</block>
+	</mcall2>
+</array>

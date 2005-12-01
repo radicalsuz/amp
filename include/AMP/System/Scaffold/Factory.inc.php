@@ -73,7 +73,7 @@ class AMPScaffold_Factory {
     }
 
     function getTargetPath( ) {
-        return AMP_LOCAL_PATH . '/lib/'. $this->_item_paths[ $this->_scaffold_item_type ] . $this->_scaffold_item;
+        return AMP_LOCAL_PATH . '/lib/'. $this->_item_paths[ $this->_scaffold_item_type ] . str_replace( '_', DIRECTORY_SEPARATOR, $this->_scaffold_item);
     }
 
     function execute( ) {
@@ -102,6 +102,7 @@ class AMPScaffold_Factory {
         foreach( $field_defs as $single_field ){
             $current_type = 'text';
             if ( isset( $this->_special_fieldtypes[ $single_field->type ])) $current_type = $this->_special_fieldtypes[ $single_field->type ];
+            if ( 'id' == $single_field->name ) $current_type = 'hidden';
             $merge_values = array( $single_field->name );
             $merge_values = array( $single_field->name, $current_type, ucwords( $single_field->name ) ) ;
             $merge_values[] = ( 'date' == $current_type ) ? "-->\n\n        <default>today</default>\n      <!-- " : " ";

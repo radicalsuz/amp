@@ -122,12 +122,12 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->col_headers[$col_name] = $col_exp;
     }
 
-    function suppressHeader() {
-        $this->suppress['header'] = true;
+    function suppressHeader( $value = true ) {
+        $this->suppress['header'] = $value;
     }
 
-    function suppressAddlink() {
-        $this->suppress['addlink'] = true;
+    function suppressAddlink( $value = true ) {
+        $this->suppress['addlink'] = $value ;
     }
 
     function getColor( $color_type ) {
@@ -235,12 +235,12 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _HTML_listTitle() {
 
-        if (isset($this->suppress['header'])) return false;
+        if (isset($this->suppress['header']) && $this->suppress['header']) return false;
         return "<h2>".str_replace("_", " ", $this->name)."</h2>";
     }
 
     function _HTML_editColumnHeader() {
-        if (isset($this->suppress['editcolumn'])) return "";
+        if (isset($this->suppress['editcolumn']) && $this->suppress['editcolumn']) return "";
         return "\n<td>&nbsp;</td>";
     }
 
@@ -283,7 +283,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _HTML_addLink () {
-        if (isset($this->suppress['addlink'])) return false;
+        if (isset($this->suppress['addlink']) && $this->suppress['addlink']) return false;
         return "<a href=\"".$this->editlink."\">Add new record</a> ";
     }
 

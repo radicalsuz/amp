@@ -6,8 +6,8 @@ require_once( 'AMP/System/IntroText/Set.inc.php');
 class AMPSystem_IntroText_List extends AMPSystem_List {
     var $name = "Intro Text";
     var $col_headers = array(
-        'Module Page'=>'name',
-        'Module'=>'modid',
+        'Page Name'=>'name',
+        'Tool'=>'modid',
         'ID'=>'id');
     var $editlink = 'introtext.php';
 
@@ -20,5 +20,11 @@ class AMPSystem_IntroText_List extends AMPSystem_List {
     function getModuleNames () {
         return AMPSystem_Lookup::instance('Modules');
     }
+
+    function setTool( $tool_id ){
+        $this->editlink = AMP_Url_AddVars( $this->editlink, 'tool_id='.$tool_id );
+        $this->addCriteria( 'modid='.$tool_id );
+    }
+
 }
 ?>

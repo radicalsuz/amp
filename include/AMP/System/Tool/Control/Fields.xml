@@ -1,0 +1,29 @@
+<array>
+    <id>
+		<type>hidden</type>
+	</id>
+    <!--
+	<display>
+		<type>checkbox</type>
+		<label>&lt;span class='publish_label'&gt;Publish&lt;/span&gt;</label>
+	</display>
+	<description>
+		<type>text</type>
+		<label>Control</label>
+        <size>70</size>
+	</description>
+	<modid>
+		<type>select</type>
+		<label>Tool</label>
+        <lookup>tools</lookup>
+	</modid>
+	<var>
+		<type>text</type>
+		<label>Control Variable ( please don't change )</label>
+    </var>
+    -->
+	<setting>
+		<type>textarea</type>
+		<label>Control Setting</label>
+	</setting>
+</array>

@@ -36,7 +36,7 @@ class AMPSystem_Form extends AMPForm {
     }
 
     function init( $name, $method = "POST", $action = null ) {
-        parent::init( $name, $method, $action );
+        PARENT::init( $name, $method, $action );
         $this->template->setClass( 'label', 'name' );
         $this->template->setClass( 'span', 'name' );
         $this->template->setClass( 'header', 'intitle' );

@@ -16,6 +16,8 @@
 
 require_once( 'AMP/System/Base.php' );
 require_once( 'AMP/System/Page/Display.inc.php' );
+require_once( 'AMP/System/Page/Urls.inc.php');
+
 define( 'AMP_PAGE_ACTION_COMPONENT_INIT', 'init' );
 define( 'AMP_PAGE_ACTION_COMPONENT_EXEC', 'execute' );
 
@@ -38,6 +40,8 @@ class AMPSystem_Page {
 
     var $results = array();
     var $errors = array();
+
+    var $_performed_action;
 
     function AMPSystem_Page ( &$dbcon, $component_map=null ) {
         $this->init ($dbcon, $component_map);
@@ -70,7 +74,12 @@ class AMPSystem_Page {
 
         if (method_exists( $this, $action_method )) {
             return $this->$action_method();
+            $this->_performed_action = $action;
         }
+    }
+
+    function getAction( ){
+        return $this->_performed_action;
     }
 
     function output ( ) {

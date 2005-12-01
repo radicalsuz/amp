@@ -101,6 +101,12 @@ class AMPSystemLookup_Modules extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_Tools extends AMPSystem_Lookup {
+    function AMPSystemLookup_Tools( ){
+        $this->dataset = &AMPSystem_Lookup::instance( 'modules' );
+    }
+}
+
 class AMPSystemLookup_ToolsbyForm extends AMPSystem_Lookup {
     var $datatable = "modules";
     var $result_field = "id";

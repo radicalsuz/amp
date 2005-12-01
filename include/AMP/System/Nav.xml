@@ -67,53 +67,53 @@
 </calendarfeeds>
 
 <faq>
-<title>FAQs</title>
-<per>FAQ_ACCESS</per>
-<item>
-<href>faq.php?action=list</href>
-<label>View FAQs</label>
-<class>view</class>
-<per>FAQ_ACCESS</per>
-</item>
-<item>
-<href>faq.php</href>
-<label>Add FAQ</label>
-<class>add</class>
-<per>FAQ_ACCESS</per>
-</item>
-<item>
-<href>faq_type.php?action=list</href>
-<label>FAQ Types</label>
-<per>FAQ_ACCESS</per>
-</item>
+	<title>FAQs</title>
+	<per>FAQ_ACCESS</per>
+	<item>
+		<href>faq.php?action=list</href>
+		<label>View FAQs</label>
+		<class>view</class>
+		<per>FAQ_ACCESS</per>
+	</item>
+	<item>
+		<href>faq.php</href>
+		<label>Add FAQ</label>
+		<class>add</class>
+		<per>FAQ_ACCESS</per>
+	</item>
+	<item>
+		<href>faq_type.php?action=list</href>
+		<label>FAQ Types</label>
+		<per>FAQ_ACCESS</per>
+	</item>
 </faq>
 
 <flashmap>
-<title>Maps</title>
-<item>
-<href>maps.php?action=list</href>
-<label>View Maps</label>
-<class>view</class>
-</item>
-<item>
-<href>maps.php</href>
-<label>Add Map</label>
-<class>add</class>
-</item>
+	<title>Maps</title>
+	<item>
+		<href>maps.php?action=list</href>
+		<label>View Maps</label>
+		<class>view</class>
+	</item>
+	<item>
+		<href>maps.php</href>
+		<label>Add Map</label>
+		<class>add</class>
+	</item>
 </flashmap>
 
 <quiz>
-<title>Quiz</title>
-<item>
-<href>quiz.php?action=list</href>
-<label>View Quizes</label>
-<class>view</class>
-</item>
-<item>
-<href>quiz.php</href>
-<label>Add Quiz</label>
-<class>add</class>
-</item>
+	<title>Quiz</title>
+	<item>
+		<href>quiz.php?action=list</href>
+		<label>View Quizes</label>
+		<class>view</class>
+	</item>
+	<item>
+		<href>quiz.php</href>
+		<label>Add Quiz</label>
+		<class>add</class>
+	</item>
 </quiz>
 
 
@@ -442,91 +442,91 @@
 
 
 <rss>
-<title>RSS Syndication</title>
-<per>CONTENT_RSS_AGGREGATOR</per>
-<item>
-<href>rssfeed.php?action=list</href>
-<label>View/Edit Feeds</label>
-<class>view</class>
-</item>
-<item>
-<href>rssfeed.php</href>
-<label>Add Feed</label>
-<class>add</class>
-</item>
-<item>
-<title>RSS Aggregator</title>
-<href>feeds_add.php</href>
-<label>Add/Edit</label>
-<class>add</class>
-</item>
-<item>
-<label>Update Feeds</label>
-<href>feeds_update.php</href>
-</item>
-<item>
-<href>feeds_view.php?action=list</href>
-<label>View/Filter Feeds</label>
-<class>view</class>
-</item>
+	<title>RSS Syndication</title>
+	<per>CONTENT_RSS_AGGREGATOR</per>
+	<item>
+		<href>rssfeed.php?action=list</href>
+		<label>View/Edit Feeds</label>
+		<class>view</class>
+	</item>
+	<item>
+		<href>rssfeed.php</href>
+		<label>Add Feed</label>
+		<class>add</class>
+	</item>
+	<item>
+		<title>RSS Aggregator</title>
+		<href>feeds_add.php</href>
+		<label>Add/Edit</label>
+		<class>add</class>
+	</item>
+	<item>
+		<label>Update Feeds</label>
+		<href>feeds_update.php</href>
+	</item>
+	<item>
+		<href>feeds_view.php?action=list</href>
+		<label>View/Filter Feeds</label>
+		<class>view</class>
+	</item>
 </rss>
 
 
 <nav>
-<title>Navigation</title>
-<per>CONTENT_NAVIGATION</per>
-<item>
-<href>nav_position.php?mod_id=1</href>
-<label>Standard Navigation Layout</label>
-</item>
-<item>
-<href>nav_position.php?mod_id=2</href>
-<label>Front Page Navigation Layout</label>
-</item>
-<item>
-<href>nav.php?action=list</href>
-<label>View Navigation Elements</label>
-<class>view</class>
-</item>
-<item>
-<href>nav.php</href>
-<label>Add Navigation Elements</label>
-<class>add</class>
-</item>
+	<title>Navigation</title>
+	<per>CONTENT_NAVIGATION</per>
+	<item>
+		<href>nav_position.php?mod_id=1</href>
+		<label>Standard Navigation Layout</label>
+	</item>
+	<item>
+		<href>nav_position.php?mod_id=2</href>
+		<label>Front Page Navigation Layout</label>
+	</item>
+	<item>
+		<href>nav.php?action=list</href>
+		<label>View Navigation Elements</label>
+		<class>view</class>
+	</item>
+	<item>
+		<href>nav.php</href>
+		<label>Add Navigation Elements</label>
+		<class>add</class>
+	</item>
 </nav>
 
 
 <template>
-<title>Template</title>
-<per>CONTENT_TEMPLATE</per>
-<item>
-<href>template.php?action=list</href>
-<label>View/Edit Template</label>
-<class>view</class>
-</item>
-<item>
-<href>template.php</href>
-<label>Add Template</label>
-<class>add</class>
-</item>
-<item>
-<href>css_edit.php</href>
-<label>Edit Standard CSS</label>
-<class>view</class>
-<per>CONTENT_CSS</per>
-</item>
-<item>
-<href>css_list.php</href>
-<label>View/Edit Custom CSS</label>
-<class>view</class>
-<per>CONTENT_CSS</per>
-</item>
-<item>
-<href>custom_edit.php</href>
-<label>View/Edit Custom Files</label>
-<class>view</class>
-<per>TOOLS_CUSTOMFILES</per>
-</item>
+	<title>Template</title>
+	<per>CONTENT_TEMPLATE</per>
+	<item>
+		<href>template.php?action=list</href>
+		<label>View/Edit Template</label>
+		<class>view</class>
+	</item>
+	<item>
+		<href>template.php</href>
+		<label>Add Template</label>
+		<class>add</class>
+	</item>
+	<item>
+		<href>css_edit.php</href>
+		<label>Edit Standard CSS</label>
+		<class>view</class>
+		<per>CONTENT_CSS</per>
+	</item>
+	<item>
+		<href>css_list.php</href>
+		<label>View/Edit Custom CSS</label>
+		<class>view</class>
+		<per>CONTENT_CSS</per>
+	</item>
+	<item>
+		<href>custom_edit.php</href>
+		<label>View/Edit Custom Files</label>
+		<class>view</class>
+		<per>TOOLS_CUSTOMFILES</per>
+	</item>
 </template>
 
 
