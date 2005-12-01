@@ -89,9 +89,9 @@ $html .=  $buildform->add_row('Module', $Mod);
 $html .= addfield('name','Navigation Name','text',$R->Fields("name"));
 
 $html .= $buildform->add_header('Navigation Content', 'intitle');
-$html .= addfield('titletext','Navigation Title','text',$R->Fields("titletext"));
-$html .= addfield('titleimg','Title Image','text',$R->Fields("titleimg"));
-$html .= addfield('titleti','Use Image As Title','checkbox',$R->Fields("titleti"));
+$html .= addfield('titletext', 'Navigation Title',  'text',     $R->Fields("titletext"));
+$html .= addfield('titleimg',  'Title Image',       'text',     $R->Fields("titleimg"));
+$html .= addfield('titleti',   'Use Image As Title','checkbox', $R->Fields("titleti"));
 
 $html .= addfield('nosqlcode','Navigation HTML','textarea',$R->Fields("nosqlcode"));
 
