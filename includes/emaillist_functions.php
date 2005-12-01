@@ -328,6 +328,8 @@ function isEmail(email) {
 function friendsend($email,$fromemail,$fromname,$subject,$text) {
 	$headers="From: $fromname <$fromemail>\nReply-To: $fromemail";
 	//if (emailisvalid($email)) {
+	   $text = $text.'\n\n\n This message sent to you from '.AMP_SITE_NAME
+.'  '.AMP_SITE_URL;
 		mail ($email,$subject,$text,$headers);
 	//}
 }			
