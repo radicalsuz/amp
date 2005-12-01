@@ -88,7 +88,7 @@ font-size: 11px; font-weight: normal; font-style: italic; color: #666; }
 
 /* indiv gallery page */
 .gallerytitle { font-size: 16px; font-weight: bold; color: #333333; }
-div.gallery { padding: 0; margin: 0; border: 0; width: 100%; border: 1px solid #666; float:left;}
+div.gallery { padding: 0; margin: 0; border: 0; width: 400px; border: 1px solid #666; float:left; max-width: 400px;}
 div.gallerycon { width: 200px; height: 200px; float: left; margin: 10px; text-align: center; border: 0px solid #666; }
 .gallerycon img { float: center; padding: 5px; border: 1px solid #666; }
 .gallerycap { padding: 5px; border: 0px solid #666; margin: 5px; }

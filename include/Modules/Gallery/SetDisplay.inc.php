@@ -37,11 +37,11 @@ class GallerySet_Display extends AMPContent_DisplayList_HTML {
                 . $this->_HTML_newline( );
     }
 
-    function _HTML_thumbnail( &$image ){
+    function _HTML_thumbnail( &$gallery ){
         $this->_thumb_attr['class'] = 'imgpad';
-        if ( !$result = PARENT::_HTML_thumbnail( $image )) return false;
+        if ( !$result = PARENT::_HTML_thumbnail( $gallery->getImageRef( true ))) return false;
         
-        return $this->_HTML_link( $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $result, array( 'target' => '_blank') );
+        return $this->_HTML_link( $gallery->getURL( ), $result, array( 'target' => '_blank') );
     }
    /* 
     function _HTML_listItemLayout( $text, $image ) {
@@ -58,7 +58,7 @@ class GallerySet_Display extends AMPContent_DisplayList_HTML {
        
         $thumb = false;
         if (method_exists( $contentItem, 'getImageRef' )) {
-            $thumb  = $this->_HTML_thumbnail( $contentItem->getImageRef( true ) );
+            $thumb  = $this->_HTML_thumbnail( $contentItem );
         }
 
         $text_description   = $this->_HTML_listItemDescription( $contentItem );

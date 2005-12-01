@@ -15,6 +15,7 @@ define ('AMP_CONTENT_CLASS_MORENEWS' , 4 );
 if (!defined( 'AMP_CONTENT_CLASS_PRESSRELEASE'))    define ('AMP_CONTENT_CLASS_PRESSRELEASE' , 10 );
 define ('AMP_CONTENT_CLASS_USERSUBMITTED' , 9 );
 if (!defined( 'AMP_CONTENT_CLASS_ACTIONITEM'))      define ('AMP_CONTENT_CLASS_ACTIONITEM' , 5 );
+if (!defined( 'AMP_CONTENT_CLASS_BLOG' ))           define ('AMP_CONTENT_CLASS_BLOG', '20');
 if (!defined( 'AMP_CONTENT_CLASS_SECTIONFOOTER'))      define ('AMP_CONTENT_CLASS_SECTIONFOOTER' , false );
 
 if (!defined( 'AMP_ARTICLE_DISPLAY_DEFAULT'))   define( 'AMP_ARTICLE_DISPLAY_DEFAULT', 'Article_Display' );
@@ -176,6 +177,7 @@ class Article extends AMPSystem_Data_Item {
 
 
     function allowsComments() {
+        if ( $this->getClass( ) == AMP_CONTENT_CLASS_BLOG ) return true;
         return $this->getData( 'comments' );
     }
 
