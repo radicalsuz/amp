@@ -47,25 +47,31 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
     }
 
     function execute() {
-        $output = $this->_HTML_addCommentLink( $this->comment_set->getArticleId() );
+        $output = '<hr><p class="subtitle">Comments</p>';
         if (!$this->comment_set->makeReady()) return $output;
-
+        
+       
+        $output .= '<ol>';
+       
         while( $data = $this->comment_set->getData() ) {
-            $output .=  $this->_HTML_title( $data['title'] .
+                
+            $output .=  $this->_HTML_comment( 
                         $this->_HTML_p_commaJoin( 
                         array( 
-                            $this->_HTML_author( $data['author'], $data['email'] ),
+                            $this->_HTML_author( $data['author'], $data['website'] ),
                             $this->_HTML_date( $data['date'] )) 
                         ) .
                         $this->_HTML_commentBody( $data['comment'] ) );
         }
-
+        
+        $output .= '</ol>';
+        $output .= $this->_HTML_addCommentLink( $this->comment_set->getArticleId() ).'  |  '. $this->_HTML_trackback();
         return $output;
     }
 
     function _HTML_addCommentLink ($article_id) {
 	    return  $this->_RDF_trackbacks( $article_id ). 
-                '<br><p>' . $this->_HTML_link( AMP_URL_AddVars( "comment.php", 'cid=' . $article_id ), "add a comment" ) ."</p>\n";
+                $this->_HTML_link( AMP_URL_AddVars( "comment.php", 'cid=' . $article_id ), "Add a Comment" ) ;
     }
     function _RDF_trackbacks( $article_id ){
         require_once( 'AMP/Content/Article.inc.php');
@@ -84,22 +90,28 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
             </rdf:RDF>
             -->';
     }
-    function _HTML_title( $title ) {
-		return "<hr><p>" .$this->_HTML_bold( $title ). $this->_HTML_newline();
+    function _HTML_comment( $comment ) {
+		return "<li>" .$this->_HTML_bold( $comment ).'</li>'. $this->_HTML_newline();
     }
 
-    function _HTML_author( $author, $email ) {
-        if ($email) $href = 'mailto:'.$email;
-        return $this->_HTML_italics( 'by ' . $this->_HTML_link( $href, $author ));
+    function _HTML_author( $author, $website ) {
+        if ($website ) $href = $website;
+        return $this->_HTML_italics(  'Comment by '. $this->_HTML_link( $href, $author ) );
     }
+    
+    function _HTML_trackback() {
+         $href = 'article_trackback.php?id='.$_GET['id'];
+        return 'Trackback '.$this->_HTML_link( $href, 'URI');
+    }
+    
     function _HTML_date( $date ) {
         if (!$date) return false;
-        return $this->_HTML_italics( DoDateTime( $date, "l, M jS, Y g:ia" ) );
+        return $this->_HTML_italics( DoDateTime( $date, " M jS, Y g:ia" ) );
     }
 
     function _HTML_commentBody( $comment ) {
         if (!$comment) return false;
-        return '<P>' . converttext( $comment ) . "</P>\n";
+        return '<P class="text">' . converttext( $comment ) . "</P>\n";
     }
 }
 ?>

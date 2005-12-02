@@ -1,0 +1,1 @@
+ALTER TABLE comments add website add column author_IP varchar(100) null;

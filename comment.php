@@ -9,8 +9,8 @@ if (isset($_POST["MM_insert"])){
 	$MM_editTable  = "comments";
 	$MM_editRedirectUrl = "article.php?id=".$_POST["articleid"];
 	$publish = $defualtpublish;
-	$MM_fieldsStr = "author|value|titlex|value|email|value|comment|value|articleid|value|publish|value|date|value";
-	$MM_columnsStr = "author|',none,''|title|',none,''|email|',none,''|comment|',none,''|articleid|none,none,NULL|publish|none,1,0|date|',none,now()";
+	$MM_fieldsStr = "author|value|website|value|email|value|comment|value|articleid|value|publish|value|date|value";
+	$MM_columnsStr = "author|',none,''|website|',none,''|email|',none,''|comment|',none,''|articleid|none,none,NULL|publish|none,1,0|date|',none,now()";
 	require ("Connections/insetstuff.php");
     require ("Connections/dataactions.php");
 }
@@ -42,17 +42,17 @@ function addFieldToCheck(value,name) {
 	  
   <table width="100%" align="center" class="form">
     <tr> 
-      <td class="form">Author</td>
+      <td class="form">Your Name</td>
       <td> <input name="author" type="text" id="author" size="40">  <script language="Javascript" type="text/javascript">addFieldToCheck("author","Author");</script>
       </td> </tr>
     <tr> 
-      <td class="form">E-Mail</td>
+      <td class="form">E-Mail (not published) </td>
       <td class="test"> 
         <input name="email" type="text" id="email" size="40"> <script language="Javascript" type="text/javascript">addFieldToCheck("email","E-Mail");</script> </td>
     </tr>
     <tr> 
-      <td class="form">Title</td>
-      <td><input name="titlex" type="text" id="titlex" size="40"> <script language="Javascript" type="text/javascript">addFieldToCheck("titlex","Title");</script> </td>
+      <td class="form">Website</td>
+      <td><input name="website" type="text" id="website" size="40">  </td>
     </tr>
     <tr> 
       <td valign="top" class="form">Comment</td>
