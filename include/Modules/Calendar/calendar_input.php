@@ -10,6 +10,9 @@ To Do:  declare post vars, verify the required fields
 
 $modid=1;
 require_once("AMP/BaseDB.php"); 
+require_once( 'AMP/System/Tool/Control/Set.inc.php' );
+$controls = &new ToolControlSet( $dbcon, $modid );
+$controls->globalizeSettings();
 require_once("dropdown.php"); 
 
 // *** Edit Operations: declare Tables
@@ -29,7 +32,7 @@ if (isset($_POST['MM_insert'])&&$_POST['MM_insert']) {
 	$startdate = DateConvertIn($_REQUEST['startdate']);
 	$MM_editTable  = "calendar";
 	if ($nonstateregion !=1) {
-		$region = $_POST[lstate];
+		$region = $_POST['lstate'];
 	}
 	$MM_fieldsStr = "type|value|startdate|value|time|value|event|value|description|value|longdescription|value|organization|value|contact|value|email|value|phone1|value|url|value|location|value|city|value|lstate|value|lcountry|value|laddress|value|lzip|value|fname2|value|lname2|value|organization2|value|address2|value|city2|value|state2|value|zip2|value|country2|value|email2|value|phone2|value|endorse|value|publish|value|repeat|value|student|value|region|value";
 	$MM_columnsStr = "typeid|none,none,NULL|date|',none,NULL|time|',none,''|event|',none,''|shortdesc|',none,''|fulldesc|',none,''|org|',none,''|contact1|',none,''|email1|',none,''|phone1|',none,''|url|',none,''|location|',none,''|lcity|',none,''|lstate|',none,''|lcountry|',none,''|laddress|',none,''|lzip|',none,''|fname2|',none,''|lname2|',none,''|orgaznization2|',none,''|address2|',none,''|city2|',none,''|state2|',none,''|zip2|',none,''|country2|',none,''|email2|',none,''|phone2|',none,''|endorse|',none,''|publish|none,none,NULL|repeat|none,1,0|student|none,1,0|region|',none,''";
