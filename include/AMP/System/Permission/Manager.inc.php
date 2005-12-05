@@ -25,14 +25,13 @@ class AMPSystem_PermissionManager {
     function AMPSystem_PermissionManager () {
     }
 
-    function readLevel(&$dbcon, $userLevel ) {
-        $sql = "SELECT id, perid FROM permission WHERE groupid = ". $dbcon->qstr( $userLevel );
-        if (!$valper = $dbcon->GetAll($sql)) return false;
+    function readLevel( $userLevel ) {
+        if (!$allowed_permissions = &AMPSystemLookup_PermissionLevel::instance( $userLevel )) return false;
         $this->clear();
         $this->userLevel = $userLevel;
 
-        foreach ($valper as $perdef) {
-            $this->allow( $perdef['perid'] );
+        foreach ($allowed_permissions as $permission_id ) {
+            $this->allow( $permission_id );
         }
     }
 

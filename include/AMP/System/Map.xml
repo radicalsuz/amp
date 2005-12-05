@@ -110,117 +110,117 @@
 </content>
 
 <rss>
-<title>RSS Content</title>
-<per>CONTENT_RSS_ACCESS</per>
-<item>
-<href>rssfeed.php?action=list</href>
-<label>View Outgoing Feeds</label>
-<class>view</class>
-</item>
-<item>
-<href>rssfeed.php</href>
-<label>Add Feed</label>
-<class>add</class>
-</item>
-<item>
-<title>RSS Aggregator</title>
-<separator>1</separator>
-<href>feeds_add.php</href>
-<label>Add Incoming Feed</label>
-<class>add</class>
-<per>CONTENT_RSS_AGGREGATOR</per>
-</item>
+    <title>RSS Content</title>
+    <per>CONTENT_RSS_ACCESS</per>
+    <item>
+        <href>rssfeed.php?action=list</href>
+        <label>View Outgoing Feeds</label>
+        <class>view</class>
+    </item>
+    <item>
+        <href>rssfeed.php</href>
+        <label>Add Feed</label>
+        <class>add</class>
+    </item>
+    <item>
+        <title>RSS Aggregator</title>
+        <separator>1</separator>
+        <href>feeds_add.php</href>
+        <label>Add Incoming Feed</label>
+        <class>add</class>
+        <per>CONTENT_RSS_AGGREGATOR</per>
+    </item>
 
-<item>
-<label>Update Incoming Feeds</label>
-<href>feeds_update.php</href>
-<per>CONTENT_RSS_AGGREGATOR</per>
-</item>
-<item>
-<href>feeds_view.php?action=list</href>
-<label>View Incoming Content</label>
-<per>CONTENT_RSS_AGGREGATOR</per>
-<class>view</class>
-</item>
-<item>
-<href>podcast.php?action=list</href>
-<label>Podcasts</label>
-<class>view</class>
-</item>
+    <item>
+        <label>Update Incoming Feeds</label>
+        <href>feeds_update.php</href>
+        <per>CONTENT_RSS_AGGREGATOR</per>
+    </item>
+    <item>
+        <href>feeds_view.php?action=list</href>
+        <label>View Incoming Content</label>
+        <per>CONTENT_RSS_AGGREGATOR</per>
+        <class>view</class>
+    </item>
+    <item>
+        <href>podcast.php?action=list</href>
+        <label>Podcasts</label>
+        <class>view</class>
+    </item>
 </rss>
 
 <contenttools>
-<per>CONTENT_TOOLS_ACCESS</per>
-<title>Content Tools</title>
-<item>
-<label>User Accounts</label>
-<href>modinput4_data.php?modin=20</href>
-<per>CONTENT_USER_ADMIN</per>
-</item>
-<item>
-<label>Comments</label>
-<href>comments.php?action=list</href>
-<per>CONTENT_USER_ADDED_CONTENT</per>
-</item>
-<item>
-<label>Page Redirection</label>
-<href>redirect.php?action=list</href>
-<per>CONTENT_REDIRECTS</per>
-</item>
-<item>
-<label>Hot Words</label>
-<href>hotwords.php?action=list</href>
-<per>CONTENT_HOTWORDS</per>
-</item>
-<item>
-<label>Regions</label>
-<href>region.php?action=list</href>
-</item>
-<item>
-<label>Quotes</label>
-<per>QUOTES_ACCESS</per>
-<href>quotes.php?action=list</href>
-</item>
-<item>
-<label>User Added Content</label>
-<href>article_list.php?class=9</href>
-<per>CONTENT_USER_ADDED_CONTENT</per>
-</item>
-<item>
-<label>Search and SiteMap</label>
-<href>module_header_list.php?modid=19</href>
-<per>TOOLS_INTROTEXT</per>
-</item>
+    <per>CONTENT_TOOLS_ACCESS</per>
+    <title>Content Tools</title>
+    <item>
+        <label>User Accounts</label>
+        <href>modinput4_data.php?modin=20</href>
+        <per>CONTENT_USER_ADMIN</per>
+    </item>
+    <item>
+        <label>Comments</label>
+        <href>comments.php?action=list</href>
+        <per>CONTENT_USER_ADDED_CONTENT</per>
+    </item>
+    <item>
+        <label>Page Redirection</label>
+        <href>redirect.php?action=list</href>
+        <per>CONTENT_REDIRECTS</per>
+    </item>
+    <item>
+        <label>Hot Words</label>
+        <href>hotwords.php?action=list</href>
+        <per>CONTENT_HOTWORDS</per>
+    </item>
+    <item>
+        <label>Regions</label>
+        <href>region.php?action=list</href>
+    </item>
+    <item>
+        <label>Quotes</label>
+        <per>QUOTES_ACCESS</per>
+        <href>quotes.php?action=list</href>
+    </item>
+    <item>
+        <label>User Added Content</label>
+        <href>article_list.php?class=9</href>
+        <per>CONTENT_USER_ADDED_CONTENT</per>
+    </item>
+    <item>
+        <label>Search and SiteMap</label>
+        <href>module_header_list.php?modid=19</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
 </contenttools>
 
 <documents>
-<title>Docs and Images</title>
-<per>CONTENT_DOCUMENTS_EDIT</per>
-<item>
-<href>docdir.php</href>
-<label>View Documents</label>
-<class>doc</class>
-<per>CONTENT_DOCUMENTS_EDIT</per>
-</item>
-<item>
-<href>imgdir.php</href>
-<label>View Images</label>
-<class>img</class>
-<per>CONTENT_IMAGES_EDIT</per>
-</item>
-<item>
-<separator>1</separator>
-<href>doc_upload.php</href>
-<label>Upload Document</label>
-<class>upload</class>
-<per>CONTENT_DOCUMENTS_EDIT</per>
-</item>
-<item>
-<href>imgup.php</href>
-<label>Upload Images</label>
-<class>upload</class>
-<per>CONTENT_IMAGES_EDIT</per>
-</item>
+    <title>Docs and Images</title>
+    <per>CONTENT_DOCUMENTS_EDIT</per>
+    <item>
+        <href>docdir.php</href>
+        <label>View Documents</label>
+        <class>doc</class>
+        <per>CONTENT_DOCUMENTS_EDIT</per>
+    </item>
+    <item>
+        <href>imgdir.php</href>
+        <label>View Images</label>
+        <class>img</class>
+        <per>CONTENT_IMAGES_EDIT</per>
+    </item>
+    <item>
+        <separator>1</separator>
+        <href>doc_upload.php</href>
+        <label>Upload Document</label>
+        <class>upload</class>
+        <per>CONTENT_DOCUMENTS_EDIT</per>
+    </item>
+    <item>
+        <href>imgup.php</href>
+        <label>Upload Images</label>
+        <class>upload</class>
+        <per>CONTENT_IMAGES_EDIT</per>
+    </item>
 </documents>
 
 <tools>
@@ -473,12 +473,12 @@
 <per>SYSTEM_ACCESS</per>
 <item>
 <label>System Permissions</label>
-<href>per.php?action=list</href>
+<href>AMP_SYSTEM_URL_PERMISSION_GROUPS</href>
 <per>SYSTEM_PERMISSIONS</per>
 </item>
 <item>
 <label>System Users</label>
-<href>user.php?action=list</href>
+<href>AMP_SYSTEM_URL_USERS</href>
 <per>SYSTEM_USERS</per>
 </item>
 <item>
@@ -533,15 +533,15 @@
 </tooladmin>
 
 <help>
-<title>Help</title>
-<item>
-<label>Help</label>
-<href>http://www.radicaldesigns.org/downloads/manual.pdf</href>
-</item>
-<item>
-<label>HTML Tips</label>
-<href>html.html</href>
-</item>
+    <title>Help</title>
+    <item>
+        <label>Help</label>
+        <href>http://www.radicaldesigns.org/downloads/manual.pdf</href>
+    </item>
+    <item>
+        <label>HTML Tips</label>
+        <href>html.html</href>
+    </item>
 </help>
 
 </array>

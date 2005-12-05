@@ -9,7 +9,6 @@ class Tool_List extends AMPSystem_List {
         'name' => 'name',
         'ID'    => 'id');
     var $editlink = 'module.php';
-    var $extra_columns = array( 'Settings' => 'module_control_list.php?modid=');
 
     function Tool_List( &$dbcon ) {
         $source = & new ToolSet( $dbcon );

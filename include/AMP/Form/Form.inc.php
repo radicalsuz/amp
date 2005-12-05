@@ -303,6 +303,22 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 		return date( 'YmdHis', $time_stamped );
 	}
 
+    function _checkgroupToArray( $data, $fieldname ){
+        if ( !( isset( $data[$fieldname]) && is_array( $data[$fieldname]))) return false;
+        return array_keys( $data[ $fieldname ]);
+    }
+    function _checkgroupFromArray( $data, $fieldname ){
+        if ( !( isset( $data[$fieldname]) && is_array( $data[$fieldname]))) return false;
+        $results = array( );
+        foreach( $data[$fieldname] as $cg_key ) {
+            $results[$cg_key] = 1;
+        }
+        return $results;
+    }
+    function _checkgroupToText( $data, $fieldname ){
+        return join( ',', $this->_checkgroupToArray( $data, $fieldname ));
+    }
+
     function dropField( $fieldname ) {
         if (!isset($this->fields[ $fieldname ])) return false; 
         unset ( $this->fields[ $fieldname ] );
@@ -750,14 +766,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         if ( !is_array( $lookup_def )) return AMPSystem_Lookup::instance( $lookup_def );
         if ( isset( $lookup_def['module'])){
             return AMPSystem_Lookup::locate( $lookup_def );
-            /*
-            if ( "content" == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
-            $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
-            $cat = eval( 'return ' . $lookup_class . '::instance( $lookup_def["instance"] );');
-            #AMP_varDump( $cat );
-            return $cat;
-            #return call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;
-            */
         }
         return array( );
     }

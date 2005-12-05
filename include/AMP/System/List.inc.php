@@ -276,10 +276,15 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _HTML_footer() {
+        return  $this->_HTML_endList( )
+                . $this->_HTML_addLink();
+    }
+
+    function _HTML_endList( ){
         return  "\n	</table>\n"
                 . ( ($this->_pager_active && $this->_pager_display ) ? $this->_pager->execute() : false ) 
-                . "</div>\n<br>&nbsp;&nbsp;" 
-                . $this->_HTML_addLink();
+                . "</div>\n<br>&nbsp;&nbsp;";
+
     }
 
     function _HTML_addLink () {

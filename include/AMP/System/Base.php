@@ -11,12 +11,16 @@ require_once("AMP/System/Permission/Manager.inc.php");
 
 $userLevel = $_SERVER['REMOTE_GROUP'];
 $AMP_Permission = & AMPSystem_PermissionManager::instance();
-$AMP_Permission->readLevel( $dbcon, $userLevel );
-if (!AMP_Authorized( AMP_PERMISSION_CONTENT_ACCESS)) header ("Location: index.php");
+$AMP_Permission->readLevel( $userLevel );
+if (!AMP_Authorized( AMP_PERMISSION_CONTENT_ACCESS)) {
+    trigger_error( 'content access not authorized for user '.$userLevel );
+    header ("Location: index.php");
+}
 
 //ENSURE THAT THE current user is allowed to see this page
 $AMP_Permission->readUser( $dbcon, $_SERVER['REMOTE_USER'] );
 if (!$AMP_Permission->authorizedPage()) {
+    trigger_error( 'unauthorized page access attempt by '. $SERVER['REMOTE_USER']);
     ampredirect( $AMP_Permission->userHome() );
 }
 

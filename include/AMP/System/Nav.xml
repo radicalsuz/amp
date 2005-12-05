@@ -118,97 +118,97 @@
 
 
 <petition>
-<title>Petitions</title>
-<per>PETITION_ADMIN</per>
-<item>
-<label>View Petitions</label>
-<href>petition.php?action=list</href>
-<class>view</class>
-<per>PETITION_ADMIN</per>
-</item>
-<item>
-<label>Add Petition</label>
-<href>petition.php</href>
-<class>add</class>
-<per>PETITION_ADMIN</per>
-</item>
+	<title>Petitions</title>
+	<per>PETITION_ADMIN</per>
+	<item>
+		<label>View Petitions</label>
+		<href>petition.php?action=list</href>
+		<class>view</class>
+		<per>PETITION_ADMIN</per>
+	</item>
+	<item>
+		<label>Add Petition</label>
+		<href>petition.php</href>
+		<class>add</class>
+		<per>PETITION_ADMIN</per>
+	</item>
 </petition>
 
 <podcast>
-<title>Podcast</title>
-<item>
-<href>podcast_item.php?action=list</href>
-<label>View/Edit Items</label>
-<class>view</class>
-</item>
-<item>
-<href>podcast_item.php</href>
-<label>Add Item</label>
-<class>add</class>
-</item>
-<item>
-<href>podcast.php?action=list</href>
-<label>View/Edit Podcasts</label>
-<class>View</class>
-</item>
-<item>
-<href>podcast.php</href>
-<label>Add Podcast</label>
-<class>add</class>
-</item>
+	<title>Podcast</title>
+	<item>
+		<href>podcast_item.php?action=list</href>
+		<label>View/Edit Items</label>
+		<class>view</class>
+		</item>
+	<item>
+		<href>podcast_item.php</href>
+		<label>Add Item</label>
+		<class>add</class>
+	</item>
+	<item>
+		<href>podcast.php?action=list</href>
+		<label>View/Edit Podcasts</label>
+		<class>View</class>
+	</item>
+	<item>
+		<href>podcast.php</href>
+		<label>Add Podcast</label>
+		<class>add</class>
+	</item>
 </podcast>
 
 
 <gallery>
-<title>Photo Gallery</title>
-<per>GALLERY_ACCESS</per>
-<item>
-<href>gallery_image.php</href>
-<label>Add Photo</label>
-<per>GALLERY_IMAGE_PUBLISH</per>
-<class>add</class>
-</item>
-<item>
-<href>gallery_image.php?action=list</href>
-<label>View Gallery</label>
-<per>GALLERY_ACCESS</per>
-<class>view</class>
-</item>
-<item>
-<href>gallery_type.php?action=list</href>
-<label>View Galleries</label>
-<per>GALLERY_ADMIN</per>
-</item>
+	<title>Photo Gallery</title>
+	<per>GALLERY_ACCESS</per>
+	<item>
+		<href>gallery_image.php</href>
+		<label>Add Photo</label>
+		<per>GALLERY_IMAGE_PUBLISH</per>
+		<class>add</class>
+	</item>
+	<item>
+		<href>gallery_image.php?action=list</href>
+		<label>View Gallery</label>
+		<per>GALLERY_ACCESS</per>
+		<class>view</class>
+	</item>
+	<item>
+		<href>gallery_type.php?action=list</href>
+		<label>View Galleries</label>
+		<per>GALLERY_ADMIN</per>
+	</item>
 </gallery>
 
 
 <email>
-<title>Email Blast</title>
-<per>BLAST_ACCESS</per>
-<item>
-<href>blast_email.php?action=list</href>
-<label>View Email Blasts</label>
-<class>view</class>
-<per>BLAST_ACCESS</per>
-</item>
-<item>
-<href>blast_email.php</href>
-<label>New Blast</label>
-<class>add</class>
-<per>BLAST_SEND</per>
-</item>
-<item>
-<href>blast_lists.php?action=list</href>
-<label>View Blast Lists</label>
-<class>view</class>
-<per>BLAST_ADMIN</per>
-</item>
-<item>
-<href>blast_template.php?action=list</href>
-<label>Email Templates</label>
-<class>email</class>
-<per>BLAST_ADMIN</per>
-</item>
+	<title>Email Blast</title>
+	<per>BLAST_ACCESS</per>
+	<item>
+		<href>blast_email.php?action=list</href>
+		<label>View Email Blasts</label>
+		<class>view</class>
+		<per>BLAST_ACCESS</per>
+	</item>
+	<item>
+		<href>blast_email.php</href>
+		<label>New Blast</label>
+		<class>add</class>
+		<per>BLAST_SEND</per>
+	</item>
+	<item>
+		<href>blast_lists.php?action=list</href>
+		<label>View Blast Lists</label>
+		<class>view</class>
+		<per>BLAST_ADMIN</per>
+	</item>
+	<item>
+		<href>blast_template.php?action=list</href>
+		<label>Email Templates</label>
+		<class>email</class>
+		<per>BLAST_ADMIN</per>
+	</item>
 <!-- page doesn't work
 <item>
 <href>blast_report.php?action=list</href>
@@ -217,60 +217,60 @@
 <per>BLAST_ACCESS</per>
 </item>
 -->
-<item>
-<href>../lists/admin</href>
-<label>PHP List Admin</label>
-<class>email</class>
-<per>BLAST_ACCESS</per>
-</item>
+	<item>
+		<href>../lists/admin</href>
+		<label>PHP List Admin</label>
+		<class>email</class>
+		<per>BLAST_ACCESS</per>
+	</item>
 </email>
 
 
 <blasttools>
-<title>Email Blast Tools</title>
-<per>BLAST_ADMIN</per>
-<item>
-<href>../lists/admin</href>
-<label>PHP List Admin</label>
-<class>email</class>
-<per>BLAST_ADMIN</per>
-</item>
-<item>
-<href>email_lists.php</href>
-<label>AMP Email Blast</label>
-<class>email</class>
-<per>BLAST_ADMIN</per>
-</item>
-<item>
-<href>email_listsedit.php</href>
-<label>Add Email Lists</label>
-<class>add</class>
-<per>BLAST_ADMIN</per>
-</item>
+	<title>Email Blast Tools</title>
+	<per>BLAST_ADMIN</per>
+	<item>
+		<href>../lists/admin</href>
+		<label>PHP List Admin</label>
+		<class>email</class>
+		<per>BLAST_ADMIN</per>
+	</item>
+	<item>
+		<href>email_lists.php</href>
+		<label>AMP Email Blast</label>
+		<class>email</class>
+		<per>BLAST_ADMIN</per>
+	</item>
+	<item>
+		<href>email_listsedit.php</href>
+		<label>Add Email Lists</label>
+		<class>add</class>
+		<per>BLAST_ADMIN</per>
+	</item>
 </blasttools>
 
 
 <links>
-<title>Links</title>
-<per>LINKS_ACCESS</per>
-<item>
-<href>links.php?action=list</href>
-<label>View Links</label>
-<class>view</class>
-<per>LINKS_ACCESS</per>
-</item>
-<item>
-<href>links.php</href>
-<label>Add Link</label>
-<class>add</class>
-<per>LINKS_ACCESS</per>
-</item>
-<item>
-    <href>link_type.php?action=list</href>
-    <label>View Link Types</label>
-    <class>view</class>
-    <per>LINKS_ACCESS</per>
-</item>
+	<title>Links</title>
+	<per>LINKS_ACCESS</per>
+	<item>
+		<href>links.php?action=list</href>
+		<label>View Links</label>
+		<class>view</class>
+		<per>LINKS_ACCESS</per>
+	</item>
+	<item>
+		<href>links.php</href>
+		<label>Add Link</label>
+		<class>add</class>
+		<per>LINKS_ACCESS</per>
+	</item>
+	<item>
+		<href>link_type.php?action=list</href>
+		<label>View Link Types</label>
+		<class>view</class>
+		<per>LINKS_ACCESS</per>
+	</item>
 </links>
 
 <voterguides>
@@ -292,123 +292,123 @@
 
 
 <payments>
-<title>Payments</title>
-<per>PAYMENT_ADMIN</per>
-<item>
-<href>payment_type.php?action=list</href>
-<label>Add Payment Type</label>
-<class>add</class>
-<per>PAYMENT_ADMIN</per>
-</item>
-<item>
-<href>payment_type.php</href>
-<label>Edit Payment Type</label>
-<class>view</class>
-<per>PAYMENT_ADMIN</per>
-</item>
-<item>
-<href>payment_merchant.php?action=list</href>
-<label>View/Edit Merchants</label>
-<class>add</class>
-<per>PAYMENT_ADMIN</per>
-</item>
-<item>
-<href>payment_merchant.php</href>
-<label>Add Merchants</label>
-<class>view</class>
-<per>PAYMENT_ADMIN</per>
-</item>
+	<title>Payments</title>
+	<per>PAYMENT_ADMIN</per>
+	<item>
+		<href>payment_type.php?action=list</href>
+		<label>Add Payment Type</label>
+		<class>add</class>
+		<per>PAYMENT_ADMIN</per>
+	</item>
+	<item>
+		<href>payment_type.php</href>
+		<label>Edit Payment Type</label>
+		<class>view</class>
+		<per>PAYMENT_ADMIN</per>
+	</item>
+	<item>
+		<href>payment_merchant.php?action=list</href>
+		<label>View/Edit Merchants</label>
+		<class>add</class>
+		<per>PAYMENT_ADMIN</per>
+	</item>
+	<item>
+		<href>payment_merchant.php</href>
+		<label>Add Merchants</label>
+		<class>view</class>
+		<per>PAYMENT_ADMIN</per>
+	</item>
 </payments>
 
 
 <content>
-<title>Content</title>
-<per>CONTENT_ACCESS</per>
-<item>
-<href>articlelist.php</href>
-<label>View/Edit Content</label>
-<class>view</class>
-<per>CONTENT_EDIT</per>
-</item>
-<item>
-<href>article_edit.php</href>
-<label>Add Content</label>
-<class>add</class>
-<per>CONTENT_EDIT</per>
-</item>
-<item>
-<href>article_list.php?&amp;class=2</href>
-<label>View/Edit Front Page Content</label>
-<class>home</class>
-<per>CONTENT_EDIT</per>
-</item>
-<item>
-<href>article_fpedit.php</href>
-<label>Add Front Page Content</label>
-<class>add</class>
-<per>CONTENT_EDIT</per>
-</item>
-<item>
-<title>Docs and Images</title>
-<href>docdir.php</href>
-<label>View Documents</label>
-<class>doc</class>
-<per>CONTENT_DOCUMENTS_EDIT</per>
-</item>
-<item>
-<href>imgdir.php</href>
-<label>View Images</label>
-<class>img</class>
-<per>CONTENT_IMAGES_EDIT</per>
-</item>
-<item>
-<href>doc_upload.php</href>
-<label>Upload Document</label>
-<class>upload</class>
-<per>CONTENT_DOCUMENTS_EDIT</per>
-</item>
-<item>
-<href>imgup.php</href>
-<label>Upload Images</label>
-<class>upload</class>
-<per>CONTENT_IMAGES_EDIT</per>
-</item>
-<item>
-<title>Sections</title>
-<href>edittypes.php</href>
-<label>View/Edit Sections</label>
-<class>view</class>
-<per>CONTENT_SECTION_EDIT</per>
-</item>
-<item>
-<href>type_edit.php</href>
-<label>Add Section</label>
-<class>add</class>
-<per>CONTENT_SECTION_EDIT</per>
-</item>
-<item>
-<href>class.php</href>
-<label>Add Class</label>
-<class>add</class>
-<per>CONTENT_CLASS_EDIT</per>
-</item>
+	<title>Content</title>
+	<per>CONTENT_ACCESS</per>
+	<item>
+		<href>articlelist.php</href>
+		<label>View/Edit Content</label>
+		<class>view</class>
+		<per>CONTENT_EDIT</per>
+	</item>
+	<item>
+		<href>article_edit.php</href>
+		<label>Add Content</label>
+		<class>add</class>
+		<per>CONTENT_EDIT</per>
+	</item>
+	<item>
+		<href>article_list.php?&amp;class=2</href>
+		<label>View/Edit Front Page Content</label>
+		<class>home</class>
+		<per>CONTENT_EDIT</per>
+	</item>
+	<item>
+		<href>article_fpedit.php</href>
+		<label>Add Front Page Content</label>
+		<class>add</class>
+		<per>CONTENT_EDIT</per>
+	</item>
+	<item>
+		<title>Docs and Images</title>
+		<href>docdir.php</href>
+		<label>View Documents</label>
+		<class>doc</class>
+		<per>CONTENT_DOCUMENTS_EDIT</per>
+	</item>
+	<item>
+		<href>imgdir.php</href>
+		<label>View Images</label>
+		<class>img</class>
+		<per>CONTENT_IMAGES_EDIT</per>
+	</item>
+	<item>
+		<href>doc_upload.php</href>
+		<label>Upload Document</label>
+		<class>upload</class>
+		<per>CONTENT_DOCUMENTS_EDIT</per>
+	</item>
+	<item>
+		<href>imgup.php</href>
+		<label>Upload Images</label>
+		<class>upload</class>
+		<per>CONTENT_IMAGES_EDIT</per>
+	</item>
+	<item>
+		<title>Sections</title>
+		<href>edittypes.php</href>
+		<label>View/Edit Sections</label>
+		<class>view</class>
+		<per>CONTENT_SECTION_EDIT</per>
+	</item>
+	<item>
+		<href>type_edit.php</href>
+		<label>Add Section</label>
+		<class>add</class>
+		<per>CONTENT_SECTION_EDIT</per>
+	</item>
+	<item>
+		<href>class.php</href>
+		<label>Add Class</label>
+		<class>add</class>
+		<per>CONTENT_CLASS_EDIT</per>
+	</item>
 </content>
 
 <actions>
-<title>Web Actions</title>
-<per>ACTION_ACCESS</per>
-<item>
-<label>View/Edit</label>
-<href>sendfax_list.php</href>
-<class>view</class>
-<per>ACTION_ACCESS</per>
-</item>
-<item>
-<href>sendfax_edit.php</href>
-<label>Add</label>
-<class>add</class>
-<per>ACTION_ACCESS</per>
-</item>
+	<title>Web Actions</title>
+	<per>ACTION_ACCESS</per>
+	<item>
+		<label>View/Edit</label>
+		<href>sendfax_list.php</href>
+		<class>view</class>
+		<per>ACTION_ACCESS</per>
+	</item>
+	<item>
+		<href>sendfax_edit.php</href>
+		<label>Add</label>
+		<class>add</class>
+		<per>ACTION_ACCESS</per>
+	</item>
 </actions>
 
 <!--
@@ -424,20 +424,20 @@
 
 
 <quotes>
-<title>Quotes</title>
-<per>QUOTES_ACCESS</per>
-<item>
-<href>quotes.php?action=list</href>
-<label>View Quotes</label>
-<class>view</class>
-<per>QUOTES_ACCESS</per>
-</item>
-<item>
-<href>quotes.php</href>
-<label>Add Quote</label>
-<class>add</class>
-<per>QUOTES_ACCESS</per>
-</item>
+	<title>Quotes</title>
+	<per>QUOTES_ACCESS</per>
+	<item>
+		<href>quotes.php?action=list</href>
+		<label>View Quotes</label>
+		<class>view</class>
+		<per>QUOTES_ACCESS</per>
+	</item>
+	<item>
+		<href>quotes.php</href>
+		<label>Add Quote</label>
+		<class>add</class>
+		<per>QUOTES_ACCESS</per>
+	</item>
 </quotes>
 
 
@@ -531,91 +531,91 @@
 
 
 <tools>
-<title>Tools</title>
-<per>TOOLS_ACCESS</per>
-<item>
-<label>View Intro Text</label>
-<href>introtext.php?action=list</href>
-<class>view</class>
-<per>TOOLS_INTROTEXT</per>
-</item>
-<item>
-<href>introtext.php</href>
-<label>Add Intro Text</label>
-<class>add</class>
-<per>TOOLS_INTROTEXT</per>
-</item>
-<item>
-<href>module.php</href>
-<label>Add Tool</label>
-<class>add</class>
-<per>TOOLS_ADMIN</per>
-</item>
-<item>
-<href>module.php?action=list</href>
-<label>Edit Tool Settings</label>
-<class>view</class>
-<per>TOOLS_ADMIN</per>
-</item>
+	<title>Tools</title>
+	<per>TOOLS_ACCESS</per>
+	<item>
+		<label>View Intro Text</label>
+		<href>introtext.php?action=list</href>
+		<class>view</class>
+		<per>TOOLS_INTROTEXT</per>
+	</item>
+	<item>
+		<href>introtext.php</href>
+		<label>Add Intro Text</label>
+		<class>add</class>
+		<per>TOOLS_INTROTEXT</per>
+	</item>
+	<item>
+		<href>module.php</href>
+		<label>Add Tool</label>
+		<class>add</class>
+		<per>TOOLS_ADMIN</per>
+	</item>
+	<item>
+		<href>module.php?action=list</href>
+		<label>Edit Tool Settings</label>
+		<class>view</class>
+		<per>TOOLS_ADMIN</per>
+	</item>
 </tools>
 
 <forms>
-<title>Forms</title>
-<per>FORM_ADMIN</per>
-<item>
-<href>modinput4_list.php</href>
-<label>View/Edit Forms</label>
-<class>view</class>
-</item>
-<item>
-<href>modinput4_new.php</href>
-<label>Add Form</label>
-<class>add</class>
-</item>
-<item>
-<href>modinput4_search.php</href>
-<label>Search Form Data</label>
-<class>search</class>
-<per>FORM_DATA_EDIT</per>
-</item>
+	<title>Forms</title>
+	<per>FORM_ADMIN</per>
+	<item>
+		<href>modinput4_list.php</href>
+		<label>View/Edit Forms</label>
+		<class>view</class>
+	</item>
+	<item>
+		<href>modinput4_new.php</href>
+		<label>Add Form</label>
+		<class>add</class>
+	</item>
+	<item>
+		<href>modinput4_search.php</href>
+		<label>Search Form Data</label>
+		<class>search</class>
+		<per>FORM_DATA_EDIT</per>
+	</item>
 </forms>
 
 <system>
-<title>System Setting</title>
-<per>SYSTEM_ACCESS</per>
-<item>
-<href>per.php?action=list</href>
-<label>System Permissions</label>
-<class>user</class>
-<per>SYSTEM_PERMISSIONS</per>
-</item>
-<item>
-<href>user.php?action=list</href>
-<label>System Users</label>
-<class>user</class>
-<per>SYSTEM_USERS</per>
-</item>
-<item>
-<href>sysvar.php</href>
-<label>System Settings</label>
-<class>settings</class>
-<per>SYSTEM_SETTINGS</per>
-</item>
-<item>
-<href>wizard_setup.php</href>
-<label>Setup Wizard</label>
-<class>settings</class>
-<per>SYSTEM_SETTINGS</per>
-</item>
-<item>
-<href>logout.php</href>
-<label>Log Out</label>
-<class>exit</class>
-</item>
-<item>
-<href>flushcache.php</href>
-<label>Flush Cache</label>
-</item>
+	<title>System Settings</title>
+	<per>SYSTEM_ACCESS</per>
+	<item>
+		<href>AMP_SYSTEM_URL_PERMISSION_GROUPS</href>
+		<label>System Permissions</label>
+		<class>user</class>
+		<per>SYSTEM_PERMISSIONS</per>
+	</item>
+	<item>
+		<href>AMP_SYSTEM_URL_USERS</href>
+		<label>System Users</label>
+		<class>user</class>
+		<per>SYSTEM_USERS</per>
+	</item>
+	<item>
+		<href>sysvar.php</href>
+		<label>System Settings</label>
+		<class>settings</class>
+		<per>SYSTEM_SETTINGS</per>
+	</item>
+	<item>
+		<href>wizard_setup.php</href>
+		<label>Setup Wizard</label>
+		<class>settings</class>
+		<per>SYSTEM_SETTINGS</per>
+	</item>
+	<item>
+		<href>logout.php</href>
+		<label>Log Out</label>
+		<class>exit</class>
+	</item>
+	<item>
+		<href>flushcache.php</href>
+		<label>Flush Cache</label>
+	</item>
 </system>
 
 </array>

@@ -1,0 +1,29 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<name>
+		<type>text</type>
+		<label>Group Name</label>
+	</name>
+	<settings_header>
+		<type>header</type>
+		<label>Permissions</label>
+	</settings_header>
+	<settings>
+		<type>checkgroup</type>
+		<label>Allowed Permissions</label>
+		<attr><style>line-height: 20px;</style></attr>
+		<lookup>permissionNames</lookup>
+	</settings>
+    <!--
+	<description>
+		<type>text</type>
+		<label>Description</label>
+	</description>
+	<subsite>
+		<type>text</type>
+		<label>Subsite</label>
+	</subsite>
+    -->
+</array>

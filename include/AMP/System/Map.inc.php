@@ -38,6 +38,7 @@ class AMPSystem_Map {
 
         $this->menuset = 
             $this->_allowedItems($this->_convertPermissions( $xmlGet->readData() ));
+        $this->menuset = $this->_convertUrls( $this->menuset );
         $this->_mapForms();
         $this->_mapLists();
         $this->_buildMap();
@@ -207,6 +208,17 @@ class AMPSystem_Map {
         }
         return $set;
     }
+    function _convertUrls( $set ) {
+        if (empty($set)) return false;
+        require_once( 'AMP/System/Page/Urls.inc.php');
+        foreach ($set as $key => $item) {
+            if (isset($item['item'])) $set[$key]['item'] = $this->_convertUrls( $item['item'] );
+            if (!( is_array($item) && isset( $item['href']))) continue;
+            if (defined($item['href'])) $set[$key]['href'] = constant( $item['href']) ;
+        }
+        return $set;
+    }
+
 
 }
 ?>

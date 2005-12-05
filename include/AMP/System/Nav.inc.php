@@ -1,6 +1,7 @@
 <?php
 
 define( 'AMP_MODULE_ID_CONTENT', 19 );
+require_once( 'AMP/System/Page/Urls.inc.php');
 
 /* * * * * * * * * * *
  *   AMPSystem_Nav
@@ -124,8 +125,11 @@ define( 'AMP_MODULE_ID_CONTENT', 19 );
     function _HTML_NavItem( $item ) {
         
         $class = "side_" . (isset($item['class'])? $item['class']  :  'type');
+        $href = ( defined( $item['href']) ?
+                            constant( $item['href']) :
+                            $item['href']);
         return  $this->_HTML_NavSubTitle( $item ) .
-                "\n<li class = \"$class\"><a href='".$item['href']."' >".$item['label']."</a></li>";
+                "\n<li class = \"$class\"><a href='".$href."' >".$item['label']."</a></li>";
     }
 
 

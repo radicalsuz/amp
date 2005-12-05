@@ -7,7 +7,7 @@ class AMPSystem_Module_Copy extends AMPSystem_Copy {
     var $datatable = "modules";
     var $dependencies = array(
         'per_description' => array(
-            'class' =>'Permission_Description', 
+            'class' =>'Permission_Detail', 
             'override'=>array('name'=>array('name','description')),
             'child_field'=>'id', 
             'parent_field'=>'perid'),

@@ -40,6 +40,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 		if (array_search( $key_name, $this->_allowed_keys )!==FALSE) return true;
 		$this->_allowed_keys[] = $key_name;
 	}
+
+    function dropID( ){
+        unset ( $this->_itemdata_keys[ $this->id_field ] );
+        unset ( $this->id );
+    }
 		
 
     function readData ( $item_id ) {
@@ -49,6 +54,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
         if ( $itemdata = $this->dbcon->CacheGetRow( $sql )) {
             $this->setData( $itemdata );
+            $this->_afterRead( );
             return true;
         }
 
@@ -56,6 +62,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
         if ($this->dbcon->ErrorMsg() ) trigger_error ( get_class( $this ) . ' failed to read the database :' . $this->dbcon->ErrorMsg() );
         return false;
+    }
+
+    function _afterRead( ){
+        //interface
     }
 
     function hasData() {

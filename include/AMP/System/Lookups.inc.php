@@ -101,6 +101,16 @@ class AMPSystemLookup_Modules extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_PermissionGroups extends AMPSystem_Lookup {
+    var $datatable = 'per_group';
+    var $result_field = "name";
+    var $sortby ='name';
+
+    function AMPSystemLookup_PermissionGroups( ){
+        $this->init( );
+    }
+}
+
 class AMPSystemLookup_Tools extends AMPSystem_Lookup {
     function AMPSystemLookup_Tools( ){
         $this->dataset = &AMPSystem_Lookup::instance( 'modules' );
@@ -415,6 +425,41 @@ class AMPSystemLookup_Permissions extends AMPSystem_Lookup {
                     );
         $this->init( );
     }
+}
+
+class AMPSystemLookup_PermissionNames extends AMPSystem_Lookup {
+    var $datatable = 'per_description';
+    var $result_field = 'name';
+    var $sortby = 'name';
+    var $criteria = 'publish=1';
+
+    function AMPSystemLookup_PermissionNames( ){
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_PermissionLevel extends AMPSystem_Lookup {
+    var $datatable = 'permission';
+    var $result_field = 'perid';
+
+    function AMPSystemLookup_PermissionLevel( $level = null ){
+        if ( isset( $level )) $this->_addCriteriaLevel( $level );
+        $this->init( );
+    }
+    function _addCriteriaLevel( $level ){
+        $this->criteria = 'groupid='.$level;
+    }
+    function &instance( $group_id ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new AMPSystemLookup_PermissionLevel( $group_id );
+        } else {
+            $lookup->_addCriteriaLevel( $group_id );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+
 }
 
 ?>

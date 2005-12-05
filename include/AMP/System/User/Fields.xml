@@ -1,0 +1,35 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<name>
+		<type>text</type>
+		<label>User Name</label>
+	</name>
+	<password>
+		<type>text</type>
+		<label>Password</label>
+	</password>
+	<permission>
+		<type>select</type>
+		<label>Access Level</label>
+        <lookup>permissionGroups</lookup>
+	</permission>
+	<email>
+		<type>text</type>
+		<label>Email Address</label>
+	</email>
+    <restricted_use_header>
+        <type>header</type>
+        <label>Access Settings</label>
+    </restricted_use_header>
+	<system_home>
+		<type>text</type>
+		<label>System side home page</label>
+	</system_home>
+	<system_allow_only>
+		<type>textarea</type>
+		<label>System side allowed pages:&lt;br&gt;&lt;span class=photocaption&gt;( separate with commas )&lt;/span&gt;</label>
+	</system_allow_only>
+
+</array>

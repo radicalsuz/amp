@@ -1,0 +1,23 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<name>
+		<type>text</type>
+		<label>Permission</label>
+	</name>
+	<groups_header>
+		<type>header</type>
+		<label>Groups</label>
+	</groups_header>
+	<groups>
+		<type>checkgroup</type>
+		<label>Assigned Groups</label>
+		<attr><style>line-height: 20px;</style></attr>
+        <lookup>permissionGroups</lookup>
+    </groups>
+</array>

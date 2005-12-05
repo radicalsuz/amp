@@ -1,5 +1,17 @@
 <?php
+
+require_once( 'AMP/System/Permission/Detail/ComponentMap.inc.php');
+require_once( 'AMP/System/Page.inc.php');
+
+$map = &new ComponentMap_PermissionDetail( );
+$systemPage = &new AMPSystem_Page( $dbcon, $map );
+if (isset($_GET['action']) && $_GET['action'] == "list")  $systemPage->showList( true );
+
+$systemPage->execute( );
+print $systemPage->output( );
+
 #generic update page
+/*
 $mod_name="system";
 
 require("Connections/freedomrising.php");
@@ -66,4 +78,5 @@ else {
 }	
 
 include ("footer.php");
+*/
 ?>
