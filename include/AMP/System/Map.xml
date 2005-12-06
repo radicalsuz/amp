@@ -297,6 +297,11 @@
         <href>quiz.php?action=list</href>
         <per>TOOLS_INTROTEXT</per>
     </item>
+	<item>
+        <label>Forum</label>
+        <href>punbb.php</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
 </tools>
 
 
