@@ -10,7 +10,7 @@ function punbb_set_admin_cookie($user_id=2) {
 	$now = time();
 	$expire = $now + 31536000;	// The cookie expires after a year
 	
-	$cookie_name = '_punbb_cookie';
+	$cookie_name = 'punbb_cookie';
 
 	$cookie_domain = '';
 	$cookie_path = '/';
