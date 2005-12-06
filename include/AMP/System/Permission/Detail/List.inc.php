@@ -8,7 +8,7 @@ class PermissionDetail_List extends AMPSystem_List {
     var $col_headers = array( 
         'name' => 'name',
         'ID'    => 'id');
-    var $editlink = 'per_description.php';
+    var $editlink = 'permissiondetail.php';
 
     function PermissionDetail_List( &$dbcon ) {
         $source = & new PermissionDetailSet( $dbcon );

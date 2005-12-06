@@ -8,7 +8,7 @@ class PermissionGroup_List extends AMPSystem_List {
     var $col_headers = array( 
         'Group' => 'name',
         'ID'    => 'id');
-    var $editlink = 'per_group.php';
+    var $editlink = 'per.php';
     var $extra_columns = array( 'Rights' => 'rights');
 
     function PermissionGroup_List( &$dbcon ) {
