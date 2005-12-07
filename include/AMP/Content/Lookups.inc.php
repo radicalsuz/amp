@@ -46,6 +46,17 @@ class AMPContentLookup_ActiveClasses {
     }
 }
 
+class AMPContentLookup_CommentsByArticle {
+    
+    var $dataset;
+        
+    function AMPContentLookup_CommentsByArticle() {
+        require_once ( 'AMP/Content/Article/Comments.inc.php' );
+        $commentset = & new ArticleCommentSet ( AMP_Registry::getDbcon() );
+        $this->dataset =  $commentset->getGroupedIndex( 'articleid' );
+    }
+}
+
 class AMPContentLookup_Hotwords extends AMPContent_Lookup {
 
     var $datatable = "hotwords";
@@ -82,6 +93,7 @@ class AMPContentLookup_SectionFooters extends AMPContent_Lookup {
     }
 
 }
+
 
 class AMPContentLookup_SectionParents extends AMPContent_Lookup {
 
@@ -145,6 +157,7 @@ class AMPContentLookup_Podcasts extends AMPContent_Lookup{
     }
 
 }
+
 
 class AMPContentLookup_GalleryImages extends AMPContent_Lookup {
     var $datatable = 'gallery';

@@ -48,6 +48,8 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
 
     function execute() {
         $output = '<hr><p class="subtitle">Comments</p>';
+        $output .= $this->_HTML_addCommentLink( $this->comment_set->getArticleId() ).'  |  '. $this->_HTML_trackback($this->comment_set->getArticleId());
+
         if (!$this->comment_set->makeReady()) return $output;
         
        
@@ -65,7 +67,6 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
         }
         
         $output .= '</ol>';
-        $output .= $this->_HTML_addCommentLink( $this->comment_set->getArticleId() ).'  |  '. $this->_HTML_trackback();
         return $output;
     }
 
@@ -99,8 +100,8 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
         return $this->_HTML_italics(  'Comment by '. $this->_HTML_link( $href, $author ) );
     }
     
-    function _HTML_trackback() {
-         $href = 'article_trackback.php?id='.$_GET['id'];
+    function _HTML_trackback($id) {
+         $href = 'article_trackback.php?id='.$id;
         return 'Trackback '.$this->_HTML_link( $href, 'URI');
     }
     
