@@ -33,7 +33,8 @@ class AMPSystem_LookupFactory {
     }
 
     function assembleSQL( &$lookup ) {
-        $sql = "Select ".$lookup->id_field.", ".$lookup->result_field." from ".$lookup->datatable;
+        if ($lookup->distinct) $distinct = " distinct ";
+        $sql = "Select ".$distinct.$lookup->id_field.", ".$lookup->result_field." from ".$lookup->datatable;
         if ($lookup->criteria) $sql .= " where ". $lookup->criteria;
         if ($lookup->sortby) $sql .= " order by ". $lookup->sortby;
 
@@ -50,6 +51,7 @@ class AMPSystem_Lookup {
     var $result_field;
     var $dataset;
     var $sortby;
+    var $distinct;
 
     function AMPSystem_Lookup() {
         $this->init();

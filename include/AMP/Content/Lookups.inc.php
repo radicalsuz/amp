@@ -94,6 +94,19 @@ class AMPContentLookup_SectionFooters extends AMPContent_Lookup {
 
 }
 
+class AMPContentLookup_Author extends AMPContent_Lookup {
+
+    var $datatable = "articles";
+    var $result_field = "author";
+    var $sortby = "author";
+    var $distinct = TRUE;
+    
+    function AMPContentLookup_Author() {
+        $this->criteria = " publish=".AMP_CONTENT_STATUS_LIVE . " AND author != ''";
+        $this->init();
+    }
+
+}
 
 class AMPContentLookup_SectionParents extends AMPContent_Lookup {
 
