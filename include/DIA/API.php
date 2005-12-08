@@ -73,6 +73,10 @@ class DIA_API {
 		$this->error( "cacheProcess must be overwritten" );
 	}
 
+	function delete( $table, $criteria ) {
+		$this->error( "delete must be overwritten" );
+	}
+		
 	//thank you magpie
 	function error ($errormsg, $lvl=E_USER_WARNING) {
         // append PHP's error message if track_errors enabled

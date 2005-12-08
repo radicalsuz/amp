@@ -35,6 +35,10 @@ class DIA_API_HTTP_Request extends DIA_API {
 			define('DIA_REST_API_REPORTS_URL', 'http://api.demaction.org/dia/api/reports.jsp');
 		}
 
+		if(!defined('DIA_REST_API_DELETE_URL')) {
+			define('DIA_REST_API_DELETE_URL', 'http://api.demaction.org/dia/api/delete.jsp');
+		}
+
 		if(!defined('DIA_API_ORGCODE_KEY')) {
 			define('DIA_API_ORGCODE_KEY', 'orgKey');
 		}
@@ -103,7 +107,7 @@ class DIA_API_HTTP_Request extends DIA_API {
 			return array(DIA_API_ORGCODE_KEY => DIA_API_ORGCODE);
 		}
 
-		if(defined('DIA_API_USERNAME') && defined('DIA_API_PASSWORD') && 'pair' == $type) {
+		if(defined('DIA_API_USERNAME') && defined('DIA_API_PASSWORD')) {
 			return array('user' => DIA_API_USERNAME, 'password' => DIA_API_PASSWORD);
 		}
 
@@ -124,6 +128,11 @@ class DIA_API_HTTP_Request extends DIA_API {
 		}
 	}
 
+	function cleanXML($xml) {
+		//escape invalid tokens, probably the first of many
+		return addcslashes($xml,"\x0b");
+	}
+
 	//options are key, column, order, limit, where, desc
 	function get( $table, $options = null ) {
 		if(isset($options) && !is_array($options)) {
@@ -134,6 +143,14 @@ class DIA_API_HTTP_Request extends DIA_API {
 			require_once('XML/Unserializer.php');
 			$xmlparser =& new XML_Unserializer();
 			$status = $xmlparser->unserialize($xml);
+			if(is_a($status, 'XML_Parser_Error')) {
+				//escape invalid tokens, probably the first of many
+				$xml = $this->cleanXML($xml);
+				$xmlparser =& new XML_Unserializer();
+				$status = $xmlparser->unserialize($xml);
+				if(is_a($status, 'XML_Parser_Error')) return null;
+			}
+
 			$unserialized = $xmlparser->getUnserializedData();
 
 			$data = $unserialized[$table]['item'];
@@ -264,6 +281,30 @@ class DIA_API_HTTP_Request extends DIA_API {
 		return $this->_links;
 	}
 
+	function delete($table, $criteria) {
+		if(isset($criteria['key']) && is_array($criteria['key'])) {
+			foreach($criteria['key'] as $key) {
+				$single_key_criteria = $criteria;
+				$single_key_criteria['key'] = $key;
+				$results[] = $this->delete($table, $single_key_criteria);
+			}
+			return $results;
+		}
+
+		$req =& $this->initRequestObject( DIA_REST_API_DELETE_URL );
+
+        $req->addQueryString( 'table', $table );
+
+        foreach ( $criteria as $key => $val ) {
+            $req->addQueryString( $key, $val );
+        }
+
+        $req->addQueryString( 'debug', true );
+
+		$key = $this->handleSendRequest();
+		return $key;
+	}
+		
 	//options are supporter_KEY, Email, groups_KEY
 	function unsubscribe($data) {
 		$req =& $this->initRequestObject( DIA_REST_API_UNSUBSCRIBE_URL );

@@ -5,7 +5,7 @@ require_once( DIA_TEST_DIR.'config.php' );
 require_once( DIA_DIR.'API.php' );
 
 require_once(SIMPLE_TEST.'mock_objects.php');
-require_once(DIA_PEAR_DIR.'HTTP/Request.php');
+require_once('HTTP/Request.php');
 Mock::generate('HTTP_Request', 'MockHttpRequest');
 
 class TestDIA_API extends UnitTestCase {
@@ -46,6 +46,11 @@ class TestDIA_API extends UnitTestCase {
 
 		$results = @$this->api->getSupporter(7561369);
 		$this->assertNotNull($results);
+	}
+
+	function testDeleteTheseGroups() {
+		$groups = array(27102,27103,27104,27105,27107,27108,27109,27110,27111,27112,27113,27114,27115,27116,27117,27118,27119,27120,27121,27122,27123,27124,27125,27126,27128,27129,27130,27131,27132);
+		$this->dump($this->api->delete('groups', array('key' => $groups)));
 	}
 
 	function testGetSupporterByEmail() {
