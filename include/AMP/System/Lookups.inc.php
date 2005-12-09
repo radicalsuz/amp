@@ -33,8 +33,8 @@ class AMPSystem_LookupFactory {
     }
 
     function assembleSQL( &$lookup ) {
-        if ($lookup->distinct) $distinct = " distinct ";
-        $sql = "Select ".$distinct.$lookup->id_field.", ".$lookup->result_field." from ".$lookup->datatable;
+        $distinct = ( $lookup->distinct ) ? " distinct " : "";
+        $sql = "Select " . $distinct . $lookup->id_field.", ".$lookup->result_field." from ".$lookup->datatable;
         if ($lookup->criteria) $sql .= " where ". $lookup->criteria;
         if ($lookup->sortby) $sql .= " order by ". $lookup->sortby;
 
@@ -217,6 +217,7 @@ class AMPSystemLookup_UserDataEmails extends AMPSystem_Lookup {
 class AMPSystemLookup_IntroTexts extends AMPSystem_Lookup {
     var $datatable = "moduletext";
     var $result_field = "name";
+    var $sortby = "name";
 
     function AMPSystemLookup_IntroTexts () {
         $this->init();
