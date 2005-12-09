@@ -99,6 +99,7 @@ class AMPContentLookup_Author extends AMPContent_Lookup {
     var $datatable = "articles";
     var $result_field = "author";
     var $sortby = "author";
+    var $id_field = "author";
     var $distinct = TRUE;
     
     function AMPContentLookup_Author() {
