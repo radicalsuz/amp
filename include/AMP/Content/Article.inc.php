@@ -18,10 +18,16 @@ if (!defined( 'AMP_CONTENT_CLASS_ACTIONITEM'))      define ('AMP_CONTENT_CLASS_A
 if (!defined( 'AMP_CONTENT_CLASS_BLOG' ))           define ('AMP_CONTENT_CLASS_BLOG', '20');
 if (!defined( 'AMP_CONTENT_CLASS_SECTIONFOOTER'))      define ('AMP_CONTENT_CLASS_SECTIONFOOTER' , false );
 
+
+if (!defined( 'AMP_CONTENT_SIDEBAR_CLASS_DEFAULT'))      define ('AMP_CONTENT_SIDEBAR_CLASS_DEFAULT' , 'sidebar_right') ;
+if (!defined( 'AMP_CONTENT_SIDEBAR_CLASS_LEFT'))      define ('AMP_CONTENT_SIDEBAR_CLASS_LEFT' , 'sidebar_left') ;
+if (!defined( 'AMP_CONTENT_SIDEBAR_CLASS_RIGHT'))      define ('AMP_CONTENT_SIDEBAR_CLASS_RIGHT' , 'sidebar_right') ;
+
 if (!defined( 'AMP_ARTICLE_DISPLAY_DEFAULT'))   define( 'AMP_ARTICLE_DISPLAY_DEFAULT', 'Article_Display' );
 if (!defined( 'AMP_ARTICLE_DISPLAY_FRONTPAGE')) define( 'AMP_ARTICLE_DISPLAY_FRONTPAGE', 'ArticleDisplay_FrontPage' );
 if (!defined( 'AMP_ARTICLE_DISPLAY_NEWS'))      define( 'AMP_ARTICLE_DISPLAY_NEWS', 'ArticleDisplay_News' );
 if (!defined( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE')) define( 'AMP_ARTICLE_DISPLAY_PRESSRELEASE', 'ArticleDisplay_PressRelease' );
+
 
 /**
  * Article 
@@ -115,6 +121,10 @@ class Article extends AMPSystem_Data_Item {
 
     function getSidebar() {
         return $this->getData( 'navtext' );
+    }
+	
+	function getSidebarClass() {
+        return $this->getData( 'sidebar_class' );
     }
 	
     function getSourceURL() {

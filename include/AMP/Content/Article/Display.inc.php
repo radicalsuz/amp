@@ -62,7 +62,10 @@ class Article_Display extends AMPDisplay_HTML {
 		//insert sidebar
 		if ($sb = &$this->_article->getSidebar() ) {
 			$find = '[-sidebar-]';
-			$replace = '<div class="sidebar">'.nl2br($sb).'</div>';
+			if (!$sb_class = &$this->_article->getSidebarClass() ) {
+				  $sb_class = AMP_CONTENT_SIDEBAR_CLASS_DEFAULT;
+			} 
+			$replace = '<div class="'.$sb_class.'">'.nl2br($sb).'</div>';
 			$htmlbody = str_replace( $find, $replace, $htmlbody );
         }
         return $this->_HTML_bodyText( $htmlbody );

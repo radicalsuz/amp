@@ -295,8 +295,17 @@
      <navtext>
 		<block>adv_header</block>
         <type>textarea</type>
-        <label>Custom Navigation Element</label>
+        <label>Sidebar</label>
      </navtext>
+	 <sidebar_class>
+		<block>adv_header</block>
+        <type>select</type>
+        <label>Sidebar Class</label>
+		<lookup>
+            <module>content</module>
+            <instance>sidebarclass</instance>
+        </lookup>
+     </sidebar_class>
      <notes>
 		<block>adv_header</block>
         <type>textarea</type>

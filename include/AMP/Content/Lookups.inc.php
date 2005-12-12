@@ -139,6 +139,16 @@ class AMPConstantLookup_Listtypes extends AMPConstant_Lookup {
     }
 
 }
+
+class AMPContentLookup_Sidebarclass extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_CONTENT_SIDEBAR_CLASS";
+
+    function AMPContentLookup_Sidebarclass() {
+        $this->init();
+    }
+
+}
+
 class AMPConstantLookup_Status extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_CONTENT_STATUS";
     #var $_prefix_labels = "AMP_TEXT_SECTIONLIST";

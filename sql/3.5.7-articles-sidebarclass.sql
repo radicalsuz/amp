@@ -1,0 +1,1 @@
+ALTER TABLE `articles` ADD `sidebar_class` VARCHAR( 50 ) ;

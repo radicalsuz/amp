@@ -65,7 +65,18 @@ td.list_entry {
 	width: 90%;
 }
 
-.sidebar {
+.sidebar_left {
+	width:25%;
+	padding:10px;
+	float:left; 
+	background-color:#999999; 
+	margin-top:0px; 
+	margin-left:10px; 
+	margin-right:10px;
+	margin-bottom:10px;
+}	
+
+.sidebar_right {
 	width:25%;
 	padding:10px;
 	float:right; 
