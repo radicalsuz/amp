@@ -60,7 +60,7 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
             $output .=  $this->_HTML_comment( 
                         $this->_HTML_p_commaJoin( 
                         array( 
-                            $this->_HTML_author( $data['author'], $data['website'] ),
+                            $this->_HTML_author( $data['author'], $data['author_url'] ),
                             $this->_HTML_date( $data['date'] )) 
                         ) .
                         $this->_HTML_commentBody( $data['comment'] ) );
@@ -95,8 +95,8 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
 		return "<li>" .$this->_HTML_bold( $comment ).'</li>'. $this->_HTML_newline();
     }
 
-    function _HTML_author( $author, $website ) {
-        if ($website ) $href = $website;
+    function _HTML_author( $author, $author_url) {
+        if ($author_url) $href = $author_url;
         return $this->_HTML_italics(  'Comment by '. $this->_HTML_link( $href, $author ) );
     }
     
