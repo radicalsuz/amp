@@ -28,5 +28,6 @@ create table if not exists media (
 									null,
 	foreign_key 	int(11)			null,
 	image			varchar(255)	null,
-	status			int				null	
+	status			int				null,
+	primary key( id )
 );
