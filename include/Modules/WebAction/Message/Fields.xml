@@ -1,0 +1,14 @@
+<array>
+    <subject>
+        <type>text</type>
+        <label>Subject:</label>
+        <public>1</public>
+        <enabled>1</enabled>
+    </subject>
+    <message>
+        <type>textarea</type>
+        <size>22:53</size>
+        <public>1</public>
+        <enabled>1</enabled>
+    </message>
+</array>

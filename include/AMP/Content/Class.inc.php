@@ -4,6 +4,9 @@ require_once ('AMP/System/Data/Item.inc.php' );
 require_once ('AMP/Content/Class/Display.inc.php' );
 require_once ('AMP/Content/Display/Criteria.inc.php' );
 
+define( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT', 'ContentClass_Display');
+define( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG', 'ContentClass_Display_Blog');
+
 class ContentClass extends AMPSystem_Data_Item {
 
     var $datatable = "class";
@@ -43,7 +46,15 @@ class ContentClass extends AMPSystem_Data_Item {
     }
 
     function &getDisplay() {
-        return new ContentClass_Display( $this );
+        $classes = filterConstants( 'AMP_CONTENT_CLASS' );
+        $display_def_constant= 'AMP_CONTENT_CLASSLIST_DISPLAY_' . array_search( $this->id , $classes );
+        include_once( 'AMP/Content/Class/Display_Blog.inc.php');
+
+        $display_class = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
+        if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
+
+        if (!class_exists( $display_class )) $display_class = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
+        return new $display_class( $this );
     }
 
     function display() {

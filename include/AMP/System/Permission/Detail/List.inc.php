@@ -6,7 +6,7 @@ require_once( 'AMP/System/Permission/Detail/Set.inc.php' );
 class PermissionDetail_List extends AMPSystem_List {
     var $name = "Permissions";
     var $col_headers = array( 
-        'name' => 'name',
+        'Name' => 'name',
         'ID'    => 'id');
     var $editlink = 'permissiondetail.php';
 

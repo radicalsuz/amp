@@ -107,9 +107,7 @@ class AMPSystemPage_Controller {
     }
 
 	function view() {
-        print 'moo';
 		if ( !$item = &$this->getActionObject()) return false;
-        print 'kuh';
 
         $this->_beforeView( );
         $this->_display = &$item->getDisplay( );

@@ -493,12 +493,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 		}
 
         if ( !$field_def['template'] ) return true;
-/*
-		$template_function = ($field_def['type']=='header')?
-                                'setHeaderTemplate':
-                                'setElementTemplate';
-		$this->renderer->$template_function( $field_def['template'], $name);
-        */
+
 		$this->renderer->setElementTemplate( $field_def['template'], $name);
 
 		return true;
@@ -514,7 +509,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     function &_addElementFile ( $name, $field_def ) {
         $this->addTranslation( $name, '_manageUpload', 'get' );
         $this->addTranslation( $name, '_addFileLink', 'set' );
-        #$this->_addHiddenField( $name . '_value');
         $this->_addFileValue( $name );
 		$this->form->setMaxFileSize(AMP_FORM_UPLOAD_MAX);
 
@@ -550,23 +544,13 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
                     . "--></script>";
         $this->registerJavascript( $script );
         $this->setJavascript( );
-        #$this->javascript.=$script;
         return true;
     }
 
 
     function &_addElementImagepicker( $name, $field_def ){
-        #$this->addTranslation( $name, '_manageUpload', 'get' );
         $this->addTranslation( $name, '_addImageLink', 'set' );
         return $this->_addImageSelect( $name, $field_def );
-        /*
-        $this->_addImageSelect( $name );
-		#$this->form->setMaxFileSize(AMP_FORM_UPLOAD_MAX);
-
-        $defaults = $this->_getDefault( $name );
-        return $this->form->addElement( 'file', $name, $field_def['label'], $defaults );
-        */
-
     }
 
     function _addImageLink( $data, $fieldname ) {
@@ -601,7 +585,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     function &_addImageSelect( $name, $field_def ) {
         $valuefield_name = $name;
-        #$valuefield_name = $name . '_value';
         $display_name = $this->_addImageDisplay( $name );
         $picker = &$this->form->addElement(  'select', $valuefield_name, $field_def['label'], AMPfile_list( 'img/thumb') );
 
@@ -636,7 +619,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function &_addElementHtml( $name, $field_def ) {
-  #      $name = $this->_getDefault( $name );
         $name = $this->_readTemplateBlock( $this->_getDefault( $name ), $field_def );
         return $this->form->addElement( 'html', $name );
     }

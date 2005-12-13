@@ -51,6 +51,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_pager_display = true;
     var $_pager_limit = false;
 
+    var $_css_class_columnheader = 'intitle';
+
     ####################
     ### Core Methods ###
     ####################
@@ -91,6 +93,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
     }
 
+    function execute( ){
+        return $this->output( );
+    }
+
 
     function output() {
 
@@ -126,9 +132,17 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->suppress['header'] = $value;
     }
 
+    function suppressEditColumn( $value=true ){
+        $this->suppress['editcolumn'] = $value;
+    }
+
     function suppressAddlink( $value = true ) {
         $this->suppress['addlink'] = $value ;
     }
+    function suppressSortLinks( $value = true ) {
+        $this->suppress['sortlinks'] = $value;
+    }
+
 
     function getColor( $color_type ) {
         if (!isset($this->color[$color_type])) return "#000000";
@@ -245,10 +259,12 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _HTML_sortLink( $fieldname ) {
-        $url_criteria = $this->_prepURLCriteria();
+        if (isset($this->suppress['sortlinks']) && $this->suppress['sortlinks']) return "";
         $new_sort = $fieldname;
         if ($fieldname == $this->source->getSort()) $new_sort .= " DESC";
-        return $_SERVER['PHP_SELF']."?$url_criteria&sort=$new_sort";
+        $url_criteria = $this->_prepURLCriteria();
+        $url_criteria[] = "sort=".$new_sort;
+        return AMP_Url_AddVars( $_SERVER['PHP_SELF'], $url_criteria );
     }
 
     function _HTML_columnHeaders() {
@@ -257,7 +273,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
         foreach ($this->col_headers as $header=>$fieldname) {
             $link = $this->_HTML_sortLink( $fieldname );
             $output.= 
-                "\n<td><b><a href='$link' class='intitle'>".$header."</a></b></td>";
+                "\n<td>". 
+                $this->_HTML_bold(  
+                    $this->_HTML_link( $link, $header, array( 'class' => $this->_css_class_columnheader ))
+                    ) . "</td>";
         }
         return $output . $this->_HTML_endColumnHeadersRow();
     }
@@ -313,7 +332,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
             $url_criteria_set = AMP_URL_Values();
             if (empty( $url_criteria_set )) return "";
             unset ($url_criteria_set['sort']);
-            $this->_url_criteria = join("&" , $url_criteria_set );            
+            $this->_url_criteria = $url_criteria_set; 
         }
         return $this->_url_criteria;
     }

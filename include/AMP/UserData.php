@@ -1016,6 +1016,10 @@ class UserData {
 
     }
 
+    function getIntrotextId() {
+        return $this->modTemplateID;
+    }
+
 }
 
 ?>

@@ -34,7 +34,7 @@ class VoterGuide_Controller {
 	var $intro_id;
 
 	function VoterGuide_Controller(&$page) {
-		$this->page =& $page;
+		$this->page = &$page;
 		$this->dbcon = AMP_Registry::getDbcon(); 
 		$this->init();
 	}

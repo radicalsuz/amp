@@ -11,7 +11,7 @@ class ArticleSet_Display extends AMPContent_DisplayList_HTML {
         $this->init( $articleSet, $read_data );
     }
 
-    function _HTML_listItemDescription( $article ) {
+    function _HTML_listItemDescription( &$article ) {
         return
             $this->_HTML_listItemTitle( $article ) . 
             $this->_HTML_listItemSource( $article->getAuthor(), $article->getSource(), $article->getSourceURL()) .
