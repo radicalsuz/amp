@@ -1,4 +1,18 @@
-<?phprequire_once ( 'AMP/System/D/Users/David/Sites/sms_data/grab.phpata/Item.inc.php' ); class AMPSystem_Podcast extends AMPSystem_Data_Item {    var $datatable = "podcast";    var $name_field = 'name';    function AMPSystem_Podcast ( &$dbcon, $id=null ) {        $this->init( $dbcon, $id );    }     }
+<?php
+
+require_once ( 'AMP/System/Data/Item.inc.php' );
+
+class AMPSystem_Podcast extends AMPSystem_Data_Item {
+
+
+    var $datatable = "podcast";
+    var $name_field = 'name';
+
+    function AMPSystem_Podcast ( &$dbcon, $id=null ) {
+        $this->init( $dbcon, $id );
+    }
+
+}
 
 class Podcast {
 
@@ -14,6 +28,7 @@ class Podcast {
        return $time;
     
     }
-    
-    
-}?>
+
+}
+
+?>
