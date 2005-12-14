@@ -1,4 +1,6 @@
 <?php
+require_once("AMP/BaseDB.php");
+
 /*
  * $RCSfile: config.php-template,v $
  *
