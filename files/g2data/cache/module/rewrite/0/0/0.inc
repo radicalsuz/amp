@@ -1,0 +1,1 @@
+|a:9:{s:15:"galleryLocation";s:11:"/gallery22/";s:6:"status";s:29:"a:1:{s:11:"needOptions";b:1;}";s:16:"embeddedLocation";s:0:"";s:16:"embeddedHtaccess";s:0:"";s:10:"accessList";s:6:"a:0:{}";s:8:"_version";s:5:"1.0.0";s:10:"_callbacks";s:40:"getSiteAdminViews|registerEventListeners";s:16:"_requiredCoreApi";s:3:"6,0";s:18:"_requiredModuleApi";s:3:"2,0";}
