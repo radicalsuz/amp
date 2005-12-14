@@ -1,0 +1,35 @@
+# File crc32 crc32(crlf) size size(crlf)  or  R File
+modules/thumbpage/CantActivate.inc	481381739	3335100231	1439	1485
+modules/thumbpage/ItemEditThumbOffset.inc	2947318585	2849827388	5786	5960
+modules/thumbpage/ItemEditThumbPage.inc	3181071236	1114229253	5632	5802
+modules/thumbpage/locale/cs_CZ/LC_MESSAGES/modules_thumbpage.mo	256612449	256612449	2126	2126
+modules/thumbpage/locale/de_DE/LC_MESSAGES/modules_thumbpage.mo	4006861437	4006861437	2233	2233
+modules/thumbpage/locale/fr_FR/LC_MESSAGES/modules_thumbpage.mo	3553890918	3553890918	2107	2107
+modules/thumbpage/locale/is_IS/LC_MESSAGES/modules_thumbpage.mo	4269684407	4269684407	418	418
+modules/thumbpage/locale/nl_NL/LC_MESSAGES/modules_thumbpage.mo	2810571280	2810571280	2028	2028
+modules/thumbpage/locale/no_NO/LC_MESSAGES/modules_thumbpage.mo	3693135757	3693135757	1999	1999
+modules/thumbpage/locale/ru_RU/LC_MESSAGES/modules_thumbpage.mo	3042272614	3042272614	2628	2628
+modules/thumbpage/locale/sr_YU/LC_MESSAGES/modules_thumbpage.mo	3119184590	3119184590	2035	2035
+modules/thumbpage/locale/sv_SE/LC_MESSAGES/modules_thumbpage.mo	2618901013	2618901013	2233	2233
+modules/thumbpage/locale/tr_TR/LC_MESSAGES/modules_thumbpage.mo	2300139803	2300139803	1978	1978
+modules/thumbpage/locale/zh_CN/LC_MESSAGES/modules_thumbpage.mo	547498677	547498677	1943	1943
+modules/thumbpage/locale/zh_TW/LC_MESSAGES/modules_thumbpage.mo	3732149131	3732149131	1960	1960
+modules/thumbpage/module.inc	3758452295	950577850	7284	7516
+modules/thumbpage/po/GNUmakefile	1866879166	2808215985	98	103
+modules/thumbpage/po/cs_CZ.po	2717681764	1491887143	2966	3056
+modules/thumbpage/po/de_DE.po	2931808417	3971691895	3228	3327
+modules/thumbpage/po/fr_FR.po	720669111	4159035933	2950	3042
+modules/thumbpage/po/is_IS.po	1740302311	2608099053	2221	2307
+modules/thumbpage/po/nl_NL.po	970684744	1530119819	2954	3045
+modules/thumbpage/po/no_NO.po	312911585	2769914996	2833	2922
+modules/thumbpage/po/ru_RU.po	465935512	2426848601	3536	3628
+modules/thumbpage/po/sr_YU.po	2134340003	310107189	2860	2948
+modules/thumbpage/po/strings.raw	1266595821	1025591661	827	847
+modules/thumbpage/po/sv_SE.po	4171871416	2849642201	3167	3267
+modules/thumbpage/po/tr_TR.po	2193042735	613576366	3032	3126
+modules/thumbpage/po/zh_CN.po	685246069	1158468183	2772	2859
+modules/thumbpage/po/zh_TW.po	4284424395	190148050	2790	2878
+modules/thumbpage/templates/CantActivate.tpl	1089181608	1942822533	854	879
+modules/thumbpage/templates/Offset.tpl	1618434337	764244766	1078	1108
+modules/thumbpage/templates/Page.tpl	259783612	2249575886	923	948
+R	modules/thumbpage/templates/ItemEdit.tpl

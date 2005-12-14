@@ -1,0 +1,37 @@
+# File crc32 crc32(crlf) size size(crlf)  or  R File
+modules/useralbum/UserAlbum.inc	294938908	520993320	3331	3435
+modules/useralbum/UserAlbumSiteAdmin.inc	2555871430	563692695	4422	4551
+modules/useralbum/classes/UserAlbumHelper.class	2037667816	2162115183	4052	4190
+modules/useralbum/locale/bg_BG/LC_MESSAGES/modules_useralbum.mo	3482378156	3482378156	2201	2201
+modules/useralbum/locale/cs_CZ/LC_MESSAGES/modules_useralbum.mo	1353267443	1353267443	2130	2130
+modules/useralbum/locale/de_DE/LC_MESSAGES/modules_useralbum.mo	421847015	421847015	2035	2035
+modules/useralbum/locale/fr_FR/LC_MESSAGES/modules_useralbum.mo	785307429	785307429	2048	2048
+modules/useralbum/locale/is_IS/LC_MESSAGES/modules_useralbum.mo	1165866409	1165866409	420	420
+modules/useralbum/locale/nl_NL/LC_MESSAGES/modules_useralbum.mo	1547692912	1547692912	1974	1974
+modules/useralbum/locale/no_NO/LC_MESSAGES/modules_useralbum.mo	1276928517	1276928517	1867	1867
+modules/useralbum/locale/pl_PL/LC_MESSAGES/modules_useralbum.mo	1210711144	1210711144	2174	2174
+modules/useralbum/locale/ru_RU/LC_MESSAGES/modules_useralbum.mo	1069836091	1069836091	2580	2580
+modules/useralbum/locale/sr_YU/LC_MESSAGES/modules_useralbum.mo	2143048343	2143048343	1979	1979
+modules/useralbum/locale/sv_SE/LC_MESSAGES/modules_useralbum.mo	2549179098	2549179098	2175	2175
+modules/useralbum/locale/tr_TR/LC_MESSAGES/modules_useralbum.mo	3924376379	3924376379	2071	2071
+modules/useralbum/locale/zh_CN/LC_MESSAGES/modules_useralbum.mo	1852418095	1852418095	1927	1927
+modules/useralbum/locale/zh_TW/LC_MESSAGES/modules_useralbum.mo	2534721658	2534721658	1902	1902
+modules/useralbum/module.inc	1895828994	3198721457	7205	7429
+modules/useralbum/po/GNUmakefile	1866879166	2808215985	98	103
+modules/useralbum/po/bg_BG.po	603410623	2984141208	3125	3235
+modules/useralbum/po/cs_CZ.po	3951511675	2641799742	2939	3049
+modules/useralbum/po/de_DE.po	2632130389	2902129703	2971	3081
+modules/useralbum/po/fr_FR.po	738707223	1693629145	2842	2948
+modules/useralbum/po/is_IS.po	4046992590	1299164035	2203	2307
+modules/useralbum/po/nl_NL.po	1184348944	3017716737	2859	2967
+modules/useralbum/po/no_NO.po	2473843079	2532859155	2660	2766
+modules/useralbum/po/pl_PL.po	3458900224	1642101238	2968	3074
+modules/useralbum/po/ru_RU.po	862231090	1296779054	3451	3561
+modules/useralbum/po/sr_YU.po	550552840	1887205888	2766	2872
+modules/useralbum/po/strings.raw	3763998069	2205325347	778	804
+modules/useralbum/po/sv_SE.po	3911976654	2317234762	3031	3142
+modules/useralbum/po/tr_TR.po	2119551247	3433799991	3003	3112
+modules/useralbum/po/zh_CN.po	1643839522	3098622224	2718	2823
+modules/useralbum/po/zh_TW.po	3471176654	1817537101	2694	2800
+modules/useralbum/templates/UserAlbumSiteAdmin.tpl	284024890	3922660637	2779	2855
+R	modules/useralbum/templates/SiteAdmin.tpl

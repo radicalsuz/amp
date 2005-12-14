@@ -1,0 +1,45 @@
+# File crc32 crc32(crlf) size size(crlf)  or  R File
+modules/archiveupload/ArchiveUploadSiteAdmin.inc	3515755739	3641141162	5478	5648
+modules/archiveupload/classes/ArchiveExtractToolkit.class	4272272734	3389087345	2651	2733
+modules/archiveupload/classes/ArchiveUploadHelper.class	3961109813	2335935572	3939	4075
+modules/archiveupload/data/test.zip	2308014917	2308014917	153	153
+modules/archiveupload/locale/bg_BG/LC_MESSAGES/modules_archiveupload.mo	3693594453	3693594453	2095	2095
+modules/archiveupload/locale/cs_CZ/LC_MESSAGES/modules_archiveupload.mo	3606478577	3606478577	2613	2613
+modules/archiveupload/locale/da_DK/LC_MESSAGES/modules_archiveupload.mo	284217983	284217983	1931	1931
+modules/archiveupload/locale/de_DE/LC_MESSAGES/modules_archiveupload.mo	4074464524	4074464524	2863	2863
+modules/archiveupload/locale/fr_FR/LC_MESSAGES/modules_archiveupload.mo	1001993983	1001993983	2098	2098
+modules/archiveupload/locale/hu_HU/LC_MESSAGES/modules_archiveupload.mo	4155335887	4155335887	1774	1774
+modules/archiveupload/locale/is_IS/LC_MESSAGES/modules_archiveupload.mo	1205168977	1205168977	422	422
+modules/archiveupload/locale/it_IT/LC_MESSAGES/modules_archiveupload.mo	3258863297	3258863297	1929	1929
+modules/archiveupload/locale/nl_NL/LC_MESSAGES/modules_archiveupload.mo	2747985326	2747985326	1926	1926
+modules/archiveupload/locale/no_NO/LC_MESSAGES/modules_archiveupload.mo	3224396249	3224396249	1868	1868
+modules/archiveupload/locale/ru_RU/LC_MESSAGES/modules_archiveupload.mo	3248858268	3248858268	2428	2428
+modules/archiveupload/locale/sr_YU/LC_MESSAGES/modules_archiveupload.mo	2991674679	2991674679	2708	2708
+modules/archiveupload/locale/sv_SE/LC_MESSAGES/modules_archiveupload.mo	2165522072	2165522072	554	554
+modules/archiveupload/locale/tr_TR/LC_MESSAGES/modules_archiveupload.mo	992356351	992356351	1089	1089
+modules/archiveupload/locale/vi_VN/LC_MESSAGES/modules_archiveupload.mo	2815341994	2815341994	2043	2043
+modules/archiveupload/locale/zh_CN/LC_MESSAGES/modules_archiveupload.mo	1908412995	1908412995	1793	1793
+modules/archiveupload/locale/zh_TW/LC_MESSAGES/modules_archiveupload.mo	1007371467	1007371467	2552	2552
+modules/archiveupload/module.inc	3324857566	3829951121	5529	5722
+modules/archiveupload/po/GNUmakefile	1866879166	2808215985	98	103
+modules/archiveupload/po/bg_BG.po	1279793137	2422323578	3877	3996
+modules/archiveupload/po/cs_CZ.po	2239741500	1946617738	3461	3570
+modules/archiveupload/po/da_DK.po	3389392437	3194939910	3631	3745
+modules/archiveupload/po/de_DE.po	3335675101	2989316052	3920	4040
+modules/archiveupload/po/fr_FR.po	4124481833	2078192885	3713	3826
+modules/archiveupload/po/hu_HU.po	3285221880	3235147854	3141	3244
+modules/archiveupload/po/is_IS.po	2147676815	4271873891	2570	2672
+modules/archiveupload/po/it_IT.po	4189696133	669717087	3510	3620
+modules/archiveupload/po/nl_NL.po	2373807144	649117364	3666	3780
+modules/archiveupload/po/no_NO.po	3155703388	4145603526	3716	3832
+modules/archiveupload/po/ru_RU.po	2780663171	2216573353	4416	4532
+modules/archiveupload/po/sr_YU.po	691397737	3753697780	3560	3672
+modules/archiveupload/po/strings.raw	2991394300	3318512723	1138	1162
+modules/archiveupload/po/sv_SE.po	1390730070	3214061292	2787	2895
+modules/archiveupload/po/tr_TR.po	2509507163	3677642790	3021	3131
+modules/archiveupload/po/vi_VN.po	2696683086	1228779174	3787	3897
+modules/archiveupload/po/zh_CN.po	1718225097	865621564	3408	3516
+modules/archiveupload/po/zh_TW.po	850705098	205143569	3390	3496
+modules/archiveupload/templates/ArchiveUploadSiteAdmin.tpl	3551565286	3795910844	3344	3442
+R	modules/archiveupload/templates/SiteAdmin.tpl
+R	modules/archiveupload/test/data/test.zip

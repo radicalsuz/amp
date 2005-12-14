@@ -1,0 +1,82 @@
+# File crc32 crc32(crlf) size size(crlf)  or  R File
+modules/imagemagick/AdminImageMagick.inc	3959598054	3327239721	8640	8926
+modules/imagemagick/classes/ImageMagickToolkit.class	118004816	1693479744	20752	21420
+modules/imagemagick/classes/ImageMagickToolkitHelper.class	854726167	1812389122	27572	28352
+modules/imagemagick/data/cmyk.jpg	2270517260	2270517260	10220	10220
+modules/imagemagick/data/test.bmp	1375450747	1375450747	504	504
+modules/imagemagick/data/test.eps	2534456741	2534456741	3141	3141
+modules/imagemagick/data/test.gif	1813905107	1813905107	232	232
+modules/imagemagick/data/test.jp2	2108951141	2108951141	1102	1102
+modules/imagemagick/data/test.jpg	3585624450	3585624450	763	763
+modules/imagemagick/data/test.pdf	422561219	422561219	30712	30712
+modules/imagemagick/data/test.png	2991005385	2991005385	730	730
+modules/imagemagick/data/test.psd	2317584476	2317584476	65770	65770
+modules/imagemagick/data/test.svg	3581637897	3581637897	8033	8033
+modules/imagemagick/data/test.tif	2675573484	2675573484	2729	2729
+modules/imagemagick/data/testProfile.jpg	3363793600	3363793600	30585	30585
+modules/imagemagick/data/truncated.pcd	2384088829	2384088829	4096	4096
+modules/imagemagick/locale/cs_CZ/LC_MESSAGES/modules_imagemagick.mo	3577465374	3577465374	5840	5840
+modules/imagemagick/locale/da_DK/LC_MESSAGES/modules_imagemagick.mo	2309044474	2309044474	5032	5032
+modules/imagemagick/locale/de_DE/LC_MESSAGES/modules_imagemagick.mo	2940783525	2940783525	6223	6223
+modules/imagemagick/locale/el_GR/LC_MESSAGES/modules_imagemagick.mo	2119095244	2119095244	1195	1195
+modules/imagemagick/locale/en_GB/LC_MESSAGES/modules_imagemagick.mo	4089625395	4089625395	1522	1522
+modules/imagemagick/locale/es_AR/LC_MESSAGES/modules_imagemagick.mo	1984352638	1984352638	1587	1587
+modules/imagemagick/locale/fi_FI/LC_MESSAGES/modules_imagemagick.mo	3353028439	3353028439	2162	2162
+modules/imagemagick/locale/fr_FR/LC_MESSAGES/modules_imagemagick.mo	720337537	720337537	5434	5434
+modules/imagemagick/locale/ga_IE/LC_MESSAGES/modules_imagemagick.mo	1195046721	1195046721	2673	2673
+modules/imagemagick/locale/is_IS/LC_MESSAGES/modules_imagemagick.mo	2047246239	2047246239	461	461
+modules/imagemagick/locale/it_IT/LC_MESSAGES/modules_imagemagick.mo	370107336	370107336	5313	5313
+modules/imagemagick/locale/ja_JP/LC_MESSAGES/modules_imagemagick.mo	3673674919	3673674919	2091	2091
+modules/imagemagick/locale/nl_NL/LC_MESSAGES/modules_imagemagick.mo	2086122399	2086122399	5164	5164
+modules/imagemagick/locale/no_NO/LC_MESSAGES/modules_imagemagick.mo	3732107595	3732107595	4118	4118
+modules/imagemagick/locale/pl_PL/LC_MESSAGES/modules_imagemagick.mo	2912725133	2912725133	2310	2310
+modules/imagemagick/locale/pt_BR/LC_MESSAGES/modules_imagemagick.mo	511548115	511548115	1685	1685
+modules/imagemagick/locale/pt_PT/LC_MESSAGES/modules_imagemagick.mo	2008992656	2008992656	2266	2266
+modules/imagemagick/locale/ru_RU/LC_MESSAGES/modules_imagemagick.mo	778324660	778324660	6596	6596
+modules/imagemagick/locale/sr_YU/LC_MESSAGES/modules_imagemagick.mo	3308506152	3308506152	6031	6031
+modules/imagemagick/locale/sv_SE/LC_MESSAGES/modules_imagemagick.mo	3846039688	3846039688	3887	3887
+modules/imagemagick/locale/tr_TR/LC_MESSAGES/modules_imagemagick.mo	2905503436	2905503436	967	967
+modules/imagemagick/locale/vi_VN/LC_MESSAGES/modules_imagemagick.mo	558556697	558556697	5513	5513
+modules/imagemagick/locale/zh_CN/LC_MESSAGES/modules_imagemagick.mo	3255467785	3255467785	4425	4425
+modules/imagemagick/locale/zh_TW/LC_MESSAGES/modules_imagemagick.mo	2480202891	2480202891	5486	5486
+modules/imagemagick/module.inc	1124208667	2977209809	10024	10360
+modules/imagemagick/po/GNUmakefile	1866879166	2808215985	98	103
+modules/imagemagick/po/cs_CZ.po	2301517592	3641713806	6631	6864
+modules/imagemagick/po/da_DK.po	122412382	916110509	6680	6915
+modules/imagemagick/po/de_DE.po	2400725947	3121209599	7242	7486
+modules/imagemagick/po/el_GR.po	3363892380	827667802	5187	5413
+modules/imagemagick/po/en_GB.po	4261038261	3879830817	5308	5537
+modules/imagemagick/po/es_AR.po	1238188973	3282634126	5388	5618
+modules/imagemagick/po/fi_FI.po	3033222820	2254118426	5804	6043
+modules/imagemagick/po/fr_FR.po	2961679070	4084027146	7015	7253
+modules/imagemagick/po/ga_IE.po	2913158734	2932975078	7015	7282
+modules/imagemagick/po/is_IS.po	1433581652	4164734110	4524	4745
+modules/imagemagick/po/it_IT.po	1779311142	1828058457	6851	7088
+modules/imagemagick/po/ja_JP.po	1769300566	2654740477	5792	6024
+modules/imagemagick/po/nl_NL.po	4268082928	3663356214	6868	7108
+modules/imagemagick/po/no_NO.po	2275580636	3966332564	6670	6914
+modules/imagemagick/po/pl_PL.po	21927009	4210620233	6155	6399
+modules/imagemagick/po/pt_BR.po	2830572652	4195584054	5533	5766
+modules/imagemagick/po/pt_PT.po	266259118	3052633461	5968	6208
+modules/imagemagick/po/ru_RU.po	978253273	4024324305	8550	8786
+modules/imagemagick/po/sr_YU.po	2543704628	2778978743	6804	7037
+modules/imagemagick/po/strings.raw	2476436408	433304552	2711	2772
+modules/imagemagick/po/sv_SE.po	1798206801	4157709331	6934	7182
+modules/imagemagick/po/tr_TR.po	3938834661	3639401508	4901	5129
+modules/imagemagick/po/vi_VN.po	1077818182	3064705092	7267	7501
+modules/imagemagick/po/zh_CN.po	3979387194	747129477	6158	6387
+modules/imagemagick/po/zh_TW.po	957402238	2750708619	6232	6457
+modules/imagemagick/templates/AdminImageMagick.tpl	3437709486	3114264763	5789	5954
+R	modules/imagemagick/test/data/cmyk.jpg
+R	modules/imagemagick/test/data/test.bmp
+R	modules/imagemagick/test/data/test.eps
+R	modules/imagemagick/test/data/test.gif
+R	modules/imagemagick/test/data/test.jp2
+R	modules/imagemagick/test/data/test.jpg
+R	modules/imagemagick/test/data/test.pdf
+R	modules/imagemagick/test/data/test.png
+R	modules/imagemagick/test/data/test.psd
+R	modules/imagemagick/test/data/test.svg
+R	modules/imagemagick/test/data/test.tif
+R	modules/imagemagick/test/data/testProfile.jpg
+R	modules/imagemagick/test/data/truncated.pcd

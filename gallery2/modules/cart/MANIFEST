@@ -1,0 +1,66 @@
+# File crc32 crc32(crlf) size size(crlf)  or  R File
+modules/cart/AddToCart.inc	311990700	1684083485	2420	2503
+modules/cart/Callbacks.inc	4285771454	3909819956	1707	1760
+modules/cart/ModifyCart.inc	41233415	2467228211	4547	4710
+modules/cart/ViewCart.inc	1832824779	2760340883	5637	5814
+modules/cart/classes/CartHelper.class	2457192215	3858611229	4396	4559
+modules/cart/classes/CartPluginInterface_1_0.class	1199750285	72060536	2304	2374
+modules/cart/locale/bg_BG/LC_MESSAGES/modules_cart.mo	2108722214	2108722214	2325	2325
+modules/cart/locale/cs_CZ/LC_MESSAGES/modules_cart.mo	3585239089	3585239089	2186	2186
+modules/cart/locale/da_DK/LC_MESSAGES/modules_cart.mo	4292572407	4292572407	1946	1946
+modules/cart/locale/de_DE/LC_MESSAGES/modules_cart.mo	125286279	125286279	2216	2216
+modules/cart/locale/fr_FR/LC_MESSAGES/modules_cart.mo	1617701515	1617701515	2190	2190
+modules/cart/locale/ga_IE/LC_MESSAGES/modules_cart.mo	2462159360	2462159360	2176	2176
+modules/cart/locale/hu_HU/LC_MESSAGES/modules_cart.mo	4062910233	4062910233	1800	1800
+modules/cart/locale/is_IS/LC_MESSAGES/modules_cart.mo	215258399	215258399	454	454
+modules/cart/locale/it_IT/LC_MESSAGES/modules_cart.mo	1505431020	1505431020	2215	2215
+modules/cart/locale/nl_NL/LC_MESSAGES/modules_cart.mo	2457087826	2457087826	2102	2102
+modules/cart/locale/no_NO/LC_MESSAGES/modules_cart.mo	2908843307	2908843307	1906	1906
+modules/cart/locale/pt_BR/LC_MESSAGES/modules_cart.mo	2755095627	2755095627	1592	1592
+modules/cart/locale/ru_RU/LC_MESSAGES/modules_cart.mo	944424240	944424240	2529	2529
+modules/cart/locale/sr_YU/LC_MESSAGES/modules_cart.mo	3534684880	3534684880	2124	2124
+modules/cart/locale/sv_SE/LC_MESSAGES/modules_cart.mo	4051283745	4051283745	1601	1601
+modules/cart/locale/tr_TR/LC_MESSAGES/modules_cart.mo	1782356699	1782356699	2072	2072
+modules/cart/locale/vi_VN/LC_MESSAGES/modules_cart.mo	937608332	937608332	2252	2252
+modules/cart/locale/zh_CN/LC_MESSAGES/modules_cart.mo	693210951	693210951	1790	1790
+modules/cart/locale/zh_TW/LC_MESSAGES/modules_cart.mo	2576965447	2576965447	2040	2040
+modules/cart/module.inc	3090379585	1472832296	3684	3821
+modules/cart/po/GNUmakefile	1866879166	2808215985	98	103
+modules/cart/po/bg_BG.po	69515356	1136913612	3307	3431
+modules/cart/po/cs_CZ.po	2083153209	4159556691	3056	3178
+modules/cart/po/da_DK.po	2734242234	1385310682	3012	3134
+modules/cart/po/de_DE.po	613521563	2927298244	3252	3378
+modules/cart/po/fr_FR.po	715541030	331892922	3044	3163
+modules/cart/po/ga_IE.po	3287565023	3372528310	3966	4112
+modules/cart/po/hu_HU.po	38756615	643194436	3001	3123
+modules/cart/po/is_IS.po	3566468317	4220728492	2391	2509
+modules/cart/po/it_IT.po	337543168	2241418485	3177	3297
+modules/cart/po/nl_NL.po	1031187765	4003515536	3055	3178
+modules/cart/po/no_NO.po	3151154219	1372114006	3102	3226
+modules/cart/po/pt_BR.po	2993432706	4113249769	2982	3107
+modules/cart/po/ru_RU.po	1801371983	3882767177	3606	3730
+modules/cart/po/sr_YU.po	385590034	1046954029	2975	3095
+modules/cart/po/strings.raw	1125552828	238552377	852	881
+modules/cart/po/sv_SE.po	1982362229	1924019018	3176	3305
+modules/cart/po/tr_TR.po	2151102078	449361341	3104	3227
+modules/cart/po/vi_VN.po	3489052880	455787146	3104	3223
+modules/cart/po/zh_CN.po	3586141859	2135155907	2964	3086
+modules/cart/po/zh_TW.po	32206279	882008475	2879	2997
+modules/cart/templates/ViewCart.tpl	3740723066	3103022136	3221	3316
+modules/cart/templates/blocks/ShowCart.tpl	304876428	3278764134	681	697
+modules/cart/templates/blocks/blocks.inc	3724706265	4029515079	109	114
+R	modules/cart/classes/CartMap.class
+R	modules/cart/classes/GNUmakefile
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/GNUmakefile
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/platform/GNUmakefile
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/platform/mysql/CartMap.sql
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/platform/mysql/GNUmakefile
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/platform/oracle/CartMap.sql
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/platform/oracle/GNUmakefile
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/platform/postgres/CartMap.sql
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/platform/postgres/GNUmakefile
+R	modules/cart/classes/GalleryStorage/DatabaseStorage/schema/xml-src/GNUmakefile
+R	modules/cart/classes/interfaces/CartMap.inc
+R	modules/cart/classes/interfaces/GNUmakefile
+R	modules/cart/templates/CartSystemContent.tpl
+R	modules/cart/templates/ViewCartHead.tpl
