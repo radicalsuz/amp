@@ -38,6 +38,14 @@ class ArticleSet extends AMPSystem_Data_Set {
         if ( !( $value || $value==='0')) return false;
         $this->addCriteria( 'publish='.$value ) ;
     }
+    
+    function addCriteriaNew(){
+        $this->addCriteria( 'new= 1 ' ) ;
+    }
+
+    function addCriteriaFp(){
+        $this->addCriteria( 'fplink= 1 ' ) ;
+    }
 
     function addFilter( $filter_name ) {
         $filter_path = 'AMP/Content/Article/Filter/'. ucfirst( $filter_name) . '.inc.php';
