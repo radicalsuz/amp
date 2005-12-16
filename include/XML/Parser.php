@@ -18,7 +18,7 @@
 // |         Stephan Schmidt <schst@php-tools.net>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: Parser.php,v 1.14 2004/05/25 13:26:42 schst Exp $
+// $Id: Parser.php,v 1.26 2005/09/23 11:51:10 schst Exp $
 
 /**
  * XML Parser class.
@@ -271,8 +271,8 @@ class XML_Parser extends PEAR
         switch ($this->mode) {
 
             case 'func':
-                xml_set_object($this->parser, $this);
-                xml_set_element_handler($this->parser, 'funcStartHandler', 'funcEndHandler');
+                xml_set_object($this->parser, $this->_handlerObj);
+                xml_set_element_handler($this->parser, array(&$this, 'funcStartHandler'), array(&$this, 'funcEndHandler'));
                 break;
 
             case 'event':
@@ -356,6 +356,7 @@ class XML_Parser extends PEAR
         if ($this->isError( $result )) {
             return $result;
         }
+        return true;
     }
 
     // }}}
@@ -376,10 +377,8 @@ class XML_Parser extends PEAR
          * check, if file is a remote file
          */
         if (eregi('^(http|ftp)://', substr($file, 0, 10))) {
-            if (!ini_get('safe_mode')) {
-                ini_set('allow_url_fopen', 1);
-            } else {
-                return $this->raiseError('Remote files cannot be parsed, as safe mode is enabled.', XML_PARSER_ERROR_REMOTE);
+            if (!ini_get('allow_url_fopen')) {
+            	return $this->raiseError('Remote files cannot be parsed, as safe mode is enabled.', XML_PARSER_ERROR_REMOTE);
             }
         }
         
@@ -469,13 +468,17 @@ class XML_Parser extends PEAR
         
             while ($data = fread($this->fp, 4096)) {
                 if (!$this->_parseString($data, feof($this->fp))) {
-                    return $this->raiseError();
+                    $error = &$this->raiseError();
+                    $this->free();
+                    return $error;
                 }
             }
         // otherwise, $this->fp must be a string
         } else {
             if (!$this->_parseString($this->fp, true)) {
-                return $this->raiseError();
+                $error = &$this->raiseError();
+                $this->free();
+                return $error;
             }
         }
         $this->free();
@@ -518,7 +521,9 @@ class XML_Parser extends PEAR
         }
         
         if (!$this->_parseString($data, $eof)) {
-           return $this->raiseError();
+           $error = &$this->raiseError();
+           $this->free();
+           return $error;
         }
 
         if ($eof === true) {
@@ -536,7 +541,7 @@ class XML_Parser extends PEAR
      **/
     function free()
     {
-        if (is_resource($this->parser)) {
+        if (isset($this->parser) && is_resource($this->parser)) {
             xml_parser_free($this->parser);
             unset( $this->parser );
         }
@@ -550,7 +555,7 @@ class XML_Parser extends PEAR
     /**
      * XML_Parser::raiseError()
      * 
-     * Trows a XML_Parser_Error and free's the internal resources
+     * Throws a XML_Parser_Error
      * 
      * @param string  $msg   the error message
      * @param integer $ecode the error message code
@@ -560,7 +565,6 @@ class XML_Parser extends PEAR
     {
         $msg = !is_null($msg) ? $msg : $this->parser;
         $err = &new XML_Parser_Error($msg, $ecode);
-        $this->free();
         return parent::raiseError($err);
     }
     
@@ -570,8 +574,13 @@ class XML_Parser extends PEAR
     function funcStartHandler($xp, $elem, $attribs)
     {
         $func = 'xmltag_' . $elem;
+        if (strchr($func, '.')) {
+            $func = str_replace('.', '_', $func);
+        }
         if (method_exists($this->_handlerObj, $func)) {
             call_user_func(array(&$this->_handlerObj, $func), $xp, $elem, $attribs);
+        } elseif (method_exists($this->_handlerObj, 'xmltag')) {
+            call_user_func(array(&$this->_handlerObj, 'xmltag'), $xp, $elem, $attribs);
         }
     }
 
@@ -581,8 +590,13 @@ class XML_Parser extends PEAR
     function funcEndHandler($xp, $elem)
     {
         $func = 'xmltag_' . $elem . '_';
-        if (method_exists($this, $func)) {
+        if (strchr($func, '.')) {
+            $func = str_replace('.', '_', $func);
+        }
+        if (method_exists($this->_handlerObj, $func)) {
             call_user_func(array(&$this->_handlerObj, $func), $xp, $elem);
+        } elseif (method_exists($this->_handlerObj, 'xmltag_')) {
+            call_user_func(array(&$this->_handlerObj, 'xmltag_'), $xp, $elem);
         }
     }
 
@@ -611,7 +625,7 @@ class XML_Parser extends PEAR
     }
 
 
-    // }}}
+    // }}}me
 }
 
 /**
@@ -659,9 +673,10 @@ class XML_Parser_Error extends PEAR_Error
     {
         if (is_resource($msgorparser)) {
             $code = xml_get_error_code($msgorparser);
-            $msgorparser = sprintf('%s at XML input line %d',
+            $msgorparser = sprintf('%s at XML input line %d:%d',
                                    xml_error_string($code),
-                                   xml_get_current_line_number($msgorparser));
+                                   xml_get_current_line_number($msgorparser),
+                                   xml_get_current_column_number($msgorparser));
         }
         $this->PEAR_Error($msgorparser, $code, $mode, $level);
     }

@@ -16,7 +16,7 @@
 // | Authors: Stephan Schmidt <schst@php-tools.net>                       |
 // +----------------------------------------------------------------------+
 //
-//    $Id: Util.php,v 1.20 2004/06/27 18:15:13 schst Exp $
+//    $Id: Util.php,v 1.24 2004/12/23 13:21:59 schst Exp $
 
 /**
  * error code for invalid chars in XML name
@@ -46,7 +46,7 @@ define("XML_UTIL_REPLACE_ENTITIES", 1);
 /**
  * embedd content in a CData Section
  */
-define("XML_UTIL_CDATA_SECTION", 2);
+define("XML_UTIL_CDATA_SECTION", 5);
 
 /**
  * do not replace entitites
@@ -72,11 +72,21 @@ define("XML_UTIL_ENTITIES_XML_REQUIRED", 2);
 define("XML_UTIL_ENTITIES_HTML", 3);
 
 /**
+ * Collapse all empty tags.
+ */
+define("XML_UTIL_COLLAPSE_ALL", 1);
+
+/**
+ * Collapse only empty XHTML tags that have no end tag.
+ */
+define("XML_UTIL_COLLAPSE_XHTML_ONLY", 2);
+
+/**
  * utility class for working with XML documents
  *
  * @category XML
  * @package  XML_Util
- * @version  0.6.0
+ * @version  1.1.0
  * @author   Stephan Schmidt <schst@php.net>
  */
 class XML_Util {
@@ -90,7 +100,7 @@ class XML_Util {
     */
     function apiVersion()
     {
-        return "0.6";
+        return '1.1';
     }
 
    /**
@@ -111,6 +121,7 @@ class XML_Util {
     * @param    string  string where XML special chars should be replaced
     * @param    integer setting for entities in attribute values (one of XML_UTIL_ENTITIES_XML, XML_UTIL_ENTITIES_XML_REQUIRED, XML_UTIL_ENTITIES_HTML)
     * @return   string  string with replaced chars
+    * @see      reverseEntities()
     */
     function replaceEntities($string, $replaceEntities = XML_UTIL_ENTITIES_XML)
     {
@@ -130,7 +141,52 @@ class XML_Util {
                                           '"'  => '&quot;' ));
                 break;
             case XML_UTIL_ENTITIES_HTML:
-                return htmlspecialchars($string);
+                return htmlentities($string);
+                break;
+        }
+        return $string;
+    }
+
+   /**
+    * reverse XML entities
+    *
+    * With the optional second parameter, you may select, which
+    * entities should be reversed.
+    *
+    * <code>
+    * require_once 'XML/Util.php';
+    * 
+    * // reverse XML entites:
+    * $string = XML_Util::reverseEntities("This string contains &lt; &amp; &gt;.");
+    * </code>
+    *
+    * @access   public
+    * @static
+    * @param    string  string where XML special chars should be replaced
+    * @param    integer setting for entities in attribute values (one of XML_UTIL_ENTITIES_XML, XML_UTIL_ENTITIES_XML_REQUIRED, XML_UTIL_ENTITIES_HTML)
+    * @return   string  string with replaced chars
+    * @see      replaceEntities()
+    */
+    function reverseEntities($string, $replaceEntities = XML_UTIL_ENTITIES_XML)
+    {
+        switch ($replaceEntities) {
+            case XML_UTIL_ENTITIES_XML:
+                return strtr($string,array(
+                                          '&amp;'  => '&',
+                                          '&gt;'   => '>',
+                                          '&lt;'   => '<',
+                                          '&quot;' => '"',
+                                          '&apos;' => '\'' ));
+                break;
+            case XML_UTIL_ENTITIES_XML_REQUIRED:
+                return strtr($string,array(
+                                          '&amp;'  => '&',
+                                          '&lt;'   => '<',
+                                          '&quot;' => '"' ));
+                break;
+            case XML_UTIL_ENTITIES_HTML:
+                $arr = array_flip(get_html_translation_table(HTML_ENTITIES));
+                return strtr($string, $arr);
                 break;
         }
         return $string;
@@ -265,6 +321,9 @@ class XML_Util {
             if( !$multiline || count($attributes) == 1) {
                 foreach ($attributes as $key => $value) {
                     if ($entities != XML_UTIL_ENTITIES_NONE) {
+                        if ($entities === XML_UTIL_CDATA_SECTION) {
+                        	$entities = XML_UTIL_ENTITIES_XML;
+                        }
                         $value = XML_Util::replaceEntities($value, $entities);
                     }
                     $string .= ' '.$key.'="'.$value.'"';
@@ -285,6 +344,31 @@ class XML_Util {
             }
         }
         return $string;
+    }
+
+   /**
+    * Collapses empty tags.
+    *
+    * @access   public
+    * @static
+    * @param    string  $xml  XML
+    * @param    integer $mode Whether to collapse all empty tags (XML_UTIL_COLLAPSE_ALL) or only XHTML (XML_UTIL_COLLAPSE_XHTML_ONLY) ones.
+    * @return   string  $xml  XML
+    */
+    function collapseEmptyTags($xml, $mode = XML_UTIL_COLLAPSE_ALL) {
+        if ($mode == XML_UTIL_COLLAPSE_XHTML_ONLY) {
+            return preg_replace(
+              '/<(area|base|br|col|hr|img|input|link|meta|param)([^>]*)><\/\\1>/s',
+              '<\\1\\2 />',
+              $xml
+            );
+        } else {
+            return preg_replace(
+              '/<(\w+)([^>]*)><\/\\1>/s',
+              '<\\1\\2 />',
+              $xml
+            );
+        }
     }
 
    /**
@@ -375,8 +459,8 @@ class XML_Util {
     */
     function createTagFromArray($tag, $replaceEntities = XML_UTIL_REPLACE_ENTITIES, $multiline = false, $indent = "_auto", $linebreak = "\n" )
     {
-        if (isset($tag["content"]) && !is_scalar($tag["content"])) {
-            return XML_Util::raiseError( "Supplied non-scalar value as tag content", XML_UTIL_ERROR_NON_SCALAR_CONTENT );
+        if (isset($tag['content']) && !is_scalar($tag['content'])) {
+            return XML_Util::raiseError( 'Supplied non-scalar value as tag content', XML_UTIL_ERROR_NON_SCALAR_CONTENT );
         }
 
         if (!isset($tag['qname']) && !isset($tag['localPart'])) {
@@ -423,16 +507,21 @@ class XML_Util {
         }
         
         // create attribute list
-        $attList    =   XML_Util::attributesToString($tag["attributes"], true, $multiline, $indent, $linebreak );
-        if (!isset($tag["content"]) || (string)$tag["content"] == '') {
-            $tag    =   sprintf("<%s%s />", $tag["qname"], $attList);
+        $attList    =   XML_Util::attributesToString($tag['attributes'], true, $multiline, $indent, $linebreak, $replaceEntities );
+        if (!isset($tag['content']) || (string)$tag['content'] == '') {
+            $tag    =   sprintf('<%s%s />', $tag['qname'], $attList);
         } else {
-            if ($replaceEntities == XML_UTIL_REPLACE_ENTITIES) {
-                $tag["content"] = XML_Util::replaceEntities($tag["content"]);
-            } elseif ($replaceEntities == XML_UTIL_CDATA_SECTION) {
-                $tag["content"] = XML_Util::createCDataSection($tag["content"]);
+            switch ($replaceEntities) {
+                case XML_UTIL_ENTITIES_NONE:
+                    break;
+                case XML_UTIL_CDATA_SECTION:
+                    $tag['content'] = XML_Util::createCDataSection($tag['content']);
+                    break;
+                default:
+                    $tag['content'] = XML_Util::replaceEntities($tag['content'], $replaceEntities);
+                    break;
             }
-            $tag    =   sprintf("<%s%s>%s</%s>", $tag["qname"], $attList, $tag["content"], $tag["qname"] );
+            $tag    =   sprintf('<%s%s>%s</%s>', $tag['qname'], $attList, $tag['content'], $tag['qname'] );
         }        
         return  $tag;
     }

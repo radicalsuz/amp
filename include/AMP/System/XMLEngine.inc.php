@@ -15,9 +15,11 @@ class AMPSystem_XMLEngine {
         require_once('XML/Unserializer.php');
         $xmlEngine = & new XML_Unserializer();
 
-        if ($xmlEngine->unserialize( $this->getFile() ) ){;
+		$status = $xmlEngine->unserialize( $this->getFile() );
+        if (!PEAR::isError($status)) {
             return $xmlEngine->getUnserializedData();
         }
+		trigger_error($status->getMessage());
         return false;
     }
 
