@@ -23,7 +23,7 @@ class Podcast_Output_RSS {
 			XML_SERIALIZER_OPTION_ROOT_NAME			=> 'rss',
 			XML_SERIALIZER_OPTION_ROOT_ATTRIBS		=> array(
 				'version' => "2.0",
-				'xmlns:itunes' => 'http://www.itunes.com/DTDs/Podcast-1.0.dtd'),
+				'xmlns:itunes' => 'http://www.itunes.com/dtds/podcast-1.0.dtd'),
 			XML_SERIALIZER_OPTION_ATTRIBUTES_KEY	=> "_attributes",
 			XML_SERIALIZER_OPTION_ENTITIES			=> XML_SERIALIZER_ENTITIES_NONE,
 			XML_SERIALIZER_OPTION_ENCODE_FUNC		=> 'htmlspecialchars',
