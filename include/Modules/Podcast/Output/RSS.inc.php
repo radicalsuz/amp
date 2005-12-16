@@ -37,7 +37,7 @@ class Podcast_Output_RSS {
 				"description"	=>	$podcast->getData('description'),
 				"copyright"		=>	$podcast->getData('copyright'),
 				"generator"		=>	$this->getGenerator(),
-				"lastBuildDate"	=>	$podcast->lastBuildDate(),
+				"lastBuildDate"	=>	date('D, j M Y G:i:s T', strtotime($podcast->lastBuildDate())),
 				"language"		=>	$podcast->getData('language'),
 				"ttl"			=>	$podcast->getData('ttl'),
 				"itunes:summary"=>	$podcast->getData('description'),
