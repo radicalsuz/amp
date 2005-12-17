@@ -3,7 +3,7 @@
 require_once( 'Modules/Gallery/Display.inc.php');
 
 class GalleryImageSet_Display extends Gallery_Display {
-    function GalleryImage_Display( &$image ){
+    function GalleryImageSet_Display( &$image ){
         $this->_gallery = &new Gallery( $image->dbcon, $image->getGallery( ));
     }
 

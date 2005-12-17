@@ -31,6 +31,7 @@ class AMPSystemPage_Controller {
 		$this->_dbcon = &AMP_Registry::getDbcon(); 
 		$this->setProtectedMethods();
         $this->readRequest( );
+        $this->_afterInit( );
     }
 
 	function execute() {
@@ -137,6 +138,9 @@ class AMPSystemPage_Controller {
     }
 
     function _afterView( ){
+        //interface
+    }
+    function _afterInit( ){
         //interface
     }
 

@@ -91,6 +91,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->_pager = &new AMPSystem_ListPager( $this->source );
         
         if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
+        $this->_afterPagerInit( );
     }
 
     function execute( ){
@@ -413,6 +414,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function appendEditlinkVar( $var ) {
         $this->editlink = AMP_URL_AddVars( $this->editlink, $var );
+    }
+
+    function _afterPagerInit( ){
+        //interface
     }
 
 

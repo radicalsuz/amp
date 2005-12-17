@@ -2,12 +2,20 @@
 
 require_once ( 'AMP/System/List/Pager.inc.php' );
 
+if ( !defined( 'AMP_TEXT_PAGER_LAST'))  define( 'AMP_TEXT_PAGER_LAST', 'Last Page');
+if ( !defined( 'AMP_TEXT_PAGER_FIRST')) define( 'AMP_TEXT_PAGER_FIRST', 'First Page');
+if ( !defined( 'AMP_TEXT_PAGER_ALL'))   define( 'AMP_TEXT_PAGER_ALL', 'Show Complete List');
+
 class AMPContent_Pager extends AMPSystem_ListPager {
 
     var $_default_qty = 20;
     var $_qty = 20;
 
     var $_css_class_link      = "pager_link";
+
+    var $_text_first = AMP_TEXT_PAGER_FIRST;
+    var $_text_last  = AMP_TEXT_PAGER_LAST;
+    var $_text_all   = AMP_TEXT_PAGER_ALL;
 
     function AMPContent_Pager( &$source ) {
         $this->init( $source );
@@ -58,20 +66,20 @@ class AMPContent_Pager extends AMPSystem_ListPager {
     function _firstPageLink() {
         if (!$this->_offset) return false;
         $href = $this->offsetURL( 0 ); 
-        return '<a class="'.$this->_css_class_link .'" href="'. $href . '">&laquo; First Page</a>&nbsp;';
+        return '<a class="'.$this->_css_class_link .'" href="'. $href . '">&laquo; ' . $this->_text_first .'</a>&nbsp;';
     }
 
     function _lastPageLink() {
         if ($this->page_total >= $this->source_total ) return false;
         $href = $this->offsetURL( $this->source_total - $this->_qty );
 
-        return '<a class="'.$this->_css_class_link.'" href="'. $href . '">Last Page &raquo;</a>&nbsp;';
+        return '<a class="'.$this->_css_class_link.'" href="'. $href . '">' . $this->_text_last . ' &raquo;</a>&nbsp;';
     }
 
     function _allItemsLink() {
         if ($this->page_total >= $this->source_total && (!$this->getOffset()) ) return false;
         $href = AMP_URL_AddVars( $this->offsetURL( 0 ), "all=1" );
-        return '<a class="'.$this->_css_class_link.'" href="'. $href . '">&laquo; Show Complete List &raquo;</a>&nbsp;';
+        return '<a class="'.$this->_css_class_link.'" href="'. $href . '">&laquo; ' . $this->_text_all . ' &raquo;</a>&nbsp;';
     }
 
     function getSubsetTotal( $subset_field, $subset_value ) {
@@ -79,5 +87,13 @@ class AMPContent_Pager extends AMPSystem_ListPager {
         if (isset($countset[ $subset_value ])) return $countset[ $subset_value ];
         return 0;
     }
+
+    function setLinkText( $text, $whichlink ){
+        $linktext = '_text_'.$whichlink;
+        if ( !isset( $this->$linktext)) return false;
+        $this->$linktext = $text;
+    }
+
 }
+
 ?>

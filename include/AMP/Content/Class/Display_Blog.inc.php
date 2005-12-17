@@ -4,9 +4,10 @@ require_once( 'AMP/Content/Class/Display.inc.php' );
 
 class ContentClass_Display_Blog extends ContentClass_Display {
 
+    var $_css_id_container_list = "main_content";
 
-    function ContentClass_Display_Blog( &$dbcon, $read_data = true ) {
-        $this->_class = &new ContentClass ( $dbcon, AMP_CONTENT_CLASS_BLOG );
+    function ContentClass_Display_Blog( &$classRef, $read_data = true ) {
+        $this->_class = &$classRef;
 
         $blog_articles =  &$this->_class->getContents() ;
         $blog_articles->addSort( 'pageorder' );

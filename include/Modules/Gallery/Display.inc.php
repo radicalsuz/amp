@@ -181,5 +181,12 @@ class Gallery_DisplaySingle extends Gallery_Display {
                 $this->_HTML_newline();
     }
 
+
+    function _afterPagerInit( ) {
+        $this->_pager->setLinkText( 'First Image', 'first') ;
+        $this->_pager->setLinkText( 'Last Image', 'last') ;
+        $this->_pager->setLinkText( 'Show Entire Gallery', 'all') ;
+    }
+
 }
 ?>

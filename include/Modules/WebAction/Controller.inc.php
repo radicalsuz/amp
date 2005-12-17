@@ -12,5 +12,14 @@ class WebAction_Controller extends AMPSystemPage_Controller {
         $this->init( );
     }
 
+    function _afterInit( ){
+         $this->_updateDB( );
+    }
+
+    function _updateDB( ){
+        if ( AMP_hasTable( 'webactions')) return true;
+        $this->_dbcon->MetaTables( );
+    }
+
 }
 ?>

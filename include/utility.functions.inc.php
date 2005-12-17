@@ -908,6 +908,18 @@ if ( !function_exists( 'AMP_mkdir')) {
         return false;
     }
 }
+
+if ( !function_exists( 'AMP_hasTable')) {
+
+    function AMP_hasTable( $table_name ){
+        static $tablenames = false;
+        if ( !$tablenames ) {
+            $dbcon = &AMP_Registry::getDbcon( );
+            $tablenames = $dbcon->MetaTables( );
+        }
+        return ( array_search( $table_name, $tablenames ) !== FALSE );
+    }
+}
 			
 
 ?>

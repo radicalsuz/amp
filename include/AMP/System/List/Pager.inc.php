@@ -1,6 +1,8 @@
 <?php
 
 require_once ( 'AMP/Content/Display/HTML.inc.php' );
+if ( !defined( 'AMP_TEXT_PAGER_NEXT'))  define( 'AMP_TEXT_PAGER_NEXT', 'Next');
+if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS')) define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev');
 
 class AMPSystem_ListPager extends AMPDisplay_HTML {
 
@@ -16,6 +18,10 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     var $_css_class_container = "list_pager";
     var $_css_class_container_block = "list_pager_block";
+    var $_css_class_standout = 'standout';
+
+    var $_text_next = AMP_TEXT_PAGER_NEXT;
+    var $_text_previous = AMP_TEXT_PAGER_PREVIOUS;
 
     function AMPSystem_ListPager( &$source ) {
         $this->init ( $source );
@@ -140,14 +146,14 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         $href = $this->offsetURL( ($this->_offset - $this->_qty ) );
         if ($this->_offset <= $this->_qty ) $href = $this->offsetURL(0);
 
-        return '<a class="standout" href="'. $href . '">< Prev</a>&nbsp;&nbsp;';
+        return '<a class="' . $this->_css_class_standout . '" href="'. $href . '">< ' . $this->_text_previous . '</a>&nbsp;&nbsp;';
     }
 
     function _nextPageLink() {
         if ($this->page_total >= $this->source_total ) return false;
         $href = $this->offsetURL( $this->page_total );
 
-        return '<a class="standout" href="'. $href . '">Next >></a>&nbsp;';
+        return '<a class="' . $this->_css_class_standout . '" href="'. $href . '">' . $this->_text_next . '  >></a>&nbsp;';
     }
 
 
