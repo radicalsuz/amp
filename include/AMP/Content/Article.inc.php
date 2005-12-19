@@ -75,6 +75,14 @@ class Article extends AMPSystem_Data_Item {
         return $this->getParent();
     }
 
+    function getAllSections() {
+        $related_set = &AMPContentLookup_SectionsByArticle::instance( $this->id );
+        if ( empty( $related_set )) return array( $this->getParent( ));
+        $return_set = array_keys( $related_set );
+        $return_set[] = $this->getParent( );
+        return $return_set;
+    }
+
     function getClass() {
         return $this->getData( 'class' );
     }

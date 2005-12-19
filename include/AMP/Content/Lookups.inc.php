@@ -208,5 +208,32 @@ class AMPContentLookup_GalleryImages extends AMPContent_Lookup {
         return $lookup->dataset;
     }
 }
+class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
+    var $datatable = 'articlereltype';
+    var $result_field = 'articleid';
+    var $id_field = 'typeid';
+
+    function AMPContentLookup_SectionsByArticle( $article_id = null ){
+        if ( isset( $article_id )) $this->_addCriteriaArticle( $article_id );
+        $this->init( );
+    }
+
+    function _addCriteriaArticle( $article_id ){
+        $this->criteria = "articleid =" . $article_id ;
+    }
+
+    function &instance( $article_id ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new AMPContentLookup_SectionsByArticle ( $article_id );
+        } else {
+            $lookup->_addCriteriaArticle( $article_id );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+}
+
+?>
 
 ?>
