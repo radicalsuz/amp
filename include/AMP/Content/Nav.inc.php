@@ -2,6 +2,7 @@
 
 if (!defined('AMP_NAVLINK_ALTERNATE_CSS_CLASS')) define( 'AMP_NAVLINK_ALTERNATE_CSS_CLASS', 'sidelist2' );
 if (!defined( 'AMP_NAVLINK_CSS_CLASS' )) define ('AMP_NAVLINK_CSS_CLASS', 'sidelist' );
+if (!defined( 'AMP_CONTENT_NAV_LIMIT_DEFAULT' )) define ('AMP_CONTENT_NAV_LIMIT_DEFAULT', 20 );
 
 define( 'AMP_NAVTYPE_HTML', 'HTML' );
 define( 'AMP_NAVTYPE_SQL', 'SQL' );
@@ -140,7 +141,8 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function getLimit() {
-        return $this->getData( 'repeat' );
+        if ( $limit = $this->getData( 'repeat' )) return $limit;
+        return AMP_CONTENT_NAV_LIMIT_DEFAULT;
     }
 
     function getCssClass() {

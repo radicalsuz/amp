@@ -33,27 +33,21 @@
 
 $mod_id = 2 ;
 include("AMP/BaseDB.php");
-if (!defined( 'AMP_USE_OLD_CONTENT_ENGINE' )) define ('AMP_USE_OLD_CONTENT_ENGINE', false );
 
-if (AMP_USE_OLD_CONTENT_ENGINE) {
-    require_once( 'index2.php' );
-
-} else {
-    if (AMP_SITE_MEMCACHE_ON) {
-        require_once( "AMP/Content/Page/Cached.inc.php" );
-        $cached_page = &new AMPContent_Page_Cached();
-        if ($cached_page->execute()) exit;
-    }
-    require_once ("AMP/BaseTemplate.php");
-    if ( 'index.php' != AMP_CONTENT_URL_FRONTPAGE ) ampredirect( AMP_CONTENT_URL_FRONTPAGE );
-
-    require_once ("AMP/Content/Class/Display_FrontPage.inc.php");
-    $currentPage = &AMPContent_Page::instance();
-    $currentPage->setListType( AMP_CONTENT_LISTTYPE_FRONTPAGE );
-
-    $display = &new ContentClass_Display_FrontPage( $dbcon ); 
-    $currentPage->contentManager->addDisplay( $display );
-    require_once( 'AMP/BaseFooter.php' );
+if (AMP_SITE_MEMCACHE_ON) {
+    require_once( "AMP/Content/Page/Cached.inc.php" );
+    $cached_page = &new AMPContent_Page_Cached();
+    if ($cached_page->execute()) exit;
 }
+require_once ("AMP/BaseTemplate.php");
+if ( 'index.php' != AMP_CONTENT_URL_FRONTPAGE ) ampredirect( AMP_CONTENT_URL_FRONTPAGE );
+
+require_once ("AMP/Content/Class/Display_FrontPage.inc.php");
+$currentPage = &AMPContent_Page::instance();
+$currentPage->setListType( AMP_CONTENT_LISTTYPE_FRONTPAGE );
+
+$display = &new ContentClass_Display_FrontPage( $dbcon ); 
+$currentPage->contentManager->addDisplay( $display );
+require_once( 'AMP/BaseFooter.php' );
 
 ?>

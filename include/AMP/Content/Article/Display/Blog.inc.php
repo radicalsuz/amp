@@ -42,9 +42,10 @@ class ArticleDisplay_Blog extends Article_Display {
     
 
  function _HTML_commentLink( &$commentSet) {
+     $commentSet->execute( );
          
     $text= ($commentSet->RecordCount()? $commentSet->RecordCount():'no') .' comments';
-    $comments =  $this->_HTML_link(AMP_Url_AddVars($this->_article->getURL(),'#comment'),$text);
+    $comments =  $this->_HTML_link(AMP_Url_AddAnchor($this->_article->getURL(), 'comments'),$text);
 
     $article_locations = $this->_article->getAllSections();
     $section_list = array_combine_key( $article_locations, AMPContent_Lookup::instance('sections'));

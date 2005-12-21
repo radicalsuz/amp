@@ -763,9 +763,14 @@ if (!function_exists ('AMP_jsAlert' )) {
 if (!function_exists('AMP_Url_AddVars')) {
     function AMP_Url_AddVars ( $current_value, $new_vars ) {
         if (!is_array( $new_vars)) $new_vars = array( $new_vars );
-        if (strpos( $current_value, '?') === FALSE )  return $current_value . '?' . join( '&', $new_vars );
+        if (strpos( $current_value, '?') === FALSE )  return $current_value . '?' . implode( '&', $new_vars );
 
-        return $current_value . '&' . join( '&', $new_vars );
+        return $current_value . '&' . implode( '&', $new_vars );
+    }
+}
+if (!function_exists('AMP_Url_AddAnchor')) {
+    function AMP_Url_AddAnchor ( $current_value, $anchor_name) {
+        return $current_value . '#' . $anchor_name;
     }
 }
 

@@ -47,7 +47,7 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
     }
 
     function execute() {
-        $output = '<hr><p class="subtitle">Comments</p>';
+        $output = '<hr><p class="subtitle"><a name="comments"></a>Comments</p>';
         $output .= $this->_HTML_addCommentLink( $this->comment_set->getArticleId() ).'  |  '. $this->_HTML_trackback($this->comment_set->getArticleId());
 
         if (!$this->comment_set->makeReady()) return $output;

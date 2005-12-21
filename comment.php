@@ -9,8 +9,8 @@ if (isset($_POST["MM_insert"])){
 	$MM_editTable  = "comments";
 	$MM_editRedirectUrl = "article.php?id=".$_POST["articleid"];
 	$publish = $defualtpublish;
-	$MM_fieldsStr = "author|value|website|value|email|value|comment|value|articleid|value|publish|value|date|value";
-	$MM_columnsStr = "author|',none,''|website|',none,''|email|',none,''|comment|',none,''|articleid|none,none,NULL|publish|none,1,0|date|',none,now()";
+	$MM_fieldsStr = "author|value|author_url|value|email|value|comment|value|articleid|value|publish|value|date|value";
+	$MM_columnsStr = "author|',none,''|author_url|',none,''|email|',none,''|comment|',none,''|articleid|none,none,NULL|publish|none,1,0|date|',none,now()";
 	require ("Connections/insetstuff.php");
     require ("Connections/dataactions.php");
 }
@@ -52,7 +52,7 @@ function addFieldToCheck(value,name) {
     </tr>
     <tr> 
       <td class="form">Website</td>
-      <td><input name="website" type="text" id="website" size="40">  </td>
+      <td><input name="author_url" type="text" id="author_url" size="40">  </td>
     </tr>
     <tr> 
       <td valign="top" class="form">Comment</td>

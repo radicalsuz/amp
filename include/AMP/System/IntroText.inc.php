@@ -12,7 +12,6 @@
  *
  *****/
 
-require_once ( 'utility.functions.inc.php' );
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
 
