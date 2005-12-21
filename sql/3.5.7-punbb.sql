@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `punbb_categories` (
 
 
 
-INSERT INTO `punbb_categories` VALUES (1, 'Test category', 1);
+REPLACE INTO `punbb_categories` VALUES (1, 'Test category', 1);
 
 
 
@@ -41,76 +41,76 @@ CREATE TABLE IF NOT EXISTS `punbb_config` (
 
 
 
-INSERT INTO `punbb_config` VALUES ('o_cur_version', '1.2.10');
-INSERT INTO `punbb_config` VALUES ('o_board_title', 'Fourm');
-INSERT INTO `punbb_config` VALUES ('o_board_desc', NULL);
-INSERT INTO `punbb_config` VALUES ('o_server_timezone', '0');
-INSERT INTO `punbb_config` VALUES ('o_time_format', 'H:i:s');
-INSERT INTO `punbb_config` VALUES ('o_date_format', 'Y-m-d');
-INSERT INTO `punbb_config` VALUES ('o_timeout_visit', '600');
-INSERT INTO `punbb_config` VALUES ('o_timeout_online', '300');
-INSERT INTO `punbb_config` VALUES ('o_redirect_delay', '1');
-INSERT INTO `punbb_config` VALUES ('o_show_version', '0');
-INSERT INTO `punbb_config` VALUES ('o_show_user_info', '1');
-INSERT INTO `punbb_config` VALUES ('o_show_post_count', '1');
-INSERT INTO `punbb_config` VALUES ('o_smilies', '1');
-INSERT INTO `punbb_config` VALUES ('o_smilies_sig', '1');
-INSERT INTO `punbb_config` VALUES ('o_make_links', '1');
-INSERT INTO `punbb_config` VALUES ('o_default_lang', 'English');
-INSERT INTO `punbb_config` VALUES ('o_default_style', 'Oxygen');
-INSERT INTO `punbb_config` VALUES ('o_default_user_group', '4');
-INSERT INTO `punbb_config` VALUES ('o_topic_review', '15');
-INSERT INTO `punbb_config` VALUES ('o_disp_topics_default', '30');
-INSERT INTO `punbb_config` VALUES ('o_disp_posts_default', '25');
-INSERT INTO `punbb_config` VALUES ('o_indent_num_spaces', '4');
-INSERT INTO `punbb_config` VALUES ('o_quickpost', '1');
-INSERT INTO `punbb_config` VALUES ('o_users_online', '0');
-INSERT INTO `punbb_config` VALUES ('o_censoring', '0');
-INSERT INTO `punbb_config` VALUES ('o_ranks', '0');
-INSERT INTO `punbb_config` VALUES ('o_show_dot', '0');
-INSERT INTO `punbb_config` VALUES ('o_quickjump', '1');
-INSERT INTO `punbb_config` VALUES ('o_gzip', '0');
-INSERT INTO `punbb_config` VALUES ('o_additional_navlinks', '');
-INSERT INTO `punbb_config` VALUES ('o_report_method', '0');
-INSERT INTO `punbb_config` VALUES ('o_regs_report', '0');
-INSERT INTO `punbb_config` VALUES ('o_mailing_list', '');
-INSERT INTO `punbb_config` VALUES ('o_avatars', '0');
-INSERT INTO `punbb_config` VALUES ('o_avatars_dir', 'img/avatars');
-INSERT INTO `punbb_config` VALUES ('o_avatars_width', '60');
-INSERT INTO `punbb_config` VALUES ('o_avatars_height', '60');
-INSERT INTO `punbb_config` VALUES ('o_avatars_size', '10240');
-INSERT INTO `punbb_config` VALUES ('o_search_all_forums', '1');
-INSERT INTO `punbb_config` VALUES ('o_base_url', '');
-INSERT INTO `punbb_config` VALUES ('o_admin_email', '');
-INSERT INTO `punbb_config` VALUES ('o_webmaster_email', '');
-INSERT INTO `punbb_config` VALUES ('o_subscriptions', '1');
-INSERT INTO `punbb_config` VALUES ('o_smtp_host', NULL);
-INSERT INTO `punbb_config` VALUES ('o_smtp_user', NULL);
-INSERT INTO `punbb_config` VALUES ('o_smtp_pass', NULL);
-INSERT INTO `punbb_config` VALUES ('o_regs_allow', '1');
-INSERT INTO `punbb_config` VALUES ('o_regs_verify', '0');
-INSERT INTO `punbb_config` VALUES ('o_announcement', '0');
-INSERT INTO `punbb_config` VALUES ('o_announcement_message', 'Enter your announcement here.');
-INSERT INTO `punbb_config` VALUES ('o_rules', '0');
-INSERT INTO `punbb_config` VALUES ('o_rules_message', 'Enter your rules here.');
-INSERT INTO `punbb_config` VALUES ('o_maintenance', '0');
-INSERT INTO `punbb_config` VALUES ('o_maintenance_message', 'The forums are temporarily down for maintenance. Please try again in a few minutes.<br />\n<br />\n/Administrator');
-INSERT INTO `punbb_config` VALUES ('p_mod_edit_users', '1');
-INSERT INTO `punbb_config` VALUES ('p_mod_rename_users', '0');
-INSERT INTO `punbb_config` VALUES ('p_mod_change_passwords', '0');
-INSERT INTO `punbb_config` VALUES ('p_mod_ban_users', '0');
-INSERT INTO `punbb_config` VALUES ('p_message_bbcode', '1');
-INSERT INTO `punbb_config` VALUES ('p_message_img_tag', '1');
-INSERT INTO `punbb_config` VALUES ('p_message_all_caps', '1');
-INSERT INTO `punbb_config` VALUES ('p_subject_all_caps', '1');
-INSERT INTO `punbb_config` VALUES ('p_sig_all_caps', '1');
-INSERT INTO `punbb_config` VALUES ('p_sig_bbcode', '1');
-INSERT INTO `punbb_config` VALUES ('p_sig_img_tag', '0');
-INSERT INTO `punbb_config` VALUES ('p_sig_length', '400');
-INSERT INTO `punbb_config` VALUES ('p_sig_lines', '4');
-INSERT INTO `punbb_config` VALUES ('p_allow_banned_email', '1');
-INSERT INTO `punbb_config` VALUES ('p_allow_dupe_email', '0');
-INSERT INTO `punbb_config` VALUES ('p_force_guest_email', '1');
+REPLACE INTO `punbb_config` VALUES ('o_cur_version', '1.2.10');
+REPLACE INTO `punbb_config` VALUES ('o_board_title', 'Fourm');
+REPLACE INTO `punbb_config` VALUES ('o_board_desc', NULL);
+REPLACE INTO `punbb_config` VALUES ('o_server_timezone', '0');
+REPLACE INTO `punbb_config` VALUES ('o_time_format', 'H:i:s');
+REPLACE INTO `punbb_config` VALUES ('o_date_format', 'Y-m-d');
+REPLACE INTO `punbb_config` VALUES ('o_timeout_visit', '600');
+REPLACE INTO `punbb_config` VALUES ('o_timeout_online', '300');
+REPLACE INTO `punbb_config` VALUES ('o_redirect_delay', '1');
+REPLACE INTO `punbb_config` VALUES ('o_show_version', '0');
+REPLACE INTO `punbb_config` VALUES ('o_show_user_info', '1');
+REPLACE INTO `punbb_config` VALUES ('o_show_post_count', '1');
+REPLACE INTO `punbb_config` VALUES ('o_smilies', '1');
+REPLACE INTO `punbb_config` VALUES ('o_smilies_sig', '1');
+REPLACE INTO `punbb_config` VALUES ('o_make_links', '1');
+REPLACE INTO `punbb_config` VALUES ('o_default_lang', 'English');
+REPLACE INTO `punbb_config` VALUES ('o_default_style', 'Oxygen');
+REPLACE INTO `punbb_config` VALUES ('o_default_user_group', '4');
+REPLACE INTO `punbb_config` VALUES ('o_topic_review', '15');
+REPLACE INTO `punbb_config` VALUES ('o_disp_topics_default', '30');
+REPLACE INTO `punbb_config` VALUES ('o_disp_posts_default', '25');
+REPLACE INTO `punbb_config` VALUES ('o_indent_num_spaces', '4');
+REPLACE INTO `punbb_config` VALUES ('o_quickpost', '1');
+REPLACE INTO `punbb_config` VALUES ('o_users_online', '0');
+REPLACE INTO `punbb_config` VALUES ('o_censoring', '0');
+REPLACE INTO `punbb_config` VALUES ('o_ranks', '0');
+REPLACE INTO `punbb_config` VALUES ('o_show_dot', '0');
+REPLACE INTO `punbb_config` VALUES ('o_quickjump', '1');
+REPLACE INTO `punbb_config` VALUES ('o_gzip', '0');
+REPLACE INTO `punbb_config` VALUES ('o_additional_navlinks', '');
+REPLACE INTO `punbb_config` VALUES ('o_report_method', '0');
+REPLACE INTO `punbb_config` VALUES ('o_regs_report', '0');
+REPLACE INTO `punbb_config` VALUES ('o_mailing_list', '');
+REPLACE INTO `punbb_config` VALUES ('o_avatars', '0');
+REPLACE INTO `punbb_config` VALUES ('o_avatars_dir', 'img/avatars');
+REPLACE INTO `punbb_config` VALUES ('o_avatars_width', '60');
+REPLACE INTO `punbb_config` VALUES ('o_avatars_height', '60');
+REPLACE INTO `punbb_config` VALUES ('o_avatars_size', '10240');
+REPLACE INTO `punbb_config` VALUES ('o_search_all_forums', '1');
+REPLACE INTO `punbb_config` VALUES ('o_base_url', '');
+REPLACE INTO `punbb_config` VALUES ('o_admin_email', '');
+REPLACE INTO `punbb_config` VALUES ('o_webmaster_email', '');
+REPLACE INTO `punbb_config` VALUES ('o_subscriptions', '1');
+REPLACE INTO `punbb_config` VALUES ('o_smtp_host', NULL);
+REPLACE INTO `punbb_config` VALUES ('o_smtp_user', NULL);
+REPLACE INTO `punbb_config` VALUES ('o_smtp_pass', NULL);
+REPLACE INTO `punbb_config` VALUES ('o_regs_allow', '1');
+REPLACE INTO `punbb_config` VALUES ('o_regs_verify', '0');
+REPLACE INTO `punbb_config` VALUES ('o_announcement', '0');
+REPLACE INTO `punbb_config` VALUES ('o_announcement_message', 'Enter your announcement here.');
+REPLACE INTO `punbb_config` VALUES ('o_rules', '0');
+REPLACE INTO `punbb_config` VALUES ('o_rules_message', 'Enter your rules here.');
+REPLACE INTO `punbb_config` VALUES ('o_maintenance', '0');
+REPLACE INTO `punbb_config` VALUES ('o_maintenance_message', 'The forums are temporarily down for maintenance. Please try again in a few minutes.<br />\n<br />\n/Administrator');
+REPLACE INTO `punbb_config` VALUES ('p_mod_edit_users', '1');
+REPLACE INTO `punbb_config` VALUES ('p_mod_rename_users', '0');
+REPLACE INTO `punbb_config` VALUES ('p_mod_change_passwords', '0');
+REPLACE INTO `punbb_config` VALUES ('p_mod_ban_users', '0');
+REPLACE INTO `punbb_config` VALUES ('p_message_bbcode', '1');
+REPLACE INTO `punbb_config` VALUES ('p_message_img_tag', '1');
+REPLACE INTO `punbb_config` VALUES ('p_message_all_caps', '1');
+REPLACE INTO `punbb_config` VALUES ('p_subject_all_caps', '1');
+REPLACE INTO `punbb_config` VALUES ('p_sig_all_caps', '1');
+REPLACE INTO `punbb_config` VALUES ('p_sig_bbcode', '1');
+REPLACE INTO `punbb_config` VALUES ('p_sig_img_tag', '0');
+REPLACE INTO `punbb_config` VALUES ('p_sig_length', '400');
+REPLACE INTO `punbb_config` VALUES ('p_sig_lines', '4');
+REPLACE INTO `punbb_config` VALUES ('p_allow_banned_email', '1');
+REPLACE INTO `punbb_config` VALUES ('p_allow_dupe_email', '0');
+REPLACE INTO `punbb_config` VALUES ('p_force_guest_email', '1');
 
 
 
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `punbb_forums` (
 
 
 
-INSERT INTO `punbb_forums` VALUES (1, 'Test forum', 'This is just a test forum', NULL, NULL, 1, 1, 1133820143, 1, 'admin', 0, 1, 1);
+REPLACE INTO `punbb_forums` VALUES (1, 'Test forum', 'This is just a test forum', NULL, NULL, 1, 1, 1133820143, 1, 'admin', 0, 1, 1);
 
 
 
@@ -170,10 +170,10 @@ CREATE TABLE IF NOT EXISTS `punbb_groups` (
 
 
 
-INSERT INTO `punbb_groups` VALUES (1, 'Administrators', 'Administrator', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-INSERT INTO `punbb_groups` VALUES (2, 'Moderators', 'Moderator', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
-INSERT INTO `punbb_groups` VALUES (3, 'Guest', NULL, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0);
-INSERT INTO `punbb_groups` VALUES (4, 'Members', NULL, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 300, 60, 30);
+REPLACE INTO `punbb_groups` VALUES (1, 'Administrators', 'Administrator', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+REPLACE INTO `punbb_groups` VALUES (2, 'Moderators', 'Moderator', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0);
+REPLACE INTO `punbb_groups` VALUES (3, 'Guest', NULL, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0);
+REPLACE INTO `punbb_groups` VALUES (4, 'Members', NULL, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 300, 60, 30);
 
 
 
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `punbb_posts` (
 
 
 
-INSERT INTO `punbb_posts` VALUES (1, 'admin', 2, '127.0.0.1', NULL, 'If you are looking at this (which I guess you are), the install of PunBB appears to have worked! Now log in and head over to the administration control panel to configure your forum.', 0, 1133820143, NULL, NULL, 1);
+REPLACE INTO `punbb_posts` VALUES (1, 'admin', 2, '127.0.0.1', NULL, 'If you are looking at this (which I guess you are), the install of PunBB appears to have worked! Now log in and head over to the administration control panel to configure your forum.', 0, 1133820143, NULL, NULL, 1);
 
 
 
@@ -219,8 +219,8 @@ CREATE TABLE IF NOT EXISTS `punbb_ranks` (
 
 
 
-INSERT INTO `punbb_ranks` VALUES (1, 'New member', 0);
-INSERT INTO `punbb_ranks` VALUES (2, 'Member', 10);
+REPLACE INTO `punbb_ranks` VALUES (1, 'New member', 0);
+REPLACE INTO `punbb_ranks` VALUES (2, 'Member', 10);
 
 
 
@@ -298,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `punbb_topics` (
 
 
 
-INSERT INTO `punbb_topics` VALUES (1, 'admin', 'Test post', 1133820143, 1133820143, 1, 'admin', 0, 0, 0, 0, NULL, 1);
+REPLACE INTO `punbb_topics` VALUES (1, 'admin', 'Test post', 1133820143, 1133820143, 1, 'admin', 0, 0, 0, 0, NULL, 1);
 
 
 
@@ -346,6 +346,6 @@ CREATE TABLE IF NOT EXISTS `punbb_users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 
-INSERT INTO `punbb_users` VALUES (1, 3, 'Guest', 'Guest', 'Guest', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 1, 1, 0, 1, 1, 1, 1, 1, 0, 'English', 'Oxygen', 0, NULL, 0, '0.0.0.0', 0, NULL, NULL, NULL);
-INSERT INTO `punbb_users` VALUES (2, 1, 'admin', 'fa9beb99e4029ad5a6615399e7bbae21356086b3', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 1, 1, 0, 1, 1, 1, 1, 1, 0, 'English', 'Oxygen', 1, 1133820143, 1133820143, '127.0.0.1', 1133820143, NULL, NULL, NULL);
+REPLACE INTO `punbb_users` VALUES (1, 3, 'Guest', 'Guest', 'Guest', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 1, 1, 0, 1, 1, 1, 1, 1, 0, 'English', 'Oxygen', 0, NULL, 0, '0.0.0.0', 0, NULL, NULL, NULL);
+REPLACE INTO `punbb_users` VALUES (2, 1, 'admin', 'fa9beb99e4029ad5a6615399e7bbae21356086b3', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 1, 1, 0, 1, 1, 1, 1, 1, 0, 'English', 'Oxygen', 1, 1133820143, 1133820143, '127.0.0.1', 1133820143, NULL, NULL, NULL);
         
