@@ -31,9 +31,9 @@ class ContentClass_Display_Blog extends ContentClass_Display {
 
 
     function _HTML_listItem( &$contentItem ) {
-       
+    
         if (!($display = &$contentItem->getDisplay())) return false;
-
+        $display->useShortComments();
         if ( AMP_CONTENT_LAYOUT_CSS ) return $this->_HTML_inDiv( $display->execute(), $this->_css_class_container_listentry );
         return  "<tr>".
                 $this->_HTML_inTD( $display->execute() ). 
@@ -41,14 +41,6 @@ class ContentClass_Display_Blog extends ContentClass_Display {
     }
 
 
- function _HTML_commentLink( &$contentItem) {
-    
-    $counts = AMPContent_Lookup::instance("CommentsByArticle");
-    $mycount = isset($counts[$contentItem->id])?  $counts[$contentItem->id]:'0';
-    $text= $mycount.' Comments';
-    return $this->_HTML_link(AMP_Url_AddVars($contentItem->getURL(),'#comment'),$text);
- 
- }
 }
 
 ?>

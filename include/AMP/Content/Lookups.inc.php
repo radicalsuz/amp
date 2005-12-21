@@ -235,5 +235,3 @@ class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
 }
 
 ?>
-
-?>

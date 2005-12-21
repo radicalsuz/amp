@@ -45,6 +45,23 @@ class ContentClass extends AMPSystem_Data_Item {
         $this->_contents_criteria[] = $criteria;
     }
 
+    function addContentsCriteriaSection( $section_id ) {
+        $base_section = "type=".$section_id ;
+        if (!($related_ids = $this->_getRelatedArticles( $section_id ))) return $this->addContentsCriteria( $base_section );
+
+        return $this->addContentsCriteria( "( ". $base_section . ' OR ' . $related_ids . ")" );
+    }
+
+    function _getRelatedArticles( $section_id = null) {
+        require_once( 'AMP/Content/Section/RelatedSet.inc.php' );
+
+        $related = &new SectionRelatedSet( $this->dbcon, $section_id );
+        $relatedContent = &$related->getLookup( 'typeid' );
+        if (empty( $relatedContent )) return false;
+
+        return "id in (" . join( ", ", array_keys( $relatedContent) ). ")";
+    }
+
     function &getDisplay() {
         $classes = filterConstants( 'AMP_CONTENT_CLASS' );
         $display_def_constant= 'AMP_CONTENT_CLASSLIST_DISPLAY_' . array_search( $this->id , $classes );

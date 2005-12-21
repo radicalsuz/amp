@@ -69,7 +69,8 @@ if ($currentPage->isList( AMP_CONTENT_LISTTYPE_CLASS )
     &&  isset( $_GET['type']) 
     && ($currentSection = &$currentPage->getSection() ) 
     && ($currentClass = &$currentPage->getClass() )) {
-            $currentClass->addContentsCriteria( $currentSection->getCriteriaForContent() );
+            #$currentClass->addContentsCriteria( $currentSection->getCriteriaForContent() );
+            $currentClass->addContentsCriteriaSection( $currentSection->id );
 }
 
 /**
