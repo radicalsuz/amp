@@ -1,7 +1,7 @@
 <?
 
-$modid = 4;
-$intro_id = 35;
+$modid = 8;
+$intro_id = 64;
 include("AMP/BaseDB.php");
 
 require_once('gallery2/embed.php');
