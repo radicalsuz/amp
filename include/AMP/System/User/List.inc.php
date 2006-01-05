@@ -9,7 +9,7 @@ class User_List extends AMPSystem_List {
         'User' => 'name',
         'Permission Group' => 'permission',
         'ID'    => 'id');
-    var $editlink = 'users.php';
+    var $editlink = 'user.php';
 
     function User_List( &$dbcon ) {
         $source = & new UserSet( $dbcon );
