@@ -287,7 +287,9 @@ Class Maps {
 	
 	function google_map() {
 
-		$out .='<script src="http://maps.google.com/maps?file=api&v=1&key='.GOOGLE_API_KEY.'" type="text/javascript"></script>
+		$out .= '<script src="http://maps.google.com/maps?file=api&v=1&key='.GOOGLE_API_KEY.'" type="text/javascript"></script>';
+		$out .= '<div id="map" style="width: 500px; height: 400px"></div>';
+$out .= '
 <script type="text/javascript">
     //<![CDATA[
 
@@ -321,8 +323,6 @@ Class Maps {
       }
 
 
-
-
       // create the map
       var map = new GMap(document.getElementById("map"));
       map.addControl(new GLargeMapControl());
@@ -331,7 +331,7 @@ Class Maps {
 
       // Read the data from example.xml
       var request = GXmlHttp.create();
-      request.open("GET", "data.xml", true);
+      request.open("GET", "googlexml.php?id='.$this->map_ID.'", true);
       request.onreadystatechange = function() {
         if (request.readyState == 4) {
           var xmlDoc = request.responseXML;
