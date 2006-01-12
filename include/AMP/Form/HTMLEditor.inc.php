@@ -7,6 +7,7 @@ class AMPFormElement_HTMLEditor {
             "'SpellChecker'",
             "'FullScreen'",
             "'FindReplace'",
+			 "'TableOperations'",
             "'SuperClean'",
             );
     var $config_location = "/scripts/xinha_config.js";
