@@ -9,6 +9,7 @@ if ($_GET['map']) {
 	echo "<h3>".$map->P['title']."</h3>";
 	echo "<p>".$map->P['description']."</p>";
 	echo  $map->google_map();
+	echo '<div id="map" style="width: 500px; height: 400px"></div>';
 } else {
 	$sql = 'select id, name, description from maps ';
 	$M=$dbcon->CacheExecute($sql) or DIE($sql.$dbcon->ErrorMsg());
