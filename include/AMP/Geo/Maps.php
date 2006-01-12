@@ -103,8 +103,7 @@ Class Maps {
 			$x++;
 			$R->MoveNext();
 		}
-	}
-	
+	}			
 	function build_points() {
 		if ( ($this->P['label_field']) and $this->P['label_field'] != 'City') {
 			$extra_fields = ", ".$this->P['label_field'];
@@ -163,7 +162,14 @@ Class Maps {
 			$S->MoveNext();
 		}
 	}
-
+	function xml_file() {
+		#checks to see if xmlfile is there
+		#checks age of xml file	
+		#if stale rewrites xml file
+		
+	}
+	
+	
 	function us_xml() {	
 		if (!$this->Range) {
 			//$this->build_range();
@@ -243,38 +249,19 @@ Class Maps {
 
 		header('Content-type: text/xml');
 		$out .= '<?xml version="1.0" ?>';
-		$out .= '<page>';
-		$out .= '<title>'.$this->P["title"].'</title>';
-		$out .= '<query>'.$this->P["title"].'</query>';
-		$out .= '<center lat="'.$this->P["center_lat"].'" lng="'.$this->P["center_long"].'"/>';
-		$out .= '<span lat="'.$this->P["span_lat"].'" lng="'.$this->P["span_long"].'"/>';
-		$out .= '<overlay panelStyle="/mapfiles/geocodepanel.xsl">';
-		
-		foreach($this->points as $p) {
-			$out .= '<location infoStyle="/mapfiles/mapinfo.xsl" id="'.$p['name'].'">';
-			$out .= '<point lat="'.$p['lat'].'" lng="'.$p['long'].'"/>';
-			$out .= '<icon image="'.'img/'.$this->P['default_point_src'].'" class="local"/>';
-			$out .= '<info>';
-			$out .= '<title xml:space="preserve">'.$p['name'].'</title>';
-			$out .= '<address>';
-			$out .= '<line>'.$p['hover'].'</line>';
-			$out .= '<line>'.$p['Street'].'</line>';
-			$out .= '<line>'.$p['City'].', '.$p['State'].'</line>';
-			$out .= '</address>';
-			$out .= '<description>';
-			$out .= '<references count="1">';
-			$out .= '<reference>';
-			$out .= '<url>'.$this->P['point_url']. $p['id'].'</url>';
-			$out .= '<title xml:space="preserve">'.$p['name'].'</title>';
-			$out .= '</reference>';
-			$out .= '</references>';
-			$out .= '</description>';
-			$out .= '<url>'.$this->P['point_url']. $p['id'].'</url>';
-			$out .= '</info>';	
-			$out .= '</location>';
-		}	
-		$out .= '</overlay>';
-		$out .= '</page>';
+		$out .= "<markers>";
+		if ($this->points) {
+			
+			foreach($this->points as $p) {
+				$out .= "\n<marker lat=\"".$p['lat']."\" lng=\"".$p['long']."\"";
+				$out .= " html=\"";	
+				$out .= '&lt;a href=&quot;'.$this->P['point_url']. $p['id'].'&quot;&gt;';	
+				$out .= $p['name'].'&lt;/a&gt;';
+				$out .= "&lt;br&gt;".$p['City'].", ".$p['State'];
+				$out .= '" />';
+			}
+		}
+		$out .= "</markers>";
 		return $out;
 	}
 	 
@@ -298,23 +285,91 @@ Class Maps {
 		return $html;
 	}
 	
-	function google_map($file='googlexml.php?id=') {
-		$out .= '<html><head>';
-		$out .= '<script type="text/javascript" src="http://www.google.com/mapfiles/maps.3.js"></script>';
-		$out .= '<script type="text/javascript" src="scripts/gmaps-original-3.js"></script>';
-		$out .= '<script type="text/javascript" src="scripts/gmaps-constants-3.js"></script>';
-		$out .= '<script type="text/javascript" src="scripts/gmaps-standalone-0.0.2.js"></script>';
-		$out .= '<script type="text/javascript">var _initialUrl = "'.$file.'"</script>';
-		$out .= '</head>';
-		$out .= '<body onLoad="_initStandAlone()">';
-		$out .= '<div id="page">';
-		$out .= '<div id="map"></div>';
-		$out .='<div id="rhs" style="display:none;">';
-		$out .='<div id="metapanel"></div>';
-		$out .='<div id="panel"></div>';
-		$out .='</div>';
-		$out .= '</div></body></html>'; 
+	function google_map() {
+
+		$out .='<script src="http://maps.google.com/maps?file=api&v=1&key='.GOOGLE_API_KEY.'" type="text/javascript"></script>
+<script type="text/javascript">
+    //<![CDATA[
+
+    if (GBrowserIsCompatible()) {
+      // this variable will collect the html which will eventualkly be placed in the sidebar
+      var sidebar_html = "";
+    
+      // arrays to hold copies of the markers and html used by the sidebar
+      // because the function closure trick doesnt work there
+      var gmarkers = [];
+      var htmls = [];
+      var i = 0;
+
+
+// A function to create the marker and set up the event window
+
+      function createMarker(point,name,html) {
+        // FF 1.5 fix
+        html = \'<div style="white-space:nowrap;">\' + html + \'</div>\';
+        var marker = new GMarker(point);
+        GEvent.addListener(marker, "click", function() {
+          marker.openInfoWindowHtml(html);
+        });
+        // save the info we need to use later for the sidebar
+        gmarkers[i] = marker;
+        htmls[i] = html;
+        // add a line to the sidebar html
+        sidebar_html += \'<a href="javascript:myclick(\' + i + \')">\' + name + \'</a><br>\';
+        i++;
+        return marker;
+      }
+
+
+
+
+      // create the map
+      var map = new GMap(document.getElementById("map"));
+      map.addControl(new GLargeMapControl());
+      map.addControl(new GMapTypeControl());
+      map.centerAndZoom(new GPoint(-95.615534, 37.043358), 13);
+
+      // Read the data from example.xml
+      var request = GXmlHttp.create();
+      request.open("GET", "data.xml", true);
+      request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+          var xmlDoc = request.responseXML;
+          // obtain the array of markers and loop through it
+          var markers = xmlDoc.documentElement.getElementsByTagName("marker");
+          
+          for (var i = 0; i < markers.length; i++) {
+            // obtain the attribues of each marker
+            var lat = parseFloat(markers[i].getAttribute("lat"));
+            var lng = parseFloat(markers[i].getAttribute("lng"));
+            var point = new GPoint(lng,lat);
+            var html = markers[i].getAttribute("html");
+            var label = markers[i].getAttribute("label");
+            // create the marker
+            var marker = createMarker(point,label,html);
+            map.addOverlay(marker);
+          }
+          // put the assembled sidebar_html contents into the sidebar div
+          document.getElementById("sidebar").innerHTML = sidebar_html;
+        }
+      }
+      request.send(null);
+    }
+
+    else {
+      alert("Sorry, the Google Maps API is not compatible with this browser");
+    }
+    // This Javascript is based on code provided by the
+    // Blackpool Community Church Javascript Team
+    // http://www.commchurch.freeserve.co.uk/   
+    // http://www.econym.demon.co.uk/googlemaps/
+
+    //]]>
+    </script>';
 		return $out;
 	}	
 }
+
+
+
 ?>
