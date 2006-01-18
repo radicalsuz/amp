@@ -12,12 +12,14 @@ class AMP_Authentication_LoginType_Admin extends AMP_Authentication_LoginType {
     }
 
     function validateUser( $username, $password ){
-        $user_sql = "SELECT id, name, password, permission FROM users WHERE name=" . $this->_dbcon->qstr( $username ) . " ORDER BY permission DESC";
-        $authdata = $this->_dbcon->GetRow( $user_sql );
+        require_once( 'AMP/System/User/User.php');
 
-        if ($this->_handler->validate_password( $password, $authdata['password'] )) {
-            $this->_handler->setPermissionLevel( $authdata['permission'] );
-            $this->_handler->setUserId( $authdata['id'] );
+        $user = &new AMPSystem_User( $this->_dbcon );
+        $user->readUsername( $username );
+
+        if ( $user->validatePassword( $password )) {
+            $this->_handler->setPermissionLevel( $user->getPermissionGroup() );
+            $this->_handler->setUserId( $user->id );
             return true;
         }
             

@@ -25,7 +25,9 @@ class AMPSystem_Data {
     var $_nativeColumns;
     var $id_field = "id";
     var $name_field = "name";
+
     var $_debug_constant = 'AMP_DISPLAYMODE_DEBUG';
+    var $_debug_cache_constant = 'AMP_DISPLAYMODE_DEBUG_CACHE';
 
     var $errors = array();
 
@@ -98,10 +100,12 @@ class AMPSystem_Data {
         return true;
     }
 
-    function _assembleSQL() {
+    function _assembleSQL( $criteria = null ) {
         $sql  = $this->_makeSelect();
         $sql .= $this->_makeSource();
-        $sql .= $this->_makeCriteria();
+        $sql .= isset( $criteria ) ? 
+                    ' WHERE ' . $criteria 
+                    : $this->_makeCriteria();
         return $sql;
     }
 
@@ -128,6 +132,7 @@ class AMPSystem_Data {
         $definedSources = &$reg->getEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
         if (isset($definedSources[ $sourceDef ])) return $definedSources[ $sourceDef ];
 
+        if ( !isset( $this->dbcon )) trigger_error( get_class( $this ));
         $colNames = $this->dbcon->MetaColumnNames( $sourceDef );
         $definedSources[ $sourceDef ] = $colNames;
         $reg->setEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );

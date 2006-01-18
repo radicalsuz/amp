@@ -16,11 +16,8 @@ class AMPSystem_PermissionManager {
 
     var $permission_array = array();
     var $userLevel;
-    var $usersettings = array(
-        'allowed' => array(),
-        'home' => 'index.php'
-        );
     var $userid;
+    var $_user;
 
     function AMPSystem_PermissionManager () {
     }
@@ -35,9 +32,19 @@ class AMPSystem_PermissionManager {
         }
     }
 
-    function readUser(&$dbcon, $userID ) {
-        if (!$uservals = $dbcon->GetAll("Select id, system_allow_only, system_home from users where id=" . $dbcon->qstr( $userID ))) return false;
-        $this->setUser( $uservals );
+    function &readUser( $userName ) {
+        require_once( 'AMP/System/User/User.php');
+        $user = &new AMPSystem_User( AMP_Registry::getDbcon( ) );
+        $user->readUsername( $userName );
+        if ( !$user->hasData( )) return false;
+        $this->readLevel( $user->getPermissionGroup( ));
+        $this->setUser( $user );
+        return $user;
+    }
+
+    function getUser( ){
+        if ( !isset( $this->_user )) return false;
+        return $this->_user;
     }
         
 
@@ -45,27 +52,24 @@ class AMPSystem_PermissionManager {
         $this->permission_array = array();
     }
 
-    function setUser( $data ) {
-        $this->userid = $data['id'];
-        $this->usersettings = array(
-            'allowed' => array(),
-            'home' => 'index.php');
-        if ($data['system_allow_only']) $this->usersettings['allowed'] = split("[ ]?,[ ]?", $data['system_allow_only']);
-        if ($data['system_home']) $this->usersettings['home'] = $data['system'];
+    function setUser( &$user ) {
+        $this->userid = $user->id;
+        $this->_user = &$user;
     }
 
     function authorizedPage() {
-        if (empty($this->usersettings['allowed'])) return true;
+        if ( !$this->_user->hasPageRestrictions( )) return true;
 
         $current_page = $_SERVER['PHP_SELF'];
-        if ($url = AMP_URL_Values) $current_page .= join( "&", $url);
+        if ($url_values = AMP_URL_Values( )) $current_page .= join( "&", $url_values);
+        if ( strpos( $current_page, '/system/') !== FALSE ) $current_page = substr( $current_page, 8 );
 
-        if (array_search( $current_page, $this->usersettings['allowed'] )===FALSE) return false;
-        return true;
+        return $this->_user->isAllowedPage( $current_page );
+
     }
 
     function userHome() {
-        return $this->usersettings['home'];
+        return $this->_user->getURLHome( );
     }
 
 
@@ -105,4 +109,5 @@ class AMPSystem_PermissionManager {
     }
         
 }
+
 ?>

@@ -5,19 +5,22 @@ require_once ('AMP/Region.inc.php');
 class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
     
     var $options= array( 
-		'list_row_start_template'=>array('value'=>"<tr id=\"listrow_%s\" bordercolor=\"#333333\" bgcolor=\"%s\" class=\"results\" onMouseover=\"this.bgColor='#CCFFCC';\" onMouseout=\"this.bgColor='%s';\" onClick=\"select_id(this.id.substring(8));\">"),
-		'list_row_end'=>array('value'=>"</tr>\n"),
-		'list_item_start'=>array('value'=>"<td class=list_column_%s>"),
-		'list_item_end'=>array('value'=>"</td>"),
-		'list_html_start'=>array('value'=>'<center><table cellpadding="1" cellspacing="1" width="95%"><tr class="toplinks">'),
-		'list_html_footer'=>array('value'=>"</table></center></form>"),
-		'list_html_header_column_start'=>array('value'=>"<td align=\"left\">"),
-		'list_html_header_template'=>array('value'=>'<td align="left"><b>%s</b></td>'),
+		'list_row_start_template'   
+                            =>  array( 'value' => "<tr id=\"listrow_%s\" bordercolor=\"#333333\" bgcolor=\"%s\" class=\"results\" onMouseover=\"this.bgColor='#CCFFCC';\" onMouseout=\"this.bgColor='%s';\" onClick=\"select_id(this.id.substring(8));\">" ),
+		'list_row_end'      =>  array( 'value' => "</tr>\n" ),
+		'list_item_start'   =>  array( 'value' => "<td class=list_column_%s>"),
+		'list_item_end'     =>  array( 'value' => "</td>"),
+		'list_html_start'   =>  array( 'value' => '<center><table cellpadding="1" cellspacing="1" width="95%"><tr class="toplinks">'),
+		'list_html_footer'  =>  array( 'value' => "</table></center></form>"),
+		'list_html_header_column_start'
+                            =>  array( 'value' => "<td align=\"left\">"),
+		'list_html_header_template'
+                            =>  array( 'value' => '<td align="left"><b>%s</b></td>'),
                 #"<td align=\"left\"><b><a href=\"javascript: document.forms['%1\$s'].elements['sortby'].value = '%2\$s '+document.forms['%1\$s'].elements['sortby'].value; document.forms['%1\$s'].submit();\">%3\$s</a></b></td>"),
-        'display_fields'=>array('value'=>'id,Name,Company,State,Phone,Status'),
-        'display_format'=>array('value'=>'table_format'),
-        'form_name'=>array('value'=>'udm_list'),
-        'editlink'=>array('value'=>'modinput4_view.php')
+        'display_fields'    =>  array( 'value' => 'id,Name,Company,State,Phone,Status'),
+        'display_format'    =>  array( 'value' => 'table_format'),
+        'form_name'         =>  array( 'value' => 'udm_list'),
+        'editlink'          =>  array( 'value' => 'modinput4_view.php')
         );
     var $html_rowcount=0;
     var $display_fieldset;

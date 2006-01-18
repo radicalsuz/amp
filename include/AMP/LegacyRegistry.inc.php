@@ -85,6 +85,7 @@ define('AMP_NAV_NO_LIMIT', 700);
 define('AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS', (isset($MM_reltype)&&$MM_reltype) );
 define('AMP_NULL_DATE_VALUE', '0000-00-00' );
 define('AMP_DISPLAYMODE_DEBUG', (isset($_GET['debug']) && $_GET['debug']));
+define('AMP_DISPLAYMODE_DEBUG_CACHE', (isset($_GET['debug_cache']) && $_GET['debug_cache']));
 define('AMP_DISPLAYMODE_DEBUG_PLUGINS', (isset($_GET['debug_plugins']) && $_GET['debug_plugins']));
 define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups']) && $_GET['debug_lookups']));
 define('AMP_DISPLAYMODE_DEBUG_NAVS', (isset($_GET['debug_navs']) && $_GET['debug_navs']));

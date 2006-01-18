@@ -1,8 +1,8 @@
 <?php
 
 require_once ( 'AMP/Content/Display/HTML.inc.php' );
-if ( !defined( 'AMP_TEXT_PAGER_NEXT'))  define( 'AMP_TEXT_PAGER_NEXT', 'Next');
-if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS')) define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev');
+if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
+if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );
 
 class AMPSystem_ListPager extends AMPDisplay_HTML {
 

@@ -45,12 +45,19 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         unset ( $this->_itemdata_keys[ $this->id_field ] );
         unset ( $this->id );
     }
+
+    function _beforeRead( $item_id ){
+        if ( $item_id !== FALSE ) $this->addCriteriaId( $item_id );
+    }
+
+    function addCriteriaId( $item_id ){
+        $this->addCriteria( $this->id_field." = ".$this->dbcon->qstr( $item_id ) );
+    }
 		
 
     function readData ( $item_id ) {
-        $this->addCriteria( $this->id_field." = ".$this->dbcon->qstr( $item_id ) );
+        $this->_beforeRead( $item_id );
         $sql = $this->_assembleSQL();
-        #$sql = "Select * from ".$this->datatable." where ".$this->id_field." = ". $this->dbcon->qstr( $item_id );
 
         if ( $itemdata = $this->dbcon->CacheGetRow( $sql )) {
             $this->setData( $itemdata );
@@ -75,7 +82,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function deleteData( $item_id ) {
         $sql = "Delete from " . $this->datatable . " where ". $this->id_field ." = ". $this->dbcon->qstr( $item_id );
         if ( $itemdata = $this->dbcon->Execute( $sql )) {
-            $this->dbcon->CacheFlush( $this->_assembleSqlByID( $item_id ));
+            $cached_sql = $this->_assembleSqlByID( $item_id );
+            $this->dbcon->CacheFlush( $cached_sql ) ;
+            if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) {
+                AMP_DebugSQL( $cached_sql, get_class($this)." cleared cache"); 
+            }
             return true;
         }
 
@@ -119,6 +130,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function clearItemCache( $id ) {
         $sql = $this->_assembleSqlByID( $id );
         $this->dbcon->CacheFlush( $sql );
+        if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) AMP_DebugSQL( $sql, get_class($this)." cleared cache"); 
     }
 
     function mergeData( $data ) {

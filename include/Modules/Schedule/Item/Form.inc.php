@@ -79,9 +79,11 @@ class ScheduleItem_Form extends AMPSystem_Form_XML {
 	}
 
 	function _dateArrayToString( $values, $fieldname = "start_time" ) {
-		$initial_time = $values[$fieldname];
-		if (isset( $values['start_date'] )) $initial_time =  array_merge( $values['start_date'], $values[$fieldname] );
-		return $this->_makeDbDateTime( $initial_time );
+		if (isset( $values['start_date'] )) {
+            $values[ 'start_datetime' ] = array_merge( $values['start_date'], $values[$fieldname] );
+            $fieldname = 'start_datetime';
+        }
+		return $this->_makeDbDateTime( $values, $fieldname );
 	}
 
     function output() {

@@ -293,6 +293,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $day    = isset($value['D'])? $value['D']:(isset($value['d'])?$value['d']:false);
         $year   = isset($value['Y'])? $value['Y']:(isset($value['y'])?$value['y']:0);
         $hour   = isset($value['H'])? $value['H']:0;
+        $hour   = isset($value['h'])? $value['h']:$hour;
         $minute = isset($value['i'])? $value['i']:0;
         $second = isset($value['s'])? $value['s']:0;
 

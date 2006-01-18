@@ -55,7 +55,9 @@
     }
 
     function refreshData() {
-        $this->dbcon->CacheFlush( $this->_assembleSQL() );
+        $cached_sql = $this->_assembleSQL( );
+        $this->dbcon->CacheFlush( $cached_sql );
+        if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) AMP_DebugSQL( $cached_sql, get_class($this)." cleared cache"); 
         $this->readData();
     }
 
@@ -98,10 +100,12 @@
     }
 
 
-    function _assembleSQL() {
+    function _assembleSQL( $criteria = null ) {
         $sql  = $this->_makeSelect();
         $sql .= $this->_makeSource();
-        $sql .= $this->_makeCriteria();
+        $sql .= isset( $criteria ) ? 
+                    ' WHERE ' . $criteria 
+                    : $this->_makeCriteria();
         $sql .= $this->_makeSort();
         $sql .= $this->_makeLimit();
         return $sql;
@@ -111,7 +115,11 @@
         if (!$criteria) return false;
         $sql = "DELETE" . $this->_makeSource(). " where " . $criteria;
         if($this->dbcon->Execute($sql)) {
-            $this->dbcon->CacheFlush( $this->_assembleSql() );
+            $cached_sql = $this->_assembleSql( $criteria ) ;
+            $this->dbcon->CacheFlush( $cached_sql );
+            if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) {
+                AMP_DebugSQL( $cached_sql, get_class($this)." cleared cache"); 
+            }
             return $this->dbcon->Affected_Rows();
         }
         trigger_error ( get_class( $this ) . ' failed to delete data : ' . $this->dbcon->ErrorMsg() . "\n statement: " . $sql );

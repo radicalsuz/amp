@@ -1,5 +1,10 @@
 <?php
 
+require_once( 'AMP/System/Base.php');
+$AMP_Permission = &AMPSystem_PermissionManager::instance();
+ampredirect( $AMP_Permission->userHome( ));
+
+/*
 $modid=38;
 require_once("Connections/freedomrising.php");
 
@@ -12,4 +17,5 @@ if (isset($index_user_settings['system_home'])&&$index_user_settings['system_hom
 }
     
 include ("footer.php"); 
+*/
 ?>

@@ -33,7 +33,6 @@ class PermissionGroup extends AMPSystem_Data_Item {
 
     function _renewPermissions() {
         if ( !( $setting_values = $this->getSettings( ))) return false;
-        
         require_once( 'AMP/System/Permission/Set.inc.php');
         $settingSet = &new PermissionSet( $this->dbcon );
         $this->dbcon->StartTrans( );
