@@ -21,6 +21,7 @@ while (!$R->EOF) {
 		$geo->Street = $R->Fields("Street");
 		$geo->Zip = $R->Fields("Zip");
 		$geo->geocoder_getdata();
+		echo $geo->lat;
 	}
 	if ( ($geo->lat) && ($geo->lng) ){
 		//$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->lng."' where id = " . $R->Field("id");
