@@ -134,13 +134,13 @@ Class Geo {
 			
 		}
 	
-			 echo '<pre><br>geocode result<br>';var_dump($result);echo '</pre><br>';
+			// echo '<pre><br>geocode result<br>';var_dump($result);echo '</pre><br>';
 		
 	
 		$result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result . "\n";
 		$xmlparser = new XML_Unserializer();
 		$parse_result = $xmlparser->unserialize( $result, false );
-		
+		print_r ($parse_result);
 		  if ( PEAR::isError( $parse_result )) {
 			print 'yah<BR>';
 		} else {
