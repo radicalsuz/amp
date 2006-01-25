@@ -13,12 +13,14 @@ $R= $dbcon->Execute($sql)or DIE("Error getting udm data ".$sql.$dbcon->ErrorMsg(
 while (!$R->EOF) {	
 	$t++;
 	$geo = new Geo($dbcon);
-	$geo->City =  $R->Fields("City");
-	$geo->State =  $R->Fields("State");
-	$geo->Street = $R->Fields("Street");
-	$geo->Zip = $R->Fields("Zip");
-	$geo->geocoder_getdata();
 	
+	if ($R->Fields("City") && $R->Fields("State") && $R->Fields("Street") ) {
+		$geo->City =  $R->Fields("City");
+		$geo->State =  $R->Fields("State");
+		$geo->Street = $R->Fields("Street");
+		$geo->Zip = $R->Fields("Zip");
+		$geo->geocoder_getdata();
+	}
 	if ( ($geo->lat) && ($geo->lng) ){
 		//$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->lng."' where id = " . $R->Field("id");
 		echo $R->Field("id").": ".$geo->lat.$geo->lng."<br>";
