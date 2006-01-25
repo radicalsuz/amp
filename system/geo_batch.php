@@ -14,18 +14,17 @@ while (!$R->EOF) {
 	$t++;
 	$geo = new Geo($dbcon);
 	
-	if ( $R->Fields("Street") ) {
+	if ( $R->Fields("Street")  ) {
 		echo $R->Fields("Street");
 		$geo->City =  $R->Fields("City");
 		$geo->State =  $R->Fields("State");
 		$geo->Street = $R->Fields("Street");
 		$geo->Zip = $R->Fields("Zip");
 		$geo->geocoder_getdata();
-		echo $geo->lat;
 	}
 	if ( ($geo->lat) && ($geo->long) ){
 		//$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->lng."' where id = " . $R->Field("id");
-		echo $R->Field("id").": ".$geo->lat.$geo->long."<br>";
+		echo $R->Fields("id").": ".$geo->lat.$geo->long."<br>";
 		$x++;
 	} else {
 		$html .= "<a href = 'modinput4_view.php?uid=".$R->Fields("id")."&modin=".$_REQUEST['modin']."'>".$R->Fields("Street")." ".$R->Fields("City")." ".$R->Fields("State")." ".$R->Fields("Zip")." </a><br>";
