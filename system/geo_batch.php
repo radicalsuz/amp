@@ -6,7 +6,7 @@ require_once("Connections/freedomrising.php");
 require_once("header.php");
 require_once("AMP/Geo/Geo.php");
 $geo_field = 'custom40';
-$sql = "select * from userdata where modin =".$_REQUEST['modin']. " limit 10";
+$sql = "select * from userdata where modin =".$_REQUEST['modin'];
 $R= $dbcon->Execute($sql)or DIE("Error getting udm data ".$sql.$dbcon->ErrorMsg());
 		$t= 0;
 		$x= 0;
@@ -15,7 +15,6 @@ while (!$R->EOF) {
 	$geo = new Geo($dbcon);
 	
 	if ( $R->Fields("Street")  ) {
-		echo $R->Fields("Street");
 		$geo->City =  $R->Fields("City");
 		$geo->State =  $R->Fields("State");
 		$geo->Street = $R->Fields("Street");
