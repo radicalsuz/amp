@@ -137,21 +137,19 @@ Class Geo {
 			// echo '<pre><br>geocode result<br>';var_dump($result);echo '</pre><br>';
 		
 	
-		$result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result . "\n";
 		$xmlparser = new XML_Unserializer();
 		$parse_result = $xmlparser->unserialize( $result, false );
-		print_r ($parse_result);
+		/*
 		  if ( PEAR::isError( $parse_result )) {
 			print 'yah<BR>';
 		} else {
 			print 'nah<BR>';
 		}
-		
-		
+		*/
+	
 		$data = $xmlparser->getUnserializedData();
-		print_r($data);
 		if (array_key_exists('geo:lat', $data['geo:Point'])) {
-			return array( $data['geo:Point']['geo:lat'], $data['geo:Point']['geo:long'],$result );
+			//return array( $data['geo:Point']['geo:lat'], $data['geo:Point']['geo:long'],$result );
 			$this->lat = $data['geo:Point']['geo:lat'];
 			$this->long = $data['geo:Point']['geo:long'];
 		} else {
