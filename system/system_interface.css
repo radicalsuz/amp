@@ -523,3 +523,11 @@ img.field_arrow {
 	float: left;
 	margin: 3px;
 }
+
+div.item_timestamp {
+	background-color: #dedede;
+	padding: 10px;
+	margin: 10px;
+	width: 110%;
+	white-space: nowrap;
+}

@@ -104,3 +104,24 @@ div.gallerycon { width: 200px; height: 200px; float: left; margin: 10px; text-al
 .gallerycon img { float: center; padding: 5px; border: 1px solid #666; }
 .gallerycap { padding: 5px; border: 0px solid #666; margin: 5px; }
 div.gallery_pager { padding: 10px 0px 40px 0px; }
+
+/* errors and results */
+span.page_result {
+		display:block;
+		width: 60%;
+		background-color: #99CCFF;
+		color: #006666;
+		padding: 5px 10% 5px 10%;
+		text-align: center;
+		margin: 5px 10% 5px 10%;
+}
+
+span.page_error {
+		display:block;
+		width: 60%;
+		background-color: #FF5599;
+		color: #550000;
+		padding: 5px 10% 5px 10%;
+		text-align: center;
+		margin: 5px 10% 5px 10%;
+}

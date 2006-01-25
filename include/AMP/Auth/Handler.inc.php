@@ -115,12 +115,13 @@ class AMP_Authentication_Handler {
 
         if ( !array_search( 'users_sessions', $tables ) ) {
 
-            $sql = 'CREATE TABLE users_sessions ( id INT AUTO_INCREMENT PRIMARY KEY, hash char(40), INDEX(hash), secret char(32), last_time INT, INDEX(last_time), in_time INT )';
+            $sql = 'CREATE TABLE users_sessions ( id INT AUTO_INCREMENT PRIMARY KEY, hash char(40), INDEX(hash), secret char(32), last_time INT, INDEX(last_time), in_time INT, userid INT( 11 ) )';
             $this->dbcon->Execute( $sql ) or
                 die( "Couldn't fixup database structure: " . $this->dbcon->ErrorMsg() );
         }
 
-        $sql = "INSERT INTO users_sessions (hash, secret, in_time, last_time) VALUES ('$hash', '$secret', '$now', '$now')";
+        $userid = $this->userid;
+        $sql = "INSERT INTO users_sessions (hash, secret, in_time, last_time, userid ) VALUES ('$hash', '$secret', '$now', '$now', '$userid')";
 
         $this->dbcon->Execute( $sql );
     }
@@ -154,14 +155,14 @@ class AMP_Authentication_Handler {
         $cookie['permission'] = $cookie[2];
         $cookie['userid'] = $cookie[3];
 
-        $cookie_sql = "SELECT hash, secret, last_time FROM users_sessions WHERE hash=" . $this->dbcon->qstr( $cookie['hash'] );
+        $cookie_sql = "SELECT hash, secret, last_time, userid FROM users_sessions WHERE hash=" . $this->dbcon->qstr( $cookie['hash'] );
         $authdata = $this->dbcon->GetRow( $cookie_sql );
 
         if ($authdata) {
-
             if ($this->cookie_still_valid( $authdata['last_time'] )) {
 
                 $hash = $this->make_secure_cookie( $cookie['user'], $cookie['permission'], $authdata['secret'] );
+                if ( $this->userid && $authdata['userid'] && $this->userid != $authdata['userid']) return false;
 
                 if (strcmp($hash, $cookie['hash'] === 0)) {
                     $this->user = $cookie['user'];

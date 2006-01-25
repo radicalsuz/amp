@@ -259,9 +259,21 @@ class UserData {
 
     }
 
+    function hasErrors( ){
+        return !empty( $this->errors );
+    }
+
+    function hasResults( ){
+        return !empty( $this->results );
+    }
+
 //apps can register error handlers and pass the error message as a parameter array
     function outputErrors () {
         if (!isset($this->errors)) return false;
+        $error_output = &$this->registerPlugin( 'Output', 'Messages');
+        return $error_output->execute( );
+    }
+    /*
         $output = "";
         foreach ($this->errors as $type => $message) {
 			$handler =& $this->getErrorHandler($type);
@@ -284,6 +296,7 @@ class UserData {
 		}
 		return $error;
 	}
+    */
 
 	function &getErrorHandler($type) {
 		$callback =& $this->_error_handlers[$type];
@@ -1018,6 +1031,20 @@ class UserData {
 
     function getIntrotextId() {
         return $this->modTemplateID;
+    }
+
+    function setIntrotextId( $id_value ){
+        $this->modTemplateID = $id_value;
+    }
+
+    function getTimeEdited( ){
+        $result = $this->getData( array( 'timestamp') );
+        print 'edited:<BR>';
+        AMP_varDump( $result );
+    }
+
+    function getTimeCreated( ){
+        return current( $this->getData( array( 'created_timestamp') ));
     }
 
 }

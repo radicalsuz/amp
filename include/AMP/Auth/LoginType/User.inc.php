@@ -88,7 +88,11 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 
     function check_authen_credentials( ) {
 		$this->notice('in user::check_authen_credentials');
-        $valid = PARENT::check_authen_credentials( ) || $this->_state->isAuthenticated();
+        #$valid = PARENT::check_authen_credentials( ) || $this->_state->isAuthenticated();
+        if ( !( $valid = PARENT::check_authen_credentials( ))) {
+            $this->notice( 'parent check failed, checking state');
+            $valid = $this->_state->isAuthenticated();
+        }
         if ( $valid ) {
 			if( (isset($_REQUEST['uid']) && $_REQUEST['uid'])
 				&& $_REQUEST['uid'] != $this->_handler->userid ) {

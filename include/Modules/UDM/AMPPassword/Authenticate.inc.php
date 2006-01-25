@@ -43,11 +43,14 @@ class UserDataPlugin_Authenticate_AMPPassword extends UserDataPlugin {
         require_once( 'AMP/Auth/Handler.inc.php');
         $AMP_Auth_Handler = &new AMP_Authentication_Handler( $this->udm->dbcon, 'user' );
 		$this->notice('just created auth handler');
+
 		$this->_handler =& $AMP_Auth_Handler;
 		$this->notice('just set handler');
+
 		$AMP_Auth_Handler->userid = $options['uid'];
 		$authenticated = $AMP_Auth_Handler->is_authenticated();
 		$this->notice('just checked is_authenticated');
+
         if ( !$authenticated ) {
 			$this->notice('not authenticated, doing login');
 			$AMP_Auth_Handler->do_login( );

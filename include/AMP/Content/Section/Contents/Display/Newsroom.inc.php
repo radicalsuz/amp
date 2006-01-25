@@ -3,6 +3,7 @@
 require_once( 'AMP/Content/Article/SetDisplay.inc.php' );
 require_once( 'AMP/Content/Display/Criteria.inc.php' );
 define( 'AMP_TEXT_RECENT' , 'Recent&nbsp;' );
+define( 'AMP_TEXT_MORE' , 'More&nbsp;' );
 
 class SectionContentDisplay_Newsroom extends ArticleSet_Display {
 
@@ -81,8 +82,9 @@ class SectionContentDisplay_Newsroom extends ArticleSet_Display {
             ) );
     }
     function _HTML_moreLink( $href, $name=false ) {
+        if ( !$href ) return false;
 
-        $text = 'More&nbsp;' . $name . '&nbsp;' . $this->_HTML_bold( '&raquo;' );
+        $text = AMP_TEXT_MORE . $name . '&nbsp;' . $this->_HTML_bold( '&raquo;' );
         return $this->_HTML_inDiv( 
                     $this->_HTML_inSpan( $this->_HTML_link( $href, $text ), "standout" ),
                     array( 'class'=>'list_pager' )

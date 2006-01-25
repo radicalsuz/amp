@@ -38,7 +38,7 @@ class AMP_Authentication_LoginType {
         // First check for an existing authentication token.
         if (isset($_COOKIE[ $this->_cookie_name ])) {
 			$this->notice('cookie exists');
-            return $this->_handler->check_cookie($_COOKIE[ $this->_cookie_name ]);
+            if( $result = $this->_handler->check_cookie($_COOKIE[ $this->_cookie_name ])) return $result;
 		}
 
         if (isset($_REQUEST[ $this->_login_username_field ]) || isset($_SERVER['PHP_AUTH_USER'])) {
