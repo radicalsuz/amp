@@ -14,7 +14,7 @@ function get_geo($modin,$geo_field=NULL,$update=NULL){
 		$up_sql = ' and '.$geo_field.' != "" ';
 	}
 	
-	$sql = "select * from userdata where modin =".$modin.$up_sql." limit 50";
+	$sql = "select * from userdata where modin =".$modin.$up_sql." limit 100";
 	$R= $dbcon->Execute($sql)or DIE("Error getting udm data ".$sql.$dbcon->ErrorMsg());
 			$t= 0;
 			$x= 0;
