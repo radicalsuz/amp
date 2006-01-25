@@ -134,7 +134,7 @@ Class Geo {
 			
 		}
 	
-			// echo '<pre><br>geocode result<br>';var_dump($result);echo '</pre><br>';
+			 echo '<pre><br>geocode result<br>';var_dump($result);echo '</pre><br>';
 		
 	
 		$result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result . "\n";
