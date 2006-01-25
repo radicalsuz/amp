@@ -147,16 +147,16 @@ Class Geo {
 			print 'nah<BR>';
 		}
 		
-	
+		
 		$data = $xmlparser->getUnserializedData();
-		if (array_key_exists('geo:lat', $data['geo:Point'])) {
+		//if (array_key_exists('geo:lat', $data['geo:Point'])) {
 			return array( $data['geo:Point']['geo:lat'], $data['geo:Point']['geo:long'],$result );
 			$this->lat = $data['geo:Point']['geo:lat'];
 			$this->long = $data['geo:Point']['geo:long'];
-		} else {
+		//} else {
 			#print_r (($data));
 			//return array( $data['geo:Point'][0]['geo:lat'], $data['geo:Point'][0]['geo:long'],$result );
-		}
+		//}
 	}
 	
 	function city_lookup() {
