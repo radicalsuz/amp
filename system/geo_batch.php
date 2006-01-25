@@ -15,6 +15,7 @@ while (!$R->EOF) {
 	$geo = new Geo($dbcon);
 	
 	if ($R->Fields("City") && $R->Fields("State") && $R->Fields("Street") ) {
+		echo $R->Fields("City");
 		$geo->City =  $R->Fields("City");
 		$geo->State =  $R->Fields("State");
 		$geo->Street = $R->Fields("Street");
