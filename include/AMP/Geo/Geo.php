@@ -140,17 +140,17 @@ Class Geo {
 		$result = '<?xml version="1.0" encoding="iso-8859-1"?>' . "\n" . $result . "\n";
 		$xmlparser = new XML_Unserializer();
 		$parse_result = $xmlparser->unserialize( $result, false );
-		/*
+		
 		  if ( PEAR::isError( $parse_result )) {
 			print 'yah<BR>';
 		} else {
 			print 'nah<BR>';
 		}
-		*/
+		
 	
 		$data = $xmlparser->getUnserializedData();
 		if (array_key_exists('geo:lat', $data['geo:Point'])) {
-			//return array( $data['geo:Point']['geo:lat'], $data['geo:Point']['geo:long'],$result );
+			return array( $data['geo:Point']['geo:lat'], $data['geo:Point']['geo:long'],$result );
 			$this->lat = $data['geo:Point']['geo:lat'];
 			$this->long = $data['geo:Point']['geo:long'];
 		} else {
