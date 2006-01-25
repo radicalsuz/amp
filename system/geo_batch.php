@@ -23,9 +23,9 @@ while (!$R->EOF) {
 		$geo->geocoder_getdata();
 		echo $geo->lat;
 	}
-	if ( ($geo->lat) && ($geo->lng) ){
+	if ( ($geo->lat) && ($geo->long) ){
 		//$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->lng."' where id = " . $R->Field("id");
-		echo $R->Field("id").": ".$geo->lat.$geo->lng."<br>";
+		echo $R->Field("id").": ".$geo->lat.$geo->long."<br>";
 		$x++;
 	} else {
 		$html .= "<a href = 'modinput4_view.php?uid=".$R->Fields("id")."&modin=".$_REQUEST['modin']."'>".$R->Fields("Street")." ".$R->Fields("City")." ".$R->Fields("State")." ".$R->Fields("Zip")." </a><br>";
