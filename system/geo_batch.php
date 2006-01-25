@@ -7,7 +7,8 @@ require_once("header.php");
 require_once("AMP/Geo/Geo.php");
 $geo_field = 'custom40';
 $sql = "select * from userdata where modin =".$_REQUEST['modin']." and ".$geo_field." != '' ";
-
+$R= $dbcon->Execute($sql)or DIE("Error getting udm data ".$sql.$dbcon->ErrorMsg());
+		
 while (!$R->EOF) {	
 	$t++;
 	$geo = new Geo($dbcon);
@@ -24,6 +25,7 @@ while (!$R->EOF) {
 	} else {
 		$html .= "<a href = 'modinput4_view.php?uid=".."&modin=".$_REQUEST['modin']."'>".$R->Fields("Street")." ".$R->Fields("City")." ".$R->Fields("State")." ".$R->Fields("Zip")." </a><br>";
 	}
+$R->MoveNext();	
 }
 $out = "Found $x address of $t <br><br>Failed Addresses<br> $html";
 echo $out;
