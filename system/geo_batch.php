@@ -13,7 +13,7 @@ while (!$R->EOF) {
 	$t++;
 	$geo = new Geo($dbcon);
 	$geo->City =  $R->Fields("City");
-	$geo->State =  $R->Fields("State")
+	$geo->State =  $R->Fields("State");
 	$geo->Street = $R->Fields("Street");
 	$geo->Zip = $R->Fields("Zip");
 	$geo->geocoder_getdata();
@@ -25,7 +25,7 @@ while (!$R->EOF) {
 	} else {
 		$html .= "<a href = 'modinput4_view.php?uid=".."&modin=".$_REQUEST['modin']."'>".$R->Fields("Street")." ".$R->Fields("City")." ".$R->Fields("State")." ".$R->Fields("Zip")." </a><br>";
 	}
-$R->MoveNext();	
+	$R->MoveNext();	
 }
 $out = "Found $x address of $t <br><br>Failed Addresses<br> $html";
 echo $out;
