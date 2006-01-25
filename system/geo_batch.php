@@ -23,7 +23,7 @@ while (!$R->EOF) {
 		echo $R->Field("id").": ".$geo->lat.$geo->lng."<br>";
 		$x++;
 	} else {
-		$html .= "<a href = 'modinput4_view.php?uid=".."&modin=".$_REQUEST['modin']."'>".$R->Fields("Street")." ".$R->Fields("City")." ".$R->Fields("State")." ".$R->Fields("Zip")." </a><br>";
+		$html .= "<a href = 'modinput4_view.php?uid=".$R->Fields("id")."&modin=".$_REQUEST['modin']."'>".$R->Fields("Street")." ".$R->Fields("City")." ".$R->Fields("State")." ".$R->Fields("Zip")." </a><br>";
 	}
 	$R->MoveNext();	
 }
