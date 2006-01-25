@@ -32,7 +32,7 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 			$geo->geocoder_getdata();
 		}
 		if ( ($geo->lat) && ($geo->long) ){
-			$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->long."' where id = " . $R->Field("id");
+			$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->long."' where id = " . $R->Fields("id");
 			$dbcon->Execute($sql)or DIE("Error updating udm ".$sql.$dbcon->ErrorMsg());
 
 			echo $R->Fields("id").": ".$geo->lat.$geo->long."<br>";
