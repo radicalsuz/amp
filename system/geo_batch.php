@@ -23,13 +23,16 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 	while (!$R->EOF) {	
 		$t++;
 		$geo = new Geo($dbcon);
-		
-		if ( $R->Fields("Street")  ) {
-			$geo->City =  $R->Fields("City");
-			$geo->State =  $R->Fields("State");
-			$geo->Street = $R->Fields("Street");
-			$geo->Zip = $R->Fields("Zip");
+		$geo->City =  $R->Fields("City");
+		$geo->State =  $R->Fields("State");
+		$geo->Street = $R->Fields("Street");
+		$geo->Zip = $R->Fields("Zip");
+
+		if ( ($R->Fields("Street") && ( ($type == 'GeoCode') or ($type == 'Both') ) ) {
 			$geo->geocoder_getdata();
+		} 
+		if ( ($R->Fields("City") &&  ($R->Fields("State") && ( ($type == 'City') or ($type == 'Both')  ) && (!$geo->lat) )
+			$geo->city_lookup()
 		}
 		if ( ($geo->lat) && ($geo->long) ){
 			$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->long."' where id = " . $R->Fields("id");
@@ -50,6 +53,8 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 
 ?>
 <form action="geo_batch.php" method="post">
+<h2>Geo Lookup Tool</h2>
+Lookup Type <select name="type"><option>GeoCoder</option><option>City</option><option>Both</option> </select><br>
 <input type="hidden" name="go" value="1">
 UDM: <input type="text" name="modin"><br>
 Limit: <input type="text" name="limit"><br>
