@@ -7,14 +7,16 @@ require_once("header.php");
 require_once("AMP/Geo/Geo.php");
 set_time_limit(0);
 
-function get_geo($modin,$geo_field=NULL,$update=NULL){
+
+
+function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 	global $dbcon;
 
 	if ($update) {
 		$up_sql = ' and '.$geo_field.' != "" ';
 	}
 	
-	$sql = "select * from userdata where modin =".$modin.$up_sql." limit 200";
+	$sql = "select * from userdata where modin =".$modin.$up_sql." limit $offset, $limit";
 	$R= $dbcon->Execute($sql)or DIE("Error getting udm data ".$sql.$dbcon->ErrorMsg());
 			$t= 0;
 			$x= 0;
@@ -42,7 +44,23 @@ function get_geo($modin,$geo_field=NULL,$update=NULL){
 	return $out;
 }
 
-echo get_geo($_REQUEST['modin']);
+
+
+?>
+<form action="geo_batch.php" method="post">
+<input type="hidden" name="go" value="1">
+UDM: <input type="text" name="modin"><br>
+Limit: <input type="text" name="limit"><br>
+Offset: <input type="text" name="offset"><br>
+Update:<input type="checkbox" name="update" value="1"><br>
+Update Field:<input type="text" name="geo_field"><br>
+<input type="submit">
+
+</form>
+<?php
+if ($_REQUEST['go']) {
+	echo get_geo($_REQUEST['modin'],$_REQUEST['geo_field'],$_REQUEST['update'],$_REQUEST['limit'],$_REQUEST['offset']);
+}
 require_once("header.php");
 
 ?>
