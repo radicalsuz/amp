@@ -32,7 +32,9 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 			$geo->geocoder_getdata();
 		}
 		if ( ($geo->lat) && ($geo->long) ){
-			//$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->lng."' where id = " . $R->Field("id");
+			$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->long."' where id = " . $R->Field("id");
+			$dbcon->Execute($sql)or DIE("Error updating udm ".$sql.$dbcon->ErrorMsg());
+
 			echo $R->Fields("id").": ".$geo->lat.$geo->long."<br>";
 			$x++;
 		} else {
@@ -52,7 +54,7 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 UDM: <input type="text" name="modin"><br>
 Limit: <input type="text" name="limit"><br>
 Offset: <input type="text" name="offset"><br>
-Update:<input type="checkbox" name="update" value="1"><br>
+Override Past Data:<input type="checkbox" name="update" value="1"><br>
 Update Field:<input type="text" name="geo_field"><br>
 <input type="submit">
 
