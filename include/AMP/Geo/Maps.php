@@ -34,6 +34,7 @@ Class Maps {
 		'center_long'=>'',
 		'span_lat'=>'',
 		'span_long'=>'',
+		'geo_field'=>''
 	);
 	
 	function Maps($dbcon,$map_ID){
@@ -80,6 +81,7 @@ Class Maps {
 		$this->prop('center_lat',$R);
 		$this->prop('center_long',$R);
 		$this->prop('span_lat',$R);
+		$this->prop('geo_field',$R);
 		$this->prop('span_long',$R);
 		$this->P['table'] = $R->Fields("map_table");;
 		if ($this->P['table'] == 'userdata') {
@@ -120,16 +122,20 @@ Class Maps {
 		$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting city data in build_points function ".$sql.$this->dbcon->ErrorMsg());
 		$x=0;
 		while (!$R->EOF) {
-			$geo = new Geo($this->dbcon);
-			$geo->City = $R->Fields("City");
-			$geo->State = $R->Fields("State");
-			$geo->city_lookup();
-			$location = $geo->lat.",".$geo->long;
+			if (($this->P['geo_field']) && ($R->Fields($this->P['geo_field'])) ) {
+				$location = $R->Fields($this->P['geo_field']);
+			} else {
+				$geo = new Geo($this->dbcon);
+				$geo->City = $R->Fields("City");
+				$geo->State = $R->Fields("State");
+				$geo->city_lookup();
+				$location = $geo->lat.",".$geo->long;
+			}
+			
+
 			if ($location != ',') {
 				$this->points[$x]['name'] = htmlspecialchars($R->Fields($this->P['label_field']));
 				$this->points[$x]['loc'] = $location;
-				$this->points[$x]['lat'] = $geo->lat;
-				$this->points[$x]['long'] = $geo->long;
 				$this->points[$x]['Street'] = htmlspecialchars($R->Fields("Street"));
 				$this->points[$x]['City'] = htmlspecialchars($R->Fields("City"));
 				$this->points[$x]['State'] = $R->Fields("State");
@@ -285,10 +291,10 @@ Class Maps {
 		return $html;
 	}
 	
-	function google_map() {
+	function google_map($width='500', $height='400', $zoom='14') {
 
 		$out .= '<script src="http://maps.google.com/maps?file=api&v=1&key='.GOOGLE_API_KEY.'" type="text/javascript"></script>';
-		$out .= '<div id="map" style="width: 500px; height: 400px"></div>';
+		$out .= '<div id="map" style="width: '.$width.'px; height: '.$height.'px"></div>';
 $out .= '
 <script type="text/javascript">
     //<![CDATA[
@@ -327,7 +333,7 @@ $out .= '
       var map = new GMap(document.getElementById("map"));
       map.addControl(new GLargeMapControl());
       map.addControl(new GMapTypeControl());
-      map.centerAndZoom(new GPoint(-95.615534, 37.043358), 13);
+      map.centerAndZoom(new GPoint(-95.615534, 37.043358), '.$zoom.');
 
       // Read the data from example.xml
       var request = GXmlHttp.create();

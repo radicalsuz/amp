@@ -60,6 +60,10 @@
 		<type>text</type>
 		<label>State URL</label>
 	</state_url>
+	<geo_field>
+		<type>text</type>
+		<label>Geo Data Field (overrides lookups)</label>
+	</geo_field>
 	<header4>
 		<type>header</type>
 		<label>Flash Map Config</label>
@@ -126,6 +130,10 @@
 		<type>text</type>
 		<label>Browser Target</label>
 	</target>
+	<defulat_state>
+		<type>text</type>
+		<label>Defualt State Zoom</label>
+	</defualt_state>
 	<header5>
 		<type>header</type>
 		<label>Google Map Config</label>
