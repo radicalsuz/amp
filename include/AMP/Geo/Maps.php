@@ -430,7 +430,7 @@ $direction_marker = "
 
     //]]>
     </script>';
-		return $out.$start.$direction_marker.$map;
+		return $out.$start.$basic_marker.$map;
 	}	
 }
 
