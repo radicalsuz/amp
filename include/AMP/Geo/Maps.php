@@ -300,7 +300,7 @@ Class Maps {
 		return $html;
 	}
 	
-	function google_map($width='500', $height='400', $zoom='14') {
+	function google_map($width='500', $height='400', $zoom='14',$center_lat='37.043358', $center_lng='-95.615534') {
 
 		$out .= '<script src="http://maps.google.com/maps?file=api&v=1&key='.GOOGLE_API_KEY.'" type="text/javascript"></script>';
 		$out .= '<div id="map" style="width: '.$width.'px; height: '.$height.'px"></div>';
@@ -342,7 +342,7 @@ $out .= '
       var map = new GMap(document.getElementById("map"));
       map.addControl(new GLargeMapControl());
       map.addControl(new GMapTypeControl());
-      map.centerAndZoom(new GPoint(-95.615534, 37.043358), '.$zoom.');
+      map.centerAndZoom(new GPoint('.$center_lat.', '.$center_lng.'), '.$zoom.');
 
       // Read the data from example.xml
       var request = GXmlHttp.create();
