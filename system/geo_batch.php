@@ -28,10 +28,10 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 		$geo->Street = $R->Fields("Street");
 		$geo->Zip = $R->Fields("Zip");
 
-		if ( ($R->Fields("Street")) && ( ($type == 'GeoCode') or ($type == 'Both') ) ) {
+		if ( ($R->Fields("Street")) && ($type == 'GeoCode') ) {
 			$geo->geocoder_getdata();
 		} 
-		if ( ($R->Fields("City")) &&  ($R->Fields("State")) && ( ($type == 'City') or ($type == 'Both')  ) && (!$geo->lat) ) {
+		if ( ($R->Fields("City")) &&  ($R->Fields("State")) &&  ($type == 'City') && (!$geo->lat) ) {
 			$geo->city_lookup();
 		}
 		if ( ($geo->lat) && ($geo->long) ){
