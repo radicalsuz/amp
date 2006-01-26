@@ -128,11 +128,14 @@ Class Maps {
 		while (!$R->EOF) {
 			if ($this->P['geo_field']  ) {
 				$location = $R->Fields($this->P['geo_field']);
+				list($lat, $long) = explode(",", $location);
 			} else {
 				$geo = new Geo($this->dbcon);
 				$geo->City = $R->Fields("City");
 				$geo->State = $R->Fields("State");
 				$geo->city_lookup();
+				$lat =$geo->lat;
+				$lng =$geo->long;
 				$location = $geo->lat.",".$geo->long;
 			}
 			
@@ -140,6 +143,8 @@ Class Maps {
 			if ($location != ',' and isset($location)) {
 				$this->points[$x]['name'] = htmlspecialchars($R->Fields($this->P['label_field']));
 				$this->points[$x]['loc'] = $location;
+				$this->points[$x]['lat'] = $lat;
+				$this->points[$x]['long'] = $lng;
 				$this->points[$x]['Street'] = htmlspecialchars($R->Fields("Street"));
 				$this->points[$x]['City'] = htmlspecialchars($R->Fields("City"));
 				$this->points[$x]['State'] = $R->Fields("State");
