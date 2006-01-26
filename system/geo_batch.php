@@ -28,8 +28,7 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 		$geo->Street = $R->Fields("Street");
 		$geo->Zip = $R->Fields("Zip");
 
-		if ( isset($R->Fields("Street"))  ) {
-		
+		if ( $geo->Street )  {
 			$geo->geocoder_getdata();
 		} 
 		///if ( ($R->Fields("City")) &&  ($R->Fields("State")) &&  ($type == 'City') && (!$geo->lat) ) {
