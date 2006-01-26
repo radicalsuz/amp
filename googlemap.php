@@ -15,6 +15,7 @@ if ($_GET['map']) {
 		$lat =$geo->lat;
 		$lng =$geo->long;
 		$zoom = 10;
+		if ($_REQUEST['zoom']) { $zoom = $_REQUEST['zoom']; }
 	}
 	if ( ($lat) && ($lng) ) {	
 		echo  $map->google_map(500,400,$zoom,$lat,$lng);
