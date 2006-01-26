@@ -133,7 +133,7 @@ Class Maps {
 			}
 			
 
-			if ($location != ',') {
+			if ($location != ',' and isset($location)) {
 				$this->points[$x]['name'] = htmlspecialchars($R->Fields($this->P['label_field']));
 				$this->points[$x]['loc'] = $location;
 				$this->points[$x]['Street'] = htmlspecialchars($R->Fields("Street"));
