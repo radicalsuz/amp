@@ -8,15 +8,20 @@ if ($_GET['map']) {
 
 	echo "<h3>".$map->P['title']."</h3>";
 	echo "<p>".$map->P['description']."</p>";
-#	if ($_REQUEST['zip']) {
-#		$geo = new Geo($dbcon);
-#		$geo->Zip = $_REQUEST['zip'];
-#		$geo->zip_lookup();
-#		$lat =$geo->lat;
-#		$lng =$geo->long;
-#		$zoom = 10;
-#	}
-	echo  $map->google_map(500,400,$zoom,$lat,$lng);
+	if ($_REQUEST['zip']) {
+		$geo = new Geo($dbcon);
+		$geo->Zip = $_REQUEST['zip'];
+		$geo->zip_lookup();
+		$lat =$geo->lat;
+		$lng =$geo->long;
+		$zoom = 10;
+	}
+	if ( ($lat) && ($lng) ) {	
+		echo  $map->google_map(500,400,$zoom,$lat,$lng);
+	} else {
+		echo  $map->google_map();
+	}
+
 
 } else {
 	$sql = 'select id, name, description from maps ';
