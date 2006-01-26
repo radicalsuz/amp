@@ -304,7 +304,7 @@ Class Maps {
 
 		$out .= '<script src="http://maps.google.com/maps?file=api&v=1&key='.GOOGLE_API_KEY.'" type="text/javascript"></script>';
 		$out .= '<div id="map" style="width: '.$width.'px; height: '.$height.'px"></div>';
-$out .= '
+$start = '
 <script type="text/javascript">
     //<![CDATA[
 
@@ -317,8 +317,8 @@ $out .= '
       var gmarkers = [];
       var htmls = [];
       var i = 0;
-
-
+';
+$basic_marker = '
 // A function to create the marker and set up the event window
 
       function createMarker(point,name,html) {
@@ -335,10 +335,59 @@ $out .= '
         sidebar_html += \'<a href="javascript:myclick(\' + i + \')">\' + name + \'</a><br>\';
         i++;
         return marker;
+      } ';
+$direction_marker = "
+      // A function to create the marker and set up the event window
+      function createMarker(point,name,html) {
+        var marker = new GMarker(point);
+
+        // The info window version with the \"to here\" form open
+        to_htmls[i] = html + '<br>Directions: <b>To here</b> - <a href=\"javascript:fromhere(' + i + ')\">From here</a>' +
+           '<br>Start address:<form action=\"http://maps.google.com/maps\" method=\"get\" target=\"_blank\">' +
+           '<input type=\"text\" SIZE=40 MAXLENGTH=40 name=\"saddr\" id=\"saddr\" value=\"\" /><br>' +
+           '<INPUT value=\"Get Directions\" TYPE=\"SUBMIT\">' +
+           '<input type=\"hidden\" name=\"daddr\" value=\"' +
+           point.y + ',' + point.x + \"(\" + name + \")\" + '\"/>';
+        // The info window version with the \"to here\" form open
+        from_htmls[i] = html + '<br>Directions: <a href=\"javascript:tohere(' + i + ')\">To here</a> - <b>From here</b>' +
+           '<br>End address:<form action=\"http://maps.google.com/maps\" method=\"get\"\" target=\"_blank\">' +
+           '<input type=\"text\" SIZE=40 MAXLENGTH=40 name=\"daddr\" id=\"daddr\" value=\"\" /><br>' +
+           '<INPUT value=\"Get Directions\" TYPE=\"SUBMIT\">' +
+           '<input type=\"hidden\" name=\"saddr\" value=\"' +
+           point.y + ',' + point.x + \"(\" + name + \")\" + '\"/>';
+        // The inactive version of the direction info
+        html = html + '<br>Directions: <a href=\"javascript:tohere('+i+')\">To here</a> - <a href=\"javascript:fromhere('+i+')\">From here</a>';
+
+        GEvent.addListener(marker, \"click\", function() {
+          marker.openInfoWindowHtml('<div style=\"white-space:nowrap;\">'+html+'</div>');
+        });
+        // save the info we need to use later for the sidebar
+        gmarkers[i] = marker;
+        htmls[i] = html;
+        // add a line to the sidebar html
+        sidebar_html += '<a href=\"javascript:myclick(' + i + ')\">' + name + '</a><br>';
+        i++;
+        return marker;
       }
 
 
-      // create the map
+      // This function picks up the click and opens the corresponding info window
+      function myclick(i) {
+        gmarkers[i].openInfoWindowHtml('<div style=\"white-space:nowrap;\">'+htmls[i]+'</div>');
+      }
+
+      // functions that open the directions forms
+      function tohere(i) {
+        gmarkers[i].openInfoWindowHtml('<div style=\"white-space:nowrap;\">'+ to_htmls[i]+'</div>');
+      }
+      function fromhere(i) {
+        gmarkers[i].openInfoWindowHtml('<div style=\"white-space:nowrap;\">'+ from_htmls[i] +'</div>');
+      }
+";	 
+	  
+
+
+ $map= '     // create the map
       var map = new GMap(document.getElementById("map"));
       map.addControl(new GLargeMapControl());
       map.addControl(new GMapTypeControl());
@@ -381,7 +430,7 @@ $out .= '
 
     //]]>
     </script>';
-		return $out;
+		return $out.$start.$direction_marker.$map;
 	}	
 }
 
