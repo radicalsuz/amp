@@ -113,6 +113,10 @@ Class Maps {
 		if (($this->P['hover_field']) ) {
 			$extra_fields .= ", ".$this->P['hover_field'];
 		}	
+		if (($this->P['geo_field']) ) {
+			$extra_fields .= ", ".$this->P['geo_field'];
+		}	
+
 		if ($this->P['table'] == 'calendar') {
 			$sql="select distinct id, lcity as City, lstate as State, lzip as Zip".$extra_fields." from calendar where  publish=1 ".$this->P['extra_sql']; // and typeid =$type 
 		} else {
@@ -124,7 +128,6 @@ Class Maps {
 		while (!$R->EOF) {
 			if ($this->P['geo_field']  ) {
 				$location = $R->Fields($this->P['geo_field']);
-				echo $location;
 			} else {
 				$geo = new Geo($this->dbcon);
 				$geo->City = $R->Fields("City");
