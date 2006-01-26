@@ -124,6 +124,7 @@ Class Maps {
 		while (!$R->EOF) {
 			if ($this->P['geo_field']  ) {
 				$location = $R->Fields($this->P['geo_field']);
+				echo $location;
 			} else {
 				$geo = new Geo($this->dbcon);
 				$geo->City = $R->Fields("City");
