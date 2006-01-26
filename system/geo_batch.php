@@ -31,7 +31,7 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 		if ( ($R->Fields("Street")) && ( ($type == 'GeoCode') or ($type == 'Both') ) ) {
 			$geo->geocoder_getdata();
 		} 
-		if ( ($R->Fields("City")) &&  ($R->Fields("State")) && ( ($type == 'City') or ($type == 'Both')  ) && (!$geo->lat) )
+		if ( ($R->Fields("City")) &&  ($R->Fields("State")) && ( ($type == 'City') or ($type == 'Both')  ) && (!$geo->lat) ) {
 			$geo->city_lookup()
 		}
 		if ( ($geo->lat) && ($geo->long) ){
