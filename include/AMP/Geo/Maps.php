@@ -122,7 +122,7 @@ Class Maps {
 		$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting city data in build_points function ".$sql.$this->dbcon->ErrorMsg());
 		$x=0;
 		while (!$R->EOF) {
-			if (($this->P['geo_field']) && ($R->Fields($this->P['geo_field'])) ) {
+			if ($this->P['geo_field'])  ) {
 				$location = $R->Fields($this->P['geo_field']);
 			} else {
 				$geo = new Geo($this->dbcon);
