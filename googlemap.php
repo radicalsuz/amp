@@ -8,7 +8,7 @@ if ($_GET['map']) {
 
 	echo "<h3>".$map->P['title']."</h3>";
 	echo "<p>".$map->P['description']."</p>";
-	if $_REQUEST['zip'] {
+	if ($_REQUEST['zip']) {
 		$zoom =10;
 		$geo = new Geo($dbcon);
 		$geo->Zip = $_REQUEST['zip'];
