@@ -28,12 +28,13 @@ function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 		$geo->Street = $R->Fields("Street");
 		$geo->Zip = $R->Fields("Zip");
 
-		if ( ($R->Fields("Street")) && ($type == 'GeoCode') ) {
+		if ( isset($R->Fields("Street"))  ) {
+		
 			$geo->geocoder_getdata();
 		} 
-		if ( ($R->Fields("City")) &&  ($R->Fields("State")) &&  ($type == 'City') && (!$geo->lat) ) {
-			$geo->city_lookup();
-		}
+		///if ( ($R->Fields("City")) &&  ($R->Fields("State")) &&  ($type == 'City') && (!$geo->lat) ) {
+		//	$geo->city_lookup();
+		//}
 		if ( ($geo->lat) && ($geo->long) ){
 			$sql = "update userdata set ". $geo_field ." = '".$geo->lat.",".$geo->long."' where id = " . $R->Fields("id");
 			$dbcon->Execute($sql)or DIE("Error updating udm ".$sql.$dbcon->ErrorMsg());
