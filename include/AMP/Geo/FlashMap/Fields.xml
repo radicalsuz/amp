@@ -130,10 +130,10 @@
 		<type>text</type>
 		<label>Browser Target</label>
 	</target>
-	<defulat_state>
+	<default_state>
 		<type>text</type>
-		<label>Defualt State Zoom</label>
-	</defualt_state>
+		<label>State Zoom</label>
+	</default_state>
 	<header5>
 		<type>header</type>
 		<label>Google Map Config</label>
