@@ -1037,16 +1037,6 @@ class UserData {
         $this->modTemplateID = $id_value;
     }
 
-    function getTimeEdited( ){
-        $result = $this->getData( array( 'timestamp') );
-        print 'edited:<BR>';
-        AMP_varDump( $result );
-    }
-
-    function getTimeCreated( ){
-        return current( $this->getData( array( 'created_timestamp') ));
-    }
-
 }
 
 ?>

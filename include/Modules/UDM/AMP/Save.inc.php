@@ -73,8 +73,11 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
         $dbcon =& $this->dbcon;
 
         $data['modin'] = $this->udm->instance;
+        $data['created_timestamp'] = date( 'YmdHis') ;
 
         $fields = $this->getSaveFields();
+        $fields[] = 'created_timestamp';
+
         $values_noescape = array_values( $data );
 
         foreach ( $fields as $field ) {
