@@ -317,6 +317,9 @@ $start = '
       var gmarkers = [];
       var htmls = [];
       var i = 0;
+	  // arrays to hold variants of the info window html with get direction forms open
+      var to_htmls = [];
+      var from_htmls = [];
 ';
 $basic_marker = '
 // A function to create the marker and set up the event window
@@ -430,7 +433,7 @@ $direction_marker = "
 
     //]]>
     </script>';
-		return $out.$start.$basic_marker.$map;
+		return $out.$start.$direction_marker.$map;
 	}	
 }
 
