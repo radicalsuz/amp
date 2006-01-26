@@ -11,7 +11,7 @@ set_time_limit(0);
 
 function get_geo($modin,$geo_field=NULL,$update=NULL,$limit='1000',$offset='0'){
 	global $dbcon;
-
+	$type = $_REQUEST['type'];
 	if ($update) {
 		$up_sql = ' and '.$geo_field.' != "" ';
 	}
