@@ -342,7 +342,7 @@ $out .= '
       var map = new GMap(document.getElementById("map"));
       map.addControl(new GLargeMapControl());
       map.addControl(new GMapTypeControl());
-      map.centerAndZoom(new GPoint('.$center_lat.', '.$center_lng.'), '.$zoom.');
+      map.centerAndZoom(new GPoint('.$center_lng.', '.$center_lat.'), '.$zoom.');
 
       // Read the data from example.xml
       var request = GXmlHttp.create();
