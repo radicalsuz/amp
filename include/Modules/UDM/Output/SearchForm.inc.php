@@ -34,7 +34,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             'description'=>'show description of current search',
             'type'=>'checkbox',
             'label'=>'Describe search on results page',
-            'default'=>1)
+            'default'=>1),
+        'search_form_display'=>array(
+            'description'=>'show search form on result page',
+            'type'=>'checkbox',
+            'label'=>'show search form on result page',
+            'default'=>1),
             );
         
                     
@@ -235,6 +240,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	 */
 	function execute($options=null) {
         $options= array_merge($this->getOptions(), $options);
+        if ( isset( $options['search_form_display']) && !$options['search_form_display']) return false;
 		
 		
 		$frmName    = $options['form_name']; 
