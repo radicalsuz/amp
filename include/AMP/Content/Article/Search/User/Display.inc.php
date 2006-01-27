@@ -6,6 +6,7 @@ require_once( 'AMP/Content/Display/Criteria.inc.php');
 class ContentSearch_Display_User extends ArticleSet_Display {
 
     var $_searchForm;
+    var $_sort_method = 'NewestFirst';
 
     function ContentSearch_Display_User ( ) {
         $this->init( );
@@ -29,8 +30,16 @@ class ContentSearch_Display_User extends ArticleSet_Display {
         return PARENT::execute( );
     }
 
+    function _initSort( &$source_set ){
+        $sort_method = 'addSort' . $this->_sort_method;
+        if ( !method_exists( $source_set, $sort_method )) return;
+        $source_set->$sort_method( );
+    }
+
     function initResults() {
         $source_set = &new ArticleSet( AMP_Registry::getDbcon( ));
+        $this->_initSort( $source_set );
+
         PARENT::init( $source_set , false);
         $display_criteria = &new AMPContent_DisplayCriteria( );
         $display_criteria->clean( $this->_source );

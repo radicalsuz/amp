@@ -7,6 +7,7 @@ class SectionContentSource {
     var $_section;
     var $_status_field = "publish";
     var $_include_draft_status = false;
+    var $_display_crit_source;
 
     function SectionContentSource() {
         //interface - do -not- use

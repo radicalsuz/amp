@@ -34,16 +34,16 @@ class ArticleSet extends AMPSystem_Data_Set {
         return $this->addCriteria( "( ". $base_section . ' OR ' . $related_ids . ")" );
     }
 
-    function addCriteriaStatus( $value ){
+    function addCriteriaStatus( $value ) {
         if ( !( $value || $value==='0')) return false;
         $this->addCriteria( 'publish='.$value ) ;
     }
     
-    function addCriteriaNew(){
+    function addCriteriaNew() {
         $this->addCriteria( 'new= 1 ' ) ;
     }
 
-    function addCriteriaFp(){
+    function addCriteriaFp() {
         $this->addCriteria( 'fplink= 1 ' ) ;
     }
 
@@ -60,6 +60,17 @@ class ArticleSet extends AMPSystem_Data_Set {
         if ( !$class_value ) return false;
         if ( is_array( $class_value ) && !empty( $class_value )) return $this->addCriteria( 'class in ( ' . join( ',', $class_value ) . ' )');
         return $this->addCriteria( 'class=' . $class_value ) ;
+    }
+
+    function addCriteriaExcludeClass( $class_value ){
+        if ( !$class_value ) return false;
+        if ( is_array( $class_value ) && !empty( $class_value )) return $this->addCriteria( 'class not in ( ' . join( ',', $class_value ) . ' )');
+        return $this->addCriteria( 'class!=' . $class_value ) ;
+
+    }
+
+    function addSortNewestFirst( ) {
+        $this->setSort( array( 'date DESC', 'id DESC'));
     }
 
 }

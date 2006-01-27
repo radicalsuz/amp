@@ -14,7 +14,7 @@ class CalendarPlugin_Sort_AMP extends CalendarPlugin {
         'default_select'=>array(
             'value'=>"Concat( if(!isnull(lcountry), Concat(lcountry, ' - '),''), if(!isnull(lstate), Concat(lstate, ' - '),''), if(!isnull(lcity), lcity,'')) as Location"),
         'default_orderby'=>array(
-            'value'=>"lcountry, lstate, lcity, recurring_options"),
+            'value'=>"lcountry, lstate, lcity, recurring_options, date"),
         'default_sortname_admin'=>array(
             'value'=>'Status/Date'),
             

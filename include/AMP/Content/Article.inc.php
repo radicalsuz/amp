@@ -193,6 +193,17 @@ class Article extends AMPSystem_Data_Item {
         return $this->getData( 'pselection' );
     }
 
+    function getShowInNavs( ){
+        return $this->getData( 'uselink');
+    }
+
+    function getShowInFrontPage( ){
+        return $this->getData( 'fplink');
+    }
+
+    function getShowAsNew( ){
+        return $this->getData( 'new');
+    }
 
     function allowsComments() {
         if ( $this->getClass( ) == AMP_CONTENT_CLASS_BLOG ) return true;

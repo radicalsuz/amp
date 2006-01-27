@@ -13,59 +13,9 @@ $modid=5;
 if (!defined( 'AMP_FORM_ID_GROUPS' )) define( 'AMP_FORM_ID_GROUPS', 2 );
 require_once( 'AMP/BaseDB.php' );
 require_once('AMP/UserData/Set.inc.php');
+require_once( 'Modules/Groups/Display/Config.inc.php');
 
-$intro_id = 58;
-
-//Default list behavior
-$list_options['display_format']='groups_layout_display';
-
-$sort_options['default_sortname'] = "Location";
-$sort_options['default_orderby']  = '(if(Country="USA",1,if(Country="CAN",2,if((isnull(Country) or Country=""),3,Country)))),State,City,Company';
-$sort_options['default_select']   = "Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))";
-
-
-//Display sensitivity for legacy compatibility
-$gdisplay = isset($_REQUEST['gdisplay'])?$_REQUEST['gdisplay']:false;
-switch ($gdisplay) {
-    case 2:
-        //international
-        $srch_options['criteria']['value'] = array("Country != 'USA'");
-        break;
-
-    //Alphabetical listings
-    case 3:
-        //alphabetical subheaders
-        $sort_options['default_sortname'] = "Group";
-        $sort_options['default_select'] = "Company as `Group`";
-        $sort_options['default_orderby'] = "Company";
-        $list_options['subheader'] = 'alpha';
-        break;
-    case 4:
-        //alphabetical w/o subheaders
-        $list_options['subheader']='';
-        $sort_options['default_sortname'] = "Group";
-        $sort_options['default_select'] = "Company as `Group`";
-        $sort_options['default_orderby'] = "Company";
-        break;
-    case 5:
-        $list_options['subheader'] = "Country";
-        $list_options['subheader2'] = "State";
-        $list_options['subheader3'] = "City";
-        break;
-    case 6:
-        if (isset($_REQUEST['field'])) {
-            $_REQUEST['sortby'] = $_REQUEST['field'];
-        }
-        break;
-    case 7:
-        $list_options['subheader'] = "Country";
-        $list_options['subheader2'] = "State";
-        //Sort choices
-        break;
-    default:
-}
-
-
+$intro_id = AMP_CONTENT_INTROTEXT_ID_GROUPS;
 
 if (!(isset($_REQUEST['modin']) && $_REQUEST['modin'])) $_REQUEST['modin'] = AMP_FORM_ID_GROUPS;
 $modin=$_REQUEST['modin'];
@@ -76,6 +26,14 @@ $userlist=&new UserDataSet($dbcon, $modin, $admin);
 $sub = isset($_REQUEST['btnUDMSubmit']);
 $uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
 $uid= isset($_REQUEST['gid'])?$_REQUEST['gid']:$uid;
+
+if (isset($modid) && $modid ) {
+    require_once( 'AMP/System/Tool/Control/Set.inc.php' );
+    $controls = &new ToolControlSet( $dbcon, $modid );
+    $controls->globalizeSettings();
+}
+
+if ( isset( $gdisplay )) AMP_legacy_groups_get_display( $gdisplay );
 
 if ($uid && $modin) {
 
@@ -102,7 +60,7 @@ if ($uid && $modin) {
     $output=$userlist->output_list('DisplayHTML', $list_options, $order, $srch_options); 
 }
 
-$intro_id = $userlist->modTemplateID;
+$intro_id = $userlist->getIntrotextId( );
 require_once( 'AMP/BaseTemplate.php' );
 if ($intro_id != 1) require_once( 'AMP/BaseModuleIntro.php' );
 
