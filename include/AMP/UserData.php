@@ -271,6 +271,7 @@ class UserData {
     function outputErrors () {
         if (!isset($this->errors)) return false;
         $error_output = &$this->registerPlugin( 'Output', 'Messages');
+        if ( !$error_output ) return false;
         return $error_output->execute( );
     }
     /*
