@@ -53,7 +53,7 @@ class UserDataSet extends UserData {
 
         //Specify a default output order
         if (!isset($order)) {
-            $order = array('SearchForm','Pager','Actions',$format,'Pager','Index');
+            $order = array('SearchForm','GoogleMap','Pager','Actions',$format,'Pager','Index');
         }
         if ($this->uid) $order = array($format);
 
