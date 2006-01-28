@@ -115,9 +115,7 @@ class UserDataPlugin_Save_GetActive extends UserDataPlugin_Save {
 		}
 		
 		foreach($this->translate($data) as $name => $value) {
-			if(isset($value)) {
-				$request->addPostData($name, $value);
-			}
+			$request->addPostData($name, $value);
 		}
 
 		if( !PEAR::isError( $request->sendRequest() ) )	{
@@ -132,6 +130,7 @@ class UserDataPlugin_Save_GetActive extends UserDataPlugin_Save {
 		}
     }
 
+	//and filter
 	function translate( $data ) {
 		$translation = array(
 						'Email'			=>	'email',
@@ -150,7 +149,7 @@ class UserDataPlugin_Save_GetActive extends UserDataPlugin_Save {
 						'Company'		=>	'organization');
 
 		foreach($data as $key => $value) {
-			if(isset($translation[$key])) {
+			if(isset($translation[$key]) && !empty($value)) {
 				$return[$translation[$key]] = $value;
 			}
 		}
