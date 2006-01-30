@@ -17,7 +17,7 @@ if ($_REQUEST['author']) {
 
 echo '<ul>';
 while (!$R->EOF){ 
-    echo '<li>'.$R->Fields($fields).'</li>';
+    echo '<li>'.$R->Fields($field).'</li>';
     $R->MoveNext();
 }
 echo '</ul>';
