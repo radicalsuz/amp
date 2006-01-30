@@ -441,7 +441,11 @@ function change2(which) {
           </tr>
           <tr> 
             <td valign="top"> <span align="left" class="name">Source</span></td>
-            <td><input name="source" size="50" value="<?php echo htmlspecialchars($r->Fields("source"))?>" > 
+            <td><input name="source" id="source" size="50" value="<?php echo htmlspecialchars($r->Fields("source"))?>" > 
+				<div class="auto_complete" id="source_list"></div>
+			<script language="javascript">
+  			 new Ajax.Autocompleter("source", "source_list", "ajax_request.php" , {});
+			</script> 
             </td>
           </tr>
           <tr> 

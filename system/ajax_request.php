@@ -8,11 +8,11 @@ if ($_REQUEST['author']) {
     $field ='author';
 }
 
-//if ($_REQUEST['']) {
-//    $value = $_REQUEST[''];
-//    $table = '';
-//    $field ='';
-//}
+if ($_REQUEST['source']) {
+    $value = $_REQUEST['source'];
+    $table = 'articles';
+    $field ='source';
+}
 $sql = "SELECT Distinct $field FROM $table WHERE $field LIKE '".$value."%'";   $R= $dbcon->CacheExecute($sql)or DIE($sql.$dbcon->ErrorMsg());
 
 echo '<ul>';
