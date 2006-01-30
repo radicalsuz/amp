@@ -651,12 +651,12 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td class="text"> 
               <input name="comments" type="checkbox" id="comments" value="1" <?php If (($r->Fields("comments")) == "1") { echo "CHECKED";} ?>>
               <br>
-              <a href="comments.php?action=list&cid=<?php echo $_GET[id] ;?>" target="_blank" class="text">view/edit 
-              user comments</a>
-			  <div>
+            
+			  <a href="#" onclick="new Effect.SlideDown('comment_list');return false;">View /Edit Comments</a>
+			  <div id="comment_list" style="display:none;"> 
 			  <?php
+			  if ($coms->RecordCount() > 0 ){
 			  function nicetrim ($s,$MAX_LENGTH) {
- 				if (strlen($str_to_count) <= $MAX_LENGTH) {return $s;}
 				  $s2 = substr($s, 0, $MAX_LENGTH - 3);
 				  $s2 .= "...";
 				  return $s2;
@@ -667,7 +667,8 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 				$coms->MoveNext();
 			  }
 			  ?>
-			  
+			  <br> <br>  <a href="comments.php?action=list&cid=<?php echo $_GET[id] ;?>" target="_blank" class="text">List Page</a>
+			  <?php } else { echo "no comments"; }
 			  </div>
 			  </td>
           </tr>
