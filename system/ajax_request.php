@@ -4,7 +4,7 @@ require_once("AMP/BaseDB.php");
 #decalre what is needed for each request
 if ($_REQUEST['author']) {
     $value = $_REQUEST['author'];
-    $table = 'article';
+    $table = 'articles';
     $field ='author';
 }
 
