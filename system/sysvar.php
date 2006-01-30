@@ -27,6 +27,8 @@ if (isset($_REQUEST['MM_update']) && (isset($_REQUEST['MM_recordId']))) {
     $MM_columnsStr = "searchinstallbase|',none,''|basepath|',none,''|filepath|',none,''|emfaq|',none,''|emendorse|',none,''|emgroup|',none,''|emmedia|',none,''|emride|',none,''|emhousing|',none,''|emcalendar|',none,''|websitename|',none,''|emfrom|',none,''|sendmailpath|',none,''|webname|',none,''|metadescription|',none,''|metacontent|',none,''|template|',none,''|emailfromname|',none,''|thumb|',none,''|optw|',none,''|optl|',none,''|cacheSecs|',none,''|email_tool|',none,''|dia_user|',none,''|dia_key|',none,''|phplist_bounce_host|',none,''|phplist_bounce_user|',none,''|phplist_bounce_password|',none,''";
   	$inupdate = $dbcon->Execute("Update moduletext set templateid = " . $_REQUEST['indextemplate'] . " where id =2") or DIE($dbcon->ErrorMsg());  
 
+
+// PHPLIST CONFIG UPDATES
 	$dbcon->Execute("Update phplist_config set value = '" . $_REQUEST['phplist_domain'] . "' where item ='domain' ") or DIE($dbcon->ErrorMsg());  
 	$dbcon->Execute("Update phplist_config set value = '" . $_REQUEST['phplist_website'] . "' where item ='website' ") or DIE($dbcon->ErrorMsg());  
 	$dbcon->Execute("Update phplist_config set value = '" . $_REQUEST['phplist_admin_address'] . "' where item ='admin_address' ") or DIE($dbcon->ErrorMsg());  
@@ -36,7 +38,21 @@ if (isset($_REQUEST['MM_update']) && (isset($_REQUEST['MM_recordId']))) {
 	$dbcon->Execute("Update phplist_config set value = '" . $_REQUEST['phplist_message_replyto_address'] . "' where item ='message_replyto_address' ") or DIE($dbcon->ErrorMsg());  
 	$sql ="Update phplist_admin set password = '" . $_REQUEST['phplist_admin_password'] . "', email = '" . $_REQUEST['phplist_admin_email'] . "' where id ='1' ";
 	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());  
+
+// PUNBB CONFIG UPDATES
+	$sql ="Update punbb_config set conf_value = '" . $_REQUEST['websitename'] . " Forum' where conf_name = 'o_board_title' ";
+	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg()); 
+	 
+	$sql ="Update punbb_config set conf_value = '" . $_REQUEST['emfaq'] . "' where conf_name = 'o_admin_email' ";
+	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());  
+    $sql ="Update punbb_config set conf_value = '" . $_REQUEST['emfaq'] . "' where conf_name = 'o_webmaster_email' ";
+	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());  
+    $sql ="Update punbb_config set conf_value = '" . $_REQUEST['emfaq'] . "' where conf_name = 'o_mailing_list' ";
+	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());  
+    $sql ="Update punbb_config set conf_value = '" . $_REQUEST['basepath'] . "/punbb' where conf_name = 'o_base_url' ";
+	$dbcon->Execute($sql) or DIE($sql.$dbcon->ErrorMsg());  	
 	
+
 	#$dbcon->Execute("Update phplist_config set value = '" . $_REQUEST['phplist_'] . "' where item ='' ") or DIE($dbcon->ErrorMsg());  
 	#$dbcon->Execute("Update phplist_config set value = '" . $_REQUEST['phplist_'] . "' where item ='' ") or DIE($dbcon->ErrorMsg());  
 
