@@ -120,6 +120,8 @@ if ($MM_reltype) {
 	}
 
 //other queries
+$coms=$dbcon->Execute("SELECT id, comment FROM comments where articleid = $id  ORDER BY publish desc, date desc") or DIE($dbcon->ErrorMsg());
+
 $class=$dbcon->Execute("SELECT id, class FROM class ORDER BY id ASC") or DIE($dbcon->ErrorMsg());
 $class_numRows=0;
 $class__totalRows=$class->RecordCount();
@@ -649,8 +651,24 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
             <td class="text"> 
               <input name="comments" type="checkbox" id="comments" value="1" <?php If (($r->Fields("comments")) == "1") { echo "CHECKED";} ?>>
               <br>
-              <a href="comments.php?cid=<?php echo $_GET[id] ;?>" target="_blank" class="text">view/edit 
-              user comments</a></td>
+              <a href="comments.php?action=list&cid=<?php echo $_GET[id] ;?>" target="_blank" class="text">view/edit 
+              user comments</a>
+			  <div>
+			  <?php
+			  function nicetrim ($s,$MAX_LENGTH) {
+ 				if (strlen($str_to_count) <= $MAX_LENGTH) {return $s;}
+				  $s2 = substr($s, 0, $MAX_LENGTH - 3);
+				  $s2 .= "...";
+				  return $s2;
+				}
+			  
+			   while (!$coms->EOF){
+			  	echo '- -'.nicetrim($coms->Fields("comment"),100).'<a href="comments.php?action=list&cid='.$coms->Fields("id").'" target="_new">edit</a><br>';
+				$coms->MoveNext();
+			  }
+			  
+			  </div>
+			  </td>
           </tr>
 		
           <tr class="intitle"> 
