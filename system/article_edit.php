@@ -666,6 +666,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 			  	echo '- -'.nicetrim($coms->Fields("comment"),100).'<a href="comments.php?action=list&cid='.$coms->Fields("id").'" target="_new">edit</a><br>';
 				$coms->MoveNext();
 			  }
+			  ?>
 			  
 			  </div>
 			  </td>
