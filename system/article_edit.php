@@ -668,7 +668,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 			  }
 			  ?>
 			  <br> <br>  <a href="comments.php?action=list&cid=<?php echo $_GET[id] ;?>" target="_blank" class="text">List Page</a>
-			  <?php } else { echo "no comments"; }
+			  <?php } else { echo "no comments"; } ?>
 			  </div>
 			  </td>
           </tr>
