@@ -100,7 +100,7 @@ class UserDataPlugin_Save_GetActive extends UserDataPlugin_Save {
     function save ( $data ) {
 		if(!$data['GA_optin']) {
 			trigger_error('did not opt to join');
-			return false;
+			return true;
 		}
         $options=$this->getOptions();
 
