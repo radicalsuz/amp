@@ -2,19 +2,19 @@
 
 require_once( 'AMP/UserData/Plugin.inc.php');
 
-class UserDataPlugin_Output_Messages extends UserDataPlugin {
+class UserDataPlugin_Messages_Output extends UserDataPlugin {
 
     var $_available = false;
     var $_css_class_error = 'page_error';
     var $_css_class_result = 'page_result';
 
-    function UserDataPlugin_Output_Messages( &$udm, $plugin_instance = null ){
+    function UserDataPlugin_Messages_Output( &$udm, $plugin_instance = null ){
         $this->init( $udm, $plugin_instance );
     }
 
     function execute( ){
         $output = "";
-        if ( $this->udm->hasErrors( ))    $output .= $this->outputErrors( );
+        if ( $this->udm->hasErrors( ))    $output .= $this->_outputErrors( );
         if ( $this->udm->hasResults( ))   $output .= $this->_outputResults( );
     }
 
