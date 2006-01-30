@@ -667,7 +667,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 				}
 			  
 			   while (!$coms->EOF){
-			  	echo '- '.nicetrim($coms->Fields("comment"),75).'<a href="comments.php?id='.$coms->Fields("id").'" target="_new">edit</a><br>';
+			  	echo '- '.nicetrim($coms->Fields("comment"),100).'<a href="comments.php?id='.$coms->Fields("id").'" target="_new">edit</a><br>';
 				$coms->MoveNext();
 			  }
 			  ?>
