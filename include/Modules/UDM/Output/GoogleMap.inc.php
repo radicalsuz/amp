@@ -15,7 +15,7 @@ class UserDataPlugin_GoogleMap_Output extends UserDataPlugin {
         'map_geolocation',
         'map_config_id',
         'map_zip' => array( 
-            'default'   => null )
+            'default'   => null ),
         'map_display_admin' => array( 
             'default' => false)
         );
