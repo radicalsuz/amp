@@ -223,8 +223,32 @@ function ValidateForm(){
     return true;
  }
 </script>
-
-
+<script src="/scripts/ajax/prototype.js" type="text/javascript"></script>
+<script src="/scripts/ajax/scriptaculous.js" type="text/javascript"></script>
+<style>          div.auto_complete {
+            width: 350px;
+            background: #fff;
+          }
+          div.auto_complete ul {
+            border:1px solid #888;
+            margin:0;
+            padding:0;
+            width:100%;
+            list-style-type:none;
+          }
+          div.auto_complete ul li {
+            margin:0;
+            padding:3px;
+          }
+          div.auto_complete ul li.selected { 
+            background-color: #ffb; 
+          }
+          div.auto_complete ul strong.highlight { 
+            color: #800; 
+            margin:0;
+            padding:0;
+          }
+</style>
 
 <form name="form" ACTION="<?php echo $_SERVER['PHP_SELF'] ?>" METHOD="POST" enctype="multipart/form-data">
              
@@ -405,9 +429,14 @@ function change2(which) {
             <td colspan="2" valign="top"><?php echo helpme("Display and Publishing"); ?> 
               Content Information </td>
           </tr>
+		  
 		  <tr> 
             <td valign="top"> <span align="left" class="name">Author</span></td>
-            <td> <input name="author" size="50" value="<?php echo htmlspecialchars($r->Fields("author"))?>" > 
+            <td> <input id="author" name="author" size="50" value="<?php echo htmlspecialchars($r->Fields("author"))?>" > 
+			<div class="auto_complete" id="author_list"></div>
+			<script language="javascript">
+  			 new Ajax.Autocompleter("author", "author_list", "ajax_request.php" , {});
+			</script> 
             </td>
           </tr>
           <tr> 
