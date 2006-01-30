@@ -2,14 +2,14 @@
 require_once("AMP/BaseDB.php");
 
 #decalre what is needed for each request
-if ($_REQUEST('author')) {
-    $value = $_REQUEST('author');
+if ($_REQUEST['author']) {
+    $value = $_REQUEST['author'];
     $table = 'article';
     $field ='author';
 }
 
-//if ($_REQUEST('')) {
-//    $value = $_REQUEST('');
+//if ($_REQUEST['']) {
+//    $value = $_REQUEST[''];
 //    $table = '';
 //    $field ='';
 //}
