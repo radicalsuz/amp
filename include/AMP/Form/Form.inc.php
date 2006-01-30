@@ -395,6 +395,38 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         return array_keys( $this->fields );
     }
 
+     function insertBeforeFieldOrder ( $fields, $beforeField = 0 ) {
+        $fieldOrderSet = $this->getFieldOrder();
+        $startinsert = 0;
+
+        if (is_numeric($beforeField) && ($beforeField!=0)) $startinsert = $beforeField;
+        elseif ($key = array_search($beforeField, $fieldOrderSet)) $startinsert = $key;
+
+        if ($startinsert) {
+            $newfieldOrder = array_slice($fieldOrderSet, 0, $startinsert);
+            $fieldOrderSet = array_slice($fieldOrderSet, $startinsert);
+        }
+
+        foreach ( $fields as $fieldname ) {
+            $newfieldOrder[] = $fieldname;
+        }
+
+        foreach ($fieldOrderSet as $fieldname) {
+            $newfieldOrder[] = $fieldname;
+        }
+
+        $this->setFieldOrder( $newfieldOrder );
+     }
+
+     function insertAfterFieldOrder( $fields ) {
+        $fieldOrderSet = $this->getFieldOrder();
+
+        foreach ( $fields as $fieldname ) {
+            $fieldOrderSet[] = $fieldname;
+        }
+        $this->setFieldOrder( $fieldOrderSet );
+     }
+
     function defineSubmit ( $value, $label = 'Submit' ) {
 
         $this->submit_button = array(

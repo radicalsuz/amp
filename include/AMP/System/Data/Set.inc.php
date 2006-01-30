@@ -132,7 +132,10 @@
         if (!is_array( $update_actions )) return false;
         $sql = "UPDATE " . $this->datatable . " SET " . join( ", ", $update_actions ) .
                " where " . $criteria;
-        if ($this->dbcon->Execute($sql)) return $this->dbcon->Affected_Rows();
+        if ($this->dbcon->Execute($sql)) {
+            if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." update"); 
+            return $this->dbcon->Affected_Rows();
+        }
         return false;
     }
 

@@ -11,7 +11,8 @@ class ArticleActions {
         'unpublish' => 'id', 
         'delete' => 'id', 
         'reorder' => 'pageorder', 
-        'move' => array( 'id', 'move_destination' )
+        'move' => array( 'id', 'move_destination' ),
+        'regionize' => array( 'id', 'region_destination' )
         );
   
     var $source;
@@ -63,6 +64,17 @@ class ArticleActions {
                 "&nbsp;<input type='submit' class='searchform_element' name='". $this->submitGroup ."[move]' value='Move'>&nbsp;" .
                 "<input type='button' class='searchform_element' name='hideMove' value='Cancel' onclick='window.change_any(\"article_moveMenu\");'>";
     }
+    function _HTML_button_Regionize( $action ) {
+        return "<input type='button' name='showRegions' onclick='window.change_any(\"article_regionMenu\");' value='Regions'>"
+                . '<div class="AMPComponent_hidden" id="article_regionMenu">' . $this->_HTML_selectDestinationRegion() . '</div>';
+    }
+
+    function _HTML_selectDestinationRegion() {
+        $region_select =   AMP_buildSelect( "region_destination", AMPSystem_Lookup::instance( 'regions'), null, ' class="searchform_element"') ;
+        return "<span class='searchform_label'>Set Region To: &nbsp;</span>". $region_select .
+                "&nbsp;<input type='submit' class='searchform_element' name='". $this->submitGroup ."[regionize]' value='Change Region'>&nbsp;" .
+                "<input type='button' class='searchform_element' name='hideRegion' value='Cancel' onclick='window.change_any(\"article_regionMenu\");'>";
+    }
 
     function commitReorder( $order_array ) {
         if (empty( $order_array ) || !is_array( $order_array )) return false;
@@ -105,6 +117,15 @@ class ArticleActions {
         if (empty( $id_array ) || !is_array( $id_array )) return false;
         $criteria = "id in( " . join( ",", $id_array ) . ")";
         return $this->source->deleteData( $criteria );
+
+    }
+
+    function commitRegionize( $value_array ) {
+        if ((!isset($value_array['id'])) || empty( $value_array['id'])) return false;
+        if (!(isset($value_array['region_destination']) && $value_array['region_destination'])) return false;
+        $criteria = "id in( " . join( ",", $value_array['id']) . ")";
+        $update = array("state=" . $value_array['region_destination']);
+        return $this->source->updateData( $update, $criteria );
 
     }
 

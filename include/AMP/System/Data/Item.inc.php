@@ -106,7 +106,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function save() {
         $save_fields = array_combine_key($this->_itemdata_keys, $this->getData());
-		if ( !is_array( $this->id_field ) && !isset($save_fields[ $this->id_field ]) ){
+		if ( !is_array( $this->id_field ) && !isset( $save_fields[ $this->id_field ] )) {
             $save_fields[ $this->id_field ] = "";
             $this->_blankIdAction();
         }

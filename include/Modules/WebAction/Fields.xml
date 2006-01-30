@@ -40,7 +40,7 @@
 	</tellfriend_message_id>
 	<target_method>
 		<type>select</type>
-		<label>Targetting Method</label>
+		<label>Targeting Method</label>
 		<values>
 			<all>Message is sent to all targets</all>
 			<choose_single>User must choose one target</choose_single>

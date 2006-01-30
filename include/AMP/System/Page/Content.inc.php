@@ -19,7 +19,7 @@ class AMPSystem_Page_Content extends AMPSystem_Page {
         $this->_initComponents( "list" );
         if ($list_action = $this->list->submitted()) {
             if ( $qty = $this->list->doAction( $list_action ))
-                return $this->setMessage( $qty . " items " . AMP_PastParticiple($list_action) ." succesfully");
+                return $this->setMessage( $qty . " items " . AMP_PastParticiple($list_action) ." successfully");
 
             return $this->setMessage("Nothing was " . AMP_PastParticiple( $list_action ), ( $qty === FALSE ) ); 
         }

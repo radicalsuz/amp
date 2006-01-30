@@ -267,6 +267,16 @@ class UserData {
         return !empty( $this->results );
     }
 
+    function getErrors( ){
+        if ( !$this->hasErrors( )) return false;
+        return $this->errors ;
+    }
+
+    function getResults( ){
+        if ( !$this->hasResults( )) return false;
+        return $this->results ;
+    }
+
 //apps can register error handlers and pass the error message as a parameter array
     function outputErrors () {
         if (!isset($this->errors)) return false;

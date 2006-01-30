@@ -205,6 +205,10 @@ class Article extends AMPSystem_Data_Item {
         return $this->getData( 'new');
     }
 
+    function getRegion( ){
+        return $this->getData( 'state');
+    }
+
     function allowsComments() {
         if ( $this->getClass( ) == AMP_CONTENT_CLASS_BLOG ) return true;
         return $this->getData( 'comments' );

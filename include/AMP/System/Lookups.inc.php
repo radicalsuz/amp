@@ -330,6 +330,8 @@ class AMPSystemLookup_States extends AMPSystem_Lookup {
 class AMPSystemLookup_Regions extends AMPSystem_Lookup {
 	var $datatable = 'region';
 	var $result_field = 'title';
+    var $sortby = 'title';
+
     function AMPSystemLookup_Regions( ){
         $this->init( );
     }

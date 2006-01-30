@@ -14,10 +14,11 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
 
 	function init( $name, $method=null, $action=null ) {
 		PARENT::init( $name, $method, $action );
-		if (!($this->addFields( $this->readFields()) )){
+		if (!($fields =  $this->readFields()) ){
 			 trigger_error ( 'XML Field read failed for ' . get_class( $this ) );
 			 return;
 		}
+        $this->addFields( $this->adjustFields( $fields ));
 		$this->setDynamicValues();
 	} 
 
@@ -28,6 +29,12 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
         if ( $fields = $fieldsource->readData() ) return $fields;
 
         return false;
+
+    }
+
+    function adjustFields( $fields ){
+        //interface
+        return $fields;
 
     }
 
