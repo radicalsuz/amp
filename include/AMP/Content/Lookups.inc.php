@@ -102,11 +102,78 @@ class AMPContentLookup_Author extends AMPContent_Lookup {
     var $id_field = "author";
     var $distinct = TRUE;
     
-    function AMPContentLookup_Author() {
-        $this->criteria = " publish=".AMP_CONTENT_STATUS_LIVE . " AND author != ''";
+    function AMPContentLookup_Author( $partial_name = null ) {
+        $this->criteria = isset( $partial_name ) ?
+                            $this->_getCriteriaPartialName( $partial_name ) :
+                            $this->_getBaseCriteria( );
         $this->init();
     }
 
+    function _getCriteriaPartialName( $partial_name ) {
+        return join( ' AND ', array( "author LIKE '" . $partial_name . "%'" , $this->_getBaseCriteria( ) ));
+    }
+
+    function setCriteriaPartialName( $partial_name ) {
+        $this->criteria = $this->_getCriteriaPartialName( $partial_name );
+    }
+
+    function _getBaseCriteria( ) {
+        return "publish=".AMP_CONTENT_STATUS_LIVE . " AND author != ''";
+    }
+
+    function &instance( $partial_name=null) {
+        if ( !isset( $partial_name )) return PARENT::instance( 'author');
+
+        static $lookup = false;
+        if ( !$lookup ) {
+            $lookup = new AMPContentLookup_Author( $partial_name );
+        } else {
+            $lookup->setCriteriaPartialName( $partial_name );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+}
+
+class AMPContentLookup_Source extends AMPContent_Lookup {
+
+    var $datatable = "articles";
+    var $result_field = "source";
+    var $sortby = "source";
+    var $id_field = "source";
+    var $distinct = TRUE;
+    
+    function AMPContentLookup_Source( $partial_name = null ) {
+        $this->criteria = isset( $partial_name ) ?
+                            $this->_getCriteriaPartialName( $partial_name ) :
+                            $this->_getBaseCriteria( );
+        $this->init();
+    }
+
+    function _getCriteriaPartialName( $partial_name ) {
+        return join( ' AND ', array( "source LIKE '" . $partial_name . "%'" , $this->_getBaseCriteria( ) ));
+    }
+
+    function setCriteriaPartialName( $partial_name ) {
+        $this->criteria = $this->_getCriteriaPartialName( $partial_name );
+    }
+
+    function _getBaseCriteria( ) {
+        return "publish=".AMP_CONTENT_STATUS_LIVE . " AND source != ''";
+    }
+
+    function &instance( $partial_name=null) {
+        if ( !isset( $partial_name )) return PARENT::instance( 'source');
+
+        static $lookup = false;
+        if ( !$lookup ) {
+            $lookup = new AMPContentLookup_Source( $partial_name );
+        } else {
+            $lookup->setCriteriaPartialName( $partial_name );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
 }
 
 class AMPContentLookup_SectionParents extends AMPContent_Lookup {

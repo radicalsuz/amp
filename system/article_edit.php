@@ -225,8 +225,6 @@ function ValidateForm(){
     return true;
  }
 </script>
-<script src="/scripts/ajax/prototype.js" type="text/javascript"></script>
-<script src="/scripts/ajax/scriptaculous.js" type="text/javascript"></script>
 <style>          div.auto_complete {
             width: 350px;
             background: #fff;

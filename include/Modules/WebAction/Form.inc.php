@@ -7,8 +7,11 @@ class WebAction_Form extends AMPSystem_Form_XML {
 
     var $name_field = 'title';
     var $_intro_text_set = array( 'intro_id', 'response_id', 'message_id', 'tellfriend_message_id');
-    var $_title_template = array( 'type' => 'text', 'size' => 50, 'required' => true, 'label' => 'Title');
-    var $_text_template = array( 'type' => 'textarea', 'size' => '10:20', 'label' => 'Text');
+    var $_title_template = array( 'type' => 'text', 'size' => 50, 'required' => false, 'label' => 'Title');
+    var $_text_template = array( 'type' => 'textarea', 'size' => '10:50', 'label' => 'Text');
+    var $_save_template = array( 'type' => 'submit', 'label' => 'Save');
+    var $_switch_template = array( 'type' => 'blocktrigger', 'label' => 'Edit', 'block' => '_block');
+    var $_fieldswapper;
 
     function WebAction_Form() {
         $name = 'webaction_define';
@@ -20,23 +23,34 @@ class WebAction_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'modin', '_linkedIntroTexts', 'set');
         $this->setDefaultValue( 'modin', AMP_FORM_ID_WEBACTION_DEFAULT );
         $this->_linkedIntroTexts( array( 'modin' => AMP_FORM_ID_WEBACTION_DEFAULT ), 'modin');
-        $this->_initBlankIntroTexts( );
+        #$this->_initSwapFields( );
      
     }
 
-    function adjustFields( $fields ){
-        $result_fields = array( );
-        foreach( $fields as $field_name => $field_def ){
-            $result_fields[$field_name] = $field_def;
+    function _initSwapFields( ){
+        require_once( 'AMP/Form/ElementSwapScript.inc.php');
+        $this->_fieldswapper = &ElementSwapScript::instance( );
+        foreach( $this->_intro_text_set as $textfield ) {
+            $current_swap = $textfield . '_swap';
+            $this->_fieldswapper->addSwapper( $current_swap );
+            $this->_fieldswapper->setForm( $this->getFormName( ), $current_swap ) ;
+            $this->_fieldswapper->addSet( 'basic', array( $textfield ), $current_swap );
+            $this->_fieldswapper->addSet( 'new', array( $textfield . '_title', $textfield . '_text'), $current_swap );
+            $this->_fieldswapper->setInitialValue( 'basic', $current_swap );
         }
-        foreach( $this->_intro_text_set as $introtext_field ){
-            
-        }
+        $this->registerJavascript( $this->_fieldswapper->output( ));
     }
-    function _initBlankIntroTexts( ){
-        foreach( $this->_intro_text_set as $introtext_field ){
-            $this->addTranslation( $introtext_field, '_makeIntroTextEntryFields', 'set');
+
+    function adjustFields( $fields ) {
+        $result_fields = array( );
+        foreach( $fields as $field_name => $field_def ) {
+            $result_fields[$field_name] = $field_def;
+            if ( array_search( $field_name, $this->_intro_text_set ) === FALSE ) continue;
+
+            $result_fields = array_merge( $result_fields, $this->_makeIntroTextEntryFields( $field_name, $field_def ));
+            $this->addTranslation( $field_name, '_makeNewIntroText', 'get');
         }
+        return $result_fields;
     }
 
     function _linkedIntroTexts( $data, $fieldname ){
@@ -53,6 +67,30 @@ class WebAction_Form extends AMPSystem_Form_XML {
         
     }
 
+    function _makeIntroTextEntryFields( $fieldname , $base_fielddef ){
+        $template_field = $this->_switch_template;
+        $template_field['label'] = $this->_switch_template['label'] . " " . $base_fielddef['label'];
+        $template_field['block'] = $fieldname . $this->_switch_template['block'];
+        $new_fields[ $fieldname.'_block'] = $template_field;
+
+        $template_field = $this->_title_template;
+        $template_field['label'] = $base_fielddef['label'] . ' ' . $this->_title_template['label'];
+        $template_field['block'] = $fieldname . $this->_switch_template['block'];
+        $new_fields[$fieldname.'_title'] = $template_field;
+        
+        $template_field = $this->_text_template;
+        $template_field['label'] = $base_fielddef['label'] . ' ' . $this->_text_template['label'];
+        $template_field['block'] = $fieldname . $this->_switch_template['block'];
+        $new_fields[ $fieldname.'_text'] = $template_field;
+
+        $template_field = $this->_save_template;
+        $template_field['label'] = $this->_save_template['label'] . ' ' . $base_fielddef['label'];
+        $template_field['block'] = $fieldname . $this->_switch_template['block'];
+        $new_fields[ $fieldname . '_save' ] = $template_field;
+
+        return $new_fields;
+    }
+    /*
     function _makeIntroTextEntryFields( $data, $fieldname ){
 
         if ( isset( $data[$fieldname])) return $data[$fieldname];
@@ -70,6 +108,7 @@ class WebAction_Form extends AMPSystem_Form_XML {
         $this->insertBeforeFieldOrder( array_keys( $new_fields ), $fieldname );
         $this->addFields( $new_fields );
     }
+    */
 
     function _makeNewIntroText( $data, $fieldname ){
         if ( isset( $data[ $fieldname ])) return $data[ $fieldname ];
@@ -91,4 +130,5 @@ class WebAction_Form extends AMPSystem_Form_XML {
         return $data[$this->name_field] . ucwords( str_replace( array( '_', '_id'), array( ' ', '') , $fieldname ) );
     }
 }
+
 ?>

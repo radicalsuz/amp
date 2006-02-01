@@ -75,6 +75,25 @@ class AMPDisplay_HTML {
         return '"'. str_replace( '"', '&quot;', $item). '"';
     }
 
+    function _HTML_UL( $items, $attr = array( ), $item_attr = array( )){
+        return  '<ul'.$this->_HTML_makeAttributes( $attr ).">\n" . $this->_HTML_LI( $items, $item_attr ) . "</ul>\n";
+    }
+
+    function _HTML_LI( $items, $attr = array( )){
+
+        $output = "";
+        foreach( $items as $item ){
+            if ( is_array( $item )) {
+                $output = $this->_HTML_UL( $item );
+            } else {
+                $output .= '<li' . $this->_HTML_makeAttributes( $attr ) . '>';
+                $output .= $item . "</li>\n";
+            }
+        }
+        return $output ;
+     
+    }
+
 
     function _HTML_makeAttributes( $attr_set ) {
         if (empty($attr_set)) return false;

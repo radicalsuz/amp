@@ -7,37 +7,17 @@
 		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
 		<default>1</default>
 	</status>
-	<title>
+	<name>
 		<type>text</type>
 		<label>Action Name</label>
 		<required>1</required>
-	</title>
+	</name>
 	<modin>
 		<type>select</type>
 		<lookup>forms</lookup>
 		<label>Use Form</label>
 		<required>1</required>
 	</modin>
-	<intro_id>
-		<type>select</type>
-		<lookup>introtexts</lookup>
-		<label>Introduction Text</label>
-	</intro_id>
-	<response_id>
-		<type>select</type>
-		<lookup>introtexts</lookup>
-		<label>Response Page Text</label>
-	</response_id>
-	<message_id>
-		<type>select</type>
-		<lookup>introtexts</lookup>
-		<label>Default Message to Target</label>
-	</message_id>
-	<tellfriend_message_id>
-		<type>select</type>
-		<lookup>introtexts</lookup>
-		<label>Tell-a-Friend Message</label>
-	</tellfriend_message_id>
 	<target_method>
 		<type>select</type>
 		<label>Targeting Method</label>
@@ -62,4 +42,24 @@
 		<label>Action Expires</label>
 		<default>next month</default>
 	</enddate>
+	<intro_id>
+		<type>select</type>
+		<lookup>introtexts</lookup>
+		<label>Introduction Page</label>
+	</intro_id>
+	<response_id>
+		<type>select</type>
+		<lookup>introtexts</lookup>
+		<label>Response Page</label>
+	</response_id>
+	<message_id>
+		<type>select</type>
+		<lookup>introtexts</lookup>
+		<label>Default Message to Target</label>
+	</message_id>
+	<tellfriend_message_id>
+		<type>select</type>
+		<lookup>introtexts</lookup>
+		<label>Tell-a-Friend Message</label>
+	</tellfriend_message_id>
 </array>

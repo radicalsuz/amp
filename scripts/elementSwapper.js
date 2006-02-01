@@ -19,6 +19,8 @@ function addSwapElement ( name, setname ) {
         updateset[ updateset.length ] = this.swapForm.elements[ name ];
     }
 }
+
+
 function getSwapSet ( setname ) {
     for (i=0; i<this.ElementSets.length; i++ ) {
         if (this.ElementSets[i].name == setname) {
@@ -27,22 +29,26 @@ function getSwapSet ( setname ) {
     }
     return false;
 }
+
 function addSwapSet ( setname ) {
     newset = this.ElementSets[ this.ElementSets.length ] = Array();
     newset.name = setname;
 }
+
 function swapSetOn ( givenSet ) {
     if (!givenSet.length) return false;
     for (i=0; i<givenSet.length; i++) {
         givenSet[i].parentNode.parentNode.style.display = this.visibleStyle;
     }
 }
+
 function swapSetOff ( givenSet ) {
     if (!givenSet.length) return false;
     for (i=0; i<givenSet.length; i++) {
         givenSet[i].parentNode.parentNode.style.display = this.hideStyle;
     }
 }
+
 function ActivateSwap ( swapper, setname ) {
     for (n=0; n<swapper.ElementSets.length; n++) {
         swapper.swapSetOff (swapper.ElementSets[n]);

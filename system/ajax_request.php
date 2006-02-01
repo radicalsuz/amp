@@ -1,24 +1,20 @@
 <?php
 require_once("AMP/BaseDB.php");
+require_once( 'AMP/Content/Display/HTML.inc.php');
 
-#decalre what is needed for each request
-if ($_REQUEST['author']) {
-    $value = $_REQUEST['author'];
-    $table = 'articles';
-    $field ='author';
+#declare what is needed for each request
+$allowed_lookups = array( 'author', 'source' );
+
+foreach( $allowed_lookups as $test_lookup ){
+    if ( !( isset( $_REQUEST[ $test_lookup ]) && $_REQUEST[ $test_lookup ])) continue;
+    
+    $partial_value = $_REQUEST[ $test_lookup ];
+    $desired_lookup = 'AMPContentLookup_' . ucfirst( $test_lookup );
+    
 }
 
-if ($_REQUEST['source']) {
-    $value = $_REQUEST['source'];
-    $table = 'articles';
-    $field ='source';
-}
-$sql = "SELECT Distinct $field FROM $table WHERE $field LIKE '".$value."%'";   $R= $dbcon->CacheExecute($sql)or DIE($sql.$dbcon->ErrorMsg());
+$result_set = call_user_func( array( $desired_lookup, 'instance'), $partial_value );
 
-echo '<ul>';
-while (!$R->EOF){ 
-    echo '<li>'.$R->Fields($field).'</li>';
-    $R->MoveNext();
-}
-echo '</ul>';
+$display = &new AMPDisplay_HTML( );
+print $display->_HTML_UL( $result_set );
 ?>
