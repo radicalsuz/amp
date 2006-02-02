@@ -130,12 +130,12 @@ require PUN_ROOT.'include/functions.php';
 require PUN_ROOT.'include/dblayer/common_db.php';
 
 // Load cached config
-@include PUN_ROOT.'cache/cache_config.php';
+@include PUN_CACHE_DIR.'cache_config.php';
 if (!defined('PUN_CONFIG_LOADED'))
 {
     require PUN_ROOT.'include/cache.php';
     generate_config_cache();
-    require PUN_ROOT.'cache/cache_config.php';
+    require PUN_CACHE_DIR.'cache_config.php';
 }
 
 // Make sure we (guests) have permission to read the forums

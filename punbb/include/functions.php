@@ -458,12 +458,12 @@ function get_title($user)
 	// If not already loaded in a previous call, load the cached ranks
 	if ($pun_config['o_ranks'] == '1' && empty($pun_ranks))
 	{
-		@include PUN_ROOT.'cache/cache_ranks.php';
+		@include PUN_CACHE_DIR.'cache_ranks.php';
 		if (!defined('PUN_RANKS_LOADED'))
 		{
 			require_once PUN_ROOT.'include/cache.php';
 			generate_ranks_cache();
-			require PUN_ROOT.'cache/cache_ranks.php';
+			require PUN_CACHE_DIR.'cache_ranks.php';
 		}
 	}
 

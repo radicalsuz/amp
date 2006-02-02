@@ -93,12 +93,12 @@ require PUN_ROOT.'include/dblayer/common_db.php';
 $db->start_transaction();
 
 // Load cached config
-@include PUN_ROOT.'cache/cache_config.php';
+@include PUN_CACHE_DIR.'cache_config.php';
 if (!defined('PUN_CONFIG_LOADED'))
 {
 	require PUN_ROOT.'include/cache.php';
 	generate_config_cache();
-	require PUN_ROOT.'cache/cache_config.php';
+	require PUN_CACHE_DIR.'cache_config.php';
 }
 
 
@@ -131,12 +131,12 @@ if ($pun_config['o_maintenance'] && $pun_user['g_id'] > PUN_ADMIN && !defined('P
 
 
 // Load cached bans
-@include PUN_ROOT.'cache/cache_bans.php';
+@include PUN_CACHE_DIR.'cache_bans.php';
 if (!defined('PUN_BANS_LOADED'))
 {
 	require_once PUN_ROOT.'include/cache.php';
 	generate_bans_cache();
-	require PUN_ROOT.'cache/cache_bans.php';
+	require PUN_CACHE_DIR.'cache_bans.php';
 }
 
 // Check if current user is banned
