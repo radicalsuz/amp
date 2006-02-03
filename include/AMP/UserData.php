@@ -221,26 +221,7 @@ class UserData {
     }
 
     function getResults ( $type = null ) {
-
-        $retarray = array();
-
-        if ( isset( $type ) ) {
-            $udmResults[ $type ] = $this->results[ $type ];
-        } else {
-            $udmResults = $this->results;
-        }
-
-        if ( is_array( $udmResults ) ) {
-            foreach ( $udmResults as $type => $results ) {
-                foreach ( $udmResults[ $type ] as $result ) {
-                    $retarray[] = array( 'type' => $type,
-                                         'result' => $result );
-                }
-            }
-        }
-
-        return $retarray;
-
+        return $this->_getTypedItems( $type, $this->results, 'result' );
     }
 
     /*****
@@ -267,14 +248,33 @@ class UserData {
         return !empty( $this->results );
     }
 
-    function getErrors( ){
-        if ( !$this->hasErrors( )) return false;
-        return $this->errors ;
+    function _getTypedItems( $type, $udmItems, $itemKey = null ){
+
+        $retarray = array();
+
+        if ( isset( $type ) ) {
+            $udmResults[ $type ] = $udmItems[ $type ];
+        } else {
+            $udmResults = $udmItems;
+        }
+
+        if ( !isset( $itemKey )) return $udmResults;
+
+        if ( is_array( $udmResults ) ) {
+            foreach ( $udmResults as $type => $results ) {
+                foreach ( $udmResults[ $type ] as $result ) {
+                    $retarray[] = array( 'type' => $type,
+                                         $itemKey => $result );
+                }
+            }
+        }
+
+        return $retarray;
+
     }
 
-    function getResults( ){
-        if ( !$this->hasResults( )) return false;
-        return $this->results ;
+    function getErrors( $type = null ){
+        return $this->_getTypedItems( $type, $this->errors, 'error' );
     }
 
 //apps can register error handlers and pass the error message as a parameter array

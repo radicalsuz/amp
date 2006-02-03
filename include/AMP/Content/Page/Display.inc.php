@@ -39,10 +39,11 @@ class AMPContent_PageDisplay {
 
     function output_Standard() {
 
+        $content = $this->_page->contentManager->output() ;
         $this->_template->placeNavigation( $this->_page );
         $output =  
                 $this->_header->output().
-                $this->_template->execute( $this->_page->contentManager->output() );
+                $this->_template->execute( $content );
         return $output;
     }
 
