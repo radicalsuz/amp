@@ -4,7 +4,7 @@ require_once("AMP/System/Page.inc.php");
 
 $map = &new ComponentMap_IntroText();
 $page = &new AMPSystem_Page ($dbcon, $map);
-if (isset($_GET['action']) && $_GET['action'] == "list")  $page->showList( true );
+#if (isset($_GET['action']) && $_GET['action'] == "list")  $page->showList( true );
 
 // allow default to link to referring module
 if (isset( $_GET[ 'tool_id' ]) && ($tool_id = $_GET[ 'tool_id' ])) {

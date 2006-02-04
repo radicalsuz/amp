@@ -42,6 +42,7 @@ class AMPSystem_Page {
     var $errors = array();
 
     var $_performed_action;
+    var $_display;
 
     function AMPSystem_Page ( &$dbcon, $component_map=null ) {
         $this->init ($dbcon, $component_map);
@@ -58,7 +59,8 @@ class AMPSystem_Page {
 
     function execute() {
         $this->_initSearch( );
-        if ($this->showList()) return true;
+        $this->_initRequest( );
+        if ($this->getAction()) return true;
 
         $this->_initForm();
 
@@ -73,9 +75,13 @@ class AMPSystem_Page {
         $action_method = 'commit' . ucfirst( $action );
 
         if (method_exists( $this, $action_method )) {
+            $this->setCompletedAction( $action );
             return $this->$action_method();
-            $this->_performed_action = $action;
         }
+    }
+
+    function setCompletedAction( $action ){
+        $this->_performed_action = $action;
     }
 
     function getAction( ){
@@ -83,7 +89,7 @@ class AMPSystem_Page {
     }
 
     function output ( ) {
-        $display = & new AMPSystem_Page_Display( $this );
+        $display = &$this->getDisplay( );
         $diplay_title = "Item";
         
         if (isset($this->component_map)) { 
@@ -95,6 +101,12 @@ class AMPSystem_Page {
         if ($this->showList()) $this->_initComponents('list');
 
         return $display->execute();
+    }
+
+    function &getDisplay( ){
+        if ( isset( $this->_display )) return $this->_display;
+        $this->_display = & new AMPSystem_Page_Display( $this );
+        return $this->_display;
     }
 
     function hasSearch( ){
@@ -113,6 +125,10 @@ class AMPSystem_Page {
         if ($action = $this->search->submitted() ) $this->doAction( $action );
         else $this->_setSearchFormDefaults();
 
+    }
+
+    function _initRequest( ){
+        return $this->component_map->readRequest( $this );
     }
         
 
@@ -331,6 +347,21 @@ class AMPSystem_Page {
         $this->setMessage( $this->source->getErrors(), true );
         $this->addComponent('form');
         return false;
+    }
+
+    function commitInlineUpdate( ) {
+        if ( !$this->component_map->isAllowed( 'inline_update')) return false;
+        $display = &$this->getDisplay( );
+        $display->setTemplate( false );
+        if ( $this->form->isSubmitted( )) {
+            $this->commitSave( );
+            $this->showList( false );
+            return true;
+        }
+        $this->action = 'Update';
+        #$this->form->initAjaxUpdate( );
+        return $this->commitRead( );
+
     }
 
     function &getComponents() {

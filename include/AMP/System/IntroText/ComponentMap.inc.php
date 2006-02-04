@@ -6,6 +6,7 @@ class ComponentMap_IntroText extends AMPSystem_ComponentMap {
 
     var $heading = "Intro Text";
     var $nav_name = "tools";
+    var $_allow_inline_edit = true;
 
     var $paths = array(
         'form' => 'AMP/System/IntroText/Form.inc.php',

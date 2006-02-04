@@ -20,7 +20,7 @@ class AMPSystem_Page_Display {
     var $page;
     var $itemtype;
 
-    var $show_template = true;
+    var $show_template = 'AMPSystem_BaseTemplate';
 
     function AMPSystem_Page_Display( &$page ) {
         $this->page = &$page;
@@ -72,12 +72,16 @@ class AMPSystem_Page_Display {
         return $this->nav_name;
     }
 
+    function setTemplate( $template_class ){
+        $this->show_template = $template_class;
+    }
+
 
     function _templateContent( $content ) {
         if (!$this->show_template) return $content;
         if (isset($GLOBALS['modid'])) $modid = $GLOBALS['modid'];
 
-        $template = & AMPSystem_BaseTemplate::instance();
+        $template = & call_user_func( array( $this->show_template, 'instance'));
 
         if (isset($modid) && $modid) $template->setTool( $modid );
         $template->setToolName( $this->getNavName() );
