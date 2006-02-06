@@ -378,7 +378,7 @@
     </item>
     <item>
         <label>Web Actions</label>
-        <href>action_center.php?action=list</href>
+        <href>sendfax_edit.php</href>
         <per>ACTION_ACCESS</per>
     </item>
     <item>
