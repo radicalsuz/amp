@@ -20,6 +20,7 @@ class AMP_Authentication_LoginType_Admin extends AMP_Authentication_LoginType {
         if ( $user->validatePassword( $password )) {
             $this->_handler->setPermissionLevel( $user->getPermissionGroup() );
             $this->_handler->setUserId( $user->id );
+            define( 'AMP_USERMODE_ADMIN', true);
             return true;
         }
             

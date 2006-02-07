@@ -1,0 +1,23 @@
+<array>
+    <sender_email>
+        <label>Your E-Mail</label>
+        <type>text</type>
+        <size>40</size>
+        <public>1</public>
+		<required>1</required>
+    </sender_email>
+    <subject>
+        <label>Subject</label>
+        <type>text</type>
+        <size>40</size>
+        <public>1</public>
+		<required>1</required>
+    </subject>
+    <message>
+        <label>Message</label>
+        <type>textarea</type>
+        <size>25:48</size>
+        <public>1</public>
+		<required>1</required>
+    </message>
+</array>

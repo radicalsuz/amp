@@ -925,6 +925,11 @@ if ( !function_exists( 'AMP_hasTable')) {
         return ( array_search( $table_name, $tablenames ) !== FALSE );
     }
 }
+
+function &AMP_getHeader( ){
+    if ( AMP_USERMODE_ADMIN ) return AMPSystem_BaseTemplate::instance( );
+    return AMPContent_Header::instance( );
+}
 			
 
 ?>

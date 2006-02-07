@@ -8,6 +8,7 @@ class AMPForm_XML extends AMPForm {
 
     var $fieldFile;
     var $xml_pathtype = "fields";
+    var $_submit_value = 'submit';
     
     function AMPForm_XML ( $name, $method=null, $action=null) {
         $this->init( $name, $method, $action );
@@ -15,7 +16,7 @@ class AMPForm_XML extends AMPForm {
 
 	function init( $name, $method=null, $action=null ) {
 		PARENT::init( $name, $method, $action );
-		if (!($this->addFields( $this->readFields()) )){
+		if (!($this->addFields( $this->readFields()) )) {
 			 trigger_error ( 'XML Field read failed for ' . get_class( $this ) );
 			 return;
 		}
@@ -43,5 +44,14 @@ class AMPForm_XML extends AMPForm {
 	function setDynamicValues() {
 		//placeholder method, should be overwritten by subclasses
 	}
+
+    function defineSubmit( $value, $label = 'Submit'){
+        $result = PARENT::defineSubmit( $value, $label );
+        $this->_submit_value = $value;
+    }
+
+    function submitted( ){
+        return isset($_REQUEST[$this->_submit_value]);
+    }
 }
 ?>

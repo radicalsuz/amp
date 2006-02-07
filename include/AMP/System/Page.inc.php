@@ -353,13 +353,13 @@ class AMPSystem_Page {
         if ( !$this->component_map->isAllowed( 'inline_update')) return false;
         $display = &$this->getDisplay( );
         $display->setTemplate( false );
-        if ( $this->form->isSubmitted( )) {
+        if ( $this->form->submitted( ) && $this->form->validate( )) {
             $this->commitSave( );
             $this->showList( false );
             return true;
         }
         $this->action = 'Update';
-        #$this->form->initAjaxUpdate( );
+        $this->form->initAjaxUpdate( );
         return $this->commitRead( );
 
     }

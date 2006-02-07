@@ -1,6 +1,6 @@
 <?php
 
-/**********************
+/**
  *  AMPForm
  *
  *  a base class for entry forms using the HTML::QuickForm library
@@ -12,7 +12,7 @@
  *  @date 2005-06-27
  *  @author  Austin Putman <austin@radicaldesigns.org>
  *
- **********/
+ */
 
 define('AMP_FORM_UPLOAD_MAX',8388608);
  require_once( 'HTML/QuickForm.php' );
@@ -207,6 +207,14 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     function getJavascript() {
         if (!isset($this->javascript)) return false;
         return $this->javascript;
+    }
+
+    function initAjaxUpdate( ){
+        $pageHeader = &AMPContent_Header::instance( );
+        $pageHeader->addJavaScript( '/scripts/ajax/prototype.js', 'prototype');
+        $pageHeader->addJavaScript( '/scripts/ajax/scriptaculous.js', 'scriptaculous');
+
+        $this->form->updateAttributes( array( 'onSubmit' => 'Ajax.InLineForm.onSubmit( );', 'class' = 'inplaceeditor-form');
     }
 
     #########################################

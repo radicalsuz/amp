@@ -1,20 +1,51 @@
 <?php 
 /*********************
-05-06-2003  v3.01
-Module:  Contact Us
-Description:  sends email to $MM_email_contact
-To Do: declare post vars
+ * contactus.php
+ *
+ * Standard Contact Page
+ * @author Austin Putman <austin@radicaldesigns.org>
+ * @version AMP 3.5.8
+ * @date    2006-02-06
+ */ 
 
-*********************/ 
-$modid = 17;
-$intro_id = 52;
-if (isset($_POST['thank']) && $_POST["thank"]) { 
-	  $intro_id = 53 ;
+if ( !defined( 'AMP_MODULE_ID_CONTACT_US')) define( 'AMP_MODULE_ID_CONTACT_US', 17 );
+if ( !defined( 'AMP_INTROTEXT_ID_CONTACT_US')) define( 'AMP_INTROTEXT_ID_CONTACT_US', 52 );
+if ( !defined( 'AMP_INTROTEXT_ID_CONTACT_US_RESPONSE')) define( 'AMP_INTROTEXT_ID_CONTACT_US_RESPONSE', 53 );
+$modid = AMP_MODULE_ID_CONTACT_US;
+
+require_once("AMP/BaseDB.php");
+require_once( 'Modules/Contact/Form.inc.php');
+
+$form = &new ContactForm( );
+$showForm = !( $form->submitted( ) && $form->validate( ));
+$intro_id = $showForm ? AMP_INTROTEXT_ID_CONTACT_US :
+                        AMP_INTROTEXT_ID_CONTACT_US_RESPONSE ;
+
+require_once("AMP/BaseTemplate.php");
+require_once("AMP/BaseModuleIntro.php");  
+if ( !isset( $MM_email_contact)) $MM_email_contact = false;
+if ( !defined( 'AMP_SITE_EMAIL_CONTACT')) define( 'AMP_SITE_EMAIL_CONTACT', $MM_email_contact );
+
+$form->Build( );
+if ( $showForm ) {
+    $form->enforceRequiredFields( );
+    print $form->output( );
+} elseif ( AMP_SITE_EMAIL_CONTACT ){
+  require_once( 'AMP/System/Email.inc.php');
+  $email_maker = &new AMPSystem_Email( );
+  $email_maker->setRecipient( AMP_SITE_EMAIL_CONTACT );
+  $data = $form->getValues( );
+  $email_maker->setMessage( $data['message'] );
+  $email_maker->setSender( $data['sender_email'] );
+  $email_maker->setSubject( $data['subject'] );
+  $email_maker->execute( );
+
+} else {
+    print AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED;
 }
-include("AMP/BaseDB.php");
-include("AMP/BaseTemplate.php");
-include("AMP/BaseModuleIntro.php");  
 
+require_once("AMP/BaseFooter.php");
+/*
 if ( (isset($_POST['send']) && $_POST["send"]) && $MM_email_contact ) {    
 	mail ( $MM_email_contact, $_POST["subject"], $_POST["message"], "From: ".$_POST["email"]." \nX-Mailer: My PHP Script\n");
 		
@@ -44,6 +75,5 @@ if (!isset($_POST['thank']) || $_POST["thank"] == NULL) { ?>
 </form>
 <?php
 }
- 
-include("AMP/BaseFooter.php");
+*/ 
 ?>

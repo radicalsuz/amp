@@ -31,4 +31,7 @@ if (  !defined( 'AMP_TEXT_SECTIONLIST_ARTICLES_PLUS_CLASS' ) && defined( 'AMP_CO
 
 if (  !defined( 'AMP_TEXT_SECTIONLIST_SECTIONS_BY_SUBSECTION' ))
         define( 'AMP_TEXT_SECTIONLIST_SECTIONS_BY_SUBSECTION', 'List of subsections within each subsection' );
+
+if ( !defined( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED'))
+        define( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED', 'This page has not been configured for use');
 ?>

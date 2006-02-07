@@ -658,14 +658,9 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 			  <div id="comment_list" style="display:none;"><div>
 			  <?php
 			  if ($coms->RecordCount() > 0 ){
-			  function nicetrim ($s,$MAX_LENGTH) {
-				  $s2 = substr($s, 0, $MAX_LENGTH - 3);
-				  $s2 .= "...";
-				  return $s2;
-				}
 			  
 			   while (!$coms->EOF){
-			  	echo '- '.nicetrim($coms->Fields("comment"),100).'<a href="comments.php?id='.$coms->Fields("id").'" target="_new">edit</a><br>';
+			  	echo '- '. AMP_trimText($coms->Fields("comment"),100).'<a href="comments.php?id='.$coms->Fields("id").'" target="_new">edit</a><br>';
 				$coms->MoveNext();
 			  }
 			  ?>
