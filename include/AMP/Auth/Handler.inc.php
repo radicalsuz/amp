@@ -14,6 +14,7 @@ class AMP_Authentication_Handler {
     var $_loginType;
 
     var $userid;
+    var $_require_redirect = false;
 
     function AMP_Authentication_Handler ( $dbcon, $logintype_name = 'admin', $timeout = null ) {
 		$this->notice('creating new handler');
@@ -33,9 +34,9 @@ class AMP_Authentication_Handler {
     }
 
     function is_authenticated () {
-		$this->notice('in is_authenticated');
+		$this->notice( 'in is_authenticated' );
         if ( !isset( $this->_loginType )) {
-			$this->error('login type not set');
+			$this->error( 'login type not set' );
 			return false;
 		}
 
@@ -208,7 +209,8 @@ class AMP_Authentication_Handler {
         if (isset($_REQUEST['logout']) && $_REQUEST['logout']=='logout') $this->do_logout();
         if ( $username = $this->_loginType->submittedUser() ) {
 			$this->notice('getting user info from form');
-             $password = $this->_loginType->submittedPassword();
+            $password = $this->_loginType->submittedPassword();
+            $this->_require_redirect = true;
         } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
 			$this->notice('getting user info from server vars');
             $username = $_SERVER['PHP_AUTH_USER'];
@@ -224,9 +226,16 @@ class AMP_Authentication_Handler {
         if ( $message = $this->_loginType->getInvalidMessage( )) {
             $this->set_message( $message, 'Error');
         }
+        define( 'AMP_USERMODE_ADMIN', false );
 
         return false;
 
+    }
+
+    function redirect_page( ){
+        if ( !$this->_require_redirect ) return false;
+        require_once( 'AMP/System/Page/Urls.inc.php');
+        ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_REDIRECT, 'url='.$_SERVER['REQUEST_URI'] )) ;
     }
 
     function validate_password ( $password, $hash ) {

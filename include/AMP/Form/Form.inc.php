@@ -214,7 +214,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $pageHeader->addJavaScript( '/scripts/ajax/prototype.js', 'prototype');
         $pageHeader->addJavaScript( '/scripts/ajax/scriptaculous.js', 'scriptaculous');
 
-        $this->form->updateAttributes( array( 'onSubmit' => 'Ajax.InLineForm.onSubmit( );', 'class' = 'inplaceeditor-form');
+        $this->form->updateAttributes( array( 'onSubmit' => 'Ajax.InLineForm.onSubmit( );', 'class' => 'inplaceeditor-form'));
     }
 
     #########################################
