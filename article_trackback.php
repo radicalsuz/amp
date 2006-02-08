@@ -4,7 +4,7 @@ require_once( 'AMP/BaseDB.php');
 require_once( 'AMP/Content/Article/Trackback.php');
 
 $article_id = 0;
-if ( isset( $_GET['id']) && is_numeric( $_GET['id'] && $_GET['id'])) {
+if ( isset( $_GET['id']) && is_numeric( $_GET['id']) && $_GET['id']) {
     $article_id = $_GET['id'];
 }
 

@@ -226,7 +226,6 @@ class AMP_Authentication_Handler {
         if ( $message = $this->_loginType->getInvalidMessage( )) {
             $this->set_message( $message, 'Error');
         }
-        define( 'AMP_USERMODE_ADMIN', false );
 
         return false;
 

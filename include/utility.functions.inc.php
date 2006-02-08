@@ -932,7 +932,8 @@ function &AMP_getHeader( ){
         return AMPSystem_Header::instance( );
     }
     require_once( 'AMP/Content/Header.inc.php');
-    return AMPContent_Header::instance( );
+    require_once( 'AMP/Content/Page.inc.php');
+    return AMPContent_Header::instance( AMPContent_Page::instance( ) );
 }
 			
 

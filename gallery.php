@@ -22,12 +22,15 @@ $gallery_id = ( isset( $_GET['id']) && $_GET['id']) ? $_GET['id'] : $gallery_id;
 if ( isset( $fullgal ) && 2 == $fullgal && !defined( 'AMP_GALLERY_DISPLAYTYPE')) define( 'AMP_GALLERY_DISPLAYTYPE' , 'Single');
 if ( !defined( 'AMP_GALLERY_DISPLAYTYPE')) define( 'AMP_GALLERY_DISPLAYTYPE', 'Full');
 
-if ( $gallery_id ){
-    $gallery = &new Gallery( $dbcon, $gallery_id ) ;
+$gallery = false;
+if ( $gallery_id ) $gallery = &new Gallery( $dbcon, $gallery_id ) ;
+
+if ( $gallery && $gallery->isLive( )){
     $currentPage->contentManager->addDisplay( $gallery->getDisplay( AMP_GALLERY_DISPLAYTYPE ));
 } else {
     require_once( 'Modules/Gallery/SetDisplay.inc.php');
     $gallerySet = &new GallerySet( $dbcon );
+    $gallerySet->addCriteriaLive( );
     $currentPage->contentManager->addDisplay( $gallerySet->getDisplay( ));
 }
 

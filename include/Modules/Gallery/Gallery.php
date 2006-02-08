@@ -60,6 +60,10 @@ class Gallery extends AMPSystem_Data_Item {
     function getURL( ){
         return AMP_Url_AddVars( AMP_CONTENT_URL_GALLERY, 'gal='.$this->id );
     }
+
+    function isLive( ){
+        return $this->getData( 'publish');
+    }
 }
 
 ?>

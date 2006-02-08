@@ -2,6 +2,10 @@
     <id>
         <type>hidden</type>
     </id>
+    <publish>
+        <type>checkbox</type>
+        <label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+    </publish>
     <galleryname>
         <type>text</type>
         <label>Gallery Name</label>
