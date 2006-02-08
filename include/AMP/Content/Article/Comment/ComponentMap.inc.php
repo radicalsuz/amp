@@ -1,0 +1,33 @@
+<?php
+
+require_once( 'AMP/System/ComponentMap.inc.php');
+
+class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
+    var $heading = "Comment";
+    var $nav_name = "comments";
+
+    var $paths = array( 
+        'fields' => 'AMP/Content/Article/Comment/Fields.xml',
+        'list'   => 'AMP/Content/Article/Comment/List.inc.php',
+        'form'   => 'AMP/Content/Article/Comment/Form.inc.php',
+        'search_fields'   => 'AMP/Content/Article/Comment/SearchFields.xml',
+        'search'   => 'AMP/Content/Article/Comment/SearchForm.inc.php',
+        'source' => 'AMP/Content/Article/Comment/ArticleComment.php');
+    
+    var $components = array( 
+        'form'  => 'ArticleComment_Form',
+        'list'  => 'ArticleComment_List',
+        'search'   => 'ArticleCommentSearch',
+        'source'=> 'ArticleComment');
+
+    var $_allow_search = true; 
+    /*
+    var $_allow_search = array( 
+        'article' =>    
+            'method' => null,
+            'url_var'   => array( 'article_id', 'cid')
+            );
+    */
+}
+
+?>

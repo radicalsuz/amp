@@ -210,7 +210,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function initAjaxUpdate( ){
-        $pageHeader = &AMPContent_Header::instance( );
+        $pageHeader = &AMP_getHeader( );
         $pageHeader->addJavaScript( '/scripts/ajax/prototype.js', 'prototype');
         $pageHeader->addJavaScript( '/scripts/ajax/scriptaculous.js', 'scriptaculous');
 

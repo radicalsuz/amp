@@ -31,6 +31,7 @@ class AMPSystem_ComponentRequest {
         return ( isset( $this->_request_vars[ $varname ]) && $this->_request_vars[ $varname ] == $value );
     }
 
+
 }
 
 ?>

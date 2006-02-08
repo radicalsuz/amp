@@ -19,6 +19,15 @@ class ArticleCommentSet extends AMPSystem_Data_Set {
         $this->article_id = $article_id;
     }
 
+    function addCriteriaArticle( $article_id ){
+        return $this->setArticle( $article_id );
+    }
+
+    function addCriteriaCid( $article_id ){
+        //retained for legacy compatibility
+        return $this->addCriteriaArticle( $article_id );
+    }
+
     function readPublished() {
         $this->addCriteria( "publish=1" );
     }

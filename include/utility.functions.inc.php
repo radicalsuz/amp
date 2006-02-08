@@ -82,7 +82,7 @@ if ( !function_exists( 'ampredirect' ) ) {
         if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
             $target_url = $_REQUEST['pageredirect'];
         }
-        define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
+        if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT'))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
         header("Location: $target_url");
     }
 
@@ -927,7 +927,11 @@ if ( !function_exists( 'AMP_hasTable')) {
 }
 
 function &AMP_getHeader( ){
-    if ( AMP_USERMODE_ADMIN ) return AMPSystem_BaseTemplate::instance( );
+    if ( defined( 'AMP_USERMODE_ADMIN') && AMP_USERMODE_ADMIN ) {
+        require_once( 'AMP/System/Header.inc.php');
+        return AMPSystem_Header::instance( );
+    }
+    require_once( 'AMP/Content/Header.inc.php');
     return AMPContent_Header::instance( );
 }
 			

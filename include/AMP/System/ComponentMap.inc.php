@@ -10,6 +10,7 @@ class AMPSystem_ComponentMap {
     var $_allow_inline_update = false;
     var $_path_request_handler = 'AMP/System/ComponentRequest.php';
     var $_component_request_handler = 'AMPSystem_ComponentRequest';
+    var $_allow_search = false; 
 
     function getComponents() {
         return $this->components;

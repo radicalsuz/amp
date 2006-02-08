@@ -350,9 +350,12 @@ class AMPSystem_Page {
     }
 
     function commitInlineUpdate( ) {
+        trigger_error( 'trying to commit');
         if ( !$this->component_map->isAllowed( 'inline_update')) return false;
         $display = &$this->getDisplay( );
         $display->setTemplate( false );
+        $this->_initComponents( 'form');
+        trigger_error( 'templateing set to off');
         if ( $this->form->submitted( ) && $this->form->validate( )) {
             $this->commitSave( );
             $this->showList( false );

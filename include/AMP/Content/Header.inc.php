@@ -9,6 +9,7 @@ class AMPContent_Header {
     var $link_rel = array( 'Search'=> '/search.php' );
     var $javaScripts = array( 'functions' => '/scripts/functions.js' );
     var $styleSheets = array( 'default'		=> '/styles_default.css');
+    var $_path_favicon = '/img/favicon.ico';
     var $_extraHtml;
 
     function AMPContent_Header( &$page ) {
@@ -78,8 +79,8 @@ class AMPContent_Header {
 
     function addJavaScript( $script_url, $id = null) {
         if (!$script_url) return false;
-        if (isset($id)) return ($this->styleSheets[ $id ] = $script_url );
-        return ($this->styleSheets[] = $script_url);
+        if (isset($id)) return ($this->javaScripts[ $id ] = $script_url );
+        return ($this->javaScripts[] = $script_url);
     }
 
     function addStylesheet( $link, $id = null) {
@@ -106,9 +107,14 @@ class AMPContent_Header {
     }
 
     function _HTML_FavIcon() {
-        if ( file_exists( AMP_LOCAL_PATH . "/img/favicon.ico" ) ) {
-            return '<link rel="icon" href="/img/favicon.ico" type="image/x-icon" />' . "\n";
-        }
+        $favicon_path = $this->_getFaviconPath( );
+        return '<link rel="icon" href="'. $favicon_path .'" type="image/x-icon" />' . "\n";
+        
+    }
+
+    function _getFaviconPath( ){
+        if ( file_exists( AMP_LOCAL_PATH . $this->_path_favicon ) ) return $this->_path_favicon; 
+        return false;
     }
 
     function _HTML_pageTitle() {

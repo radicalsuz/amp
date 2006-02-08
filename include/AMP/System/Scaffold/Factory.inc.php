@@ -132,7 +132,7 @@ class AMPScaffold_Factory {
     }
 
     function _dateTranslation( $fieldname ) {
-        return "\n       $this->addTranslation( '".$fieldname."', '_makeDbDateTime', 'get');\n";
+        return "\n       ".'$this->addTranslation.'."( '".$fieldname."', '_makeDbDateTime', 'get');\n";
     }
 
     function _writeFile( $target_file, $value ) {

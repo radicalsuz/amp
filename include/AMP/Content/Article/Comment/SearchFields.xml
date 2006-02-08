@@ -1,0 +1,16 @@
+<array>
+    <article>
+        <type>select</type>
+        <label>Find by Article</label>
+        <lookup>
+            <module>content</module>
+            <instance>articles</instance>
+        </lookup>
+        <attr>
+            <onChange>this.form.elements['cid'].value = this.value</onChange>
+        </attr>
+     </article>
+     <cid>
+        <type>hidden</type>
+     </cid>
+</array>

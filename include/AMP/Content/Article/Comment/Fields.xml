@@ -1,0 +1,45 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<articleid>
+		<type>select</type>
+		<label>Related Article</label>
+        <lookup>
+            <module>content</module>
+            <instance>articles</instance>
+        </lookup>
+	</articleid>
+	<date>
+		<type>date</type>
+		<label>Date</label>
+
+        <default>today</default>
+	</date>
+	<comment>
+		<type>textarea</type>
+		<label>Comment</label>
+        <size>25:60</size>
+	</comment>
+    <author_header>
+        <label>Author Info</label>
+        <type>header</type>
+    </author_header>
+	<author>
+		<type>text</type>
+		<label>Name</label>
+	</author>
+	<email>
+		<type>text</type>
+		<label>Email</label>
+	</email>
+	<author_url>
+		<type>text</type>
+		<label>Website</label>
+	</author_url>
+
+</array>

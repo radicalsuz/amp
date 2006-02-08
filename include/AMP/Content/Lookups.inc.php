@@ -301,4 +301,19 @@ class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
     }
 }
 
+class AMPContentLookup_Articles extends AMPContent_Lookup{
+    var $datatable = 'articles';
+    var $result_field = 'Concat( DATE( datecreated ), " : ", left( title, 60 )) as articlename ';
+    var $id_field = "id";
+    var $sortby = 'datecreated DESC, title';
+    var $criteria = 'trim( title ) != "" and !isnull( title )';
+    
+    function AMPContentLookup_Articles( ){
+        $this->init( );
+        foreach( $this->dataset as $id => $title ){
+            $this->dataset[$id] = strip_tags( $title );
+        }
+    }
+}
+
 ?>

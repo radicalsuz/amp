@@ -14,6 +14,7 @@
  * * * * * * **/
 require_once( 'AMP/System/Nav/Manager.inc.php' );
 require_once( 'AMP/System/Menu.inc.php');
+require_once( 'AMP/System/Header.inc.php');
 
 class AMPSystem_BaseTemplate {
     
@@ -21,30 +22,24 @@ class AMPSystem_BaseTemplate {
     var $form_id;
     var $modid;
 
-    var $script_files = array(
-        '../scripts/system_header.js',
-        'Connections/popcalendar.js',
-        '../scripts/functions.js', 
-        '../scripts/ajax/prototype.js',
-        '../scripts/ajax/scriptaculous.js' );
-
-
-    var $css_files = array( 'system_interface.css' );
-
-    var $page_title;
-
     var $nav_name;
 
 	var $_use_form_nav = true;
+    var $_header;
 
     function AMPSystem_BaseTemplate() {
         $this->page_title = AMP_SITE_NAME . ' Administration';
+        $this->_header = &AMPSystem_Header::instance( );
     }
 
     function &instance() {
         static $basetemplate = false;
         if (!$basetemplate) $basetemplate = new AMPSystem_BaseTemplate();
         return $basetemplate;
+    }
+
+    function &getHeader( ){
+        return $this->_header;
     }
 
     ####################################
@@ -141,11 +136,14 @@ class AMPSystem_BaseTemplate {
 
 
     function _HTML_pageHeader() {
+        return $this->_header->output( );
+        /*
         $output = "<html>\n<head>\n" . $this->_HTML_browserTitle();
         $output .= $this->_HTML_docType();
         $output .= $this->_HTML_styleSheets();
         $output .= $this->_HTML_javaScripts();
         return $output . "</head>\n";
+        */
     }
 
     function _HTML_systemLogo() {
