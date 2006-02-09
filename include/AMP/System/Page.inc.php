@@ -60,6 +60,7 @@ class AMPSystem_Page {
     function execute() {
         $this->_initSearch( );
         $this->_initRequest( );
+
         if ($this->getAction()) return true;
 
         $this->_initForm();

@@ -18,6 +18,7 @@ class Gallery_Form extends AMPSystem_Form_XML {
     function _showGalleryImages( $data, $fieldname ) {
         if ( isset( $data['id'])) {
             $this->setFieldValueSet( 'img', AMPContentLookup_GalleryImages::instance( $data['id']));
+            return $data['id'];
         }
     }
 }

@@ -2,15 +2,15 @@
     <id>
         <type>hidden</type>
     </id>
+    <publish>
+        <type>checkbox</type>
+        <label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+    </publish>
 	<img>
 		<type>imagepicker</type>
 		<label>Choose Image</label>
 	    <required>1</required>
 	</img>
-    <publish>
-        <type>checkbox</type>
-        <label>Publish</label>
-    </publish>
     <galleryid>
         <type>select</type>
         <label>Photo Gallery</label>

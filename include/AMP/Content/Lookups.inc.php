@@ -253,6 +253,7 @@ class AMPContentLookup_Podcasts extends AMPContent_Lookup{
 class AMPContentLookup_GalleryImages extends AMPContent_Lookup {
     var $datatable = 'gallery';
     var $result_field = 'img';
+    var $id_field = 'img';
     var $sortby = 'img';
 
     function AMPContentLookup_GalleryImages( $gallery_id = null ){

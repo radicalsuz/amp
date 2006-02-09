@@ -6,7 +6,7 @@ class GalleryImage_Form extends AMPSystem_Form_XML {
 
     function GalleryImage_Form( ){
         $name = "galleryImages";
-        $this->init( $name, 'POST', 'gallery_image.php?action=list' );
+        $this->init( $name );
     }
 
     function setDynamicValues( ){

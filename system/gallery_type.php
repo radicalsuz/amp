@@ -1,7 +1,8 @@
 <?php
-#$modid = "8";
 require_once("Modules/Gallery/ComponentMap.inc.php");
 require_once("AMP/System/Page.inc.php");
+
+$modid = AMP_MODULE_ID_GALLERY;
 
 $map = &new ComponentMap_Gallery();
 $page = &new AMPSystem_Page ($dbcon, $map);
