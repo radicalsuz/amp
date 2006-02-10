@@ -34,8 +34,14 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     }
 
     function setPage() {
+        if ( is_array( $this->source )) return $this->setPageArray();
         $this->source->setLimit( $this->_qty );
         $this->source->setOffset( $this->_offset );
+    }
+
+    function setPageArray( ){
+        $this->source_total = count($this->source);
+        $this->source = array_slice( $this->source, $this->getOffset( ), $this->getOffset( ) + $this->getLimit( ) );
     }
 
     function setLimit( $limit ) {
@@ -99,6 +105,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     function getSourceTotal( $reset = false ) {
         if ((!$reset) && isset($this->source_total)) return $this->source_total;
 
+        if ( is_array( $this->source )) return count( $this->source );
         $this->source_total = $this->source->NoLimitRecordCount();
         return $this->source_total;
     }

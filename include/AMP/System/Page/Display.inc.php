@@ -18,7 +18,7 @@ require_once("AMP/System/BaseTemplate.php");
 class AMPSystem_Page_Display {
 
     var $page;
-    var $itemtype;
+    var $itemtype = 'Item';
 
     var $show_template = 'AMPSystem_BaseTemplate';
 

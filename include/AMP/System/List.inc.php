@@ -105,7 +105,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
         $output = "";
 
-        while ( $this->currentrow = $this->source->getData()) {
+        while ( $this->currentrow = $this->_getSourceRow()) {
             $output .= $this->_HTML_listRow ( $this->_translateRow($this->currentrow));
         
         }		
@@ -113,6 +113,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
                $output .
                $this->_HTML_footer();
 
+    }
+
+    function _getSourceRow( ){
+        return $this->source->getData( );
     }
 
     ###########################################

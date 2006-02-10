@@ -63,12 +63,14 @@ class AMPSystem_Page {
 
         if ($this->getAction()) return true;
 
-        $this->_initForm();
+        if( $this->_initForm()) {
+            $action = $this->form->submitted();
+            if ( !$action ) $action = "read"; 
 
-        $action = $this->form->submitted();
-        if ( !$action ) $action = "read"; 
+            return $this->doAction ( $action );
 
-        return $this->doAction ( $action );
+        }
+
     }
 
     function doAction( $action ) {
@@ -91,14 +93,13 @@ class AMPSystem_Page {
 
     function output ( ) {
         $display = &$this->getDisplay( );
-        $diplay_title = "Item";
         
         if (isset($this->component_map)) { 
             $display_title = $this->component_map->getHeading();
             $display->setNavName( $this->component_map->getNavName() );
+            $display->setItemType( $display_title );
         }
 
-        $display->setItemType( $display_title );
         if ($this->showList()) $this->_initComponents('list');
 
         return $display->execute();
@@ -129,6 +130,7 @@ class AMPSystem_Page {
     }
 
     function _initRequest( ){
+        if ( !isset( $this->component_map )) return false;
         return $this->component_map->readRequest( $this );
     }
         
@@ -182,6 +184,7 @@ class AMPSystem_Page {
 
     function _initComponents ( $component_type = null, $reset=false ) {
         $init_classes = $this->component_class;
+        if ( !is_array( $component_type ) && !isset( $init_classes[$component_type])) return false;
         $this->_requireComponents( $component_type );
 
         if (isset($component_type)) {
@@ -197,16 +200,18 @@ class AMPSystem_Page {
             $this->doCallbacks( $type, AMP_PAGE_ACTION_COMPONENT_INIT ); 
 
         }
+        return true;
     }
 
     function _initForm() {
-        $this->_initComponents( 'form' );
+        if ( !$this->_initComponents( 'form' )) return false;
         if (!isset($this->includes['copier'])) $this->form->removeSubmit( 'copy' );
         if (!isset($_REQUEST['id'])) {
             $this->form->removeSubmit( 'copy' );
             $this->form->removeSubmit( 'delete' );
         }
         $this->form->Build();
+        return true;
     }
 
 

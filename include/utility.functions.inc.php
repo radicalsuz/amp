@@ -564,7 +564,6 @@ if (!function_exists('array_combine_key')) {
 if (!function_exists('AMPfile_list')) {
 		function AMPfile_list($file,$ext=NULL){ 
 				$dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
-				//die($dir_name);
 				$dir = opendir($dir_name);
 				$basename = basename($dir_name);
 				$fileArr = array();

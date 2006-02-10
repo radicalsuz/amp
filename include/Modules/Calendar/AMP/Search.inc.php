@@ -126,7 +126,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
             $index_sql="SELECT ".$index_col." FROM calendar where id in(".$index_ids.")";
             if (isset($orderby)) $index_sql.= " ORDER BY ".$orderby;
             if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $index_sql,  "calendar_index2");
-            if($indexset=&$this->dbcon->CacheGetAll($index_sql)) return $indexset;
+            if($indexset=&$this->dbcon->CacheGetAll( $index_sql )) return $indexset;
             else return false;
         } else { 
             return false;

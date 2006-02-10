@@ -462,6 +462,10 @@ class UserDataPlugin {
         return $dropped;
     }
 
+    function getPrefix( ){
+        return $this->_field_prefix;
+    }
+
     function convertFieldNamestoUDM( $fields=null, $use_keys=FALSE ) {
         $udmFields = array();
         if (!isset($fields)) {

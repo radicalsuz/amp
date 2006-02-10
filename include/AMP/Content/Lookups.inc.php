@@ -276,6 +276,32 @@ class AMPContentLookup_GalleryImages extends AMPContent_Lookup {
         return $lookup->dataset;
     }
 }
+
+class AMPContentLookup_GalleriesByImage extends AMPContent_Lookup {
+    var $datatable = 'gallery';
+    var $result_field = 'galleryid';
+    var $sortby = 'galleryid';
+
+    function AMPContentLookup_GalleriesByImage( $img_filename ){
+        $this->_addCriteriaImage( $img_filename );
+        $this->init( );
+    }
+
+    function _addCriteriaImage( $img_filename ){
+        $dbcon = &AMP_Registry::getDbcon( );
+        $this->criteria = 'img =' . $dbcon->qstr( $img_filename );
+    }
+    function &instance( $img_filename ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new AMPContentLookup_GalleriesByImage( $img_filename );
+        } else {
+            $lookup->_addCriteriaImage( $img_filename );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+}
 class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
     var $datatable = 'articlereltype';
     var $result_field = 'articleid';
