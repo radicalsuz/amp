@@ -220,6 +220,12 @@ var $id;
 
         return false;
     }
+
+	function updateEvent( $save_data ) {
+		if (!isset($save_data['id'])) return false;	
+		$new_data = array_merge($this->readData($save_data['id']), $save_data);
+		return $this->saveEvent($save_data);
+	}
 	
 
     function parse_URL_criteria () {
