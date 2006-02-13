@@ -663,10 +663,10 @@ class UserDataPlugin {
 		$sql = "DELETE FROM userdata_plugins_options where plugin_id = " . $this->plugin_instance;
 		$result = $this->dbcon->Execute( $sql );
 	}
-		
 
-
-
+	function error($message, $level=E_USER_WARNING) {
+		trigger_error($message);
+	}
 }
 
 ?>
