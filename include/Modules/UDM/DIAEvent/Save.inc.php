@@ -27,15 +27,16 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 
     var $_field_prefix;
     var $_calendar_plugin;
+	var $_event_key;
 
-    function UserDataPlugin_Save_DIA(&$udm, $plugin_instance) {
-        $this->init($udm, $plugin_instance);
+    function UserDataPlugin_Save_DIAEvent(&$udm, $plugin_instance) {
         $this->_calendar_plugin =& $udm->registerPlugin( 'AMPCalendar', 'Save');
         $this->_field_prefix = $this->_calendar_plugin->getPrefix( );
+        $this->init($udm, $plugin_instance);
     }
 
     function getSaveFields() {
-        return $this->getAllDataFields( );
+        return $this->_calendar_plugin->getAllDataFields( );
     }
 
     function save ( $data ) {
@@ -52,13 +53,19 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 		}
 
         $supporter_save =& $this->udm->getPlugin( 'DIA', 'Save');
-        if ( !($supporter_key = $supporter_save->getSupporterKey( ) )) return false;
+        if ( !($supporter_key = $supporter_save->getSupporterKey( ) )) {
+			$this->error("couldn't retrieve supporter key", E_USER_ERROR);
+			return false;
+		}
         $data['supporter_KEY'] = $supporter_key;
 
 		$data = $this->translate($data);
 
 		$api =& DIA_API::create();
-		if ( !($event_key = $api->addEvent( $data ) )) return false;
+		if ( !($event_key = $api->addEvent( $data ) )) {
+			$this->error('api failed to save event', E_USER_ERROR);
+			return false;
+		}
         $this->setEventKey( $event_key );
         $this->_calendar_plugin->updateDIAKey( $event_key );
 
