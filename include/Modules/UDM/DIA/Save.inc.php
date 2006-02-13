@@ -39,6 +39,8 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             'enabled'   => true,
             'type'      => 'header' );
 
+	var $_supporter_key;
+
     function UserDataPlugin_Save_DIA(&$udm, $plugin_instance) {
         $this->init($udm, $plugin_instance);
     }
@@ -80,6 +82,7 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
 
 		$api =& DIA_API::create();
 		$supporter_id = $api->addSupporter( $data[ 'Email'], $data );
+		$this->_supporter_key = $supporter_id;
 
 /*XXX: there is an api for linking with one step in the addSupporter method
   TODO: make that api clearer and use that
@@ -110,6 +113,10 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
 		}
 
 		return $return;
+	}
+
+	function getSupporterKey() {
+		return $this->_supporter_key;
 	}
 		
 }
