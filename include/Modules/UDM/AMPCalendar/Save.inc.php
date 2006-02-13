@@ -32,13 +32,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 
 
     function getSaveFields() {
-        $save_fields=array();
-        $types_to_avoid = array ('header', 'static', 'html');
-        foreach ($this->fields as $fname=>$fdef) {
-            if (array_search( $fdef['type'], $types_to_avoid ) ) continue;
-            $save_fields[]=$fname;
-        }
-        return $save_fields;
+		return $this->getAllDataFields();
     }
 
     function _register_fields_dynamic() {
@@ -67,6 +61,12 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 
         return false;
 	
+	}
+
+	function updateDIAKey($key) {
+		return $this->cal->updateEvent(
+							array('id' 		=> $this->cal->id,
+								  'dia_key' => $key));
 	}
 
 }	
