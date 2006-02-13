@@ -132,6 +132,14 @@ class DIA_API {
 		return $this->process( "groups", $data );
 	}
 
+	function addEvent( $data ) {
+		return $this->process( "event", $data );
+	}
+
+	function getEvent($key) {
+		return $this->get('event', $key);
+	}
+
 	function isMember($supporter_key, $group_key) {
 		return $this->getRecordKey('supporter_groups', array('supporter_KEY' => $supporter_key,
 															 'groups_KEY' => $group_key));
