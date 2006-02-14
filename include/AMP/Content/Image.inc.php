@@ -20,7 +20,7 @@ class Content_Image {
         if (isset($filename)) $this->setFile( $filename );
     }
 
-    function setFile( $filename ){
+    function setFile( $filename ) {
         $this->filename = $filename;
         if ( !$filename ) return;
         $this->setSize(getimagesize( $this->getPath( $this->getImageClass() ) )); 
@@ -88,6 +88,10 @@ class Content_Image {
 
     function getPath( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {
         return AMP_LOCAL_PATH . $this->getURL( $image_type );
+    }
+
+    function getImageClasses( ){
+        return array( AMP_IMAGE_CLASS_OPTIMIZED, AMP_IMAGE_CLASS_THUMB, AMP_IMAGE_CLASS_ORIGINAL );
     }
 
     function setData( $data ) {

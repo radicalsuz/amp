@@ -24,5 +24,9 @@ class GalleryImageSet extends AMPSystem_Data_Set {
     function addCriteriaStatus($value ){
         return $this->addCriteria( 'publish='.$value);
     }
+
+    function getCriteriaImage( $img_filename ){
+        return 'img=' . $this->dbcon->qstr( $img_filename );
+    }
 }
 ?>

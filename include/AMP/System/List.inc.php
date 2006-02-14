@@ -74,14 +74,23 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function init(&$source) {
      
-        $this->source = &$source;
+        $this->setSource( $source );
         $this->_setSort();
         $this->_activatePager( );
         $this->_prepareData();
         if (array_search( 'publish', $this->col_headers ) !== FALSE ) {
             $this->addTranslation( 'publish', '_showPublishStatus' );
         }
+        $this->_after_init( );
 
+    }
+
+    function _after_init ( ){
+        //interface
+    }
+
+    function setSource( &$source ){
+        $this->source = &$source;
     }
 
     function _activatePager() {
@@ -337,6 +346,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
             $url_criteria_set = AMP_URL_Values();
             if (empty( $url_criteria_set )) return "";
             unset ($url_criteria_set['sort']);
+            unset ($url_criteria_set['sort_direction']);
             $this->_url_criteria = $url_criteria_set; 
         }
         return $this->_url_criteria;
@@ -372,6 +382,11 @@ class AMPSystem_List extends AMPDisplay_HTML {
     function _showPublishStatus( $publish_value, $field = "publish" ) {
         if ($publish_value == 1) return AMP_PUBLISH_STATUS_LIVE;
         return AMP_PUBLISH_STATUS_DRAFT;
+    }
+
+    function _makePrettyDate( $value, $fieldname,$data  ){
+        if ( !isset( $data[$fieldname])) return "";
+        return date( 'M d, Y', $data[$fieldname]);
     }
 
     function addLookup( $field , $dataset ) {

@@ -57,6 +57,12 @@ class AMPSystem_Page {
 
     }
 
+    function &instance( $component_map = null ){
+        static $global_page = false;
+        if ( !$global_page ) $global_page = new AMPSystem_Page( AMP_Registry::getDbcon( ), $component_map );
+        return $global_page;
+    }
+
     function execute() {
         $this->_initSearch( );
         $this->_initRequest( );
