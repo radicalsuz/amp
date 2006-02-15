@@ -83,7 +83,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 	function translate( $data ) {
         //this is totally gonna hurt
 		$translation = array(
-            'publish' =>    'Status',
+			'dia_key' =>	'event_KEY', //or maybe just 'key'
             'event'   =>    'Event_Name',
             'cost'    =>    'Ticket_Price',
             'email1'  =>    'Contact_Email',
@@ -94,7 +94,6 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
             'lzip'      =>  'Zip',
             'fulldesc'  =>  'Description');
 
-
 		foreach($data as $key => $value) {
 			if(isset($translation[$key])) {
 				$return[$translation[$key]] = $value;
@@ -103,9 +102,25 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 			}
 		}
 
+		$recurring_options = array( 0 => 'None',
+									4 => 'YEARLY',
+									3 => 'MONTHLY',
+									1 => 'DAILY');
+		if($data['recurring_options'] = 2) {
+			$return['Recurrence_Interval'] = 7;
+			$return['Recurrence_Frequency'] = 'DAILY';
+		} else {
+			$return['Recurrence_Frequency'] = $recurring_options[$data['recurring_options']];
+		}
+
+		if($data['publish']) {
+			$return['Status'] = 'Active';
+		} else {
+			$return['Status'] = 'Inactive';
+		}
         $return['Start'] = strtotime( $data['date'] . ' ' . $data['time']);
         $return['End'] = strtotime( $data['endtime']);
-        if ( isset( $data['cost'])) $return['This_Event_Costs_Money'] = true;
+        if ( isset( $return['Ticket_Price'])) $return['This_Event_Costs_Money'] = true;
 
 		return $return;
 	}
