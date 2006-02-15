@@ -132,7 +132,7 @@ var $id;
 		$fields['id']=array('type'=>'hidden', 'label'=>'', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>null, 'enabled'=>true);
 
 		$fields['fulldesc'] = array('type'=>'textarea', 'label'=>'Full Description of the Event (optional)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>"10:40", 'enabled'=>true);
-		$fields['header3']=array('type'=>'header', 'label'=>'The following information is for the staff at '.$GLOBALS['SiteName'].' and will not be listed on the website, unless it is the same as the information above.', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true) ;
+		$fields['header3']=array('type'=>'header', 'label'=>'The following information is for the staff at '. AMP_SITE_NAME .' and will not be listed on the website, unless it is the same as the information above.', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true) ;
 		$fields['lat']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 		$fields['lon']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 
@@ -491,12 +491,12 @@ var $id;
         } else {
 */
             if ( method_exists( $this, '_register_default_plugins' ) ) {
-                $this->_register_default_plugins();
+                return $this->_register_default_plugins();
             }
 
         #}
 
-        return $r;
+        return false;
     }
 
     /****
@@ -513,6 +513,8 @@ var $id;
         $r = $this->registerPlugin( 'Output',   'DisplayHTML') and $r;
         $r = $this->registerPlugin( 'AMP',      'Sort'      ) and $r;
         $r = $this->registerPlugin( 'Output',   'Actions'   ) and $r;
+
+        return $r;
         
     }
 

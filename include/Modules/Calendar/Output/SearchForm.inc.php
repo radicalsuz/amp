@@ -72,7 +72,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		if (isset($_REQUEST['bydate'])&&($_REQUEST['bydate'])) {
 			$sql_criteria[]='((`date` >= '.$this->dbcon->qstr($_REQUEST['bydate']).' AND `recurring_options`=0) OR (`enddate`>='.$this->dbcon->qstr($_REQUEST['bydate']).' AND `recurring_options`>0))';
 		} else {
-            if ($_REQUEST['old']!=1)  
+            if (!( isset($_REQUEST['old']) && $_REQUEST['old']==1) ) 
                 $sql_criteria[]='((`date` >= CURDATE() AND `recurring_options`=0) || (`recurring_options`>0 AND `enddate`>= CURDATE() ))';
 		
 		}
@@ -160,7 +160,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 			$sql_criteria[]="uid=".$this->dbcon->qstr($_REQUEST['uid']);
 		}
         //Publish status
-        if (is_numeric($_REQUEST['publish'])){
+        if (isset( $_REQUEST['publish']) && is_numeric($_REQUEST['publish'])){
             if ($_REQUEST['publish']) $sql_criteria[]="publish=1";
             else $sql_criteria[]="publish!=1";
         }
@@ -204,19 +204,22 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 
 
 		//event types
-		$def['caltype'] = array('type'=>'select', 'label'=>'By Event Type', 'required'=>false,  'values'=>$this->lookups['caltype']['Set'], 'size'=>null, 'value'=>$_REQUEST['caltype'], 'public'=>'1');
+        $event_type_value = ( isset( $_REQUEST['caltype']) && $_REQUEST['caltype']) ? $_REQUEST['caltype'] : '';
+		$def['caltype'] = array('type'=>'select', 'label'=>'By Event Type', 'required'=>false,  'values'=>$this->lookups['caltype']['Set'], 'size'=>null, 'value'=>$event_type_value, 'public'=>'1');
 
 
 		//country listing
-		$def['lcountry'] =array('type'=>'select', 'label'=>'By Country', 'required'=>false,  'values'=>$this->lookups['lcountry']['Set'], 'size'=>null, 'value'=>$_REQUEST['lcountry'], 'public'=>'1');
+        $country_value = ( isset( $_REQUEST['lcountry']) && $_REQUEST['lcountry']) ? $_REQUEST['lcountry'] :'';
+		$def['lcountry'] =array('type'=>'select', 'label'=>'By Country', 'required'=>false,  'values'=>$this->lookups['lcountry']['Set'], 'size'=>null, 'value'=>$country_value, 'public'=>'1');
 
 		//state listing
 		//accepts area values
-		if ($_REQUEST['area']) {
+        $state_code = "";
+		if (isset( $_REQUEST['area']) && $_REQUEST['area']) {
 				//this is coming from the left nav pulldown, must convert the ID to a two digit code
 				$state_code=$this->lookups['area']['Set'][$_REQUEST['area']];	
 		}
-		if ($_REQUEST['state']) $state_code = $_REQUEST['state'];
+		if (isset( $_REQUEST['state']) && $_REQUEST['state']) $state_code = $_REQUEST['state'];
 		
 		$def['state']=array('type'=>'select', 'label'=>'By State/Province', 'required'=>false,  'values'=>$this->lookups['lstate']['Set'], 'size'=>null, 'value'=>$state_code, 'public'=>'1');
 
@@ -225,7 +228,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		$def['start_text']=array('type'=>'static', 'label'=>'Search the Calendar<BR>', 'public'=>'1');
 
 		//date
-		$mydate=($_REQUEST['bydate']&& isset($_REQUEST['bydate']))?
+		$mydate=( isset($_REQUEST['bydate']) && $_REQUEST['bydate'])?
 			$_REQUEST['bydate']:
 			date("Y-m-d");
 			
@@ -233,9 +236,11 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 	
 		//distance by zip
 		$distance_options=array('1'=>'1','5'=>'5', '10'=>'10', '25'=>'25', '100'=>'100', '250'=>'250');
+        $distance_value = ( isset( $_REQUEST['distance']) && is_numeric( $_REQUEST['distance'])) ? $_REQUEST['distance'] : 5;
 		$def['distance']=array('type'=>'select', 'label'=>'Within:', 'required'=>false,  'values'=>$distance_options, 
-                            'size'=>null, 'value'=>(is_numeric($_REQUEST['distance'])?$_REQUEST['distance']:'5'), 'public'=>'1');
-		$def['zip']=array('type'=>'text', 'label'=>'&nbsp;miles of US zipcode:&nbsp', 'value'=>$_REQUEST['zip'], 'size'=>'8', 'public'=>'1');
+                            'size'=>null, 'value'=> $distance_value, 'public'=>'1');
+        $zip_value = ( isset( $_REQUEST['zip']) && ( $_REQUEST['zip'])) ? $_REQUEST['zip'] : '';
+		$def['zip']=array('type'=>'text', 'label'=>'&nbsp;miles of US zipcode:&nbsp', 'value'=>$zip_value, 'size'=>'8', 'public'=>'1');
 		
 		//student checkbox
 		$def['student']=array('type'=>'checkbox', 'label'=>'Student Events Only', 'value'=>1, 'public'=>'1','enabled'=>'1');
@@ -244,12 +249,47 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 
 				
 		$publish_options=array(''=>'Any', '0'=>'draft', '1'=>'live');
-		$def['publish']=array('type'=>'select', 'label'=>'Status', 'value'=>$_REQUEST['publish'], 'values'=>$publish_options);
-        $def['recurring_options']=array('type'=>'select', 'label'=>'Repeating', 'value'=>$_REQUEST['recurring_options'], 'values'=>array(''=>'Any','0'=>'No','1'=>'Yes'), 'public'=>'0', 'enabled'=>'1');
+        $publish_value = ( isset( $_REQUEST['publish']) && ( $_REQUEST['publish'])) ? $_REQUEST['publish'] : '';
+		$def['publish']=array('type'=>'select', 'label'=>'Status', 'value'=>$publish_value, 'values'=>$publish_options);
+
+        $recurring_value= ( isset( $_REQUEST['recurring_options']) && ( $_REQUEST['recurring_options'])) ? $_REQUEST['recurring_options'] : '';
+        $def['recurring_options']=array('type'=>'select', 'label'=>'Repeating', 'value'=>$recurring_value, 'values'=>array(''=>'Any','0'=>'No','1'=>'Yes'), 'public'=>'0', 'enabled'=>'1');
 		#city is defined by state read_request routine
         #$def['city']=array('type'=>'select', 'label'=>'Select City', 'values'=>$this->lookups['lcity'], 'value'=>$_REQUEST['city']);
-        $def['sortby']=array('type'=>($_REQUEST['sortby']?'select':'hidden'), 'label'=>($_REQUEST['sortby']?'Sort:':''), 'value'=>$_REQUEST['sortby'], 'public'=>1, 'enabled'=>1, 'values'=>array(''=>'Default',$_REQUEST['sortby']=>$_REQUEST['sortby']));
-        $def['old']=array('type'=>($_REQUEST['old']?'checkbox':'hidden'), 'label'=>($_REQUEST['old']?'Past Events':''), 'value'=>'1', 'public'=>1, 'enabled'=>'1' );
+        if ( isset( $_REQUEST['sortby']) && $_REQUEST['sortby']){
+            $def['sortby']=array(   'type'=>'select', 
+                                    'label'=>'Sort:',
+                                    'value'=>$_REQUEST['sortby'], 
+                                    'public'=>1, 
+                                    'enabled'=>1, 
+                                    'values'=>array(    ''=>'Default',
+                                                        $_REQUEST['sortby']=>$_REQUEST['sortby'])
+                                );
+
+        } else {
+            $def['sortby']= array(
+                        'type'  =>  'hidden', 
+                        'label' =>  '', 
+                        'public'=>1, 
+                        'enabled'=>1) ;
+
+        }
+        if ( isset( $_REQUEST['old']) && $_REQUEST['old']){
+
+            $def['old'] =   array(
+                        'type'  =>   'checkbox',
+                        'label'=>   'Past Events',
+                        'value'=>'1', 
+                        'public'=>1, 
+                        'enabled'=>'1' );
+        } else {
+
+            $def['old'] =   array(
+                        'type'  =>  'hidden', 
+                        'label' =>  '', 
+                        'public'=>1, 
+                        'enabled'=>'1' );
+        }
 
 		return $def;
 
@@ -419,7 +459,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 					$id_field="id";
 				}
 
-				if ($this_lookup['LookupDistinctField']) {
+				if (isset( $this_lookup['LookupDistinctField']) && $this_lookup['LookupDistinctField']) {
 					$lookup_sql = "SELECT DISTINCT " . $this_lookup['LookupField'] . ", $id_field";
 				} else {
 					$lookup_sql = "SELECT DISTINCT $id_field, " . $this_lookup['LookupField'];

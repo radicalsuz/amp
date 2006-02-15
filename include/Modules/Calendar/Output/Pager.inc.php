@@ -35,12 +35,12 @@ class CalendarPlugin_Pager_Output extends CalendarPlugin {
 	}
 
 	function read_request() {
-		if(is_numeric($_REQUEST['offset'])&&$_REQUEST['offset']) {
+		if(isset( $_REQUEST['offset']) && is_numeric($_REQUEST['offset'])&&$_REQUEST['offset']) {
 			$this->offset=$_REQUEST['offset'];
 		} else {
 			$this->offset='0';
 		}
-		if(is_numeric($_REQUEST['qty'])&&$_REQUEST['qty']) {
+		if(isset( $_REQUEST['qty']) && is_numeric($_REQUEST['qty'])&&$_REQUEST['qty']) {
 			$this->return_qty=$_REQUEST['qty'];
 		} else {
 			$this->return_qty=$this->options['max_qty']['value'];

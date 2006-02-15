@@ -45,8 +45,10 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
     function CalendarPlugin_Search_AMP (&$calendar, $plugin_instance=null) {
         
         $this->init ($calendar, $plugin_instance);
-		if (($this->options['global_criteria']['value'])) { 
-            $this->criteria[]=$this->options['global_criteria']['value']; 
+		if (isset( $this->options['global_criteria'])
+            && isset( $this->options['global_criteria']['value'])
+            && ($this->options['global_criteria']['value'])) { 
+                $this->criteria[]=$this->options['global_criteria']['value']; 
         }
 		if (!$this->calendar->admin) { 
             $this->criteria[]="publish=1"; 

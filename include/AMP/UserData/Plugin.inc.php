@@ -410,6 +410,7 @@ class UserDataPlugin {
     
     function uncheckData( $keyname, $value ) {
 
+        if ( !isset( $this->udm->fields[ $keyname ])) return $value;
         $fDef = $this->udm->fields[ $keyname ];
         $types_to_modify = array( "checkgroup" );
         if (array_search($fDef['type'], $types_to_modify)===FALSE) return $value;
