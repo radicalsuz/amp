@@ -7,6 +7,8 @@
  *  
  *  03-21-2005
  **********************/
+
+require_once('Modules/Calendar/Lookups.inc.php');
  
 class Calendar {
 
