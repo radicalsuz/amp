@@ -170,7 +170,7 @@ Class Maps {
 			}
 			
 			$C= $this->dbcon->CacheExecute($sql)or DIE("Error getting state count in functon build_count Query:".$sql.$this->dbcon->ErrorMsg());
-//			if ($S->Fields("state") =="CA") { die (count(id));}//die ($C[0][0]);}
+//			if ($S->Fields("state") =="CA") { die (count(id));}//die ($C[0][0]);
 			$this->Count[$S->Fields("State")]['data'] = $C->Fields("count(id)"); 
 			$this->Count[$S->Fields("State")]['label'] = $S->Fields("statename"); 
 	

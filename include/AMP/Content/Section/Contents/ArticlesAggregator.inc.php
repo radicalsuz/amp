@@ -16,7 +16,12 @@ class SectionContentSource_ArticlesAggregator extends SectionContentSource_Artic
     ### private data source methods ###
     ###################################
 
+    function _addCriteriaSection( ){
+        $this->_source->addCriteriaSectionDescendent( $this->_section->id );
+    }
+
     function getSectionCriteria() {
+        //deprecated
 
         $base_section = "type=".$this->_section->id ;
         if (!($child_ids = $this->_getAllSubsections())) return $base_section;
@@ -24,6 +29,8 @@ class SectionContentSource_ArticlesAggregator extends SectionContentSource_Artic
     }
 
     function _getAllSubsections() {
+
+        //deprecated
         if (!($id_set = $this->_map->getDescendants( $this->_section->id ))) return false;
         return "type in (" . join( ", ", ( $id_set) ). ")";
     }

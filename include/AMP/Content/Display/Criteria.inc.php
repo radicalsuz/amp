@@ -18,12 +18,18 @@ class AMPContent_DisplayCriteria {
     function clean( &$contentSource ) {
         $contentSource->addCriteria( $this->_getClassCriteria() );
         $this->cleanStatus( $contentSource );
+        $this->cleanPermissions( $contentSource );
+    }
+
+    function cleanPermissions( &$contentSource ){
+        if ( method_exists( $contentSource, 'addCriteriaPublic' )) $contentSource->addCriteriaPublic( );
     }
 
     function cleanStatus( &$contentSource ) {
-        if ( method_exists( $contentSource, 'addCriteriaStatus')) {
+        if ( method_exists( $contentSource, 'addCriteriaStatus' )) {
             return $contentSource->addCriteriaStatus( AMP_CONTENT_STATUS_LIVE );
         }
+        
         $contentSource->addCriteria( $this->_getStatusCriteria() );
     }
 

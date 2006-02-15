@@ -27,11 +27,17 @@ class SectionContentSource_Articles extends SectionContentSource {
 
     function _setCriteria() {
         $this->_setBaseCriteria();
-        $this->_source->addCriteria( $this->getSectionCriteria() );
+        $this->_addCriteriaSection( );
+        #$this->_source->addCriteria( $this->getSectionCriteria() );
         $this->_addLegacyCriteria() ;
     }
 
+    function _addCriteriaSection( ){
+        $this->_source->addCriteriaSection( $this->_section->id );
+    }
+
     function getSectionCriteria() { 
+        //deprecated
         $base_section = "type=".$this->_section->id ;
         if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return $base_section;
         if (!($related_ids = $this->_getRelatedArticles())) return $base_section;
@@ -46,6 +52,7 @@ class SectionContentSource_Articles extends SectionContentSource {
     }
 
     function _getRelatedArticles( $section_id = null) {
+        //deprecated, use SectionContentsManager:: or AMP_Content_Article:: methods instead
         require_once( 'AMP/Content/Section/RelatedSet.inc.php' );
         if (!isset($section_id)) $section_id = $this->_section->id;
 

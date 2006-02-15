@@ -58,6 +58,7 @@ class SectionContents_Manager {
     }
 
     function getSectionCriteria() {
+        //deprecated -- use 
         if (!method_exists( $this->_contentSource, 'getSectionCriteria' )) return false;
         return $this->_contentSource->getSectionCriteria();
     }
@@ -98,8 +99,7 @@ class SectionContents_Manager {
         require_once( 'AMP/Content/Section/RelatedSet.inc.php' );
         if ( !isset( $section_id )) return false;
 
-        $related = &new SectionRelatedSet( AMP_Registry::getDbcon(), $section_id );
-        $relatedContent = &$related->getLookup( 'typeid' );
+        $relatedContent = AMPContentLookup_RelatedArticles::instance( $section_id );
         if (empty( $relatedContent )) return false;
 
         return "id in (" . join( ", ", array_keys( $relatedContent ) ). ")";

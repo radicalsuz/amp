@@ -328,6 +328,32 @@ class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
     }
 }
 
+class AMPContentLookup_RelatedArticles extends AMPContent_Lookup {
+    var $datatable = 'articlereltype';
+    var $result_field = 'typeid';
+    var $id_field = 'articleid';
+
+    function AMPContentLookup_RelatedArticles( $section_id = null ){
+        if ( isset( $section_id )) $this->_addCriteriaSection( $section_id );
+        $this->init( );
+    }
+
+    function _addCriteriaSection( $article_id ){
+        $this->criteria = "typeid =" . $article_id ;
+    }
+
+    function &instance( $section_id ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new AMPContentLookup_SectionsByArticle ( $section_id );
+        } else {
+            $lookup->_addCriteriaSection( $section_id );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+}
+
 class AMPContentLookup_Articles extends AMPContent_Lookup{
     var $datatable = 'articles';
     var $result_field = 'Concat( DATE( datecreated ), " : ", left( title, 60 )) as articlename ';
@@ -339,6 +365,28 @@ class AMPContentLookup_Articles extends AMPContent_Lookup{
         $this->init( );
         foreach( $this->dataset as $id => $title ){
             $this->dataset[$id] = strip_tags( $title );
+        }
+    }
+}
+
+class AMPContentLookup_ProtectedSections extends AMPContent_Lookup {
+    var $datatable = 'articletype';
+    var $result_field = 'secure';
+    var $criteria = 'secure = 1';
+
+    function AMPContentLookup_ProtectedSections( ){
+        $this->init( );
+        if ( empty( $this->dataset )) return;
+        $map = &AMPContent_Map::instance( );
+        foreach( $this->dataset as $section_id => $secure ){
+            if ( !( $children = $map->getDescendants( $section_id ))) continue;
+            $this->appendChildren( $children );
+        }
+    }
+
+    function appendChildren( $child_set ){
+        foreach( $child_set as $section_id ){
+            $this->dataset[$section_id] = 1;
         }
     }
 }

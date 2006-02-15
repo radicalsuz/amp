@@ -26,14 +26,24 @@ class ArticleSet extends AMPSystem_Data_Set {
     }
 
     function addCriteriaSection( $value ) {
-        $base_section = "type=" . $value;
-        if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return $this->addCriteria( $base_section );
-        require_once( 'AMP/Content/Section/Contents/Manager.inc.php');
-        if (!($related_ids = SectionContents_Manager::getRelatedArticles( $value ))) return $this->addCriteria( $base_section );
+        return $this->addCriteria( $this->_getCriteriaSection( $value ));
+    }
 
+    function _getCriteriaSection( $section_id ){
+        $base_section = "type=" . $section_id;
+        if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return $base_section ;
+        require_once( 'AMP/Content/Section/Contents/Manager.inc.php');
+        if (!($related_ids = SectionContents_Manager::getRelatedArticles( $section_id ))) return $base_section ;
         return $this->addCriteria( "( ". $base_section . ' OR ' . $related_ids . ")" );
     }
 
+
+    function addCriteriaPublic( ){
+        $protected_sections = AMPContent_Lookup::instance( 'protectedSections');
+        if ( empty( $protected_sections )) return;
+        $this->addCriteria( 'type not in( '. join( ',', array_keys( $protected_sections) ) .' )');
+
+    }
     function addCriteriaStatus( $value ) {
         if ( !( $value || $value==='0')) return false;
         $this->addCriteria( 'publish='.$value ) ;
@@ -58,8 +68,12 @@ class ArticleSet extends AMPSystem_Data_Set {
 
     function addCriteriaClass( $class_value ) {
         if ( !$class_value ) return false;
-        if ( is_array( $class_value ) && !empty( $class_value )) return $this->addCriteria( 'class in ( ' . join( ',', $class_value ) . ' )');
-        return $this->addCriteria( 'class=' . $class_value ) ;
+        return $this->addCriteria( $this->_getCriteriaClass( $class_value ));
+    }
+
+    function _getCriteriaClass( $class_value ){
+        if ( is_array( $class_value ) && !empty( $class_value )) return 'class in ( ' . join( ',', $class_value ) . ' )';
+        return 'class=' . $class_value  ;
     }
 
     function addCriteriaExcludeClass( $class_value ){
@@ -69,8 +83,23 @@ class ArticleSet extends AMPSystem_Data_Set {
 
     }
 
+    function addCriteriaSectionDescendent( $section_id ){
+        $base_section = "type=".$section_id ;
+        $map = &AMPContent_Map::instance( );
+
+        if (!($child_ids = $map->getDescendants( $section_id ))) return $this->addCriteria( $base_section );
+        $this->addCriteria(  "(" . $child_ids . ' OR '. $base_section . ")");
+
+    }
+
     function addSortNewestFirst( ) {
         $this->setSort( array( 'date DESC', 'id DESC'));
+    }
+
+    function addCriteriaSectionOrClass( $section_id, $class_id ){
+        $section_criteria = $this->_getCriteriaSection( $section_id );
+        $class_criteria = $this->_getCriteriaClass( $class_id );
+        return $this->addCriteria( "( ". $class_criteria . " OR " . $section_criteria ." )");
     }
 
 }

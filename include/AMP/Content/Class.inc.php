@@ -46,12 +46,17 @@ class ContentClass extends AMPSystem_Data_Item {
     }
 
     function addContentsCriteriaSection( $section_id ) {
+        $contents = &$this->getContents( );
+        $contents->addCriteriaSection( $section_id );
+        /*
         $base_section = "type=".$section_id ;
         if (!($related_ids = $this->_getRelatedArticles( $section_id ))) return $this->addContentsCriteria( $base_section );
 
         return $this->addContentsCriteria( "( ". $base_section . ' OR ' . $related_ids . ")" );
+        */
     }
 
+    /*
     function _getRelatedArticles( $section_id = null) {
         require_once( 'AMP/Content/Section/RelatedSet.inc.php' );
 
@@ -61,6 +66,7 @@ class ContentClass extends AMPSystem_Data_Item {
 
         return "id in (" . join( ", ", array_keys( $relatedContent) ). ")";
     }
+    */
 
     function &getDisplay() {
         $classes = filterConstants( 'AMP_CONTENT_CLASS' );

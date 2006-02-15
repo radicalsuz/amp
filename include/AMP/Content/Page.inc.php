@@ -665,6 +665,7 @@ class AMPContent_Page {
         }
         return false;
     }
+
 // }}}  public methods         location confirmation methods
 
 // {{{  private methods        legacy compatibility
