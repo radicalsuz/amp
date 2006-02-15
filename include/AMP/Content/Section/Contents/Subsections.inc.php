@@ -23,7 +23,7 @@ class SectionContentSource_Subsections extends SectionContentSource {
         $this->_display_crit_source->cleanStatus( $this->_source );
     }
 
-    function addCriteriaSection( ){
+    function _addCriteriaSection( ){
         $this->_source->addCriteriaSection( $this->_section->id );
     }
 

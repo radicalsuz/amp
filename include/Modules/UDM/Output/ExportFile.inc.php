@@ -26,14 +26,14 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
                                     'available'=>true,
                                     'type'=>'text',
                                     'label'=>'Fields to include'),
-        'display_fields'=>array(    'default'=>null,
-                                    'available'=>true,
-                                    'type'=>'text',
-                                    'label'=>'Fields to include'),
         'show_headers'=> array( 'default'=> true,
                                 'available'=> true,
                                 'type'=>'checkbox',
                                 'label'=>'Include Column Headers' ),
+        'export_raw_values' => array(   'default'   =>  null,
+                                        'available' =>  true,
+                                        'type'      =>  'text',
+                                        'label'     =>  'Export Raw Values for Fields'),
         'delimiter_type'=> array ( 'default'=> 'csv',
                                 'available'=> true,
                                 'type'=>'select',
@@ -126,6 +126,10 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     function setupColumns( $fieldset_def ) {
         foreach ($fieldset_def as $column) {
             if (!($type = $this->validateColumn( $column ))) continue;
+            if ( array_search( $column, $this->_raw_values ) !==FALSE){
+                $result_fields[]=$column;
+                continue;
+            }
             switch ($type) {
                 case 'text':
                 case 'textarea':
@@ -297,6 +301,9 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         $this->file_extension = $this->format_values[$options['delimiter_type']]['extension'];
         $this->delimiter = $this->format_values[$options['delimiter_type']]['delimiter'];
         $this->setLookup('publish', array("0"=>"draft" , "1"=>"live"));
+        if ( isset( $options['export_raw_values'] )) {
+            $this->_raw_values = preg_split( "/\s?,\s?/", $options['export_raw_values']);
+        }
 
         
      }
