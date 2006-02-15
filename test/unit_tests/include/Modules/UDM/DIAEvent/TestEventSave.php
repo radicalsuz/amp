@@ -6,13 +6,13 @@ require_once( 'Modules/UDM/DIA/Save.inc.php' );
 require_once( 'Modules/UDM/DIAEvent/Save.inc.php' );
 
 require_once( 'Modules/Calendar/Calendar.inc.php' );
-class TestDIAEventSave extends UnitTestCase {
+class TestEventSave extends UnitTestCase {
 	var $_udm;
 	var $_plugin;
 
 	var $_now = false;
 
-    function TestDIAEventSave() {
+    function TestEventSave() {
         $this->UnitTestCase('Dia Event Save');
     }
 

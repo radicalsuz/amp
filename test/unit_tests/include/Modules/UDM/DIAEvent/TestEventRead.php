@@ -5,13 +5,13 @@ require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Modules/UDM/DIAEvent/Read.inc.php' );
 
 require_once( 'Modules/Calendar/Calendar.inc.php' );
-class TestDIAEventRead extends UnitTestCase {
+class TestEventRead extends UnitTestCase {
 	var $_udm;
 	var $_plugin;
 
 	var $_now = false;
 
-    function TestDIAEventRead() {
+    function TestEventRead() {
         $this->UnitTestCase('Dia Event Read');
     }
 
@@ -47,6 +47,7 @@ class TestDIAEventRead extends UnitTestCase {
 	}
 
 	function testDoActionRead() {
+		$this->dump(array_keys($this->_udm->getPlugins('Read')));
 		$this->_udm->doAction('Read', array('dia_event_key' => 10915));
 		$this->dump($this->_udm->getData());
 	}
