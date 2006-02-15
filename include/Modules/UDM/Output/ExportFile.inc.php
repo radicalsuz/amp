@@ -51,6 +51,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     var $current_row;
     var $dataset;
     var $Lookups;
+    var $_raw_values = array( );
 
 
     function UserDataPlugin_ExportFile_Output ( &$udm, $plugin_instance=null ) {

@@ -84,6 +84,7 @@ class UserDataPlugin {
 
         // Make sure we fetch options set across our inherited classes.
         $this->_register_common('options');
+        $this->_register_options_global( );
 
         $dbcon   = &$this->dbcon;
         $options = &$this->options;
@@ -108,6 +109,19 @@ class UserDataPlugin {
         if (method_exists( $this, '_register_options_dynamic' )) {
             $this->_register_options_dynamic();
         }
+    }
+
+    function _register_options_global( ){
+        $plugin_key_parts = split( '_', strtoupper( get_class( $this )));
+        $plugin_subclass = array_shift( $plugin_key_parts );
+        $plugin_key = join ( '_', array_reverse( $plugin_key_parts ));
+
+		foreach( array_keys($this->options) as $option_name) {
+			$option_const = 'AMP_PLUGIN_OPTION_'. $plugin_key .'_'. strtoupper($option_name);
+			if(!isset($this->options[$option_name]['value']) && defined($option_const)) {
+				$this->options[$option_name]['value'] = constant($option_const);
+			}
+		}
     }
 
     function _register_fields () {

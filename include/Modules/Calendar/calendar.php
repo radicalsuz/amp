@@ -118,17 +118,33 @@ if ($event->Fields("event") == ($null)) { //start failed type called?>
 <p class="text">There are currently no events of this type planned.</p>
 <?php }//end failed type called
  } //end typecalled
+ function AMP_old_Calendar_getRegionDescription( &$event ){
+    $statename = $event->Fields( 'statename');
+    if ( $statename != 'International') return $statename;
+    static $country_list = false;
+    if ( !$country_list ) {
+        require_once( 'AMP/Region.inc.php');
+        $region = &new Region( );
+        $country_list = $region->getSubRegions( 'WORLD');
+    }
+    if ( isset( $country_list[ $event->Fields( 'lcountry')])){
+        return $country_list [ $event->Fields( 'lcountry') ];
+    }
+    return $statename;
+ }
 //start calendar 
 ####################################called event#######################################
-if (isset($calid)) { ?>
+if (isset($calid)) { 
+    $region_description = AMP_old_Calendar_getRegionDescription( $event );
+    ?>
 <p><span class="title"><?php echo $event->Fields("event")?></span><br>
  <span class="eventsubtitle"><?php echo DoDate( $event->Fields("date"), 'l, F jS Y') ?>&nbsp;<?php echo $event->Fields("time")?> <br>
- <?php echo $event->Fields("lcity")?>,&nbsp;<?php echo $event->Fields("statename")?> </span><br><br>
+ <?php echo $event->Fields("lcity")?>,&nbsp;<?php echo $region_description; ?> </span><br><br>
   <span class="text"> <?php if (($event->Fields("shortdesc") != ($null)) && ($event->Fields("fulldesc") == ($null))) { ?>
   <?php echo converttext( $event->Fields("shortdesc"));?><br><?php }?>
   <?php echo (converttext($event->Fields("fulldesc"))); ?><br>
   <?php if ($event->Fields("location") != ($null)) { ?>
-  <br><br><b>Location:&nbsp;</b><br><?php echo $event->Fields("location")?>&nbsp;<?php echo $event->Fields("laddress")?>&nbsp;<?php echo $event->Fields("lcity")?>&nbsp;<?php echo $event->Fields("statename")?>&nbsp;<?php echo $event->Fields("lzip")?>&nbsp; 
+  <br><br><b>Location:&nbsp;</b><br><?php echo $event->Fields("location")?>&nbsp;<?php echo $event->Fields("laddress")?>&nbsp;<?php echo $event->Fields("lcity")?>&nbsp;<?php echo $region_description; ?>&nbsp;<?php echo $event->Fields("lzip")?>&nbsp; 
   <?php }?>
   <?php if (($event->Fields("contact1") != ($null)) or ($event->Fields("phone1") != ($null)) or ($event->Fields("email1") != ($null)) ) { ?>
   <br><br>
@@ -165,7 +181,7 @@ elseif (isset($area)) {
    { 
    $calledcity = $eventcity->Fields("lcity");
    $event2=$dbcon->CacheExecute("SELECT eventtype.name , calendar.id,
-calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry,  calendar.lstate, states.statename   FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid and calendar.lcity = '".$calledcity."'  order by calendar.date asc") or DIE($dbcon->ErrorMsg());
+calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry,  calendar.lstate, states.statename   FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid and calendar.lcity = '".$calledcity."'  order by calendar.date, calendar.event asc") or DIE($dbcon->ErrorMsg());
 
    echo "<br><b><big>".$event2->Fields("lcity");
      if ($event2->Fields("lstate") == "53") { echo ",&nbsp;".$event2->Fields("lcountry");  }
@@ -226,12 +242,13 @@ $reventcity->MoveNext();
   $reventcountry->MoveNext();
 } 
 }
-###############################DEFUALT LAYOUT #############################################
+###############################DEFAULT LIST LAYOUT #############################################
 else {
  while (!$event->EOF) 
    { 
+    $region_description = AMP_old_Calendar_getRegionDescription( $event );
 ?>
-<br><a href="calendar.php?calid=<?php echo $event->Fields("id")?>" class="eventtitle"><?php echo $event->Fields("lcity")?>,&nbsp;<?php echo $event->Fields("statename")?>: <?php echo $event->Fields("event")?></a><br>
+<br><a href="calendar.php?calid=<?php echo $event->Fields("id")?>" class="eventtitle"><?php echo $event->Fields("lcity")?>,&nbsp;<?php echo $region_description;?>: <?php echo $event->Fields("event")?></a><br>
  </b>
   <span class="eventsubtitle"><?php echo DoDate( $event->Fields("date"), 'l, F jS Y') ?>&nbsp;<?php echo $event->Fields("time")?></span> 
   <span class="text"> 
@@ -245,9 +262,10 @@ else {
 <?php if ($revent__totalRows != 0 ){?><h3>Weekly, Monthly or other Repeating Events</h3><?php } ?>
 <?php while (!$revent->EOF) 
    { 
+    $region_description = AMP_old_Calendar_getRegionDescription( $revent );
    
 ?>
-<br><a href="calendar.php?calid=<?php echo $revent->Fields("id")?>" class="eventtitle"><?php echo $revent->Fields("lcity")?>,&nbsp;<?php echo $revent->Fields("statename")?>: <?php echo $revent->Fields("event")?></a><br>
+<br><a href="calendar.php?calid=<?php echo $revent->Fields("id")?>" class="eventtitle"><?php echo $revent->Fields("lcity")?>,&nbsp;<?php echo $region_description; ?>: <?php echo $revent->Fields("event")?></a><br>
  </b>
   <span class="eventsubtitle"><?php echo $revent->Fields("time")?></span> 
   <span class="text"> 
