@@ -53,11 +53,27 @@ class AMP_System_File {
     }
 
     function search( $folder_path, $filename_pattern = null ){
-        $folder = opendir( $folder_path );
+        /** suggested patterns
+         * send in patterns as *php or *namestuff* or namestuff*
+         * wildcard * is replaced with regex ( [0-9a-zA-Z\.-_ ]+
+         * filename extension: /([0-9a-zA-z\.-_ ]+\.php)/
+         *
+         * */
+        if ( isset( $filename_pattern)) 
+            $regex_pattern =    '/' . 
+                                str_replace( 
+                                        array( '*', '.'),
+                                        array( '[0-9a-zA-Z\.-_ ]+', '\.'), 
+                                        $filename_pattern)  
+                                . '/';
+
+        $folder = &opendir( $folder_path );
         $result_set = array( );
         if ( substr( $folder_path, -1 ) !== DIRECTORY_SEPARATOR ) $folder_path .= DIRECTORY_SEPARATOR;
+        $result_text = system( 'ls '.$filename_pattern );
         while( $file_name = readdir( $folder )){
             if (($file_name ==".") || ($file_name == "..")) continue; 
+            if ( isset( $regex_pattern ) && !preg_match( $file_name, $regex_pattern, $name_matches )) continue;
             $result_set[ $file_name ] = &new AMP_System_File( $folder_path . $file_name );
         }
         $this->sort( $result_set );

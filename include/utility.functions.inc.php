@@ -934,6 +934,20 @@ function &AMP_getHeader( ){
     require_once( 'AMP/Content/Page.inc.php');
     return AMPContent_Header::instance( AMPContent_Page::instance( ) );
 }
+
+function AMP_Authenticate( $loginType = 'content', $do_login = false ){
+    static $auth_status = array( );
+    if ( isset( $auth_status[$loginType]) ) return $auth_status[ $loginType ];
+
+    require_once( 'AMP/Auth/Handler.inc.php');
+    $AMP_Authen_Handler = &new AMP_Authentication_Handler( AMP_Registry::getDbcon(), $loginType );
+
+    if ( !( $auth_status[ $loginType ] = $AMP_Authen_Handler->is_authenticated() )) {
+        if ( $do_login ) $AMP_Authen_Handler->do_login();
+    }
+    return $auth_status[ $loginType ];
+    
+}
 			
 
 ?>

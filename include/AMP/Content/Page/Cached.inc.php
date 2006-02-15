@@ -16,6 +16,7 @@ class AMPContent_Page_Cached {
     */
 
     function execute() {
+        if ( AMP_Authenticate( 'content' )) return false;
         if ($output = &AMP_getCachedPageItem( MEMCACHE_KEY_PAGEHTML )) {
             print $output;
             return true;

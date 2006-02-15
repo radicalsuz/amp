@@ -42,7 +42,7 @@ class TestDIAEventSave extends UnitTestCase {
         $event_key = $dia_save->execute( );
 		$this->assertTrue($this->_plugin->getEventKey());
 		$this->assertTrue($event_key);
-		$this->dump($event_key);
+		#$this->dump($event_key);
 
         $api =& DIA_API::create( );
         $event = $api->getEvent( $event_key );
@@ -55,29 +55,57 @@ class TestDIAEventSave extends UnitTestCase {
         //}
     }
 
+    function testDiaKeyUpdate( ){
+        /*
+        $save =& $this->_udm->getPlugin( 'AMPCalendar', 'Save');
+        $this->assertTrue($save->execute( ));
+		$this->assertTrue($save->getSupporterKey());
+
+		$dia_save =& $this->_udm->getPlugin('DIAEvent', 'Save');
+        $event_key = $dia_save->execute( );
+		$this->assertTrue($this->_plugin->getEventKey());
+		$this->assertTrue($event_key);
+		#$this->dump($event_key);
+
+        $api =& DIA_API::create( );
+        */
+
+    }
+
     function _populateUDM( ){
 //        $calendar_dummy = &new Calendar( $this->_udm->dbcon );
 		#$dates = array('plugin_AMPCalendar_endtime', 'plugin_AMPCalendar_time', 'plugin_AMPCalendar_enddate', 'plugin_AMPCalendar_date');
 		$dates = array('endtime', 'time', 'enddate', 'date');
-        #$field_defs = $this->_udm->fields;
-        $field_defs = $this->_plugin->_calendar_plugin->getSaveFields();
+        $numbers = array( 'cost', 'lzip', 'distributed_event_KEY');
+        $field_defs = array_combine_key( 
+                            $this->_plugin->_calendar_plugin->getSaveFields( ), 
+                            $this->_plugin->_calendar_plugin->getFields( )
+                            );
         foreach( $field_defs as $fieldName => $values){
             if( $values['type'] == 'checkbox') {
                 $dummy_data[$fieldName] = true;
+            //dates
             } elseif( array_search($fieldName,$dates) !== false ) {
                 $dummy_data[$fieldName] = $this->now();
+            //numbers
+            } elseif( array_search($fieldName,$numbers) !== false ) {
+                $dummy_data[$fieldName] = 9;
+            //default
             } else {
                 $dummy_data[$fieldName] = $fieldName."_DUMMY";
             } 
         }
         #$this->_udm->setData( $dummy_data );
 		$this->_plugin->_calendar_plugin->setData($dummy_data);
+		AMP_varDump( $this->_plugin->_calendar_plugin->getData());
+
 		
     }
 
     function now( ) {
        if( !$this->_now ) {
-           $this->_now = date('r' );
+           $this->_now = '2006-01-20';
+           #$this->_now = date('r' );
        }
        return $this->_now;
     }

@@ -22,6 +22,8 @@ class AMPContent_DisplayCriteria {
     }
 
     function cleanPermissions( &$contentSource ){
+        if ( AMP_Authenticate( 'content')) return;
+
         if ( method_exists( $contentSource, 'addCriteriaPublic' )) $contentSource->addCriteriaPublic( );
     }
 

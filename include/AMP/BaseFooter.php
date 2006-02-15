@@ -42,7 +42,7 @@ print $finalPageHtml;
  *
  *  @var    AMPContentPage_Cached
  */
-if ( AMP_SITE_MEMCACHE_ON && isset($GLOBALS['cached_page']) && empty( $_POST) && (!$currentPage->isRedirected()) ) {
+if ( AMP_SITE_MEMCACHE_ON && isset($GLOBALS['cached_page']) && empty( $_POST) && (!$currentPage->isRedirected()) && ( !AMP_Authenticate( 'content' ))) {
     $cached_page->save( $finalPageHtml );
 }
 
