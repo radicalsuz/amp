@@ -13,7 +13,9 @@ class UserDataPlugin_Read_AMPCalendar extends UserDataPlugin {
     // We take one option, a calid, and no fields.
     var $cal;
     var $options     = array( 'calid' => array(   'available' => false,
-                                                    'value' => null) );
+                                                    'value' => null),
+							  'dia_event_key' => array( 'available' => false,
+													'value' => null) );
 
     // Available for use in forms.
     var $available   = true;
@@ -32,11 +34,24 @@ class UserDataPlugin_Read_AMPCalendar extends UserDataPlugin {
     
     function execute( $options = null ) {
         $options = array_merge($this->getOptions(), $options);
+
+		if(isset($options['dia_event_key'])) {
+//use if($udm->admin) for pulling in events from DIA that aren't yet in AMP
+			$dia_event_key = $options['dia_event_key'];
+			$keys = AMPSystem_Lookup::instance('CalendarDiaKey');
+			if(isset($keys[$dia_event_key])) {
+				$options['calid'] = $keys[$dia_event_key];
+			} else {
+				return false;
+			}
+		}
+
         // Check for the existence of a userid.
         if (!(isset( $options['calid'] )&&$options['calid'])) return false;
 
         if ($calData = $this->cal->readData( $options['calid'])) {
             $this->setData( $calData );
+			
             return true;
         }
         return false;
