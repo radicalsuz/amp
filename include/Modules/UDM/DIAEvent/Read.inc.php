@@ -90,6 +90,12 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 			}
 		}
 
+		if(isset($data['distributed_event_KEY'])) {
+			$type_lookup = AMPSystem_Lookup::instance('DistributedEvent');
+			if($type = array_search($data['distributed_event_KEY'], $type_lookup)) {
+				$return['typeid'] = $type;
+			}
+		}
 		return $return;
 	}
 		

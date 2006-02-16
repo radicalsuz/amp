@@ -139,6 +139,13 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 		}
         if ( isset( $return['Ticket_Price'])) $return['This_Event_Costs_Money'] = true;
 
+		if(isset($data['typeid'])) {
+			$type_lookup = AMPSystem_Lookup::instance('DistributedEvent');
+			if(($key = $type_lookup[$data['typeid']])) {
+				$return['distributed_event_KEY'] = $key;
+			}
+		}	
+
 		return $return;
 	}
 		
