@@ -29,6 +29,18 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
     var $_calendar_plugin;
 	var $_event_key;
 
+	var	$translation = array(
+			'dia_key' =>	'event_KEY', //or maybe just 'key'
+            'event'   =>    'Event_Name',
+            'cost'    =>    'Ticket_Price',
+            'email1'  =>    'Contact_Email',
+            'location' =>   'Directions',
+            'laddress' =>   'Address',
+            'lcity'     =>  'City',
+            'lstate'    =>  'State',
+            'lzip'      =>  'Zip',
+            'fulldesc'  =>  'Description');
+
     function UserDataPlugin_Save_DIAEvent(&$udm, $plugin_instance) {
         $this->_calendar_plugin =& $udm->registerPlugin( 'AMPCalendar', 'Save');
         $this->_field_prefix = $this->_calendar_plugin->getPrefix( );
@@ -40,6 +52,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
     }
 
     function save ( $data ) {
+		$this->notice('entering diaevent save plugin');
         $options=$this->getOptions();
 
 		if(!defined('DIA_API_ORGCODE') && isset($options[ 'orgKey' ])) {
@@ -69,6 +82,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
         $this->setEventKey( $event_key );
         $this->_calendar_plugin->updateDIAKey( $event_key );
 
+		$this->error('returning event key: '.$this->getEventKey(), E_USER_NOTICE);
         return $this->getEventKey( );
     }
 
@@ -82,18 +96,9 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 
 	function translate( $data ) {
         //this is totally gonna hurt
-		$translation = array(
-			'dia_key' =>	'event_KEY', //or maybe just 'key'
-            'event'   =>    'Event_Name',
-            'cost'    =>    'Ticket_Price',
-            'email1'  =>    'Contact_Email',
-            'location' =>   'Directions',
-            'laddress' =>   'Address',
-            'lcity'     =>  'City',
-            'lstate'    =>  'State',
-            'lzip'      =>  'Zip',
-            'fulldesc'  =>  'Description');
 
+		$translation = $this->translation;
+		
 		foreach($data as $key => $value) {
 			if(isset($translation[$key])) {
 				$return[$translation[$key]] = $value;
@@ -118,8 +123,20 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 		} else {
 			$return['Status'] = 'Inactive';
 		}
-        $return['Start'] = strtotime( $data['date'] . ' ' . $data['time']);
-        $return['End'] = strtotime( $data['endtime']);
+		
+		$start = strtotime($data['date'].' '.$data['time']);
+		if(!$start || (-1 == $start)) {
+			trigger_error('couldnot strtotime date and time concatenated');
+			$start = strtotime($data['date']);
+		}
+		if($start && (-1 != $start)) {
+			$return['Start'] = dia_formatdate($start);
+		}
+
+		$end = strtotime( $data['endtime']);
+		if($end && (-1 != $end)) {
+			$return['End'] = dia_formatdate($end);
+		}
         if ( isset( $return['Ticket_Price'])) $return['This_Event_Costs_Money'] = true;
 
 		return $return;

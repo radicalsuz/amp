@@ -13,6 +13,18 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 //XXX: set this dynamically by getting it from the calendar plugin
 	var $_field_prefix = "plugin_AMPCalendar";
 
+	var	$translation = array (
+			'event_KEY' => 'dia_key',
+			'Event_Name' => 'event',
+			'Ticket_Price' => 'cost',
+			'Contact_Email' => 'email1',
+			'Directions' => 'location',
+			'Address' => 'laddress',
+			'City' => 'lcity',
+			'State' => 'lstate',
+			'Zip' => 'lzip',
+			'Description' => 'fulldesc');
+
 	function UserDataPlugin_Read_DIAEvent(&$udm, $plugin_instance=null) {
         $this->cal = &new Calendar( $udm->dbcon, null, $udm->admin );
 		$this->init($udm, $plugin_instance);
@@ -35,17 +47,7 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 
 	function translate($data) {
         //this is totally gonna hurt
-		$translation = array (
-			'event_KEY' => 'dia_key',
-			'Event_Name' => 'event',
-			'Ticket_Price' => 'cost',
-			'Contact_Email' => 'email1',
-			'Directions' => 'location',
-			'Address' => 'laddress',
-			'City' => 'lcity',
-			'State' => 'lstate',
-			'Zip' => 'lzip',
-			'Description' => 'fulldesc');
+		$translation = $this->translation;
 
 		foreach($data as $key => $value) {
 			if(isset($translation[$key])) {
@@ -74,23 +76,17 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 		}
 
 		if(isset($data['Start']) && $data['Start']) {
-			$start = strtotime($data['Start']);
-			if(!($start && ($start != -1))) {
-				$start = $data['Start'];
-			}
+			$start = dia_datetotime($data['Start']);
 			if(isset($start) && $start) {
-				$return['date'] = strftime('%D', $start);
-				$return['time'] = strftime('%T', $start);
+				$return['date'] = date('l, F jS Y', $start);
+				$return['time'] = date('g:i A', $start);
 			}
 		}
 
 		if(isset($data['End']) && $data['End']) {
-			$end = strtotime($data['End']);
-			if(!($end && ($end != -1))) {
-				$end = $data['End'];
-			}
+			$end = dia_datetotime($data['End']);
 			if(isset($end) && $end) {
-				$return['endtime'] = strftime('%D %T', $end);
+				$return['endtime'] = date('g:i A', $end);
 			}
 		}
 
