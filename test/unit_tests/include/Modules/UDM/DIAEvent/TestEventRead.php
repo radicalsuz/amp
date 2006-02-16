@@ -16,12 +16,6 @@ class TestEventRead extends UnitTestCase {
 	var $event_key;
 	var $dia_account = array('user' => 'test', 'password' => 'test', 'organization_key' => 962);
 
-/*TODO:
-
-verify that date in == date out
-distributed event == typeid
-
-*/
     function TestEventRead() {
         $this->UnitTestCase('Dia Event Read');
 		$api =& DIA_API::create(null, $this->dia_account);

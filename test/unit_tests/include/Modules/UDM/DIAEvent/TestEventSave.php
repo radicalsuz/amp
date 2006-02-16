@@ -35,10 +35,15 @@ class TestEventSave extends UnitTestCase {
 	}
 
     function testWholeSave( ) {
-		define('DIA_API_DEBUG', true);
+//		define('DIA_API_DEBUG', true);
         $save =& $this->_udm->getPlugin( 'DIA', 'Save');
         @$this->assertTrue($save->execute( ));
 		$this->assertTrue($save->getSupporterKey());
+
+		$this->_udm->uid = 1;
+		$cal_save =& $this->_udm->getPlugin('AMPCalendar', 'Save');
+		$this->assertTrue($cal_save->execute());
+		$cal_id = $cal_save->cal->id;
 
 		$dia_save =& $this->_udm->getPlugin('DIAEvent', 'Save');
 
@@ -47,25 +52,23 @@ class TestEventSave extends UnitTestCase {
         @$event_key = $dia_save->execute( );
 		$this->assertTrue($this->_plugin->getEventKey());
 		$this->assertTrue($event_key);
-//		$this->dump($event_key);
 
         $api =& DIA_API::create(null, $this->dia_account );
         @$event = $api->getEvent( $event_key );
 		$this->assertNotNull($event);
 
-//		$this->dump($event);
-
         //check that $event fields are the same as those we populated the udm with
-		
 		foreach($data as $key => $value) {
 			if(!array_search($key, $this->_plugin->translation)) continue;
 			$this->assertEqual($data[$key], $event[$key]);
 		}
 		$this->assertEqual($event['Status'], 'Active');
 		$this->assertEqual($event['distributed_event_KEY'], 142);
-        //foreach ( translated field) {
-        //  $this->assertEqual( translated field, dia retrieved field))
-        //}
+		$this->assertEqual(dia_datetotime($event['Start']), strtotime($data['date'].' '.$data['time']));
+
+		$sql = 'select dia_key from calendar where id='.$cal_id;
+		$results = $this->_udm->dbcon->GetOne($sql);
+		$this->assertEqual($results, $event_key, "failed when $event_key not the same as the result of $sql");
     }
 
     function testDiaKeyUpdate( ){
