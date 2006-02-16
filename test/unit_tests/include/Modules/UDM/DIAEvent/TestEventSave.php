@@ -61,6 +61,8 @@ class TestEventSave extends UnitTestCase {
 			if(!array_search($key, $this->_plugin->translation)) continue;
 			$this->assertEqual($data[$key], $event[$key]);
 		}
+		$this->assertEqual($event['Status'], 'Active');
+		$this->assertEqual($event['distributed_event_KEY'], 142);
         //foreach ( translated field) {
         //  $this->assertEqual( translated field, dia retrieved field))
         //}
@@ -86,8 +88,8 @@ class TestEventSave extends UnitTestCase {
     function _populateUDM( ){
 //        $calendar_dummy = &new Calendar( $this->_udm->dbcon );
 		#$dates = array('plugin_AMPCalendar_endtime', 'plugin_AMPCalendar_time', 'plugin_AMPCalendar_enddate', 'plugin_AMPCalendar_date');
-		$ignore = array('endtime', 'time', 'enddate', 'date');
-        $numbers = array( 'cost', 'lzip', 'distributed_event_KEY');
+		$ignore = array('endtime', 'time', 'enddate', 'date', 'typeid');
+        $numbers = array( 'cost', 'lzip' );
         $field_defs = array_combine_key( 
                             $this->_plugin->_calendar_plugin->getSaveFields( ), 
                             $this->_plugin->_calendar_plugin->getFields( )
@@ -110,6 +112,7 @@ class TestEventSave extends UnitTestCase {
 		$dummy_data['endtime'] = '5 PM';
 		$dummy_data['enddate'] = '2006-01-21';
 		$dummy_data['lstate'] = 'CA';
+		$dummy_data['typeid'] = 39;
         #$this->_udm->setData( $dummy_data );
 		$this->_plugin->_calendar_plugin->setData($dummy_data);
 //		AMP_varDump( $this->_plugin->_calendar_plugin->getData());

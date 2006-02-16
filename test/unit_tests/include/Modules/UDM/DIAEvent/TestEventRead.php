@@ -40,7 +40,8 @@ distributed event == typeid
 				'City' => 'san francisco',
 				'State' => 'CA',
 				'Zip' => 94110,
-				'Description' => 'this is the description');
+				'Description' => 'this is the description',
+				'distributed_event_KEY' => 142);
 		$this->event_key = $api->addEvent($event);
 		$this->event = $api->getEvent($this->event_key);
     }
@@ -91,6 +92,7 @@ distributed event == typeid
 		$this->assertNotNull($data['time']);
 		$this->assertEqual(dia_datetotime($this->event['Start']), strtotime($data['date'].' '.$data['time']), "event['Start'] == ".$this->event['Start']."; data['date'] data['time'] == ".$data['date'].' '.$data['time']);
 		$this->assertEqual($data['publish'], 1);
+		$this->assertEqual($data['typeid'], 39);
 	}
 
     function _populateUDM( ){
