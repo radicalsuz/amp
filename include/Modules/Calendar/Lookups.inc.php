@@ -16,3 +16,13 @@ class AMPSystemLookup_CalendarDiaKey extends AMPSystem_Lookup {
 		$this->init();
 	}
 }
+
+class AMPSystemLookup_DistributedEvent extends AMPSystem_Lookup {
+	var $datatable = "eventtype";
+	var $result_field = "distributed_event_key";
+	var $criteria = 'distributed_event_key != FALSE AND !isNull(distributed_event_key)';
+
+	function AMPSystemLookup_CalendarDiaKey() {
+		$this->init();
+	}
+}
