@@ -35,21 +35,30 @@ class TestEventSave extends UnitTestCase {
     function testWholeSave( ) {
 		define('DIA_API_DEBUG', true);
         $save =& $this->_udm->getPlugin( 'DIA', 'Save');
-        $this->assertTrue($save->execute( ));
+        @$this->assertTrue($save->execute( ));
 		$this->assertTrue($save->getSupporterKey());
 
 		$dia_save =& $this->_udm->getPlugin('DIAEvent', 'Save');
-        $event_key = $dia_save->execute( );
+
+		$data = $dia_save->translate($dia_save->getData());
+
+        @$event_key = $dia_save->execute( );
 		$this->assertTrue($this->_plugin->getEventKey());
 		$this->assertTrue($event_key);
-		#$this->dump($event_key);
+//		$this->dump($event_key);
 
         $api =& DIA_API::create( );
-        $event = $api->getEvent( $event_key );
+        @$event = $api->getEvent( $event_key );
 		$this->assertNotNull($event);
-		$this->dump($event);
+
+//		$this->dump($event);
 
         //check that $event fields are the same as those we populated the udm with
+		
+		foreach($data as $key => $value) {
+			if(!array_search($key, $this->_plugin->translation)) continue;
+			$this->assertEqual($data[$key], $event[$key]);
+		}
         //foreach ( translated field) {
         //  $this->assertEqual( translated field, dia retrieved field))
         //}
@@ -75,7 +84,7 @@ class TestEventSave extends UnitTestCase {
     function _populateUDM( ){
 //        $calendar_dummy = &new Calendar( $this->_udm->dbcon );
 		#$dates = array('plugin_AMPCalendar_endtime', 'plugin_AMPCalendar_time', 'plugin_AMPCalendar_enddate', 'plugin_AMPCalendar_date');
-		$dates = array('endtime', 'time', 'enddate', 'date');
+		$ignore = array('endtime', 'time', 'enddate', 'date');
         $numbers = array( 'cost', 'lzip', 'distributed_event_KEY');
         $field_defs = array_combine_key( 
                             $this->_plugin->_calendar_plugin->getSaveFields( ), 
@@ -85,8 +94,7 @@ class TestEventSave extends UnitTestCase {
             if( $values['type'] == 'checkbox') {
                 $dummy_data[$fieldName] = true;
             //dates
-            } elseif( array_search($fieldName,$dates) !== false ) {
-                $dummy_data[$fieldName] = $this->now();
+            } elseif( array_search($fieldName,$ignore) !== false ) {
             //numbers
             } elseif( array_search($fieldName,$numbers) !== false ) {
                 $dummy_data[$fieldName] = 9;
@@ -95,9 +103,14 @@ class TestEventSave extends UnitTestCase {
                 $dummy_data[$fieldName] = $fieldName."_DUMMY";
             } 
         }
+		$dummy_data['date'] = '2006-01-20';
+		$dummy_data['time'] = '4 PM';
+		$dummy_data['endtime'] = '5 PM';
+		$dummy_data['enddate'] = '2006-01-21';
+		$dummy_data['lstate'] = 'CA';
         #$this->_udm->setData( $dummy_data );
 		$this->_plugin->_calendar_plugin->setData($dummy_data);
-		AMP_varDump( $this->_plugin->_calendar_plugin->getData());
+//		AMP_varDump( $this->_plugin->_calendar_plugin->getData());
 
 		
     }

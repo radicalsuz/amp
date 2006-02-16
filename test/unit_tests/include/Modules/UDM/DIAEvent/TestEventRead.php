@@ -3,6 +3,7 @@ require_once( 'unit_tests/config.php' );
 require_once( 'AMP/BaseDB.php' );
 require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Modules/UDM/DIAEvent/Read.inc.php' );
+require_once('DIA/API.php');
 
 require_once( 'Modules/Calendar/Calendar.inc.php' );
 class TestEventRead extends UnitTestCase {
@@ -11,8 +12,36 @@ class TestEventRead extends UnitTestCase {
 
 	var $_now = false;
 
+	var $event;
+	var $event_key;
+
+/*TODO:
+
+verify that date in == date out
+distributed event == typeid
+
+*/
     function TestEventRead() {
         $this->UnitTestCase('Dia Event Read');
+		$api =& DIA_API::create();
+		$now = time();
+		$now -= $now % 60; //round to nearest minute
+		$event = array(
+				'Status' => 'Active',
+				'Event_Name' => 'my cool event',
+				'Start' => dia_formatdate($now),
+				'End' => dia_formatdate($now+360),
+				'This_Event_Costs_Money' => true,
+				'Ticket_Price' => 5,
+				'Contact_Email' => 'event_test@radicaldesigns.org',
+				'Directions' => 'take a left at the tree',
+				'Address' => '123 sesame st',
+				'City' => 'san francisco',
+				'State' => 'CA',
+				'Zip' => 94110,
+				'Description' => 'this is the description');
+		$this->event_key = $api->addEvent($event);
+		$this->event = $api->getEvent($this->event_key);
     }
 
 	function setUp() {
@@ -31,25 +60,36 @@ class TestEventRead extends UnitTestCase {
 	}
 
     function testExecute( ) {
-		$this->assertTrue($this->_plugin->execute(array('dia_event_key' => 10915)));
-		$this->dump($this->_plugin->getData());
+		@$this->assertTrue($this->_plugin->execute(array('dia_event_key' => 10915)));
+//		$this->dump($this->_plugin->getData());
     }
 
-	function testStrToTime() {
-//		$this->dump(strtotime('2006-03-03 13:30:00.0'));
-//		preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '2006-03-03 13:30:00.0', $matches);
-//		$this->dump($matches);
-	}
-
 	function testDoRead() {
-		$this->_udm->doPlugin('AMPCalendar', 'Read', array('dia_event_key' => 10915));
-		$this->dump($this->_udm->getData());
+		@$this->_udm->doPlugin('AMPCalendar', 'Read', array('dia_event_key' => 10915));
+//		$this->dump($this->_udm->getData());
 	}
 
 	function testDoActionRead() {
-		$this->dump(array_keys($this->_udm->getPlugins('Read')));
-		$this->_udm->doAction('Read', array('dia_event_key' => 10915));
-		$this->dump($this->_udm->getData());
+		@$this->_udm->doPlugin('AMPCalendar', 'Read', array('dia_event_key' => 10915));
+		@$this->_udm->doPlugin('DIAEvent', 'Read', array('dia_event_key' => 10915));
+//		$this->dump($this->_udm->getData());
+	}
+
+	function testCheckData() {
+		@$this->_udm->doPlugin('DIAEvent', 'Read', array('dia_event_key' => $this->event_key));
+		$data = $this->_plugin->getData();
+
+		foreach($this->_plugin->translation as $key => $value) {
+			if('event_KEY' == $key) continue;
+			$this->assertNotNull($this->event[$key], "event[$key] is null");
+			$this->assertNotNull($data[$value], "data[$value] is null");
+			$this->assertEqual($this->event[$key], $data[$value], "event[$key] != data[$value]");
+		}
+		$this->assertNotNull($this->event['Start']);
+		$this->assertNotNull($data['date']);
+		$this->assertNotNull($data['time']);
+		$this->assertEqual(dia_datetotime($this->event['Start']), strtotime($data['date'].' '.$data['time']), "event['Start'] == ".$this->event['Start']."; data['date'] data['time'] == ".$data['date'].' '.$data['time']);
+		$this->assertEqual($data['publish'], 1);
 	}
 
     function _populateUDM( ){
