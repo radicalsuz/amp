@@ -1,0 +1,15 @@
+<array>
+	<id>
+		<type>hidden</type>
+		<label>Id</label>
+	</id>
+	<name>
+		<type>text</type>
+		<label>Name</label>
+	</name>
+	<distributed_event_key>
+		<type>text</type>
+		<label>Distributed event key&lt;BR/&gt;&lt;span class=photocaption&gt;DIA calendar users only&lt;/span&gt;</label>
+	</distributed_event_key>
+
+</array>

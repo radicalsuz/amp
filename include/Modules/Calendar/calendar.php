@@ -62,9 +62,9 @@ if (isset($bydate) and ($bydate != "By Date (ex 01-28-03)")) {
 	$sqldate2 =$sqldate;
 }
 
-$event=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id, calendar.shortdesc  ,calendar.contact1  , calendar.event ,calendar.time ,calendar.date ,calendar.fulldesc ,calendar.email1 ,calendar.location ,calendar.org ,calendar.url ,calendar.typeid ,calendar.lcity ,calendar.lstate, calendar.lzip, calendar.phone1, calendar.laddress ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and  $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid order by calendar.date asc") or DIE($dbcon->ErrorMsg());
+$event=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id, calendar.shortdesc  ,calendar.contact1  , calendar.event ,calendar.time ,calendar.date ,calendar.fulldesc ,calendar.email1 ,calendar.location ,calendar.org ,calendar.url ,calendar.typeid ,calendar.lcity ,calendar.lstate, calendar.lzip, calendar.phone1, calendar.laddress ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and  $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid order by calendar.date, calendar.lcity, calendar.lstate asc") or DIE($dbcon->ErrorMsg());
 
-$revent=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id, calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and repeat=1 and publish=1 $sqldate2 $sqlarea  $sqltype $sqlid order by calendar.date asc") or DIE($dbcon->ErrorMsg());
+$revent=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id, calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and repeat=1 and publish=1 $sqldate2 $sqlarea  $sqltype $sqlid order by calendar.date, calendar.event asc") or DIE($dbcon->ErrorMsg());
 
 $event_numRows=0;
 $event__totalRows=$event->RecordCount();
@@ -118,6 +118,7 @@ if ($event->Fields("event") == ($null)) { //start failed type called?>
 <p class="text">There are currently no events of this type planned.</p>
 <?php }//end failed type called
  } //end typecalled
+
  function AMP_old_Calendar_getRegionDescription( &$event ){
     $statename = $event->Fields( 'statename');
     if ( $statename != 'International') return $statename;
@@ -130,7 +131,7 @@ if ($event->Fields("event") == ($null)) { //start failed type called?>
     if ( isset( $country_list[ $event->Fields( 'lcountry')])){
         return $country_list [ $event->Fields( 'lcountry') ];
     }
-    return $statename;
+    return $event->Fields('lcountry');
  }
 //start calendar 
 ####################################called event#######################################
@@ -181,7 +182,7 @@ elseif (isset($area)) {
    { 
    $calledcity = $eventcity->Fields("lcity");
    $event2=$dbcon->CacheExecute("SELECT eventtype.name , calendar.id,
-calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry,  calendar.lstate, states.statename   FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid and calendar.lcity = '".$calledcity."'  order by calendar.date, calendar.event asc") or DIE($dbcon->ErrorMsg());
+calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry,  calendar.lstate, states.statename   FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid and calendar.lcity = '".$calledcity."'  order by calendar.date, calendar.lcity, calendar.lstate asc") or DIE($dbcon->ErrorMsg());
 
    echo "<br><b><big>".$event2->Fields("lcity");
      if ($event2->Fields("lstate") == "53") { echo ",&nbsp;".$event2->Fields("lcountry");  }

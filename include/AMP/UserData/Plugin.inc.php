@@ -615,7 +615,7 @@ class UserDataPlugin {
             $just_values = str_replace(")", "", substr($defaults, 7));
             $valueset = preg_split("/\s?,\s?/", $just_values );
             if (isset($valueset[4])) $field_def['default'] = $valueset[4];
-            return $this->returnLookup($valueset[0], $valueset[1], $valueset[2], $valueset[3]);
+            return $this->returnLookup($valueset[0], $valueset[1], $valueset[2], ( isset( $valueset[3]) ? $valueset[3] : null ));
         }
 
         // Split string with commas into an array

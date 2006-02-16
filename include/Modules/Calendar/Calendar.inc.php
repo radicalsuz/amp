@@ -209,7 +209,7 @@ var $id;
     }
 
     function saveEvent( $save_data ) {
-        if ($this->allowRegistration() && $save_data['rsvp']) {
+        if ($this->allowRegistration() && isset( $save_data['rsvp']) && $save_data['rsvp']) {
             $save_data['registration_modin'] = $this->registrationForm();
         }
         unset($save_data['rsvp']);

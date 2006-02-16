@@ -48,6 +48,12 @@ class TestEventSave extends UnitTestCase {
 		$dia_save =& $this->_udm->getPlugin('DIAEvent', 'Save');
 
 		$data = $dia_save->translate($dia_save->getData());
+        if( isset( $data['typeid'])) {
+            require_once( 'Modules/Calendar/Type/Type.php');
+            $caltype = &new Calendar_Type( $this->_udm->dbcon, $data['typeid']);
+            $caltype->mergeData( array( 'distributed_event_key' => 142));
+            $this->assertTrue( $caltype->save( ));
+        }
 
         @$event_key = $dia_save->execute( );
 		$this->assertTrue($this->_plugin->getEventKey());
@@ -64,6 +70,7 @@ class TestEventSave extends UnitTestCase {
 		}
 		$this->assertEqual($event['Status'], 'Active');
 		$this->assertEqual($event['distributed_event_KEY'], 142);
+
 		$this->assertEqual(dia_datetotime($event['Start']), strtotime($data['date'].' '.$data['time']));
 
 		$sql = 'select dia_key from calendar where id='.$cal_id;

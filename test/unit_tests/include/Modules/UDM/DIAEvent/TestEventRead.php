@@ -56,12 +56,12 @@ class TestEventRead extends UnitTestCase {
 	}
 
     function testExecute( ) {
-		@$this->assertTrue($this->_plugin->execute(array('dia_event_key' => 10915)));
+		$this->assertTrue($this->_plugin->execute(array('dia_event_key' => 10915)));
 //		$this->dump($this->_plugin->getData());
     }
 
 	function testDoRead() {
-		@$this->_udm->doPlugin('AMPCalendar', 'Read', array('dia_event_key' => 10915));
+		$this->_udm->doPlugin('AMPCalendar', 'Read', array('dia_event_key' => 10915));
 //		$this->dump($this->_udm->getData());
 	}
 

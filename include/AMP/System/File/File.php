@@ -70,7 +70,7 @@ class AMP_System_File {
         $folder = &opendir( $folder_path );
         $result_set = array( );
         if ( substr( $folder_path, -1 ) !== DIRECTORY_SEPARATOR ) $folder_path .= DIRECTORY_SEPARATOR;
-        $result_text = system( 'ls '.$filename_pattern );
+        #$result_text = system( 'ls '.$filename_pattern );
         while( $file_name = readdir( $folder )){
             if (($file_name ==".") || ($file_name == "..")) continue; 
             if ( isset( $regex_pattern ) && !preg_match( $file_name, $regex_pattern, $name_matches )) continue;
