@@ -37,6 +37,8 @@ class UserDataPlugin {
     // This is to prevent multiple runs of the plugin.
     var $executed;
 
+	var $ERROR;
+
     // Stub constructor. Doesn't do anything in particular.
     function UserDataPlugin ( &$udm, $plugin_instance=null ) {
         $this->init( $udm, $plugin_instance );
@@ -680,7 +682,16 @@ class UserDataPlugin {
 	}
 
 	function error($message, $level=E_USER_WARNING) {
-		trigger_error($message);
+		$this->ERROR = $message;
+		trigger_error($message, $level);
+	}
+
+	function notice($message) {
+		return $this->error($message, E_USER_NOTICE);
+	}
+
+	function warn($message) {
+		return $this->error($message, E_USER_WARNING);
 	}
 }
 
