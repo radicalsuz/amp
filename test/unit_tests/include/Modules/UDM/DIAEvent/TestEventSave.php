@@ -12,6 +12,8 @@ class TestEventSave extends UnitTestCase {
 
 	var $_now = false;
 
+	var $dia_account = array('user' => 'test', 'password' => 'test', 'organization_key' => 962);
+
     function TestEventSave() {
         $this->UnitTestCase('Dia Event Save');
     }
@@ -47,7 +49,7 @@ class TestEventSave extends UnitTestCase {
 		$this->assertTrue($event_key);
 //		$this->dump($event_key);
 
-        $api =& DIA_API::create( );
+        $api =& DIA_API::create(null, $this->dia_account );
         @$event = $api->getEvent( $event_key );
 		$this->assertNotNull($event);
 

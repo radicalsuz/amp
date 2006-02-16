@@ -14,6 +14,7 @@ class TestEventRead extends UnitTestCase {
 
 	var $event;
 	var $event_key;
+	var $dia_account = array('user' => 'test', 'password' => 'test', 'organization_key' => 962);
 
 /*TODO:
 
@@ -23,7 +24,7 @@ distributed event == typeid
 */
     function TestEventRead() {
         $this->UnitTestCase('Dia Event Read');
-		$api =& DIA_API::create();
+		$api =& DIA_API::create(null, $this->dia_account);
 		$now = time();
 		$now -= $now % 60; //round to nearest minute
 		$event = array(
