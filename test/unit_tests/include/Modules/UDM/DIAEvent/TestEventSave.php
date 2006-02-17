@@ -84,6 +84,27 @@ class TestEventSave extends UnitTestCase {
 		$this->assertEqual($results, $event_key, "failed when $event_key not the same as the result of $sql");
     }
 
+	function testDefaultCapacity() {
+        $save =& $this->_udm->getPlugin( 'DIA', 'Save');
+        @$this->assertTrue($save->execute( ));
+		$this->assertTrue($save->getSupporterKey());
+
+		$this->_udm->uid = 1;
+		$cal_save =& $this->_udm->getPlugin('AMPCalendar', 'Save');
+		$this->assertTrue($cal_save->execute());
+		$cal_id = $cal_save->cal->id;
+
+		$dia_save =& $this->_udm->getPlugin('DIAEvent', 'Save');
+		$options = $dia_save->getOptions();
+
+        @$event_key = $dia_save->execute( );
+		$this->assertTrue($event_key);
+
+        $api =& DIA_API::create(null, $this->dia_account );
+        @$event = $api->getEvent( $event_key );
+		$this->assertEqual($event['Maximum_Attendees'],$options['capacity']);
+	}
+
     function testDiaKeyUpdate( ){
         /*
         $save =& $this->_udm->getPlugin( 'AMPCalendar', 'Save');

@@ -22,7 +22,14 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
             'size'=>'5',
             'available'=>true,
             'label'=>'DIA AMP User Password'
-			)
+			),
+		'capacity' => array(
+            'type'=>'text',
+            'size'=>'4',
+            'available'=>true,
+            'label'=>'Max Capacity',
+			'value'=>25
+			),
         );
 
     var $_field_prefix;
@@ -51,9 +58,9 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
         return $this->_calendar_plugin->getAllDataFields( );
     }
 
-    function save ( $data ) {
+    function save ( $data, $options=null ) {
 		$this->notice('entering diaevent save plugin');
-        $options=$this->getOptions();
+        $options=array_merge($options, $this->getOptions());
 
 		if(!defined('DIA_API_ORGCODE') && isset($options[ 'orgKey' ])) {
 			define('DIA_API_ORGCODE', $options[ 'orgKey' ]);
@@ -73,6 +80,10 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
         $data['supporter_KEY'] = $supporter_key;
 
 		$data = $this->translate($data);
+
+		if(!isset($data['Maximum_Attendees'])) {
+			$data['Maximum_Attendees'] = $options['capacity'];
+		}
 
         $api_options = $options; 
         if ( isset( $options['orgKey'])) $api_options['organization_key'] = $options['orgKey'];
