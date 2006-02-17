@@ -28,8 +28,23 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
             'size'=>'4',
             'available'=>true,
             'label'=>'Max Capacity',
-			'value'=>25
+			'default'=>250
 			),
+		'rsvp_request_fields' => array(
+            'type'=>'text',
+            'size'=>'40',
+            'available'=>true,
+            'label'=>'RSVP Fields',
+			'default'=> 'First_Name,Last_Name,Email,Phone,Zip'
+			),
+		'rsvp_required_fields' => array(
+            'type'=>'text',
+            'size'=>'40',
+            'available'=>true,
+            'label'=>'RSVP Required Fields',
+			'default'=> 'First_Name,Last_Name,Email'
+			)
+
         );
 
     var $_field_prefix;
@@ -80,10 +95,8 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
         $data['supporter_KEY'] = $supporter_key;
 
 		$data = $this->translate($data);
+        $data = $this->_addDIAOptions( $data, $options );
 
-		if(!isset($data['Maximum_Attendees'])) {
-			$data['Maximum_Attendees'] = $options['capacity'];
-		}
 
         $api_options = $options; 
         if ( isset( $options['orgKey'])) $api_options['organization_key'] = $options['orgKey'];
@@ -107,6 +120,21 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 
     function setEventKey($key) {
         $this->_event_key = $key;
+    }
+
+    function _addDIAOptions( &$data, $options ){
+		if(!isset($data['Maximum_Attendees'])) {
+			$data['Maximum_Attendees'] = $options['capacity'];
+		}
+        if ( isset( $options['rsvp_request_fields']) && $options['rsvp_request_fields']){
+            $data['Request'] = $options['rsvp_request_fields'];
+        }
+        if ( isset( $options['rsvp_required_fields']) && $options['rsvp_required_fields']){
+            $data['Required'] = $options['rsvp_required_fields'];
+        }
+        return $data;
+
+
     }
 
 	function translate( $data ) {
@@ -146,7 +174,18 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 			$return['Start'] = dia_formatdate($start);
 		}
 
-		$end = strtotime( $data['endtime']);
+        $simple_end = strtotime( $data['enddate']);
+        if ( $simple_end < $start ){
+            $end = strtotime( $data['date'] . ' ' . $data['endtime']);
+            if(!$end || (-1 == $end)) {
+                $end = strtotime($data['date']);
+            }
+        } else {
+            $end = strtotime( $data['enddate'] . ' ' . $data['endtime']);
+            if(!$end || (-1 == $end)) {
+                $end = $simple_end;
+            }
+        }
 		if($end && (-1 != $end)) {
 			$return['End'] = dia_formatdate($end);
 		}
