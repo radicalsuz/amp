@@ -396,7 +396,7 @@ function sendEmail ($messageid,$email,$hash,$htmlpref = 0,$rssitems = array(),$f
     preg_match_all('#(http://[^\s\>\}]+)#mis',$textmessage,$links);
     for($i=0; $i<count($links[1]); $i++){
 #      $fullmatch = $links[0][$i];
-      $link = strtolower(cleanUrl($links[1][$i]));
+      $link = cleanUrl($links[1][$i]);
       $linkid = 0;
       if (preg_match('/^http|ftp/',$link) && $link != 'http://www.phplist.com' && !strpos($link,$clicktrack_root)
       && $link != $phplist_root && $link != $phplist_root.'/'
@@ -800,7 +800,7 @@ function stripHTML($text) {
       'http://'.strtolower(trim($linktext)) == strtolower(trim($linkurl))) {
         $linkreplace = $linkurl;
     } else {
-      $linkreplace = $linktext.' <'.strtolower($linkurl).'>';
+      $linkreplace = $linktext.' <'.$linkurl.'>';
     }
     $text = preg_replace('~'.preg_quote($fullmatch).'~',$linkreplace,$text);
   }
