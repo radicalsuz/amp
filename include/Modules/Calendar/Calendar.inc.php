@@ -228,7 +228,10 @@ var $id;
         trigger_error( 'updateing dia key: ' . $save_data['dia_key'] . 'for event id:' . $save_data['id']);
 		if (!isset($save_data['id'])) return false;	
 		$new_data = array_merge($this->readData($save_data['id']), $save_data);
-		return $this->saveEvent($save_data);
+        #$old_data = $this->readData( $save_data['id']);
+		#$new_data = array_merge($old_data, $save_data);
+        
+		return $this->saveEvent($new_data);
 	}
 	
 

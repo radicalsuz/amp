@@ -37,7 +37,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 	var $_event_key;
 
 	var	$translation = array(
-			'dia_key' =>	'event_KEY', //or maybe just 'key'
+	#		'dia_key' =>	'event_KEY', //or maybe just 'key'
             'event'   =>    'Event_Name',
             'cost'    =>    'Ticket_Price',
             'email1'  =>    'Contact_Email',
@@ -158,6 +158,9 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 				$return['distributed_event_KEY'] = $key;
 			}
 		}	
+        if ( isset( $data['dia_key'])){
+            $return['key'] = $data['dia_key'];
+        }
 
 		return $return;
 	}

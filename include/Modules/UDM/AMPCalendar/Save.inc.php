@@ -24,6 +24,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
     var $available = true;
     var $cal; #the Calendar Object
     var $_field_prefix = "plugin_AMPCalendar";
+    var $_event_id;
 
     function UserdataPlugin_Save_AMPCalendar ( &$udm , $plugin_instance=null){
         $this->cal =new Calendar( $udm->dbcon, null, $udm->admin );
@@ -50,12 +51,13 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
     }
 
     function save ( $data, $options = null ) {
-        $options=array_merge( $this->getOptions(), $options );
+        $options = array_merge( $this->getOptions(), $options );
         if (!isset($this->udm->uid)) return false;
         $data['uid'] = $this->udm->uid;
 
         if ($this->cal->saveEvent( $data )) {
             $this->setData(array('id'=> $this->cal->id));
+            $this->_event_id = $this->cal->id;
             return true;
         }
 
@@ -63,7 +65,9 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 	
 	}
 
-	function updateDIAKey($key, $event_id) {
+	function updateDIAKey($key, $event_id = null) {
+        $data = $this->getData( );
+        if ( !( isset( $event_id) && $event_id )) $event_id = $this->_event_id;
 		return $this->cal->updateEvent(
 							array('id' 		=> $event_id,
 								  'dia_key' => $key));
