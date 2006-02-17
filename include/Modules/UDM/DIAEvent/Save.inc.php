@@ -125,7 +125,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 									4 => 'YEARLY',
 									3 => 'MONTHLY',
 									1 => 'DAILY');
-		if($data['recurring_options'] = 2) {
+		if($data['recurring_options'] == 2) {
 			$return['Recurrence_Interval'] = 7;
 			$return['Recurrence_Frequency'] = 'DAILY';
 		} else {

@@ -69,7 +69,6 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
     }
 
 	function translate($data) {
-        //this is totally gonna hurt
 		$translation = $this->translation;
 
 		foreach($data as $key => $value) {
@@ -83,10 +82,16 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 		$recurring_options = array( 'None' => 0,
 									'YEARLY' => 4,
 									'MONTHLY' => 3,
+									'WEEKLY' => 2,
 									'DAILY' => 1);
 		if(isset($data['Recurrence_Frequency']) && $freq = $data['Recurrence_Frequency']) {
 			if(isset($recurring_options[$freq])) {
-				$return['recurring_options'] = $recurring_options[$freq];
+                if ( isset( $data['Recurrence_Interval']) && $data['Recurrence_Interval'] == 7) {
+                    $return['recurring_options'] = $recurring_options['WEEKLY'];
+                } else {
+                    $return['recurring_options'] = $recurring_options[$freq];
+
+                }
 			} else {
 				$return['recurring_options'] = 0;
 			}
@@ -101,7 +106,7 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 		if(isset($data['Start']) && $data['Start']) {
 			$start = dia_datetotime($data['Start']);
 			if(isset($start) && $start) {
-				$return['date'] = date('l, F jS Y', $start);
+				$return['date'] = date('Y-m-d', $start);
 				$return['time'] = date('g:i A', $start);
 			}
 		}

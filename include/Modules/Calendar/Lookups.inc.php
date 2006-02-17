@@ -16,6 +16,15 @@ class AMPSystemLookup_CalendarDiaKey extends AMPSystem_Lookup {
 		$this->init();
 	}
 }
+class AMPSystemLookup_CalendarEventOwner extends AMPSystem_Lookup {
+	var $datatable = "calendar";
+	var $result_field = "uid";
+	var $criteria = 'uid != "" AND !isNull(uid)';
+
+    function AMPSystemLookup_CalendarEventOwner() {
+		$this->init();
+	}
+}
 
 class AMPSystemLookup_DistributedEvent extends AMPSystem_Lookup {
 	var $datatable = "eventtype";

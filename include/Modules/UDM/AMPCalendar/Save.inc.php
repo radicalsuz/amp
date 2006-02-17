@@ -49,8 +49,8 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 
     }
 
-    function save ( $data ) {
-        $options=$this->getOptions();
+    function save ( $data, $options = null ) {
+        $options=array_merge( $this->getOptions(), $options );
         if (!isset($this->udm->uid)) return false;
         $data['uid'] = $this->udm->uid;
 
