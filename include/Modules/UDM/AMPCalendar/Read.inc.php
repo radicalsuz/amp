@@ -36,14 +36,7 @@ class UserDataPlugin_Read_AMPCalendar extends UserDataPlugin {
         $options = array_merge($this->getOptions(), $options);
 
 		if(isset($options['dia_event_key'])) {
-//use if($udm->admin) for pulling in events from DIA that aren't yet in AMP
-			$dia_event_key = $options['dia_event_key'];
-			$keys = AMPSystem_Lookup::instance('CalendarDiaKey');
-			if(isset($keys[$dia_event_key])) {
-				$options['calid'] = $keys[$dia_event_key];
-			} else {
-				return false;
-			}
+            $options['calid'] = $this->lookupCalid( $options['dia_event_key']);
 		}
 
         // Check for the existence of a userid.
@@ -52,8 +45,16 @@ class UserDataPlugin_Read_AMPCalendar extends UserDataPlugin {
         if ($calData = $this->cal->readData( $options['calid'])) {
             $this->setData( $calData );
 			
-            return true;
+            return $options['calid'];
         }
+        return false;
+
+    }
+
+    function lookupCalid( $foreign_key, $type = 'CalendarDiaKey'){
+        $keys = AMPSystem_Lookup::instance($type);
+            
+	    if(isset($keys[$foreign_key])) return $keys[$foreign_key];
         return false;
 
     }

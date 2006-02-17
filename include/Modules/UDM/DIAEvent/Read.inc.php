@@ -51,7 +51,6 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 	}
 
 	function execute($options=null) {
-//XXX: tell austin what key is being used here
 		$options = array_merge($this->getOptions(), $options);
 		if (!(isset( $options['dia_event_key'] )&&$options['dia_event_key'])) return false;
 		$key = $options['dia_event_key'];
@@ -60,7 +59,9 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
         $api = &DIA_API::create( null, $options );
         
 		if($event = $api->getEvent($key)) {
-			$this->setData($this->translate($event));
+            $local_data = $this->translate($event);
+			$this->setData($local_data);
+            #AMP_varDump( $this->getData( ));
 			return true;
 		}
 

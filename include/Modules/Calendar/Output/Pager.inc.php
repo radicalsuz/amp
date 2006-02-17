@@ -52,6 +52,7 @@ class CalendarPlugin_Pager_Output extends CalendarPlugin {
 	}
 	
 	function execute($options=null) {
+        $output = "";
         if (!isset($options)) $options=$this->getOptions();
         else $options=array_merge($this->getOptions(), $options);
 

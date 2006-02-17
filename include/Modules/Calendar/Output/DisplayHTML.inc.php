@@ -8,10 +8,10 @@ if (!defined( 'AMP_CALENDAR_RSVP_FORM_DEFAULT' )) define( 'AMP_CALENDAR_RSVP_FOR
 class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
     
     var $options= array( 
-        'subheader'=>array('value'=>'lcity'),
-        'display_format'=>array('value'=>'calendar_list_rsvp_format'),
-        'detail_format'=>array('value'=>'calendar_output_detail_rsvp_mapped'),
-        'rsvp_modin'=>array('value'=>AMP_CALENDAR_RSVP_FORM_DEFAULT));
+        'subheader'=>array('default'=>'lcity'),
+        'display_format'=>array('default'=>'calendar_list_rsvp_format'),
+        'detail_format'=>array('default'=>'calendar_output_detail_rsvp_mapped'),
+        'rsvp_modin'=>array('default'=>AMP_CALENDAR_RSVP_FORM_DEFAULT));
     
     var $current_subheader;
     var $regionset;
@@ -22,25 +22,27 @@ class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
     }
 
     function execute ($options=null) {
+        $options = array_merge( $this->getOptions( ), $options );
         //Check to see if a single event was specified
         //if so, return detail information for that event
 		if (isset($options['calid'])) {
-            $detail_function=isset($this->options['detail_format']['value'])?($this->options['detail_format']['value']):"display_detail";
+            $detail_function= $options['detail_format'];
             $inclass=method_exists($this, $detail_function);
-            if ($inclass){ $output=$this->$detail_function($this->dbcon, $options['calid']['value'] );
+            if ($inclass){ $output=$this->$detail_function($this->dbcon, $options['calid'] );
             } else {
-                $output=$detail_function($this->dbcon, $options['calid']['value']);
+                $output=$detail_function($this->dbcon, $options['calid'] );
             }
         } else {
         //Print the current results list
             $dataset=$this->calendar->results();
             
-            $display_function=isset($this->options['display_format']['value'])?($this->options['display_format']['value']):"display_item";
+            $display_function= $options['display_format'];
             $inclass=method_exists($this, $display_function);
+            $output = "";
 
             //output display format
             foreach ($dataset as $dataitem) {
-                if (isset($this->options['subheader'])) $output.=$this->subheader($dataitem);
+                if (isset($this->options['subheader'])) $output.=$this->subheader($dataitem, $options);
                 if($inclass) $output.=$this->$display_function($dataitem);
                 else $output.=$display_function($dataitem, $this->options);
             }
@@ -49,11 +51,12 @@ class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
 		return $output;
     }
         
-    function subheader($dataitem) {
-        if ($this->current_subheader != trim($dataitem[$this->options['subheader']['value']])) {
-            $this->current_subheader = trim($dataitem[$this->options['subheader']['value']]);
+    function subheader($dataitem, $options ) {
+        $output = "";
+        if ($this->current_subheader != trim($dataitem[$options['subheader']])) {
+            $this->current_subheader = trim($dataitem[$options['subheader']]);
             $output .= '<h1 style="font-size: small; background: #ccc; padding: 3px 3px;">' . $this->current_subheader;
-            if ($this->options['subheader']['value']=='lcity') {
+            if ($options['subheader'] =='lcity') {
                 if ($dataitem['lstate']) $output.= ', ' . $this->regionset->regions['US AND CANADA'][$dataitem['lstate']];
                 if ($dataitem['lcountry']!="USA") $output.= '&nbsp;&nbsp;' . $this->regionset->regions['WORLD'][$dataitem['lcountry']];
             }
@@ -79,6 +82,7 @@ class CalendarPlugin_DisplayHTML_Output extends CalendarPlugin {
 //utility output functions follow
 
 function calendar_list_rsvp_format($e, $options=null) {
+        $meat = "";
         if (isset ($e['registration_modin'])&&$e['registration_modin']) {
             $meat .= "<a href=\"modinput4.php?modin=".$e['registration_modin']."&calid=".$e['id']."\">RSVP</a>&nbsp; &bull; ";
         } elseif(isset($e['dia_key']) && $e['dia_key']) {

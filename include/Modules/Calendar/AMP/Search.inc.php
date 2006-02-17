@@ -68,7 +68,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
 	function execute ($options=null) {
 		//combine init criteria with passed criteria 
         $options=array_merge($this->getOptions(), $options);
-		if(is_array($options['criteria'])) {
+		if(isset( $options['criteria']) && is_array($options['criteria'])) {
 			$this->criteria = array_merge($this->criteria, $options['criteria']);
 		}
 		
@@ -77,6 +77,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
         if (!isset($this->sortby)) $this->setSort();
 		
 		//get Event Records for current page
+        $fieldset = "";
         foreach ($this->alias as $fname=>$fdef) {
             if (isset($fdef['f_sqlname'])) $fieldset.=$fdef['f_sqlname'].(isset($fdef['f_alias'])?" AS ".$fdef['f_alias']:"").", ";
         }

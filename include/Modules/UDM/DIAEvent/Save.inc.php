@@ -72,7 +72,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 			define('DIA_API_PASSWORD', $options[ 'password' ]);
 		}
 
-        $supporter_save =& $this->udm->getPlugin( 'DIA', 'Save');
+        $supporter_save =& $this->udm->registerPlugin( 'DIA', 'Save');
         if ( !($supporter_key = $supporter_save->getSupporterKey( ) )) {
 			$this->error("couldn't retrieve supporter key", E_USER_ERROR);
 			return false;
@@ -87,13 +87,15 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 
         $api_options = $options; 
         if ( isset( $options['orgKey'])) $api_options['organization_key'] = $options['orgKey'];
+
 		$api =& DIA_API::create( null, $api_options );
 		if ( !($event_key = $api->addEvent( $data ) )) {
 			$this->error('api failed to save event', E_USER_ERROR);
 			return false;
 		}
+
         $this->setEventKey( $event_key );
-        $this->_calendar_plugin->updateDIAKey( $event_key );
+        $this->_calendar_plugin->updateDIAKey( $event_key, $data['id'] );
 
 		$this->error('returning event key: '.$this->getEventKey(), E_USER_NOTICE);
         return $this->getEventKey( );
@@ -108,7 +110,6 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
     }
 
 	function translate( $data ) {
-        //this is totally gonna hurt
 
 		$translation = $this->translation;
 		
@@ -139,7 +140,6 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 		
 		$start = strtotime($data['date'].' '.$data['time']);
 		if(!$start || (-1 == $start)) {
-			trigger_error('couldnot strtotime date and time concatenated');
 			$start = strtotime($data['date']);
 		}
 		if($start && (-1 != $start)) {

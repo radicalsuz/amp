@@ -135,6 +135,7 @@ var $id;
 		$fields['header3']=array('type'=>'header', 'label'=>'The following information is for the staff at '. AMP_SITE_NAME .' and will not be listed on the website, unless it is the same as the information above.', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true) ;
 		$fields['lat']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 		$fields['lon']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
+		$fields['dia_key']=array('type'=>'hidden', 'required'=>false, 'public'=>false, 'values'=>null, 'enabled'=>true);
 
         return $fields;
 
@@ -224,6 +225,7 @@ var $id;
     }
 
 	function updateEvent( $save_data ) {
+        trigger_error( 'updateing dia key: ' . $save_data['dia_key'] . 'for event id:' . $save_data['id']);
 		if (!isset($save_data['id'])) return false;	
 		$new_data = array_merge($this->readData($save_data['id']), $save_data);
 		return $this->saveEvent($save_data);

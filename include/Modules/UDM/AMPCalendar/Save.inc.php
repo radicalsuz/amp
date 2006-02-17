@@ -63,9 +63,9 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 	
 	}
 
-	function updateDIAKey($key) {
+	function updateDIAKey($key, $event_id) {
 		return $this->cal->updateEvent(
-							array('id' 		=> $this->cal->id,
+							array('id' 		=> $event_id,
 								  'dia_key' => $key));
 	}
 
