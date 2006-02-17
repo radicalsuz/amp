@@ -7,8 +7,28 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 
     // We take one option, a DIA event key, and no fields.
     var $cal;
-    var $options     = array( 'dia_event_key' => array( 'available' => false,
-														'value' => null) );
+    var $options     = array( 
+            'dia_event_key' => array(   'available' => false,
+                                        'value' => null),
+            'organization_key' => array(
+                'type'=>'text',
+                'size'=>'5',
+                'available'=>true,
+                'label'=>'DIA Organization Key'
+                ),
+            'user' => array(
+                'type'=>'text',
+                'size'=>'5',
+                'available'=>true,
+                'label'=>'DIA AMP User Name'
+                ),
+            'password' => array(
+                'type'=>'text',
+                'size'=>'5',
+                'available'=>true,
+                'label'=>'DIA AMP User Password'
+                )
+            );
 
 //XXX: set this dynamically by getting it from the calendar plugin
 	var $_field_prefix = "plugin_AMPCalendar";
@@ -36,7 +56,9 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 		if (!(isset( $options['dia_event_key'] )&&$options['dia_event_key'])) return false;
 		$key = $options['dia_event_key'];
 
-		$api =& DIA_API::create();
+        //accepts passed API options for testing purposes
+        $api = &DIA_API::create( null, $options );
+        
 		if($event = $api->getEvent($key)) {
 			$this->setData($this->translate($event));
 			return true;

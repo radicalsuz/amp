@@ -39,6 +39,7 @@ class TestEventSave extends UnitTestCase {
         $save =& $this->_udm->getPlugin( 'DIA', 'Save');
         @$this->assertTrue($save->execute( ));
 		$this->assertTrue($save->getSupporterKey());
+        $save->setOptions( array_merge($this->dia_account, array( 'orgKey' => $this->dia_account['organization_key']) ));
 
 		$this->_udm->uid = 1;
 		$cal_save =& $this->_udm->getPlugin('AMPCalendar', 'Save');
@@ -46,6 +47,7 @@ class TestEventSave extends UnitTestCase {
 		$cal_id = $cal_save->cal->id;
 
 		$dia_save =& $this->_udm->getPlugin('DIAEvent', 'Save');
+        $dia_save->setOptions( array_merge($this->dia_account, array( 'orgKey' => $this->dia_account['organization_key']) ));
 
 		$data = $dia_save->translate($dia_save->getData());
         if( isset( $data['typeid'])) {
@@ -58,6 +60,10 @@ class TestEventSave extends UnitTestCase {
         @$event_key = $dia_save->execute( );
 		$this->assertTrue($this->_plugin->getEventKey());
 		$this->assertTrue($event_key);
+        if ( !$event_key ){
+            $this->fail( 'save event failed, no key returned');
+            return;
+        }
 
         $api =& DIA_API::create(null, $this->dia_account );
         @$event = $api->getEvent( $event_key );

@@ -74,7 +74,9 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 
 		$data = $this->translate($data);
 
-		$api =& DIA_API::create();
+        $api_options = $options; 
+        if ( isset( $options['orgKey'])) $api_options['organization_key'] = $options['orgKey'];
+		$api =& DIA_API::create( null, $api_options );
 		if ( !($event_key = $api->addEvent( $data ) )) {
 			$this->error('api failed to save event', E_USER_ERROR);
 			return false;

@@ -45,6 +45,7 @@ class TestEventRead extends UnitTestCase {
 		$this->_udm =& new UserDataInput($dbcon, 50, true);
 		$this->_udm->registerPlugin('AMPCalendar', 'Read');
 		$this->_plugin =& $this->_udm->registerPlugin( 'DIAEvent', 'Read');
+        $this->_plugin->setOptions ( $this->dia_account );
 
 //        $this->_populateUDM( );
 //		$this->_udm->doPlugin('QuickForm', 'Build');
@@ -61,7 +62,7 @@ class TestEventRead extends UnitTestCase {
     }
 
 	function testDoRead() {
-		$this->_udm->doPlugin('AMPCalendar', 'Read', array('dia_event_key' => 10915));
+		$this->_udm->doPlugin('AMPCalendar', 'Read', array('dia_event_key' => 10915 ));
 //		$this->dump($this->_udm->getData());
 	}
 
@@ -72,7 +73,10 @@ class TestEventRead extends UnitTestCase {
 	}
 
 	function testCheckData() {
-		@$this->_udm->doPlugin('DIAEvent', 'Read', array('dia_event_key' => $this->event_key));
+		if ( !$this->_udm->doPlugin('DIAEvent', 'Read', array('dia_event_key' => $this->event_key))){
+            $this->fail( 'Could not check data because read failed');
+            return;
+        }
 		$data = $this->_plugin->getData();
 
 		foreach($this->_plugin->translation as $key => $value) {
