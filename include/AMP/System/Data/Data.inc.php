@@ -154,6 +154,20 @@ class AMPSystem_Data {
 
     }
 
+    function notify( $action ){
+        foreach( $this->_observers as $observer ){
+            $observer->update( $this, $action );
+        }
+    }
+
+    function addObserver( &$observer, $observer_key = null ){
+        if ( isset( $observer_key )){
+            $this->_observers[$observer_key] = &$observer;
+            return;
+        }
+        $this->_observers[] = &$observer;
+    }
+
 
 }
 ?>

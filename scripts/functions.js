@@ -1,3 +1,38 @@
+//Javascript function to select all/deselect all on a given page
+var sel_action='Select All';
+function list_selectAll( form_name, id_element_name ) {
+    if ( !id_element_name ) id_element_name = 'id';
+    sform=document.forms[ form_name ]; 
+    t=document.forms[ form_name ].length;
+    if (sel_action=='Select All') {
+        sel_action='Unselect All';
+        var tvalue=true;
+    } else {
+        sel_action='Select All';
+        var tvalue=false;
+    }
+    for (n=0; n<t; n++){
+        //alert(sform.elements[n].name);
+        if (sform.elements[n].name.substring(0, id_element_name.length )== id_element_name ) {
+            sform.elements[n].checked=tvalue;
+        }
+    }
+}
+
+//Javascript - selects an ID - used by table row_select
+function select_id(find_id, form_name, id_element_name ) {
+    if ( !id_element_name ) id_element_name = 'id';
+    sform=document.forms[ form_name ];
+    t = sform.length;
+    for (n=0; n<t; n++){
+        //alert(sform.elements[n].name);
+        if (sform.elements[n].name.substring(0, id_element_name.length )== id_element_name && sform.elements[n].value==find_id) {
+            sform.elements[n].checked=!sform.elements[n].checked;
+            return;
+        }
+    }
+}
+
 function EmailToFriend(URL) { 
 day = new Date();  id = day.getTime(); 
 var url = url + "?url=" + document.location

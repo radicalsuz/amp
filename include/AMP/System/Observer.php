@@ -27,8 +27,8 @@ class AMP_System_Observer {
             return false;
         }
         //attach same instance to each class
-        foreach ( $objectSet as $target_object ){
-            $target_object->addObserver( $this );
+        foreach ( $objectSet as $key => $target_object ){
+            $objectSet[$key]->addObserver( $this );
         }
         return true;
     }

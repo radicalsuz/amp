@@ -36,6 +36,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     var $lookups;
     var $translations;
+    var $_observers_source = array( );
 
     var $color = array ( 
         'background' => array( "#D5D5D5" , "#E5E5E5" ) ,
@@ -52,6 +53,13 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_pager_limit = false;
 
     var $_css_class_columnheader = 'intitle';
+
+    var $_sort;
+    var $_source_counter = 0;
+    var $_source_keys;
+    var $_source_object;
+
+    var $_controller;
 
     ####################
     ### Core Methods ###
@@ -81,6 +89,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if (array_search( 'publish', $this->col_headers ) !== FALSE ) {
             $this->addTranslation( 'publish', '_showPublishStatus' );
         }
+        $this->_initObservers( );
         $this->_after_init( );
 
     }
@@ -125,8 +134,34 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _getSourceRow( ){
-        return $this->source->getData( );
+        // simple behavior for recordset map
+        if ( !is_array( $this->source )) return $this->source->getData( );
+        
+        // more complex for arrays of objects
+        if ( !isset( $this->_source_keys[$this->_source_counter ])) return false;
+        $row_data = array( );
+        $row_data_source = &$this->source[ $this->_source_keys[ $this->_source_counter ]];
+        foreach( $this->col_headers as $column ){
+            $row_data[$column] = $this->_getSourceDataItem( $column, $row_data_source );
+        }
+
+        $row_data['id'] = $row_data['name'];
+        ++$this->_source_counter;
+        return $row_data;
     }
+
+    //for array objects only
+    function _getSourceDataItem( $column, &$row_data_source ){
+        if ( method_exists( $this, $column )) 
+            return $this->$column( $row_data_source, $column );
+
+        $get_method = 'get'.ucfirst( str_replace( ' ', '', $column ));
+        if ( method_exists( $row_data_source, $get_method )) 
+            return $row_data_source->$get_method();
+        
+        return false;
+    }
+
 
     ###########################################
     ###  Public Presentation Option Methods ###
@@ -168,11 +203,16 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function setMessage( $text ) {
+        if ( isset( $this->_controller )) return $this->_controller->setMessage( $text );
         $this->message .= $text .'<BR>';
     }
 
     function applySearch( $values ){
         return $this->source->applySearch( $values );
+    }
+
+    function setController( &$controller ){
+        $this->_controller = &$controller;
     }
 
 
@@ -403,16 +443,36 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _prepareData() {
+        if ( is_array( $this->source )) return $this->_prepareArrayData( );
         if ($this->source->makeReady()) return true;
         $this->source->setSelect( $this->_defineFieldSet() );
         return $this->source->readData();
         
     }
 
+    function _prepareArrayData( ){
+
+        $this->_source_counter = 0;
+        return !( empty( $this->source ));
+    }
+
     function _setSort() {
         //Sort the data
         if (isset($_REQUEST['sort']) && $_REQUEST['sort']) { 
-            $this->source->addSort($_REQUEST['sort']);
+            //for recordset mapper
+            if ( !is_array( $this->source)) return $this->source->addSort($_REQUEST['sort']);
+
+            //for arrays of objects
+            $local_sort_method = '_setSort'.ucfirst( $_REQUEST['sort']);
+            $sort_direction = ( isset( $_REQUEST['sort_direction']) && $_REQUEST['sort_direction']) ?
+                                $_REQUEST['sort_direction'] : false;
+
+            if ( method_exists( $this, $local_sort_method)) return $this->$local_sort_method( $sort_direction );
+
+            $fileSource = &new $this->_source_object ( );
+            if( $fileSource->sort( $this->source, $_REQUEST['sort'], $sort_direction )){
+                $this->_sort = $_REQUEST['sort'];
+            }
         }
     }
 
@@ -439,6 +499,20 @@ class AMPSystem_List extends AMPDisplay_HTML {
         //interface
     }
 
+    function _initObservers( ){
+        foreach( $this->_observers_source as $observer_class ){
+            $observer = &new $observer_class( $this );
+            $observer->attach( $this->source );
+        }
+    }
+
+    function removeSourceItemId( $id ){
+        if ( !is_array( $this->source )) return $this->source->readData( );
+        foreach( $this->source as $sourceKey => $sourceItem ){
+            if ( $sourceItem->id == $id ) unset( $this->source[$sourceKey]);
+        }
+    }
+    
 
 }
 ?>

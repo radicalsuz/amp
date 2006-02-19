@@ -2,6 +2,8 @@
 define( 'AMP_IMAGE_CLASS_ORIGINAL', 'original' );
 define( 'AMP_IMAGE_CLASS_THUMB', 'thumb' );
 define( 'AMP_IMAGE_CLASS_OPTIMIZED', 'pic' );
+define( 'AMP_IMAGE_CLASS_CROP', 'crop' );
+
 if (!defined('AMP_IMAGE_DEFAULT_ALIGNMENT')) define( 'AMP_IMAGE_DEFAULT_ALIGNMENT', 'right' );
 define( 'AMP_IMAGE_PATH', DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR ); 
 
@@ -91,7 +93,7 @@ class Content_Image {
     }
 
     function getImageClasses( ){
-        return array( AMP_IMAGE_CLASS_OPTIMIZED, AMP_IMAGE_CLASS_THUMB, AMP_IMAGE_CLASS_ORIGINAL );
+        return array( AMP_IMAGE_CLASS_OPTIMIZED, AMP_IMAGE_CLASS_THUMB, AMP_IMAGE_CLASS_ORIGINAL, AMP_IMAGE_CLASS_CROP );
     }
 
     function setData( $data ) {

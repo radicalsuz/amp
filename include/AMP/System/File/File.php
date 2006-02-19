@@ -15,6 +15,7 @@ class AMP_System_File {
     var $_sort_method = "";
 
     var $_observers = array( );
+    var $id;
 
     function AMP_System_File( $file_path = null ){
         if ( isset( $file_path )) $this->setFile( $file_path );
@@ -24,6 +25,7 @@ class AMP_System_File {
         $this->_path = $file_path;
         $this->_basename = basename( $file_path );
         $this->_extension = $this->findExtension( $file_path );
+        $this->id = &$this->_basename;
     }
 
     function findExtension( $file_path ){
@@ -115,8 +117,9 @@ class AMP_System_File {
     }
 
     function delete( ){
-        unlink( $this->getName( ));
+        $result = unlink( $this->getPath( ));
         $this->notify( 'delete');
+        return $result;
     }
 
     function notify( $action ){

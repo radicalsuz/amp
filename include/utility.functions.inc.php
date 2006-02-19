@@ -730,6 +730,7 @@ if (!function_exists('filterConstants')) {
 
 if (!function_exists( 'AMP_PastParticiple' )) {
     function AMP_PastParticiple( $word ) {
+        if (substr($word, -1) == "y" ) return substr( $word, 0, strlen( $word) -1 ) ."ied";
         if (substr($word, -1) != "e" ) return $word ."ed";
         return $word."d";
     }
