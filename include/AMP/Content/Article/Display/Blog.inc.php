@@ -36,9 +36,14 @@ class ArticleDisplay_Blog extends Article_Display {
     }
 
     function _HTML_authorDate ( $author, $date ) {
-		
-        return $this->_HTML_inSpan('Posted by '.$author. ' on '.  DoDate( $date, 'F jS, Y'), $this->_css_class_date) . $this->_HTML_newline();
-    } 
+   
+        return $this->_HTML_inSpan('Posted by '.$author. ' on '.  DoDate( $date, 'F jS, Y'), $this->_css_class_date);
+    }
+
+    function _HTML_endHeading() {
+        return "</td></tr><tr>" .'<td  class="'.$this->_css_class_text.'">' ;
+    }
+
     
 
  function _HTML_commentLink( &$commentSet) {
