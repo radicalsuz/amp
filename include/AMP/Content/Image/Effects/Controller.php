@@ -52,6 +52,11 @@ class AMP_Content_Image_Effects_Controller {
             $clear_values[$key] = ( isset( $tainted_values[$key])  && intval( $tainted_values[ $key ]))  ? abs( intval( $tainted_values[ $key ]  ))  : 0;
         }
 
+        if ( $action == 'resize' ){
+            if ( !$clear_values['width'] && $clear_values['height']) $clear_values['width'] = $this->_image_ref->width * ( $clear_values['height'] / $this->_image_ref->height );
+            if ( !$clear_values['height'] && $clear_values['width']) $clear_values['height'] = $this->_image_ref->height * ( $clear_values['width'] / $this->_image_ref->width );
+        }
+
         if ( isset( $clear_values['height']) && !$clear_values['height'])  $clear_values['height'] = $this->_image_ref->height;
         if ( isset( $clear_values['width'])  && !$clear_values['width'])   $clear_values['width']  = $this->_image_ref->width;
         
