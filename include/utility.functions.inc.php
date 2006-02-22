@@ -949,6 +949,18 @@ function AMP_Authenticate( $loginType = 'content', $do_login = false ){
     return $auth_status[ $loginType ];
     
 }
+
+if ( !function_exists( 'AMP_initBuffer')){
+    function &AMP_initBuffer( $header = '', $footer = '', $delimiter = "\n\n") {
+        require_once( 'AMP/Content/Buffer.php');
+        $buffer = &new AMP_Content_Buffer( );
+        if ( $header ) $buffer->set_header( AMP_HTML_JAVASCRIPT_START );
+        if ( $footer ) $buffer->set_footer( AMP_HTML_JAVASCRIPT_END );
+        if ( $delimiter ) $buffer->set_delimiter( $delimiter );
+        return $buffer;
+    }
+
+}
 			
 
 ?>

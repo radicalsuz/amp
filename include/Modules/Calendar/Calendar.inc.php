@@ -210,26 +210,36 @@ var $id;
     }
 
     function saveEvent( $save_data ) {
-        if ($this->allowRegistration() && isset( $save_data['rsvp']) && $save_data['rsvp']) {
-            $save_data['registration_modin'] = $this->registrationForm();
+        if ( $this->allowRegistration() && isset( $save_data['rsvp']) && $save_data['rsvp'] ) {
+            $save_data['registration_modin'] = $this->registrationForm() ;
         }
-        unset($save_data['rsvp']);
+        unset( $save_data['rsvp'] );
 
         $rs = $this->dbcon->Replace("calendar", $save_data, "id", $quote = true );
         
 
         if ($rs == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
+        else ( $this->id= $save_data['id']);
+
+        $this->clearEventCache( $this->id );
+
         if ($rs) return true;
 
         return false;
+    }
+
+    function clearEventCache( $cal_id ){
+        $sql  = "SELECT * FROM calendar WHERE "; 
+        $sql .= "id='" . $cal_id . "'";      
+
+        $this->dbcon->CacheFlush( );
+        if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) AMP_DebugSQL( $sql, get_class($this)." cleared cache"); 
     }
 
 	function updateEvent( $save_data ) {
         trigger_error( 'updateing dia key: ' . $save_data['dia_key'] . 'for event id:' . $save_data['id']);
 		if (!isset($save_data['id'])) return false;	
 		$new_data = array_merge($this->readData($save_data['id']), $save_data);
-        #$old_data = $this->readData( $save_data['id']);
-		#$new_data = array_merge($old_data, $save_data);
         
 		return $this->saveEvent($new_data);
 	}

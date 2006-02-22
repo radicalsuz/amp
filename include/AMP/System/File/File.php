@@ -1,8 +1,5 @@
 <?php
-
-if ( !defined( 'AMP_SORT_ASC' )) define( 'AMP_SORT_ASC', ' ASC');
-if ( !defined( 'AMP_SORT_DESC' )) define( 'AMP_SORT_DESC', ' DESC');
-if ( !defined( 'AMP_SORT_END' )) define( 'AMP_SORT_END', 'zzzzzzzzzzzzzzzz');
+require_once( 'AMP/System/Data/Config.inc.php');
 
 class AMP_System_File {
 
@@ -135,6 +132,7 @@ class AMP_System_File {
         }
         $this->_observers[] = &$observer;
     }
+
 
 }
 

@@ -84,16 +84,18 @@ class Content_Image {
     }
 
     function getURL( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {
+        if ( array_search( $image_type, $this->getImageClasses()) === FALSE) return false;
         if ( strpos( $this->filename, "/" ) !== FALSE ) return $this->filename;
         return AMP_IMAGE_PATH . $image_type . DIRECTORY_SEPARATOR . $this->filename;
     }
 
     function getPath( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {
+        if ( array_search( $image_type, $this->getImageClasses()) === FALSE) return false;
         return AMP_LOCAL_PATH . $this->getURL( $image_type );
     }
 
     function getImageClasses( ){
-        return array( AMP_IMAGE_CLASS_OPTIMIZED, AMP_IMAGE_CLASS_THUMB, AMP_IMAGE_CLASS_ORIGINAL, AMP_IMAGE_CLASS_CROP );
+        return array_keys( AMPConstant_Lookup::instance( 'imageClasses' ));
     }
 
     function setData( $data ) {
@@ -105,6 +107,18 @@ class Content_Image {
         if (!isset($this->_itemdata[ $fieldname ] )) return true;
         unset( $this->_itemdata[ $fieldname ] );
         return true;
+    }
+
+    function isWide( ){
+        return ( $this->imageRatio( ) > 1 );
+    }
+
+    function isTall( ){
+        return ( $this->imageRatio( ) < 1 );
+    }
+
+    function imageRatio( ){
+        return $this->getHeight( )/$this->getWidth( );
     }
 }
 

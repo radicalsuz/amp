@@ -1,4 +1,9 @@
 <?php
+define( 'AMP_HTML_JAVASCRIPT_START', "<script language=\"Javascript\"  type=\"text/javascript\">\n");
+define( 'AMP_HTML_JAVASCRIPT_END', "</script>\n");
+define( 'AMP_HTML_STYLESHEET_START', "<style type='text/css'>\n");
+define( 'AMP_HTML_STYLESHEET_END', "</style>\n");
+
 
 class AMPContent_Header {
 
@@ -8,7 +13,11 @@ class AMPContent_Header {
 
     var $link_rel = array( 'Search'=> '/search.php' );
     var $javaScripts = array( 'functions' => '/scripts/functions.js' );
+    var $_javaScript_buffer;
+
     var $styleSheets = array( 'default'		=> '/styles_default.css');
+    var $_styleSheet_buffer;
+
     var $_path_favicon = '/img/favicon.ico';
     var $_extraHtml;
 
@@ -83,10 +92,37 @@ class AMPContent_Header {
         return ($this->javaScripts[] = $script_url);
     }
 
+    function addJavascriptDynamic( $content, $key = null ){
+        $buffer = &$this->_getBuffer( 'javaScript' );
+        return $buffer->add( $content, $key );
+    }
+
+    function &_getBuffer( $buffer_type = 'javaScript' ){
+        $buffer_Ref = '_' . $buffer_type . '_buffer';
+        if ( isset( $this->$buffer_Ref )) return $this->$buffer_Ref;
+
+        $buffer_header_constant = 'AMP_HTML_'.strtoupper( $buffer_type ).'_START'; 
+        $buffer_header = defined( $buffer_header_constant ) ?
+                         constant( $buffer_header_constant ) : false;
+
+        $buffer_footer_constant = 'AMP_HTML_'.strtoupper( $buffer_type ).'_END'; 
+        $buffer_footer = defined( $buffer_header_constant ) ?
+                         constant( $buffer_header_constant ) : false;
+
+        $this->$buffer_Ref = &AMP_initBuffer( $buffer_header, $buffer_footer );
+        return $this->$buffer_Ref;
+    }
+
+
     function addStylesheet( $link, $id = null) {
         if (!$link) return false;
         if (isset($id)) return ($this->styleSheets[ $id ] = $link);
         return ($this->styleSheets[] = $link );
+    }
+
+    function addStylesheetDynamic( $content, $key = null ){
+        $buffer = &$this->_getBuffer( 'styleSheet' );
+        return $buffer->add( $content, $key );
     }
 
     function addExtraHtml( $html ) {
@@ -134,10 +170,11 @@ class AMPContent_Header {
             if (!(substr($url, 0, 1)=="/")) $url = "/" . $url;
             $output .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $url . "\">\n";
         }
-        return $output;
+        if ( isset( $this->_styleSheet_buffer )) {
+            $output .= $this->_styleSheet_buffer->execute( );
+        }
+        return $output ;
     }
-
-
 
     function _HTML_javaScripts() {
         $output = "";
@@ -145,6 +182,9 @@ class AMPContent_Header {
         foreach ( $this->javaScripts as $script_id => $url ) {
             if (!((substr($url, 0, 1)=="/") || (substr($url, 0, 7)=="http://"))) $url = "/" . $url;
             $output .= "<script language=\"Javascript\"  type=\"text/javascript\" src=\"" . $url . "\"></script>\n";
+        }
+        if ( isset( $this->_javaScript_buffer)) {
+            $output .= $this->_javaScript_buffer->execute( );
         }
         return $output;
     }

@@ -391,4 +391,13 @@ class AMPContentLookup_ProtectedSections extends AMPContent_Lookup {
     }
 }
 
+class AMPConstantLookup_ImageClasses extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_IMAGE_CLASS";
+
+    function AMPConstantLookup_ImageClasses() {
+        $this->init();
+    }
+
+}
+
 ?>

@@ -7,18 +7,30 @@ define( 'AMP_INCLUDE_END_TAG', '}}' );
 class AMPDisplay_HTML {
 
     var $_html_value;
+    var $_buffer;
 
     function setContent( $html ) {
-        $this->_html_value = $html;
+        $buffer = &$this->getBuffer( );
+        $buffer->clear( );
+        $buffer->add( $html );
+    }
+
+    function &getBuffer( ){
+        if ( isset( $this->_buffer )) return $this->_buffer;
+
+        require_once( 'AMP/Content/Buffer.inc.php');
+        $this->_buffer = &new AMP_Content_Buffer;
+        return $this->_buffer;
     }
 
     function addtoContent( $html ){
-        $this->_html_value .= $html;
+        $buffer = &$this->getBuffer( );
+        $buffer->add( $html );
     }
 
     function execute() {
-        if ( !isset( $this->_html_value )) return false;
-        return $this->_html_value;
+        $buffer = &$this->getBuffer( );
+        return $buffer->execute( );
     }
 
     function _HTML_inSpan( $text, $class=array() ) {

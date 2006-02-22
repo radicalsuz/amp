@@ -74,7 +74,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
     }
 
     function save ( $data, $options=null ) {
-		$this->notice('entering diaevent save plugin');
+		#$this->notice('entering diaevent save plugin');
         $options=array_merge($options, $this->getOptions());
 
 		if(!defined('DIA_API_ORGCODE') && isset($options[ 'orgKey' ])) {
