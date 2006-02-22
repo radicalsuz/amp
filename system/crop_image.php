@@ -34,7 +34,7 @@ if (!$_GET['crh']) {
 }
 
 
-  $maxwinw =2000; //Sets the maxmimum width for displaying the original while cropping
+  $maxwinw = 2000; //Sets the maxmimum width for displaying the original while cropping
   $maxwinh = 2000; //Same, only this time it's the height
 
   $jpegqual = 80; //Sets the jpeg quality
@@ -255,4 +255,3 @@ imagedestroy($im);
   }
 
 ?>
-

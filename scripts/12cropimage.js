@@ -37,7 +37,7 @@ function lib_obj(obj,nest){
   this.evnt=bw.dom? document.getElementById(obj):
     bw.ie4?document.all[obj]:bw.ns4?eval(nest+"document.layers." +obj):0;
   if(!this.evnt) return lib_message('The layer does not exist ('+obj+')'
-    +'- \nIf your using Netscape please check the nesting of your tags!')
+    +'- \nIf you are using Netscape please check the nesting of your tags!')
   this.css=bw.dom||bw.ie4?this.evnt.style:this.evnt;
   this.ref=bw.dom||bw.ie4?document:this.css.document;
   this.x=parseInt(this.css.left)||this.css.pixelLeft||this.evnt.offsetLeft||0;
