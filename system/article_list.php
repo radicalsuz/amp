@@ -55,6 +55,21 @@ function art_change_section($ids,$type) {
 	send_to($_SERVER['PHP_SELF'], $qs);
 }
 
+function art_change_class($ids,$class) {
+	global $dbcon;
+	if (is_array($ids)) {
+		foreach ($ids as $id) {
+			$q = "update articles set class=$class where id=$id";
+			
+			$dbcon->execute($q) or die($q.$dbcon->errorMsg());
+		}
+		$qs = array(
+			'msg' => urlencode('Selected items class changes.')
+		);
+	}
+	send_to($_SERVER['PHP_SELF'], $qs);
+}
+
 function art_unpublish($ids) {
 	global $dbcon;
 	if (is_array($ids)) {
@@ -118,6 +133,9 @@ switch($_POST['act']) {
 		break;
 	case 'Move Articles':
 		art_change_section($_POST['id'],$_POST['change_type']);
+		break;
+	case 'Change Class':
+		art_change_class($_POST['id'],$_POST['change_class']);
 		break;
 	case 'Change Order':
 		art_order($_POST['order']);
@@ -356,7 +374,16 @@ for(i=1; i<t; i++) document.forms[1][i].checked=document.forms[1][7].checked;
 	  <option>Select Section To Move To</option>
 	  <?php echo $obj->select_type_tree($MX_top); ?></Select>
 		<input type="submit" name="act" value="Move Articles" class="name">
-		
+		<br>
+		<select name="change_class" class="name">
+	  <option>Select Class To Change</option>
+	        <?php  $allclass->MoveFirst();
+	        while (!$allclass->EOF){?>
+              <option value="<?php echo  $allclass->Fields("id")?>" ><?php echo  $allclass->Fields("class");?> 
+              </option>
+              <?php      $allclass->MoveNext();  } ?>
+	  </Select>
+		<input type="submit" name="act" value="Change Class" class="name">
 		</div>
 
 	<div class='list_table'> 
