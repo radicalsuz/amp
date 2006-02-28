@@ -9,7 +9,6 @@ class GallerySet_Display extends AMPContent_DisplayList_HTML {
 #    var $_css_class_container_listentry = "gallerylist";
 #    var $_css_class_title    = "listtitle";
     var $_css_class_title    = "gallerytitle";
-    var $_css_class_container_listimage = "gallerycon";
     var $_sourceItem_class = "Gallery";
 
     function GallerySet_Display( &$source ){
