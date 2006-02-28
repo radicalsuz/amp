@@ -4,7 +4,7 @@ class AMPSystem_ComponentMap {
     
     var $paths;
     var $components;
-    var $heading;
+    var $heading = 'Item';
     var $nav_name;
 
     var $_allow_inline_update = false;
@@ -14,6 +14,15 @@ class AMPSystem_ComponentMap {
 
     function getComponents() {
         return $this->components;
+    }
+
+    function &getComponent( $component_type ){
+        if ( !isset( $this->components[ $component_type ])) return false;
+        if ( isset( $this->paths[ $component_type ])) {
+            require_once( $this->paths[ $component_type ]);
+        }
+        $component_class = $this->components[ $component_type ];
+        return new $component_class( AMP_Registry::getDbcon( ) );
     }
 
     function getFilePaths() {

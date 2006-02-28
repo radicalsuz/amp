@@ -1,0 +1,10 @@
+<array>
+    <file_value>
+        <type>file</type>
+        <label>File:</label>
+    </file_value>
+    <new_name>
+        <type>text</type>
+        <label>New File Name ( optional ) &lt;br /&gt;&lt;span class=photocaption&gt;please do NOT include a file extension (  like .jpg )&lt;/span&gt;</label>
+    </new_name>
+</array>

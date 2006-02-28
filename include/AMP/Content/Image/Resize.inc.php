@@ -1,27 +1,18 @@
 <?php
-define( 'AMP_TEXT_ERROR_IMAGE_NOT_ALLOWED', "Could not determine the type of image. JPG, GIF, and PNG format only"); 
-define( 'AMP_TEXT_ERROR_FILE_EXISTS', "File already exists: " );
-define( 'AMP_TEXT_ERROR_FILE_WRITE_FAILED', "Failed to write :" );
-define( 'AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND', 'Your installation of PHP does not support resizing images of this type.  Update your GD library configuration.');
-
 require_once( 'AMP/Content/Image.inc.php' );
+require_once( 'AMP/System/File/Image.php');
 
 class ContentImage_Resize {
 
-    var $_file_extension;
-    var $_file_name;
+    var $_image_ref;
+    var $_crop_ref;
+    var $_content_image_controller;
 
     var $versions = array();
     var $_version_keys = array( AMP_IMAGE_CLASS_ORIGINAL, AMP_IMAGE_CLASS_OPTIMIZED, AMP_IMAGE_CLASS_THUMB );
-    var $imageRef;
 
-    var $_allowed_image_type_extensions = array(
-            IMAGETYPE_GIF => 'gif', IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png' );
-    var $_imagecreate_methods = array(
-            'gif'=>'imagecreatefromgif', 'jpg'=>'imagecreatefromjpeg', 'png' => 'imagecreatefrompng' );
-    var $_imagewrite_methods = array(
-            'gif'=>'imagegif', 'jpg'=>'imagejpeg', 'png' => 'imagepng' );
-
+    var $_allowed_mimetypes = array( 'image/gif', 'image/jpeg', 'image/png');
+            
     var $_widths = array( AMP_IMAGE_CLASS_THUMB => AMP_IMAGE_WIDTH_THUMB );
     var $_errors=array();
 
@@ -30,51 +21,52 @@ class ContentImage_Resize {
     }
 
     ###############################
-    ###  Core Functions   ###
+    ###  Core Functions         ###
     ###############################
 
     function execute() {
-        if (!isset($this->versions[ AMP_IMAGE_CLASS_ORIGINAL ])) return false;
+        if ( !isset($this->_image_ref )) return false;
         $this->makeVersions();
         
-        foreach( $this->_version_keys as $version ) {
-            if (!isset($this->versions[ $version ])) continue;
-            $this->saveVersion( $version );
-        }
-
         return (empty( $this->_errors ));
     }
 
     function makeVersions() {
-        foreach( $this->_version_keys  as $version ) {
-            if (isset( $this->versions[ $version ] )) continue;
-            if (!isset( $this->_widths[ $version ] )) continue;
-            if ( $version == AMP_IMAGE_CLASS_ORIGINAL ) continue; 
-
-            $this->_makeVersion( $version );
+        foreach( $this->_version_keys  as $version_class ) {
+            $custom_method = 'makeVersion' . ucfirst( $version_class );
+            if ( method_exists( $this, $custom_method )) {
+                $this->$custom_method( );
+                continue;
+            }
+            $this->makeVersion( $version_class );
         }
     }
-            
 
-    function saveVersion( $version=AMP_IMAGE_CLASS_ORIGINAL ) {
-        $imgpath = $this->getPath( $version );
-        if ( $version == AMP_IMAGE_CLASS_ORIGINAL ) return true; 
+    function makeVersionOriginal( ){
+        return;
+    }
 
-        if (file_exists($imgpath)) {
-            trigger_error(AMP_TEXT_ERROR_FILE_EXISTS.$imgpath) ;
-        }
+    function makeVersion( $version_class, $save = true  ){
+        $target_path = $this->_content_image_controller->getPath( $version_class );
+        $source = &$this->_getVersionSource( $version_class );
 
-        $write_function= $this->_imagewrite_methods[$this->_file_extension];
+        $new_height = $source->height * ( $this->_widths[ $version_class ] / $source->width );
+        $new_resource = &$source->resize( $this->_widths[ $version_class ], $new_height );
 
-        if (! $write_function( $this->versions[ $version ], $imgpath ) ) {
-            $this->addError( AMP_TEXT_ERROR_FILE_WRITE_FAILED );
+        if ( !$save ) return $new_resource;
+
+        if ( !$source->write_image_resource( $new_resource, $target_path )) {
+            $this->addError( sprintf( AMP_TEXT_ERROR_FILE_WRITE_FAILED, $target_path ));
             return false;
         }
+        $this->setFilePermission( $target_path );
 
-        chmod ($imgpath, 0755);
-        return true;
     }
 
+    function setFilePermission( $target_file ){
+        chmod ($target_file, 0755);
+    }
+            
 
     ###############################
     ###  Public Access Methods  ###
@@ -82,110 +74,58 @@ class ContentImage_Resize {
 
     function setImageFile( $filename ) {
 
-        
-        if ( ! (($imagetype = exif_imagetype( $filename )) && 
-                isset($this->_allowed_image_type_extensions[ $imagetype ]))) {
+        if ( !file_exists( $filename )) return false; 
+        $image_ref = &new AMP_System_File_Image( $filename );
+        if ( array_search( $image_ref->get_mimetype( ), $this->_allowed_mimetypes ) === FALSE ) {
             $this->addError( AMP_TEXT_ERROR_IMAGE_NOT_ALLOWED );
             return false;
-        } 
 
-        $this->_file_extension = $this->_allowed_image_type_extensions[ $imagetype ];
-        $this->setFileName( AMP_removeExtension( basename( $filename ) ) ); 
-        return $this->_setOriginal( $filename );
-
+        }
+        $this->_content_image_controller = &new Content_Image( $image_ref->getName( ));
+        $this->_image_ref = &$image_ref;
+        $this->_initCrop( );
+        $this->_setWidths( );
+        return true;
     }
 
-    function setFileName( $name ) {
-        $this->_file_name = $name;
-    }
-
-    function getPath( $version ) {
-        return  AMP_LOCAL_PATH . AMP_IMAGE_PATH . $version . 
-            DIRECTORY_SEPARATOR . $this->_file_name .".". $this->_file_extension;
+    function _initCrop( ) {
+        $crop_path = $this->_content_image_controller->getPath( AMP_IMAGE_CLASS_CROP );
+        if ( !file_exists( $crop_path )) return false;
+        $this->_crop_ref = &new AMP_System_File_Image( $crop_path );
     }
 
     ################################
     ###  Private Config Methods  ###
     ################################
 
-    function _setOriginal( $filename ) {
-        if (!isset( $this->_imagecreate_methods[ $this->_file_extension ] )) return false;
-        $create_method = $this->_imagecreate_methods[ $this->_file_extension ];
-        if ( !function_exists( $create_method )) {
-            trigger_error( AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND );
-            $this->addError( AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND );
-            return false;
-        }
-
-        if ($this->versions[ AMP_IMAGE_CLASS_ORIGINAL ] = ( $create_method( $filename ))) {
-            $this->_setWidths();
-            return true;
-        }
-
-        return false;
-    }
-
     function _setWidths() {
-        if (!isset($this->versions[ AMP_IMAGE_CLASS_ORIGINAL ])) return false;
+        if (!isset($this->_image_ref )) return false;
 
-        $start_height = imagesy( $this->versions[ AMP_IMAGE_CLASS_ORIGINAL ] );
-        $start_width =  imagesx( $this->versions[ AMP_IMAGE_CLASS_ORIGINAL ] );
-        $this->_widths[ AMP_IMAGE_CLASS_ORIGINAL ] = $start_width;
-        $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ] = $this->_getOptimizedWidth( $start_height, $start_width );
-        if ($start_width < $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ])
-                $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ] = $start_width;
-        if ($start_width < $this->_widths[ AMP_IMAGE_CLASS_THUMB ])
-                $this->_widths[ AMP_IMAGE_CLASS_THUMB ] = $start_width;
+        $this->_widths[ AMP_IMAGE_CLASS_ORIGINAL ] = $this->_image_ref->width;
+        $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ] = $this->_getOptimizedWidth();
+
+        if ($this->_image_ref->width < $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ])
+                $this->_widths[ AMP_IMAGE_CLASS_OPTIMIZED ] = $this->_image_ref->width;
+
+        $thumb_source = $this->_getVersionSource( AMP_IMAGE_CLASS_THUMB );
+        if ($thumb_source->width < $this->_widths[ AMP_IMAGE_CLASS_THUMB ])
+                $this->_widths[ AMP_IMAGE_CLASS_THUMB ] = $thumb_source->width;
     }
 
-    function _getOptimizedWidth( $start_height, $start_width ) {
-        if ( $start_width > $start_height ) {
+    function _getVersionSource( $version_class ){
+        if ( $version_class != AMP_IMAGE_CLASS_THUMB && $version_class != AMP_IMAGE_CLASS_CROP ) {
+            return $this->_image_ref;
+        }
+
+        if ( !isset( $this->_crop_ref )) return $this->_image_ref;
+        return $this->_crop_ref;
+    }
+
+    function _getOptimizedWidth() {
+        if ( $this->_image_ref->width > $this->_image_ref->height ) {
             return AMP_IMAGE_WIDTH_WIDE;
         }
         return AMP_IMAGE_WIDTH_TALL;
-    }
-
-
-    ################################
-    ###  private Image Resize methods ###
-    ################################
-
-
-    function _makeVersion( $version=AMP_IMAGE_CLASS_ORIGINAL ) {
-
-        $image= &$this->versions[ AMP_IMAGE_CLASS_ORIGINAL  ];
-        $new_width = $this->_widths[ $version ];
-
-        $start_height = imagesy( $image );
-        $start_width =  imagesx( $image );
-
-        $aspect_ratio = $start_width / $new_width;
-        $new_height= $start_height / $aspect_ratio;
-
-        if ( $new_width && $new_height ) {
-            return ( $this->versions[ $version ] = &$this->_resize( $image, $start_width, $new_width, $start_height, $new_height ) );
-        }
-        
-    }
-
-
-    function &_resize( &$image, $start_width, $new_width, $start_height, $new_height ) {
-
-        if ((!function_exists('ImageCreateTrueColor')) || $this->_file_extension == "gif") {
-
-            // if GD library 2.0 is not installed
-            // or the file is a GIF
-
-            $result_image = &ImageCreate($new_width,$new_height);
-            ImageCopyResized($result_image, $image, 0,   0,   0,   0, $new_width, $new_height, $start_width, $start_height); 
-            return $result_image;
-
-        }
-
-        $result_image = &ImageCreateTrueColor($new_width,$new_height);
-        ImageCopyResampled($result_image, $image, 0,   0,   0,   0, $new_width, $new_height, $start_width, $start_height); 
-
-        return $result_image;
     }
 
 
@@ -194,6 +134,7 @@ class ContentImage_Resize {
     ################################
 
     function addError( $text, $name = null ) {
+        trigger_error( $text );
         if (isset($name )) return $this->_errors[ $name ] = $text;
         return $this->_errors[] = $text;
     }

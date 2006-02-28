@@ -68,7 +68,10 @@ class AMP_System_File_Image extends AMP_System_File {
     function _get_action_method( $action ) {
         $method_set = '_' . $action .'_methods' ;
         $methods = $this->$method_set;
-        if ( !isset( $methods[ $this->get_mimetype( )])) return false ;
+        if ( !isset( $methods[ $this->get_mimetype( )])) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND, $action, $this->getName( ), $this->get_mimetype( )) );
+            return false ;
+        }
         return $methods[ $this->get_mimetype( )] ;
     }
 

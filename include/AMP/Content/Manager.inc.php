@@ -5,7 +5,6 @@ if (!defined( 'AMP_CONTENT_BUFFER_CONTAINER_ID' )) define ('AMP_CONTENT_BUFFER_C
 if (!defined( 'AMP_CONTENT_DISPLAY_KEY_INTRO' )) define ('AMP_CONTENT_DISPLAY_KEY_INTRO', "intro");
 if (!defined( 'AMP_CONTENT_DISPLAY_KEY_BUFFER' )) define ('AMP_CONTENT_DISPLAY_KEY_BUFFER', "buffer");
 
-require_once( 'AMP/Content/Display/HTML.inc.php' );
 /**
  * Controller for the main body of the page 
  *
@@ -19,13 +18,13 @@ require_once( 'AMP/Content/Display/HTML.inc.php' );
  * @uses AMPDisplay_HTML
  * @package Content 
  * @since 3.5.3 
- * @version 3.5.3 
+ * @version 3.5.8 
  * @copyright 2005 Radical Designs
  * @author Austin Putman <austin@radicaldesigns.org> 
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @see AMPContent_Page
  */
-class AMPContent_Manager extends AMPDisplay_HTML {
+class AMPContent_Manager {
 
 // {{{ private properties: _displays, _display_order, _displays_executed 
 
@@ -68,6 +67,16 @@ class AMPContent_Manager extends AMPDisplay_HTML {
 
     var $_displays_executed = array( );
 
+    /**
+     * Creates any required enveloping markup for displays 
+     * 
+     * Usually an instance of AMPDisplay_HTML
+     * @var object  
+     * @access protected
+     * @since 3.5.8
+     */
+    var $_renderer;
+
 // }}}
 
 // {{{ public core methods: instance, output, execute
@@ -82,6 +91,8 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      * @return AMPContent_Manager 
      */
     function AMPContent_Manager() {
+        require_once( 'AMP/Content/Display/HTML.inc.php' );
+        $this->_renderer = &new AMPDisplay_HTML( );
     }
 
     /**
@@ -270,7 +281,7 @@ class AMPContent_Manager extends AMPDisplay_HTML {
      */
     function _doDisplayBuffer( &$display ) {
         if (!AMP_CONTENT_BUFFER_CONTAINER_ID ) return $display->execute() ;
-        return $this->_HTML_inDiv( $display->execute(), array( 'id' => AMP_CONTENT_BUFFER_CONTAINER_ID ));
+        return $this->_renderer->_HTML_inDiv( $display->execute(), array( 'id' => AMP_CONTENT_BUFFER_CONTAINER_ID ));
     }
 
 // }}}

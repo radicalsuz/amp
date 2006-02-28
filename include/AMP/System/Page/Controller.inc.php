@@ -27,11 +27,20 @@ class AMPSystemPage_Controller {
     }
 
 	function init( ) {
-		$this->_page = &AMPContent_Page::instance( );
+		$this->_initPage( );
 		$this->_dbcon = &AMP_Registry::getDbcon(); 
 		$this->setProtectedMethods();
         $this->readRequest( );
         $this->_afterInit( );
+    }
+
+    function _initPage( ){
+        if ( defined( 'AMP_USERMODE_ADMIN') && AMP_USERMODE_ADMIN ) {
+            $this->_page = &AMPSystem_Page::instance( );
+            return;
+        }
+        $this->_page = &AMPContent_Page::instance( );
+
     }
 
 	function execute() {
@@ -89,9 +98,11 @@ class AMPSystemPage_Controller {
 		}
         return $this->doAuthorization( );
     }
+
     function doAuthorization( ){
         //interface
     }
+
 	function &getActionObject() {
 		if (isset($this->_action_object)) return $this->_action_object;
         #if (!isset($this->_action_id)) return false;
@@ -145,6 +156,32 @@ class AMPSystemPage_Controller {
     }
 
 
+}
+
+function AMP_System_Page_Controller {
+
+    var $_request;
+    var $_map;
+    
+    var $_model;
+    var $_displayManager;
+
+
+    function AMP_System_Page_Controller( ){
+        $this->__construct( );
+    }
+
+    function __construct( ){
+        $this->_contentManager = &new AMPContent_Manager( );
+    }
+
+    function output( ){
+        return $this->_contentManager->execute( );
+    }
+
+    function execute( ){
+        $this->do_action( );
+    }
 }
 
 ?>

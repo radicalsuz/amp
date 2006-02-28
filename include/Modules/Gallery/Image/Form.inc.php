@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/System/Form/XML.inc.php');
+require_once( 'Modules/Gallery/Image/ComponentMap.inc.php');
 
 class GalleryImage_Form extends AMPSystem_Form_XML {
 

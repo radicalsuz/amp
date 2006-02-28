@@ -150,6 +150,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         return  $this->form->display() . $form_footer . $script;
     }
 
+    function execute( ){
+        return $this->output( );
+    }
+
     function setValues( $data ) {
         $this->form->setDefaults( $this->translate($data, 'set') );
     }
@@ -217,6 +221,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $this->form->updateAttributes( array( 'onSubmit' => 'Ajax.InLineForm.onSubmit( );', 'class' => 'inplaceeditor-form'));
     }
 
+    function initNoId( ){
+        //interface
+    }
+
     #########################################
     ### Public Field Manipulation Methods ###
     #########################################
@@ -264,6 +272,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
         require_once( 'AMP/System/Upload.inc.php' );
         $upLoader = &new AMPSystem_Upload( $_FILES[ $filefield ][ 'name' ] );
+        $this->_initUploader( $data, $filefield, $upLoader );
         if (!$upLoader->execute( $_FILES[ $filefield ][ 'tmp_name' ] )) return false;
 
         require_once( 'AMP/Content/Image/Resize.inc.php');
@@ -274,6 +283,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
         $this->_fileNames[ $filefield ] = basename( $upLoader->getTargetPath() );
         return $this->_fileNames[ $filefield ];
+    }
+
+    function _initUploader( $data, $filefield, &$uploader ){
+        //interface
     }
 
     function _addFileLink( $data, $fieldname ) {
@@ -879,6 +892,14 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
         require_once( 'AMP/System/Permission/Manager.inc.php');
         $this->_per_manager = &AMPSystem_PermissionManager::instance();
+    }
+
+    function removeSubmit( $submit_value ){
+        //interface
+    }
+
+    function postSave( $data ){
+        //interface
     }
 
  }

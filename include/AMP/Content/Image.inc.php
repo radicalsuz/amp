@@ -25,6 +25,7 @@ class Content_Image {
     function setFile( $filename ) {
         $this->filename = $filename;
         if ( !$filename ) return;
+        if ( !file_exists( $this->getPath( $this->getImageClass( )))) return;
         $this->setSize(getimagesize( $this->getPath( $this->getImageClass() ) )); 
     }
 

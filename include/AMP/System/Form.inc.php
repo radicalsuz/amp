@@ -116,6 +116,11 @@ class AMPSystem_Form extends AMPForm {
         return false;
     }
 
+    function initNoId( ){
+        $this->removeSubmit( 'copy' );
+        $this->removeSubmit( 'delete' );
+    }
+
     function getItemName() {
         if (!$this->getField( $this->name_field )) return false;
         $set = $this->getValues( array($this->name_field) );

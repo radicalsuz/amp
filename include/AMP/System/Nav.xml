@@ -169,6 +169,12 @@
 		<class>add</class>
 	</item>
 	<item>
+		<href>AMP_SYSTEM_URL_IMAGE_UPLOAD</href>
+		<label>Upload Photo</label>
+		<per>GALLERY_IMAGE_PUBLISH</per>
+		<class>add</class>
+	</item>
+	<item>
 		<href>gallery_image.php?action=list</href>
 		<label>View Gallery</label>
 		<per>GALLERY_ACCESS</per>

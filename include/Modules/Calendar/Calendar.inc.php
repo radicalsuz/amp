@@ -35,6 +35,7 @@ var $allow_registration = false;
 var $registration_form_modin;
 
 var $id;
+    var $_debug_cache_constant = 'AMP_DISPLAYMODE_DEBUG_CACHE';
 
 	function Calendar(&$dbcon, $eventset=null, $admin=false, $instance=1) {
 		$this->instance=$instance;
@@ -216,10 +217,15 @@ var $id;
         unset( $save_data['rsvp'] );
 
         $rs = $this->dbcon->Replace("calendar", $save_data, "id", $quote = true );
-        
 
-        if ($rs == ADODB_REPLACE_INSERTED ) $this->id = $this->dbcon->Insert_ID();
-        else ( $this->id= $save_data['id']);
+        if ($rs == ADODB_REPLACE_INSERTED ) {
+            $this->id = $this->dbcon->Insert_ID();
+        } elseif ( $rs ){
+            $this->id= $save_data['id'];
+        } 
+        if ( $rs && isset( $save_data['lzip']) && substr( $save_data['lzip'], 0, 1 ) == '0') {
+            $this->dbcon->Execute( 'update calendar set lzip = '.$this->dbcon->qstr( $save_data['lzip']) . 'where id = '. $this->id );
+        }
 
         $this->clearEventCache( $this->id );
 
@@ -237,7 +243,7 @@ var $id;
     }
 
 	function updateEvent( $save_data ) {
-        trigger_error( 'updateing dia key: ' . $save_data['dia_key'] . 'for event id:' . $save_data['id']);
+        trigger_error( 'updating dia key: ' . $save_data['dia_key'] . 'for event id:' . $save_data['id']);
 		if (!isset($save_data['id'])) return false;	
 		$new_data = array_merge($this->readData($save_data['id']), $save_data);
         
