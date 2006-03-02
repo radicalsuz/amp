@@ -8,7 +8,6 @@ require_once( 'Modules/VoterGuide/Position/Set.inc.php');
 
 
 require_once( 'DIA/API.php' );
-require_once( 'XML/Unserializer.php' );
 
 class VoterGuide extends AMPSystem_Data_Item {
 
@@ -33,6 +32,9 @@ class VoterGuide extends AMPSystem_Data_Item {
 		parent::init($dbcon, $id);
 		if(!defined('AMP_VOTERGUIDE_UNSUBSCRIBE')) {
 			define('AMP_VOTERGUIDE_UNSUBSCRIBE', false);
+		}
+		if(defined('VOTERGUIDE_DIA_GROUP_PARENT_KEY')) {
+			$this->_dia_group_parent = VOTERGUIDE_DIA_GROUP_PARENT_KEY;
 		}
 	}
 
@@ -104,7 +106,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 		
 		if($this->isNew()) {
 			if(!$this->_validateNewGuide()) return false;
-			$this->mergeData(array('publish' => true));
+			$this->mergeData(array('publish' => true, 'bloc_id' => $this->createVoterBloc())); 
 		}
 
         if ( !( $result=PARENT::save())) return $result;
@@ -117,6 +119,16 @@ class VoterGuide extends AMPSystem_Data_Item {
         return false;
     }
 
+	function setParentGroup($group) {
+		$this->_dia_group_parent = $group;
+	}
+
+	function getParentGroup() {
+		if(isset($this->_dia_group_parent)) {
+			return $this->_dia_group_parent;
+		}
+		return false;
+	}
 	function setRedirect() {
 		$redirect = array('old' => $this->getPublicURL(),
 						  'new' => AMP_CONTENT_URL_VOTERGUIDE . '?id=' . $this->id,
@@ -155,8 +167,8 @@ class VoterGuide extends AMPSystem_Data_Item {
                         'external_ID' => 'AMP_'.$this->id,
                         'Display_To_User' => 0,
                         'Listserve_Type' => 'Restrict Posts to Allowed Users');
-        if(defined('VOTERGUIDE_DIA_GROUP_PARENT_KEY')) {
-            $group['parent_KEY'] = VOTERGUIDE_DIA_GROUP_PARENT_KEY;
+        if($parent = $this->getParentGroup()) {
+            $group['parent_KEY'] = $parent;
         }
 		if(defined('AMP_VOTERGUIDE_UNSUBSCRIBE_FOOTER')) {
 			$group['Append_Footer'] = sprintf(AMP_VOTERGUIDE_UNSUBSCRIBE_FOOTER,
@@ -201,30 +213,21 @@ class VoterGuide extends AMPSystem_Data_Item {
 			return false;
 		}
         $api =& DIA_API::create();
-		$results = $api->get('supporter', array('where' => 'Email="'.$email.'"'));
-        $xmlparser =& new XML_Unserializer();
-        $status = $xmlparser->unserialize($results);
-        $supporter_data = $xmlparser->getUnserializedData();
+		$supporter_data = $api->get('supporter', array('where' => 'Email="'.$email.'"'));
 		if(!$supporter_id = $supporter_data['supporter']['item']['key']) {
 			return false;
 		}
 
-		$results = $api->get('supporter_groups', array('where' => '(supporter_KEY='.$supporter_id.')and(groups_KEY='.$bloc_id.')'));
-        $xmlparser2 =& new XML_Unserializer();
-        $status = $xmlparser2->unserialize($results);
-        $record_data = $xmlparser2->getUnserializedData();
+		$record_data = $api->get('supporter_groups', array('where' => '(supporter_KEY='.$supporter_id.')and(groups_KEY='.$bloc_id.')'));
 		$record_id = $record_data['supporter_groups']['item']['key'];
 		$api->process('supporter_groups', array('key' => $record_id, 'Properties' => 'Receive No Emails'));
 	}
 		
 	function getBlocGroupIDByName($name) {
         $api =& DIA_API::create();
-		$results = $api->get('groups', array('where' => 'Group_Name="'.$name.'"',
+		$group_data = $api->get('groups', array('where' => 'Group_Name="'.$name.'"',
 											 'column' => 'groups_key'));
 
-        $xmlparser =& new XML_Unserializer();
-        $status = $xmlparser->unserialize($results);
-        $group_data = $xmlparser->getUnserializedData();
 		if($key = $group_data['groups']['item']['key']) {
 			return $key;
 		}

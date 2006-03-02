@@ -310,17 +310,12 @@ class VoterGuide_Controller {
 		}
 		
 		require_once('DIA/API.php');
-		require_once('XML/Unserializer.php');
 
 		$api =& DIA_API::create();
 		$guide =& $this->getActionObject();
 
 		if(!$guide) return false;
-		$link_xml = $api->get('supporter_groups', array('where' => 'groups_KEY='.$guide->getBlocID()));
-
-		$xmlparser =& new XML_Unserializer();
-		$status = $xmlparser->unserialize($link_xml);
-		$links = $xmlparser->getUnserializedData();
+		$links = $api->get('supporter_groups', array('where' => 'groups_KEY='.$guide->getBlocID()));
 
 		if($links['supporter_groups']['count'] > 1) {
 			foreach ($links['supporter_groups']['item'] as $item) {
@@ -332,11 +327,7 @@ class VoterGuide_Controller {
 			$supporters = array($links['supporter_groups']['item']['supporter_KEY']);
 		}
 
-		$bloc_xml = $api->get('supporter', array('key' => $supporters));
-
-		$xmlparser2 =& new XML_Unserializer();
-		$status = $xmlparser2->unserialize($bloc_xml);
-		$bloc = $xmlparser2->getUnserializedData();
+		$bloc = $api->get('supporter', array('key' => $supporters));
 
 		header("Content-type: text/plain");
 		$csv = "First Name\tLast Initial\tZip Code\tHas Email\n";
