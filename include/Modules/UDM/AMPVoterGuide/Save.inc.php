@@ -7,6 +7,16 @@ require_once( 'AMP/Content/Page.inc.php' );
 
 class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
+    var $name = 'Save Voter Guide Data';
+    var $description = 'Save voter guide data into the AMP database';
+
+	var $options = array(
+		'dia_parent_group' => array(
+			'description'=>'group under which voter guides created from this form will be stored',
+			'name'=>'Parent Group',
+			'type'=>'text',
+			'available'=>true));
+
     var $_field_prefix = 'plugin_AMPVoterGuide';
     var $_guideForm;
     var $_copierName = 'voterguidePositions';
@@ -67,7 +77,8 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
     }
 
 
-    function save( $data ) {
+    function save( $data, $options=null ) {
+        $options = array_merge( $this->getOptions(), $options );
 
         $data['owner_id'] = $this->udm->uid;
         if ( $copier_data = $this->_copier->returnSets(  $this->_copierName ) ) {
@@ -76,6 +87,9 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
         $voterGuide = &new VoterGuide( $this->udm->dbcon );
         $voterGuide->setData( $data );
+		if(isset($options['dia_parent_group'])) {
+			$voterGuide->setParentGroup($options['dia_parent_group']);
+		}
         if ( $voterGuide->save() ) {
 			$organizer_id = $this->udm->tryPlugin( 'DIA', 'SupporterSave' );
 			$link = $voterGuide->setBlocOrganizer($voterGuide->getBlocID(), $organizer_id);
