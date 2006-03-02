@@ -79,6 +79,13 @@ else if ($pun_config['o_rules'] == '1' && !isset($_GET['agree']) && !isset($_POS
 
 else if (isset($_POST['form_sent']))
 {
+	// Check that someone from this IP didn't register a user within the last hour (DoS prevention)
+	$result = $db->query('SELECT 1 FROM '.$db->prefix.'users WHERE registration_ip=\''.get_remote_address().'\' AND registered>'.(time() - 3600)) or error('Unable to fetch user info', __FILE__, __LINE__, $db->error());
+
+	if ($db->num_rows($result))
+		message('A new user was registered with the same IP address as you within the last hour. To prevent registration flooding, at least an hour has to pass between registrations from the same IP. Sorry for the inconvenience.');
+
+
 	$username = pun_trim($_POST['req_username']);
 	$email1 = strtolower(trim($_POST['req_email1']));
 
