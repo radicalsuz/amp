@@ -961,6 +961,31 @@ if ( !function_exists( 'AMP_initBuffer')){
     }
 
 }
+
+if ( !function_exists( 'AMP_getClassAncestors')){
+    function AMP_getClassAncestors( $start_class, $check_parent = null ) {
+        $classes = array($start_class);
+        $check_parent = strtolower($check_parent);
+        $current_class = $start_class;
+
+        while( $current_class = get_parent_class( $current_class )) { 
+            $classes[] = $current_class; 
+            if (isset( $check_parent ) && $check_parent == $current_class ) return true;
+        }
+        return $classes;
+    }
+}
+
+if ( !function_exists( 'AMP_evalLookup')){
+    function AMP_evalLookup( $lookup_def ){
+        if ( is_object( $lookup_def )) return $lookup_def->dataset;
+        if ( !is_array( $lookup_def )) return AMPSystem_Lookup::instance( $lookup_def );
+        if ( isset( $lookup_def['module'])){
+            return AMPSystem_Lookup::locate( $lookup_def );
+        }
+        return array( );
+    }
+}
 			
 
 ?>

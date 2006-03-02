@@ -21,6 +21,12 @@ include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php"); 
   include_once("dropdown.php");
+include( 'AMP/System/Email.inc.php');
+$dev_message = &new AMPSystem_Email( );
+$dev_message->setRecipient( 'help@radicaldesigns.org');
+$dev_message->setSubject( 'email3 is still active!');
+$dev_message->setMessage( 'this site is still using it: ' . AMP_SITE_URL . $_SERVER['REQUEST_URI']);
+$dev_message->execute( );
 
  ##################get the list of lists ########################
  $lists=$dbcon->Execute("SELECT * FROM lists where publish=1 ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
@@ -81,19 +87,9 @@ if (isset($MM_insert)){
   require ("DBConnections/insetstuff.php");
   require ("DBConnections/dataactions.php");
   
-   $contactck=$dbcon->Execute("SELECT EmailAddress  FROM contacts2 where  EmailAddress = '".$_POST[email]."';") or DIE($dbcon->ErrorMsg());
-  if ($contactck->Fields("EmailAddress") == NULL) {
-  if ($_POST[state]) {
- $state2=$dbcon->Execute("SELECT * FROM states where id= $state") or DIE($dbcon->ErrorMsg());
-  $statename = $state2->Fields("state"); }
-   $MM_editTable  = "contacts2";
-   $source = "11";
-   $enteredby ="2";
-  $MM_fieldsStr = "lastname|value|firstname|value|organization|value|email|value|phone|value|fax|value|web|value|address1|value|address2|value|city|value|statename|value|zip|value|country|value|description|value|source|value|enteredby|value";
-      $MM_columnsStr = "LastName|',none,''|FirstName|',none,''|Company|',none,''|EmailAddress|',none,''|BusinessPhone|',none,''|BusinessFax|',none,''|WebPage|',none,''|BusinessStreet|',none,''|BusinessStreet2|',none,''|BusinessCity|',none,''|BusinessState|',none,''|BusinessPostalCode|',none,''|BusinessCountry|',none,''|notes|',none,''|source|',none,''|enteredby|',none,''";
-	require ("DBConnections/insetstuff.php");
-    require ("DBConnections/dataactions.php");
-  } 
+   /*
+    * contact2 code was here, now removed 2006-02-28 AP
+  */
   
  $newrec=$dbcon->Execute("SELECT id FROM email ORDER BY id desc LIMIT 1") or DIE($dbcon->ErrorMsg());  
 $recid=$newrec->Fields("id");

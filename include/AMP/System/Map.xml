@@ -307,7 +307,10 @@
 
 <schedule>
     <list>
-        <lookup>scheduleNames</lookup>
+        <lookup>
+			<module>schedule</module>
+			<instance>Names</instance>
+		</lookup>
         <href>
             <base>schedule_item.php?action=list</base>
             <var>schedule_id</var>

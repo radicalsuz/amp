@@ -1,8 +1,11 @@
 <?php 
-ob_start();
-require_once( 'AMP/UserData.php' );
 require_once( 'AMP/BaseDB.php' );
-include_once("AMP/DBfunctions.inc.php"); 
+require_once( 'AMP/UserData.php' );
+#include_once("AMP/DBfunctions.inc.php"); 
+include_once( 'DIA/API.php');
+
+if ( !defined( 'DIA_API_ORGCODE')) define ( 'DIA_API_ORGCODE', 199) ;
+ob_start();
 
 
 if (!isset($_GET[modin])){ $modin=8;} else {$modin=$_GET[modin];}
@@ -44,8 +47,8 @@ if ( ( !$uid || $auth ) && $sub ) {
 		$supporter = array('Title' => $_REQUEST['Title'], 'Last_Name' => $_REQUEST['Last_Name'], 'Suffix' => $_REQUEST['Suffix'], 'First_Name' => $_REQUEST['First_Name'], 'MI' => $_REQUEST['MI'], 'Company' => $_REQUEST['Company'], 'Notes' => $_REQUEST['Notes'], 'Email' => $_REQUEST['Email'], 'Phone' => $_REQUEST['Phone'], 'Cell_Phone' => $_REQUEST['Cell_Phone'], 'Phone_Provider' => $_REQUEST['Phone_Provider'], 'Work_Phone' => $_REQUEST['Work_Phone'], 'Pager' => $_REQUEST['Pager'], 'Home_Fax' => $_REQUEST['Home_Fax'], 'WebPage' => $_REQUEST['WebPage'], 'Street' => $_REQUEST['Street'], 'City' => $_REQUEST['City'], 'State' => $_REQUEST['State'], 'Zip' => $_REQUEST['Zip'], 'Country' => $_REQUEST['Country'],  'Work_Fax' => $_REQUEST['Work_Fax'], 'Street_2' => $_REQUEST['Street_2'], 'Street_3' => $_REQUEST['Street_3'], 'occupation' => $_REQUEST['occupation']    );
 	
 	  $supp_email = $_REQUEST['Email'];
-	  $diaReq = new dia( 199, "http://www.demaction.org/dia/api/process.jsp" );
-	  $result = $diaReq->add_supporter( $supp_email, $supporter );
+	  $diaReq = & DIA_API::create( );
+	  $result = $diaReq->addSupporter( $supp_email, $supporter );
 	}
 	//Check for POST DATA from VOLUNTEER RECORD
 	if (is_array($_POST[available])) {

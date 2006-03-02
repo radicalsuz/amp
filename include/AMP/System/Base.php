@@ -32,6 +32,6 @@ require_once( 'AMP/System/Page/Urls.inc.php');
 //These items are deprecated 
 //used in the older form-processing engine
 require_once("AMP/System/Help.inc.php");
-require_once("AMP/DBfunctions.inc.php");
+//require_once("AMP/DBfunctions.inc.php");
 
 ?>

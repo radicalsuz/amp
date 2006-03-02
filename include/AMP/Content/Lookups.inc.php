@@ -13,6 +13,7 @@ class AMPContent_Lookup extends AMPSystem_Lookup {
         return PARENT::instance( $type, $lookup_baseclass );
     }
 
+
 }
 
 class AMPContentLookup_Class extends AMPContent_Lookup {
@@ -44,6 +45,10 @@ class AMPContentLookup_ActiveClasses {
         $this->dataset = array_combine_key( array_keys( $counts ), $class_set );
         asort( $this->dataset );
     }
+
+    function available( ){
+        return false;
+    }
 }
 
 class AMPContentLookup_CommentsByArticle {
@@ -54,6 +59,10 @@ class AMPContentLookup_CommentsByArticle {
         require_once ( 'AMP/Content/Article/Comments.inc.php' );
         $commentset = & new ArticleCommentSet ( AMP_Registry::getDbcon() );
         $this->dataset =  $commentset->getGroupedIndex( 'articleid' );
+    }
+
+    function available( ){
+        return false;
     }
 }
 
@@ -194,6 +203,9 @@ class AMPContentLookup_SectionMap {
         $this->dataset = &$mapsource->selectOptions( );
 
     }
+    function available( ){
+        return false;
+    }
     
 }
 
@@ -275,6 +287,9 @@ class AMPContentLookup_GalleryImages extends AMPContent_Lookup {
         }
         return $lookup->dataset;
     }
+    function available( ){
+        return false;
+    }
 }
 
 class AMPContentLookup_GalleriesByImage extends AMPContent_Lookup {
@@ -301,6 +316,9 @@ class AMPContentLookup_GalleriesByImage extends AMPContent_Lookup {
         }
         return $lookup->dataset;
     }
+    function available( ){
+        return false;
+    }
 }
 class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
     var $datatable = 'articlereltype';
@@ -325,6 +343,9 @@ class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
             $lookup->init();
         }
         return $lookup->dataset;
+    }
+    function available( ){
+        return false;
     }
 }
 
@@ -351,6 +372,9 @@ class AMPContentLookup_RelatedArticles extends AMPContent_Lookup {
             $lookup->init();
         }
         return $lookup->dataset;
+    }
+    function available( ){
+        return false;
     }
 }
 

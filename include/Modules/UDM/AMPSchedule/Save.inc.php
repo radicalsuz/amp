@@ -4,6 +4,7 @@ require_once ('AMP/UserData/Plugin/Save.inc.php' );
 require_once ('Modules/Schedule/Item.inc.php' );
 require_once ('Modules/Schedule/Item/Form.inc.php' );
 require_once ( 'Modules/Schedule/Schedule.php' );
+require_once ( 'Modules/Schedule/ComponentMap.inc.php');
 
 class UserDataPlugin_Save_AMPSchedule extends UserDataPlugin_Save {
 

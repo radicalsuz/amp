@@ -1,6 +1,7 @@
 <?php
 
 require_once ( "AMP/System/ComponentMap.inc.php" );
+require_once ( 'Modules/Schedule/Lookups.inc.php' );
 
 class ComponentMap_ScheduleItem extends AMPSystem_ComponentMap {
 

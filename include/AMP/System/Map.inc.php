@@ -141,7 +141,11 @@ class AMPSystem_Map {
         foreach( $this->menuset as $menu_id => $menu_def ) {
             if (!isset($menu_def['list'])) continue;
             if (!isset($menu_def['list']['lookup'])) continue;
-            if (!($itemset = &AMPSystem_Lookup::instance( $menu_def['list']['lookup'] ))) continue;            
+
+            if (!is_array($menu_def['list']['lookup'])) $itemset = &AMPSystem_Lookup::instance( $menu_def['list']['lookup'] );            
+            else $itemset = &AMPSystem_Lookup::locate( $menu_def['list']['lookup'] );            
+            if ( !$itemset ) continue;
+            
             $sep = true;
             foreach ($itemset as $id => $name ) {
                 $this->_addListItem( $id, $name, $menu_id, $menu_def['list']['href'], $sep );

@@ -790,14 +790,14 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         if (!($def = $this->getField( $name ))) return null;
         if (isset($def['values'])) return $def['values'];
         
-        if ( isset( $def['lookup'] ) && $values = $this->_evalLookup( $def['lookup']) ) {
+        if ( isset( $def['lookup'] ) && $values = AMP_evalLookup( $def['lookup']) ) {
             $this->setFieldValueSet( $name, $values );
             return $values;
         }
 
         return null;
     }
-
+/*** moved to utility.function AMP_evalLookup 2006-03-01 AP
     function _evalLookup( $lookup_def ){
         if ( !is_array( $lookup_def )) return AMPSystem_Lookup::instance( $lookup_def );
         if ( isset( $lookup_def['module'])){
@@ -805,6 +805,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         }
         return array( );
     }
+    */
 
 	function _getTemplate( $type=null ) {
         if (!isset($type)) return false;

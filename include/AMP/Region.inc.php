@@ -1,4 +1,6 @@
 <?php
+if ( !defined( 'AMP_REGION_US_INCLUDE_INTERNATIONAL'))
+    define( 'AMP_REGION_US_INCLUDE_INTERNATIONAL', false );
 
 class Region {
 
@@ -15,6 +17,12 @@ class Region {
 
         $this->init();
 
+    }
+
+    function &instance( ){
+        static $regionObj = false;
+        if ( !$regionObj ) $regionObj = new Region( ) ;
+        return $regionObj;
     }
     
     function init () {
@@ -133,6 +141,13 @@ class Region {
 
         foreach ( array_values( $this->regions[ 'WORLD' ] ) as $country ) {
             $this->regions[ 'WORLD-LONG' ][ $country ] = $country;
+        };
+        if (  AMP_REGION_US_INCLUDE_INTERNATIONAL ){
+            $international_values = array( 
+                  'INTL' => 'International',
+                  ' ' => '---' );
+            $this->regions[ 'US' ] =  $international_values + $this->regions[ 'US' ];
+            #$this->regions[ 'US' ] = array_merge( $international_values, $this->regions[ 'US' ]);
         }
 
 	$this->regions[ 'US AND CANADA'] = $this->regions[ 'US' ] + array( "---" ) + $this->regions[ 'CDN' ];

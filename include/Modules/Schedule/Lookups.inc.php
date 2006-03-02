@@ -11,6 +11,16 @@ class AMPSystemLookup_ScheduleNames extends AMPSystem_Lookup {
     }
 }
 
+class ScheduleLookup_Names {
+    function ScheduleLookup_Names ( ){
+        $this->dataset = &AMPSystem_Lookup::instance( 'scheduleNames' );
+    }
+
+    function available( ){
+        return false;
+    }
+}
+
 class AMPSystemLookup_ScheduleItemDesc extends AMPSystem_Lookup {
     var $datatable = "schedules, scheduleitems";
     var $result_field = "Concat( schedules.name, ': ', if(!isnull(scheduleitems.title), concat(scheduleitems.title, ': '), ''), start_time, ' ', timezone,  if(!isnull(location), concat(' : ', location),''), ' : ', status) as descrp ";
@@ -56,6 +66,9 @@ class ScheduleLookup_ItemSet {
             $results[] = $item_id;
         }
         return $results;
+    }
+    function available( ){;
+        return false;
     }
 }
 ?>

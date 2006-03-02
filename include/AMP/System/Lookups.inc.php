@@ -1,7 +1,6 @@
 <?php
-define ('AMP_ERROR_LOOKUP_SQL_FAILED', 'Failed to retrieve %s: %s' );
 require_once ( 'AMP/Content/Lookups.inc.php' );
-require_once ( 'Modules/Schedule/Lookups.inc.php' );
+if ( file_exists_incpath( 'custom.lookups.inc.php')) include ( 'custom.lookups.inc.php' );
 
 class AMPSystem_LookupFactory {
 
@@ -26,7 +25,7 @@ class AMPSystem_LookupFactory {
         if (!isset($lookup->result_field)) return false;
         if ( ! ($data = $this->dbcon->CacheGetAssoc( $this->assembleSQL( $lookup ) ))) {
             if ($dbError = $this->dbcon->ErrorMsg()) 
-                trigger_error( sprintf( AMP_ERROR_LOOKUP_SQL_FAILED, get_class($lookup), $dbError ) );
+                trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($lookup), $dbError ) );
             return false;
         }
         return $data;
@@ -41,10 +40,15 @@ class AMPSystem_LookupFactory {
         if (AMP_DISPLAYMODE_DEBUG_LOOKUPS) AMP_DebugSQL( $sql, get_class( $lookup ));
         return $sql;
     }
+
+    function available ( ){
+        return false;
+    }
 }
 
 
 class AMPSystem_Lookup {
+
     var $datatable;
     var $criteria;
     var $id_field = "id";
@@ -52,6 +56,8 @@ class AMPSystem_Lookup {
     var $dataset;
     var $sortby;
     var $distinct;
+    var $name = false;
+    var $basetype = 'AMPSystem';
 
     function AMPSystem_Lookup() {
         $this->init();
@@ -64,16 +70,20 @@ class AMPSystem_Lookup {
 
     function &instance( $type, $lookup_baseclass="AMPSystemLookup" ) {
         static $lookup_set = false;
-        $req_class = $lookup_baseclass . '_' . $type;
         if (!$lookup_set) $lookup_set = array();
+        $req_class = $lookup_baseclass . '_' . $type;
+        if ( !class_exists( $req_class ) ){
+            trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
+            return false;
+        }
         if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
         return $lookup_set[$type]->dataset;
     }
 
     function &locate( $lookup_def ){
         if ( !isset( $lookup_def['module'])) $lookup_def['module'] = 'AMPSystem';
-        if ( "content" == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
-        if ( "constant" == $lookup_def['module']) $lookup_def['module'] = "AMPConstant";
+        if ( 'content'  == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
+        if ( 'constant' == $lookup_def['module']) $lookup_def['module'] = "AMPConstant";
         $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
         if ( !class_exists( $lookup_class ) && !AMPSystem_Lookup::loadLookups( $lookup_def['module'], $lookup_class )) return false;
         return call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;
@@ -88,6 +98,55 @@ class AMPSystem_Lookup {
         return class_exists( $class );
 
     }
+    function available( ){
+        return false;
+    }
+
+}
+
+class AMPSystemLookup_Lookups {
+    var $_include_modules = array( 'schedule', 'form', 'content', 'calendar', 'voterGuide' );
+    var $dataset;
+
+    function AMPSystemLookup_Lookups( ){
+        $this->init( );
+    }
+
+    function init() {
+        foreach( $this->_include_modules as $module ){
+            AMPSystem_Lookup::loadLookups( $module, 'test');
+        }
+        $this->get_defined_lookups( );
+    }
+
+    function get_defined_lookups( ){
+        $class_set = get_declared_classes( );
+        foreach( $class_set as $test_class ){
+
+            if ( !strpos( $test_class, 'lookup')) continue;
+            if ( AMP_getClassAncestors( $test_class, 'AMPSystem_Lookup')
+                 || AMP_getClassAncestors( $test_class, 'AMPConstant_Lookup')) {
+                if ( !call_user_func( array( $test_class, 'available' ))) continue;
+                $lookup_name = $this->get_lookup_name( $test_class );
+                if ( $lookup_name == 'lookup') continue;
+                $this->dataset[ $test_class ] = $lookup_name;
+            }
+        }
+        asort( $this->dataset );
+    }
+
+    function get_lookup_name( $class_name ){
+        $test_lookup = new $class_name( );
+        if ( $test_lookup->name ) return $test_lookup->name;
+        $space = strpos( $class_name, '_' ) + 1;
+        if ( !$space ) return $class_name;
+        return substr( $class_name, $space );
+    }
+
+    function available ( ){
+        return false;
+    }
+
 
 }
 
@@ -325,6 +384,9 @@ class AMPSystemLookup_ListHosts extends AMPSystem_Lookup {
 class AMPSystemLookup_States extends AMPSystem_Lookup {
 	var $datatable = 'states';
 	var $result_field = 'state';
+    function AMPSystemLookup_States( ){
+        $this->init( );
+    }
 }
 
 class AMPSystemLookup_Regions extends AMPSystem_Lookup {
@@ -333,6 +395,79 @@ class AMPSystemLookup_Regions extends AMPSystem_Lookup {
     var $sortby = 'title';
 
     function AMPSystemLookup_Regions( ){
+        $this->init( );
+    }
+}
+
+class Region_Lookup extends AMPSystem_Lookup {
+    var $_parent_region = false;
+    var $_region;
+
+    function init( ){
+        $this->_region = &Region::instance( );
+        $this->_init_dataset( );
+    }
+
+    function _init_dataset( ){
+        if ( $this->_parent_region ){
+            $this->dataset = $this->_region->getSubRegions( $this->_parent_region );
+            return;
+        }
+        // default
+        $this->dataset = $this->_region->getTLRegions( );
+    }
+
+    function available( ){
+        return true;
+    }
+}
+
+class AMPSystemLookup_Regions_US extends Region_Lookup {
+    var $_parent_region = 'US';
+    var $name = 'Region: US States';
+    var $form_def =  'regions_US';
+
+    function AMPSystemLookup_Regions_US( ){
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_Regions_Canada extends Region_Lookup {
+    var $_parent_region = 'CDN';
+    var $name = 'Region: Canadian Provinces';
+    var $form_def =  'regions_Canada';
+
+    function AMPSystemLookup_Regions_Canada( ){
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_Regions_World extends Region_Lookup {
+    var $_parent_region = 'WORLD';
+    var $name = 'Region: All Countries';
+    var $form_def =  'regions_World';
+
+    function AMPSystemLookup_Regions_World( ){
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_Regions_World_Long extends Region_Lookup {
+    var $_parent_region = 'WORLD-LONG';
+    var $name = 'Region: All Countries ( full names )';
+    var $form_def =  'regions_World_Long';
+
+    function AMPSystemLookup_Regions_World_Long( ){
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_Regions_US_and_Canada extends Region_Lookup {
+    var $_parent_region = 'US AND CANADA';
+    var $name = "Region: US States and Canadian Provinces";
+    var $form_def =  'regions_US_and_Canada';
+
+    function AMPSystemLookup_Regions_US_and_Canada( ){
         $this->init( );
     }
 }
@@ -378,6 +513,9 @@ class AMPSystemLookup_CellProviders {
             "verizon wireless" => "verizon wireless",
             "virgin mobile usa" => "virgin mobile usa" );
     }
+    function available ( ){
+        return false;
+    }
 }
 
 
@@ -386,6 +524,8 @@ class AMPConstant_Lookup {
     var $dataset;
     var $prefix_values;
     var $prefix_labels;
+    var $name = false;
+    var $basetype = 'AMPConstant';
 
     function init() {
         if (isset($this->_prefix_values)) {
@@ -411,6 +551,10 @@ class AMPConstant_Lookup {
         $req_class = $lookup_baseclass . '_' . ucfirst($type);
         if (!$lookup_set) $lookup_set = new $req_class(); 
         return $lookup_set->dataset;
+    }
+
+    function available( ){
+        return false;
     }
 }
 
@@ -463,6 +607,9 @@ class AMPSystemLookup_PermissionLevel extends AMPSystem_Lookup {
             $lookup->init();
         }
         return $lookup->dataset;
+    }
+    function available( ){
+        return false;
     }
 
 }

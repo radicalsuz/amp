@@ -843,7 +843,7 @@ class UserData {
 
         $fields = array_map( array( &$this, "_register_fields_filter" ), array_keys( $md ) );
 
-        $keys = array( 'label', 'public', 'type', 'required', 'values', 'region', 'size', 'enabled' );
+        $keys = array( 'label', 'public', 'type', 'required', 'values', 'lookup', 'size', 'enabled' );
 
         foreach ( $fields as $fname ) {
 
@@ -859,17 +859,35 @@ class UserData {
             foreach ( $keys as $key ) {
                 $field[ $key ] = $md[ $key . "_" . $fname ];
             }
-
+            $field = $this->_register_lookups( $field );
             $this->fields[ $fname ] = $field;
         }
         //Publish Field Hack
         if ($this->admin && $md['publish']) {
-            $publish_field = array('type'=>'checkbox', 'label'=>'<font color="#CC0000" size="3">PUBLISH</font>', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'enabled'=>true);
+            $publish_field = array('type'=>'checkbox', 'label'=>'<span class=publish_label>PUBLISH</span>', 'required'=>false, 'public'=>false,  'values'=>0, 'size'=>null, 'enabled'=>true);
             $this->fields['publish']=$publish_field;
         }
 
         return true;
 
+    }
+
+    function _register_lookups( $field_def ) {
+        if ( !( isset( $field_def['lookup']) && $field_def['lookup'])){
+            unset( $field_def['lookup']);
+            return $field_def;
+        }
+        $requested_lookup_class = $field_def['lookup'];
+        unset( $field_def['lookup']);
+
+        if ( class_exists( $requested_lookup_class )) {
+            $lookup = new $requested_lookup_class;
+            if ( $lookup) $field_def['lookup'] = &$lookup;
+
+        } else {
+            trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $requested_lookup_class));
+        }
+        return $field_def; 
     }
 
     /***

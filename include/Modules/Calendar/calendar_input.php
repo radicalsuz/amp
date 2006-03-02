@@ -45,12 +45,13 @@ if (isset($_POST['MM_insert'])&&$_POST['MM_insert']) {
 	$recent->Close();
 
 	$mailtext = "Event Name: $event \n Date: $startdate \n Time: $time \n Description: $description \n Long Description: $longdescription \n Organization: $organization \n Contact: $contact \n Email: $email \n Phone: $phone1 \n Website: $url \n Location: $location \n City: $city \n State Code: $lstate \n Country: $lcountry \n Address: $laddress \n Zip: $lzip \n Student Event: $studnet \n Endorse: $endorse \n Repeating Event: $repeat \n     \nPlease visit ";
-	$mailtext .= $Web_url."system/calendar_gxedit.php?id=$idval to edit";
+	$mailtext .= $Web_url . "system/calendar_gxedit.php?id=$idval to edit" ;
 	mail ( "$MM_email_calendar", "new calendar posting", "$mailtext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
 
-	$recent->Close();
+    ampredirect( "calendar_input.php?thank=1" );
+        /* Obsolete code inserted into contacts system
 	if ( ($fname2==($null)) && ($lname2==($null)) && ($organization2==($null))) {
-		header ("Location: calendar_input.php?thank=1");
+        ampredirect ("calendar_input.php?thank=1");
 	} else {
 		$MM_editTable  = "contacts2";
 		$MM_editRedirectUrl = "calendar_input.php?thank=1";
@@ -62,6 +63,7 @@ if (isset($_POST['MM_insert'])&&$_POST['MM_insert']) {
 		require ("Connections/insetstuff.php"); 
 		require ("Connections/dataactions.php");
 	}
+    */
 }
 
 $state=$dbcon->CacheExecute("SELECT * FROM states") or DIE($dbcon->ErrorMsg());

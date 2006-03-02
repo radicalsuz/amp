@@ -597,6 +597,7 @@ class UserDataPlugin {
     function getValueSet ( &$field_def ) {
         $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
         if (is_array($defaults)) return $defaults;
+        if ( isset( $field_def['lookup'])) return AMP_evalLookup( $field_def['lookup']);
 
         $fieldtypes_possessing_valuesets = array( 'select', 'multiselect', 'radiogroup', 'checkgroup' );
 
@@ -605,8 +606,14 @@ class UserDataPlugin {
         // Return region information
         if ( isset( $field_def[ 'region' ] )
                 && strlen( $field_def[ 'region' ] ) > 1 ) {
-
-            return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
+                return $GLOBALS['regionObj']->getSubRegions( $field_def[ 'region' ] );
+            /*
+            if ( class_exists( $field_def['region'])){
+                $lookup = new $field_def['region'];
+                return $lookup->dataset;
+            }
+            */
+            trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $field_def['region']));
         }
 
         // Return a defined index from the DB

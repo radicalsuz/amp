@@ -7,10 +7,7 @@ include("AMP/BaseTemplate.php");
 //include("AMP/BaseModuleIntro.php");
 
 
-include("AMP/DBfunctions.inc.php"); 
 include("includes/emaillist_functions.php");
-
-
 
 
 function buildactionform($id,$error=NULL) {

@@ -11,6 +11,10 @@ class FormLookup extends AMPSystem_Lookup {
         return PARENT::instance( $type, $lookup_baseclass );
     }
 
+    function available( ){
+        return false;
+    }
+
 }
 
 class FormLookup_FormsbyPlugin extends FormLookup {
@@ -36,6 +40,10 @@ class FormLookup_PluginsbyNamespace extends FormLookup {
     function setNamespace ( $value ) {
        $dbcon = AMP_Registry::getDbcon();
        $this->criteria = "namespace=" . $dbcon->qstr($value); 
+    }
+
+    function available( ){
+        return false;
     }
 
     function &instance( $namespace ) {
@@ -76,6 +84,9 @@ class FormLookup_StartPluginsbyNamespace extends FormLookup {
         }
         return $lookup->dataset;
     }
+    function available( ){
+        return false;
+    }
 }
 
 class FormLookup_PluginsbyOptionDef extends FormLookup {
@@ -102,6 +113,10 @@ class FormLookup_PluginsbyOptionDef extends FormLookup {
             $lookup->init();
         }
         return $lookup->dataset;
+    }
+
+    function available( ){
+        return false;
     }
 }
 
@@ -137,6 +152,9 @@ class FormLookup_Names extends FormLookup {
             $lookup->init();
         }
         return $lookup->dataset;
+    }
+    function available( ){
+        return false;
     }
 }
 
@@ -207,6 +225,9 @@ class FormLookup_IntroTexts {
             }
         }
         return $results[ $form_id ];
+    }
+    function available( ){
+        return false;
     }
 }
 

@@ -12,11 +12,9 @@
 require_once( 'HTML/QuickForm.php' );
 require_once( 'HTML/QuickForm/Renderer/Savant.php' );
 require_once( 'Savant/Savant2.php' );
-require_once( 'AMP/Region.inc.php' );
 require_once( 'AMP/UserData/Plugin.inc.php' );
 require_once( 'AMP/UserData/Lookups.inc.php');
 
-$GLOBALS['regionObj'] = new Region();
 class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
     var $fields = Array();
@@ -29,8 +27,6 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
     function execute ( $options = null ) {
 
-        $this->regions = new Region();
-        
         $form_name   = $this->udm->name;
         $form_method = ( isset($options['frmMethod']) ) ?
                        $options['frmMethod'] : 'post';
@@ -157,7 +153,6 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
             } else {
                 $group = 'standard';
             }
-
             $fields[$group] += $this->_build_field( $field_name, $field );
         }
 
@@ -323,7 +318,8 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
             $types[ $ftype ] = $ftype;
         }
 
-        $regions = array( '' => '--' ) + $this->regions->getTLRegions();
+        $lookups = array( '' => '--' ) + AMPSystem_Lookup::instance( 'lookups');
+        #$regions = array( '' => '--' ) + $this->regions->getTLRegions();
 
         $elements = Array(
             "arrow_$fn"    => Array( 'type' => 'static',   'values' => $fa_js     ),
@@ -333,7 +329,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
             "required_$fn" => Array( 'type' => 'checkbox', 'values' => 'required' ),
             "type_$fn"     => Array( 'type' => 'select',   'values' => $types,    'label' => 'Type' ),
             "label_$fn"    => Array( 'type' => 'text',     'values' => null,      'label' => 'Label' ),
-            "region_$fn"   => Array( 'type' => 'select',   'values' => $regions,  'label' => 'Region' ),
+            "lookup_$fn"   => Array( 'type' => 'select',   'values' => $lookups,  'label' => 'Dynamic Lookup' ),
             "values_$fn"   => Array( 'type' => 'textarea', 'values' => null,      'label' => 'Default Values' ),
             "size_$fn"     => Array( 'type' => 'text',     'values' => null,      'label' => 'Field Size', 'size' => 3 ),
         );
