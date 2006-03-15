@@ -8,12 +8,14 @@ To Do:  declare post vars, verify the required fields
 
 *********************/ 
 
+
 $modid=1;
 require_once("AMP/BaseDB.php"); 
 require_once( 'AMP/System/Tool/Control/Set.inc.php' );
 $controls = &new ToolControlSet( $dbcon, $modid );
 $controls->globalizeSettings();
 require_once("dropdown.php"); 
+include_once("AMP/System/Email.inc.php");
 
 // *** Edit Operations: declare Tables
 $MM_editAction = $_SERVER['PHP_SELF'];
@@ -46,7 +48,7 @@ if (isset($_POST['MM_insert'])&&$_POST['MM_insert']) {
 
 	$mailtext = "Event Name: $event \n Date: $startdate \n Time: $time \n Description: $description \n Long Description: $longdescription \n Organization: $organization \n Contact: $contact \n Email: $email \n Phone: $phone1 \n Website: $url \n Location: $location \n City: $city \n State Code: $lstate \n Country: $lcountry \n Address: $laddress \n Zip: $lzip \n Student Event: $studnet \n Endorse: $endorse \n Repeating Event: $repeat \n     \nPlease visit ";
 	$mailtext .= $Web_url . "system/calendar_gxedit.php?id=$idval to edit" ;
-	mail ( "$MM_email_calendar", "new calendar posting", "$mailtext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
+	mail ( "$MM_email_calendar", "new calendar posting", "$mailtext", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n"); 
 
     ampredirect( "calendar_input.php?thank=1" );
         /* Obsolete code inserted into contacts system

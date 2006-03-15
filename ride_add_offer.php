@@ -7,6 +7,7 @@ $mod_id = 62;
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php");
+include_once("AMP/System/Email.inc.php");
 include("dropdown.php"); 
 $board="ride";
 
@@ -33,13 +34,13 @@ if ($MM_insert||$MM_update){
 			if ($confirm == "admin") {
 				$MM_editRedirectUrl = $board."_signin.php?step=admin"; 
 				$messagetext = "$firstname $lastname has added a posting on the $board board\n\n Information:\n Phone: $phone\n Email: $email\n State: $state\n Departing From: $depatingfrom\n Departure Date: $depaturedate\n Returning to: $returningto\n Return Date:$returndate\n Number of People: $numpeople\n  Comments:  $commets  \n\nPlease visit ".$Web_url.$board."_signin.php?uid=$uniqiueid to publish";
-				mail("$MM_email_ride", "new $board board posting", "$messagetext", "From: $MM_email_from\n");}
+				mail("$MM_email_ride", "new $board board posting", "$messagetext", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\n");}
 
 			//Mail to poster for confirmation
 			if ($confirm == "poster") { 
 				$MM_editRedirectUrl = $board."_signin.php?step=email";
 				$messagetext2 = "\nPlease visit <a href=\"".$Web_url.$board."_signin.php?uid=$uniqueid&action=confirm\">".$Web_url.$board."_signin.php?uid=$uniqueid&action=confirm</A> to confirm your $board board posting.\n\n Information:\n Phone: $phone\n Email: $email\n State: $state\n Departing From: $depatingfrom\n Departure Date: $depaturedate\n Returning to: $returningto\n Return Date:$returndate\n Number of People: $numpeople\n Comments:  $commets  \n ";
-				mail("$pemail", "Confirm your $board board posting", "$messagetext2", "From: $MM_email_from\n"); }
+				mail("$pemail", "Confirm your $board board posting", "$messagetext2", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\n"); }
 		}
    }
 

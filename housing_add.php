@@ -18,6 +18,7 @@ $intro_id = 6;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
+include_once("AMP/System/Email.inc.php");
 
 
 if (isset($_POST["MM_insert"])){
@@ -30,7 +31,7 @@ if (isset($_POST["MM_insert"])){
   		$MM_editRedirectUrl = "housing_confirm.php?step=admin"; 
   		$messagetext = $_POST["firstname"]. ' ' .$_POST["lastname"]. " has added a posting to the ride board\n Information:$firstname, $Lastname,  $email, $phone,  $avalible, $beds, $floor,  $tents,  $access,  $location, $transport, $parking, $cooking, $children, $smoking, $info \n\nPlease visit ".$Web_url."housing_confirm.php?email=".$_POST["email"]." to publish";
    		if ($MM_email_housing) {
-			mail ( $MM_email_housing, "new housing board posting", "$messagetext", "From: $MM_email_from\nX-Mailer: My PHP Script\n");  
+			mail ( $MM_email_housing, "new housing board posting", "$messagetext", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n");  
 		}
 	}
 
@@ -39,7 +40,7 @@ if (isset($_POST["MM_insert"])){
 		$MM_editRedirectUrl = "housing_confirm.php?step=email";
 		$messagetext2 = "\nPlease visit ".$Web_url."housing_confirm.php?email=".$_POST["email"]." to confirm your housing board posting./n/n Information:$firstname, $Lastname/n  $email/n $phone/n  $avalible/n $beds/n $floor/n  $tents/n  $access/n  $location/n $transport/n $parking/n $cooking/n $children/n $smoking/n $info ";
 	   if ($_POST["email"]) {
-		   mail ( $_POST["email"], "confirm your housing board posting", "$messagetext2", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
+		   mail ( $_POST["email"], "confirm your housing board posting", "$messagetext2", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n"); 
 		}
 	}
 	require ("DBConnections/insetstuff.php");

@@ -16,6 +16,7 @@ $modid=9;
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php"); 
+include_once("AMP/System/Email.inc.php");
          
  // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
@@ -34,7 +35,7 @@ if (isset($MM_insert)){
    // $MM_editConnection = MM__STRING;
    //send subscribe email
    if ($sendemail != NULL) {  
-mail ( "$sendemail","" ,"" , "From: $email\nX-Mailer: My PHP Script\n");} 
+mail ( "$sendemail","" ,"" , "From: ".AMPSystem_Email::sanitize($email)."\nX-Mailer: My PHP Script\n");} 
   //check for dups
    if  (isset($email))  {
   $emailcheck=$dbcon->Execute("SELECT email FROM email where email = '$email' LIMIT 1") or DIE($dbcon->ErrorMsg());

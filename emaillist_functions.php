@@ -353,4 +353,12 @@ mail ($email,$subject,$text,$headers);
 	echo "<br><br><b>Thank You for Spreading the Word</b>";
 	}
 						
+	function emaillist_sanitize($content) {
+		if (eregi("\r",$content) || eregi("\n",$content)){
+			trigger_error("possible spam at ".time()." :(".$content.")");
+			die("Possible Spam at ".time()." :(".$content.")");
+		}
+		return $content;
+	}
+
 ?>

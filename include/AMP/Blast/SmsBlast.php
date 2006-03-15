@@ -4,6 +4,7 @@
 require_once('Net/POP3.php');
 require_once "HTTP/Request.php";
 require_once('AMP/Blast/BlastBase.php');
+include_once("AMP/System/Email.inc.php");
 
 class SmsBlast extends Blast {
 
@@ -68,6 +69,7 @@ class SmsBlast extends Blast {
 	
 	//a function that does the sending of a message
 	function send_sms($email,$message,$subject=NULL,$from=NULL) {
+		$from = AMPSystem_Email::sanitize($from);
 		if (mail($email,$subject,$message,"From: $from\r\nReply-To: $from\r\nX-Sender: $from\r\nReturn-Path: $from", "-f$from")) {
 			return true;
 		}

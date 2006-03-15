@@ -4,6 +4,7 @@
 # $emailsubject, $eamilto, $emailfrom, $redirect
 #
 
+include_once("AMP/System/Email.inc.php");
 
 function email_is_valid($email) {
 #	return ereg("[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+(.[a-zA-Z0-9-]+)", $email);
@@ -39,7 +40,7 @@ if ($v){
 		}
 
 if (email_is_valid($emailto)) { 
-		mail($emailto,$emailsubject,$message,"From: $emailfrom");
+		mail($emailto,$emailsubject,$message,"From: ".AMPSystem_Email::sanitize($emailfrom));
 		//echo $message;
 		}
 else {$error = "Error - The email target is not valid";}

@@ -98,9 +98,9 @@ class UserDataPlugin_Email extends UserDataPlugin {
     function prepareHeader ( $options = null) {
 
 		if(isset($options['from']) && $options['from']) {
-			$header  = "From: " . $options['from'];
+			$header  = "From: " . $this->sanitize($options['from']);
 		} else {
-			$header  = "From: " . $GLOBALS['MM_email_from'];
+			$header  = "From: " . $this->sanitize($GLOBALS['MM_email_from']);
 		}
         $header .= "\nX-Mailer: AMP/UserDataMail\n";
 
@@ -112,6 +112,13 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
     }
 
+	function sanitize($content) {
+		if (eregi("\r",$content) || eregi("\n",$content)){
+			trigger_error("Possible Spam at ".time()." :(".$content.")");
+			die("Possible Spam at ".time()." :(".$content.")");
+		}
+		return $content;
+	}
 
     function prepareMessage ( $options ) {
 

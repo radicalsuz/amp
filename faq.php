@@ -17,6 +17,7 @@ $intro_id = 35;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
+include_once("AMP/System/Email.inc.php");
 
  
 if (isset($_REQUEST["MM_insert"])){
@@ -26,7 +27,7 @@ if (isset($_REQUEST["MM_insert"])){
    	$MM_fieldsStr = "question|value|first|value|last|value|email|value";
    	$MM_columnsStr = "question|',none,''|firstname|',none,''|lastname|',none,''|email|',none,''";
 	if ($MM_email_faq) {
-		mail ( $MM_email_faq, "faq needs response", "There is a new FAQ that needs answering: ".$_POST["question"]." From:".$_POST["email"]."  \nPlease visit $Web_url/system/faq.php?action=list to answer", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
+		mail ( $MM_email_faq, "faq needs response", "There is a new FAQ that needs answering: ".$_POST["question"]." From:".$_POST["email"]."  \nPlease visit $Web_url/system/faq.php?action=list to answer", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n"); 
 	}
 	require ("Connections/insetstuff.php");
     require ("Connections/dataactions.php");

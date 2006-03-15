@@ -13,11 +13,12 @@ $intro_id = 19;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
+include_once("AMP/System/Email.inc.php");
 
 if (isset($_POST["MM_insert"])){
 	$messagetext = "To remove your listing simply visit this page ".$Web_url."housing_remove2.php?email=".$_POST["email"]." and press the remove button";
 	if ($_POST["email"]){
-		mail ( $_POST["email"], "remove your housing posting", "$messagetext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
+		mail ( $_POST["email"], "remove your housing posting", "$messagetext", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n"); 
 		header ("Location: housing_remove.php?show=yes");
 	}
 }

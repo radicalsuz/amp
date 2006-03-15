@@ -10,6 +10,7 @@ To Do:  make multiple var pages send
 *********************/ 
 $modid = 22;
 include("AMP/BaseDB.php");
+include_once("AMP/System/Email.inc.php");
 if (isset($modid)){
 $modinstance = $dbcon->CacheExecute("SELECT * from module_control where modid = $modid") or DIE($dbcon->ErrorMsg());
 while (!$modinstance->EOF) {
@@ -100,10 +101,10 @@ if ($submit) {
         $date=date( "D, j M Y H:i:s -0600");
 	$to_email=$form["to_email"];
 	$from=$form["from"];
-	$from_email=$form["from_email"];
+	$from_email=AMPSystem_Email::sanitize($form["from_email"]);
 	$comment=$form["comment"];
-	$site_name=$GLOBALS["site_name"];
-	$your_email=$GLOBALS["your_email"];
+	$site_name=AMPSystem_Email::sanitize($GLOBALS["site_name"]);
+	$your_email=AMPSystem_Email::sanitize($GLOBALS["your_email"]);
 	$message="Hi\n$from ($from_email) invited you to visit $site_name\n".$GLOBALS['prmailtomessage']."\nCheck out this URL: $url";
 		if ($form["comment"] != "") {
 			$message.="\n\n$from left you a note:\n$comment";

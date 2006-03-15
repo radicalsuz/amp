@@ -326,7 +326,7 @@ function isEmail(email) {
 }
 		
 function friendsend($email,$fromemail,$fromname,$subject,$text) {
-	$headers="From: $fromname <$fromemail>\nReply-To: $fromemail";
+	$headers="From: ".emaillist_sanitize($fromname)." <".emaillist_sanitize($fromemail).">\nReply-To: ".emaillist_sanitize($fromemail);
 	//if (emailisvalid($email)) {
 	   $text = $text."\n\n\n This message sent to you from ".AMP_SITE_NAME
 .'  '.AMP_SITE_URL;
@@ -336,6 +336,14 @@ function friendsend($email,$fromemail,$fromname,$subject,$text) {
 			
 function friendthankyou() {
 	echo "<br><br><b>Thank You for Spreading the Word</b>";
+}
+
+function emaillist_sanitize($content) {
+    if (eregi("\r",$content) || eregi("\n",$content)){
+        trigger_error("possible spam at ".time()." :(".$content.")");
+        die("Possible Spam at ".time()." :(".$content.")");
+    }
+    return $content;
 }
 						
 ?>

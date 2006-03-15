@@ -77,11 +77,19 @@ class AMPSystem_Email {
         if ($sender_name = $this->getSenderName() ) {
             $from = $sender_name . " <" . $from .">";
         }
-        $header  = "From: " . $from . "\n";
+        $header  = "From: " . $this->sanitize($from) . "\n";
         $header .= "X-Mailer: AMP/SystemMail\n";
 
         return $header;
     }
+
+	function sanitize($content) {
+		if (eregi("\r",$content) || eregi("\n",$content)){
+			trigger_error("Possible Spam at ".time()." :(".$content.")");
+			die("Possible Spam at ".time()." :(".$content.")");
+		}
+		return $content;
+	}
 
     function execute() {
         if (method_exists( $this, 'preProcess' )) {

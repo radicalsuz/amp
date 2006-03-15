@@ -4,6 +4,7 @@ $mod_id = 5;
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php"); 
+include_once("AMP/System/Email.inc.php");
 include("dropdown.php"); 
 
   // *** Edit Operations: declare Tables
@@ -26,13 +27,13 @@ if (isset($MM_insert)){
  if ($confirm == "admin")   
 	{ $MM_editRedirectUrl = "ride_confirm.php?step=admin";
 	$messagetext = "$firstname $lastname has added a posting to the ride board\n Information:$phone, $email, $departingform, $depaturedate, $returningto, $retundate, $numpeople, $ride, $comments \n\nPlease visit ".$Web_url."ride_confirm.php?email=$email to publish";
-  mail ( "$MM_email_ride", "new ride board posting", "$messagetext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); }
+  mail ( "$MM_email_ride", "new ride board posting", "$messagetext", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n"); }
   
 //Mail to poster for confirmation
  if ($confirm == "poster")
 {$MM_editRedirectUrl = "ride_confirm.php?step=email";
 $messagetext2 = "\nPlease visit ".$Web_url."ride_confirm.php?email=$email to confirm your ride board posting./n/n Information: $phone, $email, $departingform, $depaturedate, $returningto, $retundate, $numpeople, $ride, $comments ";
- mail ( "$email", "confirm your ride board posting", "$messagetext2", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); }
+ mail ( "$email", "confirm your ride board posting", "$messagetext2", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n"); }
 
      require ("DBConnections/insetstuff.php"); 
 require ("DBConnections/dataactions.php"); } 

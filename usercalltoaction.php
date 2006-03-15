@@ -6,8 +6,9 @@ else {$mod_id = 55;}
 	  $mod_id = 49 ;}
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
-include("AMP/BaseModuleIntro.php"); ?>
-<?php
+include("AMP/BaseModuleIntro.php");
+include_once("AMP/System/Email.inc.php");
+
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
   if ($QUERY_STRING) {
@@ -30,7 +31,7 @@ include("AMP/BaseModuleIntro.php"); ?>
     $MM_columnsStr = "type|none,none,NULL|class|none,none,NULL|title|',none,''|subtitile|',none,''|html|none,1,0|test|',none,''|shortdesc|',none,''|author|',none,''|linktext|',none,''|date|',none,NULL|state|none,none,NULL|source|',none,''|contact|',none,''|subtype|none,none,NULL|catagory|none,none,NULL";
 
 $emailtext = " Title = $title \nSubitle = $subtitle \nTitle = $article \nAuthor = $author \n Source = $source \nContact = $contact \n ";
-	mail ( "$MM_email_usersubmit", "user submited article", "$emailtext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
+	mail ( "$MM_email_usersubmit", "user submited article", "$emailtext", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n"); 
   
   require ("DBConnections/insetstuff.php");
 require ("DBConnections/dataactions.php");

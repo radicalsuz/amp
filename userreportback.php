@@ -3,8 +3,9 @@
 $mod_id = 41;
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
-include("AMP/BaseModuleIntro.php"); ?>
-<?php
+include("AMP/BaseModuleIntro.php");
+include_once("AMP/System/Email.inc.php");
+
   // *** Edit Operations: declare Tables
   $MM_editAction = $PHP_SELF;
   if ($QUERY_STRING) {
@@ -25,13 +26,13 @@ include("AMP/BaseModuleIntro.php"); ?>
 	$date =  DateConvertIn($date);
     $MM_fieldsStr = "type|value|class|value|select3|value|uselink2|value|uselink|value|publish|value|titlex|value|subtitle|value|html|value|article|value|textfield|value|author|value|linktext|value|date|value|usedate|value|doc|value|radiobutton|value|link|value|linkuse|value|new|value|actionitem|value|actionlink|value|piccap|value|picture|value|usepict|value|morelink|value|usemore|value|ID|value|pageorder|value";
     $MM_columnsStr = "type|none,none,NULL|class|none,none,NULL|catagory|none,none,NULL|fplink|none,1,0|uselink|none,1,0|publish|none,1,0|title|',none,''|subtitile|',none,''|html|none,1,0|test|',none,''|shortdesc|',none,''|author|',none,''|linktext|',none,''|date|',none,NULL|usedate|none,1,0|doc|',none,''|doctype|',none,''|link|',none,''|linkover|none,1,0|new|none,1,0|actionitem|none,1,0|actionlink|none,none,NULL|piccap|',none,''|picture|',none,''|picuse|none,none,NULL|morelink|',none,''|usemore|none,1,0|enteredby|none,none,NULL|pageorder|none,none,NULL";
-	mail ( "$MM_email_usersubmit", "user submited article", "$article", "From: $author\nX-Mailer: My PHP Script\n"); 
+	mail ( "$MM_email_usersubmit", "user submited article", "$article", "From: ".AMPSystem_Email::sanitize($author)."\nX-Mailer: My PHP Script\n"); 
   
-  require ("DBConnections/insetstuff.php");
+  require ("Connections/insetstuff.php");
   
    }
   
-require ("DBConnections/dataactions.php");
+require ("Connections/dataactions.php");
   
 
 ?><?php

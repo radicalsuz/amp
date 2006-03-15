@@ -17,6 +17,7 @@ $modid=9;
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php"); 
+include_once("AMP/System/Email.inc.php");
 
  ##################get the list of lists ########################
  $lists=$dbcon->Execute("SELECT * FROM lists where publish=1 ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
@@ -54,7 +55,7 @@ if (isset($send)){
  $idnum = (($emailsend->Fields("id"))*3+792875);
  if ($SendConfirm == 1) {
  $body = "Please follow the following link to update your information\n ".$Web_url."email.php?id=".$emailsend->Fields("id")."&token=".$idnum;
- mail("$sendtox", "Update Your Subscription", "$body",  "From: $MM_email_from\nX-Mailer: My PHP Script\n");
+ mail("$sendtox", "Update Your Subscription", "$body",  "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n");
  echo "Please check your email for a link to edit you subscription";}
  else {
  $goto = $Web_url."email.php?id=".$emailsend->Fields("id")."&token=".$idnum;

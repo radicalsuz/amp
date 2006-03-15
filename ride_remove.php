@@ -4,6 +4,7 @@ $mod_id = 19;
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php"); 
+include_once("AMP/System/Email.inc.php");
 include("dropdown.php"); 
 ?><?php
   // *** Edit Operations: declare Tables
@@ -19,7 +20,7 @@ include("dropdown.php");
 
 if (isset($MM_insert)){
 $messagetext = "To remove your listing simply visit this page ".$Web_url."ride_remove2.php?email=$email and press the remove button";
-   mail ( "$email", "remove your ride posting", "$messagetext", "From: $MM_email_from\nX-Mailer: My PHP Script\n"); 
+   mail ( "$email", "remove your ride posting", "$messagetext", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\nX-Mailer: My PHP Script\n"); 
    header ("Location: ride_remove.php?show=yes");
 }
    

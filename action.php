@@ -270,6 +270,15 @@ function addFieldToCheck(value,name) {
 
 }
 
+if(!function_exists('mail_sanitize')) {
+	function mail_sanitize($content) {
+		if (eregi("\r",$content) || eregi("\n",$content)){
+			trigger_error("Contact Us Spam at ".time()." :(".$content.")");
+			die("Contact Us Spam at ".time()." :(".$content.")");
+		}
+		return $content;
+	}
+}
 function  getactionemail($email) {
 	global $dbcon;
 	$getuser = $dbcon->Execute("select * from userdata where Email ='".$email."' and modin=12 ") or DIE($dbcon->ErrorMsg());
@@ -277,7 +286,7 @@ function  getactionemail($email) {
 }
 
 function memebershipemail($email) {
-	global $dbconn;
+	global $dbcon;
 	mail($email,$subject,$message,$headers);
 }
 
@@ -386,10 +395,10 @@ $Title $First_Name $Last_Name \n";
  
 #send emails	
     $emailemail =  $actiondetails->Fields("email");
-	$emailheaders = "From: $First_Name $Last_Name <$Email>\nReply-To: $Email";
-	$temailheaders = "From: $MM_email_from";
+	$emailheaders = mail_sanitize("From: $First_Name $Last_Name <$Email>")."\n".mail_sanitize("Reply-To: $Email");
+	$temailheaders = mail_sanitize("From: $MM_email_from");
 	$faxemail = $actiondetails->Fields("fax");
-	$faxheaders = "From: ".$actiondetails->Fields("faxaccount");
+	$faxheaders = mail_sanitize("From: ".$actiondetails->Fields("faxaccount"));
 	if ($actiondetails->Fields("faxsubject") != 'subject') {	
 	 	$faxsubject = $actiondetails->Fields("faxsubject");
 	} else {

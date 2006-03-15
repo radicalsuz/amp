@@ -14,6 +14,7 @@ ob_start();
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 include("AMP/BaseModuleIntro.php");
+include_once("AMP/System/Email.inc.php");
 
 function getid($uid) {
 	global $dbcon,$board, $modinid;
@@ -60,7 +61,7 @@ function confirmride($uid) {
 					} else {
 						$messagetext2.=$user->Fields('firstname')." ".$user->Fields('lastname')." has removed you as a passenger in their vehicle. \n";
 					}
-					mail($getriders->Fields("pemail"), "Ride request status change", "$messagetext2", "From: $MM_email_from\n");
+					mail($getriders->Fields("pemail"), "Ride request status change", "$messagetext2", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\n");
 					
 				}
 			}
@@ -99,7 +100,7 @@ $getuid = $dbcon->Execute("Select id, uniqueid from $board where pemail = '$pema
 $uid = $getuid->Fields("uniqueid");
 $messagetext = "To remove your listing simply visit this page ".$Web_url.$board."_signin.php?deluid=$uid";
   if (email_is_valid($pemail)){
-   mail($pemail, "remove your $board posting", "$messagetext", "From:$MM_email_from");
+   mail($pemail, "remove your $board posting", "$messagetext", "From:".AMPSystem_Email::sanitize($MM_email_from));
    echo "An e-mail has been sent to you with instructions on how to remove yourself from the board.";}
 else {echo "Your email is invalid or not in our system<br><br>"; 
 			deleteform();}
@@ -132,7 +133,7 @@ if ($uid&&$_GET[setdriver]&&($action=="requestride")) {
 		$messagetext2.=$user->Fields('firstname')." ".$user->Fields('lastname')." requested a ride in your vehicle. \nTo confirm this and other ride requests, please visit ".$Web_url."rides.php?uid=".$getriders->Fields("uniqueid")."\n\n Ride Request Information:\n";
 		$messagetext2.="Departing From: ".$user->Fields('depatingfrom')."\nDeparture Date: ".$user->Fields('depaturedate')."\nReturning To: ".$user->Fields('returningto')."\nReturn Date: ".$user->Fields('returndate')."\nPhone: ".$user->Fields('phone')."\nEmail: ".$user->Fields('email');
 		
-		mail($getriders->Fields("pemail"), "Ride request", "$messagetext2", "From: $MM_email_from\n");
+		mail($getriders->Fields("pemail"), "Ride request", "$messagetext2", "From: ".AMPSystem_Email::sanitize($MM_email_from)."\n");
 		echo "<P>Your ride request was sent successfully. <BR><A href=\"rides.php?uid=$uid\">Click here to return to the ride board.</A><P>";	
 	}
 }

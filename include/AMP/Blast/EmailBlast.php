@@ -5,6 +5,7 @@
 require_once('Net/POP3.php');
 require_once('AMP/Blast/BlastBase.php');
 include ("AMP/Blast/class.html.mime.mail.inc");
+include_once("AMP/System/Email.inc.php");
 
 
 class EmailBlast extends Blast {
@@ -24,9 +25,8 @@ class EmailBlast extends Blast {
 				
 		$mail->send("", $to_addr, $from_name, $from_addr, $subject);
 
-		
-		
-		
+		$from = AMPSystem_Email::sanitize($from);
+		$replyto = AMPSystem_Email::sanitize($replyto);
 		if (mail($email,$subject,$message,"From: $from\r\nReply-To: $replyto\r\nX-Sender: $from\r\nReturn-Path: $replyto", "-f$replyto")) {
 			return true;
 		}
