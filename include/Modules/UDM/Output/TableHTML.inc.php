@@ -16,11 +16,23 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
                             =>  array( 'value' => "<td align=\"left\">"),
 		'list_html_header_template'
                             =>  array( 'value' => '<td align="left"><b>%s</b></td>'),
-                #"<td align=\"left\"><b><a href=\"javascript: document.forms['%1\$s'].elements['sortby'].value = '%2\$s '+document.forms['%1\$s'].elements['sortby'].value; document.forms['%1\$s'].submit();\">%3\$s</a></b></td>"),
-        'display_fields'    =>  array( 'value' => 'id,Name,Company,State,Phone,Status'),
-        'display_format'    =>  array( 'value' => 'table_format'),
         'form_name'         =>  array( 'value' => 'udm_list'),
-        'editlink'          =>  array( 'value' => 'modinput4_view.php')
+                #"<td align=\"left\"><b><a href=\"javascript: document.forms['%1\$s'].elements['sortby'].value = '%2\$s '+document.forms['%1\$s'].elements['sortby'].value; document.forms['%1\$s'].submit();\">%3\$s</a></b></td>"),
+        'display_fields'    =>  array( 
+            'label'   => 'Select SQL phrase for display fields',
+            'type'    => 'textarea',
+            'available' => true,
+            'default' => 'id,Name,Company,State,Phone,Status'),
+        'display_format'    =>  array( 
+            'label'   => 'Output method for each row',
+            'available' => true,
+            'type' => 'text',
+            'default' => 'table_format'),
+        'editlink'          =>  array( 
+            'label' => 'System page to link to',
+            'available' => true,
+            'type'  => 'text',
+            'default' => 'modinput4_view.php')
         );
     var $html_rowcount=0;
     var $display_fieldset;

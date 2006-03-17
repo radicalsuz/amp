@@ -11,6 +11,16 @@
  *****/
 $modid=1;
 require_once( 'AMP/BaseDB.php' );
+
+/**
+ *  Check for a cached page
+ */
+if (AMP_SITE_MEMCACHE_ON) {
+    require_once( "AMP/Content/Page/Cached.inc.php" );
+    $cached_page = &new AMPContent_Page_Cached();
+    if ($cached_page->execute()) exit;
+}
+
 require_once('AMP/UserData/Set.inc.php');
 
 //bounce to the index if modin isn't set
@@ -35,40 +45,18 @@ $sub = isset($_REQUEST['btnUDMSubmit']);
 $uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
 
 if ($uid && $modin) {
-/*
-	if(isset($display_options['header_text_detail'])) {
-		$intro_id=$display_options['header_text_detail'];
-	}
-*/
+
     $userlist->uid = $uid;
     $output= $userlist->output('DisplayHTML'); 
 
 } else { 
 
-/*
-	if(isset($display_options['header_text_list'])) {
-		$intro_id=$display_options['header_text_list'];
-	}
-*/
     //display result list
     if (!$userlist->getPlugins('SearchForm')) $srch_options['criteria']=array('value'=>array("modin=".$modin));
 
     #$userlist->doAction('Search', $srch_options);
     $output = $userlist->output_list();
-        /*
-        $output= (isset($userlist->error)? $userlist->error.'<BR>':"").
-                ($searchform?   $searchform->search_text_header()
-                                .$searchform->execute():"").
-                ($pager?$pager->execute():"").
-                ($actionbar?$actionbar->execute():"").
-                $userlist->output('DisplayHTML').
-                ($pager?$pager->execute():"");#.
-                #$userlist->output('Index');
                 
-    } else {
-        $output=join('<BR>',$userlist->errors).'<P>'.($searchform?$searchform->execute():"");
-    }
-    */
 }
 
 $intro_id = $userlist->modTemplateID;

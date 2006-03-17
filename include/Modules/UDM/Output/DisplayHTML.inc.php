@@ -8,19 +8,19 @@ if (file_exists_incpath('custom.layouts.inc.php')) {
 class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     
     var $options= array( 
-        'subheader'=>array('label'=>'Subheading',
+        'subheader'=>array(
                             'available'=>true, 
-                            'description'=>'Show subheadings for',
+                            'label'=>'Show subheadings for',
                             'default'=>null,
                             'type'=>'text'),
-        'subheader2'=>array('label'=>'Subheading 2',
+        'subheader2'=>array(
                             'available'=>true, 
-                            'description'=>'Show second-level subheadings for',
+                            'label'=>'Show second-level subheadings for',
                             'default'=>null,
                             'type'=>'text'),
-        'subheader3'=>array('label'=>'Subheading 3',
+        'subheader3'=>array(
                             'available'=>true, 
-                            'description'=>'Show third-level subheadings for',
+                            'label'=>'Show third-level subheadings for',
                             'default'=>null,
                             'type'=>'text'),
         'display_format'=>array('label'=>'List Display Function Name',
@@ -76,6 +76,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
     function _register_options_dynamic () {
         if ($this->udm->admin) {
+            /*
             $udm_mod_id  = $this->dbcon->qstr( $this->udm->instance );
             $modlist_sql = "SELECT   moduletext.id, moduletext.name FROM moduletext, modules
                             WHERE    modules.id = moduletext.modid
@@ -88,8 +89,11 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
             while ( $row = $modlist_rs->FetchRow() ) {
                 $modules[ $row['id'] ] = $row['name'];
             }
-            $this->options['header_text_list']['values']=$modules;
-            $this->options['header_text_display']['values']=$modules;
+            */
+            require_once( 'AMP/UserData/Lookups.inc.php');
+            $introtexts = &FormLookup_IntroTexts::instance( $this->udm->instance );
+            $this->options['header_text_list']['values']    = array( '' => 'None selected') + $introtexts;
+            $this->options['header_text_detail']['values']  = array( '' => 'None selected') + $introtexts;
         }
     }
 

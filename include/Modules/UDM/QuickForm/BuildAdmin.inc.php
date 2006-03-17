@@ -21,6 +21,25 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
     var $form;
     var $regions;
 
+    var $_field_plugin_def = array( 
+        'priority' => array( 
+            'type'  => 'text',
+            'size'  => '2',
+            'default' => null,
+            'label' => 'Priority' ),
+        'active'    => array( 
+            'type'  => 'checkbox',
+            'value' => true,
+            'label' => 'Active'),
+    /*    'remove'    => array( 
+            'type'  => 'checkbox',
+            'label' => 'Remove'),*/
+        'id'        => array( 
+            'available' => true,
+            'default' => null,
+            'type'  => 'hidden' ));
+    var $available = false;
+
     function UserDataPlugin_BuildAdmin_QuickForm ( &$udm ) {
         $this->init( $udm );
     }
@@ -37,6 +56,12 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
         $this->form->addElement( 'hidden', 'modin',        'Module Instance' );
         $this->form->addElement( 'submit', 'btnUdmSubmit', 'Submit' );
+
+        $this->form->registerElementType('multiselect','HTML/QuickForm/select.php','HTML_QuickForm_select');
+        $this->form->registerElementType('radiogroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
+        $this->form->registerElementType('checkgroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
+        $this->form->registerElementType('wysiwyg','HTML/QuickForm/textarea.php','HTML_QuickForm_textarea');
+        
 
         $this->_build_core_fields();
         $this->_build_fields();
@@ -67,35 +92,50 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
             $label  = (isset($field['label']))  ? $field['label']  : null;
             $values = (isset($field['values'])) ? $field['values'] : null;
 
-            $this->form->addElement( $field['type'],
+            $el = &$this->form->addElement( $field['type'],
                                      $prefix . $field_name,
                                      $label,
                                      $values );
+            if ( isset( $field['size']) && $field['type'] == 'text') $el->setSize( $field['size']);
 
         }
+    }
+
+    function _read_plugins( ){
+        $plugins = $this->udm->plugins;
+        $option_values = array( );
+        $plugin_settings = array( );
+        $plugin_ids = array( );
+        $plugin_priorities = FormLookup::instance( 'pluginPriorities');
+        foreach( $plugins as $action => $plugin_def ){
+            foreach( $plugin_def as $namespace => $plugin ){
+                $prefix = join( '_', array( 'plugin', $action, $namespace ));
+                /*
+                $simple_options = $plugin->getOptions( );
+                foreach( $simple_options as $key => $option_value ){
+                    $option_values [ $prefix .'_'. $key] = $option_value;
+                }
+                */
+                if ( $plugin->plugin_instance ){
+                    $plugin_ids[ $prefix . '_plugin_id'] = $plugin->plugin_instance;
+                    $plugin_settings[ $prefix . '_plugin_priority'] = $plugin_priorities[ $plugin->plugin_instance ];
+                }
+                $plugin_settings[ $prefix . '_plugin_active'] = true;
+            }
+        }
+        
+        #$this->form->setDefaults( $option_values );
+        
+        $this->form->setDefaults( $plugin_settings );
+        $this->form->setDefaults( $plugin_ids );
+        $this->form->setConstants( $plugin_ids );
+        
+        
     }
 
     function _build_core_fields () {
 
         $dbcon =& $this->udm->dbcon;
-
-        /* Fetch module information.
-            this should be moved to some generic AMP class or somesuch.
-        
-
-        $udm_mod_id  = $dbcon->qstr( $this->udm->instance );
-        $modlist_sql = "SELECT   moduletext.id, moduletext.name FROM moduletext, modules
-                        WHERE    modules.id = moduletext.modid
-                             AND modules.userdatamodid = $udm_mod_id
-                        ORDER BY name ASC";
-        $modlist_rs  = $dbcon->CacheExecute( $modlist_sql )
-            or die( "Error fetching module information: " . $dbcon->ErrorMsg() );
-
-        $modules[ '' ] = '--';
-        while ( $row = $modlist_rs->FetchRow() ) {
-            $modules[ $row['id'] ] = $row['name'];
-        }
-            */
 
         $modules_blank_row[ '' ] = '--';
         $modules = $modules_blank_row + FormLookup_IntroTexts::instance( $this->udm->instance );
@@ -108,12 +148,9 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $fields['core'] = Array( 'tab' => array( 'type' => 'header', 'label' => 'Settings', 'values' => 'Settings' ) );
 
         $fields['core']['name']          = array( 'label' => 'Name',                 'type' => 'text' );
-        #$fields['core']['redirect']      = array( 'label' => 'Redirect URL',         'type' => 'text' );
         $fields['core']['publish']       = array( 'label' => 'Publish Data',         'type' => 'checkbox' );
         $fields['core']['modidinput']    = array( 'label' => 'Intro Text',           'type' => 'select', 'values' => $modules );
         $fields['core']['modidresponse'] = array( 'label' => 'Response Text',        'type' => 'select', 'values' => $modules );
-        #$fields['core']['sourceid']      = array( 'label' => 'Source',               'type' => 'select', 'values' => $sources );
-        #$fields['core']['enteredby']     = array( 'label' => 'Entered By',           'type' => 'select', 'values' => AMPSystem_Lookup::instance( 'users' ));
         $fields['core']['uselists']      = array( 'label' => 'Use Lists',            'type' => 'checkbox' );
         $fields['core']['list1']         = array( 'label' => 'List #1',              'type' => 'select', 'values' => $lists );
         $fields['core']['list2']         = array( 'label' => 'List #2',              'type' => 'select', 'values' => $lists );
@@ -173,6 +210,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
         // We use this to fill in default values.
         $md = &$this->udm->_module_def;
+        $plugin_priorities = FormLookup::instance( 'pluginPriorities');
 
         foreach ( $actions as $action => $plugins ) {
 
@@ -185,20 +223,40 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
                 $plugin_name   = "plugin_$action" . "_$namespace";
                 $plugin_fields = Array();
+                $option_values = $plugin->getOptions( );
 
                 if (isset( $plugin->options )) {
                     foreach ( $plugin->options as $option_name => $option ) {
                         if (!isset($option['available']) || !$option['available']) continue;
                         $plugin_fields[$option_name] = $option;
-                        $md[$plugin_name . "_$option_name"] = $option['default'];
+                        if ( isset( $option_values[$option_name])) {
+                            $md[$plugin_name . "_$option_name"] = $option_values[ $option_name ];
+                        }
                     }
                 }
 
+                foreach( $this->_field_plugin_def as $short_name => $field_def ){
+                    $field_name =   'plugin_' . $short_name ;
+                    $plugin_fields[ $field_name ] = $field_def ;
+
+                }
+                $md[$plugin_name . "_plugin_active"] = true;
+                if ( $plugin->plugin_instance ){
+                    $md[$plugin_name . "_plugin_id"] = $plugin->plugin_instance; 
+                    $md[$plugin_name . "_plugin_priority"] = $plugin_priorities[ $plugin->plugin_instance ];
+
+                    $plugin_fields[ 'plugin_id']['default'] = $plugin->plugin_instance;
+                    $plugin_fields[ 'plugin_priority']['default'] = $plugin_priorities[ $plugin->plugin_instance ];
+
+                }
+                
+                /* this is deprecated, i hope we never implement it
                 if (isset( $plugin->fields )) {
                     foreach ( $plugin->fields as $field_name => $field ) {
                         $plugin_fields[$field_name] = $this->_build_field( $field_name, $field );
                     }
                 }
+                */
 
                 if (count($plugin_fields) > 0) {
                     $header = Array("heading" => Array( 'type' => 'static', 'values' => "<h3>$namespace: $action</h3>" ));
@@ -309,10 +367,6 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
                                "Unnamed Field <span class=\"fieldname\">(<em>$fn</em>)</span>";
 
         // Do this in the absence of array_combine.
-        $this->form->registerElementType('multiselect','HTML/QuickForm/select.php','HTML_QuickForm_select');
-        $this->form->registerElementType('radiogroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
-        $this->form->registerElementType('checkgroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
-        $this->form->registerElementType('wysiwyg','HTML/QuickForm/textarea.php','HTML_QuickForm_textarea');
         $available_types = $this->form->getRegisteredTypes();
         foreach ( $available_types as $ftype ) {
             $types[ $ftype ] = $ftype;

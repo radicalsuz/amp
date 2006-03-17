@@ -41,6 +41,12 @@ class AMPSystem_LookupFactory {
         return $sql;
     }
 
+    function clearCache( &$lookup ){
+        if (!isset($lookup->datatable)) return false;
+        if (!isset($lookup->result_field)) return false;
+        return $this->dbcon->CacheFlush( $this->assembleSQL( $lookup ) ); 
+    }
+
     function available ( ){
         return false;
     }
@@ -102,10 +108,16 @@ class AMPSystem_Lookup {
         return false;
     }
 
+    function clearCache( ){
+        $factory = & AMPSystem_LookupFactory::instance();
+        $factory->clearCache( $this );
+        
+    }
+
 }
 
 class AMPSystemLookup_Lookups {
-    var $_include_modules = array( 'schedule', 'form', 'content', 'calendar', 'voterGuide' );
+    var $_include_modules = array( 'schedule', 'form', 'calendar', 'voterGuide' );
     var $dataset;
 
     function AMPSystemLookup_Lookups( ){
@@ -116,6 +128,7 @@ class AMPSystemLookup_Lookups {
         foreach( $this->_include_modules as $module ){
             AMPSystem_Lookup::loadLookups( $module, 'test');
         }
+        require_once( 'AMP/Content/Lookups.inc.php');
         $this->get_defined_lookups( );
     }
 

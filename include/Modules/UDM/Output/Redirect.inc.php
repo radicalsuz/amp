@@ -15,3 +15,4 @@ function udm_output_redirect ( $udm, $options = null ) {
     header( 'Location: ' . $redirURL );
 
 }
+?>

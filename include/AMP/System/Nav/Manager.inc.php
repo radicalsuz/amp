@@ -22,6 +22,8 @@ class AMPSystem_NavManager {
     var $nav_set;
     var $per_manager;
     var $_tool_id;
+    var $_buffer;
+    var $_default_nav = 'content';
 
     function AMPSystem_NavManager() {
         $this->per_manager =  & AMPSystem_PermissionManager::instance();
@@ -114,6 +116,31 @@ class AMPSystem_NavManager {
         return $nav_name;
     }
 
+    function &get_buffer( ){
+        if ( isset( $this->_buffer )) return $this->_buffer;
+        require_once( 'AMP/Content/Buffer.php');
+        $this->_buffer = &new AMP_Content_Buffer( );
+        return $this->_buffer;
+    }
+
+    function request( $nav_name, $form_id = false ){
+        if ( $form_id ) $nav_name = $this->buildFormNav( $form_id );
+        if ( !$output = $this->render( $nav_name)) return false;
+        $buffer = &$this->get_buffer( );
+        $buffer->add( $output );
+        return true;
+
+    }
+
+    function execute( ){
+        $buffer = &$this->get_buffer( );
+        $output = $buffer->execute( );
+        if ( $output ) return $output;
+        
+        $this->request( $this->_default_nav );
+        return $this->execute( );
+        
+    }
 
 }
 ?>

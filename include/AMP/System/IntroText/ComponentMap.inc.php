@@ -20,5 +20,11 @@ class ComponentMap_IntroText extends AMPSystem_ComponentMap {
         'copier' => 'AMPSystem_IntroText_Copy',
         'source' => 'AMPSystem_IntroText' );
 
+    function onInitForm( &$controller ){
+        if (!( $tool_id = $controller->assert_var( 'tool_id' ))) return false;
+        $form = &$controller->get_form( );
+        $form->setDefaultValue( 'modid', $tool_id );
+    }
+
 }
 ?>

@@ -88,6 +88,7 @@ class UserDataPlugin {
         $this->_register_common('options');
         $this->_register_options_global( );
 
+       /* 
         $dbcon   = &$this->dbcon;
         $options = &$this->options;
 
@@ -103,9 +104,17 @@ class UserDataPlugin {
                 $options[ $option['name'] ]['value'] = $option['value'];
             }
         }
+        */
+        
+        require_once( 'AMP/UserData/Lookups.inc.php');
 
         // Push the database-defined options back.
-        $this->options = $options;
+        
+        if ( $this->plugin_instance ){
+            $this->setOptions( FormLookup_PluginOptions::instance( $this->plugin_instance ));
+        }
+        
+    
 
         // If the necessary method is set, fetch dynamic options.
         if (method_exists( $this, '_register_options_dynamic' )) {
@@ -660,7 +669,6 @@ class UserDataPlugin {
     }
 
     function saveOption( $name, $value ) {
-		if (! $this->plugin_instance ) die( "you suck" );
 
         $option_data = array(
             "plugin_id" => $this->plugin_instance,

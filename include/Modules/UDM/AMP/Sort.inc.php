@@ -8,30 +8,38 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
     var $order;
     var $sortname;
     var $options = array (
-        /*'default_sortname'=>array(
-            'value'=>"State/Org",
-            'available'=>true,
-            'description'=>'Text name of default sort'),
-        'default_select'=>array(
-            'value'=>"Concat( State, '-', Company) as `State/Org`"),
-        'default_orderby'=>array(
-            'value'=>"State,Company,Last_Name,First_Name"),*/
         'default_sortname'=>array(
-            'value'=>"Name",
+            'default'=>"Name",
             'available'=>true,
-            'description'=>'Text name of default sort'),
+            'type' => 'text',
+            'label'=>'Text name of default sort'),
         'default_select'=>array(
-            'value'=>"Concat(First_Name,' ',Last_Name) as Name"),
+            'available'=>true,
+            'label'=>'SELECT SQL phrase for sorting',
+            'type' => 'textarea',
+            'default'=>"Concat(First_Name,' ',Last_Name) as Name"),
         'default_orderby'=>array(
-            'value'=>"Last_Name,First_Name"),
+            'available'=>true,
+            'label'=>'ORDER BY SQL phrase for sorting',
+            'type' => 'textarea',
+            'default'=>"Last_Name,First_Name"),
         'default_sortname_admin'=>array(
-            'value'=>'Name'),
+            'available'=>true,
+            'label'=>'Admin view: Text name of default sort',
+            'type' => 'text',
+            'default'=>'Name'),
             
         'default_select_admin'=>array(
-            'value'=>'Concat( First_Name, " ", Last_Name ) as `Name`'),
+            'available'=>true,
+            'label'=>'Admin view: SELECT SQL phrase for sorting',
+            'type' => 'textarea',
+            'default'=>'Concat( First_Name, " ", Last_Name ) as `Name`'),
             
         'default_orderby_admin'=>array(
-            'value'=>'Last_Name,First_Name'));
+            'available'=>true,
+            'label'=>'Admin view: ORDER BY SQL phrase for sorting',
+            'type' => 'textarea',
+            'default'=>'Last_Name,First_Name'));
 
     function UserDataPlugin_Sort_AMP(&$udm, $plugin_instance = null) {
         $this->init ($udm, $plugin_instance);

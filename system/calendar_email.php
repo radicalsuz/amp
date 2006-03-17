@@ -13,9 +13,9 @@
 $modid=1;
 $mod_id=67;
 ob_start();
-require_once( 'AMP/BaseDB.php' );
+require_once( 'AMP/System/Base.php' );
 
-require_once('AMP/Calendar.inc.php');
+require_once('Modules/Calendar/Calendar.inc.php');
 require_once( 'header.php' );
 
 $admin=true;

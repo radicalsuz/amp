@@ -59,7 +59,7 @@ class AMPDisplay_HTML {
     }
 
     function inDiv( $text, $attr_set = array() ) {
-        return $this->_HTML_inDiv( $text, $attr_set = array() ) ;
+        return $this->_HTML_inDiv( $text, $attr_set ) ;
     }
     function _HTML_inDiv( $text, $attr_set = array() ) {
         $div_attr = $this->_HTML_makeAttributes( $attr_set );

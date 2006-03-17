@@ -1,5 +1,4 @@
 <?php
-define( 'AMP_ERROR_METHOD_NOT_SUPPORTED', '%s does not support method %s attempted by %s');
 
 class AMP_System_List_Request {
     var $_actions = array();
@@ -54,7 +53,7 @@ class AMP_System_List_Request {
 
     function commitAction( &$target, $action, $args = null ){
         if ( !method_exists( $target, $action )) {
-            trigger_error( sprintf( AMP_ERROR_METHOD_NOT_SUPPORTED, get_class( $target ), $action , get_class( $this )));
+            trigger_error( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED, get_class( $target ), $action , get_class( $this )));
             return false;
         }
         return call_user_func_array( array( $target, $action ), $args ) ;

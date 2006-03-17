@@ -31,6 +31,7 @@ class UserDataPlugin_EmailForm_Output extends UserDataPlugin {
             'available'     =>true,
             'default'       =>'go')
             );
+    var $available = false;
 
     function UserDataPlugin_EmailForm_Output (&$udm, $plugin_instance) { 
         $this->init($udm, $plugin_instance);

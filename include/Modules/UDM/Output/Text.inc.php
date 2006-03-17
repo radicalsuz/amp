@@ -8,7 +8,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
         'skip_prefix' => array(
             'type'=>'text',
             'available'=> true,
-            'label' => 'Skip Fields Prefixed' )
+            'label' => 'Skip Fields Prefixed with' )
         );
 
     function UserDataPlugin_Text_Output ( &$udm, $plugin_instance=null ) {

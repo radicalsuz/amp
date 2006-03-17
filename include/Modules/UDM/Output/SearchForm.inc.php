@@ -12,34 +12,37 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	var $form;
 	var $fields_def;
 	var $control_class;
+    var $_included_fields;
     var $options = array (
         'show_distance'=>array(
-            'description'=>'Allow Search by Zip/Distance',
+            'label'=>'Allow Search by Zip/Distance',
             'type'=>'checkbox',
-            'value'=>true,
+            'available' => true,
             'default'=>true), 
         'form_name'=>array(
-            'description'=>'Name of Search Form',
+            'label'=>'Name of Search Form',
             'available'=>false,
             'default'=>'udm_search'),
-        'field_order'=>array(
-            'description'=>'Order of Fields, User Side',
-            'available'=>true,
-            'default'=>'newline,start_text,country,state,bydate,search,sortby,modin,endline'),
-        'field_order_admin'=>array(
-            'description'=>'Order of Fields, Admin View',
-            'available'=>true,
-            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,search,sortby,modin,endline'),
         'show_search_header'=>array(
-            'description'=>'show description of current search',
+            'label'=>'Show text description of current search on results page',
             'type'=>'checkbox',
-            'label'=>'Describe search on results page',
+            'available' => true,
             'default'=>1),
         'search_form_display'=>array(
-            'description'=>'show search form on result page',
+            'label'=>'Show search form on results page',
             'type'=>'checkbox',
-            'label'=>'show search form on result page',
+            'available' => true,
             'default'=>1),
+        'field_order'=>array(
+            'label'=>'Order of Fields',
+            'type' => 'textarea',
+            'available' => true,
+            'default'   => 'newline,start_text,country,state,bydate,search,sortby,modin,endline'),
+        'field_order_admin'=>array(
+            'label'=>'Admin View: Order of Fields',
+            'type' => 'textarea',
+            'available'=>true,
+            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,search,sortby,modin,endline')
             );
         
                     
@@ -94,7 +97,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 			$sql_criteria[]="State=".$this->dbcon->qstr($_REQUEST['state']);
 			$this->lookups['city']['LookupWhere'] = " modin=".$this->udm->instance." AND State=".$this->dbcon->qstr($_REQUEST['state']);
 			$this->setupLookup('city');
-		    $this->fields_def['city']=array('type'=>'select', 'label'=>'Select City', 'values'=>$this->lookups['city']['Set'], 'value'=>$_REQUEST['city']);
+            $city_value = ( isset( $_REQUEST['city']) && $_REQUEST['city']) ? $_REQUEST['city'] : null;
+		    $this->fields_def['city']=array('type'=>'select', 'label'=>'Select City', 'values'=>$this->lookups['city']['Set'], 'value'=>$city_value );
 
 		} 
 
@@ -120,12 +124,13 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		if (isset($_REQUEST['country'])&&$_REQUEST['country']) {
 			//check to see if the search is by code
 			if (strlen($_REQUEST['country'])==3&&($country_name=$this->lookups['country']['Set'][ $_REQUEST['country']])) {
-				$sql_criteria[]="Country=".$this->dbcon->qstr($_REQUEST['country']);
+				$criteria_code ="Country=".$this->dbcon->qstr($_REQUEST['country']);
 			} else {
 				if ($country_code=array_search($_REQUEST['country'], $this->regionset->regions['WORLD'])) {
-					$sql_criteria[]="Country=".$this->dbcon->qstr($country_code);
+					$criteria_code="Country=".$this->dbcon->qstr($country_code);
 				}
 			}
+            $sql_criteria[] = "( ".$criteria_code." OR ( Country=".$this->dbcon->qstr( $_REQUEST['country'])."))";
 		}
 
 		//Modin
@@ -143,9 +148,16 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             }
 		}
         //Publish status
-        if (is_numeric($_REQUEST['publish'])){
+        if (isset( $_REQUEST['publish']) && is_numeric($_REQUEST['publish'])){
             if ($_REQUEST['publish']) $sql_criteria[]="publish=1";
             else $sql_criteria[]="(isnull(publish) OR publish!=1)";
+        }
+
+        $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate');
+        foreach( $this->_included_fields as $fieldname ){
+            if ( array_search( $fieldname, $specified_fields ) !== FALSE ) continue;
+            if ( !( isset( $_REQUEST[ $fieldname ]) && $_REQUEST[ $fieldname ])) continue;
+            $sql_criteria[] = $fieldname . ' LIKE ' . $this->dbcon->qstr( '%' . $_REQUEST[$fieldname] . '%' );
         }
 
 		//Vet valid URL data
@@ -178,17 +190,22 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		} else {
 			$this->control_class='go'; 
 		}
+        $this->_included_fields = preg_split( "/\s?,\s?/", $def['field_order']);
+
+        //basic listing
+        $this->_makeSimpleFields( $def );
 			
 		//country listing
-		$def['country'] =array('type'=>'select', 'label'=>'By Country', 'required'=>false,  'values'=>$this->lookups['country']['Set'], 'size'=>null, 'value'=>$_REQUEST['country'], 'public'=>'1');
+        $country_value = ( isset( $_REQUEST['country']) && $_REQUEST['country']) ? $_REQUEST['country'] : null;
+		$def['country'] =array('type'=>'select', 'label'=>'By Country', 'required'=>false,  'values'=>$this->lookups['country']['Set'], 'size'=>null, 'value'=> $country_value , 'public'=>'1');
 
 		//state listing
 		//accepts area values
-		if ($_REQUEST['area']) {
+		if (isset( $_REQUEST['area']) && $_REQUEST['area']) {
 				//this is coming from the left nav pulldown, must convert the ID to a two digit code
 				$state_code=$this->lookups['area']['Set'][$_REQUEST['area']];	
 		}
-		if ($_REQUEST['state']) $state_code = $_REQUEST['state'];
+		$state_code = (isset( $_REQUEST['state']) && $_REQUEST['state']) ? $_REQUEST['state'] : null ;
 		
 		$def['state']=array('type'=>'select', 'label'=>'By State/Province', 'required'=>false,  'values'=>$this->lookups['state']['Set'], 'size'=>null, 'value'=>$state_code, 'public'=>'1');
 
@@ -197,7 +214,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$def['start_text']=array('type'=>'static', 'label'=>'Search '.$this->udm->name.'<BR>', 'public'=>'1');
 
 		//date
-		$mydate=($_REQUEST['bydate']&& isset($_REQUEST['bydate']))?
+		$mydate=(isset($_REQUEST['bydate']) && $_REQUEST['bydate'])?
 			$_REQUEST['bydate']:
 		    "";	
 			
@@ -205,11 +222,13 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	
 		//distance by zip
 		$distance_options=array('1'=>'1','5'=>'5', '10'=>'10', '25'=>'25', '100'=>'100', '250'=>'250');
-		$def['distance']=array('type'=>'select', 'label'=>'Within:', 'required'=>false,  'values'=>$distance_options, 'size'=>null, 'value'=>(isset($_REQUEST['distance'])?$_REQUEST['distance']:'5'), 'public'=>'1');
+        $distance_value = ( isset( $_REQUEST['distance']) && $_REQUEST['distance']) ? $_REQUEST[ 'distance' ] : 5;
+		$def['distance']=array('type'=>'select', 'label'=>'Within:', 'required'=>false,  'values'=>$distance_options, 'size'=>null, 'value'=> $distance_value , 'public'=>'1');
+        $zip_value = ( isset( $_REQUEST['zip']) && $_REQUEST['zip'] ) ? $_REQUEST[ 'zip '] : null;
 		$def['zip']  =  array(
             'type'=>'text',     
             'label'=>'&nbsp;miles of US zipcode:&nbsp', 
-            'value'=>$_REQUEST['zip'], 
+            'value'=> $zip_value, 
             'size'=>'8', 
             'public'=>'1');
 		
@@ -224,15 +243,41 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
 
 				
-		$publish_options=array(''=>'Any', '0'=>'draft', '1'=>'live');
-		$def['publish']=array('type'=>'select', 'label'=>'Status', 'value'=>$_REQUEST['publish'], 'values'=>$publish_options);
+		$publish_options = array (''=>'Any', '0'=>'draft', '1'=>'live');
+        $publish_value   = ( isset( $_REQUEST[ 'publish' ]) && $_REQUEST[ 'publish'] ) ? $_REQUEST[ 'publish' ] : null;
+		$def['publish']  = array( 'type'=>'select', 'label'=>'Status', 'value'=>$publish_value, 'values'=>$publish_options );
 		#city is defined by state read_request routine
         #$def['city']=array('type'=>'select', 'label'=>'Select City', 'values'=>$this->lookups['city'], 'value'=>$_REQUEST['city']);
-        $def['sortby']=array('type'=>($_REQUEST['sortby']?'select':'hidden'), 'label'=>($_REQUEST['sortby']?'Sort:':''), 'value'=>$_REQUEST['sortby'], 'public'=>1, 'enabled'=>1, 'values'=>array(''=>'Default',$_REQUEST['sortby']=>$_REQUEST['sortby']));
+        if ( isset( $_REQUEST['sortby']) && $_REQUEST['sortby'] ) {
+            $def['sortby'] =    array(
+                'type'  => 'select',
+                'label' => 'Sort:',
+                'value' => $_REQUEST['sortby'], 
+                'public'=>1, 
+                'enabled'=>1, 
+                'values'=> array( ''=>'Default', $_REQUEST['sortby']=>$_REQUEST['sortby'] )
+                );
+
+        } else {
+            $def['sortby'] =    array(
+                'type'  => 'hidden',
+                'label' => '',
+                'public'=>1, 
+                'enabled'=>1
+                );
+
+        }
 
 		return $def;
 
 	}
+
+    function _makeSimpleFields( &$def ){
+        foreach ( $this->_included_fields as $fieldname ) {
+            if ( !isset( $this->udm->fields[ $fieldname ])) continue;
+            $def[ $fieldname ] = $this->udm->fields[ $fieldname ];
+        }
+    }
 
 	
 	/**
@@ -254,7 +299,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
 		if ( isset( $this->fields_def[ 'field_order' ] ) ) {
 		
-			$fieldOrder = split( ',', $this->fields_def[ 'field_order']  );
+			$fieldOrder = preg_split( "/\s?,\s?/", $this->fields_def[ 'field_order']  );
 			
 			foreach ( $fieldOrder as $field ) {
 				$field = trim( $field );
@@ -292,6 +337,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         $defaults = isset( $field_def['values']) ? $field_def[ 'values' ] : null; 
         $size     = isset( $field_def['size']) ? $field_def[ 'size' ]:null;
 		$renderer =& $form->defaultRenderer();
+
+        if ( !$type ) return false;
 
 		// Check to see if we have an array of values.
 		if (!is_array($defaults)) {
@@ -421,7 +468,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	//get Region Values for state and country lookups
 	function setupRegion () {
 		if (!isset($this->regionset->regions['WORLD'])) {$this->regionset=new Region();}
-		$this->lookups['country']['Set']=&$this->regionset->regions['WORLD'];
+		$this->lookups['country']['Set']=&$this->getValueSet( $this->udm->fields['Country']);
 		$this->lookups['state']['Set']=&$this->regionset->regions['US AND CANADA'];
 	}
 
@@ -437,10 +484,14 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 				switch ($searchitem) {
 					//adding text for various criteria
 					case 'zip':
-						$search_text[]="within ".$_REQUEST['distance']." miles of ".$searchdata;
+                        if ( isset( $_REQUEST['distance']) && $_REQUEST['distance']) {
+                            $search_text[]="within ".$_REQUEST['distance']." miles of ".$searchdata;
+                        } else {
+                            $search_text[] = 'in ' . $searchdata;
+                        }
 						break;
 					case 'state':
-                        $city_insert=($_REQUEST['city']?$_REQUEST['city'].", ":"");
+                        $city_insert=(isset( $_REQUEST[ 'city' ]) && $_REQUEST['city'] ) ? $_REQUEST['city'].", " : "";
 						$search_text[]="in ".$city_insert.$this->lookups['state']['Set'][$searchdata];
 						break;
 					case 'area':

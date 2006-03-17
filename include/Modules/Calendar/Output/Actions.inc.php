@@ -10,7 +10,7 @@ class CalendarPlugin_Actions_Output extends CalendarPlugin {
     var $criteria;
     var $options = array (
         'allow_email'=>array(
-            'default'=>true,
+            'default'=>false,
             'type'=>'checkbox',
             'available'=>false,
             'description'=>'Allow user to Email event contact'),

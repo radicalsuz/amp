@@ -15,6 +15,7 @@ class DocumentLink  {
 
     var $_filename;
     var $_filetype;
+    var $_document_folder = AMP_CONTENT_DOCUMENT_PATH;
 
     var $_default_display = 'ArticleDocumentLink_Display';
     var $_mime_translations = array( 
@@ -79,7 +80,7 @@ class DocumentLink  {
     }
 
     function getPath() {
-        return AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_DOCUMENT_PATH . DIRECTORY_SEPARATOR . $this->getFileName();
+        return AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . $this->_document_folder . DIRECTORY_SEPARATOR . $this->getFileName();
     }
 
 }

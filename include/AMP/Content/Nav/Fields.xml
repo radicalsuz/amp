@@ -10,6 +10,7 @@
 		<type>select</type>
 		<label>Tool</label>
         <lookup>tools</lookup>
+		<required>1</required>
 	</modid>
     <content_header>
         <type>header</type>

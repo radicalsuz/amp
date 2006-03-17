@@ -9,10 +9,17 @@
  * @author Austin Putman <austin@radicaldesigns.org> 
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
+
+require_once( 'AMP/System/Flash.php');
+require_once( 'AMP/System/Base.php');
+
 class AMP_System_Component_Controller {
 
     var $_page;
+
     var $_display;
+    var $_display_class = 'AMP_System_Page_Display';
+    var $_display_custom = array( );
 
     var $_actions_available = array();
     var $_action_args = array( );
@@ -59,13 +66,19 @@ class AMP_System_Component_Controller {
     }
 
     function _init_display( ){
-        require_once( 'AMP/Content/Manager.inc.php');
-        $this->_display = AMPContent_Manager::instance( );
+        require_once( 'AMP/System/Page/Display.php');
+        if ( isset( $this->_display_custom[ $this->_action_requested ] )){
+            $this->_display_class = $this->_display_custom[ $this->_action_requested ];
+        }
+        $this->_display = &call_user_func_array( array( $this->_display_class, 'instance'), $this );
     }
 
     function _init_request( ) {
         $this->_request_vars = array_merge( $_POST, AMP_URL_Read( ));
         //pull useful info from request values
+        if ( isset( $this->_request_vars['action'] ) && $this->_request_vars['action']){
+            $this->_action_requested = $this->_request_vars['action'];
+        }
     }
 
     function execute( $output = true ){
@@ -74,14 +87,14 @@ class AMP_System_Component_Controller {
             $this->_action_committed = $action;
         }
         if ( !$output ) return;
-        $template = &new AMPSystemPage_Display( );
+        return $this->_display->execute( );
     }
 
     function commit( &$target, $action, $args = null ){
         $local_method = 'commit_' . $action;
-        if ( method_exists( $local_method )) return $this->$local_method( $args );
+        if ( method_exists( $this, $local_method )) return $this->$local_method( $args );
         if ( !method_exists( $target, $action )) {
-            trigger_error( sprintf( AMP_ERROR_METHOD_NOT_SUPPORTED, get_class( $target ), $action , get_class( $this )));
+            trigger_error( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED, get_class( $target ), $action , get_class( $this )));
             return false;
         }
         return call_user_func_array( array( $target, $action ), $args ) ;
@@ -106,10 +119,16 @@ class AMP_System_Component_Controller {
         return $this->_action_default;
     }
         
+    function get_arguments( $action = null ) {
+        if ( !isset( $action )) $action = $this->get_action( );
+        if ( !isset( $this->_action_args[$action] )) return null;
+        return array_combine_key( $this->_action_args[ $action ], $this->_request_vars );
+    }
+
     function allow( $action ){
         if ( !isset( $this->_model->protected_actions[$action] ) ) return true;
         return AMP_Authorized( $this->_model->protected_actions[$action]);
-    };
+    }
 
     function add_action( $action_name, $action_args = null ){
         $this->_actions[] = $action_name;
@@ -122,21 +141,32 @@ class AMP_System_Component_Controller {
         }
     }
 
-    function addObserver( &$observer, $observer_key = null ){
+    function add_observer( &$observer, $observer_key = null ){
         if ( isset( $observer_key )){
             $this->_observers[$observer_key] = &$observer;
             return;
         }
         $this->_observers[] = &$observer;
     }
+
+    function assert_action( $action ){
+        return $this->assert_var( 'action', $action );
+    }
+
+    function assert_var( $varname, $value = null ) {
+        if ( !isset( $this->_request_vars[ $varname ])) return false;
+        if ( !isset( $value )) return $this->_request_vars[$varname ];
+        return ( $this->_request_vars[ $varname ] == $value );
+    }
 }
 
-class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controller {
+class AMP_System_Component_Controller_Standard extends AMP_System_Component_Controller {
 
     var $_map;
     var $_action_default = 'add';
+    var $_form;
 
-    function AMP_System_Component_Controller_Crud( ){
+    function AMP_System_Component_Controller_Standard( ){
         $this->init( );
     }
 
@@ -146,10 +176,13 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
     }
 
     function _init_map( ) {
-        $this->_display->addDisplay( $this->make_banner( ), 'banner');
+        $this->add_observer( $this->_map );
+
         //set methods based on map values
-        if ( $form =  &$map->getComponent( 'form'))   $this->_init_form ( $form ) ;
-        if ( $model = &$map->getComponent( 'source')) $this->_init_model( $model) ;
+        if ( $form =  &$this->_map->getComponent( 'form'))   $this->_init_form ( $form ) ;
+        if ( $model = &$this->_map->getComponent( 'source')) $this->_init_model( $model) ;
+        $this->set_banner( $this->get_action( ));
+        $this->_display->add_nav( $this->_map->getNavName( ));
         
     }
 
@@ -162,14 +195,21 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
         
     }
 
+    function &get_form( ){
+        return $this->_form;
+    }
+
     function _init_search( &$search, &$display ){
         $this->_search = &$search;
-        $this->_display->addDisplay( $search );
+        $this->_display->add( $search );
+        $this->notify( 'initSearch' );
+
         $search->Build( true );
 
         if ( !$search->submitted( ) ) return $search->applyDefaults( );
+
         $display->applySearch( $search->getSearchValues( )) ;
-        $this->_display->make_banner( 'search');
+        $this->set_banner( 'search');
     }
 
     function _init_form_request( ){
@@ -183,13 +223,13 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
         }
 
         if ( $request_id && !$action ) $action  = 'edit';
-        if ( $action ) $this->_action_requested['form'] = $action;
+        if ( $action ) $this->_action_requested = $action;
 
     }
 
     function commit_add( ){
         $this->_form->applyDefaults( );
-        $this->_display->addDisplay( $this->_form, 'form' );
+        $this->_display->add( $this->_form, 'form' );
     }
 
     function commit_cancel( ){
@@ -199,13 +239,13 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
     function commit_edit( ) {
         if ( !$this->_model->readData( $this->_model_id )) return $this->commit_default( );
         $this->_form->setValues( $this->_model->getData( ));
-        $this->_display->addDisplay( $this->_form, 'form' );
+        $this->_display->add( $this->_form, 'form' );
     }
 
     function commit_save( $copy_mode = false ){
         //check if form validation succeeds
         if (!$this->_form->validate()) {
-            $this->_display->addDisplay( $this->_form, 'form' );
+            $this->_display->add( $this->_form, 'form' );
             return false;
         }
         $this->_model->setData( $this->get_form_data( $copy_mode ));
@@ -213,7 +253,7 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
         //attempt to save the submitted data
         if ( !$this->_model->save( )) {
             $this->error( $this->_model->getErrors( ));
-            $this->_display->addDisplay( $this->_form );
+            $this->_display->add( $this->_form );
             return false;
         }
 
@@ -233,12 +273,12 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
            $display = &$this->_map->getComponent( 'form' );
            $this->_init_form( $display, false );
         } else {
+            $this->notify( 'initList' );
             if ( $search = $this->_map->getComponent( 'search' )) $this->_init_search( $search, $display );
-            
         }
 
         //add the list / blank form to the display manager
-        $this->_display->addDisplay( $display );
+        $this->_display->add( $display );
         return true;
 
     }
@@ -249,7 +289,7 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
         if ( !$name ) $name = 'Item';
         if ( !$this->_model->deleteData( $this->_model_id )){
             $this->error( $this->_model->getErrors( ));
-            $this->_display->addDisplay( $this->_form );
+            $this->_display->add( $this->_form );
             return false;
         }
         $this->message( sprintf( AMP_TEXT_DATA_DELETE_SUCCESS, $name ));
@@ -266,17 +306,24 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
 
     }
 
+    function commit_list( ){
+        $this->display_default( );
+        return true;
+    }
+
     function message( $message ){
         $flash = &AMP_System_Flash::instance( );
-        $flash->add_message( $error_set ) ;
-        $this->_display->addDisplay( $flash, 'flash' );
+        $flash->add_message( $message ) ;
+        $this->_display->add( $flash, 'flash' );
 
     }
     function error( $error_item ){
         $error_set = ( is_array( $error_item )) ? $error_item : array(  $error_item );
         $flash = &AMP_System_Flash::instance( );
-        $flash->add_error( $error_set ) ;
-        $this->_display->addDisplay( $flash, 'flash' );
+        foreach( $error_set as $error_message ){
+            $flash->add_error( $error_message ) ;
+        }
+        $this->_display->add( $flash, 'flash' );
     }
 
     function get_form_data( $copy_mode = false ) {
@@ -287,13 +334,21 @@ class AMP_System_Component_Controller_Crud extends AMP_System_Component_Controll
         return $copy_values;
     }
 
-    function make_banner( $action = null) {
+    function set_banner( $action = null) {
         $text = ucfirst( isset( $action ) ? $action :  join( "", $this->get_actions( )));
+        if ( $text == 'Cancel' ) $text = 'List';
+
         $heading = $this->_map->getHeading( );
         if ( $text == 'List' ) $heading = AMP_Pluralize( $heading );
-        $renderer =&new AMPDisplay_HTML( );
+        $renderer = &new AMPDisplay_HTML( );
+
+        $buffer = &new AMP_Content_Buffer( );
         $buffer->add( $renderer->inDiv( $text." ".$heading, array( 'class' => 'banner')));
-        return $buffer;
+        $this->_display->add( $buffer , AMP_CONTENT_DISPLAY_KEY_INTRO );
+    }
+
+    function allow( $action ){
+        return $this->_map->isAllowed( $action );
     }
 
 }

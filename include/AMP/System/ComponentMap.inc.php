@@ -1,6 +1,7 @@
 <?php
+require_once( 'AMP/System/Observer.php');
 
-class AMPSystem_ComponentMap {
+class AMPSystem_ComponentMap extends AMP_System_Observer {
     
     var $paths;
     var $components;
@@ -8,9 +9,13 @@ class AMPSystem_ComponentMap {
     var $nav_name;
 
     var $_allow_inline_update = false;
+    var $_allow_search = false; 
+
     var $_path_request_handler = 'AMP/System/ComponentRequest.php';
     var $_component_request_handler = 'AMPSystem_ComponentRequest';
-    var $_allow_search = false; 
+
+    var $_path_controller = 'AMP/System/Component/Controller.php';
+    var $_component_controller = 'AMP_System_Component_Controller_Standard';
 
     function getComponents() {
         return $this->components;
@@ -62,6 +67,13 @@ class AMPSystem_ComponentMap {
         if ( $this->$allow_var === true ) return true;
         return AMP_Authorized( $this->$allow_var );
 
+    }
+
+    function &get_controller( ){
+        require_once( $this->_path_controller );
+        $controller = &new $this->_component_controller( );
+        $controller->set_map( $this );
+        return $controller;
     }
 
 }

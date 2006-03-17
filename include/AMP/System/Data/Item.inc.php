@@ -24,6 +24,13 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 	var $_allowed_keys;
 
     var $id;
+    var $_class_name;
+
+    var $_sort_property;
+    var $_sort_direction = AMP_SORT_ASC;
+    var $_sort_method = "";
+
+    var $_observers = array( );
 
     function AMPSystem_Data_Item ( &$dbcon ) {
         $this->init($dbcon);
@@ -93,6 +100,15 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return false ;
     }
 
+    function delete( ){
+        if ( !isset( $this->id )) return false;
+        if ( !$this->deleteData( $this->id )) return false;
+
+        $this->notify( 'delete');
+        return true;
+        
+    }
+
     function _assembleSqlByID( $id ) {
          return $this->_makeSelect().
                 $this->_makeSource().
@@ -120,6 +136,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ($result) {
             $this->clearItemCache( $this->id );
             if (method_exists( $this, '_afterSave' )) $this->_afterSave();
+            $this->notify( 'save' );
             return true;
         }
         trigger_error ( get_class( $this ) . ' save failed: '. $this->dbcon->ErrorMsg() );
@@ -233,5 +250,67 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     }
 
+    function search( $criteria, $class_name = null ){
+        require_once( 'AMP/System/Data/Set.inc.php');
+        $data_set = &new AMPSystem_Data_Set( $this->dbcon );
+        $data_set->setSource( $this->datatable );
+        $data_set->addCriteria( $criteria );
+        if ( !$data_set->readData( )) return false;
+        if ( !isset( $class_name )) $class_name = $this->_class_name;
+        $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );
+        $this->sort( $result_set );
+        return $result_set;
+        
+    }
+
+    function sort( &$item_set, $sort_property=null, $sort_direction = null ){
+        if ( !isset( $sort_property)) {
+            $this->_sort_default( $item_set );
+            return true;
+        }
+
+        if ( !$this->setSortMethod( $sort_property )) {
+            trigger_error( 'sort by '.$sort_property.' failed in '.get_class( $this ).": no access method found" );
+            return false;
+        }
+
+        if ( isset( $sort_direction ))  $this->_sort_direction = $sort_direction;
+
+        usort( $item_set, array( $this ,'_sort_compare'));
+        return true;
+
+    }
+
+    function _sort_compare( $file1, $file2 ) {
+        if ( !( $sort_method = $this->_sort_accessor )) return 0;
+        if ( $this->_sort_direction == AMP_SORT_DESC )
+            return ( $file1->$sort_method( ) < $file2->$sort_method( ) ) ? 1 : -1; 
+        return ( $file1->$sort_method( ) > $file2->$sort_method( ) ) ? 1 : -1; 
+    }
+
+    function setSortMethod( $sort_property ) {
+        $access_method = 'get' . ucfirst( $sort_property );
+        if ( !method_exists( $this, $access_method )) return false;
+        $this->_sort_accessor = $access_method;
+        return true;
+    }
+
+    function _sort_default( &$item_set ){
+        return $this->sort( $item_set, 'name');
+    }
+
+    function notify( $action ){
+        foreach( $this->_observers as $observer ){
+            $observer->update( $this, $action );
+        }
+    }
+
+    function add_observer( &$observer, $observer_key = null ){
+        if ( isset( $observer_key )){
+            $this->_observers[$observer_key] = &$observer;
+            return;
+        }
+        $this->_observers[] = &$observer;
+    }
 }
 ?>

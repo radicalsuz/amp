@@ -10,18 +10,19 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
     var $options = array (
         'global_criteria'=> array (
             'available'=>true,
-            'description'=>'Required criteria in all searches'
+            'type' => 'text',
+            'label'=>'Required SQL criteria in all searches'
             ),
         'criteria'=> array (
             'available'=>false,
-            'description'=>'Passed criteria'),
+            'description'=>'Passed criteria' ),
         'clear_criteria' => array (
             'available'=>false,
-            'description'=>'clear preset criteria when search runs'),
+            'description'=>'clear preset criteria when search runs' ),
         'multimodin' => array (
             'available'=>false,
             'default'=>false,
-            'description'=>'search across UDM instances'),
+            'description'=>'search across UDM instances' ),
         'display_fields' => array(
             'available'=>false,
             'description'=>'fields to include in sql statement',

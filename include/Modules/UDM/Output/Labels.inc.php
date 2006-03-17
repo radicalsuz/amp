@@ -34,7 +34,7 @@ class UserDataPlugin_Labels_Output extends UserDataPlugin {
             )
         );
 
-    var $available = true;
+    var $available = false;
 
     function UserDataPlugin_Labels_Output ( &$udm, $plugin_instance = null ) {
         $this->init( $udm, $plugin_instance );

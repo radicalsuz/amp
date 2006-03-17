@@ -6,15 +6,18 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	var $options = array (
         'control_class'=>array(
             'available'=>true,
-            'description'=>'CSS class for pagebar controls, user side',
+            'label'=>'CSS class for pager controls',
+            'type' => 'text',
             'default'=>'sidelist'), 
         'max_qty'=>array (
             'available'=>true,
-            'description'=>'Most results allowed on one page from front end',
+            'label'=>'Most results allowed on one page from front end',
+            'type' => 'text',
             'default'=>200), 
         'form_name'=>array (
             'available'=>true,
-            'description'=>'Name of Pager form',
+            'label'=>'Name of Pager form',
+            'type' => 'text',
             'default'=>'udm_list_pager',
             ) );
 	var $criteria = array();

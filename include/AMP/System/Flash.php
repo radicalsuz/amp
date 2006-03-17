@@ -1,4 +1,5 @@
 <?php
+require_once( 'AMP/Content/Buffer.php');
 
 class AMP_System_Flash extends AMP_Content_Buffer {
 
@@ -61,7 +62,7 @@ class AMP_System_Flash extends AMP_Content_Buffer {
     }
 
     function execute( ){
-        $output = $this->display( );
+        return $this->display( );
     }
 
     function display( ){

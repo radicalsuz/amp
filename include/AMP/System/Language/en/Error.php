@@ -9,4 +9,12 @@ define( 'AMP_TEXT_ERROR_DATA_COPY_FAILURE_MULTIPLE_IDS', 'Multiple ID fields, ca
 
 define ('AMP_TEXT_ERROR_LOOKUP_SQL_FAILED', 'Failed to retrieve %s: %s' );
 define( 'AMP_TEXT_ERROR_LOOKUP_NOT_FOUND', 'Lookup %s : not found');
+define( 'AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED', '%s does not support method %s attempted by %s');
+
+define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED_MULTIPLE_INSTANCES', 
+            'Cannot update multiple instances of plugin %s : %s using interface');
+define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED_NOT_REGISTERED',
+            'Cannot update plugin %s : %s settings. Plugin is not registered');
+define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED',
+            'Cannot update plugin %s : %s settings.' );
 ?>

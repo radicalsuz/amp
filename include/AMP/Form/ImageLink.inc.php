@@ -9,6 +9,7 @@ class ImageLink extends DocumentLink {
     var $_default_display = 'ImageLink_Display';
     var $_image;
     var $_image_id;
+    var $_document_folder = 'img/original';
 
     function ImageLink( $filename = null ) {
         if ( isset( $filename )) $this->init( $filename );

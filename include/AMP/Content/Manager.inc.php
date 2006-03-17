@@ -1,6 +1,5 @@
 <?php
 
-define ( 'MEMCACHE_KEY_CONTENT' , 'PageContent' );
 if (!defined( 'AMP_CONTENT_BUFFER_CONTAINER_ID' )) define ('AMP_CONTENT_BUFFER_CONTAINER_ID', false );
 if (!defined( 'AMP_CONTENT_DISPLAY_KEY_INTRO' )) define ('AMP_CONTENT_DISPLAY_KEY_INTRO', "intro");
 if (!defined( 'AMP_CONTENT_DISPLAY_KEY_BUFFER' )) define ('AMP_CONTENT_DISPLAY_KEY_BUFFER', "buffer");

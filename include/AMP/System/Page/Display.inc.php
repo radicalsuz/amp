@@ -86,9 +86,9 @@ class AMPSystem_Page_Display {
         if (isset($modid) && $modid) $template->setTool( $modid );
         $template->setToolName( $this->getNavName() );
         
-        return $template->outputHeader() .
-                        $content .
-                        $template->outputFooter();
+        return  $template->outputHeader() .
+                $content .
+                $template->outputFooter();
     }
 
     function showMessages() {

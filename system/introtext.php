@@ -1,5 +1,11 @@
-<?
+<?php
 require_once("AMP/System/IntroText/ComponentMap.inc.php");
+
+$map = &new ComponentMap_IntroText();
+$controller = &$map->get_controller( );
+
+print $controller->execute( );
+/*
 require_once("AMP/System/Page.inc.php");
 
 $map = &new ComponentMap_IntroText();
@@ -14,6 +20,7 @@ if (isset( $_GET[ 'tool_id' ]) && ($tool_id = $_GET[ 'tool_id' ])) {
 $page->execute();
 
 print $page->output( );
+*/
 
 ?>
 

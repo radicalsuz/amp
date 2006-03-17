@@ -42,6 +42,12 @@ class AMPSystem_BaseTemplate {
         return $this->_header;
     }
 
+    function execute( $content ){
+        return  $this->outputHeader( )
+                . $content
+                . $this->outputFooter( );
+    }
+
     ####################################
     ### Public Configuration Methods ###
     ####################################
@@ -57,6 +63,10 @@ class AMPSystem_BaseTemplate {
     function setToolName( $nav_name ) {
         if ($nav_name == 'module') return $this->setToolName('tools');
         $this->nav_name = $nav_name;
+    }
+
+    function setNavs( $nav_set ){
+        $this->nav_name = $nav_set;
     }
 
 	function useFormNav( $usenav = null ) {
@@ -194,18 +204,18 @@ class AMPSystem_BaseTemplate {
 
     function _HTML_systemNav() {
         $navEngine = &new AMPSystem_NavManager();
-        $nav_name = $this->nav_name;
         if (isset($this->modid)) $navEngine->setToolId( $this->modid );
 
         if ($this->form_id && $this->useFormNav()) {
-            $form_name = $navEngine->buildFormNav( $this->form_id );
-            if ($form_name) $nav_name = $form_name;
-        }
+            $navEngine->request( 'form', $this->form_id );
+            return $navEngine->execute( );
+        } 
 
-        if (!($output = $navEngine->render( $nav_name ))) {
-            $output = $navEngine->render( 'content' );
+        $nav_set = is_array( $this->nav_name ) ? $this->nav_name : array( $this->nav_name );
+        foreach( $nav_set as $nav_name ){
+            $navEngine->request( $nav_name );
         }
-        return $output;
+        return $navEngine->execute( );
     }
 
 }

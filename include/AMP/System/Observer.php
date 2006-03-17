@@ -1,5 +1,4 @@
 <?php
-define ( 'AMP_TEXT_ERROR_OBSERVER_UNSUPPORTED', 'Cannot attach %s to %s because addObserver method doesn\'t exist');
 
 class AMP_System_Observer {
 
@@ -22,13 +21,15 @@ class AMP_System_Observer {
             $objectSet[] = &$target;
         }
         //check for interface
-        if ( !method_exists( current( $objectSet ), 'addObserver')) {
-            trigger_error( sprintf( AMP_TEXT_ERROR_OBSERVER_UNSUPPORTED, get_class( $this ), get_class( current( $objectSet ))) );
+        $add_method = method_exists( current( $objectSet ), 'addObserver') ?
+                        'addObserver' : 'add_observer';
+        if ( !method_exists( current( $objectSet ), $add_method )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED, get_class( current( $objectSet )), $add_method, get_class( $this )) );
             return false;
         }
         //attach same instance to each class
         foreach ( $objectSet as $key => $target_object ){
-            $objectSet[$key]->addObserver( $this );
+            $objectSet[$key]->$add_method( $this );
         }
         return true;
     }

@@ -42,10 +42,6 @@ class FormLookup_PluginsbyNamespace extends FormLookup {
        $this->criteria = "namespace=" . $dbcon->qstr($value); 
     }
 
-    function available( ){
-        return false;
-    }
-
     function &instance( $namespace ) {
         static $lookup  = false;
         if (!$lookup) {
@@ -120,13 +116,14 @@ class FormLookup_PluginsbyOptionDef extends FormLookup {
     }
 }
 
-class FormLookup_PluginNamespaces {
+class FormLookup_PluginNamespaces extends FormLookup {
     var $datatable = "userdata_plugins";
     var $result_field = "namespace";
 
     function FormLookup_PluginNamespaces () {
         $this->init();
     }
+
 }
 
 class FormLookup_Names extends FormLookup {
@@ -147,6 +144,35 @@ class FormLookup_Names extends FormLookup {
         static $lookup = false;
         if (!$lookup) {
             $lookup = new FormLookup_Names ( $instance_id );
+        } else {
+            $lookup->setInstance( $instance_id );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+    function available( ){
+        return false;
+    }
+}
+
+class FormLookup_Companies extends FormLookup {
+    var $datatable = "userdata";
+    var $result_field = "Company";
+    var $sortby = "Company";
+
+    function FormLookup_Companies( $instance ) {
+        $this->setInstance( $instance );
+        $this->init();
+    }
+
+    function setInstance( $instance_id ) {
+        $this->criteria = "modin=".$instance_id;
+    }
+
+    function &instance( $instance_id ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new FormLookup_Companies ( $instance_id );
         } else {
             $lookup->setInstance( $instance_id );
             $lookup->init();
@@ -192,6 +218,10 @@ class FormLookup_FindScheduleForm  {
         $result = array_intersect( $option_plugins, $namespace_plugins ) ;
         return $result;
     }
+
+    function available( ){
+        return false;
+    }
 }
 
 class FormLookup_FindAppointmentForm extends FormLookup_FindScheduleForm {
@@ -228,6 +258,41 @@ class FormLookup_IntroTexts {
     }
     function available( ){
         return false;
+    }
+}
+
+class FormLookup_PluginOptions extends FormLookup {
+    var $datatable = "userdata_plugins_options";
+    var $result_field = "value";
+    var $id_field = 'name';
+
+    function FormLookup_PluginOptions( $plugin_id = null) {
+        if ( isset( $plugin_id )) $this->addCriteriaPlugin( $plugin_id );
+        $this->init( );
+    }
+
+    function addCriteriaPlugin( $plugin_id ){
+        $this->criteria = 'plugin_id='.$plugin_id;
+    }
+
+    function &instance( $plugin_id ) {
+        static $results = array( );
+        if ( isset( $results[ $plugin_id] )) return $results[ $plugin_id ]->dataset;
+
+        $results[ $plugin_id ] = &new FormLookup_PluginOptions( $plugin_id );
+        return $results[ $plugin_id ]->dataset;
+    }
+    function available( ){
+        return false;
+    }
+}
+
+class FormLookup_PluginPriorities extends FormLookup {
+    var $datatable = 'userdata_plugins';
+    var $result_field = 'priority';
+
+    function FormLookup_PluginPriorities( ){
+        $this->init( );
     }
 }
 

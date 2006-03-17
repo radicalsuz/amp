@@ -60,7 +60,7 @@ function addPlugin() {
     var newFieldDisplay = document.createElement("div");
     newFieldDisplay.innerHTML = namespace + "/" + action + " scheduled for addition.";
 
-    alert(add_button.form);
+    //alert(add_button.form.name);
     add_button.form.appendChild(newField);
     pNode = add_button.parentNode;
     pNode.parentNode.insertBefore(newFieldDisplay, pNode.nextSibling);

@@ -7,6 +7,10 @@ class ComponentLookup {
 		if (!$super_map) $super_map = new ComponentMapSet();
 		return $super_map->findOwner( $classname );
 	}
+
+    function available( ){
+        return false;
+    }
 }
 
 class ComponentMapSet {
