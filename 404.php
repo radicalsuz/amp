@@ -82,7 +82,7 @@ function error_redirect( $requested_uri, $target_uri, $num = null ) {
 
     // This is very confusing, and I'm not entirely clear on what it's supposed
     // to do or accomplish. Oh well...
-    $fetch_str = strstr($_SERVER['REQUEST_URI'], $requested_uri);
+    $fetch_str = stristr($_SERVER['REQUEST_URI'], $requested_uri);
     $fetch_val = ( isset($num) && $num ) ? substr( $fetch_str, $num ) : "";
 
     // Check to see if our REQUEST_URI matches in any way the $requested_uri
