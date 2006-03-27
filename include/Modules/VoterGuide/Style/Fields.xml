@@ -1,0 +1,28 @@
+<array>
+	<id>
+		<type>hidden</type>
+		<label>Id</label>
+		<!-- extra_scaffold_items   /extra_scaffold_items -->
+	</id>
+	<name>
+		<type>text</type>
+		<label>Name</label>
+		<!-- extra_scaffold_items   /extra_scaffold_items -->
+	</name>
+	<author>
+		<type>text</type>
+		<label>Author</label>
+		<!-- extra_scaffold_items   /extra_scaffold_items -->
+	</author>
+	<url>
+		<type>text</type>
+		<label>Url</label>
+		<!-- extra_scaffold_items   /extra_scaffold_items -->
+	</url>
+	<fullscreen_url>
+		<type>text</type>
+		<label>Fullscreen_url</label>
+		<!-- extra_scaffold_items   /extra_scaffold_items -->
+	</fullscreen_url>
+
+</array>

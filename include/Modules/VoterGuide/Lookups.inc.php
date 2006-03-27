@@ -61,4 +61,9 @@ class AMPSystemLookup_VoterGuideByOwner extends AMPSystem_Lookup {
 	var $result_field = "id";
 }
 
+class AMPSystemLookup_VoterGuideStyles extends AMPSystem_Lookup {
+	var $datatable = "voterguide_styles";
+	var $result_field = "name";
+}
+
 ?>

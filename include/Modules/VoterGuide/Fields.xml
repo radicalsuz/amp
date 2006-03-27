@@ -100,6 +100,12 @@
         <enabled>1</enabled>
         <public>1</public>
     </filelink>
+	<style>
+		<type>select</type>
+		<public>1</public>
+		<label>Style</label>
+		<enabled>1</enabled>
+	</style>
 	<spacer2>
 		<type>static</type>
 		<values>&lt;span class="form_span_col"&gt;&lt;br /&gt;&lt;/span&gt;</values>

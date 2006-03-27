@@ -1,6 +1,7 @@
 <?php
 require_once( "Modules/VoterGuide/VoterGuide.php");
 require_once('utility.functions.inc.php');
+
 if ( !defined( 'AMP_TEXT_VOTERGUIDE_DISCLAIMER')) define ( 'AMP_TEXT_VOTERGUIDE_DISCLAIMER' ,
         'This section paid for by League of Independent '
         . 'Voters Political Action Committee ( LIV PAC) 226 W. 135th St. 4th Fl. NY NY 10030. '
@@ -17,11 +18,24 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function VoterGuide_Display ( &$voterguide ) {
         $this->_voterguide = &$voterguide;
+		if($style_id = $this->_voterguide->getData('style')) {
+			require_once('AMP/Content/Header.inc.php');
+			require_once('AMP/Content/Page.inc.php');
+			$header =& AMPContent_Header::instance(AMPContent_Page::instance());
+			require_once('Modules/VoterGuide/Style/VoterGuide_Style.php');
+			$style =& new VoterGuide_Style($this->_voterguide->dbcon, $style_id);
+			$header->addStylesheet($style->getData('url'));
+			if($fullscreen = $style->getData('fullscreen_url')) {
+				$header->addStylesheet($fullscreen);
+			}
+		}
     }
 
     function execute ( ) {
-        return  $this->_HTML_guideHeader( ).
+        return  $this->_HTML_inDiv(' ', array('class' => 'spacer')).
+				$this->_HTML_guideHeader( ).
                 $this->_HTML_positionsList( ).
+				$this->_HTML_inDiv(' ', array('class' => 'spacer')).
                 $this->_HTML_guideFooter( ).
                 $this->_HTML_disclaimer( )
                 . $this->_HTML_notifyAdmin( );
@@ -48,7 +62,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
                     $this->_HTML_blocJoin(). 
                     $this->_HTML_newline(2);
 
-        return $this->_HTML_addImage( $output );
+        return $this->_HTML_inDiv($this->_HTML_addImage( $output ), array('class' => 'voterguide_header'));
 
     }
 
@@ -103,7 +117,10 @@ class VoterGuide_Display extends AMPDisplay_HTML {
     function _HTML_positionsList( ) {
         require_once( 'Modules/VoterGuide/Position/SetDisplay.inc.php');
         $this->_positionDisplay = &new VoterGuidePositionSet_Display( $this->_voterguide->dbcon, $this->_voterguide->id );
-        return $this->_HTML_inDiv( $this->_positionDisplay->execute( ), array( 'style' => 'border:1px solid silver; padding: 10px;'));
+		if($style_id = $this->_voterguide->getData('style')) {
+			$this->_positionDisplay->setLayoutCSS(true);
+		}
+        return $this->_HTML_inDiv( $this->_positionDisplay->execute( ), array( 'class' => 'element_list_container'));
     }
 
 	function _HTML_blocJoin() {
