@@ -3,7 +3,6 @@
 require_once( 'AMP/Content/Display/HTML.inc.php' );
 require_once( 'AMP/Content/Display/Pager.inc.php' );
 if (!defined( 'AMP_CONTENT_MAIN_HEADER_HTML' )) define( 'AMP_CONTENT_MAIN_HEADER_HTML', false );
-if (!defined( 'AMP_CONTENT_LAYOUT_CSS' )) define( 'AMP_CONTENT_LAYOUT_CSS', false );
 
 class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
@@ -38,15 +37,29 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     var $_list_image_class = AMP_IMAGE_CLASS_THUMB;
 
+	var $_layout_css = false;
+
     function AMPContent_DisplayList_HTML ( &$source, $read_data = true ) {
         $this->init( $source, $read_data );
     }
 
     function init( &$source, $read_data = true ) {
+		if (defined( 'AMP_CONTENT_LAYOUT_CSS' )) {
+			$this->setLayoutCSS(AMP_CONTENT_LAYOUT_CSS);
+		}
         $this->_source = &$source;
         $this->_activatePager( );
         if ( $read_data ) $this->_source->readData();
     }
+
+	function setLayoutCSS($css = false) {
+		$this->_layout_css = $css;
+		return $this->_layout_css;
+	}
+
+	function getLayoutCSS() {
+		return $this->_layout_css;
+	}
 
     function _activatePager() {
         if ( !$this->_pager_active ) return false;
@@ -119,18 +132,20 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     function _HTML_listing( &$sourceItems ) {
         $output = AMP_CONTENT_MAIN_HEADER_HTML;
+		$order = 0;
         foreach ($sourceItems as $contentItem ) {
-            $output .= $this->_HTML_listItem( $contentItem );
+			$order++;
+            $output .= $this->_HTML_listItem( $contentItem, array('id' => 'list_entry_'.$order));
         }
         return $this->_HTML_listingFormat( $output );
     }
 
     function _HTML_listingFormat( $html ) {
-        if (!AMP_CONTENT_LAYOUT_CSS ) return $html;
+        if (!$this->getLayoutCSS()) return $html;
         return $this->_HTML_inDiv( $html, array( 'id' => $this->_css_id_container_content ) );
     }
 
-    function _HTML_listItem( &$contentItem ) {
+    function _HTML_listItem( &$contentItem, $attr=array() ) {
        
         $thumb = false;
         if (method_exists( $contentItem, 'getImageRef' )) {
@@ -139,13 +154,13 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
         $text_description   = $this->_HTML_listItemDescription( $contentItem );
 
-        return $this->_HTML_listItemLayout( $text_description, $thumb );
+        return $this->_HTML_listItemLayout( $text_description, $thumb, $attr );
 
     }
 
-    function _HTML_listItemLayout ( $text, $image ) {
-        if ( AMP_CONTENT_LAYOUT_CSS ) {
-            return  $this->_HTML_inDiv( $image . $text, array( 'class' => $this->_css_class_container_listentry ) );
+    function _HTML_listItemLayout ( $text, $image, $attr=array() ) {
+        if ( $this->getLayoutCSS()) {
+            return  $this->_HTML_inDiv( $image . $text, array_merge($attr, array( 'class' => $this->_css_class_container_listentry ) ) );
         }
 
         return  "<table" . $this->_HTML_makeAttributes( $this->_layout_table_attr ) . "><tr>" . 
