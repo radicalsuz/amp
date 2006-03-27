@@ -65,6 +65,20 @@ td.list_entry {
 	width: 90%;
 }
 
+div.list_entry {
+	width: 90%;
+	padding-bottom: 1em;
+}
+
+.element_list_container {
+	border: 1px solid silver;
+	padding: 10px;
+}
+
+div.spacer {
+	clear: both;
+}
+
 .sidebar_left {
 	width:25%;
 	padding:10px;
