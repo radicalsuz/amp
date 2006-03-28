@@ -10,8 +10,8 @@
  *
  *****/
 $mod_name='udm';
-require_once( 'Connections/freedomrising.php' );
-require_once('AMP/UserData/Set.inc.php');
+require_once( 'AMP/System/Base.php' );
+require_once('AMP/UserData/Set.inc.php'); 
 
 if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
     $modin=$_REQUEST['modin'];
@@ -19,13 +19,11 @@ if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
     header ("Location: modinput4_list.php");
 }
 
-$modidselect=$dbcon->CacheExecute("SELECT id, perid from modules where publish=1 and userdatamodid=" . $modin) or DIE($dbcon->ErrorMsg());
-$modid=$modidselect->Fields("id");
-$modin_permission=$modidselect->Fields("perid");
-
+$form_permissions = &AMPSystem_Lookup::instance( 'PermissionsbyForm');
+$modin_permission = ( isset( $form_permissions[$modin]) && $form_permissions[$modin]) ? $form_permissions[$modin] : false;
 
 $view_permission = (AMP_Authorized(AMP_PERMISSION_FORM_DATA_EDIT)
-                 && AMP_Authorized($modin_permission));
+                 && ( $modin_permission ? AMP_Authorized($modin_permission) : true ));
 
 $admin=true;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);
@@ -45,7 +43,7 @@ if ($uid && $modin) {
     $output = $userlist->output_list('TableHTML');
 }
 
-if (!$view_permission) $output = "You do not have permission to view this list";
+if (!$view_permission) $output = AMP_TEXT_PERMISSION_DENIED_LIST;
 
 require_once( 'header.php' );
 
