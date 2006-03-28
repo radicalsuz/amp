@@ -73,7 +73,9 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
                             multiselect :: a selectbox which allows more than one value
                             radiogroup  :: a set of radio buttons from which the user may select a single value
                             checkgroup  :: a set of checkboxes from which the user may select multiple values
-                            wysiwyg     :: a instance of the Xinha htmlarea plugin
+                            wysiwyg     :: an instance of the Xinha htmlarea plugin
+                            blocktrigger:: a DHTML envelope for a set of elements
+                            imagepicker :: a selectbox that pulls from AMP's image library and displays a preview of the selected image
          *
          *
          ****************/
@@ -146,12 +148,16 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $form_footer = "";
         $script = "";
         if ( $include_javascript ) $script = $this->getJavascript();
-        if (method_exists( $this, '_formFooter' )) $form_footer = $this->_formFooter();
+        $form_footer = $this->_formFooter();
         return  $this->form->display() . $form_footer . $script;
     }
 
     function execute( ){
         return $this->output( );
+    }
+
+    function _formFooter( ){
+        return false;
     }
 
     function setValues( $data ) {
@@ -176,7 +182,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         if (! ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname )))) return true;
 
         $current = $fRef->getValue();
-        $current_default = $this->_getDefault( $name );
+        $current_default = $this->_getDefault( $fieldname );
         if ((!(isset($current)||isset($current_default))) 
             || ($current_default == $current)) $fRef->setValue( $value );
     }
@@ -188,9 +194,12 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 	function translate ( $data, $action = "get" ) {
 		if (empty( $this->translations) || empty( $this->translations[ $action ])) return $data;
 		$result_data = $data;
-		foreach ( $this->translations[ $action] as $fieldname => $translate_method ) {
-			if (!method_exists( $this, $translate_method )) continue;
-			$result_data[ $fieldname ] = $this->$translate_method( $data, $fieldname );
+		foreach ( $this->translations[ $action] as $fieldname => $translate_method_set ) {
+            if ( !is_array( $translate_method_set )) continue;
+            foreach( $translate_method_set as $translate_method ){
+                if (!method_exists( $this, $translate_method )) continue;
+                $result_data[ $fieldname ] = $this->$translate_method( $result_data, $fieldname );
+            }
 		}
 		return $result_data;
 	}
@@ -341,6 +350,11 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         return join( ',', $this->_checkgroupToArray( $data, $fieldname ));
     }
 
+    function _multiselectToText( $data, $fieldname ){
+        if ( !( isset( $data[$fieldname]) && is_array( $data[$fieldname]))) return false;
+        return join( ',', $data[ $fieldname ]);
+    }
+
     function dropField( $fieldname ) {
         if (!isset($this->fields[ $fieldname ])) return false; 
         unset ( $this->fields[ $fieldname ] );
@@ -348,7 +362,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
 	function addTranslation( $fieldname, $method, $action="get" ) {
-		$this->translations[$action][ $fieldname ] = $method;
+		$this->translations[$action][ $fieldname ][] = $method;
 	}
 
     function setFieldValueSet( $fieldname, $valueset ) {
@@ -576,11 +590,15 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     }
 
-    function &_addElementBlocktrigger( $name, $field_def ){
-        $jscript = "change_form_block( '".$name."' );";
+    function &_addElementBlocktrigger( $name, $field_def ) {
+        $jscript = "change_form_block( '".$field_def['block']."' );";
         $div = "";
         if ( isset( $field_def['block_trigger'])){
-             $this->addTranslation($name,'_showDynamicBlock', 'set');   
+            $trigger_set = is_array( $field_def['block_trigger']) ? 
+                                        $field_def['block_trigger'] : array(  $field_def['block_trigger'] );
+            foreach( $trigger_set as $trigger ){
+                $this->addTranslation($trigger,'_showDynamicBlock', 'set');   
+            }
         }
 		$name_block =   "<a href=\"javascript:$jscript\" class=\"trigger\">"
                         . "<img src=\"images/arrow-right.gif\" border=\"0\" class=\"field_arrow\" id=\"arrow_$name\" />"
@@ -589,16 +607,17 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         return $this->_addElementHtml( $name, $field_def );
     }
 
-    function _showDynamicBlock( $data, $fieldname ){
+    function _showDynamicBlock( $data, $fieldname ) {
         $def = $this->getField( $fieldname );
-        if ( !$trigger = $def['block_trigger'] ) return false;
-        if ( !( isset( $data[$trigger]) && $data[$trigger])) return false;
+        if ( !( isset( $data[$fieldname]) && $data[$fieldname ] )) return false;
+        if ( ! isset( $def['block'])) return $data[$fieldname];
+
         $script =   '<script type="text/javascript" language="Javascript"><!--'."\n"
-                    . 'change_form_block( "'.$fieldname.'");'."\n"
+                    . 'change_form_block( "'.$def['block'].'");' . "\n"
                     . "--></script>";
         $this->registerJavascript( $script );
         $this->setJavascript( );
-        return true;
+        return $data[$fieldname];
     }
 
 

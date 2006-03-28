@@ -110,21 +110,15 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         foreach( $plugins as $action => $plugin_def ){
             foreach( $plugin_def as $namespace => $plugin ){
                 $prefix = join( '_', array( 'plugin', $action, $namespace ));
-                /*
-                $simple_options = $plugin->getOptions( );
-                foreach( $simple_options as $key => $option_value ){
-                    $option_values [ $prefix .'_'. $key] = $option_value;
-                }
-                */
-                if ( $plugin->plugin_instance ){
-                    $plugin_ids[ $prefix . '_plugin_id'] = $plugin->plugin_instance;
-                    $plugin_settings[ $prefix . '_plugin_priority'] = $plugin_priorities[ $plugin->plugin_instance ];
-                }
+
+                if ( !$plugin->plugin_instance ) continue;
+
+                $plugin_ids[ $prefix . '_plugin_id'] = $plugin->plugin_instance;
+                $plugin_settings[ $prefix . '_plugin_priority'] = $plugin_priorities[ $plugin->plugin_instance ];
                 $plugin_settings[ $prefix . '_plugin_active'] = true;
+                
             }
         }
-        
-        #$this->form->setDefaults( $option_values );
         
         $this->form->setDefaults( $plugin_settings );
         $this->form->setDefaults( $plugin_ids );
@@ -241,7 +235,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
                 }
                 $md[$plugin_name . "_plugin_active"] = true;
-                if ( $plugin->plugin_instance ){
+                if ( $plugin->plugin_instance ) {
                     $md[$plugin_name . "_plugin_id"] = $plugin->plugin_instance; 
                     $md[$plugin_name . "_plugin_priority"] = $plugin_priorities[ $plugin->plugin_instance ];
 

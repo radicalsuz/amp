@@ -1,8 +1,5 @@
 <?php
-
-define( 'AMP_ICON_SPACER', 'spacer.gif' );
-define( 'AMP_INCLUDE_START_TAG', '{{' );
-define( 'AMP_INCLUDE_END_TAG', '}}' );
+require_once( 'AMP/Content/Config.inc.php');
 
 class AMPDisplay_HTML {
 
@@ -92,7 +89,7 @@ class AMPDisplay_HTML {
     }
 
     function link( $href, $text, $attr = array() ) {
-        return $this->_HTML_link( $href, $text ) ;
+        return $this->_HTML_link( $href, $text, $attr ) ;
     }
     function _HTML_link( $href, $text, $attr = array() ) {
         if (!$href) return $this->_HTML_inSpan( $text, $attr);

@@ -86,6 +86,7 @@ $lookup_factory->init( $dbcon );
 
 if (!defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
 require_once('AMP/LegacyRegistry.inc.php');
+require_once('AMP/System/Config.inc.php');
 require_once( 'AMP/System/Language/Config.php');
 
 

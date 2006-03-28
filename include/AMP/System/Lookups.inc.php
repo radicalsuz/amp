@@ -561,9 +561,14 @@ class AMPConstant_Lookup {
 
     function &instance( $type, $lookup_baseclass="AMPConstantLookup" ) {
         static $lookup_set = false;
+        if (!$lookup_set) $lookup_set = array();
         $req_class = $lookup_baseclass . '_' . ucfirst($type);
-        if (!$lookup_set) $lookup_set = new $req_class(); 
-        return $lookup_set->dataset;
+        if ( !class_exists( $req_class ) ){
+            trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
+            return false;
+        }
+        if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
+        return $lookup_set[$type]->dataset;
     }
 
     function available( ){

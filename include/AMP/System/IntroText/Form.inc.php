@@ -58,6 +58,14 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form {
         return false;
 
     }
+    function _formFooter( ){
+        if ( !$this->getIdValue( ) ) return false;
+        $renderer = &new AMPDisplay_HTML;
+        $navlink =  
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'mod_id='.$this->getIdValue( ) ),
+                             AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_CONTENT_EDIT );
+        return  $renderer->in_P( $navlink );
+    }
 }
 
 ?>

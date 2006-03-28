@@ -18,7 +18,11 @@ require_once( 'AMP/Content/Page.inc.php' );
  * Filelink is used by link navs
  * TODO remove this when built-in navs are upgraded
  */
-if (isset($_GET['filelink']) && $_GET['filelink']) ampredirect ($_GET['filelink']);
+if (isset($_GET['filelink']) && $_GET['filelink']) {
+    ampredirect ($_GET['filelink']);
+    trigger_error( 'attempteing redirect to ' . $_GET['filelink']);
+
+}
 
 /* TODO: check the cache for the current page, once all front-end pages support caching */
    

@@ -10,5 +10,6 @@ define( 'AMP_SYSTEM_URL_GALLERY_IMAGE', 'gallery_image.php');
 define( 'AMP_SYSTEM_URL_GALLERY_IMAGES', 'gallery_image.php?action=list');
 define( 'AMP_SYSTEM_URL_IMAGE_UPLOAD', 'imgup.php');
 define( 'AMP_SYSTEM_URL_IMAGES', 'imgdir.php');
+define( 'AMP_SYSTEM_URL_NAV_LAYOUT', 'nav_position.php');
 
 ?>

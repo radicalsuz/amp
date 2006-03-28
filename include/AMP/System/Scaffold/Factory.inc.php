@@ -102,9 +102,14 @@ class AMPScaffold_Factory {
         foreach( $field_defs as $single_field ){
             $current_type = 'text';
             if ( isset( $this->_special_fieldtypes[ $single_field->type ])) $current_type = $this->_special_fieldtypes[ $single_field->type ];
-            if ( 'id' == $single_field->name ) $current_type = 'hidden';
-            $merge_values = array( $single_field->name );
-            $merge_values = array( $single_field->name, $current_type, ucwords( $single_field->name ) ) ;
+
+            $label = ucwords( $single_field->name );
+            if ( 'id' == $single_field->name ) {
+                $current_type = 'hidden';
+                $label = '';
+            }
+
+            $merge_values = array( $single_field->name, $current_type, $label ) ;
             $merge_values[] = ( 'date' == $current_type ) ? "-->\n\n        <default>today</default>\n      <!-- " : " ";
             #$fields_xml .= vsprintf( $field_template, $merge_values);
             $fields_xml .= $this->stupidSingleQuoteVsprintfWorkaround( $field_template, $merge_values);
@@ -132,7 +137,7 @@ class AMPScaffold_Factory {
     }
 
     function _dateTranslation( $fieldname ) {
-        return "\n       ".'$this->addTranslation.'."( '".$fieldname."', '_makeDbDateTime', 'get');\n";
+        return "\n       ".'$this->addTranslation'."( '".$fieldname."', '_makeDbDateTime', 'get');\n";
     }
 
     function _writeFile( $target_file, $value ) {

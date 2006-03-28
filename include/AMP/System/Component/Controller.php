@@ -10,8 +10,8 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-require_once( 'AMP/System/Flash.php');
 require_once( 'AMP/System/Base.php');
+require_once( 'AMP/System/Flash.php');
 
 class AMP_System_Component_Controller {
 
@@ -71,6 +71,9 @@ class AMP_System_Component_Controller {
             $this->_display_class = $this->_display_custom[ $this->_action_requested ];
         }
         $this->_display = &call_user_func_array( array( $this->_display_class, 'instance'), $this );
+
+        $flash = &AMP_System_Flash::instance( );
+        $this->_display->add( $flash, 'flash' );
     }
 
     function _init_request( ) {
@@ -214,6 +217,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
 
     function _init_form_request( ){
         $request_id = $this->_form->getIdValue( );
+        if ( is_array( $request_id )) return false;
+
         $action = $this->_form->submitted( );
 
         if ( !$request_id ) {
@@ -223,6 +228,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         }
 
         if ( $request_id && !$action ) $action  = 'edit';
+        
         if ( $action ) $this->_action_requested = $action;
 
     }
@@ -273,6 +279,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
            $display = &$this->_map->getComponent( 'form' );
            $this->_init_form( $display, false );
         } else {
+            $display->setController( $this );
             $this->notify( 'initList' );
             if ( $search = $this->_map->getComponent( 'search' )) $this->_init_search( $search, $display );
         }
@@ -284,7 +291,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
     }
 
     function commit_delete( ){
-        if ( !$this->_model_id ) return false;
+        if ( !$this->_model_id ) return $this->commit_default( );
         $name = $this->_form->getItemName( );
         if ( !$name ) $name = 'Item';
         if ( !$this->_model->deleteData( $this->_model_id )){
@@ -311,11 +318,10 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         return true;
     }
 
-    function message( $message ){
+    function message( $message ) {
         $flash = &AMP_System_Flash::instance( );
         $flash->add_message( $message ) ;
         $this->_display->add( $flash, 'flash' );
-
     }
     function error( $error_item ){
         $error_set = ( is_array( $error_item )) ? $error_item : array(  $error_item );

@@ -10,14 +10,9 @@
  *
  * * **/
 
-define( 'AMP_PUBLISH_STATUS_LIVE' , 'live' );
-define( 'AMP_PUBLISH_STATUS_DRAFT' , 'draft' );
-define ('AMP_SYSTEM_ICON_EDIT', '/system/images/edit.png' ); 
-define ('AMP_SYSTEM_ICON_PREVIEW', '/system/images/view.gif' );
-define ('AMP_SYSTEM_ICON_DELETE', '/system/images/delete.png' );
-
 require_once ( 'AMP/System/Data/Set.inc.php' );
 require_once ( 'AMP/Content/Display/HTML.inc.php');
+require_once ( 'AMP/Content/Config.inc.php');
 
 class AMPSystem_List extends AMPDisplay_HTML {
     
@@ -58,8 +53,12 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_source_counter = 0;
     var $_source_keys;
     var $_source_object;
+    var $_source_criteria;
 
     var $_controller;
+    var $_actions;
+
+    var $_renderer;
 
     ####################
     ### Core Methods ###
@@ -70,14 +69,24 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function AMPSystem_List (&$dbcon, $name, $col_headers=null, $datatable = null ) {
 
-        $this->name = $name;
-        if (isset($col_headers)) $this->setColumns( $col_headers );
+        if ( !( isset( $this->_source_object ) && class_exists( $this->_source_object ))) {
+            $this->name = $name;
+            if (isset($col_headers)) $this->setColumns( $col_headers );
 
-        $source = & new $this->sourceclass ( $dbcon );
-        $source->setSource( $datatable );
+            $source = & new $this->sourceclass ( $dbcon );
+            $source->setSource( $datatable );
+
+        } else {
+            $source = &$this->_init_source( $dbcon );
+        }
 
         $this->init($source);
 
+    }
+
+    function &_init_source( &$dbcon ){
+        $listSource = &new $this->_source_object( $dbcon  );
+        return $listSource->search( $this->_source_criteria );
     }
 
     function init(&$source) {
@@ -103,7 +112,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _activatePager() {
-        if ( !$this->_pager_active ) return false;
+        if ( !$this->_pager_active ) {
+            $this->_afterPagerInit( );
+            return false;
+        }
 
         require_once( 'AMP/System/List/Pager.inc.php');
         $this->_pager = &new AMPSystem_ListPager( $this->source );
@@ -145,13 +157,13 @@ class AMPSystem_List extends AMPDisplay_HTML {
             $row_data[$column] = $this->_getSourceDataItem( $column, $row_data_source );
         }
 
-        $row_data['id'] = $row_data['name'];
         ++$this->_source_counter;
         return $row_data;
     }
 
     //for array objects only
     function _getSourceDataItem( $column, &$row_data_source ){
+        if ( $column == 'id' ) return $row_data_source->id;
         if ( method_exists( $this, $column )) 
             return $this->$column( $row_data_source, $column );
 
@@ -204,6 +216,11 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function setMessage( $text ) {
         if ( isset( $this->_controller )) return $this->_controller->setMessage( $text );
+
+        require_once( 'AMP/System/Flash.php' );
+        $flash = &AMP_System_Flash::instance( );
+        $flash->add_message( $text );
+
         $this->message .= $text .'<BR>';
     }
 
@@ -451,30 +468,31 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _prepareArrayData( ){
-
+        $this->_source_keys = array_keys( $this->source );
         $this->_source_counter = 0;
         return !( empty( $this->source ));
     }
 
     function _setSort() {
         //Sort the data
-        if (isset($_REQUEST['sort']) && $_REQUEST['sort']) { 
-            //for recordset mapper
-            if ( !is_array( $this->source)) return $this->source->addSort($_REQUEST['sort']);
+        if (!( isset($_REQUEST['sort']) && $_REQUEST['sort'])) return false; 
+            
+        //for recordset mapper
+        if ( !is_array( $this->source)) return $this->source->addSort($_REQUEST['sort']);
 
-            //for arrays of objects
-            $local_sort_method = '_setSort'.ucfirst( $_REQUEST['sort']);
-            $sort_direction = ( isset( $_REQUEST['sort_direction']) && $_REQUEST['sort_direction']) ?
-                                $_REQUEST['sort_direction'] : false;
+        //for arrays of objects
+        $local_sort_method = '_setSort'.ucfirst( $_REQUEST['sort']);
+        $sort_direction = ( isset( $_REQUEST['sort_direction']) && $_REQUEST['sort_direction']) ?
+                            $_REQUEST['sort_direction'] : false;
 
-            if ( method_exists( $this, $local_sort_method)) return $this->$local_sort_method( $sort_direction );
+        if ( method_exists( $this, $local_sort_method)) return $this->$local_sort_method( $sort_direction );
 
-            $fileSource = &new $this->_source_object ( );
-            if( $fileSource->sort( $this->source, $_REQUEST['sort'], $sort_direction )){
-                $this->_sort = $_REQUEST['sort'];
-            }
+        $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
+        if( $itemSource->sort( $this->source, $_REQUEST['sort'], $sort_direction )){
+            $this->_sort = $_REQUEST['sort'];
         }
     }
+
 
     function _defineFieldset( ) {
         if (!isset($this->col_headers)) return;
@@ -511,6 +529,18 @@ class AMPSystem_List extends AMPDisplay_HTML {
         foreach( $this->source as $sourceKey => $sourceItem ){
             if ( $sourceItem->id == $id ) unset( $this->source[$sourceKey]);
         }
+    }
+    
+    function updateSourceItemId( $id ){
+        if ( !is_array( $this->source )) return $this->source->readData( );
+        if ( !isset( $this->source[ $id ])) return false;
+        return $this->source[$id]->readData( $id );
+    }
+
+    function &_getRenderer( ){
+        if ( isset( $this->_renderer )) return $this->_renderer;
+        $this->_renderer = &new AMPDisplay_HTML;
+        return $this->_renderer;
     }
     
 

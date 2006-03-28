@@ -1,5 +1,6 @@
 <?php
 require_once( 'AMP/Content/Manager.inc.php');
+require_once( 'AMP/Content/Display/HTML.inc.php');
 
 class AMP_System_Component_Display extends AMPContent_Manager {
     var $_controller;

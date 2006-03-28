@@ -250,11 +250,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     }
 
-    function search( $criteria, $class_name = null ){
+    function search( $criteria = null, $class_name = null ){
         require_once( 'AMP/System/Data/Set.inc.php');
         $data_set = &new AMPSystem_Data_Set( $this->dbcon );
         $data_set->setSource( $this->datatable );
-        $data_set->addCriteria( $criteria );
+        if ( isset( $criteria )) $data_set->addCriteria( $criteria );
         if ( !$data_set->readData( )) return false;
         if ( !isset( $class_name )) $class_name = $this->_class_name;
         $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );

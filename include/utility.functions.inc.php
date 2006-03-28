@@ -562,27 +562,25 @@ if (!function_exists('array_combine_key')) {
     }
 }
 if (!function_exists('AMPfile_list')) {
-		function AMPfile_list($file,$ext=NULL){ 
-				$dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
-				$dir = opendir($dir_name);
-				$basename = basename($dir_name);
-				$fileArr = array();
-				$fileArr[''] = 'Select';
-				while ($file_name = readdir($dir)) {
-					if (($file_name !=".") && ($file_name != "..")) {
-						if ($dotspot = strrpos( $file_name, "." )) {
-            					$file_ext = strtolower( substr( $file_name, $dotspot+1) );
-        				}
-						if ($ext) {
-							if ($ext == $file_ext ){
-								$fileArr[$file_name] = $file_name;
-							}
-						} else {
-							$fileArr[$file_name] = $file_name;
-						}
-					}
-				}	
-				uksort($fileArr, "strnatcasecmp");
+		function AMPfile_list($file,$ext=NULL) { 
+            $dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
+            $dir = opendir($dir_name);
+            $basename = basename($dir_name);
+            $fileArr = array();
+            $fileArr[''] = 'Select';
+            while ($file_name = readdir($dir)) {
+                if ( is_dir( $dir_name . DIRECTORY_SEPARATOR . $file_name )) continue; 
+                
+                if ( isset( $ext) && $ext ) {
+                    $file_ext = false;
+                    if ($dotspot = strrpos( $file_name, "." )) {
+                        $file_ext = strtolower( substr( $file_name, $dotspot+1) );
+                    }
+                    if ( !$file_ext || $ext != $file_ext ) continue;
+                }
+                $fileArr[$file_name] = $file_name;
+            }	
+            uksort($fileArr, "strnatcasecmp");
 				return $fileArr;
 		} 
 }
@@ -984,6 +982,37 @@ if ( !function_exists( 'AMP_evalLookup')){
             return AMPSystem_Lookup::locate( $lookup_def );
         }
         return array( );
+    }
+}
+
+if ( ! function_exists( 'AMP_navCountDisplay_Section')) {
+    function AMP_navCountDisplay_Section( $section_id ){
+        if ( !$section_id ) return false;
+        static $renderer = false;
+        static $navcount_lists = false;
+        static $navcount_content = false;
+        if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
+        if ( !$navcount_lists )
+            $navcount_lists = &AMPContent_Lookup::instance( 'SectionListsNavigationCount' );
+        if ( !$navcount_content )
+            $navcount_content = &AMPContent_Lookup::instance( 'SectionContentNavigationCount' );
+
+        $count_lists = isset( $navcount_lists[ $section_id ]) ? "( " . $navcount_lists[ $section_id ] . " )" : false;
+        $count_content= isset( $navcount_content[ $section_id ]) ? "( " . $navcount_content[ $section_id ] . " )" : false;
+
+        $navlink_lists = 
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'type='.$section_id ),
+                             AMP_TEXT_LIST_PAGES . $count_lists );
+        $navlink_content = 
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'typeid='.$section_id ),
+                             AMP_TEXT_CONTENT_PAGES . $count_content );
+
+        return  $renderer->in_P( 
+                    $navlink_lists 
+                    . $renderer->newline( )
+                    . $navlink_content
+                );
+    
     }
 }
 			

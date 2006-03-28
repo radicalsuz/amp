@@ -77,16 +77,22 @@
 
 	<item>
 		<separator>1</separator>
-		<href>edittypes.php</href>
+		<href>section.php?action=list</href>
 		<label>View Sections</label>
 		<class>view</class>
 		<per>CONTENT_SECTION_EDIT</per>
 	</item>
 	<item>
-		<href>type_edit.php</href>
+		<href>section.php</href>
 		<label>Add Section</label>
 		<class>add</class>
 		<per>CONTENT_SECTION_EDIT</per>
+	</item>
+	<item>
+		<href>class.php?action=list</href>
+		<label>View Classes</label>
+		<class>view</class>
+		<per>CONTENT_CLASS_EDIT</per>
 	</item>
 	<item>
 		<href>class.php</href>

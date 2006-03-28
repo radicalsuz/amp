@@ -3,6 +3,7 @@
 class AMP_System_List_Request {
     var $_actions = array();
     var $_action_args = array( );
+    var $_actions_global = array( );
 
     /* sample code
     var $_action_args = array( 
@@ -56,10 +57,26 @@ class AMP_System_List_Request {
             trigger_error( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED, get_class( $target ), $action , get_class( $this )));
             return false;
         }
-        return call_user_func_array( array( $target, $action ), $args ) ;
+        $local_args = $this->_getSpecificArgs( $target, $action, $args );
+        return call_user_func_array( array( $target, $action ), $local_args ) ;
+    }
+
+    function _getSpecificArgs( &$target, $action, $args ){
+        if ( !isset( $this->_action_args[$action])) return null; 
+        $result_args = array( );
+        foreach( $args as $arg_key => $arg_value ){
+            if ( !is_array( $arg_value ) || !isset( $arg_value[$target->id])){
+                $result_args[$arg_key] = $arg_value;
+                continue;
+            }
+            $result_args[$arg_key] = $arg_value[ $target->id ];
+        }
+        return $result_args;
     }
 
     function &_getAffectedItems( $affected_ids ){
+
+        #return array_combine_key( $affected_ids, $this->_source );
         $return = array( );
         foreach( $this->_source as $sourceItem ) {
             if ( array_search( $sourceItem->id, $affected_ids ) !== FALSE ) {
@@ -86,6 +103,10 @@ class AMP_System_List_Request {
     }
 
     function _getAffectedIds( ){
+        if ( array_search( $this->_getAction( ), $this->_actions_global ) !== FALSE ){
+            return array_keys( $this->_source );
+        }
+
         if ( !isset( $this->_request_vars['id'])) return false;
         return $this->_request_vars['id'] ;
 
@@ -99,7 +120,10 @@ class AMP_System_List_Request {
 
     function addAction( $action_name, $action_args = null ){
         $this->_actions[] = $action_name;
-        if ( isset( $action_args )) $this->_action_args[$action] = $action_args;
+        if ( isset( $action_args )) $this->_action_args[$action_name] = $action_args;
+    }
+    function setActionGlobal( $action_name ){
+        $this->_actions_global[] = $action_name;
     }
 
     function getPerformedAction( ){

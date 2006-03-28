@@ -74,6 +74,12 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
         ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_GALLERY_IMAGES, 'sort=galleryid'));
     }
 
+    function _getSourceRow( ){
+        $row_data = PARENT::_getSourceRow( );
+        $row_data['id'] = $row_data['name'];
+        return $row_data;
+    }
+
 }
 
 ?>

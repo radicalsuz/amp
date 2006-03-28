@@ -14,10 +14,6 @@
 
 require_once( 'AMP/Content/Map.inc.php' );
 
-define( 'AMP_CONTENT_PAGETYPE_ARTICLE', 'article' );
-define( 'AMP_CONTENT_PAGETYPE_LIST', 'list' );
-define( 'AMP_CONTENT_PAGETYPE_TOOL', 'tool' );
-
 class AMP_Breadcrumb_Content {
 
     var $dbcon;

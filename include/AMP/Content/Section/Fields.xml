@@ -1,0 +1,178 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+    <id_display>
+        <type>static</type>
+    </id_display>
+	<usenav>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</usenav>
+	<type>
+		<type>text</type>
+		<label>Section Name</label>
+        <required>1</required>
+	</type>
+	<description>
+		<type>textarea</type>
+		<label>Description</label>
+        <size>6:50</size>
+	</description>
+	<parent>
+		<type>select</type>
+		<label>Subsection of</label>
+        <lookup>
+            <module>content</module>
+            <instance>sectionmap</instance>
+        </lookup>
+        <required>1</required>
+	</parent>
+	<textorder>
+		<type>text</type>
+        <size>4</size>
+		<label>Section Order</label>
+	</textorder>
+    <date_redirect_header>
+        <type>blocktrigger</type>
+        <label>Date and Redirect</label>
+        <block>date_redirect</block>
+        <block_trigger>linkurl</block_trigger>
+    </date_redirect_header>
+	<linkurl>
+		<type>text</type>
+		<label>Redirect Section to this URL</label>
+        <block>date_redirect</block>
+	</linkurl>
+	<uselink>
+		<type>hidden</type>
+        <default>1</default>
+		<label>Enable Above Redirect</label>
+	</uselink>
+	<date2>
+		<type>date</type>
+		<label>Date</label>
+        <default>today</default>
+        <block>date_redirect</block>
+	</date2>
+    <security_header>
+        <type>blocktrigger</type>
+        <label>Security</label>
+        <block>security</block>
+        <block_trigger>secure</block_trigger>
+    </security_header>
+	<secure>
+		<type>checkbox</type>
+        <block>security</block>
+		<label>Require Login to View Content</label>
+	</secure>
+    <listing_settings_header>
+        <type>header</type>
+        <label>Listing Page Options</label>
+    </listing_settings_header>
+	<listtype>
+		<type>select</type>
+		<label>Display Format</label>
+        <lookup>
+            <module>constant</module>
+            <instance>listtypes</instance>
+        </lookup>
+        <default>1</default>
+	</listtype>
+	<up>
+		<type>text</type>
+        <size>4</size>
+		<label>Max Items per Page</label>
+	</up>
+	<usetype>
+		<type>checkbox</type>
+		<label>Hide Content List</label>
+	</usetype>
+    <listing_options_header>
+        <type>blocktrigger</type>
+        <label>Section Header</label>
+        <block>listing_options</block>
+        <block_trigger>url</block_trigger>
+    </listing_options_header>
+	<header>
+        <default>1</default>
+		<type>checkbox</type>
+		<label>Use Section Header</label>
+        <block>listing_options</block>
+	</header>
+	<url>
+		<type>select</type>
+		<label>Use This Article as Section Header</label>
+        <block>listing_options</block>
+        <lookup>
+            <module>content</module>
+            <instance>articles</instance>
+        </lookup>
+	</url>
+    <!--
+	<searchbar>
+		<type>checkbox</type>
+		<label>Show List Search Bar</label>
+        <block>listing_options</block>
+	</searchbar>
+    -->
+    <appearance_header>
+        <type>header</type>
+        <label>Appearance</label>
+    </appearance_header>
+    <images_header>
+        <type>blocktrigger</type>
+        <label>Images</label>
+        <block>images</block>
+        <block_trigger>image2</block_trigger>
+        <block_trigger>flash</block_trigger>
+    </images_header>
+	<image2>
+		<type>imagepicker</type>
+		<label>Image for lists</label>
+        <block>images</block>
+	</image2>
+	<flash>
+		<type>imagepicker</type>
+		<label>Image for Banner</label>
+        <block>images</block>
+	</flash>
+    <!-- no clue if these are still being used
+	<image>
+		<type>imagepicker</type>
+		<label>Image for display in sidebar listings</label>
+        <block>images</block>
+	</image>
+	<useimage>
+		<type>checkbox</type>
+		<label>Use this image</label>
+        <block>images</block>
+	</useimage> 
+    -->
+    <template_css_header>
+        <type>blocktrigger</type>
+        <label>Template and CSS</label>
+        <block>template_css</block>
+        <block_trigger>templateid</block_trigger>
+        <block_trigger>css</block_trigger>
+    </template_css_header>
+	<templateid>
+		<type>select</type>
+		<label>Template</label>
+        <lookup>templates</lookup>
+        <block>template_css</block>
+	</templateid>
+	<css>
+		<type>multiselect</type>
+		<label>Override with CSS files</label>
+        <size>6</size>
+        <block>template_css</block>
+	</css>
+    <!--
+	<imgcap>
+		<type>textarea</type>
+		<label>Custom Data</label>
+	</imgcap>
+    -->
+
+</array>

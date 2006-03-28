@@ -4,9 +4,6 @@ require_once( 'AMP/System/List.inc.php');
 require_once( 'AMP/System/List/Toolbar.inc.php');
 require_once( 'AMP/System/List/Request.inc.php');
 
-define( 'AMP_TEXT_LIST_ACTION_SUCCESS', '%s %s items successfully ');
-define( 'AMP_TEXT_LIST_ACTION_FAIL', 'Nothing was %s');
-
 class AMP_System_List_Form extends AMPSystem_List {
     var $formname = "System_List";
 
@@ -29,15 +26,13 @@ class AMP_System_List_Form extends AMPSystem_List {
        $this->init( $source ) ;
     }
 
-    function init(&$source) {
+    function init( &$source ) {
      
         $this->setSource( $source );
         $this->_submitGroup .= $this->formname;
 
         $this->_initController( );
         $this->_initObservers( );
-        $test_item = current( $this->source );
-        print count( $test_item->_observers );
         $this->_initRequest( );
         $this->_initToolbar( );
 
@@ -76,7 +71,9 @@ class AMP_System_List_Form extends AMPSystem_List {
     }
 
     function _initController( ){
-        $this->_controller =  &AMPSystem_Page::instance( );
+        if ( class_exists( 'AMPSystem_Page')){
+            $this->_controller =  &AMPSystem_Page::instance( );
+        }
     }
 
     function _attachActions( &$target ){
@@ -84,14 +81,13 @@ class AMP_System_List_Form extends AMPSystem_List {
             $args = ( isset( $this->_action_args[$action] )) ?  $this->_action_args[$action] : null;
             $target->addAction( $action, $args ) ;
         }
+        foreach( $this->_actions_global as $action ){
+            $target->setActionGlobal( $action ) ;
+        }
     }
 
     function getName( ){
         return $this->formname;
-    }
-
-    function _afterPagerInit( ){
-        $this->_source_keys = array_keys( $this->source );
     }
 
     function _makeInput( $value, $fieldname, $currentrow ) {
@@ -114,7 +110,7 @@ class AMP_System_List_Form extends AMPSystem_List {
     function _HTML_header() {
         //Starter HTML
         $start_html = $this->_HTML_listTitle() .
-                      $this->_pager->outputTop().
+                      ( isset( $this->_pager ) ? $this->_pager->outputTop() : false ).
                       $this->_HTML_startForm() .
                       $this->_outputToolbar( );
         $start_html .= "\n<div class='list_table'>\n<table class='list_table'>\n<tr class='intitle'> ";
@@ -131,7 +127,7 @@ class AMP_System_List_Form extends AMPSystem_List {
         return  "\n	</table>\n</div>"
                 . $this->_outputToolbar( )
                 . "</form>\n<br>&nbsp;&nbsp;" 
-                . $this->_pager->output()  
+                . ( isset( $this->_pager ) ? $this->_pager->output() : false ) 
                 . $this->_HTML_addLink()  ;
     }
 
@@ -186,13 +182,17 @@ class AMP_System_List_Form extends AMPSystem_List {
     }
 
     function _HTML_previewLink( $id ) {
-        return  '<a href="' . $this->previewlink . $id .'" target="_blank" title="Preview this Item">' .
+        if ( !isset( $this->previewlink )) return false;
+        return  '<a href="' . AMP_URL_AddVars( $this->previewlink , 'id='.$id) .'" target="_blank" title="Preview this Item">' .
                 '<img src="' . AMP_SYSTEM_ICON_PREVIEW . '" width="16" height="16" border=0></a>';
     }
 
     function _HTML_deleteLink( $id ) {
+        return false;
+        /*
         return  '<a href="javascript: void();" onclick=\'if (confirmDelete() ) document.forms["' . $this->formname . '"].submit();\' title="Delete this Item">' .
                 '<img src="' . AMP_SYSTEM_ICON_DELETE . '" width="16" height="16" border=0></a>';
+                */
     }
 
     function _HTML_sortLink( $fieldname ) {

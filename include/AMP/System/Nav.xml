@@ -392,12 +392,14 @@
 		<class>add</class>
 		<per>CONTENT_SECTION_EDIT</per>
 	</item>
+<!--
 	<item>
 		<href>class.php</href>
 		<label>Add Class</label>
 		<class>add</class>
 		<per>CONTENT_CLASS_EDIT</per>
 	</item>
+-->
 </content>
 
 <actions>

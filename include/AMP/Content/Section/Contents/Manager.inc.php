@@ -9,20 +9,7 @@ require_once( 'AMP/Content/Section/Contents/Subsections.inc.php' );
 require_once( 'AMP/Content/Section/Contents/SubsectionsPlusArticles.inc.php' );
 require_once( 'AMP/Content/Section/Contents/Newsroom.inc.php' );
 require_once( 'AMP/Content/Section/Contents/ArticlesAggregator.inc.php' );
-
-if (!defined( 'AMP_CONTENT_LISTORDER_MAX')) define('AMP_CONTENT_LISTORDER_MAX', 999999999);
-
-if (!defined( 'AMP_SECTIONLIST_ARTICLES'))      define( 'AMP_SECTIONLIST_ARTICLES', '1' );
-if (!defined( 'AMP_SECTIONLIST_NEWSROOM'))      define( 'AMP_SECTIONLIST_NEWSROOM', '2' );
-if (!defined( 'AMP_SECTIONLIST_SUBSECTIONS'))   define( 'AMP_SECTIONLIST_SUBSECTIONS', '5' );
-if (!defined( 'AMP_SECTIONLIST_ARTICLES_BY_SUBSECTION')) 
-                                                define( 'AMP_SECTIONLIST_ARTICLES_BY_SUBSECTION', '3' );
-if (!defined( 'AMP_SECTIONLIST_SUBSECTIONS_PLUS_ARTICLES')) 
-                                                define( 'AMP_SECTIONLIST_SUBSECTIONS_PLUS_ARTICLES', '6' );
-if (!defined( 'AMP_SECTIONLIST_ARTICLES_AGGREGATOR')) 
-                                                define( 'AMP_SECTIONLIST_ARTICLES_AGGREGATOR', '7' );
-if ( file_exists_incpath( 'custom.layouts.inc.php' )) include_once ('custom.layouts.inc.php' );
-if ( file_exists_incpath( 'custom.sources.inc.php' )) include_once ('custom.sources.inc.php' );
+require_once( 'AMP/Content/Config.inc.php');
 
 class SectionContents_Manager {
 

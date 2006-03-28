@@ -17,4 +17,7 @@ define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED_NOT_REGISTERED',
             'Cannot update plugin %s : %s settings. Plugin is not registered');
 define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED',
             'Cannot update plugin %s : %s settings.' );
+
+if ( !defined( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED'))
+        define( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED', 'This page has not been configured for use');
 ?>

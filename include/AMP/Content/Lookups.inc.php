@@ -1,7 +1,7 @@
 <?php
 
-require_once ('AMP/Content/Article/Set.inc.php');
 require_once ('AMP/System/Lookups.inc.php');
+require_once ( 'AMP/Content/Config.inc.php');
 
 class AMPContent_Lookup extends AMPSystem_Lookup {
 
@@ -39,6 +39,7 @@ class AMPContentLookup_ActiveClasses {
     var $dataset;
     
     function AMPContentLookup_ActiveClasses() {
+        require_once ('AMP/Content/Article/Set.inc.php');
         $articleset = & new ArticleSet ( AMP_Registry::getDbcon() );
         if (!( $counts = $articleset->getGroupedIndex( 'class' ))) return false;
         $class_set = & AMPContent_Lookup::instance( 'class' );
@@ -380,10 +381,10 @@ class AMPContentLookup_RelatedArticles extends AMPContent_Lookup {
 
 class AMPContentLookup_Articles extends AMPContent_Lookup{
     var $datatable = 'articles';
-    var $result_field = 'Concat( DATE( datecreated ), " : ", left( title, 60 )) as articlename ';
+    var $result_field = 'Concat( if ( datecreated != "", DATE( datecreated ), "0000-00-00"), " : ", left( title, 50 )) as articlename ';
     var $id_field = "id";
     var $sortby = 'datecreated DESC, title';
-    var $criteria = 'trim( title ) != "" and !isnull( title )';
+    var $criteria = 'trim( title ) != "" and !isnull( title ) and publish=1';
     
     function AMPContentLookup_Articles( ){
         $this->init( );
@@ -422,6 +423,28 @@ class AMPConstantLookup_ImageClasses extends AMPConstant_Lookup {
         $this->init();
     }
 
+}
+
+class AMPContentLookup_SectionContentNavigationCount extends AMPContent_Lookup {
+    var $datatable = 'nav';
+    var $result_field = 'count( id ) as totalnavs';
+    var $id_field = 'typeid';
+    var $criteria = "!isnull( typeid ) group by typeid";
+
+    function AMPContentLookup_SectionContentNavigationCount( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_SectionListsNavigationCount extends AMPContent_Lookup {
+    var $datatable = 'nav';
+    var $result_field = 'count( id ) as totalnavs';
+    var $id_field = 'typelist';
+    var $criteria = "!isnull( typelist ) group by typelist";
+
+    function AMPContentLookup_SectionListNavigationCount( ){
+        $this->init( );
+    }
 }
 
 ?>

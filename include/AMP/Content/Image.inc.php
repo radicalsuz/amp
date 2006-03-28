@@ -1,12 +1,5 @@
 <?php
-define( 'AMP_IMAGE_CLASS_ORIGINAL', 'original' );
-define( 'AMP_IMAGE_CLASS_THUMB', 'thumb' );
-define( 'AMP_IMAGE_CLASS_OPTIMIZED', 'pic' );
-define( 'AMP_IMAGE_CLASS_CROP', 'crop' );
-
-if (!defined('AMP_IMAGE_DEFAULT_ALIGNMENT')) define( 'AMP_IMAGE_DEFAULT_ALIGNMENT', 'right' );
-define( 'AMP_IMAGE_PATH', DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR ); 
-
+require_once( 'AMP/Content/Config.inc.php');
 
 class Content_Image {
 

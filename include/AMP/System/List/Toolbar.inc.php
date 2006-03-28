@@ -1,5 +1,4 @@
 <?php
-define( 'AMP_TEXT_WITH_SELECTED', 'With Selected:&nbsp;');
 
 class AMP_System_List_Toolbar {
     var $submitGroup = "submitAction";
@@ -12,8 +11,8 @@ class AMP_System_List_Toolbar {
         'delete',
         );
     */
-    var $_headerContent = AMP_TEXT_WITH_SELECTED;
-    var $_footerContent;
+    var $_headerContent = array( AMP_TEXT_WITH_SELECTED );
+    var $_footerContent = array( );
 
     var $_display;
 
@@ -51,20 +50,26 @@ class AMP_System_List_Toolbar {
     }
 
     function renderToolbarStart( ){
-        return $this->_headerContent;
+        return join( '', $this->_headerContent);
     }
     function renderToolbarEnd( ){
-        return $this->_footerContent;
+        return join( '', $this->_footerContent);
     }
-    function _addToolbarStartContent( $content ){
-        $this->_headerContent .= $content;
+    function addStartContent( $content, $key = null ){
+        if ( isset( $key )) return $this->_headerContent[$key] = $content;
+        $this->_headerContent[] = $content;
     }
-    function _addToolbarEndContent( $content ){
-        $this->_footerContent .= $content;
+    function addEndContent( $content, $key = null ){
+        if ( isset( $key )) return $this->_footerContent[$key] = $content;
+        $this->_footerContent[] = $content;
     }
 
     function addAction( $action_name ){
         $this->_actions[] = $action_name;
+    }
+
+    function setActionGlobal( $action_name ){
+        //interface
     }
 
     function setSubmitGroup(  $name ){
