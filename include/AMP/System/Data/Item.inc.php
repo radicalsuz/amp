@@ -258,6 +258,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( !$data_set->readData( )) return false;
         if ( !isset( $class_name )) $class_name = $this->_class_name;
         $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );
+        if ( empty( $result_set )) return $result_set;
         $this->sort( $result_set );
         return $result_set;
         

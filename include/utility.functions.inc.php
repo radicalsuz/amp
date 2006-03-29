@@ -1016,5 +1016,27 @@ if ( ! function_exists( 'AMP_navCountDisplay_Section')) {
     }
 }
 			
+if ( ! function_exists( 'AMP_navCountDisplay_Class')) {
+    function AMP_navCountDisplay_Class( $class_id ){
+        if ( !$class_id ) return false;
+        static $renderer = false;
+        static $navcount_lists = false;
+        if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
+        if ( !$navcount_lists )
+            $navcount_lists = &AMPContent_Lookup::instance( 'ClassListsNavigationCount' );
+
+        $count_lists = isset( $navcount_lists[ $class_id ]) ? "( " . $navcount_lists[ $class_id ] . " )" : false;
+
+        $navlink_lists = 
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'class='.$class_id),
+                             AMP_TEXT_LIST_PAGES . $count_lists );
+
+        return  $renderer->in_P( 
+                    $navlink_lists 
+                );
+    
+    }
+}
+			
 
 ?>

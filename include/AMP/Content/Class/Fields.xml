@@ -1,0 +1,26 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+    <id_display>
+        <type>static</type>
+    </id_display>
+	<class>
+		<type>text</type>
+		<label>Class Name</label>
+        <required>1</required>
+	</class>
+	<description>
+		<type>textarea</type>
+		<label>Description</label>
+	</description>
+	<url>
+		<type>select</type>
+		<lookup>
+			<module>content</module>
+			<instance>articles</instance>
+		</lookup>
+		<label>Header Article</label>
+	</url>
+
+</array>

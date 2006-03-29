@@ -86,7 +86,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function &_init_source( &$dbcon ){
         $listSource = &new $this->_source_object( $dbcon  );
-        return $listSource->search( $this->_source_criteria );
+        return $listSource->search( $this->_source_criteria, $this->_source_object );
     }
 
     function init(&$source) {
@@ -331,9 +331,16 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _HTML_sortLink( $fieldname ) {
         if (isset($this->suppress['sortlinks']) && $this->suppress['sortlinks']) return "";
-        $new_sort = $fieldname;
-        if ($fieldname == $this->source->getSort()) $new_sort .= " DESC";
         $url_criteria = $this->_prepURLCriteria();
+        $new_sort = $fieldname;
+        if ($fieldname == $this->_sort ) {
+            if ( !is_array( $this->source )) {
+                $new_sort .= " DESC";
+            } else {
+                $url_criteria[] = "sort_direction= DESC";
+            }
+        }
+        
         $url_criteria[] = "sort=".$new_sort;
         return AMP_Url_AddVars( $_SERVER['PHP_SELF'], $url_criteria );
     }
@@ -478,7 +485,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if (!( isset($_REQUEST['sort']) && $_REQUEST['sort'])) return false; 
             
         //for recordset mapper
-        if ( !is_array( $this->source)) return $this->source->addSort($_REQUEST['sort']);
+        if ( !is_array( $this->source)) {
+            $this->_sort = $_REQUEST['sort'];
+            return $this->source->addSort($_REQUEST['sort']);
+        }
 
         //for arrays of objects
         $local_sort_method = '_setSort'.ucfirst( $_REQUEST['sort']);

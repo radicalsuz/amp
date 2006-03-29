@@ -190,6 +190,7 @@ class AMPContentLookup_SectionParents extends AMPContent_Lookup {
 
     var $datatable = "articletype";
     var $result_field = "parent";
+    var $sortby = 'textorder,type';
 
     function AMPContentLookup_SectionParents() {
         $this->init();
@@ -442,7 +443,18 @@ class AMPContentLookup_SectionListsNavigationCount extends AMPContent_Lookup {
     var $id_field = 'typelist';
     var $criteria = "!isnull( typelist ) group by typelist";
 
-    function AMPContentLookup_SectionListNavigationCount( ){
+    function AMPContentLookup_SectionListsNavigationCount( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_ClassListsNavigationCount extends AMPContent_Lookup {
+    var $datatable = 'nav';
+    var $result_field = 'count( id ) as totalnavs';
+    var $id_field = 'classlist';
+    var $criteria = "!isnull( typelist ) group by classlist";
+
+    function AMPContentLookup_ClassListsNavigationCount( ){
         $this->init( );
     }
 }

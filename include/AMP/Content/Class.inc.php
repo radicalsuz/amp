@@ -4,9 +4,6 @@ require_once ('AMP/System/Data/Item.inc.php' );
 require_once ('AMP/Content/Class/Display.inc.php' );
 require_once ('AMP/Content/Display/Criteria.inc.php' );
 
-define( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT', 'ContentClass_Display');
-define( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG', 'ContentClass_Display_Blog');
-
 class ContentClass extends AMPSystem_Data_Item {
 
     var $datatable = "class";

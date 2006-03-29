@@ -195,6 +195,7 @@ class AMP_System_List_Form extends AMPSystem_List {
                 */
     }
 
+    /*
     function _HTML_sortLink( $fieldname ) {
         if (isset($this->suppress['sortlinks']) && $this->suppress['sortlinks']) return "";
         $new_sort = $fieldname;
@@ -203,6 +204,7 @@ class AMP_System_List_Form extends AMPSystem_List {
         if ($fieldname == $this->_sort ) $url_criteria[] = "sort_direction= DESC";
         return AMP_Url_AddVars( $_SERVER['PHP_SELF'], $url_criteria );
     }
+    */
     
 
 }

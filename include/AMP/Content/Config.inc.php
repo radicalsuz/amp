@@ -19,6 +19,12 @@ if ( file_exists_incpath( 'custom.layouts.inc.php' )) include_once ('custom.layo
 if ( file_exists_incpath( 'custom.sources.inc.php' )) include_once ('custom.sources.inc.php' );
 
 /**
+ * Class List Configurations
+ */
+define( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT', 'ContentClass_Display');
+define( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG', 'ContentClass_Display_Blog');
+
+/**
  * Content Status Configuration
  */
 define ('AMP_CONTENT_STATUS_LIVE', 1);

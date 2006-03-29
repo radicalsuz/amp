@@ -20,7 +20,7 @@ class AMPContent_Map {
         if (!isset($top) || !$top ) $top = 1;
         $this->top = $top;
 
-        $this->buildMap( $top );
+        $this->buildMap();
     }
 
     function buildMap() {
