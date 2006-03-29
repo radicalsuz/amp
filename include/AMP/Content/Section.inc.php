@@ -182,6 +182,14 @@ class Section extends AMPSystem_Data_Item {
 
     }
     
+    function getNavIndex( ){
+        if ( isset( $this->_nav_index )) return $this->_nav_index;
+        $navs_lists =       AMPContent_Lookup::instance( 'sectionListsNavigationCount');
+        $navs_content =     AMPContent_Lookup::instance( 'sectionContentNavigationCount');
+        $this->_nav_index = ( isset( $navs_content[ $this->id ]) ? $navs_content[$this->id] : 0 )
+                     + ( isset( $navs_lists[ $this->id ]) ? $navs_lists[ $this->id ] : 0 );
+        return $this->_nav_index;
+    }
 
 }
 ?>

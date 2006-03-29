@@ -142,13 +142,12 @@ class AMP_System_List_Form extends AMPSystem_List {
                     ." onMouseover=\"this.bgColor='".$this->getColor('mouseover')."';\""
                     ." onMouseout=\"this.bgColor='". $bgcolor ."';\"" 
                     ." onClick='select_id(this.id.substring(13), \"". $this->formname ."\");'>\n";
-        return $output . $this->_HTML_firstColumn( $id );
+        return $output . $this->_HTML_firstColumn( $id ) . $this->_HTML_editColumn( $id );
     }
         
 
     function _HTML_endColumnHeadersRow() {
-        return   $this->_HTML_editColumnHeader() 
-               . $this->_HTML_extraColumnHeaders() . "\n</tr>";
+        return $this->_HTML_extraColumnHeaders() . "\n</tr>";
     }
 
     function _HTML_firstColumn( $id ) {
@@ -156,7 +155,8 @@ class AMP_System_List_Form extends AMPSystem_List {
     }
 
     function _HTML_firstColumnHeader() {
-        return $this->_HTML_selectColumnHeader();
+        return $this->_HTML_selectColumnHeader()
+                . $this->_HTML_editColumnHeader() ;
     }
 
     function _HTML_selectColumnHeader() {
@@ -167,10 +167,6 @@ class AMP_System_List_Form extends AMPSystem_List {
     function _HTML_selectColumn( $id ) {
         if (isset($this->suppress['selectcolumn'])) return "";
         return '<td><center><input type="checkbox" name="id[]" value="'.$id.'" onclick="this.checked=!this.checked;"><center></td>'; ;
-    }
-
-    function _HTML_endRow( $id ) {
-        return $this->_HTML_editColumn( $id ) . PARENT::_HTML_endRow( $id );
     }
 
     function _HTML_editColumn( $id ) {

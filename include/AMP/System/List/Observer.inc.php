@@ -1,10 +1,10 @@
 <?php
 require_once( 'AMP/System/Observer.php');
 
-class AMP_Content_Display_Observer extends AMP_System_Observer {
+class AMP_System_List_Observer extends AMP_System_Observer {
     var $_list;
 
-    function AMP_Content_Display_Observer( &$list ){
+    function AMP_System_List_Observer( &$list ){
         //interface
         $this->_list = $list;
     }

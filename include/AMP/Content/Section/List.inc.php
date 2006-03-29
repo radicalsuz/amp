@@ -3,7 +3,7 @@
 require_once( 'AMP/System/List/Form.inc.php');
 require_once( 'AMP/Content/Section/Set.inc.php' );
 require_once( 'AMP/Content/Section.inc.php' );
-require_once( 'AMP/Content/Display/Observer.inc.php');
+require_once( 'AMP/System/List/Observer.inc.php');
 
 class Section_List extends AMP_System_List_Form {
     var $name = "Section";
@@ -19,10 +19,11 @@ class Section_List extends AMP_System_List_Form {
 
     var $_map;
     var $_renderer;
-    var $_observers_source = array( 'AMP_Content_Display_Observer');
+    var $_observers_source = array( 'AMP_System_List_Observer');
     var $_actions = array( 'publish', 'unpublish', 'delete', 'reorder');
     var $_action_args = array( 'reorder' => array( 'order'));
     var $_actions_global = array( 'reorder');
+    var $name_field = 'name';
 
     function Section_List( &$dbcon ) {
         $this->init( $this->_init_source( $dbcon  ) );

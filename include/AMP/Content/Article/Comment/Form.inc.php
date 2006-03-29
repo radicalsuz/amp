@@ -16,4 +16,5 @@ class ArticleComment_Form extends AMPSystem_Form_XML {
        $this->addTranslation( 'date', '_makeDbDateTime', 'get');
     }
 }
+
 ?>

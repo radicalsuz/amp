@@ -5,4 +5,10 @@ if ( !defined( 'AMP_MODULE_INCLUDE_PATH' ))     define( 'AMP_MODULE_INCLUDE_PATH
 if ( !defined( 'AMP_COMPONENT_MAP_FILENAME' ))  define( 'AMP_COMPONENT_MAP_FILENAME', 'ComponentMap.inc.php');
 if ( !defined( 'AMP_COMPONENT_MAP_CLASSNAME' )) define( 'AMP_COMPONENT_MAP_CLASSNAME', 'ComponentMap');
 
+/**
+ * Sort options
+ */
+if ( !defined( 'AMP_SORT_ASC' )) define( 'AMP_SORT_ASC', ' ASC');
+if ( !defined( 'AMP_SORT_DESC' )) define( 'AMP_SORT_DESC', ' DESC');
+if ( !defined( 'AMP_SORT_END' )) define( 'AMP_SORT_END', 'zzzzzzzzzzzzzzzz');
 ?>

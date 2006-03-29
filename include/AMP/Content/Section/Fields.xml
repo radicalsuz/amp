@@ -68,7 +68,7 @@
 	</secure>
     <listing_settings_header>
         <type>header</type>
-        <label>Listing Page Options</label>
+        <label>List Page Options</label>
     </listing_settings_header>
 	<listtype>
 		<type>select</type>

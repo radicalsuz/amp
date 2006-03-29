@@ -601,7 +601,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
             }
         }
 		$name_block =   "<a href=\"javascript:$jscript\" class=\"trigger\">"
-                        . "<img src=\"images/arrow-right.gif\" border=\"0\" class=\"field_arrow\" id=\"arrow_$name\" />"
+                        . "<img src=\"images/arrow-right.gif\" border=\"0\" class=\"field_arrow\" id=\"arrow_".$field_def['block'] ."\" />"
                         . $field_def['label'] ."</a>";
         $this->setDefaultValue( $name, $name_block );
         return $this->_addElementHtml( $name, $field_def );

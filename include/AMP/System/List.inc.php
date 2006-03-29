@@ -156,6 +156,13 @@ class AMPSystem_List extends AMPDisplay_HTML {
         foreach( $this->col_headers as $column ){
             $row_data[$column] = $this->_getSourceDataItem( $column, $row_data_source );
         }
+        if ( isset( $this->name_field ) && isset( $row_data[$this->name_field ])) {
+            $row_data[$this->name_field ] = 
+                    "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$row_data['id'] ) ."' title='Edit this Item'>" 
+                    . $row_data[ $this->name_field ]
+                    . '</a>';
+
+        }
 
         ++$this->_source_counter;
         return $row_data;
@@ -335,9 +342,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $new_sort = $fieldname;
         if ($fieldname == $this->_sort ) {
             if ( !is_array( $this->source )) {
-                $new_sort .= " DESC";
-            } else {
-                $url_criteria[] = "sort_direction= DESC";
+                $new_sort .= AMP_SORT_DESC;
+            } elseif ( !isset( $_REQUEST['sort_direction']) || $_REQUEST['sort_direction'] != AMP_SORT_DESC ) {
+                
+                $url_criteria[] = "sort_direction=" . AMP_SORT_DESC;
             }
         }
         
@@ -450,7 +458,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _makePrettyDate( $value, $fieldname,$data  ){
         if ( !isset( $data[$fieldname])) return "";
-        return date( 'M d, Y', $data[$fieldname]);
+        $result = date( 'M d, Y', $data[$fieldname]);
+
+        if ( $result != 'Dec 31, 1969') return $result;
+        return date( 'M d, Y', strtotime( $data[$fieldname]));
     }
 
     function addLookup( $field , $dataset ) {

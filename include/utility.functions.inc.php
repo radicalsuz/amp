@@ -738,6 +738,7 @@ if (!function_exists( 'AMP_Pluralize' )) {
         $term_end = substr( $word, -1 );
         if ("y" == $term_end ) return substr( $word, 0, strlen( $word )-1 ). "ies" ;
         if ($term_end != "s" ) return $word ."s";
+        else return $word .'es';
         return $word;
     }
 }
