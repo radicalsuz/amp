@@ -157,7 +157,7 @@ class Section extends AMPSystem_Data_Item {
 
     function publish( ){
         if ( $this->isLive( )) return false;
-        $this->mergeData( array( 'usenav' => 1 ));
+        $this->mergeData( array( 'usenav' => AMP_CONTENT_STATUS_LIVE ));
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update');
         $this->notify( 'publish');
@@ -165,7 +165,7 @@ class Section extends AMPSystem_Data_Item {
     }
     function unpublish( ){
         if ( !$this->isLive( )) return false;
-        $this->mergeData( array( 'usenav' => 0 ));
+        $this->mergeData( array( 'usenav' => AMP_CONTENT_STATUS_DRAFT ));
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update');
         $this->notify( 'unpublish');

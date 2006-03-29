@@ -254,7 +254,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         require_once( 'AMP/System/Data/Set.inc.php');
         $data_set = &new AMPSystem_Data_Set( $this->dbcon );
         $data_set->setSource( $this->datatable );
-        if ( isset( $criteria )) $data_set->addCriteria( $criteria );
+        if ( isset( $criteria )) {
+            foreach( $criteria as $crit_phrase ){
+                $data_set->addCriteria( $crit_phrase );
+            }
+        }
         if ( !$data_set->readData( )) return false;
         if ( !isset( $class_name )) $class_name = $this->_class_name;
         $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );
@@ -313,5 +317,39 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         }
         $this->_observers[] = &$observer;
     }
+
+    function makeCriteria( $data ){
+        $return = array( );
+        if ( !( isset( $data ) && is_array( $data ))) return false;
+        foreach ($data as $key => $value) {
+            $crit_method = 'makeCriteria' . ucfirst( $key );
+
+            if (method_exists( $this, $crit_method )) {
+                $return[$key] = $this->$crit_method( $value );
+                continue;
+            }
+            if ( $crit_method = $this->_getCriteriaMethod( $key )){
+                $return[$key] = $this->$crit_method( $key, $value );
+            }
+
+        }
+        return $return;
+    }
+    function _getCriteriaMethod( $fieldname ) {
+        if ( !$this->isColumn( $fieldname )) return false;
+        if (array_search( $fieldname, $this->_exact_value_fields ) !==FALSE) return '_makeCriteriaEquals';
+        return '_makeCriteriaContains';
+    }
+
+    function _makeCriteriaContains( $key, $value ) {
+        $dbcon = &AMP_Registry::getDbcon( );
+        return $key . ' LIKE ' . $dbcon->qstr( '%' . $value . '%' );
+    }
+
+    function _makeCriteriaEquals( $key, $value ) {
+        $dbcon = &AMP_Registry::getDbcon( );
+        return $key . ' = ' . $dbcon->qstr( $value );
+    }
+
 }
 ?>

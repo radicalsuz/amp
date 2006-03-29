@@ -232,7 +232,12 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function applySearch( $values ){
-        return $this->source->applySearch( $values );
+        if ( !is_array( $this->source )) {
+            return $this->source->applySearch( $values );
+        }
+        $listSource = &new $this->_source_object( $dbcon  );
+        $this->_source_criteria = array_merge( $this->_source_criteria, $listSource->makeCriteria( $values ) );
+        $this->init( $this->_init_source( AMP_Registry::getDbcon( ) ));
     }
 
     function setController( &$controller ){

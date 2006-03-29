@@ -23,7 +23,7 @@ class AMPSystem_Data {
     var $sql_criteria = array();
     var $_sql_select = array();
 
-    var $_nativeColumns;
+    var $_nativeColumns = array( );
     var $id_field = "id";
     var $name_field = "name";
 
@@ -78,6 +78,7 @@ class AMPSystem_Data {
     }
 
     function isColumn( $exp ) {
+        if ( empty( $this->_nativeColumns )) return false;
         if (array_search( $exp, $this->_nativeColumns ) === FALSE) return false;
         return true;
     }

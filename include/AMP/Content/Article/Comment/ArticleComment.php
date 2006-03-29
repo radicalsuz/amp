@@ -23,9 +23,6 @@ class ArticleComment extends AMPSystem_Data_Item {
         return $this->sort( $item_set, 'timestamp', AMP_SORT_DESC );
     }
 
-    function publish( ){
-        return
-    }
     function isLive() {
         return ($this->getData('publish')==AMP_CONTENT_STATUS_LIVE);
     }
@@ -33,6 +30,30 @@ class ArticleComment extends AMPSystem_Data_Item {
     function getPublish( ){
         return $this->isLive( ) ;
 
+    }
+
+    function publish( ){
+        if ( $this->isLive( )) return false;
+        $this->mergeData( array( 'publish' => AMP_CONTENT_STATUS_LIVE ));
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update');
+        $this->notify( 'publish');
+        return $result;
+    }
+    function unpublish( ){
+        if ( !$this->isLive( )) return false;
+        $this->mergeData( array( 'publish' => AMP_CONTENT_STATUS_DRAFT ));
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update');
+        $this->notify( 'unpublish');
+        return $result;
+    }
+
+    function makeCriteriaArticle( $article_id ){
+        return $this->_makeCriteriaEquals( 'articleid', $article_id );
+    }
+    function makeCriteriaCid( $article_id ){
+        return $this->makeCriteriaArticle( $article_id );
     }
 }
 
