@@ -1,0 +1,48 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<Title>
+		<type>text</type>
+		<label>Title/Prefix</label>
+	</Title>
+	<First_Name>
+		<type>text</type>
+		<label>First Name</label>
+	</First_Name>
+	<Last_Name>
+		<type>text</type>
+		<label>Last Name</label>
+	</Last_Name>
+	<occupation>
+		<type>text</type>
+		<label>Position</label>
+	</occupation>
+	<Email>
+		<type>text</type>
+		<label>Email</label>
+	</Email>
+	<Work_Fax>
+		<type>text</type>
+		<label>Fax</label>
+	</Work_Fax>
+	<District>
+		<type>text</type>
+		<label>District</label>
+	</District>
+<!--
+	<Office>
+		<type>text</type>
+		<label>Office or Position</label>
+	</Office>
+-->
+	<region>
+		<type>text</type>
+		<label>Region</label>
+	</region>
+
+</array>

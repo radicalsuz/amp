@@ -20,4 +20,6 @@ define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED',
 
 if ( !defined( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED'))
         define( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED', 'This page has not been configured for use');
+if ( !defined( 'AMP_TEXT_ERROR_STATUS_FIELD_MISSING'))
+        define( 'AMP_TEXT_ERROR_STATUS_FIELD_MISSING', "Status field for %s, defined as '%s', does not exist");
 ?>

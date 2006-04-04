@@ -13,7 +13,7 @@ class %1\$s_List extends AMPSystem_List {
     var $_source_object = '%1\$s';
 
     function %1\$s_List( &$dbcon ) {
-        $this->init( $this->_init_source( ) );
+        $this->init( $this->_init_source( $dbcon ) );
     }
 }
 ?>

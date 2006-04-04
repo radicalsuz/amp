@@ -1,24 +1,30 @@
 <?php
 
-require_once( 'AMP/System/Page/Controller.inc.php');
-require_once( 'AMP/UserData/Input.inc.php');
+require_once( 'AMP/System/Component/Controller.php');
 require_once( 'Modules/WebAction/WebAction.php');
 
-class WebAction_Controller extends AMPSystemPage_Controller {
-    var $_identifiers = array( 'id' => 'setActionId', 'action' => 'setActionId' );
-    var $_action_object_class = "WebAction";
+class WebAction_Controller extends AMP_System_Component_Controller_Standard {
+    var $_action_default = 'list';
 
     function WebAction_Controller(){
         $this->init( );
     }
 
-    function _afterInit( ){
-         $this->_updateDB( );
-    }
-
-    function _updateDB( ){
-        if ( AMP_hasTable( 'webactions')) return true;
-        $this->_dbcon->MetaTables( );
+    function commit_update( ){
+        require_once( 'Modules/WebAction/Deprecated.php');
+        $old_webActions = &new WebAction_Deprecated( AMP_Registry::getDbcon( ));
+        $actions_set = $old_webActions->search( );
+        if ( !$actions_set ) {
+            ampredirect( AMP_SYSTEM_URL_WEBACTION );
+            return false;
+        }
+        foreach( $actions_set as $action ){
+            if ( $action->update( ) ) {
+                $this->message( $action->getName( ) . ' updated');
+                //$action->delete( );
+            }
+        }
+        $this->display_default( );
     }
 
 }

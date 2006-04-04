@@ -4,15 +4,17 @@ class WebAction extends AMPSystem_Data_Item {
 
     var $datatable = 'webactions';
     var $name_field = 'name';
+    var $_field_status = 'status';
 
     function WebAction( &$dbcon, $id = null ){
         $this->init( $dbcon, $id );
     }
-
+    /*
     function _afterSave( $data ){
         #$this->_saveIntroTexts( );
         #$this->_saveFormPlugin( );
     }
+    */
 
     function &getMessageForm( ){
         require_once( 'Modules/WebAction/Message/Form.inc.php');
@@ -66,6 +68,27 @@ class WebAction extends AMPSystem_Data_Item {
 
     function getTargetMethod( ){
         return $this->getData( 'target_method' );
+    }
+
+    function getExpirationDate( ){
+        $result = $this->getData( 'enddate');
+        if ( $result == AMP_NULL_DATETIME_VALUE ) return false;
+        return $result;
+    }
+
+    function isLive( ){
+        if ( !( $result = $this->getData( 'status'))) return false;
+        return !$this->isExpired( );
+    }
+
+    function isExpired( ){
+        if ( !( $expire_date = $this->getExpirationDate( ))) return false;
+        return ( time( ) >= strtotime( $expire_date )); 
+    }
+
+    function getStatus( ){
+        if ( $this->isExpired( )) return AMP_TEXT_CONTENT_STATUS_EXPIRED;
+        return $this->isLive( ) ? AMP_TEXT_CONTENT_STATUS_LIVE : AMP_TEXT_CONTENT_STATUS_DRAFT;
     }
 
 }

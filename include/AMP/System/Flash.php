@@ -44,11 +44,13 @@ class AMP_System_Flash extends AMP_Content_Buffer {
     }
 */
     function add_error( $message, $key = null ){
+        if ( !isset( $key )) return $this->_errors[] = $message;
         $this->_errors[$key] = $message;
  //       $_SESSION['__flash']['errors'][$key] = $message;  
     }
 
     function add_message( $message, $key = null ){
+        if ( !isset( $key )) return $this->_messages[] = $message;
         $this->_messages[$key] = $message;
   //      $_SESSION['__flash']['messages'][$key] = $message;  
     }

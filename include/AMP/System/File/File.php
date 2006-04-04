@@ -1,5 +1,5 @@
 <?php
-require_once( 'AMP/System/Data/Config.inc.php');
+require_once( 'AMP/System/Base.php');
 
 class AMP_System_File {
 

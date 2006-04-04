@@ -55,10 +55,14 @@
     }
 
     function refreshData() {
+        $this->clearCache( );
+        $this->readData();
+    }
+
+    function clearCache( ){
         $cached_sql = $this->_assembleSQL( );
         $this->dbcon->CacheFlush( $cached_sql );
         if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) AMP_DebugSQL( $cached_sql, get_class($this)." cleared cache"); 
-        $this->readData();
     }
 
     function makeReady() {
@@ -137,6 +141,20 @@
             return $this->dbcon->Affected_Rows();
         }
         return false;
+    }
+
+    function insertData( $values ){
+        require_once( 'AMP/System/Data/Item.inc.php');
+        $source = &new AMPSystem_Data_Item( $this->dbcon );
+        $source->setSource( $this->datatable );
+        $source->setData( $values );
+        $sql = $source->debug_insertSQL( );
+        if ($this->dbcon->Execute($sql)) {
+            if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." insert"); 
+            return $this->dbcon->Affected_Rows();
+        }
+        return false;
+         
     }
 
 

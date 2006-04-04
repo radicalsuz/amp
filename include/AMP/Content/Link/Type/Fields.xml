@@ -1,0 +1,14 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<name>
+		<type>text</type>
+		<label>Name</label>
+	</name>
+
+</array>

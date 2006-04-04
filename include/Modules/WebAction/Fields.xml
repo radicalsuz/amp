@@ -12,12 +12,26 @@
 		<label>Action Name</label>
 		<required>1</required>
 	</name>
+	<blurb>
+		<type>textarea</type>
+		<label>Description</label>
+        <size>8:60</size>
+	</blurb>
 	<modin>
 		<type>select</type>
 		<lookup>forms</lookup>
 		<label>Use Form</label>
 		<required>1</required>
 	</modin>
+	<enddate>
+		<type>date</type>
+		<label>Action Expires</label>
+		<default>next month</default>
+	</enddate>
+    <target_header>
+        <type>header</type>
+        <label>Select Target</label>
+    </target_header>
 	<target_method>
 		<type>select</type>
 		<label>Targeting Method</label>
@@ -29,7 +43,7 @@
 		<default>all</default>
 	</target_method>
 	<target_id>
-		<type>multiselect</type>
+		<type>checkgroup</type>
 		<size>8</size>
 		<label>Choose Targets</label>
 		<lookup>
@@ -37,11 +51,10 @@
 			<instance>targets</instance>
 		</lookup>
 	</target_id>
-	<enddate>
-		<type>date</type>
-		<label>Action Expires</label>
-		<default>next month</default>
-	</enddate>
+    <text_header>
+        <type>header</type>
+        <label>Related Intro Texts</label>
+    </text_header>
 	<intro_id>
 		<type>select</type>
 		<lookup>introtexts</lookup>

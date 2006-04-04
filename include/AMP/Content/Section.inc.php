@@ -10,6 +10,7 @@ class Section extends AMPSystem_Data_Item {
     var $name_field = "type";
     var $_contents;
     var $_class_name = 'Section';
+    var $_field_status = 'usenav';
 
     function Section( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -138,38 +139,11 @@ class Section extends AMPSystem_Data_Item {
     }
 
 
-    function isLive() {
-        return ($this->getData('usenav')==AMP_CONTENT_STATUS_LIVE);
-    }
-
-    function getPublish( ){
-        return $this->isLive( ) ;
-
-    }
-
-    
     function _sort_default( &$item_set ){
         require_once( 'AMP/Content/Map.inc.php');
         $map = &AMPContent_Map::instance( );
         $order = array_keys( $map->selectOptions( ));
         $item_set = array_combine_key( $order, $item_set );
-    }
-
-    function publish( ){
-        if ( $this->isLive( )) return false;
-        $this->mergeData( array( 'usenav' => AMP_CONTENT_STATUS_LIVE ));
-        if ( !( $result = $this->save( ))) return false;
-        $this->notify( 'update');
-        $this->notify( 'publish');
-        return $result;
-    }
-    function unpublish( ){
-        if ( !$this->isLive( )) return false;
-        $this->mergeData( array( 'usenav' => AMP_CONTENT_STATUS_DRAFT ));
-        if ( !( $result = $this->save( ))) return false;
-        $this->notify( 'update');
-        $this->notify( 'unpublish');
-        return $result;
     }
 
     function reorder( $new_order_value ){

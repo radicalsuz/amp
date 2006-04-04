@@ -1,0 +1,65 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<url>
+		<type>textarea</type>
+		<label>Link Url</label>
+	</url>
+	<linkname>
+		<type>textarea</type>
+		<label>Name</label>
+	</linkname>
+	<description>
+		<type>textarea</type>
+		<label>Description</label>
+        <size>8:50</size>
+	</description>
+	<linkorder>
+		<type>text</type>
+		<label>Order</label>
+        <size>4</size>
+	</linkorder>
+	<linktype>
+		<type>select</type>
+		<label>Link Type</label>
+        <lookup>
+            <module>content</module>
+            <instance>linktypes</instance>
+        </lookup>
+	</linktype>
+    <image_header>
+        <type>header</type>
+        <label>Image</label>
+    </image_header>
+	<image>
+		<type>imagepicker</type>
+		<label>Thumbnail</label>
+	</image>
+    <section_header>
+        <type>header</type>
+        <label>Section</label>
+    </section_header>
+	<type>
+		<type>select</type>
+		<label>Section</label>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
+	</type>
+	<reltype>
+		<type>multiselect</type>
+		<label>Related Sections</label>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
+        <size>8</size>
+	</reltype>
+
+</array>

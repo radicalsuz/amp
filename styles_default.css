@@ -139,3 +139,8 @@ span.page_error {
 		text-align: center;
 		margin: 5px 10% 5px 10%;
 }
+
+span.list_subheader {
+	font-size: 15px;
+	font-weight: bold;
+}

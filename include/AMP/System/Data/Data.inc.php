@@ -78,7 +78,11 @@ class AMPSystem_Data {
     }
 
     function isColumn( $exp ) {
-        if ( empty( $this->_nativeColumns )) return false;
+        if ( empty( $this->_nativeColumns ) && !isset( $this->datatable )) return false;
+        if ( empty( $this->_nativeColumns )) {
+            $this->setSource( $this->datatable );
+            if ( empty( $this->_nativeColumns )) return false;
+        }
         if (array_search( $exp, $this->_nativeColumns ) === FALSE) return false;
         return true;
     }

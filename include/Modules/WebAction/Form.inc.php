@@ -5,7 +5,7 @@ require_once( 'Modules/WebAction/ComponentMap.inc.php');
 
 class WebAction_Form extends AMPSystem_Form_XML {
 
-    var $name_field = 'title';
+    var $name_field = 'name';
     var $_intro_text_set = array( 'intro_id', 'response_id', 'message_id', 'tellfriend_message_id');
     var $_title_template = array( 'type' => 'text', 'size' => 50, 'required' => false, 'label' => 'Title');
     var $_text_template = array( 'type' => 'textarea', 'size' => '10:50', 'label' => 'Text');
@@ -23,8 +23,32 @@ class WebAction_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'modin', '_linkedIntroTexts', 'set');
         $this->setDefaultValue( 'modin', AMP_FORM_ID_WEBACTION_DEFAULT );
         $this->_linkedIntroTexts( array( 'modin' => AMP_FORM_ID_WEBACTION_DEFAULT ), 'modin');
+        $this->_setupIntroTextValues( );
+        $this->addTranslation( 'target_id', '_checkgroupFromText','set');
+        $this->addTranslation( 'target_id', '_checkgroupToText','get');
         #$this->_initSwapFields( );
      
+    }
+
+    function _setupIntroTextValues( ){
+        foreach( $this->_intro_text_set as $text_id_field ){
+            $this->addTranslation( $text_id_field, '_populateIntroTextFields', 'set');
+            $this->addTranslation( $text_id_field, '_saveIntroText', 'get');
+        }
+    }
+
+    function _populateIntroTextFields( &$data, $fieldname ){
+        if ( !isset( $data[$fieldname])) return false;
+        $introtext_id = $data[$fieldname];
+        if ( !$introtext_id ) return false;
+
+        require_once( 'AMP/System/Introtext.inc.php');
+        $introtext = &new AMPSystem_IntroText( AMP_Registry::getDbcon( ), $introtext_id );
+        $data[ $fieldname . '_title' ] = $introtext->getTitle( );
+        $data[ $fieldname . '_text' ] = $introtext->getBody( );
+
+        return $data[$fieldname];
+        
     }
 
     function _initSwapFields( ){
@@ -48,7 +72,6 @@ class WebAction_Form extends AMPSystem_Form_XML {
             if ( array_search( $field_name, $this->_intro_text_set ) === FALSE ) continue;
 
             $result_fields = array_merge( $result_fields, $this->_makeIntroTextEntryFields( $field_name, $field_def ));
-            $this->addTranslation( $field_name, '_makeNewIntroText', 'get');
         }
         return $result_fields;
     }
@@ -83,10 +106,12 @@ class WebAction_Form extends AMPSystem_Form_XML {
         $template_field['block'] = $fieldname . $this->_switch_template['block'];
         $new_fields[ $fieldname.'_text'] = $template_field;
 
+        /*
         $template_field = $this->_save_template;
         $template_field['label'] = $this->_save_template['label'] . ' ' . $base_fielddef['label'];
         $template_field['block'] = $fieldname . $this->_switch_template['block'];
         $new_fields[ $fieldname . '_save' ] = $template_field;
+        */
 
         return $new_fields;
     }
@@ -110,24 +135,37 @@ class WebAction_Form extends AMPSystem_Form_XML {
     }
     */
 
-    function _makeNewIntroText( $data, $fieldname ){
-        if ( isset( $data[ $fieldname ])) return $data[ $fieldname ];
-        if ( !isset( $data[ $fieldname . '_title'])) return false;
+    function _saveIntroText( $data, $fieldname ){
+        $start_id = isset( $data[ $fieldname ]) ? $data[ $fieldname ] : false;
+        if ( !( isset( $data[ $fieldname . '_title']) && $data[$fieldname.'_title'])) return $start_id;
+
         require_once( 'AMP/System/Introtext.inc.php');
+        $text_data = array( 
+            'title' =>  $data[ $fieldname . '_title'],
+            'body'  =>  $data[ $fieldname . '_text'] 
+            );
+
+        $tools_lookup = AMPSystem_Lookup::instance( 'toolsbyForm');
+        if ( !isset( $tools_lookup[ $data['modin' ]])) return $data ;
+        $text_data['modid'] = $tools_lookup[ $data['modin'] ];
+
+
+        if ( !$start_id ) {
+            $text_data['name']  = $this->_makeIntroTextName( $data, $fieldname );
+        } else {
+            $text_data['id'] = $start_id;
+        }
 
         $textItem = &new AMPSystem_IntroText( AMP_Registry::getDbcon( ));
-        $textItem->setData( array( 
-            'name'  =>  $this->_makeIntroTextName( $data, $fieldname ),
-            'title' =>  $data[ $fieldname . '_title'],
-            'body'  =>  $data[ $fieldnaem . '_text'] 
-            ));
+        $textItem->setData( $text_data );
         $textItem->save( );
+
         return $textItem->id;
 
     }
 
     function _makeIntroTextName( $data, $fieldname ){
-        return $data[$this->name_field] . ucwords( str_replace( array( '_', '_id'), array( ' ', '') , $fieldname ) );
+        return ucwords( AMP_TEXT_ACTION . ' ' . str_replace( array( '_id', '_'), array( '', ' ') , $fieldname ) ) . ': ' .$data[$this->name_field];
     }
 }
 

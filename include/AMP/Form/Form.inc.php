@@ -330,6 +330,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 		if ( isset( $value['a']) && ( $value['a'] == 'pm')) $hour+=12;
         $time_stamped = mktime($hour,$minute,$second,$month,$day,$year);
         if (!$time_stamped) return false;
+        if ( date( 'Y-m-d H:i:s', $time_stamped) == AMP_NULL_DATETIME_VALUE_FORM ) return AMP_NULL_DATETIME_VALUE;
 
 		return date( 'YmdHis', $time_stamped );
 	}
@@ -347,7 +348,12 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         return $results;
     }
     function _checkgroupToText( $data, $fieldname ){
-        return join( ',', $this->_checkgroupToArray( $data, $fieldname ));
+        if ( !( $values = $this->_checkgroupToArray( $data, $fieldname ))) return false;
+        return join( ',', $values);
+    }
+    function _checkgroupFromText( $data, $fieldname ){
+        $data[ $fieldname ] = preg_split( '/\s?,\s?/', $data[$fieldname] );
+        return $this->_checkgroupFromArray( $data, $fieldname );
     }
 
     function _multiselectToText( $data, $fieldname ){

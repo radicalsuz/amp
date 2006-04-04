@@ -28,6 +28,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $extra_column_mapvalue;
 
     var $editlink;
+    var $_url_add;
+    var $_url_edit;
 
     var $lookups;
     var $translations;
@@ -131,7 +133,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function output() {
 
-        if (!$this->_prepareData()) return false;
+        if (!$this->_prepareData()) return $this->_noRecordsOutput( );
 
         $output = "";
 
@@ -145,12 +147,18 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     }
 
+    function _noRecordsOutput( ){
+
+        return $this->newline( ) . $this->_HTML_addLink();
+    }
+
     function _getSourceRow( ){
         // simple behavior for recordset map
         if ( !is_array( $this->source )) return $this->source->getData( );
-        
+
         // more complex for arrays of objects
         if ( !isset( $this->_source_keys[$this->_source_counter ])) return false;
+
         $row_data = array( );
         $row_data_source = &$this->source[ $this->_source_keys[ $this->_source_counter ]];
         foreach( $this->col_headers as $column ){
@@ -158,7 +166,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         }
         if ( isset( $this->name_field ) && isset( $row_data[$this->name_field ])) {
             $row_data[$this->name_field ] = 
-                    "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$row_data['id'] ) ."' title='Edit this Item'>" 
+                    "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$row_data['id'] ) ."' title='" . AMP_TEXT_EDIT_ITEM . "'>" 
                     . $row_data[ $this->name_field ]
                     . '</a>';
 
@@ -250,6 +258,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     #########################################
 
     function _HTML_listRow ( $currentrow ) {
+
         //show each row
         $list_html = $this->_HTML_startRow( $currentrow['id'] );
         foreach ($this->col_headers as $header=>$col) {
@@ -282,8 +291,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _HTML_editLink( $id ) {
-        return  "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$id ) ."' title='Edit this Item'>" .
-                "<img src=\"". AMP_SYSTEM_ICON_EDIT ."\" alt=\"Edit\" width=\"16\" height=\"16\" border=0></A>" ;
+        return  "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$id ) ."' title='".AMP_TEXT_EDIT_ITEM."'>" .
+                "<img src=\"". AMP_SYSTEM_ICON_EDIT ."\" alt=\"".AMP_TEXT_EDIT."\" width=\"16\" height=\"16\" border=0></A>" ;
     }
 
     function _HTML_extraColumns( $currentrow ) {
@@ -399,7 +408,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _HTML_addLink () {
         if (isset($this->suppress['addlink']) && $this->suppress['addlink']) return false;
-        return "<a href=\"".$this->editlink."\">Add new record</a> ";
+        $add_url = isset( $this->_url_add ) ? $this->_url_add : $this->editlink;
+        return "<a href=\"". $add_url ."\">". AMP_TEXT_ADD_ITEM . "</a> ";
     }
 
 
@@ -421,9 +431,9 @@ class AMPSystem_List extends AMPDisplay_HTML {
     function _prepURLCriteria() {
         if (!$this->_url_criteria ) {
             $url_criteria_set = AMP_URL_Values();
-            if (empty( $url_criteria_set )) return "";
             unset ($url_criteria_set['sort']);
             unset ($url_criteria_set['sort_direction']);
+            $url_criteria_set['action'] = 'action=list';
             $this->_url_criteria = $url_criteria_set; 
         }
         return $this->_url_criteria;
@@ -483,6 +493,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _prepareData() {
+        if ( !$this->source ) return false;
         if ( is_array( $this->source )) return $this->_prepareArrayData( );
         if ($this->source->makeReady()) return true;
         $this->source->setSelect( $this->_defineFieldSet() );

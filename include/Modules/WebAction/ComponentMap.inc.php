@@ -17,5 +17,9 @@ class ComponentMap_WebAction extends AMPSystem_ComponentMap {
         'form'  => 'WebAction_Form',
         'list'  => 'WebAction_List',
         'source'=> 'WebAction');
+
+    var $_path_controller = 'Modules/WebAction/Controller.inc.php';
+    var $_component_controller = 'WebAction_Controller';
+
 }
 ?>

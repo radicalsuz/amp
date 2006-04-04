@@ -24,6 +24,8 @@ $modin_permission = ( isset( $form_permissions[$modin]) && $form_permissions[$mo
 
 $view_permission = (AMP_Authorized(AMP_PERMISSION_FORM_DATA_EDIT)
                  && ( $modin_permission ? AMP_Authorized($modin_permission) : true ));
+$tool_set = &AMPSystem_Lookup::instance( 'ToolsbyForm');
+$modid = isset( $tool_set[$modin]) ? $tool_set[$modin] : null;
 
 $admin=true;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);

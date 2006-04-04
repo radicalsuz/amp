@@ -5,8 +5,6 @@ require_once( 'AMP/System/File/File.php');
 require_once( 'AMP/Content/Page/Urls.inc.php');
 require_once( 'AMP/Content/Image/Observer.inc.php');
 
-if ( !defined( 'AMP_TEXT_MODULE_NAME_GALLERY')) define( 'AMP_TEXT_MODULE_NAME_GALLERY', 'Photo Gallery');
-
 class AMP_Content_Image_List extends AMP_System_List_Form {
     var $_path_files;
     var $suppress = array( 'header'=>true , 'editcolumn' =>true );

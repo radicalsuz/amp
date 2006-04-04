@@ -31,6 +31,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     var $_sort_method = "";
 
     var $_observers = array( );
+    var $_search_source;
+    var $_field_status = 'publish';
 
     function AMPSystem_Data_Item ( &$dbcon ) {
         $this->init($dbcon);
@@ -38,9 +40,14 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function init ( &$dbcon, $item_id = null ) {
         $this->dbcon = & $dbcon;
+        $this->setSource( $this->datatable );
+        if (isset($item_id) && $item_id) $this->readData( $item_id );
+    }
+
+    function setSource( $sourcename ){
+        PARENT::setSource( $sourcename );
         $this->_itemdata_keys = $this->_getColumnNames( $this->datatable );
 		$this->_allowed_keys = $this->_itemdata_keys;
-        if (isset($item_id) && $item_id) $this->readData( $item_id );
     }
 
 	function _addAllowedKey( $key_name ) {
@@ -66,13 +73,13 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $this->_beforeRead( $item_id );
         $sql = $this->_assembleSQL();
 
+        if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this) . ' read'); 
+
         if ( $itemdata = $this->dbcon->CacheGetRow( $sql )) {
             $this->setData( $itemdata );
             $this->_afterRead( );
             return true;
         }
-
-        if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)); 
 
         if ($this->dbcon->ErrorMsg() ) trigger_error ( get_class( $this ) . ' failed to read the database :' . $this->dbcon->ErrorMsg() );
         return false;
@@ -121,7 +128,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
 
     function save() {
-        $save_fields = array_combine_key($this->_itemdata_keys, $this->getData());
+        $item_data = $this->getData( );
+        $save_fields = array_combine_key($this->_itemdata_keys, $item_data );
 		if ( !is_array( $this->id_field ) && !isset( $save_fields[ $this->id_field ] )) {
             $save_fields[ $this->id_field ] = "";
             $this->_blankIdAction();
@@ -129,13 +137,14 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         
         $result = $this->dbcon->Replace( $this->datatable, $save_fields, $this->id_field, $quote=true);
 
+
         if ($result == ADODB_REPLACE_INSERTED ) {
             $this->mergeData( array( $this->id_field => $this->dbcon->Insert_ID() ));
         }
         
         if ($result) {
             $this->clearItemCache( $this->id );
-            if (method_exists( $this, '_afterSave' )) $this->_afterSave();
+            $this->_afterSave();
             $this->notify( 'save' );
             return true;
         }
@@ -144,10 +153,16 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return false;
     }
 
+    function _afterSave( ){
+        //interface
+    }
+
     function clearItemCache( $id ) {
         $sql = $this->_assembleSqlByID( $id );
         $this->dbcon->CacheFlush( $sql );
         if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) AMP_DebugSQL( $sql, get_class($this)." cleared cache"); 
+        $data_set = &$this->_getSearchSource( );
+        $data_set->clearCache( );
     }
 
     function mergeData( $data ) {
@@ -192,6 +207,9 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 		return false;
 	}
 
+
+    //{{{ debug methods: debugSave, debug_updateSQL, debug_insertSQL
+
     function debugSave() {
         $save_sql = $this->id ? $this->debug_updateSQL():
                                 $this->debug_insertSQL();
@@ -231,6 +249,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
         $dbcon =& $this->dbcon;
         $data = $this->itemdata;
+        #if ( !is_array( $data )) return false;
 
         $fields = $this->_itemdata_keys;
         $values_noescape = array_values( $data );
@@ -249,16 +268,12 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $sql;
 
     }
+    //}}}
+
+    //{{{ Search methods: search
 
     function search( $criteria = null, $class_name = null ){
-        require_once( 'AMP/System/Data/Set.inc.php');
-        $data_set = &new AMPSystem_Data_Set( $this->dbcon );
-        $data_set->setSource( $this->datatable );
-        if ( isset( $criteria )) {
-            foreach( $criteria as $crit_phrase ){
-                $data_set->addCriteria( $crit_phrase );
-            }
-        }
+        $data_set = &$this->_getSearchSource( $criteria );
         if ( !$data_set->readData( )) return false;
         if ( !isset( $class_name )) $class_name = $this->_class_name;
         $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );
@@ -267,6 +282,24 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $result_set;
         
     }
+
+    function &_getSearchSource( $criteria = null ){
+        if ( isset( $this->_search_source )) return $this->_search_source;
+        require_once( 'AMP/System/Data/Set.inc.php');
+        $data_set = &new AMPSystem_Data_Set( $this->dbcon );
+        $data_set->setSource( $this->datatable );
+        if ( isset( $criteria )) {
+            foreach( $criteria as $crit_phrase ){
+                $data_set->addCriteria( $crit_phrase );
+            }
+        }
+        $this->_search_source = &$data_set;
+        return $this->_search_source;
+
+    }
+    //}}}
+
+    //{{{ Sorting methods: sort, setSortMethod, _sort_default
 
     function sort( &$item_set, $sort_property=null, $sort_direction = null ){
         if ( !isset( $sort_property)) {
@@ -303,6 +336,9 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function _sort_default( &$item_set ){
         return $this->sort( $item_set, 'name');
     }
+    //}}}
+
+     //{{{ Observer methods: notify, add_observer
 
     function notify( $action ){
         foreach( $this->_observers as $observer ){
@@ -317,7 +353,17 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         }
         $this->_observers[] = &$observer;
     }
+    //}}}
 
+     //{{{ Object based Search methods: makeCriteria
+
+    /**
+     * makeCriteria 
+     * 
+     * @param mixed $data 
+     * @access public
+     * @return void
+     */
     function makeCriteria( $data ){
         $return = array( );
         if ( !( isset( $data ) && is_array( $data ))) return false;
@@ -350,6 +396,46 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $dbcon = &AMP_Registry::getDbcon( );
         return $key . ' = ' . $dbcon->qstr( $value );
     }
+    
+    //}}}
 
+    //{{{ Status methods: isLive, publish, unpublish
+    
+    function isLive() {
+        if (!$this->isColumn( $this->_field_status )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_STATUS_FIELD_MISSING, get_class( $this ), $this->_field_status ));
+            return false;
+        }
+        return ($this->getData( $this->_field_status ) == AMP_CONTENT_STATUS_LIVE);
+    }
+
+    function getPublish( ){
+        return $this->isLive( ) ;
+    }
+
+    function publish( ){
+
+        if ( $this->isLive( )) return false;
+        $this->mergeData( array( $this->_field_status => AMP_CONTENT_STATUS_LIVE ));
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update');
+        $this->notify( 'publish');
+        return $result;
+    }
+
+    function unpublish( ){
+        if ( !$this->isLive( )) return false;
+        $this->mergeData( array( $this->_field_status => AMP_CONTENT_STATUS_DRAFT ));
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update');
+        $this->notify( 'unpublish');
+        return $result;
+    }
+
+    function makeCriteriaLive( ){
+        return $this->_field_status . '=' . AMP_CONTENT_STATUS_LIVE;
+    }
+
+    //}}}
 }
 ?>

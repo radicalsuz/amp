@@ -368,7 +368,7 @@ class AMPContentLookup_RelatedArticles extends AMPContent_Lookup {
     function &instance( $section_id ) {
         static $lookup = false;
         if (!$lookup) {
-            $lookup = new AMPContentLookup_SectionsByArticle ( $section_id );
+            $lookup = new AMPContentLookup_RelatedArticles ( $section_id );
         } else {
             $lookup->_addCriteriaSection( $section_id );
             $lookup->init();
@@ -459,4 +459,80 @@ class AMPContentLookup_ClassListsNavigationCount extends AMPContent_Lookup {
     }
 }
 
+class AMPContentLookup_ArticlesbyDocument extends AMPContent_Lookup {
+    var $datatable = 'articles';
+    var $result_field = 'doc';
+    var $criteria = '!isnull( doc ) and doc !=""';
+
+    function AMPContentLookup_ArticlesbyDocument( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_LinkTypes extends AMPContent_Lookup{
+    var $datatable = 'linktype';
+    var $result_field = 'name';
+    var $criteria = '!isnull( publish ) AND publish=1';
+
+    function AMPContentLookup_LinkTypes( ) {
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_RelatedLinks extends AMPContent_Lookup {
+    var $datatable = 'linksreltype';
+    var $result_field = 'typeid';
+    var $id_field = 'linkid';
+
+    function AMPContentLookup_RelatedLinks ( $section_id = null ){
+        if ( isset( $section_id )) $this->_addCriteriaSection( $section_id );
+        $this->init( );
+    }
+
+    function _addCriteriaSection( $article_id ){
+        $this->criteria = "typeid =" . $article_id ;
+    }
+
+    function &instance( $section_id ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new AMPContentLookup_RelatedLinks ( $section_id );
+        } else {
+            $lookup->_addCriteriaSection( $section_id );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+    function available( ){
+        return false;
+    }
+}
+class AMPContentLookup_SectionsByLink extends AMPContent_Lookup {
+    var $datatable = 'linksreltype';
+    var $result_field = 'linkid';
+    var $id_field = 'typeid';
+
+    function AMPContentLookup_SectionsByLink( $link_id = null ){
+        if ( isset( $link_id )) $this->_addCriteriaLink( $link_id );
+        $this->init( );
+    }
+
+    function _addCriteriaLink( $link_id ){
+        $this->criteria = "linkid =" . $link_id ;
+    }
+
+    function &instance( $link_id ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new AMPContentLookup_SectionsByLink ( $link_id );
+        } else {
+            $lookup->_addCriteriaLink( $article_id );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+    function available( ){
+        return false;
+    }
+}
 ?>

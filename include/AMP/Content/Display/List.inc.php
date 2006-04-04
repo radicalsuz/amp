@@ -34,10 +34,14 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     var $_css_id_container_content = "main_content";
     var $_css_class_container_listentry = "list_entry";
     var $_css_class_container_listimage = "list_image";
+    var $_css_class_subheader = 'list_subheader';
 
     var $_list_image_class = AMP_IMAGE_CLASS_THUMB;
 
 	var $_layout_css = false;
+
+    var $_subheader_current;
+    var $_subheader = 'LinkTypeName';
 
     function AMPContent_DisplayList_HTML ( &$source, $read_data = true ) {
         $this->init( $source, $read_data );
@@ -49,7 +53,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 		}
         $this->_source = &$source;
         $this->_activatePager( );
-        if ( $read_data ) $this->_source->readData();
+        if ( $read_data && !is_array( $this->_source)) $this->_source->readData();
     }
 
 	function setLayoutCSS($css = false) {
@@ -74,9 +78,18 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         $this->_afterPagerInit( );
     }
 
+    function _prepareData( ){
+        if ( !is_array( $this->_source )) return $this->_source->makeReady( );
+        return !empty( $this->_source );
+    }
+
     function execute() {
-        if (!$this->_source->makeReady()) return $this->noResultsDisplay();
-        $sourceItems = &$this->_buildItems( $this->_source->getArray() );
+        if (!$this->_prepareData()) return $this->noResultsDisplay();
+        if ( is_array( $this->_source ) ) {
+            $sourceItems = &$this->_source ;
+        } else {
+            $sourceItems = &$this->_buildItems( $this->_source->getArray() );
+        }
 
         return  $this->_HTML_listing( $sourceItems ). 
                 ( ($this->_pager_active && $this->_pager_display ) ? $this->_pager->execute() : false ) ;
@@ -95,7 +108,12 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     }
 
     function getSourceArray() {
-        return $this->_source->getArray();
+        if ( !is_array( $this->_source)) return $this->_source->getArray();
+        $results = array( );
+        foreach( $this->_source as $data_item ){
+            $results[$data_item->id ] = $data_item->getData( );
+        }
+        return $results;
     }
 
     function setPageLimit( $limit ) {
@@ -103,7 +121,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         if ( isset( $this->_source ) && isset( $this->_pager)) {
             $this->_pager->setLimit( $limit );
             $this->_pager->setPage( );
-            $this->_source->readData( );
+            if ( !is_array( $this->_source )) $this->_source->readData( );
         }
     }
 
@@ -205,6 +223,19 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
         $text = 'More&nbsp;'.$this->_HTML_bold( '&raquo;' );
         return $this->_HTML_inSpan( $this->_HTML_link( $href, $text ), $this->_css_class_morelink );
+    }
+
+    function _HTML_listItemSubheading( &$source ){
+        if ( !isset( $this->_subheader )) return false;
+        $subheader_method = 'get' . $this->_subheader;
+        if ( !method_exists( $source, $subheader_method )) return false;
+        $subheader_value = $source->$subheader_method( );
+        if ( $subheader_value == $this->_subheader_current ) return false;
+        $this->_subheader_current = $subheader_value;
+        return  $this->newline( 2 ) 
+                . '<a name="'.$subheader_value.'"></a>' 
+                . $this->inSpan( $subheader_value, array( 'class' => $this->_css_class_subheader ))
+                . $this->newline( 2 ) ;
     }
 
 }

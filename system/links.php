@@ -1,4 +1,12 @@
 <?php
+
+require_once( 'AMP/Content/Link/ComponentMap.inc.php');
+
+$modid = 11;
+$map = &new ComponentMap_Link( );
+$controller = &$map->get_controller( );
+print $controller->execute( );
+/*
 $modid = "11";
 $mod_name = 'links';
 
@@ -98,4 +106,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>

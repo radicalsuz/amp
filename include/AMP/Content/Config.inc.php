@@ -106,17 +106,24 @@ define( 'AMP_CONTENT_PAGETYPE_LIST', 'list' );
 define( 'AMP_CONTENT_PAGETYPE_TOOL', 'tool' );
 
 /**
- * Publish Status 
- */
-define( 'AMP_PUBLISH_STATUS_LIVE' , 'live' );
-define( 'AMP_PUBLISH_STATUS_DRAFT' , 'draft' );
-
-
-/**
  * System Icon File Paths
  */
 define ('AMP_SYSTEM_ICON_EDIT', '/system/images/edit.png' ); 
 define ('AMP_SYSTEM_ICON_PREVIEW', '/system/images/view.gif' );
 define ('AMP_SYSTEM_ICON_DELETE', '/system/images/delete.png' );
 
+/**
+ * Default value for unlimited navs 
+ */
+if ( !defined( 'AMP_NAV_NO_LIMIT')) define('AMP_NAV_NO_LIMIT', 700);
+
+/**
+ * Default Introtext page 
+ */
+if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
+/**
+ * Allow multiple sections per article 
+ */
+if ( !defined( 'AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS'))
+    define('AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS', ( ( isset($MM_reltype) && !$MM_reltype ) ? false : true ) );
 ?>

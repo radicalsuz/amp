@@ -17,17 +17,21 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     var $_path_controller = 'AMP/System/Component/Controller.php';
     var $_component_controller = 'AMP_System_Component_Controller_Standard';
 
+    var $_action_displays = array( );
+    var $_default_display = 'list';
+
     function getComponents() {
         return $this->components;
     }
 
-    function &getComponent( $component_type ){
+    function &getComponent( $component_type, $passthru_value = null ){
         if ( !isset( $this->components[ $component_type ])) return false;
         if ( isset( $this->paths[ $component_type ])) {
             require_once( $this->paths[ $component_type ]);
         }
         $component_class = $this->components[ $component_type ];
-        return new $component_class( AMP_Registry::getDbcon( ) );
+        if ( !isset( $passthru_value )) $passthru_value = &AMP_Registry::getDbcon( );
+        return new $component_class( $passthru_value );
     }
 
     function getFilePaths() {
@@ -74,6 +78,13 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         $controller = &new $this->_component_controller( );
         $controller->set_map( $this );
         return $controller;
+    }
+
+    function &get_action_display( $action ){
+        if ( !isset( $this->_action_displays[$action] )) {
+            return $this->getComponent( $this->_default_display );
+        }
+        return $this->getComponent( $this->_action_displays[ $action ]);
     }
 
 }

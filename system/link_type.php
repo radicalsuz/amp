@@ -1,5 +1,12 @@
 <?php
-$modid = "11";
+require_once( 'AMP/Content/Link/Type/ComponentMap.inc.php');
+
+$modid = 11;
+$map = &new ComponentMap_Link_Type( );
+$controller = &$map->get_controller( );
+print $controller->execute( );
+
+/*
 $mod_name = "links";
 
 require_once("Connections/freedomrising.php");
@@ -58,4 +65,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>

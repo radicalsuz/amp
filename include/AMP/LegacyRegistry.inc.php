@@ -81,17 +81,12 @@ $browser_checked = false;
 
 define('ADODB_REPLACE_INSERTED', 2);
 define('ADODB_REPLACE_UPDATED', 1);
-define('AMP_NAV_NO_LIMIT', 700);
-define('AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS', (isset($MM_reltype)&&$MM_reltype) );
-define('AMP_NULL_DATE_VALUE', '0000-00-00' );
 define('AMP_DISPLAYMODE_DEBUG', (isset($_GET['debug']) && $_GET['debug']));
 define('AMP_DISPLAYMODE_DEBUG_CACHE', (isset($_GET['debug_cache']) && $_GET['debug_cache']));
 define('AMP_DISPLAYMODE_DEBUG_PLUGINS', (isset($_GET['debug_plugins']) && $_GET['debug_plugins']));
 define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups']) && $_GET['debug_lookups']));
 define('AMP_DISPLAYMODE_DEBUG_NAVS', (isset($_GET['debug_navs']) && $_GET['debug_navs']));
-define( 'AMP_TEXT_LOGIN_HELP_ADMIN', 'If you are having trouble logging in, please contact the <a href="mailto:%s">site administrator</a>.' );
 
-if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
 if (!defined( 'AMP_DBTABLE_BLAST_LISTS')) define ( 'AMP_DBTABLE_BLAST_LISTS', false );
 
 require_once( 'AMP/System/Permission/Config.inc.php' );

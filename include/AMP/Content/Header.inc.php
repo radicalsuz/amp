@@ -158,7 +158,19 @@ class AMPContent_Header {
     }
 
     function _HTML_feed() {
-        return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"".AMP_SITE_URL.AMP_CONTENT_URL_RSSFEED."\">";
+        $rss_vars = array( );
+        if ( $this->_page->isList( AMP_CONTENT_LISTTYPE_SECTION )) {
+            $section = &$this->_page->getSection( );
+            $rss_vars['section'] = 'section=' . $section->id;
+        }
+        if ( $this->_page->isList( AMP_CONTENT_LISTTYPE_CLASS )) {
+            $class= &$this->_page->getClass( );
+            $rss_vars['class'] = 'class=' . $class->id;
+        }
+        $final_rssfeed_url = empty( $rss_vars ) ? 
+                            AMP_SITE_URL . AMP_CONTENT_URL_RSSFEED : 
+                            AMP_Url_AddVars( AMP_SITE_URL . AMP_CONTENT_URL_RSSFEED, $rss_vars );
+        return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"".$final_rssfeed_url."\">";
     }
 
 

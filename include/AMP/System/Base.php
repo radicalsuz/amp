@@ -28,6 +28,8 @@ $content_map = & AMPContent_Map::instance();
 
 //standard system pages
 require_once( 'AMP/System/Page/Urls.inc.php');
+//configuration
+require_once( 'AMP/System/Config.inc.php');
 
 //These items are deprecated 
 //used in the older form-processing engine

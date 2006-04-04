@@ -18,7 +18,7 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
 
     function AMPContent_RSSFeed ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
-        $this->getDataSource();
+        if ( isset( $id )) $this->getDataSource();
     }
 
     function getDescription() {
@@ -98,6 +98,19 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
             return $source->getBody();
         }
         return AMP_trimText( $source->getBlurb(), 9000 );
+    }
+
+    function setSection( $section_id ){
+        return $this->mergeData( array( 'section_id' => $section_id ) );
+    }
+
+    function setClass( $class_id ){
+        return $this->mergeData( array( 'class_id' => $class_id ) );
+    }
+
+    function setCombineLogic( $logic_value = 'AND'){
+        return $this->mergeData( array( 'combine_logic' => $logic_value ) );
+        
     }
 
 }

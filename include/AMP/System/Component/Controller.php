@@ -80,14 +80,19 @@ class AMP_System_Component_Controller {
         $this->_request_vars = array_merge( $_POST, AMP_URL_Read( ));
         //pull useful info from request values
         if ( isset( $this->_request_vars['action'] ) && $this->_request_vars['action']){
-            $this->_action_requested = $this->_request_vars['action'];
+            if ( $this->allow( $this->_request_vars['action'])){
+                $this->_action_requested = $this->_request_vars['action'];
+            }
         }
     }
 
     function execute( $output = true ){
         foreach ( $this->get_actions( ) as $action ){
-            $this->_results[$action] = $this->commit( $this->_model, $action, $this->get_arguments( $action ) );
-            $this->_action_committed = $action;
+            if( $this->_results[$action] = $this->commit( $this->_model, $action, $this->get_arguments( $action ) )) {
+                $this->_action_committed = $action;
+                continue;
+            }
+            $this->commit_default( );
         }
         if ( !$output ) return;
         return $this->_display->execute( );
@@ -104,11 +109,14 @@ class AMP_System_Component_Controller {
     }
 
     function commit_default( ){
-        unset( $this->_action_committed );
-        unset( $this->_action_requested );
-        return $this->execute( );
+        $this->clear_actions( );
+        return $this->execute( false );
     }
 
+    function clear_actions( ){
+        unset( $this->_action_committed );
+        unset( $this->_action_requested );
+    }
 
     function get_actions( ){
         $action = $this->get_action( ) ;
@@ -161,15 +169,29 @@ class AMP_System_Component_Controller {
         if ( !isset( $value )) return $this->_request_vars[$varname ];
         return ( $this->_request_vars[ $varname ] == $value );
     }
+
+    function message( $message ) {
+        $flash = &AMP_System_Flash::instance( );
+        $flash->add_message( $message ) ;
+        $this->_display->add( $flash, 'flash' );
+    }
+
+    function error( $error_item ){
+        $error_set = ( is_array( $error_item )) ? $error_item : array(  $error_item );
+        $flash = &AMP_System_Flash::instance( );
+        foreach( $error_set as $error_message ){
+            $flash->add_error( $error_message ) ;
+        }
+        $this->_display->add( $flash, 'flash' );
+    }
+
 }
 
-class AMP_System_Component_Controller_Standard extends AMP_System_Component_Controller {
-
+class AMP_System_Component_Controller_Map extends AMP_System_Component_Controller {
     var $_map;
-    var $_action_default = 'add';
-    var $_form;
+    var $_action_default = 'list';
 
-    function AMP_System_Component_Controller_Standard( ){
+    function AMP_System_Component_Controller_Map ( ){
         $this->init( );
     }
 
@@ -182,11 +204,53 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->add_observer( $this->_map );
 
         //set methods based on map values
-        if ( $form =  &$this->_map->getComponent( 'form'))   $this->_init_form ( $form ) ;
+        if ( $form  = &$this->_map->getComponent( 'form'))   $this->_init_form ( $form ) ;
         if ( $model = &$this->_map->getComponent( 'source')) $this->_init_model( $model) ;
+
+        if ( !$this->allow( $this->get_action( ))) $this->clear_actions( );
         $this->set_banner( $this->get_action( ));
         $this->_display->add_nav( $this->_map->getNavName( ));
         
+    }
+
+    function set_banner( $action = null) {
+        $text = ucfirst( isset( $action ) ? $action :  join( "", $this->get_actions( )));
+        if ( $text == 'Cancel' ) $text = 'List';
+
+        $heading = $this->_map->getHeading( );
+        if ( $text == 'List' ) $heading = AMP_Pluralize( $heading );
+        $renderer = &new AMPDisplay_HTML( );
+
+        $buffer = &new AMP_Content_Buffer( );
+        $buffer->add( $renderer->inDiv( $text." ".$heading, array( 'class' => 'banner')));
+        $this->_display->add( $buffer , AMP_CONTENT_DISPLAY_KEY_INTRO );
+    }
+
+    function allow( $action ){
+        if ( isset( $this->_map )) return $this->_map->isAllowed( $action );
+        if ( !isset( $this->_model->protected_actions[$action] ) ) return true;
+        return AMP_Authorized( $this->_model->protected_actions[$action]);
+    }
+
+    function display_default( ){
+        $display = &$this->_map->get_action_display( $this->get_action( )); 
+        if ( $display ) $this->_display->add( $display );
+    }
+
+    function commit_list( ){
+        $this->display_default( );
+        return true;
+    }
+
+}
+
+class AMP_System_Component_Controller_Standard extends AMP_System_Component_Controller_Map {
+
+    var $_action_default = 'add';
+    var $_form;
+
+    function AMP_System_Component_Controller_Standard( ){
+        $this->init( );
     }
 
     function _init_form( &$form, $read_request = true ){
@@ -236,16 +300,19 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
     function commit_add( ){
         $this->_form->applyDefaults( );
         $this->_display->add( $this->_form, 'form' );
+        return true;
     }
 
     function commit_cancel( ){
         $this->display_default( );
+        return true;
     }
 
     function commit_edit( ) {
         if ( !$this->_model->readData( $this->_model_id )) return $this->commit_default( );
         $this->_form->setValues( $this->_model->getData( ));
         $this->_display->add( $this->_form, 'form' );
+        return true;
     }
 
     function commit_save( $copy_mode = false ){
@@ -278,8 +345,10 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         if ( !( $display = &$this->_map->getComponent( 'list' ))) {
            $display = &$this->_map->getComponent( 'form' );
            $this->_init_form( $display, false );
+            $this->set_banner( 'add');
         } else {
             $display->setController( $this );
+            $this->set_banner( 'list');
             $this->notify( 'initList' );
             if ( $search = $this->_map->getComponent( 'search' )) $this->_init_search( $search, $display );
         }
@@ -313,48 +382,12 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
 
     }
 
-    function commit_list( ){
-        $this->display_default( );
-        return true;
-    }
-
-    function message( $message ) {
-        $flash = &AMP_System_Flash::instance( );
-        $flash->add_message( $message ) ;
-        $this->_display->add( $flash, 'flash' );
-    }
-    function error( $error_item ){
-        $error_set = ( is_array( $error_item )) ? $error_item : array(  $error_item );
-        $flash = &AMP_System_Flash::instance( );
-        foreach( $error_set as $error_message ){
-            $flash->add_error( $error_message ) ;
-        }
-        $this->_display->add( $flash, 'flash' );
-    }
-
     function get_form_data( $copy_mode = false ) {
         $copy_values = $this->_form->getValues( );
         if ( $copy_mode ) {
             unset( $copy_values[ $this->_model->id_field ]);
         }
         return $copy_values;
-    }
-
-    function set_banner( $action = null) {
-        $text = ucfirst( isset( $action ) ? $action :  join( "", $this->get_actions( )));
-        if ( $text == 'Cancel' ) $text = 'List';
-
-        $heading = $this->_map->getHeading( );
-        if ( $text == 'List' ) $heading = AMP_Pluralize( $heading );
-        $renderer = &new AMPDisplay_HTML( );
-
-        $buffer = &new AMP_Content_Buffer( );
-        $buffer->add( $renderer->inDiv( $text." ".$heading, array( 'class' => 'banner')));
-        $this->_display->add( $buffer , AMP_CONTENT_DISPLAY_KEY_INTRO );
-    }
-
-    function allow( $action ){
-        return $this->_map->isAllowed( $action );
     }
 
 }

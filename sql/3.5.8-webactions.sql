@@ -13,3 +13,18 @@ CREATE TABLE IF NOT EXISTS webactions (
 	modin		int(11)					null,
 	PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS webaction_targets (
+	id 						int(11) 	not null	AUTO_INCREMENT,
+	First_Name				varchar(250),
+	Last_Name				varchar(250),
+	Title 					varchar(60),
+	occupation				varchar(100),
+	Email					varchar(120),
+	Work_Fax				varchar(40),
+	District				varchar(40),
+	Office					varchar(50),
+	region					varchar(50),
+	publish					int(4),
+	PRIMARY KEY (id)
+);
