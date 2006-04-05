@@ -88,7 +88,8 @@ class ArticleSet extends AMPSystem_Data_Set {
         $map = &AMPContent_Map::instance( );
 
         if (!($child_ids = $map->getDescendants( $section_id ))) return $this->addCriteria( $base_section );
-        $this->addCriteria(  "(" . $child_ids . ' OR '. $base_section . ")");
+        $child_sections = 'type in ( ' . join(',', $child_ids ).' )';
+        $this->addCriteria(  "(" . $child_sections . ' OR '. $base_section . ")");
 
     }
 
