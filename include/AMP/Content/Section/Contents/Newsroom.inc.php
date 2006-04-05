@@ -24,11 +24,12 @@ class SectionContentSource_Newsroom extends SectionContentSource_Articles {
     }
 
     function _setBaseCriteria() {
-        $this->_source->addCriteria( $this->_getClassCriteria() );
+        $this->_source->addCriteriaClass( $this->_included_classes );
         $this->_display_crit_source->cleanStatus( $this->_source );
     }
 
     function _getClassCriteria() {
+        //deprecated
         if (empty($this->_included_classes)) return false;
         return "class in (" . join( ", ", $this->_included_classes ) . ")" ;
     }

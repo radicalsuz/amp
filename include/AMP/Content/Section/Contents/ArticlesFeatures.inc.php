@@ -10,11 +10,12 @@ class SectionContentSource_ArticlesFeatures extends SectionContentSource_Article
     }
 
     function _setBaseCriteria() {
-        $this->_source->addCriteria( $this->_getClassCriteria() );
+        $this->_source->addCriteriaClass( AMP_CONTENT_CLASS_FEATURE );
         $this->_display_crit_source->cleanStatus( $this->_source );
     }
 
     function _getClassCriteria() {
+        //deprecated
         return "class=".AMP_CONTENT_CLASS_FEATURE;
     }
 }
