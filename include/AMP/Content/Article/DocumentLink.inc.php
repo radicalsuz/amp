@@ -11,6 +11,8 @@ define ('AMP_ICON_PDF', 'pdf.gif' );
 define ('AMP_ICON_IMAGE', 'img.gif' );
 define ('AMP_CONTENT_URL_ICONS', '/img/' );
 
+require_once( 'AMP/Content/Display/HTML.inc.php');
+
 class DocumentLink  {
 
     var $_filename;
