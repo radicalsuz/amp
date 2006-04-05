@@ -705,12 +705,12 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     function &_addElementSelect( $name, $field_def ) {
         $valueset = $this->_getValueSet( $name );
 		if ( is_array( $valueset ) ) {
-            $valueset = $this->_selectAddNull( $valueset );
+            $valueset = $this->_selectAddNull( $valueset, $name );
         }
         return $this->form->addElement( 'select', $name, $field_def['label'], $valueset);
     }
 
-    function _selectAddNull( $valueset ) {
+    function _selectAddNull( $valueset, $name ) {
         if (!is_array($valueset)) return false;
         return array('' => 'Select one') + $valueset;
     }

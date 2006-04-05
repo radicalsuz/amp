@@ -189,7 +189,7 @@
     }
 
     function RecordCount() {
-        if (!isset($this->source)) return false;
+        if (!is_object($this->source)) return false;
         return $this->source->RecordCount();
     }
 
@@ -230,7 +230,6 @@
         $result = array();
         while( $data = $this->getData() ) {
             if (isset($max_qty) && count($result)==$max_qty) break;
-            print $data[ $fieldname ] . $value . '<BR>';
             if ($data[ $fieldname ] != $value) continue;
             $result[ $data[$this->id_field] ] = $data;
         }
