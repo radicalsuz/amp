@@ -118,7 +118,11 @@ class VoterGuide_Controller {
 
 	function view() {
 		$guide =& $this->getActionObject();
-		$this->page->contentManager->addDisplay( $guide->getDisplay() );
+		$display =& $guide->getDisplay();
+		if(isset($_REQUEST['printsafe']) && $_REQUEST['printsafe']) {
+			$display->setPrintSafe(true);
+		}
+		$this->page->contentManager->addDisplay( $display );
 /*
 		if($guide->isPublished()) {
 			$this->page->contentManager->addDisplay( $guide->getDisplay() );

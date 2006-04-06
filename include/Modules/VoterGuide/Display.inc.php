@@ -1,5 +1,6 @@
 <?php
 require_once( "Modules/VoterGuide/VoterGuide.php");
+//require_once('Translation2.php');
 require_once('utility.functions.inc.php');
 
 if ( !defined( 'AMP_TEXT_VOTERGUIDE_DISCLAIMER')) define ( 'AMP_TEXT_VOTERGUIDE_DISCLAIMER' ,
@@ -10,44 +11,107 @@ if ( !defined( 'AMP_TEXT_VOTERGUIDE_DISCLAIMER')) define ( 'AMP_TEXT_VOTERGUIDE_
 class VoterGuide_Display extends AMPDisplay_HTML {
 
     var $_voterguide;
+	var $_voterguide_style;
 
     var $_css_class_title = "title";
     var $_css_class_date = "date";
     var $_css_class_subtitle = "subtitle";
     var $_css_class_text = "text";
 
+	var $_page_header;
+
+	var $_printsafe = false;
+
     function VoterGuide_Display ( &$voterguide ) {
         $this->_voterguide = &$voterguide;
 		if($style_id = $this->_voterguide->getData('style')) {
 			require_once('AMP/Content/Header.inc.php');
 			require_once('AMP/Content/Page.inc.php');
-			$header =& AMPContent_Header::instance(AMPContent_Page::instance());
+			$this->_page_header =& AMPContent_Header::instance(AMPContent_Page::instance());
 			require_once('Modules/VoterGuide/Style/VoterGuide_Style.php');
-			$style =& new VoterGuide_Style($this->_voterguide->dbcon, $style_id);
-			$header->addStylesheet($style->getData('url'));
-			if($fullscreen = $style->getData('fullscreen_url')) {
-				$header->addStylesheet($fullscreen);
+			$this->_voterguide_style =& new VoterGuide_Style($this->_voterguide->dbcon, $style_id);
+			$this->_page_header->addStylesheet($this->_voterguide_style->getData('url'));
+			if($this->getPrintSafe() && $fullscreen = $this->_voterguide_style->getData('fullscreen_url')) {
+				$this->_page_header->addStylesheet($fullscreen);
 			}
 		}
     }
 
     function execute ( ) {
-        return  $this->_HTML_inDiv(' ', array('class' => 'spacer')).
+		$output =
+				$this->_HTML_intro().
 				$this->_HTML_guideHeader( ).
                 $this->_HTML_positionsList( ).
-				$this->_HTML_inDiv(' ', array('class' => 'spacer')).
+				$this->_HTML_spacer().
                 $this->_HTML_guideFooter( ).
-                $this->_HTML_disclaimer( )
-                . $this->_HTML_notifyAdmin( );
+//				$this->_HTML_newline().
+                $this->_HTML_expenditure_notice().
+                $this->_HTML_notifyAdmin( );
+
+		if(function_exists('tidy_repair_string')) {
+			   tidy_setopt('output-xhtml', TRUE);
+			   tidy_setopt('show-body-only', true);
+			   tidy_setopt('vertical-space', true);
+			   tidy_setopt('indent', TRUE);
+			   tidy_setopt('indent-spaces', 2);
+			   tidy_setopt('wrap', 200);
+			   $output = tidy_repair_string($output);
+		}
+		return $output;
     }
 
-    function _HTML_disclaimer( ) {
-        return $this->_HTML_newline( ) . $this->_HTML_inSpan( AMP_TEXT_VOTERGUIDE_DISCLAIMER , array('style' => 'font-size: 10px;' ));
-    }
+	function _HTML_spacer() {
+		return $this->_HTML_inDiv('', array('class' => 'spacer'));
+	}
 
+	function _HTML_module_title() {
+		return '<div class="module_title"><a href="'.AMP_SITE_URL.'voterguides.php">Voter Guides</a></div>';
+	}
+
+	function _HTML_intro() {
+		$intro = $this->_HTML_expenditure_notice();
+		if($this->getPrintSafe()) {
+			return $intro;
+		}
+		$intro = $this->_HTML_module_title()."\n$intro";
+
+		$js=
+"function set_tell_Url() {
+   document.forms['tell_it_loud'].elements['url_link'].value=location.href;
+   document.forms['tell_it_loud'].submit();
+}";
+		$this->_page_header->addJavascriptDynamic($js);
+
+		$intro = $intro.
+				$this->_HTML_inDiv('<a href="'.AMP_SITE_URL.'/newvoterguide">Click here to Post a New Voter Guide</a>', array('class' => 'new_guide_link')).
+				$this->_HTML_inDiv('<form method="post" action="mailto2.php" name="tell_it_loud">
+					<input type="hidden" name="url_link" />
+					<a href="javascript:set_tell_Url();">Email a friend about this page</a>
+					</form>', array('class' => 'tell_link'));
+
+		$intro = $this->_HTML_inDiv($intro, array('class' => 'voterguide_intro'));
+		return $intro;
+	}
+
+	function _HTML_expenditure_notice() {
+		if(defined('AMP_TEXT_VOTERGUIDE_DISCLAIMER')) {
+			return $this->_HTML_inDiv( AMP_TEXT_VOTERGUIDE_DISCLAIMER , array('class' => 'expenditure_notice' ));
+		}
+	}
+		
     function _HTML_notifyAdmin( ) {
+/*
+		$params = array('prefetch' => false);
+		$gettext_options = array(
+    'langs_avail_file' => 'Modules/VoterGuide/langs.ini',
+    'domains_path_file' => 'Modules/VoterGuide/domains.ini',
+    'default_domain' => 'voterguide');
+		$tr =& Translation2::factory('gettext', $gettext_options, $params);
+		$tr->setLang('en');
+*/
+
         $notifyLink = "if this guide is offensive, send email to: <a href=\"mailto:voterguides@indyvoter.org?subject=guide%20". $this->_voterguide->getShortName() . "%20is%20pissing%20me%20off\"> the League</a>";
-        return $this->_HTML_newline(2) . $this->_HTML_inSpan( $notifyLink, array('style' => 'font-size: 10px;' ));
+        return $this->_HTML_inDiv( $notifyLink, array('class' => 'notify_link' ));
     }
 
     function _HTML_guideHeader( ) {
@@ -56,11 +120,11 @@ class VoterGuide_Display extends AMPDisplay_HTML {
                     $this->_HTML_location( $this->_voterguide->getLocation( ) ).
                     $this->_HTML_date( $this->_voterguide->getItemDate( ) ).
                     $this->_HTML_blurb( $this->_voterguide->getBlurb( ) ).
-                    $this->_HTML_newline().
+//                    $this->_HTML_newline().
                     $this->_HTML_docLink( $this->_voterguide->getDocumentRef( )) .
-                    $this->_HTML_newline().
-                    $this->_HTML_blocJoin(). 
-                    $this->_HTML_newline(2);
+//                    $this->_HTML_newline().
+                    $this->_HTML_blocJoin();
+//                    $this->_HTML_newline(2);
 
         return $this->_HTML_inDiv($this->_HTML_addImage( $output ), array('class' => 'voterguide_header'));
 
@@ -68,30 +132,28 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_addImage( $html ) {
         if ( !( $imageRef = &$this->_voterguide->getImageRef( ))) return $html;
-//        return $this->_HTML_inDiv( $this->_HTML_image( '/downloads/' . $imageRef->getName( ) ), array( 'style'=>'float:right;position:relative;')) . $html;
-        return $this->_HTML_inDiv( $this->_HTML_image( $imageRef->getURL( AMP_IMAGE_CLASS_OPTIMIZED ) ), array( 'style'=>'float:right;position:relative;')) . $html;
+        return $this->_HTML_inDiv( $this->_HTML_image( $imageRef->getURL( AMP_IMAGE_CLASS_OPTIMIZED ) ), array( 'class'=>'vg_image')) . $html;
 
     }
 
     function _HTML_title( $title ) {
         if ( !$title ) return false;
-        return $this->_HTML_in_P( $title, array( 'class' => $this->_css_class_title ));
+        return $this->_HTML_inDiv( $title, array( 'class' => $this->_css_class_title ));
     }
 
     function _HTML_location( $location ){
         if ( !$location ) return false;
-        return $this->_HTML_inSpan( $location, $this->_css_class_subtitle ). $this->_HTML_newline();
+        return $this->_HTML_inDiv( $location, array('class' => $this->_css_class_subtitle ));
     }
 
     function _HTML_date( $date ){
 		if (!$date) return false;
-        return $this->_HTML_inSpan( DoDate( $date, 'F jS, Y'), $this->_css_class_date) . $this->_HTML_newline();
-
+        return $this->_HTML_inDiv( DoDate( $date, 'F jS, Y'), array('class' => $this->_css_class_date));
     }
 
     function _HTML_blurb( $blurb ) {
         if ( !$blurb ) return false;
-        return $this->_HTML_in_P( $blurb, array( 'class' => $this->_css_class_text));
+        return $this->_HTML_inDiv( $blurb, array( 'class' => $this->_css_class_text));
     }
 
     function _HTML_affiliations ( $affiliations ) {
@@ -99,7 +161,8 @@ class VoterGuide_Display extends AMPDisplay_HTML {
         require_once( 'AMP/Content/Image.inc.php');
         $iconRef = &new Content_Image( $affiliations . "_icon.gif");
         if ( !file_exists( $iconRef->getPath( AMP_IMAGE_CLASS_ORIGINAL ))) return false;
-        return $this->_HTML_inDiv( $this->_HTML_image( $iconRef->getURL( AMP_IMAGE_CLASS_ORIGINAL )), array( 'class' => 'voterguide_endorsement_logos'));
+//        return $this->_HTML_inDiv( $this->_HTML_image( $iconRef->getURL( AMP_IMAGE_CLASS_ORIGINAL )), array( 'class' => 'voterguide_endorsement_logos'));
+		return $this->_HTML_inDiv('', array('class' => 'voterguide_endorsement_logos'));
     }
 
     function _HTML_docLink ( &$doc ) {
@@ -109,7 +172,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_guideFooter( ) {
         if ( !( $footer_blurb =  $this->_voterguide->getFooter( ))) return false;
-        return $this->_HTML_in_P( $footer_blurb, array( 'class' => $this->_css_class_text)).
+        return $this->_HTML_inDiv( $footer_blurb, array( 'class' => 'vg_footer')).
                     $this->_HTML_blocJoin();
     }
 
@@ -120,7 +183,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 		if($style_id = $this->_voterguide->getData('style')) {
 			$this->_positionDisplay->setLayoutCSS(true);
 		}
-        return $this->_HTML_inDiv( $this->_positionDisplay->execute( ), array( 'class' => 'element_list_container'));
+		return $this->_positionDisplay->execute( );
     }
 
 	function _HTML_blocJoin() {
@@ -130,7 +193,15 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 		if( !$blocURL ) {
 			return false;
 		}
-		return $this->_HTML_link($blocURL, AMP_VOTERBLOC_LINK_TEXT);
+		return $this->_HTML_inDiv($this->_HTML_link($blocURL, AMP_VOTERBLOC_LINK_TEXT), array('class' => 'vg_endorse_link'));
+	}
+
+	function setPrintSafe($printsafe = true) {
+		$this->_printsafe = $printsafe;
+	}
+
+	function getPrintSafe() {
+		return $this->_printsafe;
 	}
 }
 ?>
