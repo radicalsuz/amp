@@ -9,6 +9,8 @@ class VoterGuidePositionSet_Display extends AMPContent_DisplayList_HTML {
     var $_sourceItem_class = "VoterGuide_Position";
     var $_pager_active = false;
 
+	var $_css_class_title = 'voter_item_title';
+
     function VoterGuidePositionSet_Display( &$dbcon, $guide_id =  null ) {
         $source = &new VoterGuidePositionSet( $dbcon, $guide_id );
         $this->init( $source );
@@ -21,11 +23,16 @@ class VoterGuidePositionSet_Display extends AMPContent_DisplayList_HTML {
             $this->_HTML_listItemBlurb( $position->getBlurb() );
     }
 
+	function _HTML_listItemTitle( &$source ) {        return  '<h2'.$this->_HTML_link( $source->getURL(), $source->getTitle(), array( "class"=>$this->_css_class_title ) ).'</h2>';
+//		                $this->_HTML_newline();
+						    }  
+
     function _HTML_listItemVote( &$position ) {
         if ( !$issue = $position->getName( ) ) return false;
-        $output = "<span class='text'><em>Candidate/Issue: </em></span>" . $issue;
-        if ( $vote = $position->getPosition( )) $output .= $this->_HTML_newline() . "<span class='text'><em>Endorsed Vote: </em></span>" . $vote ;
-        return $this->_HTML_inSpan( $output, $this->_css_class_subtitle ) . $this->_HTML_newline( );
+        $output = $this->_HTML_inDiv('<span class="name_label">Candidate/Issue: </span><span class="name_text">'.$issue.'</span>', array('class' => 'listname'));
+        if ( $vote = $position->getPosition( )) $output .= $this->_HTML_inDiv('<span class="position_label">Endorsed Vote: </span><span class="position_text">' . $vote.'</span>', array('class' => 'position')) ;
+//        return $this->_HTML_inSpan( $output, $this->_css_class_subtitle ) . $this->_HTML_newline( );
+        return $output;
     }
 }
 ?>
