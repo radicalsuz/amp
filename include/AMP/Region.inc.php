@@ -96,7 +96,7 @@ class Region {
           'SOM' => 'Somalia',               'ZAF' => 'South Africa',        'KOR' => 'South Korea',
           'ESP' => 'Spain',                 'LKA' => 'Sri Lanka',           'SDN' => 'Sudan',
           'SUR' => 'Suriname',              'SWZ' => 'Swaziland',           'SWE' => 'Sweden',
-          'CHE' => 'Switzerland',           'SYR' => 'Syrian Arab Republic','TWN' => 'Taiwan Province of China',
+          'CHE' => 'Switzerland',           'SYR' => 'Syrian Arab Republic','TWN' => 'Taiwan',
           'TJK' => 'Tajikistan',            'TZA' => 'Tanzania',            'THA' => 'Thailand',
           'TGO' => 'Togo',                  'TKL' => 'Tokelau',             'TON' => 'Tonga',
           'TTO' => 'Trinidad and Tobago',   'TUN' => 'Tunisia',             'TUR' => 'Turkey',
