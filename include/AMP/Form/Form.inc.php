@@ -580,7 +580,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function &_addElementFile ( $name, $field_def ) {
-        trigger_error( 'found file add');
         $this->addTranslation( $name, '_manageUpload', 'get' );
         $this->addTranslation( $name, '_addFileLink', 'set' );
         $this->_addFileValue( $name );
