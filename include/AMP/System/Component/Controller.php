@@ -345,7 +345,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         if ( !( $display = &$this->_map->getComponent( 'list' ))) {
            $display = &$this->_map->getComponent( 'form' );
            $this->_init_form( $display, false );
-            $this->set_banner( 'add');
+           $this->set_banner( 'add');
         } else {
             $display->setController( $this );
             $this->set_banner( 'list');

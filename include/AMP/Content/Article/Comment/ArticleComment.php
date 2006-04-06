@@ -12,7 +12,8 @@ class ArticleComment extends AMPSystem_Data_Item {
     }
 
     function getTimestamp( ){
-        return strtotime( $this->getData( 'date'));
+        if ( !$result = $this->getData( 'date')) return null;
+        return strtotime( $result );
     }
 
     function getDate( ){

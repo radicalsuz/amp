@@ -272,7 +272,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     function _manageUpload( $data, $filefield ) {
         if ( isset( $this->_fileNames[$filefield])) return $this->_fileNames[ $filefield ];
-
         if (!( isset( $_FILES[ $filefield ][ 'tmp_name' ] ) && $_FILES[$filefield]['tmp_name'])) {
             if ( !isset( $data[$filefield.'_value'])) return false; 
             $this->_fileNames[ $filefield ] = $data[$filefield.'_value'];
@@ -581,6 +580,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function &_addElementFile ( $name, $field_def ) {
+        trigger_error( 'found file add');
         $this->addTranslation( $name, '_manageUpload', 'get' );
         $this->addTranslation( $name, '_addFileLink', 'set' );
         $this->_addFileValue( $name );

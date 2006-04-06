@@ -35,6 +35,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     function setPage() {
         if ( is_array( $this->source )) return $this->setPageArray();
+        if ( !is_object( $this->source )) return false;
         $this->source->setLimit( $this->_qty );
         $this->source->setOffset( $this->_offset );
     }

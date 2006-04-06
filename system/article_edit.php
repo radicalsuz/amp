@@ -660,7 +660,7 @@ document.write("&nbsp;<img src='images/cal.gif' onclick='popUpCalendar(this, dat
 			  if ($coms->RecordCount() > 0 ){
 			  
 			   while (!$coms->EOF){
-			  	echo '- '. AMP_trimText($coms->Fields("comment"),100).'<a href="comments.php?id='.$coms->Fields("id").'" target="_new">edit</a><br>';
+			  	echo '- '. AMP_trimText($coms->Fields("comment"),100, false).'<a href="comments.php?id='.$coms->Fields("id").'" target="_new">edit</a><br>';
 				$coms->MoveNext();
 			  }
 			  ?>
