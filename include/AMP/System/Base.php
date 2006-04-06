@@ -11,13 +11,13 @@ require_once("AMP/System/Permission/Manager.inc.php");
 $AMP_Permission = & AMPSystem_PermissionManager::instance();
 $AMP_CurrentUser = &$AMP_Permission->readUser( $_SERVER['REMOTE_USER'] );
 
-if (!AMP_Authorized( AMP_PERMISSION_CONTENT_ACCESS)) {
+if ($AMP_CurrentUser && !AMP_Authorized( AMP_PERMISSION_CONTENT_ACCESS)) {
     trigger_error( 'content access not authorized for user '.$AMP_CurrentUser->getName( ) );
     ampredirect ( AMP_SITE_URL );
 }
 
 //ENSURE THAT THE current user is allowed to see this page
-if (!$AMP_Permission->authorizedPage()) {
+if ($AMP_CurrentUser && !$AMP_Permission->authorizedPage()) {
     trigger_error( 'unauthorized page access attempt by '. $AMP_CurrentUser->getName( ) );
     ampredirect( $AMP_Permission->userHome() );
 }
