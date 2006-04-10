@@ -23,14 +23,15 @@ class VoterGuidePositionSet_Display extends AMPContent_DisplayList_HTML {
             $this->_HTML_listItemBlurb( $position->getBlurb() );
     }
 
-	function _HTML_listItemTitle( &$source ) {        return  '<h2'.$this->_HTML_link( $source->getURL(), $source->getTitle(), array( "class"=>$this->_css_class_title ) ).'</h2>';
+	function _HTML_listItemTitle( &$source ) {
+		return  "<h2 class=\"{$this->_css_class_title}\">".$source->getTitle()."</h2>";
 //		                $this->_HTML_newline();
-						    }  
+	}  
 
     function _HTML_listItemVote( &$position ) {
         if ( !$issue = $position->getName( ) ) return false;
-        $output = $this->_HTML_inDiv('<span class="name_label">Candidate/Issue: </span><span class="name_text">'.$issue.'</span>', array('class' => 'listname'));
-        if ( $vote = $position->getPosition( )) $output .= $this->_HTML_inDiv('<span class="position_label">Endorsed Vote: </span><span class="position_text">' . $vote.'</span>', array('class' => 'position')) ;
+        $output = '<h4 class="listname"><span class="name_label">Candidate/Issue: </span><span class="name_text">'.$issue.'</span></h4>';
+        if ( $vote = $position->getPosition( )) $output .= '<h4 class="position"><span class="position_label">Endorsed Vote: </span><span class="position_text">' . $vote.'</span></h4>';
 //        return $this->_HTML_inSpan( $output, $this->_css_class_subtitle ) . $this->_HTML_newline( );
         return $output;
     }

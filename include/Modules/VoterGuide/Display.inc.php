@@ -57,7 +57,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 			   tidy_setopt('wrap', 200);
 			   $output = tidy_repair_string($output);
 		}
-		return $output;
+		return $this->_HTML_inDiv($output, array('class' => 'voterguide_container'));
     }
 
 	function _HTML_spacer() {
@@ -65,7 +65,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 	}
 
 	function _HTML_module_title() {
-		return '<div class="module_title"><a href="'.AMP_SITE_URL.'voterguides.php">Voter Guides</a></div>';
+		return $this->_HTML_inDiv('<a href="'.AMP_SITE_URL.'voterguides.php">Voter Guides</a>', array('class' => 'module_title'));
 	}
 
 	function _HTML_intro() {
@@ -138,22 +138,22 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_title( $title ) {
         if ( !$title ) return false;
-        return $this->_HTML_inDiv( $title, array( 'class' => $this->_css_class_title ));
+        return '<h1 class="title">'.$title.'</h1>';
     }
 
     function _HTML_location( $location ){
         if ( !$location ) return false;
-        return $this->_HTML_inDiv( $location, array('class' => $this->_css_class_subtitle ));
+        return "<h4 class=\"{$this->_css_class_subtitle}\">$location</h4>";
     }
 
     function _HTML_date( $date ){
 		if (!$date) return false;
-        return $this->_HTML_inDiv( DoDate( $date, 'F jS, Y'), array('class' => $this->_css_class_date));
+        return "<h4 class=\"{$this->_css_class_date}\">".DoDate( $date, 'F jS, Y')."</h4>";
     }
 
     function _HTML_blurb( $blurb ) {
         if ( !$blurb ) return false;
-        return $this->_HTML_inDiv( $blurb, array( 'class' => $this->_css_class_text));
+        return $this->_HTML_in_P( $blurb, array('class' => 'introduction'));
     }
 
     function _HTML_affiliations ( $affiliations ) {
@@ -172,7 +172,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_guideFooter( ) {
         if ( !( $footer_blurb =  $this->_voterguide->getFooter( ))) return false;
-        return $this->_HTML_inDiv( $footer_blurb, array( 'class' => 'vg_footer')).
+        return $this->_HTML_inDiv( $this->_HTML_in_P($footer_blurb), array( 'class' => 'vg_footer')).
                     $this->_HTML_blocJoin();
     }
 
@@ -193,7 +193,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 		if( !$blocURL ) {
 			return false;
 		}
-		return $this->_HTML_inDiv($this->_HTML_link($blocURL, AMP_VOTERBLOC_LINK_TEXT), array('class' => 'vg_endorse_link'));
+		return $this->_HTML_in_P($this->_HTML_link($blocURL, AMP_VOTERBLOC_LINK_TEXT), array('class' => 'vg_endorse_link'));
 	}
 
 	function setPrintSafe($printsafe = true) {
