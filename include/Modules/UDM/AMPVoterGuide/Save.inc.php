@@ -120,7 +120,7 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
     }
 
     function invalidForm() {
-		if($_FILES[$this->_field_prefix.'_'.'filelink']['name']) {
+		if(isset($_FILES[$this->_field_prefix.'_'.'filelink']) && $_FILES[$this->_field_prefix.'_'.'filelink']['name']) {
 			$this->udm->form->setElementError($this->_field_prefix.'_'.'filelink', 'You will need to select your file again');
 		}
 		if(isset($_FILES[$this->_field_prefix.'_'.'picture']) && $_FILES[$this->_field_prefix.'_'.'picture']['name']) {
