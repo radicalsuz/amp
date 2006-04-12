@@ -165,5 +165,20 @@ class Section extends AMPSystem_Data_Item {
         return $this->_nav_index;
     }
 
+    function _afterSave( ){
+        if ( $this->id != $this->dbcon->Insert_ID( )) return;
+
+        require_once( 'AMP/Content/Article.inc.php');
+        $section_header = &new Article( $this->dbcon );
+        $article_data = array( 
+            'title' =>  $this->getName( ),
+            'body' => $this->getBlurb( ),
+            'publish'   => true,
+            'class'     => AMP_CONTENT_CLASS_SECTIONHEADER,
+            'type'      => $this->id );
+        $section_header->setData( $article_data );
+        return $section_header->save( );
+    }
+
 }
 ?>

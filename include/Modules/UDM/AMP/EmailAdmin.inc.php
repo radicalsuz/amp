@@ -28,6 +28,7 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
         $this->options['mailto']['default'] = $this->udm->_module_def['mailto'];
         $this->options['subject']['default'] = $this->udm->_module_def['subject'];
         $this->options['update_page']['default'] = "system/modinput4_view.php";
+        $this->_registerIntroTextOptions( );
     }
 
     function prepareMessage ( $options = null ) {

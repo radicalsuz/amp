@@ -154,6 +154,19 @@ class UserDataPlugin_Email extends UserDataPlugin {
 		return $this->_containsHTML;
 	}
 
+    function _registerIntroTextOptions( ){
+        require_once( 'AMP/UserData/Lookups.inc.php');
+        $introtexts_blank_row[ '' ] = '--';
+        #$modules = $modules_blank_row + FormLookup_IntroTexts::instance( $this->udm->instance );
+        $introtexts = $introtexts_blank_row + AMPSystem_Lookup::instance( 'introtexts');
+        $this->options['intro_text']['values'] = $introtexts;
+        $this->options['footer_text']['values'] = $introtexts;
+    }
+
+    function _register_options_dynamic() {
+        $this->_registerIntroTextOptions( );
+    }
+
 }
 
 ?>
