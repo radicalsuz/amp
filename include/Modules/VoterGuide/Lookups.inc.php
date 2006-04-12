@@ -66,4 +66,14 @@ class AMPSystemLookup_VoterGuideStyles extends AMPSystem_Lookup {
 	var $result_field = "name";
 }
 
+class AMPSystemLookup_ElectionCycles extends AMPSystem_Lookup {
+	var $datatable = "userdata_plugins_options";
+	var $id_field = "value";
+	var $result_field = "value";
+    function AMPSystemLookup_ElectionCycles() {
+		$this->criteria = "plugin_id in ( select id from userdata_plugins where namespace='AMPVoterGuide' and action='Save' ) and name='election_cycle'";
+		$this->init();
+	}
+}
+
 ?>

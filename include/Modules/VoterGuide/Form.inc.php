@@ -26,6 +26,7 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
 	}
 		
     function setDynamicValues() {
+		$this->setFieldValueSet( 'election_cycle', AMPSystem_Lookup::instance('ElectionCycles'));
 		$this->setFieldValueSet( 'style', AMPSystem_Lookup::instance('VoterGuideStyles'));
         $region = &new Region();
         $this->setFieldValueSet( 'state' , $region->regions['US']);

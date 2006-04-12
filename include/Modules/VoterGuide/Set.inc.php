@@ -17,6 +17,10 @@ class VoterGuideSet extends AMPSystem_Data_Set {
         PARENT::applySearch( $data, false );
         $this->_applyPositionSetCriteria();
         if ( !AMP_Authorized( AMP_PERMISSION_VOTERGUIDE_PUBLISH  )) $this->addCriteriaLive( );
+
+		if(defined('AMP_VOTERGUIDE_CURRENT_CYCLE')) {
+			$this->addCriteria("election_cycle='".AMP_VOTERGUIDE_CURRENT_CYCLE."'");
+		}
         if ( $run_query ) $this->readData( );
     }
 

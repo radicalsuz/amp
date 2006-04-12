@@ -327,7 +327,6 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function isOwner($user) {
-trigger_error( "is $user == ".$this->getOwner());
 		return ($this->getOwner() == $user);
 	}
 

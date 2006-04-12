@@ -1,4 +1,10 @@
 <array>
+	<election_cycle>
+		<type>select</type>
+		<public>0</public>
+		<label>Election Cycle</label>
+		<enabled>1</enabled>
+	</election_cycle>
     <owner_id>
         <type>select</type>
         <public>0</public>
