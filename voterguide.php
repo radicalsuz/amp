@@ -21,10 +21,15 @@ $currentPage = &AMPContent_Page::instance();
 
 $voterguide =& new VoterGuide_Controller($currentPage);
 $voterguide->execute();
-$intro_id = $voterguide->getIntroID();
 
+$intro_id = $voterguide->getIntroID();
 require_once( "AMP/BaseTemplate.php" );
-require_once( "AMP/BaseModuleIntro.php" );
+//no idea why we have to do this twice, but it seems like we do
+$intro_id = $voterguide->getIntroID();
+if($intro_id) {
+	require_once( "AMP/BaseModuleIntro.php" );
+}
+
 include("AMP/BaseFooter.php"); 
 
 ?>
