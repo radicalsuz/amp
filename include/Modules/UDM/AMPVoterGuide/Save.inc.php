@@ -7,15 +7,32 @@ require_once( 'AMP/Content/Page.inc.php' );
 
 class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 
+	var $short_name = 'Save_AMPVoterGuide';
+	var $long_name = 'Save';
     var $name = 'Save Voter Guide Data';
     var $description = 'Save voter guide data into the AMP database';
+	var $available = true;
 
 	var $options = array(
 		'dia_parent_group' => array(
 			'description'=>'group under which voter guides created from this form will be stored',
+			'label' => 'DIA Parent Group',
 			'name'=>'Parent Group',
 			'type'=>'text',
-			'available'=>true));
+			'available'=>true),
+		'election_cycle' => array(
+			'description' => 'unique election cycle',
+			'label' => 'Election Cycle',
+			'name' => 'Election Cycle',
+			'type' => 'text',
+			'available' => true),
+		'election_date' => array(
+			'description' => 'election date',
+			'label' => 'Election Date',
+			'name' => 'Election Date',
+			'type' => 'date',
+			'available' => true)
+		);
 
     var $_field_prefix = 'plugin_AMPVoterGuide';
     var $_guideForm;
@@ -28,6 +45,10 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 		$callback = array('callback' => array(&$this, 'invalidForm'));
         $udm->addFormCallback('AMP_UDM_FORM_INVALID', $callback);
     }
+
+	function _register_options_dynamic() {
+//		$this->options['election_date']['default']
+	}
 
     function _register_fields_dynamic() {
         $this->_guideForm = &new VoterGuide_Form();
@@ -85,10 +106,15 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
             $data[ $this->_copierName ] = $copier_data;
         }
 
+
         $voterGuide = &new VoterGuide( $this->udm->dbcon );
         $voterGuide->setData( $data );
 		if(isset($options['dia_parent_group'])) {
 			$voterGuide->setParentGroup($options['dia_parent_group']);
+		}
+
+		if(isset($options['election_cycle']) && !$voterGuide->getData('election_cycle')) {
+			$voterGuide->mergeData(array('election_cycle'=>$options['election_cycle']));
 		}
         if ( $voterGuide->save() ) {
 			$organizer_id = $this->udm->tryPlugin( 'DIA', 'SupporterSave' );
