@@ -24,6 +24,9 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function VoterGuide_Display ( &$voterguide ) {
         $this->_voterguide = &$voterguide;
+    }
+
+    function execute ( ) {
 		if($style_id = $this->_voterguide->getData('style')) {
 			require_once('AMP/Content/Header.inc.php');
 			require_once('AMP/Content/Page.inc.php');
@@ -35,9 +38,6 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 				$this->_page_header->addStylesheet($fullscreen);
 			}
 		}
-    }
-
-    function execute ( ) {
 		$output =
 				$this->_HTML_intro().
 				$this->_HTML_guideHeader( ).
