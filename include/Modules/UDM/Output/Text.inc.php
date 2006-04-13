@@ -101,9 +101,6 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
                 break;
             case 'select':
                 $value_set = $this->getValueSet($fDef);
-                if ( $fDef['region'] ) {
-                    $value = $value_set[$value];
-                }
                 if (is_array($value_set)) {
                     if (isset($value_set[$value])) {
                         $value = $value_set[$value];
