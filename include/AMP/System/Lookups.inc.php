@@ -509,14 +509,12 @@ class AMPSystemLookup_CellProviders {
         	"pac bell" => "pacbellpcs.net",
         	"sprint" => "messaging.sprintpcs.com",
         	"tmobile" => "tmomail.net",
-        	"t-mobile" => "tmomail.net",
         	"us cellular" => "uscc.textmsg.com",
         	"verizon" => "vtext.com",
         	"virgin" => "vmobl.com",
         	"virgin mobile" => "vmobl.com",
         	"voicestream" => "voicestream.net",
-        	"western" => "cellularonewest.com",
-        	"western wireless" => "cellularonewest.com" );
+        	"western" => "cellularonewest.com" );
         }
 
 
