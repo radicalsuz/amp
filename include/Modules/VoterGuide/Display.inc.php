@@ -83,7 +83,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 		$this->_page_header->addJavascriptDynamic($js);
 
 		$intro = $intro.
-				$this->_HTML_in_P('<a href="'.AMP_SITE_URL.'/newvoterguide">Click here to Post a New Voter Guide</a>', array('class' => 'new_guide_link')).
+				$this->_HTML_in_P('<a href="'.$this->getCreateUrl().'">Click here to Post a New Voter Guide</a>', array('class' => 'new_guide_link')).
 				$this->_HTML_in_P('<form method="post" action="mailto2.php" name="tell_it_loud">
 					<input type="hidden" name="url_link" />
 					<a href="javascript:set_tell_Url();">Email a friend about this page</a>
@@ -93,6 +93,11 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 		return $intro;
 	}
 
+	function getCreateUrl() {
+		//XXX:AMP_SITE_URL.'newvoterguide'
+		return AMP_SITE_URL.'voterguide.php?action=new';
+	}
+		
 	function _HTML_expenditure_notice() {
 		if(defined('AMP_TEXT_VOTERGUIDE_DISCLAIMER')) {
 			return $this->_HTML_in_P( AMP_TEXT_VOTERGUIDE_DISCLAIMER , array('class' => 'expenditure_notice' ));
