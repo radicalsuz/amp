@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/UserData/Plugin.inc.php');
+require_once( 'AMP/System/Flash.php' );
 
 class UserDataPlugin_Messages_Output extends UserDataPlugin {
 
@@ -16,6 +17,8 @@ class UserDataPlugin_Messages_Output extends UserDataPlugin {
         $output = "";
         if ( $this->udm->hasErrors( ))    $output .= $this->_outputErrors( );
         if ( $this->udm->hasResults( ))   $output .= $this->_outputResults( );
+		$flash =& AMP_System_Flash::instance();
+		return $output.$flash->execute();
     }
 
     function _outputErrors( ){
