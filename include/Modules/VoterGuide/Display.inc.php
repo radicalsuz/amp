@@ -65,7 +65,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 	}
 
 	function _HTML_module_title() {
-		return '<h3 class="module_title"><a href="'.AMP_SITE_URL.'voterguides.php">Voter Guides</a></h3>';
+		return '<h3 class="module_title"><a href="'.AMP_SITE_URL.'voterguide.php">Voter Guides</a></h3>';
 	}
 
 	function _HTML_intro() {
