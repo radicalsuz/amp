@@ -279,7 +279,6 @@ class UserData {
 
 //apps can register error handlers and pass the error message as a parameter array
     function outputErrors () {
-        if (!isset($this->errors)) return false;
         $error_output = &$this->registerPlugin( 'Output', 'Messages');
         if ( !$error_output ) return false;
         return $error_output->execute( );
@@ -561,7 +560,10 @@ class UserData {
 
 	function formInvalidCallback() {
 		if(defined('AMP_UDM_FORM_INVALID_ERROR')) {
-			$this->addError('AMP_UDM_FORM_INVALID', AMP_UDM_FORM_INVALID_ERROR);
+			require_once('AMP/System/Flash.php');
+			$flash =& AMP_System_Flash::instance();
+			$flash->add_error(AMP_UDM_FORM_INVALID_ERROR);
+//			$this->addError('AMP_UDM_FORM_INVALID', AMP_UDM_FORM_INVALID_ERROR);
 		}
 		foreach($this->getFormCallbacks('AMP_UDM_FORM_INVALID') as $callback) {
 			call_user_func_array($callback['callback'], $this);
