@@ -486,6 +486,8 @@ class AMPSystemLookup_Regions_US_and_Canada extends Region_Lookup {
 }
 
 class AMPSystemLookup_CellProviders {
+    var $name = "Cellphone Providers";
+    var $form_def =  'cellProviders';
 
     function AMPSystemLookup_CellProviders( ) {
         $this->init(); 
@@ -527,7 +529,7 @@ class AMPSystemLookup_CellProviders {
             "virgin mobile usa" => "virgin mobile usa" );
     }
     function available ( ){
-        return false;
+        return true;
     }
 }
 
