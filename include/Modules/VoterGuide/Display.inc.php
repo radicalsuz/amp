@@ -24,13 +24,13 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function VoterGuide_Display ( &$voterguide ) {
         $this->_voterguide = &$voterguide;
+		require_once('AMP/Content/Header.inc.php');
+		require_once('AMP/Content/Page.inc.php');
+		$this->_page_header =& AMPContent_Header::instance(AMPContent_Page::instance());
     }
 
     function execute ( ) {
 		if($style_id = $this->_voterguide->getData('style')) {
-			require_once('AMP/Content/Header.inc.php');
-			require_once('AMP/Content/Page.inc.php');
-			$this->_page_header =& AMPContent_Header::instance(AMPContent_Page::instance());
 			require_once('Modules/VoterGuide/Style/VoterGuide_Style.php');
 			$this->_voterguide_style =& new VoterGuide_Style($this->_voterguide->dbcon, $style_id);
 			$this->_page_header->addStylesheet($this->_voterguide_style->getData('url'));
