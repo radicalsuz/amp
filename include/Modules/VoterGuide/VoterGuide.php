@@ -138,11 +138,17 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function getRedirectPrefix() {
-		return AMP_VOTERGUIDE_REDIRECT_PREFIX;
+		if(defined('AMP_VOTERGUIDE_REDIRECT_PREFIX')) {
+			return AMP_VOTERGUIDE_REDIRECT_PREFIX;
+		}
+		return false;
 	}
 
 	function getPublicURL() {
-		return $this->getRedirectPrefix() . $this->getShortName();
+		if(!($path = $this->getRedirectPrefix())) {
+			$path = 'voterguide.php?name=';
+		}
+		return $path . $this->getShortName();
 	}
 
 	function generateShortName($string) {
