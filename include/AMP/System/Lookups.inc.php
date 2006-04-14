@@ -495,39 +495,31 @@ class AMPSystemLookup_CellProviders {
 
     function init( ) {
         $this->dataset = array( 
+	       "at&t" => "mobile.att.net",
+        	"att" => "mobile.att.net",
+        	"alltel" => "message.alltel.com",
+        	"cellular one" => "cellularone.txtmsg.com",
+        	"cingular" => "mobile.mycingular.com",
+        	"dobson cellular" => "mobile.dobson.net",
+        	"dobson" => "mobile.dobson.net",
+        	"metro pcs" => "metropcs.sms.us",
+        	"metropcs" => "metropcs.sms.us",
+        	"nextel" => "page.nextel.com",
+        	"pacbell" => "pacbellpcs.net",
+        	"pac bell" => "pacbellpcs.net",
+        	"sprint" => "messaging.sprintpcs.com",
+        	"tmobile" => "tmomail.net",
+        	"t-mobile" => "tmomail.net",
+        	"us cellular" => "uscc.textmsg.com",
+        	"verizon" => "vtext.com",
+        	"virgin" => "vmobl.com",
+        	"virgin mobile" => "vmobl.com",
+        	"voicestream" => "voicestream.net",
+        	"western" => "cellularonewest.com",
+        	"western wireless" => "cellularonewest.com" );
+        }
 
-            "airmessage" =>"airmessage",
-            "alltel" =>"alltel",
-            "ameritech/acs" => "ameritech/acs",
-            "att wireless" => "att wireless",
 
-            "bell mobility (canada)" => "bell mobility (canada)",
-            "cellular one" => "cellular one",
-            "cellular south" => "cellular south",
-            "cinbell" => "cinbell",
-            "cingular" => "cingular",
-            "fido (canada)" => "fido (canada)",
-
-            "manitoba telecom" => "manitoba telecom",
-            "metrocall pagers" => "metrocall pagers",
-            "metropcs" => "metropcs",
-            "midwest wireless" => "midwest wireless",
-            "nextel" => "nextel",
-            "qwest" => "qwest",
-            "rcc/unicel" => "rcc/unicel",
-            "rogers (canada)" => "rogers (canada)",
-            "simple freedom" => "simple freedom",
-
-            "skytell" => "skytell",
-            "sprint pcs" => "sprint pcs",
-            "suncom" => "suncom",
-            "t-mobile" => "t-mobile",
-            "telus/clearnet (canada)" => "telus/clearnet (canada)",
-            "US cellular" => "US cellular",
-            "verizon pagers" => "verizon pagers",
-            "verizon wireless" => "verizon wireless",
-            "virgin mobile usa" => "virgin mobile usa" );
-    }
     function available ( ){
         return true;
     }
