@@ -86,7 +86,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 				$this->_HTML_in_P('<a href="'.$this->getCreateUrl().'">Click here to Post a New Voter Guide</a>', array('class' => 'new_guide_link')).
 				$this->_HTML_in_P('<form method="post" action="mailto2.php" name="tell_it_loud">
 					<input type="hidden" name="url_link" />
-					<a href="javascript:set_tell_Url();">Email a friend about this page</a>
+					<a href="javascript:set_tell_Url();" class="tell_link">Email a friend about this page</a>
 					</form>', array('class' => 'tell_link'));
 
 		$intro = $this->_HTML_inDiv($intro, array('class' => 'voterguide_intro'));
