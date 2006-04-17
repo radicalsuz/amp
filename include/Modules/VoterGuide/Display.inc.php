@@ -128,22 +128,34 @@ class VoterGuide_Display extends AMPDisplay_HTML {
                     $this->_HTML_title( $this->_voterguide->getName( ) ).
                     $this->_HTML_location( $this->_voterguide->getLocation( ) ).
                     $this->_HTML_date( $this->_voterguide->getItemDate( ) ).
-                    $this->_HTML_blurb( $this->_voterguide->getBlurb( ) ).
+//                    $this->_HTML_blurb( $this->_voterguide->getBlurb( ) ).
+					$this->_HTML_blurb_with_image().
 //                    $this->_HTML_newline().
                     $this->_HTML_docLink( $this->_voterguide->getDocumentRef( )) .
 //                    $this->_HTML_newline().
                     $this->_HTML_blocJoin();
 //                    $this->_HTML_newline(2);
 
-        return $this->_HTML_inDiv($this->_HTML_addImage( $output ), array('class' => 'voterguide_header'));
+        return $this->_HTML_inDiv($output, array('class' => 'voterguide_header'));
 
     }
 
     function _HTML_addImage( $html ) {
         if ( !( $imageRef = &$this->_voterguide->getImageRef( ))) return $html;
-        return $this->_HTML_inDiv( $this->_HTML_image( $imageRef->getURL( AMP_IMAGE_CLASS_OPTIMIZED ) ), array( 'class'=>'vg_image')) . $html;
+        return $this->_HTML_imageDiv().$html;
 
     }
+
+	function _HTML_imageDiv() {
+        if ( !( $imageRef = &$this->_voterguide->getImageRef( ))) return ''; 
+        return $this->_HTML_inDiv( $this->_HTML_image( $imageRef->getURL( AMP_IMAGE_CLASS_OPTIMIZED ) ), array( 'class'=>'vg_image'));
+	}
+
+	function _HTML_blurb_with_image() {
+		$blurb = $this->_HTML_inDiv($this->_HTML_blurb($this->_voterguide->getBlurb()), array('class' => 'introductory-text'));
+		$image = $this->_HTML_imageDiv();
+		return $this->_HTML_inDiv($image.$blurb, array('class' => 'intro-with-image'));
+	}
 
     function _HTML_title( $title ) {
         if ( !$title ) return false;
