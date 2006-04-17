@@ -172,7 +172,11 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_docLink ( &$doc ) {
         if ( !$doc ) return false;
-        return 'Download PDF of guide:'.$doc->display( 'div' );
+		$link_display =& new ArticleDocumentLink_DisplayDiv($doc);
+		$label = $this->_HTML_in_P('Download PDF of guide:', array('class' => 'doclink_label'));
+		$linkhtml = $link_display->getIcon()." ".basename($link_display->document_link->getPath());
+		$link = $this->_HTML_in_P($link_display->_HTML_link($link_display->document_link->getURL(), $linkhtml), array('class' => 'filelink'));
+		return $this->_HTML_inDiv($label.$link, array('class' => 'doclink'));
     }
 
     function _HTML_guideFooter( ) {
