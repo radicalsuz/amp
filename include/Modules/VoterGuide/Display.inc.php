@@ -48,7 +48,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
                 $this->_HTML_expenditure_notice().
                 $this->_HTML_notifyAdmin( );
 
-		if(function_exists('tidy_repair_string')) {
+		if(defined('AMP_VOTERGUIDE_OUTPUT_TIDY') && function_exists('tidy_repair_string')) {
 			   tidy_setopt('output-xhtml', TRUE);
 			   tidy_setopt('show-body-only', true);
 			   tidy_setopt('vertical-space', true);
