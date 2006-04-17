@@ -45,7 +45,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 				$this->_HTML_spacer().
                 $this->_HTML_guideFooter( ).
 //				$this->_HTML_newline().
-                $this->_HTML_expenditure_notice().
+                $this->_HTML_expenditure_notice('expenditure-bottom').
                 $this->_HTML_notifyAdmin( );
 
 		if(defined('AMP_VOTERGUIDE_OUTPUT_TIDY') && function_exists('tidy_repair_string')) {
@@ -69,7 +69,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 	}
 
 	function _HTML_intro() {
-		$intro = $this->_HTML_expenditure_notice();
+		$intro = $this->_HTML_expenditure_notice('expenditure-top');
 		if($this->getPrintSafe()) {
 			return $intro;
 		}
@@ -98,9 +98,13 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 		return AMP_SITE_URL.'voterguide.php?action=new';
 	}
 		
-	function _HTML_expenditure_notice() {
+	function _HTML_expenditure_notice($id=null) {
+		$props = array('class' => 'expenditure_notice' );
+		if(isset($id)) {
+			$props['id'] = $id;
+		}
 		if(defined('AMP_TEXT_VOTERGUIDE_DISCLAIMER')) {
-			return $this->_HTML_in_P( AMP_TEXT_VOTERGUIDE_DISCLAIMER , array('class' => 'expenditure_notice' ));
+			return $this->_HTML_in_P( AMP_TEXT_VOTERGUIDE_DISCLAIMER , $props);
 		}
 	}
 		
