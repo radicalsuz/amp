@@ -35,5 +35,10 @@ class VoterGuidePositionSet_Display extends AMPContent_DisplayList_HTML {
 //        return $this->_HTML_inSpan( $output, $this->_css_class_subtitle ) . $this->_HTML_newline( );
         return $output;
     }
+
+    function _HTML_listItemBlurb( $blurb ) {
+        if (!trim( $blurb )) return false;
+        return $this->_HTML_in_P( AMP_trimText( $blurb, $this->_max_blurb_length ) , array('class' => $this->_css_class_text ) ); 
+    }
 }
 ?>
