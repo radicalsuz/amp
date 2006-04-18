@@ -14,6 +14,11 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
             'label'=>'Most results allowed on one page from front end',
             'type' => 'text',
             'default'=>200), 
+        'show_jumplist'=>array (
+            'available'=>true,
+            'default'   => 1,
+            'label'=>'Show Jump Listing',
+            'type' => 'checkbox'),
         'form_name'=>array (
             'available'=>true,
             'label'=>'Name of Pager form',
@@ -26,12 +31,18 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
     var $offset;
     var $stored_dataset;
     var $available=true;
+    var $_index_set;
 			
 	
 	function UserDataPlugin_Pager_Output (&$udm, $plugin_instance) {
         $this->init ($udm, $plugin_instance);
 		$this->read_request();	
 	}
+
+    function setOptions( $options ){
+        $result = PARENT::setOptions( $options );
+        $this->read_request( );
+    }
 
 	function read_request() {
         $options=$this->getOptions();
@@ -52,8 +63,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	}
 	
 	function execute($options=null) {
-        if (!isset($options)) $options=$this->getOptions();
-        else $options=array_merge($this->getOptions(), $options);
+        $options=array_merge($this->getOptions(), $options);
 
         if ($this->udm->total_qty) $this->total_qty = $this->udm->total_qty;
         else $this->total_qty = count($this->udm->users);
@@ -161,12 +171,15 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 		$output="Qty:&nbsp;<SELECT name=\"qty_selector[]\" class=".$options['control_class'] 
             ." onchange=\" if (this.value".($this->total_qty==$this->return_qty?"!=":"==").$this->total_qty.") window.location.href='".$_SERVER['PHP_SELF']."?".join("&", $this->criteria)."&qty='+this.value;\">";
         #  onchange=\"window.location.href='".$_SERVER['PHP_SELF']."?".join("&", $this->criteria).(($this->offset!=0)?"&offset=".$this->offset:"")."&qty='+this.value;\">";
-		if ($this->return_qty<50&&is_numeric($this->return_qty)) {
-			$display_options[$this->return_qty]=$this->return_qty;
-		}
-		$display_options['50']='50';
-		$display_options['100']='100';
-		$display_options['200']='200';
+        $display_options = array( );
+        $default_qtys = array( 50, 100, 200 );
+        foreach( $default_qtys as $test_qty ){
+            if ( $this->return_qty<$test_qty && is_numeric($this->return_qty) && !isset( $display_options[$this->return_qty])) {
+                $display_options[$this->return_qty]=$this->return_qty;
+            }
+            if ( $test_qty > $options['max_qty']) continue;
+            $display_options[strval( $test_qty)] = strval( $test_qty );
+        }
 		if ($this->udm->admin)  $display_options[$this->total_qty]='All';
 		foreach ($display_options as $dvalue => $dtext) {
 			$output .= "<option value=\"".$dvalue."\"";
@@ -183,6 +196,9 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
     //Create an index of records based on the sort criteria
     //or supplied values
     function get_index ($index_col=null, $orderby=null) {		
+        $options = $this->getOptions( );
+        if ( !( $options['show_jumplist'])) return false;
+        if ( isset( $this->_index_set )) return $this->_index_set;
         $criteria=$this->udm->sql_criteria; 
         
         if (!isset($this->udm->sortby)) $this->udm->setSort();
@@ -195,8 +211,11 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         
         if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $index_sql,  "udm_pager");
 
-		if($indexset=&$this->dbcon->CacheGetAll($index_sql))  return $indexset;
-        else return false;
+		if($indexset=&$this->dbcon->CacheGetAll($index_sql))  {
+            $this->_index_set = $indexset;
+            return $indexset;
+        }
+        return false;
     }
 
 

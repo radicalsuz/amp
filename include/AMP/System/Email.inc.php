@@ -10,6 +10,8 @@ class AMPSystem_Email {
     var $_subject;
     var $_format;
 
+    var $_paramaters = array( );
+
 
     function AMPSystem_Email() {
 		$this->init();
@@ -70,6 +72,14 @@ class AMPSystem_Email {
         return $this->_mailto;
     }
 
+    function setTarget( $address ){
+        return $this->setRecipient( $address );
+    }
+
+    function getTarget( ){
+        return $this->getRecipient( );
+    }
+
     function prepareHeader () {
 
         if (! ($from = $this->getSender())) return false;
@@ -107,14 +117,18 @@ class AMPSystem_Email {
 
 	function getAdditionalParameters() {
 		if(defined('AMP_MAIL_ENVELOPE_SENDER') && AMP_MAIL_ENVELOPE_SENDER) {
-			$parameters[] = '-f'.AMP_MAIL_ENVELOPE_SENDER;
+			$this->addParameter( '-f'.AMP_MAIL_ENVELOPE_SENDER );
 		}
 
-		if(empty($parameters)) {
+		if(empty($this->_parameters)) {
 			return null;
 		}
 
-		return join(' ', $parameters);
+		return join(' ', $this->_parameters);
 	}
+
+    function addParameter( $value ){
+        return $this->_parameters[] = $value;
+    }
 }
 ?>

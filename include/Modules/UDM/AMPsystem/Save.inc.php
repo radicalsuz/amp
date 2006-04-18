@@ -71,6 +71,7 @@ class UserDataPlugin_Save_AMPsystem extends UserDataPlugin_Save {
             foreach( $plugin_def as $action => $options ){
 
                 $plugin = &$this->udm->getPlugin( $namespace, $action );
+
                 if ( is_array( $plugin )) {
                     $this->error( sprintf( AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED_MULTIPLE_INSTANCES, $namespace, $action ));
                     continue;
@@ -82,6 +83,7 @@ class UserDataPlugin_Save_AMPsystem extends UserDataPlugin_Save {
 
                 $current_options = $plugin->getOptions( );
                 $plugin_settings = array( 'plugin_id', 'plugin_active', 'plugin_priority');
+
                 foreach( $options as $option_name => $option_value ){
                     if ( isset( $current_options[ $option_name ]) 
                          && $current_options[ $option_name ] == $option_value ) continue;

@@ -52,6 +52,16 @@ class UserDataSet extends UserData {
             return false;
         }
 
+        //check for registered list plugin
+        
+        if ( $this->admin && $format == 'TableHTML' && $list_plugin = &$this->registerPlugin( 'Output', 'ListAdmin') ){
+            return $list_plugin->execute( );
+        }
+        if ( $list_plugin = &$this->getPlugin( 'Output', 'List')){
+            return $list_plugin->execute( );
+        }
+        
+
         //Specify a default output order
         if (!isset($order)) {
             $order = array('SearchForm','GoogleMap','Pager','Actions',$format,'Pager','Index');

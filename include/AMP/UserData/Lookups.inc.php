@@ -296,4 +296,38 @@ class FormLookup_PluginPriorities extends FormLookup {
     }
 }
 
+class FormLookup_Variant extends FormLookup {
+    var $datatable = 'userdata';
+    var $id_field = 'State';
+    var $result_field = 'count( id ) as qty';
+    var $criteria = 'modin = 1 GROUP BY State';
+    var $_criteria_suffix = ' GROUP BY ';
+
+    function FormLookup_Variant( $result_field=null, $modin=null ){
+        $this->setCriteria( $result_field, $modin );
+        $this->init( );
+    }
+
+    function makeCriteriaModin( $modin ){
+        return 'modin=' . $modin ;
+    }
+
+    function setCriteria( $result_field, $modin ){
+        if ( !( isset( $result_field) && isset( $modin ))) return false;
+        $this->id_field = $result_field;
+        $this->criteria = $this->makeCriteriaModin( $modin ). $this->_criteria_suffix . $result_field;
+        return true;
+
+    }
+
+    function &instance( $result_field, $modin ){
+        static $variant_lookups = array( );
+        if ( isset( $variant_lookups[$modin]) && isset( $variant_lookups[$modin][$result_field])){
+            return $variant_lookups[$modin][$result_field]->dataset;
+        }
+        $variant_lookups[$modin][$result_field] = new FormLookup_Variant( $result_field, $modin );
+        return $variant_lookups[$modin][$result_field]->dataset;
+    }
+}
+
 ?>

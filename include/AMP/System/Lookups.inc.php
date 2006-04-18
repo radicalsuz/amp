@@ -495,6 +495,45 @@ class AMPSystemLookup_CellProviders {
 
     function init( ) {
         $this->dataset = array( 
+        /* these should just be short names and human readable names
+	       "at&t" => "AT&T",
+        	"att" => "mobile.att.net",
+        	"alltel" => "message.alltel.com",
+        	"cellular one" => "cellularone.txtmsg.com",
+        	"cingular" => "mobile.mycingular.com",
+        	"dobson cellular" => "mobile.dobson.net",
+        	"dobson" => "mobile.dobson.net",
+        	"metro pcs" => "metropcs.sms.us",
+        	"metropcs" => "metropcs.sms.us",
+        	"nextel" => "page.nextel.com",
+        	"pacbell" => "pacbellpcs.net",
+        	"pac bell" => "pacbellpcs.net",
+        	"sprint" => "messaging.sprintpcs.com",
+        	"tmobile" => "tmomail.net",
+        	"us cellular" => "uscc.textmsg.com",
+        	"verizon" => "vtext.com",
+        	"virgin" => "vmobl.com",
+        	"virgin mobile" => "vmobl.com",
+        	"voicestream" => "voicestream.net",
+        	"western" => "cellularonewest.com" 
+            */
+            );
+        }
+
+
+    function available ( ){
+        return true;
+    }
+}
+
+class AMPSystemLookup_CellProviderDomains {
+
+    function AMPSystemLookup_CellProviderDomains( ) {
+        $this->init(); 
+    }
+
+    function init( ) {
+        $this->dataset = array( 
 	       "at&t" => "mobile.att.net",
         	"att" => "mobile.att.net",
         	"alltel" => "message.alltel.com",
@@ -519,10 +558,9 @@ class AMPSystemLookup_CellProviders {
 
 
     function available ( ){
-        return true;
+        return false;
     }
 }
-
 
 class AMPConstant_Lookup {
 

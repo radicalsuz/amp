@@ -7,6 +7,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
     // Store message.
     var $message = '';
     var $header = '';
+    var $emailer;
 
     var $options = array(
 
@@ -46,6 +47,10 @@ class UserDataPlugin_Email extends UserDataPlugin {
                                         'available'=>true,
                                         'type'=>'text',
                                         'label'=>'Edit Page'),
+
+                'form_data_intro' => array( 'available'=>true,
+						                    'type'=>'text',
+						                    'label'=>'Introduction to form data' )
          );
 
     function execute ( $options = null ) {
@@ -60,6 +65,10 @@ class UserDataPlugin_Email extends UserDataPlugin {
         //get options
         $options = array_merge($this->getOptions(), $options);
 
+        //invoke system email
+        require_once( 'AMP/System/Email.inc.php');
+        $emailer = &new AMPSystem_Email( );
+        $this->emailer = & $emailer;
 
         // Header text.
         $this->message .= $this->_getBodyHeader ( $options );
@@ -79,10 +88,16 @@ class UserDataPlugin_Email extends UserDataPlugin {
             if ($rt !== true) return $rt;
         }
 
-        if (!isset( $options['mailto'] )) return false;
+        $email_target = $this->getEmailTarget( $options );
+        if (!$email_target) return false;
 
         // Send the mail.
-        return mail( $options['mailto'], $options['subject'], $this->message, $this->header );
+        $emailer->setTarget( $email_target );
+        $emailer->setSubject( $options['subject'] );
+        $emailer->setMessage( $this->message );
+        return $emailer->execute( );
+
+        #return mail( $options['mailto'], $options['subject'], $this->message, $this->header );
 
     }
 
@@ -97,16 +112,26 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
     function prepareHeader ( $options = null) {
 
+        $safe_sender = $this->sanitize( AMP_SITE_EMAIL_SENDER );
 		if(isset($options['from']) && $options['from']) {
-			$header  = "From: " . $this->sanitize($options['from']);
-		} else {
-			$header  = "From: " . $this->sanitize($GLOBALS['MM_email_from']);
-		}
+            $safe_sender  = $this->sanitize( $options['from'] );
+		} 
+
+        $header  = "From: " . $safe_sender;
+        if ( isset( $this->emailer )) {
+            $this->emailer->setSender( $safe_sender );
+        }
+
         $header .= "\nX-Mailer: AMP/UserDataMail\n";
 
 		if('html' == strtolower($options['format'])) {
-			$header .= "Content-Type: text/html; charset=utf-8\r\n" .
-					   "Content-Transfer-Encoding: 8bit\r\n\r\n";
+            $content_header =  "Content-Type: text/html; charset=utf-8\r\n" .
+			           		   "Content-Transfer-Encoding: 8bit\r\n\r\n";
+			$header .=  $content_header;
+
+            if ( isset( $this->emailer )) {
+                $this->emailer->addParameter( $content_header );
+            }
 		}
         return $header;
 
@@ -119,6 +144,13 @@ class UserDataPlugin_Email extends UserDataPlugin {
 		}
 		return $content;
 	}
+
+    function getEmailTarget( $options = null ){
+        if ( isset( $options ) && isset( $options['mailto'])){
+            return $options['mailto'];
+        }
+        return false;
+    }
 
     function prepareMessage ( $options ) {
 

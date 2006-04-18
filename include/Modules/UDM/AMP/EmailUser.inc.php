@@ -17,11 +17,6 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
     var $long_name   = 'Email User';
     var $description = 'Notifies the user that their record has been created.';
 
-    var $options = array('form_data_intro' => 
-					array('available'=>true,
-						  'type'=>'text',
-						  'label'=>'Introduction to form data'));
-
     var $available = true;
 
     function UserDataPlugin_EmailUser_AMP ( &$udm, $plugin_instance=null ) {
@@ -39,7 +34,7 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
         $options = array_merge($this->getOptions(), $options);
 
         //Update Link
-		if($options['form_data_intro']) {
+		if ( isset( $options['form_data_intro']) && $options['form_data_intro']) {
 			$message = "\n\n".$options['form_data_intro']."\n\n";
 		} else {
 			$message = "\n\nPlease go to http://" . $_SERVER['SERVER_NAME'] .
@@ -60,9 +55,13 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
     function preProcess () {
         //Remove the field prefix
         //this allows access to core UDM data
+        $field_prefix = $this->_field_prefix;
+
         $this->_field_prefix = '';
-        
         $answer = $this->getData( array('Email') );
+
+        $this->_field_prefix = $field_prefix;
+
         if ( $answer['Email'] ) {
             $this->options['mailto']['default'] = $answer['Email'];
             return true;
