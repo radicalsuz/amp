@@ -52,9 +52,10 @@ class AMPContent_PageDisplay {
     }
 
     function output_PrinterSafe() {
+		$content = $this->execute( AMP_CONTENT_PAGE_DISPLAY_CONTENT);
         return  $this->_header->output() .
                 $this->_HTML_printSafeHead() . 
-                $this->execute( AMP_CONTENT_PAGE_DISPLAY_CONTENT ) .
+                $content.
                 $this->_HTML_endPage();
     }
 
