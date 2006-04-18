@@ -22,6 +22,8 @@ class VoterGuide extends AMPSystem_Data_Item {
 
 	var $_custom_errors;
 
+	var $_group_prefix;
+
     function VoterGuide ( &$dbcon, $id=null ) {
         $this->_positionSet = &new VoterGuidePositionSet( $dbcon );
         $this->init( $dbcon, $id );
@@ -94,8 +96,8 @@ class VoterGuide extends AMPSystem_Data_Item {
             return false;
         }
         $this->mergeData(array('short_name' => $short_name));
+		$this->mergeData(array('group_name' => $this->getGroupPrefix().$short_name));
         return true;
-
     }
 
     function _validateNewGuide( ){
@@ -159,17 +161,30 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function isUniqueShortName($string, $check_external = false) {
+return true;
 		$isUnique = !$this->existsValue('short_name', $string);
 		if($check_external) {
 			$api =& DIA_API::create();
-			$isUnique = $isUnique && !$this->getBlocGroupIDByName($string);
+			$isUnique = $isUnique && !$this->getBlocGroupIDByName($this->getBlocGroupName($string));
 		}
 		return $isUnique;
 	}
 
+	function getGroupPrefix() {
+		if(isset($this->_group_prefix)) {
+			return $this->_group_prefix;
+		}
+		return '';
+	}
+
+	function setGroupPrefix($pre='') {
+		return $this->_group_prefix=$pre;
+	}
+
     function createVoterBloc() {
+		$group_name = $this->getBlocGroupName();
         $api =& DIA_API::create();
-        $group = array('Group_Name' => $this->getShortName(),
+        $group = array('Group_Name' => $group_name,
                         'external_ID' => 'AMP_'.$this->id,
                         'Display_To_User' => 0,
                         'Listserve_Type' => 'Restrict Posts to Allowed Users');
@@ -231,8 +246,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 		
 	function getBlocGroupIDByName($name) {
         $api =& DIA_API::create();
-		$group_data = $api->get('groups', array('where' => 'Group_Name="'.$name.'"',
-											 'column' => 'groups_key'));
+		$group_data = $api->get('groups', array('where' => 'Group_Name="'.$name.'"','column' => 'groups_key'));
 
 		if($key = $group_data['groups']['item']['key']) {
 			return $key;
@@ -337,8 +351,15 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function getBlocList() {
-		return DIA_ORGANIZATION_SHORT_NAME.'+'.$this->getShortName().'-'.$this->getBlocID().
+		return DIA_ORGANIZATION_SHORT_NAME.'+'.$this->getBlocGroupName().'-'.$this->getBlocID().
 			'@lists.democracyinaction.org';
+	}
+
+	function getBlocGroupName($name=null) {
+		if(!isset($name)) {
+			$name = $this->getShortName();
+		}
+		return $this->getGroupPrefix().$name;
 	}
 
 	function isPublished() {
