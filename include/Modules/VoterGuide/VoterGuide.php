@@ -161,7 +161,6 @@ class VoterGuide extends AMPSystem_Data_Item {
 	}
 
 	function isUniqueShortName($string, $check_external = false) {
-return true;
 		$isUnique = !$this->existsValue('short_name', $string);
 		if($check_external) {
 			$api =& DIA_API::create();
