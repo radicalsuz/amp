@@ -19,12 +19,21 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 			'label' => 'DIA Parent Group',
 			'name'=>'Parent Group',
 			'type'=>'text',
+			'default' => '',
+			'available'=>true),
+		'dia_group_prefix' => array(
+			'description'=>'prepended to voter guide groups',
+			'label' => 'DIA Group Prefix',
+			'name'=>'DIA Group Prefix',
+			'type'=>'text',
+			'default' => '',
 			'available'=>true),
 		'election_cycle' => array(
 			'description' => 'unique election cycle',
 			'label' => 'Election Cycle',
 			'name' => 'Election Cycle',
 			'type' => 'text',
+			'default' => '',
 			'available' => true),
 		'election_date' => array(
 			'description' => 'election date',
@@ -116,6 +125,11 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 		if(isset($options['election_cycle']) && !$voterGuide->getData('election_cycle')) {
 			$voterGuide->mergeData(array('election_cycle'=>$options['election_cycle']));
 		}
+
+		if(isset($options['dia_group_prefix'])) {
+			$voterGuide->setGroupPrefix($options['dia_group_prefix']);
+		}
+
         if ( $voterGuide->save() ) {
 			$organizer_id = $this->udm->tryPlugin( 'DIA', 'SupporterSave' );
 			$link = $voterGuide->setBlocOrganizer($voterGuide->getBlocID(), $organizer_id);
