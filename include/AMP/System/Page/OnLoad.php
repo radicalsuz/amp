@@ -42,7 +42,7 @@ class AMP_System_Page_OnLoad extends AMP_Content_Buffer {
     }
 
     function _jsEnd( ){
-        return $this->_jsEndFunction( )
+        return $this->_jsEndFunction( ).
                $this->_jsFunctionCall( );
     }
 
