@@ -12,11 +12,21 @@
 //ob_start();
 
 // Set default module.
-$mod_id = 57;
+$intro_id = 57;
 $modid = 1;
 
 require_once( 'AMP/BaseDB.php' );
 require_once( 'AMP/UserData/Input.inc.php' );
+
+/**
+ *  Check for a cached page
+ */
+if ( AMP_SITE_MEMCACHE_ON && empty( $_POST ) ) {
+    require_once( "AMP/Content/Page/Cached.inc.php" );
+    $cached_page = &new AMPContent_Page_Cached();
+    if ($cached_page->execute()) exit;
+    
+}
 
 // Fetch the form instance specified by submitted modin value.
 $udm =& new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
