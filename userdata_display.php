@@ -52,9 +52,6 @@ if ($uid && $modin) {
 } else { 
 
     //display result list
-    if (!$userlist->getPlugins('SearchForm')) $srch_options['criteria']=array('value'=>array("modin=".$modin));
-
-    #$userlist->doAction('Search', $srch_options);
     $output = $userlist->output_list();
                 
 }

@@ -606,7 +606,9 @@ class UserDataPlugin {
     function getValueSet ( &$field_def ) {
         $defaults = (isset($field_def['values'])) ? $field_def[ 'values' ] : null;
         if (is_array($defaults)) return $defaults;
-        if ( isset( $field_def['lookup'])) return AMP_evalLookup( $field_def['lookup']);
+        if ( isset( $field_def['lookup'])) {
+            return AMP_evalLookup( $field_def['lookup']);
+        }
 
         $fieldtypes_possessing_valuesets = array( 'select', 'multiselect', 'radiogroup', 'checkgroup' );
 

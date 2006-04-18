@@ -66,16 +66,17 @@ class UserDataInput extends UserData {
         $this->showForm = false;
         $this->modTemplateID = $this->_module_def['modidresponse'];
 
-        //Attempt Email notifications when Data is updated by non-admin users
+        // Attempt Email notifications when Data is updated by non-admin users
         if (!$this->admin) {
             //Admin Notification
             if ($this->_module_def['useemail']) {
                 $this->doPlugin('AMP', 'EmailAdmin');
             }
 
-            //User Notification
+            // User Notification
             // for now turn this on by registering the EmailUser plugin
             $this->tryPlugin('AMP', 'EmailUser');
+            $this->tryPlugin('AMP', 'SmsUser');
         }
 
         return $save_results;

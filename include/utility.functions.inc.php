@@ -977,7 +977,9 @@ if ( !function_exists( 'AMP_getClassAncestors')){
 
 if ( !function_exists( 'AMP_evalLookup')){
     function AMP_evalLookup( $lookup_def ){
-        if ( is_object( $lookup_def )) return $lookup_def->dataset;
+        if ( is_object( $lookup_def )){
+            return $lookup_def->dataset;
+        }
         if ( !is_array( $lookup_def )) return AMPSystem_Lookup::instance( $lookup_def );
         if ( isset( $lookup_def['module'])){
             return AMPSystem_Lookup::locate( $lookup_def );
@@ -1044,6 +1046,19 @@ if ( !function_exists( 'AMP_openFile ')){
         if ( !isset( $path )) $path = AMP_LOCAL_PATH . '/custom/';
         print $path . $filename; 
         return fopen( $path.$filename, 'a');
+    }
+}
+
+if ( !function_exists( 'AMP_cleanPhoneNumber')){
+    function AMP_cleanPhoneNumber( $number ){
+        $remove = array("-","(",")"," ");
+        $number = trim(str_replace($remove,'',$number));
+        if (substr($number, 0, 1)=='1') {$number=substr($number, 1);}
+        $ct = strlen($number);
+        if ($ct == 10) {
+            return $number;
+        }
+        return false;
     }
 }
 			

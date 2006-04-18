@@ -28,14 +28,18 @@ class UserDataPlugin_SmsUser_AMP extends UserDataPlugin_Email {
         
         $this->_field_prefix = '';
         $answer = $this->getData( array('Cell_Phone', 'Phone_Provider') );
+        if ( !( isset( $answer['Cell_Phone']) && $answer['Cell_Phone'] && isset( $answer['Phone_Provider']) && $answer['Phone_Provider'])) return false;
 
         $this->_field_prefix = $field_prefix;
-        $provider_lookups = AMPSystem_Lookup::instance( 'cellphone_carriers');
+        $provider_lookups = AMPSystem_Lookup::instance( 'cellProviderDomains' );
+        $account = AMP_cleanPhoneNumber( $answer['Cell_Phone']);
+        $domain = false;
         if ( isset( $provider_lookups[ $answer[ 'Phone_Provider']] )){
-            $result_email = AMP_cleanPhoneNumber( $answer['Cell_Phone'] ) . '@' . $provider_lookups[ $answer['Phone_Provider']] ;
-            return $result_email;
+            $domain = $provider_lookups[ $answer['Phone_Provider']] ;
         }
-        return false;
+        if ( !( $account && $domain )) return false;
+        
+        return $account . '@' . $domain;
 
     }
 }

@@ -485,40 +485,33 @@ class AMPSystemLookup_Regions_US_and_Canada extends Region_Lookup {
     }
 }
 
-class AMPSystemLookup_CellProviders {
+class AMPSystemLookup_CellProviderNames {
     var $name = "Cellphone Providers";
-    var $form_def =  'cellProviders';
+    var $form_def =  'cellProviderNames';
 
-    function AMPSystemLookup_CellProviders( ) {
+    function AMPSystemLookup_CellProviderNames( ) {
         $this->init(); 
     }
 
     function init( ) {
         $this->dataset = array( 
-        /* these should just be short names and human readable names
-	       "at&t" => "AT&T",
-        	"att" => "mobile.att.net",
-        	"alltel" => "message.alltel.com",
-        	"cellular one" => "cellularone.txtmsg.com",
-        	"cingular" => "mobile.mycingular.com",
-        	"dobson cellular" => "mobile.dobson.net",
-        	"dobson" => "mobile.dobson.net",
-        	"metro pcs" => "metropcs.sms.us",
-        	"metropcs" => "metropcs.sms.us",
-        	"nextel" => "page.nextel.com",
-        	"pacbell" => "pacbellpcs.net",
-        	"pac bell" => "pacbellpcs.net",
-        	"sprint" => "messaging.sprintpcs.com",
-        	"tmobile" => "tmomail.net",
-        	"us cellular" => "uscc.textmsg.com",
-        	"verizon" => "vtext.com",
-        	"virgin" => "vmobl.com",
-        	"virgin mobile" => "vmobl.com",
-        	"voicestream" => "voicestream.net",
-        	"western" => "cellularonewest.com" 
-            */
+        	"att"       => "AT&amp;T",
+        	"alltel"    => "AllTel",
+        	"cellular one" => "Cellular One",
+        	"cingular"  => "Cingular",
+        	"dobson" => "Dobson Cellular",
+        	"metropcs" => "MetroPCS",
+        	"nextel" => "Nextel",
+        	"pacbell" => "PacBell",
+        	"sprint" => "Sprint",
+        	"tmobile" => "T-Mobile",
+        	"us cellular" => "US Cellular",
+        	"verizon" => "Verizon",
+        	"virgin" => "Virgin Mobile",
+        	"voicestream" => "VoiceStream",
+        	"western" => "Western Wireless" 
             );
-        }
+    }
 
 
     function available ( ){

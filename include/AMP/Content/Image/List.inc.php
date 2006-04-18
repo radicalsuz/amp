@@ -74,7 +74,7 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
 
     function _getSourceRow( ){
         $row_data = PARENT::_getSourceRow( );
-        $row_data['id'] = $row_data['name'];
+        if ( $row_data ) $row_data['id'] = $row_data['name'];
         return $row_data;
     }
 

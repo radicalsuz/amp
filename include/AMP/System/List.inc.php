@@ -138,7 +138,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $output = "";
 
         while ( $this->currentrow = $this->_getSourceRow()) {
-            $output .= $this->_HTML_listRow ( $this->_translateRow($this->currentrow));
+           $output .= $this->_HTML_listRow ( $this->_translateRow($this->currentrow));
         
         }		
         return $this->_HTML_header() .
@@ -157,6 +157,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if ( !is_array( $this->source )) return $this->source->getData( );
 
         // more complex for arrays of objects
+
         if ( !isset( $this->_source_keys[$this->_source_counter ])) return false;
 
         $row_data = array( );
