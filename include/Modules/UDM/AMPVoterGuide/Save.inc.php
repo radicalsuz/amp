@@ -65,6 +65,10 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
 		$current = getdate();
 		$this->fields['election_date']['options']['minYear'] = $current['year'];
 
+		$this->insertBeforeFieldOrder(array('style'), 'custom8');
+		$builder = &$this->udm->getPlugin('QuickForm', 'Build');
+		$builder->registerFieldAttr($this->addPrefix('style'), array('onUpdate' => 'vg_style_select();'));
+
         $this->_copier = &ElementCopierScript::instance();
         $this->_copier->setFormName( $this->_copierName, $this->udm->name );
 
