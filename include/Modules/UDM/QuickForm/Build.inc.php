@@ -24,6 +24,8 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
     var $_formEngine;
 
+	var $_field_attrs;
+
 
     function UserDataPlugin_Build_QuickForm ( &$udm, $plugin_instance=null ) {
         $this->init( $udm, $plugin_instance );
@@ -49,6 +51,14 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 		$formEngine->setValues( $this->udm->getStoredValues() );
 		$formEngine->setValues( $this->udm->getData() );
 		
+		if($form_attrs = $this->getRegisteredFieldAttrs()) {
+			foreach($form_attrs as $field => $field_attrs) {
+				foreach($field_attrs as $attr) {
+					$formEngine->addFieldAttr($field, $attr);
+				}
+			}
+		}
+
         //register results with udm
 		$this->udm->form = & $formEngine->form;
         if ($script = $formEngine->getJavascript()) {
@@ -65,6 +75,14 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
 
 		return $formEngine->form;
     }
+
+	function registerFieldAttr($key, $attr) {
+		$this->_field_attrs[$key][] = $attr;
+	}
+
+	function getRegisteredFieldAttrs() {
+		return $this->_field_attrs;
+	}
 
     function &getFormEngine( ) {
         return $this->_formEngine;
