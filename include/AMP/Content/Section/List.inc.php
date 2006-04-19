@@ -54,7 +54,6 @@ class Section_List extends AMP_System_List_Form {
 
     function navIndex( &$source, $fieldname ){
 
-        $renderer = &$this->_getRenderer( );
         return  $renderer->inDiv( 
                 AMP_navCountDisplay_Section( $source->id ),
                     array( 'style' => 'margin:3px;'));

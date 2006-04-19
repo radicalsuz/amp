@@ -4,23 +4,27 @@ require_once( 'DIA/API.php' );
 require_once( 'AMP/UserData/Plugin/Save.inc.php' );
 
 class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
+    var $available = true;
     var $options = array(
         'orgKey' => array(
             'type'=>'text',
             'size'=>'5',
             'available'=>true,
+            'default' => '',
             'label'=>'DIA Organization Key'
             ),
 		'user' => array(
             'type'=>'text',
             'size'=>'5',
             'available'=>true,
+            'default' => '',
             'label'=>'DIA AMP User Name'
 			),
 		'password' => array(
             'type'=>'text',
             'size'=>'5',
             'available'=>true,
+            'default' => '',
             'label'=>'DIA AMP User Password'
 			),
 		'capacity' => array(
@@ -63,7 +67,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
             'lzip'      =>  'Zip',
             'fulldesc'  =>  'Description');
 
-    function UserDataPlugin_Save_DIAEvent(&$udm, $plugin_instance) {
+    function UserDataPlugin_Save_DIAEvent( &$udm, $plugin_instance ) {
         $this->_calendar_plugin =& $udm->registerPlugin( 'AMPCalendar', 'Save');
         $this->_field_prefix = $this->_calendar_plugin->getPrefix( );
         $this->init($udm, $plugin_instance);

@@ -50,6 +50,13 @@ class AMPSystem_User extends AMPSystem_Data_Item {
         $this->readData( FALSE );
     }
 
+    function hasPermission( $permission_value ){
+        require_once( 'AMP/System/Permission/Manager.inc.php');
+        $manager = &new AMPSystem_PermissionManager( );
+        $manager->readUser( $this->getName( ));
+        return $manager->authorized( $permission_value );
+    }
+
 }
 
 ?>

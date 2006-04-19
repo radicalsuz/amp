@@ -102,7 +102,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
 
 		$index_sql="SELECT count(id) as qty from calendar where ".join(" AND ", $criteria);
         if (AMP_DISPLAYMODE_DEBUG) AMP_DebugSQL( $index_sql, "calendarCount" );
-        if ($indexset=$this->dbcon->Execute($index_sql)) {
+        if ($indexset=$this->dbcon->CacheExecute($index_sql)) {
 		    $total_qty=$indexset->Fields("qty");
             return $total_qty;
         } else {

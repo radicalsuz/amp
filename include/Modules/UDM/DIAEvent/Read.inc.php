@@ -13,18 +13,21 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
             'organization_key' => array(
                 'type'=>'text',
                 'size'=>'5',
+                'default' => '',
                 'available'=>true,
                 'label'=>'DIA Organization Key'
                 ),
             'user' => array(
                 'type'=>'text',
                 'size'=>'5',
+                'default' => '',
                 'available'=>true,
                 'label'=>'DIA AMP User Name'
                 ),
             'password' => array(
                 'type'=>'text',
                 'size'=>'5',
+                'default' => '',
                 'available'=>true,
                 'label'=>'DIA AMP User Password'
                 )
@@ -32,6 +35,7 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 
 //XXX: set this dynamically by getting it from the calendar plugin
 	var $_field_prefix = "plugin_AMPCalendar";
+    var $available = true;
 
 	var	$translation = array (
 			'event_KEY' => 'dia_key',

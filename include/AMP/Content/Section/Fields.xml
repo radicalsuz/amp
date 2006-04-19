@@ -53,7 +53,7 @@
 	<date2>
 		<type>date</type>
 		<label>Date</label>
-        <default>today</default>
+    <!--    <default>today</default> -->
         <block>date_redirect</block>
 	</date2>
     <security_header>

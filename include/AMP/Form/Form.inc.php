@@ -330,6 +330,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $time_stamped = mktime($hour,$minute,$second,$month,$day,$year);
         if (!$time_stamped) return false;
         if ( date( 'Y-m-d H:i:s', $time_stamped) == AMP_NULL_DATETIME_VALUE_FORM ) return AMP_NULL_DATETIME_VALUE;
+        if ( date( 'Y-m-d H:i:s', $time_stamped) == AMP_BLANK_DATETIME_VALUE_FORM ) return AMP_NULL_DATETIME_VALUE;
 
 		return date( 'YmdHis', $time_stamped );
 	}

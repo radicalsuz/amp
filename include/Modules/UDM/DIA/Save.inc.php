@@ -8,22 +8,26 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
         'orgKey' => array(
             'type'=>'text',
             'size'=>'5',
+            'default' => '',
             'available'=>true,
             'label'=>'DIA Organization Key'
             ),
 		'user' => array(
             'type'=>'text',
             'size'=>'5',
+            'default' => '',
             'available'=>true,
             'label'=>'DIA AMP User Name'
 			),
 		'password' => array(
             'type'=>'text',
             'size'=>'5',
+            'default' => '',
             'available'=>true,
             'label'=>'DIA AMP User Password'
 			)
         );
+    var $available = true;
 
     var $_field_prefix = 'DIA';
     var $_listfield_template = array(

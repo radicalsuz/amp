@@ -17,7 +17,8 @@ class AMP_Authentication_LoginType_Admin extends AMP_Authentication_LoginType {
         $user = &new AMPSystem_User( $this->_dbcon );
         $user->readUsername( $username );
 
-        if ( $user->validatePassword( $password )) {
+        if (    $user->validatePassword( $password ) 
+                && $user->hasPermission( AMP_PERMISSION_CONTENT_ACCESS )) {
             $this->_handler->setPermissionLevel( $user->getPermissionGroup() );
             $this->_handler->setUserId( $user->id );
             return true;

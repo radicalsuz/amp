@@ -2,6 +2,7 @@
 
 require_once ('Modules/Calendar/Calendar.inc.php');
 require_once ('AMP/UserData/Plugin/Save.inc.php');
+if ( !defined( 'AMP_FORM_ID_EVENT_REGISTRATION')) define( 'AMP_FORM_ID_EVENT_REGISTRATION', '' );
 
 class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
     var $name = 'Save Calendar Data';
@@ -10,13 +11,13 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
     var $options = array(
         'reg_modin' => array(
             'description'=>'Registration Form',
-            'name'=>'Registration',
+            'label'=>'RSVP Form',
             //'values'=>'Lookup(userdata_fields, name, id)',
-            'default'=>51,
+            'default'=> AMP_FORM_ID_EVENT_REGISTRATION,
             'type'=>'select',
             'available'=>true),
         'recurring_events' =>array(
-            'name'=>'Use Recurring Events',
+            'label'=>'Use Recurring Events',
             'type'=>'checkbox',
             'default'=>false,
             'available'=>true));
@@ -38,7 +39,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 
     function _register_fields_dynamic() {
         $options=$this->getOptions();
-        if (isset($options['reg_modin']) ) {
+        if (isset($options['reg_modin']) && $options['reg_modin'] ) {
             $this->cal->allowRegistration( $options['reg_modin'] );
         }
         if (isset ($options['recurring_events']) && $options['recurring_events']) {
@@ -48,6 +49,12 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
 
         $this->insertBeforeFieldOrder( array_keys($this->fields) );
 
+    }
+
+    function _register_options_dynamic() {
+        if ( !$this->udm->admin ) return;
+        $forms = &AMPSystem_Lookup::instance( 'forms' );
+        $this->options['reg_modin']['values']    = array( '' => 'None selected') + $forms;
     }
 
     function save ( $data, $options = null ) {

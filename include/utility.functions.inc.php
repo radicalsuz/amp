@@ -991,6 +991,7 @@ if ( !function_exists( 'AMP_evalLookup')){
 if ( ! function_exists( 'AMP_navCountDisplay_Section')) {
     function AMP_navCountDisplay_Section( $section_id ){
         if ( !$section_id ) return false;
+        if ( is_array( $section_id )) return false;
         static $renderer = false;
         static $navcount_lists = false;
         static $navcount_content = false;
