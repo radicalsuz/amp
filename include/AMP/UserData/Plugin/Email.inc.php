@@ -28,7 +28,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
                 'format'      => array( 'label' => 'Email Format',
                                         'available'   => true,
                                         'type'        => 'select',
-                                        'values'      => array( 'Plain Text' => 'Text' ),
+                                        'values'      => array( 'Plain Text' => 'Text', 'HTML' => 'HTML' ),
                                         'default'     => 'Text' ),
 
                 'intro_text'  => array( 'label' => 'Email Intro Text',
