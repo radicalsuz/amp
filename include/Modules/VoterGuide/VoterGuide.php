@@ -354,12 +354,17 @@ class VoterGuide extends AMPSystem_Data_Item {
 			'@lists.democracyinaction.org';
 	}
 
-	function getBlocGroupName($name=null) {
-		if(!isset($name)) {
-			$name = $this->getShortName();
-		}
-		return $this->getGroupPrefix().$name;
-	}
+    function getBlocGroupName($name=null) {
+        $group_name = $this->getData('group_name');
+        if($group_name) {
+            return $group_name;
+        } else {
+            if(!isset($name)) {
+                $name = $this->getShortName();
+            }
+        }
+        return $this->getGroupPrefix().$name;
+    }
 
 	function isPublished() {
         return $this->isLive( );
