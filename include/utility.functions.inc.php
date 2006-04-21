@@ -953,8 +953,8 @@ if ( !function_exists( 'AMP_initBuffer')){
     function &AMP_initBuffer( $header = '', $footer = '', $delimiter = "\n\n") {
         require_once( 'AMP/Content/Buffer.php');
         $buffer = &new AMP_Content_Buffer( );
-        if ( $header ) $buffer->set_header( AMP_HTML_JAVASCRIPT_START );
-        if ( $footer ) $buffer->set_footer( AMP_HTML_JAVASCRIPT_END );
+        if ( $header ) $buffer->set_header( $header );
+        if ( $footer ) $buffer->set_footer( $footer );
         if ( $delimiter ) $buffer->set_delimiter( $delimiter );
         return $buffer;
     }
