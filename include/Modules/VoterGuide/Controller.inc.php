@@ -367,6 +367,8 @@ class VoterGuide_Controller {
 
 		}
 
+        $header =& AMPContent_Header::instance(AMPContent_Page::instance());
+        $header->addStylesheetDynamic('.body-content { margin-left: 30px; margin-right: 20px; }');
 		AMP_directDisplay( $searchForm->output() );
 		$this->page->contentManager->addDisplay( $display );
 	}
