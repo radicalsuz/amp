@@ -106,8 +106,8 @@ class AMPContent_Header {
                          constant( $buffer_header_constant ) : false;
 
         $buffer_footer_constant = 'AMP_HTML_'.strtoupper( $buffer_type ).'_END'; 
-        $buffer_footer = defined( $buffer_header_constant ) ?
-                         constant( $buffer_header_constant ) : false;
+        $buffer_footer = defined( $buffer_footer_constant ) ?
+                         constant( $buffer_footer_constant ) : false;
 
         $this->$buffer_Ref = &AMP_initBuffer( $buffer_header, $buffer_footer );
         return $this->$buffer_Ref;
