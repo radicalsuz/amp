@@ -9,7 +9,7 @@ class SectionContentSource_ArticlesBySubsection extends SectionContentSource_Art
     }
 
     function _addCriteriaSection( ){
-        $this->_source->addCriteriaSectionDescendent( $this->_section->id );
+        $this->_source->addCriteriaSectionDescendentRelational( $this->_section->id );
     }
 
     function getSectionCriteria() {
