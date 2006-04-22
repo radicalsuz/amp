@@ -10,8 +10,7 @@ $guide =& $currentPage->getObject(strtolower('UserDataPlugin_Save_AMPVoterGuide'
 $reg =& AMP_Registry::instance();
 $db =& $reg->getDbcon();
 
-$owneremail = $db->Execute('select Email from userdata where id='.$guide->getOwner());
-
+$owneremail = $db->GetOne('select Email from userdata where id='.$guide->getOwner());
 
 if($owneremail) {
 	print $owneremail;
