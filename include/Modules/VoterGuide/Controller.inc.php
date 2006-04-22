@@ -322,8 +322,8 @@ class VoterGuide_Controller {
 		if(!$guide) return false;
 		$links = $api->get('supporter_groups', array('where' => 'groups_KEY='.$guide->getBlocID()));
 
-		if(isset($links['supporter_groups']['count']) && $links['supporter_groups']['count'] > 1) {
-			foreach ($links['supporter_groups']['item'] as $item) {
+		if(!array_key_exists('key', $links)) {
+			foreach ($links as $item) {
 				if($item['supporter_KEY']) {
 					$supporters[] = $item['supporter_KEY'];
 				}
@@ -338,11 +338,11 @@ class VoterGuide_Controller {
 		$csv = "First Name\tLast Initial\tZip Code\tHas Email\n";
 		print $csv;
 
-		if(!isset($bloc['supporter']['count'])) {
-			$bloc['supporter']['item'] = array($bloc);
+		if(array_key_exists('key',$bloc)) {
+			$bloc = array($bloc);
 		}
 
-		foreach($bloc['supporter']['item'] as $supporter) {
+		foreach($bloc as $supporter) {
 			$fields = array($supporter['First_Name'],
 							substr($supporter['Last_Name'], 0, 1),
 							$supporter['Zip'],
