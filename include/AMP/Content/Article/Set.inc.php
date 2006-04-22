@@ -34,7 +34,7 @@ class ArticleSet extends AMPSystem_Data_Set {
         if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return $base_section ;
         require_once( 'AMP/Content/Section/Contents/Manager.inc.php');
         if (!($related_ids = SectionContents_Manager::getRelatedArticles( $section_id ))) return $base_section ;
-        return $this->addCriteria( "( ". $base_section . ' OR ' . $related_ids . ")" );
+        return "( ". $base_section . ' OR ' . $related_ids . ")" ;
     }
 
 
@@ -90,6 +90,19 @@ class ArticleSet extends AMPSystem_Data_Set {
         if (!($child_ids = $map->getDescendants( $section_id ))) return $this->addCriteria( $base_section );
         $child_sections = 'type in ( ' . join(',', $child_ids ).' )';
         $this->addCriteria(  "(" . $child_sections . ' OR '. $base_section . ")");
+
+    }
+
+    function addCriteriaSectionDescendentRelational( $section_id ){
+        $base_section = $this->_getCriteriaSection( $section_id );
+        $map = &AMPContent_Map::instance( );
+
+        if (!($child_ids = $map->getDescendants( $section_id ))) return $this->addCriteria( $base_section );
+        foreach( $child_ids as $child_id ){
+            $child_sections[] = $this->_getCriteriaSection( $child_id );
+        }
+        $child_sections_criteria = '( '. join( ') OR ( ', $child_sections ) . ')';
+        $this->addCriteria(  "(" . $child_sections_criteria . ' OR '. $base_section . ")");
 
     }
 
