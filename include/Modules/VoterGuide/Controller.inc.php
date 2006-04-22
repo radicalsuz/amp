@@ -213,6 +213,7 @@ class VoterGuide_Controller {
 		$sub = isset($_REQUEST['btnUdmSubmit']) && $this->udm->formNotBlank();
 
 		if ( $sub ) {
+			$this->udm->uid = $authorized_user;
 			$this->udm->saveUser() ;
 			return $this->view();
 		} else {
@@ -321,14 +322,14 @@ class VoterGuide_Controller {
 		if(!$guide) return false;
 		$links = $api->get('supporter_groups', array('where' => 'groups_KEY='.$guide->getBlocID()));
 
-		if($links['supporter_groups']['count'] > 1) {
+		if(isset($links['supporter_groups']['count']) && $links['supporter_groups']['count'] > 1) {
 			foreach ($links['supporter_groups']['item'] as $item) {
 				if($item['supporter_KEY']) {
 					$supporters[] = $item['supporter_KEY'];
 				}
 			}
 		} else {
-			$supporters = array($links['supporter_groups']['item']['supporter_KEY']);
+			$supporters = array($links['supporter_KEY']);
 		}
 
 		$bloc = $api->get('supporter', array('key' => $supporters));
@@ -337,8 +338,8 @@ class VoterGuide_Controller {
 		$csv = "First Name\tLast Initial\tZip Code\tHas Email\n";
 		print $csv;
 
-		if($bloc['supporter']['count'] == 1) {
-			$bloc['supporter']['item'] = array($bloc['supporter']['item']);
+		if(!isset($bloc['supporter']['count'])) {
+			$bloc['supporter']['item'] = array($bloc);
 		}
 
 		foreach($bloc['supporter']['item'] as $supporter) {
