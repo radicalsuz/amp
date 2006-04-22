@@ -32,6 +32,20 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
 
     }
 
+    function _getArticleData( $section_id, $max_qty ){
+        if (!$this->_source->makeReady()) return false;
+        $result = array();
+        $related_ids = SectionContents_Manager::getRelatedArticles( $section_id );
+        while( $data = $this->_source->getData() ) {
+            if (isset($max_qty) && count($result)==$max_qty) break;
+            if ( ( $data[ 'type' ] != $section_id ) && ( array_search( $data['id'], $related_ids ) === FALSE )) continue;
+            $result[ $data['id'] ] = $data;
+        }
+
+        if (empty($result)) return false;
+
+    }
+
     function setSection( &$section ) {
         $subsections_source = &new SectionContentSource_Subsections( $section );
         $subsections_set = $subsections_source->execute();
