@@ -64,6 +64,19 @@ class AMPSystemLookup_VoterGuideByOwner extends AMPSystem_Lookup {
 class AMPSystemLookup_VoterGuideStyles extends AMPSystem_Lookup {
 	var $datatable = "voterguide_styles";
 	var $result_field = "name";
+	var $name = 'VoterGuide: Styles';
+
+    function AMPSystemLookup_VoterGuideStyles() {
+				if(!AMP_Authenticate('admin')) {
+						$this->criteria = "NOT public = 0";
+				}
+        $this->init();
+    }
+/*
+	function available() {
+		return true;
+	}
+*/
 }
 
 class AMPSystemLookup_ElectionCycles extends AMPSystem_Lookup {
