@@ -23,9 +23,13 @@ include("AMP/BaseModuleIntro.php");
   include_once("dropdown.php");
 include_once( 'AMP/System/Email.inc.php');
 $dev_message = &new AMPSystem_Email( );
-$dev_message->setRecipient( 'help@radicaldesigns.org');
-$dev_message->setSubject( 'email3 is still active!');
-$dev_message->setMessage( 'this site is still using it: ' . AMP_SITE_URL . $_SERVER['REQUEST_URI']);
+$dev_message->setRecipient( 'seth@radicaldesigns.org, austin@radicaldesigns.org' );
+$dev_message->setSubject( 'email3 request from '.AMP_SITE_URL.$_SERVER['REQUEST_URI']);
+$message = '$_SERVER = '."\n";
+$message .= print_r($_SERVER, true)."\n";
+$message .= '$_REQUEST = '."\n";
+$message .= print_r($_REQUEST, true)."\n";
+$dev_message->setMessage( $message );
 $dev_message->execute( );
 
  ##################get the list of lists ########################
