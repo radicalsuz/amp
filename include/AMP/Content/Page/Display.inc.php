@@ -60,7 +60,7 @@ class AMPContent_PageDisplay {
     }
 
     function _HTML_printSafeHead() {
-        return "<div class=printer_safe_top></div>";
+        return '<div class="printer_safe_top"></div>';
     }
 
     function _HTML_endPage() {
