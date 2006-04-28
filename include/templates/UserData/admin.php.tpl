@@ -72,6 +72,7 @@ function addPlugin() {
     div#formContainer {
         border: 1px solid black;
         padding: 1ex;
+		margin-top: 0px;
     }
 
     div.tab {

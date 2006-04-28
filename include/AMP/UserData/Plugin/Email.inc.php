@@ -1,6 +1,7 @@
 <?php
 
 require_once ('AMP/System/IntroText.inc.php' );
+require_once ('AMP/UserData/Plugin.inc.php' );
 
 class UserDataPlugin_Email extends UserDataPlugin {
 

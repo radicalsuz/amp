@@ -82,7 +82,9 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function getItemDate() {
-        return $this->getSectionDate();
+        if ( !$this->isColumn( 'date_display')) return $this->getSectionDate();
+        if ( $this->getData( 'date_display' )) return  $this->getSectionDate();
+        return false;
     }
 
     function getTemplate() {

@@ -22,7 +22,7 @@ class AMP_System_Page_OnLoad extends AMP_Content_Buffer {
     function render( ){
         return    $this->_header
                 . $this->_jsStart( )
-                . join( $this->_content_chunk_delimiter, $this->_content_chunks )
+                . join( $this->_content_chunks_delimiter, $this->_content_chunks )
                 . $this->_jsEnd( )
                 . $this->_footer;
 
@@ -38,7 +38,7 @@ class AMP_System_Page_OnLoad extends AMP_Content_Buffer {
     }
 
     function _jsFunctionDeclare( ){
-        return 'function ' . $this->_onload_script_name . '( ) {' . "\n";
+        return "\nfunction " . $this->_onload_script_name . '( ) {' . "\n";
     }
 
     function _jsEnd( ){
@@ -47,11 +47,11 @@ class AMP_System_Page_OnLoad extends AMP_Content_Buffer {
     }
 
     function _jsEndFunction( ){
-        return "}\n";
+        return "\n}\n";
     }
 
     function _jsFunctionCall( ){
-        return 'window.onload  = '. $this->_onload_script_name . '( );' ."\n";
+        return 'window.onload  = '. $this->_onload_script_name . ';' ."\n";
     }
 }
 

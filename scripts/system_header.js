@@ -211,7 +211,7 @@ function change_form_block(which) {
         document.getElementById( "arrow_" + which ).style.display = 'none';
     }
 }
-	
+
 function showUploadWindow (parentform, calledfield, dtype) {
     url  = 'http://'+location.host+'/upload_popup.php?pform='+parentform+'&pfield='+calledfield;
     if (dtype) url = url + '&doctype='+dtype;

@@ -199,6 +199,11 @@
          if (!isset($this->css)) return false;
          return "<STYLE type = \"text/css\">\n".$this->css."</STYLE>\n";
      }
+
+     function output_css_to_file ( ){
+         if (!isset($this->css)) return false;
+         return $this->css;
+     }
     
     
      /**

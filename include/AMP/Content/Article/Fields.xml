@@ -1,4 +1,29 @@
 <array>
+	<!--<tabs_html>-->
+	<tab_html_main>
+		<type>html</type>
+		<default>
+			&lt;/table&gt;
+			&lt;div id="tabs"&gt;
+			&lt;ul id="topnav"&gt;
+				&lt;li class="tab_control"&gt;&lt;span id="tab_0" onclick="change_any( 'article_main', 'article_tab' );Tabs_highlight( this );" &gt;Main Content&lt;/span&gt;&lt;/li&gt;
+				&lt;li class="tab_control"&gt;&lt;span id="tab_1" onclick="change_any( 'article_image', 'article_tab');Tabs_highlight( this );" &gt;Images and Documents&lt;/span&gt;&lt;/li&gt;
+				&lt;li class="tab_control"&gt;&lt;span id="tab_2" onclick="change_any( 'article_fancy', 'article_tab');Tabs_highlight( this );" &gt;Advanced Options &lt;/span&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+			&lt;/div&gt;
+<!--
+			&lt;br style="clear: both; /&gt;
+		</default>
+	</tabs_html>
+	<tab_html_main>
+		<type>html</type>
+		<default>
+-->
+			&lt;div id="formContainer"&gt;
+			&lt;div id="article_main" class="article_tab"&gt;
+			&lt;table class="form_table"&gt;
+		</default>
+	</tab_html_main>
     <publish>
         <type>checkbox</type>
         <label>&lt;span class='publish_label'&gt;PUBLISH&lt;/span&gt;</label>
@@ -116,88 +141,6 @@
         <type>checkbox</type>
         <label>The text in this field is pre-formatted as HTML</label>
     </html>
-	<attach_header>
-		<type>header</type>
-		<label>Attach Content</label>
-	</attach_header>
-	<image_header>
-        <type>blocktrigger</type>
-		<block>image_header</block>
-		<block_trigger>picture</block_trigger>
-		<label>Attach Image ( for list thumbnails )</label>
-	</image_header>
-    <picture>
-		<block>image_header</block>
-        <type>imagepicker</type>
-        <label>Image Filename</label>
-    </picture>
-    <image_actions>
-		<block>image_header</block>
-        <type>static</type>
-        <default>Upload Image</default>
-    </image_actions>
-    <picuse>
-        <type>hidden</type>
-        <default>1</default>
-    </picuse>
-    <image_details>
-        <type>blocktrigger</type>
-        <label>Image Details</label>
-		<block_trigger>piccap</block_trigger>
-		<block>image_details</block>
-    </image_details>
-    <pselection>
-        <type>radiogroup</type>
-		<block>image_details</block>
-        <label>Image Size</label>
-        <values>
-            <original>Original Size</original>
-            <pic>Optimized for Web</pic>
-        </values>
-        <default>pic</default>
-    </pselection>
-    <alignment>
-		<block>image_details</block>
-        <type>radiogroup</type>
-        <label>Image Alignment</label>
-        <values>
-            <left>Left</left>
-            <right>Right</right>
-        </values>
-        <default>AMP_IMAGE_DEFAULT_ALIGNMENT</default>
-    </alignment>
-    <piccap>
-		<block>image_details</block>
-        <type>text</type>
-        <size>50</size>
-        <label>Image Caption</label>
-    </piccap>
-    <alttag_header>
-		<block>image_details</block>
-        <type>static</type>
-        <default>Brief description of image for sightless users:</default>
-    </alttag_header>
-    <alttag>
-		<block>image_details</block>
-        <type>text</type>
-        <label>( Alt tag )</label>
-    </alttag>
-    <doc_header>
-        <type>blocktrigger</type>
-        <label>Attach Document</label>
-		<block_trigger>doc</block_trigger>
-		<block>doc_header</block>
-    </doc_header>
-	<doc>
-		<type>select</type>
-		<label>Document Name</label>
-		<block>doc_header</block>
-	</doc>
-	<doc_actions>
-		<type>static</type>
-		<block>doc_header</block>
-		<label>&lt;a href="docdir.php" target="_blank"&gt;View Documents&lt;/a&gt; | &lt;a href="doc_upload.php" target="_blank"&gt;Upload Document&lt;/a&gt;</label>
-	</doc_actions>
 	<attributes_header>
 		<type>header</type>
 		<label>Article Attributes</label>
@@ -251,54 +194,136 @@
         <label>Order &lt;br /&gt;(sorts by date&lt;br /&gt; if blank)</label>
 		<block>order_header</block>
     </pageorder>
-	<fancy_header>
+<!--
+	<tab_html_end1>
+		<type>html</type>
+		<default>
+		</default>
+	</tab_html_end1>
+-->
+	<tab_html_image>
+		<type>html</type>
+		<default>
+			&lt;/table&gt;
+			&lt;/div&gt;
+			&lt;div id="article_image" class="article_tab" style="display:none;"&gt;
+			&lt;table class="form_table" align="center"&gt;
+		</default>
+	</tab_html_image>
+	<attach_header>
 		<type>header</type>
-		<label>Fancy Options</label>
-	</fancy_header>
+		<label>Attach Image ( for list thumbnails )</label>
+	</attach_header>
+    <picture>
+        <type>imagepicker</type>
+        <label>Image Filename</label>
+    </picture>
+    <image_actions>
+        <type>static</type>
+        <default>Upload Image</default>
+    </image_actions>
+    <picuse>
+        <type>hidden</type>
+        <default>1</default>
+    </picuse>
+    <image_details>
+        <type>blocktrigger</type>
+        <label>Image Details</label>
+		<block_trigger>piccap</block_trigger>
+		<block>image_details</block>
+    </image_details>
+    <pselection>
+        <type>radiogroup</type>
+		<block>image_details</block>
+        <label>Image Size</label>
+        <values>
+            <original>Original Size</original>
+            <pic>Optimized for Web</pic>
+        </values>
+        <default>pic</default>
+    </pselection>
+    <alignment>
+		<block>image_details</block>
+        <type>radiogroup</type>
+        <label>Image Alignment</label>
+        <values>
+            <left>Left</left>
+            <right>Right</right>
+        </values>
+        <default>AMP_IMAGE_DEFAULT_ALIGNMENT</default>
+    </alignment>
+    <piccap>
+		<block>image_details</block>
+        <type>text</type>
+        <size>50</size>
+        <label>Image Caption</label>
+    </piccap>
+    <alttag_header>
+		<block>image_details</block>
+        <type>static</type>
+        <default>Brief description of image for sightless users:</default>
+    </alttag_header>
+    <alttag>
+		<block>image_details</block>
+        <type>text</type>
+        <label>( Alt tag )</label>
+    </alttag>
+    <doc_header>
+        <type>header</type>
+        <label>Attach Document</label>
+    </doc_header>
+	<doc>
+		<type>select</type>
+		<label>Document Name</label>
+	</doc>
+	<doc_actions>
+		<type>static</type>
+		<default>&lt;a href="docdir.php" target="_blank"&gt;View Documents&lt;/a&gt; | &lt;a href="doc_upload.php" target="_blank"&gt;Upload Document&lt;/a&gt;</default>
+	</doc_actions>
+<!--
+	<tab_html_end2>
+		<type>html</type>
+		<default>
+			&lt;/table&gt;
+			&lt;/div&gt;
+		</default>
+	</tab_html_end2>
+-->
+	<tab_html_fancy>
+		<type>html</type>
+		<default>
+			&lt;/table&gt;
+			&lt;/div&gt;
+			&lt;div id="article_fancy" class="article_tab" style="display:none;"&gt;
+			&lt;table class="form_table"&gt;
+		</default>
+	</tab_html_fancy>
 	<redirects_trigger>
-		<type>blocktrigger</type>
+		<type>header</type>
         <label>Redirection and Tools</label>
-		<block_trigger>link</block_trigger>
-		<block>redirects_trigger</block>
 	</redirects_trigger>
      <link>
         <label>Redirect Viewers&lt;br /&gt; to URL</label>
         <type>text</type>
-		<block>redirects_trigger</block>
      </link>
      <module_link>
         <type>select</type>
         <label>Link to Tool Page</label>
         <lookup>toolLinks</lookup>
-		<block>redirects_trigger</block>
      </module_link>
      <linkover>
         <type>hidden</type>
         <default>1</default>
      </linkover>
 	<adv_header>
-        <type>blocktrigger</type>
-		<block>adv_header</block>
-		<block_trigger>comments</block_trigger>
+        <type>header</type>
         <label>Navigation, Notes, Comments</label>
      </adv_header>
-     <comments>
-		<block>adv_header</block>
-        <type>checkbox</type>
-        <label>Allow User Comments</label>
-     </comments>
-     <comments_actions>
-		<block>adv_header</block>
-        <type>static</type>
-        <label>view/edit user comments</label>
-     </comments_actions>
      <navtext>
-		<block>adv_header</block>
         <type>textarea</type>
         <label>Sidebar</label>
      </navtext>
 	 <sidebar_class>
-		<block>adv_header</block>
         <type>select</type>
         <label>Sidebar Class</label>
 		<lookup>
@@ -306,13 +331,33 @@
             <instance>sidebarclass</instance>
         </lookup>
      </sidebar_class>
+     <comments>
+        <type>checkbox</type>
+        <label>Allow User Comments</label>
+     </comments>
+     <comments_actions>
+        <type>static</type>
+        <default>view/edit user comments</default>
+     </comments_actions>
+	<admin_header>
+		<type>header</type>
+		<label>Administrator Options</label>
+	</admin_header>
      <notes>
-		<block>adv_header</block>
         <type>textarea</type>
         <label>Editor Notes</label>
      </notes>
      <wysiwyg_actions>
         <type>static</type>
-        <label>Wysiwyg on/off</label>
+        <default>Wysiwyg on/off</default>
      </wysiwyg_actions>
+	<tab_html_end3>
+		<type>html</type>
+		<default>
+			&lt;/table&gt;
+			&lt;/div&gt;
+			&lt;/div&gt;
+			&lt;table class="form_table"&gt;
+		</default>
+	</tab_html_end3>
 </array>

@@ -19,4 +19,25 @@ if ( !defined( 'AMP_NULL_DATE_VALUE')) define('AMP_NULL_DATE_VALUE', '0000-00-00
 if ( !defined( 'AMP_NULL_DATETIME_VALUE')) define('AMP_NULL_DATETIME_VALUE', '0000-00-00 00:00:00' );
 if ( !defined( 'AMP_NULL_DATETIME_VALUE_FORM')) define('AMP_NULL_DATETIME_VALUE_FORM', '2001-11-30 00:00:00' );
 if ( !defined( 'AMP_BLANK_DATETIME_VALUE_FORM')) define('AMP_BLANK_DATETIME_VALUE_FORM', '2001-01-01 00:00:00' );
+
+/**
+ * Menu Settings
+ */
+if ( !defined( 'AMP_CACHE_KEY_SYSTEM_MENU')) define( 'AMP_CACHE_KEY_SYSTEM_MENU', 'AMP_System_Menu_%s.html' );
+if ( !defined( 'AMP_CACHE_KEY_SYSTEM_MENU_CSS')) define( 'AMP_CACHE_KEY_SYSTEM_MENU_CSS', 'AMP_System_Menu_%s.css' );
+if ( !defined( 'AMP_CACHE_KEY_SYSTEM_MENU_JS')) define( 'AMP_CACHE_KEY_SYSTEM_MENU_JS', 'AMP_System_Menu_%s.js' );
+
+
+/**
+ * Cache Settings
+ */
+if ( !defined( 'AMP_SYSTEM_CACHE')) define( 'AMP_SYSTEM_CACHE', 'file' );
+if ( !defined( 'AMP_SYSTEM_CACHE_TIMEOUT')) define( 'AMP_SYSTEM_CACHE_TIMEOUT', 600 );
+if ( !defined( 'AMP_SYSTEM_CACHE_PATH')) define( 'AMP_SYSTEM_CACHE_PATH', AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'custom');
+
+/**
+ * Filesystem Settings 
+ */
+if ( !defined( 'AMP_SYSTEM_FILE_OWNER')) define( 'AMP_SYSTEM_FILE_OWNER', false );
+
 ?>

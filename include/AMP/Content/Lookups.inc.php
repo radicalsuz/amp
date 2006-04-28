@@ -366,14 +366,12 @@ class AMPContentLookup_RelatedArticles extends AMPContent_Lookup {
     }
 
     function &instance( $section_id ) {
-        static $lookup = false;
-        if (!$lookup) {
-            $lookup = new AMPContentLookup_RelatedArticles ( $section_id );
-        } else {
-            $lookup->_addCriteriaSection( $section_id );
-            $lookup->init();
+        static $lookup = array( );
+        if (!isset( $lookup[$section_id])) {
+            $lookup[ $section_id ] = new AMPContentLookup_RelatedArticles ( $section_id );
         }
-        return $lookup->dataset;
+
+        return $lookup[$section_id]->dataset;
     }
     function available( ){
         return false;

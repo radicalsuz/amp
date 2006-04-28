@@ -297,33 +297,39 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
         $available_plugins = Array();
 
-        $udm_plugin_path = preg_replace( "/QuickForm/i", "", dirname( realpath( __FILE__ ) ) );
+        #$udm_plugin_path_base = preg_replace( "/QuickForm/i", "", dirname( realpath( __FILE__ ) ) );
+        $udm_plugin_path_base = AMP_BASE_INCLUDE_PATH . 'Modules/UDM/';
+        $udm_plugin_path_local = AMP_LOCAL_PATH . '/lib/Modules/UDM/';
 
-        $dh = opendir( $udm_plugin_path );
+        $dh_set['base'] = opendir( $udm_plugin_path_base );
+        $dh_set['local'] = ( file_exists( $udm_plugin_path_local ))? opendir( $udm_plugin_path_local ) : false;
 
-        while (($namespace = readdir($dh)) !== false) {
+        foreach( $dh_set as $dh_key => $dh ){
+            while (($namespace = readdir($dh)) !== false) {
 
-            if (strpos($namespace, ".") === 0) continue;
+                if (strpos($namespace, ".") === 0) continue;
+                $subfolder = 'udm_plugin_path_' . $dh_key;
 
-            $nsdh = opendir( $udm_plugin_path . $namespace );
+                $nsdh = opendir( $$subfolder . $namespace );
 
-            while (($action_file = readdir($nsdh)) !== false) {
+                while (($action_file = readdir($nsdh)) !== false) {
 
-                if (strpos($action_file, ".") === 0) continue;
+                    if (strpos($action_file, ".") === 0) continue;
 
-                // include the file, suppress error messages, and don't let it
-                // output anything. To my knowledge, there's no way to stop php4
-                // from dying on fatal error, so be careful out there.
-                ob_start();
-                if(!include_once( "Modules/UDM/" . ucfirst($namespace) . "/" . ucfirst($action_file) )) continue;
-                ob_end_clean();
+                    // include the file, suppress error messages, and don't let it
+                    // output anything. To my knowledge, there's no way to stop php4
+                    // from dying on fatal error, so be careful out there.
+                    ob_start();
+                    if(!include_once( "Modules/UDM/" . ucfirst($namespace) . "/" . ucfirst($action_file) )) continue;
+                    ob_end_clean();
 
-                $action = preg_replace( "/\.inc\.php$/", "", $action_file );
-                $class_vars = get_class_vars( "UserDataPlugin_" . $action . "_$namespace" );
+                    $action = preg_replace( "/\.inc\.php$/", "", $action_file );
+                    $class_vars = get_class_vars( "UserDataPlugin_" . $action . "_$namespace" );
 
-                if ($class_vars['available'] != true) continue;
+                    if ($class_vars['available'] != true) continue;
 
-                $available_plugins[$namespace][$action] = $class_vars;
+                    $available_plugins[$namespace][$action] = $class_vars;
+                }
             }
         }
 

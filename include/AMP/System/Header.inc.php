@@ -30,7 +30,7 @@ class AMPSystem_Header extends AMPContent_Header {
 
     function &instance( ){
         static $system_header = false;
-        if ( !$system_header ) $system_header = &new AMPSystem_Header( );
+        if ( !$system_header ) $system_header = new AMPSystem_Header( );
         return $system_header;
     }
 

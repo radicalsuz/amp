@@ -173,13 +173,9 @@ class AMP_Content_Image_Crop_Display {
     }
 
     function setupOnLoad( ){
-        require_once( 'AMP/System/Page/OnLoad.php');
-        $onload_script = &AMP_System_Page_OnLoad::instance( );
-        $onload_script->add( 'libinit;' );
-        $onload_script->execute( );
-
-        $systemPage = &AMP_System_Page::instance( );
-        $systemPage->addJavascript( $this->_script_file, 'crop' );
+        $header = & AMP_getHeader( );
+        $header->addJavascriptOnLoad( 'libinit;' );
+        $header->addJavascript( $this->_script_file, 'crop' );
     }
 
     function declareCSS( ){

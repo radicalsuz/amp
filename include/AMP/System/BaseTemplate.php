@@ -13,8 +13,6 @@
  *
  * * * * * * **/
 require_once( 'AMP/System/Nav/Manager.inc.php' );
-require_once( 'AMP/System/Menu.inc.php');
-require_once( 'AMP/System/Header.inc.php');
 
 class AMPSystem_BaseTemplate {
     
@@ -26,10 +24,20 @@ class AMPSystem_BaseTemplate {
 
 	var $_use_form_nav = true;
     var $_header;
+    var $_menu;
 
     function AMPSystem_BaseTemplate() {
+        $this->__construct( );
+    }
+
+    function __construct( ){
+        require_once( 'AMP/System/Menu.inc.php');
+        require_once( 'AMP/System/Header.inc.php');
         $this->page_title = AMP_SITE_NAME . ' Administration';
         $this->_header = &AMPSystem_Header::instance( );
+        $this->_menu = & new AMPSystem_Menu();
+        $this->_menu->init_header(  );
+
     }
 
     function &instance() {
@@ -95,8 +103,7 @@ class AMPSystem_BaseTemplate {
     #####################################
 
     function _systemFooterText() {
-        return  "AMP " . AMP_SYSTEM_VERSION_ID . " for ". AMP_SITE_NAME ."\n" .
-                "Please report problems to " . AMP_SITE_ADMIN;
+        return  sprintf( AMP_TEXT_SYSTEM_INTERFACE_FOOTER, AMP_SYSTEM_VERSION_ID, AMP_SITE_NAME, AMP_SITE_ADMIN);
     }
 
 
@@ -139,8 +146,7 @@ class AMPSystem_BaseTemplate {
     }
 
     function _HTML_systemMenu() {
-        $menu = & new AMPSystem_Menu();
-        return $menu->output();
+        return $this->_menu->output();
         
     }
 
@@ -198,7 +204,8 @@ class AMPSystem_BaseTemplate {
         $output .= $this->_HTML_systemNav();
         $output .=  '<br/><br/><img src ="images/spacer.gif" width = "165" height="1"></td>'."\n".
                     '<td valign="top" bgcolor="#FFFFFF" width="100%"><div>' . "\n" .
-                    '<fieldset style=" border: 1px solid grey; margin:20px; padding:10px;">';
+                    '<fieldset class="system_main_content">';
+                    //'<fieldset style=" border: 1px solid grey; margin:20px; padding:10px;">';
         return $output;
     }
 

@@ -87,6 +87,7 @@ class AMP_System_Component_Controller {
     }
 
     function execute( $output = true ){
+        $data= $this->get_actions( );
         foreach ( $this->get_actions( ) as $action ){
             if( $this->_results[$action] = $this->commit( $this->_model, $action, $this->get_arguments( $action ) )) {
                 $this->_action_committed = $action;
@@ -295,6 +296,10 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         
         if ( $action ) $this->_action_requested = $action;
 
+    }
+
+    function commit_new( ){
+        return $this->commit_add( );
     }
 
     function commit_add( ){

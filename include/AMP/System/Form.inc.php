@@ -76,12 +76,11 @@ class AMPSystem_Form extends AMPForm {
     }
 
     function copy_button () {
-        $attr = array( "onclick" => "return AMPForm_getCopyName();" );   
+        $script_name = get_class( $this ) . '_getCopyName';
+        $attr = array( "onclick" => "return " . $script_name . "();" );   
         $this->defineSubmit('copy', 'Save As...', $attr);
         $script = 
-        '<script type = "text/javascript">
-        //<!--
-            function AMPForm_getCopyName() {
+            'function '. $script_name .'() {
                 pform = document.forms["'.$this->formname.'"];
                 copyname = prompt ("What would you like to name this new item?");
                 
@@ -91,10 +90,9 @@ class AMPSystem_Form extends AMPForm {
                 }
 
                 return false;
-            }
-            //-->
-            </script>';
-        $this->registerJavascript( $script, 'copy_button' );
+            }';
+        $header = &AMP_getHeader( );
+        $header->addJavascriptDynamic( $script, 'copy_button_' . $script_name );
     }
 
     function submitted() {

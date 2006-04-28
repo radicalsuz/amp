@@ -19,6 +19,7 @@ require_once ('AMP/System/Map.inc.php');
 class AMPSystem_Menu extends AMP_Menu_FWTableRow {
     var $_baseComponentHTML = 'AMP_MenuComponent_TableRow_System';
     var $_activationMethod = 'click';
+    var $_final_output;
     
     function AMPSystem_Menu () {
         
@@ -26,6 +27,87 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
         $this->setStyles();
         
 
+    }
+
+    function output( ){
+        if ( isset( $this->_final_output )) return $this->_final_output;
+        if ( $this->is_cached( ) && ( $result = $this->cachedVersion( ))) return $result;
+
+        return $this->cache_components( );
+        
+    }
+
+    function init_header( ){
+        $this->_final_output = $this->cache_components( );
+    }
+
+    function cache_components( ){
+        return
+              $this->cache_css( )
+            . $this->cache_js( )
+            . $this->cache_html( );
+    }
+
+    function cache_css( ){
+        $this->getCSS();
+        $this->script_set->setCSS();
+        $this->addCSS(  $this->script_set->getCSS() );
+
+        if ( !( $cache = &AMP_get_cache( ))) return $this->outputCSS( );
+        if ( !( $url = $cache->url( AMP_CACHE_KEY_SYSTEM_MENU_CSS ))) {
+            if ( !$cache->add( $this->output_css_to_file( ), AMP_CACHE_KEY_SYSTEM_MENU_CSS )){
+                return $this->outputCSS( );
+            }
+            $url = $cache->url( AMP_CACHE_KEY_SYSTEM_MENU_CSS );
+        }
+
+        $header = &AMPSystem_Header::instance( );
+        $header->addStylesheet( $url, get_class( $this ) );
+        return false;
+        
+
+    }
+
+    function cache_js( ){
+        if ( !( $cache = &AMP_get_cache( ))) return $this->script_set->output( );
+        if ( !( $url = $cache->url( AMP_CACHE_KEY_SYSTEM_MENU_JS ))) {
+            $output = $this->script_set->output_to_file( );
+            if ( !$cache->add( $output, AMP_CACHE_KEY_SYSTEM_MENU_JS )){
+                return $this->script_set->template_item_start 
+                        . $output
+                        . $this->script_set->template_item_end;
+            }
+            $url = $cache->url( AMP_CACHE_KEY_SYSTEM_MENU_JS );
+        }
+
+        $header = &AMPSystem_Header::instance( );
+        $header->addJavaScript( 'scripts/fw_menu.js',  get_class( $this ).'base');
+        $header->addJavaScript( $url,  get_class( $this ));
+        return false;
+
+    }
+
+    function cache_html( ){
+        if ( !( $cache = &AMP_get_cache( ))) return $this->menuset->output( );
+        if ( !( $url = $cache->contains( AMP_CACHE_KEY_SYSTEM_MENU ))) {
+            if ( !$cache->add( $this->menuset->output( ), AMP_CACHE_KEY_SYSTEM_MENU )){
+                return $this->menuset->output( );
+            }
+        }
+        return $cache->retrieve( AMP_CACHE_KEY_SYSTEM_MENU );
+
+    }
+
+    function is_cached( ){
+        if ( !( $cache = &AMP_get_cache( ))) return false;
+        return $cache->contains( AMP_CACHE_KEY_SYSTEM_MENU );
+
+    }
+
+    function cachedVersion( ){
+        if ( !( $cache = &AMP_get_cache( ))) return false;
+        return $cache->retrieve( AMP_CACHE_KEY_SYSTEM_MENU );
+        
     }
 
     function loadMap() {

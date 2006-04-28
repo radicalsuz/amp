@@ -7,6 +7,7 @@ class ElementCopierScript {
     var $start_qty_default =0;
     var $copier_name_default = "copymaker";
     var $copiers = array();
+    var $_header;
 
     function ElementCopierScript( $fields = null ) {
         $this->init($fields);
@@ -24,6 +25,7 @@ class ElementCopierScript {
 		}
 
         if (isset($fields)) $this->addCopier( $this->copier_name_default, $fields ); 
+        $this->_header = &AMP_getHeader( );
     }
 
     function addCopier( $name, $fieldset, $formname = null, $start_qty = null ) {
@@ -102,10 +104,10 @@ class ElementCopierScript {
 
 
     function script_header() {
-        $script ='
-            <script type="text/javascript" src = "/scripts/elementCopier.js"></script>';
-        $script .= '<script type="text/javascript">
-            function loadCopier() {'."\n";
+        //$script ='<script type="text/javascript" src = "/scripts/elementCopier.js"></script>';
+        $this->_header->addJavaScript( 'scripts/elementCopier.js');
+        $script .= //'<script type="text/javascript">
+        'function loadCopier() {'."\n";
 
         foreach ($this->copiers as $copiername => $copierDef ) {
             $fieldset = $copierDef[ 'fields' ];
@@ -113,9 +115,11 @@ class ElementCopierScript {
             $script.= $this->_js_initCopier( $fieldset, $copiername );
             $script.= $this->_js_outputSets( $copiername );
         }
-        $script .= "}\n loadCopier();\n </script>";
+        $script .= "}\n";
+        $this->_header->addJavascriptDynamic( $script, 'copier_dynamic' );
+        $this->_header->addJavascriptOnLoad( "loadCopier();", 'copier_init' );
 
-        return $script;
+        return false;
     }
 
     function script_value_array( $valuevar, $fDef, $null_value = AMP_TEXT_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT ) {

@@ -10,6 +10,8 @@ require_once("AMP/System/Permission/Manager.inc.php");
 
 $AMP_Permission = & AMPSystem_PermissionManager::instance();
 $AMP_CurrentUser = &$AMP_Permission->readUser( $_SERVER['REMOTE_USER'] );
+if ( $AMP_CurrentUser ) define( 'AMP_SYSTEM_USER_ID', $AMP_CurrentUser->id);
+
 
 if ($AMP_CurrentUser && !AMP_Authorized( AMP_PERMISSION_CONTENT_ACCESS)) {
     trigger_error( 'content access not authorized for user '.$AMP_CurrentUser->getName( ) );

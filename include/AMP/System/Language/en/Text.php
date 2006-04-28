@@ -86,4 +86,6 @@ if ( !defined( 'AMP_TEXT_LOGIN_HELP_ADMIN'))
  */
 if ( !defined( 'AMP_TEXT_ACTION')) define( 'AMP_TEXT_ACTION', 'action');
 
+if ( !defined( 'AMP_TEXT_SYSTEM_INTERFACE_FOOTER')) 
+    define( 'AMP_TEXT_SYSTEM_INTERFACE_FOOTER', "AMP %s for %s \nPlease report problems to %s");
 ?>

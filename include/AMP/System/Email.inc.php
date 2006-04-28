@@ -10,7 +10,7 @@ class AMPSystem_Email {
     var $_subject;
     var $_format;
 
-    var $_paramaters = array( );
+    var $_parameters = array( );
 
 
     function AMPSystem_Email() {

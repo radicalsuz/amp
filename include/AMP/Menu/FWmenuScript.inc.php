@@ -113,7 +113,60 @@ function fwLoadMenus() {
 }
 fwLoadMenus();
 //-->
-</script>";
+</script>
+";
+
+		var $template_item_start = "
+<script language=\"JavaScript1.2\" src=\"/scripts/fw_menu.js\"></script>
+<script language=\"javascript\" type = \"text/javascript\">
+
+//<!--
+";
+
+        var $template_item_end = "
+//-->
+</script>
+";
+
+		var $template_file = "
+function getOffTop ( item ) {
+    if ( item.offsetParent) {
+        return (item.offsetTop + getOffTop( item.offsetParent));
+    }
+
+    return item.offsetTop;
+}
+
+function getOffRight( item ) {
+    if (item.offsetParent) {
+        return (getRightSize( item ) + getOffRight( item.offsetParent ));
+    }
+
+    return getRightSize ( item );
+}
+
+function getRightSize( item ) {
+    return window.innerWidth - (getOffLeft( item ) + item.offsetWidth);
+}
+
+
+function getOffLeft ( item ) {
+    if ( item.offsetParent ) {
+
+        return (item.offsetLeft + getOffLeft( item.offsetParent));
+    }
+
+    return item.offsetLeft;
+}
+
+function fwLoadMenus() {
+    if (window.fw_menu_%1\$s) return;
+    %2\$s
+
+    window.fw_menu_%1\$s.writeMenus( );
+}
+fwLoadMenus();
+";
 			
 		  var $css_template = "
         div.FW_menuItem { cursor: pointer; cursor: hand; }
@@ -130,8 +183,13 @@ fwLoadMenus();
 
 			function output() {
 					$lastChild=end($this->getChildren());
+
 					return sprintf($this->template, $lastChild->id, $this->make_core());
 			}
+            function output_to_file( ){
+					$lastChild=end($this->getChildren());
+					return sprintf($this->template_file, $lastChild->id, $this->make_core());
+            }
 
 			
 			function make_core() {

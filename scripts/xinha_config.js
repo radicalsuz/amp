@@ -93,4 +93,4 @@ xinha_init = xinha_init ? xinha_init : function()
     HTMLArea.startEditors(xinha_editors);
 }
 
-window.onload = xinha_init;
+//window.onload = xinha_init;

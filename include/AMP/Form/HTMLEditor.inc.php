@@ -15,8 +15,10 @@ class AMPFormElement_HTMLEditor {
     var $height = '420px';
     var $stylesheet = '/custom/styles.css';
     var $config_actions = array();
+    var $_header;
 
     function AMPFormElement_HTMLEditor() {
+        $this->_header = & AMP_getHeader( );
     }
 
     ################################
@@ -41,6 +43,7 @@ class AMPFormElement_HTMLEditor {
 
     function output() {
         if (empty($this->editors)) return false;
+        $this->_header->addJavascriptOnLoad( 'xinha_init();', 'editor_init' );
 
         return $this->_script_header(). $this->_config_script();
     }
@@ -54,27 +57,42 @@ class AMPFormElement_HTMLEditor {
     ##################################
 
     function _script_header() {
+        $this->_header->addJavascriptDynamicPrefix( 
+            '_editor_url  = "/scripts/xinha/";' . "\n"
+            . '_editor_lang = "en";      // And the language we need to use in the editor.',
+            'editor_options');
+        $this->_header->addJavascript( 'scripts/xinha/htmlarea.js');
+        #return '<script type="text/javascript" src="/scripts/xinha/htmlarea.js"></script>'."\n";
+        return false;
           
+          /*
         return
         '<script type="text/javascript">
             _editor_url  = "/scripts/xinha/" 
             _editor_lang = "en";      // And the language we need to use in the editor.
         </script>
         <script type="text/javascript" src="/scripts/xinha/htmlarea.js"></script>'."\n";
+        */
     }
 
     function _config_script() {
         $plugins = count( $this->plugins )?"\n[\n". join(",\n", $this->plugins)."\n]":"null";
 
-        $output  = "<script type=\"text/javascript\">\n";
+        $output = "";
+        #$output  = "<script type=\"text/javascript\">\n";
         $output .= "xinha_editors = \n[\n". join(",\n", $this->editors)."\n];\n";
         $output .= "xinha_plugins = $plugins;\n";
         $output .= $this->_xinha_config();
+        $this->_header->addJavascriptDynamicPrefix( $output, 'editor_config_dynamic');
 
-        $output .= "</script>\n";
+        #$output .= "</script>\n";
 
-        $output .= "<script type=\"text/javascript\" src=\"".$this->config_location."\"></script>\n";
-        return $output;
+        // this has to be included manually because AMP/Content/Header doesn't support
+        // ordering of Dynamic and non-dynamic scripts -- this script has to run after the dynamic config above'
+        #$legacy_output = "<script type=\"text/javascript\" src=\"".$this->config_location."\"></script>\n";
+        $this->_header->addJavascript( $this->config_location, 'editor_config ');
+        return false;
+        
     }
 
     function _xinha_config() {

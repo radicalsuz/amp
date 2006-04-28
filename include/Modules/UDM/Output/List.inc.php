@@ -131,7 +131,7 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
         }
     }
 
-    function execute( $options ){
+    function execute( $options = null ){
         $options = array_merge( $this->getOptions( ), $options );
 
         $this->setHeaderTextId( $options['intro_id_list'] );

@@ -146,7 +146,7 @@ function changef(which) {
 {/literal}
 
 <div id="tabs">
-    <ul id="topnav">
+    <ul id="tabnav">
         <li class="tab1"><span class="current" id="udm_core_tab" onclick="change('udm_core');" >Settings</span></li>
         <li class="tab2"><span id="udm_standard_tab" onclick="change('udm_standard');">Standard Fields</span></li>
         <li class="tab3"><span id="udm_custom_tab" onclick="change('udm_custom');">Custom Fields</span></li>

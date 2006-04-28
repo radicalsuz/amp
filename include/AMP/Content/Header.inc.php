@@ -4,6 +4,8 @@ define( 'AMP_HTML_JAVASCRIPT_END', "</script>\n");
 define( 'AMP_HTML_STYLESHEET_START', "<style type='text/css'>\n");
 define( 'AMP_HTML_STYLESHEET_END', "</style>\n");
 
+define( 'AMP_HTML_JAVASCRIPTPREFIX_START', "<script language=\"Javascript\"  type=\"text/javascript\">\n");
+define( 'AMP_HTML_JAVASCRIPTPREFIX_END', "</script>\n");
 
 class AMPContent_Header {
 
@@ -14,6 +16,7 @@ class AMPContent_Header {
     var $link_rel = array( 'Search'=> '/search.php' );
     var $javaScripts = array( 'functions' => '/scripts/functions.js' );
     var $_javaScript_buffer;
+    var $_javaScriptPrefix_buffer;
 
     var $styleSheets = array( 'default'		=> '/styles_default.css');
     var $_styleSheet_buffer;
@@ -88,13 +91,28 @@ class AMPContent_Header {
 
     function addJavaScript( $script_url, $id = null) {
         if (!$script_url) return false;
-        if (isset($id)) return ($this->javaScripts[ $id ] = $script_url );
+        if (isset($id)) {
+            $this->javaScripts[ $id ] = $script_url ;
+            return true;
+
+        }
         return ($this->javaScripts[] = $script_url);
     }
 
     function addJavascriptDynamic( $content, $key = null ){
         $buffer = &$this->_getBuffer( 'javaScript' );
         return $buffer->add( $content, $key );
+    }
+
+    function addJavascriptDynamicPrefix( $content, $key = null ){
+        $buffer = &$this->_getBuffer( 'javaScriptPrefix' );
+        return $buffer->add( $content, $key );
+    }
+
+    function addJavascriptOnLoad( $content, $key = null ){
+        require_once( 'AMP/System/Page/OnLoad.php');
+        $onload_script = & AMP_System_Page_OnLoad::instance( );
+        $onload_script->add( $content, $key );
     }
 
     function &_getBuffer( $buffer_type = 'javaScript' ){
@@ -176,7 +194,6 @@ class AMPContent_Header {
 
     function _HTML_styleSheets() {
         $output = "";
-        if (empty($this->styleSheets)) return false;
         foreach ( $this->styleSheets as $css_id => $url ) {
             $url = trim( $url );
             if (!(substr($url, 0, 4)=="http") && !(substr($url, 0, 1)=="/")) $url = "/" . $url;
@@ -189,8 +206,14 @@ class AMPContent_Header {
     }
 
     function _HTML_javaScripts() {
+        require_once( 'AMP/System/Page/OnLoad.php');
+        $onload_script = & AMP_System_Page_OnLoad::instance( );
+        $onload_script->execute( );
+
         $output = "";
-        if (empty($this->javaScripts)) return false;
+        if ( isset( $this->_javaScriptPrefix_buffer)) {
+            $output .= $this->_javaScriptPrefix_buffer->execute( );
+        }
         foreach ( $this->javaScripts as $script_id => $url ) {
             if (!((substr($url, 0, 1)=="/") || (substr($url, 0, 7)=="http://"))) $url = "/" . $url;
             $output .= "<script language=\"Javascript\"  type=\"text/javascript\" src=\"" . $url . "\"></script>\n";

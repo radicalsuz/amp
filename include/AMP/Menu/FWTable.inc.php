@@ -50,15 +50,15 @@ class AMP_Menu_FWTable extends AMP_Menu {
             return $root_menu;
     }
 
-		function output($item_name=null) {
+    function output($item_name=null) {
 
-				$this->getCSS();
-				$this->script_set->setCSS();
-				$this->addCSS(  $this->script_set->getCSS() );
+        $this->getCSS();
+        $this->script_set->setCSS();
+        $this->addCSS(  $this->script_set->getCSS() );
 
-				return ($this->outputCSS() . $this->script_set->output() . $this->menuset->output() );
+        return ($this->outputCSS() . $this->script_set->output() . $this->menuset->output() );
 
-		}
+    }
 
      function setStyle( $style_select, $new_value, $component_id = null ) {
         $component = &$this;

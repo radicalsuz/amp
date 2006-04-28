@@ -58,6 +58,7 @@ class AMPSystem_XMLEngine {
         $fp = fopen( $filename , "w+"); 
         $test = fwrite($fp, $data); 
         fclose ($fp); 		
+//        if ( AMP_SYSTEM_FILE_OWNER ) chown( $filename, AMP_SYSTEM_FILE_OWNER );
     }
 
     function getFile ( ) {

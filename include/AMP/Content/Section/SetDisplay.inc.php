@@ -20,7 +20,7 @@ class SectionSet_Display extends AMPContent_DisplayList_HTML {
         return
             $this->_HTML_listItemTitle( $section ) .
             $this->_HTML_listItemBlurb( $section->getBlurb() ) . $this->_HTML_newline() .
-            $this->_HTML_listItemDate ( $section->getSectionDate() );
+            $this->_HTML_listItemDate ( $section->getItemDate() );
     }
 
 }

@@ -6,6 +6,7 @@ class ElementSwapScript {
     var $swappers=array();
     var $formnames;
     var $initial_set = "";
+    var $_header;
 
 
     function ElementSwapScript ( ) {
@@ -14,6 +15,7 @@ class ElementSwapScript {
 
     function init() {
         //interface
+        $this->_header = &AMP_getHeader( );
     }
 
     function &instance() {
@@ -41,9 +43,11 @@ class ElementSwapScript {
     }
 
     function script_header() {
-        $script = '<script type="text/javascript" src = "/scripts/elementSwapper.js"></script>'."\n";
-        $script .= '<script type = "text/javascript">'."\n";
-        
+        $this->_header->addJavaScript( '/scripts/elementSwapper.js', 'element_swap_library');
+        #$script = '<script type="text/javascript" src = "/scripts/elementSwapper.js"></script>'."\n";
+        #$script .= '<script type = "text/javascript">'."\n";
+        $script = '';
+         
         foreach ($this->swappers as $swapper_name => $swapper_set ) {
             $script .= 'function loadSwapper_'. $swapper_name .'() {'. "\n".
                        'window.'.$swapper_name.' = new ElementSwapper("'.$this->getFormName( $swapper_name )."\");\n".
@@ -59,11 +63,13 @@ class ElementSwapScript {
                 }
             }
             $script .=  $this->js_ActivateInitial( $swapper_name ).
-                        "} \n loadSwapper_".$swapper_name."();\n";
+                        "} \n";
+            $this->_header->addJavascriptOnLoad( "loadSwapper_".$swapper_name."();");
         }
-        $script .= "</script>";
+        #$script .= "</script>";
+        $this->_header->addJavascriptDynamic( $script, 'element_swap_dynamic' );
 
-        return $script;
+        return false;
     }
 
     function js_ActivateInitial( $swapper_name ) {

@@ -925,28 +925,35 @@ if ( !function_exists( 'AMP_hasTable')) {
     }
 }
 
-function &AMP_getHeader( ){
-    if ( defined( 'AMP_USERMODE_ADMIN') && AMP_USERMODE_ADMIN ) {
-        require_once( 'AMP/System/Header.inc.php');
-        return AMPSystem_Header::instance( );
+if ( !function_exists( 'AMP_getHeader')){
+    function &AMP_getHeader( ){
+        if ( defined( 'AMP_USERMODE_ADMIN') && AMP_USERMODE_ADMIN ) {
+            require_once( 'AMP/System/Header.inc.php');
+            return AMPSystem_Header::instance( );
+        }
+        require_once( 'AMP/Content/Header.inc.php');
+        require_once( 'AMP/Content/Page.inc.php');
+        return AMPContent_Header::instance( AMPContent_Page::instance( ) );
     }
-    require_once( 'AMP/Content/Header.inc.php');
-    require_once( 'AMP/Content/Page.inc.php');
-    return AMPContent_Header::instance( AMPContent_Page::instance( ) );
+
+
 }
 
-function AMP_Authenticate( $loginType = 'content', $do_login = false ){
-    static $auth_status = array( );
-    if ( isset( $auth_status[$loginType]) ) return $auth_status[ $loginType ];
+if ( !function_exists( 'AMP_Authenticate')){
 
-    require_once( 'AMP/Auth/Handler.inc.php');
-    $AMP_Authen_Handler = &new AMP_Authentication_Handler( AMP_Registry::getDbcon(), $loginType );
+    function AMP_Authenticate( $loginType = 'content', $do_login = false ){
+        static $auth_status = array( );
+        if ( isset( $auth_status[$loginType]) ) return $auth_status[ $loginType ];
 
-    if ( !( $auth_status[ $loginType ] = $AMP_Authen_Handler->is_authenticated() )) {
-        if ( $do_login ) $AMP_Authen_Handler->do_login();
+        require_once( 'AMP/Auth/Handler.inc.php');
+        $AMP_Authen_Handler = &new AMP_Authentication_Handler( AMP_Registry::getDbcon(), $loginType );
+
+        if ( !( $auth_status[ $loginType ] = $AMP_Authen_Handler->is_authenticated() )) {
+            if ( $do_login ) $AMP_Authen_Handler->do_login();
+        }
+        return $auth_status[ $loginType ];
+        
     }
-    return $auth_status[ $loginType ];
-    
 }
 
 if ( !function_exists( 'AMP_initBuffer')){
@@ -1042,7 +1049,7 @@ if ( ! function_exists( 'AMP_navCountDisplay_Class')) {
     }
 }
 
-if ( !function_exists( 'AMP_openFile ')){
+if ( !function_exists( 'AMP_openFile')){
     function &AMP_openFile( $filename, $path = null ){
         if ( !isset( $path )) $path = AMP_LOCAL_PATH . '/custom/';
         print $path . $filename; 
@@ -1060,6 +1067,19 @@ if ( !function_exists( 'AMP_cleanPhoneNumber')){
             return $number;
         }
         return false;
+    }
+}
+
+if ( !function_exists( 'AMP_get_cache')){
+    function &AMP_get_cache( ){
+        if ( !AMP_SYSTEM_CACHE ) return false;
+        static $cache = false;
+        if ( $cache ) return $cache;
+
+        require_once( 'AMP/System/Cache/'.ucfirst( AMP_SYSTEM_CACHE ).'.php');
+        $cache_class = 'AMP_System_Cache_' . ucfirst( AMP_SYSTEM_CACHE );
+        $cache = &call_user_func_array( array( $cache_class, 'instance'), array( ));
+        return $cache;
     }
 }
 			

@@ -53,9 +53,14 @@
 	<date2>
 		<type>date</type>
 		<label>Date</label>
-    <!--    <default>today</default> -->
+        <default>today</default> 
         <block>date_redirect</block>
 	</date2>
+	<date_display>
+		<type>checkbox</type>
+		<label>Display this Date</label>
+		<block>date_redirect</block>
+	</date_display>
     <security_header>
         <type>blocktrigger</type>
         <label>Security</label>

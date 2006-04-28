@@ -322,10 +322,22 @@ td.name input{
 	padding: 3px 7px;
 	text-shadow: 2px 2px 2px black;
 } 
-
+/*
 .main {
 	display: table;	
 	width: 100%;
+}
+*/
+div.article_tab {
+	display:none;
+	width: 100%;
+	padding: 10px;
+	margin-left: -1px;
+	border-left: 1px solid black;
+}
+
+div#article_main {
+	display: block;
 }
 .doc_info {
 	font-size: 18px;
@@ -377,19 +389,19 @@ ul#topnav a {
 	font: bold 12.5px helvetica, arial, geneva, lucida, sans-serif;
 }
 
-#topnav a#a0 { left: 0px;}
-#topnav a#a1 { left: -30px;}
-#topnav a#a2 { left: -60px;}
-#topnav a#a3 { left: -90px;}
-#topnav a#a4 { left: -120px;}
-#topnav a#a5 { left: -150px;}
-#topnav a#a6 { left: -180px;}
+#topnav a#tab_0 { left: 0px;}
+#topnav a#tab_1 { left: -30px;}
+#topnav a#tab_2 { left: -60px;}
+#topnav a#tab_3 { left: -90px;}
+#topnav a#tab_4 { left: -120px;}
+#topnav a#tab_5 { left: -150px;}
+#topnav a#tab_6 { left: -180px;}
 	
 #topnav a:hover {
 	background: url(images/liahover.gif) no-repeat;
 }
-
-#topnav a.here {
+/*
+#topnav a.current_tab {
 	position:relative;
 	z-index:102;
 	background: url(images/liahover.gif) no-repeat;
@@ -397,7 +409,8 @@ ul#topnav a {
 	padding: 0.2em 1em 0.2em 35px;
 	margin: 0 4px 0 0;
 }
-.top {align:right; font-size:10px; }
+*/
+.top {text-align:right; font-size:10px; }
 .subfield {background-color: #FFFFFF;}
 legend {border: 1px solid black;  border-top: none; background-color: #eee; padding: 0 1ex; }
 
@@ -531,3 +544,57 @@ div.item_timestamp {
 	width: 110%;
 	white-space: nowrap;
 }
+
+.article_tab .form_table {
+	padding: 4px 4px 2px 6px;
+}
+
+table.form_table {
+	width: 90%;
+	float: left;
+	text-align: center;
+/*
+	position: absolute;
+	left:250px;
+*/
+}
+    div#tabs ul {
+        margin: 0;
+        padding: 0 0 2px 0.5em;
+    }
+
+    div#tabs ul li span {
+        padding: 0.2ex 0.5ex;
+        background-color: #e6e6e6;
+        border: 1px solid black;
+        cursor: pointer;
+    }
+
+    div#tabs ul li span.current_tab {
+        background-color: white;
+        border-bottom: 1px solid white;
+        font-weight: bold;
+    }
+
+    div#tabs ul li {
+        margin: 0 0.25ex -5px;
+        padding-top: 10px;
+        vertical-align: bottom;
+    }
+
+
+	div#formContainer {
+		width: 100%;
+		margin-top: 24px;
+		border-top: 1px solid black;
+		border-left: 1px solid black;
+    }
+
+    fieldset.system_main_content {
+        border: 1px solid grey;
+        margin:20px;
+        padding:10px;
+        height: 100%;
+
+
+    }
