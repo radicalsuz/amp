@@ -26,60 +26,64 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             'available'=>true,
             'label'=>'DIA AMP User Password'
 			),
-        'table1' => array(
+        'table_mapping1' => array(
             'type' => 'text',
             'size' => '15',
-            'default' => 'supporter',
+            'default' => '',
             'available' => true,
-            'label' => 'DIA table to save to'),
+            'label' => 'Extra DIA table to save to'),
         'mapping1' => array(
             'type' => 'textarea',
+            'default' => '',
             'size' => '3:15',
             'label' => '<span class="photocaption">mapping.  ex: custom1=<br/>Email_Preference&custom2<br/>=Source_Tracking_Code...</span>',
             'available' => true),
-        'returned_key1' => array(
+        'result_mapping1' => array(
             'type' => 'text',
+            'default' => '',
             'size' => '15',
             'label' => 'save returned key to:',
             'available' => true),
-        'table2' => array(
+        'table_mapping2' => array(
             'type' => 'text',
             'size' => '15',
-            'default' => 'groups',
+            'default' => '',
             'available' => true,
-            'label' => 'DIA table to save to'),
+            'label' => 'Extra DIA table to save to'),
         'mapping2' => array(
             'type' => 'textarea',
             'size' => '3:15',
             'label' => '<span class="photocaption">mapping.  ex: custom3=<br/>Group_Name&custom4<br/>=Description...</span>',
             'available' => true),
-        'returned_key2' => array(
+        'result_mapping2' => array(
             'type' => 'text',
             'size' => '15',
+            'default' => '',
             'label' => 'save returned key to:',
             'available' => true),
-        'table3' => array(
+        'table_mapping3' => array(
             'type' => 'text',
             'size' => '15',
-            'default' => 'event',
+            'default' => '',
             'available' => true,
-            'label' => 'DIA table to save to'),
+            'label' => 'Extra DIA table to save to'),
         'mapping3' => array(
             'type' => 'textarea',
             'size' => '3:15',
+            'default' => '',
             'label' => '<span class="photocaption">mapping.  ex: custom5=<br/>Event_Name&custom6<br/>=Description...</span>',
             'available' => true),
-        'returned_key3' => array(
+        'result_mapping3' => array(
             'type' => 'text',
             'size' => '15',
-            'label' => 'save returned key to:',
+            'default' => '',
+            'label' => 'Save returned key to:',
             'available' => true),
         );
     var $available = true;
 
     var $mappings = array('mapping1', 'mapping2', 'mapping3');
 
-    var $_field_prefix = 'DIA';
     var $_listfield_template = array(
                 'public'   => true,
                 'enabled'  => true,
@@ -94,8 +98,20 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             'type'      => 'header' );
 
 	var $_supporter_key;
+    var $_dia_api;
 
-    function UserDataPlugin_Save_DIA(&$udm, $plugin_instance) {
+    /*
+    var $_supporter_mapping = 
+            array(  'region' => 'Region',
+                    'occupation' => 'Occupation',
+                    'Company' => 'Organization');
+            */
+    var $_supporter_mapping = 
+            array(  'Region' => 'region',
+                    'Occupation' => 'occupation',
+                    'Organization' => 'Company');
+
+    function UserDataPlugin_Save_DIA( &$udm, $plugin_instance ) {
         $this->init($udm, $plugin_instance);
     }
 
@@ -115,41 +131,73 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
     function getSaveFields() {
         $db_fields   = $this->udm->dbcon->MetaColumnNames('userdata');
         $qf_fields   = array_keys( $this->udm->form->exportValues() );
-        $this->_field_prefix="";
 
         return array_intersect( $db_fields, $qf_fields );
     }
 
-    function save ( $data ) {
-        $options=$this->getOptions();
+    function &_init_api( $options = null ){
+        if ( isset( $this->_dia_api )) return $this->_dia_api;
 
-        if(!isset($options[ 'orgKey' ]) && defined('DIA_API_ORGCODE')) {
+        if(!( isset($options[ 'orgKey' ]) && $options['orgKey']) && defined('DIA_API_ORGCODE')) {
             $options['orgKey'] = DIA_API_ORGCODE;
         }
-		if(!isset($options[ 'user' ]) && defined('DIA_API_USERNAME')) {
+		if(!( isset($options[ 'user' ]) && $options['user']) && defined('DIA_API_USERNAME')) {
             $options['user'] = DIA_API_USERNAME;
 		}
-		if(!isset($options[ 'password' ]) && defined('DIA_API_PASSWORD')) {
+		if(!( isset($options[ 'password' ]) && $options['password']) && defined('DIA_API_PASSWORD')) {
             $options['password'] = DIA_API_PASSWORD;
 		}
 
-		$api =& DIA_API::create();
-        $api->init(array('user'     => $options['user'],
+		$this->_dia_api =& DIA_API::create();
+        $this->_dia_api->init(array('user'     => $options['user'],
                          'password' => $options['password'],
                          'organization_key' => $options['orgKey']));
+        
+        return $this->_dia_api;
+    }
 
-/*
+    function save ( $data ) {
+        $options=$this->getOptions();
+        $api = &$this->_init_api( $options );
 
-foreach table: save
-must save supporter key first SO must check to see if supporter table is specified and do that
+        $supporter_id = $this->addDIASupporter($api, $data);
+        if ( !$supporter_id ) {
+            trigger_error( 'Save to DIA failed' );
+            if ( !defined( 'AMP_DEBUG_MODE_REMOTE_SERVICES_UNAVAILABLE' )) return false;
+        }
+        trigger_error( 'SAVED SUPPORTER ' . $supporter_id);
+
+        /**
+         * Save data to additional DIA tables as specified by mappings
+         */
+        $update_array = array( );
 
         foreach($this->mappings as $mapping) {
-            if(isset($options[$mapping])) {
-            }
+            if(!( isset($options[$mapping]) && $options[$mapping])) continue;
+
+            $table_mapping = 'table_' . $mapping;
+            if(!( isset($options[$table_mapping]) && $options[$table_mapping])) continue;
+            $result_key = $this->addLinkedMapping( $supporter_id, 
+                                    $this->translate( $data, $this->extractMapping( $options[ $mapping ]), 'static' ),
+                                    $options[ $table_mapping ] );
+            trigger_error( 'SAVED LINK ID ' . $result_key);
+
+            $result_mapping = 'result_' . $mapping;
+            if(!( isset($options[$result_mapping]) && $options[$result_mapping] && $result_key )) continue;
+            $update_array[ $options[$result_mapping] ] = $result_key ;
+            trigger_error( 'SAVED LINK ID ' . $result_key . ' IN ' . $options[$result_mapping]);
+            
+        }
+            
+        /**
+         * Save result keys to UDM table 
+         */
+        if ( !empty( $update_array )) {
+            $save_plugin = &$this->udm->registerPlugin( 'AMP', 'Save');
+            $save_plugin->save( $update_array );
         }
 
-*/
-        $supporter_id = $this->addDIASupporter($api, $data);
+
 
 /*XXX: there is an api for linking with one step in the addSupporter method
   TODO: make that api clearer and use that
@@ -166,47 +214,76 @@ must save supporter key first SO must check to see if supporter table is specifi
         return $supporter_id;
     }
 
+    function addLinkedMapping( $supporter_id, $mapped_data, $table ){
+        trigger_error( 'SAVED LINK TO ' . $table );
+        $mapped_data['supporter_KEY'] = $supporter_id;
+        /**
+         * Hacktastic exceptions for calendar date/time fields 
+         */
+        if ( isset( $mapped_data['Start_Date'] ) && $mapped_data['Start_Date']
+                && isset( $mapped_data['Start_Time']) && $mapped_data['Start_Time']){
+            $mapped_data['Start'] = $this->_makeDIAdatetime( $mapped_data['Start_Date'], $mapped_data['Start_Time']) ;
+            if ( isset( $mapped_data['End_Time']) && $mapped_data['End_Time']){
+                $mapped_data['End'] = $this->_makeDIAdatetime( $mapped_data['Start_Date'], $mapped_data['End_Time']) ;
+            }
+        }
+        if ( isset( $mapped_data['End_Date'] ) && $mapped_data['End_Date']
+                && isset( $mapped_data['End_Time']) && $mapped_data['End_Time']){
+            $mapped_data['End'] = $this->_makeDIAdatetime( $mapped_data['End_Date'], $mapped_data['End_Time']) ;
+        }
+        return $this->_dia_api->process( $table, $mapped_data );
+    }
+
+    function _makeDIAdatetime( $date_value, $time_value ){
+
+		$base_time = strtotime($date_value .' '. $time_value);
+		if(!$base_time|| (-1 == $base_time)) {
+			$base_time = strtotime($date_value);
+		}
+		if($base_time && (-1 != $base_time)) {
+            return dia_formatdate( $base_time );
+		}
+
+    }
+
     function addDIASupporter(&$api, $data) {
         $supporter = $this->translate($data);
         $supporter['uid'] = $this->udm->uid;
         $this->_supporter_key = $api->addSupporter($supporter);
-        $this->updateReturnKey('supporter', $this->_supporter_key);
+        #$this->updateReturnKey('supporter', $this->_supporter_key);
         return $this->_supporter_key;
     }
 
-	function translate( $data, $table='supporter' ) {
-		$translation = array('region' => 'Region',
-							'occupation' => 'Occupation',
-							'Company' => 'Organization');
-
-//        $translation = array_merge($translation, $this->getMapping($table));
+	function translate( $data, $mapping=null, $alternate = 'direct' ) {
+        if ( !isset( $mapping )) $mapping = $this->_supporter_mapping;
 
 		foreach($data as $key => $value) {
-			if(isset($translation[$key])) {
-				$return[$translation[$key]] = $value;
-			} else {
+			#if(isset($mapping[$key])) {
+			if($dia_key_value = array_search( $key, $mapping )) {
+				$return[$dia_key_value] = $value;
+			} elseif( $alternate == 'direct') {
 				$return[$key] = $value;
 			}
 		}
 
+        if ( $alternate == 'static' ){
+            foreach( $mapping as $key=>$value ){
+                if ( !isset( $return[ $key ])) $return[$key] = $value;
+            }
+        }
+
 		return $return;
 	}
 
-    function getMapping($table) {
-        $options = $this->getOptions();
-        //XXX:NOT RIGHT
-        foreach($options as $option) {
-            if(!in_array($option, $this->table_options)) continue;
-            if(!($table == $option['value'])) continue;
-        }
-    }
 
     function extractMapping($string) {
-        $mappings = explode('&',$string);
+        $mappings = preg_split("/\s?&\s?/",$string);
+        $return = array( );
         foreach($mappings as $map) {
             list($key, $value) = explode('=',$map);
             $return[$key] = $value;
         }
+        return $return;
     }
 
 	function getSupporterKey() {

@@ -58,6 +58,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
         $save_fields = $this->getSaveFields();
 
         foreach ($save_fields as $field) {
+            if ( !isset( $data[$field])) continue;
             $elements[] = $field . "=" . $dbcon->qstr( $data[$field] );
         }
 

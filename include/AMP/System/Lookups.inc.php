@@ -197,6 +197,7 @@ class AMPSystemLookup_ToolsbyForm extends AMPSystem_Lookup {
     var $id_field = "userdatamodid";
 
     function AMPSystemLookup_ToolsbyForm() {
+        require_once( 'AMP/System/Permission/Manager.inc.php');
         $permissions = & AMPSystem_PermissionManager::instance();
         $this->criteria = "perid in (" . join(',', $permissions->entireSet()) .") AND publish = 1 AND !isnull(userdatamodid)";
         $this->init();
