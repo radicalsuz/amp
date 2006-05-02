@@ -24,7 +24,7 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
     }
 
     function _register_options_dynamic() {
-        $this->_registerIntroTextOptions( );
+    		parent::_register_options_dynamic();
         $this->options['subject']['default']='Update Your Posting';
     }
 
