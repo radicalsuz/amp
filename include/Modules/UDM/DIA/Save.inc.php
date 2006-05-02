@@ -36,7 +36,7 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             'type' => 'textarea',
             'default' => '',
             'size' => '3:15',
-            'label' => '<span class="photocaption">mapping.  ex: custom1=<br/>Email_Preference&custom2<br/>=Source_Tracking_Code...</span>',
+            'label' => '<span class="photocaption">mapping.  ex: Email_Preference=<br/>custom1&Sourch_Tracking_Code<br/>=custom2...</span>',
             'available' => true),
         'result_mapping1' => array(
             'type' => 'text',
@@ -53,7 +53,7 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
         'mapping2' => array(
             'type' => 'textarea',
             'size' => '3:15',
-            'label' => '<span class="photocaption">mapping.  ex: custom3=<br/>Group_Name&custom4<br/>=Description...</span>',
+            'label' => '<span class="photocaption">mapping.  ex: Group_Name=<br />custom3&Description<br/>=custom4...</span>',
             'available' => true),
         'result_mapping2' => array(
             'type' => 'text',
@@ -71,7 +71,7 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             'type' => 'textarea',
             'size' => '3:15',
             'default' => '',
-            'label' => '<span class="photocaption">mapping.  ex: custom5=<br/>Event_Name&custom6<br/>=Description...</span>',
+            'label' => '<span class="photocaption">mapping.  ex: Event_Name=<br/>custom5&Description<br/>=custom6...</span>',
             'available' => true),
         'result_mapping3' => array(
             'type' => 'text',
@@ -162,10 +162,10 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
 
         $supporter_id = $this->addDIASupporter($api, $data);
         if ( !$supporter_id ) {
-            trigger_error( 'Save to DIA failed' );
+            trigger_error( AMP_TEXT_ERROR_DIA_SAVE_FAILURE );
             if ( !defined( 'AMP_DEBUG_MODE_REMOTE_SERVICES_UNAVAILABLE' )) return false;
         }
-        trigger_error( 'SAVED SUPPORTER ' . $supporter_id);
+        if ( AMP_DISPLAYMODE_DEBUG_DIA ) trigger_error( sprintf( AMP_TEXT_DIA_SAVE_SUCCESS, $supporter_id ));
 
         /**
          * Save data to additional DIA tables as specified by mappings
@@ -180,12 +180,11 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             $result_key = $this->addLinkedMapping( $supporter_id, 
                                     $this->translate( $data, $this->extractMapping( $options[ $mapping ]), 'static' ),
                                     $options[ $table_mapping ] );
-            trigger_error( 'SAVED LINK ID ' . $result_key);
+            if ( AMP_DISPLAYMODE_DEBUG_DIA ) trigger_error( 'saved DIA '. $options[$table_mapping] . ' link id: ' . $result_key);
 
             $result_mapping = 'result_' . $mapping;
             if(!( isset($options[$result_mapping]) && $options[$result_mapping] && $result_key )) continue;
             $update_array[ $options[$result_mapping] ] = $result_key ;
-            trigger_error( 'SAVED LINK ID ' . $result_key . ' IN ' . $options[$result_mapping]);
             
         }
             
@@ -215,7 +214,6 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
     }
 
     function addLinkedMapping( $supporter_id, $mapped_data, $table ){
-        trigger_error( 'SAVED LINK TO ' . $table );
         $mapped_data['supporter_KEY'] = $supporter_id;
         /**
          * Hacktastic exceptions for calendar date/time fields 

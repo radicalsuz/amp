@@ -169,9 +169,12 @@
         <block>template_css</block>
 	</templateid>
 	<css>
+		<!--
 		<type>multiselect</type>
-		<label>Override with CSS files</label>
         <size>6</size>
+		-->
+		<type>text</type>
+		<label>Override with CSS files</label>
         <block>template_css</block>
 	</css>
     <!--

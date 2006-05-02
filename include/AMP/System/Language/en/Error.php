@@ -28,4 +28,24 @@ if ( !defined( 'AMP_TEXT_ERROR_STATUS_FIELD_MISSING'))
 
 if ( !defined( 'AMP_TEXT_ERROR_CACHE_PATH_NOT_FOUND'))
         define( 'AMP_TEXT_ERROR_CACHE_PATH_NOT_FOUND', "Folder '%s' does not exist and could not be created for caching");
+if ( !defined( 'AMP_TEXT_ERROR_EMAIL_SENDER_NOT_SET'))
+        define( 'AMP_TEXT_ERROR_EMAIL_SENDER_NOT_SET', 'No sender defined.  Email not sent.');
+if ( !defined( 'AMP_TEXT_ERROR_EMAIL_MESSAGE_NOT_SET'))
+        define( 'AMP_TEXT_ERROR_EMAIL_MESSAGE_NOT_SET', 'No message defined.  Email not sent.');
+if ( !defined( 'AMP_TEXT_ERROR_EMAIL_TARGET_NOT_SET'))
+        define( 'AMP_TEXT_ERROR_EMAIL_TARGET_NOT_SET', 'No recipient defined.  Email not sent.');
+
+/**
+ * UDM Form Errors 
+ */
+if ( !defined( 'AMP_TEXT_ERROR_FORM_DATA_INVALID'))
+        define( 'AMP_TEXT_ERROR_FORM_DATA_INVALID', 'There was a problem with one or more fields. Please scroll down for more info.');
+
+/**
+ * DIA errors 
+ */
+if ( !defined( 'AMP_TEXT_ERROR_DIA_SAVE_FAILURE'))
+        define( 'AMP_TEXT_ERROR_DIA_SAVE_FAILURE', 'Save to DIA failed');
+if ( !defined( 'AMP_TEXT_ERROR_DIA_READ_FAILURE'))
+        define( 'AMP_TEXT_ERROR_DIA_READ_FAILURE', 'DIA read failed for table %s key %s');
 ?>

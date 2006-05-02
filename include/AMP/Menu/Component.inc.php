@@ -132,7 +132,7 @@ class AMP_MenuComponent extends AMPSystem_Tree {
      * @return void
      */
     function init( &$menu, $def ) {
-        $retain_values = array( "id", "href", "label" );
+        $retain_values = array( 'id', 'href', 'label' );
         foreach ($retain_values as $retain) {
             if (isset($def[$retain]))  $this->$retain = $def[$retain];
         }

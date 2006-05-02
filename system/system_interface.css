@@ -332,8 +332,16 @@ div.article_tab {
 	display:none;
 	width: 100%;
 	padding: 10px;
-	margin-left: -1px;
-	border-left: 1px solid black;
+	margin-left: -2px;
+}
+
+div.article_tab table.form_table {
+	/*border: 1px solid black;
+		margin-top: 6px;*/
+        
+		border-top: 1px solid gray;
+		border-left: 1px solid gray;
+
 }
 
 div#article_main {
@@ -553,6 +561,7 @@ table.form_table {
 	width: 90%;
 	float: left;
 	text-align: center;
+    z-index:50;
 /*
 	position: absolute;
 	left:250px;
@@ -561,6 +570,7 @@ table.form_table {
     div#tabs ul {
         margin: 0;
         padding: 0 0 2px 0.5em;
+        z-index: 100;
     }
 
     div#tabs ul li span {
@@ -568,6 +578,7 @@ table.form_table {
         background-color: #e6e6e6;
         border: 1px solid black;
         cursor: pointer;
+        z-index:150;
     }
 
     div#tabs ul li span.current_tab {
@@ -585,9 +596,6 @@ table.form_table {
 
 	div#formContainer {
 		width: 100%;
-		margin-top: 24px;
-		border-top: 1px solid black;
-		border-left: 1px solid black;
     }
 
     fieldset.system_main_content {

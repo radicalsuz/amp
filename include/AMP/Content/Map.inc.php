@@ -6,7 +6,7 @@ class AMPContent_Map {
 
     var $dbcon;
     var $map;
-    var $fields = array("id","type","usenav","textorder","parent", "secure", "templateid", "css", "flash");
+    var $fields = array("id","type","usenav","textorder", "secure", "templateid", "css", "flash");
     var $dataset;
     var $childset;
     var $top;
@@ -19,12 +19,21 @@ class AMPContent_Map {
         $this->dbcon = &$dbcon;
         if (!isset($top) || !$top ) $top = 1;
         $this->top = $top;
+        $this->addParentField( );
 
         $this->buildMap();
     }
 
+    function getParentFieldSql( ){
+        return "if ( id=".$this->top.", 0, parent)";
+    }
+
+    function addParentField( ){
+        $this->fields[] = $this->getParentFieldSql() . ' as parent';
+    }
+
     function buildMap() {
-        $sql = "Select " . join(", ", $this->fields ) ." from articletype order by parent, textorder, type";
+        $sql = "Select " . join(", ", $this->fields ) ." from articletype order by " . $this->getParentFieldSql( ) . ", textorder, type";
         $this->dataset = &$this->dbcon->CacheGetAssoc( $sql );
         $this->childset = &AMPContent_Lookup::instance( 'sectionParents' );
         $this->buildLevel( $this->top );
@@ -41,6 +50,7 @@ class AMPContent_Map {
     }
 
     function getParent( $section_id ) {
+        if ( $section_id == $this->top ) return false;
         if (!isset($this->dataset[$section_id]['parent'])) return false;
         return $this->dataset[$section_id]['parent'];
     }

@@ -193,6 +193,7 @@ class AMPContentLookup_SectionParents extends AMPContent_Lookup {
     var $sortby = 'textorder,type';
 
     function AMPContentLookup_SectionParents() {
+        $this->result_field = "if ( id=". AMP_CONTENT_MAP_ROOT_SECTION .", 0, parent) as parent";
         $this->init();
     }
 }

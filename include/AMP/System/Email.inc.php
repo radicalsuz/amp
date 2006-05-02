@@ -82,7 +82,10 @@ class AMPSystem_Email {
 
     function prepareHeader () {
 
-        if (! ($from = $this->getSender())) return false;
+        if (! ($from = $this->getSender())){
+            trigger_error( AMP_TEXT_ERROR_EMAIL_SENDER_NOT_SET );
+            return false;
+        }
         
         if ($sender_name = $this->getSenderName() ) {
             $from = $sender_name . " <" . $from .">";
@@ -108,8 +111,15 @@ class AMPSystem_Email {
         }
 
         if (!($header   =  $this->prepareHeader() ))return false;
-        if (!($message  =  $this->getMessage() ))   return false;
-        if (!($mailto   =  $this->getRecipient() ))    return false;
+        if (!($message  =  $this->getMessage() ))   {
+            trigger_error( AMP_TEXT_ERROR_EMAIL_MESSAGE_NOT_SET );
+            return false;
+        }
+        if (!($mailto   =  $this->getRecipient() ))    {
+            trigger_error( AMP_TEXT_ERROR_EMAIL_TARGET_NOT_SET );
+            return false;
+
+        }
 
         return mail( $mailto, $this->getSubject(), $message, $header, $this->getAdditionalParameters() );
     }

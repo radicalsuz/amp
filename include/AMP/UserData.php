@@ -559,12 +559,10 @@ class UserData {
      }
 
 	function formInvalidCallback() {
-		if(defined('AMP_UDM_FORM_INVALID_ERROR')) {
-			require_once('AMP/System/Flash.php');
-			$flash =& AMP_System_Flash::instance();
-			$flash->add_error(AMP_UDM_FORM_INVALID_ERROR);
-//			$this->addError('AMP_UDM_FORM_INVALID', AMP_UDM_FORM_INVALID_ERROR);
-		}
+        require_once('AMP/System/Flash.php');
+        $flash =& AMP_System_Flash::instance();
+        $flash->add_error( AMP_TEXT_ERROR_FORM_DATA_INVALID );
+		
 		foreach($this->getFormCallbacks('AMP_UDM_FORM_INVALID') as $callback) {
 			call_user_func_array($callback['callback'], $this);
 		}

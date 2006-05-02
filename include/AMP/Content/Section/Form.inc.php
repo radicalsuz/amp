@@ -15,7 +15,6 @@ class Section_Form extends AMPSystem_Form_XML {
     function setDynamicValues( ){
 
         $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
-        $this->setFieldValueSet( 'css', AMPfile_List( 'custom', 'css'));
         $this->addTranslation( 'id', '_setIdDisplay', 'set'); 
         $this->addTranslation( 'css', '_multiselectToText', 'get'); 
     }

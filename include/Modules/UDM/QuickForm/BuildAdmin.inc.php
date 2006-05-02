@@ -289,12 +289,6 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
     function _find_available_plugins() {
 
-        # This is a bit of a hack, and will break if BuildAdmin ever stops
-        # being a plugin.
-        #
-        # It also doesn't yet take into account /custom includes, but that is
-        # easily added (once the first bit works).
-
         $available_plugins = Array();
 
         #$udm_plugin_path_base = preg_replace( "/QuickForm/i", "", dirname( realpath( __FILE__ ) ) );

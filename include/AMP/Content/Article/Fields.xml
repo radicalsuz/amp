@@ -1,9 +1,8 @@
 <array>
-	<!--<tabs_html>-->
 	<tab_html_main>
 		<type>html</type>
 		<default>
-			&lt;/table&gt;
+			&lt;tr&gt;&lt;td colspan=2&gt;
 			&lt;div id="tabs"&gt;
 			&lt;ul id="topnav"&gt;
 				&lt;li class="tab_control"&gt;&lt;span id="tab_0" onclick="change_any( 'article_main', 'article_tab' );Tabs_highlight( this );" &gt;Main Content&lt;/span&gt;&lt;/li&gt;
@@ -11,15 +10,6 @@
 				&lt;li class="tab_control"&gt;&lt;span id="tab_2" onclick="change_any( 'article_fancy', 'article_tab');Tabs_highlight( this );" &gt;Advanced Options &lt;/span&gt;&lt;/li&gt;
 			&lt;/ul&gt;
 			&lt;/div&gt;
-<!--
-			&lt;br style="clear: both; /&gt;
-		</default>
-	</tabs_html>
-	<tab_html_main>
-		<type>html</type>
-		<default>
--->
-			&lt;div id="formContainer"&gt;
 			&lt;div id="article_main" class="article_tab"&gt;
 			&lt;table class="form_table"&gt;
 		</default>
@@ -194,13 +184,7 @@
         <label>Order &lt;br /&gt;(sorts by date&lt;br /&gt; if blank)</label>
 		<block>order_header</block>
     </pageorder>
-<!--
-	<tab_html_end1>
-		<type>html</type>
-		<default>
-		</default>
-	</tab_html_end1>
--->
+<!-- new tab starts here -->
 	<tab_html_image>
 		<type>html</type>
 		<default>
@@ -280,15 +264,7 @@
 		<type>static</type>
 		<default>&lt;a href="docdir.php" target="_blank"&gt;View Documents&lt;/a&gt; | &lt;a href="doc_upload.php" target="_blank"&gt;Upload Document&lt;/a&gt;</default>
 	</doc_actions>
-<!--
-	<tab_html_end2>
-		<type>html</type>
-		<default>
-			&lt;/table&gt;
-			&lt;/div&gt;
-		</default>
-	</tab_html_end2>
--->
+<!-- new tab starts here -->
 	<tab_html_fancy>
 		<type>html</type>
 		<default>
@@ -357,7 +333,7 @@
 			&lt;/table&gt;
 			&lt;/div&gt;
 			&lt;/div&gt;
-			&lt;table class="form_table"&gt;
+            &lt;/td&gt;&lt;/tr&gt;
 		</default>
 	</tab_html_end3>
 </array>
