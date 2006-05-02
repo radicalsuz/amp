@@ -29,8 +29,8 @@ class UserDataPlugin_Email extends UserDataPlugin {
                 'format'      => array( 'label' => 'Email Format',
                                         'available'   => true,
                                         'type'        => 'select',
-                                        'values'      => array( 'Plain Text' => 'Text', 'HTML' => 'HTML' ),
-                                        'default'     => 'Text' ),
+                                        'values' => '',
+                                        'default'     => '' ),
 
                 'intro_text'  => array( 'label' => 'Email Intro Text',
                                         'type'        => 'select',
@@ -44,6 +44,11 @@ class UserDataPlugin_Email extends UserDataPlugin {
                                         'default'     => '', 
                                         'values'      => ''),
 
+                'merge_fields' => array( 'available'=>true,
+						                    'type'=>'checkbox',
+			                                'default' => false,
+						                    'label'=>'Process merge fields in texts' ),
+
                 'update_page' => array( 'default' => 'modinput4.php',
                                         'available'=>true,
                                         'type'=>'text',
@@ -51,7 +56,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
                 'form_data_intro' => array( 'available'=>true,
 						                    'type'=>'text',
-						                    'label'=>'Introduction to form data' )
+						                    'label'=>'Introduction to form data' ),
          );
 
     function execute ( $options = null ) {
@@ -72,9 +77,12 @@ class UserDataPlugin_Email extends UserDataPlugin {
         $this->emailer = & $emailer;
 
         // Header text.
-        $this->message .= $this->_getBodyHeader ( $options );
+        $merge = (isset($options['merge_fields']) && $options['merge_fields'])?
+					$this->udm->getData():
+					false;
+        $this->message .= $this->_getBodyHeader ( $options, $merge );
 
-        $this->message .= $this->prepareMessage( $options );
+        $this->message .= $this->prepareMessage( $options, $merge );
 
         // Footer Text.
         $this->message .= $this->_getBodyFooter ( $options );
@@ -161,23 +169,28 @@ class UserDataPlugin_Email extends UserDataPlugin {
         trigger_error( "There was an error submitting the form: Email message incomplete.", E_USER_WARNING );
     }
 
-    function _getBodyHeader( $options ) {
+    function _getBodyHeader( $options, $merge_fields=false ) {
         if (!(isset($options['intro_text']) && $options['intro_text'])) return false;
-        return $this->_readIntroText( $options['intro_text'] );
+        return $this->_readIntroText( $options['intro_text'], $merge_fields );
     }
 
-    function _getBodyFooter ( $options ) {
+    function _getBodyFooter ( $options, $merge_fields=false ) {
         if (!(isset($options['footer_text']) && $options['footer_text'])) return false;
-        return $this->_readIntroText( $options['footer_text'] );
+        return $this->_readIntroText( $options['footer_text'], $merge_fields );
     }
 
-    function _readIntroText( $id ) {
+    function _readIntroText( $id, $merge_fields=false ) {
         $system_texts = AMPSystem_Lookup::instance('introTexts');
         if (!isset($system_texts[ $id ])) return $id;
 
         $textdata = & new AMPSystem_IntroText( $this->dbcon, $id );
 		if($textdata->isHtml()) $this->containsHTML(true);
-        return AMPDisplay_HTML::_activateIncludes($textdata->getBody()) . "\n\n";
+		if($merge_fields) {
+			$merged_text = $textdata->mergeBodyFields($merge_fields);
+		} else {
+			$merged_text = $textdata->getBody();
+		}	
+        return AMPDisplay_HTML::_activateIncludes($merged_text) . "\n\n";
     }
 
 	function containsHTML( $flag = null ) {
@@ -197,6 +210,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
     }
 
     function _register_options_dynamic() {
+        $this->options['format']['values'] = array( 'Text' => 'Plain Text', 'HTML' => 'HTML' );
         $this->_registerIntroTextOptions( );
     }
 
