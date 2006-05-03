@@ -35,20 +35,24 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
 
         //Update Link
 		if ( isset( $options['form_data_intro']) && $options['form_data_intro']) {
-			$message = "\n\n".$options['form_data_intro']."\n\n";
+			if(!(strtolower($options['form_data_intro']) == 'none')) {
+				$message = "\n\n".$options['form_data_intro']."\n\n";
+			}
 		} else {
 			$message = "\n\nPlease go to http://" . $_SERVER['SERVER_NAME'] .
 					   "/" . $options['update_page'] . "?modin=" . $udm->instance .
 					   "&uid=" . $udm->uid . " to update your information.\n\n";
 		}
 
-		$udm->disable_javascript();
-        // Output the form data - default is 'text' as defined in
-        // UserDataPlugin_Email.
-        $message .= $udm->output( $options['format'] );
-		$udm->enable_javascript();
+		if(isset($options['include_form_data']) && $options['include_form_data']) {
+			$udm->disable_javascript();
+			// Output the form data - default is 'text' as defined in
+			// UserDataPlugin_Email.
+			$message .= $udm->output( $options['format'] );
+			$udm->enable_javascript();
+		}
 
-        return $message;
+		return $message;
 
     }
 

@@ -57,6 +57,11 @@ class UserDataPlugin_Email extends UserDataPlugin {
                 'form_data_intro' => array( 'available'=>true,
 						                    'type'=>'text',
 						                    'label'=>'Introduction to form data' ),
+
+				'include_form_data' => array('available'=>true,
+											'type' => 'checkbox',
+											'default' => true,
+											'label' => 'Include form data')
          );
 
     function execute ( $options = null ) {
@@ -77,15 +82,22 @@ class UserDataPlugin_Email extends UserDataPlugin {
         $this->emailer = & $emailer;
 
         // Header text.
-        $merge = (isset($options['merge_fields']) && $options['merge_fields'])?
-					$this->udm->getData():
-					false;
+
+		//This sucks.  why can't i just call udm->getData???
+        $merge = false;
+        if(isset($options['merge_fields']) && $options['merge_fields']) {
+	    	$form =& $this->udm->form;
+	    	unset($this->udm->form);
+            $merge = $this->udm->getData();
+            $this->udm->form =& $form;
+        }
+
         $this->message .= $this->_getBodyHeader ( $options, $merge );
 
-        $this->message .= $this->prepareMessage( $options, $merge );
+        $this->message .= $this->prepareMessage( $options );
 
         // Footer Text.
-        $this->message .= $this->_getBodyFooter ( $options );
+        $this->message .= $this->_getBodyFooter ( $options, $merge );
 
         // Construct the header.
         $this->header = $this->prepareHeader( $options );
