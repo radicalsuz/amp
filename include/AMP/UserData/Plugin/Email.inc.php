@@ -145,7 +145,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
         $header .= "\nX-Mailer: AMP/UserDataMail\n";
 
-		if('html' == strtolower($options['format'])) {
+		if(('html' == strtolower($options['format'])) || $this->containsHTML()) {
             $content_header =  "Content-Type: text/html; charset=utf-8\r\n" .
 			           		   "Content-Transfer-Encoding: 8bit\r\n\r\n";
 			$header .=  $content_header;
