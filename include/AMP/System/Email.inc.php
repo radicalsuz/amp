@@ -127,7 +127,7 @@ class AMPSystem_Email {
 
 	function getAdditionalParameters() {
 		if(defined('AMP_MAIL_ENVELOPE_SENDER') && AMP_MAIL_ENVELOPE_SENDER) {
-			$this->addParameter( '-f'.AMP_MAIL_ENVELOPE_SENDER );
+			$this->addParameter( '-f '.AMP_MAIL_ENVELOPE_SENDER );
 		}
 
 		if(empty($this->_parameters)) {
