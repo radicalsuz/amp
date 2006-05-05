@@ -25,12 +25,6 @@ class AMPContentLookup_Class extends AMPContent_Lookup {
     }
 }
 
-class AMPContentLookup_Classes extends AMPContentLookup_Class {
-    function AMPContentLookup_Classes() {
-        $this->init();
-    }
-}
-
 class AMPContentLookup_Sections extends AMPContent_Lookup {
     var $datatable = "articletype";
     var $result_field = "type";
@@ -538,15 +532,6 @@ class AMPContentLookup_SectionsByLink extends AMPContent_Lookup {
     }
     function available( ){
         return false;
-    }
-}
-
-class AMPContentLookup_RSS_Subscriptions extends AMPContent_Lookup {
-    var $datatable = 'px_feeds';
-    var $result_field = 'title';
-
-    function AMPContentLookup_RSS_Subscriptions( ){
-        $this->init( );
     }
 }
 ?>

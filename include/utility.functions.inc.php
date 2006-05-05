@@ -736,15 +736,7 @@ if (!function_exists( 'AMP_PastParticiple' )) {
 if (!function_exists( 'AMP_Pluralize' )) {
     function AMP_Pluralize( $word ) {
         $term_end = substr( $word, -1 );
-        // ending in Z
-        if ("z" == $term_end ){
-            $term_end = substr( $word, -2 );
-            if ("zz" == $term_end ) return $word . 'es';
-            return $word . 'zes';
-        }
-        // ending in Y
         if ("y" == $term_end ) return substr( $word, 0, strlen( $word )-1 ). "ies" ;
-        // ending in Default 
         if ($term_end != "s" ) return $word ."s";
         else return $word .'es';
         return $word;

@@ -1,97 +1,110 @@
 <array>
-		<id>
-			<type>hidden</type>
-		</id>
+	<id>
+		<type>hidden</type>
+	</id>	
+	<title>
+		<type>text</type>
+		<label>Title</label>
+		<required>1</required>
+	</title>
+	<subtitle>
+		<type>text</type>
+		<label>Subtitle</label>
+	</subtitle>
+	<author>
+		<type>text</type>
+		<label>Owner Name</label>
+	</author>
+	<email>
+		<type>text</type>
+		<label>Owner Email</label>
+	</email>
+	<description>
+		<type>textarea</type>
+		<label>Description</label>
+		<required>1</required>
+	</description>
+	<image>
+		<type>imagepicker</type>
+        <label>Image Filename</label>
+	</image>
+	<copyright>
+		<type>text</type>
+		<label>Copyright</label>
+	</copyright>
+	<language>
+		<type>text</type>
+		<label>Language</label>
+		<default>en-us</default>
+	</language>
+	<category>
+		<type>text</type>
+		<label>Category</label>
+	</category>
+	<ttl>
+		<type>text</type>
+		<label>Time To Live</label>
+		<default>40</default>
+	</ttl>
+</array>
+
+
+
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
 	<publish>
-		<type>checkbox</type>
-		<label>Publish</label>
-		<default>1</default>
-	</publish>
-	<name>
-		<type>text</type>
-		<label>Quiz Name</label>
-	</name>
-	<question>
-		<type>textarea</type>
-		<label>Question</label>
-	</question>
-	
-	<answer_1>
-		<type>text</type>
-		<label>Answer 1</label>
-	</answer_1>
-	<answer_2>
-		<type>text</type>
-		<label>Answer 2</label>
-	</answer_2>
-	<answer_3>
-		<type>text</type>
-		<label>Answer 3</label>
-	</answer_3>
-	<answer_4>
-		<type>text</type>
-		<label>Answer 4</label>
-	</answer_4>
-	<answer_5>
-		<type>text</type>
-		<label>Answer 5</label>
-	</answer_5>
-<answer_6>
-		<type>text</type>
-		<label>Answer 6</label>
-	</answer_6>
-	<answer_7>
-		<type>text</type>
-		<label>Answer 7</label>
-	</answer_7>
-	<correct_answer>
+        <type>checkbox</type>
+        <label>&lt;span class='publish_label'&gt;PUBLISH&lt;/span&gt;</label>
+    </publish>
+	<file_header>
+		<type>header</type>
+		<label>File Info</label>
+	</file_header>	
+	<podcast>
 		<type>select</type>
-		<label>Correct Answer</label>
-
-	</correct_answer>
-
-	<explanation>
-		<type>textarea</type>
-		<label>Explanation</label>
-	</explanation>
-	<link>
-		<type>text</type>
-		<label>Link 1</label>
-	</link>
-	<link_2>
-		<type>text</type>
-		<label>Link 2</label>
-	</link_2>
-	<link_3>
-		<type>text</type>
-		<label>Link 3</label>
-	</link_3>
-	<section>
+		<label>Podcast</label>
+		<required>1</required>
+	</podcast>
+	<file>
 		<type>select</type>
-		<label>Section</label>
-	</section>
+		<label>File Name</label>
+		<required>1</required>
+	</file>
+	<length>
+		<type>text</type>
+		<label>Length (format: 03:54)</label>
+		<required>1</required>
+	</length>
+	<file_desc>
+		<type>header</type>
+		<label>File Description</label>
+	</file_desc>	
+	<title>
+		<type>text</type>
+		<label>Title</label>
+		<required>1</required>
+	</title>
+	<subtitle>
+		<type>text</type>
+		<label>Subtitle</label>
+	</subtitle>
+	<description>
+		<type>textarea</type>
+		<label>Description</label>
+	</description>
+	<author>
+		<type>text</type>
+		<label>Owner Name</label>
+	</author>
 	<date>
-		<type>date</type>
-		<label>Quiz Date</label>
-			<options>
-				<format>MdY</format>
-			</options>
-			<default>today</default>
+		 <type>date</type>
+        <label>Date</label>
+        <default>today</default>
 	</date>
-	<date_start>
-		<type>date</type>
-		<label>Quiz Starts</label>
-			<options>
-				<format>MdY</format>
-			</options>
-	</date_start>
-	<date_end>
-		<type>date</type>
-		<label>Quiz Ends</label>
-			<options>
-				<format>MdY</format>
-			</options>
-	</date_end>
-
--->
+	<keywords>
+		<type>textarea</type>
+		<label>Keywords</label>
+	</keywords>
 </array>

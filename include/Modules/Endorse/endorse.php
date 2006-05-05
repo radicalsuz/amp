@@ -48,11 +48,9 @@ while (!$groups->EOF)   {
 	if (($groups->Fields("First_Name") !=(NULL))  or ($groups->Fields("Last_Name") !=(NULL))) { 
 		echo '<span class="bodygrey">'  .  $groups->Fields("First_Name") . '&nbsp;' . $groups->Fields("Last_Name") . '</span><br>';
 	}
-    
 	if (($groups->Fields("Email") !=(NULL)) ) { 
 		echo '<span class="bodygrey"><a href="mailto:' . $groups->Fields("Email") . '">' . $groups->Fields("Email")  . '</a></span><br>';
 	 } 
-     
 	if (($groups->Fields("Phone") !=(NULL)) ) { 
 		echo '<span class="bodygrey">' . $groups->Fields("Phone") . '</span><br>';
 	} 

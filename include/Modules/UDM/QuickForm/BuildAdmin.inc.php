@@ -226,10 +226,6 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
                         if ( isset( $option_values[$option_name])) {
                             $md[$plugin_name . "_$option_name"] = $option_values[ $option_name ];
                         }
-                        /*
-                        print $option_name;
-                        AMP_varDump( $option );
-                        */
                     }
                 }
 

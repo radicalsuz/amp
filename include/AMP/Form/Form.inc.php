@@ -193,11 +193,6 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
 	function translate ( $data, $action = "get" ) {
 		if (empty( $this->translations) || empty( $this->translations[ $action ])) return $data;
-        if ( is_object( $data ) && strtolower( get_class( $data )) == 'html_quickform_error') {
-            trigger_error( $data->getMessage( ));
-            return false;
-        }
-
 		$result_data = $data;
 		foreach ( $this->translations[ $action] as $fieldname => $translate_method_set ) {
             if ( !is_array( $translate_method_set )) continue;

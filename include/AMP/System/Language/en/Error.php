@@ -20,8 +20,6 @@ define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED',
 define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_REGISTRATION_FAILED',
             'Cannot register plugin %s : %s' );
 
-define( 'AMP_TEXT_ERROR_OPEN_FAILED', "Cannot open %s");
-
 
 if ( !defined( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED'))
         define( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED', 'This page has not been configured for use');

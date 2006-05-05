@@ -131,5 +131,4 @@ if ( !defined( 'AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS'))
  * Default Module Definitions 
  */
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );
-if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS', 45 );
 ?>

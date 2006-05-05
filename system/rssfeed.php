@@ -1,13 +1,6 @@
 <?php
+#generic update page
 $modid = "45";
-
-require_once( 'AMP/Content/RSS/Feed/ComponentMap.inc.php');
-
-$map = &new ComponentMap_RSS_Feed( );
-$controller = &$map->get_controller( );
-print $controller->execute( );
-/*
-
 $mod_name = "rss";
 
 require_once("Connections/freedomrising.php");
@@ -100,5 +93,4 @@ else {
 }	
 
 include ("footer.php");
-*/
 ?>
