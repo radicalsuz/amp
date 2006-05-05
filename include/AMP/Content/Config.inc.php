@@ -127,8 +127,12 @@ if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DE
 if ( !defined( 'AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS'))
     define('AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS', ( ( isset($MM_reltype) && !$MM_reltype ) ? false : true ) );
 
+if ( !defined( 'AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT'))
+    define( 'AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT', 750 );
+
 /**
  * Default Module Definitions 
  */
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );
+if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS', 45 );
 ?>

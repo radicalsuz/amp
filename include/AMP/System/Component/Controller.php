@@ -235,7 +235,8 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
     function display_default( ){
         $display = &$this->_map->get_action_display( $this->get_action( )); 
-        if ( $display ) $this->_display->add( $display );
+        $this->set_banner( $this->_action_default );
+        if ( $display ) $this->_display->add( $display , 'default');
     }
 
     function commit_list( ){
@@ -258,8 +259,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->_form = &$form;
         $this->notify( 'initForm' );
 
-        $this->_form->Build( );
         if ( $read_request ) $this->_init_form_request( );
+        $this->_form->Build( );
         
     }
 
@@ -359,7 +360,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         }
 
         //add the list / blank form to the display manager
-        $this->_display->add( $display );
+        $this->_display->add( $display, 'default' );
         return true;
 
     }

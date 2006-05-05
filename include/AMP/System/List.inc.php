@@ -93,6 +93,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function init(&$source) {
      
+        if ( !$source ) return;
         $this->setSource( $source );
         $this->_setSort();
         $this->_activatePager( );
@@ -165,16 +166,21 @@ class AMPSystem_List extends AMPDisplay_HTML {
         foreach( $this->col_headers as $column ){
             $row_data[$column] = $this->_getSourceDataItem( $column, $row_data_source );
         }
-        if ( isset( $this->name_field ) && isset( $row_data[$this->name_field ])) {
-            $row_data[$this->name_field ] = 
-                    "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$row_data['id'] ) ."' title='" . AMP_TEXT_EDIT_ITEM . "'>" 
-                    . $row_data[ $this->name_field ]
-                    . '</a>';
-
-        }
+        $name_data =  $this->_getNameColumnFormat( $row_data );
+        if ( $name_data ) $row_data[$this->name_field ] = $name_data;
 
         ++$this->_source_counter;
         return $row_data;
+    }
+
+    function _getNameColumnFormat( $row_data ) {
+        if ( !( isset( $this->name_field ) && isset( $row_data[$this->name_field ]))) return false; 
+        if ( isset( $this->suppress['editcolumn']) && $this->suppress['editcolumn']) return $row_data[ $this->name_field ];
+
+        return      "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$row_data['id'] ) ."' title='" . AMP_TEXT_EDIT_ITEM . "'>" 
+                    . $row_data[ $this->name_field ]
+                    . '</a>';
+
     }
 
     //for array objects only
@@ -453,7 +459,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         foreach ($this->translations as $fieldname=>$translate_method) {
             if (!array_key_exists($fieldname, $currentrow)) continue;
             if (!method_exists( $this, $translate_method )) {
-                trigger_error ( get_class( $this ) . ": Translation method " . $translate_method . " for field " . $fieldname . " not found. ");
+                trigger_error ( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED , get_class( $this ), $translate_method, ( '_translateRow:' . $fieldname) ));
                 continue;
             }
             $translated_row[ $fieldname ] = $this->$translate_method( $currentrow[ $fieldname ], $fieldname, $currentrow );
@@ -474,10 +480,24 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _makePrettyDate( $value, $fieldname,$data  ){
         if ( !isset( $data[$fieldname])) return "";
-        $result = date( 'M d, Y', $data[$fieldname]);
+        $result = date( 'M j, Y', $data[$fieldname]);
 
         if ( $result != 'Dec 31, 1969') return $result;
-        return date( 'M d, Y', strtotime( $data[$fieldname]));
+        return date( 'M j, Y', strtotime( $data[$fieldname]));
+    }
+
+    function _makePrettyDateTime( $value, $fieldname, $data ){
+        if ( !isset( $data[$fieldname])) return "";
+        $quick_result = date( "Y-m-d H:i:s", $data[$fieldname] );
+        if ( $quick_result != AMP_NULL_DATETIME_VALUE_UNIX) {
+            $timestamp_value = $data[$fieldname];
+        } else {
+            $timestamp_value = strtotime( $data[$fieldname ] );
+            $quick_result = date( "Y-m-d H:i:s", $timestamp_value);
+            if ( $quick_result == AMP_NULL_DATETIME_VALUE_UNIX ) return false;
+        }
+        return date( "M j, Y<\BR>\ng:ia", $timestamp_value );
+
     }
 
     function addLookup( $field , $dataset ) {

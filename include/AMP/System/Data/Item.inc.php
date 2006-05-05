@@ -322,8 +322,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function _sort_compare( $file1, $file2 ) {
         if ( !( $sort_method = $this->_sort_accessor )) return 0;
         if ( $this->_sort_direction == AMP_SORT_DESC )
-            return ( $file1->$sort_method( ) < $file2->$sort_method( ) ) ? 1 : -1; 
-        return ( $file1->$sort_method( ) > $file2->$sort_method( ) ) ? 1 : -1; 
+            return strnatcasecmp( $file2->$sort_method( ) , $file1->$sort_method( ) ); 
+        return strnatcasecmp( $file1->$sort_method( ) , $file2->$sort_method( ) );
+        #    return ( $file1->$sort_method( ) < $file2->$sort_method( ) ) ? 1 : -1; 
+        #return ( $file1->$sort_method( ) > $file2->$sort_method( ) ) ? 1 : -1; 
     }
 
     function setSortMethod( $sort_property ) {

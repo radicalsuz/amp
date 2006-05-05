@@ -16,7 +16,6 @@ class Section_Form extends AMPSystem_Form_XML {
 
         $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
         $this->addTranslation( 'id', '_setIdDisplay', 'set'); 
-        $this->addTranslation( 'css', '_multiselectToText', 'get'); 
     }
 
     function _setIdDisplay( $data, $fieldname ){
