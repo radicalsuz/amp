@@ -93,6 +93,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function init(&$source) {
      
+        if ( !$source ) return;
         $this->setSource( $source );
         $this->_setSort();
         $this->_activatePager( );
@@ -165,16 +166,21 @@ class AMPSystem_List extends AMPDisplay_HTML {
         foreach( $this->col_headers as $column ){
             $row_data[$column] = $this->_getSourceDataItem( $column, $row_data_source );
         }
-        if ( isset( $this->name_field ) && isset( $row_data[$this->name_field ])) {
-            $row_data[$this->name_field ] = 
-                    "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$row_data['id'] ) ."' title='" . AMP_TEXT_EDIT_ITEM . "'>" 
-                    . $row_data[ $this->name_field ]
-                    . '</a>';
-
-        }
+        $name_data =  $this->_getNameColumnFormat( $row_data );
+        if ( $name_data ) $row_data[$this->name_field ] = $name_data;
 
         ++$this->_source_counter;
         return $row_data;
+    }
+
+    function _getNameColumnFormat( $row_data ) {
+        if ( !( isset( $this->name_field ) && isset( $row_data[$this->name_field ]))) return false; 
+        if ( isset( $this->suppress['editcolumn']) && $this->suppress['editcolumn']) return $row_data[ $this->name_field ];
+
+        return      "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$row_data['id'] ) ."' title='" . AMP_TEXT_EDIT_ITEM . "'>" 
+                    . $row_data[ $this->name_field ]
+                    . '</a>';
+
     }
 
     //for array objects only

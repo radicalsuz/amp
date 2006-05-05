@@ -22,6 +22,7 @@ define( 'AMP_TEXT_DATA_DELETE_SUCCESS',  "%s was deleted");
  */
 define( 'AMP_TEXT_LIST_ACTION_SUCCESS', '%s %s items successfully ');
 define( 'AMP_TEXT_LIST_ACTION_FAIL', 'Nothing was %s');
+define( 'AMP_TEXT_CONTENT_RSS_ITEMS_ADDED', 'Received %s new items from %s');
 
 /**
  * List explanatory text  
@@ -29,7 +30,13 @@ define( 'AMP_TEXT_LIST_ACTION_FAIL', 'Nothing was %s');
 define( 'AMP_TEXT_WITH_SELECTED', 'With Selected:&nbsp;');
 define( 'AMP_TEXT_EDIT_ITEM', 'Edit this Item');
 define( 'AMP_TEXT_EDIT', 'Edit');
+define( 'AMP_TEXT_VIEW', 'View');
+define( 'AMP_TEXT_VIEW_SOURCE', 'View Source');
+define( 'AMP_TEXT_SOURCE', 'Source');
+define( 'AMP_TEXT_ALL', 'All');
+define( 'AMP_TEXT_DELETED', 'Deleted');
 define( 'AMP_TEXT_ADD_ITEM','Add new record' );
+define( 'AMP_TEXT_PREVIEW_ITEM','Preview this Item' );
 
 /**
  *  Labels for each different Sectional Listing Type 

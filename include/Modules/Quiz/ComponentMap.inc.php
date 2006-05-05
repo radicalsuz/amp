@@ -2,21 +2,21 @@
 
 require_once ( 'AMP/System/ComponentMap.inc.php' );
 
-class ComponentMap_Podcast extends AMPSystem_ComponentMap {
+class ComponentMap_Quiz extends AMPSystem_ComponentMap {
 
-	var $heading = "Podcast";
-	var $nav_name = "podcast";
+	var $heading = "Quiz";
+	var $nav_name = "quiz";
 
 	var $paths = array(
-		'fields' => 'Modules/Podcast/Fields.xml',
-		'list' => 'Modules/Podcast/List.inc.php',
-		'form' => 'Modules/Podcast/Form.inc.php',
-		'source' => 'Modules/Podcast/Podcast.php' );
+		'fields' => 'Modules/Quiz/Fields.xml',
+		'list' => 'Modules/Quiz/List.inc.php',
+		'form' => 'Modules/Quiz/Form.inc.php',
+		'source' => 'Modules/Quiz/Quiz.php' );
 
 
 	var $components = array(
-		'list' => 'Podcast_List',
-		'form' => 'Podcast_Form',
-		'source' => 'AMPSystem_Podcast' );
+		'list' => 'Quiz_List',
+		'form' => 'Quiz_Form',
+		'source' => 'AMPSystem_Quiz' );
 }
 ?>

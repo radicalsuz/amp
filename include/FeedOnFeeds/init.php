@@ -23,12 +23,12 @@ define('MAGPIE_USER_AGENT', 'FeedOnFeeds/0.1.7 (+http://minutillo.com/steve/feed
 define('MAGPIE_CACHE_DIR', FOF_CACHE_DIR);
 
 // surpress magpie's warnings, we'll handle those ourselves
-error_reporting(E_ERROR);
+#error_reporting(E_ERROR);
 
 require_once('FeedOnFeeds/magpierss/rss_fetch.inc');
 require_once('FeedOnFeeds/magpierss/rss_utils.inc');
 
-$fof_connection = mysql_connect(AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS) or die("Cannot connect to database.  Check your configuration.  Mysql says: <b>" . mysql_error());
+$fof_connection = &mysql_connect(AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS) or die("Cannot connect to database.  Check your configuration.  Mysql says: <b>" . mysql_error());
 mysql_select_db(AMP_DB_NAME, $fof_connection) or die("Cannot select database.  Check your configuration.  Mysql says: " . mysql_error());
 
 if(!$installing) is_writable( FOF_CACHE_DIR ) or die("Cache directory is not writable or does not exist.  Have you run <a href=\"install.php\"><code>install.php</code></a>?");
@@ -399,6 +399,9 @@ function fof_opml_to_array($opml)
 function fof_add_feed($url)
 {
 	if(!$url) return;
+	global $FOF_FEED_TABLE, $FOF_ITEM_TABLE;
+	$FOF_FEED_TABLE = FOF_FEED_TABLE; 
+    $FOF_ITEM_TABLE = FOF_ITEM_TABLE;
 
 	$url = trim($url);
 
@@ -478,6 +481,8 @@ function fof_add_feed($url)
 function fof_actually_add_feed($url, $rss)
 {
 	global $FOF_FEED_TABLE, $FOF_ITEM_TABLE;
+	$FOF_FEED_TABLE = FOF_FEED_TABLE; 
+    $FOF_ITEM_TABLE = FOF_ITEM_TABLE;
 
 	$title = mysql_escape_string($rss->channel['title']);
 	$link = mysql_escape_string($rss->channel['link']);
@@ -528,6 +533,9 @@ function fof_feed_row($id)
 function fof_update_feed($url)
 {
 	global $FOF_FEED_TABLE, $FOF_ITEM_TABLE;
+
+	$FOF_FEED_TABLE = FOF_FEED_TABLE; 
+    $FOF_ITEM_TABLE = FOF_ITEM_TABLE;
 
 	if(!$url) return 0;
 

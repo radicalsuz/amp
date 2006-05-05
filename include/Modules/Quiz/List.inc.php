@@ -1,16 +1,16 @@
 <?php
 
-require_once ('Modules/Podcast/Set.inc.php' );
+require_once ('Modules/Quiz/Set.inc.php' );
 require_once ('AMP/System/List.inc.php');
 
-class Podcast_List extends AMPSystem_List {
+class Quiz_List extends AMPSystem_List {
 
-	var $col_headers = array( "ID" => "id", "Podcast" => "title" );
-	var $editlink = "podcast.php";
-	var $name = "Podcasts";
+	var $col_headers = array( "ID" => "id", "Name" => "name" );
+	var $editlink = "quiz.php";
+	var $name = "Quiz";
 
-	function Podcast_List ( &$dbcon ) {
-		$source = & new PodcastSet( $dbcon );
+	function Quiz_List ( &$dbcon ) {
+		$source = & new QuizSet( $dbcon );
 		$this->init ($source );
 	}
 

@@ -1,5 +1,4 @@
 <?php
-#generic update page
 $modid = "45";
 
 $mod_name = "rss";

@@ -3,6 +3,7 @@
 require_once( 'AMP/System/List.inc.php');
 require_once( 'AMP/System/List/Toolbar.inc.php');
 require_once( 'AMP/System/List/Request.inc.php');
+require_once( 'AMP/System/List/Observer.inc.php');
 
 class AMP_System_List_Form extends AMPSystem_List {
     var $formname = "System_List";
@@ -28,6 +29,7 @@ class AMP_System_List_Form extends AMPSystem_List {
 
     function init( &$source ) {
      
+        if ( !$source ) return;
         $this->setSource( $source );
         $this->_submitGroup .= $this->formname;
 
@@ -160,7 +162,7 @@ class AMP_System_List_Form extends AMPSystem_List {
 
     function _HTML_selectColumnHeader() {
         if (isset($this->suppress['selectcolumn'])) return "";
-        return '<td><center><a class="intitle" onclick=\'list_selectAll("'.$this->formname.'");\'>All</a></center></td>';
+        return '<td><center><a class="intitle" onclick=\'list_selectAll("'.$this->formname.'");\'>'.AMP_TEXT_ALL.'</a></center></td>';
     }
 
     function _HTML_selectColumn( $id ) {
@@ -178,7 +180,7 @@ class AMP_System_List_Form extends AMPSystem_List {
 
     function _HTML_previewLink( $id ) {
         if ( !isset( $this->previewlink )) return false;
-        return  '<a href="' . AMP_URL_AddVars( $this->previewlink , 'id='.$id) .'" target="_blank" title="Preview this Item">' .
+        return  '<a href="' . AMP_URL_AddVars( $this->previewlink , 'id='.$id) .'" target="_blank" title="'.AMP_TEXT_PREVIEW_ITEM.'">' .
                 '<img src="' . AMP_SYSTEM_ICON_PREVIEW . '" width="16" height="16" border=0></a>';
     }
 

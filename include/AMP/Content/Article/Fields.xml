@@ -48,11 +48,20 @@
 		<block>title_options</block>
      </linktext>
     <LocationHeader>
-        <label>Section and Locations</label>
+        <label>Section, Class and Locations</label>
         <type>header</type>
     </LocationHeader>
+    <class>
+        <label>Class</label>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>class</instance>
+        </lookup>
+        <default>1</default>
+    </class>
     <type>
-        <label>Main Section</label>
+        <label>Main Section&amp;nbsp;&lt;a class=photocaption href="type_edit.php"&gt;add new&lt;/a&gt;</label>
         <required>1</required>
         <type>select</type>
         <lookup>
@@ -63,16 +72,15 @@
     <new_section_link>
         <type>static</type>
         <per>CONTENT_SECTION_EDIT</per>
-        <label>&lt;a href="type_edit.php"&gt;add new&lt;/a&gt;</label>
     </new_section_link>
-	<location_trigger>
+	<related_section_header>
 		<type>blocktrigger</type>
-        <label>Add Locations</label>
+        <label>Related Sections</label>
 		<block_trigger>reltype</block_trigger>
-		<block>location_trigger</block>
-	</location_trigger>
+		<block>related_sections</block>
+	</related_section_header>
     <reltype>
-		<block>location_trigger</block>
+		<block>related_sections</block>
         <label>Related Sections</label>
         <type>multiselect</type>
         <size>8</size>
@@ -81,16 +89,12 @@
             <instance>sectionmap</instance>
         </lookup>
     </reltype>
-    <class>
+	<location_trigger>
+		<type>blocktrigger</type>
+        <label>Location Options</label>
+		<block_trigger>reltype</block_trigger>
 		<block>location_trigger</block>
-        <label>Class</label>
-        <type>select</type>
-        <lookup>
-            <module>content</module>
-            <instance>class</instance>
-        </lookup>
-        <default>1</default>
-    </class>
+	</location_trigger>
      <state>
         <type>select</type>
         <label>Region</label>
