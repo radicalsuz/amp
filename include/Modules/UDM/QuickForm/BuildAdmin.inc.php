@@ -303,7 +303,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $dh_set['local'] = ( file_exists( $udm_plugin_path_local ))? opendir( $udm_plugin_path_local ) : false;
 
         foreach( $dh_set as $dh_key => $dh ){
-            while (($namespace = readdir($dh)) !== false) {
+            while ($dh && ($namespace = readdir($dh)) !== false) {
 
                 if (strpos($namespace, ".") === 0) continue;
                 $subfolder = 'udm_plugin_path_' . $dh_key;
