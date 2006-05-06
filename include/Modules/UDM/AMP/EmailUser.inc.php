@@ -24,7 +24,7 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
     }
 
     function _register_options_dynamic() {
-    		parent::_register_options_dynamic();
+        parent::_register_options_dynamic();
         $this->options['subject']['default']='Update Your Posting';
     }
 
@@ -52,7 +52,14 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
 			$udm->enable_javascript();
 		}
 
-		return $message;
+		$html = isset($options['format']) && ('html' == strtolower($options['format']));
+		if($html) {
+			$this->containsHTML($html);
+		} elseif($this->containsHTML()) {
+			$message = nl2br($message);
+		}
+
+        return $message;
 
     }
 

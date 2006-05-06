@@ -353,30 +353,32 @@ class AMPSystemLookup_Lists extends AMPSystem_Lookup {
             $this->datatable = $GLOBALS['MM_listtable'];
             $this->criteria = 'active=1';
         }
-        if ( AMP_DBTABLE_BLAST_LISTS ) {
+        if ( defined('AMP_DBTABLE_BLAST_LISTS') && AMP_DBTABLE_BLAST_LISTS ) {
             $this->datatable = AMP_DBTABLE_BLAST_LISTS;
             $this->criteria = 'active=1';
         }
-        if ( AMP_MODULE_BLAST == 'PHPlist') {
-            $this->datatable = 'phplist_list';
-            $this->criteria = 'active=1';
-        }
-        if ( AMP_MODULE_BLAST == 'Listserve') {
-            $this->criteria = "publish=1 and !isnull( subscribe_address) and subscribe_address != ''";
-        }
-        if ( AMP_MODULE_BLAST == 'DIA') {
-			require_once('DIA/API.php');
-			$api =& DIA_API::create();
-			$groups = $api->getGroupNamesAssoc();
-			$this->dataset = isset($groups)?$groups:array();
-
-			//update our local copy of available DIA lists
-			$dbcon =& AMP_Registry::getDbcon();
-			foreach($groups as $id => $name) {
-				$list = array('id' => $id, 'name' => $name, 'description' => 'DIA Group', 'service_type' => 'DIA');
-				$dbcon->Replace('lists', $list, array('id', 'service_type'), $quote=true); 
+		if ( defined('AMP_MODULE_BLAST') ) {
+			if ( AMP_MODULE_BLAST == 'PHPlist') {
+				$this->datatable = 'phplist_list';
+				$this->criteria = 'active=1';
 			}
-			return;
+			if ( AMP_MODULE_BLAST == 'Listserve') {
+				$this->criteria = "publish=1 and !isnull( subscribe_address) and subscribe_address != ''";
+			}
+			if ( AMP_MODULE_BLAST == 'DIA') {
+				require_once('DIA/API.php');
+				$api =& DIA_API::create();
+				$groups = $api->getGroupNamesAssoc();
+				$this->dataset = isset($groups)?$groups:array();
+
+				//update our local copy of available DIA lists
+				$dbcon =& AMP_Registry::getDbcon();
+				foreach($groups as $id => $name) {
+					$list = array('id' => $id, 'name' => $name, 'description' => 'DIA Group', 'service_type' => 'DIA');
+					$dbcon->Replace('lists', $list, array('id', 'service_type'), $quote=true); 
+				}
+				return;
+			}
 		}
 
         $this->init();

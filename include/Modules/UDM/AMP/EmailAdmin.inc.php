@@ -25,16 +25,16 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
     }
 
     function _register_options_dynamic() {
-		parent::_register_options_dynamic();
+    	parent::_register_options_dynamic();
         $this->options['mailto']['default'] = $this->udm->_module_def['mailto'];
         $this->options['subject']['default'] = $this->udm->_module_def['subject'];
         $this->options['update_page']['default'] = "system/modinput4_view.php";
-        $this->_registerIntroTextOptions( );
     }
 
     function prepareMessage ( $options = null ) {
 
         $udm   =& $this->udm;
+        $options = array_merge($this->getOptions(), $options);
 
         $message = '';
 
@@ -48,6 +48,14 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
         $message .= "\n\nPlease visit http://" . $_SERVER['SERVER_NAME'] . 
                     "/".$options['update_page']."?modin=" . $udm->instance .
                     "&uid=" . $udm->uid . " to publish or edit this record.\n\n";
+
+		$html = isset($options['format']) && ('html' == strtolower($options['format']));
+		if($html) {
+			$this->containsHTML($html);
+		} elseif($this->containsHTML()) {
+			$message = nl2br($message);
+		}
+
         return $message;
 
     }

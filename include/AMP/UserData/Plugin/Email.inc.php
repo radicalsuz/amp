@@ -9,28 +9,32 @@ class UserDataPlugin_Email extends UserDataPlugin {
     var $message = '';
     var $header = '';
     var $emailer;
+	var $_containsHTML = false;
 
     var $options = array(
 
-                'mailto'      => array( 'label' => 'Email Address',
+                'mailto'      => array( 'label' => 'Email To<br/>(override default)',
                                         'type'        => 'text',
                                         'required'    => true ,
+                                        'default'	  => '',
                                         'available'   => true),
 
                 'from'	      => array( 'label' => 'Email From',
                                         'type'        => 'text',
+										'default'	  => '',
                                         'available'   => true),
 
                 'subject'     => array( 'label' => 'Email Subject',
                                         'available'   => true,
                                         'type'        => 'text',
+                                        'default'	  => '',
                                         'required'    => true ),
 
                 'format'      => array( 'label' => 'Email Format',
                                         'available'   => true,
                                         'type'        => 'select',
                                         'values' => '',
-                                        'default'     => '' ),
+                                        'default'     => 'Text' ),
 
                 'intro_text'  => array( 'label' => 'Email Intro Text',
                                         'type'        => 'select',
@@ -45,9 +49,9 @@ class UserDataPlugin_Email extends UserDataPlugin {
                                         'values'      => ''),
 
                 'merge_fields' => array( 'available'=>true,
-						                    'type'=>'checkbox',
-			                                'default' => false,
-						                    'label'=>'Process merge fields in texts' ),
+                                         'type'=>'checkbox',
+			                             'default' => false,
+						                 'label'=>'Process merge fields in texts' ),
 
                 'update_page' => array( 'default' => 'modinput4.php',
                                         'available'=>true,
@@ -56,6 +60,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
                 'form_data_intro' => array( 'available'=>true,
 						                    'type'=>'text',
+                                            'default' => '',
 						                    'label'=>'Introduction to form data' ),
 
 				'include_form_data' => array('available'=>true,
@@ -98,6 +103,9 @@ class UserDataPlugin_Email extends UserDataPlugin {
 
         // Footer Text.
         $this->message .= $this->_getBodyFooter ( $options, $merge );
+		if($this->containsHTML()) {
+			$this->message = nl2br($this->message);
+		}
 
         // Construct the header.
         $this->header = $this->prepareHeader( $options );
@@ -151,7 +159,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
 			$header .=  $content_header;
 
             if ( isset( $this->emailer )) {
-                $this->emailer->addParameter( $content_header );
+                $this->emailer->setContentHeader( $content_header );
             }
 		}
         return $header;
@@ -201,7 +209,7 @@ class UserDataPlugin_Email extends UserDataPlugin {
 			$merged_text = $textdata->mergeBodyFields($merge_fields);
 		} else {
 			$merged_text = $textdata->getBody();
-		}	
+		}
         return AMPDisplay_HTML::_activateIncludes($merged_text) . "\n\n";
     }
 

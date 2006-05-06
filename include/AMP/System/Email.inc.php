@@ -11,6 +11,7 @@ class AMPSystem_Email {
     var $_format;
 
     var $_parameters = array( );
+    var $_content_header;
 
 
     function AMPSystem_Email() {
@@ -80,6 +81,18 @@ class AMPSystem_Email {
         return $this->getRecipient( );
     }
 
+	function setContentHeader($header) {
+		return $this->_content_header = $header;
+	}
+
+	function getContentHeader() {
+		if(isset($this->_content_header)) {
+			return $this->_content_header;
+		}
+		return "Content-Type: text/plain; charset=utf-8\r\n".
+			   "Content-Transfer-Encoding: 8bit\r\n\r\n";
+	}
+
     function prepareHeader () {
 
         if (! ($from = $this->getSender())){
@@ -92,6 +105,7 @@ class AMPSystem_Email {
         }
         $header  = "From: " . $this->sanitize($from) . "\n";
         $header .= "X-Mailer: AMP/SystemMail\n";
+		$header .= $this->getContentHeader();
 
         return $header;
     }
