@@ -405,7 +405,7 @@ class AMPContent_Page {
      * @return  void
      */
     function addObject($key, &$object) {
-		$this->_objectCache[$key] = $object;
+		$this->_objectCache[$key] =& $object;
 	}
 
     /**
