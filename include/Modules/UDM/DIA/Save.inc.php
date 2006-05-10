@@ -26,6 +26,12 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             'available'=>true,
             'label'=>'DIA AMP User Password'
 			),
+        'show_lists' => array(
+            'type' => 'checkbox',
+            'default' => true,
+            'available' => true,
+            'label' => "User can see lists<br/>(if 'Use lists' checked on settings)"
+        ),
         'table_mapping1' => array(
             'type' => 'text',
             'size' => '15',
@@ -116,16 +122,19 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
     }
 
 	function _register_fields_dynamic() {
-        if(defined('AMP_UDM_PLUGIN_DIA_SAVE_LISTS_REGISTERED') 
-            && AMP_UDM_PLUGIN_DIA_SAVE_LISTS_REGISTERED) return;
         if( !( $lists = $this->udm->getRegisteredLists( ))) return;
-        $this->fields[ 'list_header' ] = $this->_listfield_header;
+
+        $list_options = $this->getOptions(array('show_lists'));
+        if($list_options['show_lists']) {
+            $this->fields[ 'list_header' ] = $this->_listfield_header;
+        } else {
+            $this->_listfield_template['type'] = 'hidden';
+        }
 
         foreach ( $lists as $list_id => $list_name ){
             $listField = array( 'label'    => $list_name );
             $this->fields[ 'list_' . $list_id] = $listField + $this->_listfield_template;
         }
-        define('AMP_UDM_PLUGIN_DIA_SAVE_LISTS_REGISTERED', true);
     }
 
     function getSaveFields() {
@@ -206,8 +215,12 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
 		}
 
 		$lists = $this->udm->getRegisteredLists();
+        $alldata = $this->udm->getData();
 		foreach( $lists as $list_id => $list_name ) {
-			$api->linkSupporter($list_id, $supporter_id);
+            $subscribe = isset($alldata['list_'.$list_id]) && $alldata['list_'.$list_id];
+            if($subscribe) {
+                $api->linkSupporter($list_id, $supporter_id);
+            }
 		}
 
         return $supporter_id;

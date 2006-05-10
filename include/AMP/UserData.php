@@ -1010,7 +1010,7 @@ class UserData {
 
     function _register_lists () {
 
-        if ( $this->uselists = $this->_module_def[ 'uselists' ] ) {
+        if ( $this->useLists() ) {
             $list = &$this->registerPlugin( 'AMPlist', 'Start');
             $options = $list->getOptions( );
 
@@ -1018,6 +1018,16 @@ class UserData {
             $this->lists = explode( ",", $options['lists']);
         }
 
+    }
+
+    function useLists($flag = null) {
+        if(isset($flag)) {
+            $this->uselists = $flag;
+        }
+        if(!isset($this->uselists)) {
+            $this->uselists = $this->_module_def[ 'uselists' ];
+        }
+        return $this->uselists;
     }
 
     /***
@@ -1040,7 +1050,7 @@ class UserData {
     }
 
     function getRegisteredLists( ){
-        if( !$this->uselists ) return false;
+        if( !$this->useLists() ) return false;
         if( isset( $this->lists )) return $this->lists;
         $md = $this->_module_def;
         $lists = array_filter( array_keys( $md ), array( &$this, "_register_lists_filter" ) );
