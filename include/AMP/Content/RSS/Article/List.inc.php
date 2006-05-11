@@ -32,7 +32,7 @@ class RSS_Article_List extends AMP_System_List_Form {
     function _sourceLink( &$source ){
         $renderer = &$this->_getRenderer( );
         return $renderer->link( 
-                    $source->getLinkURL( ),
+                    AMP_validate_url( $source->getLinkURL( )),
                     $renderer->image( AMP_SYSTEM_ICON_PREVIEW, 
                                       array('alt'    => AMP_TEXT_VIEW_SOURCE, 
                                             'width'  => 16,
@@ -42,7 +42,7 @@ class RSS_Article_List extends AMP_System_List_Form {
                     array( 'target' => '_blank') )
                 . '&nbsp;'  
                 . $renderer->link( 
-                    $source->getLinkURL( ),
+                    AMP_validate_url( $source->getLinkURL( )),
                             AMP_TEXT_SOURCE . ': '
                             . AMP_trimText( $source->getLinkURL( ), 45 ),
                     array( 'target' => '_blank') );
@@ -51,13 +51,44 @@ class RSS_Article_List extends AMP_System_List_Form {
     function _contentBox( &$source, $column_name ){
         $renderer = &$this->_getRenderer( );
         $content = AMP_trimText( $source->getBody( ), 700, false);
+
+        if ( AMP_CONTENT_RSS_CUSTOMFORMAT ) $content = $this->_customContentDisplay( $content, $source );
         if ( $content ) $content = $renderer->newline( 2 ) . $content;
         return  $renderer->inDiv(  
                     $renderer->bold( $source->getName( )) 
                         . $renderer->newline() 
                         . $this->_sourceLink( $source )
+                        . $this->_itemDate( $source )
                         . $content
                 , array( 'style' => 'padding: 1em;'));
+
+    }
+
+    function _itemDate( &$source ){
+        $renderer = &$this->_getRenderer( );
+        $item_date = $source->getItemDate( );
+        $renderer->inSpan( $this->_dateFormat( $source->getItemDate( )), array( 'class'=>'photocaption'))
+        . $renderer->newline() ;
+
+    }
+
+    /**
+     * _customContentDisplay 
+     * this is only used on ChevronToxico, where RSS is used to pass along press releases 
+     *
+     * @param mixed $content 
+     * @access protected
+     * @return $content 
+     */
+    function _customContentDisplay( $content, &$source ){
+        $renderer = &$this->_getRenderer( );
+        if ( $subtitle = $source->getSubtitle( )){
+            $content = AMP_TEXT_SUBTITLE . ': ' . $subtitle. $renderer->newline( ). $content;
+        }
+        if ( $contacts = $source->getContacts( )){
+            $content .= $renderer->newline( 2 )
+                        . $renderer->bold( AMP_TEXT_CONTACTS. ': ' . $contacts );
+        }
 
     }
 
@@ -89,6 +120,14 @@ class RSS_Article_List extends AMP_System_List_Form {
                     ), 'publish_targeting');
 
         return "<input type='button' name='showPublish' value='Publish' onclick='window.change_any( \"publish_targeting\");window.scrollTo( 0, document.anchors[\"publish_targeting\"].y );'>&nbsp;";
+
+    }
+    function _setSortFeedNameText( $sort_direction ){
+        #print 'sort method found' . count($this->source);
+        $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
+        if ( $itemSource->sort( $this->source, 'FeedNameText', $sort_direction ) ) {
+            $this->_sort = 'FeedNameText';
+        }
 
     }
 

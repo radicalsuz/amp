@@ -38,14 +38,16 @@ function feed_publish($id,$type,$class) {
     $title = utf8_decode( $d->Fields("title"));
     $title = addslashes($title);
     
-    if (AMP_CONTENT_RSS_FULLTEXT == 'true') {
+    if ( AMP_CONTENT_RSS_FULLTEXT == 'true' ) {
    
     $contact = addslashes( $d->Fields("contacts"));
-	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,sourceurl,source,publish,enteredby,updatedby,datecreated,contact) values('".$title."','".$class."','".$type."','','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','','1','0','".$ID."','".$ID."',now(),'".$contact."')";  
+	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,sourceurl,source,publish,"
+        ."enteredby,updatedby,datecreated,contact) values('".$title."','".$class."','".$type."','','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','','1','0','".$ID."','".$ID."',now(),'".$contact."')";  
 	
 	} else {
 
-	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,uselink,enteredby,updatedby,datecreated) values('".$title."','".$class."','".$type."','".$shortdesc."','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
+	$q = "insert into articles (title,class,type,shortdesc,test,date,linkover,link,source,sourceurl,publish,"
+        ."uselink,enteredby,updatedby,datecreated) values('".$title."','".$class."','".$type."','".$shortdesc."','".$text."','".$d->Fields("dcdate")."','".$linkover."','".addslashes($d->Fields("link"))."','".addslashes($d->Fields("ftitle"))."','".addslashes($d->Fields("link"))."','1','1','".$ID."','".$ID."',now())";
 }
 
 	$dbcon->execute($q) or die($dbcon->errorMsg());
@@ -178,7 +180,7 @@ $i = ($offset+1);
 		<td><?= $rs->Fields("id") ?></td>
 		<td><b><?= $rs->Fields("ftitle") ?>:</b> <?= utf8_decode( $rs->Fields("title") );  
 		if (AMP_CONTENT_RSS_CUSTOMFORMAT == 'true') {
-			echo '<p>Custom Feild Subtitle:   '. $rs->Fields("subtitle");
+			echo '<p>Custom Field Subtitle:   '. $rs->Fields("subtitle");
 		} 
 
 ?></td>
@@ -186,11 +188,11 @@ $i = ($offset+1);
 		<td><?= preg_replace( "/ /", "&nbsp;", $rs->Fields("date") ) ?></td>
 		 <?php
 		 
-		  if (AMP_CONTENT_RSS_CUSTOMFORMAT == 'true') {
+		  if ( AMP_CONTENT_RSS_CUSTOMFORMAT == 'true' ) {
 		  	echo '<td>' . $rs->Fields("link") . '</td>';
 		  } else {
 		  	echo '<td><a href="' . $rs->Fields("link") . '" target="_blank">view</a></td>'; 							  
-			} 
+          } 
 			
 			?>
 	</tr>
@@ -202,7 +204,7 @@ $i = ($offset+1);
 	
 		echo '<td colspan="4" charset="utf-8">' . utf8_decode( preg_replace( "/\\n/", "<br/>", $rs->Fields("content") ) ); 
 		if (AMP_CONTENT_RSS_CUSTOMFORMAT == 'true') {
-			echo '<p>Custom Feild Contacts:  '. $rs->Fields("contacts");
+			echo '<p>Custom Field Contacts:  '. $rs->Fields("contacts");
 		}  
 		echo '</td>'; 
 		

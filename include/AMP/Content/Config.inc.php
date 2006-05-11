@@ -131,6 +131,13 @@ if ( !defined( 'AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT'))
     define( 'AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT', 750 );
 
 /**
+ * RSS definitions 
+ */
+if ( !defined( 'AMP_CONTENT_RSS_FULLTEXT'))
+    define( 'AMP_CONTENT_RSS_FULLTEXT', false);
+if (!defined('AMP_CONTENT_RSS_CUSTOMFORMAT')) define ('AMP_CONTENT_RSS_CUSTOMFORMAT', false);
+
+/**
  * Default Module Definitions 
  */
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );

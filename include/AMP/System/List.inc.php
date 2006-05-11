@@ -57,6 +57,9 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_source_object;
     var $_source_criteria;
 
+    var $_search_form;
+    var $_map;
+
     var $_controller;
     var $_actions;
 
@@ -88,7 +91,27 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function &_init_source( &$dbcon ){
         $listSource = &new $this->_source_object( $dbcon  );
+        $this->_init_search( $listSource );
         return $listSource->search( $this->_source_criteria, $this->_source_object );
+    }
+
+    function _init_search( &$listSource ){
+        require_once('AMP/System/ComponentLookup.inc.php');
+		$map = &ComponentLookup::instance( get_class($this));
+		if (!$map) return false;
+        $this->_map = &$map;
+        if ( !$map->isAllowed( 'search' )) return false;
+		$search = &$map->getComponent( 'search', $this->name . '_Search' );
+        if ( !$search ) return false;
+
+        $this->_search_form = & $search;
+        $search->Build( true );
+
+        if ( !$search->submitted( ) ) return $search->applyDefaults( );
+        $this->_source_criteria = 
+            array_merge(    $this->_source_criteria, 
+                            $listSource->makeCriteria( $search->getSearchValues( ) ) );
+
     }
 
     function init(&$source) {
@@ -150,7 +173,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _noRecordsOutput( ){
 
-        return $this->newline( ) . $this->_HTML_addLink();
+        return  $this->_HTML_searchForm( )
+                . $this->newline( ) . $this->_HTML_addLink();
     }
 
     function _getSourceRow( ){
@@ -250,9 +274,13 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if ( !is_array( $this->source )) {
             return $this->source->applySearch( $values );
         }
+        $this->source = false;
         $listSource = &new $this->_source_object( $dbcon  );
         $this->_source_criteria = array_merge( $this->_source_criteria, $listSource->makeCriteria( $values ) );
         $this->init( $this->_init_source( AMP_Registry::getDbcon( ) ));
+        if ( !$this->source ){
+            $this->setMessage( AMP_TEXT_SEARCH_NO_MATCHES );
+        }
     }
 
     function setController( &$controller ){
@@ -340,7 +368,9 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _HTML_header() {
         //Starter HTML
-        $start_html = $this->_HTML_listTitle();
+        $start_html = $this->_HTML_searchForm( ) 
+                      . $this->_HTML_listTitle()
+                      . ( isset( $this->_pager ) ? $this->_pager->outputTop() : false );
         $start_html .= "\n<div class='list_table'>\n<table class='list_table'>\n<tr class='intitle'> ";
 
         return $start_html.$this->_HTML_columnHeaders();
@@ -386,6 +416,13 @@ class AMPSystem_List extends AMPDisplay_HTML {
                     ) . "</td>";
         }
         return $output . $this->_HTML_endColumnHeadersRow();
+    }
+
+    function _HTML_searchForm( ){
+        if ( !isset( $this->_search_form )) return false;
+        $renderer = &$this->_getRenderer( );
+        return $renderer->inSpan( AMP_TEXT_SEARCH . ' ' . AMP_Pluralize( $this->_map->getHeading( )), array( 'class' => 'intitle')) ."\n"
+                . $this->_search_form->execute( );
     }
 
     function _HTML_firstColumnHeader() {
@@ -480,21 +517,34 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _makePrettyDate( $value, $fieldname,$data  ){
         if ( !isset( $data[$fieldname])) return "";
-        $result = date( 'M j, Y', $data[$fieldname]);
+        return $this->_dateFormat( $data[$fieldname]);
+    }
+
+    function _dateFormat( $date_value ){
+        if ( !$date_value ) return false;
+        $result = date( 'M j, Y', $date_value );
 
         if ( $result != 'Dec 31, 1969') return $result;
-        return date( 'M j, Y', strtotime( $data[$fieldname]));
+        return date( 'M j, Y', strtotime( $date_value ));
+
     }
 
     function _makePrettyDateTime( $value, $fieldname, $data ){
         if ( !isset( $data[$fieldname])) return "";
-        $quick_result = date( "Y-m-d H:i:s", $data[$fieldname] );
-        if ( $quick_result != AMP_NULL_DATETIME_VALUE_UNIX) {
-            $timestamp_value = $data[$fieldname];
+        return $this->_dateTimeFormat( $data[$fieldname]);
+
+    }
+
+    function _dateTimeFormat( $time_value ){
+        $null_values = &AMPConstant_Lookup::instance( 'nullDateTimes');
+        $quick_result = date( "Y-m-d H:i:s", $time_value );
+        if ( !isset( $null_values[ $quick_result ])){
+            $timestamp_value = $time_value;
         } else {
-            $timestamp_value = strtotime( $data[$fieldname ] );
+            $timestamp_value = strtotime( $time_value );
             $quick_result = date( "Y-m-d H:i:s", $timestamp_value);
-            if ( $quick_result == AMP_NULL_DATETIME_VALUE_UNIX ) return false;
+            if ( isset( $null_values[ $quick_result ])) return false;
+            #if ( $quick_result == AMP_NULL_DATETIME_VALUE_UNIX ) return false;
         }
         return date( "M j, Y<\BR>\ng:ia", $timestamp_value );
 

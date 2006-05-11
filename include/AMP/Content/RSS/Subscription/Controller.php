@@ -49,6 +49,11 @@ class RSS_Subscription_Controller extends AMP_System_Component_Controller_Map {
 
     }
 
+    function commit_new( ){
+        return $this->commit_add( );
+
+    }
+
     function add_FOF_feed_url( $url ){
         return $this->_subscribe_feeds( array( $url ));
     }

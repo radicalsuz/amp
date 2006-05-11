@@ -42,7 +42,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     function setPageArray( ){
         $this->source_total = count($this->source);
-        $this->source = array_slice( $this->source, $this->getOffset( ), $this->getOffset( ) + $this->getLimit( ) );
+        $this->source = array_slice( $this->source, $this->getOffset( ), $this->getLimit( ) );
     }
 
     function setLimit( $limit ) {

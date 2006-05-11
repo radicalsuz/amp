@@ -464,17 +464,17 @@
 	</item>
 	<item>
 		<title>RSS Aggregator</title>
-		<href>feeds_add.php</href>
-		<label>Add/Edit</label>
+		<href>rss_subscription.php?action=add</href>
+		<label>Add Subscription</label>
 		<class>add</class>
 	</item>
 	<item>
-		<label>Update Feeds</label>
-		<href>feeds_update.php</href>
+		<label>Update RSS Articles</label>
+		<href>rss_content.php?action=update</href>
 	</item>
 	<item>
-		<href>feeds_view.php?action=list</href>
-		<label>View/Filter Feeds</label>
+		<href>rss_content.php</href>
+		<label>View RSS Articles</label>
 		<class>view</class>
 	</item>
 </rss>

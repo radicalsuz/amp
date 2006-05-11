@@ -110,10 +110,11 @@ class AMP_System_List_Form extends AMPSystem_List {
 
     function _HTML_header() {
         //Starter HTML
-        $start_html = $this->_HTML_listTitle() .
-                      ( isset( $this->_pager ) ? $this->_pager->outputTop() : false ).
-                      $this->_HTML_startForm() .
-                      $this->_outputToolbar( );
+        $start_html = $this->_HTML_searchForm( ) 
+                      . $this->_HTML_listTitle() 
+                      . ( isset( $this->_pager ) ? $this->_pager->outputTop() : false )
+                      . $this->_HTML_startForm() 
+                      . $this->_outputToolbar( );
         $start_html .= "\n<div class='list_table'>\n<table class='list_table'>\n<tr class='intitle'> ";
 
         return $start_html.$this->_HTML_columnHeaders();

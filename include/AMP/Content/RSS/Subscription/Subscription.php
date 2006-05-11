@@ -35,10 +35,10 @@ class RSS_Subscription extends AMPSystem_Data_Item {
         require_once( 'FeedOnFeeds/init_adodb.php');
         if ( !( $url = $this->getURL( ))) return false;
         $count = fof_update_feed( $this->getURL( ));
-        if ( $count ){
-            $flash = &AMP_System_Flash::instance( );
-            $flash->add_message( sprintf( AMP_TEXT_CONTENT_RSS_ITEMS_ADDED, $count, $this->getName( ) ));
-        }
+        if ( !$count ) $count = '0';
+        $flash = &AMP_System_Flash::instance( );
+        $flash->add_message( sprintf( AMP_TEXT_CONTENT_RSS_ITEMS_ADDED, $count, $this->getName( ) ));
+
         return true;
     }
 }

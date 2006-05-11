@@ -154,6 +154,7 @@ class AMPContent_Map {
 
     function readAncestors( $section_id, $fieldname ) {
         if ($answer = $this->readSection( $section_id, $fieldname )) return $answer;
+        
         if (!$ancestors = $this->getAncestors( $section_id )) return false;
         foreach ($ancestors as $id => $name ) {
             if ($answer = $this->readSection( $id, $fieldname )) return $answer;

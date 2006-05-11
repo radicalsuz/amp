@@ -16,11 +16,13 @@ if ( !defined( 'AMP_SORT_END' )) define( 'AMP_SORT_END', 'zzzzzzzzzzzzzzzz');
  *  NULL values
  */
 if ( !defined( 'AMP_NULL_DATE_VALUE')) define('AMP_NULL_DATE_VALUE', '0000-00-00' );
+if ( !defined( 'AMP_NULL_DATE_VALUE_RSS')) define('AMP_NULL_DATE_VALUE_RSS', '1969-12-31' );
+if ( !defined( 'AMP_BLANK_DATETIME_VALUE_FORM')) define('AMP_BLANK_DATETIME_VALUE_FORM', '2001-01-01 00:00:00' );
 if ( !defined( 'AMP_NULL_DATETIME_VALUE')) define('AMP_NULL_DATETIME_VALUE', '0000-00-00 00:00:00' );
 if ( !defined( 'AMP_NULL_DATETIME_VALUE_FORM')) define('AMP_NULL_DATETIME_VALUE_FORM', '2001-11-30 00:00:00' );
-if ( !defined( 'AMP_BLANK_DATETIME_VALUE_FORM')) define('AMP_BLANK_DATETIME_VALUE_FORM', '2001-01-01 00:00:00' );
-if ( !defined( 'AMP_NULL_DATE_VALUE_RSS')) define('AMP_NULL_DATE_VALUE_RSS', '1969-12-31' );
-if ( !defined( 'AMP_NULL_DATETIME_VALUE_UNIX')) define('AMP_NULL_DATETIME_VALUE_UNIX', '1969-12-31 16:33:26' );
+if ( !defined( 'AMP_NULL_DATETIME_VALUE_FORM_2')) define('AMP_NULL_DATETIME_VALUE_FORM_2', '2001-01-01 00:00:00' );
+if ( !defined( 'AMP_NULL_DATETIME_VALUE_UNIX')) define('AMP_NULL_DATETIME_VALUE_UNIX', '1969-12-31 16:33:25' );
+if ( !defined( 'AMP_NULL_DATETIME_VALUE_UNIX_2')) define('AMP_NULL_DATETIME_VALUE_UNIX_2', '1969-12-31 16:33:26' );
 
 /**
  * Menu Settings

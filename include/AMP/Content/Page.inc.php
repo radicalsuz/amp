@@ -642,7 +642,9 @@ class AMPContent_Page {
      */
     function initLocation() {
         if ( !isset( $this->section ) && $this->section) $this->setSection( $this->getSectionId() );
-        if ( $this->requiresLogin() ) AMP_Authenticate( 'content', true );
+        if ( $this->requiresLogin() ) {
+            AMP_Authenticate( 'content', true );
+        }
     }
 
     /**

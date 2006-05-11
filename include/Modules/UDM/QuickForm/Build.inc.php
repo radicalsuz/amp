@@ -25,6 +25,8 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
     var $_formEngine;
 
 	var $_field_attrs;
+    var $available = true;  
+    
 
 
     function UserDataPlugin_Build_QuickForm ( &$udm, $plugin_instance=null ) {

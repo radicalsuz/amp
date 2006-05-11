@@ -11,17 +11,17 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         'subheader'=>array(
                             'available'=>true, 
                             'label'=>'Show subheadings for',
-                            'default'=>null,
+                            'default'=>'',
                             'type'=>'text'),
         'subheader2'=>array(
                             'available'=>true, 
                             'label'=>'Show second-level subheadings for',
-                            'default'=>null,
+                            'default'=>'',
                             'type'=>'text'),
         'subheader3'=>array(
                             'available'=>true, 
                             'label'=>'Show third-level subheadings for',
-                            'default'=>null,
+                            'default'=>'',
                             'type'=>'text'),
         'display_format'=>array('label'=>'List Display Function Name',
                                 'default'=>'groups_layout_display',

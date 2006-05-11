@@ -31,14 +31,25 @@ define( 'AMP_TEXT_WITH_SELECTED', 'With Selected:&nbsp;');
 define( 'AMP_TEXT_EDIT_ITEM', 'Edit this Item');
 define( 'AMP_TEXT_EDIT', 'Edit');
 define( 'AMP_TEXT_VIEW', 'View');
-define( 'AMP_TEXT_VIEW_SOURCE', 'View Source');
-define( 'AMP_TEXT_SOURCE', 'Source');
+define( 'AMP_TEXT_LIST', 'List');
+define( 'AMP_TEXT_ADD', 'Add');
+define( 'AMP_TEXT_SEARCH', 'Search');
+
 define( 'AMP_TEXT_ALL', 'All');
 define( 'AMP_TEXT_PUBLISH', 'Publish');
-define( 'AMP_TEXT_PUBLISH_TO', AMP_TEXT_PUBLISH . ' To');
 define( 'AMP_TEXT_DELETED', 'Deleted');
 define( 'AMP_TEXT_ADD_ITEM','Add new record' );
 define( 'AMP_TEXT_PREVIEW_ITEM','Preview this Item' );
+define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
+
+/**
+ * RSS listpage text
+ */
+define( 'AMP_TEXT_VIEW_SOURCE', 'View Source');
+define( 'AMP_TEXT_SOURCE', 'Source');
+define( 'AMP_TEXT_SUBTITLE', 'Subtitle');
+define( 'AMP_TEXT_CONTACTS', 'Contacts');
+define( 'AMP_TEXT_PUBLISH_TO', AMP_TEXT_PUBLISH . ' To');
 
 /**
  *  Labels for each different Sectional Listing Type 

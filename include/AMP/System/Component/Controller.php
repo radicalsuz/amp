@@ -216,10 +216,11 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
     function set_banner( $action = null) {
         $text = ucfirst( isset( $action ) ? $action :  join( "", $this->get_actions( )));
-        if ( $text == 'Cancel' ) $text = 'List';
+        if ( $text == 'Cancel' ) $text = AMP_TEXT_LIST;
 
         $heading = $this->_map->getHeading( );
-        if ( $text == 'List' ) $heading = AMP_Pluralize( $heading );
+        $plural_headings = array( AMP_TEXT_LIST, AMP_TEXT_SEARCH );
+        if ( array_search( $text , $plural_headings ) !== FALSE ) $heading = AMP_Pluralize( $heading );
         $renderer = &new AMPDisplay_HTML( );
 
         $buffer = &new AMP_Content_Buffer( );

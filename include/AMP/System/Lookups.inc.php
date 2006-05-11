@@ -658,4 +658,12 @@ class AMPSystemLookup_PermissionLevel extends AMPSystem_Lookup {
 
 }
 
+class AMPConstantLookup_NullDatetimes extends AMPConstant_Lookup {
+    var $_prefix_values = 'AMP_NULL_DATETIME_VALUE';
+    
+    function AMPConstantLookup_NullDatetimes( ){
+        $this->init( );
+    }
+}
+
 ?>

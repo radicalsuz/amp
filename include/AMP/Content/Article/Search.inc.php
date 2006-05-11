@@ -36,7 +36,8 @@ class ArticleSearch extends ArticleSet {
     }
 
     function _addCriteriaDate ( $key, $value ) {
-        $timestamp_value = mktime(0,0,0, $value['M'], $value['d'], $value['Y']);
+        $timestamp_value = $value;
+        if ( is_array( $value )) $timestamp_value = mktime(0,0,0, $value['M'], $value['d'], $value['Y']);
         $date_value = date( 'Y-m-d', $timestamp_value );
         
         $sql_criterion = $key . ' >= ' . $this->dbcon->qstr( $date_value );

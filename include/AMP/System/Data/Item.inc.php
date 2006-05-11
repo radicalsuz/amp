@@ -285,7 +285,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function &_getSearchSource( $criteria = null ){
         if ( isset( $this->_search_source )) return $this->_search_source;
-        require_once( 'AMP/System/Data/Set.inc.php');
+        require_once( 'AMP/System/Data/Set.inc.php' );
         $data_set = &new AMPSystem_Data_Set( $this->dbcon );
         $data_set->setSource( $this->datatable );
         if ( isset( $criteria )) {
@@ -293,10 +293,14 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
                 $data_set->addCriteria( $crit_phrase );
             }
         }
+        if ( isset( $sort )){
+            $data_set->setSort( $sort );
+        }
         $this->_search_source = &$data_set;
         return $this->_search_source;
 
     }
+
     //}}}
 
     //{{{ Sorting methods: sort, setSortMethod, _sort_default

@@ -951,7 +951,7 @@ if ( !function_exists( 'AMP_Authenticate')){
 
     function AMP_Authenticate( $loginType = 'content', $do_login = false ){
         static $auth_status = array( );
-        if ( isset( $auth_status[$loginType]) ) return $auth_status[ $loginType ];
+        if ( isset( $auth_status[$loginType]) && $auth_status[$loginType] ) return $auth_status[ $loginType ];
 
         require_once( 'AMP/Auth/Handler.inc.php');
         $AMP_Authen_Handler = &new AMP_Authentication_Handler( AMP_Registry::getDbcon(), $loginType );
@@ -1088,6 +1088,14 @@ if ( !function_exists( 'AMP_get_cache')){
         $cache_class = 'AMP_System_Cache_' . ucfirst( AMP_SYSTEM_CACHE );
         $cache = &call_user_func_array( array( $cache_class, 'instance'), array( ));
         return $cache;
+    }
+}
+
+if ( !function_exists( 'AMP_validate_url')){
+    function AMP_validate_url( $test_url ){
+        if( preg_match( '/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}'
+                   .'((:[0-9]{1,5})?\/.*)?$/i' ,$test_url)) return $test_url;
+        return false;
     }
 }
 			

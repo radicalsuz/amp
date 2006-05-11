@@ -1,0 +1,15 @@
+<array>
+    <feed_id>
+        <label>Select Source</label>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>RSS_Subscriptions</instance>
+        </lookup>
+    </feed_id>
+    <timestamp>
+		<separator>newrow</separator>
+        <label>Received Since&amp;nbsp;</label>
+        <type>date</type>
+    </timestamp>
+</array>

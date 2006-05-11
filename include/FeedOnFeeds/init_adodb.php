@@ -1,9 +1,5 @@
 <?php
 
-if (!defined('AMP_CONTENT_RSS_CUSTOMFORMAT')) define ('AMP_CONTENT_RSS_CUSTOMFORMAT', false);
-
-if (!defined('AMP_CONTENT_RSS_FULLTEXT')) define ('AMP_CONTENT_RSS_FULLTEXT', false);
-
 require_once("FeedOnFeeds/config.php");
 
 define('MAGPIE_CACHE_AGE', 60*15);

@@ -15,6 +15,7 @@ class AMP_System_List_Toolbar {
     var $_footerContent = array( );
 
     var $_display;
+    var $_rendered_footerContent = false;
 
     function AMP_System_List_Toolbar ( &$display ){
         $this->_display = &$display;
@@ -53,6 +54,8 @@ class AMP_System_List_Toolbar {
         return join( '', $this->_headerContent);
     }
     function renderToolbarEnd( ){
+        if ( $this->_rendered_footerContent ) return false;
+        $this->_rendered_footerContent = true;
         return join( '', $this->_footerContent);
     }
     function addStartContent( $content, $key = null ){

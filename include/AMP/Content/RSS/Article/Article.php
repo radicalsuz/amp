@@ -6,6 +6,7 @@ class RSS_Article extends AMPSystem_Data_Item {
 
     var $datatable = "px_items";
     var $name_field = "title";
+    var $_exact_value_fields = array( 'feed_id');
 
     function RSS_Article ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -16,7 +17,8 @@ class RSS_Article extends AMPSystem_Data_Item {
     }
 
     function getItemDate( ){
-        return $this->getData( 'dcdate');
+        $date_item = $this->getData( 'dcdate');
+        if ( $date_item == '1969-12-31') return AMP_NULL_DATE_VALUE;
     }
 
     function getTimestamp( ){
@@ -42,15 +44,63 @@ class RSS_Article extends AMPSystem_Data_Item {
     function getFeedNameText( ){
         $result = $this->getFeedName( );
         if ( !is_numeric( $result )) return $result;
-        return $result . ' #' . strtoupper( AMP_TEXT_DELETED ) . '#';
+        return false;
+    }
+
+    function getContacts( ){
+        return $this->getData( 'contacts' );
+    }
+
+    function getSubtitle( ){
+        return $this->getData( 'subtitle' );
     }
 
     function publish( $section_id, $class_id, $destroy_self=true ){
         $text = utf8_decode( preg_replace( "/\\n/", "<br/>", $this->getBody( )) );
         $blurb = AMP_trimText( $text, AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT, false );
         $title = utf8_decode( $this->getName( ));
+        $feed_name = $this->getFeedName( );
+        if ( !$section_id ) return false;
+        
+
+        $article_data = array( 
+            'title' => $title, 
+            'body'  => $text, 
+            'shortdesc' => $blurb, 
+            'uselink'   => ( !AMP_CONTENT_RSS_FULLTEXT ), 
+            'linkover'  => ( !AMP_CONTENT_RSS_FULLTEXT ), 
+            'link'  => $this->getLinkURL( ), 
+            'source'    => $feed_name, 
+            'sourceurl' => AMP_validate_url( $this->getLinkURL( )), 
+            'type'  => $section_id, 
+            'class' => $class_id, 
+            'date'  => $this->getItemDate( ),
+            'publish' => AMP_CONTENT_STATUS_LIVE, 
+            'enteredby' => AMP_SYSTEM_USER_ID, 
+            'updatedby' => AMP_SYSTEM_USER_ID, 
+            'contact' => $this->getContacts( )  
+            );
+
+        require_once( 'AMP/Content/Article.inc.php');
+        $article = &new Article( $this->dbcon );
+        $article->setData( $article_data );
+        if ( !$article->save( )) return false;
+
+        $this->delete( );
+        return true;
 
     }
+
+    function _sort_default( &$item_set ){
+        return $this->sort( $item_set, 'timestamp', AMP_SORT_DESC);
+    }
+
+    function makeCriteriaTimestamp( $timestamp_value ) {
+        $dbcon = &AMP_Registry::getDbcon( );
+        return ( 'timestamp > ' . $dbcon->qstr( date( 'Y-m-d h:i:s', $timestamp_value )));
+
+    }
+
 }
 
 ?>

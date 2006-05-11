@@ -16,6 +16,7 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 
     var $_path_controller = 'AMP/System/Component/Controller.php';
     var $_component_controller = 'AMP_System_Component_Controller_Standard';
+    var $_controller;
 
     var $_action_displays = array( );
     var $_default_display = 'list';
@@ -74,9 +75,11 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     }
 
     function &get_controller( ){
+        if ( isset( $this->_controller )) return $this->_controller;
         require_once( $this->_path_controller );
         $controller = &new $this->_component_controller( );
         $controller->set_map( $this );
+        $this->_controller = &$controller;
         return $controller;
     }
 
