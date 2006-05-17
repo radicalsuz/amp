@@ -55,10 +55,10 @@ class RSS_Article extends AMPSystem_Data_Item {
         return $this->getData( 'subtitle' );
     }
 
-    function publish( $section_id, $class_id, $destroy_self=true ){
+    function publish( $section_id, $class_id, $destroy_self=true ) {
         $text = utf8_decode( preg_replace( "/\\n/", "<br/>", $this->getBody( )) );
         $blurb = AMP_trimText( $text, AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT, false );
-        $title = utf8_decode( $this->getName( ));
+        $title = $this->dbcon->qstr( utf8_decode( $this->getName( )));
         $feed_name = $this->getFeedName( );
         if ( !$section_id ) return false;
         
@@ -70,6 +70,7 @@ class RSS_Article extends AMPSystem_Data_Item {
             'uselink'   => ( !AMP_CONTENT_RSS_FULLTEXT ), 
             'linkover'  => ( !AMP_CONTENT_RSS_FULLTEXT ), 
             'link'  => $this->getLinkURL( ), 
+            'subtitle' => $this->getSubtitle( ),
             'source'    => $feed_name, 
             'sourceurl' => AMP_validate_url( $this->getLinkURL( )), 
             'type'  => $section_id, 
@@ -86,7 +87,7 @@ class RSS_Article extends AMPSystem_Data_Item {
         $article->setData( $article_data );
         if ( !$article->save( )) return false;
 
-        $this->delete( );
+        #$this->delete( );
         return true;
 
     }

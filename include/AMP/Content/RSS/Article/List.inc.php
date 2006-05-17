@@ -50,12 +50,12 @@ class RSS_Article_List extends AMP_System_List_Form {
 
     function _contentBox( &$source, $column_name ){
         $renderer = &$this->_getRenderer( );
-        $content = AMP_trimText( $source->getBody( ), 700, false);
+        $content = utf8_decode( AMP_trimText( $source->getBody( ), 700, false ) );
 
         if ( AMP_CONTENT_RSS_CUSTOMFORMAT ) $content = $this->_customContentDisplay( $content, $source );
         if ( $content ) $content = $renderer->newline( 2 ) . $content;
         return  $renderer->inDiv(  
-                    $renderer->bold( $source->getName( )) 
+                    $renderer->bold( utf8_decode( $source->getName( ))) 
                         . $renderer->newline() 
                         . $this->_sourceLink( $source )
                         . $this->_itemDate( $source )
@@ -83,12 +83,15 @@ class RSS_Article_List extends AMP_System_List_Form {
     function _customContentDisplay( $content, &$source ){
         $renderer = &$this->_getRenderer( );
         if ( $subtitle = $source->getSubtitle( )){
-            $content = AMP_TEXT_SUBTITLE . ': ' . $subtitle. $renderer->newline( ). $content;
+            $content = $renderer->italics( AMP_TEXT_SUBTITLE . ': ' . $subtitle) 
+                        . $renderer->newline( )
+                        . $content;
         }
         if ( $contacts = $source->getContacts( )){
             $content .= $renderer->newline( 2 )
                         . $renderer->bold( AMP_TEXT_CONTACTS. ': ' . $contacts );
         }
+        return $content;
 
     }
 
@@ -116,7 +119,9 @@ class RSS_Article_List extends AMP_System_List_Form {
                         . $toolbar->renderDefault( 'publish')
                         . '&nbsp;'
                         . "<input type='button' name='hidePublish' value='Cancel' onclick='window.change_any( \"publish_targeting\");'>&nbsp;",
-                        array( 'class' => 'AMPComponent_hidden', 'id' => 'publish_targeting')
+                        array( 
+                            'class' => 'AMPComponent_hidden', 
+                            'id' => 'publish_targeting')
                     ), 'publish_targeting');
 
         return "<input type='button' name='showPublish' value='Publish' onclick='window.change_any( \"publish_targeting\");window.scrollTo( 0, document.anchors[\"publish_targeting\"].y );'>&nbsp;";
