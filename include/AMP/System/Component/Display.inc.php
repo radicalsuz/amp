@@ -19,6 +19,10 @@ class AMP_System_Component_Display extends AMPContent_Manager {
         return $this->addDisplay( $display, $display_key );
     }
 
+    function retrieve( $display_key ){
+        return $this->getDisplay( $display_key );
+    }
+
     function &instance( &$controller ) {
         static $manager = false;
         if (!$manager) $manager = new AMP_System_Component_Display( $controller );

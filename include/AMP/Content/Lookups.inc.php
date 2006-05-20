@@ -457,9 +457,20 @@ class AMPContentLookup_ClassListsNavigationCount extends AMPContent_Lookup {
     var $datatable = 'nav';
     var $result_field = 'count( id ) as totalnavs';
     var $id_field = 'classlist';
-    var $criteria = "!isnull( typelist ) group by classlist";
+    var $criteria = "!isnull( classlist ) group by classlist";
 
     function AMPContentLookup_ClassListsNavigationCount( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_IntrotextsNavigationCount extends AMPContent_Lookup {
+    var $datatable = 'nav';
+    var $result_field = 'count( id ) as totalnavs';
+    var $id_field = 'moduleid';
+    var $criteria = "!isnull( moduleid ) group by moduleid";
+
+    function AMPContentLookup_IntrotextsNavigationCount( ){
         $this->init( );
     }
 }
@@ -547,6 +558,67 @@ class AMPContentLookup_RSS_Subscriptions extends AMPContent_Lookup {
 
     function AMPContentLookup_RSS_Subscriptions( ){
         $this->init( );
+    }
+}
+
+class AMPContentLookup_FaqTypes extends AMPContent_Lookup {
+    var $datatable = 'faqtype';
+    var $result_field = 'type';
+    var $criteria = 'uselink=1';
+
+    function AMPContentLookup_FaqTypes( ){
+        $this->init( );
+    }
+}
+
+
+class AMPContentLookup_StylesheetLocationSections extends AMPContent_Lookup {
+    var $datatable = 'articletype';
+    var $result_field = 'css';
+    var $criteria = 'css != "" and !isnull( css ) ';
+    var $_base_criteria = 'css != "" and !isnull( css ) ';
+    var $sortby = 'type';
+
+    function AMPContentLookup_StylesheetLocationSections( $sheet_name = null ){
+        if ( isset( $sheet_name )) $this->addCriteriaStylesheet( $sheet_name );
+        $this->init( );
+    }
+
+    function addCriteriaStylesheet( $sheet_name ){
+        $this->criteria =  $this->_base_criteria . ' and css like \'%'. $sheet_name .'%\'';
+    }
+
+    function &instance( $sheet_name ) {
+        static $sheet_locations = array( );
+        if ( isset( $sheet_locations[ $sheet_name] )) return $sheet_locations[ $sheet_name ];
+        $lookup = &new AMPContentLookup_StylesheetLocationSections( $sheet_name );
+        $sheet_locations[ $sheet_name ] = $lookup->dataset;
+        return $lookup->dataset;
+    }
+}
+
+class AMPContentLookup_StylesheetLocationTemplates extends AMPContent_Lookup {
+    var $datatable = 'template';
+    var $result_field = 'css';
+    var $criteria = 'css != "" and !isnull( css ) ';
+    var $_base_criteria = 'css != "" and !isnull( css ) ';
+    var $sortby = 'name';
+
+    function AMPContentLookup_StylesheetLocationTemplates( $sheet_name = null ){
+        if ( isset( $sheet_name )) $this->addCriteriaStylesheet( $sheet_name );
+        $this->init( );
+    }
+
+    function addCriteriaStylesheet( $sheet_name ){
+        $this->criteria =  $this->_base_criteria . ' and css like \'%'. $sheet_name .'%\'';
+    }
+
+    function &instance( $sheet_name ) {
+        static $sheet_locations = array( );
+        if ( isset( $sheet_locations[ $sheet_name] )) return $sheet_locations[ $sheet_name ];
+        $lookup = &new AMPContentLookup_StylesheetLocationTemplates( $sheet_name );
+        $sheet_locations[ $sheet_name ] = $lookup->dataset;
+        return $lookup->dataset;
     }
 }
 ?>

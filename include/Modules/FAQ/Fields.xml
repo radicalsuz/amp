@@ -1,0 +1,48 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<question>
+		<type>textarea</type>
+        <size>3:60</size>
+		<label>Question</label>
+        <required>1</required>
+	</question>
+	<longanswer>
+		<type>textarea</type>
+        <size>8:60</size>
+		<label>Long Answer</label>
+	</longanswer>
+	<typeid>
+		<type>select</type>
+		<label>FAQ type</label>
+		<lookup>
+			<module>content</module>
+			<instance>faqTypes</instance>
+		</lookup>
+	</typeid>
+	<answered>
+		<type>checkbox</type>
+		<label>Answered</label>
+	</answered>
+    <name_header>
+        <type>header</type>
+        <default>Author Info</default>
+    </name_header>
+	<firstname>
+		<type>text</type>
+		<label>First Name</label>
+	</firstname>
+	<lastname>
+		<type>text</type>
+		<label>Last Name</label>
+	</lastname>
+	<email>
+		<type>text</type>
+		<label>Email</label>
+	</email>
+</array>

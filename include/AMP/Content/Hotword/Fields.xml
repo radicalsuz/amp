@@ -1,0 +1,26 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<word>
+		<type>text</type>
+		<label>Hot Word</label>
+	</word>
+	<url>
+		<type>text</type>
+		<label>Target Url</label>
+	</url>
+	<section>
+		<type>select</type>
+		<label>Section-Specific Hotword</label>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
+	</section>
+
+</array>

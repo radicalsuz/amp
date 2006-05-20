@@ -2,6 +2,7 @@
 
 define( 'AMP_TEXT_ERROR_IMAGE_NOT_ALLOWED', "Could not determine the type of image. JPG, GIF, and PNG format only"); 
 define( 'AMP_TEXT_ERROR_FILE_EXISTS', "File already exists: %s" );
+define( 'AMP_TEXT_ERROR_FILE_EXISTS_NOT', "File does not exist: %s" );
 define( 'AMP_TEXT_ERROR_FILE_WRITE_FAILED', "Failed to write: %s" );
 define( 'AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND', '%s %s failed: Your installation of PHP may not support this for images of type %s');
 
@@ -50,4 +51,18 @@ if ( !defined( 'AMP_TEXT_ERROR_DIA_SAVE_FAILURE'))
         define( 'AMP_TEXT_ERROR_DIA_SAVE_FAILURE', 'Save to DIA failed');
 if ( !defined( 'AMP_TEXT_ERROR_DIA_READ_FAILURE'))
         define( 'AMP_TEXT_ERROR_DIA_READ_FAILURE', 'DIA read failed for table %s key %s');
+
+/**
+ * Data Item Errors
+ */
+if ( !defined( 'AMP_TEXT_ERROR_SORT_PROPERTY_FAILED'))
+        define( 'AMP_TEXT_ERROR_SORT_PROPERTY_FAILED', "sort by %s failed in %s: no access method found" ); 
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_READ_FAILED'))
+        define( 'AMP_TEXT_ERROR_DATABASE_READ_FAILED', "%s failed to read the database : %s");
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SAVE_FAILED'))
+        define( 'AMP_TEXT_ERROR_DATABASE_SAVE_FAILED', "%s save failed : %s");
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD'))
+        define( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD', '%s was initialized with an invalid dbcon');
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED'))
+        define( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED', "%s failed to %s data : %s \n statement: %s");
 ?>

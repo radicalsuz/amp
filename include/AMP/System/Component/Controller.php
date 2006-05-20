@@ -38,7 +38,7 @@ class AMP_System_Component_Controller {
     var $_observers = array( );
 
     function AMP_System_Component_Controller( ){
-        //
+        $this->init( ) ;
     }
 
     function init( ){
@@ -76,18 +76,23 @@ class AMP_System_Component_Controller {
         $this->_display->add( $flash, 'flash' );
     }
 
+    function &get_display( $key = null ){
+        if ( !isset( $key )) return $this->_display;
+        return $this->_display->retrieve( $key );
+    }
+
     function _init_request( ) {
         $this->_request_vars = array_merge( $_POST, AMP_URL_Read( ));
         //pull useful info from request values
         if ( isset( $this->_request_vars['action'] ) && $this->_request_vars['action']){
             if ( $this->allow( $this->_request_vars['action'])){
-                $this->_action_requested = $this->_request_vars['action'];
+                $this->request ( $this->_request_vars['action'] );
             }
         }
     }
 
     function execute( $output = true ){
-        $data= $this->get_actions( );
+        $data = $this->get_actions( );
         foreach ( $this->get_actions( ) as $action ){
             if( $this->_results[$action] = $this->commit( $this->_model, $action, $this->get_arguments( $action ) )) {
                 $this->_action_committed = $action;
@@ -117,6 +122,10 @@ class AMP_System_Component_Controller {
     function clear_actions( ){
         unset( $this->_action_committed );
         unset( $this->_action_requested );
+    }
+
+    function request( $action ){
+        $this->_action_requested = $action;
     }
 
     function get_actions( ){
@@ -186,6 +195,22 @@ class AMP_System_Component_Controller {
         $this->_display->add( $flash, 'flash' );
     }
 
+    function set_banner( $action = null, $heading ) {
+        $text = ucfirst( isset( $action ) ? $action :  join( "", $this->get_actions( )));
+
+        $plural_headings = array( AMP_TEXT_LIST, AMP_TEXT_SEARCH );
+        if ( array_search( $text , $plural_headings ) !== FALSE ) $heading = AMP_Pluralize( $heading );
+        $renderer = &new AMPDisplay_HTML( );
+
+        $buffer = &new AMP_Content_Buffer( );
+        $buffer->add( $renderer->inDiv( $text." ".$heading, array( 'class' => 'banner')));
+        $this->_display->add( $buffer , AMP_CONTENT_DISPLAY_KEY_INTRO );
+    }
+
+    function redirect( $url ){
+        ampredirect( $url );
+    }
+
 }
 
 class AMP_System_Component_Controller_Map extends AMP_System_Component_Controller {
@@ -203,6 +228,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
     function _init_map( ) {
         $this->add_observer( $this->_map );
+        $this->_action_default = $this->_map->getDefaultDisplay( );
 
         //set methods based on map values
         if ( $form  = &$this->_map->getComponent( 'form'))   $this->_init_form ( $form ) ;
@@ -214,18 +240,51 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         
     }
 
-    function set_banner( $action = null) {
+    function _init_form( &$form, $read_request = true ){
+        $this->_form = &$form;
+        $this->notify( 'initForm' );
+
+        if ( $read_request ) $this->_init_form_request( );
+        $this->_form->Build( );
+        
+    }
+
+    function _init_form_request( ){
+        $request_id = $this->_form->getIdValue( );
+        if ( is_array( $request_id )) return false;
+
+        $action = $this->_form->submitted( );
+
+        if ( !$request_id ) {
+            $this->_form->initNoId( );
+        } else {
+            $this->_model_id = $request_id;
+        }
+
+        if ( $request_id && !$action ) $action  = 'edit';
+        
+        if ( $action ) $this->request( $action );
+
+    }
+
+    function &get_form( ){
+        return $this->_form;
+    }
+
+    function get_form_data( $copy_mode = false ) {
+        $copy_values = $this->_form->getValues( );
+        if ( $copy_mode ) {
+            unset( $copy_values[ $this->_model->id_field ]);
+        }
+        return $copy_values;
+    }
+
+    function set_banner( $action = null  ){
         $text = ucfirst( isset( $action ) ? $action :  join( "", $this->get_actions( )));
         if ( $text == 'Cancel' ) $text = AMP_TEXT_LIST;
 
         $heading = $this->_map->getHeading( );
-        $plural_headings = array( AMP_TEXT_LIST, AMP_TEXT_SEARCH );
-        if ( array_search( $text , $plural_headings ) !== FALSE ) $heading = AMP_Pluralize( $heading );
-        $renderer = &new AMPDisplay_HTML( );
-
-        $buffer = &new AMP_Content_Buffer( );
-        $buffer->add( $renderer->inDiv( $text." ".$heading, array( 'class' => 'banner')));
-        $this->_display->add( $buffer , AMP_CONTENT_DISPLAY_KEY_INTRO );
+        return PARENT::set_banner( $text, $heading );
     }
 
     function allow( $action ){
@@ -256,19 +315,6 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->init( );
     }
 
-    function _init_form( &$form, $read_request = true ){
-        $this->_form = &$form;
-        $this->notify( 'initForm' );
-
-        if ( $read_request ) $this->_init_form_request( );
-        $this->_form->Build( );
-        
-    }
-
-    function &get_form( ){
-        return $this->_form;
-    }
-
     function _init_search( &$search, &$display ){
         $this->_search = &$search;
         $this->_display->add( $search );
@@ -280,24 +326,6 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
 
         $display->applySearch( $search->getSearchValues( )) ;
         $this->set_banner( 'search');
-    }
-
-    function _init_form_request( ){
-        $request_id = $this->_form->getIdValue( );
-        if ( is_array( $request_id )) return false;
-
-        $action = $this->_form->submitted( );
-
-        if ( !$request_id ) {
-            $this->_form->initNoId( );
-        } else {
-            $this->_model_id = $request_id;
-        }
-
-        if ( $request_id && !$action ) $action  = 'edit';
-        
-        if ( $action ) $this->_action_requested = $action;
-
     }
 
     function commit_new( ){
@@ -357,7 +385,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
             $display->setController( $this );
             $this->set_banner( 'list');
             $this->notify( 'initList' );
-            if ( $search = $this->_map->getComponent( 'search' )) $this->_init_search( $search, $display );
+            #if ( $search = $this->_map->getComponent( 'search' )) $this->_init_search( $search, $display );
         }
 
         //add the list / blank form to the display manager
@@ -371,7 +399,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $name = $this->_form->getItemName( );
         if ( !$name ) $name = 'Item';
         if ( !$this->_model->deleteData( $this->_model_id )){
-            $this->error( $this->_model->getErrors( ));
+            if ( method_exists( $this->_model, 'getErrors')) $this->error( $this->_model->getErrors( ));
             $this->_display->add( $this->_form );
             return false;
         }
@@ -387,14 +415,6 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         }
         return $this->commit_save( true );
 
-    }
-
-    function get_form_data( $copy_mode = false ) {
-        $copy_values = $this->_form->getValues( );
-        if ( $copy_mode ) {
-            unset( $copy_values[ $this->_model->id_field ]);
-        }
-        return $copy_values;
     }
 
 }

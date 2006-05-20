@@ -16,12 +16,14 @@ include_once("AMP/BaseTemplate.php");
 require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Modules/Petition/Petition.php' );
 
-$P = new Petition( $dbcon, $_REQUEST['pid'], $_REQUEST['modin'] );
+$pid = isset( $_REQUEST['pid']) && $_REQUEST['pid'] ? $_REQUEST['pid'] : false;
+$modin = isset( $_REQUEST['modin']) && $_REQUEST['modin'] ? $_REQUEST['modin'] : false;
+$current_petition = &new Petition( $dbcon, $pid, $modin );
 
-if ($P->pid) {
+if ($current_petition->id) {
 	
 	// Fetch the form instance specified by submitted modin value.
-	$udm =& new UserDataInput( $dbcon, $P->petmod );
+	$udm =& new UserDataInput( $dbcon, $current_petition->getFormId( ));
 	
 	// Was data submitted via the web?
 	$sub = isset($_REQUEST['btnUdmSubmit']);
@@ -36,23 +38,22 @@ if ($P->pid) {
 	
 	//OUTPUT THE PAGE
 
-	echo $P->progressBox();
+	echo $current_petition->progressBox();
 
 	if ($_REQUEST["signers"]  or $_REQUEST['btnUdmSubmit']) {
 		$udm->output();
-		echo $P->petition_signers();
+		echo $current_petition->petition_signers();
 	}
 
 	if(!$_REQUEST['btnUdmSubmit'] and (!$_REQUEST["signers"]) and  (!$_REQUEST["uid"])){
-		echo $P->intro_text();
-		echo $P->signature_link();	
+		echo $current_petition->intro_text();
+		echo $current_petition->signature_link();	
 		echo '<p class="title">Sign Petition</p>';
 		print $udm->output();
 	}	
 	
-}
-else {
-	echo $P->petitionlist();
+} else {
+	echo $current_petition->petitionlist();
 }
 
 include_once("AMP/BaseFooter.php");

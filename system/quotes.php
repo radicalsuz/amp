@@ -1,6 +1,14 @@
 <?php
 $modid = "41";
 
+require_once( 'AMP/Content/Quote/ComponentMap.inc.php');
+
+$map = &new ComponentMap_Quote( );
+$controller = &$map->get_controller( );
+print $controller->execute( );
+
+/*
+
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
 $obj = new SysMenu; 
@@ -61,4 +69,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>

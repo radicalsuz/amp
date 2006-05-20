@@ -1,48 +1,60 @@
 <?php
+require_once( 'AMP/System/Data/Item.inc.php');
 
-Class Petition {
+Class Petition extends AMPSystem_Data_Item {
 
-	var $dbcon;
-	var $petmod;
-	var $petition_started;
-	var $petition_ends;
+	var $petition_started = false;
+	var $petition_ends = false;
 	var $limit =25;
-	var $pid;
-	var $pq;
+    var $datatable = "petition";
+    var $name_field = 'title';
 	
 	function Petition(&$dbcon, $pid=NULL,$modin=NULL) {
-		$this->dbcon = $dbcon;
-		if (isset($pid)) {
-			$this->pid=$pid;
-			$this->setData();
-		} 
-		if (isset($modin)) {
-			$this->petmod=$modin;
-			$this->setData();
-		}
+        if ( isset( $modin ) && $modin_petition_id = $this->findByModin( $modin )){
+            $pid = $modin_petition_id;
+        }
+        $this->init( $dbcon, $pid );
 	}
-	
-	function setData() {
-		if (isset($this->petmod)) {
-			$where = 'udmid = '.$this->petmod;
-		} elseif (isset($this->pid)) {
-			$where = "id =".$this->pid;
-		}
-		$sql = "SELECT * FROM petition where $where ";
-		$this->pq = $this->dbcon->Execute($sql) or DIE("could not find petition: ".$sql.$this->dbcon->ErrorMsg());
-		$this->petmod  =  $this->pq->Fields("udmid");
-		$this->pid  =  $this->pq->Fields("id");
-		
-		if ($this->pq->Fields("datestarted") !="0000-00-00" or $this->pq->Fields("datestarted") != NULL ){
-		$P->petition_started = DoDate($this->pq->Fields("datestarted"),"M, j Y");}
-		if ($this->pq->Fields("dateended") !="0000-00-00" or $this->pq->Fields("dateended") != NULL){
-		$P->petition_ends= DoDate($this->pq->Fields("dateended"),"M, j Y");}
-	
-	}
-		
+
+    function findByModin( $modin ){
+        require_once( 'Modules/Petition/Lookups.inc.php');
+        $modin_lookup = AMPSystem_Lookup::instance( 'petitionsByModin');
+        if ( !isset( $modin_lookup[ $modin ])) return false;
+        return $modin_lookup[ $modin ];
+    }
+
+    function getFormId( ){
+        return $this->getData( 'udmid');
+    }
+
+    function getStartDate( ){
+        $start_date = $this->getData( 'datestarted');
+        return AMP_verifyDateValue( $start_date );
+    }
+
+    function getEndDate( ){
+        $end_date = $this->getData( 'dateended');
+        return AMP_verifyDateValue( $end_date );
+
+    }
+
+    function getBlurb( ){
+        return $this->getData( 'shortdesc');
+    }
+
+    function getURL( ){
+        if ( !isset( $this->id )) return AMP_CONTENT_URL_PETITIONS;
+        return AMP_Url_AddVars( AMP_CONTENT_URL_PETITIONS, array( 'pid='.$this->id ));
+    }
+
+    function _adjustSetData( $data ){
+		if ($start_date = $this->getStartDate( )) $P->petition_started = DoDate($start_date,"M, j Y");
+		if ($end_date  = $this->getEndDate( )) $P->petition_started = DoDate($end_date,"M, j Y");
+    }
+
 	function progressBox() {
 
-		$sql="SELECT  COUNT(DISTINCT id) FROM userdata  where modin = ".$this->petmod 	;
+		$sql="SELECT  COUNT(DISTINCT id) FROM userdata  where modin = ".$this->getFormId( );
 		$ptct= $this->dbcon->CacheExecute($sql) or DIE("could not get count: ".$sql.$this->dbcon->ErrorMsg());
 		$count = $ptct->fields[0];
 		 
@@ -63,9 +75,9 @@ Class Petition {
 	function petition_signers(){
 		if (!$_REQUEST["offset"]) {$offset= 0;}
 		else {$offset=$_REQUEST["offset"];}
-		$sql="SELECT First_Name, Last_Name, Company,Notes, City,  State  FROM userdata  where  modin = ".$this->petmod." and custom19 = 1 order by id desc  Limit $offset, ".$this->limit;
+		$sql="SELECT First_Name, Last_Name, Company,Notes, City,  State  FROM userdata  where  modin = ".$this->getFormId( )." and custom19 = 1 order by id desc  Limit $offset, ".$this->limit;
 		$P=$this->dbcon->CacheExecute($sql) or DIE("could not find signers ".$sql.$this->dbcon->ErrorMsg());
-		$sql="SELECT  COUNT(DISTINCT id) FROM userdata  where modin = ".$this->petmod." and custom19 =1";
+		$sql="SELECT  COUNT(DISTINCT id) FROM userdata  where modin = ".$this->getFormId( )." and custom19 =1";
 		$ptct= $this->dbcon->CacheExecute($sql) or DIE("could not get count: ".$sql.$this->dbcon->ErrorMsg());
 		$count = $ptct->fields[0];
 		

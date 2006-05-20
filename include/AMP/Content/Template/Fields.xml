@@ -1,0 +1,134 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<name>
+		<type>text</type>
+		<label>Name</label>
+	</name>
+    <template_header>
+        <type>header</type>
+        <default>HTML Template</default>
+    </template_header>
+    <template_header2>
+        <type>static</type>
+        <default>Add [-body-] [-left nav-] [-right nav-] to the template where you want content to appear</default>
+    </template_header2>
+	<header2>
+		<type>textarea</type>
+		<label>HTML Template</label>
+        <size>80:65</size>
+	</header2>
+    <!--
+	<header3>
+		<type>textarea</type>
+		<label>Header3</label>
+	</header3>
+	<header4>
+		<type>textarea</type>
+		<label>Header4</label>
+	</header4>
+	<header5>
+		<type>textarea</type>
+		<label>Header5</label>
+	</header5>
+	<header6>
+		<type>textarea</type>
+		<label>Header6</label>
+	</header6>
+	<footer>
+		<type>textarea</type>
+		<label>Footer</label>
+	</footer>
+	<lnav1>
+		<type>textarea</type>
+		<label>Lnav1</label>
+	</lnav1>
+	<lnav2>
+		<type>textarea</type>
+		<label>Lnav2</label>
+	</lnav2>
+	<lnav3t>
+		<type>textarea</type>
+		<label>Lnav3t</label>
+	</lnav3t>
+    -->
+    <lnav_header>
+        <type>header</type>
+        <default>Left Side Navigation</default>
+    </lnav_header>
+	<lnav3>
+		<type>textarea</type>
+		<label>Left Nav #1 : start Heading Row</label>
+        <size>6:65</size>
+	</lnav3>
+	<lnav4>
+		<type>textarea</type>
+		<label>Left Nav #2  : end Heading Row</label>
+        <size>6:65</size>
+	</lnav4>
+	<lnav7>
+		<type>textarea</type>
+		<label>Left Nav #3  : start Content Table Row : repeats</label>
+        <size>6:65</size>
+	</lnav7>
+	<lnav8>
+		<type>textarea</type>
+		<label>Left Nav #4  : end Content Table Row : repeats</label>
+        <size>6:65</size>
+	</lnav8>
+	<lnav9>
+		<type>textarea</type>
+		<label>Left Nav #5  : spacer</label>
+        <size>6:65</size>
+	</lnav9>
+    <rnav_header>
+        <type>header</type>
+        <default>Right Side Navigation</default>
+    </rnav_header>
+	<rnav3>
+		<type>textarea</type>
+		<label>Right Nav #1  : start Heading Row</label>
+        <size>6:65</size>
+	</rnav3>
+	<rnav4>
+		<type>textarea</type>
+		<label>Right Nav #2  : end Heading Row</label>
+        <size>6:65</size>
+	</rnav4>
+	<rnav7>
+		<type>textarea</type>
+		<label>Right Nav #3  : start Content Table Row : repeats</label>
+        <size>6:65</size>
+	</rnav7>
+	<rnav8>
+		<type>textarea</type>
+		<label>Right Nav #4  : end Content Table Row : repeats</label>
+        <size>6:65</size>
+	</rnav8>
+	<rnav9>
+		<type>textarea</type>
+		<label>Right Nav #5  : spacer</label>
+        <size>6:65</size>
+	</rnav9>
+    <paths_header>
+        <type>header</type>
+        <default>Template Paths</default>
+    </paths_header>
+	<css>
+		<type>text</type>
+		<label>CSS Files</label>
+        <default>custom/styles.css</default>
+	</css>
+	<imgpath>
+		<type>text</type>
+		<label>Image Path</label>
+        <default>img/</default>
+	</imgpath>
+	<extra_header>
+		<type>textarea</type>
+		<label>Extra Headers</label>
+        <size>4:45</size>
+	</extra_header>
+
+</array>

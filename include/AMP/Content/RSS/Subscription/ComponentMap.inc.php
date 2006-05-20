@@ -20,6 +20,7 @@ class ComponentMap_RSS_Subscription extends AMPSystem_ComponentMap {
     var $_path_controller = 'AMP/Content/RSS/Subscription/Controller.php';
     var $_component_controller = 'RSS_Subscription_Controller';
 
+    var $_action_default = 'list';
 }
 
 ?>

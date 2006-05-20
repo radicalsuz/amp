@@ -41,6 +41,7 @@ define( 'AMP_TEXT_DELETED', 'Deleted');
 define( 'AMP_TEXT_ADD_ITEM','Add new record' );
 define( 'AMP_TEXT_PREVIEW_ITEM','Preview this Item' );
 define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
+define( 'AMP_TEXT_LIST_CONFIRM_DELETE', 'Are you sure you want to DELETE these items?');
 
 /**
  * RSS listpage text
@@ -109,9 +110,21 @@ if ( !defined( 'AMP_TEXT_ACTION')) define( 'AMP_TEXT_ACTION', 'action');
 if ( !defined( 'AMP_TEXT_SYSTEM_INTERFACE_FOOTER')) 
     define( 'AMP_TEXT_SYSTEM_INTERFACE_FOOTER', "AMP %s for %s \nPlease report problems to %s");
 
+define( 'AMP_TEXT_SECTION', 'section');
+define( 'AMP_TEXT_TEMPLATE', 'template');
+define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
+
 /**
  * DIA related 
  */
 if ( !defined( 'AMP_TEXT_DIA_SAVE_SUCCESS'))
         define( 'AMP_TEXT_DIA_SAVE_SUCCESS', 'Saved DIA supporter %s');
+/**
+ * Public Pages related 
+ */
+if ( !defined( 'AMP_TEXT_CONTENT_PUBLIC_NO_LINK'))
+        define( 'AMP_TEXT_CONTENT_PUBLIC_NO_LINK', 
+                'This page does not have a link auto-associated with it.  Please add a link below or the page will not link.');
+        
+
 ?>

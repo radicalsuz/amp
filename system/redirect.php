@@ -1,4 +1,12 @@
 <?php
+
+require_once( 'AMP/Content/Redirect/ComponentMap.inc.php');
+
+$map = &new ComponentMap_AMP_Content_Redirect( );
+$controller = &$map->get_controller( );
+print $controller->execute( );
+/**/
+/*
 $mod_name="content";
 
 require("Connections/freedomrising.php");
@@ -62,4 +70,5 @@ else {
 }	
 
 include ("footer.php");
+*/
 ?>

@@ -1,4 +1,12 @@
 <?php
+
+require_once( 'AMP/Content/Template/ComponentMap.inc.php');
+
+$map = &new ComponentMap_Template( );
+$controller = &$map->get_controller( );
+print $controller->execute( );
+
+/*
 #$modid = "31";
 $mod_name = "template";
 
@@ -76,4 +84,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>

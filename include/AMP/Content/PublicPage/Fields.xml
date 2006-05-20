@@ -1,0 +1,38 @@
+<array>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+		<default>1</default>
+	</publish>
+	<title>
+		<type>text</type>
+		<label>Title</label>
+		<required>1</required>
+	</title>
+	<blurb>
+		<type>textarea</type>
+		<label>Short Description</label>
+	</blurb>
+	<section>
+		<type>select</type>
+		<label>Section</label>
+		<required>1</required>
+		<lookup>
+			<module>content</module>
+			<instance>sectionMap</instance>
+		</lookup>
+	</section>
+	<class>
+		<type>select</type>
+		<label>Class</label>
+		<required>1</required>
+		<lookup>
+			<module>content</module>
+			<instance>classes</instance>
+		</lookup>
+	</class>
+	<link>
+		<type>text</type>
+		<label>Link</label>
+	</link>
+</array>

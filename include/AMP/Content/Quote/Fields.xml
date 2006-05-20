@@ -1,0 +1,32 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<quote>
+		<type>textarea</type>
+        <size>6:40</size>
+		<label>Quote</label>
+	</quote>
+	<source>
+		<type>text</type>
+		<label>Source</label>
+	</source>
+	<date>
+		<type>date</type>
+		<label>Date</label>
+        <default>today</default>
+	</date>
+	<type>
+		<type>select</type>
+		<label>Section</label>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
+	</type>
+
+</array>

@@ -1,7 +1,11 @@
 <?php
 
+header('Cache-Control: no-cache');
+header('Pragma: no-cache');
+
 require_once("AMP/System/Base.php");
 require_once("AMP/System/BaseTemplate.php");
+trigger_error( 'actually hitting the flush');
 
 $template = &new AMPSystem_BaseTemplate();
 $template->setToolName( 'system' );
@@ -24,12 +28,12 @@ $script = "
 <script type = 'text/javascript'>
 //<!--
 history.go(-1);
-alert('The cache has been reset');
+alert( '". AMP_TEXT_CACHE_RESET ."' );
 //-->
 </script>";
 
 print $template->outputHeader();
-print "The cache has been reset";
+print AMP_TEXT_CACHE_RESET;
 print $script;
 print $template->outputFooter();
 

@@ -1,0 +1,13 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<uselink>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</uselink>
+	<type>
+		<type>textarea</type>
+		<label>FAQ Type</label>
+	</type>
+</array>

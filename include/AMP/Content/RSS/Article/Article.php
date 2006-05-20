@@ -87,7 +87,7 @@ class RSS_Article extends AMPSystem_Data_Item {
         $article->setData( $article_data );
         if ( !$article->save( )) return false;
 
-        #$this->delete( );
+        $this->delete( );
         return true;
 
     }

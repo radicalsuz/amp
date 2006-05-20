@@ -44,9 +44,9 @@
 </home>
 
 <content>
-<title>Content</title>
-<per>CONTENT_ACCESS</per>
-<width>190</width>
+    <title>Content</title>
+    <per>CONTENT_ACCESS</per>
+    <width>190</width>
 
 	<item>
 		<href>articlelist.php</href>
@@ -428,124 +428,124 @@
 </forms>
 
 <navigation>
-<title>Navigation</title>
-<width>175</width>
-<per>CONTENT_NAVIGATION</per>
-<item>
-<label>Standard Navigation Layout</label>
-<href>nav_position.php?mod_id=1</href>
-<per>CONTENT_NAVIGATION</per>
-</item>
-<item>
-<label>Front Page Navigation Layout</label>
-<href>nav_position.php?mod_id=2</href>
-<per>CONTENT_NAVIGATION</per>
-</item>
-<item>
-<label>View Navigation Files</label>
-<href>nav.php?action=list</href>
-<per>CONTENT_NAVIGATION</per>
-</item>
-<item>
-<label>Add Navigation File</label>
-<href>nav.php</href>
-<per>CONTENT_NAVIGATION</per>
-</item>
+    <title>Navigation</title>
+    <width>175</width>
+    <per>CONTENT_NAVIGATION</per>
+    <item>
+        <label>Standard Navigation Layout</label>
+        <href>nav_position.php?mod_id=1</href>
+        <per>CONTENT_NAVIGATION</per>
+    </item>
+    <item>
+        <label>Front Page Navigation Layout</label>
+        <href>nav_position.php?mod_id=2</href>
+        <per>CONTENT_NAVIGATION</per>
+    </item>
+    <item>
+        <label>View Navigation Files</label>
+        <href>nav.php?action=list</href>
+        <per>CONTENT_NAVIGATION</per>
+    </item>
+    <item>
+        <label>Add Navigation File</label>
+        <href>nav.php</href>
+        <per>CONTENT_NAVIGATION</per>
+    </item>
 </navigation>
 
 <template>
-<title>Site Template</title>
-<width>175</width>
-<per>CONTENT_TEMPLATE</per>
-<item>
-<label>View Templates</label>
-<href>template.php?action=list</href>
-<per>CONTENT_TEMPLATE</per>
-</item>
-<item>
-<label>Add Template</label>
-<href>template.php</href>
-<per>CONTENT_TEMPLATE</per>
-</item>
-<item>
-<label>Edit Stylesheet</label>
-<href>css_edit.php</href>
-<per>CONTENT_CSS</per>
-</item>
-<item>
-<label>View Stylesheets</label>
-<href>css_list.php</href>
-<per>CONTENT_CSS</per>
-</item>
-<item>
-<label>View Custom Files</label>
-<href>custom_edit.php</href>
-<per>CONTENT_FILES_ACCESS</per>
-</item>
+    <title>Site Template</title>
+    <width>175</width>
+    <per>CONTENT_TEMPLATE</per>
+    <item>
+        <label>View Templates</label>
+        <href>template.php?action=list</href>
+        <per>CONTENT_TEMPLATE</per>
+    </item>
+    <item>
+        <label>Add Template</label>
+        <href>template.php</href>
+        <per>CONTENT_TEMPLATE</per>
+    </item>
+    <item>
+        <label>Edit Stylesheet</label>
+        <href>stylesheet.php?action=edit&amp;id=styles.css</href>
+        <per>CONTENT_CSS</per>
+    </item>
+    <item>
+        <label>View Stylesheets</label>
+        <href>stylesheet.php</href>
+        <per>CONTENT_CSS</per>
+    </item>
+    <item>
+        <label>View Custom Files</label>
+        <href>customfile.php</href>
+        <per>CONTENT_FILES_ACCESS</per>
+    </item>
 </template>
 
 <system>
-<title>Settings</title>
-<per>SYSTEM_ACCESS</per>
-<item>
-<label>System Permissions</label>
-<href>AMP_SYSTEM_URL_PERMISSION_GROUPS</href>
-<per>SYSTEM_PERMISSIONS</per>
-</item>
-<item>
-<label>System Users</label>
-<href>AMP_SYSTEM_URL_USERS</href>
-<per>SYSTEM_USERS</per>
-</item>
-<item>
-<label>System Settings</label>
-<href>sysvar.php</href>
-<per>SYSTEM_SETTINGS</per>
-</item>
-<item>
-<label>Tool Settings</label>
-<href>system_map.php?id=tooladmin</href>
-<child>tooladmin</child>
-<per>TOOLS_ADMIN</per>
-</item>
-<item>
-<label>Setup Wizard</label>
-<href>wizard_setup.php</href>
-<per>SYSTEM_SETTINGS</per>
-</item>
-<item>
-<label>Flush Cache</label>
-<href>flushcache.php</href>
-</item>
-<item>
-<label>Log Out</label>
-<href>logout.php</href>
-</item>
+    <title>Settings</title>
+    <per>SYSTEM_ACCESS</per>
+    <item>
+        <label>System Permissions</label>
+        <href>AMP_SYSTEM_URL_PERMISSION_GROUPS</href>
+        <per>SYSTEM_PERMISSIONS</per>
+    </item>
+    <item>
+        <label>System Users</label>
+        <href>AMP_SYSTEM_URL_USERS</href>
+        <per>SYSTEM_USERS</per>
+    </item>
+    <item>
+        <label>System Settings</label>
+        <href>sysvar.php</href>
+        <per>SYSTEM_SETTINGS</per>
+    </item>
+    <item>
+        <label>Tool Settings</label>
+        <href>system_map.php?id=tooladmin</href>
+        <child>tooladmin</child>
+    <per>TOOLS_ADMIN</per>
+    </item>
+    <item>
+        <label>Setup Wizard</label>
+        <href>wizard_setup.php</href>
+        <per>SYSTEM_SETTINGS</per>
+    </item>
+    <item>
+        <label>Flush Cache</label>
+        <href>flushcache.php</href>
+    </item>
+    <item>
+        <label>Log Out</label>
+        <href>logout.php</href>
+    </item>
 </system>
 
 <tooladmin>
-<title>Tool Settings</title>
-<per>TOOLS_ACCESS</per>
-<item>
-<label>View Intro Texts</label>
-<href>introtext.php?action=list</href>
-<per>TOOLS_INTROTEXT</per>
-</item>
-<item>
-<label>Add Intro Text</label>
-<href>introtext.php</href>
-<per>TOOLS_INTROTEXT</per>
-</item>
-<item>
-<label>Edit Tool Settings</label>
-<href>module.php?action=list</href>
-<per>TOOLS_ADMIN</per>
-</item>
-<item>
-<label>Add Tool</label>
-<href>module.php</href>
-<per>TOOLS_ADMIN</per>
-</item>
+    <title>Tool Settings</title>
+    <per>TOOLS_ACCESS</per>
+    <item>
+        <label>View Public Pages</label>
+        <href>introtext.php?action=list</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
+    <item>
+        <label>Add Public Page</label>
+        <href>introtext.php</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
+    <item>
+        <label>Edit Tool Settings</label>
+        <href>module.php?action=list</href>
+        <per>TOOLS_ADMIN</per>
+    </item>
+    <item>
+        <label>Add Tool</label>
+        <href>module.php</href>
+        <per>TOOLS_ADMIN</per>
+    </item>
 </tooladmin>
 
 <help>

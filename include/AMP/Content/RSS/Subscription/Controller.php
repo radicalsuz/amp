@@ -4,7 +4,6 @@ require_once ( 'AMP/System/Component/Controller.php');
 
 class RSS_Subscription_Controller extends AMP_System_Component_Controller_Map {
     var $_map;
-    var $_action_default = 'list';
 
     function RSS_Subscription_Controller( ){
         $this->init( );

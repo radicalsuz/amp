@@ -50,7 +50,7 @@ $userdatamod =1 ;
 $navhtml= "<A class=side href=\"moddata_list.php?modin=$modid\">View/Edit $name</A><br>
 <A class=side href=\"moddata.php?modin=$modid\">Add $name</A><br>
 <A class=side href=\"modfields2.php?id=$modid\">Data Module Settings</A><br>
-<A class=side href=\"module_control_list.php?modid=$modid\">Settings</A>";
+<A class=side href=\"module.php?id=$modid\">Settings</A>";
     $MM_editTable  = "modules";
     $MM_fieldsStr ="name|value|userdatamod|value|modid|value|file|value|udmper|value|navhtml|value|publish|value";
     $MM_columnsStr = "name|',none,''|userdatamod|',none,''|userdatamodid|',none,''|file|',none,''|perid|',none,''|navhtml|',none,''|publish|',none,''";

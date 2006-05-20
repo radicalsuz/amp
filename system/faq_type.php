@@ -2,6 +2,12 @@
 $modid = "4";
 $mod_name = "faq";
 
+require_once( 'Modules/FAQ/Type/ComponentMap.inc.php');
+
+$map = &new ComponentMap_FAQ_Type( );
+$controller = &$map->get_controller( );
+print $controller->execute( );
+/*
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
 $obj = new SysMenu; 
@@ -58,4 +64,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>

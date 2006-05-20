@@ -1057,6 +1057,27 @@ if ( ! function_exists( 'AMP_navCountDisplay_Class')) {
     }
 }
 
+if ( ! function_exists( 'AMP_navCountDisplay_Introtext')) {
+    function AMP_navCountDisplay_Introtext( $introtext_id ){
+        if ( !$introtext_id ) return false;
+        static $renderer = false;
+        static $navcount_lists = false;
+        if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
+        if ( !$navcount_lists )
+            $navcount_lists = &AMPContent_Lookup::instance( 'IntrotextsNavigationCount' );
+
+        $count_lists = isset( $navcount_lists[ $introtext_id ]) ? "( " . $navcount_lists[ $introtext_id ] . " )" : false;
+
+        $navlink_lists = 
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'mod_id='.$introtext_id),
+                             AMP_TEXT_CONTENT_PAGES . $count_lists );
+
+        return  $renderer->in_P( 
+                    $navlink_lists 
+                );
+    
+    }
+}
 if ( !function_exists( 'AMP_openFile')){
     function &AMP_openFile( $filename, $path = null ){
         if ( !isset( $path )) $path = AMP_LOCAL_PATH . '/custom/';
@@ -1096,6 +1117,33 @@ if ( !function_exists( 'AMP_validate_url')){
         if( preg_match( '/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}'
                    .'((:[0-9]{1,5})?\/.*)?$/i' ,$test_url)) return $test_url;
         return false;
+    }
+}
+
+if ( !function_exists( 'AMP_verifyDateValue')){
+    function AMP_verifyDateValue( $date_value ){
+        if ( !$date_value ) return false;
+        $null_dates = &AMPConstant_Lookup::instance( 'nullDates');
+        if ( array_search( $date_value, $null_dates )!==FALSE) return false;
+        return $date_value;
+    }
+}
+
+if ( !function_exists( 'AMP_publicPagePublishButton')){
+    function AMP_publicPagePublishButton( $id, $linkfield ){
+        return '<form name="publish_Page_'.$id .'" method="POST" action="/system/module_contentadd.php">'
+                . '<input type="hidden" name="'.$linkfield.'" value="'. $id . '">'
+                . '<input type="submit" value="Publish" class="searchform_element"></form>';
+
+    }
+}
+
+if ( !function_exists( 'AMP_flashMessage')){
+    function AMP_flashMessage( $message, $is_error = false ){
+        require_once( 'AMP/System/Flash.php');
+        $flash = & AMP_System_Flash::instance( );
+        if ( $is_error ) return $flash->add_error( $message );
+        $flash->add_message( $message );
     }
 }
 			

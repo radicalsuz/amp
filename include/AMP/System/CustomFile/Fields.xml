@@ -1,0 +1,15 @@
+<array>
+    <id>
+        <type>hidden</type>
+    </id>
+    <name>
+        <type>text</type>
+        <label>File Name&lt;BR /&gt;&lt;span class="red photocaption"&gt;changing this will create a copy&lt;/span&gt;</label>
+		<required>1</required>
+    </name>
+    <body>
+        <type>textarea</type>
+        <label>Content</label>
+        <size>45:75</size>
+    </body>
+</array>

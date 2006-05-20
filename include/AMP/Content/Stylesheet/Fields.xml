@@ -1,0 +1,22 @@
+<array>
+    <id>
+        <type>hidden</type>
+    </id>
+    <name>
+        <type>text</type>
+        <label>File Name&lt;BR /&gt;&lt;span class="red photocaption"&gt;do NOT rename styles.css&lt;/span&gt;</label>
+		<required>1</required>
+    </name>
+    <body>
+        <type>textarea</type>
+        <label>CSS</label>
+        <size>45:65</size>
+    </body>
+    <pick>
+        <type>text</type>
+        <label>&lt;a href=&apos;javascript:TCP.popup(document.forms[&quot;css_edit_form&quot;].elements[&quot;pick&quot;]);&apos;&gt;
+               &lt;img width=&quot;15&quot; height=&quot;13&quot; border=&quot;0&quot; alt=&quot;Click Here to Pick the color&quot; src=&quot;images/sel.gif&quot;&gt;
+                Color Picker &lt;/a&gt;
+        </label>
+    </pick>
+</array>

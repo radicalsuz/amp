@@ -203,6 +203,7 @@ class AMPScaffold_Factory {
         $form->enforceRequiredFields( );
         $form->removeSubmit( 'copy');
         $form->removeSubmit( 'delete');
+        $form->defineSubmit( 'save', 'Build');
         $form->Build( );
         return $form;
 

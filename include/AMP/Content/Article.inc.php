@@ -247,6 +247,11 @@ class Article extends AMPSystem_Data_Item {
     function _adjustSetData( $data ) {
         $this->legacyFieldname( $data, 'test', 'body' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
+        $this->legacyFieldname( $data, 'blurb', 'shortdesc' );
+        $this->legacyFieldname( $data, 'section', 'type' );
+        if ( isset( $data['link']) && $data['link'] && !isset( $data['linkover'])) {
+            $this->mergeData( array( 'linkover' => 1));
+        }
     }
 
     function readVersion( $version_id ) {

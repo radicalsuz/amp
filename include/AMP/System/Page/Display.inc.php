@@ -99,7 +99,9 @@ class AMPSystem_Page_Display {
         foreach ($this->page->getResults() as $result ) {
             $output .=  "<span class=\"page_result\">$result</span>\n";
         }
-        return $output;
+        require_once( 'AMP/System/Flash.php');
+        $flash = &AMP_System_Flash::instance( );
+        return $output . $flash->execute( );
     }
 }
 ?>

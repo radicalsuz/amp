@@ -20,6 +20,7 @@ class ComponentMap_RSS_Article extends AMPSystem_ComponentMap {
         'source'=> 'RSS_Article');
 
     var $_allow_search = true;
+    var $_action_default = 'list';
 }
 
 ?>

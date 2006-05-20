@@ -10,6 +10,7 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
 	var $xml_pathtype = "fields";
 
 	function AMPSystem_Form_XML() {
+        $this->init( 'Generic_System_Form', 'POST');
 	}
 
 	function init( $name, $method=null, $action=null ) {

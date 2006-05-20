@@ -518,19 +518,19 @@
 		<class>add</class>
 	</item>
 	<item>
-		<href>css_edit.php</href>
+		<href>stylesheet.php?action=edit&amp;id=styles.css</href>
 		<label>Edit Standard CSS</label>
 		<class>view</class>
 		<per>CONTENT_CSS</per>
 	</item>
 	<item>
-		<href>css_list.php</href>
+		<href>stylesheet.php</href>
 		<label>View/Edit Custom CSS</label>
 		<class>view</class>
 		<per>CONTENT_CSS</per>
 	</item>
 	<item>
-		<href>custom_edit.php</href>
+		<href>customfile.php</href>
 		<label>View/Edit Custom Files</label>
 		<class>view</class>
 		<per>TOOLS_CUSTOMFILES</per>

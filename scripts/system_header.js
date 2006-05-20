@@ -189,9 +189,11 @@ function showClass(theclass, objtype) {
 
 function change_any(which, whatkind) {
 	if (whatkind!='') {hideClass(whatkind, '');}
-		if(document.getElementById(which).style.display == 'block' ) {
-			document.getElementById(which).style.display = 'none';
-		} else {
+	target = document.getElementById(which);
+	if (!target) return false;
+	if(document.getElementById(which).style.display == 'block' ) {
+		document.getElementById(which).style.display = 'none';
+	} else {
 		document.getElementById(which).style.display = 'block';
 	}
 }

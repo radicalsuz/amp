@@ -22,6 +22,7 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     var $id;
     var $datatable = "moduletext";
     var $name_field = 'name';
+    var $_exact_value_fields = array( 'modid');
 
     function AMPSystem_IntroText ( &$dbcon, $text_id=null ) {
         $this->init( $dbcon, $text_id );
@@ -104,6 +105,29 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     }
     function getComments() {
         return false;
+    }
+
+    function getBlurb( ){
+        return false;
+    }
+
+    function getToolName( ){
+        $tool_id = $this->getToolId( );
+        if ( !$tool_id ) return false;
+        $tool_names = &AMPSystem_Lookup::instance( 'tools');
+        if ( isset( $tool_names[ $tool_id ])) return $tool_names[ $tool_id ];
+        return false;
+    }
+    function getToolId( ){
+        return $this->getData( 'tool_id');
+    }
+
+    function getPageLink( ){
+        return $this->getData( 'searchtype');
+    }
+
+    function getURL( ){
+        return $this->getPageLink( );
     }
 
  }

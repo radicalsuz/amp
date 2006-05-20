@@ -511,8 +511,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _showPublishStatus( $publish_value, $field = "publish" ) {
-        if ($publish_value == 1) return AMP_PUBLISH_STATUS_LIVE;
-        return AMP_PUBLISH_STATUS_DRAFT;
+        if ($publish_value == AMP_CONTENT_STATUS_LIVE ) return AMP_TEXT_CONTENT_STATUS_LIVE;
+        return AMP_TEXT_CONTENT_STATUS_DRAFT;
     }
 
     function _makePrettyDate( $value, $fieldname,$data  ){
@@ -610,9 +610,14 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function addCriteria( $sql_criteria, $change_editlink=false) {
-        $this->source->addCriteria( $sql_criteria );
-        $result =  $this->source->readData(); 
-
+        if ( !is_array( $this->source )){
+            $this->source->addCriteria( $sql_criteria );
+            $result =  $this->source->readData(); 
+        } else {
+            $this->_source_criteria[] = $sql_criteria;
+            $this->applySearch( array( ));
+            $result = true;
+        }
         if ($result && $change_editlink) $this->appendEditlinkVar( $sql_criteria );
         return $result;
     }

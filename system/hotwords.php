@@ -1,4 +1,10 @@
 <?php
+require_once( 'AMP/Content/Hotword/ComponentMap.inc.php');
+
+$map = &new ComponentMap_Hotword( );
+$controller = &$map->get_controller( );
+print $controller->execute( );
+/*
 $mod_name="content";
 
 require_once("Connections/freedomrising.php");
@@ -60,4 +66,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>

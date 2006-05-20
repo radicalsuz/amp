@@ -20,6 +20,8 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 
     var $_action_displays = array( );
     var $_default_display = 'list';
+    var $_action_default = 'add';
+
 
     function getComponents() {
         return $this->components;
@@ -37,6 +39,10 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 
     function getFilePaths() {
         return $this->paths;
+    }
+
+    function getDefaultDisplay( ){
+        return $this->_action_default;
     }
 
     function getNavName() {

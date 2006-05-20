@@ -139,9 +139,11 @@ class AMPSystemLookup_Lookups {
             if ( !strpos( $test_class, 'lookup')) continue;
             if ( AMP_getClassAncestors( $test_class, 'AMPSystem_Lookup')
                  || AMP_getClassAncestors( $test_class, 'AMPConstant_Lookup')) {
-                if ( !call_user_func( array( $test_class, 'available' ))) continue;
+                $class_vars = get_class_vars( $test_class );
+                if ( !( call_user_func( array( $test_class, 'available' )))
+                     || ( isset( $class_vars['available']) && $class_vars['available'])) continue;
                 $lookup_name = $this->get_lookup_name( $test_class );
-                if ( $lookup_name == 'lookup') continue;
+                if ( $lookup_name == 'lookup' ) continue;
                 $this->dataset[ $test_class ] = $lookup_name;
             }
         }
@@ -666,4 +668,11 @@ class AMPConstantLookup_NullDatetimes extends AMPConstant_Lookup {
     }
 }
 
+class AMPConstantLookup_NullDates extends AMPConstant_Lookup {
+    var $_prefix_values = 'AMP_NULL_DATE_VALUE';
+    
+    function AMPConstantLookup_NullDates( ){
+        $this->init( );
+    }
+}
 ?>

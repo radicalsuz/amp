@@ -33,18 +33,23 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     var $_observers = array( );
     var $_search_source;
     var $_field_status = 'publish';
+    var $_exact_value_fields = array( );
 
     function AMPSystem_Data_Item ( &$dbcon ) {
         $this->init($dbcon);
     }
 
     function init ( &$dbcon, $item_id = null ) {
+        if ( !is_object( $dbcon )){
+            trigger_error( sprintf( AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD, get_class( $this )));
+            return false;
+        }
         $this->dbcon = & $dbcon;
         $this->setSource( $this->datatable );
         if (isset($item_id) && $item_id) $this->readData( $item_id );
     }
 
-    function setSource( $sourcename ){
+    function setSource( $sourcename ) {
         PARENT::setSource( $sourcename );
         $this->_itemdata_keys = $this->_getColumnNames( $this->datatable );
 		$this->_allowed_keys = $this->_itemdata_keys;
@@ -81,7 +86,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             return true;
         }
 
-        if ($this->dbcon->ErrorMsg() ) trigger_error ( get_class( $this ) . ' failed to read the database :' . $this->dbcon->ErrorMsg() );
+        if ($this->dbcon->ErrorMsg() ) 
+            trigger_error ( sprintf( AMP_TEXT_ERROR_DATABASE_READ_FAILED, get_class( $this ) , $this->dbcon->ErrorMsg() ));
         return false;
     }
 
@@ -148,7 +154,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             $this->notify( 'save' );
             return true;
         }
-        trigger_error ( get_class( $this ) . ' save failed: '. $this->dbcon->ErrorMsg() );
+        trigger_error ( sprintf( AMP_TEXT_ERROR_DATABASE_SAVE_FAILED, get_class( $this ), $this->dbcon->ErrorMsg() ));
 
         return false;
     }
@@ -312,7 +318,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         }
 
         if ( !$this->setSortMethod( $sort_property )) {
-            trigger_error( 'sort by '.$sort_property.' failed in '.get_class( $this ).": no access method found" );
+            trigger_error( sprintf( AMP_TEXT_ERROR_SORT_PROPERTY_FAILED, $sort_property, get_class( $this )));
             return false;
         }
 
@@ -417,6 +423,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function getPublish( ){
         return $this->isLive( ) ;
+    }
+
+    function getStatusText( ){
+        if ( $this->isLive( )) return AMP_TEXT_CONTENT_STATUS_LIVE;
+        return AMP_TEXT_CONTENT_STATUS_DRAFT; 
     }
 
     function publish( ){

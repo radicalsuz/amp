@@ -1,5 +1,12 @@
 <?php
+require_once( 'AMP/System/Base.php');
+$modid = isset( $_GET['modid'] ) && $_GET['modid'] ? $_GET['modid'] : false;
+$control_id = isset( $_GET['id'] ) && $_GET['id'] ? $_GET['id'] : false;
 
+if ( !$modid ) ampredirect( AMP_SYSTEM_URL_HOME );
+if ( $modid ) ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_TOOL_CONTROL, array( 'id='.$control_id )));
+
+/*
 
 require_once("Connections/freedomrising.php");
 require_once("Connections/sysmenu.class.php");
@@ -65,4 +72,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>

@@ -1,5 +1,10 @@
 <?php
-$modid = $_GET['modid'];
+require_once( 'AMP/System/Base.php');
+$modid = isset( $_GET['modid'] ) && $_GET['modid'] ? $_GET['modid'] : false;
+
+if ( !$modid ) ampredirect( AMP_SYSTEM_URL_HOME );
+if ( $modid ) ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_TOOLS, 'id='.$modid ));
+/*
 
 require("Connections/freedomrising.php");
 include ("header.php");
@@ -25,4 +30,5 @@ listpage($listtitle,$listsql,$fieldsarray,$filename,$orderby,$sort,$extra);
 
 
 include ("footer.php");
+*/
 ?>

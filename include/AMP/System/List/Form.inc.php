@@ -125,6 +125,11 @@ class AMP_System_List_Form extends AMPSystem_List {
         return $this->_toolbar->execute( );
     }
 
+    function renderDelete( &$toolbar ){
+        return "<input type='submit' name='". $toolbar->submitGroup ."[delete]' value='Delete' onclick='return confirmSubmit( \"".AMP_TEXT_LIST_CONFIRM_DELETE."\");'>";
+
+    }
+
     function _HTML_footer() {
         return  "\n	</table>\n</div>"
                 . $this->_outputToolbar( )
@@ -135,7 +140,12 @@ class AMP_System_List_Form extends AMPSystem_List {
 
 
     function _HTML_startForm() {
-        return '<form name="' . $this->formname .'" method="POST" action="' . PHP_SELF_QUERY() ."\">\n";
+        $url_value = PHP_SELF_QUERY( );
+        if ( !strpos( $url_value, 'action')) {
+            $url_value = AMP_URL_AddVars( $url_value, array( 'action=list'));
+
+        }
+        return '<form name="' . $this->formname .'" method="POST" action="' . $url_value ."\">\n";
     }
 
     function _HTML_startRow( $id ) {

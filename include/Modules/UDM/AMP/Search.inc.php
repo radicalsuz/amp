@@ -11,22 +11,23 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         'global_criteria'=> array (
             'available'=>true,
             'type' => 'text',
+            'default' => '',
             'label'=>'Required SQL criteria in all searches'
             ),
         'criteria'=> array (
             'available'=>false,
-            'description'=>'Passed criteria' ),
+            'label'=>'Passed criteria' ),
         'clear_criteria' => array (
             'available'=>false,
-            'description'=>'clear preset criteria when search runs' ),
+            'label'=>'clear preset criteria when search runs' ),
         'multimodin' => array (
             'available'=>false,
             'default'=>false,
-            'description'=>'search across UDM instances' ),
+            'label'=>'search across UDM instances' ),
         'display_fields' => array(
             'available'=>false,
             'description'=>'fields to include in sql statement',
-            'default' => 'userdata.*')
+            'label' => 'userdata.*')
         );
     
     function UserDataPlugin_Search_AMP (&$udm, $plugin_instance=null) {
@@ -39,7 +40,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         
         if (isset($options['clear_criteria']) && $options['clear_criteria']) $this->criteria=array();
 
-		if (isset($options['global_criteria'])) { 
+		if (isset($options['global_criteria']) && $options['global_criteria']) { 
             $new_criteria[]=$options['global_criteria']; 
         }
 
@@ -49,7 +50,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 		if (!($options['multimodin'])) { 
             $new_criteria[]="modin=".$this->udm->instance; 
         }
-		if(is_array($options['criteria'])) {
+		if(isset( $options['criteria']) && is_array($options['criteria'])) {
 			$new_criteria = array_merge($new_criteria, $options['criteria']);
 		}
         if (isset($new_criteria)) {

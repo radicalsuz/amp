@@ -1,0 +1,81 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<title>
+		<type>text</type>
+		<label>Petition Title</label>
+	</title>
+	<addressedto>
+		<type>text</type>
+		<label>Addressed To</label>
+	</addressedto>
+	<shortdesc>
+		<type>textarea</type>
+		<label>Blurb</label>
+        <size>4:60</size>
+	</shortdesc>
+	<text>
+		<type>textarea</type>
+        <size>12:60</size>
+		<label>Full Text</label>
+	</text>
+	<udmid>
+		<type>select</type>
+		<label>Signer Entry Form</label>
+        <lookup>forms</lookup>
+	</udmid>
+	<term_header>
+		<type>header</type>
+		<default>Duration</default>
+	</term_header>
+	<datestarted>
+		<type>date</type>
+		<label>Start Date</label>
+        <default>today</default>
+	</datestarted>
+	<dateended>
+		<type>date</type>
+		<label>End Date</label>
+        <default>next month</default>
+	</dateended>
+	<sponsor_header>
+		<type>header</type>
+		<default>Petition Sponsor</default>
+	</sponsor_header>
+	<intsigner>
+		<type>text</type>
+		<label>Submitted By</label>
+	</intsigner>
+	<intsignerad>
+		<type>textarea</type>
+		<label>Contact Info</label>
+	</intsignerad>
+	<intsignerem>
+		<type>text</type>
+		<label>E-mail</label>
+	</intsignerem>
+	<org>
+		<type>text</type>
+		<label>Organization</label>
+	</org>
+	<url>
+		<type>text</type>
+		<label>Web Address</label>
+	</url>
+    <!--
+	<sourceid>
+		<type>text</type>
+		<label>Sourceid</label>
+	</sourceid>
+	<enteredby>
+		<type>text</type>
+		<label>Enteredby</label>
+	</enteredby>
+	<uselists>
+		<type>text</type>
+		<label>Uselists</label>
+	</uselists>
+    -->
+
+</array>

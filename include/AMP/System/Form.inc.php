@@ -108,6 +108,8 @@ class AMPSystem_Form extends AMPForm {
 
     function getIdValue() {
         if (isset($_REQUEST[ $this->id_field ]) && is_numeric( $_REQUEST[ $this->id_field ])) return $_REQUEST[ $this->id_field ];
+        if ( !isset( $this->form )) return false;
+        if ( !$this->isBuilt ) return false;
         
         $set = $this->getValues( $this->id_field );
         if ($set) return $set[ $this->id_field ];

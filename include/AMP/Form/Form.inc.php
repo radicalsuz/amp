@@ -382,7 +382,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
         if ($this->isBuilt && ($fRef= &$this->form->getElement( $fieldname ))) {
             $fRef->_options = array( );
-            $fRef->loadArray( $this->_selectAddNull($valueset) );
+            $fRef->loadArray( $this->_selectAddNull($valueset, $fieldname ) );
         }
             
     }

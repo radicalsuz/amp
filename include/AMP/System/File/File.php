@@ -58,13 +58,15 @@ class AMP_System_File {
          * filename extension: /([0-9a-zA-z\.-_ ]+\.php)/
          *
          * */
-        if ( isset( $filename_pattern)) 
-            $regex_pattern =    '/' . 
-                                str_replace( 
-                                        array( '*', '.'),
-                                        array( '[0-9a-zA-Z\.-_ ]+', '\.'), 
-                                        $filename_pattern)  
+        if ( isset( $filename_pattern)) {
+            $regex_pattern_1 = str_replace( '.', '\.', $filename_pattern);  
+            $regex_pattern   =    '/'
+                                . str_replace( '*' , '[0-9a-zA-Z\.-_ ]+' , $regex_pattern_1)  
                                 . '/';
+            #$regex_pattern = '/' . $filename_pattern . '/';
+
+
+        }
 
         $folder = &opendir( $folder_path );
         $result_set = array( );
@@ -72,7 +74,11 @@ class AMP_System_File {
         #$result_text = system( 'ls '.$filename_pattern );
         while( $file_name = readdir( $folder )){
             if (($file_name ==".") || ($file_name == "..")) continue; 
-            if ( isset( $regex_pattern ) && !preg_match( $file_name, $regex_pattern, $name_matches )) continue;
+            if ( isset( $regex_pattern )){
+                $name_matches = array( );
+                preg_match( $regex_pattern, $file_name, $name_matches );
+                if ( !count( $name_matches )) continue;
+            }
             $result_set[ $file_name ] = &new AMP_System_File( $folder_path . $file_name );
         }
         $this->sort( $result_set );
@@ -84,7 +90,7 @@ class AMP_System_File {
         if ( !isset( $sort_property)) return true;
 
         if ( !$this->setSortMethod( $sort_property )) {
-            trigger_error( 'sort by '.$sort_property.' failed in '.get_class( $this ).": no access method found" );
+            trigger_error( sprintf( AMP_TEXT_ERROR_SORT_PROPERTY_FAILED, $sort_property, get_class( $this ) ));
             return false;
         }
 

@@ -1,0 +1,33 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<old>
+		<type>text</type>
+		<label>Alias</label>
+		<required>1</required>
+	</old>
+	<new>
+		<type>text</type>
+		<label>Target Page</label>
+		<required>1</required>
+	</new>
+    <advanced_settings>
+        <type>header</type>
+        <default>Advanced Settings</default>
+    </advanced_settings>
+	<conditional>
+		<type>checkbox</type>
+		<label>Preserve URL variables</label>
+	</conditional>
+	<num>
+        <size>6</size>
+		<type>text</type>
+		<label>Number of Characters to Trim from the left</label>
+	</num>
+
+</array>

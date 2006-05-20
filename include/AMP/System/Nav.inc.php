@@ -87,7 +87,7 @@ require_once( 'AMP/System/Page/Urls.inc.php');
     function addToolOptions( $modid ) {
         if( (!$modid) || $modid == AMP_MODULE_ID_CONTENT ) return false;
         $this->addItem( 'module_header_list.php?modid='.$modid , 'Public Pages',  'page',       AMP_PERMISSION_TOOLS_INTROTEXT );
-        $this->addItem( 'module_control_list.php?modid='.$modid , 'Tool Settings', 'settings',   AMP_PERMISSION_TOOLS_ADMIN );
+        $this->addItem( 'module.php?id='.$modid , 'Tool Settings', 'settings',   AMP_PERMISSION_TOOLS_ADMIN );
     }
 
 

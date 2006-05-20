@@ -77,6 +77,7 @@ class AMP_System_List_Request {
     function &_getAffectedItems( $affected_ids ){
         #return array_combine_key( $affected_ids, $this->_source );
         $return = array( );
+        if ( !is_array( $affected_ids )) $affected_ids = array( $affected_ids );
         foreach( $this->_source as $sourceItem ) {
             if ( array_search( $sourceItem->id, $affected_ids ) !== FALSE ) {
                 $return[$sourceItem->id] = $sourceItem; 

@@ -200,6 +200,19 @@ class AMPContent_Manager {
         return;
     }
 
+    /**
+     * &getDisplay 
+     * 
+     * @param string $name  string key for the display to be retrieved
+     * @access public
+     * @since  3.5.9
+     * @return mixed Display Object 
+     */
+    function &getDisplay( $name ){
+        if ( !isset( $this->_displays[ $name ])) return false;
+        return $this->_displays[ $name ];
+    }
+
 //  }}}
 
 // {{{ private output methods: _doDisplays, _doDisplay, _doDisplayBuffer

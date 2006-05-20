@@ -51,15 +51,6 @@
         <label>Section, Class and Locations</label>
         <type>header</type>
     </LocationHeader>
-    <class>
-        <label>Class</label>
-        <type>select</type>
-        <lookup>
-            <module>content</module>
-            <instance>class</instance>
-        </lookup>
-        <default>1</default>
-    </class>
     <type>
         <label>Main Section&amp;nbsp;&lt;a class=photocaption href="type_edit.php"&gt;add new&lt;/a&gt;</label>
         <required>1</required>
@@ -71,8 +62,18 @@
     </type>
     <new_section_link>
         <type>static</type>
+		<default>add new</default>
         <per>CONTENT_SECTION_EDIT</per>
     </new_section_link>
+    <class>
+        <label>Class</label>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>class</instance>
+        </lookup>
+        <default>1</default>
+    </class>
 	<related_section_header>
 		<type>blocktrigger</type>
         <label>Related Sections</label>
@@ -83,7 +84,7 @@
 		<block>related_sections</block>
         <label>Related Sections</label>
         <type>multiselect</type>
-        <size>8</size>
+        <size>12</size>
         <lookup>
             <module>content</module>
             <instance>sectionmap</instance>

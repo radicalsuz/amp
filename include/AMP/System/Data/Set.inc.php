@@ -40,7 +40,7 @@
             return true;
         }
 
-        trigger_error ( get_class( $this ) . ' failed to get data : ' . $this->dbcon->ErrorMsg() . "\n statement: " . $sql );
+        trigger_error ( sprintf( AMP_TEXT_ERROR_DATABASE_SQL_FAILED, get_class( $this ), 'read', $this->dbcon->ErrorMsg(), $sql ));
         return false;
         
     }
@@ -126,7 +126,7 @@
             }
             return $this->dbcon->Affected_Rows();
         }
-        trigger_error ( get_class( $this ) . ' failed to delete data : ' . $this->dbcon->ErrorMsg() . "\n statement: " . $sql );
+        trigger_error ( sprintf( AMP_TEXT_ERROR_DATABASE_SQL_FAILED, get_class( $this ), 'delete', $this->dbcon->ErrorMsg(), $sql ));
 
         return false;
         
@@ -140,6 +140,7 @@
             if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." update"); 
             return $this->dbcon->Affected_Rows();
         }
+        trigger_error ( sprintf( AMP_TEXT_ERROR_DATABASE_SQL_FAILED, get_class( $this ), 'update', $this->dbcon->ErrorMsg(), $sql ));
         return false;
     }
 
@@ -153,6 +154,8 @@
             if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." insert"); 
             return $this->dbcon->Affected_Rows();
         }
+
+        trigger_error ( sprintf( AMP_TEXT_ERROR_DATABASE_SQL_FAILED, get_class( $this ), 'insert', $this->dbcon->ErrorMsg(), $sql ));
         return false;
          
     }

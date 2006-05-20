@@ -9,10 +9,8 @@ class AMP_System_Flash extends AMP_Content_Buffer {
     var $_keep = array( );
 
     function AMP_System_Flash( ){
-        /* session storage functions not yet implemented cuz php sessions r scary
-        if ( isset( $_SESSION['__flash'])) $this->_store = $_SESSION['__flash'];
-        if ( isset( $_SESSION['__flash']['messages'])) $this->_messages = $_SESSION['__flash']['messages'];
-        if ( isset( $_SESSION['__flash']['errors']))    $this->_errors = $_SESSION['__flash']['errors'];
+        /* session storage functions not yet implemented cuz php sessions r scary 
+        $this->_init_session( );
         */
     }
 
@@ -24,35 +22,40 @@ class AMP_System_Flash extends AMP_Content_Buffer {
     
 /*
     function _init_session( ){
-        $_SESSION['__flash'] = array( );
-    }
+        if ( !isset( $_SESSION['__flash'])) $_SESSION['__flash'] = array( );
+        if ( !isset( $_SESSION['__flash']['messages'])) $_SESSION['flash']['messages'] = array( );
+        if ( !isset( $_SESSION['__flash']['errors']))   $_SESSION['flash']['errors'] = array( );   
+        #if ( !isset( $_SESSION['__flash']['store']))    $_SESSION['flash']['store'] = array( );
 
+        #$this->_store    = & $_SESSION['__flash']['store'];
+        $this->_messages = & $_SESSION['__flash']['messages'];
+        $this->_errors   = & $_SESSION['__flash']['errors'];
+    }
+    
+
+    
     function store( $value, $key ){
         $this->_store[$key] = $value;
-        $_SESSION['__flash'][$key] = $value;
     }
 
     function keep( $key ){
-        $this->_keep[$key] = true;
-        $_SESSION['__flash'][$key] = $this->_store[$key];
+        $this->_keep[] = $key;
     }
 
     function get( $key ){
-        //not yet implemented
         if ( !isset( $this->_store[ $key ])) return false;
         return $this->_store[ $key ];
     }
-*/
+    */
+
     function add_error( $message, $key = null ){
         if ( !isset( $key )) return $this->_errors[] = $message;
         $this->_errors[$key] = $message;
- //       $_SESSION['__flash']['errors'][$key] = $message;  
     }
 
     function add_message( $message, $key = null ){
         if ( !isset( $key )) return $this->_messages[] = $message;
         $this->_messages[$key] = $message;
-  //      $_SESSION['__flash']['messages'][$key] = $message;  
     }
 
     function get_messages( ){
@@ -64,8 +67,27 @@ class AMP_System_Flash extends AMP_Content_Buffer {
     }
 
     function execute( ){
-        return $this->display( );
+        $value = $this->display( );
+        #$this->clear_session( );
+        return $value; 
     }
+
+    /*
+    function clear_session( ) {
+        $_SESSION['__flash']['errors'] = array( );
+        $_SESSION['__flash']['messages'] = array( );
+
+        $keep_values = array( );
+        foreach( $this->_keep as $key ) {
+            if ( isset( $this->_store[$key])) {
+                $keep_values[$key] = &$this->_store[ $key ];
+            }
+        }
+
+        $_SESSION['__flash']['store'] = $keep_values;
+
+    }
+    */
 
     function display( ){
         $output = "";
