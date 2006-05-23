@@ -1,7 +1,6 @@
 <?php
 
 require_once( 'AMP/UserData/Plugin.inc.php');
-if ( !defined( 'AMP_MODULE_BLAST')) define( 'AMP_MODULE_BLAST', 'AMP');
 
 class UserDataPlugin_Start_AMPlist extends UserDataPlugin {
     var $available = true;

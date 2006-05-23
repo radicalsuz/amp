@@ -499,7 +499,7 @@
     </item>
     <item>
         <label>System Settings</label>
-        <href>sysvar.php</href>
+        <href>setup.php</href>
         <per>SYSTEM_SETTINGS</per>
     </item>
     <item>

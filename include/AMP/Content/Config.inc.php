@@ -118,9 +118,10 @@ define ('AMP_SYSTEM_ICON_DELETE', '/system/images/delete.png' );
 if ( !defined( 'AMP_NAV_NO_LIMIT')) define('AMP_NAV_NO_LIMIT', 700);
 
 /**
- * Default Introtext page 
+ * Default Introtext pages
  */
 if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
+if (!defined( 'AMP_CONTENT_INTRO_ID_FRONTPAGE' )) define( 'AMP_CONTENT_INTRO_ID_FRONTPAGE' , 2 );
 /**
  * Allow multiple sections per article 
  */

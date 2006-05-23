@@ -675,4 +675,15 @@ class AMPConstantLookup_NullDates extends AMPConstant_Lookup {
         $this->init( );
     }
 }
+
+class AMPConstantLookup_BlastOptions extends AMPConstant_Lookup {
+    var $dataset = array( 
+        'DIA' => 'Democracy In Action',
+        'phplist' => 'PHPlist'
+    );
+
+    function AMPConstantLookup_BlastOptions( ){
+        //interface
+    }
+}
 ?>

@@ -45,4 +45,14 @@ if ( !defined( 'AMP_SYSTEM_CACHE_PATH')) define( 'AMP_SYSTEM_CACHE_PATH', AMP_LO
  */
 if ( !defined( 'AMP_SYSTEM_FILE_OWNER')) define( 'AMP_SYSTEM_FILE_OWNER', false );
 
+/**
+ * Strange legacy settings 
+ */
+if ( !defined( 'AMP_SYSTEM_SETTING_DB_ID')) define( 'AMP_SYSTEM_SETTING_DB_ID', 1);
+if ( !defined( 'PHPLIST_CONFIG_ADMIN_ID')) define( 'PHPLIST_CONFIG_ADMIN_ID', 1);
+
+/**
+ * Email Blaster Options  
+ */
+if ( !defined( 'AMP_MODULE_BLAST')) define ( 'AMP_MODULE_BLAST', 'AMP');
 ?>

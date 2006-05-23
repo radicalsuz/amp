@@ -130,6 +130,10 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
         return $this->getPageLink( );
     }
 
+    function setTemplate( $template_id ){
+        return $this->mergeData( array( 'templateid' => $template_id ));
+    }
+
  }
 
  ?>
