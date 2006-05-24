@@ -306,26 +306,31 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
 }
 
-class AMP_System_Component_Controller_Standard extends AMP_System_Component_Controller_Map {
-
+class AMP_System_Component_Controller_Input extends AMP_System_Component_Controller_Map {
     var $_action_default = 'add';
     var $_form;
 
-    function AMP_System_Component_Controller_Standard( ){
+    function AMP_System_Component_Controller_Input( ){
         $this->init( );
     }
 
-    function _init_search( &$search, &$display ){
-        $this->_search = &$search;
-        $this->_display->add( $search );
-        $this->notify( 'initSearch' );
+    function display_default() {
+        // if no list exists, return to the blank input form
+        if ( !( $display = &$this->_map->getComponent( 'list' ))) {
+           $display = &$this->_map->getComponent( 'form' );
+           $this->_init_form( $display, false );
+           $this->set_banner( 'add');
+        } else {
+            $display->setController( $this );
+            $this->set_banner( 'list');
+            $this->notify( 'initList' );
+            #if ( $search = $this->_map->getComponent( 'search' )) $this->_init_search( $search, $display );
+        }
 
-        $search->Build( true );
+        //add the list / blank form to the display manager
+        $this->_display->add( $display, 'default' );
+        return true;
 
-        if ( !$search->submitted( ) ) return $search->applyDefaults( );
-
-        $display->applySearch( $search->getSearchValues( )) ;
-        $this->set_banner( 'search');
     }
 
     function commit_new( ){
@@ -340,13 +345,6 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
 
     function commit_cancel( ){
         $this->display_default( );
-        return true;
-    }
-
-    function commit_edit( ) {
-        if ( !$this->_model->readData( $this->_model_id )) return $this->commit_default( );
-        $this->_form->setValues( $this->_model->getData( ));
-        $this->_display->add( $this->_form, 'form' );
         return true;
     }
 
@@ -375,23 +373,32 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         return true;
     }
         
-    function display_default() {
-        // if no list exists, return to the blank input form
-        if ( !( $display = &$this->_map->getComponent( 'list' ))) {
-           $display = &$this->_map->getComponent( 'form' );
-           $this->_init_form( $display, false );
-           $this->set_banner( 'add');
-        } else {
-            $display->setController( $this );
-            $this->set_banner( 'list');
-            $this->notify( 'initList' );
-            #if ( $search = $this->_map->getComponent( 'search' )) $this->_init_search( $search, $display );
-        }
+}
 
-        //add the list / blank form to the display manager
-        $this->_display->add( $display, 'default' );
+class AMP_System_Component_Controller_Standard extends AMP_System_Component_Controller_Input {
+
+    function AMP_System_Component_Controller_Standard( ){
+        $this->init( );
+    }
+
+    function _init_search( &$search, &$display ){
+        $this->_search = &$search;
+        $this->_display->add( $search );
+        $this->notify( 'initSearch' );
+
+        $search->Build( true );
+
+        if ( !$search->submitted( ) ) return $search->applyDefaults( );
+
+        $display->applySearch( $search->getSearchValues( )) ;
+        $this->set_banner( 'search');
+    }
+
+    function commit_edit( ) {
+        if ( !$this->_model->readData( $this->_model_id )) return $this->commit_default( );
+        $this->_form->setValues( $this->_model->getData( ));
+        $this->_display->add( $this->_form, 'form' );
         return true;
-
     }
 
     function commit_delete( ){

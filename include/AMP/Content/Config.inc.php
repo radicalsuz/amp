@@ -17,6 +17,7 @@ if (!defined( 'AMP_SECTIONLIST_ARTICLES_AGGREGATOR'))
 
 if ( file_exists_incpath( 'custom.layouts.inc.php' )) include_once ('custom.layouts.inc.php' );
 if ( file_exists_incpath( 'custom.sources.inc.php' )) include_once ('custom.sources.inc.php' );
+if ( file_exists_incpath( 'custom.translations.inc.php' )) include_once ('custom.translations.inc.php' );
 
 /**
  * Class List Configurations

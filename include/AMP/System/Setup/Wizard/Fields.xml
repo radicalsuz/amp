@@ -1,0 +1,112 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+
+    <web_header>
+        <type>header</type>
+        <default>Web Settings</default>
+    </web_header>
+	<websitename>
+		<type>text</type>
+		<label>Site Name</label>
+        <required>1</required>
+	</websitename>
+	<basepath>
+		<type>text</type>
+		<label>Site URL</label>
+        <required>1</required>
+	</basepath>
+	<metadescription>
+		<type>textarea</type>
+		<label>Meta Description</label>
+        <size>6:40</size>
+	</metadescription>
+	<emfrom>
+		<type>text</type>
+		<label>System Email Sent &lt;br /&gt;From This Address</label>
+	</emfrom>
+	<emfaq>
+		<type>text</type>;
+		<label>System Administrator&lt;br /&gt; Email Address</label>
+        <default>help@radicaldesigns.org</default>
+	</emfaq>
+
+	<sections_header>
+		<type>header</type>
+		<label>Create New Top Level Sections</label>
+	</sections_header>
+
+	<section_1_name>
+		<type>text</type>
+		<label>Section Name</label>
+	</section_1_name>
+	<section_1_text>
+		<type>textarea</type>
+		<label>Section List Intro Text</label>
+		<size>6:60</size>
+	</section_1_text>
+	<section_2_name>
+		<type>text</type>
+		<label>Section Name</label>
+	</section_2_name>
+	<section_2_text>
+		<type>textarea</type>
+		<label>Section List Intro Text</label>
+		<size>6:60</size>
+	</section_2_text>
+	<section_3_name>
+		<type>text</type>
+		<label>Section Name</label>
+	</section_3_name>
+	<section_3_text>
+		<type>textarea</type>
+		<label>Section List Intro Text</label>
+		<size>6:60</size>
+	</section_3_text>
+	<section_4_name>
+		<type>text</type>
+		<label>Section Name</label>
+	</section_4_name>
+	<section_4_text>
+		<type>textarea</type>
+		<label>Section List Intro Text</label>
+		<size>6:60</size>
+	</section_4_text>
+	<section_5_name>
+		<type>text</type>
+		<label>Section Name</label>
+	</section_5_name>
+	<section_5_text>
+		<type>textarea</type>
+		<label>Section List Intro Text</label>
+		<size>6:60</size>
+	</section_5_text>
+	<section_6_name>
+		<type>text</type>
+		<label>Section Name</label>
+	</section_6_name>
+	<section_6_text>
+		<type>textarea</type>
+		<label>Section List Intro Text</label>
+		<size>6:60</size>
+	</section_6_text>
+	<section_7_name>
+		<type>text</type>
+		<label>Section Name</label>
+	</section_7_name>
+	<section_7_text>
+		<type>textarea</type>
+		<label>Section List Intro Text</label>
+		<size>6:60</size>
+	</section_7_text>
+	<section_8_name>
+		<type>text</type>
+		<label>Section Name</label>
+	</section_8_name>
+	<section_8_text>
+		<type>textarea</type>
+		<label>Section List Intro Text</label>
+		<size>6:60</size>
+	</section_8_text>
+</array>

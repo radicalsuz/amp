@@ -510,7 +510,7 @@
     </item>
     <item>
         <label>Setup Wizard</label>
-        <href>wizard_setup.php</href>
+        <href>setup_wizard.php</href>
         <per>SYSTEM_SETTINGS</per>
     </item>
     <item>

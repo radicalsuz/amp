@@ -150,10 +150,10 @@ class Section extends AMPSystem_Data_Item {
 
     function reorder( $new_order_value ){
         if ( $new_order_value == $this->getOrder( )) return false;
-        $this->mergeData( array( 'textorder' => $new_order_value ));
+        $this->setOrder( $new_order_value );
         if ( !( $result = $this->save( ))) return false;
-        $this->notify( 'update');
-        $this->notify( 'reorder');
+        $this->notify( 'update' );
+        $this->notify( 'reorder' );
         return $result;
 
     }
@@ -181,6 +181,27 @@ class Section extends AMPSystem_Data_Item {
         $section_header->setData( $article_data );
         return $section_header->save( );
     }
+
+    function setBlurb( $blurb ){
+        return $this->mergeData( array( 'description' => $blurb ));
+    }
+
+    function setName( $name ){
+        return $this->mergeData( array( 'type' => $name ));
+    }
+
+    function setParent( $parent_id = AMP_CONTENT_MAP_ROOT_SECTION ){
+        return $this->mergeData( array( 'parent' => $parent_id ));
+    }
+
+    function setListType( $listtype = AMP_SECTIONLIST_ARTICLES ){
+        return $this->mergeData( array( 'listtype' => $listtype ));
+    }
+
+    function setOrder( $order ){
+        return $this->mergeData( array( 'textorder' => $order ));
+    }
+
 
 }
 ?>

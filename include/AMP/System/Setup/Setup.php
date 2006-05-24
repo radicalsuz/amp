@@ -71,8 +71,10 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     function _updateTemplates( ){
        require_once( 'AMP/System/IntroText.inc.php') ;
        $frontpage = &new AMPSystem_IntroText( $this->dbcon, AMP_CONTENT_INTRO_ID_FRONTPAGE );
-       if ( $this->getTemplateIdFrontpage( ) == $frontpage->getTemplate( )) return true;
-       $frontpage->setTemplate( $this->getTemplateIdFrontpage( ));
+       $template_id_frontpage = $this->getTemplateIdFrontpage( );
+       if ( !$template_id_frontpage ) return false;
+       if ( $template_id_frontpage == $frontpage->getTemplate( )) return true;
+       $frontpage->setTemplate( $template_id_frontpage );
        return $frontpage->save( );
     }
 
@@ -86,6 +88,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     function _updatePHPlistConfig( ){
         require_once( 'Modules/Blast/Config/Config.php');
         $phplist_config_data = array_combine_key( $this->_keys_phplist_setup, $this->getData( ));
+        if ( empty( $phplist_config_data )) return false;
         foreach( $phplist_config_data as $local_key  => $value ){
             $phplist_key = str_replace( 'phplist_', '', $local_key );
             $config_setting = &new Blast_Config( $this->dbcon, $phplist_key );
@@ -131,6 +134,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     function _updatePunbbConfig( ){
        require_once( 'Modules/Forum/Config.php');
        $punbb_config_data = array_combine_key( $this->_keys_translation_punbb, $this->getData( ));
+        if ( empty( $punbb_config_data )) return false;
        foreach( $punbb_config_data as $local_key  => $value ){
            $punbb_key = array_search( $local_key, $this->_keys_translation_punbb );
            $punbb_value = 
