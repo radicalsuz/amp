@@ -20,7 +20,8 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
 
     var $_thumb_attr;
     var $_pager_active = true;
-    var $editlink = AMP_SYSTEM_URL_IMAGE_UPLOAD;
+    //var $editlink = AMP_SYSTEM_URL_IMAGE_UPLOAD;
+    var $_url_add = AMP_SYSTEM_URL_IMAGE_UPLOAD;
 
     var $_observers_source = array( 'AMP_Content_Image_Observer' );
     var $_actions = array( 'delete' );

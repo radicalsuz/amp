@@ -1,0 +1,37 @@
+<array>
+    <name>
+        <label>Form Name</label>
+        <type>text</type>
+        <required>1</required>
+    </name>
+    <input_page_header>
+        <type>header</type>
+        <default>Input Page</default>
+    </input_page_header>
+    <input_page_title>
+        <type>text</type>
+        <label>Input Page Title</label>
+    </input_page_title>
+    <input_page_text>
+        <type>textarea</type>
+        <label>Input Page Text</label>
+        <size>8:60</size>
+    </input_page_text>
+    <response_page_header>
+        <type>header</type>
+        <default>Response Page Header</default>
+    </response_page_header>
+    <response_page_title>
+        <type>text</type>
+        <label>Response Page Title</label>
+    </response_page_title>
+    <response_page_text>
+        <type>textarea</type>
+        <label>Response Page Text</label>
+        <size>8:60</size>
+    </response_page_text>
+    <field_order>
+        <type>hidden</type>
+        <default>First_Name,Last_Name,Email,Company,occupation,Web_Page,Phone,Street,Street_2,City,State,Zip,Country,Home_Fax,custom1,custom2,custom3,custom4,custom5,custom6,custom7,custom8,custom9,custom10,Notes</default>
+    </field_order>
+</array>

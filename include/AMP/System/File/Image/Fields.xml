@@ -1,0 +1,54 @@
+<array>
+    <image>
+        <type>file</type>
+        <label>File to Upload</label>
+    </image>
+    <filename>
+        <type>text</type>
+        <label>New File Name ( optional )</label>
+    </filename>
+    <gallery_block>
+        <type>blocktrigger</type>
+        <label>Add to Gallery ( optional )</label>
+        <block>gallery</block>
+    </gallery_block>
+    <publish>
+        <type>checkbox</type>
+        <label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+        <block>gallery</block>
+    </publish>
+    <galleryid>
+        <type>select</type>
+        <label>Photo Gallery</label>
+        <block>gallery</block>
+        <lookup>
+            <module>content</module>
+            <instance>galleries</instance>
+        </lookup>
+    </galleryid>
+    <caption>
+        <type>textarea</type>
+        <label>Caption</label>
+        <block>gallery</block>
+    </caption>
+    <section>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
+        <block>gallery</block>
+        <label>Section</label>
+    </section>
+    <photoby>
+        <type>text</type>
+        <label>Photo By</label>
+        <block>gallery</block>
+    </photoby>
+    <date>
+        <type>date</type>
+        <label>Photo Date</label>
+        <default>today</default>
+        <block>gallery</block>
+    </date>
+</array>

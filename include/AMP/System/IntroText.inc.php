@@ -31,6 +31,7 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     function _adjustSetData( $data ) {
         $this->legacyFieldname( $data, 'test', 'body' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
+        $this->legacyFieldname( $data, 'modid', 'tool_id' );
     }
 
     function &getDisplay() {

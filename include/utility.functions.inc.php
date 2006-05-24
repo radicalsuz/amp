@@ -1131,9 +1131,18 @@ if ( !function_exists( 'AMP_verifyDateValue')){
 
 if ( !function_exists( 'AMP_publicPagePublishButton')){
     function AMP_publicPagePublishButton( $id, $linkfield ){
+        static $renderer = false;
+        if ( !$renderer ){
+            require_once( 'AMP/Content/Display/HTML.inc.php');
+            $renderer = &new AMPDisplay_HTML( );
+        }
+        return $renderer->link( AMP_Url_AddVars( AMP_SYSTEM_URL_PUBLIC_PAGE_PUBLISH, array( $linkfield . '=' . $id )), ucfirst( AMP_TEXT_PUBLISH ) ) ;
+        
+        /* using POST is not required , and is kinda messy
         return '<form name="publish_Page_'.$id .'" method="POST" action="/system/module_contentadd.php">'
                 . '<input type="hidden" name="'.$linkfield.'" value="'. $id . '">'
                 . '<input type="submit" value="Publish" class="searchform_element"></form>';
+                */
 
     }
 }

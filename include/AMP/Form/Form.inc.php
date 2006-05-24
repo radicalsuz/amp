@@ -276,10 +276,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function _manageUpload( $data, $filefield ) {
-        if ( isset( $this->_fileNames[$filefield])) return $this->_fileNames[ $filefield ];
+        if ( isset( $this->_fileNames[$filefield] )) return $this->_fileNames[ $filefield ];
         if (!( isset( $_FILES[ $filefield ][ 'tmp_name' ] ) && $_FILES[$filefield]['tmp_name'])) {
-            if ( !isset( $data[$filefield.'_value'])) return false; 
-            $this->_fileNames[ $filefield ] = $data[$filefield.'_value'];
+            if ( !isset( $data[ $filefield.'_value' ])) return false; 
+            $this->_fileNames[ $filefield ] = $data[ $filefield.'_value' ];
             return $this->_fileNames[ $filefield ];
         }
 
@@ -298,7 +298,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         return $this->_fileNames[ $filefield ];
     }
 
-    function _initUploader( $data, $filefield, &$uploader ){
+    function _initUploader( $data, $filefield, &$uploader ) {
         //interface
     }
 

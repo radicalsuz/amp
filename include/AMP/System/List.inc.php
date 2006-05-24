@@ -201,10 +201,14 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if ( !( isset( $this->name_field ) && isset( $row_data[$this->name_field ]))) return false; 
         if ( isset( $this->suppress['editcolumn']) && $this->suppress['editcolumn']) return $row_data[ $this->name_field ];
 
-        return      "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$row_data['id'] ) ."' title='" . AMP_TEXT_EDIT_ITEM . "'>" 
+        return      "<A HREF='". $this->_getUrlEdit( $row_data ) ."' title='" . AMP_TEXT_EDIT_ITEM . "'>" 
                     . $row_data[ $this->name_field ]
                     . '</a>';
 
+    }
+
+    function _getUrlEdit( $row_data ){
+        return AMP_Url_AddVars( $this->editlink, "id=".$row_data['id']);
     }
 
     //for array objects only
@@ -275,7 +279,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
             return $this->source->applySearch( $values );
         }
         $this->source = false;
-        $listSource = &new $this->_source_object( $dbcon  );
+        $listSource = &new $this->_source_object( AMP_Registry::getDbcon( )  );
         $this->_source_criteria = array_merge( $this->_source_criteria, $listSource->makeCriteria( $values ) );
         $this->init( $this->_init_source( AMP_Registry::getDbcon( ) ));
         if ( !$this->source ){
@@ -326,7 +330,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _HTML_editLink( $id ) {
-        return  "<A HREF='". AMP_URL_AddVars( $this->editlink , "id=".$id ) ."' title='".AMP_TEXT_EDIT_ITEM."'>" .
+        return  "<A HREF='". $this->_getUrlEdit( array( 'id' => $id )) ."' title='".AMP_TEXT_EDIT_ITEM."'>" .
                 "<img src=\"". AMP_SYSTEM_ICON_EDIT ."\" alt=\"".AMP_TEXT_EDIT."\" width=\"16\" height=\"16\" border=0></A>" ;
     }
 

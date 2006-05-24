@@ -1,0 +1,183 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+
+    <web_header>
+        <type>header</type>
+        <default>Web Settings</default>
+    </web_header>
+
+	<websitename>
+		<type>text</type>
+		<label>Site Name</label>
+        <required>1</required>
+	</websitename>
+	<basepath>
+		<type>text</type>
+		<label>Site URL</label>
+        <required>1</required>
+	</basepath>
+	<metadescription>
+		<type>textarea</type>
+		<label>Meta Description</label>
+        <size>6:40</size>
+	</metadescription>
+	<metacontent>
+		<type>textarea</type>
+		<label>Meta Keywords</label>
+        <size>6:40</size>
+	</metacontent>
+
+    <system_emails_header>
+        <type>header</type>
+        <default>System Email Addresses</default>
+    </system_emails_header>
+
+	<emendorse>
+		<type>text</type>
+		<label>User Submitted Article Email</label>
+	</emendorse>
+	<emfrom>
+		<type>text</type>
+		<label>Web Admin Alerts From</label>
+	</emfrom>
+	<emfaq>
+		<type>text</type>;
+		<label>System administrator Email</label>
+        <default>help@radicaldesigns.org</default>
+	</emfaq>
+
+    <template_header>
+        <type>header</type>
+        <default>Template Settings</default>
+    </template_header>
+	<template>
+		<type>select</type>
+        <required>1</required>
+		<label>Default Template</label>
+        <lookup>templates</lookup>
+	</template>
+    <indextemplate>
+		<type>select</type>
+        <required>1</required>
+		<label>Front Page Template</label>
+        <lookup>templates</lookup>
+    </indextemplate>
+
+    <photo_header>
+        <type>header</type>
+        <default>Photo Settings</default>
+    </photo_header>
+	<optw>
+		<type>text</type>
+		<label>Optimized Image Width ( wide images )</label>
+        <size>6</size>
+	</optw>
+	<optl>
+		<type>text</type>
+		<label>Optimized Image Width ( tall images )</label>
+        <size>6</size>
+	</optl>
+	<thumb>
+		<type>text</type>
+		<label>Thumbnail Image Width</label>
+        <size>6</size>
+	</thumb>
+
+    <cache_header>
+        <type>header</type>
+        <default>Cache Settings</default>
+    </cache_header>
+	<cacheSecs>
+		<type>text</type>
+		<label>Database Cache Timout ( seconds )</label>
+        <size>6</size>
+        <default>1</default>
+	</cacheSecs>
+
+    <email_header>
+        <type>header</type>
+        <default>Email Settings</default>
+    </email_header>
+
+	<email_tool>
+		<type>select</type>
+		<label>Email Tool</label>
+		<lookup>
+			<module>constant</module>
+			<instance>blastOptions</instance>
+		</lookup>
+	</email_tool>
+	<dia_user>
+		<type>text</type>
+		<label>DIA User</label>
+	</dia_user>
+	<dia_key>
+		<type>text</type>
+		<label>DIA Key</label>
+	</dia_key>
+	<emmedia>
+		<type>text</type>
+		<label>AMP Email Blast From Address</label>
+	</emmedia>
+	<emailfromname>
+		<type>text</type>
+		<label>AMP Email Blast From Name</label>
+	</emailfromname>
+
+    <phplist_header>
+        <type>header</type>
+        <default>PHPlist Settings</default>
+    </phplist_header>
+
+    <phplist_admin_email>
+		<type>text</type>
+		<label>PHPlist Admin Email</label>
+    </phplist_admin_email>
+    <phplist_admin_password>
+		<type>text</type>
+		<label>PHPlist Admin Password</label>
+    </phplist_admin_password>
+	<phplist_bounce_host>
+		<type>text</type>
+		<label>PHPlist Bounce Host</label>
+	</phplist_bounce_host>
+	<phplist_bounce_user>
+		<type>text</type>
+		<label>PHPlist Bounce User</label>
+	</phplist_bounce_user>
+	<phplist_bounce_password>
+		<type>text</type>
+		<label>PHPlist Bounce Password</label>
+	</phplist_bounce_password>
+    <phplist_website>
+        <type>text</type>
+        <label>PHPlist Website Domain ( no http )</label>
+    </phplist_website>
+    <phplist_domain>
+        <type>text</type>
+        <label>PHPlist Email Domain</label>
+    </phplist_domain>
+    <phplist_admin_address>
+        <type>text</type>
+        <label>PHPlist Admin Address</label>
+    </phplist_admin_address>
+    <phplist_report_address>
+        <type>text</type>
+        <label>PHPlist Report Address</label>
+    </phplist_report_address>
+    <phplist_message_from_address>
+        <type>text</type>
+        <label>PHPlist Message From Address</label>
+    </phplist_message_from_address>
+    <phplist_message_from_name>
+        <type>text</type>
+        <label>PHPlist Message From Name</label>
+    </phplist_message_from_name>
+    <phplist_message_replyto_address>
+        <type>text</type>
+        <label>PHPlist Reply-To Address</label>
+    </phplist_message_replyto_address>
+
+</array>

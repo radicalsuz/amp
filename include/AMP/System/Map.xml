@@ -162,7 +162,7 @@
     <title>Content Tools</title>
     <item>
         <label>User Accounts</label>
-        <href>modinput4_data.php?modin=20</href>
+        <href>userdata_list.php?modin=20</href>
         <per>CONTENT_USER_ADMIN</per>
     </item>
     <item>
@@ -412,12 +412,12 @@
     <per>FORM_ACCESS</per>
     <item>
         <label>View Forms</label>
-        <href>modinput4_list.php</href>
+        <href>form_manager.php</href>
         <per>FORM_ADMIN</per>
     </item>
     <item>
         <label>Add Form</label>
-        <href>modinput4_new.php</href>
+        <href>form_manager.php?action=add</href>
         <per>FORM_ADMIN</per>
     </item>
     <item>

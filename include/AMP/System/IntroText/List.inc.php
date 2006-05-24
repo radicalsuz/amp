@@ -14,8 +14,8 @@ class AMPSystem_IntroText_List extends AMPSystem_List {
         'Publish'  => 'publishButton'
         );
     var $editlink = 'introtext.php';
-    #var $extra_column_maps = array( 'navIndex');
     var $_source_object = 'AMPSystem_Introtext';
+    var $name_field = 'name';
 
     function AMPSystem_IntroText_List( &$dbcon ) {
         #$source   =  & new AMPSystem_IntroText_Set($dbcon);
