@@ -1,0 +1,43 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<name>
+		<type>text</type>
+        <label>Layout Name</label>
+		<required>1</required>
+	</name>
+	<introtext_id>
+		<type>hidden</type>
+		<label>Public Page</label>
+        <lookup>introtexts</lookup>
+	</introtext_id>
+	<class_id>
+		<type>hidden</type>
+		<label>Class Listing</label>
+        <lookup>
+            <module>content</module>
+            <instance>classes</instance>
+        </lookup>
+	</class_id>
+	<section_id>
+		<type>hidden</type>
+		<label>Section Content Pages</label>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
+	</section_id>
+	<section_id_list>
+		<type>hidden</type>
+		<label>Section List Pages</label>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
+	</section_id_list>
+	<position_list>
+		<type>static</type>
+	</position_list>
+
+</array>

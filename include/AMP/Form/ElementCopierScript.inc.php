@@ -105,8 +105,8 @@ class ElementCopierScript {
 
     function script_header() {
         //$script ='<script type="text/javascript" src = "/scripts/elementCopier.js"></script>';
-        $this->_header->addJavaScript( 'scripts/elementCopier.js');
-        $script .= //'<script type="text/javascript">
+        $this->_header->addJavaScript( 'scripts/elementCopier.js', 'copier_base');
+        $script = 
         'function loadCopier() {'."\n";
 
         foreach ($this->copiers as $copiername => $copierDef ) {
@@ -147,6 +147,26 @@ class ElementCopierScript {
         $this->copiers[ $copiername ][ 'fields' ][ $fieldname ][ 'default_option' ] = $null_value;
     }
 
+    function setSingleRow( $singleRow = true, $copiername ){
+        $this->copiers[ $copiername ]['singleRow'] = $singleRow;
+    }
+
+    function setLabelColumn( $label_column = true, $copiername ){
+        $this->copiers[ $copiername ]['label_column'] = $label_column;
+    }
+
+    function setFormTable( $table_id, $copiername ){
+        $this->copiers[ $copiername ]['table_id'] = $table_id;
+    }
+
+    function setRowOffset( $offset_qty, $copiername ){
+        $this->copiers[ $copiername ]['offset_qty'] = $offset_qty;
+    }
+
+    function setElementClass( $classname, $copiername ){
+        $this->copiers[ $copiername ]['css_class_elements'] = $classname;
+    }
+
     function _js_initCopier( $fieldset, $copiername ) {
         $script = "";
         foreach ($fieldset as $fieldname => $fDef ) {
@@ -167,8 +187,30 @@ class ElementCopierScript {
 
             $script .= "$copiername.defineElement( $fieldname, $type, $label, $valuevar, $actionvar );\n"; 
         }
+        $script .= $this->_js_configCopier( $copiername );
 
         return $script;
+    }
+
+    function _js_configCopier( $copiername ){
+        $config_script = "";
+        if ( isset( $this->copiers[ $copiername ]['singleRow']) && $this->copiers[ $copiername ]['singleRow'] ) {
+            $config_script .= "$copiername.singleRow = true;\n"; 
+        }
+        if ( isset( $this->copiers[ $copiername ]['label_column']) && !$this->copiers[ $copiername ]['label_column'] ) {
+            $config_script .= "$copiername.labelColumn = false;\n"; 
+        }
+        if ( isset( $this->copiers[ $copiername ]['table_id']) && $this->copiers[ $copiername ]['table_id'] ) {
+            $config_script .= "$copiername.setFormTable( '".$this->copiers[ $copiername ][ 'table_id' ]."' );\n"; 
+        }
+        if ( isset( $this->copiers[ $copiername ]['offset_qty']) ) {
+            $config_script .= "$copiername.startRowOffset = ".$this->copiers[ $copiername ][ 'offset_qty' ].";\n"; 
+        }
+        if ( isset( $this->copiers[ $copiername ]['css_class_elements']) && $this->copiers[ $copiername ]['css_class_elements'] ) {
+            $config_script .= "$copiername.cssElementClassName = '".$this->copiers[ $copiername ][ 'css_class_elements' ]."';\n"; 
+        }
+        return $config_script;
+
     }
 
     function _addPrefix( $copier, $fieldname ) {
@@ -302,7 +344,7 @@ class ElementCopierScript {
         $script = "var $namevar = new Array();\n var valuecounter=0;\n";
         foreach ( $data as $key => $value ) {
             if ( is_numeric( $key )) continue;
-            $script .= $namevar . "[ valuecounter++] = " . $this->_delimit( $this->_addPrefix( $copier_name, $key) ) . "\n";
+            $script .= $namevar . "[ valuecounter++] = " . $this->_delimit( $this->_addPrefix( $copier_name, $key) ) . ";\n";
         }
         return $script;
     }
@@ -311,7 +353,7 @@ class ElementCopierScript {
         $script = "var $valuevar = new Array();\n var valuecounter=0;\n";
         foreach ( $data as $key => $value ) {
             if ( is_numeric( $key )) continue;
-            $script .= $valuevar . "[ valuecounter++] = '" . $this->_js_cleanvalue( $value ) . "'\n";
+            $script .= $valuevar . "[ valuecounter++] = '" . $this->_js_cleanvalue( $value ) . "';\n";
         }
         return $script;
     }

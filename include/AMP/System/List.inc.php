@@ -50,6 +50,9 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_pager_limit = false;
 
     var $_css_class_columnheader = 'intitle';
+    var $_css_class_container = 'list_table';
+    var $_css_id_container_table;
+    var $_css_id_container_div;
 
     var $_sort;
     var $_source_counter = 0;
@@ -192,6 +195,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         }
         $name_data =  $this->_getNameColumnFormat( $row_data );
         if ( $name_data ) $row_data[$this->name_field ] = $name_data;
+        if ( isset( $row_data_source->id )) $row_data['id'] = $row_data_source->id;
 
         ++$this->_source_counter;
         return $row_data;
@@ -274,7 +278,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->message .= $text .'<BR>';
     }
 
-    function applySearch( $values ){
+    function applySearch( $values ) {
         if ( !is_array( $this->source )) {
             return $this->source->applySearch( $values );
         }
@@ -282,9 +286,11 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $listSource = &new $this->_source_object( AMP_Registry::getDbcon( )  );
         $this->_source_criteria = array_merge( $this->_source_criteria, $listSource->makeCriteria( $values ) );
         $this->init( $this->_init_source( AMP_Registry::getDbcon( ) ));
-        if ( !$this->source ){
-            $this->setMessage( AMP_TEXT_SEARCH_NO_MATCHES );
-        }
+        if ( !$this->source ) $this->_searchFailureNotice( );
+    }
+
+    function _searchFailureNotice( ){
+        $this->setMessage( AMP_TEXT_SEARCH_NO_MATCHES );
     }
 
     function setController( &$controller ){
@@ -374,10 +380,31 @@ class AMPSystem_List extends AMPDisplay_HTML {
         //Starter HTML
         $start_html = $this->_HTML_searchForm( ) 
                       . $this->_HTML_listTitle()
-                      . ( isset( $this->_pager ) ? $this->_pager->outputTop() : false );
-        $start_html .= "\n<div class='list_table'>\n<table class='list_table'>\n<tr class='intitle'> ";
+                      . ( isset( $this->_pager ) ? $this->_pager->outputTop() : false )
+                      . $this->_renderContainers( );
+
 
         return $start_html.$this->_HTML_columnHeaders();
+    }
+
+    function _renderContainers( ){
+        $renderer = &$this->_getRenderer( );
+        $container_output = "";
+
+        $div_attrs = array( 'class' => $this->_css_class_container );
+        $table_attrs = array( 'class' => $this->_css_class_container );
+        $column_header_attrs = array( 'class' => $this->_css_class_columnheader );
+        if ( isset( $this->_css_id_container_table)){
+            $table_attrs['id'] = $this->_css_id_container_table;
+        }
+        if ( isset( $this->_css_id_container_div)){
+            $div_attrs['id'] = $this->_css_id_container_div;
+        }
+        $container_output .= "\n<div". $renderer->makeAttributes( $div_attrs ). ">";
+        $container_output .= "\n<table".$renderer->makeAttributes( $table_attrs ). ">";
+        $container_output .= "\n<tr".$renderer->makeAttributes( $column_header_attrs ) . "> ";
+        return $container_output ;
+
     }
 
     function _HTML_listTitle() {

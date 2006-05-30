@@ -3,7 +3,7 @@
 #define( 'AMP_CONTENT_LISTTYPE_TYPE', 'section' );
 define( 'AMP_CONTENT_NAV_SECTION_LIST_FIELD', 'typelist' );
 define( 'AMP_CONTENT_NAV_SECTION_PAGE_FIELD', 'typeid' );
-define( 'NAVIGATION_STANDARD_SEARCH', 'moduleid' );
+define( 'NAVIGATION_STANDARD_SEARCH', 'layout_id' );
 define( 'NAVIGATION_STANDARD_VALUE', '1' );
 
 require_once( 'AMP/Content/Nav/LocationSet.inc.php' );
@@ -29,6 +29,7 @@ class NavigationManager {
 
     var $_navSet;
     var $_current_seek_position;
+    var $_default_attempted = false;
 
     function NavigationManager( &$template, &$page ) {
         $this->init( $template, $page );
@@ -75,6 +76,7 @@ class NavigationManager {
 
         $positions = $this->template->getNavPositions();
         foreach ($positions as $desc => $id ) {
+            $this->_default_attempted = false;
             $this->_setFindPosition( $id );
             if (!($result = $this->$find_method())) continue;
             $locationSet = array_merge( $locationSet, $result );
@@ -104,32 +106,46 @@ class NavigationManager {
     ###################################
 
     function findNavs_Article() {
-        return $this->findNavs_listSection( AMP_CONTENT_NAV_SECTION_PAGE_FIELD );
+        return $this->findNavs_listSection( 'navLayoutsBySection');
+        //return $this->findNavs_listSection( AMP_CONTENT_NAV_SECTION_PAGE_FIELD );
     }
 
     function findNavs_listClass() {
-        return $this->findNavs_standardBase( "classlist", $this->page->getClassId(), 'findNavs_listSection' );
+        $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByClass');
+        $layout_id = array_search( $this->page->getClassId( ), $layout_set );
+        if ( !$layout_id ) return $this->findNavs_listSection( );
+        return $this->findNavs_standardBase( $layout_id, 'findNavs_listSection' );
+        //return $this->findNavs_standardBase( "classlist", $this->page->getClassId(), 'findNavs_listSection' );
     }
 
     function findNavs_IntroText() {
-        return $this->findNavs_standardBase( 'moduleid', $this->page->getIntroId(), 'findNavs_listSection' );
+        $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext');
+        $layout_id = array_search( $this->page->getIntroId( ), $layout_set );
+        if ( !$layout_id ) return $this->findNavs_listSection( );
+        return $this->findNavs_standardBase( $layout_id, 'findNavs_listSection' );
+        //return $this->findNavs_standardBase( 'moduleid', $this->page->getIntroId(), 'findNavs_listSection' );
     }
 
     function findNavs_default() {
-        return $this->findNavs_standardBase( NAVIGATION_STANDARD_SEARCH , NAVIGATION_STANDARD_VALUE);
+        $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext');
+        $layout_id = array_search( AMP_CONTENT_INTRO_ID_DEFAULT, $layout_set );
+        if ( !$layout_id ) return false;
+        $this->_default_attempted = true;
+        return $this->findNavs_standardBase( $layout_id );
     }
 
 
-    function findNavs_standardBase( $target_field, $target_value, $default_find_method = 'findNavs_default'  ) {
+    //function findNavs_standardBase( $target_field, $target_value, $default_find_method = 'findNavs_default'  ) {
+    function findNavs_standardBase( $layout_id, $default_find_method = 'findNavs_default'  ) {
         $locationSet = &new NavigationLocationSet( $this->dbcon );
-        $locationSet->addCriteria( $target_field . "=" . $this->dbcon->qstr( $target_value ) );
+        $locationSet->addCriteriaLayout( $layout_id );
         if ($position = $this->_getFindPosition()) {
-            $locationSet->addCriteria( 'position like ' . $this->dbcon->qstr( $position.'%' ) );
+            $locationSet->addCriteriaPositionPrefix( $position );
         }
         $locationSet->readData();
 
         if (!$locationSet->RecordCount()) {
-            if ( $target_field==NAVIGATION_STANDARD_SEARCH && $target_value==NAVIGATION_STANDARD_VALUE ) return false;
+            if ( $this->_default_attempted ) return false;
             return $this->$default_find_method();
         }
 
@@ -137,30 +153,49 @@ class NavigationManager {
     }
 
     function findNavs_listFrontpage() {
-        return $this->findNavs_standardBase( "moduleid", AMP_CONTENT_CLASS_FRONTPAGE );
+        $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext');
+        $layout_id = array_search( AMP_CONTENT_INTRO_ID_FRONTPAGE, $layout_set );
+        if ( !$layout_id ) return $this->findNavs_default( );
+
+        return $this->findNavs_standardBase( $layout_id );
+        //return $this->findNavs_standardBase( "moduleid", AMP_CONTENT_CLASS_FRONTPAGE );
     }
 
-    function findNavs_listSection( $target_column = AMP_CONTENT_NAV_SECTION_LIST_FIELD ) {
+    //function findNavs_listSection( $target_column = AMP_CONTENT_NAV_SECTION_LIST_FIELD ) {
+    function findNavs_listSection( $lookup_name = 'navLayoutsBySectionList' ) {
 
         $map = &AMPContent_Map::instance( );
-        $locationSet = &new NavigationLocationSet( $this->dbcon );
         $parent_set = $map->getAncestors( $this->page->getSectionId() );
         if (empty($parent_set)) return $this->findNavs_default();
 
-        $target_crit = $target_column . " in (" . join( ', ', array_keys( $parent_set )) . ")" ;
-        $locationSet->addCriteria( $target_crit );
+        $layout_set = &AMPContent_Lookup::instance( $lookup_name );
+        $layout_id = false;
+
+        foreach( $parent_set  as $section_id ){
+            if ( $layout_id = array_search( $section_id, $layout_set )) break;
+        }
+        if ( !$layout_id ) return $this->findNavs_default( );
+
+        #$target_crit = $target_column . " in (" . join( ', ', array_keys( $parent_set )) . ")" ;
+
+        $locationSet = &new NavigationLocationSet( $this->dbcon );
+        $locationSet->addCriteriaLayout( $layout_id );
+
         if ($position = $this->_getFindPosition()) {
-            $locationSet->addCriteria( 'position like ' . $this->dbcon->qstr( $position.'%' ));
+            $locationSet->addCriteriaPositionPrefix( $position );
         }
         $locationSet->readData();
         if (!$locationSet->RecordCount()) return $this->findNavs_default();
+        return $locationSet->getArray( );
 
+        /*
         foreach( $parent_set as $section_id => $name ) {
             if (!($results = $locationSet->filter( $target_column , $section_id ))) continue;
             return $results;
         }
 
         return $this->findNavs_default();
+        */
     }
 
     ##############################

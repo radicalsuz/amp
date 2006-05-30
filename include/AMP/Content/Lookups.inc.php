@@ -431,6 +431,7 @@ class AMPConstantLookup_ImageClasses extends AMPConstant_Lookup {
 
 }
 
+// deprecated for 3.5.9 -- new nav layout data structure 
 class AMPContentLookup_SectionContentNavigationCount extends AMPContent_Lookup {
     var $datatable = 'nav';
     var $result_field = 'count( id ) as totalnavs';
@@ -442,6 +443,7 @@ class AMPContentLookup_SectionContentNavigationCount extends AMPContent_Lookup {
     }
 }
 
+// deprecated for 3.5.9 -- new nav layout data structure 
 class AMPContentLookup_SectionListsNavigationCount extends AMPContent_Lookup {
     var $datatable = 'nav';
     var $result_field = 'count( id ) as totalnavs';
@@ -453,6 +455,7 @@ class AMPContentLookup_SectionListsNavigationCount extends AMPContent_Lookup {
     }
 }
 
+// deprecated for 3.5.9 -- new nav layout data structure 
 class AMPContentLookup_ClassListsNavigationCount extends AMPContent_Lookup {
     var $datatable = 'nav';
     var $result_field = 'count( id ) as totalnavs';
@@ -464,6 +467,7 @@ class AMPContentLookup_ClassListsNavigationCount extends AMPContent_Lookup {
     }
 }
 
+// deprecated for 3.5.9 -- new nav layout data structure 
 class AMPContentLookup_IntrotextsNavigationCount extends AMPContent_Lookup {
     var $datatable = 'nav';
     var $result_field = 'count( id ) as totalnavs';
@@ -621,4 +625,123 @@ class AMPContentLookup_StylesheetLocationTemplates extends AMPContent_Lookup {
         return $lookup->dataset;
     }
 }
+
+class AMPContentLookup_Navs extends AMPContent_Lookup {
+    var $datatable = 'navtbl';
+    var $result_field = 'name';
+    var $sortby = 'name';
+
+    function AMPContentLookup_Navs( ) {
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_NavPositions extends AMPContent_Lookup {
+    var $dataset = array( 
+        'L1' => 'Left Side, Position 1',
+        'L2' => 'Left Side, Position 2',
+        'L3' => 'Left Side, Position 3',
+        'L4' => 'Left Side, Position 4',
+        'L5' => 'Left Side, Position 5',
+        'L6' => 'Left Side, Position 6',
+        'L7' => 'Left Side, Position 7',
+        'L8' => 'Left Side, Position 8',
+        'L9' => 'Left Side, Position 9',
+        'R1' => 'Right Side, Position 1',
+        'R2' => 'Right Side, Position 2',
+        'R3' => 'Right Side, Position 3',
+        'R4' => 'Right Side, Position 4',
+        'R5' => 'Right Side, Position 5',
+        'R6' => 'Right Side, Position 6',
+        'R7' => 'Right Side, Position 7',
+        'R8' => 'Right Side, Position 8',
+        'R9' => 'Right Side, Position 9',
+        );
+    function AMPContentLookup_NavPositions( ){
+        //interface
+    }
+}
+
+class AMPContentLookup_NavLayoutsByIntrotext extends AMPContent_Lookup {
+    var $datatable = 'nav_layouts';
+    var $result_field = 'introtext_id';
+    var $criteria = 'introtext_id != "" AND !isnull( introtext_id )';
+
+    function AMPContentLookup_NavLayoutsByIntrotext( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_NavLayoutsBySectionList extends AMPContent_Lookup {
+    var $datatable = 'nav_layouts';
+    var $result_field = 'section_id_list';
+    var $criteria = 'section_id_list != "" AND !isnull( section_id_list )';
+
+    function AMPContentLookup_NavLayoutsBySectionList ( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_NavLayoutsBySection extends AMPContent_Lookup {
+    var $datatable = 'nav_layouts';
+    var $result_field = 'section_id';
+    var $criteria = 'section_id != "" AND !isnull( section_id )';
+
+    function AMPContentLookup_NavLayoutsBySection ( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_NavLayoutsByClass extends AMPContent_Lookup {
+    var $datatable = 'nav_layouts';
+    var $result_field = 'class_id';
+    var $criteria = 'class_id != "" AND !isnull( class_id )';
+
+    function AMPContentLookup_NavLayoutsByClass ( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_NavLayouts extends AMPContent_Lookup {
+    var $datatable = 'nav_layouts';
+    var $result_field = 'name';
+    var $sortby = 'name';
+
+    function AMPContentLookup_NavLayouts ( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_CustomNavLayouts extends AMPContent_Lookup {
+    var $datatable = 'nav_layouts';
+    var $result_field = 'name';
+    var $criteria = 'id not in ( 1, 2 )';
+    var $sortby = 'name';
+
+    function AMPContentLookup_CustomNavLayouts ( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_NavLayoutLocationCount extends AMPContent_Lookup {
+    var $datatable = 'nav';
+    var $result_field = 'count( id ) as totalnavs';
+    var $id_field = 'layout_id';
+    var $criteria = "!isnull( layout_id ) group by layout_id";
+
+    function AMPContentLookup_NavLayoutLocationCount( ){
+        $this->init( );
+    }
+}
+
+class AMPContentLookup_IntroTexts extends AMPContent_Lookup {
+    var $datatable = "moduletext";
+    var $result_field = "name";
+    var $sortby = "name";
+
+    function AMPContentLookup_IntroTexts () {
+        $this->init();
+    }
+}
+
 ?>

@@ -1,7 +1,8 @@
 <?php
 
-define ('AMP_CONTENT_URL_SEARCH',       'search.php');
-define ('AMP_CONTENT_URL_ARTICLE',      'article.php');
+if ( !defined( 'AMP_CONTENT_URL_SEARCH'))  define ('AMP_CONTENT_URL_SEARCH',       'search.php');
+if ( !defined( 'AMP_CONTENT_URL_404'))     define ('AMP_CONTENT_URL_404',  AMP_CONTENT_URL_SEARCH );
+if ( !defined( 'AMP_CONTENT_URL_ARTICLE')) define ('AMP_CONTENT_URL_ARTICLE',      'article.php');
 define ('AMP_CONTENT_URL_ACTION',       'action_center.php');
 define ('AMP_CONTENT_URL_GALLERY',      'gallery.php');
 define ('AMP_CONTENT_URL_RSSFEED',      'rssfeed.php');

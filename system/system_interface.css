@@ -205,6 +205,12 @@ a.standout {
 	margin-left: 3px;
 }
 
+.system_list_input {
+	font-size: 11px;
+	text-decoration : none;
+	margin-left: 3px;
+}
+
 .searchform_label, .searchform_element, .searchform_header, .searchform_table {
 		font-size: 11px;
 		text-decoration: none;
@@ -266,6 +272,18 @@ a.intitle {
 	margin: 2px;
 }
 
+
+.list_column_header {
+	font-size: 12px;
+	text-shadow: 2px 2px 1px black;
+	font-weight: bold;
+	color: white;
+	background-color : #006699;
+	background: url('images/intitle-bg.png') top left repeat-x;
+	padding: 2px 2px 2px 6px;
+	height: 25px;
+	margin: 20px 0px 10px 0px;
+}
 
 .list_table
 { 

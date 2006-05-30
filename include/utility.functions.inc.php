@@ -1007,23 +1007,41 @@ if ( ! function_exists( 'AMP_navCountDisplay_Section')) {
     function AMP_navCountDisplay_Section( $section_id ){
         if ( !$section_id ) return false;
         if ( is_array( $section_id )) return false;
-        static $renderer = false;
-        static $navcount_lists = false;
-        static $navcount_content = false;
-        if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
-        if ( !$navcount_lists )
-            $navcount_lists = &AMPContent_Lookup::instance( 'SectionListsNavigationCount' );
-        if ( !$navcount_content )
-            $navcount_content = &AMPContent_Lookup::instance( 'SectionContentNavigationCount' );
 
-        $count_lists = isset( $navcount_lists[ $section_id ]) ? "( " . $navcount_lists[ $section_id ] . " )" : false;
-        $count_content= isset( $navcount_content[ $section_id ]) ? "( " . $navcount_content[ $section_id ] . " )" : false;
+        static $renderer = false;
+        static $layout_lists = false;
+        static $layout_content = false;
+        static $navcount_layouts = false;
+        if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
+        if ( !$layout_lists )
+            $layout_lists = &AMPContent_Lookup::instance( 'navLayoutsBySectionList' );
+        if ( !$layout_content )
+            $layout_content = &AMPContent_Lookup::instance( 'navLayoutsBySection' );
+        if ( !$navcount_layouts )
+            $navcount_layouts = &AMPContent_Lookup::instance( 'navLayoutLocationCount' );
+
+        $count_lists = false;
+        $count_content = false;
+        $layout_id_content = $layout_content ? array_search( $section_id, $layout_content ) : false;
+        $layout_id_lists = $layout_lists ? array_search( $section_id, $layout_lists ) : false;
+        $url_vars_lists   = array( 'action=add', 'section_id_list='.$section_id );
+        $url_vars_content = array( 'action=add', 'section_id='.$section_id );
+
+        if ( $layout_id_lists ){
+            $count_lists = "( " . $navcount_layouts[ $layout_id_lists   ] . " )";
+            $url_vars_lists = array( 'id='.$layout_id_lists );
+        }
+
+        if ( $layout_id_content ){
+            $count_content = "( " . $navcount_layouts[ $layout_id_content ] . " )";
+            $url_vars_content = array( 'id='.$layout_id_content );
+        }
 
         $navlink_lists = 
-            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'type='.$section_id ),
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, $url_vars_lists ),
                              AMP_TEXT_LIST_PAGES . $count_lists );
         $navlink_content = 
-            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'typeid='.$section_id ),
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, $url_vars_content ),
                              AMP_TEXT_CONTENT_PAGES . $count_content );
 
         return  $renderer->in_P( 
@@ -1039,15 +1057,24 @@ if ( ! function_exists( 'AMP_navCountDisplay_Class')) {
     function AMP_navCountDisplay_Class( $class_id ){
         if ( !$class_id ) return false;
         static $renderer = false;
-        static $navcount_lists = false;
+        static $layout_lists = false;
         if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
-        if ( !$navcount_lists )
-            $navcount_lists = &AMPContent_Lookup::instance( 'ClassListsNavigationCount' );
+        if ( !$layout_lists )
+            $layout_lists = &AMPContent_Lookup::instance( 'navLayoutsByClass' );
+        if ( !$navcount_layouts )
+            $navcount_layouts = &AMPContent_Lookup::instance( 'navLayoutLocationCount' );
 
-        $count_lists = isset( $navcount_lists[ $class_id ]) ? "( " . $navcount_lists[ $class_id ] . " )" : false;
+        $count_lists = false;
+        $url_vars_lists = array( 'action=add', 'class_id='. $class_id);
+        $layout_id_lists = $layout_lists ? array_search( $class_id, $layout_lists ) : false;
+
+        if ( $layout_id_lists ) {
+            $count_lists = "( " . $navcount_layouts[ $layout_id_lists   ] . " )";
+            $url_vars_lists = array( 'id='.$layout_id_lists );
+        }
 
         $navlink_lists = 
-            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'class='.$class_id),
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, $url_vars_lists ),
                              AMP_TEXT_LIST_PAGES . $count_lists );
 
         return  $renderer->in_P( 
@@ -1061,15 +1088,26 @@ if ( ! function_exists( 'AMP_navCountDisplay_Introtext')) {
     function AMP_navCountDisplay_Introtext( $introtext_id ){
         if ( !$introtext_id ) return false;
         static $renderer = false;
-        static $navcount_lists = false;
-        if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
-        if ( !$navcount_lists )
-            $navcount_lists = &AMPContent_Lookup::instance( 'IntrotextsNavigationCount' );
+        static $layout_lists = false;
+        static $navcount_layouts = false;
 
-        $count_lists = isset( $navcount_lists[ $introtext_id ]) ? "( " . $navcount_lists[ $introtext_id ] . " )" : false;
+        if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
+        if ( !$layout_lists )
+            $layout_lists = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext' );
+        if ( !$navcount_layouts )
+            $navcount_layouts = &AMPContent_Lookup::instance( 'navLayoutLocationCount' );
+
+        $count_lists = false;
+        $url_vars_lists = array( 'action=add', 'introtext_id='. $introtext_id );
+        $layout_id_lists = $layout_lists ? array_search( $introtext_id, $layout_lists ) : false;
+
+        if ( $layout_id_lists ){
+            $count_lists = "( " . $navcount_layouts[ $layout_id_lists   ] . " )";
+            $url_vars_lists = array( 'id='.$layout_id_lists );
+        }
 
         $navlink_lists = 
-            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, 'mod_id='.$introtext_id),
+            $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, $url_vars_lists ),
                              AMP_TEXT_CONTENT_PAGES . $count_lists );
 
         return  $renderer->in_P( 
@@ -1078,6 +1116,7 @@ if ( ! function_exists( 'AMP_navCountDisplay_Introtext')) {
     
     }
 }
+
 if ( !function_exists( 'AMP_openFile')){
     function &AMP_openFile( $filename, $path = null ){
         if ( !isset( $path )) $path = AMP_LOCAL_PATH . '/custom/';

@@ -4,7 +4,7 @@ function ElementCopier ( formname, start_qty ) {
     //the number of sets being displayed on the form
     this.set_qty = start_qty;
     this.formRef = document.forms[ formname ]
-    this.formtable = window.findFormTable( formname );
+    this.formtable = window.findFormTable( formname, this );
     this.dup_elements=new Array();
 
     this.DuplicateElementSet = DuplicateElementSet;
@@ -18,6 +18,7 @@ function ElementCopier ( formname, start_qty ) {
     this.addLabel = addLabel;
     this.isSpan = isSpan;
     this.findSetbyRow = findSetbyRow;
+	this.setFormTable = setFormTable;
 
     this.getInstanceName = getInstanceName;
     this.findDupElementIndex = findDupElementIndex;
@@ -33,6 +34,11 @@ function ElementCopier ( formname, start_qty ) {
     //this.event = event;
     this.pushValue = pushValue;
     this.pullValue = pullValue;
+	this.singleRow = false;
+	this.labelColumn = true;
+	this.table_id = false;
+	this.startRowOffset = -1;
+	this.cssElementClassName = false;
 
 }
 
@@ -106,9 +112,10 @@ function makenew( elementdef ) {
             break;
         case 'select':
             if ( this.set_qty > 1 ) {
-                return this.CopySelect( instance_name,  elementdef.values );
-            }
-            return this.BuildSelect (instance_name, elementdef );
+                newitem = this.CopySelect( instance_name,  elementdef.values );
+            } else {
+            	newitem = this.BuildSelect (instance_name, elementdef );
+			}
 
             break;
         case 'textarea':
@@ -117,6 +124,9 @@ function makenew( elementdef ) {
         default:
             newitem = this.addElement( instance_name, elementdef.type );
     }
+	if ( this.cssElementClassName && !newitem.className ){
+		newitem.className = this.cssElementClassName;
+	}
 
     return newitem;
 }
@@ -157,22 +167,38 @@ function DuplicateElementSet ( which, startRow ) {
     which.ElementSets[which.set_qty]=new Array();
     which.ElementSets[which.set_qty]['elements']=new Array();
 
-    if (!startRow) startRow = which.formtable.tBodies[0].rows.length-1;
+    if (!startRow) startRow = which.formtable.tBodies[0].rows.length+which.startRowOffset;
     which.ElementSets[which.set_qty]['start_row'] = startRow;
+	if (which.singleRow) {
+		new_single_row = which.formtable.tBodies[0].insertRow( startRow );
+	} else {
+		new_single_row = false;
+	}
     
     for (i=0; i<which.dup_elements.length; i++) {
-        //newrow=which.formtable.tBodies[0].appendChild(document.createElement('tr'));
-        newrow=which.formtable.tBodies[0].insertRow( startRow+i  );
-        newcell = newrow.insertCell(newrow.cells.length);
-        which.addLabel( newcell, which.dup_elements[i] );
-        if ( !which.isSpan( which.dup_elements[i].type )) {
-            newrow.appendChild( newcell );
-            newinput = newrow.insertCell( newrow.cells.length );
-        } else {
-            newinput = newcell;
-            newinput.setAttribute( 'colspan', 2 );
-            newinput.colSpan = 2;
-        }
+        if( !new_single_row ){
+			 newrow=which.formtable.tBodies[0].insertRow( startRow+i  );
+		} else {
+			newrow = new_single_row;
+		}
+		if (which.labelColumn) {
+			newcell = newrow.insertCell(newrow.cells.length);
+			which.addLabel( newcell, which.dup_elements[i] );
+			if ( !which.isSpan( which.dup_elements[i].type )) {
+				newrow.appendChild( newcell );
+				newinput = newrow.insertCell( newrow.cells.length );
+			} else {
+				newinput = newcell;
+				newinput.setAttribute( 'colspan', 2 );
+				newinput.colSpan = 2;
+			}
+		} else {
+			if (which.dup_elements[i].type == 'hidden') {
+				newinput = which.formRef;
+			} else {
+				newinput = newrow.insertCell( newrow.cells.length );
+			}
+		}
         which.ElementSets[which.set_qty]['elements'][i] = which.makenew( which.dup_elements[i] );
         if ( which.ElementSets[ which.set_qty ]['elements'][ i ] ) {
             newinput.appendChild(  which.ElementSets[which.set_qty]['elements'][i] );
@@ -183,7 +209,8 @@ function DuplicateElementSet ( which, startRow ) {
 }
 
 function restoreSet( which, startElementName, dataFieldSet, dataNameSet ) {
-    DuplicateElementSet( which, parentRow( which.formRef.elements[ startElementName ]).rowIndex ); 
+    //DuplicateElementSet( which, parentRow( which.formRef.elements[ startElementName ]).rowIndex ); 
+    DuplicateElementSet( which ); 
     which.populateSet( which.set_qty, dataFieldSet, dataNameSet );
 }
 
@@ -287,9 +314,20 @@ function RemoveSet( set_index ) {
     startrow = this.ElementSets[this.set_qty]['start_row'];
     this.set_qty=this.set_qty-1;
     //startrow = this.set_qty*this.dup_elements.length;
-    for (n=this.dup_elements.length-1; n>=0; n--) {
-        this.formtable.deleteRow(startrow + n);
-    }
+	if ( this.singleRow ) {
+		this.formtable.deleteRow( startrow );
+	} else {
+		for (n=this.dup_elements.length-1; n>=0; n--) {
+			this.formtable.deleteRow(startrow + n);
+		}
+	}
+	for (n=0; n<this.dup_elements.length; n++) {
+		if (this.dup_elements[n].type == 'hidden') {
+			nameIndex = this.findDupElementIndex( this.dup_elements[n].name );
+			elementRef = this.ElementSets[set_index]['elements'][ nameIndex ];
+			this.pushValue( 0, elementRef );
+		} 
+	}
         
         /*
     } else {
@@ -318,7 +356,7 @@ function event(elem,handler,funct) {//This is A Javascript Function
 function populateSet( set_index, dataSetValues, dataSetNames ) {
     for ( k=0; k<dataSetNames.length; k++ ) {
         nameIndex = this.findDupElementIndex( dataSetNames[k] );
-        if (! nameIndex ) continue;
+        if ( nameIndex === false ) continue;
         elementRef = this.ElementSets[ set_index ][ 'elements' ][nameIndex]
         this.pushValue( dataSetValues[ k ], elementRef );
     }
@@ -359,6 +397,9 @@ function BuildSelect (newname, element_def) {
 
 function findSetbyRow( row_index ) {
     if (this.set_qty <= 0) return false;
+	if (this.singleRow) {
+		return row_index - this.ElementSets[ 1 ]['start_row'] + 1;
+	}
     for (k = 1; k<=this.set_qty; k++) {
         if ( (row_index  > this.ElementSets[ k ]['start_row']) && row_index < parseInt(this.ElementSets[ k ]['start_row'] + this.dup_elements.length )) {
             return k;
@@ -377,7 +418,14 @@ function findFormTable ( formname ) {
     return false;
 }
 
-function hasParent(testchild, desired_parent) {
+function setFormTable( table_id ) {
+	candidate_table = document.getElementById( table_id );
+	if (candidate_table){
+		this.formtable = candidate_table;
+	}
+}
+
+function hasParent( testchild, desired_parent ) {
     if (testchild.parentNode == desired_parent) return true;
     if (testchild.parentNode == document ) return false;
     return hasParent(testchild.parentNode, desired_parent);

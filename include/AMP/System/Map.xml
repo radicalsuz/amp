@@ -433,12 +433,12 @@
     <per>CONTENT_NAVIGATION</per>
     <item>
         <label>Standard Navigation Layout</label>
-        <href>nav_position.php?mod_id=1</href>
+        <href>nav_layouts.php?id=1</href>
         <per>CONTENT_NAVIGATION</per>
     </item>
     <item>
         <label>Front Page Navigation Layout</label>
-        <href>nav_position.php?mod_id=2</href>
+        <href>nav_layouts.php?id=2</href>
         <per>CONTENT_NAVIGATION</per>
     </item>
     <item>
@@ -451,6 +451,22 @@
         <href>nav.php</href>
         <per>CONTENT_NAVIGATION</per>
     </item>
+    <item>
+        <label>View Navigation Layouts</label>
+        <href>nav_layouts.php</href>
+        <per>CONTENT_NAVIGATION</per>
+		<separator>1</separator>
+    </item>
+    <list>
+        <lookup>
+			<module>content</module>
+			<instance>customNavLayouts</instance>
+		</lookup>
+        <href>
+            <base>nav_layouts.php</base>
+            <var>id</var>
+        </href>
+    </list>
 </navigation>
 
 <template>

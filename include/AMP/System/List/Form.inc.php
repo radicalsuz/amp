@@ -20,6 +20,7 @@ class AMP_System_List_Form extends AMPSystem_List {
     var $_request;
     var $_request_class = 'AMP_System_List_Request';
     var $_submitGroup = 'submitAction';
+    var $_css_class_elements = 'system_list_input';
 
     var $_source_keys;
 
@@ -93,9 +94,16 @@ class AMP_System_List_Form extends AMPSystem_List {
 
     function _makeInput( $value, $fieldname, $currentrow ) {
         $id = $currentrow[ $this->_id_field ];
-        return "<input style=\"text-align: right;\" name=\"$fieldname"."[$id]\" value=\"$value\" class=\"system_list_input\" type=\"text\" size=\"3\">";
+        return "<input name=\"$fieldname"."[$id]\" style=\"text-align: right;\" value=\"$value\" class=\"".$this->_css_class_elements."\" type=\"text\" size=\"3\">";
     }
 
+    function _makeSelect ( $value, $fieldname, $currentrow, $values ) {
+        $id = $currentrow[ $this->_id_field ];
+        $select_name = $fieldname . "[$id]";
+        $attr = array( 'class' => $this->_css_class_elements );
+        $renderer = &$this->_getRenderer( );
+        return AMP_buildSelect( $select_name, $values, $value, $renderer->makeAttributes( $attr ));
+    }
     /*
     function submitted() {
         $this->readRequest
@@ -114,8 +122,9 @@ class AMP_System_List_Form extends AMPSystem_List {
                       . $this->_HTML_listTitle() 
                       . ( isset( $this->_pager ) ? $this->_pager->outputTop() : false )
                       . $this->_HTML_startForm() 
-                      . $this->_outputToolbar( );
-        $start_html .= "\n<div class='list_table'>\n<table class='list_table'>\n<tr class='intitle'> ";
+                      . $this->_outputToolbar( )
+                      . $this->_renderContainers( );
+
 
         return $start_html.$this->_HTML_columnHeaders();
     }
@@ -131,15 +140,21 @@ class AMP_System_List_Form extends AMPSystem_List {
     }
 
     function _HTML_footer() {
-        return  "\n	</table>\n</div>"
-                . $this->_outputToolbar( )
-                . "</form>\n<br>&nbsp;&nbsp;" 
-                . ( isset( $this->_pager ) ? $this->_pager->output() : false ) 
-                . $this->_HTML_addLink()  ;
+        $output = "\n	</table>\n</div>"
+                . $this->_outputToolbar( );
+
+        if ( !( isset( $this->suppress['form_tag']) && $this->suppress['form_tag'])){
+            $output .= "</form>\n";
+        }
+        $output .=  "<br>&nbsp;&nbsp;" 
+                    . ( isset( $this->_pager ) ? $this->_pager->output() : false ) 
+                    . $this->_HTML_addLink()  ;
+        return $output;
     }
 
 
     function _HTML_startForm() {
+        if ( isset( $this->suppress['form_tag']) && $this->suppress['form_tag']) return false;
         $url_value = PHP_SELF_QUERY( );
         if ( !strpos( $url_value, 'action')) {
             $url_value = AMP_URL_AddVars( $url_value, array( 'action=list'));
@@ -152,8 +167,12 @@ class AMP_System_List_Form extends AMPSystem_List {
         $bgcolor = $this->_setBgColor();
         $output ="\n<tr id=\"listform_row_$id\" bordercolor=\"".$this->getColor('border')."\" bgcolor=\"". $bgcolor."\""
                     ." onMouseover=\"this.bgColor='".$this->getColor('mouseover')."';\""
-                    ." onMouseout=\"this.bgColor='". $bgcolor ."';\"" 
-                    ." onClick='select_id(this.id.substring(13), \"". $this->formname ."\");'>\n";
+                    ." onMouseout=\"this.bgColor='". $bgcolor ."';\"" ;
+        if ( !( isset( $this->suppress['selectcolumn']) && $this->suppress['selectcolumn'] )){
+            $output .= " onClick='select_id(this.id.substring(13), \"". $this->formname ."\");'";
+        }
+        $output .= ">\n";
+
         return $output . $this->_HTML_firstColumn( $id ) . $this->_HTML_editColumn( $id );
     }
         

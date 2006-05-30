@@ -51,6 +51,16 @@ class AMP_System_Component_Controller {
         if ( $auto_init ) $this->_init_model( );
     }
 
+    function &get_model( ){
+        if( !isset( $this->_model )) return false;
+        return $this->_model;
+    }
+
+    function &get_model_id( ){
+        if( !isset( $this->_model_id )) return false;
+        return $this->_model_id;
+    }
+
     function set_page( &$page ){
         $this->_page = &$page;
     }
@@ -410,6 +420,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
             $this->_display->add( $this->_form );
             return false;
         }
+        $this->notify( 'delete' );
         $this->message( sprintf( AMP_TEXT_DATA_DELETE_SUCCESS, $name ));
         $this->display_default( ) ;
         return true;

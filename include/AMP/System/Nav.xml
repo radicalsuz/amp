@@ -484,12 +484,16 @@
 	<title>Navigation</title>
 	<per>CONTENT_NAVIGATION</per>
 	<item>
-		<href>nav_position.php?mod_id=1</href>
+		<href>nav_layouts.php?id=1</href>
 		<label>Standard Navigation Layout</label>
 	</item>
 	<item>
-		<href>nav_position.php?mod_id=2</href>
+		<href>nav_layouts.php?id=2</href>
 		<label>Front Page Navigation Layout</label>
+	</item>
+	<item>
+		<href>nav_layouts.php</href>
+		<label>View Navigation Layouts</label>
 	</item>
 	<item>
 		<href>nav.php?action=list</href>
@@ -542,14 +546,14 @@
 	<title>Tools</title>
 	<per>TOOLS_ACCESS</per>
 	<item>
-		<label>View Intro Text</label>
+		<label>View Public Pages</label>
 		<href>introtext.php?action=list</href>
 		<class>view</class>
 		<per>TOOLS_INTROTEXT</per>
 	</item>
 	<item>
 		<href>introtext.php</href>
-		<label>Add Intro Text</label>
+		<label>Add Public Page</label>
 		<class>add</class>
 		<per>TOOLS_INTROTEXT</per>
 	</item>

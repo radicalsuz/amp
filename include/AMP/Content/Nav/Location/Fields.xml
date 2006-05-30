@@ -1,0 +1,30 @@
+<array>
+    <navid>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>navs</instance>
+        </lookup>
+        <label>Element</label>
+    </navid>
+    <position>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>navPositions</instance>
+        </lookup>
+        <label>Position</label>
+    </position>
+    <moduleid>
+        <type>hidden</type>
+    </moduleid>
+    <classid>
+        <type>hidden</type>
+    </classid>
+    <typeid>
+        <type>hidden</type>
+    </typeid>
+    <typelist>
+        <type>hidden</type>
+    </typelist>
+</array>

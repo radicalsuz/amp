@@ -7,7 +7,8 @@ class Content_Image {
        'hspace' => '4',
        'vspace' => '4',
        'border' => '0',
-       'class'  => 'img_main' );
+       'class'  => 'img_main' 
+       );
     var $_itemdata = array();
     var $_itemdata_keys = array( 'width', 'height', 'alttag', 'caption', 'alignment', 'filename', 'image_size');
 
