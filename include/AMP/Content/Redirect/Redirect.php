@@ -22,6 +22,22 @@ class AMP_Content_Redirect extends AMPSystem_Data_Item {
     function getPublish( ){
         return $this->getData( 'publish');
     }
+
+    function setAlias( $alias_url ){
+        return $this->mergeData( array( 'old' => $alias_url ));
+    }
+
+    function setTarget( $url ){
+        return $this->mergeData( array( 'new' => $url ));
+    }
+
+    function setDefaults( ){
+        return $this->mergeData( array( 'publish' => 1 ));
+    }
+
+    function makeCriteriaAlias( $alias ){
+        return 'old =' .$this->dbcon->qstr( $alias );
+    }
 }
 
 ?>

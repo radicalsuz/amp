@@ -30,6 +30,7 @@ class Article extends AMPSystem_Data_Item {
      */
     function Article( &$dbcon, $id = null ) {
         $this->init ($dbcon, $id);
+        $this->_addAllowedKey( 'new_alias_name' );
     }
 
     function &getDisplay() {
@@ -262,6 +263,41 @@ class Article extends AMPSystem_Data_Item {
         $this->setData( $version->getData() );
     }
 
+    function setDefaults( ){
+        $this->mergeData( array( 
+            'type' => AMP_CONTENT_MAP_ROOT_SECTION,
+            'linkover' => 1,
+            'class' => AMP_CONTENT_CLASS_DEFAULT
+        ));
+    }
+
+    function getNewAliasName( ){
+        return $this->getData( 'new_alias_name' );
+    }
+
+    function clearAliasName( ){
+        return $this->mergeData( array( 'new_alias_name' => false ));
+    }
+
+    function _afterSave( ){
+        if ( !( $alias_name = $this->getNewAliasName( ))) return false;
+        require_once( 'AMP/Content/Redirect/Redirect.php' );
+        $redirect = &new AMP_Content_Redirect( $this->dbcon );
+        $existing_items = $redirect->search( $redirect->makeCriteria( array( 'alias' => $alias_name )));
+        if ( $existing_items ){
+            foreach( $existing_items as $existing_redirect ){
+                $existing_redirect->setTarget( $this->getURL( ));
+                $existing_redirect->save( );
+            }
+            $this->clearAliasName( );
+            return true;
+        }
+        $redirect->setDefaults( );
+        $redirect->setAlias( $alias_name );
+        $redirect->setTarget( $this->getURL( ));
+        $this->clearAliasName( );
+        return $redirect->save( );
+    }
 }
 
 

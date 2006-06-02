@@ -23,7 +23,11 @@ class AMP_Content_Nav_Layout_Form extends AMPSystem_Form_XML {
         }
         
         $fields['position_list']['default'] = $this->_getPositionList( $id );
-        if ( isset( $id )) return $fields;
+        if ( isset( $id )){
+            $fields['layout_anchor_description']['default'] = $this->_describeLayoutAnchor( $id );
+            return $fields;
+
+        }
 
         $requested_selectors = array_combine_key( $this->_selector_fields, $_GET );
         if ( !empty( $requested_selectors )){
@@ -40,10 +44,32 @@ class AMP_Content_Nav_Layout_Form extends AMPSystem_Form_XML {
         return $fields;
     }
 
-    function _getPositionList( $id = null ) {
-        if ( isset( $this->_positionList )) return $this->_positionList( );
-        require_once( 'AMP/Content/Nav/Location/List.inc.php');
+    function _describeLayoutAnchor( $id ){
+        $lookup_set = array( 
+            AMP_TEXT_PUBLIC_PAGE  =>  AMPContent_Lookup::instance( 'navLayoutsByIntrotext' ),
+            AMP_TEXT_CLASS        =>  AMPContent_Lookup::instance( 'navLayoutsByClass' ),
+            AMP_TEXT_SECTION      =>  AMPContent_Lookup::instance( 'navLayoutsBySection' ),
+            AMP_TEXT_SECTION_LIST =>  AMPContent_Lookup::instance( 'navLayoutsBySectionList' )
+        );
 
+        $lookup_names_set = array( 
+            AMP_TEXT_PUBLIC_PAGE  =>  AMPContent_Lookup::instance( 'introTexts' ),
+            AMP_TEXT_CLASS        =>  AMPContent_Lookup::instance( 'classes'  ),
+            AMP_TEXT_SECTION      =>  AMPContent_Lookup::instance( 'sections' ),
+            AMP_TEXT_SECTION_LIST =>  AMPContent_Lookup::instance( 'sections' )
+        );
+
+        foreach( $lookup_set as $description => $values ){
+            if ( !isset( $values[$id])) continue;
+            return sprintf( AMP_TEXT_CONTENT_NAV_LAYOUT_HEADER, ucwords( $description ) , $lookup_names_set[ $description ][ $values[$id] ] );
+        }
+        return false;
+    }
+
+    function _getPositionList( $id = null ) {
+        if ( isset( $this->_positionList )) return $this->_positionList->execute( );
+        require_once( 'AMP/Content/Nav/Location/List.inc.php');
+ 
         $positionList = &new AMP_Content_Nav_Location_List( AMP_Registry::getDbcon( ));
         $positionList->applySearch( array( 'layout_id' => $id ));
         $this->_positionList = &$positionList;

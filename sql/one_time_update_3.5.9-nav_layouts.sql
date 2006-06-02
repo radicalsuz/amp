@@ -12,3 +12,4 @@ update nav a, nav_layouts b set a.layout_id = b.id where a.moduleid = b.introtex
 update nav a, nav_layouts b set a.layout_id = b.id where a.classlist = b.class_id;
 update nav a, nav_layouts b set a.layout_id = b.id where a.typelist= b.section_id_list;
 update nav a, nav_layouts b set a.layout_id = b.id where a.typeid= b.section_id;
+delete from nav_layouts where name='' or isnull(name);

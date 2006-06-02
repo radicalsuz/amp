@@ -14,6 +14,7 @@
  * * * **/
 
 require_once("AMP/System/BaseTemplate.php");
+require_once( 'AMP/System/Flash.php');
 
 class AMPSystem_Page_Display {
 
@@ -99,7 +100,6 @@ class AMPSystem_Page_Display {
         foreach ($this->page->getResults() as $result ) {
             $output .=  "<span class=\"page_result\">$result</span>\n";
         }
-        require_once( 'AMP/System/Flash.php');
         $flash = &AMP_System_Flash::instance( );
         return $output . $flash->execute( );
     }

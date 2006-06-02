@@ -30,6 +30,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $editlink;
     var $_url_add;
     var $_url_edit;
+    var $_url_edit_target = '_top';
 
     var $lookups;
     var $translations;
@@ -205,10 +206,18 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if ( !( isset( $this->name_field ) && isset( $row_data[$this->name_field ]))) return false; 
         if ( isset( $this->suppress['editcolumn']) && $this->suppress['editcolumn']) return $row_data[ $this->name_field ];
 
-        return      "<A HREF='". $this->_getUrlEdit( $row_data ) ."' title='" . AMP_TEXT_EDIT_ITEM . "'>" 
+        return      "<A HREF='". $this->_getUrlEdit( $row_data ) ."' title='" . AMP_TEXT_EDIT_ITEM . "' target='".$this->_getEditLinkTarget( )."'>" 
                     . $row_data[ $this->name_field ]
                     . '</a>';
 
+    }
+
+    function _getEditLinkTarget( ){
+        return $this->_url_edit_target;
+    }
+
+    function setEditLinkTarget( $value ){
+        $this->_url_edit_target = $value;
     }
 
     function _getUrlEdit( $row_data ){
@@ -257,6 +266,13 @@ class AMPSystem_List extends AMPDisplay_HTML {
     function suppressSortLinks( $value = true ) {
         $this->suppress['sortlinks'] = $value;
     }
+    function suppressMessages( $value = true ){
+        $this->suppress['messages'] = $value;
+    }
+    function suppressToolbar( $value = true ){
+        $this->suppress['toolbar'] = $value;
+
+    }
 
 
     function getColor( $color_type ) {
@@ -269,6 +285,9 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function setMessage( $text ) {
+        print 'trying ' .$text;
+        if ( isset( $this->suppress['messages']) && $this->suppress['messages'] ) return false;
+        print 'message not suppressed';
         if ( isset( $this->_controller )) return $this->_controller->setMessage( $text );
 
         require_once( 'AMP/System/Flash.php' );
@@ -279,7 +298,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function applySearch( $values ) {
-        if ( !is_array( $this->source )) {
+        if ( isset( $this->source) && !is_array( $this->source )) {
             return $this->source->applySearch( $values );
         }
         $this->source = false;
@@ -336,7 +355,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _HTML_editLink( $id ) {
-        return  "<A HREF='". $this->_getUrlEdit( array( 'id' => $id )) ."' title='".AMP_TEXT_EDIT_ITEM."'>" .
+        return  "<A HREF='". $this->_getUrlEdit( array( 'id' => $id )) ."' title='".AMP_TEXT_EDIT_ITEM."' target='".$this->_getEditLinkTarget( )."'>" .
                 "<img src=\"". AMP_SYSTEM_ICON_EDIT ."\" alt=\"".AMP_TEXT_EDIT."\" width=\"16\" height=\"16\" border=0></A>" ;
     }
 
@@ -484,7 +503,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     function _HTML_addLink () {
         if (isset($this->suppress['addlink']) && $this->suppress['addlink']) return false;
         $add_url = isset( $this->_url_add ) ? $this->_url_add : $this->editlink;
-        return "<a href=\"". $add_url ."\">". AMP_TEXT_ADD_ITEM . "</a> ";
+        return "<a href=\"". $add_url ."\" target=\"".$this->_getEditLinkTarget( )."\">". AMP_TEXT_ADD_ITEM . "</a> ";
     }
 
 

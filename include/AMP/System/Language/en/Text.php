@@ -87,6 +87,8 @@ if (! defined( 'AMP_TEXT_SECTIONLIST_ARTICLES_PLUS_CLASS_TEMPLATE' ))
 
 if ( !defined( 'AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT')) 
         define( 'AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT', 'Edit Navigation Layouts');
+if ( !defined( 'AMP_TEXT_CONTENT_NAV_LAYOUT_HEADER')) 
+        define( 'AMP_TEXT_CONTENT_NAV_LAYOUT_HEADER', 'Navigation Layout for %s: %s');
 if ( !defined( 'AMP_TEXT_LIST_PAGES')) define('AMP_TEXT_LIST_PAGES', 'List Pages');
 if ( !defined( 'AMP_TEXT_CONTENT_PAGES')) define( 'AMP_TEXT_CONTENT_PAGES', 'Content Pages');
 if ( !defined( 'AMP_TEXT_PERMISSION_DENIED_LIST')) define( 'AMP_TEXT_PERMISSION_DENIED_LIST', 'You do not have permission to view this list');
@@ -104,6 +106,8 @@ if ( !defined( 'AMP_TEXT_LOGIN_HELP_ADMIN'))
     define( 'AMP_TEXT_LOGIN_HELP_ADMIN', 'If you are having trouble logging in, please contact the <a href="mailto:%s">site administrator</a>.' );
 /**
  * General purpose 
+ * component names
+ * system-wide values
  */
 if ( !defined( 'AMP_TEXT_ACTION')) define( 'AMP_TEXT_ACTION', 'action');
 
@@ -111,6 +115,10 @@ if ( !defined( 'AMP_TEXT_SYSTEM_INTERFACE_FOOTER'))
     define( 'AMP_TEXT_SYSTEM_INTERFACE_FOOTER', "AMP %s for %s \nPlease report problems to %s");
 
 define( 'AMP_TEXT_SECTION', 'section');
+define( 'AMP_TEXT_SECTION_LIST', 'section list');
+define( 'AMP_TEXT_CLASS', 'class');
+define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
+
 define( 'AMP_TEXT_TEMPLATE', 'template');
 define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
 

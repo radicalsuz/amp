@@ -209,8 +209,8 @@ function change_form_block(which) {
     } else {
         var parentDiv = document.getElementById(which + "_parent");
         parentDiv.className = 'fieldset fieldextra';
-        document.getElementById(which).style.display = 'block';
         document.getElementById( "arrow_" + which ).style.display = 'none';
+        document.getElementById(which).style.display = 'block';
     }
 }
 

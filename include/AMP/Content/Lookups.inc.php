@@ -744,4 +744,17 @@ class AMPContentLookup_IntroTexts extends AMPContent_Lookup {
     }
 }
 
+class AMPContentLookup_ToolLinks extends AMPContent_Lookup {
+    var $datatable = "articles";
+    var $id_field  = "link";
+    var $result_field = "title";
+
+    function AMPContentLookup_ToolLinks() {
+        $modules = &AMPSystem_Lookup::instance( 'modules');
+        $allowed = array_keys( $modules );
+        $this->criteria = "( !isnull( link) and link !='') and type = ". AMP_CONTENT_SECTION_ID_TOOL_PAGES;
+        #$this->criteria = "( !isnull( searchtype) and searchtype !='') and modid in (".join( ",", $allowed ) . " )";
+        $this->init();
+    }
+}
 ?>

@@ -2,6 +2,10 @@
 	<id>
 		<type>hidden</type>
 	</id>
+    <layout_anchor_description>
+        <type>header</type>
+        <default>Create a new layout</default>
+    </layout_anchor_description>
 	<name>
 		<type>text</type>
         <label>Layout Name</label>

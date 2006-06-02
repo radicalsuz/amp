@@ -145,4 +145,10 @@ if (!defined('AMP_CONTENT_RSS_CUSTOMFORMAT')) define ('AMP_CONTENT_RSS_CUSTOMFOR
  */
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );
 if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS', 45 );
+
+/**
+ * Bizarre Legacy Settings  
+ */
+if ( !defined( 'AMP_CONTENT_SECTION_ID_TOOL_PAGES' ))
+    define( 'AMP_CONTENT_SECTION_ID_TOOL_PAGES', 2 );
 ?>

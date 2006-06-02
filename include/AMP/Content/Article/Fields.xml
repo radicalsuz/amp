@@ -48,35 +48,41 @@
 		<block>title_options</block>
      </linktext>
     <LocationHeader>
-        <label>Section, Class and Locations</label>
+        <label>Sections</label>
         <type>header</type>
     </LocationHeader>
-    <type>
-        <label>Main Section&amp;nbsp;&lt;a class=photocaption href="type_edit.php"&gt;add new&lt;/a&gt;</label>
+    <section>
+        <label>Main Section</label>
         <required>1</required>
         <type>select</type>
         <lookup>
             <module>content</module>
             <instance>sectionmap</instance>
         </lookup>
-    </type>
-    <new_section_link>
-        <type>static</type>
-		<default>add new</default>
+    </section>
+    <new_section_header>
+        <type>blocktrigger</type>
+		<label>Add New Section</label>
         <per>CONTENT_SECTION_EDIT</per>
-    </new_section_link>
-    <class>
-        <label>Class</label>
+		<block>new_section</block>
+    </new_section_header>
+	<new_section_name>
+		<label>&lt;span class=red&gt; * &lt;/span&gt;New Section Name</label>
+        <type>text</type>
+		<block>new_section</block>
+	</new_section_name>
+	<new_section_parent>
+		<label>&lt;span class=red&gt; * &lt;/span&gt;New Section Parent</label>
         <type>select</type>
         <lookup>
             <module>content</module>
-            <instance>class</instance>
+            <instance>sectionmap</instance>
         </lookup>
-        <default>1</default>
-    </class>
+		<block>new_section</block>
+	</new_section_parent>
 	<related_section_header>
 		<type>blocktrigger</type>
-        <label>Related Sections</label>
+        <label>Add Related Sections</label>
 		<block_trigger>reltype</block_trigger>
 		<block>related_sections</block>
 	</related_section_header>
@@ -90,9 +96,22 @@
             <instance>sectionmap</instance>
         </lookup>
     </reltype>
+	<tagsHeader>
+        <label>Class and Tags</label>
+        <type>header</type>
+	</tagsHeader>
+    <class>
+        <label>Class</label>
+        <type>select</type>
+        <default>1</default>
+        <lookup>
+            <module>content</module>
+            <instance>class</instance>
+        </lookup>
+    </class>
 	<location_trigger>
 		<type>blocktrigger</type>
-        <label>Location Options</label>
+        <label>Other Tags ( Region, Front Page, New )</label>
 		<block_trigger>reltype</block_trigger>
 		<block>location_trigger</block>
 	</location_trigger>
@@ -207,10 +226,25 @@
         <type>imagepicker</type>
         <label>Image Filename</label>
     </picture>
-    <image_actions>
-        <type>static</type>
-        <default>Upload Image</default>
-    </image_actions>
+	<image_actions_header>
+		<label>Upload Image</label>
+		<type>blocktrigger</type>
+		<block>image_actions</block>
+	</image_actions_header>
+    <image_upload>
+        <type>file</type>
+        <label>File</label>
+		<block>image_actions</block>
+    </image_upload>
+	<image_gallery>
+		<type>select</type>
+		<block>image_actions</block>
+		<label>Add to Gallery (optional)</label>
+		<lookup>
+			<module>content</module>
+			<instance>galleries</instance>
+		</lookup>
+	</image_gallery>
     <picuse>
         <type>hidden</type>
         <default>1</default>
@@ -265,10 +299,22 @@
 		<type>select</type>
 		<label>Document Name</label>
 	</doc>
-	<doc_actions>
+	<!--
+	<doc_actions_header>
 		<type>static</type>
 		<default>&lt;a href="docdir.php" target="_blank"&gt;View Documents&lt;/a&gt; | &lt;a href="doc_upload.php" target="_blank"&gt;Upload Document&lt;/a&gt;</default>
 	</doc_actions>
+	-->
+	<doc_actions_header>
+		<label>Upload Document</label>
+		<type>blocktrigger</type>
+		<block>doc_actions</block>
+	</doc_actions_header>
+    <doc_upload>
+        <type>file</type>
+        <label>File</label>
+		<block>doc_actions</block>
+    </doc_upload>
 <!-- new tab starts here -->
 	<tab_html_fancy>
 		<type>html</type>
@@ -287,15 +333,38 @@
         <label>Redirect Viewers&lt;br /&gt; to URL</label>
         <type>text</type>
      </link>
-     <module_link>
+     <tool_page_link>
         <type>select</type>
         <label>Link to Tool Page</label>
-        <lookup>toolLinks</lookup>
-     </module_link>
+        <lookup>
+			<module>content</module>
+			<instance>toolLinks</instance>
+		</lookup>
+     </tool_page_link>
      <linkover>
         <type>hidden</type>
         <default>1</default>
      </linkover>
+	<alias_header>
+		<type>blocktrigger</type>
+		<label>Add Permalink</label>
+		<block>alias</block>
+	</alias_header>
+	<new_alias_name_header>
+		<type>static</type>
+		<default>Users who go to this URL on your site will be sent to this article</default>
+		<block>alias</block>
+	</new_alias_name_header>
+	<new_alias_name>
+		<type>text</type>
+		<label>URL Alias</label>
+		<block>alias</block>
+	</new_alias_name>
+	<new_alias_name_footer>
+		<type>static</type>
+		<default>&lt;a href="redirect.php?action=list" target="blank" class="photocaption"&gt;View All Redirects&lt;/a&gt;</default>
+		<block>alias</block>
+	</new_alias_name_footer>
 	<adv_header>
         <type>header</type>
         <label>Navigation, Notes, Comments</label>
@@ -316,10 +385,16 @@
         <type>checkbox</type>
         <label>Allow User Comments</label>
      </comments>
-     <comments_actions>
-        <type>static</type>
-        <default>view/edit user comments</default>
-     </comments_actions>
+     <comment_list_header>
+        <type>blocktrigger</type>
+        <label>View User Comments</label>
+		<block>comments_action</block>
+     </comment_list_header>
+	<comment_list>
+		<type>static</type>
+		<default>no comments</default>
+		<block>comments_action</block>
+	</comment_list>
 	<admin_header>
 		<type>header</type>
 		<label>Administrator Options</label>
@@ -328,10 +403,10 @@
         <type>textarea</type>
         <label>Editor Notes</label>
      </notes>
-     <wysiwyg_actions>
-        <type>static</type>
-        <default>Wysiwyg on/off</default>
-     </wysiwyg_actions>
+     <wysiwyg_setting>
+        <type>checkbox</type>
+        <label>Use WYSIWYG ( visual HTML editor )</label>
+     </wysiwyg_setting>
 	<tab_html_end3>
 		<type>html</type>
 		<default>

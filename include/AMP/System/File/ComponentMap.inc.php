@@ -8,9 +8,12 @@ class ComponentMap_File extends AMPSystem_ComponentMap {
     var $heading = "Document";
     var $nav_name = "content";
     var $_allow_inline_update = true;
-    var $_path_controller = 'AMP/System/Component/Controller.php';
-    var $_component_controller = 'AMP_System_Component_Controller_Map';
-    var $_action_displays = array( 'list' => 'list');
+
+    var $_path_controller = 'AMP/System/File/Controller.php';
+    var $_component_controller = 'AMP_System_File_Controller';
+    
+    var $_action_displays = array( 'list' => 'list', 'upload' => 'form');
+    var $_action_default = 'list';
 
 
     var $paths = array(

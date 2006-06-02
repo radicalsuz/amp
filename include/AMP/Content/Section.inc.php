@@ -172,12 +172,13 @@ class Section extends AMPSystem_Data_Item {
 
         require_once( 'AMP/Content/Article.inc.php');
         $section_header = &new Article( $this->dbcon );
+        $section_header->setDefaults( );
         $article_data = array( 
             'title' =>  $this->getName( ),
             'body' => $this->getBlurb( ),
             'publish'   => true,
             'class'     => AMP_CONTENT_CLASS_SECTIONHEADER,
-            'type'      => $this->id );
+            'section'      => $this->id );
         $section_header->setData( $article_data );
         return $section_header->save( );
     }
@@ -202,6 +203,10 @@ class Section extends AMPSystem_Data_Item {
         return $this->mergeData( array( 'textorder' => $order ));
     }
 
+
+    function setDefaults( ){
+        $this->setListType( );
+    }
 
 }
 ?>

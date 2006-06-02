@@ -11,6 +11,7 @@ class AMP_Content_Nav_Layout extends AMPSystem_Data_Item {
     function AMP_Content_Nav_Layout ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
         $this->_addAllowedKey( 'locations' );
+        $this->_addAllowedKey( 'layout_anchor' );
     }
 
     function _afterSave( ) {
@@ -76,6 +77,69 @@ class AMP_Content_Nav_Layout extends AMPSystem_Data_Item {
         $location->setData( $location_data );
         $location->save( );
         return $location->id;
+    }
+
+    function getSectionId( ){
+        return $this->getData( 'section_id' );
+    }
+
+    function getSectionIdList( ){
+        return $this->getData( 'section_id_list' );
+    }
+
+    function getClassId( ){
+        return $this->getData( 'class_id' );
+    }
+
+    function getPublicPageId( ){
+        return $this->getData( 'introtext_id' );
+    }
+
+    function getLayoutAnchor( ){
+        $anchor = $this->getData( 'layout_anchor' );
+        if ( !$anchor ) $this->_readLayoutAnchor( );
+        return $this->getData( 'layout_anchor' );
+    }
+
+    function _readLayoutAnchor( ){
+        $result = false;
+        if ( $section_id = $this->getSectionId( )){
+            $names_lookup = AMPContent_Lookup::instance( 'sections' );
+            $result = array(    
+                'description' => AMP_TEXT_SECTION ,
+                'id'    => $section_id,
+                'name'  => $names_lookup[ $section_id ],
+                'class'  => 'Section'
+                );
+    }
+        if ( $section_id_list = $this->getSectionIdList( )){
+            $names_lookup = AMPContent_Lookup::instance( 'sections' );
+            $result = array(    
+                'description' => AMP_TEXT_SECTION_LIST ,
+                'id'    => $section_id_list,
+                'name'  => $names_lookup[ $section_id_list ],
+                'class'  => 'Section'
+                );
+        }
+        if ( $class_id = $this->getClassId( )){
+            $names_lookup = AMPContent_Lookup::instance( 'classes' );
+            $result = array(    
+                'description' => AMP_TEXT_CLASS ,
+                'id'    => $class_id,
+                'name'  => $names_lookup[ $class_id ],
+                'class'  => 'ContentClass'
+                );
+        }
+        if ( $publicpage_id = $this->getPublicPageId( ) ) {
+            $names_lookup = AMPContent_Lookup::instance( 'introtexts' );
+            $result = array(    
+                'description' => AMP_TEXT_PUBLIC_PAGE,
+                'id'    => $publicpage_id,
+                'name'  => $names_lookup[ $publicpage_id ],
+                'class'  => 'AMPSystem_IntroText'
+                );
+        }
+        $this->mergeData( array( 'layout_anchor' => $result ));
     }
 
 }

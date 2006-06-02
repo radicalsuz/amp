@@ -130,6 +130,7 @@ class AMP_System_List_Form extends AMPSystem_List {
     }
 
     function _outputToolbar( ){
+        if ( isset( $this->suppress['toolbar']) && $this->suppress['toolbar'] ) return false;
         if ( !isset( $this->_toolbar)) return false;
         return $this->_toolbar->execute( );
     }
@@ -191,11 +192,13 @@ class AMP_System_List_Form extends AMPSystem_List {
     }
 
     function _HTML_selectColumnHeader() {
+        if ( isset( $this->suppress['toolbar']) && $this->suppress['toolbar'] ) return false;
         if (isset($this->suppress['selectcolumn'])) return "";
         return '<td><center><a class="intitle" onclick=\'list_selectAll("'.$this->formname.'");\'>'.AMP_TEXT_ALL.'</a></center></td>';
     }
 
     function _HTML_selectColumn( $id ) {
+        if ( isset( $this->suppress['toolbar']) && $this->suppress['toolbar'] ) return false;
         if (isset($this->suppress['selectcolumn'])) return "";
         return '<td><center><input type="checkbox" name="id[]" value="'.$id.'" onclick="this.checked=!this.checked;"><center></td>'; ;
     }
