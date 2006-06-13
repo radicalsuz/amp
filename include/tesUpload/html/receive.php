@@ -1,12 +1,12 @@
 <?php
-require_once("read_settings.php");
+require_once("tesUpload/html/read_settings.php");
 $title = $_POST["title"];
 $body = $_POST["body"];
 $sid = $_POST["file_1"];
 
 if(!empty($sid)) {
 	require_once("receive_helper.php");
-	$file = receive($sid);
+	$file = tes_receive($sid);
 }
 ?>
 <html>

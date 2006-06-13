@@ -15,12 +15,12 @@
 # implied. See the License for the specific language governing
 # rights and limitations under the License.
 
-require_once("read_settings.php");
+require_once("tesUpload/html/read_settings.php");
 
 $sessionid = $_POST['sid'];
-$info_file = "$tmp_dir/$sessionid"."_flength";
-$data_file = "$tmp_dir/$sessionid"."_postdata";
-$error_file = "$tmp_dir/$sessionid"."_err";
+$info_file = "$tes_tmp_dir/$sessionid"."_flength";
+$data_file = "$tes_tmp_dir/$sessionid"."_postdata";
+$error_file = "$tes_tmp_dir/$sessionid"."_err";
 
 # Send error code if error file exists
 if(file_exists($error_file)) {

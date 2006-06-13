@@ -43,17 +43,17 @@ use Fcntl qw(:DEFAULT :flock);
 use File::Temp qw/ tempfile tempdir /;
 
 $docroot = $ENV{DOCUMENT_ROOT};
-$settingsfile = $docroot."/../upload_settings.inc";
+$settingsfile = $docroot."/include/tesUpload/upload_settings.inc";
 if (-e $settingsfile)
 {
     #Execute settingsfile (must be valid perl code)
     do $settingsfile;
 } 
-if(!(-e $settingsfile) or !$max_upload or !$tmp_dir)
+if(!(-e $settingsfile) or !$max_upload or !$tes_tmp_dir)
 {
     #Default setting values
     $max_upload = 5000000; 
-    $tmp_dir="/tmp";
+    $tes_tmp_dir="/tmp";
 }
 
 @qstring=split(/&/,$ENV{'QUERY_STRING'});
@@ -64,7 +64,7 @@ if("test" eq $p1[0]) {
     print "Perl seems to be installed and working!<br />";
     print "<b>Settings</b><br />";
     print "Max upload size: ".$max_upload."<br />";
-    print "Temp dir:        ".$tmp_dir."<br />";
+    print "Temp dir:        ".$tes_tmp_dir."<br />";
     exit;
 }
 
@@ -73,11 +73,11 @@ $sessionid =~ s/[^a-zA-Z0-9]//g;  # sanitized as suggested by Terrence Johnson.
 
 # don't change the next few lines unless you have a very good reason to.
 
-$post_data_file = "$tmp_dir/$sessionid"."_postdata";
-$monitor_file = "$tmp_dir/$sessionid"."_flength";
-$error_file = "$tmp_dir/$sessionid"."_err";
-$signal_file = "$tmp_dir/$sessionid"."_signal";
-$qstring_file = "$tmp_dir/$sessionid"."_qstring";
+$post_data_file = "$tes_tmp_dir/$sessionid"."_postdata";
+$monitor_file = "$tes_tmp_dir/$sessionid"."_flength";
+$error_file = "$tes_tmp_dir/$sessionid"."_err";
+$signal_file = "$tes_tmp_dir/$sessionid"."_signal";
+$qstring_file = "$tes_tmp_dir/$sessionid"."_qstring";
 
 
 $len = $ENV{'CONTENT_LENGTH'};
@@ -197,7 +197,7 @@ while(($key,$value) = each %vars)
 		if(defined $fh)
 		{
 			#carp $fh;
-			($tmp_fh, $tmp_filename) = tempfile(DIR => $tmp_dir);
+			($tmp_fh, $tmp_filename) = tempfile(DIR => $tes_tmp_dir);
 
 			while(<$fh>) {
 				print $tmp_fh $_;

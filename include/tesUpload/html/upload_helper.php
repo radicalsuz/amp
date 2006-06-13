@@ -1,18 +1,18 @@
 <?php
-require_once("read_settings.php");
+require_once("tesUpload/html/read_settings.php");
 
-if(!is_writable($tmp_dir)) {
-	echo "Warning: PHP can't write to temp dir ($tmp_dir).<br />";
+if(!is_writable($tes_tmp_dir)) {
+	echo "Warning: PHP can't write to temp dir ($tes_tmp_dir).<br />";
 }
-if(!is_writable($upload_dir)) {
-	echo "Warning: PHP can't write to upload dir ($upload_dir).<br />";
+if(!is_writable($tes_upload_dir)) {
+	echo "Warning: PHP can't write to upload dir ($tes_upload_dir).<br />";
 }
 
-function upload_form($name,$title) {
-	global $cgi_dir;
+function tes_upload_form($name,$title) {
+	global $tes_cgi_dir;
 	$sid = md5(uniqid(rand()));
 	?>
-	<form enctype="multipart/form-data" action="<?php echo $cgi_dir; ?>/upload.cgi?sid=<?php echo $sid; ?>" method="post" target="iframe_<?php echo $name; ?>" />
+	<form enctype="multipart/form-data" action="<?php echo $tes_cgi_dir; ?>/upload.cgi?sid=<?php echo $sid; ?>" method="post" target="iframe_<?php echo $name; ?>" />
 		<div class="inputhead"><?php echo $title; ?></div>
 		<input class="input" type="file" name="<?php echo $name; ?>" onchange="beginUpload(this,'<?php echo $sid; ?>');" />
 		<div class="progresscontainer" style="display: none;"><div class="progressbar" id="<?php echo $name ?>_progress"></div></div>
@@ -21,7 +21,7 @@ function upload_form($name,$title) {
 	<?php
 }
 
-function upload_value($name) {
+function tes_upload_value($name) {
 	?>
 	<input id="<?php echo $name; ?>" type="hidden" name="<?php echo $name; ?>" value="" />
 	<?php

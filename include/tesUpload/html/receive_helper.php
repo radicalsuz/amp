@@ -2,15 +2,15 @@
 /**
 * Receive uploaded file and clean up temp files
 */
-function receive($sid) {
-	global $tmp_dir,$upload_dir;
+function tes_receive($sid) {
+	global $tes_tmp_dir,$tes_upload_dir;
 	$sid = ereg_replace("[^a-zA-Z0-9]","",$sid);
-	$file = $tmp_dir.'/'.$sid.'_qstring';
+	$file = $tes_tmp_dir.'/'.$sid.'_qstring';
 	if(!file_exists($file)) {
 		return false;
 	}
 	$qstr = join("",file($file));
-	unlink("$tmp_dir/{$sid}_qstring");
+	unlink("$tes_tmp_dir/{$sid}_qstring");
 
 	$q = array();
 	parse_str($qstr,$q);
@@ -27,20 +27,20 @@ function receive($sid) {
 	is what you expect it to be, for example check that it really is an image file if your
 	building an image uploader.
 	******/
-	rename($q['file']['tmp_name'][0], "$upload_dir/$fn");
-	cleanup($sid);
+	rename($q['file']['tmp_name'][0], "$tes_upload_dir/$fn");
+	tes_cleanup($sid);
 	return $file_name;
 }
 
 /**
 * Clean up temporary files
 */
-function cleanup($sid) {
-	global $tmp_dir;
+function tes_cleanup($sid) {
+	global $tes_tmp_dir;
 	$files = array("_flength","_postdata","_err","_signal","_qstring");
 	foreach($files as $file) {
-		if(file_exists("$tmp_dir/$sid$file")) {
-			unlink("$tmp_dir/$sid$file");
+		if(file_exists("$tes_tmp_dir/$sid$file")) {
+			unlink("$tes_tmp_dir/$sid$file");
 		}
 	}
 }
