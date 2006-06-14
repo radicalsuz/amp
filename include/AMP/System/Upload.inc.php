@@ -20,9 +20,13 @@ class AMPSystem_Upload {
         if (isset($filename)) $this->setFile( $filename );
     }
 
-    function execute( $temp_name ) {
+    function execute( $temp_name, $allow_existing_file=false) {
         if ( $this->_autoRename ) $this->_path_target = $this->_findSafeFilename();
-        if (! move_uploaded_file( $temp_name, $this->_path_target )) return false;
+        if(is_uploaded_file($temp_name)) {
+            if (! move_uploaded_file( $temp_name, $this->_path_target )) return false;
+        } elseif ($allow_existing_file) {
+            if (! rename( $temp_name, $this->_path_target )) return false;
+        } else return false;
         chmod( $this->_path_target, 0755 );
         return true;
     }
@@ -78,6 +82,7 @@ class AMPSystem_Upload {
 
         return $this->_findSafeFilename( ++$num );
     }
+
     function addError( $text, $name = null ) {
         if (isset($name )) return $this->_errors[ $name ] = $text;
         return $this->_errors[] = $text;
