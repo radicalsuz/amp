@@ -11,6 +11,7 @@ class Article_Public_Form extends Article_Form {
 
     function setDynamicValues() {
         //override to nada
+        $this->addTranslation( 'date', '_makeDbDateTime', 'get');
     }
 
     function _initJavascriptActions( ){

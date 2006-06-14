@@ -17,7 +17,7 @@ define( 'AMP_SYSTEM_URL_IMAGE_VIEW',                'image.php');
 define( 'AMP_SYSTEM_URL_NAV_LAYOUT',            'nav_layouts.php');
 define( 'AMP_SYSTEM_URL_NAV_LAYOUT_ADD',            'nav_layouts.php?action=add');
 define( 'AMP_SYSTEM_URL_DOCUMENT_UPLOAD',       'doc_upload.php');
-define( 'AMP_SYSTEM_URL_ARTICLE_EDIT',          'article_edit.php');
+define( 'AMP_SYSTEM_URL_ARTICLE_EDIT',          'article.php');
 define( 'AMP_SYSTEM_URL_ARTICLE',               'article.php');
 define( 'AMP_SYSTEM_URL_ARTICLE_FRONTPAGE',     'article_frontpage.php');
 define( 'AMP_SYSTEM_URL_WEBACTION',             'action_center.php');

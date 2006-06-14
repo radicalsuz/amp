@@ -37,6 +37,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'wysiwyg_setting','_returnBlankCheckbox',  'get');
         $this->addTranslation( 'wysiwyg_setting','_checkWysiwyg',  'get');
         $this->addTranslation( 'wysiwyg_setting','_evalWysiwyg',  'set');
+        $this->addTranslation( 'date',         '_makeDbDateTime',   'get');
 
         $this->setFieldValueSet( 'doc', AMPfile_list( 'downloads'));
         //$this->_initJavascriptActions( );

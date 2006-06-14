@@ -11,6 +11,7 @@ class Article_Frontpage_Form extends Article_Form {
     function setDynamicValues( ){
         $this->addTranslation( 'image_upload', '_manageUpload',     'get');
         $this->addTranslation( 'picture',      '_checkUploadImage', 'get');
+        $this->addTranslation( 'date',         '_makeDbDateTime',   'get');
 
     }
 
