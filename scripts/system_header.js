@@ -214,8 +214,9 @@ function change_form_block(which) {
     }
 }
 
-function showUploadWindow (parentform, calledfield, dtype) {
+function showUploadWindow (parentform, calledfield, dtype, handler) {
     url  = 'http://'+location.host+'/upload_popup.php?pform='+parentform+'&pfield='+calledfield;
     if (dtype) url = url + '&doctype='+dtype;
+    if (handler) url = url + '&handler='+handler;
     hWnd = window.open( url, 'recordWindow', 'height=175,width=300,scrollbars=no,menubar=no,toolbar=no,resizeable=no,location=no,status=no' );
 }
