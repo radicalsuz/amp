@@ -9,7 +9,8 @@ setBrowser();
 require_once("AMP/System/Permission/Manager.inc.php");
 
 $AMP_Permission = & AMPSystem_PermissionManager::instance();
-$AMP_CurrentUser = &$AMP_Permission->readUser( $_SERVER['REMOTE_USER'] );
+$AMP_CurrentUser = false;
+if ( isset( $_SERVER['REMOTE_USER'])) $AMP_CurrentUser = &$AMP_Permission->readUser( $_SERVER['REMOTE_USER'] );
 if ( $AMP_CurrentUser ) define( 'AMP_SYSTEM_USER_ID', $AMP_CurrentUser->id);
 
 

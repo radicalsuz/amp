@@ -41,8 +41,12 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     }
 
     function setPageArray( ){
-        $this->source_total = count($this->source);
+        $this->setSourceTotal( count($this->source) );
         $this->source = array_slice( $this->source, $this->getOffset( ), $this->getLimit( ) );
+    }
+
+    function setSourceTotal( $total_count ){
+        $this->source_total = $total_count;
     }
 
     function setLimit( $limit ) {
@@ -158,7 +162,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     }
 
     function _nextPageLink() {
-        if ($this->page_total >= $this->source_total ) return false;
+        if ( $this->page_total >= $this->source_total ) return false;
         $href = $this->offsetURL( $this->page_total );
 
         return '<a class="' . $this->_css_class_standout . '" href="'. $href . '">' . $this->_text_next . '  >></a>&nbsp;';

@@ -19,6 +19,7 @@ class Article extends AMPSystem_Data_Item {
 
     var $datatable = "articles";
     var $name_field = "title";
+    var $_sort_auto = false;
 
     /**
      * Article 
@@ -81,7 +82,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function getRedirect() {
-        if (!$this->getData( 'linkover' )) return false;
+        #if (!$this->getData( 'linkover' )) return false;
         if (! ($target = $this->getData( 'link' ))) return false;
         return $target;
     }
@@ -89,6 +90,10 @@ class Article extends AMPSystem_Data_Item {
     function getURL() {
         if ($url = $this->getRedirect() ) return $url;
         if (!$this->id ) return false;
+        return $this->getURL_default( ) ;
+    }
+
+    function getURL_default( ){
         return AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, "id=".$this->id );
     }
     
@@ -122,12 +127,16 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function getImageFileName() {
-        if (!$this->getData( 'picuse' )) return false;
+        #if (!$this->getData( 'picuse' )) return false;
         return $this->getData( 'picture' );
     }
 
     function getArticleDate() {
         if (!$this->isPublicDate()) return false;
+        return $this->getAssignedDate( );
+    }
+
+    function getAssignedDate( ){
         $date_value =  $this->getData('date');
         if ($date_value == AMP_NULL_DATE_VALUE) return false;
         return $date_value;
@@ -139,16 +148,26 @@ class Article extends AMPSystem_Data_Item {
         //this is the dumbest hack ever, but until we
         //re-tool the backend forms, I have no choice
 
-        if ($this->getClass() != AMP_CONTENT_CLASS_FRONTPAGE ) return !($this->getData( 'usedate' ));
-        return $this->getData( 'usedate' );
+        //this hack is disabled as of build 3.5.9
+        //if ($this->getClass() != AMP_CONTENT_CLASS_FRONTPAGE ) return !($this->getData( 'usedate' ));
+        //return $this->getData( 'usedate' );
+        return !($this->getData( 'usedate' ));
     }
 
     function getItemDate() {
         return $this->getArticleDate();
     }
 
+    function getOrder( ){
+        return $this->getData( 'pageorder' );
+    }
+
     function getItemDateChanged() {
         return $this->getData( 'updated');
+    }
+
+    function getItemDateCreated() {
+        return $this->getData( 'datecreated');
     }
 
     function &getImageRef() {
@@ -184,6 +203,14 @@ class Article extends AMPSystem_Data_Item {
 
     function getRegion( ){
         return $this->getData( 'state');
+    }
+
+    function getLastEditorId( ){
+        return $this->getData( 'updatedby' );
+    }
+
+    function getCreatorId( ){
+        return $this->getData( 'enteredby');
     }
 
     function allowsComments() {
@@ -253,6 +280,22 @@ class Article extends AMPSystem_Data_Item {
         if ( isset( $data['link']) && $data['link'] && !isset( $data['linkover'])) {
             $this->mergeData( array( 'linkover' => 1));
         }
+        /*
+        if ( !( 
+              ( isset( $data['id']) && $data['id'] ) 
+              || $this->id )) {
+            if ( !( isset( $data['datecreated']) && $data['datecreated'] )){
+                $this->mergeData( array( 'datecreated' => date( 'Y-m-d')));
+            }
+            if ( !( isset( $data['enteredby']) && $data['enteredby'])){
+                $this->mergeData( array( 'enteredby' => AMP_SYSTEM_USER_ID ));
+            }
+
+        }
+        */
+        if ( !( isset( $data['updatedby']) && $data['updatedby'] )){
+            $this->mergeData( array( 'updatedby' => AMP_SYSTEM_USER_ID ));
+        }
     }
 
     function readVersion( $version_id ) {
@@ -267,7 +310,9 @@ class Article extends AMPSystem_Data_Item {
         $this->mergeData( array( 
             'type' => AMP_CONTENT_MAP_ROOT_SECTION,
             'linkover' => 1,
-            'class' => AMP_CONTENT_CLASS_DEFAULT
+            'class' => AMP_CONTENT_CLASS_DEFAULT,
+            'enteredby' => AMP_SYSTEM_USER_ID,
+            'datecreated' => date( 'Y-m-d' )
         ));
     }
 
@@ -277,6 +322,13 @@ class Article extends AMPSystem_Data_Item {
 
     function clearAliasName( ){
         return $this->mergeData( array( 'new_alias_name' => false ));
+    }
+
+    function getExistingAliases( ){
+        if ( !isset( $this->id )) return false;
+        require_once( 'AMP/Content/Redirect/Redirect.php' );
+        $redirect = &new AMP_Content_Redirect( $this->dbcon );
+        return $redirect->search( $redirect->makeCriteria( array( 'target' => $this->getURL_default( ))));
     }
 
     function _afterSave( ){
@@ -297,6 +349,89 @@ class Article extends AMPSystem_Data_Item {
         $redirect->setTarget( $this->getURL( ));
         $this->clearAliasName( );
         return $redirect->save( );
+    }
+
+    function _sort_default( &$item_set ) {
+        $this->sort( $item_set, 'defaultOrder');
+    }
+
+    function getDefaultOrder( ){
+        $item_date = $this->getAssignedDate( );
+        $item_timestamp = $item_date ? strtotime ( $item_date ) :  strtotime( AMP_NULL_DATETIME_VALUE_UNIX  );
+        $desc_date_value = strtotime( AMP_FUTURE_DATETIME_VALUE + 100 ) -  $item_timestamp;
+        
+        return
+                  ':' . intval( !$this->isLive( ))
+                . ':' . intval( $this->getParent( ))
+                . ':' . ( intval( $this->getOrder( )) ? intval(  $this->getOrder( )) : AMP_CONTENT_LISTORDER_MAX  )
+                . ':' . $desc_date_value;
+    }
+
+    function setOrder( $order ){
+        return $this->mergeData( array( 'pageorder' => $order ));
+    }
+
+    function setSection( $section_id ){
+        return $this->mergeData( array( 'type' => $section_id ));
+    }
+
+    function setClass( $class_id ){
+        return $this->mergeData( array( 'class' => $class_id ));
+    }
+
+    function setRegion ( $region_id ){
+        return $this->mergeData( array( 'state' => $region_id ));
+    }
+
+
+    function reorder( $new_order_value ){
+        if ( $new_order_value == $this->getOrder( )) return false;
+        if ( is_array( $new_order_value )) return false;
+        $this->setOrder( $new_order_value );
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update' );
+        $this->notify( 'reorder' );
+        return $result;
+
+    }
+
+    function move( $section_id = false, $class_id = false ) {
+        $move_action = false;
+        if ( $section_id && $section_id != $this->getSection( )) {
+            $this->setSection( $section_id );
+            $move_action = true;
+        }
+        if ( $class_id  && $class_id != $this->getClass( )){
+            $this->setClass( $class_id );
+            $move_action = true;
+        }
+        if ( !$move_action ) return false;
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update' );
+        $this->notify( 'move' );
+        return $result;
+    }
+
+    function regionize( $region_id ){
+        if ( $region_id == $this->getRegion( )) return false;
+        $this->setRegion( $region_id );
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update' );
+        $this->notify( 'regionize' );
+        return $result;
+
+    }
+
+    function makeCriteriaSection( $section_id ) {
+        return $this->_makeCriteriaEquals( 'type', $section_id );
+    }
+
+    function makeCriteriaClass( $class_id ){
+        return $this->_makeCriteriaEquals( 'class', $class_id );
+    }
+
+    function makeCriteriaType( $section_id ) {
+        return $this->makeCriteriaSection( $section_id );
     }
 }
 

@@ -45,7 +45,9 @@ class AMPFormElement_HTMLEditor {
         if (empty($this->editors)) return false;
         $this->_header->addJavascriptOnLoad( 'xinha_init();', 'editor_init' );
 
-        return $this->_script_header(). $this->_config_script();
+        $this->_script_header(); 
+        $this->_config_script();
+        return false;
     }
 
     function register_config_action( $action ) {
@@ -61,7 +63,7 @@ class AMPFormElement_HTMLEditor {
             '_editor_url  = "/scripts/xinha/";' . "\n"
             . '_editor_lang = "en";      // And the language we need to use in the editor.',
             'editor_options');
-        $this->_header->addJavascript( 'scripts/xinha/htmlarea.js');
+        $this->_header->addJavascript( 'scripts/xinha/htmlarea.js', 'htmlarea' );
         #return '<script type="text/javascript" src="/scripts/xinha/htmlarea.js"></script>'."\n";
         return false;
           

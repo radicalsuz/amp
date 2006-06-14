@@ -1,0 +1,217 @@
+<array>
+	<top_submit_buttons>
+		<type>html</type>
+		<default>
+			&lt;tr&gt;&lt;td colspan=2&gt;
+&lt;table class="name"&gt;
+&lt;tr&gt;&lt;td&gt;
+&lt;span class="name"&gt;&lt;/span&gt;&lt;br&gt;
+&lt;input name="submitAction[save]" value="Save Changes" type="submit" /&gt;&amp;nbsp;&amp;nbsp;
+&lt;input name="submitAction[cancel]" value="Cancel" type="submit" /&gt;&amp;nbsp;&amp;nbsp;
+<!--
+&lt;input name="submitAction[delete]" value="Delete Record" type="submit" onclick="return confirmSubmit('Are you sure you want to DELETE this record?');" /&gt;
+-->
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/td&gt;&lt;/tr&gt;
+		</default>
+	</top_submit_buttons>
+    <class>
+        <type>hidden</type>
+        <default>2</default>
+    </class>
+	<id>
+		<type>hidden</type>
+	</id>
+    <publish>
+        <type>checkbox</type>
+        <label>&lt;span class='publish_label'&gt;PUBLISH&lt;/span&gt;</label>
+        <per>CONTENT_PUBLISH</per>
+    </publish>
+    <title_header>
+        <label>Title</label>
+        <type>header</type>
+    </title_header>
+    <title>
+        <label>Title</label>
+        <required>1</required>
+        <type>textarea</type>
+    </title>
+    <subtitle>
+        <label>Subtitle</label>
+        <type>textarea</type>
+    </subtitle>
+    <morelink>
+        <label>"More" Link</label>
+        <type>text</type>
+    </morelink>
+    <pageorder>
+        <type>text</type>
+        <size>4</size>
+        <label>Front Page Order &lt;br /&gt;(sorts by date&lt;br /&gt; if blank)</label>
+    </pageorder>
+    <body_header>
+        <type>header</type>
+        <default>Content Body</default>
+    </body_header>
+    <body>
+        <type>wysiwyg</type>
+        <label>Full Text</label>
+        <size>60:80</size>
+    </body>
+    <html>
+        <type>checkbox</type>
+        <label>The text in this field is pre-formatted as HTML</label>
+    </html>
+    <byline_header>
+        <type>header</type>
+        <label>Byline Information</label>
+    </byline_header>
+    <author>
+        <type>text</type>
+        <label>Author</label>
+        <!-- this is a hack to put in an auto_complete div -->
+        <!-- someday we can do this in the template -->
+        <template>
+            &lt;tr&gt;&lt;td align="right" valign="top" class="name"&gt;
+                    &lt;!-- BEGIN required --&gt;
+                        &lt;span style="color: #ff0000"&gt;*&lt;/span&gt;
+                    &lt;!-- END required --&gt;
+                    {label}
+                &lt;/td&gt;
+                &lt;td valign="top" align="left" class="form_data_col"&gt;
+                    &lt;!-- BEGIN error --&gt;
+                        &lt;span style="color: #ff0000"&gt;{error}&lt;/span&gt;&lt;br /&gt;
+                    &lt;!-- END error --&gt;	
+                    {element}
+                    &lt;div class="auto_complete" id="author_list"&gt;&lt;/div&gt;
+            &lt;/td&gt;&lt;/tr&gt;
+        </template>
+        <attr>
+            <id>author</id>
+        </attr>
+    </author>
+    <source>
+        <type>text</type>
+        <label>Source</label>
+        <!-- this is a hack to put in an auto_complete div -->
+        <!-- someday we can do this in the template -->
+        <template>
+            &lt;tr&gt;&lt;td align="right" valign="top" class="name"&gt;
+                    &lt;!-- BEGIN required --&gt;
+                        &lt;span style="color: #ff0000"&gt;*&lt;/span&gt;
+                    &lt;!-- END required --&gt;
+                    {label}
+                &lt;/td&gt;
+                &lt;td valign="top" align="left" class="form_data_col"&gt;
+                    &lt;!-- BEGIN error --&gt;
+                        &lt;span style="color: #ff0000"&gt;{error}&lt;/span&gt;&lt;br /&gt;
+                    &lt;!-- END error --&gt;	
+                    {element}
+                    &lt;div class="auto_complete" id="source_list"&gt;&lt;/div&gt;
+            &lt;/td&gt;&lt;/tr&gt;
+        </template>
+        <attr>
+            <id>source</id>
+        </attr>
+    </source>
+    <date>
+        <type>date</type>
+        <label>Date</label>
+        <default>today</default>
+    </date>
+    <usedate>
+        <type>checkbox</type>
+        <label>DO NOT DISPLAY DATE</label>
+    </usedate>
+	<attach_header>
+		<type>header</type>
+		<label>Attach Image</label>
+	</attach_header>
+    <picture>
+        <type>imagepicker</type>
+        <label>Image Filename</label>
+    </picture>
+	<image_actions_header>
+		<label>Upload Image</label>
+		<type>blocktrigger</type>
+		<block>image_actions</block>
+	</image_actions_header>
+    <image_upload>
+        <type>file</type>
+        <label>File</label>
+		<block>image_actions</block>
+    </image_upload>
+    <picuse>
+        <type>hidden</type>
+        <default>1</default>
+    </picuse>
+	<image_gallery>
+		<type>select</type>
+		<block>image_actions</block>
+		<label>Add to Gallery (optional)</label>
+		<lookup>
+			<module>content</module>
+			<instance>galleries</instance>
+		</lookup>
+	</image_gallery>
+    <image_details>
+        <type>blocktrigger</type>
+        <label>Image Details</label>
+		<block_trigger>piccap</block_trigger>
+		<block>image_details</block>
+    </image_details>
+    <pselection>
+        <type>radiogroup</type>
+		<block>image_details</block>
+        <label>Image Size</label>
+        <values>
+            <original>Original Size</original>
+            <pic>Optimized for Web</pic>
+        </values>
+        <default>pic</default>
+    </pselection>
+    <alignment>
+		<block>image_details</block>
+        <type>radiogroup</type>
+        <label>Image Alignment</label>
+        <values>
+            <left>Left</left>
+            <right>Right</right>
+        </values>
+        <default>AMP_IMAGE_DEFAULT_ALIGNMENT</default>
+    </alignment>
+    <piccap>
+		<block>image_details</block>
+        <type>text</type>
+        <size>50</size>
+        <label>Image Caption</label>
+    </piccap>
+    <alttag_header>
+		<block>image_details</block>
+        <type>static</type>
+        <default>Brief description of image for sightless users:</default>
+    </alttag_header>
+    <alttag>
+		<block>image_details</block>
+        <type>text</type>
+        <label>( Alt tag )</label>
+    </alttag>
+    <tags_header>
+        <label>Locations</label>
+        <type>header</type>
+    </tags_header>
+    <state>
+        <type>select</type>
+        <label>Region</label>
+		<lookup>regions</lookup>
+    </state>
+    <section>
+        <label>Main Section</label>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>sectionmap</instance>
+        </lookup>
+    </section>
+
+</array>

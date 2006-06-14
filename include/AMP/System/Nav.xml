@@ -337,19 +337,19 @@
 		<per>CONTENT_EDIT</per>
 	</item>
 	<item>
-		<href>article_edit.php</href>
+		<href>article.php?action=add</href>
 		<label>Add Content</label>
 		<class>add</class>
 		<per>CONTENT_EDIT</per>
 	</item>
 	<item>
-		<href>article_list.php?&amp;class=2</href>
+		<href>article_frontpage.php</href>
 		<label>View/Edit Front Page Content</label>
 		<class>home</class>
 		<per>CONTENT_EDIT</per>
 	</item>
 	<item>
-		<href>article_fpedit.php</href>
+		<href>article_frontpage.php?action=add</href>
 		<label>Add Front Page Content</label>
 		<class>add</class>
 		<per>CONTENT_EDIT</per>

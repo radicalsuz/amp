@@ -170,6 +170,7 @@ class NavigationManager {
 
         $layout_set = &AMPContent_Lookup::instance( $lookup_name );
         $layout_id = false;
+        if ( !$layout_set ) return $this->findNavs_default( );
 
         foreach( $parent_set  as $section_id ){
             if ( $layout_id = array_search( $section_id, $layout_set )) break;

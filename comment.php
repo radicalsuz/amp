@@ -4,6 +4,7 @@ $modid=23;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
+/*
 
 if (isset($_POST["MM_insert"])){
 	$MM_editTable  = "comments";
@@ -14,8 +15,11 @@ if (isset($_POST["MM_insert"])){
 	require ("Connections/insetstuff.php");
     require ("Connections/dataactions.php");
 }
+*/
 ?>
-
+Sorry, comments are currently disabled due to abuse.<BR>
+We hope to have a solution in place soon.
+<!--
 <script language="Javascript" type="text/javascript">
 
 var fieldstocheck = new Array();
@@ -64,6 +68,8 @@ function addFieldToCheck(value,name) {
     </tr>
   </table>
         </form>
+        -->
 <?php 
+
 include("AMP/BaseFooter.php"); 
 ?>

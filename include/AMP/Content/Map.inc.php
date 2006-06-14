@@ -33,7 +33,11 @@ class AMPContent_Map {
     }
 
     function buildMap() {
-        $sql = "Select " . join(", ", $this->fields ) ." from articletype order by " . $this->getParentFieldSql( ) . ", textorder, type";
+        $sql = "Select " . join(", ", $this->fields ) 
+                ." from articletype "
+                ." where id != ".AMP_CONTENT_SECTION_ID_TOOL_PAGES
+                ." order by " . $this->getParentFieldSql( ) . ", textorder, type";
+        if ( AMP_DISPLAYMODE_DEBUG ) AMP_debugSQL( $sql, 'content_map');
         $this->dataset = &$this->dbcon->CacheGetAssoc( $sql );
         $this->childset = &AMPContent_Lookup::instance( 'sectionParents' );
         $this->buildLevel( $this->top );
@@ -143,7 +147,7 @@ class AMPContent_Map {
         return array(
             'id'    =>  $section_id,
             'label' =>  AMP_clearSpecialChars( $this->getName( $section_id ) ),
-            'href'  =>  'article_list.php?type=' . $section_id
+            'href'  =>  AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'section=' . $section_id ))
             );
     }
 

@@ -1194,6 +1194,25 @@ if ( !function_exists( 'AMP_flashMessage')){
         $flash->add_message( $message );
     }
 }
+
+if ( !function_exists( 'AMP_defineLegacyCustomField')){
+    function AMP_defineLegacyCustomField( $number ){
+        $legacy_field_name = 'AMP_customartfield'. $number;
+        $legacy_field_map = array( 
+            0   => 'NAME',
+            1   => 'LABEL',
+            2   => 'TYPE',
+            3   => 'DEFAULT'
+        );
+        if ( !( isset( $GLOBALS[$legacy_field_name]) && $GLOBALS[$legacy_field_name])) return false;
+        foreach( $GLOBALS[$legacy_field_name] as $key => $value ){
+            if ( !isset( $legacy_field_map[ $key ])) continue;
+            $constant_name = 'AMP_CONTENT_ARTICLE_CUSTOMFIELD_' . $legacy_field_map[ $key ] . '_' . $number;
+            if ( !defined( $constant_name )) define( $constant_name, $value );
+        }
+        return true;
+    }
+}
 			
 
 ?>

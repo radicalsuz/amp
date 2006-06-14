@@ -1,5 +1,9 @@
  <?php  // 
 
+ require_once( 'AMP/BaseDB.php');
+ require_once( 'AMP/Content/Page/Urls.inc.php');
+ ampredirect( AMP_CONTENT_URL_ARTICLE_INPUT );
+/*
 if  (isset($HTTP_GET_VARS["mod"])) {$mod_id = $mod ; }
 else {$mod_id = 41;}
  if ($HTTP_GET_VARS["thank"] == ("1")) { 
@@ -100,5 +104,6 @@ require ("DBConnections/dataactions.php");
  <?php } //end if not thank you ?>
  
 	 
-
-<?php include("AMP/BaseFooter.php"); ?>
+<?php include("AMP/BaseFooter.php"); 
+*/
+?>

@@ -42,7 +42,7 @@ class AMP_Authentication_Handler {
 
         if ( $this->_loginType->check_authen_credentials() ) {
 			$this->notice('authen creds check out, setting tokens');
-           return $this->set_authen_tokens();
+            return $this->set_authen_tokens();
         } else {
 			$this->error('authen creds did not check out, returning false');
            return false;

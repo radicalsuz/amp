@@ -11,10 +11,10 @@
  */
 
 
-require_once ('AMP/System/Form.inc.php');
+require_once ('AMP/System/Form/XML.inc.php');
 require_once ('AMP/Form/ElementSwapScript.inc.php');
 
-class AMPSystem_IntroText_Form extends AMPSystem_Form {
+class AMPSystem_IntroText_Form extends AMPSystem_Form_XML {
 
     var $fieldswap_object_id = 'HTML_Override_Hider';
     var $AMP_Object_Type = "IntroText";
@@ -22,12 +22,18 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form {
     function AMPSystem_IntroText_Form () {
         $name = "AMP_IntroText"; 
         $this->init( $name );
+        /*
         if ($this->addFields( $this->readFields())) {
             $this->setDynamicValues();
         }
+        */
+    }
+
+    function _initJavascriptActions( ){
         $this->HTMLEditorSetup();
     }
 
+    /*
     function HTMLEditorSetup() {
         $fieldswapper = &ElementSwapScript::instance();
         $fieldswapper->addSwapper( $this->fieldswap_object_id );
@@ -48,7 +54,6 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form {
         $this->setFieldValueSet( 'templateid', AMPSystem_Lookup::instance('Templates'));
         $this->setFieldValueSet( 'type',       $map->selectOptions());
     }
-
     function readFields() {
 
         $fieldsource = & new AMPSystem_Form_XMLFields( $this->AMP_Object_Type, 'Fields' );
@@ -58,6 +63,7 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form {
         return false;
 
     }
+    */
     function _formFooter( ){
         if ( !$this->getIdValue( ) ) return false;
         $renderer = &new AMPDisplay_HTML;

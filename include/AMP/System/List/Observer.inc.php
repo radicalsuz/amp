@@ -2,10 +2,10 @@
 require_once( 'AMP/System/Observer.php');
 
 class AMP_System_List_Observer extends AMP_System_Observer {
+
     var $_list;
 
     function AMP_System_List_Observer( &$list ){
-        //interface
         $this->_list = $list;
     }
 
@@ -15,6 +15,10 @@ class AMP_System_List_Observer extends AMP_System_Observer {
 
     function onUpdate( &$source ){
         $this->_list->updateSourceItemId( $source->id );
+    }
+
+    function onReorder( &$source ){
+        $this->_list->redoSort( );
     }
 }
 

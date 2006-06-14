@@ -101,31 +101,31 @@ Class Petition extends AMPSystem_Data_Item {
 			$P->MoveNext();
 		}
 		if ($count > $this->limit) {
-			$html .= '<tr><div align=right><td colspan=4 class="text"><a href="petition.php?pid='. $this->pid .'&signers=1&offset='.($offset + $this->limit).'#namelist">Next Page</a></div></td></tr>';
+			$html .= '<tr><div align=right><td colspan=4 class="text"><a href="petition.php?pid='. $this->id .'&signers=1&offset='.($offset + $this->limit).'#namelist">Next Page</a></div></td></tr>';
 		} 
-		$html .= '</table><P><a href="petition.php?pid='. $this->pid.'">Sign the Petition</a></P><br><br>';
+		$html .= '</table><P><a href="petition.php?pid='. $this->id.'">Sign the Petition</a></P><br><br>';
 		return $html;
 	}
 
 	function intro_text() {
 	
-		$out .='<p class="title">'.$this->pq->Fields("title").'</p>';
-		if ($this->pq->Fields("addressedto") != NULL) {
-			$out .='<p><B><span class="bodystrong">To:</span> <span class="text">'.$this->pq->Fields("addressedto").'</span></B></p>';
+		$out .='<p class="title">'.$this->getData("title").'</p>';
+		if ($this->getData("addressedto") != NULL) {
+			$out .='<p><B><span class="bodystrong">To:</span> <span class="text">'.$this->getData("addressedto").'</span></B></p>';
 		}
 	
-		$out .='<p class="text">'.converttext( $this->pq->Fields("text")).'</p>';
+		$out .='<p class="text">'.converttext( $this->getData("text")).'</p>';
 	
-		if ($this->pq->Fields("intsigner") != NULL) {
-			$out .='<p><B><span class="bodystrong">Initiated By:</span>'.$this->pq->Fields("intsigner").', '.$this->pq->Fields("org").'<a href="http://'.$this->pq->Fields("url").'">'.$this->pq->Fields("url").'</a><br>';
-			$out .='<a href="mailto:'.$this->pq->Fields("intsignerem").'">'. $this->pq->Fields("intsignerem").'</a></span></B></p>';
+		if ($this->getData("intsigner") != NULL) {
+			$out .='<p><B><span class="bodystrong">Initiated By:</span>'.$this->getData("intsigner").', '.$this->getData("org").'<a href="http://'.$this->getData("url").'">'.$this->getData("url").'</a><br>';
+			$out .='<a href="mailto:'.$this->getData("intsignerem").'">'. $this->getData("intsignerem").'</a></span></B></p>';
 		}
 		//$out .='<br>' ;
 		return $out;	 
 	}
 	
 	function signature_link() {
-		$out =  "<P align=center><a href=\"petition.php?pid=".$this->pid."&signers=1\">View Signatures</a></p>";
+		$out =  "<P align=center><a href=\"petition.php?pid=".$this->id."&signers=1\">View Signatures</a></p>";
 		return $out;
 	}
 

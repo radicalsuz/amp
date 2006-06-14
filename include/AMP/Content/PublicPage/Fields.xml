@@ -34,5 +34,6 @@
 	<link>
 		<type>text</type>
 		<label>Link</label>
+		<required>1</required>
 	</link>
 </array>

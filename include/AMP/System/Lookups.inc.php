@@ -560,6 +560,10 @@ class AMPConstant_Lookup {
         if (isset($this->_prefix_labels)) {
             $this->_swapLabels( filterConstants( $this->_prefix_labels ) );
         }
+        $this->_sort_default( );
+    }
+
+    function _sort_default( ){
         ksort( $this->dataset );
     }
 
@@ -576,7 +580,7 @@ class AMPConstant_Lookup {
         static $lookup_set = false;
         if (!$lookup_set) $lookup_set = array();
         $req_class = $lookup_baseclass . '_' . ucfirst($type);
-        if ( !class_exists( $req_class ) ){
+        if ( !class_exists( $req_class ) ) {
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
             return false;
         }

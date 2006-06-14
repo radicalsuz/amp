@@ -190,17 +190,17 @@ class AMP_System_Component_Controller {
         return ( $this->_request_vars[ $varname ] == $value );
     }
 
-    function message( $message ) {
+    function message( $message, $key = null ) {
         $flash = &AMP_System_Flash::instance( );
-        $flash->add_message( $message ) ;
+        $flash->add_message( $message, $key ) ;
         $this->_display->add( $flash, 'flash' );
     }
 
-    function error( $error_item ){
+    function error( $error_item, $key = null ){
         $error_set = ( is_array( $error_item )) ? $error_item : array(  $error_item );
         $flash = &AMP_System_Flash::instance( );
         foreach( $error_set as $error_message ){
-            $flash->add_error( $error_message ) ;
+            $flash->add_error( $error_message, $key ) ;
         }
         $this->_display->add( $flash, 'flash' );
     }
@@ -208,13 +208,17 @@ class AMP_System_Component_Controller {
     function set_banner( $action = null, $heading ) {
         $text = ucfirst( isset( $action ) ? $action :  join( "", $this->get_actions( )));
 
-        $plural_headings = array( AMP_TEXT_LIST, AMP_TEXT_SEARCH );
+        $plural_headings = array( AMP_TEXT_LIST, AMP_TEXT_SEARCH, AMP_TEXT_VIEW );
         if ( array_search( $text , $plural_headings ) !== FALSE ) $heading = AMP_Pluralize( $heading );
+        $this->add_component_header( $text, $heading, 'banner', AMP_CONTENT_DISPLAY_KEY_INTRO );
+    }
+
+    function add_component_header( $action_text, $heading, $css_class = 'system_heading', $display_key = null ){
         $renderer = &new AMPDisplay_HTML( );
 
         $buffer = &new AMP_Content_Buffer( );
-        $buffer->add( $renderer->inDiv( $text." ".$heading, array( 'class' => 'banner')));
-        $this->_display->add( $buffer , AMP_CONTENT_DISPLAY_KEY_INTRO );
+        $buffer->add( $renderer->inDiv( $action_text." ".$heading, array( 'class' => $css_class )));
+        $this->_display->add( $buffer , $display_key );
     }
 
     function redirect( $url ){
@@ -246,8 +250,9 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
         if ( !$this->allow( $this->get_action( ))) $this->clear_actions( );
         $this->set_banner( $this->get_action( ));
-        $this->_display->add_nav( $this->_map->getNavName( ));
-        
+        if ( method_exists( $this->_display, 'add_nav')){
+            $this->_display->add_nav( $this->_map->getNavName( ));
+        }
     }
 
     function _init_form( &$form, $read_request = true ){
@@ -436,5 +441,6 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
     }
 
 }
+
 
 ?>

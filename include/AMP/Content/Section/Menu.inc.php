@@ -20,16 +20,20 @@ class SectionMenu extends AMP_Menu {
     function output() {
         return $this->menuset->output( false );
     }
+
+    function execute( ){
+        return $this->output( );
+    }
 }
 
 class MenuComponent_scriptBase extends AMP_MenuComponent {
     var $template = 
-    "<script language='JavaScript' src='/scripts/folder_tree/tree.js'></script>
-    <script language='JavaScript' src='/scripts/folder_tree/tree_tpl.js'></script>
-    <script language='JavaScript'>
-            var TREE_ITEMS_%1\$s =  [\n%2\$s\n];
-            new tree (TREE_ITEMS_%1\$s, tree_tpl); 
-    </script>";
+        "<script language='JavaScript' src='/scripts/folder_tree/tree.js'></script>
+        <script language='JavaScript' src='/scripts/folder_tree/tree_tpl.js'></script>
+        <script language='JavaScript'>
+                var TREE_ITEMS_%1\$s =  [\n%2\$s\n];
+                new tree (TREE_ITEMS_%1\$s, tree_tpl); 
+        </script>";
     var $_child_component = "MenuComponent_treeScriptItem";
     var $spacer10 = '<img src="/system/images/spacer.gif" width="10" height="10" border="0">';
 
@@ -64,7 +68,7 @@ class MenuComponent_treeScriptItem extends AMP_MenuComponent  {
         "%2\$s</a> ', '%1\$s'";
 
         $this->template = 
-        "['</a><a href=\"type_edit.php?id=%1\$s\">%2\$s";
+        "['</a><a href=\"section.php?id=%1\$s\">%2\$s";
 
     }
 

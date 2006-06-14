@@ -199,6 +199,7 @@ class AMPContentLookup_SectionParents extends AMPContent_Lookup {
     var $sortby = 'textorder,type';
 
     function AMPContentLookup_SectionParents() {
+        $this->criteria = 'id != ' . AMP_CONTENT_SECTION_ID_TOOL_PAGES;
         $this->result_field = "if ( id=". AMP_CONTENT_MAP_ROOT_SECTION .", 0, parent) as parent";
         $this->init();
     }
@@ -398,6 +399,50 @@ class AMPContentLookup_Articles extends AMPContent_Lookup{
             $this->dataset[$id] = strip_tags( $title );
         }
     }
+}
+
+class AMPContentLookup_Title extends AMPContent_Lookup {
+    var $datatable = 'articles';
+    var $result_field = 'left( title, 50) as short_title';
+    var $id_field = "id";
+    var $sortby = 'title';
+    var $criteria = 'trim( title ) != "" and !isnull( title ) and type != 2';
+    
+    function AMPContentLookup_Title( $partial_title ){
+        $this->criteria = isset( $partial_title ) ?
+                            $this->_getCriteriaPartialTitle( $partial_title ) :
+                            $this->_getBaseCriteria( );
+        $this->init( );
+        foreach( $this->dataset as $id => $title ){
+            $this->dataset[$id] = strip_tags( $title );
+        }
+    }
+
+    function _getCriteriaPartialTitle( $partial_title ) {
+        return join( ' AND ', array( "title LIKE '" . $partial_title . "%'" , $this->_getBaseCriteria( ) ));
+    }
+
+    function setCriteriaPartialTitle( $partial_title ) {
+        $this->criteria = $this->_getCriteriaPartialName( $partial_title );
+    }
+
+    function _getBaseCriteria( ) {
+        return 'trim( title ) != "" and !isnull( title ) and type != 2';
+    }
+
+    function &instance( $partial_title=null) {
+        if ( !isset( $partial_title )) return PARENT::instance( 'title');
+
+        static $lookup = false;
+        if ( !$lookup ) {
+            $lookup = new AMPContentLookup_Title( $partial_title );
+        } else {
+            $lookup->setCriteriaPartialName( $partial_title );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+
 }
 
 class AMPContentLookup_ProtectedSections extends AMPContent_Lookup {
@@ -744,17 +789,27 @@ class AMPContentLookup_IntroTexts extends AMPContent_Lookup {
     }
 }
 
-class AMPContentLookup_ToolLinks extends AMPContent_Lookup {
-    var $datatable = "articles";
-    var $id_field  = "link";
-    var $result_field = "title";
+class AMPConstantLookup_ToolLinks extends AMPConstant_Lookup {
+    var $_prefix_values = 'AMP_CONTENT_URL';
+    var $_prefix_labels = 'AMP_TEXT_CONTENT_PAGE';
 
-    function AMPContentLookup_ToolLinks() {
-        $modules = &AMPSystem_Lookup::instance( 'modules');
-        $allowed = array_keys( $modules );
-        $this->criteria = "( !isnull( link) and link !='') and type = ". AMP_CONTENT_SECTION_ID_TOOL_PAGES;
-        #$this->criteria = "( !isnull( searchtype) and searchtype !='') and modid in (".join( ",", $allowed ) . " )";
+    function AMPConstantLookup_ToolLinks() {
         $this->init();
+    }
+
+    function _sort_default( ){
+        asort( $this->dataset );
+    }
+
+    function _swapLabels ( $new_labels ) {
+        if (!$new_labels || empty( $new_labels )) return false;
+        $new_dataset = array( );
+        foreach ($new_labels as $label_key => $label_value ) {
+            $applied_key = array_search( $label_key, $this->dataset );
+            if ($applied_key === FALSE ) continue;
+            $new_dataset[ $applied_key ] = $label_value;
+        }
+        $this->dataset = $new_dataset;
     }
 }
 ?>

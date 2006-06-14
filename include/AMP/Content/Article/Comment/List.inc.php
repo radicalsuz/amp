@@ -9,10 +9,11 @@ class ArticleComment_List extends AMP_System_List_Form {
     var $name = "Article Comment";
     var $col_headers = array( 
         'Comment' => 'name',
-        'ID'    => 'id',
         'Date'    => 'date',
         'Author'    => 'author',
-        'Status' => 'publish');
+        'Status' => 'publish',
+        'ID'    => 'id'
+        );
     var $editlink = 'comments.php';
     var $_source_object = 'ArticleComment';
     var $_sort = 'timestamp';

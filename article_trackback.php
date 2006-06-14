@@ -3,6 +3,9 @@
 require_once( 'AMP/BaseDB.php');
 require_once( 'AMP/Content/Article/Trackback.php');
 
+print 'Sorry, trackbacks are currently disabled due to abuse.';
+
+/*
 $article_id = 0;
 if ( isset( $_GET['id']) && is_numeric( $_GET['id']) && $_GET['id']) {
     $article_id = $_GET['id'];
@@ -26,5 +29,6 @@ if ( $trackback->setPingData( $trackback_data )) {
 $display = &$trackback->getResponse( );
 
 print $display->execute( );
+*/
 
 ?>

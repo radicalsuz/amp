@@ -90,6 +90,24 @@ define('AMP_DISPLAYMODE_DEBUG_DIA', (isset($_GET['debug_dia']) && $_GET['debug_d
 
 if (!defined( 'AMP_DBTABLE_BLAST_LISTS')) define ( 'AMP_DBTABLE_BLAST_LISTS', false );
 
+// confirm whether WYSIWYG editor should be allowed for this machine
+// this should probably eventually become a user setting instead of a cookie
+if ( !defined( 'AMP_USER_CONFIG_USE_WYSIWYG') ){
+    if ( isset( $_COOKIE['AMPWYSIWYG'] )) {
+        $wysiwyg_setting =  !( $_COOKIE['AMPWYSIWYG'] == 'none' || $_COOKIE['AMPWYSIWYG'] == false );
+        define( 'AMP_USER_CONFIG_USE_WYSIWYG', $wysiwyg_setting);
+    } else {
+        define( 'AMP_USER_CONFIG_USE_WYSIWYG', true );
+    }
+}
+
 require_once( 'AMP/System/Permission/Config.inc.php' );
+
+//Article Custom Fields
+
+AMP_defineLegacyCustomField( 1 );
+AMP_defineLegacyCustomField( 2 );
+AMP_defineLegacyCustomField( 3 );
+AMP_defineLegacyCustomField( 4 );
 
 ?>

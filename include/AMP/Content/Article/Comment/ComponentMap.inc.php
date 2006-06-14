@@ -28,6 +28,13 @@ class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
             'url_var'   => array( 'article_id', 'cid')
             );
     */
+
+    function onInitForm( &$controller ){
+
+        if (!( $article_id = $controller->assert_var( 'article_id' ))) return false;
+        $form = &$controller->get_form( );
+        $form->setDefaultValue( 'articleid', $article_id );
+    }
 }
 
 ?>

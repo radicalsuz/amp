@@ -11,6 +11,7 @@ define( 'AMP_TEXT_ERROR_DATA_COPY_FAILURE_MULTIPLE_IDS', 'Multiple ID fields, ca
 define ('AMP_TEXT_ERROR_LOOKUP_SQL_FAILED', 'Failed to retrieve %s: %s' );
 define( 'AMP_TEXT_ERROR_LOOKUP_NOT_FOUND', 'Lookup %s : not found');
 define( 'AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED', '%s does not support method %s attempted by %s');
+define( 'AMP_TEXT_ERROR_NOT_DEFINED', '%s does not define %s');
 
 define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED_MULTIPLE_INSTANCES', 
             'Cannot update multiple instances of plugin %s : %s using interface');
@@ -65,4 +66,6 @@ if ( !defined( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD'))
         define( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD', '%s was initialized with an invalid dbcon');
 if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED'))
         define( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED', "%s failed to %s data : %s \n statement: %s");
+if ( !defined( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED'))
+        define( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED', '_class_name var not defined for %s: search failed' );
 ?>

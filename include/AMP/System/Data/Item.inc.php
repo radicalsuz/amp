@@ -29,6 +29,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     var $_sort_property;
     var $_sort_direction = AMP_SORT_ASC;
     var $_sort_method = "";
+    var $_sort_auto = true;
 
     var $_observers = array( );
     var $_search_source;
@@ -281,27 +282,32 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function search( $criteria = null, $class_name = null ){
         $data_set = &$this->_getSearchSource( $criteria );
         if ( !$data_set->readData( )) return false;
+        if ( !( isset( $class_name) || isset( $this->_class_name ))) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED, get_class( $this )) );
+        }
         if ( !isset( $class_name )) $class_name = $this->_class_name;
         $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );
         if ( empty( $result_set )) return $result_set;
-        $this->sort( $result_set );
+        if ( $this->_sort_auto ) $this->sort( $result_set );
         return $result_set;
         
     }
 
     function &_getSearchSource( $criteria = null ){
-        if ( isset( $this->_search_source )) return $this->_search_source;
-        require_once( 'AMP/System/Data/Set.inc.php' );
-        $data_set = &new AMPSystem_Data_Set( $this->dbcon );
-        $data_set->setSource( $this->datatable );
+        if ( isset( $this->_search_source )) {
+            if ( !isset( $criteria )) return $this->_search_source;
+            $data_set = &$this->_search_source;
+        } else {
+            require_once( 'AMP/System/Data/Set.inc.php' );
+            $data_set = &new AMPSystem_Data_Set( $this->dbcon );
+            $data_set->setSource( $this->datatable );
+        }
         if ( isset( $criteria )) {
             foreach( $criteria as $crit_phrase ){
                 $data_set->addCriteria( $crit_phrase );
             }
         }
-        if ( isset( $sort )){
-            $data_set->setSort( $sort );
-        }
+        
         $this->_search_source = &$data_set;
         return $this->_search_source;
 
@@ -324,7 +330,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
         if ( isset( $sort_direction ))  $this->_sort_direction = $sort_direction;
 
-        usort( $item_set, array( $this ,'_sort_compare'));
+        uasort( $item_set, array( $this, '_sort_compare' ));
         return true;
 
     }

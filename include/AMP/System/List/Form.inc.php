@@ -39,8 +39,8 @@ class AMP_System_List_Form extends AMPSystem_List {
         $this->_initRequest( );
         $this->_initToolbar( );
 
-        $this->_setSort();
-        $this->_activatePager( );
+        $this->_setSort( $this->source );
+        $this->_activatePager( $this->source );
         $this->_prepareData();
         if (array_search( 'publish', $this->col_headers ) !== FALSE ) {
             $this->addTranslation( 'publish', '_showPublishStatus' );
@@ -104,17 +104,6 @@ class AMP_System_List_Form extends AMPSystem_List {
         $renderer = &$this->_getRenderer( );
         return AMP_buildSelect( $select_name, $values, $value, $renderer->makeAttributes( $attr ));
     }
-    /*
-    function submitted() {
-        $this->readRequest
-        if ( !(isset( $_REQUEST['submitListAction'] ) && is_array($_REQUEST['submitListAction']))) return false;
-
-        $action = key( $_REQUEST['submitListAction'] );
-        if ($this->actions->isAction( $action )) return $action;
-
-        return false;
-    }
-    */
 
     function _HTML_header() {
         //Starter HTML

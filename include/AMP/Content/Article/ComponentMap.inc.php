@@ -7,6 +7,10 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
     var $heading = "Site Content";
 
     var $nav_name = "content";
+    var $_action_default = 'list';
+    var $_path_controller = 'AMP/Content/Article/Controller.php';
+    var $_component_controller = 'Article_Component_Controller';
+    var $_allow_search = true;
 
     var $paths = array(
         'search_user' => 'AMP/Content/Article/Search/User/Form.inc.php',
@@ -28,5 +32,20 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'list' => 'Article_ListForm',
         'form' => 'Article_Form',
         'source' => 'Article' );
+
+    function onInitForm( &$controller ){
+
+        $class_id = $controller->assert_var( 'class' );
+        $section_id = $controller->assert_var( 'section' );
+        if ( !( $class_id || $section_id )) return false;
+
+        $form = &$controller->get_form( );
+        if ( $section_id ){
+            $form->setDefaultValue( 'section', $section_id );
+        }
+        if ( $class_id ){
+            $form->setDefaultValue( 'class', $class_id );
+        }
+    }
 }
 ?>

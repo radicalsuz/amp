@@ -1,4 +1,20 @@
 <array>
+	<top_submit_buttons>
+		<type>html</type>
+		<default>
+			&lt;tr&gt;&lt;td colspan=2&gt;
+&lt;table class="name"&gt;
+&lt;tr&gt;&lt;td&gt;
+&lt;span class="name"&gt;&lt;/span&gt;&lt;br&gt;
+&lt;input name="submitAction[save]" value="Save Changes" type="submit" /&gt;&amp;nbsp;&amp;nbsp;
+&lt;input name="submitAction[cancel]" value="Cancel" type="submit" /&gt;&amp;nbsp;&amp;nbsp;
+<!--
+&lt;input name="submitAction[delete]" value="Delete Record" type="submit" onclick="return confirmSubmit('Are you sure you want to DELETE this record?');" /&gt;
+-->
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/td&gt;&lt;/tr&gt;
+		</default>
+	</top_submit_buttons>
 	<tab_html_main>
 		<type>html</type>
 		<default>
@@ -163,17 +179,60 @@
         <type>blocktrigger</type>
         <label>Byline Information</label>
 		<block_trigger>source</block_trigger>
+		<block_trigger>author</block_trigger>
+		<block_trigger>sourceurl</block_trigger>
+		<block_trigger>contact</block_trigger>
 		<block>byline_header</block>
     </byline_header>
     <author>
         <type>text</type>
         <label>Author</label>
 		<block>byline_header</block>
+        <!-- this is a hack to put in an auto_complete div -->
+        <!-- someday we can do this in the template -->
+        <template>
+            &lt;tr&gt;&lt;td align="right" valign="top" class="name"&gt;
+                    &lt;!-- BEGIN required --&gt;
+                        &lt;span style="color: #ff0000"&gt;*&lt;/span&gt;
+                    &lt;!-- END required --&gt;
+                    {label}
+                &lt;/td&gt;
+                &lt;td valign="top" align="left" class="form_data_col"&gt;
+                    &lt;!-- BEGIN error --&gt;
+                        &lt;span style="color: #ff0000"&gt;{error}&lt;/span&gt;&lt;br /&gt;
+                    &lt;!-- END error --&gt;	
+                    {element}
+                    &lt;div class="auto_complete" id="author_list"&gt;&lt;/div&gt;
+            &lt;/td&gt;&lt;/tr&gt;
+        </template>
+        <attr>
+            <id>author</id>
+        </attr>
     </author>
     <source>
         <type>text</type>
         <label>Source</label>
 		<block>byline_header</block>
+        <!-- this is a hack to put in an auto_complete div -->
+        <!-- someday we can do this in the template -->
+        <template>
+            &lt;tr&gt;&lt;td align="right" valign="top" class="name"&gt;
+                    &lt;!-- BEGIN required --&gt;
+                        &lt;span style="color: #ff0000"&gt;*&lt;/span&gt;
+                    &lt;!-- END required --&gt;
+                    {label}
+                &lt;/td&gt;
+                &lt;td valign="top" align="left" class="form_data_col"&gt;
+                    &lt;!-- BEGIN error --&gt;
+                        &lt;span style="color: #ff0000"&gt;{error}&lt;/span&gt;&lt;br /&gt;
+                    &lt;!-- END error --&gt;	
+                    {element}
+                    &lt;div class="auto_complete" id="source_list"&gt;&lt;/div&gt;
+            &lt;/td&gt;&lt;/tr&gt;
+        </template>
+        <attr>
+            <id>source</id>
+        </attr>
     </source>
     <sourceurl>
         <type>text</type>
@@ -277,8 +336,8 @@
     </alignment>
     <piccap>
 		<block>image_details</block>
-        <type>text</type>
-        <size>50</size>
+        <type>textarea</type>
+        <size>4:50</size>
         <label>Image Caption</label>
     </piccap>
     <alttag_header>
@@ -329,6 +388,10 @@
 		<type>header</type>
         <label>Redirection and Tools</label>
 	</redirects_trigger>
+     <linkover>
+        <type>hidden</type>
+        <default>1</default>
+     </linkover>
      <link>
         <label>Redirect Viewers&lt;br /&gt; to URL</label>
         <type>text</type>
@@ -337,14 +400,10 @@
         <type>select</type>
         <label>Link to Tool Page</label>
         <lookup>
-			<module>content</module>
+			<module>constant</module>
 			<instance>toolLinks</instance>
 		</lookup>
      </tool_page_link>
-     <linkover>
-        <type>hidden</type>
-        <default>1</default>
-     </linkover>
 	<alias_header>
 		<type>blocktrigger</type>
 		<label>Add Permalink</label>
@@ -365,22 +424,25 @@
 		<default>&lt;a href="redirect.php?action=list" target="blank" class="photocaption"&gt;View All Redirects&lt;/a&gt;</default>
 		<block>alias</block>
 	</new_alias_name_footer>
-	<adv_header>
+    <custom_field_header>
+        <type>hidden</type>
+    </custom_field_header>
+    <custom1>
+        <type>hidden</type>
+    </custom1>
+    <custom2>
+        <type>hidden</type>
+    </custom2>
+    <custom3>
+        <type>hidden</type>
+    </custom3>
+    <custom4>
+        <type>hidden</type>
+    </custom4>
+	<comments_header>
         <type>header</type>
-        <label>Navigation, Notes, Comments</label>
-     </adv_header>
-     <navtext>
-        <type>textarea</type>
-        <label>Sidebar</label>
-     </navtext>
-	 <sidebar_class>
-        <type>select</type>
-        <label>Sidebar Class</label>
-		<lookup>
-            <module>content</module>
-            <instance>sidebarclass</instance>
-        </lookup>
-     </sidebar_class>
+        <label>User Comments</label>
+     </comments_header>
      <comments>
         <type>checkbox</type>
         <label>Allow User Comments</label>
@@ -395,6 +457,22 @@
 		<default>no comments</default>
 		<block>comments_action</block>
 	</comment_list>
+	<sidebar_header>
+        <type>header</type>
+        <label>Sidebar</label>
+     </sidebar_header>
+     <navtext>
+        <type>textarea</type>
+        <label>Sidebar</label>
+     </navtext>
+	 <sidebar_class>
+        <type>select</type>
+        <label>Sidebar Class</label>
+		<lookup>
+            <module>content</module>
+            <instance>sidebarclass</instance>
+        </lookup>
+     </sidebar_class>
 	<admin_header>
 		<type>header</type>
 		<label>Administrator Options</label>

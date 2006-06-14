@@ -34,16 +34,16 @@ define ('AMP_CONTENT_STATUS_DRAFT', 0);
 /**
  *  Article Class Configurations
  */
-define ('AMP_CONTENT_CLASS_DEFAULT' , 1 );
+if (!defined( 'AMP_CONTENT_CLASS_DEFAULT'))         define ('AMP_CONTENT_CLASS_DEFAULT' , 1 );
 if (!defined( 'AMP_CONTENT_CLASS_FRONTPAGE' ))      define ('AMP_CONTENT_CLASS_FRONTPAGE' , 2 );
 if (!defined( 'AMP_CONTENT_CLASS_SECTIONHEADER' ))  define ('AMP_CONTENT_CLASS_SECTIONHEADER' , 8 );
 if (!defined( 'AMP_CONTENT_CLASS_NEWS' ))           define ('AMP_CONTENT_CLASS_NEWS' , 3 );
-define ('AMP_CONTENT_CLASS_MORENEWS' , 4 );
+if (!defined( 'AMP_CONTENT_CLASS_MORENEWS'))        define ('AMP_CONTENT_CLASS_MORENEWS' , 4 );
 if (!defined( 'AMP_CONTENT_CLASS_PRESSRELEASE'))    define ('AMP_CONTENT_CLASS_PRESSRELEASE' , 10 );
-define ('AMP_CONTENT_CLASS_USERSUBMITTED' , 9 );
+if (!defined( 'AMP_CONTENT_CLASS_USERSUBMITTED'))   define ('AMP_CONTENT_CLASS_USERSUBMITTED' , 9 );
 if (!defined( 'AMP_CONTENT_CLASS_ACTIONITEM'))      define ('AMP_CONTENT_CLASS_ACTIONITEM' , 5 );
 if (!defined( 'AMP_CONTENT_CLASS_BLOG' ))           define ('AMP_CONTENT_CLASS_BLOG', '20');
-if (!defined( 'AMP_CONTENT_CLASS_SECTIONFOOTER'))      define ('AMP_CONTENT_CLASS_SECTIONFOOTER' , false );
+if (!defined( 'AMP_CONTENT_CLASS_SECTIONFOOTER'))   define ('AMP_CONTENT_CLASS_SECTIONFOOTER' , false );
 
 
 /**
@@ -123,6 +123,10 @@ if ( !defined( 'AMP_NAV_NO_LIMIT')) define('AMP_NAV_NO_LIMIT', 700);
  */
 if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
 if (!defined( 'AMP_CONTENT_INTRO_ID_FRONTPAGE' )) define( 'AMP_CONTENT_INTRO_ID_FRONTPAGE' , 2 );
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_INPUT'))  
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_INPUT', 41 );
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_RESPONSE')) 
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_RESPONSE', 49 );
 
 /**
  * Allow multiple sections per article 

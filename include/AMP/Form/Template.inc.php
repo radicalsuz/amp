@@ -32,6 +32,8 @@ class AMPFormTemplate {
             "<span class=\"%s\">{header}</span>",
         'starttable' =>
             "<table class=\"%1\$s\"><tr><td>",
+        'autocomplete' =>
+            "<div class=\"auto_complete\" \"%1\$s_autocomplete_list\"></div>",
         'endtable' =>
             "</td></tr></table>",
         'startblock' =>

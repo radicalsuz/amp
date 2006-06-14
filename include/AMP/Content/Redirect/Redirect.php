@@ -6,6 +6,7 @@ class AMP_Content_Redirect extends AMPSystem_Data_Item {
 
     var $datatable = "redirect";
     var $name_field = "old";
+    var $_class_name = 'AMP_Content_Redirect';
 
     function AMP_Content_Redirect ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -37,6 +38,10 @@ class AMP_Content_Redirect extends AMPSystem_Data_Item {
 
     function makeCriteriaAlias( $alias ){
         return 'old =' .$this->dbcon->qstr( $alias );
+    }
+
+    function makeCriteriaTarget( $target ){
+        return 'new =' .$this->dbcon->qstr( $target );
     }
 }
 

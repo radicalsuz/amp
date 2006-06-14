@@ -6,6 +6,7 @@
 		<type>select</type>
 		<label>Module</label>
 		<required>1</required>
+        <lookup>modules</lookup>
 	</modid>
 	<name>
 		<type>text</type>
@@ -35,10 +36,15 @@
 	<type>
 		<type>select</type>
 		<label>Section</label>
+        <lookup>
+            <module>content</module>
+            <instance>sectionMap</instance>
+        </lookup>
 	</type>
 	<templateid>
 		<type>select</type>
 		<label>Template</label>
+        <lookup>templates</lookup>
 	</templateid>
 	<searchtype>
 		<type>text</type>

@@ -117,9 +117,11 @@ if ( !defined( 'AMP_TEXT_SYSTEM_INTERFACE_FOOTER'))
 define( 'AMP_TEXT_SECTION', 'section');
 define( 'AMP_TEXT_SECTION_LIST', 'section list');
 define( 'AMP_TEXT_CLASS', 'class');
+define( 'AMP_TEXT_ARTICLE', 'article');
 define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
 
 define( 'AMP_TEXT_TEMPLATE', 'template');
+define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
 define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
 
 /**
@@ -134,5 +136,51 @@ if ( !defined( 'AMP_TEXT_CONTENT_PUBLIC_NO_LINK'))
         define( 'AMP_TEXT_CONTENT_PUBLIC_NO_LINK', 
                 'This page does not have a link auto-associated with it.  Please add a link below or the page will not link.');
         
+/**
+ * Content Page Names for tools
+ */
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_SITEMAP' ))      define ( 'AMP_TEXT_CONTENT_PAGE_SITEMAP',   'Site Map' );
+
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_SEARCH' ))      define ( 'AMP_TEXT_CONTENT_PAGE_SEARCH',   'Search' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_ARTICLE_INPUT' ))      define ( 'AMP_TEXT_CONTENT_PAGE_ARTICLE_INPUT',   'Submit Content' );
+
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_GALLERY' ))      define ( 'AMP_TEXT_CONTENT_PAGE_GALLERY',   'Photo Galleries' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_ACTION' ))      define ( 'AMP_TEXT_CONTENT_PAGE_ACTION',   'Action Center' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_VOLUNTEERS' ))      define ( 'AMP_TEXT_CONTENT_PAGE_VOLUNTEERS',   'Add Volunteer' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_GROUPS' ))      define ( 'AMP_TEXT_CONTENT_PAGE_GROUPS',   'Groups Display' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_GROUP_ADD' ))      define ( 'AMP_TEXT_CONTENT_PAGE_GROUP_ADD',   'Add Group' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_ENDORSER_LIST' ))      define ( 'AMP_TEXT_CONTENT_PAGE_ENDORSER_LIST',   'Endorser Display' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_ENDORSER_ADD' ))      define ( 'AMP_TEXT_CONTENT_PAGE_ENDORSER_ADD',   'Add Endorser' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_EMAIL_ADD' ))      define ( 'AMP_TEXT_CONTENT_PAGE_EMAIL_ADD',   'Email Signup' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_MEDIA_ADD' ))      define ( 'AMP_TEXT_CONTENT_PAGE_MEDIA_ADD',   'Media Sign In' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_TELL_A_FRIEND' ))      define ( 'AMP_TEXT_CONTENT_PAGE_TELL_A_FRIEND',   'Tell A Friend' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_SPEAKER_LIST' ))      define ( 'AMP_TEXT_CONTENT_PAGE_SPEAKER_LIST',   'Speakers Display' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_SPEAKER_ADD' ))      define ( 'AMP_TEXT_CONTENT_PAGE_SPEAKER_ADD',   'Add Speakers' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_TRAINER_LIST' ))      define ( 'AMP_TEXT_CONTENT_PAGE_TRAINER_LIST',   'Trainers Display' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_TRAINER_ADD' ))      define ( 'AMP_TEXT_CONTENT_PAGE_TRAINER_ADD',   'Add Trainers' );
+
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_EVENT_LIST'))    define ( 'AMP_TEXT_CONTENT_PAGE_EVENT_LIST',       'Calendar' );
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_EVENT_ADD'))    define ( 'AMP_TEXT_CONTENT_PAGE_EVENT_ADD',       'Add Event' );
+
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_PETITIONS'))    define ( 'AMP_TEXT_CONTENT_PAGE_PETITIONS',       'Petitions');
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_FAQ'))    define ( 'AMP_TEXT_CONTENT_PAGE_FAQ',       'FAQ');
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_BOARD_HOUSING'))    define ( 'AMP_TEXT_CONTENT_PAGE_BOARD_HOUSING',       'Housing Board');
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_BOARD_RIDE'))    define ( 'AMP_TEXT_CONTENT_PAGE_BOARD_RIDE',       'Ride Board');
+if ( !defined( 'AMP_TEXT_CONTENT_PAGE_LINKS'))    define ( 'AMP_TEXT_CONTENT_PAGE_LINKS',       'Links' );
+
+/**
+ *  Article Related
+ */
+define( 'AMP_TEXT_DOCUMENT_INFO', 'Document Info' );
+define( 'AMP_TEXT_DATE_CREATED', 'Date Created' );
+define( 'AMP_TEXT_DATE_UPDATED', 'Date Updated' );
+define( 'AMP_TEXT_CREATED', 'Created');
+define( 'AMP_TEXT_UPDATED', 'Updated');
+define( 'AMP_TEXT_BY', 'by' );
+define( 'AMP_TEXT_ID', 'ID' );
+define( 'AMP_TEXT_REDIRECTED_TO', 'Redirected To');
+define( 'AMP_TEXT_ALIAS', 'Alias');
+define( 'AMP_TEXT_ATTACHED_FILE', 'Attached File');
+define( 'AMP_TEXT_VIEW_ALL', 'View All %s');
 
 ?>

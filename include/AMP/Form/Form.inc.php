@@ -144,16 +144,32 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $this->isBuilt = true;
     }
 
+    function _initJavascriptActions( ){
+        //interface
+    }
+
     function output( $include_javascript = true ) {
         $form_footer = "";
         $script = "";
-        if ( $include_javascript ) $script = $this->getJavascript();
+
+        if ( $include_javascript ) {
+            $script = $this->getJavascript();
+        }
+        $form_header = $this->_formHeader();
         $form_footer = $this->_formFooter();
-        return  $this->form->display() . $form_footer . $script;
+
+        return    $form_header 
+                . $this->form->display() 
+                . $form_footer 
+                . $script;
     }
 
     function execute( ){
         return $this->output( );
+    }
+
+    function _formHeader( ){
+        return false;
     }
 
     function _formFooter( ){
@@ -169,6 +185,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $types_to_avoid = array( "button", "submit" );
 
         foreach ($this->fields as $fname => $fDef) {
+            if ( !isset( $fDef['type'])) trigger_error( $fname );
             if ( array_search( $fDef['type'], $types_to_avoid) !== FALSE ) continue;
             if ( !( $value = $this->_getDefault( $fname ))) continue; 
             $default_set[ $fname ] = $value;
@@ -210,8 +227,12 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 	}
 
     function setJavascript() {
-        $editor = &AMPFormElement_HTMLEditor::instance();
-        if ($script = $editor->output()) $this->registerJavascript( $script, 'editor');
+
+        /*
+        $header = &AMP_getHeader( );
+        if ($script = $editor->output()) $header->addJavascriptDynamicPrefix( $script, 'editor' );
+            //$this->registerJavascript( $script, 'editor');
+        */
 
         if (empty($this->javascript_register)) return false;
         $this->javascript = join("\n", $this->javascript_register);
@@ -223,6 +244,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function getJavascript() {
+        $this->_initJavascriptActions( );
+        $editor = &AMPFormElement_HTMLEditor::instance();
+        $editor->output( );
+
         if (!isset($this->javascript)) return false;
         return $this->javascript;
     }
@@ -572,6 +597,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 		}
 
         if ( !$field_def['template'] ) return true;
+        //if ( $name == 'author' ) print $field_def['template'] . 'KK <BR>';
 
 		$this->renderer->setElementTemplate( $field_def['template'], $name);
 
@@ -623,11 +649,14 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         if ( !( isset( $data[$fieldname]) && $data[$fieldname ] )) return false;
         if ( ! isset( $def['block'])) return $data[$fieldname];
 
-        $script =   '<script type="text/javascript" language="Javascript"><!--'."\n"
-                    . 'change_form_block( "'.$def['block'].'");' . "\n"
-                    . "--></script>";
-        $this->registerJavascript( $script );
-        $this->setJavascript( );
+        //$script =   '<script type="text/javascript" language="Javascript"><!--'."\n"
+        //            . 'change_form_block( "'.$def['block'].'");' . "\n"
+        //            . "--></script>";
+        $script = 'change_form_block( "'.$def['block'].'");';
+        $header = &AMP_getHeader( );
+        $header->addJavascriptOnload( $script, 'form_block_'.$def['block'] );
+        //$this->registerJavascript( $script );
+        //$this->setJavascript( );
         return $data[$fieldname];
     }
 
@@ -773,7 +802,8 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $fRef->updateAttributes ( array( "id"=>$name ) );
         $this->_adjustElementTextarea( $fRef, $field_def );
 
-        if ( isset( $_COOKIE['AMPWYSIWYG']) && 'none' == $_COOKIE['AMPWYSIWYG'] ) return $fRef;
+        //if ( isset( $_COOKIE['AMPWYSIWYG']) && 'none' == $_COOKIE['AMPWYSIWYG'] ) return $fRef;
+        if ( !AMP_USER_CONFIG_USE_WYSIWYG ) return $fRef;
         if ( array_search( getBrowser( ), array( 'win/ie', 'mozilla' )) === FALSE) return $fRef; 
         $editor = &AMPFormElement_HTMLEditor::instance();
         $editor->addEditor( $name );

@@ -47,7 +47,9 @@ class AMPSearchForm extends AMPForm_XML {
     }
 
     function submitted() {
-        if (!isset($_REQUEST['AMPSearch'])) return false;
+        $search_request = ( ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'search' )
+                          || ( isset( $_REQUEST['AMPSearch'] ) && $_REQUEST[ 'AMPSearch' ]));
+        if ( !$search_request ) return false;
         return 'search';
     }
 

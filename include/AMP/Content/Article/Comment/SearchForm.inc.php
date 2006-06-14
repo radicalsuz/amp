@@ -7,6 +7,7 @@ class ArticleCommentSearch extends AMPSearchForm {
 
     function ArticleCommentSearch( ){
         $name = "CommentSearch";
+        print AMPbacktrace( );
         $this->init( $name );
     }
 }

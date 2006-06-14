@@ -129,5 +129,8 @@ class AMP_Authentication_LoginType {
 		return $this->error($message, E_USER_NOTICE);
 	}
 
+    function getAuthOptions( ) {
+        return false;
+    }
 }
 ?>

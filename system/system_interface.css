@@ -262,6 +262,20 @@ span.intitle {
     width: 100%;
 }
 
+.system_heading {
+	font-size: 12px;
+	text-shadow: 2px 2px 1px black;
+	font-weight: bold;
+	color: white;
+	background-color : #006699;
+	background: url('images/intitle-bg.png') top left repeat-x;
+	padding: 4px 2px 2px 6px;
+	height: 25px;
+	margin: 20px 0px 10px 0px;
+    display: block;
+    width: 100%;
+}
+
 .intitle td {
 		padding: 2px 2px 2px 4px;
 		vertical-align: middle;
@@ -354,8 +368,8 @@ div.article_tab {
 }
 
 div.article_tab table.form_table {
-	/*border: 1px solid black;
-		margin-top: 6px;*/
+	/*border: 1px solid black;*/
+		margin-top: 6px;
         
 		border-top: 1px solid gray;
 		border-left: 1px solid gray;
@@ -371,6 +385,10 @@ div#article_main {
 	text-align: center;
 	vertical-align: middle;
 	font-weight: bold;
+}
+.info_block {
+	background-color: #dedede;
+	padding: 5px;
 }
 
 .small {  
@@ -486,7 +504,7 @@ legend {border: 1px solid black;  border-top: none; background-color: #eee; padd
 div.list_pager {
 	text-align: right;
 	float: right;
-	width: 40%;
+	width: 100%;
 	font-size: 11px;
 	display: block;
 	margin-right: 20px;
@@ -496,16 +514,18 @@ div.list_pager {
 }
 div.list_pager_block {
 	text-align: right;
-	float: right;
-	width: 40%;
+	width: 100%;
 	font-size: 11px;
 	display: block;
 	margin-right: 20px;
 	padding: 5px;
 	margin-bottom: 20px;
 	position:relative;
+	float: right;
+/*
 	background-color: #99EE99;
 	border: solid 2px #006699;
+*/
 }
 
 div.filelink {
@@ -624,3 +644,26 @@ table.form_table {
 
 
     }
+  div.auto_complete {
+    width: 350px;
+    background: #fff;
+  }
+  div.auto_complete ul {
+    border:1px solid #888;
+    margin:0;
+    padding:0;
+    width:100%;
+    list-style-type:none;
+  }
+  div.auto_complete ul li {
+    margin:0;
+    padding:3px;
+  }
+  div.auto_complete ul li.selected { 
+    background-color: #ffb; 
+  }
+  div.auto_complete ul strong.highlight { 
+    color: #800; 
+    margin:0;
+    padding:0;
+  }

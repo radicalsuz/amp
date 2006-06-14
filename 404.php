@@ -22,6 +22,7 @@ $uri = $_SERVER['REQUEST_URI'];
 $pos = strpos( $uri, '?' );
 $PHP_SELF = $_SERVER['PHP_SELF'] = substr( $uri, 1, ($pos) ? $pos - 1 : strlen( $uri ) - 1 );
 require_once("AMP/BaseDB.php");
+require_once( 'AMP/Content/Page/Urls.inc.php');
 
 if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
     parse_str( $_SERVER['REDIRECT_QUERY_STRING'], $_GET );
@@ -71,7 +72,13 @@ if (file_exists($customHandler)) {
     $extension = substr( $_SERVER['PHP_SELF'], $extension_start+1 );
 
     if (array_search($extension, $no_search_extensions) === FALSE ) {
-        if (!$redirected) ampredirect (AMP_SITE_URL . AMP_CONTENT_URL_404 );
+        if (!$redirected) {
+            if ( strpos( AMP_CONTENT_URL_404, 'http' ) !== false ) {
+                ampredirect(  AMP_CONTENT_URL_404 );
+            } else {
+                ampredirect (AMP_SITE_URL . AMP_CONTENT_URL_404 );
+            }
+        }
     }
     trigger_error( 'Requested resource missing: '.$_SERVER['REQUEST_URI'] );
 

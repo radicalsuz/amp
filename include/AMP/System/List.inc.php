@@ -56,6 +56,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_css_id_container_div;
 
     var $_sort;
+    var $_sort_default;
+    var $_sort_translations_sql = array( );
+    var $_sort_complete = false;
+
     var $_source_counter = 0;
     var $_source_keys;
     var $_source_object;
@@ -93,10 +97,25 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     }
 
-    function &_init_source( &$dbcon ){
+    function &_init_source( &$dbcon, $criteria = null ){
         $listSource = &new $this->_source_object( $dbcon  );
+        if ( isset( $criteria )) {
+            $this->_source_criteria = array_merge (    
+                $this->_source_criteria, 
+                $listSource->makeCriteria( $criteria )
+               );
+        }
         $this->_init_search( $listSource );
-        return $listSource->search( $this->_source_criteria, $this->_source_object );
+        $this->_init_pager( $listSource->_getSearchSource( ) );
+
+        $results = &$listSource->search( $this->_source_criteria, $this->_source_object );
+        if ( !$results ) $this->_searchFailureNotice( );
+        return $results;
+    }
+
+    function _init_pager( &$searchSource ){
+        $this->_setSort( $searchSource );
+        $this->_activatePager( $searchSource );
     }
 
     function _init_search( &$listSource ){
@@ -111,10 +130,16 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->_search_form = & $search;
         $search->Build( true );
 
-        if ( !$search->submitted( ) ) return $search->applyDefaults( );
+        //if ( !$search->submitted( ) ) return $search->applyDefaults( );
+
+        $search->applyDefaults( );
+        if ( !$search->submitted( ) ) return true;
+
+        $search_values = $search->getSearchValues( );
+        $this->_after_init_search( $search_values );
         $this->_source_criteria = 
             array_merge(    $this->_source_criteria, 
-                            $listSource->makeCriteria( $search->getSearchValues( ) ) );
+                            $listSource->makeCriteria( $search_values ) );
 
     }
 
@@ -122,8 +147,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
      
         if ( !$source ) return;
         $this->setSource( $source );
-        $this->_setSort();
-        $this->_activatePager( );
+        $this->_setSort( $this->source );
+        $this->_activatePager( $this->source );
         $this->_prepareData();
         if (array_search( 'publish', $this->col_headers ) !== FALSE ) {
             $this->addTranslation( 'publish', '_showPublishStatus' );
@@ -137,18 +162,22 @@ class AMPSystem_List extends AMPDisplay_HTML {
         //interface
     }
 
+    function _after_init_search( ){
+        //interface, allows changes to _url_add based on search
+    }
+
     function setSource( &$source ){
         $this->source = &$source;
     }
 
-    function _activatePager() {
-        if ( !$this->_pager_active ) {
+    function _activatePager( &$source ) {
+        if ( !$this->_pager_active || isset( $this->_pager )) {
             $this->_afterPagerInit( );
             return false;
         }
 
         require_once( 'AMP/System/List/Pager.inc.php');
-        $this->_pager = &new AMPSystem_ListPager( $this->source );
+        $this->_pager = &new AMPSystem_ListPager( $source );
         
         if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
         $this->_afterPagerInit( );
@@ -164,11 +193,17 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if (!$this->_prepareData()) return $this->_noRecordsOutput( );
 
         $output = "";
+        if( method_exists( $this, '_renderRow') ){
+            foreach( $this->source as $sourceItem ){
+                $this->_renderRow( $sourceItem );
+            }
 
-        while ( $this->currentrow = $this->_getSourceRow()) {
-           $output .= $this->_HTML_listRow ( $this->_translateRow($this->currentrow));
-        
-        }		
+        } else {
+            while ( $this->currentrow = $this->_getSourceRow()) {
+               $output .= $this->_HTML_listRow ( $this->_translateRow($this->currentrow));
+            }		
+        }
+
         return $this->_HTML_header() .
                $output .
                $this->_HTML_footer();
@@ -284,15 +319,18 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->color[$type] = $color_id;
     }
 
-    function setMessage( $text ) {
-        print 'trying ' .$text;
+    function setMessage( $text, $key = null ) {
         if ( isset( $this->suppress['messages']) && $this->suppress['messages'] ) return false;
-        print 'message not suppressed';
-        if ( isset( $this->_controller )) return $this->_controller->setMessage( $text );
+        if ( isset( $this->_controller ) && method_exists( $this->_controller, 'setMessage' )) {
+            return $this->_controller->setMessage( $text );
+        }
+        if ( isset( $this->_controller ) && method_exists( $this->_controller, 'message' )) {
+            return $this->_controller->message( $text, $key );
+        }
 
         require_once( 'AMP/System/Flash.php' );
         $flash = &AMP_System_Flash::instance( );
-        $flash->add_message( $text );
+        $flash->add_message( $text, $key );
 
         $this->message .= $text .'<BR>';
     }
@@ -309,7 +347,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _searchFailureNotice( ){
-        $this->setMessage( AMP_TEXT_SEARCH_NO_MATCHES );
+        $this->setMessage( AMP_TEXT_SEARCH_NO_MATCHES, 'search_failed' );
     }
 
     function setController( &$controller ){
@@ -628,17 +666,43 @@ class AMPSystem_List extends AMPDisplay_HTML {
         return !( empty( $this->source ));
     }
 
-    function _setSort() {
+    function _setSort( &$source, $reset = false ) {
+        if ( $this->_sort_complete && !$reset ) return false;
         //Sort the data
-        if (!( isset($_REQUEST['sort']) && $_REQUEST['sort'])) return false; 
+        $sort_request = ( isset($_REQUEST['sort']) && $_REQUEST['sort'] ) ? $_REQUEST['sort'] : false  ; 
+        if ( !( $sort_request || isset( $this->_sort_default ))) return false;
+        $this->_sort_complete = true;
             
         //for recordset mapper
-        if ( !is_array( $this->source)) {
-            $this->_sort = $_REQUEST['sort'];
-            return $this->source->addSort($_REQUEST['sort']);
+        if ( !is_array( $source ) && is_object( $source )) {
+            if ( !$sort_request ) return $source->setSort( $this->_sort_default );
+            
+            $this->_sort = $sort_request;
+            $sort_request = $this->_translateSortRequest( $sort_request ) ;
+            return $source->addSort( $sort_request );
         }
-
         //for arrays of objects
+        $this->_setSortForArray( $source );
+    }
+
+    function _translateSortRequest( $sort_request ){
+        if ( !isset( $this->_sort_translations_sql[ $sort_request ])){
+            if ( !( isset( $_REQUEST['sort_direction']))) return $sort_request;
+            if ( $_REQUEST['sort_direction'] == AMP_SORT_DESC ) return $sort_request . AMP_SORT_DESC; 
+        }
+        $translated_sort_request = $this->_sort_translations_sql[ $sort_request ];
+        if ( !isset( $_REQUEST['sort_direction']) || $_REQUEST['sort_direction'] != AMP_SORT_DESC ) return $translated_sort_request;
+
+        if ( strpos( $translated_sort_request, AMP_SORT_DESC ) !== FALSE ){
+            return str_replace( AMP_SORT_DESC, '', $translated_sort_request );
+        }
+        return $translated_sort_request . AMP_SORT_DESC; 
+
+    }
+    
+    function _setSortForArray( &$source ){
+        $sort_request = ( isset($_REQUEST['sort']) && $_REQUEST['sort'] ) ; 
+        if ( !$sort_request ) return false;
         $local_sort_method = '_setSort'.ucfirst( $_REQUEST['sort']);
         $sort_direction = ( isset( $_REQUEST['sort_direction']) && $_REQUEST['sort_direction']) ?
                             $_REQUEST['sort_direction'] : false;
@@ -646,9 +710,16 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if ( method_exists( $this, $local_sort_method)) return $this->$local_sort_method( $sort_direction );
 
         $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
-        if( $itemSource->sort( $this->source, $_REQUEST['sort'], $sort_direction )){
+        if( $itemSource->sort( $source, $_REQUEST['sort'], $sort_direction )){
             $this->_sort = $_REQUEST['sort'];
         }
+    }
+
+    function redoSort( ){
+        $sort_direction = ( isset( $_REQUEST['sort_direction']) && $_REQUEST['sort_direction']) ?
+                            $_REQUEST['sort_direction'] : false;
+        $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
+        $itemSource->sort( $this->source, $this->_sort, $sort_direction );
     }
 
 
@@ -674,6 +745,12 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function appendEditlinkVar( $var ) {
         $this->editlink = AMP_URL_AddVars( $this->editlink, $var );
+    }
+
+    function appendAddlinkVar( $var ) {
+        if ( !isset( $this->_url_edit )) $this->_url_edit = $this->editlink;
+        if ( !isset( $this->_url_add )) $this->_url_add = $this->_url_edit;
+        $this->_url_add = AMP_URL_AddVars( $this->_url_add, $var );
     }
 
     function _afterPagerInit( ){

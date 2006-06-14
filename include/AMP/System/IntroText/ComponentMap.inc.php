@@ -4,11 +4,12 @@ require_once ( 'AMP/System/ComponentMap.inc.php' );
 
 class ComponentMap_IntroText extends AMPSystem_ComponentMap {
 
-    var $heading = "Intro Text";
+    var $heading = "Public Page";
     var $nav_name = "tools";
     var $_allow_inline_update = true;
 
     var $paths = array(
+        'fields' => 'AMP/System/IntroText/Fields.xml',
         'form' => 'AMP/System/IntroText/Form.inc.php',
         'list' => 'AMP/System/IntroText/List.inc.php',
         'copier' => 'AMP/System/IntroText/Copy.inc.php',

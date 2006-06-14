@@ -9,15 +9,26 @@
 <label> &amp;nbsp;&amp;nbsp;&lt;a href="article_list.php"&gt;View All Articles&lt;/a&gt;&amp;nbsp;&amp;nbsp;</label>
 </viewlink>
 -->
-<type>
+<section>
     <type>select</type>
     <label>Select Section</label>
     <attr><class>searchform_element</class></attr>
+	<lookup>
+		<module>content</module>
+		<instance>sectionMap</instance>
+	</lookup>
+</section>
+<type>
+	<type>hidden</type>
 </type>
 <class>
     <type>select</type>
     <label>Select Class</label>
     <attr><class>searchform_element</class></attr>
+	<lookup>
+		<module>content</module>
+		<instance>activeClasses</instance>
+	</lookup>
 </class>
 <id>
     <separator>newrow</separator>
@@ -30,17 +41,35 @@
     <label>Title</label>
     <type>text</type>
     <size>25</size>
-    <attr><class>searchform_element</class></attr>
+    <attr>
+		<class>searchform_element</class>
+		<id>title</id>
+	</attr>
+	<template>
+		{element}
+		&lt;div class="auto_complete" id="title_list"&gt;&lt;/div&gt;
+	</template>
 </title>
 <author>
     <label>Author</label>
     <size>20</size>
     <type>text</type>
-    <attr><class>searchform_element</class></attr>
+    <attr>
+		<class>searchform_element</class>
+		<id>author</id>
+	</attr>
+	<template>
+		{element}
+		&lt;div class="auto_complete" id="author_list"&gt;&lt;/div&gt;
+	</template>
 </author>
 <publish>
     <label>Status</label>
     <type>select</type>
+	<lookup>
+		<module>constant</module>
+		<instance>status</instance>
+	</lookup>
 </publish>
 <search_by_date>
     <separator>newrow</separator>

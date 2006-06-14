@@ -1,0 +1,34 @@
+<array>
+    <title>
+        <label>Title</label>
+        <required>1</required>
+        <type>textarea</type>
+    </title>
+    <subtitle>
+        <label>Subtitle</label>
+        <type>textarea</type>
+    </subtitle>
+    <author>
+        <type>text</type>
+        <label>Author</label>
+    </author>
+    <date>
+        <type>date</type>
+        <label>Date</label>
+        <default>today</default>
+    </date>
+    <shortdesc>
+        <type>textarea</type>
+        <label>Short Description</label>
+        <size>5:65</size>
+    </shortdesc>
+    <body>
+        <type>textarea</type>
+        <label>Full Text</label>
+        <size>60:80</size>
+    </body>
+    <html>
+        <type>checkbox</type>
+        <label>The text in this field is pre-formatted as HTML</label>
+    </html>
+</array>

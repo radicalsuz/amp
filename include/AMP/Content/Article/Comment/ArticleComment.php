@@ -12,12 +12,12 @@ class ArticleComment extends AMPSystem_Data_Item {
     }
 
     function getTimestamp( ){
-        if ( !$result = $this->getData( 'date')) return null;
+        if ( !$result = $this->getData( 'date' )) return null;
         return strtotime( $result );
     }
 
     function getDate( ){
-        return $this->getData( 'date');
+        return $this->getData( 'date' );
     }
 
     function _sort_default( &$item_set ){
@@ -33,7 +33,7 @@ class ArticleComment extends AMPSystem_Data_Item {
     }
 
     function getAuthor( ){
-        return $this->getData( 'author');
+        return $this->getData( 'author' );
     }
 }
 

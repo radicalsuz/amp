@@ -213,6 +213,33 @@ class AMPContent_Manager {
         return $this->_displays[ $name ];
     }
 
+    /**
+     * add 
+     * convenience alias for addDisplay
+     * 
+     * @param & $display 
+     * @param mixed $display_key 
+     * @access public
+     * @since  3.5.9
+     * @return void
+     */
+    function add( &$display, $display_key = null ){
+        return $this->addDisplay( $display, $display_key );
+    }
+
+    /**
+     * retrieve 
+     * convenience alias for getDisplay
+     * 
+     * @param string $display_key 
+     * @access public
+     * @since  3.5.9
+     * @return mixed Display Object 
+     */
+    function retrieve( $display_key ){
+        return $this->getDisplay( $display_key );
+    }
+
 //  }}}
 
 // {{{ private output methods: _doDisplays, _doDisplay, _doDisplayBuffer
