@@ -1,0 +1,39 @@
+.progresscontainer {
+	width: 100px;
+	height: 3px;
+	background-color: #aaaaaa;
+}
+
+.progressbar {
+	width: 0px;
+	height: 3px;
+	background-color: black;
+}
+
+body {
+	margin-top: 0;
+	margin-left: 20px;
+	padding: 0;
+	font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+	color: white;
+	background-color: #4a525a; /* dark blue slate thing from daringfireball.net */
+}
+
+h1 {
+	margin-top: 10px;
+}
+
+div.inputhead {
+	font-size: x-small;
+}
+
+.input {
+	margin-bottom: 10px;
+	width: 200px;
+	font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+	font-size: small;
+}
+
+.data {
+	margin-left: 20px;
+}
