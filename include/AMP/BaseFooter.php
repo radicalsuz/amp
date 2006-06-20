@@ -14,7 +14,7 @@ require_once ('AMP/Content/Page.inc.php' );
 
 $currentPage = &AMPContent_Page::instance();
 
-if ($currentPage->isRedirected()) {
+if ($currentPage->isRedirected() ){
     ob_end_flush();
     exit;
 }
@@ -42,8 +42,13 @@ print $finalPageHtml;
  *
  *  @var    AMPContentPage_Cached
  */
-if ( AMP_SITE_MEMCACHE_ON && isset($GLOBALS['cached_page']) && empty( $_POST) && (!$currentPage->isRedirected()) && ( !AMP_Authenticate( 'content' ))) {
-    $cached_page->save( $finalPageHtml );
+if ( AMP_SITE_MEMCACHE_ON 
+    && isset($GLOBALS['cached_page']) 
+    && empty( $_POST) 
+    && ( ! $currentPage->isRedirected()) 
+    && ( ! AMP_Authenticate( 'content' )) 
+    ){
+        $cached_page->save( $finalPageHtml );
 }
 
 ?>

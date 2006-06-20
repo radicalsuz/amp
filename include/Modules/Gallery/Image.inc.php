@@ -25,6 +25,10 @@ class GalleryImage extends AMPSystem_Data_Item {
         return $this->getData( 'img');
     }
 
+    function setImageFileName( $filename ){
+        return $this->mergeData( array( 'img' => $filename ));
+    }
+
     function &getImageRef() {
         if (! ($img_path = $this->getImageFileName())) return false;
         require_once( 'AMP/Content/Image.inc.php');
@@ -52,11 +56,18 @@ class GalleryImage extends AMPSystem_Data_Item {
     function getGallery( ){
         return $this->getData( 'galleryid');
     }
+
+    function setGallery( $gallery_id ){
+        return $this->mergeData( array( 'galleryid' => $gallery_id ));
+    }
     function isLive( ){
         return $this->getData( 'publish');
     }
     function getItemDate( ){
         return $this->getData( 'date');
+    }
+    function setItemDate( $date_value ){
+        return $this->mergeData( array( 'date' => $date_value ));
     }
     function getGalleryName( ){
         if ( !$id = $this->getGallery( )) return false;

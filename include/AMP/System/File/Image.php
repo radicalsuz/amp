@@ -27,6 +27,7 @@ class AMP_System_File_Image extends AMP_System_File {
     var $_mimetype;
     var $height;
     var $width;
+    var $_class_name = 'AMP_System_File_Image';
 
     function AMP_System_File_Image( $file_path = null ){
         if ( isset( $file_path )) $this->setFile( $file_path );
@@ -122,6 +123,19 @@ class AMP_System_File_Image extends AMP_System_File {
 
     function get_width( ){
         return $this->_width;
+    }
+
+    function gallery( $gallery_id ){
+        require_once( 'Modules/Gallery/Image.inc.php' );
+        $image_record = &new GalleryImage( AMP_Registry::getDbcon( ));
+        $image_record->setGallery( $gallery_id );
+        $image_record->setImageFileName( $this->getName( ));
+        $image_record->publish( );
+        $image_record->setItemDate( date( 'Y-m-d', $this->getTime( )));
+        $result = $image_record->save( );
+        $this->notify( 'update');
+        $this->notify( 'gallery');
+        return $result;
     }
 }
 

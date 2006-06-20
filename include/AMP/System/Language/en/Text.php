@@ -43,6 +43,10 @@ define( 'AMP_TEXT_PREVIEW_ITEM','Preview this Item' );
 define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
 define( 'AMP_TEXT_LIST_CONFIRM_DELETE', 'Are you sure you want to DELETE these items?');
 
+define( 'AMP_TEXT_CROP', 'Crop');
+define( 'AMP_TEXT_PREVIEW', 'Preview');
+define( 'AMP_TEXT_CANCEL', 'Cancel');
+
 /**
  * RSS listpage text
  */

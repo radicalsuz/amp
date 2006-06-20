@@ -20,7 +20,6 @@ require_once( 'AMP/Content/Page.inc.php' );
  */
 if (isset($_GET['filelink']) && $_GET['filelink']) {
     ampredirect ($_GET['filelink']);
-    trigger_error( 'attempteing redirect to ' . $_GET['filelink']);
 
 }
 

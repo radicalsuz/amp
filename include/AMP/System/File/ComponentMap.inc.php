@@ -16,13 +16,18 @@ class ComponentMap_File extends AMPSystem_ComponentMap {
     var $_action_default = 'list';
 
 
-    var $paths = array(
+    var $paths = array (
+        'form'   => 'AMP/System/File/Form.inc.php',
+        'fields' => 'AMP/System/File/Fields.xml',
         'list'   => 'AMP/System/File/List.inc.php',
-        'source' => 'AMP/System/File/File.php' );
+        'source' => 'AMP/System/File/File.php' 
+    );
 
     var $components = array (
+        'form'   => 'AMP_System_File_Form',
         'list'   => 'AMP_System_File_List',
-        'source' => 'AMP_System_File' );
+        'source' => 'AMP_System_File' 
+    );
 
     function ComponentMap_File( ){
         $this->_path_source = AMP_LOCAL_PATH . AMP_CONTENT_URL_DOCUMENTS;

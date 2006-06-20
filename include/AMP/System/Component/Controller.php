@@ -276,7 +276,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
             $this->_model_id = $request_id;
         }
 
-        if ( $request_id && !$action ) $action  = 'edit';
+        if ( $request_id && !$action && !isset( $this->_request_vars['action'] )) $action  = 'edit';
         
         if ( $action ) $this->request( $action );
 

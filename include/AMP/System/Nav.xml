@@ -356,25 +356,25 @@
 	</item>
 	<item>
 		<title>Docs and Images</title>
-		<href>docdir.php</href>
+		<href>doc_manager.php</href>
 		<label>View Documents</label>
 		<class>doc</class>
 		<per>CONTENT_DOCUMENTS_EDIT</per>
 	</item>
 	<item>
-		<href>imgdir.php</href>
+		<href>image_manager.php</href>
 		<label>View Images</label>
 		<class>img</class>
 		<per>CONTENT_IMAGES_EDIT</per>
 	</item>
 	<item>
-		<href>doc_upload.php</href>
+		<href>doc_manager.php?action=add</href>
 		<label>Upload Document</label>
 		<class>upload</class>
 		<per>CONTENT_DOCUMENTS_EDIT</per>
 	</item>
 	<item>
-		<href>imgup.php</href>
+		<href>image_manager.php?action=add</href>
 		<label>Upload Images</label>
 		<class>upload</class>
 		<per>CONTENT_IMAGES_EDIT</per>

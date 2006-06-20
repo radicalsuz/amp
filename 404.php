@@ -1,11 +1,26 @@
 <?php    
 
+$uri = $_SERVER['REQUEST_URI'];
+$query_start = strpos( $uri, '?' );
+$_SERVER['PHP_SELF'] = ( $query_start ) ? substr( $uri, 1, $query_start -1 ) : substr( $uri, 1 );
+
+if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
+    parse_str( $_SERVER['REDIRECT_QUERY_STRING'], $_GET );
+    $_REQUEST = array_merge($_REQUEST, $_GET);
+}
+require_once( 'AMP/BaseDB.php');
+require_once( 'AMP/Content/Redirect/Handler.php' );
+$handler = &new AMP_Content_Redirect_Handler( );
+
+$handler->execute( );
+
 /*************** Redirection Page
 Displayed when a user queries an AMP website
 and no resulting page is returned from the database.
 Searches redirect table for matching pages, then sends 
 the user to search page if no matches are found.*/
 
+/* 
 $no_search_extensions = array( 'jpeg', 'jpg', 'gif', 'png' );
 	 
 $extension_start = strrpos( $_SERVER['PHP_SELF'], '.' );
@@ -110,5 +125,5 @@ function error_redirect( $requested_uri, $target_uri, $num = null ) {
     // We didn't redirect, report failure.
     return false;
 }
-
+*/
 ?>

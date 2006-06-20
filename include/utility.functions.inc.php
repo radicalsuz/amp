@@ -705,6 +705,7 @@ if (!function_exists('PHP_SELF_QUERY')) {
 if (!function_exists('AMP_DebugSQL')) {
     function AMP_DebugSQL( $sql, $source_object ) {
         print $source_object . ":<BR>\n". $sql . "<P>";
+        trigger_error( $source_object . ":<BR>\n". $sql . "<P>" );
     }
 }
 
@@ -1211,6 +1212,12 @@ if ( !function_exists( 'AMP_defineLegacyCustomField')){
             if ( !defined( $constant_name )) define( $constant_name, $value );
         }
         return true;
+    }
+}
+
+if ( !function_exists( 'AMP_make_404' )){
+    function AMP_make_404( ){
+        ampredirect( AMP_CONTENT_URL_404_CORE );
     }
 }
 			

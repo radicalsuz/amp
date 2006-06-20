@@ -12,9 +12,10 @@ class AMP_System_File_List extends AMP_System_List_Form {
         'File Name' => 'name',
         'Date Uploaded' => 'time' );
     var $_source_object = 'AMP_System_File';
-    var $editlink = AMP_SYSTEM_URL_DOCUMENT_UPLOAD;
     var $_observers_source = array( 'AMP_System_List_Observer' );
     var $_actions = array( 'delete' );
+    var $_url_add = AMP_SYSTEM_URL_DOCUMENT_UPLOAD;
+    var $name_field = 'name';
 
     function AMP_System_File_List( ) {
         $this->_path_files = AMP_LOCAL_PATH . AMP_CONTENT_URL_DOCUMENTS;
@@ -32,6 +33,20 @@ class AMP_System_File_List extends AMP_System_List_Form {
         if ( $row_data ) $row_data['id'] = $row_data['name'];
         return $row_data;
     }
+
+    function _getUrlEdit( $row_data ){
+        return substr( AMP_SITE_URL, 0, -1 ) . AMP_CONTENT_URL_DOCUMENTS . $row_data['name'];
+    }
+
+    function _getNameColumnFormat( $row_data ) {
+        if ( !( isset( $this->name_field ) && isset( $row_data[$this->name_field ]))) return false; 
+    //    if ( isset( $this->suppress['editcolumn']) && $this->suppress['editcolumn']) return $row_data[ $this->name_field ];
+
+        return      "<A HREF='". $this->_getUrlEdit( $row_data ) ."' title='" . AMP_TEXT_EDIT_ITEM . "' target='".$this->_getEditLinkTarget( )."'>" 
+                    . $row_data[ $this->name_field ]
+                    . '</a>';
+    }
+
     /*
     function _setSortArticleLinks( $sort_direction ){
         //do nothing -- what should this do? -AP 2006-03-30

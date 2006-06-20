@@ -107,6 +107,7 @@ Class Maps {
 		}
 	}			
 	function build_points() {
+        $extra_fields = "";
 		if ( ($this->P['label_field']) and $this->P['label_field'] != 'City') {
 			$extra_fields = ", ".$this->P['label_field'];
 		}
@@ -197,6 +198,7 @@ Class Maps {
 		}
 		
 		header('Content-type: text/xml');
+        $out = "";
 		$out .= '<?xml version="1.0" encoding="iso-8859-1"?>';
 		$out .= '<us_states>';
 		$out .= '<state id="default_color"><color>'.$this->P['default_color'].'</color></state>';
@@ -226,7 +228,9 @@ Class Maps {
 				$out .= "\n<state id=\"point\">";
 				$out .= '<name>' . $p['name'] . '</name>';
 				$out .= '<loc>' . $p['loc'] .'</loc>';
-				$out .= '<opacity>' . $this->P['opacity'] .'</opacity>';
+                if ( isset( $this->P['opacity'])){
+                    $out .= '<opacity>' . $this->P['opacity'] .'</opacity>';
+                }
 				$out .= '<target>' . $this->P['target'] .'</target>';
 
 				if ($p['id']) {
@@ -245,10 +249,10 @@ Class Maps {
 			$out .= '<data>' . $v['data'] .'</data>';
 			$out .= '<target>' . $this->P['target'] .'</target>';
 
-			if ($v['hover']) {
+			if (isset( $v['hover']) && $v['hover']) {
 				$out .= '<hover>' .  $v['hover'] .'</hover>';
 			}
-			if ($this->P['state_url'] && ($v['data'] >= 1)) {
+			if ($this->P['state_url'] && isset( $v['data']) && ($v['data'] >= 1)) {
 				$out .= '<url>' .$this->P['state_url']. $st .'</url>';
 			}
 			$out .=  '</state>';
@@ -270,8 +274,8 @@ Class Maps {
 			foreach($this->points as $p) {
 				$out .= "\n<marker lat=\"".$p['lat']."\" lng=\"".$p['long']."\"";
 				$out .= " html=\"";	
-				$out .= '&lt;a href=&quot;'.$this->P['point_url']. $p['id'].'&quot;&gt;';	
-				$out .= $p['name'].'&lt;/a&gt;';
+				$out .= '&lt;a href=&quot;'.htmlentities( $this->P['point_url']). $p['id'].'&quot;&gt;';	
+				$out .= htmlentities( $p['name']).'&lt;/a&gt;';
 				$out .= "&lt;br&gt;".$p['City'].", ".$p['State'];
 				$out .= '" />';
 			}

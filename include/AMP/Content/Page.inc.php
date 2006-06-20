@@ -264,7 +264,11 @@ class AMPContent_Page {
     function setArticle( $article_id ) {
         require_once('AMP/Content/Article.inc.php');
         $article= &new Article( $this->dbcon, $article_id );
-        if (!$article->hasData()) ampredirect( AMP_CONTENT_URL_SEARCH );
+        if (!$article->hasData()){
+            AMP_make_404( );
+            return false; 
+        }
+        //ampredirect( AMP_CONTENT_URL_SEARCH );
 
         if ($target = $article->getRedirect() ) ampredirect($target);
 

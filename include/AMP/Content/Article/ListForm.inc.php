@@ -35,7 +35,11 @@ class Article_ListForm extends AMP_System_List_Form {
     var $_pager_active = true;
     var $_source_criteria = array( 'type' => 'type not in ( 2 )' );
     var $_sort_default = array( 'pageorder', 'date DESC', 'id');
-    var $_sort_translations_sql = array( 'assignedDate' => 'date DESC', 'section' => 'type', 'order' => 'pageorder');
+    var $_sort_translations_sql = array( 
+        'assignedDate'  => 'date DESC', 
+        'section'       => 'type', 
+        'order'         => 'pageorder'
+        );
 
     function Article_ListForm ( &$dbcon, $criteria = null ) {
         if ( isset( $criteria['type']) || isset( $criteria['section'])) {
@@ -53,6 +57,7 @@ class Article_ListForm extends AMP_System_List_Form {
             'date' => 'if ( !isnull( date ), date, "0000-00-00" ) DESC',
             'id' => 'id DESC'
         );
+        $this->_sort_translations_sql['order'] = 'if ( !isnull( pageorder ) AND pageorder != "", pageorder, '. AMP_CONTENT_LISTORDER_MAX .')';
     }
 
 
@@ -92,7 +97,7 @@ class Article_ListForm extends AMP_System_List_Form {
         $section_options = &AMPContent_Lookup::instance( 'sectionMap' );
         $section_options = array( '' => 'Select Section') + $section_options;
         $class_options = &AMPContent_Lookup::instance( 'activeClasses' );
-        $section_options = array( '' => 'Select Class') + $section_options;
+        $class_options = array( '' => 'Select Class') + $class_options;
                 
         $toolbar->addEndContent( 
                 $renderer->inDiv( 

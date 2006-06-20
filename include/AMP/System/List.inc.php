@@ -37,11 +37,12 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_observers_source = array( );
 
     var $color = array ( 
-        'background' => array( "#D5D5D5" , "#E5E5E5" ) ,
-        'border'    => '#333333',
-        'mouseover' => '#CCFFCC');
+        'background' => array( "#D5D5D5" , "#E5E5E5" ),
+        'border'     => '#333333',
+        'mouseover'  => '#CCFFCC'
+    );
 
-    var $suppress = array( 'header'=>true );
+    var $suppress = array( 'header' => true );
     var $currentrow;
     var $column_callBacks;
 
@@ -678,15 +679,19 @@ class AMPSystem_List extends AMPDisplay_HTML {
             if ( !$sort_request ) return $source->setSort( $this->_sort_default );
             
             $this->_sort = $sort_request;
-            $sort_request = $this->_translateSortRequest( $sort_request ) ;
+            $sort_request = $this->_translateSortRequest( $sort_request, $source ) ;
             return $source->addSort( $sort_request );
         }
         //for arrays of objects
         $this->_setSortForArray( $source );
     }
 
-    function _translateSortRequest( $sort_request ){
+    function _translateSortRequest( $sort_request, &$source ){
         if ( !isset( $this->_sort_translations_sql[ $sort_request ])){
+            if ( !( $source->isColumn( $sort_request ) 
+                && $source->isColumn( str_replace( AMP_SORT_DESC, '', $sort_request )))) {
+                return false;
+            }
             if ( !( isset( $_REQUEST['sort_direction']))) return $sort_request;
             if ( $_REQUEST['sort_direction'] == AMP_SORT_DESC ) return $sort_request . AMP_SORT_DESC; 
         }

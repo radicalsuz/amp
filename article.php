@@ -43,15 +43,17 @@ if (!($listType || $currentPage->isArticle()) && $currentPage->isRegion() ) {
 /**
  * Redirect to Search Page for invalid page types, i.e. no valid List or Article
  */
-if (!( $listType  || $currentPage->isArticle() ))   ampredirect ( AMP_CONTENT_URL_SEARCH );
+if (!( $listType  || $currentPage->isArticle() )) {
+    AMP_make_404( );
+}
 
 /**
  * Redirect to Search Page for unpublished articles unless in preview mode
  */
-if (!( $listType  || $currentPage->isArticle() ))   ampredirect ( AMP_CONTENT_URL_SEARCH );
+if (!( $listType  || $currentPage->isArticle() ))   AMP_make_404( );
 if ( ( !AMP_DISPLAYMODE_PREVIEW )  && ($currentArticle = &$currentPage->getArticle()) ){
 
-    if (!$currentArticle->isLive() ) ampredirect( AMP_CONTENT_URL_SEARCH );
+    if (!$currentArticle->isLive() ) AMP_make_404( ) ;
 }
 
 /**
@@ -77,11 +79,15 @@ if ($currentPage->isList( AMP_CONTENT_LISTTYPE_CLASS )
  * Get Listing Display  
  */
 if ($listType) {
-    $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
-    $filter = ( isset( $_GET['filter']) && $_GET['filter'])? $_GET['filter'] : false;
     $display = &$currentPage->getListDisplay();
-    if ( $filter ) $display->addFilter( $filter );
-    if ( method_exists( $display, 'setListIntro') ) $display->setListIntro( $show_intro );
+    if ( $display ){
+        $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
+        $filter = ( isset( $_GET['filter']) && $_GET['filter'])? $_GET['filter'] : false;
+        if ( $filter ) $display->addFilter( $filter );
+        if ( method_exists( $display, 'setListIntro') ) $display->setListIntro( $show_intro );
+    } else {
+        AMP_make_404( );
+    }
 } 
 
 /**

@@ -9,8 +9,8 @@ class ComponentMap_Image extends AMPSystem_ComponentMap {
     var $nav_name = "content";
     var $_allow_inline_update = true;
     
-    var $_path_controller = 'AMP/System/File/Controller.php';
-    var $_component_controller = 'AMP_System_File_Controller';
+    var $_path_controller = 'AMP/System/File/Image/Controller.php';
+    var $_component_controller = 'AMP_System_File_Image_Controller';
     
     var $_action_displays = array( 'list' => 'list', 'upload' => 'form');
     var $_action_default = 'list';

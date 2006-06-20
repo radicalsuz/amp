@@ -11,6 +11,7 @@ class AMP_Content_Image_Effects_Controller {
         'crop'  =>  array(  'start_x', 'start_y', 'end_x', 'end_y', 'height', 'width'),
         'resize' => array(  'height' , 'width' ));
     var $_default_action;
+    var $_image_sizes;
 
     function AMP_Content_Image_Effects_Controller( ){
         $this->__construct( );
@@ -73,6 +74,7 @@ class AMP_Content_Image_Effects_Controller {
 
         }
 
+        $this->_image_sizes = $clear_values;
         $this->_display->set_sizes( $clear_values );
 
     }
@@ -88,6 +90,14 @@ class AMP_Content_Image_Effects_Controller {
         $display->execute( );
     }
 
+
+    function hasImageSizes( $action ){
+        if ( !isset( $this->_action_values[$action])) return false;
+        foreach( $this->_action_values[$action] as $desired_value ){
+            if ( !isset( $this->_image_sizes[$desired_value])) return false;
+        }
+        return true;
+    }
 }
 
 ?>

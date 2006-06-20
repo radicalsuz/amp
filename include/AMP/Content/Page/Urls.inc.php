@@ -10,6 +10,7 @@ if ( !defined( 'AMP_CONTENT_URL_ARTICLE')) define ( 'AMP_CONTENT_URL_ARTICLE',  
 if ( !defined( 'AMP_CONTENT_URL_SEARCH'))  define ( 'AMP_CONTENT_URL_SEARCH',       'search.php');
 
 if ( !defined( 'AMP_CONTENT_URL_404'))     define ( 'AMP_CONTENT_URL_404',          AMP_CONTENT_URL_SEARCH );
+if ( !defined( 'AMP_CONTENT_URL_404_CORE'))define ( 'AMP_CONTENT_URL_404_CORE',     '404.php' );
 if ( !defined( 'AMP_CONTENT_URL_RSSFEED')) define ( 'AMP_CONTENT_URL_RSSFEED',      'rssfeed.php');
 if ( !defined( 'AMP_CONTENT_URL_ARTICLE_INPUT'))   define ( 'AMP_CONTENT_URL_ARTICLE_INPUT',       'article_submit.php');
 

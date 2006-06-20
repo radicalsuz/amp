@@ -1,7 +1,7 @@
 <?php
 
 require_once( 'AMP/System/List/Form.inc.php');
-require_once( 'AMP/System/File/File.php');
+require_once( 'AMP/System/File/Image.php');
 require_once( 'AMP/Content/Page/Urls.inc.php');
 require_once( 'AMP/Content/Image/Observer.inc.php');
 
@@ -9,14 +9,16 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
     var $_path_files;
     var $suppress = array( 'header'=>true , 'editcolumn' =>true );
     var $col_headers = array( 
-        'Image' => '_makeThumb',
-        'File Name' => 'name',
+        'Image'         => '_makeThumb',
+        'File Name'     => 'name',
         'Date Uploaded' => 'time',
-        'Galleries' => 'galleryLinks');
+        'Galleries'     => 'galleryLinks',
+        'Crop'          => 'cropLink'
+        );
 
     var $extra_columns;
 
-    var $_source_object = 'AMP_System_File';
+    var $_source_object = 'AMP_System_File_Image';
 
     var $_thumb_attr;
     var $_pager_active = true;
@@ -24,7 +26,10 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
     var $_url_add = AMP_SYSTEM_URL_IMAGE_UPLOAD;
 
     var $_observers_source = array( 'AMP_Content_Image_Observer' );
-    var $_actions = array( 'delete' );
+    var $_actions = array( 'delete', 'gallery' );
+    var $_action_args = array( 
+        'gallery' => array( 'gallery_id' )
+        );
 
     function AMP_Content_Image_List( ) {
         $this->_path_files = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_URL_IMAGES . "original/";
@@ -69,6 +74,13 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
 
     }
 
+    function cropLink( &$source, $column_name ){
+        $renderer = &$this->_getRenderer( );
+        return $renderer->link( 
+                AMP_Url_AddVars( AMP_SYSTEM_URL_IMAGES, array( 'action=crop', 'id='.$source->getName( ))),
+                'Crop' );
+    }
+
     function _setSortGalleryLinks( $sort_direction ){
         ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_GALLERY_IMAGES, 'sort=galleryid'));
     }
@@ -77,6 +89,28 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
         $row_data = PARENT::_getSourceRow( );
         if ( $row_data ) $row_data['id'] = $row_data['name'];
         return $row_data;
+    }
+
+    function renderGallery( &$toolbar ){
+        $renderer = &$this->_getRenderer( );
+        $gallery_options = &AMPContent_Lookup::instance( 'galleries' );
+        $gallery_options = array( '' => 'Select Gallery') + $gallery_options;
+                
+        $toolbar->addEndContent( 
+                $renderer->inDiv( 
+                        '<a name="gallery_targeting"></a>'
+                        . AMP_buildSelect( 'gallery_id', $gallery_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element')))
+                        . '&nbsp;'
+                        . $toolbar->renderDefault( 'gallery')
+                        . '&nbsp;'
+                        . "<input type='button' name='hideGallery' value='Cancel' onclick='window.change_any( \"gallery_targeting\");'>&nbsp;",
+                        array( 
+                            'class' => 'AMPComponent_hidden', 
+                            'id' => 'gallery_targeting')
+                    ), 'gallery_targeting');
+
+        return "<input type='button' name='showGallery' value='Gallery' onclick='window.change_any( \"gallery_targeting\");window.scrollTo( 0, document.anchors[\"gallery_targeting\"].y );'>&nbsp;";
+
     }
 
 }

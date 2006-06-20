@@ -13,9 +13,10 @@ class AMP_System_File {
 
     var $_observers = array( );
     var $id;
+    var $_class_name = 'AMP_System_File';
 
     function AMP_System_File( $file_path = null ){
-        if ( isset( $file_path )) $this->setFile( $file_path );
+        if ( isset( $file_path ) && !is_object( $file_path )) $this->setFile( $file_path );
     }
 
     function setFile( $file_path ){
@@ -72,6 +73,7 @@ class AMP_System_File {
         $result_set = array( );
         if ( substr( $folder_path, -1 ) !== DIRECTORY_SEPARATOR ) $folder_path .= DIRECTORY_SEPARATOR;
         #$result_text = system( 'ls '.$filename_pattern );
+        $class_name = $this->_class_name;
         while( $file_name = readdir( $folder )){
             if (($file_name ==".") || ($file_name == "..")) continue; 
             if ( isset( $regex_pattern )){
@@ -79,7 +81,7 @@ class AMP_System_File {
                 preg_match( $regex_pattern, $file_name, $name_matches );
                 if ( !count( $name_matches )) continue;
             }
-            $result_set[ $file_name ] = &new AMP_System_File( $folder_path . $file_name );
+            $result_set[ $file_name ] = &new $class_name( $folder_path . $file_name );
         }
         $this->sort( $result_set );
         return $result_set;
