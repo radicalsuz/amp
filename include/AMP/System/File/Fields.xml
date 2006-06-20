@@ -1,0 +1,10 @@
+<array>
+    <file_upload>
+        <type>file</type>
+        <label>File to Upload</label>
+    </file_upload>
+    <filename>
+        <type>text</type>
+        <label>New File Name ( optional )</label>
+    </filename>
+</array>
