@@ -16,7 +16,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $crop_form = &new AMP_Content_Image_Crop_Form( $this->_model );
         $crop_action = $crop_form->submitted( );
         if ( !$crop_action ){
-            $this->_display->add( $display, 'crop');
+            $this->_display->add( $crop_form, 'crop');
             return true;
         }
         if ( $crop_action == 'cancel' ){

@@ -40,13 +40,14 @@ class AMP_System_File_Image extends AMP_System_File {
     }
 
     function set_size( ) {
+        if ( !isset( $this->_mimetype ) || array_search( $this->_mimetype, array_keys( $this->_read_methods )) === FALSE ) return false;
         $size_data = getimagesize( $this->getPath( ) ); 
         $this->width = $size_data[0];
         $this->height = $size_data[1];
     }
 
-    function set_mimetype( $value = null ){
-        if ( isset( $mimetype_value ) ) return $this->_mimetype = $value;
+    function set_mimetype( $mimetype_value = null ){
+        if ( isset( $mimetype_value ) ) return $this->_mimetype = $mimetype_value;
         if ( !function_exists( 'mime_content_type')) return false;
         if ( !( $mime_filetype = mime_content_type( $this->getPath() )) ) return false;
         $this->_mimetype = $mime_filetype ;
