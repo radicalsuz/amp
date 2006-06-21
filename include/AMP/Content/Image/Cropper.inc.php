@@ -37,34 +37,6 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     var $_window_x = 220;
     var $_window_y = 170;
 
-    var $_interface_controls = array( 
-        'cropimage'     =>  array( 
-            'type'  => 'button',
-            'label' => AMP_TEXT_CROP,
-            //'attr'  => array( 'onclick="CropInterface.Check( \'def\');"')),
-            'attr'  => array( 'onclick="cropCheck( \'def\');"')),
-            /*
-        'preview'       =>  array( 
-            'type'  => 'button',
-            'label' => AMP_TEXT_PREVIEW,
-            'attr'  => array( 'onclick="CropInterface.Check( \'pre\');"')),
-            */
-        'bigger'        =>  array( 
-            'type'  => 'button',
-            'label' => '+',
-            //'attr'  => array( 'onclick="CropInterface.Zoom( \'in\');"')),
-            'attr'  => array( 'onclick="cropZoom( \'in\');"')),
-        'smaller'       =>  array( 
-            'type'  => 'button',
-            'label' => '-',
-            //'attr'  => array( 'onclick="CropInterface.Zoom( \'out\');"')),
-            'attr'  => array( 'onclick="cropZoom( \'out\');"')),
-        'closewindow'   =>  array( 
-            'type'  => 'button',
-            'label' => AMP_TEXT_CANCEL,
-            'attr'  => array( 'onclick="top.close();"'))
-            );
-  #      'selectioninpicture'    => AMP_ERROR_IMAGE_SELECTION_OUT_OF_RANGE );
     var $submit_button = array( 'submitCropAction' => array(
         'type' => 'group',
         'elements'=> array(
@@ -121,7 +93,8 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
         $this->_image = &$image;
         $this->_initDisplaySize( );
         $this->_initRenderer( );
-        $this->init( 'AMP_Content_Image_Crop_Form', 'POST', AMP_SYSTEM_URL_IMAGES );
+        $this->init( 'AMP_Content_Image_Crop_Form', 'POST', 
+                        AMP_Url_AddVars( AMP_SYSTEM_URL_IMAGES, 'action=crop' ));
     }
 
     function _initRenderer( ){
@@ -158,20 +131,17 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
         $this->_display_width  = $width;
     }
 
-/*
-    function execute( ){
-        $action_method = 'commit' . ucfirst( $this->_crop_action );
-        if ( !method_exists( $this, $action_method )) $action_method = 'commitDefault';
-        return $this->$action_method( );
+    function Build( $flag=false ){
+        $interface_html = $this->renderInterface( );
+        $this->_crop_fields['crop_interface']['default'] = $interface_html ;
+        $this->addFields( $this->_crop_fields )  ;
+        PARENT::Build( $flag );
     }
-    */
+
 
     function execute( ){
         $this->setupOnLoad( );
         $this->declareCSS( );
-        $interface_html = $this->renderInterface( );
-        $this->_crop_fields['crop_interface']['default'] = $interface_html ;
-        $this->addFields( $this->_crop_fields )  ;
         $this->Build( true );
         return $this->output( );
 
@@ -282,15 +252,15 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
                 ."   width:" . intval( $this->_crop_width /$this->_display_ratio )."px;\n"
                 ."   height:" . intval( $this->_crop_height / $this->_display_ratio )."px;\n "
                 ."   z-index:2; \n"
-                ."   background-image: url(".AMP_CONTENT_URL_IMAGES.AMP_ICON_SPACER.");\n"
+                ."   background-image: url(".AMP_SYSTEM_URL_SYSTEM_IMAGES.AMP_ICON_SPACER.");\n"
                 ."}\n";
         $page_header = &AMP_getHeader( );
         $page_header->addStylesheetDynamic( $css, 'cropper');
     }
 
     function renderInterface( ){
-        $output = $this->_renderer->newline( 2 );
-        $output .= $this->_renderer->image( $this->_displayImageURL( ), array( 'border' => 1 ));
+        #$output = $this->_renderer->newline( 2 );
+        $output = $this->_renderer->image( $this->_displayImageURL( ), array( 'border' => 1 ));
         $output .= $this->_renderCropDiv( );
         $output .= $this->_renderer->newline( 2 );
         $output .= $this->_renderControls( );
@@ -311,31 +281,14 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     function _renderControls( ){
         $stuff = 'Size: <input name="bigger" value="+" type="button" onMouseDown="window.cropZoom( \'out\');" onMouseUp="window.stopZoom( );" onMouseOut="window.stopZoom( );">&nbsp;'
                  . '<input name="smaller" value="-" type="button" onMouseDown="window.cropZoom( \'in\');" onclick="window.stopZoom( );" onMouseOut="window.stopZoom( );">&nbsp;<br />';
-                 /*
-                 . '<form name="image_crop_form" method="POST" action="'. AMP_SYSTEM_URL_IMAGES.'">'
-                 . '<input name="height" type="hidden">'
-                 . '<input name="width" type="hidden">'
-                 . '<input name="start_x" type="hidden">'
-                 . '<input name="start_y" type="hidden">'
-                 . '<input name="end_x" type="hidden">'
-                 . '<input name="end_y" type="hidden">'
-                 . '<input name="submitCropAction[crop]" value="Crop" type="button" onclick="window.cropCheck( \'def\', this.form );">&nbsp;'
-                 . '<input name="submitCropAction[cancel]" value="Cancel" type="button" >'
-                 . '</form>';
-                 */
         return $stuff;
-        require_once( 'AMP/Form/SearchForm.inc.php');
-        $form = &new AMPSearchForm( );
-        $form->addFields( $this->_interface_controls );
-        $form->Build( true );
-        return $form->output( );
     }
 
     function _renderCropDiv( ){
         $table_html = 
             '<table width="100%" height="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">'."\n"
             . '        <tr><td>'."\n"
-            . $this->_renderer->image( AMP_CONTENT_URL_IMAGES . AMP_ICON_SPACER )
+            . $this->_renderer->image( AMP_SYSTEM_URL_SYSTEM_IMAGES . AMP_ICON_SPACER )
             . '</td></tr></table>';
         return $this->_renderer->inDiv( $table_html, array( 'id' => 'cropDiv'));
     }

@@ -23,7 +23,10 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
             $this->clear_actions( );
             return false;
         }
+        $crop_form->Build( true  );
         $crop_sizes = $crop_form->getValues( );
+        unset( $crop_sizes['submitCropAction']);
+        AMP_varDump( $crop_sizes );
         $real_sizes = &$this->_resize_ratio( $crop_sizes, $crop_form->getDisplayRatio( ) );
 
         $target_image = &new Content_Image( $this->_model->getName( ) );
@@ -32,7 +35,12 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $this->_model->write_image_resource( $new_image, $target_path );
         
         $cropped_image = &new AMP_System_File_Image( $target_path );
-        $target_path = $target_image->getPath( AMP_IMAGE_CLASS_THUMBNAIL );
+        if ( !$cropped_image->width ){
+            $this->error( 'Crop creation failed');
+            return false;
+        }
+
+        $target_path = $target_image->getPath( AMP_IMAGE_CLASS_THUMB );
 
         $thumb_ratio = AMP_IMAGE_WIDTH_THUMB / $cropped_image->width;
         $thumb_sizes = $this->_resize_ratio( 
@@ -46,7 +54,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
     }
 
-    function _resize_ratios( $original_sizes, $ratio ){
+    function _resize_ratio( $original_sizes, $ratio ){
+        $result_sizes = array( );
         foreach( $original_sizes as $key => $size ){
             $result_sizes[$key] = ceil( $size * $ratio );
         }
