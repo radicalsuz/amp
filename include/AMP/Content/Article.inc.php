@@ -310,6 +310,7 @@ class Article extends AMPSystem_Data_Item {
         $this->mergeData( array( 
             'type' => AMP_CONTENT_MAP_ROOT_SECTION,
             'linkover' => 1,
+            'uselink' => 1,
             'class' => AMP_CONTENT_CLASS_DEFAULT,
             'enteredby' => AMP_SYSTEM_USER_ID,
             'datecreated' => date( 'Y-m-d' )

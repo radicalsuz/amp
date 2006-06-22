@@ -5,7 +5,7 @@ require_once( 'AMP/System/File/Image.php');
 require_once( 'AMP/System/Form.inc.php' );
 
 /**
- * AMP_Content_Image_Cropper 
+ * AMP_Content_Image_Crop_Form
  *
  * crops an image file
  * Based on 1 2 Crop Image script by Roel Meurders <scripts@roelmeurders.com>
@@ -45,7 +45,7 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
                 'label' => 'Crop',
                 'attr' => array ( 
                     'onclick' => 
-                    "return window.cropCheck('def', 'AMP_Content_Image_Crop_Form');" ),
+                    "return window.cropper.Check('def', 'AMP_Content_Image_Crop_Form');" ),
                 ),
             'cancel' => array(
                 'type' => 'submit',
@@ -140,8 +140,6 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
 
 
     function execute( ){
-        $this->setupOnLoad( );
-        $this->declareCSS( );
         $this->Build( true );
         return $this->output( );
 
@@ -172,77 +170,14 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
         $cropped_image->write_image_resource( $thumb_image, $target_path );
     }
 
-    function setupOnLoad( ){
+    function _initJavascriptActions( ){
         $header = & AMP_getHeader( );
-        $header->addJavascriptOnLoad( 'libinit( );' );
+        $header->addJavascriptOnLoad( 'window.cropper = new CropInterface( "cropDiv" );' );
+        $header->addJavascriptOnLoad( 'window.cropper.setImage( "image_to_crop", "'. $this->_image->getName( ).'" );' );
         $header->addJavaScript( $this->_script_file, 'crop' );
-        $header->addJavascriptDynamic( $this->_generateScript( ));
+        $this->declareCSS( );
     }
 
-    function _generateScript( ){
-        return 
-	"
-    function libinit(){
-	   obj=new lib_obj('cropDiv')
-	   obj.dragdrop()
-	}
-
-	function cropCheck(crA, formname ){
-	   if (!((((obj.x + obj.cr)-".$this->_window_x.") <= ".$this->_display_width . ")&&(((obj.y + obj.cb)-".$this->_window_y.") <= ".$this->_display_height . ")&&(obj.x >= ".$this->_window_x.")&&(obj.y >= ".$this->_window_y."))) {
-	        alert('" . AMP_TEXT_ERROR_SELECTION_OUTSIDE_IMAGE . "');
-            return false;
-       }
-       formRef = document.forms[formname];
-       if (  formname >= ''){
-           formRef.elements['start_x'].value = obj.x -".$this->_window_x.";
-           formRef.elements['start_y'].value = obj.y -".$this->_window_y.";
-           formRef.elements['width'].value = obj.cr;
-           formRef.elements['height'].value = obj.cb;
-           return true;
-       }
-        alert( 'formRef not Found');
-        var url = '". AMP_SYSTEM_URL_IMAGE_VIEW 
-                    . "?action=crop&filename=" . $this->_image->getName( )
-                    . "&width=" . $this->_crop_width 
-                    . "&height=" . $this->_crop_height
-                    . "&start_x='+(obj.x-".$this->_window_x.")+'&start_y='+(obj.y-".$this->_window_y.")+'&s='+obj.cr;
-        if (crA == 'pre'){
-           window.open(url,'prevWin','width=".$this->_crop_width.",height=".$this->_crop_height."');
-        } else {
-           location.href=url;
-           return true;
-        }
-    }
-
-    function stopZoom() {
-       loop = false;
-       clearTimeout(zoomtimer);
-    }
-
-    function cropZoom(dir) {
-       loop = true;
-       prop = " . ( $this->_crop_height / $this->_crop_width ).";
-       zoomtimer = null;
-       direction = dir;
-       if (loop == true) {
-        if (direction == \"in\" ) {
-       if ((obj.cr > ". ( $this->_crop_width / $this->_display_ratio ) .") && ( obj.cb > ".( $this->_crop_height / $this->_display_ratio ). " )) {
-			cW = obj.cr - 1;
-			cH = parseInt(prop * cW);
-			obj.clipTo(0,cW,cH,0,1);
-		   }
-		} else {
-		   if ((obj.cr < (" . $this->_display_width . "-5))&&(obj.cb < (".$this->_display_height . "-5))){
-			cW = obj.cr + 1;
-			cH = parseInt(prop * cW);
-			obj.clipTo(0,cW,cH,0,1);
-		   }
-		}
-		zoomtimer = setTimeout(\"cropZoom(direction)\", 10);
-	   }
-	}";
-
-    }
 
     function declareCSS( ){
         $css = "body{font-family:arial,helvetica; font-size:12px}\n";
@@ -259,8 +194,7 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     }
 
     function renderInterface( ){
-        #$output = $this->_renderer->newline( 2 );
-        $output = $this->_renderer->image( $this->_displayImageURL( ), array( 'border' => 1 ));
+        $output = $this->_renderer->image( $this->_displayImageURL( ), array( 'border' => 1, 'name' => 'image_to_crop' ));
         $output .= $this->_renderCropDiv( );
         $output .= $this->_renderer->newline( 2 );
         $output .= $this->_renderControls( );
@@ -279,8 +213,9 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     }
 
     function _renderControls( ){
-        $stuff = 'Size: <input name="bigger" value="+" type="button" onMouseDown="window.cropZoom( \'out\');" onMouseUp="window.stopZoom( );" onMouseOut="window.stopZoom( );">&nbsp;'
-                 . '<input name="smaller" value="-" type="button" onMouseDown="window.cropZoom( \'in\');" onclick="window.stopZoom( );" onMouseOut="window.stopZoom( );">&nbsp;<br />';
+        $stuff = 'Size: <input name="bigger" value="+" type="button" onMouseDown="window.cropper.Bigger( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;'
+                 . '<input name="smaller" value="-" type="button" onMouseDown="window.cropper.Smaller( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;&nbsp;&nbsp;'
+                 . '<input name="preview" value="Preview" type="button" onClick="window.cropper.Check( \'pre\');"><br />';
         return $stuff;
     }
 
@@ -293,15 +228,6 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
         return $this->_renderer->inDiv( $table_html, array( 'id' => 'cropDiv'));
     }
 
-    function setCropAction( $action ){
-        if ( !$this->_allowed( $action )) return false;
-        $this->_crop_action = $action;
-    }
-
-    function _allowed( $action ){
-        return ( array_search( $action, $this->_allowed_actions ) !== FALSE );
-    }
-
     function setCropHeight( $height ){
         $this->_crop_height = $height;
     }
@@ -311,14 +237,12 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     }
 
     function _displayImageURL( ){
-        return AMP_SITE_URL . str_replace( AMP_LOCAL_PATH, "", $this->_image->getPath( ));
-    }
-
-    function _renderPreviewInterface( ){
-        return $this->_renderer->link( 
-                    $this->_renderer->_image( $this->_displayCropPreviewURL( ), array( 'border' => 0)),
-                    "#", array( 'onClick'=> $this->_crop_script . '.closePreview( );')) ;
-            
+        $image_url = AMP_Url_AddVars(  AMP_SYSTEM_URL_IMAGE_VIEW, 
+                                        array( 'filename='.$this->_image->getName( ),
+                                                'class='.AMP_IMAGE_CLASS_ORIGINAL ));
+        if ( $this->_display_ratio == 1 ) return $image_url;
+        return AMP_Url_AddVars( $image_url, array( 'action=resize', 'height='.$this->_display_height, 'width='.$this->_display_width ));
+                                        
     }
 
 }

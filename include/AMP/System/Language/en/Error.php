@@ -1,7 +1,6 @@
 <?php
 
 define( 'AMP_TEXT_ERROR_IMAGE_NOT_ALLOWED', "Could not determine the type of image. JPG, GIF, and PNG format only"); 
-define( 'AMP_TEXT_ERROR_SELECTION_OUTSIDE_IMAGE', 'The selection has to be completely on the image.' );
 define( 'AMP_TEXT_ERROR_FILE_EXISTS', "File already exists: %s" );
 define( 'AMP_TEXT_ERROR_FILE_EXISTS_NOT', "File does not exist: %s" );
 define( 'AMP_TEXT_ERROR_FILE_WRITE_FAILED', "Failed to write: %s" );

@@ -125,7 +125,96 @@ function lib_dd_move(e,y,rresize){ //Mousemove
 //Drag drop functions end *************
 
 
+    function CropInterface( layer_id ){
+        this.crop_obj=new lib_obj( layer_id );
+        this.crop_obj.dragdrop()
+        this.image = false;
+        this.image_filename = false;
 
+        this.Check = cropCheck;
+        this.Stop = stopZoom;
+        this.Bigger = Bigger;
+        this.Smaller = Smaller;
 
+        this.setImage = setImage;
+        this.setRatio = setRatio;
 
+        this.display_ratio = 1;
+        this.window_ratio = 1;
+        this.crop_min_width = 50;
+        this.crop_min_height = 50;
+
+        this.zoomtimer = null;
+    }
+
+    function setImage( image_name, image_filename ){
+        if ( imageRef = document.images[ image_name ] ) {
+            this.image = imageRef;
+            this.image_filename = image_filename;
+            layer_obj = document.getElementById( 'cropDiv');
+            this.crop_obj.x = this.image.x;
+            this.crop_obj.y = this.image.y;
+            layer_obj.style.left = this.image.x;
+            layer_obj.style.top  = this.image.y;
+        }
+    }
+
+    function setRatio( ratio ){
+        this.display_ratio=ratio;
+        this.crop_min_height = 50/ratio;
+        this.crop_min_width = 50/ratio;
+    }
+
+	function cropCheck(crA, formname ){
+	   if (!((((this.crop_obj.x + this.crop_obj.cr)-this.image.x ) <= this.image.width )&&(((this.crop_obj.y + this.crop_obj.cb)- this.image.y ) <= this.image.height )&&(this.crop_obj.x >= this.image.x )&&(this.crop_obj.y >= this.image.y))) {
+	        alert('The selection has to be completely on the image');
+            return false;
+       }
+       formRef = document.forms[formname];
+       if (  formname >= ''){
+           formRef.elements['start_x'].value = this.crop_obj.x - this.image.x;
+           formRef.elements['start_y'].value = this.crop_obj.y - this.image.y;
+           formRef.elements['width'].value = this.crop_obj.cr;
+           formRef.elements['height'].value = this.crop_obj.cb;
+           return true;
+       }
+        var url = 'image.php?action=crop&filename='+ this.image_filename +'&class=original&width='+ this.crop_obj.cr + '&height='+ this.crop_obj.cb + '&start_x='+( this.crop_obj.x - this.image.x )+'&start_y='+( this.crop_obj.y - this.image.y );
+        if (crA == 'pre'){
+           window.open( url, 'prevWin', ('width=' + this.crop_obj.cr + ',height=' + this.crop_obj.cb));
+            prompt( 'Stuff', url );
+        } else {
+           location.href=url;
+           return true;
+        }
+    }
+
+    function stopZoom() {
+       clearTimeout(this.zoomtimer);
+    }
+
+    function Bigger( ){
+       if (  this.crop_obj == undefined ) {
+           return window.cropper.Bigger( );
+       }
+       if (( ( this.crop_obj.x + this.crop_obj.cr - this.image.x ) < ( this.image.width )) && ( ( this.crop_obj.y + this.crop_obj.cb - this.image.y ) < ( this.image.height ))){
+           cW = this.crop_obj.cr + 1;
+           cH = parseInt( this.window_ratio * cW);
+           this.crop_obj.clipTo(0,cW,cH,0,1);
+           this.zoomtimer = setTimeout( Bigger, 10 );
+       }
+
+    }
+
+    function Smaller( ){
+       if (  this.crop_obj == undefined ) {
+           return window.cropper.Smaller( );
+       }
+       if (( this.crop_obj.cr > this.crop_min_width ) && ( this.crop_obj.cb > this.crop_min_height )) {
+			cW = this.crop_obj.cr - 1;
+			cH = parseInt(this.window_ratio * cW);
+			this.crop_obj.clipTo(0,cW,cH,0,1);
+            this.zoomtimer = setTimeout( this.Smaller, 10);
+       }
+
+	}
 
