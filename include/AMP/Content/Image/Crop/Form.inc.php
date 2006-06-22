@@ -68,6 +68,9 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
             'end_y' => array( 
                 'type' => 'hidden'
                 ),
+            'image' => array( 
+                'type' => 'hidden'
+                ),
             'height' => array( 
                 'type' => 'hidden'
                 ),

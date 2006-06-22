@@ -10,7 +10,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
     }
 
     function commit_crop( ){
-        require_once( 'AMP/Content/Image/Cropper.inc.php');
+        require_once( 'AMP/Content/Image/Crop/Form.inc.php');
         $file_name = ( AMP_LOCAL_PATH . '/' . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL . '/' . $this->_model_id );
         $this->_model->setFile( $file_name );
         $crop_form = &new AMP_Content_Image_Crop_Form( $this->_model );
@@ -23,10 +23,14 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
             $this->clear_actions( );
             return false;
         }
+
         $crop_form->Build( true  );
+
         $crop_sizes = $crop_form->getValues( );
+        $image_filename = $crop_sizes['image'];
+        $this->_model->setFile( $image_filename );
         unset( $crop_sizes['submitCropAction']);
-        AMP_varDump( $crop_sizes );
+        unset( $crop_sizes['image']);
         $real_sizes = &$this->_resize_ratio( $crop_sizes, $crop_form->getDisplayRatio( ) );
 
         $target_image = &new Content_Image( $this->_model->getName( ) );
