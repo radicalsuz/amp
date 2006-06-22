@@ -58,6 +58,7 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
             'label' => 'Extra DIA table to save to'),
         'mapping2' => array(
             'type' => 'textarea',
+            'default' => '',
             'size' => '3:15',
             'label' => '<span class="photocaption">mapping.  ex: Group_Name=<br />custom3&Description<br/>=custom4...</span>',
             'available' => true),
