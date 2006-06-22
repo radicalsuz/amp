@@ -176,6 +176,7 @@ function lib_dd_move(e,y,rresize){ //Mousemove
            formRef.elements['start_y'].value = this.crop_obj.y - this.image.y;
            formRef.elements['width'].value = this.crop_obj.cr;
            formRef.elements['height'].value = this.crop_obj.cb;
+           formRef.elements['image'].value = this.image_filename;
            return true;
        }
         var url = 'image.php?action=crop&filename='+ this.image_filename +'&class=original&width='+ this.crop_obj.cr + '&height='+ this.crop_obj.cb + '&start_x='+( this.crop_obj.x - this.image.x )+'&start_y='+( this.crop_obj.y - this.image.y );
