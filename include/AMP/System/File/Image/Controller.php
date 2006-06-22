@@ -28,13 +28,16 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
         $crop_sizes = $crop_form->getValues( );
         $image_filename = $crop_sizes['image'];
-        $this->_model->setFile( $image_filename );
+		$image_path  = AMP_LOCAL_PATH . '/img/' . AMP_IMAGE_CLASS_ORIGINAL . '/' . $image_filename ;
+		trigger_error($image_path);
+        $this->_model->setFile( $image_path );
         unset( $crop_sizes['submitCropAction']);
         unset( $crop_sizes['image']);
         $real_sizes = &$this->_resize_ratio( $crop_sizes, $crop_form->getDisplayRatio( ) );
 
         $target_image = &new Content_Image( $this->_model->getName( ) );
         $target_path  = $target_image->getPath( AMP_IMAGE_CLASS_CROP );
+		AMP_mkDir( substr( $target_path, 0, strlen( $target_path ) - strlen( $this->_model->getName() - 1)));
         $new_image = &$this->_model->crop( $real_sizes['start_x'], $real_sizes['start_y'], $real_sizes['width'], $real_sizes['height']);
         $this->_model->write_image_resource( $new_image, $target_path );
         
