@@ -13,8 +13,10 @@ class ContentSearch_Form extends AMPSearchForm {
     }
 
     function setDynamicValues() {
-        $section_values = $this->_getValueSet( 'section' );
-        $section_values = array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --') + $section_values ;
+        $section_values = array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --');
+		if($section_value_set = $this->_getValueSet( 'section' )) {
+			$section_values += $section_value_set;
+		}
         $this->setFieldValueSet( 'section', $section_values );
         //$this->_initJavascriptActions( );
         /*
