@@ -34,6 +34,7 @@ define( 'AMP_TEXT_VIEW', 'View');
 define( 'AMP_TEXT_LIST', 'List');
 define( 'AMP_TEXT_ADD', 'Add');
 define( 'AMP_TEXT_SEARCH', 'Search');
+define( 'AMP_TEXT_CROP', 'Crop');
 
 define( 'AMP_TEXT_ALL', 'All');
 define( 'AMP_TEXT_PUBLISH', 'Publish');

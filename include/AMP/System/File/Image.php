@@ -113,6 +113,7 @@ class AMP_System_File_Image extends AMP_System_File {
 
         $initial_width = $end_x - $start_x; 
         $initial_height = $end_y - $start_y; 
+		print $initial_height . ' : ' . $initial_width; 
 
         $result = &$create_method( $initial_width, $initial_height );
         $copy_method($result, $source, 0, 0, $start_x, $start_y, $initial_width, $initial_height, $initial_width, $initial_height);

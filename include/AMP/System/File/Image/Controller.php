@@ -29,7 +29,6 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $crop_sizes = $crop_form->getValues( );
         $image_filename = $crop_sizes['image'];
 		$image_path  = AMP_LOCAL_PATH . '/img/' . AMP_IMAGE_CLASS_ORIGINAL . '/' . $image_filename ;
-		trigger_error($image_path);
         $this->_model->setFile( $image_path );
         unset( $crop_sizes['submitCropAction']);
         unset( $crop_sizes['image']);
@@ -38,11 +37,12 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $target_image = &new Content_Image( $this->_model->getName( ) );
         $target_path  = $target_image->getPath( AMP_IMAGE_CLASS_CROP );
 		AMP_mkDir( substr( $target_path, 0, strlen( $target_path ) - strlen( $this->_model->getName() - 1)));
-        $new_image = &$this->_model->crop( $real_sizes['start_x'], $real_sizes['start_y'], $real_sizes['width'], $real_sizes['height']);
+        $new_image = &$this->_model->crop( $real_sizes['start_x'], $real_sizes['start_y'], $real_sizes['start_x'] + $real_sizes['width'], $real_sizes['start_y'] + $real_sizes['height']);
         $this->_model->write_image_resource( $new_image, $target_path );
         
         $cropped_image = &new AMP_System_File_Image( $target_path );
         if ( !$cropped_image->width ){
+            $this->clear_actions( );
             $this->error( 'Crop creation failed');
             return false;
         }
@@ -56,6 +56,12 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
                             $thumb_ratio );
         $thumb_image = &$cropped_image->resize( $thumb_sizes['width'], $thumb_sizes['height'] );
         $cropped_image->write_image_resource( $thumb_image, $target_path );
+        $renderer = &new AMPDisplay_HTML( );
+		$this->message( $renderer->image( $target_image->getURL( AMP_IMAGE_CLASS_CROP ), array('border'=>1 )) 
+						. $renderer->newline( 2 )
+						. sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $cropped_image->getName() . $renderer->space() . AMP_TEXT_CROP )
+						);
+		$this->_display->add( $this->_map->getComponent('list'));
 
         return true;
 
