@@ -30,12 +30,11 @@ class AMP_System_File_Image extends AMP_System_File {
     var $_class_name = 'AMP_System_File_Image';
 
     function AMP_System_File_Image( $file_path = null ){
-        if ( isset( $file_path )) $this->setFile( $file_path );
+        if ( isset( $file_path ) && !is_object( $file_path )) $this->setFile( $file_path );
     }
 
     function setFile( $file_path ){
         PARENT::setFile( $file_path );
-        //trigger_error( $file_path );
         $this->set_mimetype( );
         $this->set_size ();
     }
@@ -113,7 +112,6 @@ class AMP_System_File_Image extends AMP_System_File {
 
         $initial_width = $end_x - $start_x; 
         $initial_height = $end_y - $start_y; 
-		print $initial_height . ' : ' . $initial_width; 
 
         $result = &$create_method( $initial_width, $initial_height );
         $copy_method($result, $source, 0, 0, $start_x, $start_y, $initial_width, $initial_height, $initial_width, $initial_height);

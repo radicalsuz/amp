@@ -15,6 +15,7 @@ class AMP_System_List_Form extends AMPSystem_List {
 
     var $_actions = array( 'publish', 'unpublish', 'delete');
     var $_action_args = array( );
+    var $_actions_global = array( );
     var $_toolbar;
     var $_toolbar_class = 'AMP_System_List_Toolbar';
     var $_request;
@@ -189,7 +190,7 @@ class AMP_System_List_Form extends AMPSystem_List {
     function _HTML_selectColumn( $id ) {
         if ( isset( $this->suppress['toolbar']) && $this->suppress['toolbar'] ) return false;
         if (isset($this->suppress['selectcolumn'])) return "";
-        return '<td><center><input type="checkbox" name="id[]" value="'.$id.'" onclick="this.checked=!this.checked;"><center></td>'; ;
+        return '<td><center><input type="checkbox" name="list_action_id[]" value="'.$id.'" onclick="this.checked=!this.checked;"><center></td>'; ;
     }
 
     function _HTML_editColumn( $id ) {

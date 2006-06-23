@@ -11,6 +11,7 @@ class Content_Image {
        );
     var $_itemdata = array();
     var $_itemdata_keys = array( 'width', 'height', 'alttag', 'caption', 'alignment', 'filename', 'image_size');
+    var $_files = array( );
 
     function Content_Image( $filename=null ) {
         if (isset($filename)) $this->setFile( $filename );
@@ -19,8 +20,15 @@ class Content_Image {
     function setFile( $filename ) {
         $this->filename = $filename;
         if ( !$filename ) return;
-        if ( !file_exists( $this->getPath( $this->getImageClass( )))) return;
-        $this->setSize(getimagesize( $this->getPath( $this->getImageClass() ) )); 
+        $target_path =  $this->getPath( $this->getImageClass( ));
+        if ( !file_exists( $target_path )) return;
+        if ( !function_exists( 'mime_content_type' )) return ;
+        $mime_filetype  = mime_content_type( $target_path ) ;
+        if ( strpos( $mime_filetype, 'image') === FALSE ){
+            $this->setSize( array( 0, 0 ));
+            return ;
+        }
+        $this->setSize(getimagesize( $target_path ));
     }
 
     function setSize( $size_data ) {

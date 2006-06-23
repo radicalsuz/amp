@@ -30,7 +30,7 @@ class AMP_System_File_List extends AMP_System_List_Form {
 
     function _getSourceRow( ){
         $row_data = PARENT::_getSourceRow( );
-        if ( $row_data ) $row_data['id'] = $row_data['name'];
+        if ( $row_data ) $row_data['id'] = strip_tags( $row_data['name'] );
         return $row_data;
     }
 

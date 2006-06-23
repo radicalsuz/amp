@@ -42,6 +42,9 @@ class AMP_System_List_Request {
         
         // for Object Array lists
         $affected_items = &$this->_getAffectedItems( $this->_getAffectedIds( ));
+        if ( $this->commitActionLocal( $affected_items, $this->_getAction( ), $this->_getArguments( ))) {
+            return true;
+        }
 
         foreach( $affected_items as $request_target ) {
             if ( !$this->commitAction(  $request_target , $this->_getAction( ), $this->_getArguments())) continue; 
@@ -59,6 +62,10 @@ class AMP_System_List_Request {
         }
         $local_args = $this->_getSpecificArgs( $target, $action, $args );
         return call_user_func_array( array( $target, $action ), $local_args ) ;
+    }
+
+    function commitActionLocal( &$target_set, $action, $args = null ){
+        return false;
     }
 
     function _getSpecificArgs( &$target, $action, $args ){
@@ -110,8 +117,8 @@ class AMP_System_List_Request {
             return $return;
         }
 
-        if ( !isset( $this->_request_vars['id'])) return false;
-        return $this->_request_vars['id'] ;
+        if ( !isset( $this->_request_vars['list_action_id'])) return false;
+        return $this->_request_vars['list_action_id'] ;
 
     }
 

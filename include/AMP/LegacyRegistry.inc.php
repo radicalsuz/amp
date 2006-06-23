@@ -17,10 +17,10 @@ if (file_exists($base_path."Connections/menu.class.php")) {
 } 
 
 # Get system vars
-$getsysvars = $dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1")
-    or die("Couldn't fetch system settings: " . $dbcon->ErrorMsg()); 
+require_once( 'AMP/System/Setup/Setup.php');
+$sysvars = & new AMP_System_Setup( $dbcon );
 
-$SystemSettings = $getsysvars->FetchRow();
+$SystemSettings = $sysvars->getData();
 
 $SiteName            = $SystemSettings["websitename"];
 $Web_url             = $SystemSettings["basepath"];

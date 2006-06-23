@@ -2,6 +2,8 @@
 require_once( 'AMP/System/Form/XML.inc.php');
 
 class AMP_System_File_Image_Form extends AMPSystem_Form_XML {
+
+    var $name_field = 'image';
     
     function AMP_System_File_Image_Form( ){
         $name = 'AMP_System_File_Image_Form';

@@ -39,7 +39,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         'o_base_url'    => '/punbb'
     );
 
-    function AMP_System_Setup ( &$dbcon, $id = null ) {
+    function AMP_System_Setup ( &$dbcon, $id = AMP_SYSTEM_SETTING_DB_ID ) {
         $this->init( $dbcon, $id );
         $this->_initExtraSetup( );
     }
@@ -166,6 +166,17 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
     function setTemplateIdFrontpage( $template_id ){
         return $this->mergeData( array( 'indextemplate' => $template_id ));
+    }
+
+    function setImageWidths( $sizes ){
+        $legacy_keys = array( 'thumb' => 'thumb', 'tall' => 'optl', 'wide' => 'optw' );
+        $legacy_size_values = array( );
+        foreach( $sizes as $size_key => $value ){
+            if ( !isset( $legacy_keys[$size_key])) continue ;
+            $legacy_size_values[ $legacy_keys[ $size_key ]]  = $value ;
+        }
+        if ( empty( $legacy_size_values )) return false;
+        return $this->mergeData( $legacy_size_values );
     }
 }
 

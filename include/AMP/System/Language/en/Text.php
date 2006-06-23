@@ -34,7 +34,6 @@ define( 'AMP_TEXT_VIEW', 'View');
 define( 'AMP_TEXT_LIST', 'List');
 define( 'AMP_TEXT_ADD', 'Add');
 define( 'AMP_TEXT_SEARCH', 'Search');
-define( 'AMP_TEXT_CROP', 'Crop');
 
 define( 'AMP_TEXT_ALL', 'All');
 define( 'AMP_TEXT_PUBLISH', 'Publish');
@@ -43,10 +42,17 @@ define( 'AMP_TEXT_ADD_ITEM','Add new record' );
 define( 'AMP_TEXT_PREVIEW_ITEM','Preview this Item' );
 define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
 define( 'AMP_TEXT_LIST_CONFIRM_DELETE', 'Are you sure you want to DELETE these items?');
+define( 'AMP_TEXT_LIST_CONFIRM_RECALCULATE_IMAGES', 'Recalculating image sizes may take several minutes.\n  Please do not interfere with your browser during this time.\n  Are you sure you want to continue?');
 
 define( 'AMP_TEXT_CROP', 'Crop');
+define( 'AMP_TEXT_RECALCULATE', 'Recalculate');
 define( 'AMP_TEXT_PREVIEW', 'Preview');
 define( 'AMP_TEXT_CANCEL', 'Cancel');
+define( 'AMP_TEXT_ALL_IMAGE_SIZES', 'All Image Sizes');
+define( 'AMP_TEXT_SELECT_NEW_WIDTHS_FOR', 'Select new widths for');
+define( 'AMP_TEXT_GALLERY', 'Gallery');
+define( 'AMP_TEXT_SELECT', 'Select %s');
+define( 'AMP_TEXT_ACTION_NOTICE', 'Performing %s on %s');
 
 /**
  * RSS listpage text
@@ -187,5 +193,9 @@ define( 'AMP_TEXT_REDIRECTED_TO', 'Redirected To');
 define( 'AMP_TEXT_ALIAS', 'Alias');
 define( 'AMP_TEXT_ATTACHED_FILE', 'Attached File');
 define( 'AMP_TEXT_VIEW_ALL', 'View All %s');
+
+define( 'AMP_TEXT_IMAGE_CLASS_THUMB', 'thumbnail' );
+define( 'AMP_TEXT_IMAGE_CLASS_OPTIMIZED_TALL', 'tall image' );
+define( 'AMP_TEXT_IMAGE_CLASS_OPTIMIZED_WIDE', 'wide image' );
 
 ?>

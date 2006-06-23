@@ -1,7 +1,7 @@
 //Javascript function to select all/deselect all on a given page
 var sel_action='Select All';
 function list_selectAll( form_name, id_element_name ) {
-    if ( !id_element_name ) id_element_name = 'id';
+    if ( !id_element_name ) id_element_name = 'list_action_id';
     sform=document.forms[ form_name ]; 
     t=document.forms[ form_name ].length;
     if (sel_action=='Select All') {
@@ -21,7 +21,7 @@ function list_selectAll( form_name, id_element_name ) {
 
 //Javascript - selects an ID - used by table row_select
 function select_id(find_id, form_name, id_element_name ) {
-    if ( !id_element_name ) id_element_name = 'id';
+    if ( !id_element_name ) id_element_name = 'list_action_id';
     sform=document.forms[ form_name ];
     t = sform.length;
     for (n=0; n<t; n++){

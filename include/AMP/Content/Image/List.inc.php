@@ -4,6 +4,7 @@ require_once( 'AMP/System/List/Form.inc.php');
 require_once( 'AMP/System/File/Image.php');
 require_once( 'AMP/Content/Page/Urls.inc.php');
 require_once( 'AMP/Content/Image/Observer.inc.php');
+require_once( 'AMP/Content/Image/List/Request.inc.php' );
 
 class AMP_Content_Image_List extends AMP_System_List_Form {
     var $_path_files;
@@ -20,16 +21,19 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
 
     var $_source_object = 'AMP_System_File_Image';
 
-    var $_thumb_attr;
+    var $_thumb_attr = array();
     var $_pager_active = true;
     //var $editlink = AMP_SYSTEM_URL_IMAGE_UPLOAD;
     var $_url_add = AMP_SYSTEM_URL_IMAGE_UPLOAD;
 
     var $_observers_source = array( 'AMP_Content_Image_Observer' );
-    var $_actions = array( 'delete', 'gallery' );
+    var $_actions = array( 'delete', 'gallery', 'recalculate' );
     var $_action_args = array( 
-        'gallery' => array( 'gallery_id' )
+        'gallery' => array( 'gallery_id' ),
+        'recalculate' => array( 'image_width_thumb', 'image_width_tall', 'image_width_wide' )
         );
+    var $_actions_global = array( 'recalculate' );
+    var $_request_class = 'AMP_Content_Image_List_Request';
 
     function AMP_Content_Image_List( ) {
         $this->_path_files = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_URL_IMAGES . "original/";
@@ -56,7 +60,7 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
     function _makeThumb( &$source, $column_name ) {
         require_once( 'AMP/Content/Image.inc.php');
         $img = &new Content_Image( $source->getName( ));
-        return $this->_HTML_link( $img->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $this->_HTML_image($img->getURL( AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ));
+        return $this->_HTML_link( $img->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $this->_HTML_image($img->getURL( AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ), array( 'target' => 'blank' ));
     }
 
     function galleryLinks( $source, $column_name ) {
@@ -87,14 +91,40 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
 
     function _getSourceRow( ){
         $row_data = PARENT::_getSourceRow( );
-        if ( $row_data ) $row_data['id'] = $row_data['name'];
+        if ( $row_data ) $row_data['id'] = strip_tags( $row_data['name'] );
         return $row_data;
+    }
+
+    function renderRecalculate( &$toolbar ){
+        $renderer = &$this->_getRenderer( );
+        $toolbar->addEndContent( 
+                $renderer->inDiv( 
+                        '<a name="recalculate_sizes"></a>'
+                        . $renderer->bold( AMP_TEXT_SELECT_NEW_WIDTHS_FOR . ':' )
+                        . $renderer->newline( 2 )
+                        . ucwords( AMP_Pluralize( AMP_TEXT_IMAGE_CLASS_THUMB )) . ': ' . '<input name="image_width_thumb" value='.AMP_IMAGE_WIDTH_THUMB.' class="searchform_element" size="4">' . $renderer->space( 2 )
+                        . ucwords( AMP_Pluralize( AMP_TEXT_IMAGE_CLASS_OPTIMIZED_TALL )) . ': ' . '<input name="image_width_tall" value='.AMP_IMAGE_WIDTH_TALL.' class="searchform_element" size="4">' . $renderer->space( 2 ) 
+                        . ucwords( AMP_Pluralize( AMP_TEXT_IMAGE_CLASS_OPTIMIZED_WIDE )) . ': ' . '<input name="image_width_wide" value='.AMP_IMAGE_WIDTH_WIDE.' class="searchform_element" size="4">' . $renderer->space( 2 ) 
+                        . $renderer->newline(  2 )
+                        //. AMP_buildSelect( 'gallery_id', $gallery_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element')))
+                        . '&nbsp;'
+                        . "<input type='submit' name='". $toolbar->submitGroup ."[recalculate]' value='". AMP_TEXT_RECALCULATE . "' onclick='return confirmSubmit( \"".AMP_TEXT_LIST_CONFIRM_RECALCULATE_IMAGES."\");'>"
+//                        . $toolbar->renderDefault( 'recalculate')
+                        . '&nbsp;'
+                        . "<input type='button' name='hideRecalculate' value='".AMP_TEXT_CANCEL."' onclick='window.change_any( \"recalculate_sizes\");'>&nbsp;",
+                        array( 
+                            'class' => 'AMPComponent_hidden', 
+                            'id' => 'recalculate_sizes')
+                    ), 'recalculate_sizes');
+
+        return "&nbsp;&nbsp;&#124;&nbsp;&nbsp; ".AMP_TEXT_ALL_IMAGE_SIZES.": <input type='button' name='showRecalculate' value='".AMP_TEXT_RECALCULATE."' onclick='window.change_any( \"recalculate_sizes\");if ( $(\"gallery_targeting\").style.display==\"block\") window.change_any( \"gallery_targeting\" );window.scrollTo( 0, document.anchors[\"recalculate_sizes\"].y );'>&nbsp;";
+
     }
 
     function renderGallery( &$toolbar ){
         $renderer = &$this->_getRenderer( );
         $gallery_options = &AMPContent_Lookup::instance( 'galleries' );
-        $gallery_options = array( '' => 'Select Gallery') + $gallery_options;
+        $gallery_options = array( '' => sprintf( AMP_TEXT_SELECT, AMP_TEXT_GALLERY )) + $gallery_options;
                 
         $toolbar->addEndContent( 
                 $renderer->inDiv( 
@@ -103,13 +133,13 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
                         . '&nbsp;'
                         . $toolbar->renderDefault( 'gallery')
                         . '&nbsp;'
-                        . "<input type='button' name='hideGallery' value='Cancel' onclick='window.change_any( \"gallery_targeting\");'>&nbsp;",
+                        . "<input type='button' name='hideGallery' value='".AMP_TEXT_CANCEL."' onclick='window.change_any( \"gallery_targeting\");'>&nbsp;",
                         array( 
                             'class' => 'AMPComponent_hidden', 
                             'id' => 'gallery_targeting')
                     ), 'gallery_targeting');
 
-        return "<input type='button' name='showGallery' value='Gallery' onclick='window.change_any( \"gallery_targeting\");window.scrollTo( 0, document.anchors[\"gallery_targeting\"].y );'>&nbsp;";
+        return "<input type='button' name='showGallery' value='".AMP_TEXT_GALLERY."' onclick='window.change_any( \"gallery_targeting\");if ( $(\"recalculate_sizes\").style.display==\"block\") window.change_any( \"recalculate_sizes\" );window.scrollTo( 0, document.anchors[\"gallery_targeting\"].y );'>&nbsp;";
 
     }
 

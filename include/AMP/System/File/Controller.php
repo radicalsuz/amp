@@ -4,6 +4,8 @@ require_once( 'AMP/System/Component/Controller.php');
 
 class AMP_System_File_Controller extends AMP_System_Component_Controller_Standard {
 
+    var $_file_name_uploaded;
+
     function AMP_System_File_Controller( ){
         $this->init( );
     }
@@ -23,20 +25,16 @@ class AMP_System_File_Controller extends AMP_System_Component_Controller_Standar
         }
 
         $values = $this->get_form_data( );
-        if ( isset( $values['image'])){
-            $image_name = $values['image'];
-            $values['img'] = $image_name;
-            $this->_save_galleryInfo( $values );
+        $this->_commit_save_actions( $values );
 
-            require_once( 'AMP/Content/Image/Display.inc.php');
-            $uploaded_image = &new ContentImage_Display_allVersions( $image_name );
-            $this->_display->add( $uploaded_image );
-        }
-
-        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $image_name));
+        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $this->_file_name_uploaded ));
 
         $this->display_default( );
         return true;
+    }
+
+    function _commit_save_actions( $values ){
+        if ( isset( $values['file_upload'] )) $this->_file_name_uploaded = $values['file_upload'];
     }
 
     function _save_galleryInfo( $data ){

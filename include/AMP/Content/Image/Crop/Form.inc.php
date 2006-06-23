@@ -68,7 +68,7 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
             'end_y' => array( 
                 'type' => 'hidden'
                 ),
-            'image' => array( 
+            'id' => array( 
                 'type' => 'hidden'
                 ),
             'height' => array( 
@@ -81,7 +81,6 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
 
 
     var $_crop_action;
-    var $_allowed_actions = array( 'crop', 'preview', 'def' );
 
     var $_crop_width    = AMP_IMAGE_WIDTH_THUMB;
     var $_crop_height   = AMP_IMAGE_WIDTH_THUMB;
@@ -89,15 +88,11 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     var $crop_start_x;
     var $crop_start_y;
 
-    var $_crop_jpeg_quality = 80;
-    var $_target_page = 'crop_image2.php';
-
     function AMP_Content_Image_Crop_Form( &$image ){
         $this->_image = &$image;
         $this->_initDisplaySize( );
         $this->_initRenderer( );
-        $this->init( 'AMP_Content_Image_Crop_Form', 'POST', 
-                        AMP_Url_AddVars( AMP_SYSTEM_URL_IMAGES, 'action=crop' ));
+        $this->init( 'AMP_Content_Image_Crop_Form', 'POST', AMP_SYSTEM_URL_IMAGES );
     }
 
     function _initRenderer( ){
@@ -152,27 +147,6 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
         return $this->_display_ratio;
     }
 
-    function commitCrop( ){
-        $target_image = &new Content_Image( $this->_image->getName( ) );
-        $target_path  = $target_image->getPath( AMP_IMAGE_CLASS_CROP );
-        $real_sizes = &$this->_resize_ratio( $sizes, $this->_display_ratio );
-
-        $new_image = &$this->_image->crop( $real_sizes['start_x'], $real_sizes['start_y'], $real_sizes['width'], $real_sizes['height']);
-        $this->_image->write_image_resource( $new_image, $target_path );
-        
-        $cropped_image = &new AMP_System_File_Image( $target_path );
-        $target_path = $target_image->getPath( AMP_IMAGE_CLASS_THUMBNAIL );
-
-        $thumb_ratio = AMP_IMAGE_WIDTH_THUMB / $cropped_image->width;
-        $thumb_sizes = $this->_resize_ratio( 
-                            array( 'height' => $cropped_image->height,
-                                    'width' => $cropped_image->width ), 
-                            $thumb_ratio );
-
-        $thumb_image = &$cropped_image->resize( $thumb_sizes['width'], $thumb_sizes['height'] );
-        $cropped_image->write_image_resource( $thumb_image, $target_path );
-    }
-
     function _initJavascriptActions( ){
         $header = & AMP_getHeader( );
         $header->addJavascriptOnLoad( 'window.cropper = new CropInterface( "cropDiv" );' );
@@ -218,7 +192,7 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     function _renderControls( ){
         $stuff = 'Size: <input name="bigger" value="+" type="button" onMouseDown="window.cropper.Bigger( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;'
                  . '<input name="smaller" value="-" type="button" onMouseDown="window.cropper.Smaller( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;&nbsp;&nbsp;'
-                 . '<input name="preview" value="Preview" type="button" onClick="window.cropper.Check( \'pre\');"><br />';
+                 . '<input name="preview" value="'.AMP_TEXT_PREVIEW.'" type="button" onClick="window.cropper.Check( \'pre\');"><br />';
         return $stuff;
     }
 
