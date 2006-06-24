@@ -1371,7 +1371,7 @@ else
 		$d->close();
 		if(defined('PUN_STYLE_DIR')) {
 			$d = dir(realpath(PUN_STYLE_DIR));
-			while (($entry = $d->read()) !== false)
+			while ($d && (($entry = $d->read()) !== false))
 			{
 				if (substr($entry, strlen($entry)-4) == '.css')
 					$styles[] = substr($entry, 0, strlen($entry)-4);
