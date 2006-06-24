@@ -59,7 +59,7 @@ function check_cookie(&$pun_user)
 			$pun_user['language'] = $pun_config['o_default_lang'];
 
 		// Set a default style if the user selected style no longer exists
-		if (!@file_exists(PUN_ROOT.'style/'.$pun_user['style'].'.css'))
+		if (!(@file_exists(PUN_ROOT.'style/'.$pun_user['style'].'.css') || (defined('PUN_STYLE_DIR') && defined('PUN_STYLE_PATH') && @file_exists(PUN_STYLE_DIR.$pun_user['style'].'.css'))))
 			$pun_user['style'] = $pun_config['o_default_style'];
 
 		if (!$pun_user['disp_topics'])
@@ -764,7 +764,11 @@ function maintenance_message()
 
 ?>
 <title><?php echo pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_common['Maintenance'] ?></title>
+<?php if (defined('PUN_STYLE_DIR') && defined('PUN_STYLE_PATH') && @file_exists(PUN_STYLE_DIR.$pun_user['style'].'.css')): ?>
+<link rel="stylesheet" type="text/css" href="<?php echo PUN_STYLE_PATH.$pun_user['style'].'.css' ?>" />
+<?php else: ?>
 <link rel="stylesheet" type="text/css" href="style/<?php echo $pun_user['style'].'.css' ?>" />
+<?php endif; ?>
 <?php
 
 	$tpl_temp = trim(ob_get_contents());
@@ -844,7 +848,11 @@ function redirect($destination_url, $message)
 ?>
 <meta http-equiv="refresh" content="<?php echo $pun_config['o_redirect_delay'] ?>;URL=<?php echo str_replace(array('<', '>', '"'), array('&lt;', '&gt;', '&quot;'), $destination_url) ?>" />
 <title><?php echo pun_htmlspecialchars($pun_config['o_board_title']).' / '.$lang_common['Redirecting'] ?></title>
+<?php if (defined('PUN_STYLE_DIR') && defined('PUN_STYLE_PATH') && @file_exists(PUN_STYLE_DIR.$pun_user['style'].'.css')): ?>
+<link rel="stylesheet" type="text/css" href="<?php echo PUN_STYLE_PATH.$pun_user['style'].'.css' ?>" />
+<?php else: ?>
 <link rel="stylesheet" type="text/css" href="style/<?php echo $pun_user['style'].'.css' ?>" />
+<?php endif; ?>
 <?php
 
 	$tpl_temp = trim(ob_get_contents());

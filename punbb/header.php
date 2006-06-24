@@ -62,7 +62,11 @@ if (!defined('PUN_ALLOW_INDEX'))
 
 ?>
 <title><?php echo $page_title ?></title>
+<?php if (defined('PUN_STYLE_DIR') && defined('PUN_STYLE_PATH') && @file_exists(PUN_STYLE_DIR.'/'.$pun_user['style'].'.css')): ?>
+<link rel="stylesheet" type="text/css" href="<?php echo PUN_STYLE_PATH.$pun_user['style'].'.css' ?>" />
+<?php else: ?>
 <link rel="stylesheet" type="text/css" href="style/<?php echo $pun_user['style'].'.css' ?>" />
+<?php endif; ?>
 <?php
 
 if (defined('PUN_ADMIN_CONSOLE'))

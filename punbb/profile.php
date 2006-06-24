@@ -1369,6 +1369,15 @@ else
 				$styles[] = substr($entry, 0, strlen($entry)-4);
 		}
 		$d->close();
+		if(defined('PUN_STYLE_DIR')) {
+			$d = dir(realpath(PUN_STYLE_DIR));
+			while (($entry = $d->read()) !== false)
+			{
+				if (substr($entry, strlen($entry)-4) == '.css')
+					$styles[] = substr($entry, 0, strlen($entry)-4);
+			}
+			$d->close();
+		}
 
 		// Only display the style selection box if there's more than one style available
 		if (count($styles) == 1)

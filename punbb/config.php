@@ -18,9 +18,15 @@ $cookie_secure = 0;
 $cookie_seed = '744c5f12';
 
 if(defined('AMP_LOCAL_PATH')) {
-	define('PUN_CACHE_DIR', AMP_LOCAL_PATH.'/cache/punbb');
+	if(!defined('PUN_CACHE_DIR'))
+		define('PUN_CACHE_DIR', AMP_LOCAL_PATH.'/cache/punbb');
+	if(!defined('PUN_STYLE_PATH'))
+		define('PUN_STYLE_PATH', '/custom/punbb/styles/');
+	if(!defined('PUN_STYLE_DIR'))
+		define('PUN_STYLE_DIR', AMP_LOCAL_PATH.PUN_STYLE_PATH);
 } else {
-	define('PUN_CACHE_DIR', PUN_ROOT.'cache/');
+	if(!defined('PUN_CACHE_DIR'))
+		define('PUN_CACHE_DIR', PUN_ROOT.'cache/');
 }
 
 define('PUN', 1);
