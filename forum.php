@@ -2,8 +2,10 @@
 include("AMP/BaseDB.php"); 
 
 //$modid = 46;
-//$intro_id = 69;
 
+if (AMP_FOURM_INTRO_TEXT) {
+    $intro_id = AMP_FOURM_INTRO_TEXT;
+}
 include("AMP/BaseTemplate.php"); 
 //include("AMP/BaseModuleIntro.php");
 ?>
