@@ -6,6 +6,8 @@ class ArticleComment extends AMPSystem_Data_Item {
 
     var $datatable = "comments";
     var $name_field = "comment";
+    var $_sort_auto = false;
+    var $_class_name = 'ArticleComment';
 
     function ArticleComment ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -27,6 +29,9 @@ class ArticleComment extends AMPSystem_Data_Item {
 
     function makeCriteriaArticle( $article_id ){
         return $this->_makeCriteriaEquals( 'articleid', $article_id );
+    }
+    function makeCriteriaArticle_id( $article_id ){
+        return $this->makeCriteriaArticle( $article_id );
     }
     function makeCriteriaCid( $article_id ){
         return $this->makeCriteriaArticle( $article_id );

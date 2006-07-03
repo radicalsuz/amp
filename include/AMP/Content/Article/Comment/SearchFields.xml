@@ -1,5 +1,5 @@
 <array>
-    <article>
+    <article_id>
         <type>select</type>
         <label>Find by Article</label>
         <lookup>
@@ -9,7 +9,7 @@
         <attr>
             <onChange>this.form.elements['cid'].value = this.value</onChange>
         </attr>
-     </article>
+     </article_id>
      <cid>
         <type>hidden</type>
      </cid>

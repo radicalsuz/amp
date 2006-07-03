@@ -15,13 +15,10 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
     function display_default( ) {
         $display = &$this->_map->getComponent( 'list' );
         $display->setController( $this );
-        //$searchform = &$this->_map->getComponent( 'search' );
-        //$searchform->Build( );
 
         $this->set_banner( 'list');
         $this->notify( 'initList' );
 
-        //$this->_display->add( $searchform, 'search' );
         $this->_display->add( $display, 'default' );
         return true;
     }
@@ -42,6 +39,39 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         $this->add_component_header( AMP_TEXT_VIEW, AMP_TEXT_BY . " " . ucfirst( AMP_TEXT_CLASS ) );
         $this->_display->add( $class_display, 'class' );
         
+    }
+
+    function commit_restore( ){
+        $version_id = $this->assert_var( 'vid' );
+        if ( !$version_id ) return false;
+
+        $this->notify( 'beforeUpdate' );
+        $this->_model->readVersion( $version_id );
+        if ( $result = $this->_model->save( ) ) {
+            $this->message( sprintf( AMP_TEXT_DATA_RESTORE_SUCCESS, $this->_model->getName( )));
+            $this->display_default( );
+        }
+        return $result;
+    }
+
+    function commit_delete_version( ){
+        $version_id = $this->assert_var( 'vid' );
+        if ( !$version_id ) return false;
+        require_once( 'AMP/Content/Article/Version.inc.php');
+        $version = & new Article_Version( AMP_Registry::getDbcon( ), $version_id );
+        $this->_model_id = $version->getArticleId( );
+
+        $name = $version->getName( );
+        if ( !$name ) $name = AMP_TEXT_ITEM_NAME;
+        if ( !$version->delete( )){
+            if ( method_exists( $version, 'getErrors')) $this->error( $version->getErrors( ));
+            return false;
+
+        }
+        $this->message( sprintf( AMP_TEXT_DATA_DELETE_VERSION_SUCCESS, $name, $version_id ));
+        $this->commit_edit( );
+        return true;
+
     }
 
 

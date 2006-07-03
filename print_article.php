@@ -1,4 +1,13 @@
 <?php
+require_once("AMP/BaseDB.php");
+require_once("AMP/Content/Page/Urls.inc.php");
+
+$get_vars = AMP_URL_Values( );
+$get_vars['printsafe'] = 'printsafe=1';
+$new_url = AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, $get_vars );
+ampredirect( $new_url );
+
+/*
  
 $mod_id=1;
 include("AMP/BaseDB.php");
@@ -13,7 +22,7 @@ $MM_id = $id;
 </head>
 <body bgcolor="#FFFFFF" text="#000000">
 
-<?php $dapath= $base_path_amp."img/printsafelogo.jpg";
+<?php $dapath= AMP_LOCAL_PATH."/img/printsafelogo.jpg";
 if (file_exists("$dapath")) {echo "<img src='img/printsafelogo.jpg'>";}  ?>
 
 <table class="text"><tr><td>
@@ -84,3 +93,7 @@ $calledrcd=$dbcon->CacheExecute("SELECT articles.author, articles.".$MX_type.", 
    </td></tr></table>
 </body>
 </html>
+<?php
+*/
+
+?>

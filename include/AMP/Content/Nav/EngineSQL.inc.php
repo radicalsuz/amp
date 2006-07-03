@@ -159,7 +159,8 @@ class NavEngine_SQL extends NavEngine {
         if ($varname = $this->nav->getData('mvar1val')) {
             if (isset($item[ $varname ])) return $item[ $varname ];
         }
-        return $item[ 'id' ];
+        if ( isset( $item['id'])) return $item[ 'id' ];
+        return false;
     }
 
 

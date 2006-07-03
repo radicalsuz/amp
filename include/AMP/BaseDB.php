@@ -71,8 +71,9 @@ if (! $dbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME )) {
     die( 'Connection to database '.AMP_DB_NAME.' was refused.  Please check your site configuration file.' );
 }
 
+require_once('AMP/System/Config.inc.php');
+
 //activate the memcache class
-if (!defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
 if ( AMP_SITE_MEMCACHE_ON ) require_once('AMP/System/Memcache.inc.php');
 
 //add the dbcon to the Registry
@@ -84,13 +85,12 @@ require_once('AMP/System/Lookups.inc.php');
 $lookup_factory = & AMPSystem_LookupFactory::instance();
 $lookup_factory->init( $dbcon );
 
-if (!defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
 require_once('AMP/LegacyRegistry.inc.php');
-require_once('AMP/System/Config.inc.php');
+
+//load Language files 
 require_once( 'AMP/System/Language/Config.php');
 
 
 // turn on APD debugger when set by config file
-if (!defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
 if ( AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
 ?>

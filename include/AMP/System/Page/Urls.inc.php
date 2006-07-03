@@ -21,6 +21,8 @@ define( 'AMP_SYSTEM_URL_DOCUMENT_UPLOAD',       'doc_manager.php?action=add');
 define( 'AMP_SYSTEM_URL_DOCUMENTS',             'doc_manager.php');
 define( 'AMP_SYSTEM_URL_ARTICLE_EDIT',          'article.php');
 define( 'AMP_SYSTEM_URL_ARTICLE',               'article.php');
+define( 'AMP_SYSTEM_URL_ARTICLE_VERSION',       'article_version.php');
+define( 'AMP_SYSTEM_URL_ARTICLE_COMMENT',       'comments.php');
 define( 'AMP_SYSTEM_URL_ARTICLE_FRONTPAGE',     'article_frontpage.php');
 define( 'AMP_SYSTEM_URL_WEBACTION',             'action_center.php');
 define ('AMP_SYSTEM_URL_RSS_SUBSCRIPTION',      'rss_subscription.php');
@@ -35,5 +37,6 @@ define( 'AMP_SYSTEM_URL_FORM_SETUP',            'modinput4_edit.php');
 define( 'AMP_SYSTEM_URL_FORM_DATA',             'userdata_list.php');
 define( 'AMP_SYSTEM_URL_FORM_ENTRY',            'modinput4_view.php');
 define( 'AMP_SYSTEM_URL_PUBLIC_PAGE_PUBLISH',   'module_contentadd.php');
+define( 'AMP_SYSTEM_URL_CACHE_DATA',            'system/cache.php');
 
 ?>

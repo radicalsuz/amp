@@ -538,5 +538,13 @@ class PHPlist_API {
           return $data;
         }
     #};
+
+    function __sleep( ){
+        $this->dbcon = false;
+    }
+
+    function __wakeup( ){
+        $this->dbcon = &AMP_Registry::getDbcon( );
+    }
 }
 ?>

@@ -83,6 +83,12 @@ class Article_Form extends AMPSystem_Form_XML {
         return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --') + $valueset;
     }
 
+    function _blankValueSet( $valueset, $name ){
+        $required_selects = array( 'section', 'new_section_parent');
+        if ( array_search( $name, $required_selects ) === FALSE ) return PARENT::_blankValueSet( $valueset, $name );
+        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --');
+    }
+
     function _checkNewSection( $data, $fieldname ){
         if ( ! ( isset( $data['new_section_name'] ) && $data['new_section_name'] )) {
             if ( !isset( $data[$fieldname ])) return false;
@@ -219,8 +225,10 @@ class Article_Form extends AMPSystem_Form_XML {
     function _formHeader( ){
         $id = $this->getIdValue( );
         if ( !$id ) return false;
+
         require_once( 'AMP/Content/Article.inc.php');
         require_once( 'AMP/Content/Article/Display/Info.php');
+
         $article = &new Article( AMP_Registry::getDbcon( ), $id ) ;
         $display = &new ArticleDisplay_Info( $article );
         return $display->execute( );
@@ -232,7 +240,21 @@ class Article_Form extends AMPSystem_Form_XML {
         require_once( 'AMP/Content/Article/Version/List.inc.php');
         $list = &new Article_Version_List( AMP_Registry::getDbcon( ), array( 'article' => $id ));
         return $list->execute( );
-
     }
+
+    function _after_init( ){
+        $this->defineSubmitAction( 'delete_version' );
+        $this->defineSubmitAction( 'restore' );
+    }
+
+    function defineSubmitAction( $value, $label = "Submit", $attr=null ) {
+        $this->submit_button['submitAction']['elements'][$value] = 
+            array(
+                'type' => 'hidden',
+                'label'=> $label,
+                'attr' => $attr 
+            );
+    }
+
 }
 ?>

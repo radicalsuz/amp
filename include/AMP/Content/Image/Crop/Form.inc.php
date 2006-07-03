@@ -2,7 +2,7 @@
 
 require_once( 'AMP/Content/Image.inc.php');
 require_once( 'AMP/System/File/Image.php');
-require_once( 'AMP/System/Form.inc.php' );
+require_once( 'AMP/System/Form/XML.inc.php' );
 
 /**
  * AMP_Content_Image_Crop_Form
@@ -19,7 +19,7 @@ require_once( 'AMP/System/Form.inc.php' );
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
+class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
     var $_image;
 
     var $_original_height;
@@ -36,6 +36,7 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     var $_script_file = '/scripts/12cropimage.js';
     var $_window_x = 220;
     var $_window_y = 170;
+	var $xml_pathtype = "crop_fields";
 
     var $submit_button = array( 'submitCropAction' => array(
         'type' => 'group',
@@ -52,41 +53,9 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
                 'label' => 'Cancel'),
             )
     ));
-    var $_crop_fields = array( 
-            'crop_interface' =>  array( 
-                'type' => 'static',
-                ),
-            'start_x' => array( 
-                'type' => 'hidden'
-                ),
-            'start_y' => array( 
-                'type' => 'hidden'
-                ),
-            'end_x' => array( 
-                'type' => 'hidden'
-                ),
-            'end_y' => array( 
-                'type' => 'hidden'
-                ),
-            'id' => array( 
-                'type' => 'hidden'
-                ),
-            'height' => array( 
-                'type' => 'hidden'
-                ),
-            'width' => array( 
-                'type' => 'hidden'
-                )
-        );
-
-
-    var $_crop_action;
 
     var $_crop_width    = AMP_IMAGE_WIDTH_THUMB;
     var $_crop_height   = AMP_IMAGE_WIDTH_THUMB;
-
-    var $crop_start_x;
-    var $crop_start_y;
 
     function AMP_Content_Image_Crop_Form( &$image ){
         $this->_image = &$image;
@@ -129,19 +98,18 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
         $this->_display_width  = $width;
     }
 
-    function Build( $flag=false ){
+    function adjustFields( $fields ){
         $interface_html = $this->renderInterface( );
-        $this->_crop_fields['crop_interface']['default'] = $interface_html ;
-        $this->addFields( $this->_crop_fields )  ;
-        PARENT::Build( $flag );
+        $fields['crop_interface']['default'] = $interface_html ;
+        $fields['crop_interface_options']['default'] = $this->_renderOptions( );
+        return $fields;
     }
 
-
-    function execute( ){
-        $this->Build( true );
-        return $this->output( );
-
+    function _selectAddNull( $valueset, $fieldname ){
+        if ( $fieldname != 'target' ) return PARENT::_selectAddNull( $valueset, $fieldname );
+        return $valueset;
     }
+
 
     function getDisplayRatio( ){
         return $this->_display_ratio;
@@ -190,10 +158,21 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form {
     }
 
     function _renderControls( ){
-        $stuff = 'Size: <input name="bigger" value="+" type="button" onMouseDown="window.cropper.Bigger( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;'
-                 . '<input name="smaller" value="-" type="button" onMouseDown="window.cropper.Smaller( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;&nbsp;&nbsp;'
+        $stuff = AMP_TEXT_SIZE . ': ' 
+                 . '<input name="bigger" value="+" type="button" onMouseDown="window.cropper.Bigger( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;'
+                 . '<input name="smaller" value="-" type="button" onMouseDown="window.cropper.Smaller( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
                  . '<input name="preview" value="'.AMP_TEXT_PREVIEW.'" type="button" onClick="window.cropper.Check( \'pre\');"><br />';
         return $stuff;
+    }
+
+    function _renderOptions( ){
+           return  '<input name="wider" value="+" type="button" onMouseDown="window.cropper.Wider( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;'
+                 . '<input name="thinner" value="-" type="button" onMouseDown="window.cropper.Thinner( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;&nbsp;'
+                 . ': ' . AMP_TEXT_WIDTH . '<br /> ' 
+                 . '<input name="taller" value="+" type="button" onMouseDown="window.cropper.Taller( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;'
+                 . '<input name="shorter" value="-" type="button" onMouseDown="window.cropper.Shorter( );" onMouseUp="window.cropper.Stop( );" onMouseOut="window.cropper.Stop( );">&nbsp;&nbsp;'
+                 . ': ' . AMP_TEXT_HEIGHT . '<br /> ' ;
+
     }
 
     function _renderCropDiv( ){

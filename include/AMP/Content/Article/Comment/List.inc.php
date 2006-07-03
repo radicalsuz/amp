@@ -20,11 +20,16 @@ class ArticleComment_List extends AMP_System_List_Form {
     var $_observers_source = array( 'AMP_System_List_Observer');
     var $_pager_active = true;
 
-    function ArticleComment_List( &$dbcon ) {
-        #$source = & new ArticleCommentSet( $dbcon );
+    var $_sort_default = array( 'date DESC' );
+    var $_sort_translations_sql = array( );
+
+    function ArticleComment_List( &$dbcon, $criteria = null ) {
+        $this->init( $this->_init_source($dbcon, $criteria ));
+    }
+
+    function _after_init( ){
         $this->addTranslation( 'date', '_makePrettyDate');
         $this->addTranslation( 'name', 'shortComment');
-        $this->init( $this->_init_source($dbcon ));
     }
 
     function addCriteriaArticle( $articleid ){
@@ -34,5 +39,22 @@ class ArticleComment_List extends AMP_System_List_Form {
     function shortComment( $text, $fieldname, $row_data ){
         return AMP_trimText( $text, 70, false );
     }
+
+    function _after_init_search( $criteria = null ){
+        $this->_url_add = AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE_COMMENT, array( 'action=add' ));
+        if ( !isset( $criteria )) return false;
+        $article_id = ( isset( $criteria['article_id']) ? 
+                            $criteria['article_id'] : false
+                            );
+        if ( $article_id){
+            $this->_url_add = AMP_Url_AddVars( $this->_url_add, array( 'article_id=' . $article_id ));
+        }
+    }
+
+    function _noRecordsOutput( ){
+        $this->_searchFailureNotice( );
+        return PARENT::_noRecordsOutput( );
+    }
+
 }
 ?>

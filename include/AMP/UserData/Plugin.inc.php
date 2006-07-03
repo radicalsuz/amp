@@ -709,6 +709,14 @@ class UserDataPlugin {
 	function warn($message) {
 		return $this->error($message, E_USER_WARNING);
 	}
+
+    function __sleep( ){
+        $this->dbcon = false;
+    }
+
+    function __wakeup( ){
+        $this->dbcon = &AMP_Registry::getDbcon( );
+    }
 }
 
 ?>

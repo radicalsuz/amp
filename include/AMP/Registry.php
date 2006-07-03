@@ -96,5 +96,14 @@ class AMP_Registry {
     function adminName( ) {
         return AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME;
     }
+
+    function __sleep( ){
+        $this->setEntry( AMP_REGISTRY_DBCON, false );
+    }
+
+    function __wakeup( ){
+        global $dbcon;
+        $this->setEntry( AMP_REGISTRY_DBCON, $dbcon );
+    }
 }
 ?>

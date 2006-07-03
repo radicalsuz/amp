@@ -79,6 +79,7 @@ class AMP_Content_Redirect_Handler {
     }
 
     function commit_default( ){
+        trigger_error( 'doing deafult');
         $this->sendStatus( );
         if ( strpos( AMP_CONTENT_URL_404, 'http' ) !== false ) {
             ampredirect(  AMP_CONTENT_URL_404 );

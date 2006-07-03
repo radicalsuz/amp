@@ -126,6 +126,11 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         if (!isset($action)) $action = PHP_SELF_QUERY();
         $this->form = &new HTML_QuickForm( $name, $method, $action );
         $this->template = &new AMPFormTemplate();
+        $this->_after_init( );
+    }
+
+    function _after_init( ){
+        //interface
     }
 
     function Build( $show_private_fields = false ) {
@@ -740,8 +745,14 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $valueset = $this->_getValueSet( $name );
 		if ( is_array( $valueset ) ) {
             $valueset = $this->_selectAddNull( $valueset, $name );
+        } else {
+            $valueset = $this->_blankValueSet( $valueset, $name );
         }
         return $this->form->addElement( 'select', $name, $field_def['label'], $valueset);
+    }
+
+    function _blankValueSet( $valueset, $name ){
+        return false;
     }
 
     function _selectAddNull( $valueset, $name ) {

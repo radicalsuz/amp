@@ -101,6 +101,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
         require_once( 'Modules/Blast/Config/Admin.php');
         $phplist_admin_data = array_combine_key( $this->_keys_phplist_admin_setup, $this->getData( ));
+        $admin_data = array( );
         foreach( $phplist_admin_data as $local_key => $value ){
             $phplist_key = str_replace( 'phplist_admin_', '', $local_key );
             $admin_data[ $phplist_key ] = $value;
@@ -122,6 +123,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
         require_once( 'Modules/Blast/Config/Admin.php');
         $admin_settings = &new Blast_Config_Admin( $this->dbcon, PHPLIST_CONFIG_ADMIN_ID );
+        $phplist_admin_data = array( );
         foreach( $admin_settings->getData( ) as $phplist_key => $value ){
             $local_key = 'phplist_admin_' . $phplist_key;
             if ( array_search( $local_key, $this->_keys_phplist_admin_setup ) === FALSE ) continue;

@@ -104,8 +104,8 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
 		return "<li>" .$this->_HTML_bold( $comment ).'</li>'. $this->_HTML_newline();
     }
 
-    function _HTML_author( $author, $author_url) {
-        if ($author_url) $href = $author_url;
+    function _HTML_author( $author, $author_url = null ) {
+        $href = (isset( $author_url ) && $author_url) ? $author_url : false;
         return $this->_HTML_italics(  'Comment by '. $this->_HTML_link( $href, $author ) );
     }
     

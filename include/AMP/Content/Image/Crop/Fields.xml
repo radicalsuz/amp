@@ -1,0 +1,45 @@
+<array>
+    <crop_interface>
+        <type>static</type>
+    </crop_interface>
+    <start_x>
+        <type>hidden</type>
+    </start_x>
+    <start_y>
+        <type>hidden</type>
+    </start_y>
+    <id>
+        <type>hidden</type>
+    </id>
+    <height>
+        <type>hidden</type>
+    </height>
+    <width>
+        <type>hidden</type>
+    </width>
+    <crop_options_header>
+        <type>blocktrigger</type>
+        <label>More Options</label>
+        <block>crop_options</block>
+    </crop_options_header>
+    <crop_interface_options>
+        <type>static</type>
+        <block>crop_options</block>
+    </crop_interface_options>
+    <target>
+        <type>select</type>
+        <label>Apply Crop To:</label>
+        <values>
+            <thumb>Thumbnail</thumb>
+            <all>All Versions</all>
+        </values>
+        <required>1</required>
+        <default>thumb</default>
+        <block>crop_options</block>
+        <attr>
+            <onChange>
+                if ( this.value !='thumb' ) if ( !confirm( 'The original image will be REPLACED by the cropped image! \n Once you save, you will NOT be able to undo this.')) this.value='thumb';
+            </onChange>
+        </attr>
+    </target>
+</array>

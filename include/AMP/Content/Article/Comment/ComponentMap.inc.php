@@ -5,6 +5,8 @@ require_once( 'AMP/System/ComponentMap.inc.php');
 class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
     var $heading = "Comment";
     var $nav_name = "comments";
+    var $_action_default = 'list';
+    var $_allow_search = true; 
 
     var $paths = array( 
         'fields' => 'AMP/Content/Article/Comment/Fields.xml',
@@ -20,14 +22,6 @@ class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
         'search'   => 'ArticleCommentSearch',
         'source'=> 'ArticleComment');
 
-    var $_allow_search = true; 
-    /*
-    var $_allow_search = array( 
-        'article' =>    
-            'method' => null,
-            'url_var'   => array( 'article_id', 'cid')
-            );
-    */
 
     function onInitForm( &$controller ){
 

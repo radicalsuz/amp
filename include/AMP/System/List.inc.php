@@ -1,6 +1,6 @@
 <?php
 
-/*** * * * * * * * * * *
+/**
  *   AMP System List
  *
  *   A base class for system list pages
@@ -8,10 +8,10 @@
  *   Author: austin@radicaldesigns.org
  *   Date: 6/16/2005
  *
- * * **/
+ **/
 
 require_once ( 'AMP/System/Data/Set.inc.php' );
-require_once ( 'AMP/Content/Display/HTML.inc.php');
+require_once ( 'AMP/Content/Display/HTML.inc.php' );
 require_once ( 'AMP/Content/Config.inc.php');
 
 class AMPSystem_List extends AMPDisplay_HTML {
@@ -50,6 +50,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_pager_active  = false;
     var $_pager_display = true;
     var $_pager_limit = false;
+    var $_pager_target= false;
 
     var $_css_class_columnheader = 'intitle';
     var $_css_class_container = 'list_table';
@@ -181,6 +182,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->_pager = &new AMPSystem_ListPager( $source );
         
         if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
+        if ( $this->_pager_target ) $this->_pager->setTarget( $this->_pager_target ); 
         $this->_afterPagerInit( );
     }
 

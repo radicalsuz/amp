@@ -135,6 +135,10 @@ function lib_dd_move(e,y,rresize){ //Mousemove
         this.Stop = stopZoom;
         this.Bigger = Bigger;
         this.Smaller = Smaller;
+        this.Wider = Wider;
+        this.Taller = Taller;
+        this.Shorter = Shorter;
+        this.Thinner = Thinner;
 
         this.setImage = setImage;
         this.setRatio = setRatio;
@@ -218,3 +222,48 @@ function lib_dd_move(e,y,rresize){ //Mousemove
 
 	}
 
+	function Wider() {
+       if (  this.crop_obj == undefined ) {
+           return window.cropper.Wider( );
+       }
+       if (( ( this.crop_obj.x + this.crop_obj.cr - this.image.x ) < ( this.image.width )) ){
+			cW = this.crop_obj.cr + 1;
+			this.window_ratio = cW / this.crop_obj.cb ;
+			this.crop_obj.clipTo(0,cW, this.crop_obj.cb ,0,1);
+            this.zoomtimer = setTimeout( this.Wider, 10);
+		}
+	}
+	function Thinner() {
+       if (  this.crop_obj == undefined ) {
+           return window.cropper.Thinner( );
+       }
+       if ( this.crop_obj.cr > this.crop_min_width ) {
+			cW = this.crop_obj.cr - 1;
+			this.window_ratio = cW / this.crop_obj.cb ;
+			this.crop_obj.clipTo(0,cW, this.crop_obj.cb ,0,1);
+            this.zoomtimer = setTimeout( this.Thinner, 10);
+		}
+	}
+	function Taller() {
+       if (  this.crop_obj == undefined ) {
+           return window.cropper.Taller( );
+       }
+       if ( ( this.crop_obj.y + this.crop_obj.cb - this.image.y ) < ( this.image.height )){
+			cH = this.crop_obj.cb + 1;
+			this.window_ratio = this.crop_obj.cr / cH;
+			this.crop_obj.clipTo(0,this.crop_obj.cr,cH ,0,1);
+            this.zoomtimer = setTimeout( this.Taller, 10);
+		}
+	}
+
+	function Shorter() {
+       if (  this.crop_obj == undefined ) {
+           return window.cropper.Shorter( );
+       }
+       if ( this.crop_obj.cb > this.crop_min_height ) {
+			cH = this.crop_obj.cb - 1;
+			this.window_ratio = this.crop_obj.cr / cH;
+			this.crop_obj.clipTo(0,this.crop_obj.cr,cH ,0,1);
+            this.zoomtimer = setTimeout( this.Shorter, 10);
+		}
+	}

@@ -53,6 +53,7 @@ class AMPContent_PageDisplay {
 
     function output_PrinterSafe() {
 		$content = $this->execute( AMP_CONTENT_PAGE_DISPLAY_CONTENT);
+        $this->_header->addStyleSheet( 'print.css', 'printer-safe');
         return  $this->_header->output() .
                 $this->_HTML_printSafeHead() . 
                 $content.

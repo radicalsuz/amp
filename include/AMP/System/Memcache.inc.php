@@ -43,7 +43,7 @@ class AMPSystem_Memcache {
 
     function setSiteItem( $item_key, $item_value ) {
         $cachekey = $_SERVER['SERVER_NAME'] . $item_key;
-        if ( $this->memcache_connection->set( $cachekey, $item_value , MEMCACHE_COMPRESSED, AMP_SITE_MEMCACHE_TIMEOUT  )) {
+        if ( $this->memcache_connection->set( $cachekey, $item_value , MEMCACHE_COMPRESSED, AMP_SYSTEM_CACHE_TIMEOUT )) {
             if ( $item_key != MEMCACHE_KEY_INDEX ) $this->addSiteKey( $cachekey );
             return true;
         }

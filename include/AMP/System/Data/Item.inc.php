@@ -35,6 +35,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     var $_search_source;
     var $_field_status = 'publish';
     var $_exact_value_fields = array( );
+    var $_allow_db_cache = true;
 
     function AMPSystem_Data_Item ( &$dbcon ) {
         $this->init($dbcon);
@@ -133,6 +134,14 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         //interface
     }
 
+    function _save_create_actions( $data ){
+        return $data;
+    }
+
+    function _save_update_actions( $data ) {
+        return $data;
+    }
+
 
     function save() {
         $item_data = $this->getData( );
@@ -140,6 +149,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 		if ( !is_array( $this->id_field ) && !isset( $save_fields[ $this->id_field ] )) {
             $save_fields[ $this->id_field ] = "";
             $this->_blankIdAction();
+        }
+        if ( !isset( $this->id )) {
+            $save_fields = $this->_save_create_actions(  $save_fields );
+        } else {
+            $save_fields = $this->_save_update_actions( $save_fields );
         }
         
         $result = $this->dbcon->Replace( $this->datatable, $save_fields, $this->id_field, $quote=true);
@@ -288,7 +302,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( !isset( $class_name )) $class_name = $this->_class_name;
         $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );
         if ( empty( $result_set )) return $result_set;
-        #$this->sort( $result_set );
+
         if ( $this->_sort_auto ) $this->sort( $result_set );
         return $result_set;
         
@@ -308,6 +322,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
                 $data_set->addCriteria( $crit_phrase );
             }
         }
+        if ( !$this->_allow_db_cache ) $data_set->clearCache( );
         
         $this->_search_source = &$data_set;
         return $this->_search_source;
@@ -442,6 +457,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( $this->isLive( )) return false;
         $this->mergeData( array( $this->_field_status => AMP_CONTENT_STATUS_LIVE ));
         if ( !isset( $this->id )) return true;
+
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update');
         $this->notify( 'publish');
@@ -452,6 +468,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( !$this->isLive( )) return false;
         $this->mergeData( array( $this->_field_status => AMP_CONTENT_STATUS_DRAFT ));
         if ( !isset( $this->id )) return true;
+
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update');
         $this->notify( 'unpublish');
@@ -463,5 +480,6 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     //}}}
+
 }
 ?>

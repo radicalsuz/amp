@@ -1,4 +1,9 @@
 <?php
+if ( !defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
+if ( !defined( 'AMP_SYSTEM_UNIQUE_ID')) define ( 'AMP_SYSTEM_UNIQUE_ID', AMP_DB_NAME );
+if ( !defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
+if ( !defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
+
 if ( !defined( 'AMP_SYSTEM_INCLUDE_PATH' ))     define( 'AMP_SYSTEM_INCLUDE_PATH', 'AMP/System');
 if ( !defined( 'AMP_CONTENT_INCLUDE_PATH' ))    define( 'AMP_CONTENT_INCLUDE_PATH', 'AMP/Content');
 if ( !defined( 'AMP_MODULE_INCLUDE_PATH' ))     define( 'AMP_MODULE_INCLUDE_PATH', 'Modules');
@@ -28,19 +33,15 @@ if ( !defined( 'AMP_NULL_DATETIME_VALUE_UNIX_2')) define('AMP_NULL_DATETIME_VALU
 if ( !defined( 'AMP_FUTURE_DATETIME_VALUE')) define('AMP_FUTURE_DATETIME_VALUE', '2100-12-31 16:33:26' );
 
 /**
- * Menu Settings
- */
-if ( !defined( 'AMP_CACHE_KEY_SYSTEM_MENU')) define( 'AMP_CACHE_KEY_SYSTEM_MENU', 'AMP_System_Menu_%s.html' );
-if ( !defined( 'AMP_CACHE_KEY_SYSTEM_MENU_CSS')) define( 'AMP_CACHE_KEY_SYSTEM_MENU_CSS', 'AMP_System_Menu_%s.css' );
-if ( !defined( 'AMP_CACHE_KEY_SYSTEM_MENU_JS')) define( 'AMP_CACHE_KEY_SYSTEM_MENU_JS', 'AMP_System_Menu_%s.js' );
-
-
-/**
  * Cache Settings
  */
-if ( !defined( 'AMP_SYSTEM_CACHE')) define( 'AMP_SYSTEM_CACHE', 'file' );
+if ( !defined( 'AMP_SYSTEM_CACHE')) define( 'AMP_SYSTEM_CACHE', 'memcache' );
 if ( !defined( 'AMP_SYSTEM_CACHE_TIMEOUT')) define( 'AMP_SYSTEM_CACHE_TIMEOUT', 600 );
-if ( !defined( 'AMP_SYSTEM_CACHE_PATH')) define( 'AMP_SYSTEM_CACHE_PATH', AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'custom');
+if ( !defined( 'AMP_SYSTEM_CACHE_PATH')) define( 'AMP_SYSTEM_CACHE_PATH', AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache');
+
+if ( !defined( 'AMP_CACHE_KEY_STYLESHEET')) define( 'AMP_CACHE_KEY_STYLESHEET', '%s.css' );
+if ( !defined( 'AMP_CACHE_KEY_JAVASCRIPT')) define( 'AMP_CACHE_KEY_JAVASCRIPT', '%s.js' );
+if ( !defined( 'AMP_CACHE_KEY_OUTPUT')) define( 'AMP_CACHE_KEY_OUTPUT', '%s.html' );
 
 /**
  * Filesystem Settings 

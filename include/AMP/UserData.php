@@ -1076,6 +1076,15 @@ class UserData {
         $this->modTemplateID = $id_value;
     }
 
+    function __sleep( ){
+        $this->dbcon = false;
+    }
+
+    function __wakeup( ){
+        $this->dbcon = &AMP_Registry::getDbcon( );
+    }
+
+
 }
 
 ?>

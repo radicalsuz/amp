@@ -174,6 +174,13 @@ class AMPSystem_Data {
         $this->_observers[] = &$observer;
     }
 
+    function __sleep( ){
+        $this->dbcon = false;
+    }
+
+    function __wakeup( ){
+        $this->dbcon = &AMP_Registry::getDbcon( );
+    }
 
 }
 ?>

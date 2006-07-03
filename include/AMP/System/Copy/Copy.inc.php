@@ -263,5 +263,13 @@ class AMPSystem_Copy {
         return $sql;
 
     }
+
+    function __sleep( ){
+        $this->dbcon = false;
+    }
+
+    function __wakeup( ){
+        $this->dbcon = &AMP_Registry::getDbcon( );
+    }
 }
 ?>

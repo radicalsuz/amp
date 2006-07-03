@@ -40,6 +40,12 @@ class Section_Form extends AMPSystem_Form_XML {
         return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --') + $valueset;
     }
 
+    function _blankValueSet( $valueset, $name ){
+        if ( $name != 'parent' ) return PARENT::_blankValueSet( $valueset, $name );
+        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --');
+
+    }
+
     function _formFooter( ){
         if ( !$this->getIdValue( )) return false;
         $renderer = &new AMPDisplay_HTML;

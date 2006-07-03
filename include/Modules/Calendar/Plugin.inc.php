@@ -289,6 +289,14 @@ class CalendarPlugin {
         return true;
     }
 
+
+    function __sleep( ){
+        $this->dbcon = false;
+    }
+
+    function __wakeup( ){
+        $this->dbcon = &AMP_Registry::getDbcon( );
+    }
 }
 
 ?>

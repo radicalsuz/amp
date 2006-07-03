@@ -43,8 +43,17 @@ class ArticleDisplay_Info extends Article_Display {
     }
 
     function _renderArticleId( ){
+        if ( strtolower( get_class( $this->_article)) == 'article_version' ) return $this->_renderArticleVersionId( );
         return $this->_renderer->inSpan( AMP_TEXT_ID . ': ' . $this->_article->id )
                 . $this->_renderer->newline( );
+    }
+
+    function _renderArticleVersionId( ){
+        return $this->_renderer->inSpan( AMP_TEXT_ID . ': ' . $this->_article->getArticleId( ) )
+                . $this->_renderer->newline( )
+                . $this->_renderer->inSpan( sprintf( AMP_TEXT_VERSION_ID, $this->_article->id ), array( 'class' => 'red'))
+                . $this->_renderer->newline( );
+
     }
 
     function _renderImage( ){

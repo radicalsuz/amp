@@ -14,8 +14,10 @@ define( 'AMP_TEXT_CONTENT_STATUS_DRAFT' , AMP_PUBLISH_STATUS_DRAFT );
  * Form Result messages
  */
 define( 'AMP_TEXT_DATA_SAVE_SUCCESS', "%s has been saved." );
+define( 'AMP_TEXT_DATA_RESTORE_SUCCESS', "%s has been restored." );
 define( 'AMP_TEXT_DATA_COPY_SUCCESS',  "Your working copy was saved as %s");
 define( 'AMP_TEXT_DATA_DELETE_SUCCESS',  "%s was deleted");
+define( 'AMP_TEXT_DATA_DELETE_VERSION_SUCCESS',  "%s, version %s was deleted");
 
 /**
  * List result messages
@@ -33,9 +35,13 @@ define( 'AMP_TEXT_EDIT', 'Edit');
 define( 'AMP_TEXT_VIEW', 'View');
 define( 'AMP_TEXT_LIST', 'List');
 define( 'AMP_TEXT_ADD', 'Add');
+define( 'AMP_TEXT_ITEM_NAME', 'Item');
 define( 'AMP_TEXT_SEARCH', 'Search');
 
 define( 'AMP_TEXT_ALL', 'All');
+if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
+if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );
+define( 'AMP_TEXT_PAGER_POSITION', 'Displaying %s of %s');
 define( 'AMP_TEXT_PUBLISH', 'Publish');
 define( 'AMP_TEXT_DELETED', 'Deleted');
 define( 'AMP_TEXT_ADD_ITEM','Add new record' );
@@ -48,6 +54,9 @@ define( 'AMP_TEXT_CROP', 'Crop');
 define( 'AMP_TEXT_RECALCULATE', 'Recalculate');
 define( 'AMP_TEXT_PREVIEW', 'Preview');
 define( 'AMP_TEXT_CANCEL', 'Cancel');
+define( 'AMP_TEXT_SIZE', 'Size');
+define( 'AMP_TEXT_WIDTH', 'Width');
+define( 'AMP_TEXT_HEIGHT', 'Height');
 define( 'AMP_TEXT_ALL_IMAGE_SIZES', 'All Image Sizes');
 define( 'AMP_TEXT_SELECT_NEW_WIDTHS_FOR', 'Select new widths for');
 define( 'AMP_TEXT_GALLERY', 'Gallery');
@@ -187,12 +196,14 @@ define( 'AMP_TEXT_DATE_CREATED', 'Date Created' );
 define( 'AMP_TEXT_DATE_UPDATED', 'Date Updated' );
 define( 'AMP_TEXT_CREATED', 'Created');
 define( 'AMP_TEXT_UPDATED', 'Updated');
+define( 'AMP_TEXT_CURRENT_ACTION', '%sing %s');
 define( 'AMP_TEXT_BY', 'by' );
 define( 'AMP_TEXT_ID', 'ID' );
 define( 'AMP_TEXT_REDIRECTED_TO', 'Redirected To');
 define( 'AMP_TEXT_ALIAS', 'Alias');
 define( 'AMP_TEXT_ATTACHED_FILE', 'Attached File');
 define( 'AMP_TEXT_VIEW_ALL', 'View All %s');
+define( 'AMP_TEXT_VERSION_ID', 'Archived Content - Version ID: %s');
 
 define( 'AMP_TEXT_IMAGE_CLASS_THUMB', 'thumbnail' );
 define( 'AMP_TEXT_IMAGE_CLASS_OPTIMIZED_TALL', 'tall image' );

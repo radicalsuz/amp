@@ -56,7 +56,7 @@ class AMP_System_Component_Controller {
         return $this->_model;
     }
 
-    function &get_model_id( ){
+    function get_model_id( ){
         if( !isset( $this->_model_id )) return false;
         return $this->_model_id;
     }
@@ -363,14 +363,17 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
         return true;
     }
 
-    function commit_save( $copy_mode = false ){
+    function commit_save( ){
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );
             return false;
         }
-        $this->_model->setData( $this->get_form_data( $copy_mode ));
 
+        $this->notify( 'beforeUpdate' );
+        $this->_model->setData( $this->get_form_data( ));
+
+        $this->notify( 'beforeSave' );
         //attempt to save the submitted data
         if ( !$this->_model->save( )) {
             $this->error( $this->_model->getErrors( ));
@@ -379,9 +382,9 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
         }
 
         $this->_model_id = $this->_model->id;
+        $this->notify( 'save' );
 
-        $success_message = $copy_mode ? AMP_TEXT_DATA_COPY_SUCCESS : AMP_TEXT_DATA_SAVE_SUCCESS;
-        $this->message( sprintf( $success_message, $this->_model->getName( )));
+        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $this->_model->getName( )));
 
         $this->_form->postSave( $this->_model->getData() );
         $this->display_default( );
@@ -419,7 +422,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
     function commit_delete( ){
         if ( !$this->_model_id ) return $this->commit_default( );
         $name = $this->_form->getItemName( );
-        if ( !$name ) $name = 'Item';
+        $this->notify( 'beforeDelete' );
+        if ( !$name ) $name = AMP_TEXT_ITEM_NAME;
         if ( !$this->_model->deleteData( $this->_model_id )){
             if ( method_exists( $this->_model, 'getErrors')) $this->error( $this->_model->getErrors( ));
             $this->_display->add( $this->_form );
@@ -436,7 +440,33 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
             $this->error( AMP_TEXT_ERROR_DATA_COPY_FAILURE_MULTIPLE_IDS);
             return false;
         }
-        return $this->commit_save( true );
+
+        //check if form validation succeeds
+        if (!$this->_form->validate()) {
+            $this->_display->add( $this->_form, 'form' );
+            return false;
+        }
+
+        $form_data = $this->get_form_data( );
+        unset( $form_data[$this->_model->id_field]);
+        $thsi->_model->setData( $form_data );
+
+        $this->notify( 'beforeCopy' );
+        //attempt to save the submitted data
+        if ( !$this->_model->save( )) {
+            $this->error( $this->_model->getErrors( ));
+            $this->_display->add( $this->_form );
+            return false;
+        }
+
+        $this->_model_id = $this->_model->id;
+        $this->notify( 'copy' );
+
+        $this->message( sprintf( AMP_TEXT_COPY_SUCCESS, $this->_model->getName( )));
+
+        $this->_form->postSave( $this->_model->getData() );
+        $this->display_default( );
+        return true;
 
     }
 

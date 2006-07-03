@@ -300,6 +300,7 @@ class AMP_Authentication_Handler {
 
     function setUserId( $id ) {
 		$this->notice('setting handler userid to '.$id);
+        define( 'AMP_SYSTEM_USER_ID', $id );
         $this->userid = $id;
     }
     /*

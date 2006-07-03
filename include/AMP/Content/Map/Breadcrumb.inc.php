@@ -205,6 +205,7 @@ class AMP_Breadcrumb_Content {
 
     function _buildActions() {
         $urlvars = AMP_URL_Values();
+        $urlvars['printsafe'] = 'printsafe=1';
         $actions = array();
         $actions['email'] = array(
                 'image' => '<img src="img/email.gif" align="top">',
@@ -213,7 +214,7 @@ class AMP_Breadcrumb_Content {
 
         $actions['print']  = array( 
                 'image' => '<img src="/img/print.gif" align="top">',
-                'link' => '<a href="print_article.php?'. join( "&", $urlvars) .'" class="'.$this->css_class."\">Printer Safe</a>" );
+                'link' => '<a href="'.AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, $urlvars ) . '" class="'.$this->css_class."\">Printer Safe</a>" );
 
         return $actions;
     }

@@ -20,6 +20,7 @@ class Article extends AMPSystem_Data_Item {
     var $datatable = "articles";
     var $name_field = "title";
     var $_sort_auto = false;
+    var $_class_name = 'Article';
 
     /**
      * Article 
@@ -280,22 +281,28 @@ class Article extends AMPSystem_Data_Item {
         if ( isset( $data['link']) && $data['link'] && !isset( $data['linkover'])) {
             $this->mergeData( array( 'linkover' => 1));
         }
-        /*
-        if ( !( 
-              ( isset( $data['id']) && $data['id'] ) 
-              || $this->id )) {
-            if ( !( isset( $data['datecreated']) && $data['datecreated'] )){
-                $this->mergeData( array( 'datecreated' => date( 'Y-m-d')));
-            }
-            if ( !( isset( $data['enteredby']) && $data['enteredby'])){
-                $this->mergeData( array( 'enteredby' => AMP_SYSTEM_USER_ID ));
-            }
+    }
 
+    function _save_create_actions( $data ){
+        if ( !( isset( $data['datecreated']) && $data['datecreated'] )){
+            $data['datecreated'] = date( 'Y-m-d');
         }
-        */
+        if ( !( isset( $data['enteredby']) && $data['enteredby'])){
+            $data['enteredby'] = AMP_SYSTEM_USER_ID ;
+        }
+        return $data;
+
+    }
+
+    function _save_update_actions( $data ) {
         if ( !( isset( $data['updatedby']) && $data['updatedby'] )){
-            $this->mergeData( array( 'updatedby' => AMP_SYSTEM_USER_ID ));
+            $data['updatedby'] = AMP_SYSTEM_USER_ID ;
         }
+        if ( !( isset( $data['updated']) && $data['updated'] )){
+            $data['updated'] = date( 'Y-m-d H:i:s');
+        }
+        return $data;
+
     }
 
     function readVersion( $version_id ) {
@@ -304,6 +311,13 @@ class Article extends AMPSystem_Data_Item {
         if (!$version->hasData()) return false;
 
         $this->setData( $version->getData() );
+    }
+
+    function saveVersion( ){
+        require_once ( 'AMP/Content/Article/Version.inc.php' );
+        $version = &new Article_Version( $this->dbcon );
+        $version->setData( $this->getData( ));
+        return $version->save( );
     }
 
     function setDefaults( ){
@@ -434,6 +448,15 @@ class Article extends AMPSystem_Data_Item {
     function makeCriteriaType( $section_id ) {
         return $this->makeCriteriaSection( $section_id );
     }
+/*
+    function save( $save_version = true ){
+        if ( isset( $this->id ) && $this->id && $save_version ) {
+            $this->saveVersion( );
+        }
+        if ( !iss)
+        return PARENT::save( );
+    }
+    */
 }
 
 

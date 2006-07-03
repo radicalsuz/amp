@@ -1,9 +1,8 @@
 <?php
-require_once( 'AMP/System/Form/XML.inc.php');
+require_once( 'AMP/System/File/Form.inc.php');
 
-class AMP_System_File_Image_Form extends AMPSystem_Form_XML {
+class AMP_System_File_Image_Form extends AMP_System_File_Form {
 
-    var $name_field = 'image';
     
     function AMP_System_File_Image_Form( ){
         $name = 'AMP_System_File_Image_Form';
@@ -19,12 +18,6 @@ class AMP_System_File_Image_Form extends AMPSystem_Form_XML {
         if ( isset( $data['filename']) && $data['filename']){
             $upLoader->setTargetFileName( $data['filename']);
         }
-    }
-
-    function getIdValue( ){
-        if (isset($_REQUEST[ $this->id_field ]) &&  $_REQUEST[ $this->id_field ]) return $_REQUEST[ $this->id_field ];
-        return PARENT::getIdValue( );
-
     }
 
 }

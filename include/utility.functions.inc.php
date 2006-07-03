@@ -705,7 +705,7 @@ if (!function_exists('PHP_SELF_QUERY')) {
 if (!function_exists('AMP_DebugSQL')) {
     function AMP_DebugSQL( $sql, $source_object ) {
         print $source_object . ":<BR>\n". $sql . "<P>";
-        trigger_error( $source_object . ":<BR>\n". $sql . "<P>" );
+        trigger_error( $source_object . " debug: ". $sql );
     }
 }
 
@@ -1147,7 +1147,7 @@ if ( !function_exists( 'AMP_get_cache')){
 
         require_once( 'AMP/System/Cache/'.ucfirst( AMP_SYSTEM_CACHE ).'.php');
         $cache_class = 'AMP_System_Cache_' . ucfirst( AMP_SYSTEM_CACHE );
-        $cache = &call_user_func_array( array( $cache_class, 'instance'), array( ));
+        $cache = call_user_func_array( array( $cache_class, 'instance'), array( ));
         return $cache;
     }
 }

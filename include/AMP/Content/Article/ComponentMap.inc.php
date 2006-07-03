@@ -47,5 +47,22 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
             $form->setDefaultValue( 'class', $class_id );
         }
     }
+
+    function onBeforeUpdate( &$controller ){
+        $this->_save_version( $controller );
+    }
+
+    function _save_version( &$controller ){
+        $model = &$controller->get_model( );
+        $model_id = $controller->get_model_id( );
+        if ( !isset( $model_id )) return;
+        $model->readData( $model_id );
+        if ( !$model->hasData( )) return;
+        $model->saveVersion( );
+    }
+
+    function onBeforeDelete( &$controller ) {
+        $this->_save_version( $controller );
+    }
 }
 ?>

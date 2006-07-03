@@ -18,16 +18,19 @@ class ComponentMap_Image extends AMPSystem_ComponentMap {
 
     var $paths = array(
         'crop'   => 'AMP/Content/Image/Crop/Form.inc.php',
+        'crop_fields' => 'AMP/Content/Image/Crop/Fields.xml',
         'form'   => 'AMP/System/File/Image/Form.inc.php',
         'list'   => 'AMP/Content/Image/List.inc.php',
         'fields' => 'AMP/System/File/Image/Fields.xml',
-        'source' => 'AMP/System/File/Image.php' );
+        'source' => 'AMP/System/File/Image.php' 
+        );
 
     var $components = array (
         'crop'   => 'AMP_Content_Image_Crop_Form',
         'form'   => 'AMP_System_File_Image_Form',
         'list'   => 'AMP_Content_Image_List',
-        'source' => 'AMP_System_File_Image' );
+        'source' => 'AMP_System_File_Image' 
+        );
 
     function ComponentMap_Image( ){
         $this->_path_source = AMP_LOCAL_PATH . AMP_CONTENT_URL_DOCUMENTS;

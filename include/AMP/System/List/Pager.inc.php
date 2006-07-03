@@ -1,8 +1,6 @@
 <?php
 
 require_once ( 'AMP/Content/Display/HTML.inc.php' );
-if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
-if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );
 
 class AMPSystem_ListPager extends AMPDisplay_HTML {
 
@@ -22,6 +20,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     var $_text_next = AMP_TEXT_PAGER_NEXT;
     var $_text_previous = AMP_TEXT_PAGER_PREVIOUS;
+    var $_url_target;
 
     function AMPSystem_ListPager( &$source ) {
         $this->init ( $source );
@@ -55,6 +54,10 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
 
     function setOffset( $offset ) {
         $this->_offset = $offset;
+    }
+
+    function setTarget( $url ){
+        $this->_url_target = $url;
     }
 
     function getOffset() {
@@ -121,7 +124,7 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         if ($this->page_total > $this->source_total) $this->page_total = $this->source_total;
         if ($this->page_total) $start = 1;
         if ($this->_offset) $start = $this->_offset + 1;
-        return "Displaying ".$this->_positionRange( $start )." of ".$this->source_total;
+        return sprintf( AMP_TEXT_PAGER_POSITION, $this->_positionRange( $start ), $this->source_total );
     }
     function _positionRange( $start ){
         if ( 1 == $this->_qty ) return $start;
@@ -149,8 +152,9 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         $page_url_vars = array();
         if ( $new_offset ) $page_url_vars['offset'] ='offset=' . $new_offset ;
         if ( $this->_qty != $this->_default_qty) $page_url_vars['qty'] = 'qty=' . $this->_qty;
+        if ( !isset( $this->_url_target )) $this->_url_target = $_SERVER['PHP_SELF'];
 
-         return AMP_Url_AddVars( $_SERVER['PHP_SELF'] , array_merge( $this->_getURLValues() , $page_url_vars )); 
+         return AMP_Url_AddVars( $this->_url_target , array_merge( $this->_getURLValues() , $page_url_vars )); 
     }
 
     function _prevPageLink() {
