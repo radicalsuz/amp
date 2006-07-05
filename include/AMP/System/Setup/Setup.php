@@ -86,6 +86,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     }
 
     function _updatePHPlistConfig( ){
+        if ( !AMP_hasTable( 'phplist_config')) return true;
         require_once( 'Modules/Blast/Config/Config.php');
         $phplist_config_data = array_combine_key( $this->_keys_phplist_setup, $this->getData( ));
         if ( empty( $phplist_config_data )) return false;
@@ -112,6 +113,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     }
 
     function _readPHPlistConfig( ){
+        if ( !AMP_hasTable( 'phplist_config')) return true;
         require_once( 'Modules/Blast/Config/Config.php');
         $phplist_config_data = array_combine_key( $this->_keys_phplist_setup, $this->getData( ));
         foreach( $this->_keys_phplist_setup as $local_key ){
@@ -134,6 +136,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     }
 
     function _updatePunbbConfig( ){
+        if ( !AMP_hasTable( 'punbb_config')) return true;
        require_once( 'Modules/Forum/Config.php');
        $punbb_config_data = array_combine_key( $this->_keys_translation_punbb, $this->getData( ));
         if ( empty( $punbb_config_data )) return false;
