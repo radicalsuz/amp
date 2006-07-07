@@ -6,8 +6,16 @@
 		<type>hidden</type>
 		<default>Calendar</default>
 	</service>
+	<name>
+		<type>text</type>
+		<label>Name</label>
+	</name>
 	<url>
 		<type>text</type>
-		<label>Link</label>
+		<label>URL</label>
 	</url>
+	<publish>
+		<type>checkbox</type>
+		<label>Auto-publish from this feed</label>
+	</publish>
 </array>

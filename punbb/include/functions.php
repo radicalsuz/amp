@@ -59,8 +59,10 @@ function check_cookie(&$pun_user)
 			$pun_user['language'] = $pun_config['o_default_lang'];
 
 		// Set a default style if the user selected style no longer exists
-		if (!(@file_exists(PUN_ROOT.'style/'.$pun_user['style'].'.css') || (defined('PUN_STYLE_DIR') && defined('PUN_STYLE_PATH') && @file_exists(PUN_STYLE_DIR.$pun_user['style'].'.css'))))
+		if (!((@file_exists(PUN_ROOT.'style/'.$pun_user['style'].'.css') || (defined('PUN_STYLE_DIR') && defined('PUN_STYLE_PATH') && @file_exists(PUN_STYLE_DIR.$pun_user['style'].'.css'))))) {
+			trigger_error('resetting');
 			$pun_user['style'] = $pun_config['o_default_style'];
+		}
 
 		if (!$pun_user['disp_topics'])
 			$pun_user['disp_topics'] = $pun_config['o_disp_topics_default'];

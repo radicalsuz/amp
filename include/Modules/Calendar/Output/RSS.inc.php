@@ -23,8 +23,9 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 		$rss->useModule('ev', 'http://purl.org/rss/1.0/modules/event/');
 		$rss->useModule('vCard', 'http://www.w3.org/2001/vcard-rdf/3.0#');
 		$rss->useModule('geo', 'http://www.w3.org/2003/01/geo/wgs84_pos#');
+		$rss->useModule('content', 'http://purl.org/rss/1.0/modules/content/');
 
-		if ($id = $options['calid']['value']) {
+		if (isset($options['calid']) && ($id = $options['calid'])) {
 			$timestamp = $this->add_event_rss($rss, $id);
 		} else {
 			$this->calendar->doAction('Search');
@@ -64,49 +65,168 @@ class CalendarPlugin_RSS_Output extends CalendarPlugin {
 	}
 
 	function add_event_item(&$rss, $event) {
-		$id = $event['id'];
 		if(is_numeric($state_id = $event['lstate'])) {
 			$states = AMPSystem_Lookup::instance('States');
 			$event['lstate'] = $states[$state_id];
 		}
-		$item = array("description" => $event['shortdesc'],
-						"ev:startdate" => $event['date'],
-						"ev:enddate" => $event['enddate'],
-						"ev:location" => $event['location'],
-						"ev:type" => $this->types[$event['typeid']],
-						"vCard:Adr" => array(
-							"vCard:Street" => $event['laddress'],
-							"vCard:Extadd" => '',
-							"vCard:Locality" => $event['lcity'],
-							"vCard:Region" => ($event['lstate'] != 'Intl')?$event['lstate']:'',
-							"vCard:Pcode" => $event['lzip'],
-							"vCard:Country" => $event['lcountry']));
-		if($event['email1'] || $event['phone1']) {
+		$item = array();
+		if(isset($event['shortdesc']) && $event['shortdesc']) $item['description'] = $event['shortdesc'];
+		if(isset($event['date']) && $event['date']) $item['ev:startdate'] = $event['date'];
+		if(isset($event['enddate']) && $event['enddate']) $item['ev:enddate'] = $event['enddate'];
+		if(isset($event['location']) && $event['location']) $item['ev:location'] = $event['location'];
+		if(isset($event['typeid']) && $this->types[$event['typeid']]) $item['ev:type'] = $this->types[$event['typeid']];
 
-			$item["ev:organizer"] = array(
-							"vCard:FN" => $event['contact1']);
+		$adr = array();
+		if(isset($event['laddress']) && $event['laddress'])
+			$adr['vCard:Street'] = '   '.$event['laddress'].' ';
+		if(isset($event['lcity']) && $event['lcity'])
+			$adr['vCard:Locality'] = ' '.$event['lcity'].' ';
+		if(isset($event['lstate']) && $event['lstate'] && 'Intl' != $event['lstate'])
+			$adr['vCard:Region'] = '   '.$event['lstate'].' ';
+		if(isset($event['lzip']) && $event['lzip'])
+			$adr['vCard:Pcode'] = '    '.$event['lzip'].' ';
+		if(isset($event['lcountry']) && $event['lcountry'])
+			$adr['vCard:Country'] = '  '.$event['lcountry'].' ';
+		if(!empty($adr))
+			$item['vCard:ADR rdf:parseType="Resource"'] = $adr;
 
-			if($event['email1']) {
-				$item["ev:organizer"]["vCard:EMAIL"] = $event['email1'];
-			}
-			if($event['phone1']) {
-				$item["ev:organizer"]["vCard:TEL"] = $event['phone1'];
-			}
-			if($event['uid']) {
-				$item["ev:organizer"]["vCard:UID"] = $event['uid'];
-			}
+
+		$organizer = array();
+
+		if($event['email1'])
+			$organizer['vCard:EMAIL'] = ' '.$event['email1'].' ';
+		if($event['phone1'])
+			$organizer['vCard:TEL'] = '   '.$event['phone1'].' ';
+		if($event['uid'])
+			$organizer["vCard:UID"] = '   '.$event['uid'].' ';
+		if(!empty($organizer)) {
+			if($event['contact1']) $organizer["vCard:FN"] = '  '.$event['contact1'].' ';
+			$item["ev:organizer"] = $organizer;
 		} else {
-			$item["ev:organizer"] = $event['contact1'];
+			if($event['contact1']) $item["ev:organizer"] = $event['contact1'];
 		}
-
-		if(!$item["ev:organizer"]) return false;
 
 		if($event['lat'] && $event['lon']) {
 			$item["geo:lat"] = $event['lat'];
 			$item["geo:long"] = $event['lon'];
 		}
 
-		$rss->addItem(AMP_SITE_URL . "calendar.php?calid=$id", $event['event'], $item);
+		$item['content:encoded'] = '<![CDATA['.$this->hcalendar($event).']]>';
+
+		$rss->addItem(AMP_SITE_URL.'calendar.php?calid='.$event['id'], $event['event'], $item);
+	}
+
+	function hcalendar($e, $options=null) {
+		$hcal = '<p class="vevent">';
+		$hcal .= '<a href="'.AMP_SITE_URL.'calendar.php?calid='.$e['id'].'">'.$this->hcal_summary($e).'</a><br />';
+		$recur = $this->hcal_rrule($e);
+		if($recur) $hcal .= $recur.' ';
+		$hcal .= $this->hcal_dtstart($e);
+		if($recur && isset($e['enddate'])) $hcal .= '-<abbr class="dtend" title="'.$e['enddate'].'">'.DoDate($e['enddate'], 'l, F jS Y').'</abbr>';
+		if ($e['time'] != '00:00 ') $hcal .=  ' '.$e['time'];
+		$desc = $this->hcal_description($e);
+		if($desc) $hcal .= "<br /><br />$desc";
+		$location = $this->hcal_location($e);
+		if($location) $hcal .= "<br /><br />Location:<br />$location";
+		$hcal .= '</p>';
+		return $hcal;
+	}
+
+	function hcal_summary($e) {
+		return '<span class="summary">'. $this->cleanXHTML($e['event']) .'</span>';
+	}
+
+	function hcal_rrule($e) {
+		$freq = false;
+		if(isset($e['recurring_options'])) {
+			switch($e['recurring_options']) {
+			case 1:
+				$freq='Daily';
+				break;
+			case 2:
+				$freq='Weekly';
+				break;
+			case 3:
+				$freq='Monthly';
+				break;
+			case 4:
+				$freq='Yearly';
+				break;
+			default:
+				$freq=false;
+			}
+		}
+		if(!$freq) return '';
+
+		$recur = '<abbr class="rrule" title="FREQ='.strtoupper($freq).'">';
+		if(isset($e['recurring_description'])) {
+			$recur .= $e['recurring_description'];
+		} else {
+			$recur .= $freq;
+		}
+		$recur .= '</abbr>';
+
+		return $recur;
+	}
+
+	function hcal_dtstart($e) {
+		if ($e['date'] != '0000-00-00' || $e['time'] != '') {
+			$formatted_date = DoDate($e['date'], 'l, F jS Y');
+		}
+		if(!$formatted_date) return '';
+		return '<abbr class="dtstart" title="'.$e['date'].'">'.$formatted_date.'</abbr>';
+	}
+
+	function hcal_description($e) {
+		$desc = false;
+		if ($e['shortdesc'] && !$e['fulldesc'])
+			$desc = converttext(trim($e['shortdesc']));
+		else
+			$desc = converttext(trim($e['fulldesc']));
+		if(!$desc) return false;
+
+		return '<span class="description">'.$this->cleanXHTML($desc).'</span>';
+	}
+
+	function hcal_location($e) {
+		$hcal = '<span class="location">'.$e['location'].'</span>';
+		if(isset($e['laddress']) || isset($e['lcity']) || isset($e['lstate']) || isset($e['lzip'])) {
+			$hcal .= '<br /><span class="location vcard"><span class="adr">';
+			$addr = array();
+			if(isset($e['lcity'])) $addr[] = '<span class="locality">'.$e['lcity'].'</span>';
+			if(isset($e['lstate'])) $addr[] = '<span class="region">'.$e['lstate'].'</span>';
+			$city_state = implode(', ', $addr);
+			$addr = array();
+
+			if($city_state) $addr[] = $city_state;
+			if(isset($e['lzip'])) $addr[] = '<span class="postal-code">'.$e['lzip'].'</span>';
+			$city_state_zip = implode(' ', $addr);
+			$addr = array();
+			if(isset($e['laddress'])) $addr[] = '<span class="street-address">'.$e['laddress'].'</span>';
+			if($city_state_zip) $addr[] = $city_state;
+			$location = implode('<br />', $addr);
+			
+			$hcal .= $location;
+			$hcal .= '</span></span>';
+		}
+		return $hcal;
+	}
+
+	function cleanXHTML($string) {
+		if(!extension_loaded('tidy')) {
+			if(!dl('tidy.so')) {
+				return strip_tags($string, '<br><a>');
+			}
+		}
+		tidy_setopt('output-xhtml', true);
+		tidy_setopt('doctype', 'omit');
+		tidy_setopt('show-body-only', true);
+
+		tidy_parse_string($string);
+		tidy_clean_repair();
+		$clean = tidy_get_output();
+		if(!$clean) return strip_tags($string, '<br><a>');
+		return $clean;
 	}
 
 /*

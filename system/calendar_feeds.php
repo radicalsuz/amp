@@ -2,9 +2,6 @@
 
 require_once('AMP/System/Page.inc.php');
 require_once('Modules/Calendar/Feeds/CalendarFeeds.php');
-//require_once("feedonfeeds-0.1.9/init.php");
-require_once('magpierss/rss_fetch.inc');
-
 require_once('Modules/Calendar/Feeds/ComponentMap.inc.php');
 
 $map =& new ComponentMap_CalendarFeeds();

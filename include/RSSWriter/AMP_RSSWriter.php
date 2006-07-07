@@ -14,27 +14,48 @@ class AMP_RSSWriter extends RSSWriter {
 		foreach ($this->items as $item) {
 			print "  <item rdf:about=\"" .  htmlspecialchars($item["uri"]) . "\">\n";
 			foreach ($item as $key => $value) {
+				$key = trim($key);
 				if ($key!="uri") {
+					if(($attr = strpos($key, ' ')) !== false) {
+						$end_key = substr($key, 0, $attr);
+					} else {
+						$end_key = $key;
+					}
 					if (is_array($value)) {
 						$keys = array_keys($value);
 						if (strpos($keys[0], ':' ) !== false) {
 							print "    <${key}>\n";
 							foreach ($value as $k1 => $v1) {
-								print "      <${k1}>" . htmlspecialchars($v1) . "</${k1}>\n";
+								if(($attr = strpos($k1, ' ')) !== false) {
+									$end_k1 = substr($k1, 0, $attr);
+								} else {
+									$end_k1 = $k1;
+								}
+								if(!$this->isCdata($v1))
+									$v1 = htmlspecialchars($v1);
+								print "      <${k1}>" . $v1 . "</${end_k1}>\n";
 							}
-							print "    </${key}>\n";
+							print "    </${end_key}>\n";
 						} else {
 							foreach ($value as $v1) {
-								print "    <${key}>" . htmlspecialchars($v1) . "</${key}>\n";
+								if(!$this->isCdata($v1))
+									$v1 = htmlspecialchars($v1);
+								print "    <${key}>" . $v1 . "</${end_key}>\n";
 							}
 						}
 					} else {
-						print "    <${key}>" . htmlspecialchars($value) . "</${key}>\n";
+						if(!$this->isCdata($value))
+							$value = htmlspecialchars($value);
+						print "    <${key}>" . $value . "</${end_key}>\n";
 					}
 				}
 			}
 			print "  </item>\n\n";
 		}
+	}
+
+	function isCdata($content) {
+		return preg_match('/^<!\[CDATA\[.*\]\]>$/ims', $content);
 	}
 
 	function lastModified($timestamp = null) {
