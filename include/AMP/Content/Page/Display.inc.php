@@ -39,16 +39,20 @@ class AMPContent_PageDisplay {
 
     function output_Standard() {
 
+        $flash = &AMP_System_Flash::instance( );
         $content = $this->_page->contentManager->output() ;
         $this->_template->placeNavigation( $this->_page );
+        $flash_output = $flash->execute( );
         $output =  
                 $this->_header->output().
-                $this->_template->execute( $content );
+                $this->_template->execute( $flash_output . $content );
         return $output;
     }
 
     function output_Content() {
-        return $this->_page->contentManager->output();
+        $flash = &AMP_System_Flash::instance( );
+        return  $flash->execute( ) 
+                . $this->_page->contentManager->output();
     }
 
     function output_PrinterSafe() {

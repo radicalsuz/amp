@@ -673,16 +673,24 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if ( $this->_sort_complete && !$reset ) return false;
         //Sort the data
         $sort_request = ( isset($_REQUEST['sort']) && $_REQUEST['sort'] ) ? $_REQUEST['sort'] : false  ; 
-        if ( !( $sort_request || isset( $this->_sort_default ))) return false;
-        $this->_sort_complete = true;
+        if ( !( $sort_request || isset( $this->_sort_default ))){
+            $this->_after_sort( $source );
+            return false;
+        }
             
         //for recordset mapper
         if ( !is_array( $source ) && is_object( $source )) {
-            if ( !$sort_request ) return $source->setSort( $this->_sort_default );
+            if ( !$sort_request ){
+                $this->_sort_complete = true;
+                return $source->setSort( $this->_sort_default );
+            }
             
             $this->_sort = $sort_request;
             $sort_request = $this->_translateSortRequest( $sort_request, $source ) ;
-            return $source->addSort( $sort_request );
+            $this->_sort_complete = $sort_request;
+            $result = $source->addSort( $sort_request );
+            $this->_after_sort( $source );
+            return $result;
         }
         //for arrays of objects
         $this->_setSortForArray( $source );
@@ -708,18 +716,28 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
     
     function _setSortForArray( &$source ){
-        $sort_request = ( isset($_REQUEST['sort']) && $_REQUEST['sort'] ) ; 
-        if ( !$sort_request ) return false;
-        $local_sort_method = '_setSort'.ucfirst( $_REQUEST['sort']);
+        $sort_request = ( isset($_REQUEST['sort']) && $_REQUEST['sort'] ) ? $_REQUEST['sort'] : false ; 
+        if ( !$sort_request ) {
+            $this->_after_sort( $source );
+            return false;
+        }
+        $this->_sort_complete = true;
+        $local_sort_method = '_setSort'.ucfirst( $sort_request );
         $sort_direction = ( isset( $_REQUEST['sort_direction']) && $_REQUEST['sort_direction']) ?
                             $_REQUEST['sort_direction'] : false;
 
-        if ( method_exists( $this, $local_sort_method)) return $this->$local_sort_method( $sort_direction );
+        if ( method_exists( $this, $local_sort_method)) {
+            $result = $this->$local_sort_method( $source, $sort_direction );
+            $this->_after_sort( $source );
+            return $result;
+
+        }
 
         $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
-        if( $itemSource->sort( $source, $_REQUEST['sort'], $sort_direction )){
-            $this->_sort = $_REQUEST['sort'];
+        if( $itemSource->sort( $source, $sort_request , $sort_direction )){
+            $this->_sort = $sort_request;
         }
+        $this->_after_sort( $source );
     }
 
     function redoSort( ){
@@ -727,6 +745,11 @@ class AMPSystem_List extends AMPDisplay_HTML {
                             $_REQUEST['sort_direction'] : false;
         $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
         $itemSource->sort( $this->source, $this->_sort, $sort_direction );
+        $this->_after_sort( $this->source );
+    }
+
+    function _after_sort( &$source ) {
+        //interface
     }
 
 

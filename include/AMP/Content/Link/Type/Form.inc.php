@@ -9,7 +9,7 @@ class Link_Type_Form extends AMPSystem_Form_XML {
 
     function Link_Type_Form( ) {
         $name = 'linktype';
-        $this->init( $name );
+        $this->init( $name, 'POST', AMP_SYSTEM_URL_LINK_TYPES );
     }
 
     function setDynamicValues( ){

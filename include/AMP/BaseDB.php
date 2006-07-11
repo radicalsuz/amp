@@ -1,5 +1,9 @@
 <?php
-require_once('utility.functions.inc.php');
+
+require_once( 'AMP/Base/DB.php');
+require_once( 'AMP/Base/Config.php');
+/*
+require_once('utility.base.functions.inc.php');
 
 // If we don't yet have a local path, find one.
 if (!defined('AMP_LOCAL_PATH'))
@@ -14,6 +18,7 @@ if ( AMP_LOCAL_PATH ) {
 }
 
 require_once('adodb/adodb.inc.php');
+require_once('utility.functions.inc.php');
 require_once('AMP/Registry.php');
 
 // Look for a local site configuration.
@@ -70,27 +75,6 @@ $dbcon =& ADONewConnection( AMP_DB_TYPE );
 if (! $dbcon->Connect( AMP_DB_HOST, AMP_DB_USER, AMP_DB_PASS, AMP_DB_NAME )) {
     die( 'Connection to database '.AMP_DB_NAME.' was refused.  Please check your site configuration file.' );
 }
+*/
 
-require_once('AMP/System/Config.inc.php');
-
-//activate the memcache class
-if ( AMP_SITE_MEMCACHE_ON ) require_once('AMP/System/Memcache.inc.php');
-
-//add the dbcon to the Registry
-$registry =& AMP_Registry::instance();
-$registry->setDbcon($dbcon);
-
-//activate Lookups
-require_once('AMP/System/Lookups.inc.php');
-$lookup_factory = & AMPSystem_LookupFactory::instance();
-$lookup_factory->init( $dbcon );
-
-require_once('AMP/LegacyRegistry.inc.php');
-
-//load Language files 
-require_once( 'AMP/System/Language/Config.php');
-
-
-// turn on APD debugger when set by config file
-if ( AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
 ?>

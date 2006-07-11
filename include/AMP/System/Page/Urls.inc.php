@@ -38,5 +38,6 @@ define( 'AMP_SYSTEM_URL_FORM_DATA',             'userdata_list.php');
 define( 'AMP_SYSTEM_URL_FORM_ENTRY',            'modinput4_view.php');
 define( 'AMP_SYSTEM_URL_PUBLIC_PAGE_PUBLISH',   'module_contentadd.php');
 define( 'AMP_SYSTEM_URL_CACHE_DATA',            'system/cache.php');
+define( 'AMP_SYSTEM_URL_LINK_TYPES',            'link_type.php');
 
 ?>

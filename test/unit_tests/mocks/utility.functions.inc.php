@@ -1,33 +1,5 @@
 <?php
-
-/**
- * Check if a file exists in the include path
- *
- * @version      1.2
- * @author       Aidan Lister <aidan@php.net>
- * @param        string $file The name of the file to look for
- * @return       bool True if the file exists, False if it does not
- */
-
-if ( !function_exists( 'file_exists_incpath' ) ) {
-
-    function file_exists_incpath ($file) {
-        $paths = explode(PATH_SEPARATOR, get_include_path());
-
-        foreach ($paths as $path)
-        {
-            // Formulate the absolute path
-            $fullpath = $path . DIRECTORY_SEPARATOR . $file;
-
-            // Check it
-            if (file_exists($fullpath)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
+require_once( 'utility.base.functions.inc.php');
 
 if (!function_exists( 'array_intersect_key' ) ) {
 
@@ -491,49 +463,39 @@ function pagination($count,$offset,$limit) {
 }
 }
 
-if (!function_exists('find_local_path')) {
-function find_local_path () {
-    if (function_exists('apache_lookup_uri')) {
-
-        $localInfo = apache_lookup_uri( '/custom/' );
-        $localPath = preg_replace( "/(.*)\/custom.*$/", "\$1", $localInfo->filename );
-        
-    }
-    if (isset($localPath)) $customPath = $localPath . '/custom';
-
-    $searchPath = '.';
-    $depth = 0;
-    while ( !is_dir($customPath) && $depth++ < 4 ) {
-        $customPath = $searchPath . '/custom';
-        $localPath = realpath( $searchPath );
-        $searchPath = '../' . $searchPath;
-    }
-
-    if ($depth >= 4) return null;
-	
-	return $localPath;
-}
-}
-
 if (!function_exists('setBrowser')) {
 function setBrowser() {
-    global $browser_ie, $browser_win, $browser_mo, $browser_checked;
+    if ( defined( 'AMP_SYSTEM_USER_BROWSER_TYPE' )) return AMP_SYSTEM_USER_BROWSER_TYPE;
+
+    //global $browser_ie, $browser_win, $browser_mo, $browser_checked;
     $browser_ie =  strstr(getenv('HTTP_USER_AGENT'), 'MSIE') ;
     $browser_win =  strstr(getenv('HTTP_USER_AGENT'), 'Win') ;
     if (!strstr(getenv('HTTP_USER_AGENT'), 'Safari')){
         $browser_mo =  strstr(getenv('HTTP_USER_AGENT'), 'Mozilla/5') ;
     }
     if (strstr(getenv('HTTP_USER_AGENT'), '2002')){
-        $browser_mo =  NULL ;
+        $browser_mo =  false;
     }
-    $browser_checked = true;
+    $browser_value = false;
+    if ( $browser_mo  ) $browser_value = "mozilla";
+    if ( $browser_win ) $browser_valu  = "win";
+    if ( $browser_ie  ) $browser_value = "ie";
+    if ( $browser_ie && $browser_win ) $browser_value =  "win/ie";
+    define( 'AMP_SYSTEM_USER_BROWSER_TYPE', $browser_value );
+    return AMP_SYSTEM_USER_BROWSER_TYPE;
 
-    return getBrowser();
+    //    return  $browser_ie?"ie":$browser_win?"win":$browser_mo?"mozilla":false;
+    //$browser_checked = true;
+    
+
 }
 }
 
 if (!function_exists('getBrowser')) {
 function getBrowser() {
+    if ( defined( 'AMP_SYSTEM_USER_BROWSER_TYPE' )) return AMP_SYSTEM_USER_BROWSER_TYPE;
+    return setBrowser();
+    /*
     global $browser_ie, $browser_win, $browser_mo, $browser_checked;
     if ($browser_checked) {
         if ($browser_ie&&$browser_win) return "win/ie";
@@ -541,8 +503,10 @@ function getBrowser() {
     } else {
         return setBrowser();
     }
+    */
 }
 }
+  
   
 if (!function_exists('array_combine_key')) {
 		function array_combine_key(&$arr1, &$arr2) {

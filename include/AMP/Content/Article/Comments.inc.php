@@ -32,7 +32,7 @@ class ArticleCommentSet extends AMPSystem_Data_Set {
         $this->addCriteria( "publish=1" );
     }
 
-    function execute( $show_all ) {
+    function execute( $show_all=false ) {
         if ($show_all) $this->dropCriteria( "publish=1" );
         $this->readData();
     }
@@ -106,7 +106,7 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
 
     function _HTML_author( $author, $author_url = null ) {
         $href = (isset( $author_url ) && $author_url) ? $author_url : false;
-        return $this->_HTML_italics(  'Comment by '. $this->_HTML_link( $href, $author ) );
+        return $this->_HTML_italics(  'Comment by '. $this->link( $href, $author, array( 'target' => 'blank' ) ) );
     }
     
     function _HTML_trackback($id) {

@@ -76,6 +76,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
                             wysiwyg     :: an instance of the Xinha htmlarea plugin
                             blocktrigger:: a DHTML envelope for a set of elements
                             imagepicker :: a selectbox that pulls from AMP's image library and displays a preview of the selected image
+                            captcha     :: an image containing text that must be matched by the user for the form to submit
          *
          *
          ****************/
@@ -624,6 +625,31 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
         $defaults = $this->_getDefault( $name );
         return $this->form->addElement( 'file', $name, $field_def['label'], $defaults );
+
+    }
+
+    function &_addElementCaptcha ( $name, $field_def ) {
+        $this->_addUniqueIdValue( );
+
+        $renderer = &new AMPDisplay_HTML;
+        $this->form->addElement( 
+                'static', 'captcha_'.$name, "",  
+                $renderer->image( AMP_Url_AddVars( AMP_CONTENT_URL_CAPTCHA, array( 'key='. AMP_SYSTEM_UNIQUE_VISITOR_ID ) ), array( 'align' => 'center'))
+                );
+
+        $defaults = $this->_getDefault( $name );
+        $fRef = &$this->form->addElement( 'text', $name, $field_def['label'], $defaults );
+
+        require_once( 'AMP/Form/Element/Captcha.inc.php');
+        $captcha_demo = &new PhpCaptcha( array( ) );
+        $rule_config = array( $captcha_demo, 'Validate' );
+        $this->form->addRule( $name, AMP_TEXT_ERROR_FORM_CAPTCHA_FAILED, 'callback', $rule_config );
+
+        return $fRef;
+    }
+
+    function _addUniqueIdValue( ) {
+        $this->form->addElement(  'hidden', 'AMP_SYSTEM_UNIQUE_VISITOR_ID', AMP_SYSTEM_UNIQUE_VISITOR_ID );
 
     }
 

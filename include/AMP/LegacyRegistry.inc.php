@@ -8,18 +8,25 @@ $MX_top = AMP_CONTENT_MAP_ROOT_SECTION;
 
 $PHP_SELF = $_SERVER['PHP_SELF'];
 
-define( 'MAGIC_QUOTES_ACTIVE', get_magic_quotes_gpc());
-
 #load menu class	
 if (file_exists($base_path."Connections/menu.class.php")) {
     require_once($base_path."Connections/menu.class.php");
     $obj = new Menu;
 } 
 
-# Get system vars
-require_once( 'AMP/System/Setup/Setup.php');
-$sysvars = & new AMP_System_Setup( $dbcon );
+$MM_USERNAME = AMP_DB_USER;
+$MM_HOSTNAME = AMP_DB_HOST;
+$MM_PASSWORD = AMP_DB_PASS;
+$MM_DATABASE = AMP_DB_NAME;
 
+//Article Custom Fields
+
+AMP_defineLegacyCustomField( 1 );
+AMP_defineLegacyCustomField( 2 );
+AMP_defineLegacyCustomField( 3 );
+AMP_defineLegacyCustomField( 4 );
+
+/*
 $SystemSettings = $sysvars->getData();
 
 $SiteName            = $SystemSettings["websitename"];
@@ -64,50 +71,19 @@ if ( !defined( 'DIA_API_ORGANIZATION_KEY')) define( 'DIA_API_ORGANIZATION_KEY', 
 if ( !defined( 'DIA_API_ORGCODE')) define( 'DIA_API_ORGCODE', $SystemSettings['dia_key']);
 
 #SET DATABASE CACHING
-$dbcon->cacheSecs = $cacheSecs;
+$dbcon = &AMP_Registry::getDbcon( );
+$dbcon->cacheSecs = AMP_SITE_CACHE_TIMEOUT;
+*/
 
-$MM_USERNAME = AMP_DB_USER;
-$MM_HOSTNAME = AMP_DB_HOST;
-$MM_PASSWORD = AMP_DB_PASS;
-$MM_DATABASE = AMP_DB_NAME;
-
-define( "AMP_SYSTEM_VERSION_ID", '3.5.9');
 
 #define browser detection global variables
+/*
 $browser_ie = NULL;
 $browser_win = NULL;
 $browser_mo = NULL;
 $browser_checked = false;
+*/
 
-define('ADODB_REPLACE_INSERTED', 2);
-define('ADODB_REPLACE_UPDATED', 1);
-define('AMP_DISPLAYMODE_DEBUG', (isset($_GET['debug']) && $_GET['debug']));
-define('AMP_DISPLAYMODE_DEBUG_CACHE', (isset($_GET['debug_cache']) && $_GET['debug_cache']));
-define('AMP_DISPLAYMODE_DEBUG_PLUGINS', (isset($_GET['debug_plugins']) && $_GET['debug_plugins']));
-define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups']) && $_GET['debug_lookups']));
-define('AMP_DISPLAYMODE_DEBUG_NAVS', (isset($_GET['debug_navs']) && $_GET['debug_navs']));
-define('AMP_DISPLAYMODE_DEBUG_DIA', (isset($_GET['debug_dia']) && $_GET['debug_dia']));
 
-if (!defined( 'AMP_DBTABLE_BLAST_LISTS')) define ( 'AMP_DBTABLE_BLAST_LISTS', false );
-
-// confirm whether WYSIWYG editor should be allowed for this machine
-// this should probably eventually become a user setting instead of a cookie
-if ( !defined( 'AMP_USER_CONFIG_USE_WYSIWYG') ){
-    if ( isset( $_COOKIE['AMPWYSIWYG'] )) {
-        $wysiwyg_setting =  !( $_COOKIE['AMPWYSIWYG'] == 'none' || $_COOKIE['AMPWYSIWYG'] == false );
-        define( 'AMP_USER_CONFIG_USE_WYSIWYG', $wysiwyg_setting);
-    } else {
-        define( 'AMP_USER_CONFIG_USE_WYSIWYG', true );
-    }
-}
-
-require_once( 'AMP/System/Permission/Config.inc.php' );
-
-//Article Custom Fields
-
-AMP_defineLegacyCustomField( 1 );
-AMP_defineLegacyCustomField( 2 );
-AMP_defineLegacyCustomField( 3 );
-AMP_defineLegacyCustomField( 4 );
 
 ?>

@@ -7,12 +7,14 @@ if (!defined( 'AMP_CONTENT_NAV_LIMIT_DEFAULT' )) define ('AMP_CONTENT_NAV_LIMIT_
 define( 'AMP_NAVTYPE_HTML', 'HTML' );
 define( 'AMP_NAVTYPE_SQL', 'SQL' );
 define( 'AMP_NAVTYPE_RSS', 'RSS' );
+define( 'AMP_NAVTYPE_PHP', 'PHP' );
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Nav/Display.inc.php' );
 require_once ( 'AMP/Content/Nav/EngineSQL.inc.php' );
 require_once ( 'AMP/Content/Nav/EngineRSS.inc.php' );
 require_once ( 'AMP/Content/Nav/EngineHTML.inc.php' );
+require_once ( 'AMP/Content/Nav/EnginePHP.inc.php' );
 
 
 class NavigationElement extends AMPSystem_Data_Item {
@@ -49,6 +51,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     #################################
     
     function _initEngine() {
+        if ($this->getIncludeFile()) return $this->setEngine( AMP_NAVTYPE_PHP );
         if ($this->getRSS()) return $this->setEngine( AMP_NAVTYPE_RSS );
         if ($this->getSQL()) return $this->setEngine( AMP_NAVTYPE_SQL );
         if ($this->getBaseHTML()) return $this->setEngine( AMP_NAVTYPE_HTML );
@@ -112,6 +115,18 @@ class NavigationElement extends AMPSystem_Data_Item {
 
     function getSQL() {
         return $this->getData('sql');
+    }
+
+    function getIncludeFile( ){
+        return $this->getData( 'include_file');
+    }
+
+    function getIncludeClass( ){
+        return $this->getData( 'include_class');
+    }
+
+    function getIncludeFunction( ){
+        return $this->getData( 'include_function');
     }
 
     function getBaseHTML() {

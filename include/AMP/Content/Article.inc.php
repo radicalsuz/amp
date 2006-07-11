@@ -223,6 +223,9 @@ class Article extends AMPSystem_Data_Item {
         if (!$this->allowsComments()) return false;
         require_once ( 'AMP/Content/Article/Comments.inc.php' );
         return new ArticleCommentSet( $this->dbcon, $this->id );
+        
+        //require_once ( 'AMP/Content/Article/Comment/ArticleComment.php' );
+        //$comment_source = &new AMP_Content_Article_Comment_List( );
     }
 
     function getDocumentLink() {
@@ -322,12 +325,12 @@ class Article extends AMPSystem_Data_Item {
 
     function setDefaults( ){
         $this->mergeData( array( 
-            'type' => AMP_CONTENT_MAP_ROOT_SECTION,
-            'linkover' => 1,
-            'uselink' => 1,
-            'class' => AMP_CONTENT_CLASS_DEFAULT,
+            'type'      => AMP_CONTENT_MAP_ROOT_SECTION,
+            'linkover'  => 1,
+            'uselink'   => 1,
+            'class'     => AMP_CONTENT_CLASS_DEFAULT,
             'enteredby' => AMP_SYSTEM_USER_ID,
-            'datecreated' => date( 'Y-m-d' )
+            'datecreated'   => date( 'Y-m-d' )
         ));
     }
 

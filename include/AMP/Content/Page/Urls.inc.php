@@ -42,6 +42,7 @@ if ( !defined( 'AMP_CONTENT_URL_TRACKBACKS'))   define ( 'AMP_CONTENT_URL_TRACKB
 
 if ( !defined( 'AMP_CONTENT_URL_DOCUMENTS'))    define ( 'AMP_CONTENT_URL_DOCUMENTS', '/downloads/' );
 if ( !defined( 'AMP_CONTENT_URL_IMAGES' ))      define ( 'AMP_CONTENT_URL_IMAGES', 'img/' );
+if ( !defined( 'AMP_CONTENT_URL_CAPTCHA' ))      define ( 'AMP_CONTENT_URL_CAPTCHA', 'image_captcha.php' );
 if ( !defined( 'AMP_CONTENT_URL_EVENT_LIST' ))  define ( 'AMP_CONTENT_URL_EVENT_LIST', 'calendar.php');
 if ( !defined( 'AMP_CONTENT_URL_EVENT_ADD' ))   define ( 'AMP_CONTENT_URL_EVENT_ADD', 'calendar_input.php');
 

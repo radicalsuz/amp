@@ -1,6 +1,7 @@
 <?php 
 require_once( 'AMP/BaseDB.php');
-require_once( 'AMP/Content/Link/Display_Controller.php');
+//require_once( 'AMP/Content/Link/Display_Controller.php');
+require_once( 'AMP/Content/Link/Public/Controller.php');
 /*
 require_once( 'AMP/BaseDB.php');
 require_once( 'AMP/Content/Link/ComponentMap.inc.php');

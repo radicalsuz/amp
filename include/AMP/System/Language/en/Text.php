@@ -124,6 +124,7 @@ if ( !defined( 'AMP_TEXT_MODULE_NAME_GALLERY')) define( 'AMP_TEXT_MODULE_NAME_GA
  */
 if ( !defined( 'AMP_TEXT_LOGIN_HELP_ADMIN')) 
     define( 'AMP_TEXT_LOGIN_HELP_ADMIN', 'If you are having trouble logging in, please contact the <a href="mailto:%s">site administrator</a>.' );
+if ( !defined( 'AMP_TEXT_ADMINISTRATION')) define ( 'AMP_TEXT_ADMINISTRATION', 'Administration');
 /**
  * General purpose 
  * component names
@@ -143,6 +144,7 @@ define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
 define( 'AMP_TEXT_TEMPLATE', 'template');
 define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
 define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
+define( 'AMP_TEXT_YOUR_COMMENT', 'Your Comment' );
 
 /**
  * DIA related 

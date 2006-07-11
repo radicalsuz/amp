@@ -45,6 +45,8 @@ if ( !defined( 'AMP_TEXT_ERROR_EMAIL_TARGET_NOT_SET'))
  */
 if ( !defined( 'AMP_TEXT_ERROR_FORM_DATA_INVALID'))
         define( 'AMP_TEXT_ERROR_FORM_DATA_INVALID', 'There was a problem with one or more fields. Please scroll down for more info.');
+if ( !defined( 'AMP_TEXT_ERROR_FORM_CAPTCHA_FAILED'))
+        define( 'AMP_TEXT_ERROR_FORM_CAPTCHA_FAILED', 'The data you entered did not match the image or your time expired. Please try again');
 
 /**
  * DIA errors 
@@ -69,4 +71,10 @@ if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED'))
         define( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED', "%s failed to %s data : %s \n statement: %s");
 if ( !defined( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED'))
         define( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED', '_class_name var not defined for %s: search failed' );
+
+/**
+ * Cache Errors
+ */
+if ( !defined( 'AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED'))
+        define( 'AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED', '%s cache method failed.' );
 ?>

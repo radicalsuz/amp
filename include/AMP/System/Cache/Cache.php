@@ -58,9 +58,6 @@ class AMP_System_Cache {
 
     }
 
-    function url( $key  ){
-        return AMP_Url_AddVars( AMP_SYSTEM_URL_CACHE_DATA, array( 'key' => 'key='. $key ));
-    }
     //}}}
 
     //{{{ authorize methods
@@ -87,6 +84,18 @@ class AMP_System_Cache {
         if ( !isset( $id )) return $key;
         if ( strrpos( $key, ( '__'. $id .'__') ) === 0 ) return $key;
         return $key . '__' . $id . '__'; 
+    }
+
+    function publicize( $key ){
+        if ( !isset( $this->_unique_site_key )) return $key;
+        $site_key_imprint = '__' . $this->_unique_site_key . '__';
+        if ( strpos( $key, $site_key_imprint ) === FALSE ) return $key;
+        return substr( $key, strlen( $site_key_imprint));
+
+    }
+
+    function url( $key  ){
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_CACHE_DATA, array( 'key' => 'key='. $this->publicize( $key ) ));
     }
     // }}}
 

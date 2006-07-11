@@ -1,5 +1,4 @@
 <?php
-if ( !defined( 'AMP_TEXT_ADMINISTRATION')) define ( 'AMP_TEXT_ADMINISTRATION', 'Administration');
 require_once( 'AMP/Content/Header.inc.php');
 
 /**
@@ -48,6 +47,7 @@ class AMPSystem_Header extends AMPContent_Header {
     }
 
     function _HTML_header () {
+        $this->_sendCacheHeaders( );
         return  $this->_HTML_linkRels() . 
                 $this->_HTML_pageTitle() . 
                 $this->_HTML_javaScripts() .
@@ -57,6 +57,11 @@ class AMPSystem_Header extends AMPContent_Header {
     function _getFaviconPath( ){
         if ( file_exists( AMP_BASE_PATH . $this->_path_favicon ) ) return $this->_path_favicon; 
         return false;
+    }
+
+    function _sendCacheHeaders( ){
+        header('Cache-Control: no-cache');
+        header('Pragma: no-cache');
     }
 
 

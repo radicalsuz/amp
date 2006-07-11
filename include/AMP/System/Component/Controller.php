@@ -371,7 +371,8 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
         }
 
         $this->notify( 'beforeUpdate' );
-        $this->_model->setData( $this->get_form_data( ));
+        if ( !isset( $this->_model->id )) $this->_model->setDefaults( );
+        $this->_model->mergeData( $this->get_form_data( ));
 
         $this->notify( 'beforeSave' );
         //attempt to save the submitted data
@@ -449,7 +450,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
 
         $form_data = $this->get_form_data( );
         unset( $form_data[$this->_model->id_field]);
-        $thsi->_model->setData( $form_data );
+        $this->_model->setDefaults( );
+        $this->_model->mergeData( $form_data );
 
         $this->notify( 'beforeCopy' );
         //attempt to save the submitted data

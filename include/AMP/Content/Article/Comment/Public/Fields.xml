@@ -1,0 +1,35 @@
+<array>
+	<articleid>
+		<type>hidden</type>
+    </articleid>
+	<comment>
+		<type>textarea</type>
+		<label>Comment</label>
+        <size>25:60</size>
+        <required>1</required>
+	</comment>
+    <author_header>
+        <label>Author Info</label>
+        <type>header</type>
+    </author_header>
+	<author>
+		<type>text</type>
+		<label>Name</label>
+        <required>1</required>
+	</author>
+	<email>
+		<type>text</type>
+		<label>Email</label>
+        <required>1</required>
+	</email>
+	<author_url>
+		<type>text</type>
+		<label>Website</label>
+	</author_url>
+    <captcha_baby>
+        <type>captcha</type>
+        <label>Enter the letters from &lt;br /&gt;the image above</label>
+        <required>1</required>
+    </captcha_baby>
+
+</array>

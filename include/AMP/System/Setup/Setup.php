@@ -11,6 +11,8 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         'indextemplate'
     );
 
+    var $_encoding_default = 'iso-8859-1';
+
     var $_keys_phplist_setup = array( 
         'phplist_website',
         'phplist_domain',
@@ -37,6 +39,53 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     var $_value_suffix_punbb = array( 
         'o_board_title' => ' Forum',
         'o_base_url'    => '/punbb'
+    );
+
+    var $_translation_globals = array( 
+        'SiteName'            => 'Name',
+        'Web_url'             => 'URL',
+        'cacheSecs'           => 'CacheTimeout',
+        'admEmail'            => 'EmailSupport',
+        'MM_email_usersubmit' => 'EmailNotifyUserContent',
+        'MM_email_from'       => 'EmailSiteSender',	
+        'meta_description'    => 'MetaDescription',
+        'meta_content'        => 'MetaKeywords',
+        'systemplate_id'      => 'TemplateId'
+    );
+
+    var $_translation_constants = array( 
+        //Core config
+        'AMP_SITE_URL'                  => 'URL',
+        'AMP_SITE_NAME'                 => 'Name',
+        'AMP_SITE_META_DESCRIPTION'     => 'MetaDescription',
+        'AMP_SITE_META_KEYWORDS'        => 'MetaKeywords',
+        'AMP_SITE_CONTENT_ENCODING'     => 'CharacterEncoding',
+
+        // Email Addresses
+        'AMP_SITE_ADMIN'                => 'EmailSupport',
+        'AMP_SYSTEM_BLAST_EMAIL_SENDER' => 'EmailBlastSender', 
+        'AMP_SITE_EMAIL_SENDER'         => 'EmailSiteSender', 
+        'AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME'  => 'NameBlastSender',
+
+        //DB settings
+        'AMP_SITE_CACHE_TIMEOUT'        => 'CacheTimeout',
+
+        //Image Settings
+        'AMP_IMAGE_WIDTH_THUMB'         => 'ImageWidthThumb',
+        'AMP_IMAGE_WIDTH_TALL'          => 'ImageWidthTall',
+        'AMP_IMAGE_WIDTH_WIDE'          => 'ImageWidthWide',
+
+        //Default Template
+        'AMP_CONTENT_TEMPLATE_ID_DEFAULT'     => 'TemplateId',
+
+        //PHPlist Settings
+        'PHPLIST_BOUNCE_PASSWORD'       => 'PhplistBouncePassword',
+        'PHPLIST_BOUNCE_HOST'           => 'PhplistBounceHost',
+        'PHPLIST_BOUNCE_USER'           => 'PhplistBounceUser',
+
+        //DIA Settings
+        'DIA_API_ORGANIZATION_KEY'      => '_DIA_organization_key',
+        'DIA_API_ORGCODE'               => '_DIA_orgcode'
     );
 
     function AMP_System_Setup ( &$dbcon, $id = AMP_SYSTEM_SETTING_DB_ID ) {
@@ -66,6 +115,41 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         $this->_updateTemplates( );
         $this->_updatePHPlistConfig( );
         $this->_updatePunbbConfig( );
+    }
+
+    function execute( ) {
+        $this->globalize_settings( );
+        $this->dbcon->cacheSecs = AMP_SITE_CACHE_TIMEOUT;
+    }
+
+    function globalize_settings( ){
+        $this->_globalize_constants( );
+        $this->_globalize_legacy_vars( );
+    }
+
+    function _globalize_constants( ){
+        foreach( $this->_translation_constants as $constant_name => $value_description ) {
+            if ( defined( $constant_name )) continue;
+            $local_method = 'get' .$value_description;
+            if ( !method_exists( $this, $local_method )) {
+                trigger_error( 'Setup failed to find method ' . $local_method );
+                continue;
+            }
+            define( $constant_name, $this->$local_method( ));
+        }
+    }
+
+    function _globalize_legacy_vars( ){
+        foreach( $this->_translation_globals as $global_var_name => $value_description ) {
+            $local_method = 'get' .$value_description;
+            //if ( !method_exists( $this, $local_method )) continue;
+            if ( !method_exists( $this, $local_method )) {
+                trigger_error( 'Setup failed to find method ' . $local_method );
+                continue;
+            }
+            $_GLOBALS[ $global_var_name ] = $this->$local_method( );
+        }
+
     }
 
     function _updateTemplates( ){
@@ -182,6 +266,80 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         }
         if ( empty( $legacy_size_values )) return false;
         return $this->mergeData( $legacy_size_values );
+    }
+
+    function getEmailSupport( ){
+        return $this->getData( 'emfaq');
+    }
+
+    function getEmailNotifyUserContent( ){
+        return $this->getData( 'emendorse');
+    }
+
+    function getEmailBlastSender( ){
+        return $this->getData( 'emmedia');
+    }
+
+    function getNameBlastSender( ){
+        return $this->getData( 'emailfromname');
+    }
+
+    function getEmailSiteSender( ){
+        return $this->getData( 'emfrom');
+    }
+
+    function getCharacterEncoding( ) {
+        $result = $this->getData( 'encoding');
+        if ( !$result ) return $this->_encoding_default;
+        return $result;
+    }
+
+    function getURL( ){
+        return $this->getData( 'basepath');
+    }
+
+    function getMetaDescription( ){
+        return $this->getData( 'metadescription');
+    }
+
+    function getMetaKeywords( ) {
+        return $this->getData( 'metacontent');
+    }
+
+    function getCacheTimeout( ){
+        return $this->getData( 'cacheSecs');
+    }
+
+    function getImageWidthThumb( ){
+        return $this->getData( 'thumb');
+    }
+
+    function getImageWidthTall( ){
+        return $this->getData( 'optl');
+    }
+
+    function getImageWidthWide( ){
+        return $this->getData( 'optw');
+    }
+
+    function getPhplistBounceHost( ){
+        return $this->getData( 'phplist_bounce_host');
+    }
+
+    function getPhplistBounceUser( ){
+        return $this->getData( 'phplist_bounce_user');
+    }
+
+    function getPhplistBouncePassword( ){
+        return $this->getData( 'phplist_bounce_password');
+    }
+
+    function get_DIA_organization_key( ){
+        return $this->getData( 'dia_user') ;
+    }
+
+    function get_DIA_orgcode( ){
+        return $this->getData( 'dia_key') ;
     }
 }
 

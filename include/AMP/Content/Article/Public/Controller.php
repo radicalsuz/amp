@@ -88,33 +88,12 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
         return $results;
     }
 
-    /*
-    function _init_display( ){
-        $this->_display = &AMPContent_Manager::instance( );
-
-    }
-    */
     function display_response( ){
         if ( $public_page = &$this->_map->getPublicPage( 'response' )) {
             $this->_public_page_id = $public_page->id;
             $this->_display->add( $public_page->getDisplay( ));
         }
     }
-
-    
-   /* 
-    
-    function _init_display( ){
-        if ( isset( $this->_display_custom[ $this->_action_requested ] )){
-            $this->_display_class = $this->_display_custom[ $this->_action_requested ];
-        }
-        $this->_display = &call_user_func_array( array( $this->_display_class, 'instance'), $this );
-
-        $flash = &AMP_System_Flash::instance( );
-        $this->_display->add( $flash, 'flash' );
-    }
-
-    */
 
    function set_banner( $action, $heading = null ){
        //do nothing

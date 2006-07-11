@@ -81,6 +81,7 @@ class Article_Display extends AMPDisplay_HTML {
     function _HTML_Footer() {
         $output = "";
         if ($comments = &$this->_article->getComments()) {
+            $comments->readPublished( );
             $output .= $comments->display();
         }
         if ($docbox = &$this->_article->getDocLinkRef()) {

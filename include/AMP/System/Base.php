@@ -6,6 +6,12 @@ require_once('AMP/BaseDB.php');
 setBrowser();
 
 //Initialize System Permissions
+/** 
+ * offloaded to AMP/System/User/Config.php as of 3.5.9 -ap 2006-07-06
+ *
+ */
+
+/*** *** 
 require_once("AMP/System/Permission/Manager.inc.php");
 
 $AMP_Permission = & AMPSystem_PermissionManager::instance();
@@ -24,6 +30,7 @@ if ($AMP_CurrentUser && !$AMP_Permission->authorizedPage()) {
     trigger_error( 'unauthorized page access attempt by '. $AMP_CurrentUser->getName( ) );
     ampredirect( $AMP_Permission->userHome() );
 }
+*** ***/
 
 //initialize Content Map
 require_once('AMP/Content/Map.inc.php');
@@ -31,8 +38,9 @@ $content_map = & AMPContent_Map::instance();
 
 //standard system pages
 require_once( 'AMP/System/Page/Urls.inc.php');
+
 //configuration
-require_once( 'AMP/System/Config.inc.php');
+//require_once( 'AMP/System/Config.inc.php');
 
 //These items are deprecated 
 //used in the older form-processing engine

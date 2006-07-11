@@ -67,6 +67,18 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
 
     }
 
+    function move( $link_type_id = false ) {
+        $move_action = false;
+        if ( !( $link_type_id && $link_type_id != $this->getLinkType( ))) return false; 
+
+        $this->setLinkType( $link_type_id );
+        if ( !( $result = $this->save( ))) return false;
+
+        $this->notify( 'update' );
+        $this->notify( 'move' );
+        return $result;
+    }
+
     function &getImageRef( ){
         if (! ($img_path = $this->getImageFileName())) return false;
         require_once( 'AMP/Content/Image.inc.php');
@@ -94,21 +106,42 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
         return false;
     }
 
+    function getLinkTypePath( ){
+        return $this->getLinkTypeName( );
+    }
+
     function _sort_default( &$item_set ){
         return $this->sort( $item_set, 'name');
 #        $this->sort( $item_set, 'order');
 #        return $this->sort( $item_set, 'linkTypeName');
     }
 
-    function _makeCriteriaLinkType( $value ){
+    function makeCriteriaSection( $value ){
         if ( !is_numeric( $value )) return false;
-        return 'type=' . $value ;
+        $related_links = &AMPContentLookup_LinksBySection::instance( $value );
+        $simple_crit = 'type=' . $value ;
+        if ( !$related_links ) return $simple_crit; 
+        return '( '. $simple_crit . ' OR id in( ' . join( ',', array_keys( $related_links )) . '))';
+    }
+
+    function makeCriteriaLinkType( $value ){
+        if ( !is_numeric( $value )) return false;
+        return 'linktype=' . $value ;
+    }
+
+    function makeCriteriaNoLinkType( $value ){
+        if ( $value ) return "( isnull( linktype ) or linktype = '' )";
+        return "!( isnull( linktype ) or linktype = '' )";
     }
 
     function getTitle( ){
         return $this->getName( );
     }
 
+
+    function setLinkType( $link_type_id ) {
+        return $this->mergeData( array( 'linktype' => $link_type_id ));
+    }
     
 }
 

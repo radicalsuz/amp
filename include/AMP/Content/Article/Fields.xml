@@ -460,11 +460,11 @@
 	</comment_list>
 	<sidebar_header>
         <type>header</type>
-        <label>Sidebar</label>
+        <label>Custom Navigation</label>
      </sidebar_header>
      <navtext>
         <type>textarea</type>
-        <label>Sidebar</label>
+        <label>Navigation HTML to appear on this page</label>
      </navtext>
 	 <sidebar_class>
         <type>select</type>

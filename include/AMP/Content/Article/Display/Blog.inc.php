@@ -15,7 +15,7 @@ class ArticleDisplay_Blog extends Article_Display {
         
         return  $this->_HTML_start() .
                 $this->_HTML_title( $article->getTitle() ) .
-              $this->_HTML_authorDate( $article->getAuthor(), $article->getItemDate() ) .
+                $this->_HTML_authorDate( $article->getAuthor(), $article->getItemDate() ) .
                 $this->_HTML_endHeading();
     }
 
@@ -23,7 +23,7 @@ class ArticleDisplay_Blog extends Article_Display {
     function _HTML_Footer() {
         $output = "";
         if ($comments = &$this->_article->getComments()) {
-    
+            $comments->readPublished( );
       
             if ($this->use_short_comments) {
                $output .=  $this->_HTML_commentLink($comments);       

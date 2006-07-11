@@ -266,7 +266,7 @@
 		<per>LINKS_ACCESS</per>
 	</item>
 	<item>
-		<href>links.php</href>
+		<href>links.php?action=add</href>
 		<label>Add Link</label>
 		<class>add</class>
 		<per>LINKS_ACCESS</per>

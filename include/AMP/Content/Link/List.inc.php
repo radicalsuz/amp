@@ -14,11 +14,16 @@ class AMP_Content_Link_List extends AMP_System_List_Form {
         'Status' => 'publish',
         'ID'    => 'id');
     var $editlink = 'links.php';
+    var $_url_add = 'links.php?action=add';
+
     var $name_field = 'linkname';
     var $_source_object = 'AMP_Content_Link';
-    var $_observers_source = 'AMP_System_List_Observer';
-    var $_actions = array( 'publish', 'unpublish', 'delete', 'reorder');
-    var $_action_args = array( 'reorder' => array( 'order'));
+    var $_observers_source = array( 'AMP_System_List_Observer' );
+    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'reorder');
+    var $_action_args = array( 
+                'move'      => array( 'link_type_id' ), 
+                'reorder'   => array( 'order' )
+                );
     var $_actions_global = array( 'reorder');
 
     function AMP_Content_Link_List( &$dbcon ) {
@@ -29,6 +34,28 @@ class AMP_Content_Link_List extends AMP_System_List_Form {
     function renderReorder( &$toolbar ){
         $action = 'reorder';
         return '&nbsp;&nbsp;&#124;&nbsp;&nbsp;' . $toolbar->renderDefault( $action );
+
+    }
+
+    function renderMove( &$toolbar ){
+        $renderer = &$this->_getRenderer( );
+        $type_options = &AMPContent_Lookup::instance( 'linkTypeMap' );
+        $type_options = array( '' => 'Select Link Type') + $type_options;
+                
+        $toolbar->addEndContent( 
+                $renderer->inDiv( 
+                        '<a name="move_targeting"></a>'
+                        . AMP_buildSelect( 'link_type_id', $type_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element')))
+                        . '&nbsp;'
+                        . $toolbar->renderDefault( 'move')
+                        . '&nbsp;'
+                        . "<input type='button' name='hideMove' value='Cancel' onclick='window.change_any( \"move_targeting\");'>&nbsp;",
+                        array( 
+                            'class' => 'AMPComponent_hidden', 
+                            'id' => 'move_targeting')
+                    ), 'move_targeting');
+
+        return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");'>&nbsp;";
 
     }
 }

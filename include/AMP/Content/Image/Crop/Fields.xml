@@ -17,15 +17,6 @@
     <width>
         <type>hidden</type>
     </width>
-    <crop_options_header>
-        <type>blocktrigger</type>
-        <label>More Options</label>
-        <block>crop_options</block>
-    </crop_options_header>
-    <crop_interface_options>
-        <type>static</type>
-        <block>crop_options</block>
-    </crop_interface_options>
     <target>
         <type>select</type>
         <label>Apply Crop To:</label>
@@ -35,11 +26,19 @@
         </values>
         <required>1</required>
         <default>thumb</default>
-        <block>crop_options</block>
         <attr>
             <onChange>
                 if ( this.value !='thumb' ) if ( !confirm( 'The original image will be REPLACED by the cropped image! \n Once you save, you will NOT be able to undo this.')) this.value='thumb';
             </onChange>
         </attr>
     </target>
+    <crop_options_header>
+        <type>blocktrigger</type>
+        <label>Proportions</label>
+        <block>crop_options</block>
+    </crop_options_header>
+    <crop_interface_options>
+        <type>static</type>
+        <block>crop_options</block>
+    </crop_interface_options>
 </array>

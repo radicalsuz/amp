@@ -32,7 +32,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     var $_sort_auto = true;
 
     var $_observers = array( );
+
     var $_search_source;
+    var $_search_criteria_global = array( );
+
     var $_field_status = 'publish';
     var $_exact_value_fields = array( );
     var $_allow_db_cache = true;
@@ -73,6 +76,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function addCriteriaId( $item_id ){
         $this->addCriteria( $this->id_field." = ".$this->dbcon->qstr( $item_id ) );
+    }
+
+    function addCriteriaGlobal( $criteria ){
+        $this->_search_criteria_global = array_merge( $this->_search_criteria_global, $criteria );
     }
 		
 
@@ -303,13 +310,13 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );
         if ( empty( $result_set )) return $result_set;
 
-        if ( $this->_sort_auto ) $this->sort( $result_set );
+        if ( $this->_sort_auto && !$data_set->getSort( )) $this->sort( $result_set );
         return $result_set;
         
     }
 
     function &_getSearchSource( $criteria = null ){
-        if ( isset( $this->_search_source )) {
+        if ( isset( $this->_search_source ) && $this->_search_source ) {
             if ( !isset( $criteria )) return $this->_search_source;
             $data_set = &$this->_search_source;
         } else {
@@ -318,9 +325,15 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             $data_set->setSource( $this->datatable );
         }
         if ( isset( $criteria )) {
+            $data_set->setCriteria( $criteria );
+            /*
             foreach( $criteria as $crit_phrase ){
                 $data_set->addCriteria( $crit_phrase );
             }
+            */
+        }
+        foreach( $this->_search_criteria_global as $crit_phrase ){
+            $data_set->addCriteria( $crit_phrase );
         }
         if ( !$this->_allow_db_cache ) $data_set->clearCache( );
         
@@ -480,6 +493,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     //}}}
+
+    function setDefaults( ) {
+        //interface
+    }
 
 }
 ?>

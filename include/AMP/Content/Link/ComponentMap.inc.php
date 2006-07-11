@@ -1,12 +1,11 @@
 <?php
 
 require_once( 'AMP/System/ComponentMap.inc.php');
-define( 'AMP_MODULE_ID_LINKS', 11 );
-define( 'AMP_INTROTEXT_ID_LINKS', 12 );
 
 class ComponentMap_Link extends AMPSystem_ComponentMap {
     var $heading = "Link";
     var $nav_name = "links";
+    var $_action_default = 'list';
 
     var $paths = array( 
         'fields' => 'AMP/Content/Link/Fields.xml',

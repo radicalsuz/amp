@@ -40,6 +40,16 @@ class ArticleComment extends AMPSystem_Data_Item {
     function getAuthor( ){
         return $this->getData( 'author' );
     }
+
+    function setDefaults( ) {
+        $this->mergeData( array( 
+            'author_IP' => $_SERVER['REMOTE_ADDR'],
+            'agent'     => $_SERVER['HTTP_USER_AGENT'],
+            'publish'   => AMP_CONTENT_STATUS_LIVE,
+            'user_id'   => ( defined( 'AMP_SYSTEM_USER_ID') ? AMP_SYSTEM_USER_ID : false ),
+            'date'      => date( 'Y-m-d H:i:s' )
+        ));
+    }
 }
 
 ?>

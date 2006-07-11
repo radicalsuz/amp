@@ -47,6 +47,7 @@ if ( AMP_SITE_MEMCACHE_ON
     && empty( $_POST) 
     && ( ! $currentPage->isRedirected()) 
     && ( ! AMP_Authenticate( 'content' )) 
+    && ( ! defined( 'AMP_SYSTEM_FLASH_OUTPUT')) 
     ){
         $cached_page->save( $finalPageHtml );
 }

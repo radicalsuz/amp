@@ -20,7 +20,7 @@ class ContentClass_Display_Blog extends ContentClass_Display {
         foreach ($sourceItems as $sourceKey => $contentItem ) {
             $output .= $this->_HTML_listItem( $sourceItems[ $sourceKey ] );
         }
-        return $this->_HTML_inDiv( $this->_HTML_listTable($output), array('class' => $this->_css_class_container_list ) );
+        return $this->_HTML_inDiv( $this->_HTML_listTable($output), array('class' => $this->_css_class_container_content ) );
     }
 
     function _HTML_listTable( $content ) {

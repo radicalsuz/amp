@@ -11,6 +11,7 @@ class Article_Form extends AMPSystem_Form_XML {
         'type'  => 'AMP_CONTENT_ARTICLE_CUSTOMFIELD_TYPE',
         'default'  =>  'AMP_CONTENT_ARTICLE_CUSTOMFIELD_DEFAULT',
     );
+    var $_custom_field_path = 'AMP/Content/Article/CustomFields.xml';
     var $_custom_field_limit = 4;
     var $_custom_field_header = array( 
         'custom_field_header' => array( 
@@ -170,6 +171,26 @@ class Article_Form extends AMPSystem_Form_XML {
     }
 
     function _defineCustomFields( ){
+
+        $custom_fields = false;
+        if ( file_exists_incpath( 'Article_Custom_Fields.xml' )) {
+            $custom_fields = $this->_readCustomFields( 'Article_Custom_Fields.xml');
+        }
+        if ( file_exists_incpath( 'AMP/Content/Article/Custom_Fields.xml' )) {
+            $custom_fields = $this->_readCustomFields( 'AMP/Content/Article/Custom_Fields.xml');
+        }
+        if ( !$custom_fields ) {
+            $custom_fields = $this->_defineLegacyCustomFields( );
+        }
+
+        if ( !$custom_fields ) return array( );
+
+        $custom_fields = array_merge( $this->_custom_field_header, $custom_fields);
+        return $custom_fields;
+    }
+
+    function _defineLegacyCustomFields( ){
+        //legacy definition method
         $custom_fields = array( );
         for( $n=1; $n<=$this->_custom_field_limit; $n++) {
             $field_name_constant = $this->_field_custom_defs['name'] . '_' . $n;
@@ -184,10 +205,17 @@ class Article_Form extends AMPSystem_Form_XML {
 
             $custom_fields[ constant( $field_name_constant ) ] = $current_field;
         }
-        if ( !empty( $custom_fields )) {
-            $custom_fields = array_merge( $this->_custom_field_header, $custom_fields);
-        }
+        if ( empty( $custom_fields )) return false;
         return $custom_fields;
+
+    }
+
+    function _readCustomFields( $file_name ){
+        $fieldsource = & new AMPSystem_XMLEngine( $file_name );
+        if ( $fields = $fieldsource->readData() ) return $fields;
+
+        return false;
+        
     }
 
     function _getCommentListOutput( $id ){

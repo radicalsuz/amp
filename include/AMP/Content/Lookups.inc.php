@@ -219,6 +219,24 @@ class AMPContentLookup_SectionMap {
     
 }
 
+class AMPContentLookup_LinkTypeMap {
+    var $dataset;
+
+    function AMPContentLookup_LinkTypeMap() {
+        require_once( 'AMP/System/Data/Tree.php' );
+        require_once( 'AMP/Content/Link/Type/Type.php' );
+
+        $link_type = &new Link_Type( AMP_Registry::getDbcon( ));
+        $link_type->_auto_sort = false;
+        $link_map_source = &new AMP_System_Data_Tree( $link_type );
+        $this->dataset = &$link_map_source->select_options( );
+    }
+
+    function available( ){
+        return false;
+    }
+}
+
 class AMPConstantLookup_Listtypes extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_SECTIONLIST";
     var $_prefix_labels = "AMP_TEXT_SECTIONLIST";
@@ -591,7 +609,36 @@ class AMPContentLookup_SectionsByLink extends AMPContent_Lookup {
         if (!$lookup) {
             $lookup = new AMPContentLookup_SectionsByLink ( $link_id );
         } else {
-            $lookup->_addCriteriaLink( $article_id );
+            $lookup->_addCriteriaLink( $link_id );
+            $lookup->init();
+        }
+        return $lookup->dataset;
+    }
+    function available( ){
+        return false;
+    }
+}
+
+class AMPContentLookup_LinksBySection extends AMPContent_Lookup {
+    var $datatable = 'linksreltype';
+    var $result_field = 'typeid';
+    var $id_field = 'linkid';
+
+    function AMPContentLookup_LinksBySection( $section_id= null ){
+        if ( isset( $section_id )) $this->_addCriteriaSection( $section_id );
+        $this->init( );
+    }
+
+    function _addCriteriaSection( $section_id ){
+        $this->criteria = "typeid =" . $section_id ;
+    }
+
+    function &instance( $section_id ) {
+        static $lookup = false;
+        if (!$lookup) {
+            $lookup = new AMPContentLookup_LinksBySection( $section_id );
+        } else {
+            $lookup->_addCriteriaSection( $section_id );
             $lookup->init();
         }
         return $lookup->dataset;

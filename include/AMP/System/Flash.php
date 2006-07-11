@@ -8,10 +8,15 @@ class AMP_System_Flash extends AMP_Content_Buffer {
     var $_messages = array( );
     var $_keep = array( );
 
+    var $_cache;
+    var $_cache_key_messages = '__flash__messages';
+    var $_cache_key_errors   = '__flash__errors';
+
     function AMP_System_Flash( ){
         /* session storage functions not yet implemented cuz php sessions r scary 
         $this->_init_session( );
         */
+        $this->__construct( );
     }
 
     function &instance( ){
@@ -19,43 +24,47 @@ class AMP_System_Flash extends AMP_Content_Buffer {
         if ( !$flash ) $flash = new AMP_System_Flash;
         return $flash;
     }
-    
-/*
-    function _init_session( ){
-        if ( !isset( $_SESSION['__flash'])) $_SESSION['__flash'] = array( );
-        if ( !isset( $_SESSION['__flash']['messages'])) $_SESSION['flash']['messages'] = array( );
-        if ( !isset( $_SESSION['__flash']['errors']))   $_SESSION['flash']['errors'] = array( );   
-        #if ( !isset( $_SESSION['__flash']['store']))    $_SESSION['flash']['store'] = array( );
 
-        #$this->_store    = & $_SESSION['__flash']['store'];
-        $this->_messages = & $_SESSION['__flash']['messages'];
-        $this->_errors   = & $_SESSION['__flash']['errors'];
+    function __construct( ){
+        $this->_init_cache( );
+    }
+
+    function _init_cache( ){
+        $this->_cache = &AMP_get_cache( );
+        $this->_cache_key_messages = $this->_cache->identify( $this->_cache_key_messages, AMP_SYSTEM_UNIQUE_VISITOR_ID );
+        $this->_cache_key_errors   = $this->_cache->identify( $this->_cache_key_errors,   AMP_SYSTEM_UNIQUE_VISITOR_ID );
+        //trigger_error( 'seeking with key ' . $this->_cache_key_messages );
+
+        if ( $messages = $this->_cache->retrieve( $this->_cache_key_messages )) {
+            $this->_messages = $messages;
+        }
+
+        if ( $errors = $this->_cache->retrieve( $this->_cache_key_errors )) {
+            $this->_errors = $errors;
+        }
+    }
+
+    function keep( $key ) {
+        $this->_keep[] = $key ;
     }
     
-
-    
-    function store( $value, $key ){
-        $this->_store[$key] = $value;
-    }
-
-    function keep( $key ){
-        $this->_keep[] = $key;
-    }
-
-    function get( $key ){
-        if ( !isset( $this->_store[ $key ])) return false;
-        return $this->_store[ $key ];
-    }
-    */
-
     function add_error( $message, $key = null ){
-        if ( !isset( $key )) return $this->_errors[] = $message;
-        $this->_errors[$key] = $message;
+        if ( !isset( $key ))  {
+            $this->_errors[] = $message;
+        } else {
+            $this->_errors[$key] = $message;
+        }
+        $this->_cache->add( $this->_errors, $this->_cache_key_errors );
     }
 
     function add_message( $message, $key = null ){
-        if ( !isset( $key )) return $this->_messages[] = $message;
-        $this->_messages[$key] = $message;
+        if ( !isset( $key )) {
+            $this->_messages[] = $message;
+        } else {
+            $this->_messages[$key] = $message;
+        }
+        //trigger_error( 'cacheing with key ' . $this->_cache_key_messages );
+        $this->_cache->add( $this->_messages, $this->_cache_key_messages );
     }
 
     function get_messages( ){
@@ -68,26 +77,40 @@ class AMP_System_Flash extends AMP_Content_Buffer {
 
     function execute( ){
         $value = $this->display( );
-        #$this->clear_session( );
+        //trigger_error( 'running flash for ' . $_SERVER['REQUEST_URI'] . ( $this->active( ) ? ' active' : ' tough') );
+        if ( $value ) define( 'AMP_SYSTEM_FLASH_OUTPUT', true );
+        if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT' ) )$this->clear( );
         return $value; 
     }
 
-    /*
-    function clear_session( ) {
-        $_SESSION['__flash']['errors'] = array( );
-        $_SESSION['__flash']['messages'] = array( );
+    function active( ){
+        if ( !empty( $this->_messages )) return true;
+        if ( !empty( $this->_errors )) return true;
+        return false;
+        
+    }
 
-        $keep_values = array( );
-        foreach( $this->_keep as $key ) {
-            if ( isset( $this->_store[$key])) {
-                $keep_values[$key] = &$this->_store[ $key ];
-            }
+    function clear( ){
+        if ( !empty( $this->_keep )) {
+            $keep_messages = array_combine_key( $this->_keep, $this->_messages );
+            $keep_errors = array_combine_key( $this->_keep, $this->_errors );
         }
 
-        $_SESSION['__flash']['store'] = $keep_values;
+        //trigger_error( 'clearing flash for ' . $_SERVER['REQUEST_URI'] . ( $this->active( ) ? ' active' : ' tough') );
+        $this->_messages = array( );
+        $this->_errors = array( );
 
+        $this->_cache->delete( $this->_cache_key_messages );
+        $this->_cache->delete( $this->_cache_key_errors );
+
+        if ( !empty( $this->_keep )) {
+            $this->_keep = array( );
+            $this->_messages = $keep_messages;
+            $this->_errors   = $keep_messages;
+            $this->_cache->add( $this->_messages, $this->_cache_key_messages );
+            $this->_cache->add( $this->_errors,   $this->_cache_key_errors   );
+        }
     }
-    */
 
     function display( ){
         $output = "";

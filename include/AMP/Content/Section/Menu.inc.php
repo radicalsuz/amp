@@ -5,6 +5,8 @@ require_once ( 'AMP/Content/Map.inc.php');
 
 class SectionMenu extends AMP_Menu {
     var $_baseComponent = 'MenuComponent_scriptBase';
+    var $_cache;
+    var $_header;
 
     function SectionMenu() {
         $this->init( $this->loadMap(), 'AMP_Content_Explorer' );
@@ -19,6 +21,13 @@ class SectionMenu extends AMP_Menu {
 
     function output() {
         return $this->menuset->output( false );
+    }
+
+    function cache_output( ){
+        return
+              $this->cache_css( )
+            . $this->cache_js( )
+            . $this->cache_html( );
     }
 
     function execute( ){
@@ -62,10 +71,10 @@ class MenuComponent_treeScriptItem extends AMP_MenuComponent  {
 
     function _makeTemplates() {
         $this->core_template = 
-        "<img src=\"/system/images/edit.png\" border=\"0\" valign=\"bottom\"></a>&nbsp;".
-        "<a href=\"%1\$s\"><img src=\"/system/images/spacer.gif\" width=\"7\" border=\"0\">".
-        "<img src=\"/system/images/view.jpg\" border=\"0\"><img src=\"/system/images/spacer.gif\" width=\"5\" border=\"0\">".
-        "%2\$s</a> ', '%1\$s'";
+              "<img src=\"/system/images/edit.png\" border=\"0\" valign=\"bottom\"></a>&nbsp;"
+            . "<a href=\"%1\$s\"><img src=\"/system/images/spacer.gif\" width=\"7\" border=\"0\">"
+            . "<img src=\"/system/images/view.jpg\" border=\"0\"><img src=\"/system/images/spacer.gif\" width=\"5\" border=\"0\">"
+            . "%2\$s</a> ', '%1\$s'";
 
         $this->template = 
         "['</a><a href=\"section.php?id=%1\$s\">%2\$s";

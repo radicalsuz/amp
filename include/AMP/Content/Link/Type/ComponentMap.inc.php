@@ -5,6 +5,7 @@ require_once( 'AMP/System/ComponentMap.inc.php');
 class ComponentMap_Link_Type extends AMPSystem_ComponentMap {
     var $heading = "Link Type";
     var $nav_name = "links";
+    var $_action_default = 'list';
 
     var $paths = array( 
         'fields' => 'AMP/Content/Link/Type/Fields.xml',

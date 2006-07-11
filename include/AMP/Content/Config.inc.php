@@ -128,6 +128,11 @@ if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_INPUT'))
 if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_RESPONSE')) 
         define( 'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_RESPONSE', 49 );
 
+define( 'AMP_CONTENT_PUBLICPAGE_ID_LINKS_DISPLAY', 12 );
+
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT'))  
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT', 23 );
+
 /**
  * Allow multiple sections per article 
  */
@@ -148,7 +153,9 @@ if (!defined('AMP_CONTENT_RSS_CUSTOMFORMAT')) define ('AMP_CONTENT_RSS_CUSTOMFOR
  * Default Module Definitions 
  */
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );
+if ( !defined( 'AMP_MODULE_ID_COMMENTS')) define( 'AMP_MODULE_ID_COMMENTS', 23 );
 if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS', 45 );
+define( 'AMP_MODULE_ID_LINKS', 11 );
 
 /**
  * Bizarre Legacy Settings  

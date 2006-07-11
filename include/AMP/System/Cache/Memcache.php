@@ -15,7 +15,6 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         //ensure memcache is set
         $connected = $this->_init_connection( );
         if ( !$connected ) {
-            trigger_error( 'Memcache server connection failed' );
             return;
         }
         $this->_unique_site_key = AMP_SYSTEM_UNIQUE_ID;
@@ -40,7 +39,9 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$cache) $cache = new AMP_System_Cache_Memcache;
         if ( !$cache->has_connection( )) {
             $cache = new AMP_System_Cache_File;
-            trigger_error( 'Memcache Connection failed.  Attempting file caching.' );
+            if ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
+                trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED, get_class( $this )) );
+            }
         }
         return $cache;
     }

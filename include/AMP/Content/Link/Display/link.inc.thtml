@@ -1,0 +1,9 @@
+%render_partial_heading_link_type_name%
+<div class="links">
+	<a href="%url%" target="_blank">
+        %render_partial_conditional_thumbnail%
+        %linkname%
+    </a>
+    <p>%description%</p>
+    <br />
+</div>

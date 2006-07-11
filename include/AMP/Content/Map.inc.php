@@ -123,7 +123,7 @@ class AMPContent_Map {
     }
 
     function selectSiteTree() {
-        return array( $this->top, $GLOBALS['SiteName']) + $this->selectOptions();
+        return array( $this->top, AMP_SITE_NAME ) + $this->selectOptions();
     }
 
     function &instance() {

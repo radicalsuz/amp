@@ -95,9 +95,9 @@ class RSS_Article_List extends AMP_System_List_Form {
 
     }
 
-    function _setSort_contentBox( $sort_direction ){
+    function _setSort_contentBox( &$source, $sort_direction ){
         $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
-        if( $itemSource->sort( $this->source, 'title', $sort_direction )){
+        if( $itemSource->sort( $source, 'title', $sort_direction )){
             $this->_sort = 'title';
         }
     }
@@ -127,10 +127,9 @@ class RSS_Article_List extends AMP_System_List_Form {
         return "<input type='button' name='showPublish' value='Publish' onclick='window.change_any( \"publish_targeting\");window.scrollTo( 0, document.anchors[\"publish_targeting\"].y );'>&nbsp;";
 
     }
-    function _setSortFeedNameText( $sort_direction ){
-        #print 'sort method found' . count($this->source);
+    function _setSortFeedNameText( &$source, $sort_direction ){
         $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
-        if ( $itemSource->sort( $this->source, 'FeedNameText', $sort_direction ) ) {
+        if ( $itemSource->sort( $source, 'FeedNameText', $sort_direction ) ) {
             $this->_sort = 'FeedNameText';
         }
 

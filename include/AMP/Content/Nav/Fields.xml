@@ -159,4 +159,25 @@
 		<label>More Field #2 ( 4 )</label>
         <block>dynamic_header</block>
 	</mcall2>
+    <include_header>
+        <type>blocktrigger</type>
+        <label>Include File</label>
+        <block>direct_include</block>
+        <block_trigger>include_file</block_trigger>
+    </include_header>
+	<include_file>
+        <type>text</type>
+        <label>Include File</label>
+        <block>direct_include</block>
+	</include_file>
+	<include_class>
+        <type>text</type>
+        <label>Include Class</label>
+        <block>direct_include</block>
+	</include_class>
+	<include_function>
+        <type>text</type>
+        <label>Include Function</label>
+        <block>direct_include</block>
+	</include_function>
 </array>

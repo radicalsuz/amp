@@ -1,9 +1,9 @@
 <?php
 require_once( 'AMP/Content/Link/Type/ComponentMap.inc.php');
 
-$modid = 11;
 $map = &new ComponentMap_Link_Type( );
 $controller = &$map->get_controller( );
+$modid = AMP_MODULE_ID_LINKS;
 print $controller->execute( );
 
 /*

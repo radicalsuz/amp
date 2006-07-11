@@ -1,4 +1,5 @@
 <?php
+
 if ( !defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
 if ( !defined( 'AMP_SYSTEM_UNIQUE_ID')) define ( 'AMP_SYSTEM_UNIQUE_ID', AMP_DB_NAME );
 if ( !defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
@@ -53,9 +54,34 @@ if ( !defined( 'AMP_SYSTEM_FILE_OWNER')) define( 'AMP_SYSTEM_FILE_OWNER', false 
  */
 if ( !defined( 'AMP_SYSTEM_SETTING_DB_ID')) define( 'AMP_SYSTEM_SETTING_DB_ID', 1);
 if ( !defined( 'PHPLIST_CONFIG_ADMIN_ID')) define( 'PHPLIST_CONFIG_ADMIN_ID', 1);
+if ( !defined( 'AMP_DBTABLE_BLAST_LISTS')) define ( 'AMP_DBTABLE_BLAST_LISTS', false );
 
 /**
  * Email Blaster Options  
  */
 if ( !defined( 'AMP_MODULE_BLAST')) define ( 'AMP_MODULE_BLAST', 'AMP');
+
+/**
+ * ADODB Options
+ */
+define('ADODB_REPLACE_INSERTED', 2);
+define('ADODB_REPLACE_UPDATED',  1);
+
+/**
+ * Debug Modes 
+ */
+define('AMP_DISPLAYMODE_DEBUG',         (isset($_GET['debug'])          && $_GET['debug']));
+define('AMP_DISPLAYMODE_DEBUG_CACHE',   (isset($_GET['debug_cache'])    && $_GET['debug_cache']));
+define('AMP_DISPLAYMODE_DEBUG_PLUGINS', (isset($_GET['debug_plugins'])  && $_GET['debug_plugins']));
+define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups'])  && $_GET['debug_lookups']));
+define('AMP_DISPLAYMODE_DEBUG_NAVS',    (isset($_GET['debug_navs'])     && $_GET['debug_navs']));
+define('AMP_DISPLAYMODE_DEBUG_DIA',     (isset($_GET['debug_dia'])      && $_GET['debug_dia']));
+
+/**
+ *  GLOBAL settings
+ */
+define( "AMP_SYSTEM_VERSION_ID", '3.5.9');
+define( 'MAGIC_QUOTES_ACTIVE', get_magic_quotes_gpc());
+
+
 ?>

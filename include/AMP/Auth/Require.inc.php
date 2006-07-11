@@ -13,7 +13,6 @@
 ob_start();
 
 require_once( 'AMP/Auth/Handler.inc.php' );
-require_once( 'AMP/BaseDB.php' );
 
 $AMP_Authen_Handler = &new AMP_Authentication_Handler( $dbcon );
 
@@ -25,6 +24,7 @@ if ( !$AMP_Authen_Handler->is_authenticated() ) {
 $AMP_Authen_Handler->redirect_page( );
 
 if ( !empty($_POST) && AMP_SITE_MEMCACHE_ON ) {
+    require_once('AMP/System/Memcache.inc.php');
     AMP_cacheFlush();
 }
 

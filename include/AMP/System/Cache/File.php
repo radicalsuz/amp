@@ -36,7 +36,6 @@ class AMP_System_Cache_File extends AMP_System_Cache {
         if ( !$cache) $cache = new AMP_System_Cache_File;
         if ( !$cache->has_connection( )) {
             $cache = false;
-            trigger_error( 'File Write Permission denied for '. $cache->_path( $cache->_index_key) );
         }
         return $cache;
     }
@@ -84,6 +83,8 @@ class AMP_System_Cache_File extends AMP_System_Cache {
     function delete( $key ){
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key ) return false;
+        if ( !$this->contains( $authorized_key )) return false;
+
         $this->_remove_index_key( $authorized_key );
         $entry_ref = & new AMP_System_File( $this->_path( $authorized_key ));
         return $entry_ref->delete( );

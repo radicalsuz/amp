@@ -5,10 +5,23 @@
 	<publish>
 		<type>checkbox</type>
 		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+        <default>1</default>
 	</publish>
 	<name>
 		<type>text</type>
 		<label>Name</label>
 	</name>
-
+    <listorder>
+        <type>text</type>
+        <label>List Order</label>
+        <size>5</size>
+    </listorder>
+    <parent>
+        <type>select</type>
+        <label>SubType of</label>
+        <lookup>
+            <module>content</module>
+            <instance>linkTypeMap</instance>
+        </lookup>
+    </parent>
 </array>
