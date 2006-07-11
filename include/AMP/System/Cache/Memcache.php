@@ -25,7 +25,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     function _init_connection( ){
         if (!class_exists( 'Memcache' )) return false;
         $memcache_connection = &new Memcache;
-        $result = $memcache_connection->pconnect( $this->_memcache_server, $this->_memcache_port );
+        $result = $memcache_connection->pconnect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT );
         if ( $result ) $this->_memcache_connection = &$memcache_connection;
         return $result;
     }

@@ -3,6 +3,9 @@
 if ( !defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
 if ( !defined( 'AMP_SYSTEM_UNIQUE_ID')) define ( 'AMP_SYSTEM_UNIQUE_ID', AMP_DB_NAME );
 if ( !defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
+if ( !defined( 'AMP_SYSTEM_MEMCACHE_SERVER' ))      define ('AMP_SYSTEM_MEMCACHE_SERVER', 'localhost' );
+if ( !defined( 'AMP_SYSTEM_MEMCACHE_PORT' ))        define ('AMP_SYSTEM_MEMCACHE_PORT',   '11211' );
+
 if ( !defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
 
 if ( !defined( 'AMP_SYSTEM_INCLUDE_PATH' ))     define( 'AMP_SYSTEM_INCLUDE_PATH', 'AMP/System');
