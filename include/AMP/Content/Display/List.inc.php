@@ -238,5 +238,9 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
                 . $this->newline( 2 ) ;
     }
 
+    function indent( $content, $indent_size = 10 ) {
+        return $this->inDiv( $content, array( 'style' => ( 'padding-left:' . $indent_size . 'px' )));
+    }
+
 }
 ?>

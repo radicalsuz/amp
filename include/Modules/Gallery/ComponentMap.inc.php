@@ -4,6 +4,7 @@ require_once( 'AMP/System/ComponentMap.inc.php');
 class ComponentMap_Gallery extends AMPSystem_ComponentMap {
     var $heading = "Photo Gallery"    ;
     var $nav_name = "gallery";
+    var $_action_default = 'list';
 
     var $paths = array( 
         'fields' => 'Modules/Gallery/Fields.xml',

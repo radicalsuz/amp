@@ -4,6 +4,9 @@ require_once( 'AMP/System/Data/Item.inc.php');
 
 class GalleryImage extends AMPSystem_Data_Item {
     var $datatable = "gallery";
+    var $name_field  = 'img';
+    var $_class_name = 'GalleryImage';
+
 
     function GalleryImage( &$dbcon, $id = null ){
         $this->init( $dbcon, $id );
@@ -76,5 +79,49 @@ class GalleryImage extends AMPSystem_Data_Item {
         return $galleries[$id];
     }
 
+    function getOrder( ){
+        return $this->getData( 'listorder' );
+    }
+
+    function reorder( $new_order_value ){
+        if ( $new_order_value == $this->getOrder( )) return false;
+        $this->mergeData( array( 'listorder' => $new_order_value ));
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update');
+        $this->notify( 'reorder');
+        return $result;
+
+    }
+
+    function move( $gallery_id = false ) {
+        $move_action = false;
+        if ( !( $gallery_id && $gallery_id != $this->getGallery( ))) return false; 
+
+        $this->setGallery( $gallery_id );
+        if ( !( $result = $this->save( ))) return false;
+
+        $this->notify( 'update' );
+        $this->notify( 'move'   );
+        return $result;
+    }
+
+    function makeCriteriaGallery( $gallery_id ) {
+        return 'galleryid ='.$gallery_id;
+    }
+
+    function makeCriteriaStatus( $status_value ) {
+        if ( $status_value === '' ) return false;
+        return 'publish = ' . $status_value;
+    }
+
+    function _sort_default( &$source ) {
+        return $this->sort( $source, 'listOrder' );
+    }
+
+    function getListOrder( ){
+        $value = $this->getData( 'listorder' );
+        if ( !$value ) $value = AMP_CONTENT_LISTORDER_MAX . $this->getName( ) ;
+        return $this->getGalleryName( ) . $value;
+    }
 }
 ?>

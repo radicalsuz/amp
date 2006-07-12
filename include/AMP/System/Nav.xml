@@ -163,7 +163,7 @@
 	<title>Photo Gallery</title>
 	<per>GALLERY_ACCESS</per>
 	<item>
-		<href>gallery_image.php</href>
+		<href>gallery_image.php?action=add</href>
 		<label>Add Photo</label>
 		<per>GALLERY_IMAGE_PUBLISH</per>
 		<class>add</class>
@@ -175,13 +175,13 @@
 		<class>add</class>
 	</item>
 	<item>
-		<href>gallery_image.php?action=list</href>
+		<href>gallery_image.php</href>
 		<label>View Gallery</label>
 		<per>GALLERY_ACCESS</per>
 		<class>view</class>
 	</item>
 	<item>
-		<href>gallery_type.php?action=list</href>
+		<href>gallery_type.php</href>
 		<label>View Galleries</label>
 		<per>GALLERY_ADMIN</per>
 	</item>

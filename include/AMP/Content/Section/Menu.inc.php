@@ -20,29 +20,71 @@ class SectionMenu extends AMP_Menu {
     }
 
     function output() {
-        return $this->menuset->output( false );
+        return $this->cache_output( );
+        //return $this->menuset->output( false );
     }
 
     function cache_output( ){
-        return
-              $this->cache_css( )
-            . $this->cache_js( )
-            . $this->cache_html( );
+        $this->_cache  = &AMP_get_cache( );
+        $this->_header = &AMP_getHeader( );
+        $this->_header->addJavaScript( 'scripts/folder_tree/tree.js',     'section_menu_tree'     );
+        $this->_header->addJavaScript( 'scripts/folder_tree/tree_tpl.js', 'section_menu_tree_tpl' );
+
+        return $this->cache_js( );
     }
 
     function execute( ){
         return $this->output( );
     }
+
+    function cache_js( ){
+        //try to just apply the cached version of the script 
+        if ( $this->_cache ) {
+
+            $cache_key_public = sprintf( AMP_CACHE_KEY_JAVASCRIPT, get_class( $this ));
+            $cache_key_private = $this->_cache->identify( $cache_key_public, AMP_SYSTEM_USER_ID );
+            
+            if ( $this->_cache->contains( $cache_key_private )) {
+                return $this->_apply_cached_javascript( $cache_key_public );
+                trigger_error( 'already cached');
+            }
+        }
+
+        //generate the js
+        //$js_values = $this->script_set->output_to_file( );
+        $js_values = $this->menuset->output( false );
+
+        if ( $this->_cache ) {
+            $result = $this->_cache->add( $js_values, $cache_key_private );
+            if ( $result ) return $this->_apply_cached_javascript( $cache_key_public );
+        }
+
+        //$this->_header->addJavascriptDynamic( $js_values,  get_class( $this ).'base');
+        $js_trigger =  "new tree (TREE_ITEMS_1, tree_tpl);\n" ;
+        return 
+         "<script language=\"Javascript\"  type=\"text/javascript\">$js_values\n\n$js_trigger</script>\n";
+        // "<script language=\"Javascript\"  type=\"text/javascript\">$js_values</script>\n";
+    }
+
+    function _apply_cached_javascript( $key ){
+        $url = $this->_cache->url( $key );
+        $this->_header->addJavaScript( $url, get_class( $this ) );
+        #return "<script language=\"Javascript\"  type=\"text/javascript\" src=\"" . $url . "\"></script>\n";
+        $js_trigger =  "new tree (TREE_ITEMS_1, tree_tpl);\n" ;
+        return 
+         "<script language=\"Javascript\"  type=\"text/javascript\">$js_trigger</script>\n";
+    }
+
 }
 
 class MenuComponent_scriptBase extends AMP_MenuComponent {
     var $template = 
-        "<script language='JavaScript' src='/scripts/folder_tree/tree.js'></script>
-        <script language='JavaScript' src='/scripts/folder_tree/tree_tpl.js'></script>
-        <script language='JavaScript'>
-                var TREE_ITEMS_%1\$s =  [\n%2\$s\n];
-                new tree (TREE_ITEMS_%1\$s, tree_tpl); 
-        </script>";
+//        "<script language='JavaScript' src='/scripts/folder_tree/tree.js'></script>
+//        <script language='JavaScript' src='/scripts/folder_tree/tree_tpl.js'></script>
+//        <script language='JavaScript'>
+"                var TREE_ITEMS_%1\$s =  [\n%2\$s\n];";
+//                new tree (TREE_ITEMS_%1\$s, tree_tpl);\n" ;
+//        </script>";
     var $_child_component = "MenuComponent_treeScriptItem";
     var $spacer10 = '<img src="/system/images/spacer.gif" width="10" height="10" border="0">';
 

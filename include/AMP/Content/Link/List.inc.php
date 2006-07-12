@@ -28,6 +28,9 @@ class AMP_Content_Link_List extends AMP_System_List_Form {
 
     function AMP_Content_Link_List( &$dbcon ) {
         $this->init( $this->_init_source( $dbcon ) );
+    }
+
+    function _after_init( ){
         $this->addTranslation( 'order', '_makeInput');
     }
 

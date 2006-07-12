@@ -5,9 +5,11 @@ require_once( 'Modules/Gallery/Image.inc.php');
 
 class GalleryImageSet extends AMPSystem_Data_Set {
     var $datatable = 'gallery';
-    var $sort = array( 'img');
+    var $sort = array( 'img' );
 
     function GalleryImageSet( &$dbcon, $id = null ){
+        $this->sort =
+                array( "if(isnull(listorder) or listorder='', Concat( ". AMP_CONTENT_LISTORDER_MAX .", img), listorder) ASC");
         $this->init( $dbcon );
         if ( isset( $id )) $this->addCriteriaGallery( $id );
     }

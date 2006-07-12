@@ -227,9 +227,25 @@ class AMPContentLookup_LinkTypeMap {
         require_once( 'AMP/Content/Link/Type/Type.php' );
 
         $link_type = &new Link_Type( AMP_Registry::getDbcon( ));
-        $link_type->_auto_sort = false;
         $link_map_source = &new AMP_System_Data_Tree( $link_type );
         $this->dataset = &$link_map_source->select_options( );
+    }
+
+    function available( ){
+        return false;
+    }
+}
+
+class AMPContentLookup_GalleryMap {
+    var $dataset;
+
+    function AMPContentLookup_GalleryMap() {
+        require_once( 'AMP/System/Data/Tree.php' );
+        require_once( 'Modules/Gallery/Gallery.php' );
+
+        $gallery = &new Gallery( AMP_Registry::getDbcon( ));
+        $gallery_map_source = &new AMP_System_Data_Tree( $gallery );
+        $this->dataset = &$gallery_map_source->select_options( );
     }
 
     function available( ){

@@ -15,7 +15,7 @@
         <type>select</type>
         <label>Photo Gallery</label>
         <lookup>
-            <instance>galleries</instance>
+            <instance>galleryMap</instance>
             <module>content</module>
         </lookup>
 	    <required>1</required>
@@ -41,4 +41,9 @@
 			<instance>sectionMap</instance>
 		</lookup>
 	</section>
+    <listorder>
+        <type>text</type>
+        <size>4</size>
+        <label>Order</label>
+    </listorder>
 </array>

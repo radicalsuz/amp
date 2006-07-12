@@ -37,6 +37,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     var $_search_criteria_global = array( );
 
     var $_field_status = 'publish';
+    var $_field_listorder = 'listorder';
+
     var $_exact_value_fields = array( );
     var $_allow_db_cache = true;
 
@@ -450,7 +452,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     
     function isLive() {
         if (!$this->isColumn( $this->_field_status )) {
-            trigger_error( sprintf( AMP_TEXT_ERROR_STATUS_FIELD_MISSING, get_class( $this ), $this->_field_status ));
+            trigger_error( sprintf( AMP_TEXT_ERROR_REQUIRED_FIELD_MISSING, get_class( $this ), $this->_field_status ));
             return false;
         }
         return ($this->getData( $this->_field_status ) == AMP_CONTENT_STATUS_LIVE);
@@ -496,6 +498,16 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function setDefaults( ) {
         //interface
+    }
+
+    function getListOrder( ){
+        if ( !$this->isColumn( $this->_field_listorder )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_REQUIRED_FIELD_MISSING, get_class( $this ), $this->_field_listorder ));
+            return false;
+        }
+        $result = $this->getData( $this->_field_listorder );
+        if ( !$result ) return AMP_CONTENT_LISTORDER_MAX . $this->getName( );
+        return $result;
     }
 
 }

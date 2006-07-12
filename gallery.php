@@ -28,10 +28,13 @@ if ( $gallery_id ) $gallery = &new Gallery( $dbcon, $gallery_id ) ;
 if ( $gallery && $gallery->isLive( )){
     $currentPage->contentManager->addDisplay( $gallery->getDisplay( AMP_GALLERY_DISPLAYTYPE ));
 } else {
-    require_once( 'Modules/Gallery/SetDisplay.inc.php');
-    $gallerySet = &new GallerySet( $dbcon );
-    $gallerySet->addCriteriaLive( );
-    $currentPage->contentManager->addDisplay( $gallerySet->getDisplay( ));
+    //require_once( 'Modules/Gallery/SetDisplay.inc.php');
+    //$gallerySet = &new GallerySet( $dbcon );
+    //$gallerySet->addCriteriaLive( );
+    require_once( 'Modules/Gallery/Display/Tree.php');
+    $gallery = &new Gallery( $dbcon );
+    $display = &new Gallery_Display_Tree( $gallery, array( 'live' => true ));
+    $currentPage->contentManager->addDisplay( $display );
 }
 
 require_once( 'AMP/BaseFooter.php');

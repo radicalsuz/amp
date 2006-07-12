@@ -2,6 +2,7 @@
 
 require_once( 'AMP/System/List/Form.inc.php');
 require_once( 'AMP/Content/Link/Type/Type.php');
+require_once( 'AMP/System/Data/Tree.php');
 
 class Link_Type_List extends AMP_System_List_Form {
 

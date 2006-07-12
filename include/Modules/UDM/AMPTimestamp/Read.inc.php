@@ -1,8 +1,6 @@
 <?php
 
 require_once( 'AMP/UserData/Plugin.inc.php');
-define( 'AMP_TEXT_LAST_UPDATE', 'Last Update');
-define( 'AMP_TEXT_CREATED', 'Created');
 
 class UserDataPlugin_Read_AMPTimestamp extends UserDataPlugin {
     var $options     = array( '_userid' => array( 'available'=>false ));
@@ -60,7 +58,7 @@ class UserDataPlugin_Read_AMPTimestamp extends UserDataPlugin {
         if ( !$edited = $this->getTimeEdited( )) return false;
 
             return  '<div class="item_timestamp">' 
-                    . AMP_TEXT_LAST_UPDATE . ':&nbsp;' 
+                    . AMP_TEXT_UPDATED. ':&nbsp;' 
                     . date( 'Y-m-d g:i a',$edited) . '&nbsp;&nbsp;<BR />'
                     . AMP_TEXT_CREATED . ':&nbsp;'
                     . date( 'Y-m-d g:i a', $this->getTimeCreated( )) . '&nbsp;&nbsp;' 

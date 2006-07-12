@@ -38,11 +38,11 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
         'field_order'=>array(
             'description'=>'Order of Fields, User Side',
             'available'=>true,
-            'value'=>'newline,start_text,caltype,lcountry,state,endline,newline,bydate,distance,zip,student,search,sortby,endline'),
+            'value'=>'newline,start_text,caltype,lcountry,state,endline,newline,bydate,distance,zip,endline,newline,ondate,student,search,sortby,endline'),
         'field_order_admin'=>array(
             'description'=>'Order of Fields, Admin View',
             'available'=>true,
-            'value'=>'newline,start_text,caltype,lcountry,state, city, endline,newline,bydate,distance,zip,endline,newline,publish,recurring_options,student,old,search,sortby,endline')
+            'value'=>'newline,start_text,caltype,lcountry,state, city, endline,newline,bydate,distance,zip,endline,newline,publish,recurring_options,student,old,endline,newline,ondate,search,sortby,endline')
             );
         
                     
@@ -59,6 +59,13 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
         //check the REQUEST array
         $this->calendar->sql_criteria=$this->read_request();
 	}	
+
+    function _makeExactDate( ){
+        if ( !isset( $_REQUEST['ondate'] ) && $_REQUEST['ondate']) return false;
+        $mydate = $_REQUEST['ondate'];
+        if ( !( isset( $mydate['Y'] ) && isset( $mydate['m'] ) && isset( $mydate['d'] ))) return false;
+        return $mydate['Y'].'-'.$mydate['m'] . $mydate['d'];
+    }
 	
 	function read_request() {
 		global $_REQUEST;
@@ -71,7 +78,9 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 		//searches for future events only if no start date is specified.
 		if (isset($_REQUEST['bydate'])&&($_REQUEST['bydate'])) {
 			$sql_criteria[]='((`date` >= '.$this->dbcon->qstr($_REQUEST['bydate']).' AND `recurring_options`=0) OR (`enddate`>='.$this->dbcon->qstr($_REQUEST['bydate']).' AND `recurring_options`>0))';
-		} else {
+		} elseif ( $exact_date = $this->_makeExactDate( )) {
+			$sql_criteria[]='( `date` = '.$this->dbcon->qstr($exact_date).')';
+        } else {
             if (!( isset($_REQUEST['old']) && $_REQUEST['old']==1) ) 
                 $sql_criteria[]='((`date` >= CURDATE() AND `recurring_options`=0) || (`recurring_options`>0 AND `enddate`>= CURDATE() ))';
 		
@@ -233,6 +242,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 			date("Y-m-d");
 			
 		$def['bydate']=array('type'=>'select', 'label'=>'On or After:', 'required'=>false,  'values'=>$this->lookups['bydate']['Set'], 'size'=>null, 'value'=>$mydate, 'public'=>'1');
+		$def['ondate'] =array('type'=>'date', 'label'=>'On This Date', 'required'=>false, 'value'=>'today', 'public'=>'1');
 	
 		//distance by zip
 		$distance_options=array('1'=>'1','5'=>'5', '10'=>'10', '25'=>'25', '100'=>'100', '250'=>'250');

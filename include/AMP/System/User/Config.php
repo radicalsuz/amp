@@ -42,21 +42,21 @@ if ( !defined( 'AMP_USER_CONFIG_USE_WYSIWYG') ){
 
 //define Unique Visitor ID
 //$unique_visitor_cookie_name = 'AMP_SYSTEM_UNIQUE_VISITOR_ID';
-$unique_visitor_cookie_name = 'testTheCookie';
+$unique_visitor_cookie_name = 'AMPSystemGuest';
 
 if ( defined( 'AMP_SYSTEM_USER_ID' ))  {
     define( 'AMP_SYSTEM_UNIQUE_VISITOR_ID', AMP_SYSTEM_USER_ID );
 } elseif ( isset( $_COOKIE[ $unique_visitor_cookie_name ])) {
     define( 'AMP_SYSTEM_UNIQUE_VISITOR_ID', $_COOKIE[ $unique_visitor_cookie_name ]);
-    //trigger_error( 'found cookie unique id: ' . AMP_SYSTEM_UNIQUE_VISITOR_ID );
+    trigger_error( $_SERVER['REQUEST_URI'] .' found cookie unique id: ' . AMP_SYSTEM_UNIQUE_VISITOR_ID );
 } elseif ( isset( $_POST['AMP_SYSTEM_UNIQUE_VISITOR_ID'])) {
     define( 'AMP_SYSTEM_UNIQUE_VISITOR_ID', $_POST['AMP_SYSTEM_UNIQUE_VISITOR_ID']);
     setcookie( $unique_visitor_cookie_name, AMP_SYSTEM_UNIQUE_VISITOR_ID );
-    //trigger_error( 'found POST unique id: ' . AMP_SYSTEM_UNIQUE_VISITOR_ID );
+    trigger_error( $_SERVER['REQUEST_URI'] . ' found POST unique id: ' . AMP_SYSTEM_UNIQUE_VISITOR_ID );
 } else {
     define( 'AMP_SYSTEM_UNIQUE_VISITOR_ID',  sha1( $_SERVER['REMOTE_ADDR'] . date( "Y-m-d h:i:s")));
     setcookie( $unique_visitor_cookie_name, AMP_SYSTEM_UNIQUE_VISITOR_ID );
-    //trigger_error( 'created unique id: ' . AMP_SYSTEM_UNIQUE_VISITOR_ID );
+    trigger_error( $_SERVER['REQUEST_URI'] .' created unique id: ' . AMP_SYSTEM_UNIQUE_VISITOR_ID );
 }
 
 ?>

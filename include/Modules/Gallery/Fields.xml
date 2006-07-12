@@ -23,4 +23,17 @@
         <type>textarea</type>
         <label>Description</label>
     </description>
+    <parent>
+        <type>select</type>
+        <lookup>
+            <module>content</module>
+            <instance>galleryMap</instance>
+        </lookup>
+        <label>Parent Gallery</label>
+    </parent>
+    <listorder>
+        <type>text</type>
+        <size>4</size>
+        <label>Order</label>
+    </listorder>
 </array>

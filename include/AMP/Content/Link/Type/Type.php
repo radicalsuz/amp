@@ -17,11 +17,6 @@ class Link_Type extends AMPSystem_Data_Item {
         return $this->getData( 'parent' );
     }
 
-    function getListOrder( ){
-        $result = $this->getData( 'listorder' );
-        if ( !$result ) return AMP_CONTENT_LISTORDER_MAX;
-        return $result;
-    }
 
     function getLinks( $source = null ){
         if ( !isset( $source ) ){

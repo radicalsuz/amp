@@ -3,7 +3,7 @@
         <label>Select Gallery</label>
         <type>select</type>
         <lookup>
-            <instance>galleries</instance>
+            <instance>galleryMap</instance>
             <module>content</module>
         </lookup>
     </gallery>

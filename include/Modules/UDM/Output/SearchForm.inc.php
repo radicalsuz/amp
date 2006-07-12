@@ -133,6 +133,11 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             $sql_criteria[] = "( ".$criteria_code." OR ( Country=".$this->dbcon->qstr( $_REQUEST['country'])."))";
 		}
 
+        //Company
+        if ( isset( $_REQUEST['Company']) && $_REQUEST['Company']) {
+			$sql_criteria[] = "Company LIKE" . $this->dbcon->qstr( '%' . $_REQUEST['Company'] .'%' );
+        }
+
 		//Modin
 		if (isset($_REQUEST['modin'])&&$_REQUEST['modin']) {
 			$sql_criteria[]="modin=".$_REQUEST['modin'];

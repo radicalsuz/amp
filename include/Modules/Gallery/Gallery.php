@@ -3,8 +3,10 @@
 require_once( 'AMP/System/Data/Item.inc.php');
 
 class Gallery extends AMPSystem_Data_Item {
-    var $datatable = 'gallerytype';
-    var $name_field = 'galleryname';
+    var $datatable   = 'gallerytype';
+    var $name_field  = 'galleryname';
+    var $_class_name = 'Gallery';
+
     var $_display;
 
     function Gallery( &$dbcon, $id = null ) {
@@ -40,6 +42,10 @@ class Gallery extends AMPSystem_Data_Item {
         return $this->getData( 'date');
     }
 
+    function getParent( ){
+        return $this->getData( 'parent' );
+    }
+
     function getImageFilename( $choose_rand = false ){
         $value = $this->getData( 'img');
         if ( !$choose_rand ) return $value;
@@ -64,6 +70,37 @@ class Gallery extends AMPSystem_Data_Item {
     function isLive( ){
         return $this->getData( 'publish');
     }
+
+    function getOrder( ){
+        return $this->getData( 'listorder');
+    }
+
+    function reorder( $new_order_value ){
+        if ( $new_order_value == $this->getOrder( )) return false;
+        $this->mergeData( array( 'listorder' => $new_order_value ));
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update');
+        $this->notify( 'reorder');
+        return $result;
+
+    }
+
+    function move( $parent_id = false ) {
+        $move_action = false;
+        if ( !( $parent_id && $parent_id != $this->getParent( ))) return false; 
+
+        $this->setParent( $parent_id );
+        if ( !( $result = $this->save( ))) return false;
+
+        $this->notify( 'update' );
+        $this->notify( 'move' );
+        return $result;
+    }
+
+    function setParent( $parent_id ){
+        return $this->mergeData( array( 'parent' => $parent_id ));
+    }
+
 }
 
 ?>

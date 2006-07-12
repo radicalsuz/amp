@@ -85,6 +85,7 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
         $image = &new Content_Image();
         return $image;
     }
+
     function getImageFileName() {
         return $this->getData( 'image' );
     }
