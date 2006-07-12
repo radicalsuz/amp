@@ -80,8 +80,8 @@ define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups'])  && $_GET
 define('AMP_DISPLAYMODE_DEBUG_NAVS',    (isset($_GET['debug_navs'])     && $_GET['debug_navs']));
 define('AMP_DISPLAYMODE_DEBUG_DIA',     (isset($_GET['debug_dia'])      && $_GET['debug_dia']));
 
-if ( !defined( 'AMP_SYSTEM_ERRORS_USE_CUSTOM_FILE' ))
-    define('AMP_SYSTEM_ERRORS_USE_CUSTOM_FILE',     false );
+if ( !defined( 'AMP_SYSTEM_CUSTOM_ERROR_HANDLER' ))
+    define('AMP_SYSTEM_CUSTOM_ERROR_HANDLER',     false );
 
 /**
  *  GLOBAL settings

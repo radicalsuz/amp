@@ -40,7 +40,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$cache->has_connection( )) {
             $cache = new AMP_System_Cache_File;
             if ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
-                AMP_log_error( sprintf( AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED, get_class( $this )), __FILE__, __LINE__ );
+                trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED, get_class( $this )) );
             }
         }
         return $cache;
@@ -55,7 +55,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( $result ) {
             $this->_add_index_key( $authorized_key );
         } elseif ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
-            AMP_log_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ), __FILE__, __LINE__ );
+            trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ) );
         }
         
         return $result;
@@ -86,7 +86,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$authorized_key ) return false;
         if ( !$this->contains( $authorized_key )) {
             if ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
-                AMP_log_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ), __FILE__, __LINE__ );
+                trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ));
             }
             return false;
         }

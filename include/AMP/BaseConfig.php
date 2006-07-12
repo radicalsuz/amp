@@ -25,6 +25,7 @@ require_once('AMP/LegacyRegistry.inc.php');
 //content configuration
 require_once('AMP/Content/Config.inc.php');
 
+if ( AMP_SYSTEM_CUSTOM_ERROR_HANDLER ) set_error_handler( AMP_SYSTEM_CUSTOM_ERROR_HANDLER );
 
 // turn on APD debugger when set by config file
 if ( AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
