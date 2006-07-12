@@ -1198,7 +1198,6 @@ if ( !function_exists( 'AMP_make_404' )){
 
 function AMP_log_error( $error_number, $error_text, $error_file, $error_line ) {
     $localized_error = sprintf( AMP_TEXT_ERROR_LOG_FORMAT, $error_text, $error_file, $error_line );
-    if ( !AMP_SYSTEM_ERRORS_USE_CUSTOM_FILE ) return;
     $output_log = &AMP_openFile( 'error_log.txt');
     fwrite( $output_log, $localized_error ); 
     fclose( $output_log );
