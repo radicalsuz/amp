@@ -31,8 +31,6 @@ if ( !defined( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED'))
 if ( !defined( 'AMP_TEXT_ERROR_REQUIRED_FIELD_MISSING'))
         define( 'AMP_TEXT_ERROR_REQUIRED_FIELD_MISSING', "Field for %s, defined as '%s', does not exist");
 
-if ( !defined( 'AMP_TEXT_ERROR_CACHE_PATH_NOT_FOUND'))
-        define( 'AMP_TEXT_ERROR_CACHE_PATH_NOT_FOUND', "Folder '%s' does not exist and could not be created for caching");
 if ( !defined( 'AMP_TEXT_ERROR_EMAIL_SENDER_NOT_SET'))
         define( 'AMP_TEXT_ERROR_EMAIL_SENDER_NOT_SET', 'No sender defined.  Email not sent.');
 if ( !defined( 'AMP_TEXT_ERROR_EMAIL_MESSAGE_NOT_SET'))
@@ -59,22 +57,28 @@ if ( !defined( 'AMP_TEXT_ERROR_DIA_READ_FAILURE'))
 /**
  * Data Item Errors
  */
-if ( !defined( 'AMP_TEXT_ERROR_SORT_PROPERTY_FAILED'))
+if ( !defined( 'AMP_TEXT_ERROR_SORT_PROPERTY_FAILED' ))
         define( 'AMP_TEXT_ERROR_SORT_PROPERTY_FAILED', "sort by %s failed in %s: no access method found" ); 
-if ( !defined( 'AMP_TEXT_ERROR_DATABASE_READ_FAILED'))
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_READ_FAILED' ))
         define( 'AMP_TEXT_ERROR_DATABASE_READ_FAILED', "%s failed to read the database : %s");
-if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SAVE_FAILED'))
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SAVE_FAILED' ))
         define( 'AMP_TEXT_ERROR_DATABASE_SAVE_FAILED', "%s save failed : %s");
-if ( !defined( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD'))
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD' ))
         define( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD', '%s was initialized with an invalid dbcon');
-if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED'))
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED' ))
         define( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED', "%s failed to %s data : %s \n statement: %s");
-if ( !defined( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED'))
+if ( !defined( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED' ))
         define( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED', '_class_name var not defined for %s: search failed' );
+if ( !defined( 'AMP_TEXT_ERROR_LOG_FORMAT' ))
+        define( 'AMP_TEXT_ERROR_LOG_FORMAT', '%s in %s on line %s' );
 
 /**
  * Cache Errors
  */
 if ( !defined( 'AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED'))
         define( 'AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED', '%s cache method failed.' );
+if ( !defined( 'AMP_TEXT_ERROR_CACHE_REQUEST_FAILED'))
+        define( 'AMP_TEXT_ERROR_CACHE_REQUEST_FAILED', '%s cache method %s failed for item %s.' );
+if ( !defined( 'AMP_TEXT_ERROR_CACHE_PATH_NOT_FOUND'))
+        define( 'AMP_TEXT_ERROR_CACHE_PATH_NOT_FOUND', "Folder '%s' does not exist and could not be created for caching");
 ?>

@@ -72,7 +72,7 @@ class Gallery_Display extends AMPContent_DisplayList_HTML {
                 'class' => 'go', 
                 'onchange' => 'AMP_openURL( "'.AMP_SITE_URL.AMP_CONTENT_URL_GALLERY.'?gal="+this.value );'
             );
-        return AMP_buildSelect( 'gallery_jump', AMPContent_Lookup::instance( 'galleries' ), $this->_gallery->id, $this->_HTML_makeAttributes( $sel_attr) );
+        return AMP_buildSelect( 'gallery_jump', AMPContent_Lookup::instance( 'galleryMap' ), $this->_gallery->id, $this->_HTML_makeAttributes( $sel_attr) );
 
     }
 

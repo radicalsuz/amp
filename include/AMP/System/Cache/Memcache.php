@@ -40,7 +40,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$cache->has_connection( )) {
             $cache = new AMP_System_Cache_File;
             if ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
-                trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED, get_class( $this )) );
+                AMP_log_error( sprintf( AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED, get_class( $this )), __FILE__, __LINE__ );
             }
         }
         return $cache;
@@ -52,7 +52,11 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$authorized_key ) return false;
 
         $result = $this->_memcache_connection->set( $authorized_key, MEMCACHE_COMPRESSED, AMP_SITE_MEMCACHE_TIMEOUT );
-        if ( $result ) $this->_add_index_key( $authorized_key );
+        if ( $result ) {
+            $this->_add_index_key( $authorized_key );
+        } elseif ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
+            AMP_log_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ), __FILE__, __LINE__ );
+        }
         
         return $result;
 
@@ -80,7 +84,12 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     function &retrieve( $key ){
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key ) return false;
-        if ( !$this->contains( $authorized_key )) return false;
+        if ( !$this->contains( $authorized_key )) {
+            if ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
+                AMP_log_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ), __FILE__, __LINE__ );
+            }
+            return false;
+        }
         // this call is not necessary as the contains call will always pull the object from memcache
         //$result = $this->_confirm_memcache_retrieve( $authorized_key );
 

@@ -1195,6 +1195,16 @@ if ( !function_exists( 'AMP_make_404' )){
         ampredirect( AMP_CONTENT_URL_404_CORE );
     }
 }
+
+function AMP_log_error( $error_text, $file, $line ) {
+    $localized_error = sprintf( AMP_TEXT_ERROR_LOG_FORMAT, $error_text, $file, $line );
+    trigger_error( $localized_error );
+    if ( !AMP_SYSTEM_ERRORS_USE_CUSTOM_FILE ) return;
+    $output_log = &AMP_openFile( 'error_log.txt');
+    fwrite( $output_log, $localized_error ); 
+    fclose( $output_log );
+}
+
 			
 
 ?>
