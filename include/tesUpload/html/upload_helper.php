@@ -4,6 +4,9 @@ require_once("tesUpload/html/read_settings.php");
 if(!is_writable($tes_tmp_dir)) {
 	echo "Warning: PHP can't write to temp dir ($tes_tmp_dir).<br />";
 }
+if(!file_exists($tes_upload_dir)) {
+	mkdir($tes_upload_dir);
+}
 if(!is_writable($tes_upload_dir)) {
 	echo "Warning: PHP can't write to upload dir ($tes_upload_dir).<br />";
 }
