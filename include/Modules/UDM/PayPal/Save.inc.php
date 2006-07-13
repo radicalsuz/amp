@@ -154,7 +154,6 @@ class UserDataPlugin_Save_PayPal extends UserDataPlugin_Save {
 
 		if(PEAR::isError($caller)) {
 			trigger_error($caller->getMessage());
-			$this->udm->addError('error',$caller->getMessage());
 			return false;
 		}
 
