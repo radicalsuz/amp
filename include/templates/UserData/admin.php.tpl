@@ -28,6 +28,20 @@ function change(which) {
     document.body.style.cursor = origCursor;
 }
 
+function change_all_udm_blocks( setting ) {
+	if (!setting>'') {setting='block';}
+	var block_set=document.getElementsByTagName('div');
+	for (i=0;i<block_set.length; i++) {
+		if ( block_set.item(i).className == 'hidden' ) {
+			var parentDiv = document.getElementById(block_set.item(i).id + "_parent");
+			//summary = summary + parentDiv.id + " : " + block_set.item(i).style.display + " vs " + setting + "\n";
+			if ( block_set.item(i).style.display != setting ) {
+				changef( block_set.item(i).id );
+			}
+		}
+	}
+}
+
 function changef(which) {
     var setting = document.getElementById(which).style.display;
     if ( setting == 'block' ) {

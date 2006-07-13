@@ -39,6 +39,14 @@ if ( !defined( 'AMP_USER_CONFIG_USE_WYSIWYG') ){
     }
 }
 
+if ( !defined( 'AMP_USER_CONFIG_CONTENT_MODE_TRANSFER')){
+    $tranfer_mode = false;
+    if ( isset( $_COOKIE['AMPTransferMode'])){
+        $tranfer_mode = $_COOKIE['AMPTransferMode'];
+    }
+    define( 'AMP_USER_CONFIG_CONTENT_MODE_TRANSFER', $tranfer_mode );
+}
+
 
 //define Unique Visitor ID
 //$unique_visitor_cookie_name = 'AMP_SYSTEM_UNIQUE_VISITOR_ID';

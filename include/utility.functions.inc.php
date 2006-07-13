@@ -1096,7 +1096,6 @@ if ( ! function_exists( 'AMP_navCountDisplay_Introtext')) {
 if ( !function_exists( 'AMP_openFile')){
     function &AMP_openFile( $filename, $path = null ){
         if ( !isset( $path )) $path = AMP_LOCAL_PATH . '/custom/';
-        print $path . $filename; 
         return fopen( $path.$filename, 'a');
     }
 }

@@ -46,7 +46,6 @@ class SectionMenu extends AMP_Menu {
             
             if ( $this->_cache->contains( $cache_key_private )) {
                 return $this->_apply_cached_javascript( $cache_key_public );
-                trigger_error( 'already cached');
             }
         }
 

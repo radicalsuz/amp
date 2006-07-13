@@ -8,9 +8,10 @@ class ComponentMap_Article_Version extends AMPSystem_ComponentMap {
 
     var $nav_name = "content";
     var $_action_default = 'list';
-    var $_path_controller = 'AMP/Content/Article/Version/Controller.php';
-    var $_component_controller = 'Article_Version_Component_Controller';
+    var $_path_controller = 'AMP/Content/Article/Controller.php';
+    var $_component_controller = 'Article_Component_Controller';
     var $_allow_search = true;
+    var $url_system_default = AMP_SYSTEM_URL_ARTICLE;
 
     var $paths = array(
         'fields' => 'AMP/Content/Article/Fields.xml',
@@ -24,7 +25,14 @@ class ComponentMap_Article_Version extends AMPSystem_ComponentMap {
         'form'   => 'Article_Version_Form',
         'source' => 'Article_Version' 
         );
+
 /*
+    function ComponentMap_Article_Version( ){
+        $this->__construct( );
+    }
+    function __construct( ){
+
+    }
     function onInitForm( &$controller ){
 
         $class_id = $controller->assert_var( 'class' );

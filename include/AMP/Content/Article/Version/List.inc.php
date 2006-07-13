@@ -5,7 +5,7 @@ require_once( 'AMP/Content/Article/Version.inc.php' );
 
 class Article_Version_List extends AMPSystem_List {
     var $name = "Version History";
-    var $suppress = array( 'addlink' => true, 'sortlinks' => true, 'editcolumn' => true );
+    var $suppress = array( 'addlink' => true, 'sortlinks' => true, 'editcolumn' => true, 'messages' => true );
     var $col_headers = array( 
         ' ' => '_actionColumn',
         '#'       => 'id',
@@ -88,6 +88,9 @@ class Article_Version_List extends AMPSystem_List {
                 .'</form>';
     }
 
+    function _noRecordsOutput( ){
+        return false;
+    }
 }
 
 ?>

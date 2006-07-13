@@ -441,7 +441,11 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaSection( $section_id ) {
-        return $this->_makeCriteriaEquals( 'type', $section_id );
+        $related_articles = &AMPContentLookup_RelatedLinks::instance( $section_id );
+        if ( !$related_articles ) return $this->_makeCriteriaEquals( 'type', $section_id ) ;
+
+        return '( ' . $this->_makeCriteriaEquals( 'type', $section_id ) 
+                    . ' or id in( ' . join( ',', array_keys( $related_articles ) ) . ' ) )';
     }
 
     function makeCriteriaClass( $class_id ){

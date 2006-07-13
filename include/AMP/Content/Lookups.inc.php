@@ -110,6 +110,40 @@ class AMPContentLookup_SectionFooters extends AMPContent_Lookup {
 
 }
 
+class AMPContentLookup_SectionTotals extends AMPContent_Lookup {
+    var $datatable = 'articles';
+    var $result_field = 'count( id ) as qty';
+    var $id_field = 'type';
+    var $criteria = "!isnull( type ) group by type";
+
+    function AMPContentLookup_SectionTotals( ){
+        $this->init( );
+        //$this->_mergeRelatedArticles( );
+    }
+
+    // merge related doesn't make the right totals for some reason
+    function _mergeRelatedArticles( ){
+        $related = &AMPContent_Lookup::instance( 'sectionRelatedTotals');
+        foreach( $related as $section_id => $count ) {
+            if ( !isset( $this->dataset[$section_id])) {
+                $this->dataset[$section_id] = '*';
+            }
+            $this->dataset[$section_id] = $this->dataset[$section_id] . '*';
+        }
+    }
+}
+
+class AMPContentLookup_SectionRelatedTotals extends AMPContent_Lookup {
+    var $datatable = 'articlereltype';
+    var $result_field = 'count( articleid ) as qty';
+    var $id_field = 'typeid';
+    var $criteria = "!isnull( typeid ) group by typeid";
+
+    function AMPContentLookup_SectionRelatedTotals( ){
+        $this->init( );
+    }
+}
+
 class AMPContentLookup_Author extends AMPContent_Lookup {
 
     var $datatable = "articles";

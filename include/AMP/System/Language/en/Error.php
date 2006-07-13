@@ -70,7 +70,7 @@ if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED' ))
 if ( !defined( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED' ))
         define( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED', '_class_name var not defined for %s: search failed' );
 if ( !defined( 'AMP_TEXT_ERROR_LOG_FORMAT' ))
-        define( 'AMP_TEXT_ERROR_LOG_FORMAT', '%s in %s on line %s' );
+        define( 'AMP_TEXT_ERROR_LOG_FORMAT', '%s in %s on line %s'."\n" );
 
 /**
  * Cache Errors

@@ -10,6 +10,7 @@ class AMPContent_Map {
     var $dataset;
     var $childset;
     var $top;
+    var $_section_totals;
 
     function AMPContent_Map( &$dbcon, $top = AMP_CONTENT_MAP_ROOT_SECTION ) {
         $this->init( $dbcon, $top );
@@ -30,6 +31,15 @@ class AMPContent_Map {
 
     function addParentField( ){
         $this->fields[] = $this->getParentFieldSql() . ' as parent';
+    }
+
+    function getTotals( $section_id ) {
+        if ( !isset( $this->_totals )) {
+            $this->_totals = &AMPContent_Lookup::instance( 'sectionTotals' );
+        }
+        if ( !$this->_totals ) return false;
+        if ( !isset( $this->_totals[$section_id])) return false;
+        return $this->_totals[ $section_id ];
     }
 
     function buildMap() {
@@ -146,7 +156,7 @@ class AMPContent_Map {
     function _menuItemArticleList( $section_id ) {
         return array(
             'id'    =>  $section_id,
-            'label' =>  AMP_clearSpecialChars( $this->getName( $section_id ) ),
+            'label' =>  AMP_clearSpecialChars( $this->getName( $section_id ) ) . " ( ".$this->getTotals( $section_id )." )",
             'href'  =>  AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'section=' . $section_id ))
             );
     }

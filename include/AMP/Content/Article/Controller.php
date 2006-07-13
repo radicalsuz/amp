@@ -8,11 +8,12 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         $this->init( );
     }
 
-    function commit_default( ){
-        // override
-    }
 
     function display_default( ) {
+        $url = AMP_SYSTEM_URL_ARTICLE;
+        if ( $url != $_SERVER['REQUEST_URI'] ) ampredirect( $url );
+        return true;
+        /*
         $display = &$this->_map->getComponent( 'list' );
         $display->setController( $this );
 
@@ -21,6 +22,7 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
 
         $this->_display->add( $display, 'default' );
         return true;
+        */
     }
 
     function commit_view( ){
@@ -49,7 +51,8 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         $this->_model->readVersion( $version_id );
         if ( $result = $this->_model->save( ) ) {
             $this->message( sprintf( AMP_TEXT_DATA_RESTORE_SUCCESS, $this->_model->getName( )));
-            $this->display_default( );
+            ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'id='.$this->_model_id ) ));
+            //$this->display_default( );
         }
         return $result;
     }
@@ -65,13 +68,20 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         if ( !$name ) $name = AMP_TEXT_ITEM_NAME;
         if ( !$version->delete( )){
             if ( method_exists( $version, 'getErrors')) $this->error( $version->getErrors( ));
+            ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE_VERSION, array( 'id' => 'id='.$version_id )));
             return false;
 
         }
         $this->message( sprintf( AMP_TEXT_DATA_DELETE_VERSION_SUCCESS, $name, $version_id ));
-        $this->commit_edit( );
+        ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'id' => 'id='.$this->_model_id )));
+        //$this->commit_edit( );
         return true;
 
+    }
+
+    function _commit_fails( ){
+        ampredirect( AMP_SYSTEM_URL_HOME );
+        return false;
     }
 
 

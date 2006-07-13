@@ -62,11 +62,13 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $this->form->registerElementType('checkgroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
         $this->form->registerElementType('wysiwyg','HTML/QuickForm/textarea.php','HTML_QuickForm_textarea');
         
-
         $this->_build_core_fields();
         $this->_build_fields();
         $this->_build_plugins();
         $this->_build_preview();
+
+        $opener = &$this->form->addElement( 'button', 'open_up', 'Expand All Fields' );
+        $opener->updateAttributes( array( 'onclick' => 'change_all_udm_blocks( );' ));
 
         $this->form->setDefaults( $this->udm->_module_def );
         $this->form->setConstants( array( 'modin' => $this->udm->instance ) );

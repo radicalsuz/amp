@@ -76,7 +76,7 @@ class AMP_System_Cache {
 
     function localize( $key ) {
         if ( !isset( $this->_unique_site_key )) return $key;
-        if ( strpos( $key, ( '__'.$this->_unique_site_key.'__') ) === FALSE ) return $key;
+        if ( strpos( $key, ( '__'.$this->_unique_site_key.'__') ) !== FALSE ) return $key;
         return sprintf( '__%s__%s', $this->_unique_site_key, $key );
     }
 
@@ -101,6 +101,7 @@ class AMP_System_Cache {
 
     // {{{ private index management methods: _load_index, _save_index, _add_index_key, _remove_index_key 
     function _load_index( ){
+        $this->_index_key = $this->localize( $this->_index_key );
         $result = $this->retrieve( $this->_index_key );
         if ( !$result ) {
             return $this->_index = array( );

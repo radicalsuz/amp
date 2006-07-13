@@ -78,6 +78,7 @@ class Article_ListForm extends AMP_System_List_Form {
                             );
         $class_id = ( isset( $criteria['class']) ? $criteria['class'] : false );
         if ( $section_id ){
+            unset( $this->_sort_default['type']);
             $this->_url_add = AMP_Url_AddVars( $this->_url_add, array( 'section=' . $section_id ));
         }
         if ( $class_id ){

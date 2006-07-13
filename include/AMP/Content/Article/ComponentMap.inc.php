@@ -1,6 +1,7 @@
 <?php
 
 require_once ( 'AMP/System/ComponentMap.inc.php' );
+require_once ( 'AMP/System/Page/Urls.inc.php');
 
 class ComponentMap_Article extends AMPSystem_ComponentMap {
 
@@ -11,6 +12,7 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
     var $_path_controller = 'AMP/Content/Article/Controller.php';
     var $_component_controller = 'Article_Component_Controller';
     var $_allow_search = true;
+    var $url_system_default = AMP_SYSTEM_URL_ARTICLE;
 
     var $paths = array(
         'search_user' => 'AMP/Content/Article/Search/User/Form.inc.php',

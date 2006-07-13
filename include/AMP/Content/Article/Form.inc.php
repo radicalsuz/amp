@@ -40,6 +40,10 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'wysiwyg_setting','_evalWysiwyg',  'set');
         $this->addTranslation( 'date',         '_makeDbDateTime',   'get');
 
+        $this->addTranslation( 'transfer_mode_setting','_returnBlankCheckbox',  'get');
+        $this->addTranslation( 'transfer_mode_setting','_checkTransferMode',  'get');
+        $this->addTranslation( 'transfer_mode_setting','_evalTransferMode',  'set');
+
         $this->setFieldValueSet( 'doc', AMPfile_list( 'downloads'));
         //$this->_initJavascriptActions( );
         //$this->HTMLEditorSetup( );
@@ -49,7 +53,15 @@ class Article_Form extends AMPSystem_Form_XML {
         $header = &AMP_getHeader( );
         $this->_initTabDisplay( $header );
         $this->_initAutoLookups( $header );
+        $this->_initTransferMode( $header );
         $this->HTMLEditorSetup( );
+    }
+
+    function _initTransferMode( &$header ){
+        if ( AMP_USER_CONFIG_CONTENT_MODE_TRANSFER ) {
+            $header->addJavascriptOnload( 'window.change_all_blocks( );');
+        }
+
     }
 
     function _initAutoLookups( &$header ){
@@ -250,6 +262,19 @@ class Article_Form extends AMPSystem_Form_XML {
         PARENT::HTMLEditorSetup( $fieldname );
     }
 
+    function _evalTransferMode( $data, $fieldname ){
+        return AMP_USER_CONFIG_CONTENT_MODE_TRANSFER;
+    }
+
+    function _checkTransferMode( $data, $fieldname ) {
+        if ( $data[ $fieldname ]){
+            //setcookie( 'section', $data['section'] );
+            //setcookie( 'class', $data['class'] );
+        }
+        if ( $data[$fieldname] == AMP_USER_CONFIG_CONTENT_MODE_TRANSFER ) return true;
+        setcookie( 'AMPTransferMode', intval( $data[$fieldname] ), time( )+( 24*60*60*90 ));
+    }
+
     function _formHeader( ){
         $id = $this->getIdValue( );
         if ( !$id ) return false;
@@ -270,19 +295,18 @@ class Article_Form extends AMPSystem_Form_XML {
         return $list->execute( );
     }
 
-    function _after_init( ){
-        $this->defineSubmitAction( 'delete_version' );
-        $this->defineSubmitAction( 'restore' );
+    function submitted( ){
+        if (!isset($_REQUEST['submitAction'])) return false;
+        $submitAction = $_REQUEST['submitAction'];
+        if (!is_array($submitAction)) return false;
+
+        $accepted_actions = array( 'delete_version' => true , 'restore' => true  );
+        $key = key($submitAction);
+        if (isset($accepted_actions[$key])) return $key;
+        return PARENT::submitted( );
+
     }
 
-    function defineSubmitAction( $value, $label = "Submit", $attr=null ) {
-        $this->submit_button['submitAction']['elements'][$value] = 
-            array(
-                'type' => 'hidden',
-                'label'=> $label,
-                'attr' => $attr 
-            );
-    }
 
 }
 ?>

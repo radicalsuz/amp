@@ -93,6 +93,7 @@ class AMP_System_Component_Controller {
 
     function _init_request( ) {
         $this->_request_vars = array_merge( $_POST, AMP_URL_Read( ));
+
         //pull useful info from request values
         if ( isset( $this->_request_vars['action'] ) && $this->_request_vars['action']){
             if ( $this->allow( $this->_request_vars['action'])){
@@ -108,9 +109,11 @@ class AMP_System_Component_Controller {
                 $this->_action_committed = $action;
                 continue;
             }
-            $this->commit_default( );
+            $this->_commit_default( );
         }
         if ( !$output ) return;
+        if ( defined( 'AMP_CONTENT_PAGE_REDIRECT' )) return;
+
         return $this->_display->execute( );
     }
 
@@ -124,7 +127,11 @@ class AMP_System_Component_Controller {
         return call_user_func_array( array( $target, $action ), $args ) ;
     }
 
-    function commit_default( ){
+    function _commit_fail( ){
+        return $this->_commit_default( );
+    }
+
+    function _commit_default( ){
         $this->clear_actions( );
         return $this->execute( false );
     }
@@ -315,7 +322,14 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
     }
 
     function commit_list( ){
-        $this->display_default( );
+        //$this->display_default( );
+        $display = &$this->_map->getComponent( 'list' );
+        $display->setController( $this );
+
+        $this->set_banner( 'list');
+        $this->notify( 'initList' );
+
+        $this->_display->add( $display, 'default' );
         return true;
     }
 
@@ -414,14 +428,13 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
     }
 
     function commit_edit( ) {
-        if ( !$this->_model->readData( $this->_model_id )) return $this->commit_default( );
+        if ( !$this->_model->readData( $this->_model_id )) return $this->_commit_fail( );
         $this->_form->setValues( $this->_model->getData( ));
-        $this->_display->add( $this->_form, 'form' );
-        return true;
+        $this->_display->add( $this->_form, 'form' ); return true;
     }
 
     function commit_delete( ){
-        if ( !$this->_model_id ) return $this->commit_default( );
+        if ( !$this->_model_id ) return $this->_commit_fail( );
         $name = $this->_form->getItemName( );
         $this->notify( 'beforeDelete' );
         if ( !$name ) $name = AMP_TEXT_ITEM_NAME;

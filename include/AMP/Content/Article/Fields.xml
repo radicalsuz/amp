@@ -486,6 +486,10 @@
         <type>checkbox</type>
         <label>Use WYSIWYG ( visual HTML editor )</label>
      </wysiwyg_setting>
+     <transfer_mode_setting>
+        <type>checkbox</type>
+        <label>Use Transfer Mode</label>
+     </transfer_mode_setting>
 	<tab_html_end3>
 		<type>html</type>
 		<default>
