@@ -13,7 +13,7 @@ class AMP_System_Setup_Controller extends AMP_System_Component_Controller_Map {
     }
 
     function commit_edit( ) {
-        if ( !$this->_model->readData( $this->_model_id )) return $this->commit_default( );
+        if ( !$this->_model->readData( $this->_model_id )) return $this->_commit_fail( );
         $this->_form->setValues( $this->_model->getData( ));
         $this->_display->add( $this->_form, 'form' );
         return true;

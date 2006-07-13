@@ -135,9 +135,9 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         return $result_sizes;
     }
 
-    function commit_default( ){
+    function _commit_default( ){
         if ( $this->get_action( ) == 'crop' ) return false;
-        return PARENT::commit_default( );
+        return PARENT::_commit_default( );
     }
 
     function _commit_save_actions( $values ){

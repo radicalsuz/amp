@@ -79,6 +79,13 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
 
     }
 
+    function _commit_default( ){
+        if ( $this->get_action( ) == 'view') {
+            return;
+        }
+        return PARENT::_commit_default( );
+    }
+
     function _commit_fails( ){
         ampredirect( AMP_SYSTEM_URL_HOME );
         return false;
