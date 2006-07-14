@@ -21,6 +21,10 @@ if (AMP_SITE_MEMCACHE_ON) {
         $memcache->memcache_connection->flush();
     }
 }
+
+if ($cache = &AMP_get_cache( )) {
+    $cache->clear( );
+}
 //$dbcon->CacheFlush() or DIE($dbcon->ErrorMsg()); //flushes adodb cache
 //$dbcon->CacheFlush();
 

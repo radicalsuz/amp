@@ -37,8 +37,22 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
 
     function onInitForm( &$controller ){
 
+        //REQUEST values
         $class_id = $controller->assert_var( 'class' );
         $section_id = $controller->assert_var( 'section' );
+
+        //transfer mode values 
+        if ( !$class_id ){
+            if ( isset( $_COOKIE['AMPContentDefault_class']) && $_COOKIE['AMPContentDefault_class']) {
+                $class_id = $_COOKIE['AMPContentDefault_class'];
+            }
+        }
+        if ( !$section_id ) {
+            if ( isset( $_COOKIE['AMPContentDefault_section']) && $_COOKIE['AMPContentDefault_section']) {
+                $section_id = $_COOKIE['AMPContentDefault_section'];
+            }
+        }
+
         if ( !( $class_id || $section_id )) return false;
 
         $form = &$controller->get_form( );
@@ -52,6 +66,7 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
 
     function onBeforeUpdate( &$controller ){
         $this->_save_version( $controller );
+        $this->_update_list_location( $controller );
     }
 
     function _save_version( &$controller ){
@@ -65,6 +80,25 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
 
     function onBeforeDelete( &$controller ) {
         $this->_save_version( $controller );
+    }
+
+    function _update_list_location( &$controller ) {
+        $model = &$controller->get_model( );
+        $new_data = $_POST;
+
+        if ( !( isset( $new_data['id'] ) && $new_data['id'])) {
+            ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'section=' . $new_data['section'])));
+            return;
+        } 
+        
+        if ( $model->getClass( ) != $new_data['class'] ) {
+            $controller->update_list_location( $new_data['class'], 'class');
+        }
+
+        if ( $model->getSection( ) != $new_data['section'] ) {
+            $controller->update_list_location( $new_data['section'], 'section');
+        }
+
     }
 }
 ?>

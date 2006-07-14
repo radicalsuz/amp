@@ -214,6 +214,20 @@ function change_form_block(which) {
     }
 }
 
+function change_all_blocks( setting ) {
+	if (!setting>'') {setting='block';}
+	var block_set=document.getElementsByTagName('table');
+	for (i=0;i<block_set.length; i++) {
+		if ( block_set.item(i).className == 'form_hider' ) {
+			var parentDiv = document.getElementById(block_set.item(i).id + "_parent");
+			//summary = summary + parentDiv.id + " : " + block_set.item(i).style.display + " vs " + setting + "\n";
+			if ( block_set.item(i).style.display != setting ) {
+				change_form_block( block_set.item(i).id );
+			}
+		}
+	}
+}
+
 function showUploadWindow (parentform, calledfield, dtype, handler) {
     url  = 'http://'+location.host+'/upload_popup.php?pform='+parentform+'&pfield='+calledfield;
     if (dtype) url = url + '&doctype='+dtype;

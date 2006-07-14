@@ -1138,7 +1138,8 @@ if ( !function_exists( 'AMP_verifyDateValue')){
     function AMP_verifyDateValue( $date_value ){
         if ( !$date_value ) return false;
         $null_dates = &AMPConstant_Lookup::instance( 'nullDates');
-        if ( array_search( $date_value, $null_dates )!==FALSE) return false;
+        if ( isset( $null_dates[ $date_value ])) return false;
+        //if ( array_search( $date_value, $null_dates )!==FALSE) return false;
         return $date_value;
     }
 }
@@ -1202,6 +1203,12 @@ function AMP_log_error( $error_number, $error_text, $error_file, $error_line ) {
     fclose( $output_log );
 }
 
+function AMP_verifyDateTimeValue( $date_value ){
+    if ( !$date_value ) return false;
+    $null_dates = &AMPConstant_Lookup::instance( 'nullDatetimes');
+    if ( isset( $null_dates[ $date_value ])) return false;
+    return $date_value;
+}
 			
 
 ?>

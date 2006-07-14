@@ -168,6 +168,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
         //interface, allows changes to _url_add based on search
     }
 
+    function _after_request( ){
+        //interface
+    }
+
     function setSource( &$source ){
         $this->source = &$source;
     }

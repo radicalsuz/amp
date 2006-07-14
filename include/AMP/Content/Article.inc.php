@@ -298,12 +298,9 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function _save_update_actions( $data ) {
-        if ( !( isset( $data['updatedby']) && $data['updatedby'] )){
-            $data['updatedby'] = AMP_SYSTEM_USER_ID ;
-        }
-        if ( !( isset( $data['updated']) && $data['updated'] )){
-            $data['updated'] = date( 'Y-m-d H:i:s');
-        }
+        $data['updatedby'] = AMP_SYSTEM_USER_ID ;
+        $data['updated'] = date( 'Y-m-d H:i:s');
+        
         return $data;
 
     }

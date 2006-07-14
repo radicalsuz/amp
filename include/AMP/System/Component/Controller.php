@@ -321,12 +321,12 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         if ( $display ) $this->_display->add( $display , 'default');
     }
 
-    function commit_list( ){
+    function commit_list( ) {
         //$this->display_default( );
         $display = &$this->_map->getComponent( 'list' );
         $display->setController( $this );
 
-        $this->set_banner( 'list');
+        $this->set_banner( 'list' );
         $this->notify( 'initList' );
 
         $this->_display->add( $display, 'default' );

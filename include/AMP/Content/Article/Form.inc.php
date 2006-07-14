@@ -39,6 +39,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'wysiwyg_setting','_checkWysiwyg',  'get');
         $this->addTranslation( 'wysiwyg_setting','_evalWysiwyg',  'set');
         $this->addTranslation( 'date',         '_makeDbDateTime',   'get');
+        $this->addTranslation( 'date',         '_makeNullDate',   'set');
 
         $this->addTranslation( 'transfer_mode_setting','_returnBlankCheckbox',  'get');
         $this->addTranslation( 'transfer_mode_setting','_checkTransferMode',  'get');
@@ -70,8 +71,16 @@ class Article_Form extends AMPSystem_Form_XML {
         
     }
 
+    function _makeNullDate( $data, $fieldname ) {
+//        trigger_error( 'date is not null' . $data[$fieldname]);
+        if ( AMP_verifyDateValue( $data[$fieldname]) ) return $data[$fieldname];
+        trigger_error( 'date is null' . $data[$fieldname]);
+        return '';
+        return array( 'Y' => '', 'M' => '', 'd' => '');
+    }
+
     function _configHTMLEditor( &$editor ){
-        $editor->height = '600px';
+        $editor->height = '400px';
     }
 
     function execute( ){
@@ -268,8 +277,11 @@ class Article_Form extends AMPSystem_Form_XML {
 
     function _checkTransferMode( $data, $fieldname ) {
         if ( $data[ $fieldname ]){
-            //setcookie( 'section', $data['section'] );
-            //setcookie( 'class', $data['class'] );
+            setcookie( 'AMPContentDefault_section', $data['section'] );
+            setcookie( 'AMPContentDefault_class', $data['class'] );
+        } else{
+            setcookie( 'AMPContentDefault_section', "", time( ) - 3600 );
+            setcookie( 'AMPContentDefault_class', "" , time( ) - 3600 );
         }
         if ( $data[$fieldname] == AMP_USER_CONFIG_CONTENT_MODE_TRANSFER ) return true;
         setcookie( 'AMPTransferMode', intval( $data[$fieldname] ), time( )+( 24*60*60*90 ));

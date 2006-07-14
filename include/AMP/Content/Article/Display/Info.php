@@ -90,7 +90,7 @@ class ArticleDisplay_Info extends Article_Display {
         $date_updated = $this->_article->getItemDateChanged( );
         $last_editor_id = $this->_article->getLastEditorId( );
         $output = "";
-        if ( $date_updated && array_search( $date_updated, AMPConstant_Lookup::instance( 'nullDatetimes')) !== FALSE ){
+        if ( $date_updated && AMP_verifyDateTimeValue( $date_updated ) !== FALSE ){
             $output = $this->_renderer->inSpan( ': ' . $date_updated );
         }
 

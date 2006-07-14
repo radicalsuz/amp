@@ -256,6 +256,10 @@
         <label>Date</label>
         <default>today</default>
 		<block>order_header</block>
+        <options>
+            <addEmptyOption>1</addEmptyOption>
+            <emptyOptionText>--</emptyOptionText>
+        </options>
     </date>
     <usedate>
         <type>checkbox</type>

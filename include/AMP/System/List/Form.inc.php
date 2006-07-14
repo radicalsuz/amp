@@ -53,7 +53,9 @@ class AMP_System_List_Form extends AMPSystem_List {
         $this->_request = &new $this->_request_class( $this->source );
         $this->_request->setSubmitGroup( $this->_submitGroup );
         $this->_attachActions( $this->_request );
-        if ( !$this->_request->execute( )) return false;
+        if ( !$this->_request->execute( )) {
+            return false;
+        }
         
         if ( $affected_qty = $this->_request->getAffectedQty( )) {
             $message = sprintf( AMP_TEXT_LIST_ACTION_SUCCESS, 
@@ -64,6 +66,7 @@ class AMP_System_List_Form extends AMPSystem_List {
                                 AMP_PastParticiple( $this->_request->getPerformedAction( ))); 
         }
         $this->setMessage( $message );
+        $this->_after_request( );
         
     }
 

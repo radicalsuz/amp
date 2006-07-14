@@ -10,8 +10,20 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
 
 
     function display_default( ) {
+        if ( defined( 'AMP_CONTENT_PAGE_REDIRECT' )) return true;
         $url = AMP_SYSTEM_URL_ARTICLE;
-        if ( $url != $_SERVER['REQUEST_URI'] ) ampredirect( $url );
+
+        //check for saved cookie
+        $display_class = strtolower( $this->_map->components['list'] );
+        $list_location_cookie =  $display_class  . '_ListLocation';
+        if ( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie ]) {
+            $url = $_COOKIE[ $list_location_cookie ];
+        }
+
+        $current_url = $_SERVER['REQUEST_URI'];
+        if ( $current_url != $url ) {
+            ampredirect( $url );
+        }
         return true;
         /*
         $display = &$this->_map->getComponent( 'list' );
@@ -40,7 +52,14 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         $this->_display->add( $menu_display, 'menu' );
         $this->add_component_header( AMP_TEXT_VIEW, AMP_TEXT_BY . " " . ucfirst( AMP_TEXT_CLASS ) );
         $this->_display->add( $class_display, 'class' );
+        $this->_clear_list_location( );
         
+    }
+
+    function _clear_list_location( ){
+        $display_class = strtolower( $this->_map->components['list'] );
+        $list_location_cookie = $display_class  . '_ListLocation';
+        setcookie( $list_location_cookie, "");
     }
 
     function commit_restore( ){
@@ -91,6 +110,49 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         return false;
     }
 
+    function commit_list( ){
+        $display_class = strtolower( $this->_map->components['list'] );
+        $list_location_cookie = $display_class  . '_ListLocation';
+
+        if ( $this->_is_basic_list_request( ) ) {
+            if ( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie]) {
+                ampredirect( $_COOKIE[ $list_location_cookie ]);
+            }
+        } else {
+            setcookie( $list_location_cookie, $_SERVER['REQUEST_URI']);
+        }
+        return PARENT::commit_list( );
+        
+    }
+
+    function _is_basic_list_request( ){
+        if ( !empty( $_POST )) return false;
+        $request_vars = AMP_Url_Read( );
+        if ( empty( $request_vars )) return true;
+
+        $action_value = ( isset( $request_vars['action'] ) && $request_vars['action']) ? $request_vars['action'] : false;
+        $action_value = $this->assert_var( 'action'); 
+        if ( $action_value && $action_value != 'list' ) return false;
+        if ( count( $request_vars ) > 1  || !$action_value ) return false;
+        return true;
+    }
+
+    function update_list_location( $item_id, $location_item = 'section' ) {
+        $display_class = strtolower( $this->_map->components['list'] );
+        $list_location_cookie = $display_class  . '_ListLocation';
+        $list_location_var = $location_item . '=' . $item_id;
+
+        if ( !( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie] )) {
+            return false;
+        }
+        //confirm that existing cookie is for a similar search
+        if ( strpos( $_COOKIE[ $list_location_cookie ], $location_item ) 
+            && !strpos( $_COOKIE[ $list_location_cookie ], $location_item.'&' )) {
+
+            $new_url = AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, $list_location_var );
+            ampredirect( $new_url );
+        }
+    }
 
 }
 

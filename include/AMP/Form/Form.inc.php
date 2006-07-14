@@ -364,9 +364,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
 		if ( isset( $value['a']) && ( $value['a'] == 'pm')) $hour+=12;
         $time_stamped = mktime($hour,$minute,$second,$month,$day,$year);
-        if (!$time_stamped) return false;
-        if ( date( 'Y-m-d H:i:s', $time_stamped) == AMP_NULL_DATETIME_VALUE_FORM ) return AMP_NULL_DATETIME_VALUE;
-        if ( date( 'Y-m-d H:i:s', $time_stamped) == AMP_BLANK_DATETIME_VALUE_FORM ) return AMP_NULL_DATETIME_VALUE;
+        if ( !$time_stamped ) return false;
+        $dat_is_good = date( 'Y-m-d H:i:s', $time_stamped );
+        if ( !AMP_verifyDateTimeValue( date( 'Y-m-d H:i:s', $time_stamped ))) return AMP_NULL_DATETIME_VALUE;
+        if ( !AMP_verifyDateValue( date( 'Y-m-d', $time_stamped ))) return AMP_NULL_DATETIME_VALUE;
 
 		return date( 'YmdHis', $time_stamped );
 	}
@@ -735,7 +736,12 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $srcpath = AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_OPTIMIZED . DIRECTORY_SEPARATOR;
         $linkpath = AMP_SITE_URL . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL. DIRECTORY_SEPARATOR;
         $picker->updateAttributes( 
-            array( 'onChange' => 
+            array( 
+                    'onChange' => 
+                    "AMP_swapLoadImage( '$srcpath' + this.value, '$display_name' );" 
+                    ."AMP_swapLinkTarget( '$linkpath' + this.value, '$display_name'+'_link');"
+                    ."AMP_showValid( this.value, '$display_name'+'_container');",
+                    'onKeyUp' => 
                     "AMP_swapLoadImage( '$srcpath' + this.value, '$display_name' );" 
                     ."AMP_swapLinkTarget( '$linkpath' + this.value, '$display_name'+'_link');"
                     ."AMP_showValid( this.value, '$display_name'+'_container');"

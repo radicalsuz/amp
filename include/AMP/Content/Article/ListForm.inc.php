@@ -87,6 +87,14 @@ class Article_ListForm extends AMP_System_List_Form {
 
     }
 
+    function _after_request( ){
+        $list_location_cookie = get_class( $this ) . '_ListLocation';
+        if ( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie ]) {
+            ampredirect( $_COOKIE[ $list_location_cookie ]);
+        }
+
+    }
+
     function renderReorder( &$toolbar ){
         $action = 'reorder';
         return '&nbsp;&nbsp;&#124;&nbsp;&nbsp;' . $toolbar->renderDefault( $action );
@@ -146,5 +154,11 @@ class Article_ListForm extends AMP_System_List_Form {
         return PARENT::_noRecordsOutput( );
     }
 
+    function _HTML_startForm() {
+        if ( isset( $this->suppress['form_tag']) && $this->suppress['form_tag']) return false;
+        $url_value = PHP_SELF_QUERY( ); 
+        //does not auto_add 'action' value to URL
+        return '<form name="' . $this->formname .'" method="POST" action="' . $url_value ."\">\n";
+    }
 }
 ?>
