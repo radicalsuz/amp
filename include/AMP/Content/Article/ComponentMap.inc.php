@@ -24,7 +24,8 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'source' => 'AMP/Content/Article.inc.php',
         'list' => 'AMP/Content/Article/ListForm.inc.php',
         'menu' => 'AMP/Content/Section/Menu.inc.php',
-        'classlinks' => 'AMP/Content/Class/Links.inc.php' );
+        'classlinks' => 'AMP/Content/Class/Links.inc.php' 
+        );
 
     var $components = array (
         'search_user' => 'ContentSearch_Form_User',
@@ -33,7 +34,8 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'classlinks' => 'Class_Links',
         'list' => 'Article_ListForm',
         'form' => 'Article_Form',
-        'source' => 'Article' );
+        'source' => 'Article' 
+        );
 
     function onInitForm( &$controller ){
 

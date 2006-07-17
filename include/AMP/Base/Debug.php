@@ -16,6 +16,7 @@ if ( !defined( 'AMP_SYSTEM_CUSTOM_ERROR_HANDLER' ))
 if ( AMP_SYSTEM_CUSTOM_ERROR_HANDLER ) set_error_handler( AMP_SYSTEM_CUSTOM_ERROR_HANDLER );
 
 // turn on APD debugger when set by config file
+if ( !defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
 if ( AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
 
 ?>

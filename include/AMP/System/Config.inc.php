@@ -7,8 +7,6 @@ if ( !defined( 'AMP_SYSTEM_MEMCACHE_SERVER' ))      define ('AMP_SYSTEM_MEMCACHE
 if ( !defined( 'AMP_SYSTEM_MEMCACHE_PORT' ))        define ('AMP_SYSTEM_MEMCACHE_PORT',   '11211' );
 if ( !defined( 'AMP_SITE_MEMCACHE_TIMEOUT')) define ( 'AMP_SITE_MEMCACHE_TIMEOUT', 180 );
 
-if ( !defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
-
 if ( !defined( 'AMP_SYSTEM_INCLUDE_PATH' ))     define( 'AMP_SYSTEM_INCLUDE_PATH', 'AMP/System');
 if ( !defined( 'AMP_CONTENT_INCLUDE_PATH' ))    define( 'AMP_CONTENT_INCLUDE_PATH', 'AMP/Content');
 if ( !defined( 'AMP_MODULE_INCLUDE_PATH' ))     define( 'AMP_MODULE_INCLUDE_PATH', 'Modules');

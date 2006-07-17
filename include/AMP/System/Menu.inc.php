@@ -19,7 +19,6 @@ require_once ('AMP/System/Map.inc.php');
 class AMPSystem_Menu extends AMP_Menu_FWTableRow {
     var $_baseComponentHTML = 'AMP_MenuComponent_TableRow_System';
     var $_activationMethod = 'click';
-    var $_final_output;
 
     var $_cache;
     var $_header;
@@ -32,16 +31,15 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
 
     }
 
+    function init_header( ){
+        $this->_final_output = $this->cache_components( );
+    }
+
     function output( ){
-        if ( isset( $this->_final_output )) return $this->_final_output;
-        //if ( $this->is_cached( ) && ( $result = $this->cachedVersion( ))) return $result;
+        if ( $this->_final_output ) return $this->_final_output;
 
         return $this->cache_components( );
         
-    }
-
-    function init_header( ){
-        $this->_final_output = $this->cache_components( );
     }
 
     function cache_components( ){
@@ -176,6 +174,7 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
 
     function loadMap() {
         $map = & AMPSystem_Map::instance();
+
         $menumap = $map->getMenu();
         $menumap[ AMP_MENU_ROOT_ENTRY ] = $menumap[ $map->top ];
         return $menumap;
