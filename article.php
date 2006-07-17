@@ -17,6 +17,7 @@ require_once("AMP/BaseDB.php");
 /**
  *  Check for a cached page
  */
+/*
 if (AMP_SITE_MEMCACHE_ON) {
     $flash = &AMP_System_Flash::instance( );
     if ( !$flash->active( )) {
@@ -26,6 +27,16 @@ if (AMP_SITE_MEMCACHE_ON) {
 
     }
 }
+*/
+
+/**
+ * Check for a cached copy of this request
+ */
+if ( $cached_output = AMP_cached_request( )) {
+    print $cached_output;
+    exit;
+}
+
 
 /**
  *  Initialize the Page

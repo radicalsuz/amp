@@ -42,6 +42,7 @@ print $finalPageHtml;
  *
  *  @var    AMPContentPage_Cached
  */
+/*
 if ( AMP_SITE_MEMCACHE_ON 
     && isset($GLOBALS['cached_page']) 
     && empty( $_POST) 
@@ -51,14 +52,15 @@ if ( AMP_SITE_MEMCACHE_ON
     ){
         $cached_page->save( $finalPageHtml );
 }
-/*
+*/
+
 if ( $cache = &AMP_get_cache( ) && AMP_is_cacheable_url( ) ) {
     $cache_key = $_SERVER['REQUEST_URI'];
-    if ( AMP_SYSTEM_USER_ID ) {
-        $cache_key = $cache->identify( $_SERVER['REQUEST_URI']);
+    if ( defined( 'AMP_SYSTEM_USER_ID' ) && AMP_SYSTEM_USER_ID ) {
+        $cache_key = $cache->identify( $_SERVER['REQUEST_URI'], AMP_SYSTEM_USER_ID );
     }
     $cache->add( $finalPageHtml, $cache_key );
 }
-*/
+
 
 ?>

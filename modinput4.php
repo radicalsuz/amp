@@ -21,11 +21,9 @@ require_once( 'AMP/UserData/Input.inc.php' );
 /**
  *  Check for a cached page
  */
-if ( AMP_SITE_MEMCACHE_ON && empty( $_POST ) ) {
-    require_once( "AMP/Content/Page/Cached.inc.php" );
-    $cached_page = &new AMPContent_Page_Cached();
-    if ($cached_page->execute()) exit;
-    
+if ( $cached_output = AMP_cached_request( )) {
+    print $cached_output;
+    exit;
 }
 
 // Fetch the form instance specified by submitted modin value.

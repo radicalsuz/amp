@@ -52,7 +52,7 @@ if ( !defined( 'AMP_USER_CONFIG_CONTENT_MODE_TRANSFER')){
 //$unique_visitor_cookie_name = 'AMP_SYSTEM_UNIQUE_VISITOR_ID';
 $unique_visitor_cookie_name = 'AMPSystemGuest';
 
-if ( defined( 'AMP_SYSTEM_USER_ID' ))  {
+if ( defined( 'AMP_SYSTEM_USER_ID' ) && AMP_SYSTEM_USER_ID )  {
     define( 'AMP_SYSTEM_UNIQUE_VISITOR_ID', AMP_SYSTEM_USER_ID );
 } elseif ( isset( $_COOKIE[ $unique_visitor_cookie_name ])) {
     define( 'AMP_SYSTEM_UNIQUE_VISITOR_ID', $_COOKIE[ $unique_visitor_cookie_name ]);

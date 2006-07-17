@@ -5,6 +5,7 @@ if ( !defined( 'AMP_SYSTEM_UNIQUE_ID')) define ( 'AMP_SYSTEM_UNIQUE_ID', AMP_DB_
 if ( !defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
 if ( !defined( 'AMP_SYSTEM_MEMCACHE_SERVER' ))      define ('AMP_SYSTEM_MEMCACHE_SERVER', 'localhost' );
 if ( !defined( 'AMP_SYSTEM_MEMCACHE_PORT' ))        define ('AMP_SYSTEM_MEMCACHE_PORT',   '11211' );
+if ( !defined( 'AMP_SITE_MEMCACHE_TIMEOUT')) define ( 'AMP_SITE_MEMCACHE_TIMEOUT', 180 );
 
 if ( !defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
 

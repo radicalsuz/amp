@@ -792,20 +792,45 @@ function &AMP_cache_delete( $key ){
 
 function AMP_is_cacheable_url( ) {
     $cache = &AMP_get_cache( );
-    if ( !$cache ) return false;
     $flash = &AMP_System_Flash::instance( );
-    if ( $flash->active( )) return false;
 
     return 
-        (  defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED' ) 
+        //is the cache active
+        ( $cache ) 
+        
+        //does the flash contain messages for the user
+        && ( !$flash->active( )) 
+
+        //is the user viewing protected content
+        && ( !AMP_Authenticate( 'content' )) 
+
+        //is this page a valid caching candidate
+        && (  defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED' ) 
+
+        //was a form submitted to get here
         && empty( $_POST) 
+
+        // is a redirect scheduled to occur
         && ( ! defined( 'AMP_CONTENT_PAGE_REDIRECT' ))
+
+        //did the flash display a value on this page
         && ( ! defined( 'AMP_SYSTEM_FLASH_OUTPUT')) );
 
 }
 
+function AMP_cached_request( ){
+    if ( !defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED')) define( 'AMP_CONTENT_PAGE_CACHE_ALLOWED', true );
+    if ( !( $cache = &AMP_get_cache( ) && AMP_is_cacheable_url( )) ) return false; 
+    $cache_key = $_SERVER['REQUEST_URI'];
+    if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
+        $cache_key = $cache->identify( $_SERVER['REQUEST_URI'], AMP_SYSTEM_USER_ID );
+    }
+    return $cache->retrieve( $cache_key ) ;
+}
+
 if (!function_exists( 'AMP_cacheSiteItem' )) {
     function AMP_cacheSiteItem( $item_key, $item ) {
+        trigger_error( 'Deprecated function ' . __FUNCTION__ . ' was called by ' . $_SERVER['REQUEST_URI']);
         if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
         return $memcache->setSiteItem( $item_key, $item );
     }
@@ -813,6 +838,7 @@ if (!function_exists( 'AMP_cacheSiteItem' )) {
 
 if (!function_exists( 'AMP_getCachedPageItem' )) {
     function &AMP_getCachedPageItem( $item_key ) {
+        trigger_error( 'Deprecated function ' . __FUNCTION__ . ' was called by ' . $_SERVER['REQUEST_URI']);
         if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
         return $memcache->getPageItem( $item_key );
     }
@@ -820,12 +846,14 @@ if (!function_exists( 'AMP_getCachedPageItem' )) {
 
 if (!function_exists( 'AMP_cachePageItem' )) {
     function AMP_cachePageItem( $item_key, $item ) {
+        trigger_error( 'Deprecated function ' . __FUNCTION__ . ' was called by ' . $_SERVER['REQUEST_URI']);
         if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
         return $memcache->setPageItem( $item_key, $item );
     }
 }
 if (!function_exists( 'AMP_cacheFlush' )) {
     function AMP_cacheFlush() {
+        trigger_error( 'Deprecated function ' . __FUNCTION__ . ' was called by ' . $_SERVER['REQUEST_URI']);
         if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
         return $memcache->flushSite();
     }

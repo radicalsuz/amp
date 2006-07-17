@@ -1,8 +1,18 @@
 <?php
 
-if (!defined( 'AMP_SITE_MEMCACHE_TIMEOUT')) define ( 'AMP_SITE_MEMCACHE_TIMEOUT', 180 );
 if (!defined( 'MEMCACHE_KEY_INDEX')) define ( 'MEMCACHE_KEY_INDEX', 'keyIndex' );
 
+/**
+ * AMPSystem_Memcache 
+ * This caching library is deprecated as of 3.5.9
+ * use AMP/System/Cache instead
+ *
+ * @package 
+ * @version 3.5.9
+ * @copyright 2006 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org> 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 class AMPSystem_Memcache {
 
     var $memcache_connection;

@@ -34,10 +34,16 @@
 $mod_id = 2 ;
 include("AMP/BaseDB.php");
 
+/*
 if (AMP_SITE_MEMCACHE_ON) {
     require_once( "AMP/Content/Page/Cached.inc.php" );
     $cached_page = &new AMPContent_Page_Cached();
     if ($cached_page->execute()) exit;
+}
+*/
+if ( $cached_output = AMP_cached_request( )) {
+    print $cached_output;
+    exit;
 }
 require_once ("AMP/BaseTemplate.php");
 if ( 'index.php' != AMP_CONTENT_URL_FRONTPAGE ) ampredirect( AMP_CONTENT_URL_FRONTPAGE );
