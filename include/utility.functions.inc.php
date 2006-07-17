@@ -780,12 +780,28 @@ if (!function_exists( 'AMP_getCachedSiteItem' )) {
 
 function &AMP_cache_get( $key ){
     $cache = &AMP_get_cache( );
+    if ( !$cache ) return false;
     return $cache->retrieve( $key );
 }
 
 function &AMP_cache_delete( $key ){
     $cache = &AMP_get_cache( );
+    if ( !$cache ) return false;
     return $cache->delete( $key );
+}
+
+function AMP_is_cacheable_url( ) {
+    $cache = &AMP_get_cache( );
+    if ( !$cache ) return false;
+    $flash = &AMP_System_Flash::instance( );
+    if ( $flash->active( )) return false;
+
+    return 
+        (  defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED' ) 
+        && empty( $_POST) 
+        && ( ! defined( 'AMP_CONTENT_PAGE_REDIRECT' ))
+        && ( ! defined( 'AMP_SYSTEM_FLASH_OUTPUT')) );
+
 }
 
 if (!function_exists( 'AMP_cacheSiteItem' )) {

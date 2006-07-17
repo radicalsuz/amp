@@ -51,5 +51,12 @@ if ( AMP_SITE_MEMCACHE_ON
     ){
         $cached_page->save( $finalPageHtml );
 }
+if ( $cache = &AMP_get_cache( ) && AMP_is_cacheable_url( ) ) {
+    $cache_key = $_SERVER['REQUEST_URI'];
+    if ( AMP_SYSTEM_USER_ID ) {
+        $cache_key = $cache->identify( $_SERVER['REQUEST_URI']);
+    }
+    $cache->add( $finalPageHtml, $cache_key );
+}
 
 ?>
