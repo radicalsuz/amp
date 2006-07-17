@@ -24,4 +24,3 @@ class Article_Comment_Public_Form extends AMPSystem_Form_XML {
 
 }
 ?>
-

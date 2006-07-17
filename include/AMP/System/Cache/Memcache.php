@@ -51,7 +51,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key ) return false;
 
-        $result = $this->_memcache_connection->set( $authorized_key, MEMCACHE_COMPRESSED, AMP_SITE_MEMCACHE_TIMEOUT );
+        $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED, AMP_SITE_MEMCACHE_TIMEOUT );
         if ( $result ) {
             $this->_add_index_key( $authorized_key );
         } elseif ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
@@ -90,8 +90,9 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
             }
             return false;
         }
-        // this call is not necessary as the contains call will always pull the object from memcache
-        //$result = $this->_confirm_memcache_retrieve( $authorized_key );
+
+        $result = $this->_confirm_memcache_retrieve( $authorized_key );
+        if ( !$result ) return false;
 
         return $this->_items_retrieved[ $authorized_key ];
     }
