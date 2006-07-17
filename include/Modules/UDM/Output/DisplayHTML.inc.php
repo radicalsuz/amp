@@ -104,7 +104,6 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         $this->udm->modTemplateID = $this->header_text_id();
 
         // if the UID is set, show only one record with the detail format
-
         if (isset($this->udm->uid)) {
             $display_function=isset($options['detail_format'])?($options['detail_format']):"display_detail";
             $dataset = $this->udm->getUser( $this->udm->uid );
@@ -121,8 +120,10 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
 
         }
         
-        $inclass=method_exists($this, $display_function);
-
+        $inclass = method_exists($this, $display_function);
+        $comments_plugin = &$this->udm->getPlugin( 'Output', 'Comments' );
+        
+        $output = false;
         //output display format
         foreach ($dataset as $dataitem) {
             //check if a new subheader is needed
@@ -131,13 +132,24 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
             //run the output function
             if($inclass) {
                 $output.=$this->$display_function($dataitem);
+
             } else {
                 $output.=$display_function($dataitem, $options);
+            }
+
+            //add comments
+            if ( $comments_plugin ) {
+                $output .= $this->addComments( $dataitem, $comments_plugin );
             }
         }
     
 
 		return $output;
+    }
+
+    function addComments( $dataitem, &$display  ) {
+        if( !isset( $dataitem['id'] )) return false; 
+        return $display->execute( array( '_linked_uid' => $dataitem['id']) );
     }
 
     function setAliases() {
@@ -202,6 +214,9 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         else $textlevel=strval($level);
         $header_field = $options['subheader'.$textlevel];
         $output = "";
+        if (!isset( $dataitem[$header_field])) {
+            return false;
+        }
 
         //set which header we are currently checking
         $current_sub = "current_subheader" . $textlevel;
@@ -327,6 +342,7 @@ if (!function_exists('groups_detail_display')) {
         $Web_Page=$data['Web_Page'];
         $About=$data['custom1'];
         $Details=$data['custom18'];
+        $image=$data['custom19'];
         $html="";
 	
 		$html .= '<p class ="title">'.$Organization.'</p>';

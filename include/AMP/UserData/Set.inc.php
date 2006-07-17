@@ -183,6 +183,10 @@ class UserDataSet extends UserData {
         
         $search_options = array (   'criteria'  =>  array( 'value'=>array("id = ".$userid)),
                                     'clear_criteria'    => array('value'=> true) );
+
+        //ensure the search plugin is set
+        $search_plugin = &$this->registerPlugin( 'AMP', 'Search' );
+
         if ($this->doAction( 'Search', $search_options )) {
             return $this->getData();
         }

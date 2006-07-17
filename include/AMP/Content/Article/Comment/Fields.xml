@@ -14,6 +14,9 @@
             <instance>articles</instance>
         </lookup>
 	</articleid>
+	<userdata_id>
+        <type>hidden</type>
+    </userdata_id>
 	<date>
 		<type>date</type>
 		<label>Date</label>

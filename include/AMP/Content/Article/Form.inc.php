@@ -72,11 +72,8 @@ class Article_Form extends AMPSystem_Form_XML {
     }
 
     function _makeNullDate( $data, $fieldname ) {
-//        trigger_error( 'date is not null' . $data[$fieldname]);
         if ( AMP_verifyDateValue( $data[$fieldname]) ) return $data[$fieldname];
-        trigger_error( 'date is null' . $data[$fieldname]);
         return '';
-        return array( 'Y' => '', 'M' => '', 'd' => '');
     }
 
     function _configHTMLEditor( &$editor ){

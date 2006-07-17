@@ -45,5 +45,6 @@ if ( !defined( 'AMP_CONTENT_URL_IMAGES' ))      define ( 'AMP_CONTENT_URL_IMAGES
 if ( !defined( 'AMP_CONTENT_URL_CAPTCHA' ))      define ( 'AMP_CONTENT_URL_CAPTCHA', 'image_captcha.php' );
 if ( !defined( 'AMP_CONTENT_URL_EVENT_LIST' ))  define ( 'AMP_CONTENT_URL_EVENT_LIST', 'calendar.php');
 if ( !defined( 'AMP_CONTENT_URL_EVENT_ADD' ))   define ( 'AMP_CONTENT_URL_EVENT_ADD', 'calendar_input.php');
+if ( !defined( 'AMP_CONTENT_URL_COMMENT_ADD' ))   define ( 'AMP_CONTENT_URL_COMMENT_ADD', 'comment.php');
 
 ?>

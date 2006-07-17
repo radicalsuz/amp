@@ -909,4 +909,5 @@ class AMPConstantLookup_ToolLinks extends AMPConstant_Lookup {
         $this->dataset = $new_dataset;
     }
 }
+
 ?>

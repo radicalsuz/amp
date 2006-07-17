@@ -22,6 +22,10 @@ class ArticleComment extends AMPSystem_Data_Item {
         return $this->getData( 'date' );
     }
 
+    function getItemDate( ){
+        return $this->getDate( );
+    }
+
     function _sort_default( &$item_set ){
         return $this->sort( $item_set, 'timestamp', AMP_SORT_DESC );
     }
@@ -30,15 +34,36 @@ class ArticleComment extends AMPSystem_Data_Item {
     function makeCriteriaArticle( $article_id ){
         return $this->_makeCriteriaEquals( 'articleid', $article_id );
     }
+
     function makeCriteriaArticle_id( $article_id ){
         return $this->makeCriteriaArticle( $article_id );
     }
+
     function makeCriteriaCid( $article_id ){
         return $this->makeCriteriaArticle( $article_id );
     }
 
+    function makeCriteriaUserdata_id( $userdata_id ){
+        return $this->_makeCriteriaEquals( 'userdata_id', $userdata_id );
+    }
+
+    function makeCriteriaModin( $modin ) {
+        $form_id_lookup = FormLookup::instance( 'modin' );
+        $used_ids = array_search( $form_id_lookup, $modin );
+        if ( empty( $used_ids )) return false;
+        return 'userdata_id in ' . '( ' . join( ",", $used_ids ) . ')';
+    }
+
     function getAuthor( ){
         return $this->getData( 'author' );
+    }
+
+    function getAuthorUrl( ){
+        return $this->getData( 'author_url' );
+    }
+
+    function getBody( ) {
+        return $this->getData( 'comment' );
     }
 
     function setDefaults( ) {

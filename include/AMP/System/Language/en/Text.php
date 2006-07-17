@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * Quantities 
+ */
+define( 'AMP_TEXT_NO', 'no');
+
+/**
  * Publish Status 
  */
 define( 'AMP_PUBLISH_STATUS_LIVE' , 'live' );
@@ -144,7 +149,12 @@ define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
 define( 'AMP_TEXT_TEMPLATE', 'template');
 define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
 define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
+/**
+ * Comment
+ */
 define( 'AMP_TEXT_YOUR_COMMENT', 'Your Comment' );
+define( 'AMP_TEXT_COMMENT', 'comment' );
+define( 'AMP_TEXT_ADD_A_COMMENT', 'Add a Comment' );
 
 /**
  * DIA related 

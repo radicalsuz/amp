@@ -43,11 +43,19 @@ class ArticleComment_List extends AMP_System_List_Form {
     function _after_init_search( $criteria = null ){
         $this->_url_add = AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE_COMMENT, array( 'action=add' ));
         if ( !isset( $criteria )) return false;
+
         $article_id = ( isset( $criteria['article_id']) ? 
                             $criteria['article_id'] : false
                             );
+        $userdata_id = ( isset( $criteria['userdata_id']) ? 
+                            $criteria['userdata_id'] : false
+                            );
+
         if ( $article_id){
             $this->_url_add = AMP_Url_AddVars( $this->_url_add, array( 'article_id=' . $article_id ));
+        }
+        if ( $userdata_id ){
+            $this->_url_add = AMP_Url_AddVars( $this->_url_add, array( 'userdata_id=' . $userdata_id));
         }
     }
 

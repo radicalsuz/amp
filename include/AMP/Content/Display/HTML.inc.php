@@ -234,6 +234,10 @@ class AMPDisplay_HTML {
     function _replaceInclude( $original, $insert, $start, $end ) {
         return substr( $original, 0, $start) . $insert . substr($original, $end);
     }
+
+    function separator( ){
+        return '&nbsp;&#124;&nbsp;';
+    }
 }
 
 ?>

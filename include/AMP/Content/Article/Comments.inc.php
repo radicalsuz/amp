@@ -81,7 +81,7 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
 
     function _HTML_addCommentLink ($article_id) {
 	    return  $this->_RDF_trackbacks( $article_id ). 
-                $this->_HTML_link( AMP_URL_AddVars( "comment.php", 'cid=' . $article_id ), "Add a Comment" ) ;
+                $this->_HTML_link( AMP_URL_AddVars( "comment.php", 'articleid=' . $article_id ), AMP_TEXT_ADD_A_COMMENT ) ;
     }
     function _RDF_trackbacks( $article_id ){
         require_once( 'AMP/Content/Article.inc.php');
@@ -104,14 +104,27 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
 		return "<li>" .$this->_HTML_bold( $comment ).'</li>'. $this->_HTML_newline();
     }
 
+    function comment( $comment ) {
+        return $this->_HTML_comment( $comment );
+    }
+
     function _HTML_author( $author, $author_url = null ) {
         $href = (isset( $author_url ) && $author_url) ? $author_url : false;
         return $this->_HTML_italics(  'Comment by '. $this->link( $href, $author, array( 'target' => 'blank' ) ) );
     }
+
+    function author( $author, $author_url = null ) {
+        return $this->_HTML_author( $author, $author_url );
+    }
     
     function _HTML_trackback($id) {
          $href = 'article_trackback.php?id='.$id;
-        return 'Trackback '.$this->_HTML_link( $href, 'URI');
+         return $this->trackback( $href );
+    }
+
+    function trackback( $url ){
+        return 'Trackback '.$this->_HTML_link( $url, 'URI');
+        
     }
     
     function _HTML_date( $date ) {
@@ -119,9 +132,17 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
         return $this->_HTML_italics( DoDateTime( $date, " M jS, Y g:ia" ) );
     }
 
+    function date( $date ) {
+        return $this->_HTML_date( $date );
+    }
+
     function _HTML_commentBody( $comment ) {
         if (!$comment) return false;
         return '<P class="text">' . converttext( $comment ) . "</P>\n";
+    }
+
+    function commentBody( $comment ){
+        return $this->_HTML_commentBody( $comment );
     }
 }
 ?>

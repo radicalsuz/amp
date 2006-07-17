@@ -10,6 +10,12 @@
             <onChange>this.form.elements['cid'].value = this.value</onChange>
         </attr>
      </article_id>
+     <modin>
+        <separator>newrow</separator>
+        <type>select</type>
+        <label>Find by Form</label>
+        <lookup>forms</lookup>
+     </modin>
      <cid>
         <type>hidden</type>
      </cid>

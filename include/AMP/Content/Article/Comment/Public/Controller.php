@@ -4,12 +4,14 @@ require_once( 'AMP/System/Component/Controller/Public.php');
 
 class Article_Comment_Public_Controller extends AMP_System_Component_Controller_Public {
     var $_article_id;
+    var $_userdata_id;
 
     function Article_Comment_Public_Controller( ){
         $this->init( );
         $this->_article_id = $this->assert_var( 'articleid' );
         if ( !$this->_article_id )
             $this->_article_id = $this->assert_var( 'cid' );
+        $this->_userdata_id = $this->assert_var( 'userdata_id' );
     }
 
     function display_response( ){
@@ -22,7 +24,18 @@ class Article_Comment_Public_Controller extends AMP_System_Component_Controller_
                         AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'id='.$this->_article_id ) )
                     );
                 */
-        ampredirect( AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'id='.$this->_article_id ) ));
+        if ( $this->_article_id ) {
+            ampredirect( AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'id='.$this->_article_id ) ));
+        }
+        if ( $this->_userdata_id ) {
+            require_once( 'AMP/UserData/Lookups.inc.php' );
+            $form_id_lookup = &FormLookup::instance( 'modin');
+#            AMP_varDump( $form_id_lookup );
+            if ( isset( $form_id_lookup[ $this->_userdata_id ] )) {
+                $target_modin = $form_id_lookup[ $this->_userdata_id ];
+                ampredirect( AMP_Url_AddVars( AMP_CONTENT_URL_FORM_DISPLAY, array( 'uid='.$this->_userdata_id, 'modin='. $target_modin ) ));
+            }
+        }
     }
 
 }

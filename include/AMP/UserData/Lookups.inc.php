@@ -330,4 +330,25 @@ class FormLookup_Variant extends FormLookup {
     }
 }
 
+class FormLookup_Modin extends FormLookup {
+    var $datatable = 'userdata';
+    var $id_field = 'id';
+    var $result_field = 'modin';
+
+    function FormLookup_Modin( ){
+        $this->init( );
+    }
+}
+
+class FormLookup_CommentCounts extends FormLookup {
+    var $datatable = 'comments';
+    var $id_field = 'userdata_id';
+    var $result_field = 'count( id ) as qty';
+    var $criteria = '( !isnull( userdata_id ) AND userdata_id != "" ) GROUP BY userdata_id ';
+
+    function FormLookup_CommentCounts ( ){
+        $this->init( );
+    }
+}
+
 ?>

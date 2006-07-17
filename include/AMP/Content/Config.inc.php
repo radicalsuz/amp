@@ -162,4 +162,8 @@ define( 'AMP_MODULE_ID_LINKS', 11 );
  */
 if ( !defined( 'AMP_CONTENT_SECTION_ID_TOOL_PAGES' ))
     define( 'AMP_CONTENT_SECTION_ID_TOOL_PAGES', 2 );
+
+if ( !defined ( 'AMP_CONTENT_TRACKBACKS_ENABLED' )) {
+    define( 'AMP_CONTENT_TRACKBACKS_ENABLED', true );
+}
 ?>

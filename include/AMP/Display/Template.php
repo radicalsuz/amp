@@ -37,7 +37,6 @@ class AMP_Display_Template {
         if ( $dotspot ) $this->_extension = substr( basename( $path ), $dotspot + 1 );
         preg_match_all( "/%([\w\s]+)(%|$)/", $this->_template, $token_results, PREG_PATTERN_ORDER );
         $this->_tokens_active = $token_results[1];
-        #AMP_varDump( $this->_tokens_active );
     }
 
     function _load_template_file( $request_path ) {

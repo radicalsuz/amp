@@ -2,6 +2,9 @@
 	<articleid>
 		<type>hidden</type>
     </articleid>
+	<userdata_id>
+		<type>hidden</type>
+    </userdata_id>
 	<comment>
 		<type>textarea</type>
 		<label>Comment</label>
