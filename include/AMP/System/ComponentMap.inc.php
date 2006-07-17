@@ -32,6 +32,32 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         return $this->components;
     }
 
+    function getComponentClass( $component_type ) {
+        if ( !isset( $this->components[ $component_type ])) return false;
+        return $this->components[$component_type];
+    }
+
+    function &getCachedComponent( $component_type, $id=null, $passthru_value = null ){
+        $cache = &AMP_get_cache( );
+        if ( !(( $component_class = $this->getComponentClass( $component_type )) && ( $cache ))) return false;
+
+        $cache_key = $component_class;
+        if ( isset( $id )) $cache_key = $cache->identify( $component_class, $id );
+
+        if ( isset( $this->paths[ $component_type ])) {
+            require_once( $this->paths[ $component_type ]);
+        }
+
+        if ( $component = $cache->retrieve( $cache_key )) {
+            return $component;
+        }
+
+        $component = $this->getComponent( $component_type, $passthru_value );
+        if ( !$component ) return false;
+        $cache->add( $component, $cache_key );
+        return $component;
+    }
+
     function &getComponent( $component_type, $passthru_value = null ){
         if ( !isset( $this->components[ $component_type ])) return false;
         if ( isset( $this->paths[ $component_type ])) {

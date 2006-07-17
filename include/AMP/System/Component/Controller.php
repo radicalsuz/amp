@@ -252,7 +252,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         $this->_action_default = $this->_map->getDefaultDisplay( );
 
         //set methods based on map values
-        if ( $form  = &$this->_map->getComponent( 'form'))   $this->_init_form ( $form ) ;
+        if ( $form  = &$this->_map->getCachedComponent( 'form', AMP_SYSTEM_UNIQUE_VISITOR_ID ))   $this->_init_form ( $form ) ;
         if ( $model = &$this->_map->getComponent( 'source')) $this->_init_model( $model) ;
 
         if ( !$this->allow( $this->get_action( ))) $this->clear_actions( );
