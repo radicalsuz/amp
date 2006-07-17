@@ -5,6 +5,9 @@ if ( $key ) $_COOKIE['AMP_SYSTEM_UNIQUE_VISITOR_ID'] = $key;
 require_once( 'AMP/BaseDB.php' );
 require_once( 'AMP/Form/Element/Captcha.inc.php');
 
+header('Cache-Control: no-cache');
+header('Pragma: no-cache');
+
 $captcha_fonts = array( 
     AMP_BASE_INCLUDE_PATH . 'TrueType/FreeSans.ttf',
     AMP_BASE_INCLUDE_PATH . 'TrueType/FreeMono.ttf',
