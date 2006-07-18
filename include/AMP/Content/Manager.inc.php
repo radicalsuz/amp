@@ -67,6 +67,18 @@ class AMPContent_Manager {
     var $_displays_executed = array( );
 
     /**
+     * Tracks which displays should have their output cached upon execution, and under what key 
+     * 
+     * Displays are stored in the format array( display_key => cache_key ).  Requests for caching
+     * are registered with the cache method.
+     *
+     * @var array
+     * @since 3.5.9
+     * @access protected
+     */
+    var $_displays_cacheable = array( );
+
+    /**
      * Creates any required enveloping markup for displays 
      * 
      * Usually an instance of AMPDisplay_HTML
@@ -240,6 +252,11 @@ class AMPContent_Manager {
         return $this->getDisplay( $display_key );
     }
 
+    function cache( $display_key, $cache_key = false ) {
+        if ( !$cache_key ) $cache_key = $display_key;
+        $this->_displays_cacheable[ $display_key ] = $cache_key;
+    }
+
 //  }}}
 
 // {{{ private output methods: _doDisplays, _doDisplay, _doDisplayBuffer
@@ -258,7 +275,7 @@ class AMPContent_Manager {
      * @return  string  output from executed displays
      */
     function _doDisplays( $order=array() ) {
-        if (empty($this->_displays)) return false;
+        if ( empty( $this->_displays )) return false;
         if ( empty( $order )) $order = array_keys( $this->_displays );
 
         $output = "";
@@ -296,10 +313,19 @@ class AMPContent_Manager {
         
         if ( $name ) {
             $display_method = '_doDisplay' . ucfirst( $name );
-            if ( method_exists( $this, $display_method )) return $this->$display_method( $display );
+            if ( method_exists( $this, $display_method )) {
+                return $this->$display_method( $display );
+            }
 
         }
         
+        //cache the display output for standard displays
+        if ( isset( $this->_displays_cacheable[ $name ] )){
+            $output = $display->execute( );
+            AMP_cache_set( $this->_displays_cacheable[ $name ], $output );
+            return $output;
+        }
+
         return $display->execute();
         
     }

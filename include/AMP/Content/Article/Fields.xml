@@ -265,6 +265,7 @@
         <type>checkbox</type>
         <label>DO NOT DISPLAY DATE</label>
 		<block>order_header</block>
+		<default>1</default>
     </usedate>
     <pageorder>
         <type>text</type>

@@ -22,6 +22,7 @@ class AMP_System_Component_Controller {
     var $_display_custom = array( );
 
     var $_actions_available = array();
+    var $_actions_cacheable = array( );
     var $_action_args = array( );
 
     var $_model;
@@ -105,6 +106,12 @@ class AMP_System_Component_Controller {
     function execute( $output = true ){
         $data = $this->get_actions( );
         foreach ( $this->get_actions( ) as $action ){
+            //try running the action cached
+            if( $this->_commit_cached( $action )) {
+                continue;
+            }
+
+            //run the action for real
             if( $this->_results[$action] = $this->commit( $this->_model, $action, $this->get_arguments( $action ) )) {
                 $this->_action_committed = $action;
                 continue;
@@ -232,6 +239,41 @@ class AMP_System_Component_Controller {
         ampredirect( $url );
     }
 
+    function _commit_cached( $action ){
+        if ( array_search( $action, $this->_actions_cacheable ) === FALSE ) return false;
+
+        $cache_key = sprintf( AMP_CACHE_TOKEN_ACTION_OUTPUT, $action ). $_SERVER['REQUEST_URI'];
+        $user_id = defined( 'AMP_SYSTEM_USER_ID' ) ? AMP_SYSTEM_USER_ID : null;
+        $cached_output = AMP_cache_get( $cache_key, $user_id );
+        if ( !$cached_output ) return false;
+
+        require_once( 'AMP/Content/Buffer.php' );
+        $buffer = & new AMP_Content_Buffer;
+        $buffer->add( $cached_output );
+
+        $this->_display->add( $buffer, $action );
+
+        $this->_results[$action] = true;
+        $this->_action_committed = $action;
+        return true;
+
+    }
+
+    function _request_cache( $display_key, $action ) {
+        if ( array_search( $action, $this->_actions_cacheable ) === FALSE ) return false;
+
+        $cache = &AMP_get_cache( );
+        if ( !$cache ) return false;
+        $cache_key = sprintf( AMP_CACHE_TOKEN_ACTION_OUTPUT, $action ). $_SERVER['REQUEST_URI'];
+
+        if ( defined( 'AMP_SYSTEM_USER_ID')) {
+            $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
+        }
+        
+        $this->_display->cache( $display_key, $cache_key );
+        return true;
+    }
+/*
     function cache( $component ){
         $cache = &AMP_get_cache( );
         if ( !$cache ) return false;
@@ -259,6 +301,7 @@ class AMP_System_Component_Controller {
         return $stuff;
 
     }
+    */
 
 }
 
@@ -418,8 +461,11 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
 
         $this->_form->applyDefaults( );
         $this->_display->add( $this->_form, 'form' );
+        $this->_request_cache( 'form', 'add' );
+
         return true;
     }
+
 
     function commit_cancel( ){
         $this->display_default( );
