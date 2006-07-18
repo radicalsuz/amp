@@ -173,9 +173,9 @@ class AMP_System_Component_Controller {
         if ( isset( $action_args )) $this->_action_args[$action] = $action_args;
     }
 
-    function notify( $action ){
+    function notify( $action, $passthru_values = null ){
         foreach( $this->_observers as $observer ){
-            $observer->update( $this, $action );
+            $observer->update( $this, $action, $passthru_values );
         }
     }
 
@@ -281,7 +281,10 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
         //set methods based on map values
 
-        if ( $form  = &$this->_map->getComponent( 'form' ))  $this->_init_form ( $form ) ;
+        if ( $form  = &$this->_map->getComponent( 'form' )){
+            $this->_init_form_request ( $form ) ;
+            $this->_form = &$form;
+        }
         if ( $model = &$this->_map->getComponent( 'source')) $this->_init_model( $model) ;
 
         if ( !$this->allow( $this->get_action( ))) $this->clear_actions( );
@@ -291,23 +294,30 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         }
     }
 
-    function _init_form( &$form, $read_request = true ){
-        $this->_form = &$form;
-        $this->notify( 'initForm' );
+    function _init_form( $read_request = true ){
+        
+        // init_running is a flag to keep an infinite loop from forming;
+        // in case an observer requests the form
+        static $init_running = false;
+        if ( $this->_form->isBuilt || $init_running ) return false;
 
-        if ( $read_request ) $this->_init_form_request( );
-        //$this->_form->Build( );
+        $init_running = true;
+        $this->notify( 'initForm' );
+        $init_running = false;
+
+        //if ( $read_request ) $this->_init_form_request( $this->_form );
+        $this->_form->Build( );
         
     }
 
-    function _init_form_request( ){
-        $request_id = $this->_form->getIdValue( );
+    function _init_form_request( &$form ){
+        $request_id = $form->getIdValue( );
         if ( is_array( $request_id )) return false;
 
-        $action = $this->_form->submitted( );
+        $action = $form->submitted( );
 
         if ( !$request_id ) {
-            $this->_form->initNoId( );
+            $form->initNoId( );
         } else {
             $this->_model_id = $request_id;
         }
@@ -319,12 +329,15 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
     }
 
     function &get_form( ){
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
         return $this->_form;
     }
 
     function get_form_data( $copy_mode = false ) {
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
+
         $copy_values = $this->_form->getValues( );
         if ( $copy_mode ) {
             unset( $copy_values[ $this->_model->id_field ]);
@@ -378,9 +391,10 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
         // if no list exists, return to the blank input form
         if ( !( $display = &$this->_map->getComponent( 'list' ))) {
            $display = &$this->_map->getComponent( 'form' );
-           $this->_init_form( $display, false );
+           $this->_form = &$display;
+           $this->_init_form( false );
            $this->set_banner( 'add');
-           if ( !$display->isBuilt ) $display->Build( );
+
         } else {
             $display->setController( $this );
             $this->set_banner( 'list');
@@ -399,7 +413,9 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
     }
 
     function commit_add( ){
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
+
         $this->_form->applyDefaults( );
         $this->_display->add( $this->_form, 'form' );
         return true;
@@ -411,7 +427,9 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
     }
 
     function commit_save( ){
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
+
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );
@@ -463,7 +481,9 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
 
     function commit_edit( ) {
         if ( !$this->_model->readData( $this->_model_id )) return $this->_commit_fail( );
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
 
         $this->_form->setValues( $this->_model->getData( ));
         $this->_display->add( $this->_form, 'form' ); return true;
@@ -491,7 +511,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
             return false;
         }
 
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
 
         //check if form validation succeeds
         if (!$this->_form->validate()) {

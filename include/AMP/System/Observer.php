@@ -6,10 +6,10 @@ class AMP_System_Observer {
         //init
     }
 
-    function update( &$source, $action ){
+    function update( &$source, $action, $passthru_values = null ){
         $update_method = 'on' . ucfirst( $action );
         if ( !method_exists( $this, $update_method )) return;
-        return $this->$update_method( $source );
+        return $this->$update_method( $source, $passthru_values );
     }
 
     function attach( &$target ){

@@ -8,14 +8,18 @@ class PublicPage_Controller extends AMP_System_Component_Controller_Map {
     }
 
     function commit_add( ){
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
+        
         $this->_form->applyDefaults( );
         $this->_display->add( $this->_form, 'form' );
         return true;
     }
 
     function commit_save( ){
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
+        
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );

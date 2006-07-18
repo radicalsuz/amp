@@ -19,7 +19,8 @@ class AMP_System_File_Controller extends AMP_System_Component_Controller_Standar
     }
 
     function commit_save( ) {
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
 
         if ( !$this->_form->validate( )){
             $this->_display->add( $this->_form, 'form' );

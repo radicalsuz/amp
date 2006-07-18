@@ -9,25 +9,9 @@ class RSS_Subscription_Controller extends AMP_System_Component_Controller_Map {
         $this->init( );
     }
 
-    function _init_form( &$form, $read_request = true ){
-        $this->_form = &$form;
-        $this->notify( 'initForm' );
-
-        if ( $read_request ) $this->_init_form_request( );
-        //$this->_form->Build( );
-        
-    }
-    function _init_form_request( ){
-        $request_id = $this->_form->getIdValue( );
-        if ( is_array( $request_id )) return false;
-
-        $action = $this->_form->submitted( );
-        if ( !$request_id ) $this->_form->initNoId( );
-        if ( $action ) $this->_action_requested = $action;
-    }
-
     function commit_add( ){
-        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
 
         if ( !$this->_form->submitted( ) ){
             $this->_display->add( $this->_form );

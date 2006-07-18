@@ -43,6 +43,8 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
     }
 
     function commit_save( ){
+        $this->_init_form( );
+
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );
