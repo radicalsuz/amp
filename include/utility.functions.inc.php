@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'utility.base.functions.inc.php');
+require_once( 'utility.system.functions.inc.php');
 
 if (!function_exists( 'array_intersect_key' ) ) {
 
@@ -528,8 +528,16 @@ if (!function_exists('array_combine_key')) {
 }
 if (!function_exists('AMPfile_list')) {
 		function AMPfile_list($file,$ext=NULL) { 
-            $dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
+            if ( strpos( $file, AMP_LOCAL_PATH ) === FALSE ) {
+                $dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
+            } else {
+                $dir_name = $file;
+            }
+
             $dir = opendir($dir_name);
+            if ( !$dir ) {
+                return false;
+            }
             $basename = basename($dir_name);
             $fileArr = array();
             $fileArr[''] = 'Select';

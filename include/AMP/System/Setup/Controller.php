@@ -14,12 +14,15 @@ class AMP_System_Setup_Controller extends AMP_System_Component_Controller_Map {
 
     function commit_edit( ) {
         if ( !$this->_model->readData( $this->_model_id )) return $this->_commit_fail( );
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
         $this->_form->setValues( $this->_model->getData( ));
         $this->_display->add( $this->_form, 'form' );
         return true;
     }
 
     function commit_save( $copy_mode = false ){
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );
@@ -48,7 +51,9 @@ class AMP_System_Setup_Controller extends AMP_System_Component_Controller_Map {
        $display = &$this->_map->getComponent( 'form' );
        $this->_init_form( $display, false );
        $this->set_banner( 'edit');
+
        $this->_display->add( $display, 'default' );
+       if ( !$this->_form->isBuilt ) $this->_form->Build( );
        return true;
     }
 }

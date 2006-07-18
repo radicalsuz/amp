@@ -14,6 +14,7 @@ class AMP_System_Setup_Wizard_Controller extends AMP_System_Component_Controller
     }
 
     function commit_edit( ) {
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
         if ( !$this->_model->readData( $this->_model_id )) return $this->_commit_fail( );
         $this->_form->setValues( $this->_model->getData( ));
         $this->_display->add( $this->_form, 'form' );
@@ -68,6 +69,7 @@ class AMP_System_Setup_Wizard_Controller extends AMP_System_Component_Controller
        $this->_init_form( $display, false );
        $this->set_banner( 'edit');
        $this->_display->add( $display, 'default' );
+       if ( !$this->_form->isBuilt ) $this->_form->Build( );
        return true;
     }
 

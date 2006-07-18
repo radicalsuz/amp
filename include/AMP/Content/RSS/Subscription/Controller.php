@@ -14,7 +14,7 @@ class RSS_Subscription_Controller extends AMP_System_Component_Controller_Map {
         $this->notify( 'initForm' );
 
         if ( $read_request ) $this->_init_form_request( );
-        $this->_form->Build( );
+        //$this->_form->Build( );
         
     }
     function _init_form_request( ){
@@ -27,6 +27,8 @@ class RSS_Subscription_Controller extends AMP_System_Component_Controller_Map {
     }
 
     function commit_add( ){
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+
         if ( !$this->_form->submitted( ) ){
             $this->_display->add( $this->_form );
             return true;

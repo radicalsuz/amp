@@ -3,7 +3,7 @@
 require_once( 'AMP/Base/DB.php');
 require_once( 'AMP/Base/Config.php');
 /*
-require_once('utility.base.functions.inc.php');
+require_once('utility.system.functions.inc.php');
 
 // If we don't yet have a local path, find one.
 if (!defined('AMP_LOCAL_PATH'))

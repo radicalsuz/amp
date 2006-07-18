@@ -296,7 +296,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         $this->notify( 'initForm' );
 
         if ( $read_request ) $this->_init_form_request( );
-        $this->_form->Build( );
+        //$this->_form->Build( );
         
     }
 
@@ -319,10 +319,12 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
     }
 
     function &get_form( ){
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
         return $this->_form;
     }
 
     function get_form_data( $copy_mode = false ) {
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
         $copy_values = $this->_form->getValues( );
         if ( $copy_mode ) {
             unset( $copy_values[ $this->_model->id_field ]);
@@ -378,6 +380,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
            $display = &$this->_map->getComponent( 'form' );
            $this->_init_form( $display, false );
            $this->set_banner( 'add');
+           if ( !$display->isBuilt ) $display->Build( );
         } else {
             $display->setController( $this );
             $this->set_banner( 'list');
@@ -396,6 +399,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
     }
 
     function commit_add( ){
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
         $this->_form->applyDefaults( );
         $this->_display->add( $this->_form, 'form' );
         return true;
@@ -407,6 +411,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
     }
 
     function commit_save( ){
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );
@@ -458,6 +463,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
 
     function commit_edit( ) {
         if ( !$this->_model->readData( $this->_model_id )) return $this->_commit_fail( );
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+
         $this->_form->setValues( $this->_model->getData( ));
         $this->_display->add( $this->_form, 'form' ); return true;
     }
@@ -483,6 +490,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
             $this->error( AMP_TEXT_ERROR_DATA_COPY_FAILURE_MULTIPLE_IDS);
             return false;
         }
+
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
 
         //check if form validation succeeds
         if (!$this->_form->validate()) {

@@ -19,6 +19,8 @@ class AMP_System_File_Controller extends AMP_System_Component_Controller_Standar
     }
 
     function commit_save( ) {
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+
         if ( !$this->_form->validate( )){
             $this->_display->add( $this->_form, 'form' );
             return false;

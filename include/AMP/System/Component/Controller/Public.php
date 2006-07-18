@@ -27,6 +27,8 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
     }
 
     function commit_save( ){
+        if ( !$this->_form->isBuilt ) $this->_form->Build( );
+
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );
