@@ -48,6 +48,7 @@ class ArticleComment extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaModin( $modin ) {
+        require_once( 'AMP/UserData/Lookups.inc.php');
         $form_id_lookup = FormLookup::instance( 'modin' );
         $used_ids = array_search( $form_id_lookup, $modin );
         if ( empty( $used_ids )) return false;
