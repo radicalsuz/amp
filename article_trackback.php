@@ -29,9 +29,9 @@ if (  !(
 }
 
 if ( $trackback->setPingData( $trackback_data )) {
-    if ( !$trackback->validate( )){
-        $trackback->unpublish( );
-    }
+    //if ( !$trackback->validate( )){
+    //    $trackback->unpublish( );
+    //}
     $trackback->save( );
 }
 
