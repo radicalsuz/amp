@@ -16,7 +16,7 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
 	function init( $name, $method=null, $action=null ) {
 		PARENT::init( $name, $method, $action );
 		if (!($fields =  $this->readFields()) ){
-			 trigger_error ( 'XML Field read failed for ' . get_class( $this ) );
+			 trigger_error ( sprintf( AMP_TEXT_ERROR_XML_READ_FAILED, get_class( $this ) ));
 			 return;
 		}
         $this->addFields( $this->adjustFields( $fields ));
@@ -25,7 +25,10 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
 
 	function readFields() {
 		if (!($file_name = $this->getFieldFile())) return false;
-        if ( $fields = $this->getFieldsCached( $file_name )) {
+
+        //check for cached field defs
+        $cache_key = AMP_CACHE_TOKEN_XML_DATA . $file_name;
+        if ( $fields = &AMP_cache_get( $cache_key )) {
             return $fields;
         }
 
@@ -33,7 +36,7 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
         $fieldsource = & new AMPSystem_XMLEngine( $file_name );
 
         if ( $fields = $fieldsource->readData() ) {
-            $this->cacheFields( $fields, $file_name );
+            AMP_cache_set( $cache_key, $fields );
             return $fields;
         }
 
@@ -41,19 +44,6 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
 
     }
 
-    function getFieldsCached( $field_file_name ){
-        $cache = &AMP_get_cache( );
-        if ( !$cache ) return false;
-        $cache_key = AMP_CACHE_TOKEN_FIELD_DEF . $field_file_name;
-        return $cache->retrieve( $cache_key );
-    }
-
-    function cacheFields( $field_defs, $field_file_name ){
-        $cache = &AMP_get_cache( );
-        if ( !$cache ) return false;
-        $cache_key = AMP_CACHE_TOKEN_FIELD_DEF . $field_file_name;
-        return $cache->add( $cache_key, $field_defs );
-    }
 
     function adjustFields( $fields ){
         //interface

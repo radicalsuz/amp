@@ -24,6 +24,7 @@ class AMPSystem_NavManager {
     var $_tool_id;
     var $_buffer;
     var $_default_nav = 'content';
+    var $_filename_navs = 'AMP/System/Nav.xml';
 
     function AMPSystem_NavManager() {
         $this->per_manager =  & AMPSystem_PermissionManager::instance();
@@ -31,9 +32,15 @@ class AMPSystem_NavManager {
     }
 
     function loadNavs() {
-        if (!($xmlEngine = &new AMPSystem_XMLEngine('Nav'))) return false;;
-        $nav_set = $xmlEngine->readData();
-        $this->convertPermissions( $nav_set );
+        //check for cached version
+        $cache_key = AMP_CACHE_TOKEN_XML_DATA . $this->_filename_navs;
+        $nav_set = &AMP_cache_get( $cache_key );
+        if ( !$nav_set ){
+            if (!($xmlEngine = &new AMPSystem_XMLEngine('Nav'))) return false;;
+            $nav_set = $xmlEngine->readData();
+            $this->convertPermissions( $nav_set );
+            AMP_cache_set( $cache_key, $nav_set );
+        }
 
         foreach ($nav_set as $name => $item ) {
             $new_nav = &$this->addNav( $name, $item );

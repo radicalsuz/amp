@@ -54,12 +54,10 @@ if ( AMP_SITE_MEMCACHE_ON
 }
 */
 
-if ( $cache = &AMP_get_cache( ) && AMP_is_cacheable_url( ) ) {
-    $cache_key = AMP_CACHE_TOKEN_CONTENT_URL . $_SERVER['REQUEST_URI'];
-    if ( defined( 'AMP_SYSTEM_USER_ID' ) && AMP_SYSTEM_USER_ID ) {
-        $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
-    }
-    $cache->add( $finalPageHtml, $cache_key );
+if ( AMP_is_cacheable_url( ) ) {
+    $cache_key = AMP_CACHE_TOKEN_URL_CONTENT . $_SERVER['REQUEST_URI'];
+    $user_id =  ( defined( 'AMP_SYSTEM_USER_ID' ) && AMP_SYSTEM_USER_ID ) ? AMP_SYSTEM_USER_ID : null; 
+    AMP_cache_set( $cache_key, $finalPageHtml, $user_id );
 }
 
 

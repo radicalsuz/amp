@@ -117,9 +117,14 @@ class AMP_System_Cache_File extends AMP_System_Cache {
     }
 
     function authorize( $key ){
-        //check for the slash char
-        $clean_key = str_replace( DIRECTORY_SEPARATOR, '__DS__', $key );
-        return PARENT::authorize( $clean_key );
+        $authorized_key = false;
+        $standard_key = PARENT::authorize( $key );
+
+        if ( $standard_key ) {
+            //check for the slash char
+            $authorized_key = str_replace( DIRECTORY_SEPARATOR, '__DS__', $standard_key );
+        }
+        return $authorized_key;
     }
 
 

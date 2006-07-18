@@ -24,6 +24,7 @@ define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_REGISTRATION_FAILED',
             'Cannot register plugin %s : %s' );
 
 define( 'AMP_TEXT_ERROR_OPEN_FAILED', "Cannot open %s");
+define( 'AMP_TEXT_ERROR_XML_READ_FAILED', 'XML Read failed for %s');
 
 
 if ( !defined( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED'))
@@ -81,4 +82,6 @@ if ( !defined( 'AMP_TEXT_ERROR_CACHE_REQUEST_FAILED'))
         define( 'AMP_TEXT_ERROR_CACHE_REQUEST_FAILED', '%s cache method %s failed for item %s.' );
 if ( !defined( 'AMP_TEXT_ERROR_CACHE_PATH_NOT_FOUND'))
         define( 'AMP_TEXT_ERROR_CACHE_PATH_NOT_FOUND', "Folder '%s' does not exist and could not be created for caching");
+if ( !defined( 'AMP_TEXT_ERROR_CACHE_INVALID_KEY'))
+        define( 'AMP_TEXT_ERROR_CACHE_INVALID_KEY', 'Invalid key type %s sent to cache');
 ?>

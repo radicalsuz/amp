@@ -68,7 +68,10 @@ class AMP_System_Cache {
 
     //{{{ authorize methods
     function authorize( $key ){
-        if ( !( $key && is_string( $key ))) return false;
+        if ( !( $key && is_string( $key ))) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_INVALID_KEY , get_class( $key ) ));
+            return false;
+        }
         $local_key = $this->localize( $key );
         if ( strpos( $key, '%s' ) === FALSE ) return $local_key ;
         return sprintf( $local_key, AMP_SYSTEM_USER_ID );

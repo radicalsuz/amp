@@ -48,7 +48,7 @@ class AMPSystem_BaseTemplate {
         }
         if ( !$system_menu ) {
             $this->_menu = & new AMPSystem_Menu();
-            if ( $cache ) $cache->add( $cache_key, $system_menu );
+            if ( $cache ) $cache->add( $this->_menu, $cache_key );
         } else {
             $this->_menu = &$system_menu;
         }
