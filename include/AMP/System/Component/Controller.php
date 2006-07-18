@@ -232,6 +232,34 @@ class AMP_System_Component_Controller {
         ampredirect( $url );
     }
 
+    function cache( $component ){
+        $cache = &AMP_get_cache( );
+        if ( !$cache ) return false;
+        if ( !empty( $_POST )) return false;
+
+        $component_class = get_class( $component ) ;
+        $cache_key = $cache->identify( $component_class, AMP_SYSTEM_UNIQUE_VISITOR_ID ) ;
+        trigger_error( 'saving the ' .$component_class . ' with ' . $cache_key );
+        return $cache->add( $component, $cache_key );
+
+    }
+
+    function _load_cached( $component_type ){
+        $cache = &AMP_get_cache( );
+        if ( !$cache ) return false;
+        if ( !empty( $_POST )) return false;
+
+        $component_class = strtolower( $this->_map->getComponentClass( $component_type ));
+        $cache_key = $cache->identify( $component_class, AMP_SYSTEM_UNIQUE_VISITOR_ID ) ;
+        $stuff = &$cache->retrieve( $cache_key );
+        trigger_error( 'loading the ' .$component_class . ' with ' . $cache_key );
+        if ( $stuff ){
+            trigger_error( 'got the ' . $component_type ) ;
+        }
+        return $stuff;
+
+    }
+
 }
 
 class AMP_System_Component_Controller_Map extends AMP_System_Component_Controller {
@@ -252,7 +280,8 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         $this->_action_default = $this->_map->getDefaultDisplay( );
 
         //set methods based on map values
-        if ( $form  = &$this->_map->getCachedComponent( 'form', AMP_SYSTEM_UNIQUE_VISITOR_ID ))   $this->_init_form ( $form ) ;
+
+        if ( $form  = &$this->_map->getComponent( 'form' ))  $this->_init_form ( $form ) ;
         if ( $model = &$this->_map->getComponent( 'source')) $this->_init_model( $model) ;
 
         if ( !$this->allow( $this->get_action( ))) $this->clear_actions( );

@@ -90,13 +90,15 @@ class AMP_System_Cache_File extends AMP_System_Cache {
         return $entry_ref->delete( );
     }
     
-    function clear( ){
+    function clear( $key_token = null ){
         foreach( $this->_index as $authorized_key => $time_stored ){
+            if ( isset( $key_token ) && ( strpos( $authorized_key, $key_token ) === FALSE )) continue;
             $this->delete( $authorized_key );
         }
         $file_set = AMPfile_list( $this->_path_cache );
 
         foreach( $file_set as $file_name ){
+            if ( isset( $key_token ) && ( strpos( $file_name, $key_token ) === FALSE )) continue;
             $entry_ref = & new AMP_System_File( $this->_path( $file_name ));
 
             if ( $entry_ref->getTime( )+ AMP_SYSTEM_CACHE_TIMEOUT < time( )){

@@ -106,11 +106,21 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         return $result;
     }
     
-    function clear( ){
+    function clear( $key_token = null ){
+        $preserve_keys = array( );
         foreach( $this->_index as $authorized_key => $time_stored ){
+            if ( isset( $key_token ) && ( strpos( $file_name, $key_token ) === FALSE )) {
+                $preserve_keys[] = $authorized_key;
+                continue;
+            }
             $this->delete( $authorized_key );
         }
-        $this->_items_retrieved = array( );
+
+        if ( isset( $key_token ) && !empty( $preserve_keys )) {
+            $this->_items_retrieved = array_combine_key( $preserve_keys, $this->_items_retrieved );
+        } else {
+            $this->_items_retrieved = array( );
+        }
     }
 }
 

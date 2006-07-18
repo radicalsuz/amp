@@ -9,6 +9,9 @@
  * @author Austin Putman <austin@radicaldesigns.org> 
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
+
+require_once( 'AMP/System/Cache/Config.inc.php');
+
 class AMP_System_Cache {
 
     var $_index_key = 'AMP_cache_index';
@@ -54,8 +57,11 @@ class AMP_System_Cache {
 
     }
     
-    function clear( ){
-
+    function clear( $key_token = null ){
+        foreach( $this->_index as $authorized_key => $time_stored ){
+            if ( isset( $key_token ) && ( strpos( $authorized_key, $key_token ) === FALSE )) continue;
+            $this->delete( $authorized_key );
+        }
     }
 
     //}}}

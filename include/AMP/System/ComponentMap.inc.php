@@ -34,6 +34,9 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 
     function getComponentClass( $component_type ) {
         if ( !isset( $this->components[ $component_type ])) return false;
+        if ( isset( $this->paths[ $component_type ])) {
+            require_once( $this->paths[ $component_type ]);
+        }
         return $this->components[$component_type];
     }
 

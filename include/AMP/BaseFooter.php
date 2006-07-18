@@ -55,9 +55,9 @@ if ( AMP_SITE_MEMCACHE_ON
 */
 
 if ( $cache = &AMP_get_cache( ) && AMP_is_cacheable_url( ) ) {
-    $cache_key = $_SERVER['REQUEST_URI'];
+    $cache_key = AMP_CACHE_TOKEN_CONTENT_URL . $_SERVER['REQUEST_URI'];
     if ( defined( 'AMP_SYSTEM_USER_ID' ) && AMP_SYSTEM_USER_ID ) {
-        $cache_key = $cache->identify( $_SERVER['REQUEST_URI'], AMP_SYSTEM_USER_ID );
+        $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
     }
     $cache->add( $finalPageHtml, $cache_key );
 }
