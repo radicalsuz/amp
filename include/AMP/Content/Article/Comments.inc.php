@@ -57,7 +57,10 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
 
     function execute() {
         $output = '<hr><p class="subtitle"><a name="comments"></a>Comments</p>';
-        $output .= $this->_HTML_addCommentLink( $this->comment_set->getArticleId() ).'  |  '. $this->_HTML_trackback($this->comment_set->getArticleId());
+        $output .= $this->_HTML_addCommentLink( $this->comment_set->getArticleId() );
+        if ( AMP_CONTENT_TRACKBACKS_ENABLED ) {
+            $output .= '  |  '. $this->_HTML_trackback($this->comment_set->getArticleId());
+        }
 
         if (!$this->comment_set->makeReady()) return $output;
         
@@ -84,6 +87,7 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
                 $this->_HTML_link( AMP_URL_AddVars( "comment.php", 'articleid=' . $article_id ), AMP_TEXT_ADD_A_COMMENT ) ;
     }
     function _RDF_trackbacks( $article_id ){
+        if ( !AMP_CONTENT_TRACKBACKS_ENABLED ) return false;
         require_once( 'AMP/Content/Article.inc.php');
         $article = &new Article( $this->comment_set->dbcon, $article_id );
         return

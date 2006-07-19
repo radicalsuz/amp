@@ -10,7 +10,9 @@ class AMP_System_List_Observer extends AMP_System_Observer {
     }
 
     function onDelete( &$source ) {
-        $this->_list->removeSourceItemId( $source->id );
+        //$this->_list->removeSourceItemId( $source->id );
+        $this->_clear_cache( );
+        $this->_reload_page( );
     }
 
     function onUpdate( &$source ){
@@ -18,7 +20,18 @@ class AMP_System_List_Observer extends AMP_System_Observer {
     }
 
     function onReorder( &$source ){
-        $this->_list->redoSort( );
+    //    $this->_list->redoSort( );
+        $this->_reload_page( );
+        $this->_clear_cache( );
+    }
+
+    function _reload_page( ){
+        ampredirect( $_SERVER['REQUEST_URI']);
+    }
+
+    function _clear_cache( ){
+        $dbcon = &AMP_Registry::getDbcon( );
+        $dbcon->CacheFlush( );
     }
 }
 
