@@ -19,7 +19,9 @@ class ArticleDisplay_Info extends Article_Display {
                 . $this->_renderTitle( AMP_TEXT_DOCUMENT_INFO )
                 . $this->_renderArticleId( )
                 . $this->_renderRedirects( )
+                . $this->_renderSectionHeader( )
                 . $this->_renderAttachments( )
+                . $this->_renderPreviewLink( )
                 . $this->_renderCreated( )
                 . $this->_renderUpdated( );
 
@@ -38,8 +40,18 @@ class ArticleDisplay_Info extends Article_Display {
     }
 
     function _renderTitle( $title ){
-        return    $this->_renderer->inSpan( $title, array( 'class' => 'doc_info' ))
+        return    
+                 $this->_renderer->inSpan( $title, array( 'class' => 'doc_info' ))
                 . $this->_renderer->newline( );
+    }
+
+    function _renderPreviewLink( ) {
+        return  
+            $this->_renderer->link( 
+                    AMP_URL_AddVars( AMP_SITE_URL . $this->_article->getURL( ), 'preview=1' ),
+                    $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'width' => '16', 'height' => '16', 'border' =>'0', 'align' => 'right' )),
+                    array( 'target' => 'blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
+                );
     }
 
     function _renderArticleId( ){
@@ -109,16 +121,38 @@ class ArticleDisplay_Info extends Article_Display {
         $aliases = &$this->_article->getExistingAliases( );
         $output = '';
         if ( $redirect_url ){
-            $output .= $this->_renderer->inSpan( AMP_TEXT_REDIRECTED_TO . ': ' . $redirect_url, array( 'class' => 'red' ))
+            $output .= $this->_renderer->inSpan( 
+                                        AMP_TEXT_REDIRECTED_TO . ': ' 
+                                        . $this->_renderer->link( $redirect_url, $redirect_url, array( 'target' => 'blank' ) ), 
+                                array( 'class' => 'red' ))
                         . $this->_renderer->newline( );
         }
         if ( $aliases ) {
             foreach( $aliases as $id => $alias ) {
-                $output .= $this->_renderer->inSpan( AMP_TEXT_ALIAS . ': ' . AMP_SITE_URL .  $alias->getName( ))
+                $alias_url = AMP_SITE_URL . $alias->getName( );
+                $output .= $this->_renderer->inSpan( 
+                                    AMP_TEXT_ALIAS . ': ' 
+                                    . $this->_renderer->link( $alias_url, $alias_url, array( 'target' => 'blank' ) ))
                             . $this->_renderer->newline( );
             }
         }
         return $output;
+    }
+
+    function _renderSectionHeader( ){
+        $section_header_lookup = AMPContent_Lookup::instance( 'sectionHeaders');
+        if ( !isset( $section_header_lookup[ $this->_article->id ])) return false;
+
+        $section_id = $section_header_lookup[ $this->_article->id ];
+        $section_url = AMP_SITE_URL . AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'list=type', 'type='.$section_id ));
+
+        $section_names_lookup = AMPContent_Lookup::instance( 'sections');
+        $section_name = isset( $section_names_lookup[ $section_id ]) ? $section_names_lookup[ $section_id ] : false ;
+
+        return $this->_renderer->inSpan( 
+                        AMP_TEXT_SECTION_HEADER . ': ' 
+                        . $this->_renderer->link( $section_url, $section_name, array(  'target' => 'blank')))
+                    . $this->_renderer->newline( );
     }
 
     function _renderAttachments( ){

@@ -348,6 +348,7 @@ class Article extends AMPSystem_Data_Item {
 
     function _afterSave( ){
         if ( !( $alias_name = $this->getNewAliasName( ))) return false;
+        $alias_name = urlencode( $alias_name );
         require_once( 'AMP/Content/Redirect/Redirect.php' );
         $redirect = &new AMP_Content_Redirect( $this->dbcon );
         $existing_items = $redirect->search( $redirect->makeCriteria( array( 'alias' => $alias_name )));

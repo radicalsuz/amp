@@ -213,6 +213,7 @@ define( 'AMP_TEXT_BY', 'by' );
 define( 'AMP_TEXT_ID', 'ID' );
 define( 'AMP_TEXT_REDIRECTED_TO', 'Redirected To');
 define( 'AMP_TEXT_ALIAS', 'Alias');
+define( 'AMP_TEXT_SECTION_HEADER', 'Section Header');
 define( 'AMP_TEXT_ATTACHED_FILE', 'Attached File');
 define( 'AMP_TEXT_VIEW_ALL', 'View All %s');
 define( 'AMP_TEXT_VERSION_ID', 'Archived Content - Version ID: %s');

@@ -412,12 +412,12 @@
      </tool_page_link>
 	<alias_header>
 		<type>blocktrigger</type>
-		<label>Add Permalink</label>
+		<label>Add Article Alias</label>
 		<block>alias</block>
 	</alias_header>
 	<new_alias_name_header>
 		<type>static</type>
-		<default>Users who go to this URL on your site will be sent to this article</default>
+		<default>Users who go to &lt;em&gt;http://your_site.org/this_url&lt;/em&gt; will be sent to this article.&lt;br /&gt;&lt;span class=photocaption&gt;Do not include spaces or any wacky characters&lt;/span&gt;</default>
 		<block>alias</block>
 	</new_alias_name_header>
 	<new_alias_name>
