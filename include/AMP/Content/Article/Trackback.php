@@ -48,7 +48,9 @@ class ArticleTrackback extends AMPSystem_Data_Item {
 
     function setBody( $body ){
         if ( !$body ) return false;
-        return $this->mergeData( array( 'body' => AMP_trimText( $body, 255, false )));
+		$body_text = AMP_trimText( $body, 255, false );
+		if ($title = $this->getTitle()) $body_text = $title . "\n" . $body_text;
+        return $this->mergeData( array( 'comment' => $body_text ));
     }
 
     function setAuthorName( $author_name ){
@@ -146,6 +148,7 @@ class ArticleTrackback extends AMPSystem_Data_Item {
         return $this->getData( 'author');
     }
 
+	/*
     function validate( ){
         if ( !( $url = $this->getAuthorURL( ))){
             return false;
@@ -153,6 +156,7 @@ class ArticleTrackback extends AMPSystem_Data_Item {
 
         curl_init( $url );
         $page_content = curl_exec( );
+		curl_close();
 
         $permalink_q = preg_quote( $url, '/' );
         $pattern="/<\s*a.*href\s*=[\"'\s]*".$permalink_q."[\"'\s]*.*>.*<\s*\/\s*a\s*>/i";
@@ -160,6 +164,7 @@ class ArticleTrackback extends AMPSystem_Data_Item {
         return (preg_match($pattern,$page_content));
         
     }
+	*/
 
 }
 

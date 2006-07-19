@@ -18,6 +18,8 @@ $trackback = &new ArticleTrackback( $dbcon );
 $allowed_tags = $trackback->getAllowedTags( );
 $trackback_data = array_combine_key( $allowed_tags, $_POST );
 $trackback_data['article_id'] = $article_id;
+foreach($_POST as $postvar_name => $postvar_value ) {
+}
 
 // no trackback data received, redirect to article display page
 if (  !( 
@@ -29,9 +31,11 @@ if (  !(
 }
 
 if ( $trackback->setPingData( $trackback_data )) {
-    //if ( !$trackback->validate( )){
-    //    $trackback->unpublish( );
+
+    //if ( $trackback->validate( )){
+    //    $trackback->publish( );
     //}
+
     $trackback->save( );
 }
 
