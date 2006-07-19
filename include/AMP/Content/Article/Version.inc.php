@@ -33,6 +33,11 @@ class Article_Version extends Article {
         return $this->sort( $item_set, 'itemDateChanged', AMP_SORT_DESC );
     }
 
+    function getURL() {
+        if ($url = $this->getRedirect() ) return $url;
+        if (!$this->id ) return false;
+        return AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( "vid=".$this->id, 'id='.$this->getArticleId( ),'preview=1' ));
+    }
 
 }
 ?>

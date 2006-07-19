@@ -15,13 +15,14 @@ class ArticleDisplay_Info extends Article_Display {
     }
 
     function _HTML_Content( ){
-          return  $this->_renderImage( )
+          return  
+                  $this->_renderPreviewLink( )
+                . $this->_renderImage( )
                 . $this->_renderTitle( AMP_TEXT_DOCUMENT_INFO )
                 . $this->_renderArticleId( )
                 . $this->_renderRedirects( )
                 . $this->_renderSectionHeader( )
                 . $this->_renderAttachments( )
-                . $this->_renderPreviewLink( )
                 . $this->_renderCreated( )
                 . $this->_renderUpdated( );
 
@@ -56,14 +57,18 @@ class ArticleDisplay_Info extends Article_Display {
 
     function _renderArticleId( ){
         if ( strtolower( get_class( $this->_article)) == 'article_version' ) return $this->_renderArticleVersionId( );
-        return $this->_renderer->inSpan( AMP_TEXT_ID . ': ' . $this->_article->id )
+        $article_url = AMP_Url_AddVars( AMP_SITE_URL . $this->_article->getURL( ), array( 'preview=1' ));
+        return $this->_renderer->inSpan( AMP_TEXT_ID . ': ' . $this->_article->id ) . $this->_renderer->space( 2 )
+                . $this->_renderer->link( $article_url, '[ ' . ucfirst( AMP_TEXT_VIEW ) . ' ]' )
                 . $this->_renderer->newline( );
     }
 
     function _renderArticleVersionId( ){
+        $article_url = AMP_SITE_URL . $this->_article->getURL( );
         return $this->_renderer->inSpan( AMP_TEXT_ID . ': ' . $this->_article->getArticleId( ) )
                 . $this->_renderer->newline( )
-                . $this->_renderer->inSpan( sprintf( AMP_TEXT_VERSION_ID, $this->_article->id ), array( 'class' => 'red'))
+                . $this->_renderer->inSpan( sprintf( AMP_TEXT_VERSION_ID, $this->_article->id ), array( 'class' => 'red')) . $this->_renderer->space( 2 )
+                . $this->_renderer->link( $article_url, '[ ' . ucfirst( AMP_TEXT_VIEW ) . ' ]' )
                 . $this->_renderer->newline( );
 
     }

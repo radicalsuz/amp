@@ -88,7 +88,9 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         $model = &$controller->get_model( );
         $new_data = $_POST;
 
-        if ( !( isset( $new_data['id'] ) && $new_data['id'])) {
+        //default list behavior
+        if (    !( isset( $new_data['id'] ) && $new_data['id'])
+             || !( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie] )) {
             ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'section=' . $new_data['section'])));
             return;
         } 
