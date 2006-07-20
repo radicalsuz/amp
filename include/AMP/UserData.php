@@ -109,7 +109,7 @@ class UserData {
         $dbcon->SetFetchMode( ADODB_FETCH_ASSOC );
 
         $this->instance( $instance );
-        $this->submitted = true;
+		
         $this->useDefaults = true;
 
         $this->admin = $admin;
@@ -117,6 +117,8 @@ class UserData {
         // Initialise against database
         $this->init();
 
+		// Was data submitted via the web?
+		$this->submitted = isset($_REQUEST['btnUdmSubmit']) && $this->formNotBlank();
     }
 
     /*****

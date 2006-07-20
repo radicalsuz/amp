@@ -33,9 +33,6 @@ $udm =& new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
 $otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
 
-// Was data submitted via the web?
-$sub = isset($_REQUEST['btnUdmSubmit']) && $udm->formNotBlank();
-
 // Check for duplicates, setting $uid if found.
 if ( !$uid ) {
 
@@ -51,18 +48,18 @@ if ( $uid ) {
 
 }
 
+
 // Fetch or save user data.
-if ( ( !$uid || $auth ) && $sub ) {
+if ( ( !$uid || $auth ) && $udm->submitted ) {
 
     // Save only if submitted data is present, and the user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
     $udm->saveUser();
 
-} elseif ( $uid && $auth && !$sub ) {
+} elseif ( $uid && $auth && !$udm->submitted ) {
 
     // Fetch the user data for $uid if there is no submitted data
     // and the user is authenticated.
-    $udm->submitted = false;
     $udm->getUser( $uid ); 
 
 }
