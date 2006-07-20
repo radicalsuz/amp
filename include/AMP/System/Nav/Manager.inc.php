@@ -16,6 +16,7 @@
  require_once ('AMP/System/XMLEngine.inc.php');
  require_once ('AMP/System/Permission/Manager.inc.php');
  require_once ('AMP/System/Nav.inc.php');
+ require_once ('AMP/System/Cache/Config.inc.php');
 
 class AMPSystem_NavManager {
 

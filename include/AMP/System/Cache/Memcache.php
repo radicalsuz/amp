@@ -109,7 +109,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     function clear( $key_token = null ){
         $preserve_keys = array( );
         foreach( $this->_index as $authorized_key => $time_stored ){
-            if ( isset( $key_token ) && ( strpos( $file_name, $key_token ) === FALSE )) {
+            if ( isset( $key_token ) && ( strpos( $authorized_key, $key_token ) === FALSE )) {
                 $preserve_keys[] = $authorized_key;
                 continue;
             }

@@ -3,7 +3,8 @@
 require_once( 'AMP/System/Component/Controller.php' );
 
 class Article_Component_Controller extends AMP_System_Component_Controller_Standard {
-    var $_actions_cacheable = array( 'add', 'new' );
+    // caching the add form messes up a bunch of javascript stuff
+    // var $_actions_cacheable = array( 'add', 'new' );
 
     function Article_Component_Controller( ){
         $this->init( );

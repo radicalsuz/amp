@@ -67,7 +67,7 @@ class AMP_System_File {
             #$regex_pattern = '/' . $filename_pattern . '/';
 
 
-        }
+        } 
 
         $folder = &opendir( $folder_path );
         $result_set = array( );

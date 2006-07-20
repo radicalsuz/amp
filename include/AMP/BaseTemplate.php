@@ -75,7 +75,7 @@ $currentPage->initLocation();
  */
 if (isset($modid) && $modid ) {
     require_once( 'AMP/System/Tool/Control/Set.inc.php' );
-    $controls = &new ToolControlSet( $dbcon, $modid );
+    $controls = &new ToolControlSet( AMP_Registry::getDbcon( ), $modid );
     $controls->globalizeSettings();
 }
 

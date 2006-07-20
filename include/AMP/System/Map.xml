@@ -224,7 +224,7 @@
         <per>CONTENT_DOCUMENTS_EDIT</per>
     </item>
     <item>
-        <href>image_manger.php?action=add</href>
+        <href>image_manager.php?action=add</href>
         <label>Upload Images</label>
         <class>upload</class>
         <per>CONTENT_IMAGES_EDIT</per>

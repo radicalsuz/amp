@@ -1,5 +1,4 @@
 <?php
-
 //load DB
 require_once( 'AMP/Base/DB.php');
 

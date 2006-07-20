@@ -77,7 +77,7 @@ class Article_Form extends AMPSystem_Form_XML {
     }
 
     function _configHTMLEditor( &$editor ){
-        $editor->height = '400px';
+        $editor->height = '600px';
     }
 
     function execute( ){

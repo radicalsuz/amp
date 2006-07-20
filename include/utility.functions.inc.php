@@ -55,6 +55,7 @@ if ( !function_exists( 'ampredirect' ) ) {
         if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
             $target_url = $_REQUEST['pageredirect'];
         }
+        trigger_error( 'redirecting to ' . $target_url );
         if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT'))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
         header("Location: $target_url");
     }
@@ -479,6 +480,7 @@ function setBrowser() {
     //global $browser_ie, $browser_win, $browser_mo, $browser_checked;
     $browser_ie =  strstr(getenv('HTTP_USER_AGENT'), 'MSIE') ;
     $browser_win =  strstr(getenv('HTTP_USER_AGENT'), 'Win') ;
+    $browser_mo = false;
     if (!strstr(getenv('HTTP_USER_AGENT'), 'Safari')){
         $browser_mo =  strstr(getenv('HTTP_USER_AGENT'), 'Mozilla/5') ;
     }

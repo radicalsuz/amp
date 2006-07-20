@@ -163,7 +163,6 @@ class NavigationManager {
 
     //function findNavs_listSection( $target_column = AMP_CONTENT_NAV_SECTION_LIST_FIELD ) {
     function findNavs_listSection( $lookup_name = 'navLayoutsBySectionList' ) {
-
         $map = &AMPContent_Map::instance( );
         $parent_set = $map->getAncestors( $this->page->getSectionId() );
         if (empty($parent_set)) return $this->findNavs_default();
@@ -172,7 +171,7 @@ class NavigationManager {
         $layout_id = false;
         if ( !$layout_set ) return $this->findNavs_default( );
 
-        foreach( $parent_set  as $section_id ){
+        foreach( $parent_set  as $section_id => $section_name  ){
             if ( $layout_id = array_search( $section_id, $layout_set )) break;
         }
         if ( !$layout_id ) return $this->findNavs_default( );

@@ -138,7 +138,7 @@ class AMPSystem_Data {
         $definedSources = &$reg->getEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
         if (isset($definedSources[ $sourceDef ])) return $definedSources[ $sourceDef ];
 
-        if ( !isset( $this->dbcon )) trigger_error( get_class( $this ));
+        if ( !isset( $this->dbcon )) trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this ), 'dbcon' ));
         $colNames = $this->dbcon->MetaColumnNames( $sourceDef );
         $definedSources[ $sourceDef ] = $colNames;
         $reg->setEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );

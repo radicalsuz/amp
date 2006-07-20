@@ -45,7 +45,6 @@
     </title_header>
     <title>
         <label>Title</label>
-        <required>1</required>
         <type>textarea</type>
     </title>
 	<title_options>

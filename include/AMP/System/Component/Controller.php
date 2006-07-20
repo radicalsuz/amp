@@ -461,7 +461,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
 
         $this->_form->applyDefaults( );
         $this->_display->add( $this->_form, 'form' );
-        $this->_request_cache( 'form', 'add' );
+        //$this->_request_cache( 'form', 'add' );
 
         return true;
     }

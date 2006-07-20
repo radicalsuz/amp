@@ -317,6 +317,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         
     }
 
+    function &getSearchSource( $criteria = null ){
+        return $this->_getSearchSource( $criteria );
+    }
+
     function &_getSearchSource( $criteria = null ){
         if ( isset( $this->_search_source ) && $this->_search_source ) {
             if ( !isset( $criteria )) return $this->_search_source;

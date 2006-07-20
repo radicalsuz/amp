@@ -7,6 +7,7 @@ class AMP_Content_Nav_Layout extends AMPSystem_Data_Item {
     var $datatable = "nav_layouts";
     var $name_field = "name";
     var $_locations;
+    var $_location_search;
 
     function AMP_Content_Nav_Layout ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -34,6 +35,7 @@ class AMP_Content_Nav_Layout extends AMPSystem_Data_Item {
 
         if ( !$this->_locations ) return false;
         $results = array( );
+        $this->_location_search = &$location->getSearchSource( );
 
         foreach( $this->_locations as $location ){
             $results[] = $location->getData( );
@@ -59,6 +61,10 @@ class AMP_Content_Nav_Layout extends AMPSystem_Data_Item {
         $this->_readLocations( );
         foreach( $this->_locations as $location ){
             if ( array_search( $location->id, $allowed_ids ) === FALSE ) $location->delete( );
+        }
+
+        if ( isset( $this->_location_search )) {
+            $this->_location_search->clearCache( );
         }
     }
 

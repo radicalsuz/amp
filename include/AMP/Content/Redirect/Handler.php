@@ -58,6 +58,7 @@ class AMP_Content_Redirect_Handler {
         if ( !file_exists( $custom_folder_filename )) return false;
         $_SERVER['PHP_SELF'] = "custom/" .  $this->_request_page;
         ob_start( );
+        extract( $GLOBALS );
         include( $custom_folder_filename );
         print ob_get_clean( );
         return true;
