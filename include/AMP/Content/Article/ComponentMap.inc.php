@@ -74,7 +74,7 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
     function _save_version( &$controller ){
         $model = &$controller->get_model( );
         $model_id = $controller->get_model_id( );
-        if ( !isset( $model_id )) return;
+        if ( !(isset( $model_id ) && $model_id )) return;
         $model->readData( $model_id );
         if ( !$model->hasData( )) return;
         $model->saveVersion( );
