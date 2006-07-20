@@ -175,6 +175,33 @@
 		<type>header</type>
 		<label>Article Attributes</label>
 	</attributes_header>
+    <!--
+	<order_header>
+        <type>blocktrigger</type>
+        <label>Ordering and Date</label>
+		<block_trigger>pageorder</block_trigger>
+		<block>order_header</block>
+    </order_header>
+	-->
+    <pageorder>
+        <type>text</type>
+        <size>4</size>
+        <label>List Order &lt;br /&gt;(sorts by date&lt;br /&gt; if blank)</label>
+    </pageorder>
+    <date>
+        <type>date</type>
+        <label>Date</label>
+        <default>today</default>
+        <options>
+            <addEmptyOption>1</addEmptyOption>
+            <emptyOptionText>--</emptyOptionText>
+        </options>
+    </date>
+    <usedate>
+        <type>checkbox</type>
+        <label>DO NOT DISPLAY DATE</label>
+		<default>1</default>
+    </usedate>
     <byline_header>
         <type>blocktrigger</type>
         <label>Byline Information</label>
@@ -244,34 +271,6 @@
         <label>Press Release Contact</label>
 		<block>byline_header</block>
     </contact>
-    <order_header>
-        <type>blocktrigger</type>
-        <label>Ordering and Date</label>
-		<block_trigger>pageorder</block_trigger>
-		<block>order_header</block>
-    </order_header>
-    <date>
-        <type>date</type>
-        <label>Date</label>
-        <default>today</default>
-		<block>order_header</block>
-        <options>
-            <addEmptyOption>1</addEmptyOption>
-            <emptyOptionText>--</emptyOptionText>
-        </options>
-    </date>
-    <usedate>
-        <type>checkbox</type>
-        <label>DO NOT DISPLAY DATE</label>
-		<block>order_header</block>
-		<default>1</default>
-    </usedate>
-    <pageorder>
-        <type>text</type>
-        <size>4</size>
-        <label>Order &lt;br /&gt;(sorts by date&lt;br /&gt; if blank)</label>
-		<block>order_header</block>
-    </pageorder>
 <!-- new tab starts here -->
 	<tab_html_image>
 		<type>html</type>

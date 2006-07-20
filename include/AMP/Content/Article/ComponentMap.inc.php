@@ -88,6 +88,9 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         $model = &$controller->get_model( );
         $new_data = $_POST;
 
+        $display_class = strtolower( $this->components['list'] );
+        $list_location_cookie = $display_class  . '_ListLocation';
+
         //default list behavior
         if (    !( isset( $new_data['id'] ) && $new_data['id'])
              || !( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie] )) {

@@ -55,7 +55,6 @@ if ( !function_exists( 'ampredirect' ) ) {
         if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
             $target_url = $_REQUEST['pageredirect'];
         }
-        trigger_error( 'redirecting to ' . $target_url );
         if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT'))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
         header("Location: $target_url");
     }

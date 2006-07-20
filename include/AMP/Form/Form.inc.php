@@ -211,10 +211,14 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     }
 
     function getValues ( $fields = null ) {
-        return $this->translate( $this->form->exportValues( $fields ) );
+        $requested_fields = $fields;
+        if ( isset( $fields ) && !is_array( $fields )) $requested_fields = array( $fields );
+        if ( is_object( $fields )) $requested_fields = null;
+
+        return $this->translate( $this->form->exportValues( $fields ), 'get', $requested_fields );
     }
 
-	function translate ( $data, $action = "get" ) {
+	function translate ( $data, $action = "get", $requested_fields = null ) {
 		if (empty( $this->translations) || empty( $this->translations[ $action ])) return $data;
         if ( is_object( $data ) && strtolower( get_class( $data )) == 'html_quickform_error') {
             trigger_error( $data->getMessage( ));
@@ -224,6 +228,8 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 		$result_data = $data;
 		foreach ( $this->translations[ $action] as $fieldname => $translate_method_set ) {
             if ( !is_array( $translate_method_set )) continue;
+            if ( isset( $requested_fields ) && !isset( $requested_fields[ $fieldname ])) continue;
+
             foreach( $translate_method_set as $translate_method ){
                 if (!method_exists( $this, $translate_method )) continue;
                 $result_data[ $fieldname ] = $this->$translate_method( $result_data, $fieldname );

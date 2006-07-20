@@ -79,12 +79,12 @@ class Article_Form extends AMPSystem_Form_XML {
     function _configHTMLEditor( &$editor ){
         $editor->height = '600px';
     }
-
+/*
     function execute( ){
-        $value =PARENT::execute( );
+        $value = PARENT::execute( );
         return $value;
     }
-
+*/
     function _initTabDisplay( &$header ){
         $header->addJavaScript( 'scripts/tabs.js', 'tabs');
         
@@ -260,7 +260,7 @@ class Article_Form extends AMPSystem_Form_XML {
 
     function _checkWysiwyg( $data, $fieldname ) {
         if ( $data['wysiwyg_setting'] == AMP_USER_CONFIG_USE_WYSIWYG ) return true;
-        setcookie( 'AMPWYSIWYG', intval( $data['wysiwyg_setting'] ), time( )+( 24*60*60*90 ));
+        setcookie( 'AMPWYSIWYG', intval( $data['wysiwyg_setting'] ), time( )+( 24*60*60*90 ) );
     }
 
     function HTMLEditorSetup( $fieldname = 'html' ){
