@@ -5,9 +5,9 @@ include("AMP/BaseDB.php");
 
 if (defined('AMP_FORUM_INTRO_ID')) {
     $intro_id = AMP_FORUM_INTRO_ID;
-    include("AMP/BaseModuleIntro.php");
 }
 include("AMP/BaseTemplate.php"); 
+include("AMP/BaseModuleIntro.php");
 ?>
 <IFRAME SRC="/punbb/"  FRAMEBORDER=0 width="100%" height="800">
 </IFRAME>
