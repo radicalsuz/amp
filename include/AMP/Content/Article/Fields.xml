@@ -46,6 +46,7 @@
     <title>
         <label>Title</label>
         <type>textarea</type>
+		<required>1</required>
     </title>
 	<title_options>
 		<type>blocktrigger</type>

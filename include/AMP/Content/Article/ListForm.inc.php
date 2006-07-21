@@ -53,11 +53,11 @@ class Article_ListForm extends AMP_System_List_Form {
         $this->_sort_default = array( 
             'type' => 'type',
             'publish' => 'publish DESC',
-            'pageorder' => 'if ( !isnull( pageorder ) AND pageorder != "", pageorder, '.AMP_CONTENT_LISTORDER_MAX.')',
+            'pageorder' => 'if ( !isnull( pageorder ) AND pageorder != "" AND pageorder !=0, pageorder, '.AMP_CONTENT_LISTORDER_MAX.')',
             'date' => 'if ( !isnull( date ), date, "0000-00-00" ) DESC',
             'id' => 'id DESC'
         );
-        $this->_sort_translations_sql['order'] = 'if ( !isnull( pageorder ) AND pageorder != "", pageorder, '. AMP_CONTENT_LISTORDER_MAX .')';
+        $this->_sort_translations_sql['order'] = 'if ( !isnull( pageorder ) AND pageorder != "" AND pageorder !=0 , pageorder, '. AMP_CONTENT_LISTORDER_MAX .')';
     }
 
 

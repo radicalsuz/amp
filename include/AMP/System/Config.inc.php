@@ -43,10 +43,6 @@ if ( !defined( 'AMP_SYSTEM_CACHE')) define( 'AMP_SYSTEM_CACHE', 'memcache' );
 if ( !defined( 'AMP_SYSTEM_CACHE_TIMEOUT')) define( 'AMP_SYSTEM_CACHE_TIMEOUT', 600 );
 if ( !defined( 'AMP_SYSTEM_CACHE_PATH')) define( 'AMP_SYSTEM_CACHE_PATH', AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache');
 
-if ( !defined( 'AMP_CACHE_KEY_STYLESHEET')) define( 'AMP_CACHE_KEY_STYLESHEET', '%s.css' );
-if ( !defined( 'AMP_CACHE_KEY_JAVASCRIPT')) define( 'AMP_CACHE_KEY_JAVASCRIPT', '%s.js' );
-if ( !defined( 'AMP_CACHE_KEY_OUTPUT')) define( 'AMP_CACHE_KEY_OUTPUT', '%s.html' );
-
 /**
  * Filesystem Settings 
  */
@@ -74,7 +70,7 @@ define('ADODB_REPLACE_UPDATED',  1);
 /**
  *  GLOBAL settings
  */
-define( "AMP_SYSTEM_VERSION_ID", '3.5.9');
+define( "AMP_SYSTEM_VERSION_ID", '3.5.11');
 define( 'MAGIC_QUOTES_ACTIVE', get_magic_quotes_gpc());
 
 

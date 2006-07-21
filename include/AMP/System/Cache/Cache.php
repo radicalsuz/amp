@@ -64,6 +64,22 @@ class AMP_System_Cache {
         }
     }
 
+    function header( $key ) {
+        $javascript_token = str_replace( '%s', '', AMP_CACHE_KEY_JAVASCRIPT );
+        $stylesheet_token = str_replace( '%s', '', AMP_CACHE_KEY_STYLESHEET );
+
+        $dotpoint = strrpos( $key, '.');
+        if ( !$dotpoint ) return false;
+
+        if ( substr( $key, $dotpoint ) == $javascript_token ) {
+            return 'Content-Type: text/javascript';
+        }
+        if ( substr( $key, $dotpoint ) == $stylesheet_token ) {
+            return 'Content-Type: text/css';
+        }
+        return false;
+    }
+
     //}}}
 
     //{{{ authorize methods

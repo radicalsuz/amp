@@ -234,17 +234,19 @@
 <tools>
     <title>Tools</title>
     <per>TOOLS_ACCESS</per>
+
     <item>
         <label>Tool Settings</label>
         <href>system_map.php?id=tooladmin</href>
         <child>tooladmin</child>
 		<per>TOOLS_ADMIN</per>
     </item>
+
     <item>
-		<separator>1</separator>
         <label>Calendar</label>
         <href>calendar_gxlist.php</href>
         <per>CALENDAR_ACCESS</per>
+		<separator>1</separator>
     </item>
     <item>
         <label>Photo Gallery</label>

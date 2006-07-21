@@ -82,7 +82,7 @@ function writeMenus(container) {
         clearTimeout(timer);
     } else if (document.all || document.hasChildNodes) {
         document.writeln('<SPAN ID="menuContainer"></SPAN>');
-        container = FIND("menuContainer");
+        container = FIND( "menuContainer" );
     }
 
     window.fwHideMenuTimer = null;

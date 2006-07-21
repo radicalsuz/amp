@@ -165,7 +165,7 @@ function fwLoadMenus() {
 
     window.fw_menu_%1\$s.writeMenus( );
 }
-fwLoadMenus();
+//fwLoadMenus();
 ";
 			
 		  var $css_template = "
