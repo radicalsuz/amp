@@ -118,6 +118,11 @@
         <type>date</type>
         <label>Date</label>
         <default>today</default>
+        <options>
+            <minYear>1990</minYear>
+            <addEmptyOption>1</addEmptyOption>
+            <emptyOptionText>--</emptyOptionText>
+        </options>
     </date>
     <usedate>
         <type>checkbox</type>

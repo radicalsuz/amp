@@ -72,9 +72,15 @@ class AMPContent_Header {
 
         if ( $section = &$this->_page->getSection() && ($section->id != AMP_CONTENT_MAP_ROOT_SECTION) ) {
             $metadesc = $section->getBlurb();
+            $section_header = &$section->getHeaderRef() ;
+            if ( $section_header && ( $custom_metadesc = $section_header->getMetaDescription( ) )) {
+                $metadesc = $custom_metadesc;
+            } 
         }
         if ( $article = &$this->_page->getArticle() ) {
-            $metadesc = $article->getBlurb();
+            if ( $custom_metadesc = $article->getMetaDescription( ) ) {
+                $metadesc = $custom_metadesc;
+            } 
         }
 
         return $this->stripQuotes($metadesc);
@@ -86,7 +92,13 @@ class AMPContent_Header {
     }
 
     function getMetaKeywords() {
-        return $this->stripQuotes( AMP_SITE_META_KEYWORDS );
+        $keywords = AMP_SITE_META_KEYWORDS ;
+        if ( $article = &$this->_page->getArticle() ) {
+            if ( $custom_keywords = $article->getMetaKeywords( ) ) {
+                $keywords = $custom_keywords ;
+            } 
+        }
+        return $this->stripQuotes( $keywords );
     }
 
     function addJavaScript( $script_url, $id = null) {

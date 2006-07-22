@@ -119,6 +119,7 @@ class AMP_System_Component_Controller {
             $this->_commit_default( );
         }
         if ( !$output ) return;
+
         if ( defined( 'AMP_CONTENT_PAGE_REDIRECT' )) return;
 
         return $this->_display->execute( );

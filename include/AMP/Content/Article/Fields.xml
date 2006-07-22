@@ -46,7 +46,6 @@
     <title>
         <label>Title</label>
         <type>textarea</type>
-		<required>1</required>
     </title>
 	<title_options>
 		<type>blocktrigger</type>
@@ -194,6 +193,7 @@
         <label>Date</label>
         <default>today</default>
         <options>
+            <minYear>1990</minYear>
             <addEmptyOption>1</addEmptyOption>
             <emptyOptionText>--</emptyOptionText>
         </options>
@@ -429,6 +429,28 @@
 		<default>&lt;a href="redirect.php?action=list" target="blank" class="photocaption"&gt;View All Redirects&lt;/a&gt;</default>
 		<block>alias</block>
 	</new_alias_name_footer>
+	<metadata_header>
+		<type>blocktrigger</type>
+		<label>Search Engine Optimization</label>
+		<block>metadata</block>
+	</metadata_header>
+	<metadesc_help>
+		<type>static</type>
+		<default>Text entered here will override your Short Description&lt;br /&gt; as the MetaDescription for this page.</default>
+		<block>metadata</block>
+	</metadesc_help>
+	<metadescription>
+		<type>textarea</type>
+		<label>Meta Description</label>
+        <size>6:40</size>
+		<block>metadata</block>
+	</metadescription>
+	<metakeywords>
+		<type>textarea</type>
+		<label>Meta Keywords</label>
+        <size>6:40</size>
+		<block>metadata</block>
+	</metakeywords>
     <custom_field_header>
         <type>hidden</type>
     </custom_field_header>

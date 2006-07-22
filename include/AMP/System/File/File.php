@@ -15,6 +15,11 @@ class AMP_System_File {
     var $id;
     var $_class_name = 'AMP_System_File';
 
+    var $_mimetype;
+
+    //mimetype cacheing is a performance optimization for large file lists
+    var $_mimetype_cache;
+
     function AMP_System_File( $file_path = null ){
         if ( isset( $file_path ) && !is_object( $file_path )) $this->setFile( $file_path );
     }
@@ -52,6 +57,63 @@ class AMP_System_File {
         return $this->_path;
     }
 
+    function set_mimetype( $mimetype_value = null ){
+        if ( isset( $mimetype_value ) ) return $this->_mimetype = $mimetype_value;
+        if ( !( function_exists( 'mime_content_type' ))) return false;
+
+        $mime_filetype = false;
+        if ( !( $mime_filetype = $this->lookup_mimetype( ))) {
+            $mime_filetype = mime_content_type( $this->getPath() );
+            $this->cache_mimetype( );
+        }
+
+        if ( !$mime_filetype ) return false;
+
+        return $this->_mimetype = $mime_filetype ;
+    }
+
+    function get_mimetype( ){
+        return $this->_mimetype;
+    }
+
+    function lookup_mimetype( $path ){
+        $reg = &AMP_Registry::instance( );
+        $mimetype_lookup = &$reg->getEntry( AMP_REGISTRY_MIMETYPE_CACHE );
+        if ( !isset( $mimetype_lookup[ $this->getPath( ) ] )) return false;
+        return $mimetype_lookup[ $this->getPath( )];
+    }
+
+    function _load_mimetype_cache( ){
+        if ( isset( $this->_mimetype_cache )) return $this->_mimetype_cache;
+        $reg = &AMP_Registry::instance( );
+        $mimetype_lookup = &$reg->getEntry( AMP_REGISTRY_MIMETYPE_CACHE );
+        if ( !$mimetype_lookup ) {
+            $mimetype_lookup = &AMP_cache_get( AMP_REGISTRY_MIMETYPE_CACHE );
+            if ( !$mimetype_lookup ){
+                $blank_array= array( );
+                $reg->setEntry( AMP_REGISTRY_MIMETYPE_CACHE, $blank_array );
+                $this->_mimetype_cache = $blank_array;
+            }
+            
+        }
+        if ( $mimetype_lookup ) $this->_mimetype_cache = $mimetype_lookup;
+        return $this->_mimetype_cache;
+
+    }
+
+    function cache_mimetype( ){
+        $this->_mimetype_cache[ $this->getPath( )] = $this->_mimetype;
+        $reg = &AMP_Registry::instance( );
+        $reg->setEntry( AMP_REGISTRY_MIMETYPE_CACHE, $this->_mimetype_cache );
+    }
+    
+    function _save_mimetype_cache( ){
+        $mimetype_lookup = &$this->_load_mimetype_cache( );
+        if ( $mimetype_lookup && !empty( $mimetype_lookup )) {
+            AMP_cache_set( AMP_REGISTRY_MIMETYPE_CACHE, $mimetype_lookup );
+        }
+    }
+
     function search( $folder_path, $filename_pattern = null ){
         /** suggested patterns
          * send in patterns as *php or *namestuff* or namestuff*
@@ -84,6 +146,7 @@ class AMP_System_File {
             $result_set[ $file_name ] = &new $class_name( $folder_path . $file_name );
         }
         $this->sort( $result_set );
+        $this->_save_mimetype_cache( );
         return $result_set;
     }
 

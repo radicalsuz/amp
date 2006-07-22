@@ -464,6 +464,11 @@
 	</item>
 	<item>
 		<title>RSS Aggregator</title>
+		<href>rss_subscription.php</href>
+		<label>View Subscriptions</label>
+		<class>view</class>
+	</item>
+	<item>
 		<href>rss_subscription.php?action=add</href>
 		<label>Add Subscription</label>
 		<class>add</class>
@@ -471,6 +476,7 @@
 	<item>
 		<label>Update RSS Articles</label>
 		<href>rss_content.php?action=update</href>
+		<class>search</class>
 	</item>
 	<item>
 		<href>rss_content.php</href>

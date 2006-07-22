@@ -208,5 +208,19 @@ class Section extends AMPSystem_Data_Item {
         $this->setListType( );
     }
 
+    function move( $section_id ){
+        if ( !( $section_id && $section_id != $this->getParent( ))) {
+            return false ;
+        }
+
+        $this->setParent( $section_id );
+
+        if ( !( $result = $this->save( ))) return false;
+        $this->notify( 'update' );
+        $this->notify( 'move' );
+        return $result;
+
+    }
+
 }
 ?>

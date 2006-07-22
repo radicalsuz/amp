@@ -453,6 +453,17 @@ class Article extends AMPSystem_Data_Item {
     function makeCriteriaType( $section_id ) {
         return $this->makeCriteriaSection( $section_id );
     }
+
+    function getMetaDescription( ){
+        $result = $this->getData( 'metadescription');
+        if ( $result ) return $result;
+
+        return $this->getBlurb( );
+    }
+
+    function getMetaKeywords( ){
+        return $this->getData( 'metakeywords');
+    }
 /*
     function save( $save_version = true ){
         if ( isset( $this->id ) && $this->id && $save_version ) {

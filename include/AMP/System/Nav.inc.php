@@ -1,6 +1,5 @@
 <?php
 
-define( 'AMP_MODULE_ID_CONTENT', 19 );
 require_once( 'AMP/System/Page/Urls.inc.php');
 
 /* * * * * * * * * * *

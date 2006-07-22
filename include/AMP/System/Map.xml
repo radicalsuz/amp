@@ -129,11 +129,14 @@
         <class>add</class>
     </item>
     <item>
-        <title>RSS Aggregator</title>
         <separator>1</separator>
         <href>rss_subscription.php?action=add</href>
         <label>Add Incoming Feed</label>
-        <class>add</class>
+        <per>CONTENT_RSS_AGGREGATOR</per>
+    </item>
+    <item>
+        <href>rss_subscription.php</href>
+        <label>View Subscribed Feeds</label>
         <per>CONTENT_RSS_AGGREGATOR</per>
     </item>
 

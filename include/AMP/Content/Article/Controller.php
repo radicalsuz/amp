@@ -101,13 +101,16 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
     }
 
     function _commit_default( ){
-        if ( $this->get_action( ) == 'view') {
+        //view never wants the standard article list
+        //save might show the list if the form fails to validate
+        $no_list_actions = array( 'view', 'save');
+        if ( array_search( $this->get_action( ), $no_list_actions ) ) {
             return;
         }
         return PARENT::_commit_default( );
     }
 
-    function _commit_fails( ){
+    function _commit_fail( ){
         ampredirect( AMP_SYSTEM_URL_HOME );
         return false;
     }

@@ -156,7 +156,8 @@ class AMPContent_Map {
     function _menuItemArticleList( $section_id ) {
         return array(
             'id'    =>  $section_id,
-            'label' =>  AMP_clearSpecialChars( $this->getName( $section_id ) ) . " ( ".$this->getTotals( $section_id )." )",
+            'label' =>  AMP_trimText( AMP_clearSpecialChars( $this->getName( $section_id ) ), 80 ) 
+                        . " ( ".$this->getTotals( $section_id )." )",
             'href'  =>  AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'section=' . $section_id ))
             );
     }

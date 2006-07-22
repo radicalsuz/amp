@@ -152,6 +152,7 @@ if (!defined('AMP_CONTENT_RSS_CUSTOMFORMAT')) define ('AMP_CONTENT_RSS_CUSTOMFOR
 /**
  * Default Module Definitions 
  */
+define( 'AMP_MODULE_ID_CONTENT', 19 );
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );
 if ( !defined( 'AMP_MODULE_ID_COMMENTS')) define( 'AMP_MODULE_ID_COMMENTS', 23 );
 if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS', 45 );

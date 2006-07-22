@@ -33,6 +33,12 @@ class AMP_System_List_Observer extends AMP_System_Observer {
         $dbcon = &AMP_Registry::getDbcon( );
         $dbcon->CacheFlush( );
     }
+
+    function onMove( &$source ) {
+        $this->_reload_page( );
+        $this->_clear_cache( );
+
+    }
 }
 
 ?>

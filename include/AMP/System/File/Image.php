@@ -24,7 +24,6 @@ class AMP_System_File_Image extends AMP_System_File {
             'image/png' => 'imagecopyresampled' );
     
     
-    var $_mimetype;
     var $height;
     var $width;
     var $_class_name = 'AMP_System_File_Image';
@@ -46,16 +45,6 @@ class AMP_System_File_Image extends AMP_System_File {
         $this->height = $size_data[1];
     }
 
-    function set_mimetype( $mimetype_value = null ){
-        if ( isset( $mimetype_value ) ) return $this->_mimetype = $mimetype_value;
-        if ( !( function_exists( 'mime_content_type' ))) return false;
-        if ( !( $mime_filetype = mime_content_type( $this->getPath() )) ) return false;
-        $this->_mimetype = $mime_filetype ;
-    }
-
-    function get_mimetype( ){
-        return $this->_mimetype;
-    }
 
     function &get_image_resource( ){
         if( !($read_method = $this->_get_action_method( 'read') )) return false;

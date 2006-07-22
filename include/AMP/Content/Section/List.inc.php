@@ -20,8 +20,11 @@ class Section_List extends AMP_System_List_Form {
     var $_map;
     var $_renderer;
     var $_observers_source = array( 'AMP_System_List_Observer');
-    var $_actions = array( 'publish', 'unpublish', 'delete', 'reorder');
-    var $_action_args = array( 'reorder' => array( 'order'));
+    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'reorder');
+    var $_action_args = array(
+            'reorder'   => array( 'order' ), 
+            'move'      => array( 'section_id' ), 
+        );
     var $_actions_global = array( 'reorder');
     var $name_field = 'name';
 
@@ -66,5 +69,28 @@ class Section_List extends AMP_System_List_Form {
         return '&nbsp;&nbsp;&#124;&nbsp;&nbsp;' . $toolbar->renderDefault( $action );
 
     }
+
+    function renderMove( &$toolbar ){
+        $renderer = &$this->_getRenderer( );
+        $section_options = &AMPContent_Lookup::instance( 'sectionMap' );
+        $section_options = array( '' => 'Select Section') + $section_options;
+                
+        $toolbar->addEndContent( 
+                $renderer->inDiv( 
+                        '<a name="move_targeting"></a>'
+                        . AMP_buildSelect( 'section_id', $section_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element')))
+                        . '&nbsp;'
+                        . $toolbar->renderDefault( 'move')
+                        . '&nbsp;'
+                        . "<input type='button' name='hideMove' value='Cancel' onclick='window.change_any( \"move_targeting\");'>&nbsp;",
+                        array( 
+                            'class' => 'AMPComponent_hidden', 
+                            'id' => 'move_targeting')
+                    ), 'move_targeting');
+
+        return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");if ( $(\"region_targeting\").style.display==\"block\") window.change_any( \"region_targeting\" );window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
+
+    }
+
 }
 ?>
