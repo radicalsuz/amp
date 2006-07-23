@@ -27,6 +27,12 @@ class AMP_Content_Image_Observer extends AMP_System_Observer {
 
         $this->_list->removeSourceItemId( $source->getName( ));
 
+        //clear image folder cache
+        $cache = &AMP_get_cache( );
+        if ( $cache ) {
+            $cache->delete( $source->getCacheKeySearch( ) );
+        }
+
     }
 
 }

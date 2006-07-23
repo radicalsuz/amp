@@ -20,6 +20,11 @@ class AMP_System_File {
     //mimetype cacheing is a performance optimization for large file lists
     var $_mimetype_cache;
 
+
+    var $_search_offset;
+    var $_search_limit;
+    var $_search_total;
+
     function AMP_System_File( $file_path = null ){
         if ( isset( $file_path ) && !is_object( $file_path )) $this->setFile( $file_path );
     }
@@ -62,10 +67,10 @@ class AMP_System_File {
         if ( !( function_exists( 'mime_content_type' ))) return false;
 
         $mime_filetype = false;
-        if ( !( $mime_filetype = $this->lookup_mimetype( ))) {
+        //if ( !( $mime_filetype = $this->lookup_mimetype( ))) {
             $mime_filetype = mime_content_type( $this->getPath() );
-            $this->cache_mimetype( );
-        }
+        //    $this->cache_mimetype( $mime_filetype );
+        //}
 
         if ( !$mime_filetype ) return false;
 
@@ -75,10 +80,10 @@ class AMP_System_File {
     function get_mimetype( ){
         return $this->_mimetype;
     }
+/*
+    function lookup_mimetype( ){
+        $mimetype_lookup = &$this->_load_mimetype_cache( );
 
-    function lookup_mimetype( $path ){
-        $reg = &AMP_Registry::instance( );
-        $mimetype_lookup = &$reg->getEntry( AMP_REGISTRY_MIMETYPE_CACHE );
         if ( !isset( $mimetype_lookup[ $this->getPath( ) ] )) return false;
         return $mimetype_lookup[ $this->getPath( )];
     }
@@ -101,8 +106,8 @@ class AMP_System_File {
 
     }
 
-    function cache_mimetype( ){
-        $this->_mimetype_cache[ $this->getPath( )] = $this->_mimetype;
+    function cache_mimetype( $mime_filetype ){
+        $this->_mimetype_cache[ $this->getPath( )] = $mime_filetype;
         $reg = &AMP_Registry::instance( );
         $reg->setEntry( AMP_REGISTRY_MIMETYPE_CACHE, $this->_mimetype_cache );
     }
@@ -113,6 +118,7 @@ class AMP_System_File {
             AMP_cache_set( AMP_REGISTRY_MIMETYPE_CACHE, $mimetype_lookup );
         }
     }
+    */
 
     function search( $folder_path, $filename_pattern = null ){
         /** suggested patterns
@@ -126,28 +132,55 @@ class AMP_System_File {
             $regex_pattern   =    '/'
                                 . str_replace( '*' , '[0-9a-zA-Z\.-_ ]+' , $regex_pattern_1)  
                                 . '/';
-            #$regex_pattern = '/' . $filename_pattern . '/';
 
 
         } 
 
         $folder = &opendir( $folder_path );
-        $result_set = array( );
         if ( substr( $folder_path, -1 ) !== DIRECTORY_SEPARATOR ) $folder_path .= DIRECTORY_SEPARATOR;
-        #$result_text = system( 'ls '.$filename_pattern );
+        $folder_cache_key = AMP_CACHE_TOKEN_DIR . $folder_path;
+        if ( isset( $filename_pattern )) $folder_cache_key .= $filename_pattern;
+
         $class_name = $this->_class_name;
-        while( $file_name = readdir( $folder )){
-            if (($file_name ==".") || ($file_name == "..")) continue; 
-            if ( isset( $regex_pattern )){
-                $name_matches = array( );
-                preg_match( $regex_pattern, $file_name, $name_matches );
-                if ( !count( $name_matches )) continue;
+        $this->_search_total = 0;
+        $result_set = array( );
+        //trigger_error( 'search limit ' . $this->_search_limit . ' and offset ' . $this->_search_offset );
+        $dir_contents = &AMP_cache_get( $folder_cache_key );
+        if ( !$dir_contents ) {
+
+            while( $file_name = readdir( $folder )){
+                if (($file_name ==".") || ($file_name == "..")) continue; 
+    /*
+                $this->_search_total++;
+                if ( isset( $this->_search_limit ) 
+                     && ( count( $result_set ) > $this->_search_limit )) continue;
+                if ( isset( $this->_search_offset ) && ( $this->_search_total <= $this->_search_offset ) ){
+                    continue;
+                }
+                */
+
+                if ( isset( $regex_pattern )){
+                    $name_matches = array( );
+                    preg_match( $regex_pattern, $file_name, $name_matches );
+                    if ( !count( $name_matches )) continue;
+                }
+                $result_set[ $file_name ] = &new $class_name( $folder_path . $file_name );
             }
-            $result_set[ $file_name ] = &new $class_name( $folder_path . $file_name );
+            AMP_cache_set( $folder_cache_key, $result_set );
+        } else {
+            $result_set = &$dir_contents;
         }
         $this->sort( $result_set );
-        $this->_save_mimetype_cache( );
+
         return $result_set;
+    }
+
+    function getCacheKeySearch( ){
+        return AMP_CACHE_TOKEN_DIR . $this->getPath( );
+    }
+
+    function NoLimitRecordCount( ){
+        return $this->_search_total;
     }
 
     function sort( &$file_set, $sort_property=null, $sort_direction = null ){
@@ -161,9 +194,17 @@ class AMP_System_File {
 
         if ( isset( $sort_direction ))  $this->_sort_direction = $sort_direction;
 
-        usort( $file_set, array( $this ,'_sort_compare'));
+        uasort( $file_set, array( $this ,'_sort_compare'));
         return true;
 
+    }
+
+    function setOffset( $offset ){
+        $this->_search_offset = $offset;
+    }
+
+    function setLimit( $qty ){
+        $this->_search_limit = $qty;
     }
 
     function _sort_compare( $file1, $file2 ){

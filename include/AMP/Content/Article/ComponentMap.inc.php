@@ -12,7 +12,6 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
     var $_path_controller = 'AMP/Content/Article/Controller.php';
     var $_component_controller = 'Article_Component_Controller';
     var $_allow_search = true;
-    var $url_system_default = AMP_SYSTEM_URL_ARTICLE;
 
     var $paths = array(
         'search_user' => 'AMP/Content/Article/Search/User/Form.inc.php',
@@ -91,21 +90,31 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         $display_class = strtolower( $this->components['list'] );
         $list_location_cookie = $display_class  . '_ListLocation';
 
+        //frontpage content special action
+        if ( isset( $new_data['class'] ) 
+             && ( $new_data['class'] == AMP_CONTENT_CLASS_FRONTPAGE )) {
+            ampredirect( AMP_SYSTEM_URL_ARTICLE_FRONTPAGE );
+        }
+
         //default list behavior
-        if (    !( isset( $new_data['id'] ) && $new_data['id'])
-             || !( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie] )) {
+        if ( isset( $new_data['section'] ) 
+             && (  !( isset( $new_data['id'] ) && $new_data['id'])
+                || !( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie] ))) {
             ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'section=' . $new_data['section'])));
             return;
         } 
         
-        if ( $model->getClass( ) != $new_data['class'] ) {
+        if ( isset( $new_data['class'] ) 
+             && ( $model->getClass( ) != $new_data['class'] )) {
             $controller->update_list_location( $new_data['class'], 'class');
         }
 
-        if ( $model->getSection( ) != $new_data['section'] ) {
+        if ( isset( $new_data['section'] ) 
+             && ( $model->getSection( ) != $new_data['section'] )) {
             $controller->update_list_location( $new_data['section'], 'section');
         }
 
     }
+
 }
 ?>

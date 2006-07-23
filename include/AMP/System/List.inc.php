@@ -816,7 +816,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->_renderer = &new AMPDisplay_HTML;
         return $this->_renderer;
     }
-    
+
 
 }
 ?>

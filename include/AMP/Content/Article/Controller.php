@@ -71,6 +71,7 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         $this->notify( 'beforeUpdate' );
         $this->_model->readVersion( $version_id );
         if ( $result = $this->_model->save( ) ) {
+            $this->notify( 'restore' );
             $this->message( sprintf( AMP_TEXT_DATA_RESTORE_SUCCESS, $this->_model->getName( )));
             ampredirect( AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'id='.$this->_model_id ) ));
             //$this->display_default( );

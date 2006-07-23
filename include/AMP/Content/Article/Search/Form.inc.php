@@ -43,7 +43,7 @@ class ContentSearch_Form extends AMPSearchForm {
     }
 
     function _formFooter() {
-        return '&nbsp;&nbsp;<a href="'. AMP_SYSTEM_URL_ARTICLE . '" class="standout">'
+        return '&nbsp;&nbsp;<a href="'. AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'nosearch=1' ) ) . '" class="standout">'
                 . sprintf( AMP_TEXT_VIEW_ALL, AMP_Pluralize( ucfirst( AMP_TEXT_ARTICLE ))) . '</a><BR />';
     }
 

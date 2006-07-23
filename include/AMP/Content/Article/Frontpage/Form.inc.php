@@ -24,14 +24,5 @@ class Article_Frontpage_Form extends Article_Form {
     function adjustFields( $fields ){
         return $fields;
     }
-
-    function _formFooter( ){
-        $id = $this->getIdValue( );
-        if ( !$id ) return false;
-        require_once( 'AMP/Content/Article/Version/List.inc.php');
-        $list = &new Article_Version_List( AMP_Registry::getDbcon( ), array( 'article' => $id ));
-        $list->setTargetLinks( AMP_SYSTEM_URL_ARTICLE_FRONTPAGE );
-        return $list->execute( );
-    }
 }
 ?>

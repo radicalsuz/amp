@@ -150,8 +150,16 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $uploaded_image = &new ContentImage_Display_allVersions( $image_name );
         $this->_display->add( $uploaded_image );
         $this->_file_name_uploaded = $image_name;
+        $this->_update_image_cache( );
     }
 
+    function _update_image_cache( ){
+        $image_cache_key = $this->_model->getCacheKeySearch( );
+        $image_cache = &AMP_cache_get( $image_cache_key );
+        if ( !$image_cache ) return;
+        $image_cache[ $this->_model->getName( ) ] = &$this->_model;
+        AMP_cache_set( $image_cache_key, $image_cache );
+    }
 
 }
 
