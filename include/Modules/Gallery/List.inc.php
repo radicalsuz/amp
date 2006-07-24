@@ -68,7 +68,11 @@ class Gallery_List extends AMP_System_List_Form {
     function renderMove( &$toolbar ){
         $renderer = &$this->_getRenderer( );
         $type_options = &AMPContent_Lookup::instance( 'galleryMap' );
-        $type_options = array( '' => 'Select Gallery') + $type_options;
+        if ( $type_options ) {
+            $type_options = array( '' => 'Select Gallery') + $type_options;
+        } else {
+            $type_options = array( '' => 'Select Gallery');
+        }
                 
         $toolbar->addEndContent( 
                 $renderer->inDiv( 

@@ -43,7 +43,11 @@ class AMP_Content_Link_List extends AMP_System_List_Form {
     function renderMove( &$toolbar ){
         $renderer = &$this->_getRenderer( );
         $type_options = &AMPContent_Lookup::instance( 'linkTypeMap' );
-        $type_options = array( '' => 'Select Link Type') + $type_options;
+        if ( $type_options ) {
+            $type_options = array( '' => 'Select Link Type') + $type_options;
+        } else {
+            $type_options = array( '' => 'Select Link Type');
+        }
                 
         $toolbar->addEndContent( 
                 $renderer->inDiv( 

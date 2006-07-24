@@ -15,7 +15,9 @@ class SectionMenu extends AMP_Menu {
     function loadMap() {
         $map = & AMPContent_Map::instance();
         $menumap = $map->getMenu();
-        $menumap[ AMP_MENU_ROOT_ENTRY ] = $menumap[ $map->top ];
+        if ( isset( $menumap[ $map->top ])) {
+            $menumap[ AMP_MENU_ROOT_ENTRY ] = $menumap[ $map->top ];
+        }
         return $menumap;
     }
 

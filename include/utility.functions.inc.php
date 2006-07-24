@@ -842,7 +842,7 @@ function AMP_cached_request( ){
     if ( !defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED')) define( 'AMP_CONTENT_PAGE_CACHE_ALLOWED', true );
 
     if ( !( $cache = &AMP_get_cache( ) && AMP_is_cacheable_url( )) ) return false; 
-    $cache_key = AMP_CACHE_TOKEN_URL_CONTENT . $_SERVER['REQUEST_URI'];
+    $cache_key = AMP_CACHE_TOKEN_URL_CONTENT . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
     if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
         $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
     }

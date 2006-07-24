@@ -55,7 +55,7 @@ if ( AMP_SITE_MEMCACHE_ON
 */
 
 if ( AMP_is_cacheable_url( ) ) {
-    $cache_key = AMP_CACHE_TOKEN_URL_CONTENT . $_SERVER['REQUEST_URI'];
+    $cache_key = AMP_CACHE_TOKEN_URL_CONTENT . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
     $user_id =  ( defined( 'AMP_SYSTEM_USER_ID' ) && AMP_SYSTEM_USER_ID ) ? AMP_SYSTEM_USER_ID : null; 
     AMP_cache_set( $cache_key, $finalPageHtml, $user_id );
 }

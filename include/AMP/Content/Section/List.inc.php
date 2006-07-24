@@ -73,7 +73,11 @@ class Section_List extends AMP_System_List_Form {
     function renderMove( &$toolbar ){
         $renderer = &$this->_getRenderer( );
         $section_options = &AMPContent_Lookup::instance( 'sectionMap' );
-        $section_options = array( '' => 'Select Section') + $section_options;
+        if ( $section_options ) {
+            $section_options = array( '' => 'Select Section') + $section_options;
+        } else {
+            $section_options = array( '' => 'Select Section');
+        }
                 
         $toolbar->addEndContent( 
                 $renderer->inDiv( 

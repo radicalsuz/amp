@@ -104,9 +104,18 @@ class Article_ListForm extends AMP_System_List_Form {
     function renderMove( &$toolbar ){
         $renderer = &$this->_getRenderer( );
         $section_options = &AMPContent_Lookup::instance( 'sectionMap' );
-        $section_options = array( '' => 'Select Section') + $section_options;
+        if ( $section_options ) {
+            $section_options = array( '' => 'Select Section') + $section_options;
+        } else {
+            $section_options = array( '' => 'Select Section');
+        }
+
         $class_options = &AMPContent_Lookup::instance( 'activeClasses' );
-        $class_options = array( '' => 'Select Class') + $class_options;
+        if ( $class_options ){
+            $class_options = array( '' => 'Select Class') + $class_options;
+        } else {
+            $class_options = array( '' => 'Select Class'); 
+        }
                 
         $toolbar->addEndContent( 
                 $renderer->inDiv( 
@@ -130,7 +139,11 @@ class Article_ListForm extends AMP_System_List_Form {
     function renderRegionize( &$toolbar ){
         $renderer = &$this->_getRenderer( );
         $region_options = &AMPSystem_Lookup::instance( 'regions' );
-        $region_options = array( '' => 'Select Region') + $region_options;
+        if ( $region_options ){
+            $region_options = array( '' => 'Select Region') + $region_options;
+        } else {
+            $region_options = array( '' => 'Select Region');
+        }
                 
         $toolbar->addEndContent( 
                 $renderer->inDiv( 
