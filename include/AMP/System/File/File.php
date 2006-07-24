@@ -166,7 +166,10 @@ class AMP_System_File {
                 }
                 $result_set[ $file_name ] = &new $class_name( $folder_path . $file_name );
             }
-            AMP_cache_set( $folder_cache_key, $result_set );
+            //Cache Folder results for large searches
+            if ( count( $result_set ) > 500 ) {
+                AMP_cache_set( $folder_cache_key, $result_set );
+            }
         } else {
             $result_set = &$dir_contents;
         }

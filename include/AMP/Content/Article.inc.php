@@ -279,8 +279,8 @@ class Article extends AMPSystem_Data_Item {
     function _adjustSetData( $data ) {
         $this->legacyFieldname( $data, 'test', 'body' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
-        $this->legacyFieldname( $data, 'blurb', 'shortdesc' );
-        $this->legacyFieldname( $data, 'section', 'type' );
+        $this->legacyFieldname( $data, 'shortdesc', 'blurb' );
+        $this->legacyFieldname( $data, 'type', 'section' );
         if ( isset( $data['link']) && $data['link'] && !isset( $data['linkover'])) {
             $this->mergeData( array( 'linkover' => 1));
         }

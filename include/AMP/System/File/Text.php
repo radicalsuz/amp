@@ -50,6 +50,10 @@ class AMP_System_File_Text extends AMP_System_File {
         if ( isset( $data['name']) && $data['name']) $this->_resetFileName( $data['name']);
     }
 
+    function mergeData( $data ) {
+        return $this->setData( $data );
+    }
+
     function deleteData( $file_name ){
         $delete_target = &new AMP_System_File_Text( );
         if ( !$delete_target->readData( $file_name )) return false;
@@ -81,6 +85,10 @@ class AMP_System_File_Text extends AMP_System_File {
         }
         return $results;
 
+    }
+
+    function setDefaults( ){
+        //interface
     }
 
 }

@@ -142,8 +142,11 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
     function _jumpPageLinks() {
         $output ="";
         for( $n=0; ($n * $this->_qty ) < $this->source_total; $n++ ) {
+            $link_offset = $n * $this->_qty;
+            $pager_link_class = 'page_jump_link';
+            if ( $this->getOffset( ) == $link_offset ) $pager_link_class = 'current_page_jump_link';
             $link = $this->offsetURL( ($n * $this->_qty) );
-            $output .= "<a href='$link'>" . ($n+1) . '</a> ';
+            $output .= "<a href='$link' class='$pager_link_class' >" . ($n+1) . '</a> ';
         }
         return $output;
     }
