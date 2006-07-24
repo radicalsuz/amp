@@ -105,7 +105,7 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         //view never wants the standard article list
         //save might show the list if the form fails to validate
         $no_list_actions = array( 'view', 'save');
-        if ( array_search( $this->get_action( ), $no_list_actions ) ) {
+        if ( array_search( $this->get_action( ), $no_list_actions ) !== FALSE ) {
             return;
         }
         return PARENT::_commit_default( );
@@ -133,6 +133,7 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
 
     function _is_basic_list_request( ){
         if ( !empty( $_POST )) return false;
+        if ( strpos( $_SERVER['REQUEST_URI'], AMP_SYSTEM_URL_ARTICLE ) === FALSE ) return true;
         $request_vars = AMP_Url_Read( );
         if ( empty( $request_vars )) return true;
 
