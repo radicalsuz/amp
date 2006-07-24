@@ -667,3 +667,8 @@ table.form_table {
     margin:0;
     padding:0;
   }
+
+  a.current_page_jump_link {
+      font-weight: bold;
+      font-size: 14px;
+  }
