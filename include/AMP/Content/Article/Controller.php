@@ -121,7 +121,8 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         $list_location_cookie = $display_class  . '_ListLocation';
 
         if ( $this->_is_basic_list_request( ) ) {
-            if ( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie]) {
+            if ( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie]
+                 && ( $_COOKIE[ $list_location_cookie ] != $_SERVER['REQUEST_URI'] )) {
                 ampredirect( $_COOKIE[ $list_location_cookie ]);
             }
         } else {

@@ -13,6 +13,7 @@ define( 'AMP_TEXT_ERROR_LOOKUP_NOT_FOUND', 'Lookup %s : not found');
 define( 'AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED', '%s does not support method %s attempted by %s');
 define( 'AMP_TEXT_ERROR_NOT_DEFINED', '%s does not define %s');
 define( 'AMP_TEXT_ERROR_CREATE_FAILED', '%s failed to create %s');
+define( 'AMP_TEXT_ERROR_ACTION_NOT_ALLOWED', "You do not have permission to %s"); 
 
 define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED_MULTIPLE_INSTANCES', 
             'Cannot update multiple instances of plugin %s : %s using interface');

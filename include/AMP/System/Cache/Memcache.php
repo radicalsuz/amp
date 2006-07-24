@@ -51,7 +51,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key ) return false;
 
-        $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED, AMP_SYSTEM_CACHE_TIMEOUT );
+        $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED );
         if ( $result ) {
             $this->_add_index_key( $authorized_key );
         } elseif ( AMP_DISPLAYMODE_DEBUG_CACHE ) {

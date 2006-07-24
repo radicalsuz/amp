@@ -61,6 +61,23 @@ class AMPSystem_Form extends AMPForm {
         $this->enforceRequiredFields();
     }
 
+    function _allowedFields( $fields ) {
+        $permission_manager = & AMPSystem_PermissionManager::instance();
+        //clear non-allowed fields as specified by 'per' element in XML
+        foreach( $fields as $fieldname => $field_def ) {
+            if ( !isset( $field_def['per'] )) continue;
+            $per_constant = $permission_manager->convertDescriptor( $field_def['per']);
+            if ( !AMP_Authorized( $per_constant )) unset ( $fields[ $fieldname ] );
+        }
+
+        //clear non_allowed submit actions as specified by the map
+        $map = &$this->_get_map( );
+        foreach( $this->submit_button['submitAction']['elements'] as $action => $field_def ) {
+            if ( !$map->isAllowed( $action )) $this->removeSubmit( $action );
+        }
+        return $fields;
+    }
+
     function &_addElementGroup( $name, $field_def ) {
         $group_set = array();
         $default = $this->_getDefault( $name );

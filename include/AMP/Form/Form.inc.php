@@ -282,6 +282,8 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     function addFields ( $fieldset ) {
         if (!is_array($fieldset)) return false;
+        $fieldset = $this->_allowedFields( $fieldset );
+
         foreach ( $fieldset as $key => $field_def ) {
             $this->addField( $field_def, $key );
         }
@@ -1010,6 +1012,17 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     function postSave( $data ){
         //interface
+    }
+
+    function &_get_map( ) {
+        if ( isset( $this->_map )) return $this->_map;
+        $this->_map = &ComponentLookup::instance( get_class( $this ));
+        return $this->_map;
+    }
+
+    function _allowedFields( $fields ) {
+        //interface, no action taken
+        return $fields;
     }
 
  }

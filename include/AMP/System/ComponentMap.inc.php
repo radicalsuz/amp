@@ -1,5 +1,6 @@
 <?php
 require_once( 'AMP/System/Observer.php');
+require_once( 'AMP/System/Permission/Config.inc.php');
 
 class AMPSystem_ComponentMap extends AMP_System_Observer {
     
@@ -21,12 +22,13 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 
     var $_action_displays = array( );
     var $_default_display = 'list';
-    var $_action_default = 'add';
+    var $_action_default  = 'add' ;
 
     var $_public_page_id_input;
     var $_public_page_id_response;
     var $_public_page_id_list;
 
+    var $_permissions = array( );
 
     function getComponents() {
         return $this->components;
@@ -106,7 +108,13 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     }
 
     function isAllowed( $action ){
-        $allow_var = '_allow_'.$action;
+        //if edit is not allowed -- allow nothing
+        $allow_any_action = 'edit';
+        if ( $action != $allow_any_action && $action != 'search' ){
+            if ( !$this->isAllowed( $allow_any_action )) return false;
+        }
+
+        $allow_var = '_allow_' . $action;
         if ( !isset( $this->$allow_var )) return true;
         if ( !$this->$allow_var ) return false;
         if ( $this->$allow_var === true ) return true;

@@ -86,6 +86,7 @@
 		<label>&lt;span class=red&gt; * &lt;/span&gt;New Section Name</label>
         <type>text</type>
 		<block>new_section</block>
+        <per>CONTENT_SECTION_EDIT</per>
 	</new_section_name>
 	<new_section_parent>
 		<label>&lt;span class=red&gt; * &lt;/span&gt;New Section Parent</label>
@@ -95,6 +96,7 @@
             <instance>sectionmap</instance>
         </lookup>
 		<block>new_section</block>
+        <per>CONTENT_SECTION_EDIT</per>
 	</new_section_parent>
 	<related_section_header>
 		<type>blocktrigger</type>

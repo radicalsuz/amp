@@ -64,6 +64,12 @@ class AMP_System_Cache {
         }
     }
 
+    function refresh( $key ) {
+        $authorized_key = $this->authorize( $key );
+        if ( !$authorized_key ) return false;
+        $this->_add_index_key( $authorized_key );
+    }
+
     function header( $key ) {
         $javascript_token = str_replace( '%s', '', AMP_CACHE_KEY_JAVASCRIPT );
         $stylesheet_token = str_replace( '%s', '', AMP_CACHE_KEY_STYLESHEET );

@@ -83,13 +83,27 @@ class AMP_System_List_Form extends AMPSystem_List {
     }
 
     function _attachActions( &$target ){
-        foreach( $this->_actions as $action ){
+        $allowed_actions = $this->get_actions_allowed( );
+        foreach( $allowed_actions as $action ){
             $args = ( isset( $this->_action_args[$action] )) ?  $this->_action_args[$action] : null;
             $target->addAction( $action, $args ) ;
         }
         foreach( $this->_actions_global as $action ){
             $target->setActionGlobal( $action ) ;
         }
+    }
+
+    function get_actions_allowed( ){
+        $result = array( );
+        $map = &ComponentLookup::instance( get_class( $this ));
+        if ( !$map ) return $this->_actions;
+
+        foreach( $this->_actions as $action ) {
+            if ( $map->isAllowed( $action )) {
+                $result[] = $action;
+            }
+        }
+        return $result;
     }
 
     function getName( ){

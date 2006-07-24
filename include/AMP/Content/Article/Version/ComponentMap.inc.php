@@ -11,7 +11,7 @@ class ComponentMap_Article_Version extends AMPSystem_ComponentMap {
     var $_path_controller = 'AMP/Content/Article/Controller.php';
     var $_component_controller = 'Article_Component_Controller';
     var $_allow_search = true;
-    var $url_system_default = AMP_SYSTEM_URL_ARTICLE;
+    //var $url_system_default = AMP_SYSTEM_URL_ARTICLE;
 
     var $paths = array(
         'fields' => 'AMP/Content/Article/Fields.xml',

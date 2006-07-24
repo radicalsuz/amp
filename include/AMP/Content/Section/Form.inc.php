@@ -15,24 +15,25 @@ class Section_Form extends AMPSystem_Form_XML {
     function setDynamicValues( ){
 
         $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
-        $this->addTranslation( 'id', '_setIdDisplay', 'set'); 
     }
 
-    function _setIdDisplay( $data, $fieldname ){
-        if ( !( isset( $data['id']) && $data['id'] )) return false;
+    function adjustFields( $fields ) {
+        $id_display = $this->_setIdDisplay( $id );
+        if ( $id_display ) $fields['id_display'] = $id_display;
+        return $fields;
+    }
+
+    function _setIdDisplay( ){
+        if ( !( $id = $this->getIdValue( ))) return false;
         require_once( 'AMP/Content/Display/HTML.inc.php');
         $renderer = &new AMPDisplay_HTML;
-        $value = $renderer->in_P( 'ID: ' . $data['id'], array( 'class' => 'name'));
+        $value = $renderer->in_P( 'ID: ' . $id, array( 'class' => 'name'));
        
-        $this->addField( 
+        return
              array( 
                 'type' => 'static',
                 'default' =>  $value,
-                ), 
-            'id_display' );
-        
-        return $data[ $fieldname ]  ;
-
+                ); 
     }
 
     function _selectAddNull( $valueset, $name ) {

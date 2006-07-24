@@ -56,8 +56,6 @@ if ( !function_exists( 'ampredirect' ) ) {
             $target_url = $_REQUEST['pageredirect'];
         }
         if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT'))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
-        print AMPbacktrace( );
-        exit;
         header("Location: $target_url");
     }
 
@@ -1101,6 +1099,8 @@ if ( ! function_exists( 'AMP_navCountDisplay_Class')) {
         if ( !$class_id ) return false;
         static $renderer = false;
         static $layout_lists = false;
+        static $navcount_layouts = false;
+
         if ( !$renderer ) $renderer = &new AMPDisplay_HTML;
         if ( !$layout_lists )
             $layout_lists = &AMPContent_Lookup::instance( 'navLayoutsByClass' );

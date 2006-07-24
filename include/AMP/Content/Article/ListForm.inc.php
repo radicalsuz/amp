@@ -65,6 +65,10 @@ class Article_ListForm extends AMP_System_List_Form {
         $this->addTranslation( 'order', '_makeInput' );
         $this->addLookup( 'class', AMPContent_Lookup::instance( 'classes' ));
         $this->addLookup( 'section', AMPContent_Lookup::instance( 'sections' ));
+        if ( !AMP_Authorized( AMP_PERMISSION_CONTENT_EDIT )) {
+            $this->suppress['editcolumn'] = true;
+            $this->suppress['selectcolumn'] = true;
+        }
 
     }
 

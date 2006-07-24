@@ -2,6 +2,7 @@
 
 require_once ( 'AMP/System/ComponentMap.inc.php' );
 require_once ( 'AMP/System/Page/Urls.inc.php');
+require_once ( 'AMP/System/Permission/Config.inc.php');
 
 class ComponentMap_Article extends AMPSystem_ComponentMap {
 
@@ -11,7 +12,6 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
     var $_action_default = 'list';
     var $_path_controller = 'AMP/Content/Article/Controller.php';
     var $_component_controller = 'Article_Component_Controller';
-    var $_allow_search = true;
 
     var $paths = array(
         'search_user' => 'AMP/Content/Article/Search/User/Form.inc.php',
@@ -35,6 +35,13 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'form' => 'Article_Form',
         'source' => 'Article' 
         );
+
+    var $_allow_add = AMP_PERMISSION_CONTENT_EDIT;
+    var $_allow_edit = AMP_PERMISSION_CONTENT_EDIT;
+    var $_allow_delete = AMP_PERMISSION_CONTENT_DELETE;
+    var $_allow_publish = AMP_PERMISSION_CONTENT_PUBLISH;
+    var $_allow_unpublish = AMP_PERMISSION_CONTENT_PUBLISH;
+    var $_allow_search = true;
 
     function onInitForm( &$controller ){
 

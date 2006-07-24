@@ -97,9 +97,7 @@ class AMP_System_Component_Controller {
 
         //pull useful info from request values
         if ( isset( $this->_request_vars['action'] ) && $this->_request_vars['action']){
-            if ( $this->allow( $this->_request_vars['action'])){
-                $this->request ( $this->_request_vars['action'] );
-            }
+            $this->request ( $this->_request_vars['action'] );
         }
     }
 
@@ -150,7 +148,11 @@ class AMP_System_Component_Controller {
     }
 
     function request( $action ){
-        $this->_action_requested = $action;
+        if ( $this->allow( $action )){
+            $this->_action_requested = $action;
+        } else {
+            $this->error( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, $action ));
+        }
     }
 
     function get_actions( ){

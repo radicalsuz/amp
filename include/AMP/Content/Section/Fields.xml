@@ -9,6 +9,7 @@
 		<type>checkbox</type>
 		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
         <default>1</default>
+        <per>CONTENT_PUBLISH</per>
 	</usenav>
 	<type>
 		<type>text</type>

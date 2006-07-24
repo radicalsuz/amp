@@ -17,6 +17,12 @@ class ComponentMap_Section extends AMPSystem_ComponentMap {
         'list'  => 'Section_List',
         'source'=> 'Section');
 
+    var $_allow_add  = AMP_PERMISSION_CONTENT_SECTION_EDIT;
+    var $_allow_edit = AMP_PERMISSION_CONTENT_SECTION_EDIT;
+    var $_allow_save = AMP_PERMISSION_CONTENT_SECTION_EDIT;
+    var $_allow_delete    = AMP_PERMISSION_CONTENT_SECTION_DELETE;
+    var $_allow_publish   = AMP_PERMISSION_CONTENT_PUBLISH;
+    var $_allow_unpublish = AMP_PERMISSION_CONTENT_PUBLISH;
 }
 
 ?>
