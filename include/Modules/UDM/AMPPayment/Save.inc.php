@@ -7,6 +7,7 @@ require_once ('AMP/Form/ElementSwapScript.inc.php');
 class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
 
     var $short_name = "AMPPayment";
+    var $available = true;
 
     var $options = array(
         'merchant_ID'=> array('label'=>'Merchant',

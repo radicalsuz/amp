@@ -37,7 +37,7 @@ class Article extends AMPSystem_Data_Item {
 
     function &getDisplay() {
         $classes = filterConstants( 'AMP_CONTENT_CLASS' );
-        $display_def_constant= 'AMP_ARTICLE_DISPLAY_' . array_search( $this->getClass() , $classes );
+        $display_def_constant = 'AMP_ARTICLE_DISPLAY_' . array_search( $this->getClass() , $classes );
 
         $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
         if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
@@ -123,7 +123,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function getMoreLinkURL() {
-        if (!$this->getData('usemore')) return false;
+        //if (!$this->getData('usemore')) return false;
         return $this->getData( 'morelink' );
     }
 

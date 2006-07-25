@@ -6,7 +6,7 @@ if ( !defined( 'AMP_CONTENT_CLASS_FRONTPAGE_DISPLAY_PAGER'))
 
 class ContentClass_Display_FrontPage extends ContentClass_Display {
 
-    var $_pager_limit = AMP_CONTENT_CLASS_FRONTPAGE_DISPLAY_PAGER;
+    var $_pager_limit  = AMP_CONTENT_CLASS_FRONTPAGE_DISPLAY_PAGER;
     var $_pager_active = AMP_CONTENT_CLASS_FRONTPAGE_DISPLAY_PAGER;
     var $_css_class_container_list = "home";
     var $_css_class_container_listentry = 'list_entry' ;

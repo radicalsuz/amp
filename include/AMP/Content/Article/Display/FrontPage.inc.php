@@ -65,6 +65,7 @@ class ArticleDisplay_FrontPage extends Article_Display {
     }
 
     function _HTML_moreLink( $href ) {
+        trigger_error( 'trying morelink ' . $href );
         if (!$href) return false;
         return  $this->_HTML_inSpan( 
                     $this->_HTML_link(  $href, 
