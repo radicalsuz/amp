@@ -25,9 +25,5 @@ class Article_Frontpage_Form extends Article_Form {
         return $fields;
     }
 
-    function getValues( $args = null ) {
-        trigger_error( 'called getvalues on frontpage form');
-        return PARENT::getValues( $args );
-    }
 }
 ?>
