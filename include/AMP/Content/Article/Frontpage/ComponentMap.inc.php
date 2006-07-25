@@ -8,10 +8,10 @@ class ComponentMap_Article_Frontpage extends AMPSystem_ComponentMap {
     var $_action_default = 'list';
 
     var $paths = array( 
-        'fields' => 'AMP/Content/Article/Frontpage/Fields.xml',
-        'form'          => 'AMP/Content/Article/Frontpage/Form.inc.php',
-        'source' => 'AMP/Content/Article.inc.php',
-        'list' => 'AMP/Content/Article/Frontpage/List.inc.php',
+        'fields'    => 'AMP/Content/Article/Frontpage/Fields.xml',
+        'form'      => 'AMP/Content/Article/Frontpage/Form.inc.php',
+        'source'    => 'AMP/Content/Article.inc.php',
+        'list'      => 'AMP/Content/Article/Frontpage/List.inc.php',
     );
 
     var $components = array (

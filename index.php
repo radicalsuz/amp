@@ -41,7 +41,7 @@ if (AMP_SITE_MEMCACHE_ON) {
     if ($cached_page->execute()) exit;
 }
 */
-if ( $cached_output = AMP_cached_request( )) {
+if ( $cached_output = AMP_cached_request( AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE )) {
     print $cached_output;
     exit;
 }

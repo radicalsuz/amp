@@ -3,7 +3,7 @@ require_once( 'AMP/Content/Article/Form.inc.php');
 
 class Article_Frontpage_Form extends Article_Form {
 
-    function Article_Form( ) {
+    function Article_Frontpage_Form( ) {
         $name = "article_frontpage";
         $this->init( $name, 'POST', AMP_SYSTEM_URL_ARTICLE_FRONTPAGE );
     }
@@ -23,6 +23,11 @@ class Article_Frontpage_Form extends Article_Form {
 
     function adjustFields( $fields ){
         return $fields;
+    }
+
+    function getValues( $args = null ) {
+        trigger_error( 'called getvalues on frontpage form');
+        return PARENT::getValues( $args );
     }
 }
 ?>
