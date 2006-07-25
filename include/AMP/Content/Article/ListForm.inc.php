@@ -166,10 +166,12 @@ class Article_ListForm extends AMP_System_List_Form {
 
     }
 
+/*
     function _noRecordsOutput( ){
-        $this->_searchFailureNotice( );
+        //$this->_searchFailureNotice( );
         return PARENT::_noRecordsOutput( );
     }
+    */
 
     function _HTML_startForm() {
         if ( isset( $this->suppress['form_tag']) && $this->suppress['form_tag']) return false;

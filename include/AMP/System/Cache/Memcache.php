@@ -54,6 +54,9 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED );
         if ( $result ) {
             $this->_add_index_key( $authorized_key );
+            if ( isset( $this->_items_retrieved[ $authorized_key ])) {
+                $this->_items_retrieved[ $authorized_key ] = &$item;
+            }
         } elseif ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
             trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ) );
         }
@@ -103,6 +106,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
         $result = $this->_memcache_connection->delete( $authorized_key );
         if ( $result ) $this->_remove_index_key( $authorized_key );
+        unset( $this->_items_retrieved[ $authorized_key ]);
         return $result;
     }
     

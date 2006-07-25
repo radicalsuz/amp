@@ -128,7 +128,7 @@
 	<extra_header>
 		<type>textarea</type>
 		<label>Extra Headers</label>
-        <size>4:45</size>
+        <size>6:65</size>
 	</extra_header>
 
 </array>

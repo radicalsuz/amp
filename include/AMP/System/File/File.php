@@ -179,7 +179,9 @@ class AMP_System_File {
     }
 
     function getCacheKeySearch( ){
-        return AMP_CACHE_TOKEN_DIR . $this->getPath( );
+        $current_file = basename( $this->getPath( ));
+        $cut_off = 0 - strlen( $current_file );
+        return AMP_CACHE_TOKEN_DIR . substr( $this->getPath( ), 0, $cut_off );
     }
 
     function NoLimitRecordCount( ){

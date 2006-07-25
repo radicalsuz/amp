@@ -128,6 +128,9 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
         foreach ( $fields as $fieldname => $field_def ) {
             if (!isset($field_def['enabled'])) continue;
             if (!$field_def['enabled']) continue;
+            if (   isset( $field_def['type']) 
+                    && ( $field_def['type'] == 'captcha' )
+                    && $this->udm->admin) continue;
             $newfields [$fieldname] = $this->_addValueSet( $fields[$fieldname] );
         }
         return $newfields;

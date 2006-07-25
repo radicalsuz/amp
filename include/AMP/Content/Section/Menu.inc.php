@@ -47,6 +47,7 @@ class SectionMenu extends AMP_Menu {
             $cache_key_private = $this->_cache->identify( $cache_key_public, AMP_SYSTEM_USER_ID );
             
             if ( $this->_cache->contains( $cache_key_private )) {
+                $this->_cache->refresh( $cache_key_private );
                 return $this->_apply_cached_javascript( $cache_key_public );
             }
         }

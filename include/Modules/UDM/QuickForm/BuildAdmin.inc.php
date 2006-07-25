@@ -61,6 +61,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $this->form->registerElementType('radiogroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
         $this->form->registerElementType('checkgroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
         $this->form->registerElementType('wysiwyg','HTML/QuickForm/textarea.php','HTML_QuickForm_textarea');
+		$this->form->registerElementType('captcha','HTML/QuickForm/text.php','HTML_QuickForm_text');
         
         $this->_build_core_fields();
         $this->_build_fields();

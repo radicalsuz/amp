@@ -23,13 +23,13 @@ if ( file_exists_incpath( 'custom.translations.inc.php' )) include_once ('custom
  * Class List Configurations
  */
 define( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT', 'ContentClass_Display');
-define( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG', 'ContentClass_Display_Blog');
+define( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG',    'ContentClass_Display_Blog');
 
 /**
  * Content Status Configuration
  */
-define ('AMP_CONTENT_STATUS_LIVE', 1);
-define ('AMP_CONTENT_STATUS_DRAFT', 0);
+define ( 'AMP_CONTENT_STATUS_LIVE',  1);
+define ( 'AMP_CONTENT_STATUS_DRAFT', 0);
 
 /**
  *  Article Class Configurations
@@ -159,6 +159,12 @@ if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SU
 define( 'AMP_MODULE_ID_LINKS', 11 );
 
 /**
+ * Content Caching Settings
+ */
+if ( !defined( 'AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE')) 
+    define( 'AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE', AMP_SYSTEM_CACHE_TIMEOUT );
+
+/**
  * Bizarre Legacy Settings  
  */
 if ( !defined( 'AMP_CONTENT_SECTION_ID_TOOL_PAGES' ))
@@ -167,4 +173,5 @@ if ( !defined( 'AMP_CONTENT_SECTION_ID_TOOL_PAGES' ))
 if ( !defined ( 'AMP_CONTENT_TRACKBACKS_ENABLED' )) {
     define( 'AMP_CONTENT_TRACKBACKS_ENABLED', false );
 }
+
 ?>

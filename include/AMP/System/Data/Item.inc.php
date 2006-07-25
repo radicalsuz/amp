@@ -498,6 +498,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $this->_field_status . '=' . AMP_CONTENT_STATUS_LIVE;
     }
 
+    function makeCriteriaPublish( $value ){
+        if ( !$value ) return '( isnull( '. $this->_field_status.') OR ' . $this->_field_status . ' = ' . AMP_CONTENT_STATUS_DRAFT . ' )';
+        return $this->_field_status . '=' . $value;
+    }
+
     //}}}
 
     function setDefaults( ) {

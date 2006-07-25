@@ -35,7 +35,6 @@ class AMP_System_Flash extends AMP_Content_Buffer {
 
         $this->_cache_key_messages = $this->_cache->identify( $this->_cache_key_messages, AMP_SYSTEM_UNIQUE_VISITOR_ID );
         $this->_cache_key_errors   = $this->_cache->identify( $this->_cache_key_errors,   AMP_SYSTEM_UNIQUE_VISITOR_ID );
-        //trigger_error( 'seeking with key ' . $this->_cache_key_messages );
 
         if ( $messages = $this->_cache->retrieve( $this->_cache_key_messages )) {
             $this->_messages = $messages;
@@ -65,7 +64,6 @@ class AMP_System_Flash extends AMP_Content_Buffer {
         } else {
             $this->_messages[$key] = $message;
         }
-        //trigger_error( 'cacheing with key ' . $this->_cache_key_messages );
         if ( $this->_cache ) $this->_cache->add( $this->_messages, $this->_cache_key_messages );
     }
 
@@ -79,7 +77,6 @@ class AMP_System_Flash extends AMP_Content_Buffer {
 
     function execute( ){
         $value = $this->display( );
-        //trigger_error( 'running flash for ' . $_SERVER['REQUEST_URI'] . ( $this->active( ) ? ' active' : ' tough') );
         if ( $value ) define( 'AMP_SYSTEM_FLASH_OUTPUT', true );
         if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT' ) )$this->clear( );
         return $value; 
@@ -98,7 +95,6 @@ class AMP_System_Flash extends AMP_Content_Buffer {
             $keep_errors = array_combine_key( $this->_keep, $this->_errors );
         }
 
-        //trigger_error( 'clearing flash for ' . $_SERVER['REQUEST_URI'] . ( $this->active( ) ? ' active' : ' tough') );
         $this->_messages = array( );
         $this->_errors = array( );
         

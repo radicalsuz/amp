@@ -86,6 +86,12 @@ class AMP_System_Cache {
         return false;
     }
 
+    function age( $key ) {
+        $authorized_key = $this->authorize( $key );
+        if ( !$authorized_key || !isset( $this->_index[ $authorized_key ])) return false;
+        return time( ) - $this->_index[$authorized_key];
+    }
+
     //}}}
 
     //{{{ authorize methods

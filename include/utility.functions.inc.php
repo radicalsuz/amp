@@ -836,7 +836,7 @@ function AMP_is_cacheable_url( ) {
 
 }
 
-function AMP_cached_request( ){
+function AMP_cached_request( $timeout = null  ){
     //signal that the current request is cacheable
     //because it has requested a cached copy of itself
     if ( !defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED')) define( 'AMP_CONTENT_PAGE_CACHE_ALLOWED', true );
@@ -846,6 +846,8 @@ function AMP_cached_request( ){
     if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
         $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
     }
+    if ( isset( $timeout ) && ( $cache->age( $cache_key ) > $timeout )) return false;
+
     return $cache->retrieve( $cache_key ) ;
 }
 

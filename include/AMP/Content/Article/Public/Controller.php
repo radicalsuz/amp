@@ -27,7 +27,7 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
         if ( !$intro ) return PARENT::commit_add( );
 
         $this->_public_page_id = $intro->id;
-        $this->_display->add( $intro->getDisplay( ));
+        $this->_display->add( $intro->getDisplay( ), AMP_CONTENT_DISPLAY_KEY_INTRO );
 
         $reg = &AMP_Registry::instance( );
         $reg->setEntry( AMP_REGISTRY_CONTENT_INTRO_ID, $this->_public_page_id );
@@ -93,7 +93,10 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
     function display_response( ){
         if ( $public_page = &$this->_map->getPublicPage( 'response' )) {
             $this->_public_page_id = $public_page->id;
-            $this->_display->add( $public_page->getDisplay( ));
+            $this->_display->add( $public_page->getDisplay( ), AMP_CONTENT_DISPLAY_KEY_INTRO );
+
+            $this->_page->setIntroText( $this->_public_page_id );
+            $this->_page->initLocation( );
         }
     }
 
