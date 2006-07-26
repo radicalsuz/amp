@@ -38,8 +38,11 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'wysiwyg_setting','_returnBlankCheckbox',  'get');
         $this->addTranslation( 'wysiwyg_setting','_checkWysiwyg',  'get');
         $this->addTranslation( 'wysiwyg_setting','_evalWysiwyg',  'set');
+
         $this->addTranslation( 'date',         '_makeDbDateTime',   'get');
         $this->addTranslation( 'date',         '_makeNullDate',   'set');
+
+        $this->addTranslation( 'sections_related',   '_getRelatedSections', 'set');
 
         $this->addTranslation( 'transfer_mode_setting','_returnBlankCheckbox',  'get');
         $this->addTranslation( 'transfer_mode_setting','_checkTransferMode',  'get');
@@ -173,15 +176,6 @@ class Article_Form extends AMPSystem_Form_XML {
         return $data['tool_page_link'];
     }
 
-    function _saveRedirectAlias( $data, $fieldname ){
-        if ( ! ( isset( $data['new_alias_name'] ) && $data['new_alias_name'] )) {
-            if ( !isset( $data[$fieldname ])) return false;
-            return $data[ $fieldname ];
-        }
-        require_once( 'AMP/Content/Redirect/Redirect.php');
-
-    }
-
     function adjustFields( $fields ){
         $fields['comment_list']['default'] = $this->_getCommentListOutput( $this->getIdValue( ));
         $fields = array_merge( $fields, $this->_defineCustomFields( ));
@@ -252,6 +246,17 @@ class Article_Form extends AMPSystem_Form_XML {
         $commentList->appendAddLinkVar( 'article_id='.$id );
         $this->_commentList = &$commentList;
         return $commentList;
+    }
+
+    function &_getRelatedSections( $data, $fieldname ) {
+        $id = ( isset( $data['id']) && $data['id']) ? $data['id'] : false;
+        if ( !$id ) return false;
+
+        $related_sections = &AMPContentLookup_SectionsByArticle::instance( $id );
+
+        if ( !$related_sections ) return false;
+        return join( ',', array_keys( $related_sections ) );
+
     }
 
     function _evalWysiwyg( $data, $fieldname ){

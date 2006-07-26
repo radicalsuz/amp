@@ -101,10 +101,10 @@
 	<related_section_header>
 		<type>blocktrigger</type>
         <label>Add Related Sections</label>
-		<block_trigger>reltype</block_trigger>
+		<block_trigger>sections_related</block_trigger>
 		<block>related_sections</block>
 	</related_section_header>
-    <reltype>
+    <sections_related>
 		<block>related_sections</block>
         <label>Related Sections</label>
         <type>multiselect</type>
@@ -113,7 +113,7 @@
             <module>content</module>
             <instance>sectionmap</instance>
         </lookup>
-    </reltype>
+    </sections_related>
 	<tagsHeader>
         <label>Class and Tags</label>
         <type>header</type>

@@ -409,22 +409,34 @@ class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
     }
 
     function _addCriteriaArticle( $article_id ){
-        $this->criteria = "articleid =" . $article_id ;
+        $this->criteria = $this->_makeCriteriaArticle( $article_id ) ;
+    }
+
+    function _makeCriteriaArticle( $article_id ) {
+        return "articleid =" . $article_id ;
     }
 
     function &instance( $article_id ) {
-        static $lookup = false;
-        if (!$lookup) {
-            $lookup = new AMPContentLookup_SectionsByArticle ( $article_id );
-        } else {
-            $lookup->_addCriteriaArticle( $article_id );
-            $lookup->init();
-        }
-        return $lookup->dataset;
+        static $lookup = array( );
+
+        if ( !isset( $lookup[ $article_id ])){
+            $lookup[$article_id] = new AMPContentLookup_SectionsByArticle ( $article_id );
+        } 
+
+        return $lookup[$article_id]->dataset;
     }
-    function available( ){
-        return false;
+
+    function clear_cache( $article_id ) {
+        static $lookup = array( );
+
+        if ( !isset( $lookup[ $article_id ])){
+            $lookup[$article_id] = new AMPContentLookup_SectionsByArticle ( $article_id );
+        } 
+
+        $factory = & AMPSystem_LookupFactory::instance();
+        $factory->clearCache( $lookup[$article_id] );
     }
+
 }
 
 class AMPContentLookup_RelatedArticles extends AMPContent_Lookup {
@@ -449,6 +461,18 @@ class AMPContentLookup_RelatedArticles extends AMPContent_Lookup {
 
         return $lookup[$section_id]->dataset;
     }
+
+    function clear_cache( $section_id ) {
+        static $lookup = array( );
+
+        if ( !isset( $lookup[ $section_id ])){
+            $lookup[$section_id] = new AMPContentLookup_RelatedArticles ( $section_id );
+        } 
+
+        $factory = & AMPSystem_LookupFactory::instance();
+        $factory->clearCache( $lookup[ $section_id ] );
+    }
+
     function available( ){
         return false;
     }

@@ -33,6 +33,7 @@ class Article extends AMPSystem_Data_Item {
     function Article( &$dbcon, $id = null ) {
         $this->init ($dbcon, $id);
         $this->_addAllowedKey( 'new_alias_name' );
+        $this->_addAllowedKey( 'sections_related' );
     }
 
     function &getDisplay() {
@@ -335,6 +336,23 @@ class Article extends AMPSystem_Data_Item {
         return $this->getData( 'new_alias_name' );
     }
 
+    function getSectionsRelated() {
+        if ( $internal_value = $this->_getSectionsRelatedBase( )) return $internal_value;
+        return $this->_getSectionsRelatedDB( );
+    }
+
+    function _getSectionsRelatedBase( ){
+        return $this->getData( 'sections_related');
+    }
+
+    function _getSectionsRelatedDB( ){
+        $related_sections = &AMPContentLookup_SectionsByArticle::instance( $this->id );
+        if ( !$related_sections ) return false;
+        
+        $this->mergeData( array(  'sections_related' => array_keys( $related_sections ) ));
+        return array_keys( $related_sections );
+    }
+
     function clearAliasName( ){
         return $this->mergeData( array( 'new_alias_name' => false ));
     }
@@ -347,6 +365,44 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function _afterSave( ){
+        $this->_save_aliases( );
+        $this->_save_sections_related( );
+    }
+
+    function _save_sections_related( ){
+        if ( !$sections_related = $this->getSectionsRelated( )) return false;
+        $active_related = $this->_getSectionsRelatedDB( ) ;
+        $deleted_items = array_diff( $active_related, $sections_related );
+        $new_items = array_diff( $sections_related, $active_related );
+        if ( empty( $deleted_items ) && empty( $new_items )) return false;
+
+        require_once( 'AMP/Content/Section/RelatedSet.inc.php');
+        $related_section_set = &new SectionRelatedSet( $this->dbcon );
+
+        if ( !empty( $deleted_items )) {
+            $delete_crit = $this->_makeRelatedSectionCriteria( $deleted_items );
+            $related_section_set->deleteData( $delete_crit );
+            foreach( $deleted_items as $section_id ) {
+                AMPContentLookup_RelatedArticles::clear_cache( $section_id );
+            }
+        }
+        if ( !empty( $new_items )) {
+            foreach( $new_items as $section_id ) {
+                $insert_values = array( 'typeid' => $section_id , 'articleid' => $this->id );
+                $related_section_set->insertData( $insert_values );
+                AMPContentLookup_RelatedArticles::clear_cache( $section_id );
+            }
+
+        }
+        AMPContentLookup_SectionsByArticle::clear_cache( $this->id );
+    }
+
+    function _makeRelatedSectionCriteria( $section_id_array ) {
+        if ( empty( $section_id_array ) || !is_array( $section_id_array )) return false;
+        return 'typeid in ( '.join( ',', $section_id_array ).' ) and articleid=' . $this->id;
+    }
+
+    function _save_aliases( ){
         if ( !( $alias_name = $this->getNewAliasName( ))) return false;
         $alias_name = urlencode( $alias_name );
         require_once( 'AMP/Content/Redirect/Redirect.php' );
@@ -365,6 +421,7 @@ class Article extends AMPSystem_Data_Item {
         $redirect->setTarget( $this->getURL( ));
         $this->clearAliasName( );
         return $redirect->save( );
+
     }
 
     function _sort_default( &$item_set ) {

@@ -119,6 +119,10 @@
         if (!$criteria) return false;
         $sql = "DELETE" . $this->_makeSource(). " where " . $criteria;
         if($this->dbcon->Execute($sql)) {
+            if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) {
+                AMP_DebugSQL( $sql, get_class($this)); 
+            }
+
             $cached_sql = $this->_assembleSql( $criteria ) ;
             $this->dbcon->CacheFlush( $cached_sql );
             if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) {

@@ -11,6 +11,9 @@ require_once( 'AMP/System/Language/Config.php');
 //debug values initialized
 require_once( 'AMP/Base/Debug.php');
 
+//cache tokens and settings
+require_once( 'AMP/System/Cache/Config.inc.php');
+
 //db action : initialize lookups
 require_once( 'AMP/Base/Lookups.php');
 
