@@ -14,10 +14,18 @@ class NavEngine_PHP extends NavEngine {
         if ( !$fullpath ) $fullpath = file_exists_incpath( 'AMP/Nav/' . $filename );
         if ( !$fullpath ) return false;
 
-        $nav_class = $nav->getIncludeClass( );
-        $nav_function = $nav->getIncludeFunction( );
-        
+        $nav_class = $this->nav->getIncludeClass( );
+        $nav_function = $this->nav->getIncludeFunction( );
+
+        if ( !$nav_class && !$nav_function ) {
+            return $this->_raw_include( $fullpath );
+        }
+
+        //include the file -- don't make a mess in these guys!
+        include_once( $fullpath ) ;
+
         if ( !$nav_class && is_callable( $nav_function )) {
+            trigger_error( 'nav function is ' .$nav_function );
             return $nav_function( );
         }
 
@@ -30,18 +38,19 @@ class NavEngine_PHP extends NavEngine {
             if ( is_callable( array( $nav, $nav_function ))) {
                 return $nav->$nav_function( );
             }
-            if ( method_exists( $nav_class, 'execute' )) {
+            if ( method_exists( $nav, 'execute' )) {
                 return $nav->execute( );
             }
         }
 
-        return $this->_raw_include( );
+        return $this->_raw_include( $fullpath );
 
     }
 
     function _raw_include( $fullpath ){
         ob_start();
-        include( $fullpath );
+        extract( $GLOBALS );
+        include_once( $fullpath );
         $include_value = ob_get_contents();
         ob_end_clean();
 

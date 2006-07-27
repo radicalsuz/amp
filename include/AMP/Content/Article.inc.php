@@ -496,7 +496,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaSection( $section_id ) {
-        $related_articles = &AMPContentLookup_RelatedLinks::instance( $section_id );
+        $related_articles = &AMPContentLookup_RelatedArticles::instance( $section_id );
         if ( !$related_articles ) return $this->_makeCriteriaEquals( 'type', $section_id ) ;
 
         return '( ' . $this->_makeCriteriaEquals( 'type', $section_id ) 

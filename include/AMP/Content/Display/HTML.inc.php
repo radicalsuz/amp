@@ -162,11 +162,12 @@ class AMPDisplay_HTML {
         return $output;
     }
 
-    function p_commaJoin( $text_array ) {
+    function p_commaJoin( $text_array, $attr=array( )) {
         return $this->_HTML_p_commaJoin( $text_array ) ;
     }
-    function _HTML_p_commaJoin( $text_array ) {
-        return '<P>' . join( ',  ' , $text_array ) . "</P>\n";
+    function _HTML_p_commaJoin( $text_array, $attr=array( )) {
+        $p_attr = $this->_HTML_makeAttributes( $attr );
+        return '<P'.$p_attr.'>' . join( ',  ' , $text_array ) . "</P>\n";
     }
 
     function bold ( $text ) {

@@ -287,7 +287,7 @@ a.intitle {
 }
 
 
-.list_column_header {
+tr.list_column_header td {
 	font-size: 12px;
 	text-shadow: 2px 2px 1px black;
 	font-weight: bold;

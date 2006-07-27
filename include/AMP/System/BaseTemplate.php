@@ -181,7 +181,7 @@ class AMPSystem_BaseTemplate {
     function _HTML_systemLogo() {
         $pictype = 'png';
         if (getBrowser() == 'win/ie') $pictype = 'gif';
-        return '<nobr><img src="images/amp-megaphone.'. $pictype .'" align ="middle" style="padding-right:15px">'."\n";
+        return '<nobr><img src="/system/images/amp-megaphone.'. $pictype .'" align ="middle" style="padding-right:15px">'."\n";
     }
 
     function _HTML_systemTitle() {
