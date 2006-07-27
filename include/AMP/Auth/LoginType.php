@@ -36,8 +36,6 @@ class AMP_Authentication_LoginType {
     function check_authen_credentials() {
 
         // First check for an existing authentication token.
-		AMP_varDump($_COOKIE);
-		trigger_error( count($_COOKIE) . ' COOKIES FOUND' );
         if (isset($_COOKIE[ $this->_cookie_name ])) {
 			$this->notice('cookie exists');
             if( $result = $this->_handler->check_cookie($_COOKIE[ $this->_cookie_name ])) return $result;
