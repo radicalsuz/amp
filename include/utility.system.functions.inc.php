@@ -11,6 +11,7 @@
 if ( !function_exists( 'file_exists_incpath' ) ) {
 
     function file_exists_incpath ($file) {
+        if ( file_exists( $file )) return $file;
         $paths = explode(PATH_SEPARATOR, get_include_path());
 
         foreach ($paths as $path)

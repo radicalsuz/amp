@@ -10,6 +10,16 @@ define('AMP_DISPLAYMODE_DEBUG_LOOKUPS', (isset($_GET['debug_lookups'])  && $_GET
 define('AMP_DISPLAYMODE_DEBUG_NAVS',    (isset($_GET['debug_navs'])     && $_GET['debug_navs']));
 define('AMP_DISPLAYMODE_DEBUG_DIA',     (isset($_GET['debug_dia'])      && $_GET['debug_dia']));
 
+$display_cache_setting = ( AMP_DISPLAYMODE_DEBUG_DIA 
+                        || AMP_DISPLAYMODE_DEBUG_NAVS
+                        || AMP_DISPLAYMODE_DEBUG_LOOKUPS
+                        || AMP_DISPLAYMODE_DEBUG_PLUGINS
+                        || AMP_DISPLAYMODE_DEBUG_CACHE
+                        || AMP_DISPLAYMODE_DEBUG 
+                        || ( isset( $_GET['cache']) && $_GET['cache'] === '0'));
+
+define( 'AMP_DISPLAYMODE_CACHE_OFF', $display_cache_setting );
+
 if ( !defined( 'AMP_SYSTEM_CUSTOM_ERROR_HANDLER' ))
     define('AMP_SYSTEM_CUSTOM_ERROR_HANDLER',     false );
 

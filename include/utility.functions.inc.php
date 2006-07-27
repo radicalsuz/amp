@@ -839,6 +839,7 @@ function AMP_is_cacheable_url( ) {
 function AMP_cached_request( $timeout = null  ){
     //signal that the current request is cacheable
     //because it has requested a cached copy of itself
+    if ( AMP_DISPLAYMODE_CACHE_OFF ) return false;
     if ( !defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED')) define( 'AMP_CONTENT_PAGE_CACHE_ALLOWED', true );
 
     if ( !( $cache = &AMP_get_cache( ) && AMP_is_cacheable_url( )) ) return false; 

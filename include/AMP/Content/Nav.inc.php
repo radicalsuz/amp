@@ -25,6 +25,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     var $totalCount;
     var $_engine;
     var $_exceedsLimit;
+    var $name_field = 'name';
 
     function NavigationElement( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
