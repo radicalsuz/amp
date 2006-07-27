@@ -99,7 +99,6 @@
 </head>
 
 <body onload="document.forms[0].elements[0].focus(); setOpacity( document.getElementById('shadow'), 100 ); setOpacity( document.getElementById('content'), 100 );">
-
 <div id="wrapper">
 
     <div id="header">

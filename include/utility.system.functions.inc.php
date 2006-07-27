@@ -36,14 +36,14 @@ function find_local_path () {
         $localPath = preg_replace( "/(.*)\/custom.*$/", "\$1", $localInfo->filename );
         
     }
-    if (isset($localPath)) $customPath = $localPath . '/custom';
+    if (isset($localPath)) $customPath = $localPath . DIRECTORY_SEPARATOR . 'custom';
 
     $searchPath = '.';
     $depth = 0;
     while ( !is_dir($customPath) && $depth++ < 4 ) {
-        $customPath = $searchPath . '/custom';
+        $customPath = $searchPath . DIRECTORY_SEPARATOR . 'custom';
         $localPath = realpath( $searchPath );
-        $searchPath = '../' . $searchPath;
+        $searchPath = '..' . DIRECTORY_SEPARATOR . $searchPath;
     }
 
     if ($depth >= 4) return null;

@@ -40,7 +40,7 @@ class AMP_System_Cache {
 
     //}}}
 
-    // {{{ public methods: add, retrieve, delete, contains, clear, url, authorize, authorize_tainted
+    // {{{ public methods: add, retrieve, delete, contains, clear, url, refresh, header, age 
     function add( $item, $key ){
 
     }

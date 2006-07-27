@@ -122,7 +122,8 @@ class AMP_System_Cache_File extends AMP_System_Cache {
 
         if ( $standard_key ) {
             //check for the slash char
-            $authorized_key = str_replace( DIRECTORY_SEPARATOR, '__DS__', $standard_key );
+            $authorized_key = str_replace( array( DIRECTORY_SEPARATOR, '/' ), '__DS__', $standard_key );
+            //$authorized_key = urlencode($standard_key );
         }
         return $authorized_key;
     }

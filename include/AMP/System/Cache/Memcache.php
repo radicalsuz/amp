@@ -65,6 +65,15 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
     }
 
+	function refresh( $key ) {
+		$authorized_key = $this->authorize($key);
+        if ( !$authorized_key ) return false;
+        $this->_add_index_key( $authorized_key );
+		if (isset($this->_items_retrieved[ $authorized_key ] )) {
+			$this->_memcache_connection->set( $authorized_key, $this->_items_retrieved[ $authorized_key ], MEMCACHE_COMPRESSED );
+		}
+	}
+
     function contains( $key ){
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key ) return false;
