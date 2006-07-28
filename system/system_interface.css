@@ -228,18 +228,18 @@ span.page_result {
 		width: 60%;
 		background-color: #99CCFF;
 		color: #006666;
-		padding: 5px 10% 5px 10%;
 		text-align: center;
-		margin: 5px 10% 5px 10%;
+		padding: 5px 10px 5px 10px;
+		margin: 5px 10px 5px 10px;
 }
 span.page_error {
 		display:block;
 		width: 60%;
 		background-color: #FF5599;
 		color: #550000;
-		padding: 5px 10% 5px 10%;
+		padding: 5px 10px 5px 10px;
 		text-align: center;
-		margin: 5px 10% 5px 10%;
+		margin: 5px 10px 5px 10px;
 }
 
 /* CONTENT LAYOUT CLASSES */
