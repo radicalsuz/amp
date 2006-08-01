@@ -26,7 +26,11 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if (!class_exists( 'Memcache' )) return false;
         $memcache_connection = &new Memcache;
         $result = $memcache_connection->connect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT );
-        if ( $result ) $this->_memcache_connection = &$memcache_connection;
+        if ( $result ) {
+            $this->_memcache_connection = &$memcache_connection;
+        } else {
+            trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, 'Memcache', 'connect', 'Request: '.$_SERVER['REQUEST_URI'] ) );
+        }
         return $result;
     }
 
@@ -114,8 +118,10 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$authorized_key ) return false;
 
         $result = $this->_memcache_connection->delete( $authorized_key );
-        if ( $result ) $this->_remove_index_key( $authorized_key );
-        unset( $this->_items_retrieved[ $authorized_key ]);
+        if ( $result ) {
+            $this->_remove_index_key( $authorized_key );
+            unset( $this->_items_retrieved[ $authorized_key ]);
+        }
         return $result;
     }
     

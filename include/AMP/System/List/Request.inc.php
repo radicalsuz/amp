@@ -26,7 +26,11 @@ class AMP_System_List_Request {
 
     function init( &$source ){
         $this->_source = &$source;
-        $this->_request_vars = array_merge( $_POST, AMP_URL_Read( ));
+        if ( $url_vars = AMP_URL_Read( )){
+            $this->_request_vars = array_merge( $_POST, AMP_URL_Read( ));
+        } else {
+            $this->_request_vars = $_POST;
+        }
     }
 
 

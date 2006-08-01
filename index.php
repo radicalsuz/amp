@@ -52,7 +52,8 @@ require_once ("AMP/Content/Class/Display_FrontPage.inc.php");
 $currentPage = &AMPContent_Page::instance();
 $currentPage->setListType( AMP_CONTENT_LISTTYPE_FRONTPAGE );
 
-$display = &new ContentClass_Display_FrontPage( $dbcon ); 
+$currentClass = &new ContentClass( AMP_Registry::getDbcon( ), AMP_CONTENT_CLASS_FRONTPAGE );
+$display = &$currentClass->getDisplay( );
 $currentPage->contentManager->addDisplay( $display );
 require_once( 'AMP/BaseFooter.php' );
 

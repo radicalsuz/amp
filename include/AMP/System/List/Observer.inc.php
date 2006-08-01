@@ -16,7 +16,9 @@ class AMP_System_List_Observer extends AMP_System_Observer {
     }
 
     function onUpdate( &$source ){
-        $this->_list->updateSourceItemId( $source->id );
+        //$this->_list->updateSourceItemId( $source->id );
+        $this->_reload_page( );
+        $this->_clear_cache( );
     }
 
     function onReorder( &$source ){

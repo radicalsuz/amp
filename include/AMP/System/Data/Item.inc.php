@@ -195,6 +195,12 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $data_set->clearCache( );
     }
 
+    function clear_cache( ){
+        if ( isset( $this->id )) {
+            return $this->clearItemCache( $this->id );
+        }
+    }
+
     function mergeData( $data ) {
         $this->itemdata = array_merge( $this->itemdata, array_combine_key( $this->_allowed_keys, $data ));
         if (method_exists( $this, '_adjustSetData' ) ) $this->_adjustSetData( $data );

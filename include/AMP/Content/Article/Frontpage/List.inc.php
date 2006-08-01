@@ -4,7 +4,7 @@ require_once( 'AMP/Content/Article/ListForm.inc.php' );
 
 class Article_Frontpage_List extends Article_ListForm {
 
-    var $_source_criteria;
+    var $_source_criteria = array( );
     var $editlink = AMP_SYSTEM_URL_ARTICLE_FRONTPAGE;
 
     function Article_Frontpage_List( &$dbcon, $criteria = array( )) {

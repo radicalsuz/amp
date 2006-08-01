@@ -65,7 +65,7 @@ class AMP_System_List_Form extends AMPSystem_List {
             $message = sprintf( AMP_TEXT_LIST_ACTION_FAIL, 
                                 AMP_PastParticiple( $this->_request->getPerformedAction( ))); 
         }
-        $this->setMessage( $message );
+        $this->setMessage( $message, 'AMP_LIST_REQUEST_RESULT' );
         $this->_after_request( );
         
     }

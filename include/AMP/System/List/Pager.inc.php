@@ -180,6 +180,10 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         if (!empty($this->_pageless_UrlVars) ) return $this->_pageless_UrlVars;
         
         $this->_pageless_UrlVars =  AMP_URL_Values();
+        if ( !$this->_pageless_UrlVars ) {
+            $this->_pageless_UrlVars = array( );
+            return array( );
+        }
         unset ($this->_pageless_UrlVars['offset']);
         unset ($this->_pageless_UrlVars['qty']);
         unset ($this->_pageless_UrlVars['id']);
