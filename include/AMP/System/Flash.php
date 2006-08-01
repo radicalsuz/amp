@@ -115,10 +115,10 @@ class AMP_System_Flash extends AMP_Content_Buffer {
     function display( ){
         $output = "";
         foreach ($this->get_errors() as $error ) {
-            $output .=  "<span class=\"page_error\">$error</span>\n";
+            $output .=  "\n <span class=\"page_error\">$error</span> \n\n";
         }
         foreach ($this->get_messages() as $message) {
-            $output .=  "<span class=\"page_result\">$message</span>\n";
+            $output .=  "\n <span class=\"page_result\">$message</span> \n\n";
         }
         return $output;
     }
