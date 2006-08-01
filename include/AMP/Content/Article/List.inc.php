@@ -25,7 +25,7 @@ class Article_List extends AMPSystem_List {
         $this->addLookup( 'type', AMPContent_Lookup::instance( 'sections' ));
         $this->addLookup( 'class', AMPContent_Lookup::instance( 'class' ));
         $this->addTranslation( 'date', '_clearNullDate' );
-        PARENT::init( $source );
+        parent::init( $source );
         $this->suppressAddLink();
     }
 

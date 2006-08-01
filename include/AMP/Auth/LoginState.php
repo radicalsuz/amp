@@ -251,8 +251,8 @@ class AMP_Authentication_LoginState_OtpConfirm extends AMP_Authentication_LoginS
     }
 
     function getLoginUrl( ){
-        if ( $this->_validated ) return PARENT::getLoginUrl( array( $this->_login_otp_field => $_REQUEST[ $this->_login_otp_field]));
-        return PARENT::getLoginUrl( );
+        if ( $this->_validated ) return parent::getLoginUrl( array( $this->_login_otp_field => $_REQUEST[ $this->_login_otp_field]));
+        return parent::getLoginUrl( );
     }
 }
 class AMP_Authentication_LoginState_SetPassword extends AMP_Authentication_LoginState {
@@ -330,7 +330,7 @@ class AMP_Authentication_LoginState_SetPassword extends AMP_Authentication_Login
         return $emailsLookup[ $uid ];
     }
     function getLoginUrl( ){
-        return PARENT::getLoginUrl( array( $this->_login_otp_field => $this->_login_otp_field . '=' . $_REQUEST[ $this->_login_otp_field]));
+        return parent::getLoginUrl( array( $this->_login_otp_field => $this->_login_otp_field . '=' . $_REQUEST[ $this->_login_otp_field]));
     }
 }
 

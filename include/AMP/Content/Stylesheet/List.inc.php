@@ -22,7 +22,7 @@ class AMP_Content_Stylesheet_List extends AMP_System_List_Form {
     }
 
     function _getSourceRow( ) {
-        $row_data = PARENT::_getSourceRow( );
+        $row_data = parent::_getSourceRow( );
         if ( $row_data ) $row_data['id'] = $row_data['name'];
         return $row_data;
     }

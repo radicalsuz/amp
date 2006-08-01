@@ -24,7 +24,7 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
 
     function commit_add( ){
         $intro = &$this->_map->getPublicPage( 'input' );
-        if ( !$intro ) return PARENT::commit_add( );
+        if ( !$intro ) return parent::commit_add( );
 
         $this->_public_page_id = $intro->id;
         $this->_display->add( $intro->getDisplay( ), AMP_CONTENT_DISPLAY_KEY_INTRO );
@@ -34,7 +34,7 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
 
         $this->_page->setIntroText( $this->_public_page_id );
         $this->_page->initLocation( );
-        return PARENT::commit_add( );
+        return parent::commit_add( );
 
     }
 
@@ -73,7 +73,7 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
     }
 
     function get_form_data( ){
-        $results = PARENT::get_form_data( );
+        $results = parent::get_form_data( );
         if ( !empty( $this->_map->public_permitted_classes ) && isset( $results['class'])){
             if ( array_search( $results['class'], $this->_map->public_permitted_classes) !== FALSE ){
                 $results['publish'] = 1;

@@ -15,7 +15,7 @@ class AMP_Content_Stylesheet_Form extends AMPSystem_Form_XML {
     //overrides standard behavior for non-numeric filename ids
     function getIdValue() {
         if ( isset($_REQUEST[ $this->id_field ]) && ( $_REQUEST[ $this->id_field ] )) return $_REQUEST[ $this->id_field ];
-        return PARENT::getIdValue( );
+        return parent::getIdValue( );
     }
 
 }

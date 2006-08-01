@@ -52,8 +52,8 @@ class AMPContent_Pager extends AMPSystem_ListPager {
     function _positionText() {
         $this->readPosition();
         if ( (!($this->source_total> $this->page_total)) && !$this->getOffset() ) return false;
-        return  PARENT::_positionText();
-        #return $this->_HTML_inSpan( PARENT::_positionText(), 'pager_link' );
+        return  parent::_positionText();
+        #return $this->_HTML_inSpan( parent::_positionText(), 'pager_link' );
     }
 
     function _pageLinks() {

@@ -32,7 +32,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function init( &$dbcon, $id=null ) {
-        PARENT::init( $dbcon, $id );
+        parent::init( $dbcon, $id );
         $this->_initEngine();
     }
 

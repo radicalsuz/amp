@@ -34,14 +34,24 @@ class AMPSystem_Map {
 
     function init(){
         $this->per_manager = & AMPSystem_PermissionManager::instance();
-        $xmlGet = &new AMPSystem_XMLEngine('Map');
 
         $this->menuset = 
-            $this->_allowedItems($this->_convertPermissions( $xmlGet->readData() ));
+            $this->_allowedItems($this->_convertPermissions( $this->_init_map_values( ) ));
         $this->menuset = $this->_convertUrls( $this->menuset );
         $this->_mapForms();
         $this->_mapLists();
         $this->_buildMap();
+
+    }
+
+    function _init_map_values( ){
+        $map_source = &new AMPSystem_XMLEngine('Map');
+        $map = $map_source->readData( );
+
+        $map_extensions_source = &new AMPSystem_XMLEngine('Map_Override');
+        $map_extensions = $map_extensions_source->readData( );
+        if ( !$map_extensions ) return $map;
+        return array_merge( $map, $map_extensions );
 
     }
 

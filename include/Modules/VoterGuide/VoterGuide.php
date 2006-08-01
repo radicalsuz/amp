@@ -35,13 +35,13 @@ class VoterGuide extends AMPSystem_Data_Item {
 		if(!defined('AMP_VOTERGUIDE_UNSUBSCRIBE')) {
 			define('AMP_VOTERGUIDE_UNSUBSCRIBE', false);
 		}
-		if(defined('VOTERGUIDE_DIA_GROUP_PARENT_KEY')) {
-			$this->_dia_group_parent = VOTERGUIDE_DIA_GROUP_PARENT_KEY;
+		if(defined('VOTERGUIDE_DIA_GROUP_parent_KEY')) {
+			$this->_dia_group_parent = VOTERGUIDE_DIA_GROUP_parent_KEY;
 		}
 	}
 
     function readData( $guide_id ) {
-        if ( !( $result = PARENT::readData( $guide_id ))) return $result;
+        if ( !( $result = parent::readData( $guide_id ))) return $result;
         $this->_positionSet->readGuide( $guide_id );
         if ( !$this->_positionSet->hasData()) return $result;
         $this->mergeData( array( $this->_positions_key => $this->_positionSet->getArray()));
@@ -111,7 +111,7 @@ class VoterGuide extends AMPSystem_Data_Item {
 			$this->mergeData(array('publish' => true, 'bloc_id' => $this->createVoterBloc())); 
 		}
 
-        if ( !( $result=PARENT::save())) return $result;
+        if ( !( $result=parent::save())) return $result;
 		if(defined('AMP_VOTERGUIDE_SET_REDIRECTS') && AMP_VOTERGUIDE_SET_REDIRECTS) {
 			$this->setRedirect();
 		}

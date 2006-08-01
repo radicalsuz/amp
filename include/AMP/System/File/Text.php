@@ -24,7 +24,7 @@ class AMP_System_File_Text extends AMP_System_File {
     }
 
     function setFile( $path ){
-        PARENT::setFile( $path );
+        parent::setFile( $path );
         if ( file_exists( $this->getPath( ))){
             $this->getBody( );
         }
@@ -77,7 +77,7 @@ class AMP_System_File_Text extends AMP_System_File {
     function search( $folder_path = null, $filename_pattern = null ){
         if ( !isset( $folder_path )) $folder_path = $this->_base_path;
         if ( !isset( $filename_pattern )) $filename_pattern = $this->_file_name_pattern;
-        $results = PARENT::search( $folder_path, $filename_pattern );
+        $results = parent::search( $folder_path, $filename_pattern );
         foreach( $results as $key => $result_file ){
             if ( is_dir( $result_file->getPath( )) || !is_writable( $result_file->getPath( ))) {
                 unset( $results[ $key ]);

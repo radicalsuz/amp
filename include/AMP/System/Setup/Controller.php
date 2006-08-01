@@ -8,7 +8,7 @@ class AMP_System_Setup_Controller extends AMP_System_Component_Controller_Map {
     }
 
     function _init_form_request( &$form ){
-        PARENT::_init_form_request( $form );
+        parent::_init_form_request( $form );
         $this->_model_id = AMP_SYSTEM_SETTING_DB_ID;
     }
 

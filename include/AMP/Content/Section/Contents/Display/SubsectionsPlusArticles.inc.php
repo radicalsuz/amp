@@ -20,7 +20,7 @@ class SectionContentDisplay_SubsectionsPlusArticles extends ArticleSet_Display {
     function execute() {
         $output = "";
         if (isset($this->_subsections_display)) $output = $this->_subsections_display->execute() ;
-        return $output . PARENT::execute();
+        return $output . parent::execute();
     }
 
 }

@@ -36,7 +36,16 @@ class AMP_Content_Image_List_Request extends AMP_System_List_Request {
         foreach( $target_set as $target ){
             $this->resize( $target, $new_sizes );
         }
+        $this->_clear_cache( $target );
         
+        
+    }
+
+    function _clear_cache( &$target ){
+        $cache_key = $target->getCacheKeySearch( );
+        if ( !( $cache = &AMP_get_cache( ))) return false;
+        $cache->delete( $cache_key );
+
     }
 
     function resize( &$target, $widths ){
@@ -69,7 +78,7 @@ class AMP_Content_Image_List_Request extends AMP_System_List_Request {
 
     function _rewriteVersion( &$target, $new_width, $file_path ){
         $new_height = intval( $target->height *( $new_width / $target->width ));
-        $target->write_image_resource( 
+        return $target->write_image_resource( 
             $target->resize( $new_width, $new_height ),
             $file_path
         );

@@ -65,7 +65,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_source_counter = 0;
     var $_source_keys;
     var $_source_object;
-    var $_source_criteria;
+    var $_source_criteria = array( );
 
     var $_search_form;
     var $_map;

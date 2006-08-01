@@ -41,7 +41,7 @@ class ArticleDisplay_FrontPage extends Article_Display {
         if (!$image) return false;
         #$image->setStyleAttrs( array( 'border' => '1', 'style' => 'border-color:#000000' ));
         $image->setStyleAttrs( array( 'class' => $this->_css_class_image ));
-        return PARENT::_HTML_imageBlock( $image );
+        return parent::_HTML_imageBlock( $image );
     }
         
 

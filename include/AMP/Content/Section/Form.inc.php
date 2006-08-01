@@ -18,7 +18,7 @@ class Section_Form extends AMPSystem_Form_XML {
     }
 
     function adjustFields( $fields ) {
-        $id_display = $this->_setIdDisplay( $id );
+        $id_display = $this->_setIdDisplay( );
         if ( $id_display ) $fields['id_display'] = $id_display;
         return $fields;
     }
@@ -37,12 +37,12 @@ class Section_Form extends AMPSystem_Form_XML {
     }
 
     function _selectAddNull( $valueset, $name ) {
-        if ( $name != 'parent' ) return PARENT::_selectAddNull( $valueset, $name );
+        if ( $name != 'parent' ) return parent::_selectAddNull( $valueset, $name );
         return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --') + $valueset;
     }
 
     function _blankValueSet( $valueset, $name ){
-        if ( $name != 'parent' ) return PARENT::_blankValueSet( $valueset, $name );
+        if ( $name != 'parent' ) return parent::_blankValueSet( $valueset, $name );
         return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --');
 
     }

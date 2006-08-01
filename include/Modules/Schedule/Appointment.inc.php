@@ -36,7 +36,7 @@ class Appointment extends UserData_Action {
         $item = &new ScheduleItem( $this->dbcon, $this->getData('action_id'));
 
         $this->dbcon->StartTrans();
-        $result= (PARENT::save() && $item->updateStatus());
+        $result= (parent::save() && $item->updateStatus());
         if (!$result) {
             $this->addError( 'Appointment status change failed' );
             $this->dbcon->FailTrans();
@@ -46,7 +46,7 @@ class Appointment extends UserData_Action {
 
     function deleteData( $id ) {
         $action = &new Appointment( $this->dbcon, $id );
-        $result = PARENT::deleteData( $id );
+        $result = parent::deleteData( $id );
         if (!$action->getData('action_id')) return $result;
         $item = &new ScheduleItem( $this->dbcon, $action->getData('action_id'));
         return ($result && $item->updateStatus());

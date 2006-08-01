@@ -40,7 +40,7 @@ class AMPSearchForm extends AMPForm_XML {
     }
 
     function init( $name, $method="GET", $action=null ) {
-        PARENT::init( $name, $method, $action );
+        parent::init( $name, $method, $action );
         $this->defineSubmit( 'AMPSearch', 'Search' );
         unset ($this->template);
         $this->template = &new AMPFormTemplate_Search();
@@ -63,7 +63,7 @@ class AMPSearchForm extends AMPForm_XML {
         if ( !( isset( $field_def['attr']) && isset( $field_def['attr']['class']))) {
             $field_def['attr']['class'] = 'searchform_element';
         }
-        return PARENT::_confirmFieldDef(  $field_def );
+        return parent::_confirmFieldDef(  $field_def );
     }
 
     function getSearchValues() {

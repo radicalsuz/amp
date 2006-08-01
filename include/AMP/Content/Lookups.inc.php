@@ -10,7 +10,7 @@ class AMPContent_Lookup extends AMPSystem_Lookup {
     }
 
     function &instance( $type, $lookup_baseclass="AMPContentLookup" ) {
-        return PARENT::instance( $type, $lookup_baseclass );
+        return parent::instance( $type, $lookup_baseclass );
     }
 
 
@@ -172,7 +172,7 @@ class AMPContentLookup_Author extends AMPContent_Lookup {
     }
 
     function &instance( $partial_name=null) {
-        if ( !isset( $partial_name )) return PARENT::instance( 'author');
+        if ( !isset( $partial_name )) return parent::instance( 'author');
 
         static $lookup = false;
         if ( !$lookup ) {
@@ -213,7 +213,7 @@ class AMPContentLookup_Source extends AMPContent_Lookup {
     }
 
     function &instance( $partial_name=null) {
-        if ( !isset( $partial_name )) return PARENT::instance( 'source');
+        if ( !isset( $partial_name )) return parent::instance( 'source');
 
         static $lookup = false;
         if ( !$lookup ) {
@@ -523,7 +523,7 @@ class AMPContentLookup_Title extends AMPContent_Lookup {
     }
 
     function &instance( $partial_title=null) {
-        if ( !isset( $partial_title )) return PARENT::instance( 'title');
+        if ( !isset( $partial_title )) return parent::instance( 'title');
 
         static $lookup = false;
         if ( !$lookup ) {

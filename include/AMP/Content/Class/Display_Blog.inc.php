@@ -10,7 +10,6 @@ class ContentClass_Display_Blog extends ContentClass_Display {
         $this->_class = &$classRef;
 
         $blog_articles =  &$this->_class->getContents() ;
-        $blog_articles->addSort( 'pageorder' );
 
         $this->init( $blog_articles, $read_data );
     }

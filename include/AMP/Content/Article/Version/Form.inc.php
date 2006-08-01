@@ -38,7 +38,7 @@ class Article_Version_Form extends Article_Form {
     }
 /*
     function setDynamicValues() {
-        PARENT::setDynamicValues( );
+        parent::setDynamicValues( );
         $this->removeSubmit( 'copy' );
         $this->removeSubmit( 'save' );
         $this->defineSubmit( 'restore', 'Restore This Version' );

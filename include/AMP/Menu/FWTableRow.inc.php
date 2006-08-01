@@ -67,7 +67,7 @@ class AMP_MenuComponent_TableRow extends AMP_MenuComponent_Table {
     function setCSS() {
         $totalwidth = $this->tallyWidth();
         $this->template = "<table border=\"0\" width=\"". ($totalwidth) ."\" cellspacing=\"0\" id=\"%1\$s\" cellpadding=\"3\" class=\"AMPmenu\"><tr>\n%2\$s</tr></table>\n";
-        PARENT::setCSS();
+        parent::setCSS();
     }
 }
 

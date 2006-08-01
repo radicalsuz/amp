@@ -41,7 +41,7 @@ class Schedule extends AMPSystem_Data_Item {
     }
 
 	function readData( $schedule_id ) {
-		$result =  PARENT::readData ($schedule_id );
+		$result =  parent::readData ($schedule_id );
 		$this->_readSchedulePlugins( 'AMPSchedule' );
 		$this->_readSchedulePlugins( 'AMPAppointment' );
 		return $result;

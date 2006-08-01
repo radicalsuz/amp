@@ -34,7 +34,7 @@ class AMPSystem_Page_Content extends AMPSystem_Page {
     }
 
     function commitSearch( ){
-        PARENT::commitSearch( );
+        parent::commitSearch( );
         $this->dropComponent( 'menu' );
     }
 

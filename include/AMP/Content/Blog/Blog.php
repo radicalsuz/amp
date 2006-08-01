@@ -26,7 +26,7 @@ require_once ( 'AMP/Content/Article.inc.php' );
     
 	function setData( $data ) {
 		$data['class'] = AMP_CONTENT_CLASS_BLOG;
-		PARENT::setData($data);
+		parent::setData($data);
 	}
 
  }

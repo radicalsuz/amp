@@ -33,8 +33,8 @@ class ArticleDisplay_News extends Article_Display {
     }
 
     function _HTML_end() {
-        if (!AMP_CONTENT_FAIR_USE_NOTICE) return PARENT::_HTML_end();
-        return $this->_HTML_fairUseNotice() . PARENT::_HTML_end();
+        if (!AMP_CONTENT_FAIR_USE_NOTICE) return parent::_HTML_end();
+        return $this->_HTML_fairUseNotice() . parent::_HTML_end();
     }
 
     function _HTML_title( $title ) {

@@ -61,7 +61,7 @@ class ArticleComment_List extends AMP_System_List_Form {
 
     function _noRecordsOutput( ){
         $this->_searchFailureNotice( );
-        return PARENT::_noRecordsOutput( );
+        return parent::_noRecordsOutput( );
     }
 
 }

@@ -18,7 +18,7 @@ class ContentClass_Display extends ArticleSet_Display {
     function execute() {
         $intro = &$this->getIntroDisplay();
         return  $this->_HTML_listIntro( $intro ) . 
-                PARENT::execute();
+                parent::execute();
     }
 
     function &getIntroDisplay() {
@@ -31,7 +31,7 @@ class ContentClass_Display extends ArticleSet_Display {
         if( class_exists( $introClass ) ) {
             return new $introClass( $this->_class );
         }
-        trigger_error( $introClass.'is not declared');
+        trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP',$introClass ));
         return false;
     }
 

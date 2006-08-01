@@ -17,7 +17,7 @@ class AMP_System_UserData_Controller extends AMP_System_Component_Controller_Sta
     }
 
     function commit_save( ){
-        $result = PARENT::commit_save( );
+        $result = parent::commit_save( );
         if ( !$result ) return false;
         $this->_saveModuleData( );
         $this->_saveInputPageData( );

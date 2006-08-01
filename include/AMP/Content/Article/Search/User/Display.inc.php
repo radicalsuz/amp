@@ -27,7 +27,7 @@ class ContentSearch_Display_User extends ArticleSet_Display {
     function displayResults( ) {
         if ( !$this->_searchForm->submitted( )) return false;
         if ( !$this->_source->makeReady( )) return false;
-        return PARENT::execute( );
+        return parent::execute( );
     }
 
     function _initSort( &$source_set ){
@@ -40,7 +40,7 @@ class ContentSearch_Display_User extends ArticleSet_Display {
         $source_set = &new ArticleSet( AMP_Registry::getDbcon( ));
         $this->_initSort( $source_set );
 
-        PARENT::init( $source_set , false);
+        parent::init( $source_set , false);
         $display_criteria = &new AMPContent_DisplayCriteria( );
         $display_criteria->clean( $this->_source );
         $this->_source->applySearch( $this->_searchForm->getSearchValues() );

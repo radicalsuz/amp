@@ -4,18 +4,30 @@
     </crop_interface>
     <start_x>
         <type>hidden</type>
+        <attr>
+			<id>x1</id>
+		</attr>
     </start_x>
     <start_y>
         <type>hidden</type>
+        <attr>
+			<id>y1</id>
+		</attr>
     </start_y>
     <id>
         <type>hidden</type>
     </id>
     <height>
         <type>hidden</type>
+        <attr>
+			<id>height</id>
+		</attr>
     </height>
     <width>
         <type>hidden</type>
+        <attr>
+			<id>width</id>
+		</attr>
     </width>
     <target>
         <type>select</type>

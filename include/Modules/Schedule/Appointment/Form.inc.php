@@ -50,11 +50,11 @@ class Appointment_Form extends AMPSystem_Form_XML {
     function setDefaultValue( $fieldname, $value ) {
         if ($fieldname == 'action_id' ) {
             $schedule_id = $this->_locateActionSchedule( array($fieldname => $value), $fieldname );
-            PARENT::setDefaultValue( 'schedule_id', $schedule_id );
-            PARENT::setDefaultValue( 'action_id_'.$schedule_id, $value );
+            parent::setDefaultValue( 'schedule_id', $schedule_id );
+            parent::setDefaultValue( 'action_id_'.$schedule_id, $value );
             return true;
         }
-        PARENT::setDefaultValue( $fieldname, $value );
+        parent::setDefaultValue( $fieldname, $value );
     }*/
 
     function _getFieldIncrement( $fieldname ) {
@@ -72,7 +72,7 @@ class Appointment_Form extends AMPSystem_Form_XML {
     }
 
     function setValues( $data ) {
-        $result = PARENT::setValues( $data ); 
+        $result = parent::setValues( $data ); 
         if (!isset($data['action_id'])) return $result; 
         $action = &new ScheduleItem( AMP_Registry::getDbcon(), $data['action_id'] );
         if ($action->isOpen()) return $result;
@@ -142,7 +142,7 @@ class Appointment_Form extends AMPSystem_Form_XML {
     function output() {
         $this->registerJavascript( $this->swapper->output() );
         $this->setJavascript();
-        return PARENT::output();
+        return parent::output();
     }
 
 }

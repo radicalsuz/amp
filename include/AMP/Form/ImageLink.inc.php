@@ -15,7 +15,7 @@ class ImageLink extends DocumentLink {
         if ( isset( $filename )) $this->init( $filename );
     }
     function setFile( $filename, $filetype = AMP_CONTENT_DOCUMENT_TYPE_DEFAULT ) {
-        PARENT::setFile( $filename, $filetype );
+        parent::setFile( $filename, $filetype );
         if ( $this->verifyFileType( )){
             if ( 'img' != $this->getFileType( )) return false;
         }
@@ -25,7 +25,7 @@ class ImageLink extends DocumentLink {
 
     function display( $display_type = null ) {
         if ( $this->getFileName() && !isset( $this->_image) ) $this->_default_display = 'ArticleDocumentLink_Display';
-        return PARENT::display( $display_type );
+        return parent::display( $display_type );
     }
     function getURL( $image_class = AMP_IMAGE_CLASS_ORIGINAL ) {
         if ( !isset( $this->_image)) return false;

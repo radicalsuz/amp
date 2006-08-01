@@ -21,7 +21,7 @@ class AMPContentDisplay_Region extends ArticleSet_Display  {
         if ($this->_source->RecordCount() === 1) return $this->displayArticle();
 
         return $this->_HTML_listTitle( $this->_region->getName() ).
-                PARENT::execute();
+                parent::execute();
     }
 
     function _HTML_listTitle( $title ) {

@@ -37,8 +37,8 @@ class AMPSystem_NavManager {
         $cache_key = AMP_CACHE_TOKEN_XML_DATA . $this->_filename_navs;
         $nav_set = &AMP_cache_get( $cache_key );
         if ( !$nav_set ){
-            if (!($xmlEngine = &new AMPSystem_XMLEngine('Nav'))) return false;;
-            $nav_set = $xmlEngine->readData();
+            $nav_set = $this->_init_nav_values( );
+            if ( !$nav_set ) return false;
             $this->convertPermissions( $nav_set );
             AMP_cache_set( $cache_key, $nav_set );
         }
@@ -46,6 +46,18 @@ class AMPSystem_NavManager {
         foreach ($nav_set as $name => $item ) {
             $new_nav = &$this->addNav( $name, $item );
         }
+    }
+
+    function _init_nav_values( ) {
+        $navs_source = &new AMPSystem_XMLEngine('Nav');
+        $navs = $navs_source->readData();
+
+        $nav_extensions_source = &new AMPSystem_XMLEngine('Nav_Override');
+        $nav_extensions = $nav_extensions_source->readData( )  ;
+
+        if ( !$nav_extensions ) return $navs;
+        return array_merge( $navs, $nav_extensions );
+
     }
 
     function &addNav ( $nav_name, $desc=array() ) {

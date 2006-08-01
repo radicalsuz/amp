@@ -48,7 +48,7 @@ class ContentSearch_Form extends AMPSearchForm {
     }
 
     function getSearchValues( ) {
-        $results = &PARENT::getSearchValues( );
+        $results = &parent::getSearchValues( );
         if ( !(isset( $results['search_by_date']) && $results['search_by_date'])) unset ( $results['date'] );
         unset( $results['search_by_date']);
         return $results;
@@ -63,7 +63,7 @@ class ContentSearch_Form extends AMPSearchForm {
             $search_request = false;
         }
         if ( $search_request ) return 'search';
-        return PARENT::submitted( );
+        return parent::submitted( );
     }
 
 }

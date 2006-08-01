@@ -109,7 +109,7 @@ class Gallery_Display extends AMPContent_DisplayList_HTML {
     }
 
     function _HTML_thumbnail( &$image ){
-        if ( !$result = PARENT::_HTML_thumbnail( $image )) return false;
+        if ( !$result = parent::_HTML_thumbnail( $image )) return false;
         return $this->_HTML_link( $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $result, array( 'target' => '_blank') );
     }
 
@@ -160,7 +160,7 @@ class Gallery_DisplaySingle extends Gallery_Display {
     }
 
     function _HTML_thumbnail( &$image ){
-        if ( !$result = PARENT::_HTML_thumbnail( $image )) return false;
+        if ( !$result = parent::_HTML_thumbnail( $image )) return false;
         return $this->_HTML_inDiv( $result, array( 'class' => 'gallerycon') );
     }
     function _HTML_fullImageLink( &$image ){

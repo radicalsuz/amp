@@ -12,7 +12,7 @@ class AMP_System_File_Image_CropForm extends AMPSystem_Form_XML {
     }
 
     function isSubmitted( ){
-        $result = PARENT::isSubmitted( );
+        $result = parent::isSubmitted( );
         if ( !$result ) return false;
         require_once( 'AMP/Content/Image/Effects/Controller.php' );
         $effects_controller = &new AMP_Content_Image_Effects_Controller( );

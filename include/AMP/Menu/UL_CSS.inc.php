@@ -131,7 +131,7 @@ var $template_footer = "
     }
 
     function output ($returnChildren=false) {
-        $menu_output = PARENT::output($returnChildren);
+        $menu_output = parent::output($returnChildren);
         return $this->scriptStyle( $this->template_header ).
                 $menu_output.
                 $this->scriptStyle( $this->template_footer );

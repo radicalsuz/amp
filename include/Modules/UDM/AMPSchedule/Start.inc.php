@@ -17,7 +17,7 @@ class UserDataPlugin_Start_AMPSchedule extends UserDataPlugin {
     }
 
 	function init( &$udm, $plugin_instance=null ) {
-		PARENT::init( $udm, $plugin_instance );
+		parent::init( $udm, $plugin_instance );
 
 		$save =& $udm->registerPlugin('AMPSchedule', 'Save', $plugin_instance );
 		#$save->setOptions($this->getOptions());

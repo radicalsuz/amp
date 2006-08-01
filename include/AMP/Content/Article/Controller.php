@@ -108,7 +108,7 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         if ( array_search( $this->get_action( ), $no_list_actions ) !== FALSE ) {
             return;
         }
-        return PARENT::_commit_default( );
+        return parent::_commit_default( );
     }
 
     function _commit_fail( ){
@@ -128,14 +128,14 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         } else {
             setcookie( $list_location_cookie, $_SERVER['REQUEST_URI']);
         }
-        return PARENT::commit_list( );
+        return parent::commit_list( );
         
     }
 
     function _is_basic_list_request( ){
         if ( !empty( $_POST )) return false;
         if ( strpos( $_SERVER['REQUEST_URI'], AMP_SYSTEM_URL_ARTICLE ) === FALSE ) return true;
-        $request_vars = AMP_Url_Read( );
+        $request_vars = AMP_URL_Read( );
         if ( empty( $request_vars )) return true;
 
         $action_value = ( isset( $request_vars['action'] ) && $request_vars['action']) ? $request_vars['action'] : false;

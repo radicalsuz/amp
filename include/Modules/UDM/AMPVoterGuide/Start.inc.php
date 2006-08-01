@@ -11,7 +11,7 @@ class UserDataPlugin_Start_AMPVoterGuide extends UserDataPlugin {
     }
 
     function init( &$udm, $plugin_instance = null) {
-        PARENT::init( $udm, $plugin_instance );
+        parent::init( $udm, $plugin_instance );
 
         $save = & $udm->registerPlugin( 'AMPVoterGuide', 'Save', $plugin_instance );
         #$savePositions = &$udm->registerPlugin( 'AMPVoterGuide', 'PositionSave', $plugin_instance );

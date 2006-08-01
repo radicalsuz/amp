@@ -9,7 +9,7 @@ class AMP_System_Setup_Wizard_Controller extends AMP_System_Component_Controller
     }
 
     function _init_form_request( &$form ){
-        PARENT::_init_form_request( $form );
+        parent::_init_form_request( $form );
         $this->_model_id = AMP_SYSTEM_SETTING_DB_ID;
     }
 
@@ -24,7 +24,7 @@ class AMP_System_Setup_Wizard_Controller extends AMP_System_Component_Controller
     }
 
     function commit_save( ){
-        $result = PARENT::commit_save( );
+        $result = parent::commit_save( );
         if ( !$result ) return false;
         $this->_saveSections( );
         ampredirect( AMP_SYSTEM_URL_HOME );

@@ -35,8 +35,8 @@ class ComponentMap_File extends AMPSystem_ComponentMap {
 
 
     function &getComponent( $component_type, $passthru_value=null ){
-        if ( $component_type != 'source' ) return PARENT::getComponent( $component_type, $passthru_value );
-        return PARENT::getComponent( $component_type, $this->_path_source );
+        if ( $component_type != 'source' ) return parent::getComponent( $component_type, $passthru_value );
+        return parent::getComponent( $component_type, $this->_path_source );
     }
 
 }

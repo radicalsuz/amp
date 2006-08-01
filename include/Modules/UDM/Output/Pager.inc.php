@@ -40,7 +40,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	}
 
     function setOptions( $options ){
-        $result = PARENT::setOptions( $options );
+        $result = parent::setOptions( $options );
         $this->read_request( );
     }
 

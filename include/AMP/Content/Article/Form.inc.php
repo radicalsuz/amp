@@ -84,7 +84,7 @@ class Article_Form extends AMPSystem_Form_XML {
     }
 /*
     function execute( ){
-        $value = PARENT::execute( );
+        $value = parent::execute( );
         return $value;
     }
 */
@@ -101,13 +101,13 @@ class Article_Form extends AMPSystem_Form_XML {
 
     function _selectAddNull( $valueset, $name ) {
         $required_selects = array( 'section', 'new_section_parent');
-        if ( array_search( $name, $required_selects ) === FALSE ) return PARENT::_selectAddNull( $valueset, $name );
+        if ( array_search( $name, $required_selects ) === FALSE ) return parent::_selectAddNull( $valueset, $name );
         return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --') + $valueset;
     }
 
     function _blankValueSet( $valueset, $name ){
         $required_selects = array( 'section', 'new_section_parent');
-        if ( array_search( $name, $required_selects ) === FALSE ) return PARENT::_blankValueSet( $valueset, $name );
+        if ( array_search( $name, $required_selects ) === FALSE ) return parent::_blankValueSet( $valueset, $name );
         return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --');
     }
 
@@ -270,7 +270,7 @@ class Article_Form extends AMPSystem_Form_XML {
 
     function HTMLEditorSetup( $fieldname = 'html' ){
         if( !AMP_USER_CONFIG_USE_WYSIWYG ) return false;
-        PARENT::HTMLEditorSetup( $fieldname );
+        parent::HTMLEditorSetup( $fieldname );
     }
 
     function _evalTransferMode( $data, $fieldname ){
@@ -317,7 +317,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $accepted_actions = array( 'delete_version' => true , 'restore' => true  );
         $key = key($submitAction);
         if (isset($accepted_actions[$key])) return $key;
-        return PARENT::submitted( );
+        return parent::submitted( );
 
     }
 

@@ -17,7 +17,7 @@ class ArticleDisplay_Introtext extends Article_Display {
     }
 
     function _HTML_Content() {
-        $text = PARENT::_HTML_Content();
+        $text = parent::_HTML_Content();
         return $this->_HTML_in_P( $this->_activateIncludes( $text ), array( 'class' => $this->_css_class_text ) );
     }
 

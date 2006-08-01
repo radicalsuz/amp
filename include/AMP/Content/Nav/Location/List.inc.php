@@ -59,7 +59,7 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
         if ( $posted_values = $this->_copier->returnSets( $this->copier_name )) return false;
         $all_data = array( );
         $n = 0;
-        while( $all_data[++$n] = PARENT::_getSourceRow( )){
+        while( $all_data[++$n] = parent::_getSourceRow( )){
             //collect data
         }
         $result_data = $this->_translateDataForCopier( $all_data );

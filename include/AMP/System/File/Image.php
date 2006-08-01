@@ -33,7 +33,7 @@ class AMP_System_File_Image extends AMP_System_File {
     }
 
     function setFile( $file_path ){
-        PARENT::setFile( $file_path );
+        parent::setFile( $file_path );
         $this->set_mimetype( );
         $this->set_size ();
     }

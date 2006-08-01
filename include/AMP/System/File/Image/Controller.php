@@ -12,7 +12,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
     }
 
     function _init_model( &$model ){
-        $result = PARENT::_init_model( $model );
+        $result = parent::_init_model( $model );
 
         if( !isset( $this->_model_id )) return $result; 
 
@@ -137,7 +137,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
     function _commit_default( ){
         if ( $this->get_action( ) == 'crop' ) return false;
-        return PARENT::_commit_default( );
+        return parent::_commit_default( );
     }
 
     function _commit_save_actions( $values ){

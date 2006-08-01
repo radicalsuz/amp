@@ -62,7 +62,7 @@ class VoterGuide_Form extends AMPSystem_Form_XML {
     }
 
     function getValues( $fields=null ) {
-        $base_data = PARENT::getValues( $fields );
+        $base_data = parent::getValues( $fields );
         if ( $copier_data = $this->_copier->returnSets(  $this->_copierName ) ) {
             $base_data[ $this->_copierName ] = $copier_data;
         }

@@ -527,7 +527,7 @@ class Article extends AMPSystem_Data_Item {
             $this->saveVersion( );
         }
         if ( !iss)
-        return PARENT::save( );
+        return parent::save( );
     }
     */
 }

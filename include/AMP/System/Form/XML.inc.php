@@ -14,7 +14,7 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
 	}
 
 	function init( $name, $method=null, $action=null ) {
-		PARENT::init( $name, $method, $action );
+		parent::init( $name, $method, $action );
 		if (!($fields =  $this->readFields()) ){
 			 trigger_error ( sprintf( AMP_TEXT_ERROR_XML_READ_FAILED, get_class( $this ) ));
 			 return;
@@ -33,14 +33,36 @@ class AMPSystem_Form_XML extends AMPSystem_Form {
         }
 
         //reload def from XML file
-        $fieldsource = & new AMPSystem_XMLEngine( $file_name );
+        $fields = $this->_readXML( $file_name );
 
-        if ( $fields = $fieldsource->readData() ) {
+        if ( $fields ) {
+            $fields = array_merge( $fields, $this->_getFieldOverrides( $file_name ));
             AMP_cache_set( $cache_key, $fields );
             return $fields;
         }
 
         return false;
+
+    }
+
+    function _readXML( $file_name ) {
+        $fieldsource = & new AMPSystem_XMLEngine( $file_name );
+
+        if ( $fields = $fieldsource->readData() ) {
+            return $fields;
+        }
+        return false;
+
+    }
+
+    function _getFieldOverrides( $file_name ){
+        $override_file_name = str_replace( '.xml', '_Override.xml', $file_name );
+        $override_file_path = file_exists_incpath( $override_file_name );
+        if ( !$override_file_name ) return array( );
+
+        $field_overrides = $this->_readXML( $override_file_path );
+        if ( !$field_overrides ) return array( );
+        return $field_overrides;
 
     }
 

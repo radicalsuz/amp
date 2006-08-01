@@ -32,7 +32,7 @@ class Gallery_Display_Tree extends AMP_Content_Buffer {
                     $this->_renderer->_HTML_listItem( $sourceItem ), ( 50*$this->_tree->get_depth( $sourceItem->id ))
                     ));
         }
-        return PARENT::execute( );
+        return parent::execute( );
     }
 
 }

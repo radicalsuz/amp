@@ -12,7 +12,7 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
 
     function commit_add( ){
         $intro = &$this->_map->getPublicPage( 'input' );
-        if ( !$intro ) return PARENT::commit_add( );
+        if ( !$intro ) return parent::commit_add( );
 
         $this->_public_page_id = $intro->id;
         $this->_display->add( $intro->getDisplay( ));
@@ -22,7 +22,7 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
 
         $this->_page->setIntroText( $this->_public_page_id );
         $this->_page->initLocation( );
-        return PARENT::commit_add( );
+        return parent::commit_add( );
 
     }
 

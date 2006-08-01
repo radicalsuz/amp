@@ -23,7 +23,7 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
     }
 
     function init( &$handler ) {
-        PARENT::init( $handler );
+        parent::init( $handler );
 		if(!defined('AMP_AUTHENTICATION_DEBUG')) {
 			define('AMP_AUTHENTICATION_DEBUG', false);
 		}
@@ -67,7 +67,7 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 
     function getFormFields( ) {
         $this->_formFields = $this->_state->getFormFields( );
-        return PARENT::getFormFields( );
+        return parent::getFormFields( );
     }
 
     function getMessage( ) {
@@ -76,20 +76,20 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 
     function getLoginUrl( ){
         if ( $url = $this->_state->getLoginUrl( )) return $url;
-        return PARENT::getLoginUrl( );
+        return parent::getLoginUrl( );
     }
 
 
 
     function getFieldnamePassword( ) {
         if ( $pname = $this->_state->getFieldnamePassword( )) return $pname;
-        return PARENT::getFieldnamePassword( );
+        return parent::getFieldnamePassword( );
     }
 
     function check_authen_credentials( ) {
 		$this->notice('in user::check_authen_credentials');
-        #$valid = PARENT::check_authen_credentials( ) || $this->_state->isAuthenticated();
-        if ( !( $valid = PARENT::check_authen_credentials( ))) {
+        #$valid = parent::check_authen_credentials( ) || $this->_state->isAuthenticated();
+        if ( !( $valid = parent::check_authen_credentials( ))) {
             $this->notice( 'parent check failed, checking state');
             $valid = $this->_state->isAuthenticated();
         }
@@ -109,14 +109,14 @@ class AMP_Authentication_LoginType_User extends AMP_Authentication_LoginType {
 
 /*
     function check_authen_credentials() {
-        if ( !( isset( $_REQUEST['action']) && $_REQUEST['action'])) return PARENT::check_authen_credentials( );
+        if ( !( isset( $_REQUEST['action']) && $_REQUEST['action'])) return parent::check_authen_credentials( );
         
         if ( $valid_action = $this->validateAction( $_REQUEST['action'] )) {
             if ( $this->_validateOtp( $valid_action )) return $this->do_set_password( $valid_action );
             if ( $otp_active = $this->_activateOtp( $valid_action )) return $otp_active;
             return $this->_requestEmailOnly( $valid_action );
         }
-        return PARENT::check_authen_credentials( );
+        return parent::check_authen_credentials( );
     }
 
     function _requestEmailOnly( $action ) {

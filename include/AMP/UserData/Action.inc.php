@@ -15,7 +15,7 @@ class UserData_Action extends AMPSystem_Data_Item {
 
     function setData( $data ) {
         $data['service'] = $this->service;
-        return PARENT::setData( $data );
+        return parent::setData( $data );
     }
 }
 

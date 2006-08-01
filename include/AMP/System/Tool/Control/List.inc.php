@@ -27,7 +27,7 @@ class ToolControl_List extends AMPSystem_List {
         if ( !$this->_prepareData( ))    return false;
         if ( !$this->source->hasData( )) return false;
 
-        return PARENT::output( );
+        return parent::output( );
     }
 
     function _trimSetting( $value, $fieldname, $data ){

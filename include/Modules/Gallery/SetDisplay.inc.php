@@ -38,7 +38,7 @@ class GallerySet_Display extends AMPContent_DisplayList_HTML {
 
     function _HTML_thumbnail( &$gallery ){
         $this->_thumb_attr['class'] = 'imgpad';
-        if ( !$result = PARENT::_HTML_thumbnail( $gallery->getImageRef( true ))) return false;
+        if ( !$result = parent::_HTML_thumbnail( $gallery->getImageRef( true ))) return false;
         
         return $this->_HTML_link( $gallery->getURL( ), $result, array( 'target' => '_blank') );
     }

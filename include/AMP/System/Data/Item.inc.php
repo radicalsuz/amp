@@ -57,7 +57,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     function setSource( $sourcename ) {
-        PARENT::setSource( $sourcename );
+        parent::setSource( $sourcename );
         $this->_itemdata_keys = $this->_getColumnNames( $this->datatable );
 		$this->_allowed_keys = $this->_itemdata_keys;
     }

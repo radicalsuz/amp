@@ -10,7 +10,6 @@ class Article_Display extends AMPDisplay_HTML {
         'title' => 'title',
         'subtitle' => 'subtitle' );
     var $_css_class_author = "author";
-    var $_css_class_author = "author";
     var $_css_class_title = "title";
     var $_css_class_subtitle = "subtitle";
     var $_css_class_photocaption = "photocaption";

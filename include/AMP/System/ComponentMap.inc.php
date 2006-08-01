@@ -96,7 +96,7 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 	
 	function findComponent( $component_class ) {
 		foreach( $this->components as $key => $component_name ) {
-			if (strtolower( $component_name ) == $component_class) return $key;
+			if (strtolower( $component_name ) == strtolower( $component_class )) return $key;
 		}
 		return false;
 	}

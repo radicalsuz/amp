@@ -12,9 +12,9 @@ class AMPSystem_UserData extends AMPSystem_Data_Item {
     }
 
     function getData($fields=null ){
-        if ( isset( $fields )) return PARENT::getData( $fields );
+        if ( isset( $fields )) return parent::getData( $fields );
 
-        return array_merge( $this->_getTemplateArray( ), PARENT::getData() );
+        return array_merge( $this->_getTemplateArray( ), parent::getData() );
     }
     function _getTemplateArray( ) {
         if ( isset( $this->_template_data )) return $this->_template_data;

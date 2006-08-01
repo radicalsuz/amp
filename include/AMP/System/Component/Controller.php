@@ -93,7 +93,11 @@ class AMP_System_Component_Controller {
     }
 
     function _init_request( ) {
-        $this->_request_vars = array_merge( $_POST, AMP_URL_Read( ));
+        $url_vars = AMP_URL_Read( );
+        $this->_request_vars = $_POST;
+        if ( $url_vars ) {
+            $this->_request_vars = array_merge( $_POST, $url_vars );
+        }
 
         //pull useful info from request values
         if ( isset( $this->_request_vars['action'] ) && $this->_request_vars['action']){
@@ -210,7 +214,6 @@ class AMP_System_Component_Controller {
     function message( $message, $key = null ) {
         $flash = &AMP_System_Flash::instance( );
         $flash->add_message( $message, $key ) ;
-        $this->_display->add( $flash, 'flash' );
     }
 
     function error( $error_item, $key = null ){
@@ -219,7 +222,6 @@ class AMP_System_Component_Controller {
         foreach( $error_set as $error_message ){
             $flash->add_error( $error_message, $key ) ;
         }
-        $this->_display->add( $flash, 'flash' );
     }
 
     function set_banner( $action = null, $heading ) {
@@ -366,11 +368,12 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         if ( $text == 'Cancel' ) $text = AMP_TEXT_LIST;
 
         $heading = $this->_map->getHeading( );
-        return PARENT::set_banner( $text, $heading );
+        return parent::set_banner( $text, $heading );
     }
 
     function allow( $action ){
         if ( isset( $this->_map )) return $this->_map->isAllowed( $action );
+        if ( !isset( $this->_model )) return true;
         if ( !isset( $this->_model->protected_actions[$action] ) ) return true;
         return AMP_Authorized( $this->_model->protected_actions[$action]);
     }

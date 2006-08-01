@@ -14,7 +14,7 @@ class SectionContentSource_ArticlesPlusClass extends SectionContentSource_Articl
 
     function getSectionCriteria() {
         //deprecated -- this is not good
-        $section_crit = PARENT::getSectionCriteria();
+        $section_crit = parent::getSectionCriteria();
         $plusclass = "class =". AMP_CONTENT_SECTION_PLUS_CLASS;
         return "( ". $plusclass ." OR ". $section_crit . " )";
     }

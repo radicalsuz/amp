@@ -8,7 +8,7 @@ class WebAction_Lookup extends AMPSystem_Lookup {
     }
 
     function &instance( $type, $lookup_baseclass="WebActionLookup" ) {
-        return PARENT::instance( $type, $lookup_baseclass );
+        return parent::instance( $type, $lookup_baseclass );
     }
 
 

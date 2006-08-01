@@ -16,7 +16,7 @@ class AMP_System_File_Form extends AMPSystem_Form_XML {
 
     function getIdValue( ){
         if (isset($_REQUEST[ $this->id_field ]) &&  $_REQUEST[ $this->id_field ]) return $_REQUEST[ $this->id_field ];
-        return PARENT::getIdValue( );
+        return parent::getIdValue( );
 
     }
 

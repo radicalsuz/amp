@@ -32,7 +32,7 @@ class ScheduleItem_Form extends AMPSystem_Form_XML {
     }
 
     function setValues( $data ) {
-        $result = PARENT::setValues( $data );
+        $result = parent::setValues( $data );
         if ($data['schedule_id']) $this->setSchedule( $data['schedule_id'] );
         return $result;
     }
@@ -88,7 +88,7 @@ class ScheduleItem_Form extends AMPSystem_Form_XML {
 
     function output() {
         $this->verifyOwnedItem();
-        return PARENT::output();
+        return parent::output();
     }
 
 }

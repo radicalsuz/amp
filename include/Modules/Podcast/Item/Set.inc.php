@@ -13,7 +13,7 @@ class PodcastItemSet extends AMPSystem_Data_Set {
 
 	function init(&$dbcon, $podcast=null) {
 		$this->podcast = $podcast;
-		PARENT::init($dbcon);
+		parent::init($dbcon);
 	}
 
 	function _register_criteria_dynamic() {

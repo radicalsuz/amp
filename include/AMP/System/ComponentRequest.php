@@ -7,7 +7,7 @@ class AMPSystem_ComponentRequest {
 
     function AMPSystem_ComponentRequest( &$controller ){
         $this->_controller = &$controller;
-        $this->_request_vars = AMP_Url_Read( );
+        $this->_request_vars = AMP_URL_Read( );
     }
 
     function execute( ){

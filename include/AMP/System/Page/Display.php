@@ -16,7 +16,7 @@ class AMP_System_Page_Display extends AMP_System_Component_Display {
     }
 
     function execute( ){
-        $output = PARENT::execute( );
+        $output = parent::execute( );
         return $this->template( $output );
     }
 

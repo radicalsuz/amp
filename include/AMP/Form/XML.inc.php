@@ -15,7 +15,7 @@ class AMPForm_XML extends AMPForm {
     }
 
 	function init( $name, $method=null, $action=null ) {
-		PARENT::init( $name, $method, $action );
+		parent::init( $name, $method, $action );
 		if (!($this->addFields( $this->readFields()) )) {
 			 trigger_error ( 'XML Field read failed for ' . get_class( $this ) );
 			 return;
@@ -46,7 +46,7 @@ class AMPForm_XML extends AMPForm {
 	}
 
     function defineSubmit( $value, $label = 'Submit'){
-        $result = PARENT::defineSubmit( $value, $label );
+        $result = parent::defineSubmit( $value, $label );
         $this->_submit_value = $value;
     }
 
