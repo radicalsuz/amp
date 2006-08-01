@@ -66,7 +66,7 @@ if (!defined('AMP_DB_TYPE'))
     define('AMP_DB_TYPE', 'mysql');
 
 if (!is_dir($ADODB_CACHE_DIR) || !is_writable($ADODB_CACHE_DIR))
-        $ADODB_CACHE_DIR = AMP_LOCAL_PATH . '/cache';
+        $ADODB_CACHE_DIR = str_replace( DIRECTORY_SEPARATOR , '/', AMP_LOCAL_PATH ) . '/cache';
 
 ADOLoadCode(AMP_DB_TYPE);
 

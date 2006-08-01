@@ -82,12 +82,14 @@ class Article_Form extends AMPSystem_Form_XML {
     function _configHTMLEditor( &$editor ){
         $editor->height = '600px';
     }
-/*
+
+	/*
     function execute( ){
         $value = parent::execute( );
         return $value;
     }
-*/
+	 */
+
     function _initTabDisplay( &$header ){
         $header->addJavaScript( 'scripts/tabs.js', 'tabs');
         

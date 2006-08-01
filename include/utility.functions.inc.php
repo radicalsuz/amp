@@ -55,6 +55,7 @@ if ( !function_exists( 'ampredirect' ) ) {
         if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
             $target_url = $_REQUEST['pageredirect'];
         }
+		trigger_error( 'redirect is for ' . $target_url );
         if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT'))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
         header("Location: $target_url");
     }
@@ -952,7 +953,8 @@ if ( !function_exists( 'AMP_Authorized')) {
 if ( !function_exists( 'AMP_mkdir')) {
     function AMP_mkdir( $new_path, $per_level = 0775 ){
         if ( file_exists( $new_path )) return true;
-        $dir_set = split( DIRECTORY_SEPARATOR, $new_path );
+		$split_pattern = ( DIRECTORY_SEPARATOR == '\\' ? '\\\\' : DIRECTORY_SEPARATOR );
+        $dir_set = split( $split_pattern, $new_path );
 
         $child_folder = array_pop( $dir_set );
         $parent_path = join( DIRECTORY_SEPARATOR, $dir_set );
@@ -1278,6 +1280,20 @@ function AMP_verifyDateTimeValue( $date_value ){
     $null_dates = &AMPConstant_Lookup::instance( 'nullDatetimes');
     if ( isset( $null_dates[ $date_value ])) return false;
     return $date_value;
+}
+
+function AMP_pathFlip( $path ) {
+	if ( DIRECTORY_SEPARATOR != '/' ) {
+		return str_replace( '/', DIRECTORY_SEPARATOR, $path );
+	}
+	return $path;
+}
+
+function AMP_urlFlip( $path ) {
+	if ( DIRECTORY_SEPARATOR != '/' ) {
+		return str_replace( DIRECTORY_SEPARATOR, '/', $path );
+	}
+	return $path;
 }
 			
 

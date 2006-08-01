@@ -221,19 +221,19 @@
         <!-- this is a hack to put in an auto_complete div -->
         <!-- someday we can do this in the template -->
         <template>
-            &lt;tr&gt;&lt;td align="right" valign="top" class="name"&gt;
-                    &lt;!-- BEGIN required --&gt;
-                        &lt;span style="color: #ff0000"&gt;*&lt;/span&gt;
-                    &lt;!-- END required --&gt;
-                    {label}
-                &lt;/td&gt;
-                &lt;td valign="top" align="left" class="form_data_col"&gt;
-                    &lt;!-- BEGIN error --&gt;
-                        &lt;span style="color: #ff0000"&gt;{error}&lt;/span&gt;&lt;br /&gt;
-                    &lt;!-- END error --&gt;	
-                    {element}
-                    &lt;div class="auto_complete" id="author_list"&gt;&lt;/div&gt;
-            &lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td align="right" valign="top" class="name"&gt;
+&lt;!-- BEGIN required --&gt;
+&lt;span style="color: #ff0000"&gt;*&lt;/span&gt;
+&lt;!-- END required --&gt;
+{label}
+&lt;/td&gt;
+&lt;td valign="top" align="left" class="form_data_col"&gt;
+&lt;!-- BEGIN error --&gt;
+&lt;span style="color: #ff0000"&gt;{error}&lt;/span&gt;&lt;br /&gt;
+&lt;!-- END error --&gt;
+{element}
+&lt;div class="auto_complete" id="author_list"&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;
         </template>
         <attr>
             <id>author</id>
@@ -245,21 +245,19 @@
 		<block>byline_header</block>
         <!-- this is a hack to put in an auto_complete div -->
         <!-- someday we can do this in the template -->
-        <template>
-            &lt;tr&gt;&lt;td align="right" valign="top" class="name"&gt;
-                    &lt;!-- BEGIN required --&gt;
-                        &lt;span style="color: #ff0000"&gt;*&lt;/span&gt;
-                    &lt;!-- END required --&gt;
-                    {label}
-                &lt;/td&gt;
-                &lt;td valign="top" align="left" class="form_data_col"&gt;
-                    &lt;!-- BEGIN error --&gt;
-                        &lt;span style="color: #ff0000"&gt;{error}&lt;/span&gt;&lt;br /&gt;
-                    &lt;!-- END error --&gt;	
-                    {element}
-                    &lt;div class="auto_complete" id="source_list"&gt;&lt;/div&gt;
-            &lt;/td&gt;&lt;/tr&gt;
-        </template>
+        <template>&lt;tr&gt;&lt;td align="right" valign="top" class="name"&gt;
+&lt;!-- BEGIN required --&gt;
+&lt;span style="color: #ff0000"&gt;*&lt;/span&gt;
+&lt;!-- END required --&gt;
+{label}
+&lt;/td&gt;
+&lt;td valign="top" align="left" class="form_data_col"&gt;
+&lt;!-- BEGIN error --&gt;
+&lt;span style="color: #ff0000"&gt;{error}&lt;/span&gt;&lt;br /&gt;
+&lt;!-- END error --&gt;
+{element}
+&lt;div class="auto_complete" id="source_list"&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;</template>
         <attr>
             <id>source</id>
         </attr>

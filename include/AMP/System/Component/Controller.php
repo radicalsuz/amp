@@ -508,7 +508,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->_init_form( );
 
         $this->_form->setValues( $this->_model->getData( ));
-        $this->_display->add( $this->_form, 'form' ); return true;
+		$this->_display->add( $this->_form, 'form' ); 
+		return true;
     }
 
     function commit_delete( ){

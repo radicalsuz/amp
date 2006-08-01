@@ -29,7 +29,8 @@ class AMP_System_File {
         if ( isset( $file_path ) && !is_object( $file_path )) $this->setFile( $file_path );
     }
 
-    function setFile( $file_path ){
+    function setFile( $tainted_file_path ){
+		$file_path = AMP_pathFlip( $tainted_file_path );
         $this->_path = $file_path;
         $this->_basename = basename( $file_path );
         $this->_extension = $this->findExtension( $file_path );
@@ -68,7 +69,9 @@ class AMP_System_File {
 
         $mime_filetype = false;
         //if ( !( $mime_filetype = $this->lookup_mimetype( ))) {
-            $mime_filetype = mime_content_type( $this->getPath() );
+		$file_path = $this->getPath();
+		if (is_dir($file_path)) return false;
+		$mime_filetype = mime_content_type( $file_path );
         //    $this->cache_mimetype( $mime_filetype );
         //}
 

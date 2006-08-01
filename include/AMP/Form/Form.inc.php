@@ -164,10 +164,11 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $form_header = $this->_formHeader();
         $form_footer = $this->_formFooter();
 
-        return    $form_header 
+        $output = $form_header 
                 . $this->form->display() 
                 . $form_footer 
                 . $script;
+		return $output;
     }
 
     function execute( ){
@@ -191,7 +192,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $types_to_avoid = array( "button", "submit" );
 
         foreach ($this->fields as $fname => $fDef) {
-            if ( !isset( $fDef['type'])) trigger_error( $fname );
+            if ( !isset( $fDef['type'])) trigger_error( $fname . ' type not set' );
             if ( array_search( $fDef['type'], $types_to_avoid) !== FALSE ) continue;
             if ( !( $value = $this->_getDefault( $fname ))) continue; 
             $default_set[ $fname ] = $value;

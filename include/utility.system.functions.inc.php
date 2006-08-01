@@ -48,6 +48,9 @@ function find_local_path () {
     }
 
     if ($depth >= 4) return null;
+	if ( DIRECTORY_SEPARATOR != '/' ) {
+		$localPath = str_replace( '/', DIRECTORY_SEPARATOR, $localPath );
+	}
 	
 	return $localPath;
 }

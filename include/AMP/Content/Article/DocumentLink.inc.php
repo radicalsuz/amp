@@ -45,7 +45,9 @@ class DocumentLink  {
 
     function verifyFileType( ) {
         if ( !function_exists( 'mime_content_type')) return false;
-        if ( !( $mime_filetype = mime_content_type( $this->getPath() )) ) return false;
+		$file_path = $this->getPath();
+		if (is_dir($file_path)) return false;
+        if ( !( $mime_filetype = mime_content_type( $file_path )) ) return false;
         $this->setFileType( $this->_simpleFileType( $mime_filetype ));
     }
 
@@ -82,7 +84,7 @@ class DocumentLink  {
     }
 
     function getPath() {
-        return AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . $this->_document_folder . DIRECTORY_SEPARATOR . $this->getFileName();
+        return AMP_pathFlip( AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . $this->_document_folder . DIRECTORY_SEPARATOR . $this->getFileName() );
     }
 
 }

@@ -88,13 +88,17 @@ class Content_Image {
 
     function getURL( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {
         if ( array_search( $image_type, $this->getImageClasses()) === FALSE) return false;
-        if ( strpos( $this->filename, "/" ) !== FALSE ) return $this->filename;
-        return AMP_IMAGE_PATH . $image_type . DIRECTORY_SEPARATOR . $this->filename;
+        if ( strpos( $this->filename, '/' ) !== FALSE ) return $this->filename;
+
+		$url_filename = AMP_IMAGE_PATH . $image_type . '/' . $this->filename;
+		$url_filename = AMP_urlFlip( $url_filename );
+        return $url_filename;
     }
 
     function getPath( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {
         if ( array_search( $image_type, $this->getImageClasses()) === FALSE) return false;
-        return AMP_LOCAL_PATH . $this->getURL( $image_type );
+		$file_path = AMP_LOCAL_PATH . $this->getURL($image_type );
+        return AMP_pathFlip($file_path);
     }
 
     function getImageClasses( ){
