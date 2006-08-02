@@ -25,7 +25,6 @@ class NavEngine_PHP extends NavEngine {
         include_once( $fullpath ) ;
 
         if ( !$nav_class && is_callable( $nav_function )) {
-            trigger_error( 'nav function is ' .$nav_function );
             return $nav_function( );
         }
 

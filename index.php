@@ -48,10 +48,10 @@ if ( $cached_output = AMP_cached_request( AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE )) 
 require_once ("AMP/BaseTemplate.php");
 if ( 'index.php' != AMP_CONTENT_URL_FRONTPAGE ) ampredirect( AMP_CONTENT_URL_FRONTPAGE );
 
-require_once ("AMP/Content/Class/Display_FrontPage.inc.php");
 $currentPage = &AMPContent_Page::instance();
 $currentPage->setListType( AMP_CONTENT_LISTTYPE_FRONTPAGE );
 
+require_once( 'AMP/Content/Class.inc.php');
 $currentClass = &new ContentClass( AMP_Registry::getDbcon( ), AMP_CONTENT_CLASS_FRONTPAGE );
 $display = &$currentClass->getDisplay( );
 $currentPage->contentManager->addDisplay( $display );

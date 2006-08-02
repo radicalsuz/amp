@@ -12,8 +12,8 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
     var $_css_class_container_listentry = 'list_entry' ;
 
     function ContentClass_Display_FrontPage( &$classRef, $read_data = true ) {
-        //$this->_class = &new ContentClass ( $dbcon, AMP_CONTENT_CLASS_FRONTPAGE );
-        $fp_articles =  &$this->_class->getContents() ;
+        $this->_class  = & $classRef;
+        $fp_articles =  &$classRef->getContents() ;
 
         $this->init( $fp_articles, $read_data );
     }
@@ -36,7 +36,6 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
     function _HTML_listItem( &$contentItem ) {
        
         if (!($display = &$contentItem->getDisplay())) return false;
-
         if ( AMP_CONTENT_LAYOUT_CSS ) return $this->_HTML_inDiv( $display->execute(), $this->_css_class_container_listentry );
         return  "<tr>".
                 $this->_HTML_inTD( $display->execute() ). 

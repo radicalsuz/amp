@@ -24,6 +24,7 @@ if ( file_exists_incpath( 'custom.translations.inc.php' )) include_once ('custom
  */
 define( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT', 'ContentClass_Display');
 define( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG',    'ContentClass_Display_Blog');
+define( 'AMP_CONTENT_CLASSLIST_DISPLAY_FRONTPAGE',    'ContentClass_Display_FrontPage');
 
 /**
  * Content Status Configuration

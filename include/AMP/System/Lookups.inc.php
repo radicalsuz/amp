@@ -407,6 +407,7 @@ class Region_Lookup extends AMPSystem_Lookup {
     var $_region;
 
     function init( ){
+        require_once( 'AMP/Region.inc.php' );
         $this->_region = &Region::instance( );
         $this->_init_dataset( );
     }

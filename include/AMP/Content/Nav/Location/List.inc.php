@@ -6,7 +6,6 @@ require_once( 'AMP/Content/Nav/Location/ComponentMap.inc.php');
 
 class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
     var $name = "Nav_Location";
-    var $copier_name = 'nav_locations_copier';
     var $col_headers = array( 
         'Nav'        => 'navid',
         'Position'   =>  'position',

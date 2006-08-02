@@ -34,9 +34,7 @@ class NavEngine_HTML extends NavEngine {
     }
 
     function _processPhpInclude( $code ) {
-        trigger_error( 'code is ' . $code );
         if (!($filename = $this->_getIncludeFilename( $code ))) return false;
-        trigger_error( 'filename is ' . $code );
 
         extract ($this->_globalVars());
         extract ($this->_allowedVars( $code ));
