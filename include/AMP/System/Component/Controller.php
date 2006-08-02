@@ -230,13 +230,19 @@ class AMP_System_Component_Controller {
         $plural_headings = array( AMP_TEXT_LIST, AMP_TEXT_SEARCH, AMP_TEXT_VIEW );
         if ( array_search( $text , $plural_headings ) !== FALSE ) $heading = AMP_Pluralize( $heading );
         $this->add_component_header( $text, $heading, 'banner', AMP_CONTENT_DISPLAY_KEY_INTRO );
+
+        $header_text = $text . ' ' . $heading;
+        $header = &AMP_getHeader( );
+        $header->setPageAction( $header_text );
     }
 
     function add_component_header( $action_text, $heading, $css_class = 'system_heading', $display_key = null ){
+
+        $header_text = $action_text . ' ' . $heading;
         $renderer = &new AMPDisplay_HTML( );
 
         $buffer = &new AMP_Content_Buffer( );
-        $buffer->add( $renderer->inDiv( $action_text." ".$heading, array( 'class' => $css_class )));
+        $buffer->add( $renderer->inDiv( $header_text, array( 'class' => $css_class )));
         $this->_display->add( $buffer , $display_key );
     }
 

@@ -41,14 +41,6 @@
 		&lt;div class="auto_complete" id="author_list"&gt;&lt;/div&gt;
 	</template>
 </author>
-<publish>
-    <label>Status</label>
-    <type>select</type>
-	<lookup>
-		<module>constant</module>
-		<instance>status</instance>
-	</lookup>
-</publish>
 <section>
     <separator>newrow</separator>
     <type>select</type>
@@ -83,4 +75,12 @@
 <type>
 	<type>hidden</type>
 </type>
+<publish>
+    <label>Status</label>
+    <type>select</type>
+	<lookup>
+		<module>constant</module>
+		<instance>status</instance>
+	</lookup>
+</publish>
 </array>

@@ -468,7 +468,11 @@
         <href>nav_layouts.php</href>
         <per>CONTENT_NAVIGATION</per>
 		<separator>1</separator>
+        <child>navigation_layouts</child>
     </item>
+</navigation>
+
+<navigation_layouts>
     <list>
         <lookup>
 			<module>content</module>
@@ -479,7 +483,7 @@
             <var>id</var>
         </href>
     </list>
-</navigation>
+</navigation_layouts>
 
 <template>
     <title>Site Template</title>

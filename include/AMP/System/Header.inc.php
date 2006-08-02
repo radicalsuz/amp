@@ -22,6 +22,7 @@ class AMPSystem_Header extends AMPContent_Header {
 
     var $styleSheets = array( 'default'     =>  'system/system_interface.css' );
     var $_path_favicon = '/system/images/amp_admin.ico';
+    var $_page_action;
     
     function AMPSystem_Header( ){
         
@@ -35,10 +36,17 @@ class AMPSystem_Header extends AMPContent_Header {
 
     function getPageTitle( ){
         $pageTitle = array( AMP_SITE_NAME . ' ' . AMP_TEXT_ADMINISTRATION );
+        if ( isset( $this->_page_action )) {
+            array_unshift( $pageTitle , $this->_page_action );
+        }
         // someday we should be able to put current admin-side location here
         
         $this->_pageTitle = join( $this->_title_separator, $pageTitle ); 
         return $this->_pageTitle;
+    }
+
+    function setPageAction( $page_action ){
+        $this->_page_action = $page_action;
     }
 
     function _HTML_feed( ){
