@@ -647,6 +647,10 @@ table.form_table {
         font-weight: bold;
     }
 
+	div#tabs_mirror ul {
+		margin-bottom: 2em;
+	}
+
 
 	div#formContainer {
 		width: 100%;
