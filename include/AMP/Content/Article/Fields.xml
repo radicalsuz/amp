@@ -526,6 +526,17 @@
 			&lt;/div&gt;
 			&lt;/div&gt;
             &lt;/td&gt;&lt;/tr&gt;
+	<!-- extra tabs code here -->
+			&lt;tr&gt;&lt;td colspan=2&gt;
+			&lt;div id="tabs_mirror"&gt;
+			&lt;ul id="topnav"&gt;
+				&lt;li class="tab_control"&gt;&lt;span id="tab_0_mirror" onclick="change_any( 'article_main', 'article_tab' );Tabs_highlight_mirror( this );" &gt;Main Content&lt;/span&gt;&lt;/li&gt;
+				&lt;li class="tab_control"&gt;&lt;span id="tab_1_mirror" onclick="change_any( 'article_image', 'article_tab');Tabs_highlight_mirror( this );" &gt;Images and Documents&lt;/span&gt;&lt;/li&gt;
+				&lt;li class="tab_control"&gt;&lt;span id="tab_2_mirror" onclick="change_any( 'article_fancy', 'article_tab');Tabs_highlight_mirror( this );" &gt;Advanced Options &lt;/span&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+			&lt;/div&gt;
+            &lt;/td&gt;&lt;/tr&gt;
+	<!-- extra tabs code here -->
 		</default>
 	</tab_html_end3>
 </array>

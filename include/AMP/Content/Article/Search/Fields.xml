@@ -9,29 +9,7 @@
 <label> &amp;nbsp;&amp;nbsp;&lt;a href="article_list.php"&gt;View All Articles&lt;/a&gt;&amp;nbsp;&amp;nbsp;</label>
 </viewlink>
 -->
-<section>
-    <type>select</type>
-    <label>Select Section</label>
-    <attr><class>searchform_element</class></attr>
-	<lookup>
-		<module>content</module>
-		<instance>sectionMap</instance>
-	</lookup>
-</section>
-<type>
-	<type>hidden</type>
-</type>
-<class>
-    <type>select</type>
-    <label>Select Class</label>
-    <attr><class>searchform_element</class></attr>
-	<lookup>
-		<module>content</module>
-		<instance>activeClasses</instance>
-	</lookup>
-</class>
 <id>
-    <separator>newrow</separator>
     <type>text</type>
     <size>5</size>
     <label>ID</label>
@@ -71,6 +49,25 @@
 		<instance>status</instance>
 	</lookup>
 </publish>
+<section>
+    <separator>newrow</separator>
+    <type>select</type>
+    <label>Select Section</label>
+    <attr><class>searchform_element</class></attr>
+	<lookup>
+		<module>content</module>
+		<instance>sectionMap</instance>
+	</lookup>
+</section>
+<class>
+    <type>select</type>
+    <label>Select Class</label>
+    <attr><class>searchform_element</class></attr>
+	<lookup>
+		<module>content</module>
+		<instance>activeClasses</instance>
+	</lookup>
+</class>
 <search_by_date>
     <separator>newrow</separator>
     <type>checkbox</type>
@@ -83,4 +80,7 @@
     <label>After: </label>
     <attr><class>searchform_element</class></attr>
 </date>
+<type>
+	<type>hidden</type>
+</type>
 </array>
