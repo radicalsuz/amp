@@ -92,7 +92,7 @@ class Section_List extends AMP_System_List_Form {
                             'id' => 'move_targeting')
                     ), 'move_targeting');
 
-        return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");if ( $(\"region_targeting\").style.display==\"block\") window.change_any( \"region_targeting\" );window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
+        return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
 
     }
 
