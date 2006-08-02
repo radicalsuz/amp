@@ -40,13 +40,15 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
     function &instance( ){
         static $cache = false;
-        if ( !$cache) $cache = new AMP_System_Cache_Memcache;
+        if ( $cache) return $cache;
+		
+		//creating the cache
+		$cache = new AMP_System_Cache_Memcache;
         if ( !$cache->has_connection( )) {
-            $cache = new AMP_System_Cache_File;
-            if ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
-                trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_CONNECTION_FAILED, get_class( $this )) );
-            }
-        }
+			trigger_error('MEMCACHE FAILED, attempting file cacheing for ' . $_SERVER['REQUEST_URI']);
+            $cache = AMP_System_Cache_File::instance();
+        } 
+
         return $cache;
     }
 

@@ -1189,11 +1189,14 @@ if ( !function_exists( 'AMP_get_cache')){
     function &AMP_get_cache( ){
         if ( !AMP_SYSTEM_CACHE ) return false;
         static $cache = false;
+        static $cache_failure = false;
         if ( $cache ) return $cache;
+		if ( $cache_failure ) return false;
 
         require_once( 'AMP/System/Cache/'.ucfirst( AMP_SYSTEM_CACHE ).'.php');
         $cache_class = 'AMP_System_Cache_' . ucfirst( AMP_SYSTEM_CACHE );
         $cache = call_user_func_array( array( $cache_class, 'instance'), array( ));
+		if (!$cache) $cache_failure = true;
         return $cache;
     }
 }
