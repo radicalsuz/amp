@@ -182,8 +182,9 @@
 	</item>
 	<item>
 		<href>gallery_type.php</href>
-		<label>View Galleries</label>
+		<label>Manage Galleries</label>
 		<per>GALLERY_ADMIN</per>
+		<class>view</class>
 	</item>
 </gallery>
 
