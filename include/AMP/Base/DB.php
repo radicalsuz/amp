@@ -14,8 +14,14 @@ if ( AMP_LOCAL_PATH ) {
                              ini_get('include_path') );
 }
 
-require_once('adodb/adodb.inc.php');
 require_once('utility.functions.inc.php');
+
+if (!isset( $ADODB_CACHE_DIR ) || !is_dir($ADODB_CACHE_DIR) || !is_writable($ADODB_CACHE_DIR)){
+	$ADODB_CACHE_DIR = AMP_urlFlip( AMP_LOCAL_PATH . '/cache' );
+}
+
+require_once('adodb/adodb.inc.php');
+
 
 // Look for a local site configuration.
 if (file_exists_incpath( 'SiteConfig.php' )) {
@@ -55,6 +61,7 @@ if (file_exists_incpath( 'SiteConfig.php' )) {
 
     die( "Couldn't find a local site configuration file. Please contact your system administrator." );
 }
+
 if (!defined( 'AMP_BASE_PATH' ))        define( 'AMP_BASE_PATH', $_SERVER['DOCUMENT_ROOT'] );
 if (!defined( 'AMP_BASE_INCLUDE_PATH')) define( 'AMP_BASE_INCLUDE_PATH', $_SERVER['DOCUMENT_ROOT'].'/include/' );
 
@@ -65,8 +72,6 @@ if ( defined( 'AMP_DEBUG_MODE_APD' ) && AMP_DEBUG_MODE_APD ) apd_set_pprof_trace
 if (!defined('AMP_DB_TYPE'))
     define('AMP_DB_TYPE', 'mysql');
 
-if (!is_dir($ADODB_CACHE_DIR) || !is_writable($ADODB_CACHE_DIR))
-        $ADODB_CACHE_DIR = str_replace( DIRECTORY_SEPARATOR , '/', AMP_LOCAL_PATH ) . '/cache';
 
 ADOLoadCode(AMP_DB_TYPE);
 

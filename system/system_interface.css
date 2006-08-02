@@ -223,23 +223,32 @@ a.standout {
 		font-weight: bold;
 }
 
+
 span.page_result {
 		display:block;
+		border: #99CCFF 2px solid;
 		width: 60%;
-		background-color: #99CCFF;
+		background-color: #ddEEFF;
 		color: #006666;
 		text-align: center;
-		padding: 5px 10px 5px 10px;
-		margin: 5px 10px 5px 10px;
+		padding: 0.5em 5em 0.5em 5em;
+		margin: 1em 5em 0.5em 10em;
+}
+html > body span.page_result {
+		margin-left: 10%;
 }
 span.page_error {
 		display:block;
 		width: 60%;
-		background-color: #FF5599;
+		border: #FF5599 2px solid;
+		background-color: #FF99CC;
 		color: #550000;
-		padding: 5px 10px 5px 10px;
 		text-align: center;
-		margin: 5px 10px 5px 10px;
+		padding: 0.5em 5em 0.5em 5em;
+		margin: 1em 5em 0.5em 10em;
+}
+html > body span.page_error {
+		margin-left: 10%;
 }
 
 /* CONTENT LAYOUT CLASSES */

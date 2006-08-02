@@ -36,6 +36,13 @@
         <per>CONTENT_PUBLISH</per>
         <default>1</default>
     </publish>
+    <picuse>
+		<!-- this value has to stay on the form because Internet Explorer is the most worthless browser ever created
+			 and will fail to retain the ID value if it is the first hidden field. ap 2006-07-31
+		-->
+        <type>hidden</type>
+        <default>1</default>
+    </picuse>
 	<id>
 		<type>hidden</type>
 	</id>
@@ -309,10 +316,6 @@
 			<instance>galleries</instance>
 		</lookup>
 	</image_gallery>
-    <picuse>
-        <type>hidden</type>
-        <default>1</default>
-    </picuse>
     <image_details>
         <type>blocktrigger</type>
         <label>Image Details</label>
