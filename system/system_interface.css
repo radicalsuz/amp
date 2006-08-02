@@ -372,8 +372,9 @@ td.name input{
 div.article_tab {
 	display:none;
 	width: 100%;
-	padding: 10px;
+	padding: 0px 10px 10px 10px;
 	margin-left: -2px;
+	float: left;
 }
 
 div.article_tab table.form_table {
