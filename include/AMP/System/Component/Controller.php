@@ -39,6 +39,10 @@ class AMP_System_Component_Controller {
     var $_observers = array( );
 
     function AMP_System_Component_Controller( ){
+        $this->__construct( ) ;
+    }
+
+    function __construct( ){
         $this->init( ) ;
     }
 
@@ -124,7 +128,10 @@ class AMP_System_Component_Controller {
 
         if ( defined( 'AMP_CONTENT_PAGE_REDIRECT' )) return;
 
-        return $this->_display->execute( );
+        $output = $this->_display->execute( );
+        AMP_cache_close( );
+
+        return $output;
     }
 
     function commit( &$target, $action, $args = null ){
@@ -364,7 +371,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
         $copy_values = $this->_form->getValues( );
         if ( $copy_mode ) {
-            unset( $copy_values[ $this->_model->id_field ]);
+            unset( $copy_values[ $this->_model->id_field ] );
         }
         return $copy_values;
     }

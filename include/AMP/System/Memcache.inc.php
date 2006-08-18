@@ -27,7 +27,7 @@ class AMPSystem_Memcache {
     function init() {
         if (!class_exists( 'Memcache' )) return false;
         $this->memcache_connection = &new Memcache;
-        $this->memcache_connection->pconnect( $this->_memcache_server, $this->_memcache_port );
+        $this->memcache_connection->connect( $this->_memcache_server, $this->_memcache_port );
     }
 
     function &instance() {

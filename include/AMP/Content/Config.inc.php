@@ -22,9 +22,12 @@ if ( file_exists_incpath( 'custom.translations.inc.php' )) include_once ('custom
 /**
  * Class List Configurations
  */
-define( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT', 'ContentClass_Display');
-define( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG',    'ContentClass_Display_Blog');
-define( 'AMP_CONTENT_CLASSLIST_DISPLAY_FRONTPAGE',    'ContentClass_Display_FrontPage');
+if ( !defined( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT'  ))
+    define( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT',    'ContentClass_Display' );
+if ( !defined( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG'     ))
+    define( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG',       'ContentClass_Display_Blog' );
+if ( !defined( 'AMP_CONTENT_CLASSLIST_DISPLAY_FRONTPAGE'))
+    define( 'AMP_CONTENT_CLASSLIST_DISPLAY_FRONTPAGE',  'ContentClass_Display_FrontPage' );
 
 /**
  * Content Status Configuration
@@ -132,7 +135,7 @@ if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_RESPONSE'))
 define( 'AMP_CONTENT_PUBLICPAGE_ID_LINKS_DISPLAY', 12 );
 
 if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT'))  
-        define( 'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT', 23 );
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT', 34 );
 
 /**
  * Allow multiple sections per article 
@@ -157,6 +160,7 @@ define( 'AMP_MODULE_ID_CONTENT', 19 );
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );
 if ( !defined( 'AMP_MODULE_ID_COMMENTS')) define( 'AMP_MODULE_ID_COMMENTS', 23 );
 if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS', 45 );
+if ( !defined( 'AMP_MODULE_ID_PETITION')) define( 'AMP_MODULE_ID_PETITION', 7 );
 define( 'AMP_MODULE_ID_LINKS', 11 );
 
 /**

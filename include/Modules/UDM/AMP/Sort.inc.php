@@ -46,7 +46,7 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
     }
 
 
-    function execute ($options=null) {
+    function execute ($options=array( )) {
         if (!isset($options)) {
             if ($this->executed) return $this->sortby;
         }

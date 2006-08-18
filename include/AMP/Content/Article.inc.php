@@ -34,6 +34,7 @@ class Article extends AMPSystem_Data_Item {
         $this->init ($dbcon, $id);
         $this->_addAllowedKey( 'new_alias_name' );
         $this->_addAllowedKey( 'sections_related' );
+        $this->_addAllowedKey( 'url' );
     }
 
     function &getDisplay() {
@@ -278,12 +279,20 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function _adjustSetData( $data ) {
+
         $this->legacyFieldname( $data, 'test', 'body' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
         $this->legacyFieldname( $data, 'shortdesc', 'blurb' );
+
         $this->legacyFieldname( $data, 'type', 'section' );
+        $this->legacyFieldname( $data, 'picture', 'image' );
+
         if ( isset( $data['link']) && $data['link'] && !isset( $data['linkover'])) {
             $this->mergeData( array( 'linkover' => 1));
+        }
+
+        if ( !isset( $data[ 'url' ] ) && ( $article_url = $this->getURL( )) ){
+            $this->mergeData( array( 'url' => $article_url ));
         }
     }
 
@@ -370,10 +379,15 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function _save_sections_related( ){
-        if ( !$sections_related = $this->getSectionsRelated( )) return false;
+        if ( !( $sections_related = $this->getSectionsRelated( ))) return false;
         $active_related = $this->_getSectionsRelatedDB( ) ;
-        $deleted_items = array_diff( $active_related, $sections_related );
-        $new_items = array_diff( $sections_related, $active_related );
+        if ( $active_related ) {
+            $deleted_items = array_diff( $active_related, $sections_related );
+            $new_items = array_diff( $sections_related, $active_related );
+        } else {
+            $deleted_items = array( );
+            $new_items = $sections_related;
+        }
         if ( empty( $deleted_items ) && empty( $new_items )) return false;
 
         require_once( 'AMP/Content/Section/RelatedSet.inc.php');

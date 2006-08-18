@@ -65,7 +65,7 @@ class CalendarPlugin_Search_AMP extends CalendarPlugin {
     }
 
 
-	function execute ($options=null) {
+	function execute ($options=array( )) {
 		//combine init criteria with passed criteria 
         $options=array_merge($this->getOptions(), $options);
 		if(isset( $options['criteria']) && is_array($options['criteria'])) {

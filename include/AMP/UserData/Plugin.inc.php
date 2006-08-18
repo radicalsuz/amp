@@ -319,8 +319,9 @@ class UserDataPlugin {
     function getOptions( $options=null ) {
         if (!isset($options)) $options = array_keys($this->options);
         
-        if (!is_array($options)) return false;
+        if (!is_array($options)) return array( );
 
+        $return_options = array( );
         foreach ( $options as $option_name ) {
             $option_def=$this->options[$option_name];
 
@@ -331,7 +332,6 @@ class UserDataPlugin {
 
             if (isset($option_def['default'])) $return_options[$option_name]=$option_def['default'];
         }
-        if (!isset ($return_options)) return false;
 
         return $return_options;
     }

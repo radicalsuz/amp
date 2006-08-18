@@ -97,7 +97,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         }
     }
 
-    function execute ($options=null) {
+    function execute ($options=array( )) {
         $options=array_merge($this->getOptions(), $options);
         //Check to see if a single record was specified
         //if so, return detail information for that record 

@@ -54,13 +54,13 @@ class UserDataInput extends UserData {
         $options = array( 'admin' => array ( 'value' => $this->admin ) );
 
         if (!isset( $this->form )) {
-            $result = $this->doPlugin( 'QuickForm', 'build', $options );
+            $result = $this->doPlugin( 'QuickForm', 'Build', $options );
         }
 
         if ( !$result )     return false;
         if ( !$this->form ) return false;
 
-        if (!$save_results = $this->doAction( 'Save', $options )) {
+        if (!( $save_results = $this->doAction( 'Save', $options ))) {
             return false;
         }
         $this->showForm = false;

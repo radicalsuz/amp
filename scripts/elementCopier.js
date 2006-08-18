@@ -1,10 +1,10 @@
 function ElementCopier ( formname, start_qty ) {
-    this.ElementSets =new Array(); //Holds pointers to form elements
+    this.ElementSets = new Array(); //Holds pointers to form elements
 
     //the number of sets being displayed on the form
     this.set_qty = start_qty;
     this.formRef = document.forms[ formname ]
-    this.formtable = window.findFormTable( formname, this );
+    this.formtable = window.findFormTable( formname );
     this.dup_elements=new Array();
 
     this.DuplicateElementSet = DuplicateElementSet;

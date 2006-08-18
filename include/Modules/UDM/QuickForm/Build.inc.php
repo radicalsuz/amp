@@ -33,7 +33,8 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
         $this->init( $udm, $plugin_instance );
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
+        if ( !isset( $options )) $options = array( );
         $options = array_merge( $this->getOptions(), $options );
 
         $formEngine = & new AMPForm( $this->udm->name );

@@ -70,6 +70,7 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
     function _translateDataForCopier( $data ){
         $result_data = array( );
         foreach( $data as $row_count => $current_row ) {
+            if ( !is_array( $current_row )) continue;
             foreach( $current_row as $key => $value ){
                 $result_data[ $this->copier_name . '_' . $key ][ $row_count ] = $value;
 
@@ -111,8 +112,8 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
             $this->_copier->addSets( $this->copier_name, $_POST );
         }
 
-        $header = &AMP_getHeader( );
-        $header->addJavascriptDynamic( $this->_copier->output( ), 'copier' );
+        //$header = &AMP_getHeader( );
+        //$header->addJavascriptDynamic( $this->_copier->output( ), 'copier' );
 
     }
 
@@ -122,7 +123,7 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
 
     function execute( ){
         $content = $this->output( );
-        $this->_copier->output( );
+        $content .=  $this->_copier->output( ) ;
         return $content;
     }
 

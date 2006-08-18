@@ -92,6 +92,10 @@ class AMP_System_Cache {
         return time( ) - $this->_index[$authorized_key];
     }
 
+    function shutdown( ){
+        return true;
+    }
+
     //}}}
 
     //{{{ authorize methods

@@ -23,7 +23,7 @@ if ( !$AMP_Authen_Handler->is_authenticated() ) {
 }
 $AMP_Authen_Handler->redirect_page( );
 
-if ( !empty($_POST) && AMP_SITE_MEMCACHE_ON ) {
+if ( !empty($_POST) ) {
     require_once( 'AMP/System/Cache/Config.inc.php');
     AMP_cacheFlush( AMP_CACHE_TOKEN_URL_CONTENT );
 }

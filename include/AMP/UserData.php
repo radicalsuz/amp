@@ -72,14 +72,14 @@ class UserData {
     var $showForm;
 
 	// form callbacks for form post processing
-	var $_form_callbacks;
+	var $_form_callbacks = array( );
 
     // Flag to indicate administrator access.
     var $admin;
 
     // Arrays for holding result information.
-    var $results;
-    var $errors;
+    var $results = array( );
+    var $errors = array( );
 
 	// Flag for suppressing javascript output (for emails, for example)
 	var $no_javascript = false;
@@ -756,7 +756,7 @@ class UserData {
 
         $plugins =& $this->getPlugins( $action );
 
-        if (!isset( $plugins )|| !is_array($plugins) ) return;
+        if (!isset( $plugins )|| !is_array($plugins) ) return false;
         
         $result = false;
         foreach ( array_keys($plugins) as $plugin_name ) {

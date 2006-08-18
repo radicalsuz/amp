@@ -2,7 +2,7 @@
 require_once ('AMP/UserData/Plugin.inc.php');
 
 class UserDataPlugin_Search_AMP extends UserDataPlugin {
-	var $criteria;
+	var $criteria = array( );
 	var $total_qty;
     var $available=true;
     var $count_criteria;
@@ -85,7 +85,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
     }
 
 
-	function execute ($options=null) {
+	function execute ($options = array( )) {
 		//combine init criteria with passed criteria 
         $options=array_merge($this->getOptions(), $options);
         $this->initializeCriteria($options);
@@ -117,7 +117,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         }
 
 		$index_sql="SELECT count(id) as qty from userdata ";
-        if (is_array($criteria)) $index_sql.="where ".join(" AND ", $criteria);
+        if (is_array($criteria) && !empty( $criteria )) $index_sql.="where ".join(" AND ", $criteria);
         if (AMP_DISPLAYMODE_DEBUG)  AMP_DebugSQL( $index_sql,  "udmcount");
         if ($indexset=$this->dbcon->CacheExecute($index_sql)) {
 		    $total_qty=$indexset->Fields("qty");
@@ -130,7 +130,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 
     function &return_items($fieldset, $criteria, $orderby=null, $return_qty="*", $offset=0) {
 		$sql="SELECT $fieldset from userdata ";
-        if (is_array($criteria)) $sql.="where ".join(" AND ", $criteria);
+        if (is_array($criteria) && !empty( $criteria )) $sql.="where ".join(" AND ", $criteria);
 		$sql.=(isset($orderby))?" ORDER BY ".$orderby:"";
         
         if ($pager=&$this->udm->getPlugins('Pager')) {

@@ -60,5 +60,6 @@ if ( AMP_is_cacheable_url( ) ) {
     AMP_cache_set( $cache_key, $finalPageHtml, $user_id );
 }
 
+AMP_cache_close( );
 
 ?>

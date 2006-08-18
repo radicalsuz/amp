@@ -4,8 +4,8 @@ require_once( 'AMP/System/Lookups.inc.php');
 
 function AMP_navCalendarSearchState( ){
     $renderer = new AMPDisplay_HTML;
-    $add_link = $renderer->link( AMP_CONTENT_URL_EVENT_ADD, 'Post an Event' );
-    $search_link = $renderer->link( AMP_CONTENT_URL_EVENT_SEARCH, 'Search Events');
+    $add_link = $renderer->link( AMP_CONTENT_URL_EVENT_ADD, 'Post an Event', array( 'class' => 'homeeventslink') );
+    $search_link = $renderer->link( AMP_CONTENT_URL_EVENT_SEARCH, 'Search Events', array( 'class' => 'homeeventslink'));
 
     $state_values = AMPSystem_Lookup::instance( 'Regions_US');
     $select_values = array( '' => 'Select Your State');
@@ -21,7 +21,8 @@ function AMP_navCalendarSearchState( ){
         .'<input name="search" value="Search" type="hidden">'
         .'</form>'
         .$renderer->newline( )
-        .$add_link;
+        .$add_link
+        .$renderer->newline( );
 }
 
 ?>

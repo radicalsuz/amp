@@ -9,7 +9,7 @@
 # modinput2 needs to be changed to modinput 4 and not break
 
 $modid = 7;
-$mod_id = 42;
+$intro_id = 42;
 include_once("AMP/BaseDB.php");
 include_once("AMP/BaseTemplate.php");
 #include_once("AMP/BaseModuleIntro.php"); 
@@ -26,23 +26,26 @@ if ($current_petition->id) {
 	$udm =& new UserDataInput( $dbcon, $current_petition->getFormId( ));
 	
 	// Was data submitted via the web?
-	$sub = isset($_REQUEST['btnUdmSubmit']);
-	
-	
-	// Fetch or save user data.
-	if ( $sub ) {
-		// Save only if submitted data is present, and the user is
-		// authenticated, or if the submission is anonymous (i.e., !$uid)
-		$udm->saveUser();
-	} 
+	$sub = ( isset($_REQUEST['btnUdmSubmit']) && $_REQUEST['btnUdmSubmit'] );
 	
 	//OUTPUT THE PAGE
 
 	echo $current_petition->progressBox();
+	
+	// Fetch or save user data.
+	if ( $udm->submitted ) {
+		// Save only if submitted data is present, and the user is
+		// authenticated, or if the submission is anonymous (i.e., !$uid)
+		$save_success = $udm->saveUser();
+		echo $udm->output();
+        if ( $save_success ) {
+            echo $current_petition->petition_signers();
+        }
+	} 
+	
 
-	if ($_REQUEST["signers"]  or $_REQUEST['btnUdmSubmit']) {
-		$udm->output();
-		echo $current_petition->petition_signers();
+	if ( isset( $_REQUEST[ 'signers' ] ) && $_REQUEST['signers'] ){
+        echo $current_petition->petition_signers();
 	}
 
 	if(!$_REQUEST['btnUdmSubmit'] and (!$_REQUEST["signers"]) and  (!$_REQUEST["uid"])){

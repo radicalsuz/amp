@@ -9,7 +9,7 @@ class Petition_Form extends AMPSystem_Form_XML {
 
     function Petition_Form( ) {
         $name = 'petition';
-        $this->init( $name );
+        $this->init( $name, 'POST', AMP_SYSTEM_URL_PETITIONS  );
     }
 
     function setDynamicValues( ){

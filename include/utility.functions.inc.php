@@ -55,23 +55,12 @@ if ( !function_exists( 'ampredirect' ) ) {
         if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
             $target_url = $_REQUEST['pageredirect'];
         }
-		trigger_error( 'redirect is for ' . $target_url );
-        if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT'))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
+        if ( defined( 'AMP_USERMODE_ADMIN' ) ) trigger_error ( 'redirect is for ' . $target_url );
+        if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT' ))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
         header("Location: $target_url");
     }
 
 }
-
-/* this function is causing trouble by conflicting with PHPList /
-/* it is no longer permitted in AMP 3.5.3 Bugfix 5 
-if ( !function_exists( 'redirect' ) ) {
-
-    function redirect($url) {
-        ampredirect($url);
-    }
-
-}
-*/
 
 if ( !function_exists( 'DoDateTime' ) ) {
 
@@ -788,6 +777,12 @@ if (!function_exists( 'AMP_getCachedSiteItem' )) {
     }
 }
 
+function AMP_cache_close( ){
+    $cache = &AMP_get_cache( );
+    if ( !$cache ) return false;
+    return $cache->shutdown( );
+}
+
 function &AMP_cache_get( $key, $id = null ){
     $cache = &AMP_get_cache( );
     if ( !$cache ) return false;
@@ -1187,16 +1182,22 @@ if ( !function_exists( 'AMP_cleanPhoneNumber')){
 
 if ( !function_exists( 'AMP_get_cache')){
     function &AMP_get_cache( ){
+//        trigger_error( 'getting cache');
         if ( !AMP_SYSTEM_CACHE ) return false;
+//        trigger_error( 'cache is on');
         static $cache = false;
         static $cache_failure = false;
-        if ( $cache ) return $cache;
+        if ( $cache ) {
+//            trigger_error( 'return found cache');
+            return $cache;
+        }
 		if ( $cache_failure ) return false;
 
         require_once( 'AMP/System/Cache/'.ucfirst( AMP_SYSTEM_CACHE ).'.php');
         $cache_class = 'AMP_System_Cache_' . ucfirst( AMP_SYSTEM_CACHE );
         $cache = call_user_func_array( array( $cache_class, 'instance'), array( ));
 		if (!$cache) $cache_failure = true;
+//        else trigger_error( 'cache create successful');
         return $cache;
     }
 }
@@ -1297,6 +1298,10 @@ function AMP_urlFlip( $path ) {
 		return str_replace( DIRECTORY_SEPARATOR, '/', $path );
 	}
 	return $path;
+}
+
+function AMP_javascript_envelope( $script ) {
+    return AMP_HTML_JAVASCRIPT_START . $script . AMP_HTML_JAVASCRIPT_END;
 }
 			
 

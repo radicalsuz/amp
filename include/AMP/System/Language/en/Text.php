@@ -55,6 +55,7 @@ define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
 define( 'AMP_TEXT_LIST_CONFIRM_DELETE', 'Are you sure you want to DELETE these items?');
 define( 'AMP_TEXT_LIST_CONFIRM_RECALCULATE_IMAGES', 'Recalculating image sizes may take several minutes.\n  Please do not interfere with your browser during this time.\n  Are you sure you want to continue?');
 
+define( 'AMP_TEXT_PETITION_SIGNERS', 'signers');
 define( 'AMP_TEXT_CROP', 'Crop');
 define( 'AMP_TEXT_RECALCULATE', 'Recalculate');
 define( 'AMP_TEXT_PREVIEW', 'Preview');

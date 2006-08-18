@@ -117,9 +117,9 @@ class ElementCopierScript {
         }
         $script .= "}\n";
         $this->_header->addJavascriptDynamic( $script, 'copier_dynamic' );
-        $this->_header->addJavascriptOnLoad( "loadCopier();", 'copier_init' );
+        //$this->_header->addJavascriptOnLoad( "loadCopier();", 'copier_init' );
 
-        return false;
+        return AMP_javascript_envelope( 'loadCopier( );' );
     }
 
     function script_value_array( $valuevar, $fDef, $null_value = AMP_TEXT_FORM_ELEMENT_COPIER_VALUE_ARRAY_DEFAULT ) {

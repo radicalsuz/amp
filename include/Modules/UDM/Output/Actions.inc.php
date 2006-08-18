@@ -255,7 +255,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         return $script;
     }
 
-    function execute ($options=null) {
+    function execute ($options=array( )) {
         if (!isset($options)) {
             if ($this->executed) return false;
             $options=$this->getOptions();

@@ -288,7 +288,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	/**
 	 * returns html for the search form
 	 */
-	function execute($options=null) {
+	function execute($options=array( )) {
         $options= array_merge($this->getOptions(), $options);
         if ( isset( $options['search_form_display']) && !$options['search_form_display']) return false;
 		
@@ -472,7 +472,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
 	//get Region Values for state and country lookups
 	function setupRegion () {
-		if (!isset($this->regionset->regions['WORLD'])) {$this->regionset=new Region();}
+		if (!isset($this->regionset)) {$this->regionset=new Region();}
 		$this->lookups['country']['Set']=&$this->getValueSet( $this->udm->fields['Country']);
 		$this->lookups['state']['Set']=&$this->regionset->regions['US AND CANADA'];
 	}

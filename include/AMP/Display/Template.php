@@ -160,7 +160,9 @@ class AMP_Display_Template {
     }
 
     function _render_partial_loop( $key ) {
+        trigger_error( 'running partial for ' . $key );
         if ( !is_array( $this->_properties[ $key ])) return false;
+        trigger_error( 'array found for ' . $key );
         $output = false;
         $display = &$this->_load_partial( $key );
         foreach( $this->_properties[$key] as $id => $source ){

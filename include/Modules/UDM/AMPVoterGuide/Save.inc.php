@@ -103,7 +103,7 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
         }
         
 
-        $this->_register_javascript( $this->_copier->output() );
+        $this->_register_javascript(  $this->_copier->output() );
     }
 
     function getSaveFields() {

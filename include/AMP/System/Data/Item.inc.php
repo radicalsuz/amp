@@ -19,7 +19,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     var $dbcon;
 
-    var $itemdata;
+    var $itemdata = array( );
     var $_itemdata_keys;
 	var $_allowed_keys;
 

@@ -7,7 +7,7 @@ class CalendarPlugin_Search_Feeds extends CalendarPlugin {
 		$this->init($calendar, $plugin_instance);
 	}
 
-	function execute($options=null) {
+	function execute($options=array( )) {
 		$sql = 'SELECT MAX(last_update) < DATE_SUB(NOW(), INTERVAL 24 HOUR) FROM calendar_feeds';
 
 		$update = (isset($options['update']) && $options['update']) || 

@@ -86,10 +86,8 @@ class CalendarPlugin_EmailForm_Output extends CalendarPlugin {
         return $script;
     } 
         
-	function execute($options) {
-        if (!isset($options)) {
-            $options=$this->getOptions();
-        } 
+	function execute($options = array( )) {
+        $options = array_merge( $this->getOptions( ), $options );
 
 		$frmName    = $options['form_name']; 
 		$frmMethod  = 'POST';

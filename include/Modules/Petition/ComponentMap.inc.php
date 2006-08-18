@@ -5,6 +5,7 @@ require_once( 'AMP/System/ComponentMap.inc.php');
 class ComponentMap_Petition extends AMPSystem_ComponentMap {
     var $heading = "Petition";
     var $nav_name = "petition";
+    var $_action_default = 'list';
 
     var $paths = array( 
         'fields' => 'Modules/Petition/Fields.xml',

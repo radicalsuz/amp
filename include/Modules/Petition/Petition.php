@@ -54,9 +54,9 @@ Class Petition extends AMPSystem_Data_Item {
 
 	function progressBox() {
 
-		$sql="SELECT  COUNT(DISTINCT id) FROM userdata  where modin = ".$this->getFormId( );
+		$sql="SELECT  COUNT(id) as qty FROM userdata  where modin = ".$this->getFormId( );
 		$ptct= $this->dbcon->CacheExecute($sql) or DIE("could not get count: ".$sql.$this->dbcon->ErrorMsg());
-		$count = $ptct->fields[0];
+		$count = $ptct->Fields('qty');
 		 
 		$html .= "<table cellpadding=0 cellspacing=0 border=1 align=center bgcolor=\"#CCCCCC\" width=\"100%\"><tr><td>";
 		$html .= "\n\t<table border=0 cellspacing=0 cellpadding=0 width=\"100%\"><tr>";
@@ -73,11 +73,14 @@ Class Petition extends AMPSystem_Data_Item {
 	}
 		
 	function petition_signers(){
-		if (!$_REQUEST["offset"]) {$offset= 0;}
-		else {$offset=$_REQUEST["offset"];}
-		$sql="SELECT First_Name, Last_Name, Company,Notes, City,  State  FROM userdata  where  modin = ".$this->getFormId( )." and custom19 = 1 order by id desc  Limit $offset, ".$this->limit;
-		$P=$this->dbcon->CacheExecute($sql) or DIE("could not find signers ".$sql.$this->dbcon->ErrorMsg());
-		$sql="SELECT  COUNT(DISTINCT id) FROM userdata  where modin = ".$this->getFormId( )." and custom19 =1";
+        $offset = 0;  
+        if ( isset( $_REQUEST['offset'] ) && $_REQUEST['offset'] ) {
+            $offset = $_REQUEST['offset'];
+        }
+		$sql= "SELECT First_Name, Last_Name, Company, Notes, City, State FROM userdata where modin = ".$this->getFormId( )." and custom19 = 1 order by id desc  Limit $offset, ".$this->limit;
+		$P  = $this->dbcon->CacheExecute($sql) or DIE("could not find signers ".$sql.$this->dbcon->ErrorMsg());
+
+		$sql= "SELECT  COUNT(DISTINCT id) FROM userdata  where modin = ".$this->getFormId( )." and custom19 =1";
 		$ptct= $this->dbcon->CacheExecute($sql) or DIE("could not get count: ".$sql.$this->dbcon->ErrorMsg());
 		$count = $ptct->fields[0];
 		

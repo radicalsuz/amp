@@ -29,11 +29,11 @@ class CalendarPlugin_Sort_AMP extends CalendarPlugin {
     }
 
 
-    function execute ($options=null) {
-        if (!isset($options)) {
+    function execute ($options=array( )) {
+        if (empty($options)) {
             if ($this->executed) return $this->sortby;
-            $options=$this->getOptions();
         }
+        $options = array_merge( $this->getOptions( ), $options );
         
 
 		//Check sort

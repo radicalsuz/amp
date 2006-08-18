@@ -62,7 +62,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 		}
 	}
 	
-	function execute($options=null) {
+	function execute($options=array( )) {
         $options=array_merge($this->getOptions(), $options);
 
         if ($this->udm->total_qty) $this->total_qty = $this->udm->total_qty;

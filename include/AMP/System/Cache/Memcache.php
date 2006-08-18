@@ -143,6 +143,10 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
             $this->_items_retrieved = array( );
         }
     }
+
+    function shutdown( ){
+        return $this->_memcache_connection->close( );
+    }
 }
 
 ?>

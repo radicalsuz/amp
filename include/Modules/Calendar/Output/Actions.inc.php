@@ -211,14 +211,11 @@ class CalendarPlugin_Actions_Output extends CalendarPlugin {
     return $script;
 }
 
-function execute ($options=null) {
-    if (!isset($options)) {
-        if ($this->executed) return false;
-        $options=$this->getOptions();
-    } else {
-        $options=array_merge($this->getOptions(), $options);
-        $this->form_def=$this->define_form($options);
-    }
+function execute ($options=array( )) {
+    if ( ( empty($options)) && $this->executed) return false;
+
+    $options=array_merge($this->getOptions(), $options);
+    $this->form_def=$this->define_form($options);
 
     $this->setCriteria();
 
