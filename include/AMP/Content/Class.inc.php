@@ -72,7 +72,6 @@ class ContentClass extends AMPSystem_Data_Item {
         $display_def_constant= 'AMP_CONTENT_CLASSLIST_DISPLAY_' . array_search( $this->id , $classes );
         include_once( 'AMP/Content/Class/Display_Blog.inc.php');
         include_once( 'AMP/Content/Class/Display_FrontPage.inc.php');
-        include_once( 'AMP/Content/Class/FrontPage/Display.php');
 
         $display_class = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
         if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
