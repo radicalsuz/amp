@@ -43,6 +43,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'date',         '_makeNullDate',   'set');
 
         $this->addTranslation( 'sections_related',   '_getRelatedSections', 'set');
+        $this->addTranslation( 'sections_related',   '_getRelatedSectionsBlanks', 'get');
 
         $this->addTranslation( 'transfer_mode_setting','_returnBlankCheckbox',  'get');
         $this->addTranslation( 'transfer_mode_setting','_checkTransferMode',  'get');
@@ -259,6 +260,16 @@ class Article_Form extends AMPSystem_Form_XML {
         if ( !$related_sections ) return false;
         return join( ',', array_keys( $related_sections ) );
 
+    }
+
+    function _getRelatedSectionsBlanks( $data, $fieldname ) {
+        if ( !isset( $data[$fieldname ])) {
+            trigger_error( 'returning array');
+            return array( );
+
+        }
+        trigger_error( 'value ' . $fieldname . ' is ' . $data[$fieldname]);
+        return $data[$fieldname];
     }
 
     function _evalWysiwyg( $data, $fieldname ){

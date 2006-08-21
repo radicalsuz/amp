@@ -14,9 +14,11 @@ class ArticleDisplay_FrontPage extends Article_Display {
     var $_css_class_image = "image_frontpage";
     var $_css_class_subtitle = AMP_ARTICLE_FRONTPAGE_DISPLAY_CSS_SUBTITLE;
 
+    var $_renderer;
 
     function ArticleDisplay_Frontpage ( &$article ) {
         $this->init( $article );
+        $this->_init_renderer( );
     }
 
     function _HTML_Header( ) {

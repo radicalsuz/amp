@@ -13,8 +13,11 @@ class Section_List extends AMP_System_List_Form {
         'Status'=> 'publish',
         'Order' => 'order',
         'Navigation' => 'navIndex');
+
     var $editlink = 'section.php';
+    var $_url_add = 'section.php?action=add';
     var $previewlink = '/section.php';
+
     var $_source_object = 'Section';
 
     var $_map;

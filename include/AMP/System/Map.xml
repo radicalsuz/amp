@@ -77,13 +77,13 @@
 
 	<item>
 		<separator>1</separator>
-		<href>section.php?action=list</href>
+		<href>section.php</href>
 		<label>View Sections</label>
 		<class>view</class>
 		<per>CONTENT_SECTION_EDIT</per>
 	</item>
 	<item>
-		<href>section.php</href>
+		<href>section.php?action=add</href>
 		<label>Add Section</label>
 		<class>add</class>
 		<per>CONTENT_SECTION_EDIT</per>

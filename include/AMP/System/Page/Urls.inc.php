@@ -40,5 +40,7 @@ define( 'AMP_SYSTEM_URL_PUBLIC_PAGE_PUBLISH',   'module_contentadd.php');
 define( 'AMP_SYSTEM_URL_CACHE_DATA',            'system/cache.php');
 define( 'AMP_SYSTEM_URL_LINK_TYPES',            'link_type.php');
 define( 'AMP_SYSTEM_URL_PETITIONS',             'petition.php');
+define( 'AMP_SYSTEM_URL_TAG',                   'tag.php');
+define( 'AMP_SYSTEM_URL_TAG_INPUT',             'tag.php?action=add');
 
 ?>

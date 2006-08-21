@@ -2,7 +2,7 @@
 
 require_once( 'AMP/Content/Display/List.inc.php');
 
-class AMPTag_Display extends AMPContent_DisplayList_HTML {
+class AMP_Content_Tag_Display extends AMPContent_DisplayList_HTML {
 
     function AMPTag_Display( &$source, $read_data = true ){
         $this->init( $source, $read_data );

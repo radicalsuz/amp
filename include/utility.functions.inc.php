@@ -1310,6 +1310,16 @@ if (version_compare(phpversion(), '5.0') < 0) {
       return $object;
     }');
 }
+
+function &AMP_get_renderer( ){
+    static $_renderer = false;
+    if ( $renderer ) return $renderer;
+
+    require_once( 'AMP/Content/Display/HTML.inc.php');
+    $renderer = &new AMPDisplay_HTML( );
+    return $renderer ;
+
+}
 			
 
 ?>

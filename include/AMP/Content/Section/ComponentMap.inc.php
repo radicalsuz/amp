@@ -6,6 +6,8 @@ class ComponentMap_Section extends AMPSystem_ComponentMap {
     var $heading = "Section";
     var $nav_name = "content";
 
+    var $_action_default = 'list';
+
     var $paths = array( 
         'fields' => 'AMP/Content/Section/Fields.xml',
         'list'   => 'AMP/Content/Section/List.inc.php',

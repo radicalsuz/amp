@@ -357,7 +357,7 @@ class Article extends AMPSystem_Data_Item {
     function _getSectionsRelatedDB( ){
         $related_sections = &AMPContentLookup_SectionsByArticle::instance( $this->id );
         if ( !$related_sections ) return false;
-        
+
         $this->mergeData( array(  'sections_related' => array_keys( $related_sections ) ));
         return array_keys( $related_sections );
     }
@@ -379,8 +379,9 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function _save_sections_related( ){
-        if ( !( $sections_related = $this->getSectionsRelated( ))) return false;
+        $sections_related = $this->_getSectionsRelatedBase( );
         $active_related = $this->_getSectionsRelatedDB( ) ;
+        if ( !$active_related && !$sections_related ) return false;
         if ( $active_related ) {
             $deleted_items = array_diff( $active_related, $sections_related );
             $new_items = array_diff( $sections_related, $active_related );
