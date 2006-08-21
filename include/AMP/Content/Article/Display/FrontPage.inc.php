@@ -21,6 +21,10 @@ class ArticleDisplay_FrontPage extends Article_Display {
         $this->_init_renderer( );
     }
 
+    function _init_renderer( ) {
+        $this->_renderer = &AMP_get_renderer( );
+    }
+
     function _HTML_Header( ) {
         $article = &$this->_article;
         $header =  

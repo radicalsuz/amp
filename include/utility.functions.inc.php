@@ -1312,7 +1312,7 @@ if (version_compare(phpversion(), '5.0') < 0) {
 }
 
 function &AMP_get_renderer( ){
-    static $_renderer = false;
+    static $renderer = false;
     if ( $renderer ) return $renderer;
 
     require_once( 'AMP/Content/Display/HTML.inc.php');
