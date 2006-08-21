@@ -8,7 +8,7 @@ class FormLookup extends AMPSystem_Lookup {
     }
 
     function &instance( $type, $lookup_baseclass="FormLookup" ) {
-        return PARENT::instance( $type, $lookup_baseclass );
+        return parent::instance( $type, $lookup_baseclass );
     }
 
     function available( ){
@@ -24,6 +24,17 @@ class FormLookup_FormsbyPlugin extends FormLookup {
     function FormLookup_FormsbyPlugin () {
         $this->init();
     }
+}
+
+class FormLookup_PublishedForms extends FormLookup {
+    var $datatable = "userdata_fields";
+    var $result_field = "publish";
+    var $criteria = "publish=1";
+
+    function FormLookup_PublishedForms( ){
+        $this->init( );
+    }
+
 }
 
 class FormLookup_PluginsbyNamespace extends FormLookup {
@@ -133,6 +144,7 @@ class FormLookup_Names extends FormLookup {
 
     function FormLookup_Names( $instance ) {
         $this->setInstance( $instance );
+        $this->setPublic( $instance );
         $this->init();
     }
 
@@ -140,15 +152,22 @@ class FormLookup_Names extends FormLookup {
         $this->criteria = "modin=".$instance_id;
     }
 
-    function &instance( $instance_id ) {
-        static $lookup = false;
-        if (!$lookup) {
-            $lookup = new FormLookup_Names ( $instance_id );
-        } else {
-            $lookup->setInstance( $instance_id );
-            $lookup->init();
+    function setPublic( $instance_id ) {
+        $published_forms = FormLookup::instance( 'PublishedForms' );
+        if ( !isset( $published_forms[ $instance_id ])) return;
+
+        if ( !defined('AMP_USERMODE_ADMIN' )) {
+            $this->criteria .= ' AND publish=' . AMP_CONTENT_STATUS_LIVE;
         }
-        return $lookup->dataset;
+    }
+
+    function &instance( $instance_id ) {
+        static $lookup = array( );
+        if (!isset( $lookup[$instance_id])) {
+            $lookup[$instance_id] = new FormLookup_Names ( $instance_id );
+        } 
+
+        return $lookup[$instance_id]->dataset;
     }
     function available( ){
         return false;

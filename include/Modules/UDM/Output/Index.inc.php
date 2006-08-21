@@ -25,7 +25,7 @@ class UserDataPlugin_Index_Output extends UserDataPlugin {
         $this->init($udm, $instance);
     }
 
-    function execute ($options=null) {
+    function execute ($options=array( )) {
         $options = array_merge( $this->getOptions( ), $options);
 
         require_once( 'AMP/UserData/Lookups.inc.php');

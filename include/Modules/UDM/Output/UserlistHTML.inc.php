@@ -48,7 +48,7 @@ class UserDataPlugin_UserlistHTML_Output extends UserDataPlugin {
 
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         $options = array_merge($this->getOptions(), $options);
         return udm_output_userlist_html( $this->udm, $options );
@@ -94,7 +94,7 @@ class UserDataPlugin_UserlistHTML_Output extends UserDataPlugin {
 
 
 
-function udm_output_userlist_html(&$udm, $options=null) {
+function udm_output_userlist_html(&$udm, $options=array( )) {
 	if ($options['allow_lookups']) {
 		$options=list_setupLookups($udm, $options);
 	}

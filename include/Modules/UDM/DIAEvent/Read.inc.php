@@ -54,7 +54,7 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 		$this->init($udm, $plugin_instance);
 	}
 
-	function execute($options=null) {
+	function execute($options=array( )) {
 		$options = array_merge($this->getOptions(), $options);
 		if (!(isset( $options['dia_event_key'] )&&$options['dia_event_key'])) return false;
 		$key = $options['dia_event_key'];

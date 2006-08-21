@@ -95,10 +95,23 @@ if ($currentPage->isList( AMP_CONTENT_LISTTYPE_CLASS )
 if ($listType) {
     $display = &$currentPage->getListDisplay();
     if ( $display ){
-        $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
-        $filter = ( isset( $_GET['filter']) && $_GET['filter'])? $_GET['filter'] : false;
+
+        $filter = false;
+        //assign a default filter for section list pages
+        if ( $currentPage->isList( AMP_CONTENT_LISTTYPE_SECTION )) {
+            $section = &$currentPage->getSection( );
+            $filter = $section->getData( 'filter' );
+        }
+
+        //check for a requested filter, override the default if one exists
+        if ( isset( $_GET['filter']) && $_GET['filter']) {
+            $filter = $_GET['filter'] ;
+        }
         if ( $filter ) $display->addFilter( $filter );
+
+        $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
         if ( method_exists( $display, 'setListIntro') ) $display->setListIntro( $show_intro );
+
     } else {
         AMP_make_404( );
     }

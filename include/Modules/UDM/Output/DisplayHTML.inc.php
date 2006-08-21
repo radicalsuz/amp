@@ -329,7 +329,7 @@ function list_state_convert($in) {
 }
 if (!function_exists('groups_detail_display')) {
 
-	function groups_detail_display( $data, $options=null) {
+	function groups_detail_display( $data, $options=array( )) {
         $id=$data['id'];
         $Organization=$data['Company'];
         $City=$data['City'];

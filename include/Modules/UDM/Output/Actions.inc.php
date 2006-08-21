@@ -198,7 +198,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
 	
 	}
 
-    function action_script($options=null) {
+    function action_script($options=array( )) {
         $script='
         <script type="text/javascript">
         function list_DoAction( action ) {

@@ -35,7 +35,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         $this->init ($udm, $plugin_instance);
 	}
 
-    function initializeCriteria($options=null ) {
+    function initializeCriteria($options=array( )) {
         $this->getUDMCrit();
         
         if (isset($options['clear_criteria']) && $options['clear_criteria']) $this->criteria=array();

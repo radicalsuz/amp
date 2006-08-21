@@ -104,7 +104,7 @@ class UserDataPlugin_Read_DIA extends UserDataPlugin {
         return $this->_dia_api;
     }
 
-	function execute($options=null) {
+	function execute($options=array( )) {
 		$options = array_merge($this->getOptions(), $options);
 		if (!(isset( $options['dia_key'] )&&$options['dia_key'])) return false;
 		$this->_dia_key = $options['dia_key'];

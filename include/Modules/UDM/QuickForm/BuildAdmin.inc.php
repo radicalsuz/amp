@@ -369,7 +369,12 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
             $types[ $ftype ] = $ftype;
         }
 
-        $lookups = array( '' => '--' ) + AMPSystem_Lookup::instance( 'lookups');
+        $lookups_set = AMPSystem_Lookup::instance( 'lookups');
+        $lookups = array( '' => '--' );
+
+        if ( $lookups_set ){
+            $lookups = array( '' => '--' ) + AMPSystem_Lookup::instance( 'lookups');
+        }
         #$regions = array( '' => '--' ) + $this->regions->getTLRegions();
 
         $elements = Array(

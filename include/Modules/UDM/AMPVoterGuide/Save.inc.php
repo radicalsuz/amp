@@ -111,7 +111,7 @@ class UserDataPlugin_Save_AMPVoterGuide extends UserDataPlugin_Save {
     }
 
 
-    function save( $data, $options=null ) {
+    function save( $data, $options=array( )) {
         $options = array_merge( $this->getOptions(), $options );
 
         $data['owner_id'] = $this->udm->uid;

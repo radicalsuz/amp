@@ -136,14 +136,21 @@ class AMPSystemLookup_Lookups {
         $class_set = get_declared_classes( );
         foreach( $class_set as $test_class ){
 
-            if ( !strpos( $test_class, 'lookup')) continue;
+            if ( !strpos( strtolower( $test_class ), 'lookup')) continue;
             if ( AMP_getClassAncestors( $test_class, 'AMPSystem_Lookup')
                  || AMP_getClassAncestors( $test_class, 'AMPConstant_Lookup')) {
+
                 $class_vars = get_class_vars( $test_class );
-                if ( !( call_user_func( array( $test_class, 'available' )))
-                     || ( isset( $class_vars['available']) && $class_vars['available'])) continue;
+                $class_available = ( isset( $class_vars['available']) && $class_vars['available']); 
+
+                if ( !isset( $class_vars['available'])) {
+                    if ( !call_user_func( array( $test_class, 'available' ))) continue;
+                } elseif ( !$class_available ) {
+                    continue;
+                }
+
                 $lookup_name = $this->get_lookup_name( $test_class );
-                if ( $lookup_name == 'lookup' ) continue;
+                if ( strtolower( $lookup_name ) == 'lookup' ) continue;
                 $this->dataset[ $test_class ] = $lookup_name;
             }
         }
@@ -674,6 +681,56 @@ class AMPConstantLookup_BlastOptions extends AMPConstant_Lookup {
 
     function AMPConstantLookup_BlastOptions( ){
         //interface
+    }
+}
+
+class AMPSystemLookup_DeclaredClasses {
+    var $dataset;
+    var $available = false; 
+
+    function AMPSystemLookup_DeclaredClasses( $prefix = null ){
+        $this->_init_classes( $prefix );
+    }
+
+    function _init_classes( $prefix = null ) {
+        $declared_classes = get_declared_classes( );
+        if ( !isset( $prefix )){
+            $this->dataset = $declared_classes;
+            return;
+        }
+        $results = array( );
+
+        foreach( $declared_classes as $classname ){
+            if ( strpos( $classname, $prefix ) === 0 ) {
+                $results[ $classname ] = substr( $classname, strlen( $prefix )) ;
+            }
+        }
+        $this->dataset = $results;
+    }
+
+    function instance( $prefix ) {
+        static $class_lookups = array( );
+        if ( !isset( $class_lookups[ $prefix ])) {
+            $class_lookups[ $prefix ] = new AMPSystemLookup_DeclaredClasses( $prefix );
+        }
+        return $class_lookups[$prefix]->dataset ;
+    }
+
+}
+
+class AMPSystemLookup_Filters extends AMPConstant_Lookup {
+    var $dataset;
+
+    function AMPSystemLookup_Filters( ){
+        $dataset = AMPSystemLookup_DeclaredClasses::instance( 'ContentFilter_');
+        if ( !$dataset ) {
+            $this->dataset = false;
+            return;
+        }
+
+        foreach ( $dataset as $classname => $short_name ) {
+            $this->dataset[ strtolower( $short_name )] = $short_name;
+        }
     }
 }
 ?>

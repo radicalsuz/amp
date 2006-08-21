@@ -139,7 +139,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	}
 
 ////Creates the HTML for the Go Box on Paginated Lists
-	function jumpto_box ($options=null) {
+	function jumpto_box ($options=array( )) {
 
 		$jumpto_set=$this->get_index();
         if (!$jumpto_set) return false;
@@ -163,7 +163,7 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	}
 
 	///// CREATES the Display Quantity Select Box
-	function qty_choice($options=null) {
+	function qty_choice($options=array( )) {
 
         //The Javascript activates a page refresh if the Display All option is
         //selected, or if the current page is in Display All and the user

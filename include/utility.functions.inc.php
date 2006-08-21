@@ -1303,6 +1303,13 @@ function AMP_urlFlip( $path ) {
 function AMP_javascript_envelope( $script ) {
     return AMP_HTML_JAVASCRIPT_START . $script . AMP_HTML_JAVASCRIPT_END;
 }
+
+if (version_compare(phpversion(), '5.0') < 0) {
+    eval( 
+    'function clone($object) {
+      return $object;
+    }');
+}
 			
 
 ?>

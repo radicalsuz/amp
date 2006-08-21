@@ -95,6 +95,11 @@
 		<type>checkbox</type>
 		<label>Hide Content List</label>
 	</usetype>
+	<filter>
+		<type>select</type>
+		<label>Default Filter</label>
+		<lookup>filters</lookup>
+	</filter>
     <listing_options_header>
         <type>blocktrigger</type>
         <label>Section Header</label>

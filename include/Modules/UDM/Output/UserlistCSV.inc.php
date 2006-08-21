@@ -35,7 +35,7 @@ class UserDataPlugin_UserlistCSV_Output extends UserDataPlugin {
 
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         if (isset($options)) $this->_shallow_replace('options', $options);
         return udm_output_userlist_csv( $this->udm, $this->options );
@@ -82,7 +82,7 @@ class UserDataPlugin_UserlistCSV_Output extends UserDataPlugin {
 
 
 
-function udm_output_userlist_csv($udm, $options=null) {
+function udm_output_userlist_csv($udm, $options=array( )) {
     global $ID, $MM_email_from; // - returns current user variable
 
 	

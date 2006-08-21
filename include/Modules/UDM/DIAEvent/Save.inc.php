@@ -77,7 +77,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
         return $this->_calendar_plugin->getAllDataFields( );
     }
 
-    function save ( $data, $options=null ) {
+    function save ( $data, $options=array( )) {
 		#$this->notice('entering diaevent save plugin');
         $options=array_merge($options, $this->getOptions());
 

@@ -60,8 +60,8 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
                 'f_sqlname'=>'if(publish=1,"Live","Draft")'
               ));
 
-    function UserDataPlugin_TableHTML_Output (&$udm, $options=null, $instance=null) {   
-        $this->init($udm, $options, $instance);
+    function UserDataPlugin_TableHTML_Output (&$udm, $plugin_instance=null) {   
+        $this->init($udm, $plugin_instance);
     }
 
 
@@ -104,7 +104,7 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
     }
 
 
-    function column_headers($options=null) {
+    function column_headers($options=array( )) {
         $list_html_headers = "";
         foreach ($this->display_fieldset as $key) {
             if ($sort_set=&$this->udm->getPlugins('Sort')) {
@@ -122,8 +122,8 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         return $list_html_headers;
     }
 
-    function table_format($current_row, $options=null) {
-        if (!isset($options)) $options = $this->getOptions();
+    function table_format($current_row, $options=array( )) {
+        if (empty($options)) $options = $this->getOptions();
         $this->html_rowcount++;
 
         //assigns an id and background color to each row

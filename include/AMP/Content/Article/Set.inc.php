@@ -30,11 +30,21 @@ class ArticleSet extends AMPSystem_Data_Set {
     }
 
     function _getCriteriaSection( $section_id ){
-        $base_section = "type=" . $section_id;
-        if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return $base_section ;
-        require_once( 'AMP/Content/Section/Contents/Manager.inc.php');
-        if (!($related_ids = SectionContents_Manager::getRelatedArticles( $section_id ))) return $base_section ;
+        $base_section = $this->_makeCriteriaSectionBase( $section_id );
+        if ( !( $related_ids = $this->_makeCriteriaSectionRelated( $section_id ))) {
+            return $base_section;
+        }
         return "( ". $base_section . ' OR ' . $related_ids . ")" ;
+    }
+
+    function _makeCriteriaSectionBase( $section_id ) {
+        return "type=" . $section_id;
+    }
+
+    function _makeCriteriaSectionRelated( $section_id ) {
+        if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return false;
+        require_once( 'AMP/Content/Section/Contents/Manager.inc.php');
+        return SectionContents_Manager::getRelatedArticles( $section_id );
     }
 
 
@@ -58,8 +68,13 @@ class ArticleSet extends AMPSystem_Data_Set {
     }
 
     function addFilter( $filter_name ) {
-        $filter_path = 'AMP/Content/Article/Filter/'. ucfirst( $filter_name) . '.inc.php';
-        if ( !file_exists_incpath( $filter_path )) return false;
+        $filter_filename = ucfirst( $filter_name ) . '.inc.php';
+        $filter_path = 'AMP/Content/Article/Filter/'. $filter_filename;
+        if ( !file_exists_incpath( $filter_path )) {
+            if ( !( $filter_path = file_exists_incpath( $filter_filename ))) {
+                return false;
+            }
+        }
         include_once( $filter_path );
         $filter_class = 'ContentFilter_' . ucfirst( $filter_name );
         $sourceFilter = &new $filter_class();
