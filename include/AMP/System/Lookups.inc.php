@@ -701,7 +701,7 @@ class AMPSystemLookup_DeclaredClasses {
         $results = array( );
 
         foreach( $declared_classes as $classname ){
-            if ( strpos( $classname, $prefix ) === 0 ) {
+            if ( strpos( strtolower( $classname ), strtolower( $prefix ) ) === 0 ) {
                 $results[ $classname ] = substr( $classname, strlen( $prefix )) ;
             }
         }

@@ -212,9 +212,10 @@ class AMP_MenuComponent extends AMPSystem_Tree {
      */
     function getStyle() {
         $parent = &$this->menu;
-        if ($this->parent) $parent = &$this->parent;
+        if (is_object( $this->parent )) $parent = &$this->parent;
 
-        if (empty($this->style)) return $parent->getStyle();
+        //if ( !is_object( $this->parent ) && empty( $this->style )) return array( );
+        if (empty($this->style) ) return $parent->getStyle();
         
         return array_merge( $parent->getStyle(), $this->style);
     }
