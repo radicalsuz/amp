@@ -72,7 +72,7 @@ class UserDataSet extends UserData {
         $plugin_set = &$this->getPlugins(); 
 
         // check for any error messages, display them
-        if (isset($this->errors)) {
+        if (isset($this->errors) && !empty( $this->errors )) {
             $output_html = '<P>'.join('<BR>',$this->errors)."<BR>";
             
             //Show only the search form and the index so the user can create a
@@ -80,8 +80,9 @@ class UserDataSet extends UserData {
             $order = array('SearchForm','Index');
             
         }
+
         // check for any result messages, display them
-        if ($list_results = $this->getResults()) {
+        if ($list_results = $this->getResults() && !empty( $list_results )) {
             $output_html = '<P>'.join('<BR>',$list_results)."<BR>";
         }
 
