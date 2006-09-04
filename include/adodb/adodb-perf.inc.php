@@ -1,6 +1,6 @@
 <?php
 /* 
-V4.62 2 Apr 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.92a 29 Aug 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -16,9 +16,36 @@ V4.62 2 Apr 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reser
   
 */
 
-if (!defined(ADODB_DIR)) include_once(dirname(__FILE__).'/adodb.inc.php');
+if (!defined('ADODB_DIR')) include_once(dirname(__FILE__).'/adodb.inc.php');
 include_once(ADODB_DIR.'/tohtml.inc.php');
 
+define( 'ADODB_OPT_HIGH', 2);
+define( 'ADODB_OPT_LOW', 1);
+
+// returns in K the memory of current process, or 0 if not known
+function adodb_getmem()
+{
+	if (function_exists('memory_get_usage'))
+		return (integer) ((memory_get_usage()+512)/1024);
+	
+	$pid = getmypid();
+	
+	if ( strncmp(strtoupper(PHP_OS),'WIN',3)==0) {
+		$output = array();
+	
+		exec('tasklist /FI "PID eq ' . $pid. '" /FO LIST', $output); 
+		return substr($output[5], strpos($output[5], ':') + 1);
+	} 
+	
+	/* Hopefully UNIX */
+	exec("ps --pid $pid --no-headers -o%mem,size", $output);
+	if (sizeof($output) == 0) return 0;
+	
+	$memarr = explode(' ',$output[0]);
+	if (sizeof($memarr)>=2) return (integer) $memarr[1];
+	
+	return 0;
+}
 
 // avoids localization problems where , is used instead of .
 function adodb_round($n,$prec)
@@ -44,7 +71,7 @@ function& adodb_log_sql(&$conn,$sql,$inputarr)
 	$rs =& $conn->Execute($sql,$inputarr);
 	$t1 = microtime();
 
-	if (!empty($conn->_logsql)) {
+	if (!empty($conn->_logsql) && (empty($conn->_logsqlErrors) || !$rs)) {
 		$conn->_logsql = false; // disable logsql error simulation
 		$dbT = $conn->databaseType;
 		
@@ -99,7 +126,7 @@ function& adodb_log_sql(&$conn,$sql,$inputarr)
 		}
 		
 		if (is_array($sql)) $sql = $sql[0];
-		$arr = array('b'=>trim(substr($sql,0,230)),
+		$arr = array('b'=>strlen($sql).'.'.crc32($sql),
 					'c'=>substr($sql,0,3900), 'd'=>$params,'e'=>$tracer,'f'=>adodb_round($time,6));
 		//var_dump($arr);
 		$saved = $conn->debug;
@@ -109,7 +136,7 @@ function& adodb_log_sql(&$conn,$sql,$inputarr)
 		if (empty($d)) $d = date("'Y-m-d H:i:s'");
 		if ($conn->dataProvider == 'oci8' && $dbT != 'oci8po') {
 			$isql = "insert into $perf_table values($d,:b,:c,:d,:e,:f)";
-		} else if ($dbT == 'odbc_mssql' || $dbT == 'informix') {
+		} else if ($dbT == 'odbc_mssql' || $dbT == 'informix' || $dbT == 'odbtp') {
 			$timer = $arr['f'];
 			if ($dbT == 'informix') $sql2 = substr($sql2,0,230);
 
@@ -122,6 +149,7 @@ function& adodb_log_sql(&$conn,$sql,$inputarr)
 			if ($dbT == 'informix') $isql = str_replace(chr(10),' ',$isql);
 			$arr = false;
 		} else {
+			if ($dbT == 'db2') $arr['f'] = (float) $arr['f'];
 			$isql = "insert into $perf_table (created,sql0,sql1,params,tracer,timer) values( $d,?,?,?,?,?)";
 		}
 
@@ -324,7 +352,12 @@ Committed_AS:   348732 kB
         $perf_table = adodb_perf::table();
 		$saveE = $this->conn->fnExecute;
 		$this->conn->fnExecute = false;
-			
+		
+		global $ADODB_FETCH_MODE;
+		$save = $ADODB_FETCH_MODE;
+		$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+		if ($this->conn->fetchMode !== false) $savem = $this->conn->SetFetchMode(false);
+				
 		$sqlq = $this->conn->qstr($sql);
 		$arr = $this->conn->GetArray(
 "select count(*),tracer 
@@ -338,6 +371,9 @@ Committed_AS:   348732 kB
 				$s .= sprintf("%4d",$k[0]).' &nbsp; '.strip_tags($k[1]).'<br>';
 			}
 		}
+		
+		if (isset($savem)) $this->conn->SetFetchMode($savem);
+		$ADODB_CACHE_MODE = $save;
 		$this->conn->fnExecute = $saveE;
 		return $s;
 	}
@@ -479,13 +515,14 @@ Committed_AS:   348732 kB
 				where {$this->conn->upperCase}({$this->conn->substr}(sql0,1,5))  not in ('DROP ','INSER','COMMI','CREAT')
 				and (tracer is null or tracer not like 'ERROR:%')
 				group by sql1
+				having count(*)>1
 				order by 1 desc",$numsql);
 			if (isset($savem)) $this->conn->SetFetchMode($savem);
 			$this->conn->fnExecute = $saveE;
 			$ADODB_FETCH_MODE = $save;
 			if (!$rs) return "<p>$this->helpurl. ".$this->conn->ErrorMsg()."</p>";
 			$s = "<h3>Expensive SQL</h3>
-<font size=1>Tuning the following SQL will reduce the server load substantially</font><br>
+<font size=1>Tuning the following SQL could reduce the server load substantially</font><br>
 <table border=1 bgcolor=white><tr><td><b>Load</b><td><b>Count</b><td><b>SQL</b><td><b>Max</b><td><b>Min</b></tr>\n";
 			$max = $this->maxLength;
 			while (!$rs->EOF) {
@@ -548,7 +585,11 @@ Committed_AS:   348732 kB
 			$ret = false;
 			$save = $ADODB_FETCH_MODE;
 			$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+			if ($this->conn->fetchMode !== false) $savem = $this->conn->SetFetchMode(false);
+			
 			$rs = $this->conn->Execute($sql1);
+			
+			if (isset($savem)) $this->conn->SetFetchMode($savem);
 			$ADODB_FETCH_MODE = $save;
 			if ($rs) {
 				while (!$rs->EOF) {
@@ -820,8 +861,10 @@ Committed_AS:   348732 kB
 	{
 		if (!$this->createTableSQL) return false;
 		
+		$table = $this->table();
+		$sql = str_replace('adodb_logsql',$table,$this->createTableSQL);
 		$savelog = $this->conn->LogSQL(false);
-		$ok = $this->conn->Execute($this->createTableSQL);
+		$ok = $this->conn->Execute($sql);
 		$this->conn->LogSQL($savelog);
 		return ($ok) ? true : false;
 	}
@@ -909,7 +952,7 @@ Committed_AS:   348732 kB
 		return $arr;
 	}
 	
-	function undomq(&$m) 
+	function undomq($m) 
 	{
 	if (get_magic_quotes_gpc()) {
 		// undo the damage
@@ -919,8 +962,95 @@ Committed_AS:   348732 kB
 	}
 	return $m;
 }
+
+    
+   /************************************************************************/
+   
+    /** 
+     * Reorganise multiple table-indices/statistics/..
+     * OptimizeMode could be given by last Parameter
+     * 
+     * @example
+     *      <pre>
+     *          optimizeTables( 'tableA');
+     *      </pre>
+     *      <pre>
+     *          optimizeTables( 'tableA', 'tableB', 'tableC');
+     *      </pre>
+     *      <pre>
+     *          optimizeTables( 'tableA', 'tableB', ADODB_OPT_LOW);
+     *      </pre>
+     * 
+     * @param string table name of the table to optimize
+     * @param int mode optimization-mode
+     *      <code>ADODB_OPT_HIGH</code> for full optimization 
+     *      <code>ADODB_OPT_LOW</code> for CPU-less optimization
+     *      Default is LOW <code>ADODB_OPT_LOW</code> 
+     * @author Markus Staab
+     * @return Returns <code>true</code> on success and <code>false</code> on error
+     */
+    function OptimizeTables()
+    {
+        $args = func_get_args();
+        $numArgs = func_num_args();
+        
+        if ( $numArgs == 0) return false;
+        
+        $mode = ADODB_OPT_LOW; 
+        $lastArg = $args[ $numArgs - 1];
+        if ( !is_string($lastArg)) {
+            $mode = $lastArg;
+            unset( $args[ $numArgs - 1]);
+        }
+        
+        foreach( $args as $table) {
+            $this->optimizeTable( $table, $mode);
+        }
+	}
+
+    /** 
+     * Reorganise the table-indices/statistics/.. depending on the given mode.
+     * Default Implementation throws an error.
+     * 
+     * @param string table name of the table to optimize
+     * @param int mode optimization-mode
+     *      <code>ADODB_OPT_HIGH</code> for full optimization 
+     *      <code>ADODB_OPT_LOW</code> for CPU-less optimization
+     *      Default is LOW <code>ADODB_OPT_LOW</code> 
+     * @author Markus Staab
+     * @return Returns <code>true</code> on success and <code>false</code> on error
+     */
+    function OptimizeTable( $table, $mode = ADODB_OPT_LOW) 
+    {
+        ADOConnection::outp( sprintf( "<p>%s: '%s' not implemented for driver '%s'</p>", __CLASS__, __FUNCTION__, $this->conn->databaseType));
+        return false;
+    }
+    
+    /** 
+     * Reorganise current database.
+     * Default implementation loops over all <code>MetaTables()</code> and 
+     * optimize each using <code>optmizeTable()</code>
+     * 
+     * @author Markus Staab
+     * @return Returns <code>true</code> on success and <code>false</code> on error
+     */
+    function optimizeDatabase() 
+    {
+        $conn = $this->conn;
+        if ( !$conn) return false;
+        
+        $tables = $conn->MetaTables( 'TABLES');
+        if ( !$tables ) return false;
+
+        foreach( $tables as $table) {
+            if ( !$this->optimizeTable( $table)) {
+                return false;
+            }
+        }
+      
+        return true;
+    }
+    // end hack 
 }
-
-
 
 ?>
