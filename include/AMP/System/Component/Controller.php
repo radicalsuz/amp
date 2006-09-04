@@ -85,7 +85,7 @@ class AMP_System_Component_Controller {
         if ( isset( $this->_display_custom[ $this->_action_requested ] )){
             $this->_display_class = $this->_display_custom[ $this->_action_requested ];
         }
-        $this->_display = &call_user_func_array( array( $this->_display_class, 'instance'), $this );
+        $this->_display = call_user_func_array( array( $this->_display_class, 'instance'), $this );
 
         $flash = &AMP_System_Flash::instance( );
         $this->_display->add( $flash, 'flash' );

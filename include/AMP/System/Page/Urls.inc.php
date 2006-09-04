@@ -30,6 +30,7 @@ define ('AMP_SYSTEM_URL_PUBLIC_PAGES',          'introtext.php?action=list');
 define( 'AMP_SYSTEM_URL_CONTENTS',              'articlelist.php');
 define( 'AMP_SYSTEM_URL_STYLESHEET',            'stylesheet.php');
 define( 'AMP_SYSTEM_URL_SECTION',               'section.php');
+define( 'AMP_SYSTEM_URL_CLASS',                 'class.php');
 define( 'AMP_SYSTEM_URL_TEMPLATE',              'template.php');
 define( 'AMP_SYSTEM_URL_CUSTOM_FILE',           'customfile.php');
 define( 'AMP_SYSTEM_URL_FORMS',                 'form_manager.php');

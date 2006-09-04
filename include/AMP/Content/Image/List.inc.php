@@ -39,7 +39,7 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
         $this->_path_files = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_URL_IMAGES . "original/";
         $listSource = &new $this->_source_object( );
         //$this->_init_pager( $listSource );
-        $source = &$listSource->search( $this->_path_files );
+        $source = $listSource->search( $this->_path_files );
         $this->init( $source );
     }
 

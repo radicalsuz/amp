@@ -43,12 +43,60 @@ class ContentSearch_Form extends AMPSearchForm {
     }
 
     function _formFooter() {
-        return '&nbsp;&nbsp;<a href="'. AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'nosearch=1' ) ) . '" class="standout">'
-                . sprintf( AMP_TEXT_VIEW_ALL, AMP_Pluralize( ucfirst( AMP_TEXT_ARTICLE ))) . '</a><BR />';
+        $renderer = &AMP_get_renderer( );
+        $current_section_edit_link = false;
+        $current_class_edit_link = false;
+        $base_footer = '&nbsp;&nbsp;<a href="'. AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'nosearch=1' ) ) . '" class="standout">'
+                . sprintf( AMP_TEXT_VIEW_ALL, AMP_Pluralize( ucfirst( AMP_TEXT_ARTICLE ))) . '</a>';
+
+        //sectional edit link
+        $current_section = ( isset( $_REQUEST['section']) && $_REQUEST['section']) ? $_REQUEST['section'] : false;
+        if ( !$current_section ) {
+            $current_section = ( isset( $_REQUEST['type']) && $_REQUEST['type'] ? $_REQUEST['type'] : false );
+        }
+        if ( $current_section ) {
+            $section_names = AMPContent_Lookup::instance( 'sections');
+            $section_name = isset( $section_names[$current_section]) ? $section_names[$current_section] : false;
+            $current_section_edit_link = 
+                    $renderer->separator( )
+                    . $renderer->link( 
+                        AMP_Url_AddVars( AMP_SYSTEM_URL_SECTION, array( 'id='.$current_section )),
+                            $renderer->image( AMP_SYSTEM_ICON_EDIT )
+                            . $renderer->space( ) 
+                            . AMP_TEXT_EDIT 
+                            . $renderer->space( ) 
+                            . AMP_TEXT_SECTION 
+                            . $renderer->space( ) 
+                            . AMP_trimText( $section_name, 20, false )
+                        );
+        }
+
+        //class edit link
+        $current_class = ( isset( $_REQUEST['class']) && $_REQUEST['class']) ? $_REQUEST['class'] : false;
+        if ( $current_class ) {
+            $class_names = AMPContent_Lookup::instance( 'classes' );
+            $class_name = ( isset( $class_names[$current_class ])) ? $class_names[ $current_class ] : false;
+            $current_class_edit_link = 
+                    $renderer->separator( )
+                    .$renderer->link( 
+                        AMP_Url_AddVars( AMP_SYSTEM_URL_CLASS, array( 'id='.$current_class )),
+                            $renderer->image( AMP_SYSTEM_ICON_EDIT )
+                            . $renderer->space( ) 
+                            . AMP_TEXT_EDIT 
+                            . $renderer->space( ) 
+                            . AMP_TEXT_CLASS. $renderer->space( ) 
+                            . AMP_trimText( $class_name, 20, false )
+                            );
+                    
+        }
+        return $base_footer 
+                .$current_section_edit_link
+                .$current_class_edit_link
+                . $renderer->newline( );
     }
 
     function getSearchValues( ) {
-        $results = &parent::getSearchValues( );
+        $results = parent::getSearchValues( );
         if ( !(isset( $results['search_by_date']) && $results['search_by_date'])) unset ( $results['date'] );
         unset( $results['search_by_date']);
         return $results;

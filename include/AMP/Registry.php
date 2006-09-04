@@ -29,7 +29,8 @@ class AMP_Registry {
         $this->_cache_stack[0][$key] = &$item;
     }
     function &getEntry($key) {
-        if (!isset($this->_cache_stack[0][$key])) return false;
+        $empty_value = false;
+        if (!isset($this->_cache_stack[0][$key])) return $empty_value;
         return $this->_cache_stack[0][$key];
     }
     function isEntry($key) {

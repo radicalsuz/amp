@@ -33,10 +33,11 @@ class AMP_System_Page_Display extends AMP_System_Component_Display {
     }
 
     function &get_template( ){
-        if ( !$this->_template_active ) return false;
+        $empty_value = false;
+        if ( !$this->_template_active ) return $empty_value;
         if ( isset( $this->_template )) return $this->_template;
         
-        $template = & call_user_func( array( $this->_template_class, 'instance'));
+        $template = call_user_func( array( $this->_template_class, 'instance'));
         if ( isset( $GLOBALS['modid'])) $template->setTool( $GLOBALS['modid']);
         $template->setToolName( $this->get_navs( ));
         $this->_template = &$template;

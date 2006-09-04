@@ -99,5 +99,15 @@ class Section_List extends AMP_System_List_Form {
 
     }
 
+    function _HTML_previewLink( $id ) {
+        if ( !isset( $this->previewlink )) return false;
+        $renderer = &AMP_get_renderer( );
+        return  '<a href="' . AMP_URL_AddVars( $this->previewlink , 'id='.$id) .'" target="_blank" title="'.AMP_TEXT_PREVIEW_ITEM.'">' 
+                . '<img src="' . AMP_SYSTEM_ICON_PREVIEW . '" width="16" height="16" border=0></a>'
+                . $renderer->space( )
+                . $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_ARTICLE, 'section='.$id),
+                                    $renderer->image( AMP_SYSTEM_ICON_VIEW ),
+                                    array( 'title' => AMP_TEXT_CONTENT_PAGES, 'width' => 16, 'height' => 16, 'border' => 0 ));
+    }
 }
 ?>

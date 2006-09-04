@@ -76,23 +76,26 @@ class AMPSystem_Lookup {
 
     function &instance( $type, $lookup_baseclass="AMPSystemLookup" ) {
         static $lookup_set = false;
+        $empty_value = false;
         if (!$lookup_set) $lookup_set = array();
         $req_class = $lookup_baseclass . '_' . $type;
         if ( !class_exists( $req_class ) ){
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
-            return false;
+            return $empty_value;
         }
         if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
         return $lookup_set[$type]->dataset;
     }
 
     function &locate( $lookup_def ){
+        $empty_value = false;
         if ( !isset( $lookup_def['module'])) $lookup_def['module'] = 'AMPSystem';
         if ( 'content'  == $lookup_def['module']) $lookup_def['module'] = "AMPContent";
         if ( 'constant' == $lookup_def['module']) $lookup_def['module'] = "AMPConstant";
         $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
-        if ( !class_exists( $lookup_class ) && !AMPSystem_Lookup::loadLookups( $lookup_def['module'], $lookup_class )) return false;
-        return call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;
+        if ( !class_exists( $lookup_class ) && !AMPSystem_Lookup::loadLookups( $lookup_def['module'], $lookup_class )) return $empty_value;
+        $result = call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;
+        return $result;
     }
 
     function loadLookups( $module, $class ){

@@ -70,7 +70,7 @@ class AMP_Content_Redirect extends AMPSystem_Data_Item {
         if ( !isset( $requested_url )) return $target;
 
         if ( $suffix = $this->getSuffix( $requested_url )) {
-            $target = AMP_Url_AddVars( $target, $suffix );
+            $target .= $suffix ;
         }
         return $target;
     }

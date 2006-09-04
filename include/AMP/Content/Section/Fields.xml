@@ -2,9 +2,6 @@
 	<id>
 		<type>hidden</type>
 	</id>
-    <id_display>
-        <type>static</type>
-    </id_display>
 	<usenav>
 		<type>checkbox</type>
 		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>

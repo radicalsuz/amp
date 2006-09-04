@@ -18,7 +18,7 @@ class Article_ListForm extends AMP_System_List_Form {
         'Class'     =>  'class',
         'Status'    =>  'publish' );
     var $editlink = AMP_SYSTEM_URL_ARTICLE;
-    var $previewlink = '/article.php?preview=1';
+    var $previewlink = '/article.php?preview=1&cache=0';
     var $name_field = 'title';
     var $_source_object = 'Article';
 
@@ -114,7 +114,7 @@ class Article_ListForm extends AMP_System_List_Form {
             $section_options = array( '' => 'Select Section');
         }
 
-        $class_options = &AMPContent_Lookup::instance( 'activeClasses' );
+        $class_options = &AMPContent_Lookup::instance( 'classes' );
         if ( $class_options ){
             $class_options = array( '' => 'Select Class') + $class_options;
         } else {

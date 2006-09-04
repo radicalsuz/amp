@@ -139,7 +139,7 @@ class AMP_System_File {
 
         } 
 
-        $folder = &opendir( $folder_path );
+        $folder = opendir( $folder_path );
         if ( substr( $folder_path, -1 ) !== DIRECTORY_SEPARATOR ) $folder_path .= DIRECTORY_SEPARATOR;
         $folder_cache_key = AMP_CACHE_TOKEN_DIR . $folder_path;
         if ( isset( $filename_pattern )) $folder_cache_key .= $filename_pattern;

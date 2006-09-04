@@ -49,7 +49,7 @@ class ArticleDisplay_Info extends Article_Display {
     function _renderPreviewLink( ) {
         return  
             $this->_renderer->link( 
-                    AMP_URL_AddVars( AMP_SITE_URL . $this->_article->getURL( ), 'preview=1' ),
+                    AMP_URL_AddVars( AMP_SITE_URL . $this->_article->getURL_default( ), 'preview=1', 'cache=0' ),
                     $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'width' => '16', 'height' => '16', 'border' =>'0', 'align' => 'right' )),
                     array( 'target' => 'blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
                 );
@@ -57,9 +57,9 @@ class ArticleDisplay_Info extends Article_Display {
 
     function _renderArticleId( ){
         if ( strtolower( get_class( $this->_article)) == 'article_version' ) return $this->_renderArticleVersionId( );
-        $article_url = AMP_Url_AddVars( AMP_SITE_URL . $this->_article->getURL( ), array( 'preview=1' ));
+        $article_url = AMP_Url_AddVars( AMP_SITE_URL . $this->_article->getURL_default( ), array( 'preview=1', 'cache=0' ));
         return $this->_renderer->inSpan( AMP_TEXT_ID . ': ' . $this->_article->id ) . $this->_renderer->space( 2 )
-                . $this->_renderer->link( $article_url, '[ ' . ucfirst( AMP_TEXT_VIEW ) . ' ]' )
+                . $this->_renderer->link( $article_url, '[ ' . ucfirst( AMP_TEXT_VIEW ) . ' ]' , array( 'target' => 'blank'))
                 . $this->_renderer->newline( );
     }
 

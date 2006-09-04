@@ -110,7 +110,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->_init_search( $listSource );
         $this->_init_pager( $listSource->_getSearchSource( ) );
 
-        $results = &$listSource->search( $this->_source_criteria, $this->_source_object );
+        $results = $listSource->search( $this->_source_criteria, $this->_source_object );
         if ( !$results ) $this->_searchFailureNotice( );
         return $results;
     }

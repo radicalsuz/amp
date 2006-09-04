@@ -72,6 +72,10 @@ class Content_Image {
         return $picSize;
     }
 
+    function display_block( ){
+        return !( $this->getImageClass( ) == 'list_only');
+    }
+
 
     function getAltTag() {
         return $this->getData( 'alttag' );

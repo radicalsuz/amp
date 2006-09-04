@@ -100,17 +100,18 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     }
 
     function &retrieve( $key ){
+        $empty_value = false;
         $authorized_key = $this->authorize( $key );
-        if ( !$authorized_key ) return false;
+        if ( !$authorized_key ) return $empty_value;
         if ( !$this->contains( $authorized_key )) {
             if ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
                 trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ));
             }
-            return false;
+            return $empty_value;
         }
 
         $result = $this->_confirm_memcache_retrieve( $authorized_key );
-        if ( !$result ) return false;
+        if ( !$result ) return $empty_value;
 
         return $this->_items_retrieved[ $authorized_key ];
     }

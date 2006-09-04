@@ -153,15 +153,16 @@ class AMPSystem_Tree {
     }
 
     function &getChild($id) {
-        if (!isset($id)) return false; 
+        $empty_value = false;
+        if (!isset($id)) return $empty_value; 
         if ($id == $this->id) return $this;
-        if (!$this->hasChildren()) return false; 
+        if (!$this->hasChildren()) return $empty_value; 
 
         $myChildren = &$this->getChildren();
         foreach ($myChildren as $key => $aChild) {
             if ($result = &$myChildren[$key]->getChild($id)) return $result;
         }
-        return false;
+        return $empty_value;
     }
 
     // }}} 

@@ -361,7 +361,8 @@ class AMPContent_Page {
      * @return  mixed   Section object if one is set, false otherwise 
      */
     function &getSection() {
-        if ( !isset( $this->section )) return false;
+        $empty_value = false;
+        if ( !isset( $this->section )) return $empty_value;
         return $this->section;
     }
 
@@ -373,7 +374,8 @@ class AMPContent_Page {
      * @return  mixed   Article object if one is set, false otherwise 
      */
     function &getArticle() {
-        if ( !isset( $this->article )) return false;
+        $empty_value = false;
+        if ( !isset( $this->article )) return $empty_value;
         return $this->article;
     }
 
@@ -385,7 +387,8 @@ class AMPContent_Page {
      * @return  mixed   ContentClass object if one is set, false otherwise 
      */
     function &getClass() {
-        if ( !isset( $this->class)) return false;
+        $empty_value = false;
+        if ( !isset( $this->class)) return $empty_value;
         return $this->class;
     }
 
@@ -397,7 +400,8 @@ class AMPContent_Page {
      * @return  mixed   IntroText object if one is set, false otherwise 
      */
     function &getIntroText() {
-        if ( !isset( $this->introtext)) return false;
+        $empty_value = false;
+        if ( !isset( $this->introtext)) return $empty_value;
         return $this->introtext;
     }
 
@@ -421,10 +425,11 @@ class AMPContent_Page {
      * @return  mixed	Object by key or false
      */
     function &getObject($key) {
+        $empty_value = false;
 		if(isset($this->_objectCache[$key])) {
 			return $this->_objectCache[$key];
 		}
-		return false;
+		return $empty_value;
 	}
 
 // }}}  public methods         content object accessors
@@ -570,13 +575,14 @@ class AMPContent_Page {
      * @return  mixed   if the page is a list, a subclass of {@link AMPContent_DisplayList_HTML} is returned, otherwise returns false 
      */
     function &getListDisplay() {
-        if (!$listType = $this->isList()) return false;
+        $empty_value = false;
+        if (!$listType = $this->isList()) return $empty_value;
 
         if ( isset( $this->$listType)  && method_exists( $this->$listType, 'getDisplay' )) {
             return  $this->$listType->getDisplay();
         }
 
-        return false;
+        return $empty_value;
 
     }
 

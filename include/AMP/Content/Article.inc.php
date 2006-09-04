@@ -45,7 +45,8 @@ class Article extends AMPSystem_Data_Item {
         if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
 
         if (!class_exists( $display_class )) $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
-        return new $display_class( $this );
+        $result = &new $display_class( $this );
+        return $result;
     }
 
     function getParent() {
@@ -174,7 +175,8 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function &getImageRef() {
-        if (! ($img_path = $this->getImageFileName())) return false;
+        $empty_value = false;
+        if (! ($img_path = $this->getImageFileName())) return $empty_value;
         $image = &new Content_Image();
         $image->setData( $this->getImageData() );
         return $image;
@@ -222,7 +224,8 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function &getComments() {
-        if (!$this->allowsComments()) return false;
+        $empty_value = false;
+        if (!$this->allowsComments()) return $empty_value;
         require_once ( 'AMP/Content/Article/Comments.inc.php' );
         return new ArticleCommentSet( $this->dbcon, $this->id );
         
@@ -240,7 +243,8 @@ class Article extends AMPSystem_Data_Item {
 
     function &getDocLinkRef() {
         require_once ( 'AMP/Content/Article/DocumentLink.inc.php' );
-        if (!($doc = $this->getDocumentLink() )) return false;
+        $empty_value = false;
+        if (!($doc = $this->getDocumentLink() )) return $empty_value;
         $doclink = &new DocumentLink();
         $doclink->setFile( $doc, $this->getDocLinkType() );
         return $doclink;

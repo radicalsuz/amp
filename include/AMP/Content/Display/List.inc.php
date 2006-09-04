@@ -102,7 +102,9 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
 
     function addFilter( $filter_name ) {
         if ( method_exists( $this->_source, 'addFilter')) {
-            return $this->_source->addFilter( $filter_name );
+            $result = $this->_source->addFilter( $filter_name );
+            $this->_source->readData( );
+            return $result;
         }
         return false;
     }
@@ -126,7 +128,8 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     }
 
     function &_buildItems( $dataset ) {
-        return $this->_source->instantiateItems( $dataset, $this->_sourceItem_class );
+        $result = $this->_source->instantiateItems( $dataset, $this->_sourceItem_class );
+        return $result;
     }
 
     function applySearch( $search_values, $run_query = true ){

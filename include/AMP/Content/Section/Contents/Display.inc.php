@@ -38,7 +38,10 @@ class SectionContents_Display  extends AMPDisplay_HTML {
 
         $display_class = $this->_getDisplayClass();
         $read_source = true;
-        if ( $limit = $this->_section->getListItemLimit( ) ) $read_source = false; 
+        if  ( $limit = $this->_section->getListItemLimit( )) {
+            $read_source = false; 
+        }
+
         $this->_display = &new $display_class( $contents, $read_source );
 
         if ( $limit && method_exists( $this->_display, 'setPageLimit') && (!$this->_display->allResultsRequested()) ) {
@@ -72,10 +75,12 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         
 
     function &getIntroDisplay() {
-        if (! $this->_showListIntro) return false; 
+        $empty_value = false;
+        if (! $this->_showListIntro) return $empty_value; 
 
         $introClass = AMP_CONTENT_LIST_INTRO_DISPLAY;
-        return new $introClass( $this->_section );
+        $result = &new $introClass( $this->_section );
+        return $result;
     }
 
     function setListIntro( $show_intro = true ) {

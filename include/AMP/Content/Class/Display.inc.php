@@ -22,17 +22,19 @@ class ContentClass_Display extends ArticleSet_Display {
     }
 
     function &getIntroDisplay() {
-        if (! $this->_showListIntro) return false; 
+        $empty_value = false;
+        if (! $this->_showListIntro) return $empty_value; 
 
         $introClass = AMP_CONTENT_LIST_INTRO_DISPLAY;
         $path = split( '_', $introClass );
         include_once( 'AMP/Content/'.join( '/', array_reverse( $path ) ) .'.inc.php' );
 
         if( class_exists( $introClass ) ) {
-            return new $introClass( $this->_class );
+            $result = &new $introClass( $this->_class );
+            return $result;
         }
         trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP',$introClass ));
-        return false;
+        return $empty_value;
     }
 
     function setListIntro( $show_intro = true ) {

@@ -115,6 +115,7 @@ define( 'AMP_CONTENT_PAGETYPE_TOOL', 'tool' );
  * System Icon File Paths
  */
 define ('AMP_SYSTEM_ICON_EDIT', '/system/images/edit.png' ); 
+define ('AMP_SYSTEM_ICON_VIEW', '/system/images/view2.png' ); 
 define ('AMP_SYSTEM_ICON_PREVIEW', '/system/images/view.gif' );
 define ('AMP_SYSTEM_ICON_DELETE', '/system/images/delete.png' );
 

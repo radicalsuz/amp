@@ -9,7 +9,7 @@ class Section_Form extends AMPSystem_Form_XML {
 
     function Section_Form( ) {
         $name = 'articletype';
-        $this->init( $name );
+        $this->init( $name, 'POST', AMP_SYSTEM_URL_SECTION );
     }
 
     function setDynamicValues( ){
@@ -17,10 +17,25 @@ class Section_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
     }
 
+    /*
     function adjustFields( $fields ) {
         $id_display = $this->_setIdDisplay( );
         if ( $id_display ) $fields['id_display'] = $id_display;
         return $fields;
+    }
+    */
+
+    function _formHeader( ){
+        $id = $this->getIdValue( );
+        if ( !$id ) return false;
+
+        require_once( 'AMP/Content/Section.inc.php');
+        require_once( 'AMP/Content/Section/Display/Info.php');
+
+        $section = &new Section( AMP_Registry::getDbcon( ), $id ) ;
+        $display = &new AMP_Content_Section_Display_Info( $section );
+        return $display->execute( );
+
     }
 
     function _setIdDisplay( ){

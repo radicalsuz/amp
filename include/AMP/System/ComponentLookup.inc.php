@@ -27,13 +27,14 @@ class ComponentMapSet {
 	}
 
 	function &findOwner( $classname ) {
+        $empty_value = false;
 		$this->indexMaps();
 		foreach ($this->mapset as $mapname) {
 			$map = &new $mapname();
 			if (!method_exists( $map, 'findComponent' )) continue;
 			if ( $map->findComponent( $classname)  !== false ) return $map;
 		}
-		return false;
+		return $empty_value;
 	}
 }
 ?>

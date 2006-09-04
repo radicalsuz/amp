@@ -98,9 +98,10 @@ class AMPSystem_NavManager {
         return isset($this->nav_set[$nav_name]);
     }
 
-    function getNav( $nav_name ) {
+    function &getNav( $nav_name ) {
+        $empty_value = false;
 		$nav_name = strtolower($nav_name);
-        if (!$this->isNav( $nav_name )) return false;
+        if (!$this->isNav( $nav_name )) return $empty_value;
         return $this->nav_set[$nav_name];
     }
 

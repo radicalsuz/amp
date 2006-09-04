@@ -77,7 +77,8 @@ class ContentClass extends AMPSystem_Data_Item {
         if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
 
         if (!class_exists( $display_class )) $display_class = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
-        return new $display_class( $this );
+        $result = &new $display_class( $this );
+        return $result;
     }
 
     function display() {
@@ -86,8 +87,11 @@ class ContentClass extends AMPSystem_Data_Item {
     }
 
     function &getHeaderRef() {
-        if ($id = $this->getHeaderTextId() ) return new Article( $this->dbcon, $id );
-        return false;
+        $result = false;
+        if ($id = $this->getHeaderTextId() ) {
+            $result = &new Article( $this->dbcon, $id );
+        }
+        return $result;
     }
 
     function getHeaderTextId() {

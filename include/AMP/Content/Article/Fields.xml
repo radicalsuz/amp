@@ -329,6 +329,7 @@
         <values>
             <original>Original Size</original>
             <pic>Optimized for Web</pic>
+            <list_only>Show List Thumbnail Only</list_only>
         </values>
         <default>pic</default>
     </pselection>

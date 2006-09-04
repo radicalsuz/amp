@@ -48,7 +48,8 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
     }
 
     function &getIntroDisplay() {
-        return false;
+        $empty_value = false;
+        return $empty_value;
     }
 
 }

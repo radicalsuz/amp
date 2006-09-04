@@ -42,7 +42,7 @@ class AMP_Content_Image_Effects_Display {
 
 
     function commit_display( ){
-        $fRef = &fopen( $this->_image_ref->getPath( ), 'r');
+        $fRef = fopen( $this->_image_ref->getPath( ), 'r');
         fpassthru( $fRef );
     }
 

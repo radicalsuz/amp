@@ -240,8 +240,9 @@ class Article_Form extends AMPSystem_Form_XML {
     }
 
     function &_getCommentList( $id ) {
+        $empty_value = AMP_TEXT_SEARCH_NO_MATCHES;
         if ( isset( $this->_commentList )) return $this->_commentList;
-        if ( !$id ) return AMP_TEXT_SEARCH_NO_MATCHES;
+        if ( !$id ) return $empty_value;
         require_once( 'AMP/Content/Article/Comment/List_Basic.inc.php');
 
         $commentList = &new AMP_Content_Article_Comment_List_Basic( AMP_Registry::getDbcon( ), array( 'article' => $id ));

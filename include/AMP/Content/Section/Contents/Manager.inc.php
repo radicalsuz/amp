@@ -33,7 +33,8 @@ class SectionContents_Manager {
         $this->_contentSourceType = str_replace( " ", "", ucwords( str_replace( "_", " ", strtolower( $this->getDisplayType( $listType ) ) ) ) );
         
         $contentSource_class = 'SectionContentSource_'.$this->_contentSourceType;
-        return new $contentSource_class( $this->_section );
+        $result = &new $contentSource_class( $this->_section );
+        return $result;
     }
 
     function getDisplayType( $listType=null ) {
@@ -74,7 +75,8 @@ class SectionContents_Manager {
     ######################################
 
     function &getDisplay() {
-        return new SectionContents_Display( $this );
+        $result = &new SectionContents_Display( $this );
+        return $result;
     }
 
     function display() {

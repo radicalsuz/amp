@@ -59,9 +59,9 @@ class Article_Display extends AMPDisplay_HTML {
             $htmlbody = str_replace( array_keys($hw), array_values($hw), $htmlbody );
         }
 		//insert sidebar
-		if ($sb = &$this->_article->getSidebar() ) {
+		if ($sb = $this->_article->getSidebar() ) {
 			$find = '[-sidebar-]';
-			if (!$sb_class = &$this->_article->getSidebarClass() ) {
+			if (!$sb_class = $this->_article->getSidebarClass() ) {
 				  $sb_class = AMP_CONTENT_SIDEBAR_CLASS_DEFAULT;
 			} 
 			$replace = '<div class="'.$sb_class.'">'.nl2br($sb).'</div>';
@@ -72,8 +72,8 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _addImage( $body ) {
         $image = &$this->_article->getImageRef();
-        if ($image) return $this->_HTML_imageBlock( $image ) . $body;
-        return $body;
+        if (!$image || !$image->display_block( )) return $body;
+        return $this->_HTML_imageBlock( $image ) . $body;
     }
 
 

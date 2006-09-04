@@ -39,17 +39,32 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function &getHeaderRef() {
-        if (!$this->getData( 'header' )) return false;
-        if ($id = $this->getHeaderTextId() ) return new Article( $this->dbcon, $id );
-        if (!($headers = &AMPContent_Lookup::instance( 'sectionHeaders' ))) return false;
-        if (isset( $headers[ $this->id ] )) return new Article( $this->dbcon, $headers[ $this->id ] );
-        return false;
+        $empty_value = false;
+        if (!$this->getData( 'header' )) return $empty_value;
+        if ($id = $this->getHeaderTextId() ) {
+            $result = &new Article( $this->dbcon, $id );
+            return $result;
+        }
+
+        if (!($headers = &AMPContent_Lookup::instance( 'sectionHeaders' ))) return $empty_value;
+
+        if (isset( $headers[ $this->id ] )) {
+            $result = &new Article( $this->dbcon, $headers[ $this->id ] );
+            return $result;
+        }
+        return $empty_value;
     }
+
     function &getFooterRef() {
-        if (!AMP_CONTENT_CLASS_SECTIONFOOTER) return false;
-        if (!($footers = &AMPContent_Lookup::instance( 'sectionFooters' ))) return false;
-        if (isset( $footers[ $this->id ] )) return new Article( $this->dbcon, $footers[ $this->id ] );
-        return false;
+        $empty_value = false;
+        if (!AMP_CONTENT_CLASS_SECTIONFOOTER) return $empty_value;
+        if (!($footers = &AMPContent_Lookup::instance( 'sectionFooters' ))) return $empty_value;
+
+        if (isset( $footers[ $this->id ] )) {
+            $result = &new Article( $this->dbcon, $footers[ $this->id ] );
+            return $result;
+        }
+        return $empty_value;
     }
 
     function getHeaderTextId() {
@@ -99,9 +114,19 @@ class Section extends AMPSystem_Data_Item {
     function getURL() {
         if ($url = $this->getRedirect() ) return $url;
         if (!$this->id ) return false;
+        return $this->getURL_default( );
+    }
+
+    function getURL_default( ) {
         return AMP_Url_AddVars( AMP_CONTENT_URL_LIST_SECTION, "type=".$this->id );
     }
     
+    function getExistingAliases( ){
+        if ( !isset( $this->id )) return false;
+        require_once( 'AMP/Content/Redirect/Redirect.php' );
+        $redirect = &new AMP_Content_Redirect( $this->dbcon );
+        return $redirect->search( $redirect->makeCriteria( array( 'target' => $this->getURL_default( ))));
+    }
 
     function getStylesheet() {
         return $this->getData( 'css' );
@@ -109,6 +134,10 @@ class Section extends AMPSystem_Data_Item {
 
     function getListItemLimit() {
         return $this->getData( 'up' );
+    }
+
+    function getListFilter( ){
+        return $this->getData( 'filter' );
     }
 
     function getListType() {
@@ -127,7 +156,8 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function &getImageRef() {
-        if (! ($img_path = $this->getImageFileName())) return false;
+        $empty_value = false;
+        if (! ($img_path = $this->getImageFileName())) return $empty_value;
         $image = &new Content_Image( $img_path );
         return $image;
     }

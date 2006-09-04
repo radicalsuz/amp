@@ -244,7 +244,7 @@ class AMPContentLookup_SectionMap {
 
     function AMPContentLookup_SectionMap() {
         $mapsource = &AMPContent_Map::instance( );
-        $this->dataset = &$mapsource->selectOptions( );
+        $this->dataset = $mapsource->selectOptions( );
 
     }
     function available( ){

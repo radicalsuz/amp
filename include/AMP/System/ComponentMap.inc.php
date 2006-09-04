@@ -43,8 +43,9 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     }
 
     function &getCachedComponent( $component_type, $id=null, $passthru_value = null ){
+        $empty_value = false;
         $cache = &AMP_get_cache( );
-        if ( !(( $component_class = $this->getComponentClass( $component_type )) && ( $cache ))) return false;
+        if ( !(( $component_class = $this->getComponentClass( $component_type )) && ( $cache ))) return $empty_value;
 
         $cache_key = $component_class;
         if ( isset( $id )) $cache_key = $cache->identify( $component_class, $id );
@@ -58,19 +59,21 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         }
 
         $component = $this->getComponent( $component_type, $passthru_value );
-        if ( !$component ) return false;
+        if ( !$component ) return $empty_value;
         $cache->add( $component, $cache_key );
         return $component;
     }
 
     function &getComponent( $component_type, $passthru_value = null ){
-        if ( !isset( $this->components[ $component_type ])) return false;
+        $empty_value = false;
+        if ( !isset( $this->components[ $component_type ])) return $empty_value;
         if ( isset( $this->paths[ $component_type ])) {
             require_once( $this->paths[ $component_type ]);
         }
         $component_class = $this->components[ $component_type ];
         if ( !isset( $passthru_value )) $passthru_value = &AMP_Registry::getDbcon( );
-        return new $component_class( $passthru_value );
+        $result = &new $component_class( $passthru_value );
+        return $result;
     }
 
     function getFilePaths() {
@@ -148,7 +151,8 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     }
 
     function &getPublicPage( $action = 'input' ) {
-        if ( !( $id = $this->getPublicPageId( $action ))) return false;
+        $empty_value = false;
+        if ( !( $id = $this->getPublicPageId( $action ))) return $empty_value;
         require_once( 'AMP/System/IntroText.inc.php');
         $page = &new AMPSystem_IntroText( AMP_Registry::getDbcon( ), $id );
         if ( !$page->hasData( )) return false;

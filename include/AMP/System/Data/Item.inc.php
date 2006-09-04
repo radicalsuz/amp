@@ -315,7 +315,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             trigger_error( sprintf( AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED, get_class( $this )) );
         }
         if ( !isset( $class_name )) $class_name = $this->_class_name;
-        $result_set = &$data_set->instantiateItems( $data_set->getArray( ), $class_name );
+        $result_set = $data_set->instantiateItems( $data_set->getArray( ), $class_name );
         if ( empty( $result_set )) return $result_set;
 
         if ( $this->_sort_auto && !$data_set->getSort( )) $this->sort( $result_set );
@@ -324,7 +324,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     function &getSearchSource( $criteria = null ){
-        return $this->_getSearchSource( $criteria );
+        $result = $this->_getSearchSource( $criteria );
+        return $result;
     }
 
     function &_getSearchSource( $criteria = null ){
