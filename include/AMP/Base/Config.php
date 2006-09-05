@@ -26,8 +26,8 @@ require_once( 'AMP/Content/Config.inc.php');
 //load user
 require_once( 'AMP/System/User/Config.php');
 
-//activate the memcache class
-if ( AMP_SITE_MEMCACHE_ON ) require_once('AMP/System/Memcache.inc.php');
+//activate the memcache class -- deprecated for 3.6.1
+//if ( AMP_SITE_MEMCACHE_ON ) require_once('AMP/System/Memcache.inc.php');
 
 //old legacy settings
 require_once( 'AMP/LegacyRegistry.inc.php');

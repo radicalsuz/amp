@@ -70,7 +70,7 @@ define('ADODB_REPLACE_UPDATED',  1);
 /**
  *  GLOBAL settings
  */
-define( "AMP_SYSTEM_VERSION_ID", '3.6.0');
+define( "AMP_SYSTEM_VERSION_ID", '3.6.1');
 define( 'MAGIC_QUOTES_ACTIVE', get_magic_quotes_gpc());
 
 

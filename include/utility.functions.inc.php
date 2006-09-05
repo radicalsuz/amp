@@ -544,8 +544,9 @@ if (!function_exists('AMPfile_list')) {
                 }
                 $fileArr[$file_name] = $file_name;
             }	
-            uksort($fileArr, "strnatcasecmp");
-				return $fileArr;
+            //uksort($fileArr, "strnatcasecmp");
+            natcasesort( $fileArr );
+            return $fileArr;
 		} 
 }
 

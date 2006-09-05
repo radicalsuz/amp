@@ -289,7 +289,7 @@ class AMPContent_Page {
      */
     function setSection( $section_id ) {
         require_once('AMP/Content/Section.inc.php');
-        $section = &new Section($this->dbcon, $section_id);
+        $section = &new Section( AMP_Registry::getDbcon( ), $section_id);
         if (!$section->hasData() ) return false;
         if ($target = $section->getRedirect()) ampredirect( $target );
         if (!isset($this->template_id) && ( $template = $section->getTemplate())) $this->template_id = $template;
