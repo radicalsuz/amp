@@ -23,6 +23,10 @@ $ADODB_INCLUDED_MEMCACHE = 1;
 		$false = false;
 		$err = false;
 
+		if ($cache_value = AMP_cache_get($key)){
+			return $cache_value;
+		}
+
 		if (!function_exists('memcache_pconnect')) {
 			$err = 'Memcache module PECL extension not found!';
 			return $false;
@@ -68,6 +72,10 @@ $ADODB_INCLUDED_MEMCACHE = 1;
 		$false = false;
 		$true = true;
 
+		if ($success = AMP_cache_set($key, $rs )){
+			return $true;
+		}
+
 		if (!function_exists('memcache_pconnect')) {
 			if ($debug) ADOConnection::outp(" Memcache module PECL extension not found!<br>\n");
 			return $false;
@@ -89,6 +97,12 @@ $ADODB_INCLUDED_MEMCACHE = 1;
 
 	function flushmemcache($key=false, $host, $port, $debug=false)
 	{
+		if ($key) {
+			return AMP_cache_delete($key);
+		} else {
+			return AMP_cacheFlush();
+		}
+
 		if (!function_exists('memcache_pconnect')) {
 			if ($debug) ADOConnection::outp(" Memcache module PECL extension not found!<br>\n");
 			return;

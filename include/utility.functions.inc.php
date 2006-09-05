@@ -784,8 +784,9 @@ function AMP_cache_close( ){
 }
 
 function &AMP_cache_get( $key, $id = null ){
+	$empty_value = false;
     $cache = &AMP_get_cache( );
-    if ( !$cache ) return false;
+    if ( !$cache ) return $empty_value;
     if ( isset( $id ) && $id ) $key = $cache->identify( $key, $id );
     return $cache->retrieve( $key );
 }
@@ -809,17 +810,8 @@ function AMP_is_cacheable_url( ) {
     $flash = &AMP_System_Flash::instance( );
 
     return 
-        //is the cache active
-        ( $cache ) 
-        
-        //does the flash contain messages for the user
-        && ( !$flash->active( )) 
-
-        //is the user viewing protected content
-        && ( !AMP_Authenticate( 'content' )) 
-
         //is this page a valid caching candidate
-        && (  defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED' ) 
+        (  defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED' ) 
 
         //was a form submitted to get here
         && empty( $_POST) 
@@ -828,7 +820,16 @@ function AMP_is_cacheable_url( ) {
         && ( ! defined( 'AMP_CONTENT_PAGE_REDIRECT' ))
 
         //did the flash display a value on this page
-        && ( ! defined( 'AMP_SYSTEM_FLASH_OUTPUT')) );
+        && ( ! defined( 'AMP_SYSTEM_FLASH_OUTPUT')) )
+
+        //is the cache active
+        && ( $cache ) 
+        
+        //does the flash contain messages for the user
+        && ( !$flash->active( )) 
+
+        //is the user viewing protected content
+        && ( !AMP_Authenticate( 'content' )); 
 
 }
 
