@@ -21,6 +21,7 @@ if ( !$AMP_Authen_Handler->is_authenticated() ) {
 } else {
     define( 'AMP_USERMODE_ADMIN', true );
 }
+AMP_init_user( );
 $AMP_Authen_Handler->redirect_page( );
 
 if ( !empty($_POST) ) {

@@ -514,6 +514,19 @@ class Article extends AMPSystem_Data_Item {
 
     }
 
+    function relate( $section_id ) {
+        if ( !$section_id ) return false;
+        $db_related = $this->_getSectionsRelatedDB( );
+        if ( array_search( $section_id, $db_related ) !== FALSE ) return false;
+
+        require_once( 'AMP/Content/Section/RelatedSet.inc.php');
+        $related_section_set = &new SectionRelatedSet( $this->dbcon );
+
+        $insert_values = array( 'typeid' => $section_id , 'articleid' => $this->id );
+        return $related_section_set->insertData( $insert_values );
+
+    }
+
     function makeCriteriaSection( $section_id ) {
         $related_articles = &AMPContentLookup_RelatedArticles::instance( $section_id );
         if ( !$related_articles ) return $this->_makeCriteriaEquals( 'type', $section_id ) ;

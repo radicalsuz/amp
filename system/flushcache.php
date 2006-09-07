@@ -15,12 +15,14 @@ $flush_command = "rm -f `find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' 
 
 system($flush_command);
 
+/*
 if (AMP_SITE_MEMCACHE_ON) {
     require_once("AMP/System/Memcache.inc.php");
     if ( $memcache = &AMPSystem_Memcache::instance() ) {
         $memcache->memcache_connection->flush();
     }
 }
+*/
 
 if ($cache = &AMP_get_cache( )) {
     $cache->clear( );

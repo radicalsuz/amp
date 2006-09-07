@@ -275,7 +275,7 @@
 	var $cacheSecs = 3600; /// cache for 1 hour
 
 	// memcache
-	var $memCache = true; /// should we use memCache instead of caching in files
+	var $memCache = false; /// should we use memCache instead of caching in files
 	var $memCacheHost; /// memCache host
 	var $memCachePort = 11211; /// memCache port
 	var $memCacheCompress = false; /// Use 'true' to store the item compressed (uses zlib)

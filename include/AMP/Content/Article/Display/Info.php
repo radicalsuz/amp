@@ -123,7 +123,7 @@ class ArticleDisplay_Info extends Article_Display {
 
     function _renderRedirects( ){
         $redirect_url = $this->_article->getRedirect( );
-        $aliases = &$this->_article->getExistingAliases( );
+        $aliases = $this->_article->getExistingAliases( );
         $output = '';
         if ( $redirect_url ){
             $output .= $this->_renderer->inSpan( 

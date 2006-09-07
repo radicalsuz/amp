@@ -252,11 +252,11 @@ class Article_Form extends AMPSystem_Form_XML {
         return $commentList;
     }
 
-    function &_getRelatedSections( $data, $fieldname ) {
+    function _getRelatedSections( $data, $fieldname ) {
         $id = ( isset( $data['id']) && $data['id']) ? $data['id'] : false;
         if ( !$id ) return false;
 
-        $related_sections = &AMPContentLookup_SectionsByArticle::instance( $id );
+        $related_sections = AMPContentLookup_SectionsByArticle::instance( $id );
 
         if ( !$related_sections ) return false;
         return join( ',', array_keys( $related_sections ) );

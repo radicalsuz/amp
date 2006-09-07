@@ -1,5 +1,4 @@
 <?php
-
 if ( !defined( 'AMP_CONTENT_URL_INDEX' ))   define ( 'AMP_CONTENT_URL_INDEX',        'index.php');
 if ( !defined( 'AMP_CONTENT_URL_FRONTPAGE' ))     define ( 'AMP_CONTENT_URL_FRONTPAGE',    'index.php');
 if ( !defined( 'AMP_CONTENT_URL_LIST_SECTION' )) define ( 'AMP_CONTENT_URL_LIST_SECTION', 'article.php?list=type');

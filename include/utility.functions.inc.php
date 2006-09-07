@@ -1185,21 +1185,32 @@ if ( !function_exists( 'AMP_cleanPhoneNumber')){
 if ( !function_exists( 'AMP_get_cache')){
     function &AMP_get_cache( ){
 //        trigger_error( 'getting cache');
-        if ( !AMP_SYSTEM_CACHE ) return false;
+        $empty_value = false;
+        if ( !AMP_SYSTEM_CACHE ) return $empty_value;
 //        trigger_error( 'cache is on');
         static $cache = false;
         static $cache_failure = false;
         if ( $cache ) {
-//            trigger_error( 'return found cache');
             return $cache;
         }
-		if ( $cache_failure ) return false;
+		if ( $cache_failure ) return $empty_value;
 
+        $cache_filename = ( 'AMP/System/Cache/'.ucfirst( AMP_SYSTEM_CACHE ).'.php');
         require_once( 'AMP/System/Cache/'.ucfirst( AMP_SYSTEM_CACHE ).'.php');
         $cache_class = 'AMP_System_Cache_' . ucfirst( AMP_SYSTEM_CACHE );
-        $cache = call_user_func_array( array( $cache_class, 'instance'), array( ));
-		if (!$cache) $cache_failure = true;
-//        else trigger_error( 'cache create successful');
+        //$cache = call_user_func( array( $cache_class, 'instance'));
+        $cache = new $cache_class;
+        if ( !$cache->has_connection( )) {
+            trigger_error('MEMCACHE FAILED, attempting file cacheing for ' . $_SERVER['REQUEST_URI']);
+            $cache = false;
+            require_once( 'AMP/System/Cache/'.ucfirst( 'file' ).'.php');
+            $cache = new AMP_System_Cache_File;
+            if ( !$cache->has_connection( )) {
+                $cache = false;
+                $cache_failure = true;
+            }
+        } 
+
         return $cache;
     }
 }

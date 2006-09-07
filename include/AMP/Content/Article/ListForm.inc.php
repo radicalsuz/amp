@@ -23,10 +23,11 @@ class Article_ListForm extends AMP_System_List_Form {
     var $_source_object = 'Article';
 
     var $_observers_source = array( 'AMP_System_List_Observer');
-    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'regionize', 'reorder' );
+    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'relate', 'regionize', 'reorder' );
     var $_action_args = array( 
             'reorder'   => array( 'order' ), 
             'move'      => array( 'section_id', 'class_id' ), 
+            'relate'    => array( 'related_section_id' ), 
             'regionize' => array( 'region_id' )
         );
     var $_actions_global = array( 'reorder');
@@ -136,7 +137,12 @@ class Article_ListForm extends AMP_System_List_Form {
                             'id' => 'move_targeting')
                     ), 'move_targeting');
 
-        return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");if ( $(\"region_targeting\").style.display==\"block\") window.change_any( \"region_targeting\" );window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
+        //return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");if ( $(\"region_targeting\").style.display==\"block\") window.change_any( \"region_targeting\" );window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
+        return "<input type='button' name='showMove' value='Move' "
+                . "onclick='window.change_any( \"move_targeting\" );"
+                . "if ( $(\"region_targeting\").style.display==\"block\") window.change_any( \"region_targeting\");"
+                . "if ( $(\"relate_targeting\").style.display==\"block\") window.change_any( \"relate_targeting\");"
+                . "window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
 
     }
 
@@ -162,11 +168,46 @@ class Article_ListForm extends AMP_System_List_Form {
                             'id' => 'region_targeting')
                     ), 'region_targeting');
 
-        return "<input type='button' name='showRegion' value='Regionize' onclick='window.change_any( \"region_targeting\" );if ( $(\"move_targeting\").style.display==\"block\") window.change_any( \"move_targeting\");window.scrollTo( 0, document.anchors[\"region_targeting\"].y );'>&nbsp;";
+        //return "<input type='button' name='showRegion' value='Regionize' onclick='window.change_any( \"region_targeting\" );if ( $(\"move_targeting\").style.display==\"block\") window.change_any( \"move_targeting\");window.scrollTo( 0, document.anchors[\"region_targeting\"].y );'>&nbsp;";
+        return "<input type='button' name='showRegion' value='Regionize' "
+                . "onclick='window.change_any( \"region_targeting\" );"
+                . "if ( $(\"move_targeting\").style.display==\"block\") window.change_any( \"move_targeting\");"
+                . "if ( $(\"relate_targeting\").style.display==\"block\") window.change_any( \"relate_targeting\");"
+                . "window.scrollTo( 0, document.anchors[\"region_targeting\"].y );'>&nbsp;";
 
     }
 
-/*
+    function renderRelate( &$toolbar ){
+        $renderer = &$this->_getRenderer( );
+        $section_options = &AMPContent_Lookup::instance( 'sectionMap' );
+        if ( $section_options ){
+            $section_options = array( '' => 'Select Related Section' ) + $section_options;
+        } else {
+            $section_options = array( '' => 'Select Related Section' );
+        }
+                
+        $toolbar->addEndContent( 
+                $renderer->inDiv( 
+                        '<a name="relate_targeting"></a>'
+                        . AMP_buildSelect( 'related_section_id', $section_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element')))
+                        . '&nbsp;'
+                        . $toolbar->renderDefault( 'relate')
+                        . '&nbsp;'
+                        . "<input type='button' name='hideRelate' value='Cancel' onclick='window.change_any( \"relate_targeting\");'>&nbsp;",
+                        array( 
+                            'class' => 'AMPComponent_hidden', 
+                            'id' => 'relate_targeting')
+                    ), 'relate_targeting');
+
+        return "<input type='button' name='showRelate' value='Relate' "
+                . "onclick='window.change_any( \"relate_targeting\" );"
+                . "if ( $(\"move_targeting\").style.display==\"block\") window.change_any( \"move_targeting\");"
+                . "if ( $(\"region_targeting\").style.display==\"block\") window.change_any( \"region_targeting\");"
+                . "window.scrollTo( 0, document.anchors[\"relate_targeting\"].y );'>&nbsp;";
+
+    }
+
+    /*
     function _noRecordsOutput( ){
         //$this->_searchFailureNotice( );
         return parent::_noRecordsOutput( );

@@ -62,6 +62,10 @@ if (file_exists_incpath( 'SiteConfig.php' )) {
     die( "Couldn't find a local site configuration file. Please contact your system administrator." );
 }
 
+if (!isset( $ADODB_CACHE_DIR ) || !is_dir($ADODB_CACHE_DIR) || !is_writable($ADODB_CACHE_DIR)){
+	$ADODB_CACHE_DIR = AMP_urlFlip( AMP_LOCAL_PATH . '/cache' );
+}
+
 if (!defined( 'AMP_BASE_PATH' ))        define( 'AMP_BASE_PATH', $_SERVER['DOCUMENT_ROOT'] );
 if (!defined( 'AMP_BASE_INCLUDE_PATH')) define( 'AMP_BASE_INCLUDE_PATH', $_SERVER['DOCUMENT_ROOT'].'/include/' );
 

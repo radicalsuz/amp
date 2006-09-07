@@ -4,11 +4,11 @@ require_once("AMP/System/Permission/Manager.inc.php");
 require_once( 'AMP/System/Permission/Config.inc.php' );
 require_once( 'AMP/System/Flash.php');
 
-$AMP_Permission = & AMPSystem_PermissionManager::instance();
-
 //legacy setup from < 3.5.9 
-if ( isset( $_SERVER['REMOTE_USER']))  {
+function AMP_init_user( ) {
+    if ( !isset( $_SERVER['REMOTE_USER'])) return false; 
 
+    $AMP_Permission = & AMPSystem_PermissionManager::instance();
     $AMP_CurrentUser = false;
     $AMP_CurrentUser = &$AMP_Permission->readUser( $_SERVER['REMOTE_USER'] );
     if ( $AMP_CurrentUser ) {
@@ -26,7 +26,9 @@ if ( isset( $_SERVER['REMOTE_USER']))  {
         }
 
     }
+
 }
+AMP_init_user( );
 
 // confirm whether WYSIWYG editor should be allowed for this machine
 // this should probably eventually become a user setting instead of a cookie

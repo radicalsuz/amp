@@ -1,4 +1,5 @@
 <?php
+/*
 require_once( 'AMP/Base/DB.php' );
 require_once( 'AMP/System/Config.inc.php' );
 require_once( 'AMP/System/Language/Config.php');
@@ -6,6 +7,8 @@ require_once( 'AMP/Base/Debug.php');
 require_once( 'AMP/Base/Lookups.php');
 require_once( 'AMP/Base/Setup.php');
 require_once( 'AMP/System/Permission/Config.inc.php');
+*/
+require_once( 'AMP/System/Base.php');
 
 class AMP_Authentication_Handler {
 

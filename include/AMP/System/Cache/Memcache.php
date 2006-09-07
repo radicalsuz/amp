@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'AMP/System/Cache/File.php');
+require_once( 'AMP/System/Cache/Cache.php');
 
 class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
@@ -38,6 +38,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         return isset( $this->_memcache_connection );
     }
 
+    /*
     function &instance( ){
         static $cache = false;
         if ( $cache) return $cache;
@@ -51,6 +52,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
         return $cache;
     }
+    */
 
 
     function add( &$item, $key ){
@@ -150,4 +152,5 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     }
 }
 
+require_once( 'AMP/System/Cache/File.php');
 ?>

@@ -1,7 +1,6 @@
 <?php
 
 require_once( 'AMP/System/Cache/Cache.php');
-require_once( 'AMP/System/File/File.php');
 
 /**
  * AMP_System_Cache_File 
@@ -31,6 +30,7 @@ class AMP_System_Cache_File extends AMP_System_Cache {
 
     }
 
+    /*
     function &instance( ){
         static $cache = false;
         if ( !$cache) $cache = new AMP_System_Cache_File;
@@ -39,6 +39,7 @@ class AMP_System_Cache_File extends AMP_System_Cache {
         }
         return $cache;
     }
+    */
 
     function add( $item, $key ){
         $authorized_key = $this->authorize( $key );
@@ -88,8 +89,14 @@ class AMP_System_Cache_File extends AMP_System_Cache {
         if ( !$this->contains( $authorized_key )) return false;
 
         $this->_remove_index_key( $authorized_key );
+        $this->_load_file( );
         $entry_ref = & new AMP_System_File( $this->_path( $authorized_key ));
         return $entry_ref->delete( );
+    }
+
+    function _load_file( ){
+        if ( class_exists( 'AMP_System_File')) return true;
+        require_once( 'AMP/System/File/File.php');
     }
     
     function clear( $key_token = null ){
@@ -98,6 +105,7 @@ class AMP_System_Cache_File extends AMP_System_Cache {
             $this->delete( $authorized_key );
         }
         $file_set = AMPfile_list( $this->_path_cache );
+        $this->_load_file( );
 
         foreach( $file_set as $file_name ){
             if ( isset( $key_token ) && ( strpos( $file_name, $key_token ) === FALSE )) continue;

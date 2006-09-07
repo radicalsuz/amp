@@ -23,11 +23,13 @@ class AMP_System_Cache {
         $this->__construct( );
     }
 
+    /*
     function &instance( ){
         static $cache = false;
         if ( !$cache) $cache = new AMP_System_Cache;
         return $cache;
     }
+    */
 
     function __construct( ){
         $this->_load_index( );
