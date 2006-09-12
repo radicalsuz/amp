@@ -31,6 +31,7 @@ class UserDataPlugin_Save extends UserDataPlugin {
         // Since this data comes from the form, it's a good idea to stick to
         // these permissions, since other data may be unreliable.
         $data = $this->getData( $this->save_fields );
+
         if (isset( $options )) $this->setOptions( $options );
 
         return $this->save( $data );

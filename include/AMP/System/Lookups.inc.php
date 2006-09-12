@@ -736,4 +736,25 @@ class AMPSystemLookup_Filters extends AMPConstant_Lookup {
         }
     }
 }
+
+class AMPSystemLookup_Tags extends AMPSystem_Lookup {
+    var $datatable = 'tags';
+    var $result_field = 'name';
+    var $sortby = 'name';
+
+    function AMPSystemLookup_Tags( ) {
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_TagImages extends AMPSystem_Lookup {
+    var $datatable = 'tags';
+    var $result_field = 'image';
+    var $sortby = 'image';
+
+    function AMPSystemLookup_TagImages( ) {
+        $this->init( );
+    }
+}
+
 ?>

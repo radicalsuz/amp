@@ -48,7 +48,7 @@ class ComponentMap_PublicPage extends AMPSystem_ComponentMap {
     }
 
     function _initFormForIntrotext( &$form , $introtext_id ){
-        require_once( 'AMP/System/Introtext.inc.php');
+        require_once( 'AMP/System/IntroText.inc.php');
         $dbcon = &AMP_Registry::getDbcon( );
         $publish_item = &new AMPSystem_Introtext( $dbcon, $introtext_id);
         $GLOBALS['modid'] = $publish_item->getToolId( );

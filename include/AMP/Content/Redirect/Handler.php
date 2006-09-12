@@ -91,7 +91,7 @@ class AMP_Content_Redirect_Handler {
     function &_searchRedirects( $criteria ) {
         require_once( 'AMP/Content/Redirect/Redirect.php');
         $redirect_source = &new AMP_Content_Redirect( AMP_Registry::getDbcon( ));
-        $results = &$redirect_source->search( $redirect_source->makeCriteria( $criteria ) );
+        $results = $redirect_source->search( $redirect_source->makeCriteria( $criteria ) );
         if ( !$results ) return $results;
         return current( $results );
     }

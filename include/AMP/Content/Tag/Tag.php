@@ -22,7 +22,8 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
     }
 
     function &getImageRef() {
-        if (! ($img_path = $this->getImageFileName())) return false;
+        $empty_value = false;
+        if (! ($img_path = $this->getImageFileName())) return $empty_value;
         require_once( 'AMP/Content/Image.inc.php');
         $image = &new Content_Image( $img_path );
         return $image;
@@ -62,6 +63,7 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
         $this->_contents_criteria[] = $criteria;
     }
 */
+
 
 
 }

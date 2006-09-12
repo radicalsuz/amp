@@ -473,8 +473,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	//get Region Values for state and country lookups
 	function setupRegion () {
 		if (!isset($this->regionset)) {$this->regionset=new Region();}
-		$this->lookups['country']['Set']=&$this->getValueSet( $this->udm->fields['Country']);
-		$this->lookups['state']['Set']=&$this->regionset->regions['US AND CANADA'];
+		$this->lookups['country']['Set']= $this->getValueSet( $this->udm->fields['Country']);
+		$this->lookups['state']['Set']= $this->regionset->regions['US AND CANADA'];
 	}
 
 

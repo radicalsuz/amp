@@ -531,7 +531,6 @@ if (!function_exists('AMPfile_list')) {
             }
             $basename = basename($dir_name);
             $fileArr = array();
-            $fileArr[''] = 'Select';
             while ($file_name = readdir($dir)) {
                 if ( is_dir( $dir_name . DIRECTORY_SEPARATOR . $file_name )) continue; 
                 
@@ -546,7 +545,8 @@ if (!function_exists('AMPfile_list')) {
             }	
             //uksort($fileArr, "strnatcasecmp");
             natcasesort( $fileArr );
-            return $fileArr;
+            $final_list = array( '' => 'Select') + $fileArr;
+            return $final_list;
 		} 
 }
 

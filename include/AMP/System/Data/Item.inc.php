@@ -290,7 +290,12 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $fields = $this->_itemdata_keys;
         $values_noescape = array_values( $data );
 
-        foreach ( $fields as $field ) {
+        foreach ( $fields as $key => $field ) {
+            if ( !isset( $data[$field ])) {
+                unset( $fields[ $key ]);
+                continue;
+            }
+
             $value = $data[$field];
             $values[] = $dbcon->qstr( $value );
         }

@@ -74,4 +74,16 @@ define( "AMP_SYSTEM_VERSION_ID", '3.6.1');
 define( 'MAGIC_QUOTES_ACTIVE', get_magic_quotes_gpc());
 
 
+/**
+ * Taggable Item Types
+ **/
+
+define( 'AMP_SYSTEM_ITEM_TYPE_FORM', 'form');
+define( 'AMP_SYSTEM_ITEM_TYPE_EVENT', 'event');
+define( 'AMP_SYSTEM_ITEM_TYPE_ARTICLE', 'article');
+define( 'AMP_SYSTEM_ITEM_TYPE_FILE', 'file');
+define( 'AMP_SYSTEM_ITEM_TYPE_GALLERY', 'gallery');
+define( 'AMP_SYSTEM_ITEM_TYPE_GALLERY_IMAGE', 'gallery_image');
+define( 'AMP_SYSTEM_ITEM_TYPE_LINK', 'link');
+
 ?>

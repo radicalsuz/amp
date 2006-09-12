@@ -184,7 +184,7 @@ class UserData {
 		}
 
 		$javascript = '';
-		foreach ($this->getPlugins() as $action) {
+		foreach ($this->getPlugins() as $action) {;
 			foreach ($action as $component) {
 				if($plugin_javascript = $component->get_javascript()) {
 					$javascript .= $plugin_javascript;
@@ -315,7 +315,8 @@ class UserData {
 		if(isset($callback)) {
 			return $callback;
 		}
-		return false;
+        $empty_value = false;
+		return $empty_value;
 	}
 
 	function setErrorHandler($type, $callback) {
@@ -585,9 +586,10 @@ class UserData {
     function &getPlugin( $namespace, $action ) {
 
         $plugins =& $this->plugins;
+        $empty_value = false;
 
-        if (!isset($plugins[$action])) return false;
-        if (!isset($plugins[$action][$namespace])) return false;
+        if (!isset($plugins[$action])) return $empty_value;
+        if (!isset($plugins[$action][$namespace])) return $empty_value;
 
         $actions =& $plugins[$action];
         $plugin  =& $actions[$namespace];
@@ -638,21 +640,21 @@ class UserData {
      *
      *****/
 
-    function getPlugins ( $action = null ) { 
-
-        if (!isset($this->plugins)) return false;
+    function &getPlugins ( $action = null ) { 
+        $empty_value = false;
+        if (!isset($this->plugins)) return $empty_value;
 
         if ($action) {
             if ( isset($this->plugins[$action]) ) {
                 return $this->plugins[$action];
             } else {
-                return false;
+                return $empty_value;
             }
         } else {
             return $this->plugins;
         }
 
-        return false;
+        return $empty_value;
     }
 
     /*****
@@ -685,7 +687,8 @@ class UserData {
         $incl = join( DIRECTORY_SEPARATOR, array( 'Modules', 'UDM', $namespace, $action . '.inc.php' ) );
 
         // Do not pass GO if the plugin doesn't actually exist.
-        if ( !file_exists_incpath( $incl ) ) return false;
+        $empty_value = false;
+        if ( !file_exists_incpath( $incl ) ) return $empty_value;
 
         require_once( $incl );
 
@@ -754,7 +757,7 @@ class UserData {
 
     function doAction ( $action, $options = array() ) {
 
-        $plugins =& $this->getPlugins( $action );
+        $plugins = $this->getPlugins( $action );
 
         if (!isset( $plugins )|| !is_array($plugins) ) return false;
         
@@ -1046,7 +1049,8 @@ class UserData {
 
 
     function &saveRegisteredPlugin ( $namespace, $action ) {
-        if (! ($plugin = &$this->registerPlugin( $namespace, $action ))) return false;
+        $empty_value = false;
+        if (! ($plugin = &$this->registerPlugin( $namespace, $action ))) return $empty_value;
         $plugin->saveRegistration( $namespace, $action );
         return $plugin;
     }

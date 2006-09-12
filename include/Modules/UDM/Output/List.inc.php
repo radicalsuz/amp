@@ -170,7 +170,7 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
         if ( $this->udm->hasErrors( )) $options['component_order'] = $this->_getErrorOptions( );
         
         $order = preg_split( '/\s?,\s?/', $options['component_order']);
-        $plugins_set = &$this->udm->getPlugins( );
+        $plugins_set = $this->udm->getPlugins( );
         $active_components = array_combine_key( $order, $plugins_set ) ;
 
         $output_html = "";
