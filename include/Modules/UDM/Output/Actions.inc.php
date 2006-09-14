@@ -76,10 +76,12 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
     function read_request($options=array()) {
         $options=array_merge($this->getOptions(), $options);
         
+        trigger_error( 'reading request' );
         if (isset($_POST['list_action'])&&$_POST['list_action']&&$options['allow_'.$_POST['list_action']]) {
             
             $this->action=$_POST['list_action'];
             $action=$this->action.'_set';
+            trigger_error( 'action is ' . $action );
             
             if (method_exists($this, $action)) {
 
@@ -106,8 +108,12 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
 
     function setCriteria() {
 
-        if (!isset($this->udm->url_criteria)) $this->criteria=$this->udm->parse_URL_crit(); 
-        else $this->criteria=$this->udm->url_criteria;
+        if (!isset($this->udm->url_criteria) || empty( $this->udm->url_criteria )) {
+            $this->criteria=$this->udm->parse_URL_crit(); 
+        } else {
+            $this->criteria=$this->udm->url_criteria;
+
+        }
         
         if ($pager_set= $this->udm->getPlugins('Pager')) {
             $pager = current($pager_set);
@@ -329,12 +335,11 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
             $criteria[] = 'uid[]=' . join('&uid[]=', $set_values);
         }
 
-        $url_vals = join("&", $criteria);
 
-        $target = '/system/form_export.php?'.$url_vals;
+        $target = AMP_Url_AddVars( AMP_SYSTEM_URL_FORM_EXPORT, $criteria );
         $metatag ='<META http-equiv="refresh" content="2; URL='.$target.'">';
-        $message = "Your download should begin within one minute.<BR>
-                    If it does not, please <a href=\"$target\">click here</a>.";
+        $message =  sprintf( AMP_TEXT_LIST_EXPORT_PROCESS_TEXT, $target );
+
         return $metatag.$message;
         
 

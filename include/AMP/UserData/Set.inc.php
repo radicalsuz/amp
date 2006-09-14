@@ -196,7 +196,7 @@ class UserDataSet extends UserData {
     }
 
     function getURLCriteria() {
-        if (isset($this->url_criteria)) return $this->url_criteria;
+        if (isset($this->url_criteria) && !empty( $this->url_criteria )) return $this->url_criteria;
         else return $this->parse_URL_crit();
     }
 

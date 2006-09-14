@@ -30,7 +30,7 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
         $this->_active = ( $public_setting || $this->udm->admin );
 
         $fields = array( 
-            'tag_listing' => array( 
+            'tag_add' => array( 
                 'type'      => 'multiselect',
                 'size'      => 12,
                 'label'     => 'Select Tags',
@@ -41,7 +41,7 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
         );
 
         $this->fields = &$fields;
-        $this->insertAfterFieldOrder( array_keys( $fields ));
+        $this->insertAfterFieldOrder( array( 'tag_list', 'tag_add') );
 
     }
 
@@ -58,10 +58,10 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
         $item_data['item_id'] = $this->udm->uid;
         if ( $this->_active ) $this->_clear_saved_tags( );
 
-        if ( !isset( $data['tag_listing']) || !( $data['tag_listing'])) {
+        if ( !isset( $data['tag_add']) || !( $data['tag_add'])) {
             return true;
         }
-        $selected_tags = split( ", ", $data['tag_listing'] );
+        $selected_tags = split( ", ", $data['tag_add'] );
         require_once( 'AMP/System/Data/Set.inc.php');
         $save_table = & new AMPSystem_Data_Set( $this->dbcon );
         $save_table->setSource( 'tags_items' );

@@ -74,7 +74,7 @@ class AMPSystem_Lookup {
         $this->dataset = $factory->readData( $this );
     }
 
-    function &instance( $type, $lookup_baseclass="AMPSystemLookup" ) {
+    function &instance( $type, $instance_var = null, $lookup_baseclass="AMPSystemLookup" ) {
         static $lookup_set = false;
         $empty_value = false;
         if (!$lookup_set) $lookup_set = array();
@@ -83,7 +83,19 @@ class AMPSystem_Lookup {
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
             return $empty_value;
         }
-        if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
+        if ( !isset( $instance_var )) {
+            //standard lookup
+            if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
+        } else {
+            //instanced lookup
+            if ( !isset( $lookup_set[$type])) {
+                $lookup_set[$type] = array( );
+            }
+            if ( !isset( $lookup_set[$type][$instance_var])) {
+                $lookup_set[$type][$instance_var] = &new $req_class( $instance_var );
+            }
+            return $lookup_set[$type][$instance_var]->dataset;
+        }
         return $lookup_set[$type]->dataset;
     }
 
@@ -94,7 +106,13 @@ class AMPSystem_Lookup {
         if ( 'constant' == $lookup_def['module']) $lookup_def['module'] = "AMPConstant";
         $lookup_class = str_replace( " ", "", ucwords( $lookup_def['module'])) . '_Lookup';
         if ( !class_exists( $lookup_class ) && !AMPSystem_Lookup::loadLookups( $lookup_def['module'], $lookup_class )) return $empty_value;
-        $result = call_user_func( array( $lookup_class, 'instance'), $lookup_def['instance'] ) ;
+
+        //set lookup args
+        $lookup_args = array( $lookup_def['instance'] );
+        if ( isset( $lookup_def['instance_var'])) {
+            $lookup_args[] = $lookup_args['instance_var'];
+        }
+        $result = call_user_func_array( array( $lookup_class, 'instance'), $lookup_args ) ;
         return $result;
     }
 
@@ -587,7 +605,7 @@ class AMPConstant_Lookup {
         }
     }
 
-    function &instance( $type, $lookup_baseclass="AMPConstantLookup" ) {
+    function &instance( $type, $instance_var = null, $lookup_baseclass="AMPConstantLookup" ) {
         static $lookup_set = false;
         if (!$lookup_set) $lookup_set = array();
         $req_class = $lookup_baseclass . '_' . ucfirst($type);
@@ -595,7 +613,19 @@ class AMPConstant_Lookup {
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
             return false;
         }
-        if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
+        if ( !isset( $instance_var )) {
+            //standard lookup
+            if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
+        } else {
+            //instanced lookup
+            if ( !isset( $lookup_set[$type])) {
+                $lookup_set[$type] = array( );
+            }
+            if ( !isset( $lookup_set[$type][$instance_var])) {
+                $lookup_set[$type][$instance_var] = &new $req_class( $instance_var );
+            }
+            return $lookup_set[$type][$instance_var]->dataset;
+        }
         return $lookup_set[$type]->dataset;
     }
 
@@ -754,6 +784,31 @@ class AMPSystemLookup_TagImages extends AMPSystem_Lookup {
 
     function AMPSystemLookup_TagImages( ) {
         $this->init( );
+    }
+}
+
+class AMPSystemLookup_TagsByForm extends AMPSystem_Lookup {
+    var $datatable = 'tags_items';
+    var $result_field = 'tag_id';
+    var $id_field = 'tag_id';
+    var $_criteria_base = 'item_type=';
+
+    function AMPSystemLookup_TagsByForm( $form_id ) {
+        $this->criteria = $this->makeCriteriaForm( $form_id );
+        $this->init( );
+
+        $tag_lookup = AMPSystem_Lookup::instance( 'tags' );
+        $this->dataset = array_combine_key( $this->dataset, $tag_lookup );
+
+        if ( $this->dataset ) {
+            natcasesort( $this->dataset );
+        }
+    }
+
+    function makeCriteriaForm( $form_id ) {
+        $dbcon = AMP_Registry::getDbcon( );
+        return $this->_criteria_base . $dbcon->qstr( AMP_SYSTEM_ITEM_TYPE_FORM ) 
+                            . ' AND item_id = ' . $dbcon->qstr( $form_id );
     }
 }
 

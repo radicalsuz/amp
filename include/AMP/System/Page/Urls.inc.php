@@ -35,6 +35,7 @@ define( 'AMP_SYSTEM_URL_TEMPLATE',              'template.php');
 define( 'AMP_SYSTEM_URL_CUSTOM_FILE',           'customfile.php');
 define( 'AMP_SYSTEM_URL_FORMS',                 'form_manager.php');
 define( 'AMP_SYSTEM_URL_FORM_SETUP',            'modinput4_edit.php');
+define( 'AMP_SYSTEM_URL_FORM_EXPORT',           '/system/form_export.php');
 define( 'AMP_SYSTEM_URL_FORM_DATA',             'userdata_list.php');
 define( 'AMP_SYSTEM_URL_FORM_ENTRY',            'modinput4_view.php');
 define( 'AMP_SYSTEM_URL_PUBLIC_PAGE_PUBLISH',   'module_contentadd.php');

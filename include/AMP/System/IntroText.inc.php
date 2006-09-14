@@ -19,9 +19,9 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     var $textdata;
     var $_textdata_keys;
     var $id;
-    var $datatable = "moduletext";
+    var $datatable = 'moduletext';
     var $name_field = 'name';
-    var $_exact_value_fields = array( 'modid');
+    var $_exact_value_fields = array( 'modid' );
 
     function AMPSystem_IntroText ( &$dbcon, $text_id=null ) {
         $this->init( $dbcon, $text_id );
@@ -53,6 +53,7 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     function getTitle() {
         return $this->getData( 'title' );
     }
+
     function getSubTitle() {
         return $this->getData( 'subtitle' );
     }
@@ -136,4 +137,4 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
 
  }
 
- ?>
+?>

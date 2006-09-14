@@ -9,8 +9,8 @@ class AMPContent_Lookup extends AMPSystem_Lookup {
         $this->init();
     }
 
-    function &instance( $type, $lookup_baseclass="AMPContentLookup" ) {
-        return parent::instance( $type, $lookup_baseclass );
+    function &instance( $type, $instance_var = null, $lookup_baseclass="AMPContentLookup" ) {
+        return parent::instance( $type, $instance_var, $lookup_baseclass );
     }
 
 

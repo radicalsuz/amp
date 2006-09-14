@@ -21,7 +21,6 @@ class UserDataPlugin_Read_Tags extends UserDataPlugin {
                 'enabled'=>true
                 )
         );
-        $this->insertAfterFieldOrder( array_keys( $this->fields ) );
     }
 
     function execute( $options = array( )) {
@@ -29,10 +28,15 @@ class UserDataPlugin_Read_Tags extends UserDataPlugin {
         if (!isset( $options['_userid'] ) ) return false;
         $uid = $options['_userid'];
 
-        require_once( 'AMP/Content/Tag/Item/List.php');
-        $tag_list = &new AMP_Content_Tag_Item_List ( $this->dbcon, array( 'uid' => $uid ) );
+        require_once( 'AMP/Content/Tag/Item/List/Tags.php');
+        $tag_list = &new AMP_Content_Tag_Item_List_Tags ( $this->dbcon, array( 'uid' => $uid ) );
 
         $this->udm->fields[ $this->addPrefix('tag_list') ]['values'] = $this->inForm($tag_list->output());
+        $tag_values = AMPSystem_Lookup::instance( 'tagsByForm', $uid );
+        if ( $tag_values ) {
+            $this->udm->fields[ $this->addPrefix('tag_add') ]['value'] = array_keys( $tag_values ); 
+
+        }
     }
         
 }

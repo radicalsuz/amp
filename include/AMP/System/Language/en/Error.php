@@ -8,6 +8,8 @@ define( 'AMP_TEXT_ERROR_IMAGE_LIBRARY_NOT_FOUND', '%s %s failed: Your installati
 
 define( 'AMP_TEXT_ERROR_DATA_COPY_FAILURE_MULTIPLE_IDS', 'Multiple ID fields, cannot copy.');
 
+define ('AMP_TEXT_ERROR_FAILED', '%s Failed' );
+define ('AMP_TEXT_ERROR_NO_SELECTION', '%s not selected' );
 define ('AMP_TEXT_ERROR_LOOKUP_SQL_FAILED', 'Failed to retrieve %s: %s' );
 define( 'AMP_TEXT_ERROR_LOOKUP_NOT_FOUND', 'Lookup %s : not found');
 define( 'AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED', '%s does not support method %s attempted by %s');

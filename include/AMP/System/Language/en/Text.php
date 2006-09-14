@@ -39,6 +39,7 @@ define( 'AMP_TEXT_EDIT_ITEM', 'Edit this Item');
 define( 'AMP_TEXT_EDIT', 'Edit');
 define( 'AMP_TEXT_VIEW', 'View');
 define( 'AMP_TEXT_LIST', 'List');
+define( 'AMP_TEXT_EXPORT', 'Export');
 define( 'AMP_TEXT_ADD', 'Add');
 define( 'AMP_TEXT_ITEM_NAME', 'Item');
 define( 'AMP_TEXT_SEARCH', 'Search');
@@ -54,6 +55,7 @@ define( 'AMP_TEXT_PREVIEW_ITEM','Preview this Item' );
 define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
 define( 'AMP_TEXT_LIST_CONFIRM_DELETE', 'Are you sure you want to DELETE these items?');
 define( 'AMP_TEXT_LIST_CONFIRM_RECALCULATE_IMAGES', 'Recalculating image sizes may take several minutes.\n  Please do not interfere with your browser during this time.\n  Are you sure you want to continue?');
+define( 'AMP_TEXT_LIST_EXPORT_PROCESS_TEXT', 'Your download should begin within one minute.<BR> If it does not, please <a href="%s">click here</a>.');
 
 define( 'AMP_TEXT_PETITION_SIGNERS', 'signers');
 define( 'AMP_TEXT_CROP', 'Crop');
@@ -145,6 +147,7 @@ define( 'AMP_TEXT_SECTION', 'section');
 define( 'AMP_TEXT_SECTION_LIST', 'section list');
 define( 'AMP_TEXT_CLASS', 'class');
 define( 'AMP_TEXT_ARTICLE', 'article');
+define( 'AMP_TEXT_FORM', 'form');
 define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
 
 define( 'AMP_TEXT_TEMPLATE', 'template');
@@ -222,5 +225,17 @@ define( 'AMP_TEXT_VERSION_ID', 'Archived Content - Version ID: %s');
 define( 'AMP_TEXT_IMAGE_CLASS_THUMB', 'thumbnail' );
 define( 'AMP_TEXT_IMAGE_CLASS_OPTIMIZED_TALL', 'tall image' );
 define( 'AMP_TEXT_IMAGE_CLASS_OPTIMIZED_WIDE', 'wide image' );
+
+/*** 
+ * Taggable Item Descriptions
+ * */
+
+define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_FORM', 'form');
+define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_EVENT', 'event');
+define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_ARTICLE', 'article');
+define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_FILE', 'file');
+define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_GALLERY', 'gallery');
+define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_GALLERY_IMAGE', 'gallery_image');
+define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_LINK', 'link');
 
 ?>

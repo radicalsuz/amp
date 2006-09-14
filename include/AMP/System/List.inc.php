@@ -719,7 +719,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     }
     
-    function _setSortForArray( &$source ){
+    function _setSortForArray( &$source ) {
         $sort_request = ( isset($_REQUEST['sort']) && $_REQUEST['sort'] ) ? $_REQUEST['sort'] : false ; 
         if ( !$sort_request ) {
             $this->_after_sort( $source );
@@ -731,6 +731,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
                             $_REQUEST['sort_direction'] : false;
 
         if ( method_exists( $this, $local_sort_method)) {
+
             $result = $this->$local_sort_method( $source, $sort_direction );
             $this->_after_sort( $source );
             return $result;
