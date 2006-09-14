@@ -14,19 +14,24 @@ require_once( 'AMP/UserData/Set.inc.php' );
 require_once( 'AMP/System/Base.php' );
 require_once( 'utility.functions.inc.php' );
 
-$modin = (isset($_REQUEST['modin']) && $_REQUEST['modin'])?$_REQUEST['modin']:false;
 $show_template=false;
+$modin = false;
+$flash = & AMP_System_Flash::instance( );
 
-if ($modin) {
-    $modidselect=$dbcon->GetRow("SELECT id, perid from modules where userdatamodid=" . $modin) or DIE($dbcon->ErrorMsg());
-    $modid=$modidselect['id'];
-    $modin_permission=$modidselect["perid"];
+if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
+    $modin=$_REQUEST['modin'];
 } else {
-    ampredirect("modinput4_list.php");
+    $flash->add_error( sprintf( AMP_TEXT_ERROR_NO_SELECTION, AMP_TEXT_FORM ));
+    ampredirect( AMP_SYSTEM_URL_FORMS );
+    exit;
 }
 
+$form_permissions = &AMPSystem_Lookup::instance( 'PermissionsbyForm');
+$modin_permission = ( isset( $form_permissions[$modin]) && $form_permissions[$modin]) ? $form_permissions[$modin] : false;
+
 $view_permission = (AMP_Authorized(AMP_PERMISSION_FORM_DATA_EXPORT)
-                 && AMP_Authorized($modin_permission));
+                 && ( $modin_permission ? AMP_Authorized($modin_permission) : true ));
+
 if ( $view_permission ) {
     $admin = true;
     // Fetch the form instance specified by submitted modin value.
@@ -53,11 +58,17 @@ if ( $view_permission ) {
         print $output;
     } else {
         $show_template=true;
-        $output = "Export failed:<BR>".join("<BR>",$userlist->errors);
+        $flash = AMP_System_Flash::instance( );
+        $renderer = AMP_get_renderer( );
+        $error_message = sprintf( AMP_TEXT_ERROR_FAILED, AMP_TEXT_EXPORT );
+        $error_message .= $renderer->newline( ).join($renderer->newline( ),$userlist->errors);
+        $flash->add_error( $error_message );
     }
 } else {
     $show_template = true;
-    $output = 'You do not have permission to export this list'; 
+    $error_message = sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, AMP_TEXT_EXPORT );
+    $flash->add_error( $error_message ); 
+    $output = $error_message; 
 }
 
 

@@ -16,7 +16,7 @@ require_once('AMP/UserData/Set.inc.php');
 if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
     $modin=$_REQUEST['modin'];
 } else {
-    header ("Location: modinput4_list.php");
+    ampredirect( AMP_SYSTEM_URL_FORMS );
 }
 
 $form_permissions = &AMPSystem_Lookup::instance( 'PermissionsbyForm');
