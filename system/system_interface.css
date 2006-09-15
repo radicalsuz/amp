@@ -722,3 +722,8 @@ div.tag_listing div.list_row:hover {
 div.tag_listing_icon {
 	float: right;
 }
+
+div.list_row_controls {
+	float: left;
+	padding-right: 2em;
+}

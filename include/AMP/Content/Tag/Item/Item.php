@@ -5,8 +5,25 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
     var $datatable = "tags_items";
     var $_class_name = 'AMP_Content_Tag_Item';
 
+    var $_item_type;
+
+    var $_tagged_item;
+
+    var $_tagged_class_form = 'AMP_System_User_Profile';
+    var $_tagged_class_article = 'Article';
+
+    var $_tagged_path_form = 'AMP/System/User/Profile/Profile.php';
+    var $_tagged_path_article = 'AMP/Content/Article.inc.php';
+
     function AMP_Content_Tag_Item( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
+    }
+
+    function _adjustSetData( $data ) {
+        if ( !isset( $this->_tagged_item ) 
+           || ( $this->_tagged_item->id != $this->getItemId( ) )) {
+            $this->_init_tagged_item( );
+        }
     }
 
     function getTagName( ) {
@@ -33,6 +50,18 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
 
     function getTag( ) {
         return $this->getData( 'tag_id');
+    }
+
+    function getItemtype( ) {
+        return $this->getData( 'item_type');
+    }
+
+    function getItemId( ) {
+        return $this->getData( 'item_id');
+    }
+
+    function getItemName( ) {
+        return $this->_tagged_item->getName( );
     }
 
     function makeCriteriaUid( $uid ) {
@@ -65,6 +94,7 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
         return $this->makeCriteriaTag( current( $tag_ids ));
     }
 
+    /*
     function _sort_default( &$item_set ){
         $names_lookup = &AMPSystem_Lookup::instance('tags' );
         $order = array_keys( $names_lookup );
@@ -78,6 +108,38 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
         $ordered_set = array_combine_key( $order, $translate_set);
         $item_set = array_combine_key( $ordered_set, $item_set );
     }
+    */
+
+    function _init_tagged_item( ) {
+        if ( !$this->hasData( )) return false;
+        $item_type = $this->getItemtype( );
+        if ( !$item_type ) return false;
+
+        $item_type_path = '_tagged_path_' . $item_type;
+        if ( !isset( $this->$item_type_path ) && $this->$item_type_path) return false; 
+        include_once( $this->$item_type_path );
+
+        $item_type_class_var = '_tagged_class_' . $item_type;
+        if ( !isset( $this->$item_type_class_var ) && $this->$item_type_class_var ) return false; 
+        $item_type_class = $this->$item_type_class_var;
+        $this->_tagged_item = & new $item_type_class( AMP_Registry::getDbcon( ), $this->getItemId( ) );
+    }
+
+    function getName( ) {
+        if ( !$this->hasData( )) return false;
+        $this->_tagged_item->getName( );
+    }
+
+    function getURL( ) {
+        if ( !method_exists( $this->_tagged_item, 'getURL')) return false;
+        return $this->_tagged_item->getURL( );
+    }
+
+    function get_url_edit( ) {
+        if ( !method_exists( $this->_tagged_item, 'get_url_edit')) return false;
+        return $this->_tagged_item->get_url_edit( );
+    }
+
 }
 
 ?>

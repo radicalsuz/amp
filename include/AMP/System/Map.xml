@@ -88,6 +88,11 @@
 		<class>add</class>
 		<per>CONTENT_SECTION_EDIT</per>
 	</item>
+    <item>
+        <separator>1</separator>
+        <href>tag.php</href>
+        <label>View Tags</label>
+    </item>
 	<item>
 		<href>class.php?action=list</href>
 		<label>View Classes</label>

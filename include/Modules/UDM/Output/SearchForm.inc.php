@@ -202,7 +202,9 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 			
 		//country listing
         $country_value = ( isset( $_REQUEST['country']) && $_REQUEST['country']) ? $_REQUEST['country'] : null;
-		$def['country'] =array('type'=>'select', 'label'=>'By Country', 'required'=>false,  'values'=>$this->lookups['country']['Set'], 'size'=>null, 'value'=> $country_value , 'public'=>'1');
+        if ( $this->getValueSet( $this->udm->fields['Country'] )) {
+            $def['country'] =array('type'=>'select', 'label'=>'By Country', 'required'=>false,  'values'=>$this->lookups['country']['Set'], 'size'=>null, 'value'=> $country_value , 'public'=>'1');
+        }
 
 		//state listing
 		//accepts area values

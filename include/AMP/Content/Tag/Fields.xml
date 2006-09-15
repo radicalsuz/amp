@@ -1,0 +1,17 @@
+<array>
+    <id>
+        <type>hidden</type>
+    </id>
+    <name>
+        <type>text</type>
+        <label>Tag</label>
+    </name>
+    <image>
+        <type>imagepicker</type>
+        <label>Icon</label>
+    </image>
+    <description>
+        <type>textarea</type>
+        <label>Blurb</label>
+    </description>
+</array>

@@ -30,9 +30,15 @@ class SectionContents_Manager {
 
     function &_getContentSource( $listType ) {
 
-        $this->_contentSourceType = str_replace( " ", "", ucwords( str_replace( "_", " ", strtolower( $this->getDisplayType( $listType ) ) ) ) );
+        $source_override_value = 'AMP_CONTENT_SOURCE_' . $listType;
+        if( defined ( $source_override_value )) {
+            $contentSource_class = constant( $source_override_value ) ;
+        } else {
+            //standard parsing method to figure out source class
+            $this->_contentSourceType = str_replace( " ", "", ucwords( str_replace( "_", " ", strtolower( $this->getDisplayType( $listType ) ) ) ) );
+            $contentSource_class = 'SectionContentSource_'.$this->_contentSourceType;
+        }
         
-        $contentSource_class = 'SectionContentSource_'.$this->_contentSourceType;
         $result = &new $contentSource_class( $this->_section );
         return $result;
     }
