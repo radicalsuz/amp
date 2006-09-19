@@ -306,6 +306,20 @@
         return $this->_search_fulltext;
     }
 
+    function makeCriteriaTag( $tag_value ) {
+        if ( !isset( $this->_item_type )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this ), '_item_type' ));
+            trigger_error( sprintf( AMP_TEXT_ERROR_CREATE_FAILED, get_class( $this ), 'tag criteria ' . $tag_value ));
+            return false;
+        }
+        $lookup_type =  AMP_pluralize(  $this->_item_type ) . 'ByTag' ;
+        $id_set = AMPSystem_Lookup::instance( $lookup_type, $tag_value );
+        if ( !$id_set || empty( $id_set )) return 'FALSE';
+
+        return $this->id_field . ' IN ( '. join( ',', $id_set ) . ')';
+        
+    }
+
 }
 
 ?>

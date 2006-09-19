@@ -50,6 +50,13 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
     }
 
     function save( $data ) {
+        if ( !isset( $data['tag_add']) || !( $data['tag_add'])) {
+            return true;
+        }
+        $selected_tags = split( ", ", $data['tag_add'] );
+        AMP_update_tags( $selected_tags, $this->udm->uid , AMP_SYSTEM_ITEM_TYPE_FORM);
+        return true;
+        /* older method 
         $item_data = array( );
         if ( defined( 'AMP_SYSTEM_USER_ID')) {
             $item_data['user_id'] = AMP_SYSTEM_USER_ID;
@@ -71,6 +78,7 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
             $save_table->insertData( $tag_save_set );
         }
         return true;
+        */
     }
 
     function _clear_saved_tags( ) {

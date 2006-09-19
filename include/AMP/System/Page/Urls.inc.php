@@ -9,6 +9,7 @@ if ( !defined( 'AMP_SYSTEM_URL_HOME'))
         define( 'AMP_SYSTEM_URL_HOME',          'articlelist.php');
 define( 'AMP_SYSTEM_URL_REDIRECT',              '/system/login_redirect.php');
 define( 'AMP_SYSTEM_URL_GALLERIES',             'gallery_type.php?action=list');
+define( 'AMP_SYSTEM_URL_GALLERY',               'gallery_type.php' );
 define( 'AMP_SYSTEM_URL_GALLERY_IMAGE',         'gallery_image.php');
 define( 'AMP_SYSTEM_URL_GALLERY_IMAGES',        'gallery_image.php?action=list');
 define( 'AMP_SYSTEM_URL_IMAGE_UPLOAD',          'image_manager.php?action=add');

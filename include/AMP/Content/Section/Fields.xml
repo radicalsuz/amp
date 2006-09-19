@@ -37,6 +37,7 @@
         <label>Date and Redirect</label>
         <block>date_redirect</block>
         <block_trigger>linkurl</block_trigger>
+        <block_trigger>date_display</block_trigger>
     </date_redirect_header>
 	<linkurl>
 		<type>text</type>

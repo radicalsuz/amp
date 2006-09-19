@@ -34,7 +34,8 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     }
 
     function &getDisplay() {
-        return new ArticleDisplay_IntroText( $this );
+        $display = & new ArticleDisplay_IntroText( $this );
+        return $display;
     }
 
     function _blankIdAction( ){

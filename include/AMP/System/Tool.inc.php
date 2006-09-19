@@ -13,5 +13,10 @@ class AMPSystem_Tool extends AMPSystem_Data_Item {
     function _blankIdAction( ){
         $this->_setSourceIncrement( 100 );
     }
+
+    function get_url_edit( ) {
+        if ( !( isset( $this->id ) && $this->id )) return false;
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_TOOLS, array( 'id=' . $this->id ) );
+    }
 }
 ?>

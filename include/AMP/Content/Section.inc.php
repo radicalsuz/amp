@@ -252,5 +252,10 @@ class Section extends AMPSystem_Data_Item {
 
     }
 
+    function get_url_edit( ) {
+        if ( !isset( $this->id )) return false;
+        return AMP_URL_AddVars( AMP_SYSTEM_URL_SECTION, array( 'id=' . $this->id ));
+    }
+
 }
 ?>

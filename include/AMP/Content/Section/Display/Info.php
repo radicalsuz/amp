@@ -121,7 +121,7 @@ class AMP_Content_Section_Display_Info {
                     $section_header_url,
                         '[ ' . AMP_TEXT_EDIT . ' ]'
                         . $this->_renderer->space( )
-                        . $this->_renderer->image( AMP_SYSTEM_ICON_EDIT )
+                        . $this->_renderer->image( AMP_SYSTEM_ICON_EDIT, array( 'width' => '16', 'height' => '16', 'border' => '0') )
                         )
                     . $this->_renderer->newline( );
     }

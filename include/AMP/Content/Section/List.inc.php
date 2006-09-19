@@ -106,8 +106,8 @@ class Section_List extends AMP_System_List_Form {
                 . '<img src="' . AMP_SYSTEM_ICON_PREVIEW . '" width="16" height="16" border=0></a>'
                 . $renderer->space( )
                 . $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_ARTICLE, 'section='.$id),
-                                    $renderer->image( AMP_SYSTEM_ICON_VIEW ),
-                                    array( 'title' => AMP_TEXT_CONTENT_PAGES, 'width' => 16, 'height' => 16, 'border' => 0 ));
+                                    $renderer->image( AMP_SYSTEM_ICON_VIEW, array( 'width' => 16, 'height' => 16, 'border' => 0 ) ),
+                                    array( 'title' => AMP_TEXT_CONTENT_PAGES ));
     }
 }
 ?>

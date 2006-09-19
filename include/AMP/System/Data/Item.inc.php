@@ -110,17 +110,42 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return (isset( $this->itemdata) && !empty($this->itemdata));
     }
 
+    function deleteById( $item_id ) {
+        return $this->deleteData( $item_id );
+    }
+
+    function deleteByCriteria( $criteria ) {
+        $sql_criteria_set = $this->makeCriteria( $criteria );
+        if ( !$sql_criteria_set || empty( $sql_criteria_set ) ) {
+            return false;
+        }
+        $sql_criteria = ' WHERE ' . join( " AND ", $sql_criteria_set ) ;
+        $sql = "Delete from " . $this->datatable . $sql_criteria;
+        if ( ( $itemdata = $this->dbcon->Execute( $sql )) && $this->dbcon->Affected_Rows( )) {
+            return true;
+        }
+        
+        trigger_error ( AMP_TEXT_DELETE . sprintf( AMP_TEXT_ERROR_DATABASE_SAVE_FAILED, get_class( $this ), $this->dbcon->ErrorMsg() ));
+        return false ;
+    }
+
+    function get_url_edit( ) {
+        return false;
+    }
+
     function deleteData( $item_id ) {
         $sql = "Delete from " . $this->datatable . " where ". $this->id_field ." = ". $this->dbcon->qstr( $item_id );
-        if ( $itemdata = $this->dbcon->Execute( $sql )) {
+        trigger_error( 'delete ' . $sql );
+        if ( ( $itemdata = $this->dbcon->Execute( $sql )) && $this->dbcon->Affected_Rows( )) {
             $cached_sql = $this->_assembleSqlByID( $item_id );
             $this->dbcon->CacheFlush( $cached_sql ) ;
             if (defined( $this->_debug_cache_constant ) && constant( $this->_debug_cache_constant )) {
                 AMP_DebugSQL( $cached_sql, get_class($this)." cleared cache"); 
             }
             return true;
-        }
+        } 
 
+        trigger_error ( AMP_TEXT_DELETE . sprintf( AMP_TEXT_ERROR_DATABASE_SAVE_FAILED, get_class( $this ), $this->dbcon->ErrorMsg() ));
         return false ;
     }
 
@@ -384,11 +409,14 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function _sort_compare( $file1, $file2 ) {
         if ( !( $sort_method = $this->_sort_accessor )) return 0;
-        if ( $this->_sort_direction == AMP_SORT_DESC )
+
+        //sort descending
+        if ( $this->_sort_direction == AMP_SORT_DESC ) {
             return strnatcasecmp( $file2->$sort_method( ) , $file1->$sort_method( ) ); 
+        }
+
+        //sort ascending
         return strnatcasecmp( $file1->$sort_method( ) , $file2->$sort_method( ) );
-        #    return ( $file1->$sort_method( ) < $file2->$sort_method( ) ) ? 1 : -1; 
-        #return ( $file1->$sort_method( ) > $file2->$sort_method( ) ) ? 1 : -1; 
     }
 
     function setSortMethod( $sort_property ) {

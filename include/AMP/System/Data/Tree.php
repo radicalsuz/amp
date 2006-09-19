@@ -15,7 +15,7 @@ class AMP_System_Data_Tree {
 
     function __construct( &$source_object, $criteria = null ){
         $this->_source_object = &$source_object;
-        $this->_tree_source = &$source_object->search( $criteria );
+        $this->_tree_source = $source_object->search( $criteria );
         //$source_object->sort( $this->_tree_source, 'listOrder' );
         $this->_init_children( );  
         $this->_init_map( );  

@@ -5,6 +5,7 @@
     <name>
         <type>text</type>
         <label>Tag</label>
+		<required>1</required>
     </name>
     <image>
         <type>imagepicker</type>

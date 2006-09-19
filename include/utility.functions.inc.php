@@ -1334,6 +1334,49 @@ function &AMP_get_renderer( ){
     return $renderer ;
 
 }
+
+function AMP_update_tags( $tag_ids, $item_id, $item_type ) {
+    $tag_lookup = 'tagsBy' . ucfirst( $item_type );
+    $existing_tags = AMPSystem_Lookup::instance( $tag_lookup, $item_id );
+
+    if ( ( !$tag_ids || empty( $tag_ids )) && !$existing_tags ) return true;
+    if ( !( $existing_tags )) $existing_tags = array( );
+    if ( !( $tag_ids )) $tag_ids = array( );
+
+    $existing_tag_ids = array_keys( $existing_tags );
+
+    if ( $existing_tag_ids ) {
+        $deleted_items = array_diff( $existing_tag_ids, $tag_ids );
+        $new_items = array_diff( $tag_ids, $existing_tag_ids );
+    } else {
+        $deleted_items = array( );
+        $new_items = $tag_ids;
+    }
+
+    if ( empty( $deleted_items ) && empty( $new_items )) return false;
+
+    require_once( 'AMP/Content/Tag/Item/Item.php');
+    $action_item = &new AMP_Content_Tag_Item( AMP_Registry::getDbcon( ));
+
+    //remove existing tags
+    if ( !empty( $deleted_items )) {
+        foreach ( $deleted_items as $tag_item_id ) {
+            $action_item->deleteByCriteria( array( 'tag_id' => $tag_item_id, 'item' => $item_id, 'itemtype' => $item_type ));
+        }
+    }
+
+    //add new tag designations
+    if ( !empty( $new_items )) {
+        $create_values = array( 'item_type' => $item_type, 'item_id' => $item_id, 'user_id' => AMP_SYSTEM_USER_ID );
+        foreach( $new_items as $tag_id ) {
+            $action_item->dropID( ) ;
+            $tag_values = $create_values + array( 'tag_id' => $tag_id );
+            $action_item->setData( $tag_values );
+            $action_item->save( );
+        }
+    }
+
+}
 			
 
 ?>

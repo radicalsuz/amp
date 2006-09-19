@@ -8,6 +8,7 @@ class ArticleSet extends AMPSystem_Data_Set {
     var $datatable = "articles";
     var $_articles;
     var $_search_class = "ContentSearch";
+    var $_item_type = AMP_SYSTEM_ITEM_TYPE_ARTICLE;
 
     function ArticleSet ( &$dbcon ) {
         $this->init ( $dbcon );
@@ -30,14 +31,14 @@ class ArticleSet extends AMPSystem_Data_Set {
     }
 
     function _getCriteriaSection( $section_id ){
-        $base_section = $this->_makeCriteriaSectionBase( $section_id );
+        $base_section = $this->makeCriteriaSectionBase( $section_id );
         if ( !( $related_ids = $this->_makeCriteriaSectionRelated( $section_id ))) {
             return $base_section;
         }
         return "( ". $base_section . ' OR ' . $related_ids . ")" ;
     }
 
-    function _makeCriteriaSectionBase( $section_id ) {
+    function makeCriteriaSectionBase( $section_id ) {
         return "type=" . $section_id;
     }
 
@@ -67,7 +68,7 @@ class ArticleSet extends AMPSystem_Data_Set {
         $this->addCriteria( 'fplink= 1 ' ) ;
     }
 
-    function addFilter( $filter_name ) {
+    function addFilter( $filter_name, $filter_var = null ) {
         $filter_filename = ucfirst( $filter_name ) . '.inc.php';
         $filter_path = 'AMP/Content/Article/Filter/'. $filter_filename;
         if ( !file_exists_incpath( $filter_path )) {
@@ -77,7 +78,7 @@ class ArticleSet extends AMPSystem_Data_Set {
         }
         include_once( $filter_path );
         $filter_class = 'ContentFilter_' . ucfirst( $filter_name );
-        $sourceFilter = &new $filter_class();
+        $sourceFilter = &new $filter_class( $filter_var );
         return $sourceFilter->execute( $this );
     }
 

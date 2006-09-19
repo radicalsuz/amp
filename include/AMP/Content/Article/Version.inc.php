@@ -10,6 +10,8 @@ class Article_Version extends Article {
     var $_sort_auto = true;
     var $_allow_db_cache = false;
 
+    var $_version_status = true;
+
     function Article_Version ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
     }
@@ -38,6 +40,7 @@ class Article_Version extends Article {
         if (!$this->id ) return false;
         return AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( "vid=".$this->id, 'id='.$this->getArticleId( ),'preview=1' ));
     }
+
 
 }
 ?>

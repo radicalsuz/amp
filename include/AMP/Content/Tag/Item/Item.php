@@ -40,6 +40,19 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
         return $images_lookup[ $tag_id ];
     }
 
+    function getItemDescription( ) {
+        $item_type = $this->getItemtype( );
+        $name_value = false;
+        if ( $item_type == AMP_TEXT_SYSTEM_ITEM_TYPE_FORM ) {
+            $form_id = $this->_tagged_item->getModin( );
+            $form_names = AMPSystem_Lookup::instance( 'forms');
+            if ( isset( $form_names[ $form_id ])) {
+                $name_value = ': ' . $form_names[ $form_id ] ;
+            }
+        }
+        return ucfirst( $item_type ) . $name_value;
+    }
+
     function &getTagImageRef( ) {
         $empty_value = false;
         if (! ($img_path = $this->getTagImage())) return $empty_value;

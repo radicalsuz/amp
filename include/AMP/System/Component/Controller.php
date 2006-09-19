@@ -218,9 +218,9 @@ class AMP_System_Component_Controller {
         return ( $this->_request_vars[ $varname ] == $value );
     }
 
-    function message( $message, $key = null ) {
+    function message( $message, $key = null, $edit_url = false ) {
         $flash = &AMP_System_Flash::instance( );
-        $flash->add_message( $message, $key ) ;
+        $flash->add_message( $message, $key, $edit_url ) ;
     }
 
     function error( $error_item, $key = null ){
@@ -292,6 +292,10 @@ class AMP_System_Component_Controller {
         return true;
     }
 
+    function _unique_action_key( ) {
+        return sha1( get_class( $this->_model ) . $this->_model->id . $this->get_action( ));
+    }
+        
 }
 
 class AMP_System_Component_Controller_Map extends AMP_System_Component_Controller {
@@ -486,13 +490,15 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
         $this->_model_id = $this->_model->id;
         $this->notify( 'save' );
 
-        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $this->_model->getName( )));
+        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $this->_model->getName( )), 
+                        $this->_unique_action_key( ), 
+                        $this->_model->get_url_edit( ) );
 
         $this->_form->postSave( $this->_model->getData() );
         $this->display_default( );
         return true;
     }
-        
+
 }
 
 class AMP_System_Component_Controller_Standard extends AMP_System_Component_Controller_Input {
@@ -572,7 +578,9 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->_model_id = $this->_model->id;
         $this->notify( 'copy' );
 
-        $this->message( sprintf( AMP_TEXT_COPY_SUCCESS, $this->_model->getName( )));
+        $this->message( sprintf( AMP_TEXT_COPY_SUCCESS, $this->_model->getName( )), 
+                        $this->_unique_action_key( ),
+                        $this->_model->get_url_edit( ));
 
         $this->_form->postSave( $this->_model->getData() );
         $this->display_default( );

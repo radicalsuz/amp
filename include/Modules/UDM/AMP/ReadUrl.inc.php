@@ -1,9 +1,6 @@
 <?php
 
 require_once( 'AMP/UserData/Plugin.inc.php');
-if ( file_exists_incpath( 'custom.translations.inc.php')){
-    require_once( 'custom.translations.inc.php');
-}
 
 class UserDataPlugin_ReadUrl_AMP extends UserDataPlugin {
     var $available = true;
@@ -34,6 +31,13 @@ class UserDataPlugin_ReadUrl_AMP extends UserDataPlugin {
 
     function translate( $data ){
         $options = $this->getOptions( );
+        if ( isset( $data['id' ])) {
+            $otp = $_REQUEST['otp'];
+            $auth = $this->udm->authenticate( $data['id'], $otp )
+            if ( !$auth ) {
+                unset( $data['id']);
+            }
+        }
         if ( !( isset( $options['translate_function']) && $options['translate_function'])) return $data;
         $translate_function = $options['translate_function'];
         if ( !function_exists( $options['translate_function'])) {

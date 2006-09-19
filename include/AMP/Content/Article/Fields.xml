@@ -137,7 +137,8 @@
 	<location_trigger>
 		<type>blocktrigger</type>
         <label>Other Tags ( Region, Front Page, New )</label>
-		<block_trigger>reltype</block_trigger>
+		<block_trigger>state</block_trigger>
+		<block_trigger>tags</block_trigger>
 		<block>location_trigger</block>
 	</location_trigger>
      <state>
@@ -162,6 +163,18 @@
         <label>Mark as &quot;New&quot;</label>
 		<block>location_trigger</block>
      </new>
+	<tags>
+		<type>multiselect</type>
+		<size>12</size>
+		<lookup>tags</lookup>
+		<label>Tags</label>
+		<block>location_trigger</block>
+	</tags>
+	<new_tags>
+		<type>text</type>
+	    <label>New Tags (comma-separated)</label>
+		<block>location_trigger</block>
+	</new_tags>	
     <body_header>
         <type>header</type>
         <default>Content Body</default>

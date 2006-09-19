@@ -11,12 +11,14 @@ class AMP_Content_Tag_Item_List_Items extends AMP_System_List_Form {
         );
 
     var $_source_object = 'AMP_Content_Tag_Item';
-    var $_sort = 'itemtype';
+    var $_sort = 'itemsByType';
+    var $_sort_default = 'item_type';
 
     var $suppress = array( 'addlink' => true, 'sortlinks' => true, 'messages' => true, 'header' => true );
 
     var $_observers_source = array( 'AMP_System_List_Observer');
     var $_thumb_attr = array( );
+    var $_current_subheader;
 
     #var $_sort_default = 'itemsByType';
 
@@ -57,22 +59,38 @@ class AMP_Content_Tag_Item_List_Items extends AMP_System_List_Form {
         return '</div>';
     }
 
-    function _HTML_listRow( $currentrow ){
+    function _renderRow( &$source ){
         $list_html = false;
         foreach( $this->col_headers as $header => $col ) {
             //$list_html .= $this->inDiv( $currentrow[ $col ], array( 'class' => 'list_row'));
-            $list_html .= $currentrow[ $col ];
+            //$list_html .= $currentrow[ $col ];
+            $col_value = $this->_translate( $source, $col );
+            $list_html .= $this->inDiv(  $col_value , array( 'class' => 'list_column'));
         }
-        return $this->inDiv( $list_html, array( 'class' => 'list_row'));
+        return $this->_renderSubheader( $source )
+                . $this->inDiv( $list_html, array( 'class' => 'list_row'));
     }
 
     function _renderControls( &$source ) {
         return $this->inDiv( 
                     $this->_renderEditLink( $source ) 
+                  . $this->space( )
                   . $this->_renderPreviewLink( $source ),
                   array( 'class' => 'list_row_controls')
                   );
 
+    }
+
+    function _renderSubheader( &$source ) {
+        $item_header = $source->getItemDescription( );
+        if ( $item_header == $this->_current_subheader ) {
+            return false; 
+        }
+        $this->_current_subheader = $item_header;
+        return $this->inDiv( 
+                    $item_header,
+                    array( 'class' => 'system_heading' )
+                    );
     }
 
     function _renderEditLink( &$source ) {
@@ -95,14 +113,23 @@ class AMP_Content_Tag_Item_List_Items extends AMP_System_List_Form {
                     );
     }
 
-    /*
     function _setSortItemsByType( &$source ) {
+        $source_segments = array( );
+        foreach( $source as $user_tag_id => $source_item ) {
+            $source_type = $source_item->getItemDescription( );
+            $source_segments[ $source_type ][ $user_tag_id ] = &$source[ $user_tag_id ];
+        }
         $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
-        $itemSource->sort( $this->source, $this->_sort, $sort_direction );
+
+        $source = false;
+        $source = array( );
+        foreach( $source_segments as $item_type => $item_set ) {
+            $itemSource->sort( $item_set );
+            $source =  $source + $item_set;
+        }
 
         
     }
-    */
 
 }
 

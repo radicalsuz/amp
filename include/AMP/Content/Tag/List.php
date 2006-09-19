@@ -10,6 +10,7 @@ class AMP_Content_Tag_List extends AMP_System_List_Form {
         'Image'   =>  '_makeThumb'
         );
     var $_source_object = 'AMP_Content_Tag';
+    var $name_field = 'name';
 
     var $editlink = AMP_SYSTEM_URL_TAG;
     var $_url_add = AMP_SYSTEM_URL_TAG_INPUT;

@@ -202,7 +202,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $output = "";
         if( method_exists( $this, '_renderRow') ){
             foreach( $this->source as $sourceItem ){
-                $this->_renderRow( $sourceItem );
+                $output .= $this->_renderRow( $sourceItem );
             }
 
         } else {
@@ -211,10 +211,18 @@ class AMPSystem_List extends AMPDisplay_HTML {
             }		
         }
 
-        return $this->_HTML_header() .
+        return $this->_renderHeader() .
                $output .
-               $this->_HTML_footer();
+               $this->_renderFooter();
 
+    }
+
+    function _renderHeader( ) {
+        return $this->_HTML_header( );
+    }
+
+    function _renderFooter( ) {
+        return $this->_HTML_footer( );
     }
 
     function _noRecordsOutput( ){
@@ -598,6 +606,20 @@ class AMPSystem_List extends AMPDisplay_HTML {
         }
 
         return $translated_row;
+    }
+
+    function _translate( &$source, $fieldname )  {
+        $value = $this->_getSourceDataItem( $fieldname, $source );
+        if (!$this->hasTranslations()) return $value;
+        if ( !isset( $this->translations[$fieldname])) return $value;
+        $translate_method = $this->translations[ $fieldname ];
+
+        if (!method_exists( $this, $translate_method )) {
+            trigger_error ( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED , get_class( $this ), $translate_method, ( '_translateRow:' . $fieldname) ));
+            return $value;
+        }
+        return $this->$translate_method( $source , $fieldname );
+
     }
 
     function lookup( $value, $lookup_name ) {

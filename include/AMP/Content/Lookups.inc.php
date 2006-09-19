@@ -262,7 +262,7 @@ class AMPContentLookup_LinkTypeMap {
 
         $link_type = &new Link_Type( AMP_Registry::getDbcon( ));
         $link_map_source = &new AMP_System_Data_Tree( $link_type );
-        $this->dataset = &$link_map_source->select_options( );
+        $this->dataset = $link_map_source->select_options( );
     }
 
     function available( ){
@@ -279,7 +279,7 @@ class AMPContentLookup_GalleryMap {
 
         $gallery = &new Gallery( AMP_Registry::getDbcon( ));
         $gallery_map_source = &new AMP_System_Data_Tree( $gallery );
-        $this->dataset = &$gallery_map_source->select_options( );
+        $this->dataset = $gallery_map_source->select_options( );
     }
 
     function available( ){

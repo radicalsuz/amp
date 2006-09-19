@@ -109,8 +109,20 @@ if ($listType) {
         }
         if ( $filter ) $display->addFilter( $filter );
 
+        // hide list intro page if nointro $_GET var is set
         $show_intro =  !(isset($_GET['nointro']) && $_GET['nointro']==1); 
         if ( method_exists( $display, 'setListIntro') ) $display->setListIntro( $show_intro );
+
+        //filter by tag(s) if specified
+        if ( isset( $_GET['tag']) && $_GET['tag']) {
+            $tag_filter = $_GET['tag'];
+            if ( !is_array( $tag_filter )) {
+                $tag_filter = array( $tag_filter );
+            }
+            foreach( $tag_filter as $single_tag ) {
+                $display->addFilter( 'tag', $single_tag );
+            }
+        }
 
     } else {
         AMP_make_404( );

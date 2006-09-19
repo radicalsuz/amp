@@ -66,9 +66,20 @@ class GalleryImage extends AMPSystem_Data_Item {
     function isLive( ){
         return $this->getData( 'publish');
     }
+
     function getItemDate( ){
+        if ( !$this->isPublicDate( )) return false;
+        return $this->getAssignedDate( );
+    }
+
+    function getAssignedDate( ) {
         return $this->getData( 'date');
     }
+
+    function isPublicDate( ) {
+        return $this->getData( 'usedate' );
+    }
+
     function setItemDate( $date_value ){
         return $this->mergeData( array( 'date' => $date_value ));
     }

@@ -10,6 +10,11 @@ class ToolControl extends AMPSystem_Data_Item {
     function ToolControl ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
     }
+
+    function get_url_edit( ) {
+        if ( !( isset( $this->id ) && $this->id )) return false;
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_TOOL_CONTROL, array( 'id=' . $this->id ) );
+    }
 }
 
 ?>

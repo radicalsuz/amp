@@ -224,7 +224,7 @@ a.standout {
 }
 
 
-span.page_result {
+span.page_result, a.page_result {
 		display:block;
 		border: #99CCFF 2px solid;
 		width: 60%;
@@ -233,6 +233,15 @@ span.page_result {
 		text-align: center;
 		padding: 0.5em 5em 0.5em 5em;
 		margin: 1em 5em 0.5em 10em;
+}
+
+a.page_result {
+	text-decoration:none;
+}
+a.page_result:hover {
+		border: #FFCC99 2px solid;
+		color: #77BBCC;
+		background-color: #FFFFCC;
 }
 html > body span.page_result {
 		margin-left: 10%;

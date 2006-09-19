@@ -787,16 +787,19 @@ class AMPSystemLookup_TagImages extends AMPSystem_Lookup {
     }
 }
 
-class AMPSystemLookup_TagsByForm extends AMPSystem_Lookup {
+class AMPSystemLookup_TagsByItem extends AMPSystem_Lookup {
     var $datatable = 'tags_items';
     var $result_field = 'tag_id';
     var $id_field = 'tag_id';
-    var $_criteria_base = 'item_type=';
+    var $_criteria_base = 'item_type= %s AND item_id = %s';
 
-    function AMPSystemLookup_TagsByForm( $form_id ) {
-        $this->criteria = $this->makeCriteriaForm( $form_id );
+    function __construct( $item_id ) {
+        $this->criteria = $this->makeCriteriaItem( $item_id );
         $this->init( );
+        $this->_init_tag_names( );
+    }
 
+    function _init_tag_names( ) {
         $tag_lookup = AMPSystem_Lookup::instance( 'tags' );
         $this->dataset = array_combine_key( $this->dataset, $tag_lookup );
 
@@ -805,10 +808,76 @@ class AMPSystemLookup_TagsByForm extends AMPSystem_Lookup {
         }
     }
 
-    function makeCriteriaForm( $form_id ) {
+    function makeCriteriaItem( $item_id ) {
         $dbcon = AMP_Registry::getDbcon( );
-        return $this->_criteria_base . $dbcon->qstr( AMP_SYSTEM_ITEM_TYPE_FORM ) 
-                            . ' AND item_id = ' . $dbcon->qstr( $form_id );
+        return sprintf( $this->_criteria_base , 
+                        $dbcon->qstr( $this->_criteria_item ),
+                        $dbcon->qstr( $item_id )
+                        );
+    }
+}
+
+class AMPSystemLookup_TagsByForm extends AMPSystemLookup_TagsByItem {
+    var $_criteria_item = AMP_SYSTEM_ITEM_TYPE_FORM;
+
+    function AMPSystemLookup_TagsByForm( $form_id ) {
+        $this->__construct( $form_id );
+    }
+
+}
+
+class AMPSystemLookup_TagsByArticle extends AMPSystemLookup_TagsByItem {
+    var $_criteria_item = AMP_SYSTEM_ITEM_TYPE_ARTICLE;
+
+    function AMPSystemLookup_TagsByArticle( $item_id ) {
+        $this->__construct( $item_id );
+    }
+
+}
+
+class AMPSystemLookup_ItemsByTag extends AMPSystem_Lookup {
+    var $datatable = 'tags_items';
+    var $result_field = 'item_id';
+    var $id_field = 'item_id';
+    var $_criteria_base = 'item_type = %s AND tag_id= %s';
+
+    function __construct( $tag_id ) {
+        $this->makeCriteriaTag( $tag_id );
+        $this->init( );
+        $this->_init_names( );
+
+    }
+
+    function _init_names( ) {
+        $lookup_name = AMP_pluralize( $this->_criteria_item );
+        $lookup_values = AMPSystem_Lookup::instance( $lookup_name );
+        if ( !$lookup_values ) return;
+        $this->dataset = array_combine_key( $this->dataset, $lookup_values );
+    }
+
+    function makeCriteriaTag( $tag_id ) {
+        $dbcon = AMP_Registry::getDbcon( );
+        $this->criteria = sprintf( $this->_criteria_base, 
+                                    $dbcon->qstr( $this->_criteria_item ),
+                                    $tag_id
+                                    ); 
+    }
+}
+
+class AMPSystemLookup_FormsByTag extends AMPSystemLookup_ItemsByTag {
+    var $_criteria_item = AMP_SYSTEM_ITEM_TYPE_FORM;
+
+    function AMPSystemLookup_FormsByTag( $tag_id ) {
+        $this->__construct( $tag_id );
+    }
+
+}
+
+class AMPSystemLookup_ArticlesByTag extends AMPSystemLookup_ItemsByTag {
+    var $_criteria_item = AMP_SYSTEM_ITEM_TYPE_ARTICLE;
+
+    function AMPSystemLookup_ArticlesByTag( $tag_id ) {
+        $this->__construct( $tag_id );
     }
 }
 

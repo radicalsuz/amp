@@ -112,5 +112,10 @@ class ContentClass extends AMPSystem_Data_Item {
     function getBlurb() {
         return $this->getData( 'description' );
     }
+
+    function get_url_edit( ) {
+        if ( !( isset( $this->id ) && $this->id )) return false;
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_CLASS, array( 'id=' . $this->id ) );
+    }
 }
 ?>

@@ -87,8 +87,8 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         $this->_showListIntro = $show_intro;
     }
 
-    function addFilter( $filter_name ){
-        if ( method_exists( $this->_display, 'addFilter')) return $this->_display->addFilter( $filter_name );
+    function addFilter( $filter_name, $filter_var = null ){
+        if ( method_exists( $this->_display, 'addFilter')) return $this->_display->addFilter( $filter_name, $filter_var );
         return false;
     }
 

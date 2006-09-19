@@ -101,6 +101,10 @@ class Gallery extends AMPSystem_Data_Item {
         return $this->mergeData( array( 'parent' => $parent_id ));
     }
 
+    function get_url_edit( ) {
+        if ( !( isset( $this->id ) && $this->id )) return false;
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_GALLERY, array( 'id=' . $this->id ) );
+    }
 }
 
 ?>

@@ -43,7 +43,11 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'date',         '_makeNullDate',   'set');
 
         $this->addTranslation( 'sections_related',   '_getRelatedSections', 'set');
-        $this->addTranslation( 'sections_related',   '_getRelatedSectionsBlanks', 'get');
+        $this->addTranslation( 'sections_related',   '_getMultiSelectBlanks', 'get');
+
+        $this->addTranslation( 'tags',   '_getTags', 'set');
+        $this->addTranslation( 'tags',   '_getMultiSelectBlanks', 'get');
+        $this->addTranslation( 'tags',   '_assembleTags', 'get');
 
         $this->addTranslation( 'transfer_mode_setting','_returnBlankCheckbox',  'get');
         $this->addTranslation( 'transfer_mode_setting','_checkTransferMode',  'get');
@@ -263,14 +267,77 @@ class Article_Form extends AMPSystem_Form_XML {
 
     }
 
-    function _getRelatedSectionsBlanks( $data, $fieldname ) {
+    function _getMultiSelectBlanks( $data, $fieldname ) {
         if ( !isset( $data[$fieldname ])) {
-            trigger_error( 'returning array');
             return array( );
 
         }
-        trigger_error( 'value ' . $fieldname . ' is ' . $data[$fieldname]);
         return $data[$fieldname];
+    }
+
+    function _getTags( $data, $fieldname ) {
+        $id = ( isset( $data['id']) && $data['id']) ? $data['id'] : false;
+        if ( !$id ) return false;
+
+        $tags_values = AMPSystem_Lookup::instance( 'tagsByArticle', $id );
+
+        if ( !$tags_values ) return false;
+        return join( ',', array_keys( $tags_values) );
+
+    }
+
+    function _assembleTags( $data, $fieldname ) {
+        if ( !isset( $data[$fieldname]) || !$data[ $fieldname ] || empty( $data[$fieldname])) {
+            return $this->_checkNewTags( $data, $fieldname ) ;
+        }
+        $created_tags = $this->_checkNewTags( $data, $fieldname );
+        $selected_tags = $data[ $fieldname ];
+        $all_tags = array_merge( $selected_tags, $created_tags);
+
+        return $all_tags;
+
+    }
+
+    function _checkNewTags( $data, $fieldname ) {
+        if ( !isset( $data['new_tags']) && $data['new_tags']) {
+            return array( );
+        }
+        $tags_set = preg_split( '/\s?,\s?/', $data['new_tags']);
+        $tag_names = AMPSystem_Lookup::instance( 'tags' );
+        $simple_tag_names = array( );
+        $new_tags_verified = array( );
+
+        foreach( $tag_names as $tag_id => $tag_name ) {
+            $simple_tag_names[$tag_id] = strtolower( $tag_name );
+        }
+
+        foreach( $tags_set as $raw_new_tag ) {
+            $new_tag = trim( $raw_new_tag );
+            if ( !$new_tag ) continue;
+
+            //see if an existing tag matches the new one
+            $new_tag_id = array_search( strtolower( $new_tag ), $simple_tag_names );
+
+            //create new tag
+            if ( !$new_tag_id ) {
+                $new_tag_id = $this->_createTag( $new_tag );
+            }
+            if ( !$new_tag_id ) continue;
+            
+            //add the id to the results list
+            $new_tags_verified[] = $new_tag_id;
+        }
+        return $new_tags_verified;
+
+    }
+
+    function _createTag( $tag_name ) {
+        require_once( 'AMP/Content/Tag/Tag.php');
+        $tag = &new AMP_Content_Tag( AMP_Registry::getDbcon( ));
+        $tag->setData( array( 'name' => $tag_name ));
+        $result = $tag->save( );
+        if ( !$result ) return false;
+        return $tag->id;
     }
 
     function _evalWysiwyg( $data, $fieldname ){

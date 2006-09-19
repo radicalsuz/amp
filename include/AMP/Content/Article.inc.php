@@ -22,6 +22,8 @@ class Article extends AMPSystem_Data_Item {
     var $_sort_auto = false;
     var $_class_name = 'Article';
 
+    var $_version_status = false;
+
     /**
      * Article 
      * 
@@ -35,6 +37,7 @@ class Article extends AMPSystem_Data_Item {
         $this->_addAllowedKey( 'new_alias_name' );
         $this->_addAllowedKey( 'sections_related' );
         $this->_addAllowedKey( 'url' );
+        $this->_addAllowedKey( 'tags' );
     }
 
     function &getDisplay() {
@@ -298,6 +301,7 @@ class Article extends AMPSystem_Data_Item {
         if ( !isset( $data[ 'url' ] ) && ( $article_url = $this->getURL( )) ){
             $this->mergeData( array( 'url' => $article_url ));
         }
+
     }
 
     function _save_create_actions( $data ){
@@ -325,6 +329,7 @@ class Article extends AMPSystem_Data_Item {
         if (!$version->hasData()) return false;
 
         $this->setData( $version->getData() );
+        $this->_version_status = true;
     }
 
     function saveVersion( ){
@@ -380,6 +385,7 @@ class Article extends AMPSystem_Data_Item {
     function _afterSave( ){
         $this->_save_aliases( );
         $this->_save_sections_related( );
+        $this->_save_tags( );
     }
 
     function _save_sections_related( ){
@@ -414,6 +420,33 @@ class Article extends AMPSystem_Data_Item {
 
         }
         AMPContentLookup_SectionsByArticle::clear_cache( $this->id );
+    }
+
+    function _save_tags( ) {
+        if ( $this->isVersion( )) return;
+        return AMP_update_tags( $this->_getTagsBase( ), $this->id, AMP_SYSTEM_ITEM_TYPE_ARTICLE );
+    }
+
+    function getTags( ) {
+        $tags = $this->_getTagsBase( );
+        if ( !$tags ) {
+            $this->_getTagsDB( );
+        }
+        return $tags;
+    }
+
+    function _getTagsBase( ) {
+        return $this->getData( 'tags');
+    }
+
+    function _getTagsDB( ) {
+        if ( !isset( $this->id ) && $this->id ) return false;
+        $tag_lookup = AMPSystem_Lookup::instance( 'tagsByArticle', $this->id );
+        if ( $tag_lookup ) {
+            $tags = array_keys( $tag_lookup );
+            $this->mergeData( array( 'tags' => $tags ));
+        }
+
     }
 
     function _makeRelatedSectionCriteria( $section_id_array ) {
@@ -562,6 +595,14 @@ class Article extends AMPSystem_Data_Item {
         return parent::save( );
     }
     */
+
+    function get_url_edit( ) {
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE_EDIT, array( 'id=' . $this->id ) );
+    }
+
+    function isVersion( ) {
+        return $this->_version_status;
+    }
 }
 
 

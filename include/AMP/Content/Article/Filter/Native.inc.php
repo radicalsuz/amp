@@ -8,7 +8,7 @@ class ContentFilter_Native {
         switch( true ) {
             case $currentPage->isList( AMP_CONTENT_LISTTYPE_SECTION  )  :
                 $source->addCriteria( 
-                        $source->_makeCriteriaSectionBase( $currentPage->getSectionId( )));
+                        $source->makeCriteriaSectionBase( $currentPage->getSectionId( )));
                 break;
             default;
         }
