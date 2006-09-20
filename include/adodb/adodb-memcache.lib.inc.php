@@ -22,13 +22,18 @@ $ADODB_INCLUDED_MEMCACHE = 1;
 	{
 		$false = false;
 		$err = false;
-
-		if ($cache_value = AMP_cache_get($key)){
+        
+        $AMP_key = AMP_CACHE_TOKEN_ADODB . $key;
+		if ($cache_value = AMP_cache_get($AMP_key)){
 			return $cache_value;
 		} else {
             return $false;
         }
 
+        /***
+         * ADODB standard library memcache code
+         * not used by AMP
+         **/
 		if (!function_exists('memcache_pconnect')) {
 			$err = 'Memcache module PECL extension not found!';
 			return $false;
@@ -74,12 +79,18 @@ $ADODB_INCLUDED_MEMCACHE = 1;
 		$false = false;
 		$true = true;
 
-		if ($success = AMP_cache_set($key, $rs )){
+        $AMP_key = AMP_CACHE_TOKEN_ADODB . $key;
+		if ($success = AMP_cache_set($AMP_key, $rs )){
 			return $true;
 		} else {
             return false;
         }
 
+
+        /***
+         * ADODB standard library memcache code
+         * not used by AMP
+         **/
 		if (!function_exists('memcache_pconnect')) {
 			if ($debug) ADOConnection::outp(" Memcache module PECL extension not found!<br>\n");
 			return $false;
@@ -101,12 +112,18 @@ $ADODB_INCLUDED_MEMCACHE = 1;
 
 	function flushmemcache($key=false, $host, $port, $debug=false)
 	{
+        $AMP_key = AMP_CACHE_TOKEN_ADODB . $key;
 		if ($key) {
-			return AMP_cache_delete($key);
+			return AMP_cache_delete($AMP_key);
 		} else {
 			return AMP_cacheFlush();
 		}
 
+
+        /***
+         * ADODB standard library memcache code
+         * not used by AMP
+         **/
 		if (!function_exists('memcache_pconnect')) {
 			if ($debug) ADOConnection::outp(" Memcache module PECL extension not found!<br>\n");
 			return;
