@@ -37,12 +37,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             'label'=>'Order of Fields',
             'type' => 'textarea',
             'available' => true,
-            'default'   => 'newline,start_text,country,state,bydate,search,sortby,modin,endline'),
+            'default'   => 'newline,start_text,country,state,bydate,newline,tag,search,sortby,modin,endline'),
         'field_order_admin'=>array(
             'label'=>'Admin View: Order of Fields',
             'type' => 'textarea',
             'available'=>true,
-            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,search,sortby,modin,endline')
+            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,newline,tag,search,sortby,modin,endline')
             );
         
                     
@@ -152,14 +152,25 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
                 $sql_criteria[]="id=".$this->dbcon->qstr($_REQUEST['uid']);
             }
 		}
+
         //Publish status
         if (isset( $_REQUEST['publish']) && is_numeric($_REQUEST['publish'])){
             if ($_REQUEST['publish']) $sql_criteria[]="publish=1";
             else $sql_criteria[]="(isnull(publish) OR publish!=1)";
         }
 
-        $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate');
-        foreach( $this->_included_fields as $fieldname ){
+        //tags
+        if ( isset( $_REQUEST['tag']) && $_REQUEST['tag']) {
+            $tagged_forms = AMPSystem_Lookup::instance( 'formsByTag', $_REQUEST['tag']);
+            if ( !$tagged_forms || empty( $tagged_forms )) {
+                $sql_criteria[] = 'FALSE';
+            } else {
+                $sql_criteria[] = 'id in( ' . join( ",", array_keys( $tagged_forms )) . ')';
+            }
+        }
+
+        $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate', 'tag');
+        foreach( $this->_included_fields as $fieldname ) {
             if ( array_search( $fieldname, $specified_fields ) !== FALSE ) continue;
             if ( !( isset( $_REQUEST[ $fieldname ]) && $_REQUEST[ $fieldname ])) continue;
             $sql_criteria[] = $fieldname . ' LIKE ' . $this->dbcon->qstr( '%' . $_REQUEST[$fieldname] . '%' );
@@ -215,6 +226,15 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$state_code = (isset( $_REQUEST['state']) && $_REQUEST['state']) ? $_REQUEST['state'] : null ;
 		
 		$def['state']=array('type'=>'select', 'label'=>'By State/Province', 'required'=>false,  'values'=>$this->lookups['state']['Set'], 'size'=>null, 'value'=>$state_code, 'public'=>'1');
+
+        //tags
+        if ( $tag_plugin = $this->udm->getPlugin( 'Tags', 'Start' )) {
+            $tags_lookup = AMPSystem_Lookup::instance( 'tags');
+            if ( $tags_lookup ) {
+                $tag_request = ( isset( $_REQUEST['tag']) && $_REQUEST['tag'] ? $_REQUEST['tag'] : null );
+                $def['tag'] = array( 'type' => 'select', 'label' => 'By ' . AMP_TEXT_TAG , 'required'=>false, 'values' => $tags_lookup, 'size' =>null, 'value' => $tag_request, 'public' => 1 );
+            }
+        }
 
 		$def['endline']=array('type'=>'static', 'label'=>'</td></tr>', 'public'=>'1');
 		$def['newline']=array('type'=>'static', 'label'=>'<tr><td class="'.$this->control_class.'">', 'public'=>'1');

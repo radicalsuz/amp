@@ -142,10 +142,18 @@ class FormLookup_Names extends FormLookup {
     var $result_field = "Concat( First_Name, ' ' , Last_Name ) as Name";
     var $sortby = "Last_Name, First_Name";
 
-    function FormLookup_Names( $instance ) {
-        $this->setInstance( $instance );
-        $this->setPublic( $instance );
+    function FormLookup_Names( $instance = false ) {
+        $this->__construct( $instance );
+    }
+
+    function __construct( $instance_id = false ) {
+        if ( $instance_id ) {
+            $this->setInstance( $instance_id );
+            $this->setPublic( $instance_id );
+        }
+
         $this->init();
+
     }
 
     function setInstance( $instance_id ) {
@@ -173,6 +181,13 @@ class FormLookup_Names extends FormLookup {
         return false;
     }
 }
+
+class AMPSystemLookup_FormNames extends FormLookup_Names {
+    function AMPSystemLookup_FormNames( $instance = false ) {
+        $this->__construct( $instance );
+    }
+}
+
 
 class FormLookup_Companies extends FormLookup {
     var $datatable = "userdata";

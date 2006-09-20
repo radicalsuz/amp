@@ -264,6 +264,7 @@ class UserData {
 
         if ( is_array( $udmResults ) ) {
             foreach ( $udmResults as $type => $results ) {
+                if ( !is_array( $udmResults[ $type ])) continue;
                 foreach ( $udmResults[ $type ] as $result ) {
                     $retarray[] = array( 'type' => $type,
                                          $itemKey => $result );

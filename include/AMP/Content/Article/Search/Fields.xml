@@ -60,6 +60,21 @@
 		<instance>activeClasses</instance>
 	</lookup>
 </class>
+<tag>
+    <type>select</type>
+    <label>Select Tag</label>
+    <attr><class>searchform_element</class></attr>
+	<lookup>tags</lookup>
+</tag>
+<frontpage>
+    <separator>newrow</separator>
+    <type>checkbox</type>
+    <label>Front Page Only</label>
+</frontpage>
+<new>
+    <type>checkbox</type>
+    <label>New Only</label>
+</new>
 <search_by_date>
     <separator>newrow</separator>
     <type>checkbox</type>

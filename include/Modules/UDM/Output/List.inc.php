@@ -176,6 +176,7 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
         $output_html = "";
         foreach( $order as $action ){
             $component_set = & $plugins_set[$action] ;
+            if ( !is_array( $component_set )) continue;
             foreach( $component_set as $namespace => $component ){
                 $output_html .= $component->execute();
 

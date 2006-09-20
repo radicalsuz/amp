@@ -380,12 +380,10 @@
 		<type>select</type>
 		<label>Document Name</label>
 	</doc>
-	<!--
-	<doc_actions_header>
-		<type>static</type>
-		<default>&lt;a href="docdir.php" target="_blank"&gt;View Documents&lt;/a&gt; | &lt;a href="doc_upload.php" target="_blank"&gt;Upload Document&lt;/a&gt;</default>
-	</doc_actions>
-	-->
+	<doc_direct_link>
+		<type>checkbox</type>
+		<label>Article Links Directly to Document</label>
+	</doc_direct_link>
 	<doc_actions_header>
 		<label>Upload Document</label>
 		<type>blocktrigger</type>

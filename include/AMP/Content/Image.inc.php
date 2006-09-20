@@ -72,7 +72,7 @@ class Content_Image {
         return $picSize;
     }
 
-    function display_block( ){
+    function display_in_body( ){
         return !( $this->getImageClass( ) == 'list_only');
     }
 

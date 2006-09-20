@@ -80,6 +80,8 @@ class AMPSystem_Lookup {
         if (!$lookup_set) $lookup_set = array();
         $req_class = $lookup_baseclass . '_' . $type;
         if ( !class_exists( $req_class ) ){
+            print AMPbacktrace( );
+            exit;
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
             return $empty_value;
         }
@@ -849,8 +851,13 @@ class AMPSystemLookup_ItemsByTag extends AMPSystem_Lookup {
     }
 
     function _init_names( ) {
-        $lookup_name = AMP_pluralize( $this->_criteria_item );
+        if ( !$this->_criteria_item == 'form') {
+            $lookup_name = AMP_pluralize( $this->_criteria_item );
+        } else {
+            $lookup_name = 'formNames';
+        }
         $lookup_values = AMPSystem_Lookup::instance( $lookup_name );
+
         if ( !$lookup_values ) return;
         $this->dataset = array_combine_key( $this->dataset, $lookup_values );
     }
@@ -880,5 +887,6 @@ class AMPSystemLookup_ArticlesByTag extends AMPSystemLookup_ItemsByTag {
         $this->__construct( $tag_id );
     }
 }
+
 
 ?>

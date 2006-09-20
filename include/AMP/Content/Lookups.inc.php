@@ -486,10 +486,25 @@ class AMPContentLookup_Articles extends AMPContent_Lookup{
     var $criteria = 'trim( title ) != "" and !isnull( title ) and publish=1';
     
     function AMPContentLookup_Articles( ){
+        $this->__construct( );
+    }
+
+    function __construct( ) {
         $this->init( );
+        $this->_clean_titles( );
+    }
+
+    function _clean_titles( ) {
         foreach( $this->dataset as $id => $title ){
             $this->dataset[$id] = strip_tags( $title );
         }
+
+    }
+}
+
+class AMPSystemLookup_Articles extends AMPContentLookup_Articles{
+    function AMPSystemLookup_Articles( ) {
+        $this->__construct( );
     }
 }
 

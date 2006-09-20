@@ -61,7 +61,7 @@ class ContentSearch_Form extends AMPSearchForm {
                     $renderer->separator( )
                     . $renderer->link( 
                         AMP_Url_AddVars( AMP_SYSTEM_URL_SECTION, array( 'id='.$current_section )),
-                            $renderer->image( AMP_SYSTEM_ICON_EDIT )
+                            $renderer->image( AMP_SYSTEM_ICON_EDIT, array( 'width' => '16', 'height' => '16', 'border' => 0 ) )
                             . $renderer->space( ) 
                             . AMP_TEXT_EDIT 
                             . $renderer->space( ) 

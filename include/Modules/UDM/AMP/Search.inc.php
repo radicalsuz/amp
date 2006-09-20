@@ -129,6 +129,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
     }
 
     function &return_items($fieldset, $criteria, $orderby=null, $return_qty="*", $offset=0) {
+        $empty_value = false;
 		$sql="SELECT $fieldset from userdata ";
         if (is_array($criteria) && !empty( $criteria )) $sql.="where ".join(" AND ", $criteria);
 		$sql.=(isset($orderby))?" ORDER BY ".$orderby:"";
@@ -145,7 +146,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 		if ($dataset=$this->dbcon->CacheExecute($sql)) {
             return $dataset;
         } else {
-            return false;
+            return $empty_value;
         }
         
     }

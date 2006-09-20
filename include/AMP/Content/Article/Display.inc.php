@@ -72,7 +72,7 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _addImage( $body ) {
         $image = $this->_article->getImageRef();
-        if (!$image || !$image->display_block( )) return $body;
+        if (!$image || !$image->display_in_body( )) return $body;
         return $this->_HTML_imageBlock( $image ) . $body;
     }
 

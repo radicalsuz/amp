@@ -33,7 +33,7 @@ class UserDataPlugin_ReadUrl_AMP extends UserDataPlugin {
         $options = $this->getOptions( );
         if ( isset( $data['id' ])) {
             $otp = $_REQUEST['otp'];
-            $auth = $this->udm->authenticate( $data['id'], $otp )
+            $auth = $this->udm->authenticate( $data['id'], $otp );
             if ( !$auth ) {
                 unset( $data['id']);
             }

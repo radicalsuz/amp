@@ -568,6 +568,22 @@ class Article extends AMPSystem_Data_Item {
                     . ' or id in( ' . join( ',', array_keys( $related_articles ) ) . ' ) )';
     }
 
+    function makeCriteriaTag( $tag_id ) {
+        $tagged_articles = AMPSystem_Lookup::instance( 'articlesByTag', $tag_id );
+        if ( !$tagged_articles || empty( $tagged_articles )) return 'FALSE';
+        return 'id in( ' . join( ',', array_keys( $tagged_articles )) . ')';
+    }
+
+    function makeCriteriaFrontpage( $value ) {
+        if ( !$value ) return false;
+        return 'fplink=1';
+    }
+
+    function makeCriteriaNew( $value ) {
+        if ( !$value ) return false;
+        return 'new=1';
+    }
+
     function makeCriteriaClass( $class_id ){
         return $this->_makeCriteriaEquals( 'class', $class_id );
     }

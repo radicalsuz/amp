@@ -76,7 +76,6 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
     function read_request($options=array()) {
         $options=array_merge($this->getOptions(), $options);
         
-        trigger_error( 'reading request' );
         if (isset($_POST['list_action'])&&$_POST['list_action']&&$options['allow_'.$_POST['list_action']]) {
             
             $this->action=$_POST['list_action'];

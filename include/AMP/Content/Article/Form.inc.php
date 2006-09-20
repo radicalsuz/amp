@@ -27,13 +27,15 @@ class Article_Form extends AMPSystem_Form_XML {
 
     function setDynamicValues() {
         $this->addTranslation( 'section',      '_checkNewSection',  'get');
-        $this->addTranslation( 'link',         '_checkToolLink',    'get');
 
         $this->addTranslation( 'image_upload', '_manageUpload',     'get');
         $this->addTranslation( 'picture',      '_checkUploadImage', 'get');
 
         $this->addTranslation( 'doc_upload',   '_manageUpload',     'get');
         $this->addTranslation( 'doc',          '_checkUploadFile',  'get');
+
+        $this->addTranslation( 'link',         '_checkToolLink',    'get');
+        $this->addTranslation( 'link',         '_checkDocLink',     'get');
 
         $this->addTranslation( 'wysiwyg_setting','_returnBlankCheckbox',  'get');
         $this->addTranslation( 'wysiwyg_setting','_checkWysiwyg',  'get');
@@ -181,6 +183,16 @@ class Article_Form extends AMPSystem_Form_XML {
             return $data[ $fieldname ];
         }
         return $data['tool_page_link'];
+    }
+
+    function _checkDocLink( $data, $fieldname ) {
+        if ( ! ( isset( $data['doc_direct_link'] ) && $data['doc_direct_link'] )) {
+            if ( !isset( $data[$fieldname ])) return false;
+            return $data[ $fieldname ];
+        }
+        if ( !( isset( $data['doc'])) && $data['doc']) return $data[$fieldname];
+        return AMP_CONTENT_URL_DOCUMENTS . $data['doc'];
+
     }
 
     function adjustFields( $fields ){

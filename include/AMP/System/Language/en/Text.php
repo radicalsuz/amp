@@ -238,4 +238,6 @@ define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_GALLERY', 'gallery');
 define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_GALLERY_IMAGE', 'gallery_image');
 define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_LINK', 'link');
 
+if ( !defined( 'AMP_TEXT_TAG')) define( 'AMP_TEXT_TAG', 'tag');
+
 ?>
