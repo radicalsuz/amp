@@ -177,12 +177,11 @@ class AMPSystem_Data {
     function __sleep( ){
         $response = get_object_vars( $this );
         unset( $response['dbcon']);
-        $this->dbcon = false;
         return array_keys( $response );
     }
 
     function __wakeup( ){
-        $this->dbcon = &AMP_Registry::getDbcon( );
+        $this->dbcon = AMP_Registry::getDbcon( );
     }
 
 }
