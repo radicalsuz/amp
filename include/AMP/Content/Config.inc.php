@@ -181,4 +181,28 @@ if ( !defined ( 'AMP_CONTENT_TRACKBACKS_ENABLED' )) {
     define( 'AMP_CONTENT_TRACKBACKS_ENABLED', false );
 }
 
+/**
+ * Document Types
+ */
+define ('AMP_CONTENT_DOCUMENT_PATH', 'downloads');
+define ('AMP_CONTENT_DOCUMENT_TYPE_PDF', 'pdf');
+define ('AMP_CONTENT_DOCUMENT_TYPE_WORD', 'word');
+define ('AMP_CONTENT_DOCUMENT_TYPE_DEFAULT', 'file');
+define ('AMP_CONTENT_DOCUMENT_TYPE_IMAGE', 'img');
+
+define ('AMP_CONTENT_DOCUMENT_TYPE_MOV',  'mov');
+define ('AMP_CONTENT_DOCUMENT_TYPE_FLV',  'flv');
+define ('AMP_CONTENT_DOCUMENT_TYPE_WMV',  'wmv');
+
+define ('AMP_ICON_WORD', 'worddoc.gif' );
+define ('AMP_ICON_PDF', 'pdf.gif' );
+define ('AMP_ICON_IMAGE', 'img.gif' );
+define ('AMP_ICON_IMG', 'img.gif' );
+
+define ('AMP_ICON_WMV', 'wmv.jpg' );
+define ('AMP_ICON_FLV', 'flv.jpg' );
+define ('AMP_ICON_MOV', 'mov.jpg' );
+
+define ('AMP_CONTENT_URL_ICONS', '/img/' );
+
 ?>

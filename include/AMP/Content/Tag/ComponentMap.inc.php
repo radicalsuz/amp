@@ -3,7 +3,7 @@
 require_once( 'AMP/System/ComponentMap.inc.php');
 
 class ComponentMap_AMP_Content_Tag extends AMPSystem_ComponentMap {
-    var $heading = "Tag";
+    var $heading = AMP_TEXT_TAG;
     var $nav_name = "content";
     var $_action_default = 'list';
 

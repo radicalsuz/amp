@@ -37,6 +37,61 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
         return $this->getName();
     }
 
+    function get_url_edit( ) {
+        if ( !isset( $this->id )) return false;
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_TAG, array( 'id=' . $this->id ) );
+    }
+
+    function getURL( ) {
+        if ( !isset( $this->id )) return false;
+        return AMP_Url_AddVars( AMP_CONTENT_URL_TAG, array( 'id=' . $this->id ) );
+    }
+
+    function makeCriteriaTag( $tag_name ) {
+        $key = AMP_Content_Tag::findByName( $tag_name );
+        if ( !$key ) return 'FALSE';
+        return 'id=' . $key;
+    }
+
+    function findByName( $raw_tag_name ) {
+        static $simple_tag_lookup = array( );
+        if ( empty( $simple_tag_lookup )) {
+
+            //initialize an all-lowercase version of the tags set
+            $tag_lookup = AMPSystem_Lookup::instance( 'tags');
+            foreach( $tag_lookup as $tag_id => $tag_name ) {
+                $simple_tag_lookup[$tag_id] = strtolower( $tag_name );
+            }
+        }
+        
+        $tag_name = strtolower( trim( $raw_tag_name ));
+        return array_search( $tag_name, $simple_tag_lookup );
+    }
+
+    function create( $tag_name, $description = false ) {
+        if ( !trim( $tag_name )) return false;
+        $existing_id = AMP_Content_Tag::findByName( $tag_name );
+
+        if ( $existing_id ) return $existing_id;
+        return AMP_Content_Tag::_create( trim( $tag_name ));
+    }
+
+    function _create( $tag_name, $description = false ) {
+        $tag = &new AMP_Content_Tag( AMP_Registry::getDbcon( ));
+        $tag->setDefaults( );
+        $tag->setData( array( 'name' => $tag_name , 'description' => $description ));
+        $result = $tag->save( );
+        if ( !$result ) return false;
+        return $tag->id;
+
+    }
+
+    function setDefaults( ) {
+        $this->mergeData( array( 
+            'publish' => 1
+            ));
+
+    }
 /*
     function display() {
         $display = &$this->getDisplay();

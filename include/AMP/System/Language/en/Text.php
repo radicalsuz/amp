@@ -39,6 +39,7 @@ define( 'AMP_TEXT_EDIT_ITEM', 'Edit this Item');
 define( 'AMP_TEXT_EDIT', 'Edit');
 define( 'AMP_TEXT_VIEW', 'View');
 define( 'AMP_TEXT_LIST', 'List');
+define( 'AMP_TEXT_DELETE', 'Delete');
 define( 'AMP_TEXT_EXPORT', 'Export');
 define( 'AMP_TEXT_ADD', 'Add');
 define( 'AMP_TEXT_ITEM_NAME', 'Item');

@@ -92,6 +92,11 @@ class AMPContent_Template extends AMPSystem_Data_Item {
         return (strpos( $this->_getCurrentTemplate(), "[-$position nav-]" ) !== FALSE );
     }
 
+    function get_url_edit( ) {
+        if ( !isset( $this->id )) return false;
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_TEMPLATE, 'id='. $this->id );
+    }
+
     ##############################
     ### private helper methods ###
     ##############################

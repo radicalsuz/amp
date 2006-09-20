@@ -314,42 +314,17 @@ class Article_Form extends AMPSystem_Form_XML {
         if ( !isset( $data['new_tags']) && $data['new_tags']) {
             return array( );
         }
-        $tags_set = preg_split( '/\s?,\s?/', $data['new_tags']);
-        $tag_names = AMPSystem_Lookup::instance( 'tags' );
-        $simple_tag_names = array( );
+        require_once( 'AMP/Content/Tag/Tag.php');
         $new_tags_verified = array( );
+        $tags_set = preg_split( '/\s?,\s?/', $data['new_tags']);
 
-        foreach( $tag_names as $tag_id => $tag_name ) {
-            $simple_tag_names[$tag_id] = strtolower( $tag_name );
-        }
-
-        foreach( $tags_set as $raw_new_tag ) {
-            $new_tag = trim( $raw_new_tag );
-            if ( !$new_tag ) continue;
-
-            //see if an existing tag matches the new one
-            $new_tag_id = array_search( strtolower( $new_tag ), $simple_tag_names );
-
-            //create new tag
-            if ( !$new_tag_id ) {
-                $new_tag_id = $this->_createTag( $new_tag );
-            }
+        foreach( $tags_set as $new_tag ) {
+            $new_tag_id = AMP_Content_Tag::create( $new_tag );
             if ( !$new_tag_id ) continue;
-            
-            //add the id to the results list
             $new_tags_verified[] = $new_tag_id;
         }
         return $new_tags_verified;
 
-    }
-
-    function _createTag( $tag_name ) {
-        require_once( 'AMP/Content/Tag/Tag.php');
-        $tag = &new AMP_Content_Tag( AMP_Registry::getDbcon( ));
-        $tag->setData( array( 'name' => $tag_name ));
-        $result = $tag->save( );
-        if ( !$result ) return false;
-        return $tag->id;
     }
 
     function _evalWysiwyg( $data, $fieldname ){

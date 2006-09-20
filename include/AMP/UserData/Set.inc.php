@@ -44,7 +44,6 @@ class UserDataSet extends UserData {
     }
 
     function output_list ( $format='DisplayHTML', $options = null, $order = null, $search_options=null) {
-
         $output_html = "";
         //block unpublished data from appearing online
         if ((!$this->_module_def['publish'])&&(!$this->admin)) {

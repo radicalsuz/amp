@@ -1,16 +1,5 @@
 <?php
 
-define ('AMP_CONTENT_DOCUMENT_PATH', 'downloads');
-define ('AMP_CONTENT_DOCUMENT_TYPE_PDF', 'pdf');
-define ('AMP_CONTENT_DOCUMENT_TYPE_WORD', 'word');
-define ('AMP_CONTENT_DOCUMENT_TYPE_DEFAULT', 'file');
-define ('AMP_CONTENT_DOCUMENT_TYPE_IMAGE', 'img');
-
-define ('AMP_ICON_WORD', 'worddoc.gif' );
-define ('AMP_ICON_PDF', 'pdf.gif' );
-define ('AMP_ICON_IMAGE', 'img.gif' );
-define ('AMP_CONTENT_URL_ICONS', '/img/' );
-
 require_once( 'AMP/Content/Display/HTML.inc.php');
 
 class DocumentLink  {
@@ -27,7 +16,11 @@ class DocumentLink  {
         'image/gif' => 'img',
         'image/tiff' => 'img',
         'image/png' => 'img',
-        'video/mpeg' => 'file');
+        'video/mpeg' => 'file'
+        'video/wmv' => 'wmv',
+        'video/flv' => 'flv',
+        'video/mov' => 'mov'
+        );
 
     function DocumentLink( $filename = null ) {
         if ( isset( $filename )) $this->init( $filename );
@@ -35,12 +28,12 @@ class DocumentLink  {
 
     function init( $filename ) {
         $this->setFile( $filename );
-        $this->verifyFileType( );
     }
 
     function setFile( $filename, $filetype = AMP_CONTENT_DOCUMENT_TYPE_DEFAULT ) {
         $this->_filename = $filename;
         $this->setFileType( $filetype );
+        $this->verifyFileType( );
     }
 
     function verifyFileType( ) {
@@ -76,6 +69,7 @@ class DocumentLink  {
     }
 
     function getFileType() {
+        if ( !isset( $th))
         return $this->_filetype;
     }
 
@@ -101,8 +95,12 @@ class ArticleDocumentLink_Display extends AMPDisplay_HTML {
     var $_file_descriptions = array(
         AMP_CONTENT_DOCUMENT_TYPE_WORD  =>  'Microsoft Word Document',
         AMP_CONTENT_DOCUMENT_TYPE_PDF   =>  'PDF',
+        AMP_CONTENT_DOCUMENT_TYPE_MOV   =>  'Quicktime Movie',
+        AMP_CONTENT_DOCUMENT_TYPE_WMV   =>  'Windows Media',
+        AMP_CONTENT_DOCUMENT_TYPE_FLV   =>  'Flash Video',
         AMP_CONTENT_DOCUMENT_TYPE_DEFAULT =>  'File',
-        AMP_CONTENT_DOCUMENT_TYPE_IMAGE =>  'Image File' );
+        AMP_CONTENT_DOCUMENT_TYPE_IMAGE =>  'Image File' 
+        );
     
 
     function ArticleDocumentLink_Display( $document_link ) {

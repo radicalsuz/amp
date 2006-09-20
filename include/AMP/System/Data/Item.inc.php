@@ -135,7 +135,6 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function deleteData( $item_id ) {
         $sql = "Delete from " . $this->datatable . " where ". $this->id_field ." = ". $this->dbcon->qstr( $item_id );
-        trigger_error( 'delete ' . $sql );
         if ( ( $itemdata = $this->dbcon->Execute( $sql )) && $this->dbcon->Affected_Rows( )) {
             $cached_sql = $this->_assembleSqlByID( $item_id );
             $this->dbcon->CacheFlush( $cached_sql ) ;

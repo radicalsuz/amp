@@ -47,4 +47,6 @@ if ( !defined( 'AMP_CONTENT_URL_EVENT_LIST' ))  define ( 'AMP_CONTENT_URL_EVENT_
 if ( !defined( 'AMP_CONTENT_URL_EVENT_ADD' ))   define ( 'AMP_CONTENT_URL_EVENT_ADD', 'calendar_input.php');
 if ( !defined( 'AMP_CONTENT_URL_COMMENT_ADD' ))   define ( 'AMP_CONTENT_URL_COMMENT_ADD', 'comment.php');
 
+if ( !defined( 'AMP_CONTENT_URL_TAG' ))   define ( 'AMP_CONTENT_URL_TAG', 'tag.php');
+
 ?>
