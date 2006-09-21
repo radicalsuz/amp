@@ -30,12 +30,12 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
             $this->_memcache_connection = &$memcache_connection;
         } else {
             trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, 'Memcache', 'connect', 'Request: '.$_SERVER['REQUEST_URI'] ) );
-            $this->_restart_memcache();
+            $this->_restart_memcached();
         }
         return $result;
     }
 
-    function _restart_memcache() {
+    function _restart_memcached() {
         $lock = fopen("/tmp/restart-memcached.lock", "w");
         flock($lock, LOCK_EX|LOCK_NB, $currently_restarting);
         if ($currently_restarting) {
