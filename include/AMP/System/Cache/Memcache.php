@@ -30,35 +30,49 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
             $this->_memcache_connection = &$memcache_connection;
         } else {
             trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, 'Memcache', 'connect', 'Request: '.$_SERVER['REQUEST_URI'] ) );
-            $lock = fopen("/tmp/restart-memcached.lock", "w");
-            flock($lock, LOCK_EX|LOCK_NB, $currently_restarting);
-            if ($currently_restarting) {
-                trigger_error(getmypid()." - could not get lock, hopefully someone else is restarting memcached");
-            } else {
-                trigger_error('connection to memcached failed, restarting');
-                $stats = $this->_memcache_connection->getStats();
-                $pid = $stats['pid'];
-                trigger_error(getmypid()." - aquired lock, restarting memcached with pid $pid");
-                $ret = `/usr/local/etc/rc.d/memcached.sh forcerestart`;
-                trigger_error("result: $ret");
-                $start = 0; 
-                //give it 30 seconds to reconnect
-                while(!($result = $memcache_connection->connect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT ))) {
-                    if(++$start > 30) {
-                        break;
-                    }
-                    sleep(1);
+            $this->_restart_memcache();
+        }
+        return $result;
+    }
+
+    function _restart_memcache() {
+        $lock = fopen("/tmp/restart-memcached.lock", "w");
+        flock($lock, LOCK_EX|LOCK_NB, $currently_restarting);
+        if ($currently_restarting) {
+            //if $currently_restarting, then another process has the lock
+            trigger_error(getmypid()." - could not get lock, hopefully someone else is restarting memcached");
+            return false;
+        } else {
+            //we're the first one to try to restart
+            trigger_error('connection to memcached failed, restarting');
+            $stats = $this->_memcache_connection->getStats();
+            $pid = $stats['pid'];
+            trigger_error(getmypid()." - aquired lock, restarting memcached with pid $pid");
+
+            //use the rc.d script to force a restart
+            $ret = `/usr/local/etc/rc.d/memcached.sh forcerestart`;
+            trigger_error("result: $ret");
+
+            //give it 30 seconds to reconnect
+            $mc = &new Memcache;
+            $start = 0; 
+            while(!($result = $mc->connect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT ))) {
+                if(++$start > 30) {
+                    break;
                 }
-                if ( $result ) {
-                    $this->_memcache_connection = &$memcache_connection;
-                    trigger_error('memcached restarted successfully');
-                } else {
-                    trigger_error('could not reestablish connection after 30 seconds');
-                }
-   
-                flock($lock, LOCK_UN);
-                mail('seth@radicaldesigns.org, austin@radicaldesigns.org', '[AMP] memcached restarted', "stats before restart:\n".print_r($stats, true), 'From: amp@radicaldesigns.org', '-fautomated@radicaldesigns.org');
+                sleep(1);
             }
+            if ( $result ) {
+                $new_stats = $mc->getStats();
+                $new_pid = $mc['pid'];
+                trigger_error("memcached restarted successfully, new pid is $pid");
+            } else {
+                trigger_error('could not reestablish connection after 30 seconds');
+            }
+   
+            //give up the lock
+            flock($lock, LOCK_UN);
+            mail('seth@radicaldesigns.org, austin@radicaldesigns.org', '[AMP] memcached restarted', "stats before restart:\n".print_r($stats, true), 'From: amp@radicaldesigns.org', '-fautomated@radicaldesigns.org');
         }
         return $result;
     }
