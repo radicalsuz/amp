@@ -37,12 +37,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             'label'=>'Order of Fields',
             'type' => 'textarea',
             'available' => true,
-            'default'   => 'newline,start_text,country,state,bydate,newline,tag,search,sortby,modin,endline'),
+            'default'   => 'newline,start_text,country,state,bydate,tag,search,sortby,modin,endline'),
         'field_order_admin'=>array(
             'label'=>'Admin View: Order of Fields',
             'type' => 'textarea',
             'available'=>true,
-            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,newline,tag,search,sortby,modin,endline')
+            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,tag,search,sortby,modin,endline')
             );
         
                     

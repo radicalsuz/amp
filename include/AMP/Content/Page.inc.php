@@ -166,7 +166,7 @@ class AMPContent_Page {
      * @ignore
      */
     function AMPContent_Page( &$dbcon ) {
-        $this->init( $dbcon );
+        $this->__construct( $dbcon );
     }
 
     /**
@@ -178,7 +178,7 @@ class AMPContent_Page {
      * @return void
      * @ignore
      */
-    function init( &$dbcon ) {
+    function __construct( &$dbcon ) {
         $this->dbcon = &$dbcon;
         $this->_registry =          & AMP_Registry::instance();
         $this->map =                & AMPContent_Map::instance();
@@ -691,6 +691,7 @@ class AMPContent_Page {
     function _globalizeIntroVars( &$introtext ) {
 
         $GLOBALS['intro_id'] = $introtext->id;
+        $this->_registry->setEntry( AMP_REGISTRY_CONTENT_INTRO_ID, $introtext->id );
 
         if ($title = $introtext->getTitle() ) {
             $GLOBALS['MM_title'] = $GLOBALS['mod_name'] = $title;

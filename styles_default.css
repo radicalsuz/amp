@@ -151,3 +151,36 @@ span.list_subheader {
 	font-size: 15px;
 	font-weight: bold;
 }
+
+div.list_header {
+	display: block;
+    border: 2px solid #9F6C06 ;
+	padding: 5px;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+div.list_tags div.list_column {
+	float:left;
+}
+
+a.list_item, div.list_item {
+	padding: 1em;
+    display:block;
+}
+a.list_item{
+    width: 100%;
+    font-size: 1.2em;
+}
+a.list_item:hover {
+	background-color: #EECC99;
+}
+div.list_item {
+    padding-right: 1em;
+}
+
+div.tagged_items div.list_item {
+    display: block;
+    padding: 1em;
+    width: 100%;
+}

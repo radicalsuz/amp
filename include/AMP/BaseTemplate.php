@@ -40,7 +40,7 @@ $currentPage = & AMPContent_Page::instance();
  *  If an intro_id or mod_id value is set to a non-default value , the page is not a content page 
  */
 if ((isset($mod_id) && $mod_id) && (! (isset($intro_id) && $intro_id))) $intro_id = $mod_id; 
-if (! (isset($intro_id) && $intro_id)) $intro_id = AMP_CONTENT_INTRO_ID_DEFAULT; 
+if (! ( isset( $intro_id ) && $intro_id )) $intro_id = AMP_CONTENT_INTRO_ID_DEFAULT;
 
 if ( $intro_id == AMP_CONTENT_INTRO_ID_DEFAULT ) {
 

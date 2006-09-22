@@ -45,13 +45,30 @@ class AMPSystem_Map {
     }
 
     function _init_map_values( ){
+        $cache_key = AMP_CACHE_TOKEN_XML_DATA . get_class( $this );
+
+        //check for cached version of map
+        if ( $map = &AMP_cache_get( $cache_key ) ) {
+            return $map;
+        }
+
+        //load map values from XML
         $map_source = &new AMPSystem_XMLEngine('Map');
         $map = $map_source->readData( );
+        if ( !$map ) return array( );
 
+        //load custom extensions to XML map
         $map_extensions_source = &new AMPSystem_XMLEngine('Map_Override');
         $map_extensions = $map_extensions_source->readData( );
-        if ( !$map_extensions ) return $map;
-        return array_merge( $map, $map_extensions );
+        if ( !$map_extensions )  {
+            $complete_map = &$map;
+        } else {
+            $complete_map = array_merge( $map, $map_extensions );
+        }
+
+        //cache the map
+        AMP_cache_set( $cache_key, $complete_map );
+        return $complete_map;
 
     }
 

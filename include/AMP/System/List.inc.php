@@ -836,7 +836,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function &_getRenderer( ){
         if ( isset( $this->_renderer )) return $this->_renderer;
-        $this->_renderer = &new AMPDisplay_HTML;
+        $this->_renderer = AMP_get_renderer( );
         return $this->_renderer;
     }
 

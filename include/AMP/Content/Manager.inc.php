@@ -1,6 +1,7 @@
 <?php
 
 if (!defined( 'AMP_CONTENT_BUFFER_CONTAINER_ID' )) define ('AMP_CONTENT_BUFFER_CONTAINER_ID', false );
+if (!defined( 'AMP_CONTENT_DISPLAY_KEY_FLASH' )) define ('AMP_CONTENT_DISPLAY_KEY_FLASH', "flash");
 if (!defined( 'AMP_CONTENT_DISPLAY_KEY_INTRO' )) define ('AMP_CONTENT_DISPLAY_KEY_INTRO', "intro");
 if (!defined( 'AMP_CONTENT_DISPLAY_KEY_BUFFER' )) define ('AMP_CONTENT_DISPLAY_KEY_BUFFER', "buffer");
 
@@ -50,7 +51,7 @@ class AMPContent_Manager {
      * @since 3.5.3 
      * @see setDisplayOrder
      */
-    var $_display_order = array( AMP_CONTENT_DISPLAY_KEY_INTRO, AMP_CONTENT_DISPLAY_KEY_BUFFER );
+    var $_display_order = array( AMP_CONTENT_DISPLAY_KEY_FLASH, AMP_CONTENT_DISPLAY_KEY_INTRO, AMP_CONTENT_DISPLAY_KEY_BUFFER );
 
     /**
      * Tracks which displays have been executed. ( internal flag )
@@ -102,8 +103,11 @@ class AMPContent_Manager {
      * @return AMPContent_Manager 
      */
     function AMPContent_Manager() {
-        require_once( 'AMP/Content/Display/HTML.inc.php' );
-        $this->_renderer = &new AMPDisplay_HTML( );
+        $this->__construct( );
+    }
+
+    function __construct( ) {
+        $this->_renderer = AMP_get_renderer( );
     }
 
     /**
@@ -180,8 +184,9 @@ class AMPContent_Manager {
      * Determine the order in which a set of named displays will execute 
      *
      * The passed array will replace the default ordering of 
-     * 1 intro,  or constant ( AMP_CONTENT_DISPLAY_KEY_INTRO )
-     * 2 buffer, or constant ( AMP_CONTENT_DISPLAY_KEY_BUFFER )
+     * 1 flash,  or constant ( AMP_CONTENT_DISPLAY_KEY_FLASH )
+     * 2 intro,  or constant ( AMP_CONTENT_DISPLAY_KEY_INTRO )
+     * 3 buffer, or constant ( AMP_CONTENT_DISPLAY_KEY_BUFFER )
      *
      * If your script needs to support these displays, please include the constant keys in your specified order.
      * 
@@ -221,7 +226,8 @@ class AMPContent_Manager {
      * @return mixed Display Object 
      */
     function &getDisplay( $name ){
-        if ( !isset( $this->_displays[ $name ])) return false;
+        $empty_value = false;
+        if ( !isset( $this->_displays[ $name ])) return $empty_value;
         return $this->_displays[ $name ];
     }
 
@@ -346,7 +352,7 @@ class AMPContent_Manager {
      */
     function _doDisplayBuffer( &$display ) {
         if (!AMP_CONTENT_BUFFER_CONTAINER_ID ) return $display->execute() ;
-        return $this->_renderer->_HTML_inDiv( $display->execute(), array( 'id' => AMP_CONTENT_BUFFER_CONTAINER_ID ));
+        return $this->_renderer->inDiv( $display->execute(), array( 'id' => AMP_CONTENT_BUFFER_CONTAINER_ID ));
     }
 
 // }}}

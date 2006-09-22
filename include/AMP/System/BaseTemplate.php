@@ -41,19 +41,8 @@ class AMPSystem_BaseTemplate {
 
     function _init_menu( ){
         $system_menu = false;
-        $cache = &AMP_get_cache( );
-        if ( $cache ) {
-            $cache_key = $cache->identify( 'AMPSystem_Menu', AMP_SYSTEM_USER_ID );
-            $system_menu = &$cache->retrieve( $cache_key );
-        }
-        if ( !$system_menu ) {
-            $this->_menu = & new AMPSystem_Menu();
-            if ( $cache ) $cache->add( $this->_menu, $cache_key );
-        } else {
-            $this->_menu = &$system_menu;
-        }
+        $this->_menu = & new AMPSystem_Menu();
         $this->_menu->init_header( );
-
     }
 
     function &instance() {

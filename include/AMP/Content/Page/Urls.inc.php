@@ -37,10 +37,11 @@ if ( !defined( 'AMP_CONTENT_URL_FAQ'))    define ( 'AMP_CONTENT_URL_FAQ',       
 if ( !defined( 'AMP_CONTENT_URL_BOARD_HOUSING')) define ( 'AMP_CONTENT_URL_BOARD_HOUSING',       'housing.php');
 if ( !defined( 'AMP_CONTENT_URL_BOARD_RIDE'))    define ( 'AMP_CONTENT_URL_BOARD_RIDE',       'ride.php');
 if ( !defined( 'AMP_CONTENT_URL_LINKS'))    define ( 'AMP_CONTENT_URL_LINKS',       'links.php');
-if ( !defined( 'AMP_CONTENT_URL_TRACKBACKS'))   define ( 'AMP_CONTENT_URL_TRACKBACKS',       AMP_SITE_URL . 'article_trackback.php');
+//if ( !defined( 'AMP_CONTENT_URL_TRACKBACKS'))   define ( 'AMP_CONTENT_URL_TRACKBACKS',       AMP_SITE_URL . 'article_trackback.php');
 
 if ( !defined( 'AMP_CONTENT_URL_DOCUMENTS'))    define ( 'AMP_CONTENT_URL_DOCUMENTS', '/downloads/' );
 if ( !defined( 'AMP_CONTENT_URL_IMAGES' ))      define ( 'AMP_CONTENT_URL_IMAGES', 'img/' );
+if ( !defined( 'AMP_CONTENT_URL_IMAGE' ))      define ( 'AMP_CONTENT_URL_IMAGE', 'image.php' );
 if ( !defined( 'AMP_CONTENT_URL_CAPTCHA' ))      define ( 'AMP_CONTENT_URL_CAPTCHA', 'image_captcha.php' );
 if ( !defined( 'AMP_CONTENT_URL_EVENT_SEARCH' ))  define ( 'AMP_CONTENT_URL_EVENT_SEARCH', 'calendar.php');
 if ( !defined( 'AMP_CONTENT_URL_EVENT_LIST' ))  define ( 'AMP_CONTENT_URL_EVENT_LIST', 'calendar.php');

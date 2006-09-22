@@ -51,8 +51,12 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
         if (!$admin) $formEngine->enforceRequiredFields();
         
         //Populate the form
-		$formEngine->setValues( $this->udm->getStoredValues() );
-		$formEngine->setValues( $this->udm->getData() );
+		//$formEngine->setValues( $this->udm->getStoredValues() );
+		//$formEngine->setValues( $this->udm->getData() );
+        $stored_values = ( $this->udm->getStoredValues( ));
+        $stored_data = $this->udm->getData( );
+        $all_values = array_merge( $stored_values, $stored_data );
+		$formEngine->setValues( $all_values );
 		
 		if($form_attrs = $this->getRegisteredFieldAttrs()) {
 			foreach($form_attrs as $field => $field_attrs) {
@@ -132,7 +136,12 @@ class UserDataPlugin_Build_QuickForm extends UserDataPlugin {
             if (   isset( $field_def['type']) 
                     && ( $field_def['type'] == 'captcha' )
                     && $this->udm->admin) continue;
+
             $newfields [$fieldname] = $this->_addValueSet( $fields[$fieldname] );
+
+            if (   isset( $field_def['type']) 
+                    && ( $field_def['type'] == 'imagepicker' )
+                    && !$this->udm->admin) $newfields[$fieldname]['type'] = 'file';
         }
         return $newfields;
     }

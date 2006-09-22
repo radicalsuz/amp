@@ -28,6 +28,7 @@ define( 'AMP_SYSTEM_URL_ARTICLE_FRONTPAGE',     'article_frontpage.php');
 define( 'AMP_SYSTEM_URL_WEBACTION',             'action_center.php');
 define ('AMP_SYSTEM_URL_RSS_SUBSCRIPTION',      'rss_subscription.php');
 define ('AMP_SYSTEM_URL_PUBLIC_PAGES',          'introtext.php?action=list');
+define ('AMP_SYSTEM_URL_PUBLIC_PAGE',           'introtext.php');
 define( 'AMP_SYSTEM_URL_CONTENTS',              'articlelist.php');
 define( 'AMP_SYSTEM_URL_STYLESHEET',            'stylesheet.php');
 define( 'AMP_SYSTEM_URL_SECTION',               'section.php');

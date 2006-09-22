@@ -7,12 +7,12 @@ class AMP_System_Component_Display extends AMPContent_Manager {
     var $_renderer;
 
     function AMP_System_Component_Display( &$controller ){
-        $this->init( $controller );
+        $this->__construct( $controller );
     }
 
-    function init( &$controller ){
+    function __construct( &$controller ){
         $this->_controller = &$controller;
-        $this->_renderer = &new AMPDisplay_HTML( );
+        $this->_renderer =  AMP_get_renderer( );
     }
 
     function &instance( &$controller ) {

@@ -265,6 +265,17 @@ class AMPSystemLookup_Forms extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_FormsPublic extends AMPSystem_Lookup {
+    var $datatable = "userdata_fields";
+    var $result_field = "name";
+    var $sortby = "name";
+    var $criteria = 'publish = 1';
+
+    function AMPSystemLookup_Forms() {
+        $this->init( );
+    }
+}
+
 class AMPSystemLookup_PermissionsbyForm extends AMPSystem_Lookup {
     var $datatable = "modules";
     var $result_field = "perid";

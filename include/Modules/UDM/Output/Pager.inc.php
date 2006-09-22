@@ -64,6 +64,10 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	
 	function execute($options=array( )) {
         $options=array_merge($this->getOptions(), $options);
+        
+        if ( defined( 'AMP_CONTENT_PAGER_EXECUTED_'.$this->udm->instance)) {
+            $this->executed = true;
+        }
 
         if ($this->udm->total_qty) $this->total_qty = $this->udm->total_qty;
         else $this->total_qty = count($this->udm->users);
@@ -83,7 +87,9 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         if ($this->udm->admin) $options['control_class']="list_controls";
 
 		$output ="<div class=".$options['control_class']." style=\"width:100%;text-align:center;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";
-        if (!$this->executed) $output .="<Form name=\"".$options['form_name']."\" ACTION=\"".$_SERVER['PHP_SELF']."\" METHOD=\"GET\">";
+        if (!$this->executed)  {
+            $output .="<Form name=\"".$options['form_name']."\" ACTION=\"".$_SERVER['PHP_SELF']."\" METHOD=\"GET\">";
+        }
 		
 		#if ($this->return_qty=="*") {$this->return_qty=$this->total_qty;}
 		
@@ -106,7 +112,10 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 		//Display Qty choice - convert the qty back to a * for listbox
 		#if ($this->total_qty==$this->return_qty) {$this->return_qty="*";}
 
-		if (!$this->executed) $output.="&nbsp;&nbsp;".$this->qty_choice($options);
+		if (!$this->executed) {
+            $output.="&nbsp;&nbsp;".$this->qty_choice($options);
+
+        }
 
 		
         if ($this->return_qty<$this->total_qty) {
@@ -127,13 +136,18 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 			}
 			//NEXT button
 			if ($this->total_qty > ($this->offset+$this->return_qty)){
-            $output .= "|&nbsp;<a href=\"javascript: window.location.href='".$_SERVER['PHP_SELF']."?".join("&", $this->criteria)."&qty='+document.forms['".$options['form_name']."'].elements['qty_selector[]'].value+'&offset=".($this->offset+$this->return_qty)."';\"><B>Next Page >></B></a>&nbsp; ";
+                $output .= "|&nbsp;<a href=\"javascript: window.location.href='".$_SERVER['PHP_SELF']."?".join("&", $this->criteria)
+                            ."&qty='+document.forms['".$options['form_name']."'].elements['qty_selector[]'].value+'"
+                            ."&offset=".($this->offset+$this->return_qty)."';\"><B>Next Page >></B></a>&nbsp; ";
 			}
         }
 
         if (!$this->executed) $output.="</form>";
         $output.="</div>";
         $this->executed=true;
+        if ( !defined( 'AMP_CONTENT_PAGER_EXECUTED_'.$this->udm->instance)) {
+            define( 'AMP_CONTENT_PAGER_EXECUTED_'.$this->udm->instance , true );
+        }
         
 		return $output;
 	}

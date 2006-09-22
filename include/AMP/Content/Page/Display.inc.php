@@ -42,7 +42,14 @@ class AMPContent_PageDisplay {
         $flash = &AMP_System_Flash::instance( );
         $content = $this->_page->contentManager->output() ;
         $this->_template->placeNavigation( $this->_page );
-        $flash_output = $flash->execute( );
+
+        //test for flash placement
+        $content_flash = $this->_page->contentManager->getDisplay( AMP_CONTENT_DISPLAY_KEY_FLASH ); 
+        $flash_output = false;
+        if ( !$content_flash || !defined( 'AMP_SYSTEM_FLASH_OUTPUT' ) ) {
+            $flash_output = $flash->execute( );
+        }
+
         $output =  
                 $this->_header->output().
                 $this->_template->execute( $flash_output . $content );

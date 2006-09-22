@@ -109,8 +109,8 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
     function _verifyBasics( ){
         
         if ( !isset( $this->plugin_instance )) return;
-        $read_plugin = &$this->udm->getPlugin( 'AMP', 'Read');
-        $save_plugin = &$this->udm->getPlugin( 'AMP', 'Save');
+        $read_plugin = $this->udm->getPlugin( 'AMP', 'Read');
+        $save_plugin = $this->udm->getPlugin( 'AMP', 'Save');
         if ( $read_plugin && $save_plugin ) return;
 
         $warning_constant_read = 'AMP_USERDATA_REGISTERED_READ_' . $this->udm->instance;
@@ -119,7 +119,7 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
 
         if ( !( $read_plugin )){
             trigger_error( get_class( $this ) . ' is saving AMP/Read AUTO');
-            $read_plugin = &$this->udm->registerPlugin( 'AMP', 'Read');
+            $read_plugin = $this->udm->registerPlugin( 'AMP', 'Read');
             $read_plugin->saveRegistration( 'AMP', 'Read', 1 );
             define( $warning_constant_read, true );
         }
@@ -147,7 +147,7 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
         $options = $this->getOptions( );
         $sort_plugin = $this->udm->registerPlugin( 'AMP', 'Sort');
         $this->_translateOptions( $options, 'Sort', $sort_plugin );
-        $search_plugin = &$this->udm->registerPlugin( 'AMP', 'Search');
+        $search_plugin = $this->udm->registerPlugin( 'AMP', 'Search');
         $this->_translateOptions( $options, 'Sort', $search_plugin );
         if ( isset( $options['components'])){
             $component_set = $options['components'];

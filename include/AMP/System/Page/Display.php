@@ -12,8 +12,9 @@ class AMP_System_Page_Display extends AMP_System_Component_Display {
     var $_nav_set = array( );
 
     function AMP_System_Page_Display ( &$controller ){
-        $this->init( $controller );
+        $this->__construct( $controller );
     }
+
 
     function execute( ){
         $output = parent::execute( );

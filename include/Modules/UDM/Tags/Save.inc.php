@@ -15,6 +15,7 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
 
     var $available = false;
     var $_active;
+    var $_field_prefix = 'Tags';
 
     function UserDataPlugin_Save_Tags( &$udm, $plugin_instance = null ) {
         $this->init( $udm, $plugin_instance );
@@ -33,7 +34,7 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
             'tag_add' => array( 
                 'type'      => 'multiselect',
                 'size'      => 12,
-                'label'     => 'Select Tags',
+                'label'     => 'Select ' . ucfirst( AMP_pluralize( AMP_TEXT_TAG )),
                 'enabled'   => true,
                 'public'    => $public_setting,
                 'values'    => $available_tags

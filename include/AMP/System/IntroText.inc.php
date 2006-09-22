@@ -136,6 +136,11 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
         return $this->mergeData( array( 'templateid' => $template_id ));
     }
 
- }
+    function get_url_edit( ) {
+        if ( !isset( $this->id ) && $this->id ) return false;
+        return AMP_Url_AddVars( AMP_SYSTEM_URL_PUBLIC_PAGE, array( 'id='. $this->id ));
+    }
+
+}
 
 ?>

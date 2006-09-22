@@ -48,7 +48,8 @@ class AMP_Content_Tag_Item_List_Tags extends AMPSystem_List {
 
     function _HTML_header( ) {
         return '<div class="tag_listing">'
-                . '<div class="system_heading">Current Tags</div>';
+                . '<div class="system_heading list_header">Current '
+                . ucfirst( AMP_pluralize( AMP_TEXT_TAG )) . '</div>';
     }
 
     function _HTML_footer( ) {

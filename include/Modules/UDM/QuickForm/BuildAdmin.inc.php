@@ -62,6 +62,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $this->form->registerElementType('checkgroup','HTML/QuickForm/group.php','HTML_QuickForm_group');
         $this->form->registerElementType('wysiwyg','HTML/QuickForm/textarea.php','HTML_QuickForm_textarea');
 		$this->form->registerElementType('captcha','HTML/QuickForm/text.php','HTML_QuickForm_text');
+		$this->form->registerElementType('imagepicker','HTML/QuickForm/select.php','HTML_QuickForm_select');
         
         $this->_build_core_fields();
         $this->_build_fields();
@@ -359,7 +360,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $jscript = "onclick=\"changef('$fn');\"";
         $fa_js = "<img src=\"images/arrow-right.gif\" border=\"0\" class=\"field_arrow\" id=\"arrow_$fn\" $jscript />";
 
-        $label    = $field[ 'label'  ];
+        $label    = isset( $field['label']) ? $field[ 'label'  ] : false;
         $flabel = ( $label ) ? "$label <span class=\"fieldname\">(<em>$fn</em>)</span>" :
                                "Unnamed Field <span class=\"fieldname\">(<em>$fn</em>)</span>";
 

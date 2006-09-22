@@ -40,6 +40,13 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
         return $images_lookup[ $tag_id ];
     }
 
+    function getTagURL( ) {
+        $tag_id = $this->getTag( );
+        if ( !$tag_id ) return false;
+        return AMP_Url_AddVars( AMP_CONTENT_URL_TAG, array( 'id='.$tag_id ));
+
+    }
+
     function getItemDescription( ) {
         $item_type = $this->getItemtype( );
         $name_value = false;
@@ -50,7 +57,21 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
                 $name_value = ': ' . $form_names[ $form_id ] ;
             }
         }
-        return ucfirst( $item_type ) . $name_value;
+        return AMP_pluralize( ucfirst( $item_type )) . $name_value;
+    }
+
+    function getItemCategory( ) {
+        $item_type = $this->getItemtype( );
+        $name_value = false;
+        if ( $item_type == AMP_TEXT_SYSTEM_ITEM_TYPE_FORM ) {
+            $form_id = $this->_tagged_item->getModin( );
+            $form_names = AMPSystem_Lookup::instance( 'formsPublic');
+            if ( isset( $form_names[ $form_id ])) {
+                return $form_names[ $form_id ] ;
+            }
+        }
+        return AMP_pluralize( ucfirst( $item_type ) );
+
     }
 
     function &getTagImageRef( ) {
@@ -151,6 +172,14 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
     function get_url_edit( ) {
         if ( !method_exists( $this->_tagged_item, 'get_url_edit')) return false;
         return $this->_tagged_item->get_url_edit( );
+    }
+
+    function getBlurb( ) {
+        return $this->_tagged_item->getBlurb( );
+    }
+
+    function getImageRef( ) {
+        return $this->_tagged_item->getImageRef( );
     }
 
 }

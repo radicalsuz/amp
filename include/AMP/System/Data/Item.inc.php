@@ -56,6 +56,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if (isset($item_id) && $item_id) $this->readData( $item_id );
     }
 
+    function read( $item_id ) {
+        return $this->readData( $item_id );
+    }
+
     function setSource( $sourcename ) {
         parent::setSource( $sourcename );
         $this->_itemdata_keys = $this->_getColumnNames( $this->datatable );
@@ -352,6 +356,18 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         
     }
 
+    /**
+     * Alias for searchf
+     * 
+     * @param mixed $criteria 
+     * @param mixed $class_name 
+     * @access public
+     * @return void
+     */
+    function find( $criteria = null, $class_name = null ) {
+        return $this->search( $criteria, $class_name );
+    }
+
     function &getSearchSource( $criteria = null ){
         $result = $this->_getSearchSource( $criteria );
         return $result;
@@ -556,6 +572,14 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $result = $this->getData( $this->_field_listorder );
         if ( !$result ) return AMP_CONTENT_LISTORDER_MAX . $this->getName( );
         return $result;
+    }
+
+    function getImageRef( ) {
+        return false;
+    }
+
+    function getBlurb( ) {
+        return false;
     }
 
 }

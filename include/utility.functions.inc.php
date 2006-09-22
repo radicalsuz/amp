@@ -1377,6 +1377,10 @@ function AMP_update_tags( $tag_ids, $item_id, $item_type ) {
     }
 
 }
+
+function AMP_local_request( ){
+    return ( strpos( $_SERVER['SERVER_NAME'], $_SERVER['HTTP_REFERER']));
+}
 			
 
 ?>

@@ -29,7 +29,12 @@ class AMP_Content_Image_Effects_Controller {
         $this->set_file( $image_ref_content->getPath( $image_class ));
         
         $action = ( isset( $_REQUEST['action']) && $_REQUEST['action']) ? $_REQUEST['action'] : $this->_default_action;
-        if ( !AMP_Authenticate( 'admin')) $action = $this->_default_action;
+
+        //validate request
+        if ( AMP_local_request( )
+             || AMP_Authenticate( 'admin')) {
+            $action = $this->_default_action;
+        }
 
         $display = &$this->get_display( );
         $display->set_action( $action );
