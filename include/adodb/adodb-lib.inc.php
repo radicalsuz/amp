@@ -105,7 +105,7 @@ function _adodb_replace(&$zthis, $table, $fieldArray, $keyCol, $autoQuote, $has_
 			$keyCol = array($keyCol);
 		}
 		foreach($fieldArray as $k => $v) {
-			if ($autoQuote && !is_numeric($v) and strncmp($v,"'",1) !== 0 and strcasecmp($v,'null')!=0) {
+			if ($autoQuote && !is_numeric($v) and strcasecmp($v,'null')!=0) {
 				$v = $zthis->qstr($v);
 				$fieldArray[$k] = $v;
 			}
@@ -128,6 +128,7 @@ function _adodb_replace(&$zthis, $table, $fieldArray, $keyCol, $autoQuote, $has_
 		
 		if ($uSet && $where) {
 			$update = "UPDATE $table SET $uSet WHERE $where";
+            trigger_error( 'update sql: ' . $update );
 
 			$rs = $zthis->Execute($update);
 			
