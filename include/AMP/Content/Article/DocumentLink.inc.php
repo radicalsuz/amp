@@ -10,6 +10,7 @@ class DocumentLink  {
 
     var $_default_display = 'ArticleDocumentLink_Display';
     var $_mime_translations = array( 
+        'application/octet-stream' => 'file',
         'application/pdf' => 'pdf',
         'application/msword' => 'word',
         'image/jpeg' => 'img',
@@ -17,9 +18,10 @@ class DocumentLink  {
         'image/tiff' => 'img',
         'image/png' => 'img',
         'video/mpeg' => 'file',
-        'application/octet-stream' => 'file',
         'video/x-ms-wmv' => 'wmv',
         'video/x-flv' => 'flv',
+        'application/x-quicktime' => 'mov',
+        'application/quicktime' => 'mov',
         'video/quicktime' => 'mov'
         );
 
@@ -42,6 +44,11 @@ class DocumentLink  {
 		$file_path = $this->getPath();
 		if (is_dir($file_path)) return false;
         if ( !( $mime_filetype = mime_content_type( $file_path )) ) return false;
+		//yet another microsoft-required hack
+		if (strtolower(substr($file_path, strlen($file_path)-3)) == 'wmv' ){
+			$mime_filetype = 'video/x-ms-wmv';
+		}
+
         $this->setFileType( $this->_simpleFileType( $mime_filetype ));
     }
 
