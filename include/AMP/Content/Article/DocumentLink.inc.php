@@ -16,10 +16,11 @@ class DocumentLink  {
         'image/gif' => 'img',
         'image/tiff' => 'img',
         'image/png' => 'img',
-        'video/mpeg' => 'file'
-        'video/wmv' => 'wmv',
-        'video/flv' => 'flv',
-        'video/mov' => 'mov'
+        'video/mpeg' => 'file',
+        'application/octet-stream' => 'file',
+        'video/x-ms-wmv' => 'wmv',
+        'video/x-flv' => 'flv',
+        'video/quicktime' => 'mov'
         );
 
     function DocumentLink( $filename = null ) {
