@@ -206,7 +206,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             $this->notify( 'save' );
             return true;
         }
-        trigger_error ( sprintf( AMP_TEXT_ERROR_DATABASE_SAVE_FAILED, get_class( $this ), $this->dbcon->ErrorMsg() ));
+        $this->addError( sprintf( AMP_TEXT_ERROR_DATABASE_SAVE_FAILED, get_class( $this ), AMP_TEXT_ERROR_DATABASE_PROBLEM ) );
+        trigger_error ( sprintf( AMP_TEXT_ERROR_DATABASE_SAVE_FAILED, get_class( $this ), $this->dbcon->ErrorMsg()  ));
 
         return false;
     }

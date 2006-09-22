@@ -71,6 +71,8 @@ if ( !defined( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD' ))
         define( 'AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD', '%s was initialized with an invalid dbcon');
 if ( !defined( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED' ))
         define( 'AMP_TEXT_ERROR_DATABASE_SQL_FAILED', "%s failed to %s data : %s \n statement: %s");
+if ( !defined( 'AMP_TEXT_ERROR_DATABASE_PROBLEM' ))
+        define( 'AMP_TEXT_ERROR_DATABASE_PROBLEM', "Database Error");
 if ( !defined( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED' ))
         define( 'AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED', '_class_name var not defined for %s: search failed' );
 if ( !defined( 'AMP_TEXT_ERROR_LOG_FORMAT' ))

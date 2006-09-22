@@ -32,9 +32,7 @@ class SectionContentDisplay_Newsroom extends ArticleSet_Display {
             #$articles  = &$this->_source->instantiateItems ( $article_data, $this->_sourceItem_class );
             
             $subsource = &$this->_getSubSource($current_class, $page_limit );
-            trigger_error( 'got source for ' . $current_class );
             if (!$subsource->hasData()) continue;
-            trigger_error( 'has data for ' . $current_class );
             $articles = &$subsource->instantiateItems( $subsource->getArray(), $this->_sourceItem_class );
 
             $listBody .=    
