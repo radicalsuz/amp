@@ -36,6 +36,9 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     }
 
     function _restart_memcached() {
+        if(!defined('MEMCACHED_RC_SCRIPT')) define('MEMCACHED_RC_SCRIPT', '/usr/local/etc/rc.d/memcached.sh');
+        if(!file_exists(MEMCACHED_RC_SCRIPT)) return false;
+
         $lock = fopen("/tmp/restart-memcached.lock", "w");
         flock($lock, LOCK_EX|LOCK_NB, $currently_restarting);
         if ($currently_restarting) {
@@ -50,8 +53,11 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
             trigger_error(getmypid()." - aquired lock, restarting memcached with pid $pid");
 
             //use the rc.d script to force a restart
-            $ret = `/usr/local/etc/rc.d/memcached.sh forcerestart`;
-            trigger_error("result: $ret");
+            $ret = exec(MEMCACHED_RC_SCRIPT.' forcerestart',$message,$code);
+            if($code) {
+                trigger_error("memcached restart script ".MEMCACHED_RC_SCRIPT." returned error code: $code");
+                return false;
+            }
 
             //give it 30 seconds to reconnect
             $mc = &new Memcache;
