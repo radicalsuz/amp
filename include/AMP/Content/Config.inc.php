@@ -139,7 +139,7 @@ define( 'AMP_CONTENT_PUBLICPAGE_ID_LINKS_DISPLAY', 12 );
 if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT'))  
         define( 'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT', 34 );
 if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_TAGS_DISPLAY')) 
-        define( 'AMP_CONTENT_PUBLICPAGE_ID_TAGS_DISPLAY', 66 );
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_TAGS_DISPLAY', 28 );
 
 /**
  * Allow multiple sections per article 

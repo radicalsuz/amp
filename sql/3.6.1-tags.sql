@@ -20,3 +20,4 @@ create table if not exists tags_items (
 replace into tags ( id, name, publish ) values ( 1, 'New', 0 );
 replace into tags ( id, name, publish ) values ( 2, 'Front Page', 0 );
 replace into tags ( id, name, publish ) values ( 20, 'User Added', 0 );
+replace into moduletext (id, name, title ) values ( 28, 'Tag Listing', 'Tags' );
