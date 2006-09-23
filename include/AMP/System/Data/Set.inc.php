@@ -316,7 +316,7 @@
         $id_set = AMPSystem_Lookup::instance( $lookup_type, $tag_value );
         if ( !$id_set || empty( $id_set )) return 'FALSE';
 
-        return $this->id_field . ' IN ( '. join( ',', $id_set ) . ')';
+        return $this->id_field . ' IN ( '. join( ',', array_keys( $id_set ) ) . ')';
         
     }
 

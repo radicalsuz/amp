@@ -12,7 +12,7 @@ class ContentFilter_Tag {
 
     function execute( &$source ) {
         $source->addCriteria( 
-            $source->makeCriteriaTag( $this->_tag_value );
+            $source->makeCriteriaTag( $this->_tag_value )
         );
     }
 

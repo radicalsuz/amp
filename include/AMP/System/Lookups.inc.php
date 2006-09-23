@@ -80,8 +80,6 @@ class AMPSystem_Lookup {
         if (!$lookup_set) $lookup_set = array();
         $req_class = $lookup_baseclass . '_' . $type;
         if ( !class_exists( $req_class ) ){
-            print AMPbacktrace( );
-            exit;
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
             return $empty_value;
         }

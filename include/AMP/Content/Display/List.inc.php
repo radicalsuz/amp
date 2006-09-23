@@ -100,9 +100,9 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         return false;
     }
 
-    function addFilter( $filter_name ) {
+    function addFilter( $filter_name, $filter_var = null  ) {
         if ( method_exists( $this->_source, 'addFilter')) {
-            $result = $this->_source->addFilter( $filter_name );
+            $result = $this->_source->addFilter( $filter_name, $filter_var );
             $this->_source->readData( );
             return $result;
         }
