@@ -19,6 +19,11 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
         $this->mergeData( array( 'reltype' => array_keys( $reltype)) );
     }
 
+    function _adjustSetData( $data ) {
+        $this->legacyFieldname( $data, 'image', 'thumbnail' );
+
+    }
+
     function _afterSave( ){
         $reltype = $this->getData( 'reltype');
         $this->_removeRelatedLinks( );
