@@ -642,6 +642,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     function &_addElementCaptcha ( $name, $field_def ) {
         $this->_addUniqueIdValue( );
 
+        require_once('AMP/Content/Display/HTML.inc.php');
         $renderer = &new AMPDisplay_HTML;
         $this->form->addElement( 
                 'static', 'captcha_'.$name, "",  
