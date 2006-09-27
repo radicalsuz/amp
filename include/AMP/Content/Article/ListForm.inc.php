@@ -23,12 +23,13 @@ class Article_ListForm extends AMP_System_List_Form {
     var $_source_object = 'Article';
 
     var $_observers_source = array( 'AMP_System_List_Observer');
-    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'relate', 'regionize', 'reorder' );
+    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'regionize', 'tag','reorder' );
     var $_action_args = array( 
             'reorder'   => array( 'order' ), 
-            'move'      => array( 'section_id', 'class_id' ), 
-            'relate'    => array( 'related_section_id' ), 
-            'regionize' => array( 'region_id' )
+            'move'      => array( 'section_id', 'class_id', 'related_section_id' ), 
+    //        'relate'    => array( 'related_section_id' ), 
+            'regionize' => array( 'region_id' ),
+            'tag'       => array( 'tag_id', 'tags_text' )
         );
     var $_actions_global = array( 'reorder');
 
@@ -107,21 +108,39 @@ class Article_ListForm extends AMP_System_List_Form {
     }
 
     function renderMove( &$toolbar ){
-        $renderer = &$this->_getRenderer( );
-        $section_options = &AMPContent_Lookup::instance( 'sectionMap' );
-        if ( $section_options ) {
-            $section_options = array( '' => 'Select Section') + $section_options;
+        $renderer = AMP_get_renderer( );
+
+        //section options
+        $base_section_options = &AMPContent_Lookup::instance( 'sectionMap' );
+        if ( $base_section_options ) {
+            $section_options = array( '' => 'Select Section') + $base_section_options;
         } else {
             $section_options = array( '' => 'Select Section');
         }
 
+        //create related sections
+        if ( $base_section_options ){
+            $related_section_options = array( '' => 'Select Related Section' ) + $base_section_options;
+        } else {
+            $related_section_options = array( '' => 'Select Related Section' );
+        }
+
+        //class options
         $class_options = &AMPContent_Lookup::instance( 'classes' );
         if ( $class_options ){
             $class_options = array( '' => 'Select Class') + $class_options;
         } else {
             $class_options = array( '' => 'Select Class'); 
         }
-                
+
+        $move_selects = array( 
+            AMP_buildSelect( 'section_id',  $section_options,   null, $renderer->makeAttributes( array( 'class' => 'searchform_element'))),
+            AMP_buildSelect( 'class_id',    $class_options,     null, $renderer->makeAttributes( array( 'class' => 'searchform_element'))),
+            AMP_buildSelect( 'related_section_id', $related_section_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element')))
+            );
+
+        return $toolbar->addTab( 'move', $move_selects );
+        /*        
         $toolbar->addEndContent( 
                 $renderer->inDiv( 
                         '<a name="move_targeting"></a>'
@@ -143,6 +162,7 @@ class Article_ListForm extends AMP_System_List_Form {
                 . "if ( $(\"region_targeting\").style.display==\"block\") window.change_any( \"region_targeting\");"
                 . "if ( $(\"relate_targeting\").style.display==\"block\") window.change_any( \"relate_targeting\");"
                 . "window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
+                */
 
     }
 
@@ -154,7 +174,10 @@ class Article_ListForm extends AMP_System_List_Form {
         } else {
             $region_options = array( '' => 'Select Region');
         }
+        $region_select = array( AMP_buildSelect( 'region_id', $region_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element'))) );
+        return $toolbar->addTab( 'regionize', $region_select);
                 
+        /*
         $toolbar->addEndContent( 
                 $renderer->inDiv( 
                         '<a name="region_targeting"></a>'
@@ -174,18 +197,38 @@ class Article_ListForm extends AMP_System_List_Form {
                 . "if ( $(\"move_targeting\").style.display==\"block\") window.change_any( \"move_targeting\");"
                 . "if ( $(\"relate_targeting\").style.display==\"block\") window.change_any( \"relate_targeting\");"
                 . "window.scrollTo( 0, document.anchors[\"region_targeting\"].y );'>&nbsp;";
+                */
 
     }
 
+    function renderTag( &$toolbar ) {
+        $renderer = AMP_get_renderer( );
+        $tags = AMPSystem_Lookup::instance( 'tags');
+        if ( !$tags ) {
+            $tags = array( );
+        }
+        $tag_add =  $renderer->inSpan( AMP_TEXT_ADD . $renderer->space( ) . AMP_pluralize( AMP_TEXT_TAG ) . ': ', array( 'class' => 'searchform_element'))
+                    . '<input name = "tags_text" type="text" class="searchform_element">';
+        $tag_options = array( '' => 'Select ' . AMP_pluralize( ucfirst( AMP_TEXT_TAG ))) + $tags;
+        $tag_selects = array(   AMP_buildSelect( 'tag_id', $tag_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element'))),
+                                $tag_add );
+
+        return $toolbar->addTab( 'tag', $tag_selects );
+
+    }
+
+    //deprecated
     function renderRelate( &$toolbar ){
         $renderer = &$this->_getRenderer( );
-        $section_options = &AMPContent_Lookup::instance( 'sectionMap' );
-        if ( $section_options ){
-            $section_options = array( '' => 'Select Related Section' ) + $section_options;
+        if ( $base_section_options ){
+            $related_section_options = array( '' => 'Select Related Section' ) + $base_section_options;
         } else {
-            $section_options = array( '' => 'Select Related Section' );
+            $related_section_options = array( '' => 'Select Related Section' );
         }
+        $relate_select =    AMP_buildSelect( 'related_section_id', $section_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element')));
+        return $toolbar->addTab( 'relate', $relate_select );
                 
+        /*
         $toolbar->addEndContent( 
                 $renderer->inDiv( 
                         '<a name="relate_targeting"></a>'
@@ -204,6 +247,7 @@ class Article_ListForm extends AMP_System_List_Form {
                 . "if ( $(\"move_targeting\").style.display==\"block\") window.change_any( \"move_targeting\");"
                 . "if ( $(\"region_targeting\").style.display==\"block\") window.change_any( \"region_targeting\");"
                 . "window.scrollTo( 0, document.anchors[\"relate_targeting\"].y );'>&nbsp;";
+                */
 
     }
 

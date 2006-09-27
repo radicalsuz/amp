@@ -235,7 +235,7 @@ class AMP_System_Component_Controller {
         $text = ucfirst( isset( $action ) ? $action :  join( "", $this->get_actions( )));
 
         $plural_headings = array( AMP_TEXT_LIST, AMP_TEXT_SEARCH, AMP_TEXT_VIEW );
-        if ( array_search( $text , $plural_headings ) !== FALSE ) $heading = AMP_Pluralize( $heading );
+        if ( array_search( $text , $plural_headings ) !== FALSE ) $heading = AMP_pluralize( $heading );
         $this->add_component_header( $text, ucwords( $heading ), 'banner', AMP_CONTENT_DISPLAY_KEY_INTRO );
 
         $header_text = $text . ' ' . $heading;

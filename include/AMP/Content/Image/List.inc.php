@@ -103,9 +103,9 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
                         '<a name="recalculate_sizes"></a>'
                         . $renderer->bold( AMP_TEXT_SELECT_NEW_WIDTHS_FOR . ':' )
                         . $renderer->newline( 2 )
-                        . ucwords( AMP_Pluralize( AMP_TEXT_IMAGE_CLASS_THUMB )) . ': ' . '<input name="image_width_thumb" value='.AMP_IMAGE_WIDTH_THUMB.' class="searchform_element" size="4">' . $renderer->space( 2 )
-                        . ucwords( AMP_Pluralize( AMP_TEXT_IMAGE_CLASS_OPTIMIZED_TALL )) . ': ' . '<input name="image_width_tall" value='.AMP_IMAGE_WIDTH_TALL.' class="searchform_element" size="4">' . $renderer->space( 2 ) 
-                        . ucwords( AMP_Pluralize( AMP_TEXT_IMAGE_CLASS_OPTIMIZED_WIDE )) . ': ' . '<input name="image_width_wide" value='.AMP_IMAGE_WIDTH_WIDE.' class="searchform_element" size="4">' . $renderer->space( 2 ) 
+                        . ucwords( AMP_pluralize( AMP_TEXT_IMAGE_CLASS_THUMB )) . ': ' . '<input name="image_width_thumb" value='.AMP_IMAGE_WIDTH_THUMB.' class="searchform_element" size="4">' . $renderer->space( 2 )
+                        . ucwords( AMP_pluralize( AMP_TEXT_IMAGE_CLASS_OPTIMIZED_TALL )) . ': ' . '<input name="image_width_tall" value='.AMP_IMAGE_WIDTH_TALL.' class="searchform_element" size="4">' . $renderer->space( 2 ) 
+                        . ucwords( AMP_pluralize( AMP_TEXT_IMAGE_CLASS_OPTIMIZED_WIDE )) . ': ' . '<input name="image_width_wide" value='.AMP_IMAGE_WIDTH_WIDE.' class="searchform_element" size="4">' . $renderer->space( 2 ) 
                         . $renderer->newline(  2 )
                         //. AMP_buildSelect( 'gallery_id', $gallery_options, null, $renderer->makeAttributes( array( 'class' => 'searchform_element')))
                         . '&nbsp;'

@@ -230,7 +230,8 @@ class Article extends AMPSystem_Data_Item {
         $empty_value = false;
         if (!$this->allowsComments()) return $empty_value;
         require_once ( 'AMP/Content/Article/Comments.inc.php' );
-        return new ArticleCommentSet( $this->dbcon, $this->id );
+        $comment_set = &new ArticleCommentSet( $this->dbcon, $this->id );
+        return $comment_set;
         
         //require_once ( 'AMP/Content/Article/Comment/ArticleComment.php' );
         //$comment_source = &new AMP_Content_Article_Comment_List( );
@@ -424,7 +425,7 @@ class Article extends AMPSystem_Data_Item {
 
     function _save_tags( ) {
         if ( $this->isVersion( )) return;
-        return AMP_update_tags( $this->_getTagsBase( ), $this->id, AMP_SYSTEM_ITEM_TYPE_ARTICLE );
+        return AMP_update_tags( $this->_getTagsBase( ), false, $this->id, AMP_SYSTEM_ITEM_TYPE_ARTICLE );
     }
 
     function getTags( ) {
@@ -520,11 +521,14 @@ class Article extends AMPSystem_Data_Item {
 
     }
 
-    function move( $section_id = false, $class_id = false ) {
+    function move( $section_id = false, $class_id = false, $related_section_id = false ) {
         $move_action = false;
         if ( $section_id && $section_id != $this->getSection( )) {
             $this->setSection( $section_id );
             $move_action = true;
+        }
+        if ( $related_section_id ) {
+            $move_action = $move_action || ( $this->relate( $related_section_id ));
         }
         if ( $class_id  && $class_id != $this->getClass( )){
             $this->setClass( $class_id );
@@ -545,6 +549,28 @@ class Article extends AMPSystem_Data_Item {
         $this->notify( 'regionize' );
         return $result;
 
+    }
+
+    function tag( $tag_id = false, $tag_names = false ) {
+        if ( $tag_names ) {
+            require_once( 'AMP/Content/Tag/Tag.php');
+            $new_tag_set = AMP_Content_Tag::create_many( $tag_names );
+            $new_tag_results = true;
+            foreach( $new_tag_set as $new_tag_id ) {
+                $new_tag_results = $new_tag_results && $this->tag( $new_tag_id );
+            }
+            if ( !$tag_id ) return $new_tag_results;
+        }
+
+        if ( !$tag_id ) return false;
+        $related_tags = AMPSystem_Lookup::instance( 'tagsByArticle', $this->id );
+        if ( isset( $related_tags[ $tag_id ])) return false;
+
+        require_once( 'AMP/Content/Tag/Item/Item.php');
+        $action_item = &new AMP_Content_Tag_Item( AMP_Registry::getDbcon( ));
+        $create_values = array( 'item_type' => 'article', 'item_id' => $this->id, 'user_id' => AMP_SYSTEM_USER_ID, 'tag_id' => $tag_id );
+        $action_item->setData( $create_values );
+        return $action_item->save( );
     }
 
     function relate( $section_id ) {

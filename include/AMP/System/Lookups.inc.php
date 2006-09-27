@@ -788,6 +788,27 @@ class AMPSystemLookup_Tags extends AMPSystem_Lookup {
     }
 }
 
+/**
+ * AMPSystemLookup_TagsSimple 
+ *
+ * This lookup returns all tags in lowercase, for comparison purposes
+ * 
+ * @uses AMPSystemLookup
+ * @uses AMP_Content_Tag
+ * @package 
+ * @version 3.6.2
+ * @copyright 2006 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org> 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+class AMPSystemLookup_TagsSimple extends AMPSystemLookup_Tags {
+    var $result_field = 'LOWER( name ) as simple_tag';
+
+    function AMPSystemLookup_TagsSimple( ) {
+        $this->init( );
+    }
+}
+
 class AMPSystemLookup_TagImages extends AMPSystem_Lookup {
     var $datatable = 'tags';
     var $result_field = 'image';

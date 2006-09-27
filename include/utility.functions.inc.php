@@ -695,13 +695,18 @@ if (!function_exists('filterConstants')) {
 
 if (!function_exists( 'AMP_PastParticiple' )) {
     function AMP_PastParticiple( $word ) {
+        $double_consonants = array( 'tag');
+        if ( array_search( $word, $double_consonants ) !== FALSE ) return $word . substr( $word, strlen( $word )-1 ) . 'ed' ;
         if (substr($word, -1) == "y" ) return substr( $word, 0, strlen( $word) -1 ) ."ied";
         if (substr($word, -1) != "e" ) return $word ."ed";
         return $word."d";
     }
+    function AMP_past_participle( $word ) {
+        return AMP_PastParticiple( $word );
+    }
 }
-if (!function_exists( 'AMP_Pluralize' )) {
-    function AMP_Pluralize( $word ) {
+if (!function_exists( 'AMP_pluralize' )) {
+    function AMP_pluralize( $word ) {
         $term_end = substr( $word, -1 );
         // ending in Z
         if ("z" == $term_end ){
@@ -740,6 +745,9 @@ if (!function_exists('AMP_Url_AddVars')) {
         if (strpos( $current_value, '?') === FALSE )  return $current_value . '?' . implode( '&', $new_vars );
 
         return $current_value . '&' . implode( '&', $new_vars );
+    }
+    function AMP_url_add_vars( $current_value, $new_vars ) {
+        return AMP_Url_AddVars( $current_value, $new_vars );
     }
 }
 if (!function_exists('AMP_Url_AddAnchor')) {
@@ -986,6 +994,11 @@ if ( !function_exists( 'AMP_getHeader')){
         require_once( 'AMP/Content/Header.inc.php');
         require_once( 'AMP/Content/Page.inc.php');
         return AMPContent_Header::instance( AMPContent_Page::instance( ) );
+    }
+
+    function &AMP_get_header( ) {
+        $header = & AMP_getHeader( );
+        return $header;
     }
 
 
@@ -1335,7 +1348,18 @@ function &AMP_get_renderer( ){
 
 }
 
-function AMP_update_tags( $tag_ids, $item_id, $item_type ) {
+function AMP_update_tags( $tag_ids = false, $tag_names = false, $item_id, $item_type ) {
+    if ( $tag_names ) {
+        require_once( 'AMP/Content/Tag/Tag.php');
+        $new_tag_set = AMP_Content_Tag::create_many( $tag_names );
+        if ( $tag_ids ) {
+            $complete_tags = array_merge( $tag_ids, $new_tag_set );
+        } else {
+            $complete_tags = $new_tag_set;
+        }
+        return AMP_update_tags( $complete_tags, false, $item_id, $item_type );
+    }
+
     $tag_lookup = 'tagsBy' . ucfirst( $item_type );
     $existing_tags = AMPSystem_Lookup::instance( $tag_lookup, $item_id );
 
@@ -1375,6 +1399,44 @@ function AMP_update_tags( $tag_ids, $item_id, $item_type ) {
             $action_item->save( );
         }
     }
+
+}
+
+function AMP_add_tags( $tag_ids = false, $tag_names = false, $item_id, $item_type ) {
+    if ( $tag_names ) {
+        require_once( 'AMP/Content/Tag/Tag.php');
+        $new_tag_set = AMP_Content_Tag::create_many( $tag_names );
+        $new_tag_results = AMP_add_tags( $new_tag_set, false, $item_id, $item_type );
+        if ( !$tag_ids ) return $new_tag_results;
+    }
+
+    if ( !$tag_ids ) return false;
+
+    if ( !is_array( $tag_ids )) {
+        $tag_id_set = array( $tag_ids );
+    } else {
+        $tag_id_set = $tag_ids;
+    }
+    $related_tags = AMPSystem_Lookup::instance( 'tagsBy' . ucfirst( $item_type ), $item_id );
+    if ( $related_tags ) {
+        $new_tags = array_diff( $tag_id_set, array_keys( $related_tags ));
+    } else {
+        $new_tags = $tag_id_set;
+    }
+
+    if ( !$new_tags || empty( $new_tags )) return false;
+
+    require_once( 'AMP/Content/Tag/Item/Item.php');
+    $action_item = &new AMP_Content_Tag_Item( AMP_Registry::getDbcon( ));
+    $create_values = array( 'item_type' => $item_type, 'item_id' => $item_id, 'user_id' => AMP_SYSTEM_USER_ID );
+    $results = 0;
+    foreach( $new_tags as $new_tag_id ) {
+        $create_values['tag_id'] = $new_tag_id;
+        $action_item->dropID( );
+        $action_item->setData( $create_values );
+        $results += $action_item->save( );
+    }
+    return $results;
 
 }
 

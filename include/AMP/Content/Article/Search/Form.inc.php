@@ -47,7 +47,7 @@ class ContentSearch_Form extends AMPSearchForm {
         $current_section_edit_link = false;
         $current_class_edit_link = false;
         $base_footer = '&nbsp;&nbsp;<a href="'. AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, array( 'nosearch=1' ) ) . '" class="standout">'
-                . sprintf( AMP_TEXT_VIEW_ALL, AMP_Pluralize( ucfirst( AMP_TEXT_ARTICLE ))) . '</a>';
+                . sprintf( AMP_TEXT_VIEW_ALL, AMP_pluralize( ucfirst( AMP_TEXT_ARTICLE ))) . '</a>';
 
         //sectional edit link
         $current_section = ( isset( $_REQUEST['section']) && $_REQUEST['section']) ? $_REQUEST['section'] : false;

@@ -53,19 +53,48 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
         return 'id=' . $key;
     }
 
-    function findByName( $raw_tag_name ) {
-        static $simple_tag_lookup = array( );
-        if ( empty( $simple_tag_lookup )) {
-
-            //initialize an all-lowercase version of the tags set
-            $tag_lookup = AMPSystem_Lookup::instance( 'tags');
-            foreach( $tag_lookup as $tag_id => $tag_name ) {
-                $simple_tag_lookup[$tag_id] = strtolower( $tag_name );
+    /**
+     * This function searches an array of tags for a given key.  If the key is supplied, it is added to the lookup. 
+     * 
+     * @param mixed $raw_tag_name 
+     * @param mixed $add_tag_key 
+     * @access public
+     * @return void
+     */
+    function findByName( $raw_tag_name, $add_tag_key = false ) {
+        static $simple_tag_names = false;
+        if ( !$simple_tag_names ) {
+            $simple_tag_names = AMPSystem_Lookup::instance( 'tagsSimple' );
+            if ( !$simple_tag_names ) {
+                $simple_tag_names = array( );
             }
         }
+
         
         $tag_name = strtolower( trim( $raw_tag_name ));
-        return array_search( $tag_name, $simple_tag_lookup );
+        if ( $add_tag_key ) {
+            $simple_tag_names[$add_tag_key ] = $tag_name;
+        }
+        return array_search( $tag_name, $simple_tag_names );
+    }
+
+    function create_many( $tags_text ) {
+        if ( !$tags_text ) return false;
+        $tags_set = preg_split( '/\s?,\s?/', $tags_text );
+        $new_tags_verified = array( );
+
+        foreach( $tags_set as $raw_new_tag ) {
+            $new_tag = trim( $raw_new_tag );
+            if ( !$new_tag ) continue;
+
+            //create new tag
+            $new_tag_id = AMP_Content_Tag::create( $new_tag );
+            if ( !$new_tag_id ) continue;
+            
+            //add the id to the results list
+            $new_tags_verified[] = $new_tag_id;
+        }
+        return $new_tags_verified;
     }
 
     function create( $tag_name, $description = false ) {
@@ -82,6 +111,8 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
         $tag->setData( array( 'name' => $tag_name , 'description' => $description ));
         $result = $tag->save( );
         if ( !$result ) return false;
+
+        AMP_Content_Tag::findByName( $tag_name, $tag->id );
         return $tag->id;
 
     }

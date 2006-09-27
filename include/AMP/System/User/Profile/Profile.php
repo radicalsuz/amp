@@ -36,6 +36,11 @@ class AMP_System_User_Profile extends AMPSystem_Data_Item {
         return AMP_Url_AddVars( AMP_SYSTEM_URL_FORM_ENTRY, array( 'modin=' . $this->getModin( ), 'uid=' . $this->id ) );
     }
 
+    function tag( $tag_ids, $tag_names ) {
+        $result = AMP_add_tags( $tag_ids, $tag_names, $this->id, AMP_SYSTEM_ITEM_TYPE_FORM );
+        return ( $result ? 1 : 0 );
+    }
+
 }
 
 ?>

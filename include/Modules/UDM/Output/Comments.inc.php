@@ -75,7 +75,7 @@ class UserDataPlugin_Comments_Output extends UserDataPlugin {
 
         $link_text = ( $comment_count ? $comment_count : AMP_TEXT_NO ) 
                         . '&nbsp;'
-                        . AMP_Pluralize( AMP_TEXT_COMMENT ); 
+                        . AMP_pluralize( AMP_TEXT_COMMENT ); 
 
         $renderer = &$this->_get_renderer( );
 

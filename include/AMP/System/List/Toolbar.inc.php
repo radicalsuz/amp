@@ -4,7 +4,7 @@ class AMP_System_List_Toolbar {
     var $submitGroup = "submitAction";
 
     var $_actions = array();
-    /*
+    /* examples:
     var $_actions = array(
         'publish',
         'unpublish',
@@ -17,6 +17,9 @@ class AMP_System_List_Toolbar {
     var $_display;
     var $_rendered_footerContent = false;
 
+    var $_tabs = array( );
+    var $_tab_closure = false;
+
     function AMP_System_List_Toolbar ( &$display ){
         $this->_display = &$display;
         $this->submitGroup = 'submitAction' . $display->getName( );
@@ -27,7 +30,7 @@ class AMP_System_List_Toolbar {
         foreach( $this->_actions as $action ) {
             $output .= $this->renderAction( $action );
         }
-        return $this->renderToolbarStart( )
+        return    $this->renderToolbarStart( )
                 . $output
                 . $this->renderToolbarEnd( );
     }
@@ -47,7 +50,8 @@ class AMP_System_List_Toolbar {
     }
 
     function renderDefault( $action ){
-        return "<input type='submit' name='". $this->submitGroup ."[" . $action ."]' value='" . ucfirst( $action ) ."'>";
+        $renderer = AMP_get_renderer( );
+        return "<input type='submit' name='". $this->submitGroup ."[" . $action ."]' value='" . ucfirst( $action ) ."'>\n" . $renderer->space( );
     }
 
     function renderToolbarStart( ){
@@ -77,6 +81,48 @@ class AMP_System_List_Toolbar {
 
     function setSubmitGroup(  $name ){
         $this->submitGroup = $name;
+    }
+
+    function addTab( $action, $contents=array( ) ) {
+        $renderer = AMP_get_renderer( );
+        $tab_name = $action . '_targeting';
+        $this->_tabs[$action] = $tab_name;
+        if ( is_array( $contents )) {
+            $contents = join( $renderer->space( ), $contents );
+        }
+
+        $tab_contents = 
+            $renderer->inDiv( 
+                    '<a name="'. $tab_name .  '"></a>'
+                    . $contents . "\n" 
+                    . $renderer->space( )
+                    . $this->renderDefault( $action )
+                    . "<input type='button' name='hide".ucfirst( $action ) . "' value='Cancel' onclick='window.change_any( \"".$tab_name."\");'>\n"
+                    . $renderer->space( ),
+                    array( 
+                        'class' => 'AMPComponent_hidden', 
+                        'id' => $tab_name )
+                );
+
+        $this->addEndContent( $tab_contents, $tab_name);
+        $this->_initListTabs( );
+
+        return  "<input type='button' name='show".ucfirst( $action )."' value='".ucfirst( $action ) . "' "
+                . "onclick='window.clearListTabs(\"".$tab_name."\" );window.change_any( \"".$tab_name."\" );"
+                . "window.scrollTo( 0, document.anchors[\"".$tab_name."\"].y );'>\n". $renderer->space( );
+
+    }
+
+    function _initListTabs( ) {
+        $list_popup_script = '';
+        foreach( $this->_tabs as $tab_name ) {
+            $list_popup_script .= "if ( exempt_tab_name != '".$tab_name."' && ( $(\"".$tab_name."\").style.display==\"block\") ) window.change_any( \"".$tab_name."\");\n";
+        }
+        $script  = "\nfunction clearListTabs( exempt_tab_name ) {\n"
+                    . $list_popup_script 
+                    . "\n}";
+        $header = &AMP_get_header( );
+        $header->addJavascriptDynamic( $script, 'list_tabs_clear' );
     }
 }
 

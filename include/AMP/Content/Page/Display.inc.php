@@ -50,9 +50,12 @@ class AMPContent_PageDisplay {
             $flash_output = $flash->execute( );
         }
 
-        $output =  
-                $this->_header->output().
+        $template_output = 
                 $this->_template->execute( $flash_output . $content );
+
+        $output =  
+                $this->_header->output()
+                . $template_output;
         return $output;
     }
 

@@ -35,7 +35,7 @@ class AMPScaffold_Factory {
     function setScaffoldItem( $scaffold_item ) {
         if ( !$scaffold_item ) return false;
         $this->_scaffold_item = $scaffold_item;
-        $this->setDataTable( strtolower( AMP_Pluralize( $scaffold_item )) );
+        $this->setDataTable( strtolower( AMP_pluralize( $scaffold_item )) );
     }
 
     function setScaffoldItemType( $scaffold_item_type ){

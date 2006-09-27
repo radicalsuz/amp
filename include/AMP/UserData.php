@@ -1084,7 +1084,9 @@ class UserData {
     }
 
     function __sleep( ){
-        $this->dbcon = false;
+        $response = get_object_vars( $this );
+        unset( $response['dbcon']);
+        return array_keys( $response );
     }
 
     function __wakeup( ){

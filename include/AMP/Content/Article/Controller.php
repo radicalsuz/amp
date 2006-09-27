@@ -41,7 +41,7 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
 
     function commit_view( ){
         $search = &$this->_map->getComponent( 'search', 'AMP_Content_Search' );
-        $this->add_component_header( AMP_TEXT_SEARCH, AMP_Pluralize( $this->_map->getHeading( )));
+        $this->add_component_header( AMP_TEXT_SEARCH, AMP_pluralize( $this->_map->getHeading( )));
         $this->_display->add( $search, 'search' );
 
         $search->Build( true );

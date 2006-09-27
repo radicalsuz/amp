@@ -38,11 +38,18 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
                 'enabled'   => true,
                 'public'    => $public_setting,
                 'values'    => $available_tags
+            ),
+            'tag_add_text' => array( 
+                'type'      => 'text',
+                'size'      => 30,
+                'label'     => 'Add ' . ucfirst( AMP_pluralize( AMP_TEXT_TAG )) . ' ( comma-separated )',
+                'enabled'   => true,
+                'public'    => $public_setting
             )
         );
 
         $this->fields = &$fields;
-        $this->insertAfterFieldOrder( array( 'tag_list', 'tag_add') );
+        $this->insertAfterFieldOrder( array( 'tag_list', 'tag_add', 'tag_add_text') );
 
     }
 
@@ -51,11 +58,21 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
     }
 
     function save( $data ) {
-        if ( !isset( $data['tag_add']) || !( $data['tag_add'])) {
+        $tag_names = false;
+        $selected_tags = false;
+
+        if ( isset( $data['tag_add_text']) && $data['tag_add_text']) {
+            $tag_names = $data['tag_add_text'];
+        }
+        if ( isset( $data['tag_add']) && ( $data['tag_add'])) {
+            $selected_tags = split( ", ", $data['tag_add'] );
+        }
+        if ( !$selected_tags && !$tag_names ) {
+            //continue saving, make no tag changes
             return true;
         }
-        $selected_tags = split( ", ", $data['tag_add'] );
-        AMP_update_tags( $selected_tags, $this->udm->uid , AMP_SYSTEM_ITEM_TYPE_FORM);
+        
+        AMP_update_tags( $selected_tags, $tag_names, $this->udm->uid , AMP_SYSTEM_ITEM_TYPE_FORM);
         return true;
         /* older method 
         $item_data = array( );

@@ -153,7 +153,7 @@ if (isset($_GET['q']) && $_GET['q'] ) {
     $sql = $sql." Limit  $offset, $limit";
     $searchx=$dbcon->CacheExecute($sql);//  or DIE($sql.$dbcon->ErrorMsg());
 
-    if  (!$searchx->Fields('id')) {
+    if  (!( $searchx && $searchx->Fields('id'))) {
         $sql = "select distinct test, title, id from articles where  (title like '%".$_GET['q']."%'  or test like '%$_GET[q]%'  or author like '%".$_GET['q']."%'  or shortdesc like '%".$_GET['q']."%'   )and publish =1 $dsql  $ssql  order by id desc ";
         $sqlct = "SELECT  COUNT(DISTINCT id) from articles where  (title like '%".$_GET['q']."%'  or test like '%".$_GET['q']."%'  or author like '%".$_GET['q']."%'  or shortdesc like '%".$_GET['q']."%'   )and publish =1 $dsql $ssql   order by id desc ";
         $searchx=$dbcon->CacheExecute($sql."Limit  $offset, $limit;") ;

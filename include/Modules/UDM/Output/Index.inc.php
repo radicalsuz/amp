@@ -29,13 +29,13 @@ class UserDataPlugin_Index_Output extends UserDataPlugin {
         $options = array_merge( $this->getOptions( ), $options);
 
         require_once( 'AMP/UserData/Lookups.inc.php');
-		$index_title = AMP_Pluralize( $this->udm->name )." By ".$options['index_name'];
+		$index_title = AMP_pluralize( $this->udm->name )." By ".$options['index_name'];
         $index_set = &FormLookup_Variant::instance( $options['index_field'], $this->udm->instance );
 
 		#$index['state']['sql'].="SELECT count(userdata.id) as qty, userdata.State as item_key, states.statename as item_name from userdata, states WHERE userdata.State=states.state and modin=".$_REQUEST['modin']." GROUP BY userdata.State ";
         $translated_values = isset( $this->_region_lookups[$options['index_field']]) ?
                                 AMPSystem_Lookup::locate( $this->_region_lookups[$options['index_field'] ]) :
-                                AMPSystem_Lookup::locate( array( 'instance' => AMP_Pluralize( $options['index_field'])));
+                                AMPSystem_Lookup::locate( array( 'instance' => AMP_pluralize( $options['index_field'])));
 
         require_once( 'AMP/Content/Display/HTML.inc.php');
         $renderer = &new AMPDisplay_HTML;

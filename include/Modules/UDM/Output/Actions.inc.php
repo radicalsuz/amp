@@ -29,6 +29,11 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
             'available'=>true,
             'label'=>'Allow user to Export records'),
 
+        'allow_tag'=>array(
+            'available'=>false,
+            'type'=>'checkbox',
+            'default'=>true),
+
         'allow_publish'=>array(
             'default'=>true,
             'type'=>'checkbox',
@@ -87,7 +92,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                 $count=$this->$action($_POST['list_action_id']);
 
                 if (is_numeric($count)) {
-                    $message = "$count item(s) ".$this->action.(strrchr($this->action, "e")=="e"?"":"e")."d.<BR>";
+                    $message = "$count item(s) ".AMP_past_participle( $this->action ).".<BR>";
                 } else {
                     $message = $count;
                 }
@@ -186,6 +191,29 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                                     array('class'=>$options['control_class'],
                                     'onClick'=>"list_DoAction( 'subscribe' );"),
                                 'enabled'=>AMP_authorized( AMP_PERMISSION_BLAST_ACCESS ));
+        //Tag Items
+        if ( $tag_plugin = $this->udm->getPlugin( 'Tags', 'Start')) {
+            $def['tag_action_id'] = array(  'type' =>'select',
+                                            'label' => sprintf( AMP_TEXT_SELECT, AMP_TEXT_TAG ),
+                                            'enabled'=> true,
+                                            'attr'=>
+                                                array('class'=>$options['control_class']),
+                                            'values' => AMPSystem_Lookup::instance( 'tags'));
+
+            $def['tag_action_add'] = array( 'type' =>'text',
+                                            'label' => AMP_TEXT_ADD . ' '. AMP_pluralize( AMP_TEXT_TAG ) . ': ', 
+                                            'enabled'=> true,
+                                            'attr'=>
+                                                array('class'=>$options['control_class']));
+
+            $def['tag'] =   array(  'type'=>'button',
+                                    'label'=> ucfirst( AMP_TEXT_TAG ),
+                                    'attr'=>
+                                        array('class'=>$options['control_class'],
+                                        'onClick'=>"list_DoAction( 'tag' );"),
+                                    'enabled'=>true);
+        }
+
         //list_action form items
         $def['list_action']=array(  'type'=>'hidden',
                                 'value'=>'',
@@ -290,7 +318,11 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
            }*/
 
         $output .= $form->toHtml();
-        $output .= (isset($this->message) ? "<span class='page_result'>" . $this->message."</span><BR>" : "");
+        if ( isset($this->message)) {
+            $flash = &AMP_System_Flash::instance( );
+            $flash->add_message( $this->message );
+
+        }
 
         return  $output;
 
@@ -445,6 +477,31 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
 
 
         return 1;
+    }
+
+    function tag_set( $set ) {
+        $record_id_set=split(",", $set);
+        $selected_tag_id = false  ;
+        $tag_names = false;
+
+        if ( isset( $_POST['tag_action_id'] ) && $_POST['tag_action_id'] ) {
+            $selected_tag_id = $_POST['tag_action_id'];
+        }
+        if ( isset( $_POST['tag_action_add']) && $_POST['tag_action_add']) {
+            $tag_names = $_POST['tag_action_add'];
+        }
+        if ( !$selected_tag_id && !$tag_names ) return sprintf( AMP_TEXT_ERROR_NO_SELECTION, AMP_TEXT_TAG );
+
+        $total_tags = 0;
+
+        foreach( $record_id_set as $user_id ) {
+            $tags_added = AMP_add_tags( $selected_tag_id, $tag_names, $user_id, AMP_SYSTEM_ITEM_TYPE_FORM );
+            if ( !$tags_added ) continue;
+            $total_tags++;
+        }
+
+        return $total_tags;
+
     }
 }
 

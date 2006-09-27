@@ -128,7 +128,6 @@ function _adodb_replace(&$zthis, $table, $fieldArray, $keyCol, $autoQuote, $has_
 		
 		if ($uSet && $where) {
 			$update = "UPDATE $table SET $uSet WHERE $where";
-            trigger_error( 'update sql: ' . $update );
 
 			$rs = $zthis->Execute($update);
 			

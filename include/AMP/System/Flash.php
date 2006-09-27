@@ -10,7 +10,7 @@ class AMP_System_Flash extends AMP_Content_Buffer {
 
     var $_keep = array( );
 
-    var $_cache;
+    var $_cache = false;
     var $_cache_key_messages = '__flash__messages';
     var $_cache_key_errors   = '__flash__errors';
     var $_cache_key_message_urls = '__flash__message_urls';

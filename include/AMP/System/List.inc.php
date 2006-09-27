@@ -524,7 +524,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     function _HTML_searchForm( ){
         if ( !isset( $this->_search_form )) return false;
         $renderer = &$this->_getRenderer( );
-        return $renderer->inSpan( AMP_TEXT_SEARCH . ' ' . AMP_Pluralize( $this->_map->getHeading( )), array( 'class' => 'intitle')) ."\n"
+        return $renderer->inSpan( AMP_TEXT_SEARCH . ' ' . AMP_pluralize( $this->_map->getHeading( )), array( 'class' => 'intitle')) ."\n"
                 . $this->_search_form->execute( );
     }
 

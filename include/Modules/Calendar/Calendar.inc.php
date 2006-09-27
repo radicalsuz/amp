@@ -274,12 +274,13 @@ var $id;
     #############################
     ### Public Plugin Methods ###
     #############################
-    function getPlugin( $namespace, $action ) {
+    function &getPlugin( $namespace, $action ) {
+        $empty_value = false;
 
         $plugins =& $this->plugins;
 
-        if (!isset($plugins[$action])) return false;
-        if (!isset($plugins[$action][$namespace])) return false;
+        if (!isset($plugins[$action])) return $empty_value;
+        if (!isset($plugins[$action][$namespace])) return $empty_value;
 
         $actions =& $plugins[$action];
         $plugin  =& $actions[$namespace];
@@ -296,7 +297,7 @@ var $id;
      *****/
 
     function doPlugin( $namespace, $action, $options = null ) {
-        $plugin =& $this->registerPlugin( $namespace, $action );
+        $plugin = $this->registerPlugin( $namespace, $action );
 
         if ($plugin) {
             return $plugin->execute( $options );
@@ -315,7 +316,7 @@ var $id;
 
     function tryPlugin( $namespace, $action, $options = array() ) {
         
-        if ($plugin =& $this->getPlugin( $namespace, $action )) return $plugin->execute( $options );
+        if ($plugin = $this->getPlugin( $namespace, $action )) return $plugin->execute( $options );
         else return false;
 
     }
@@ -328,21 +329,22 @@ var $id;
      *
      *****/
 
-    function getPlugins ( $action = null ) { 
-
-        if (!isset($this->plugins)) return false;
+    function &getPlugins ( $action = null ) { 
+        
+        $empty_value = false;
+        if (!isset($this->plugins)) return $empty_value;
 
         if ($action) {
             if ( isset($this->plugins[$action]) ) {
                 return $this->plugins[$action];
             } else {
-                return false;
+                return $empty_value;
             }
         } else {
             return $this->plugins;
         }
 
-        return false;
+        return $empty_value;
     }
 
     /*****
@@ -354,7 +356,8 @@ var $id;
      *
      *****/
 
-    function registerPlugin ( $namespace, $action, $plugin_instance=null ) {
+    function &registerPlugin ( $namespace, $action, $plugin_instance=null ) {
+        $empty_value = false;
 
         // temporary fixup. 
         if (strpos($action, "_") !== false) {
@@ -368,14 +371,14 @@ var $id;
         }
 
         // just return the plugin if it already exists.
-        if ($plugin =& $this->getPlugin( $namespace, $action )) {
+        if ($plugin = $this->getPlugin( $namespace, $action )) {
             return $plugin;
         }
 
         $incl = join( DIRECTORY_SEPARATOR, array( 'Modules', 'Calendar', $namespace, $action . '.inc.php' ) );
 
         // Do not pass GO if the plugin doesn't actually exist.
-        if ( !file_exists_incpath( $incl ) ) return false;
+        if ( !file_exists_incpath( $incl ) ) return $empty_value;
 
         require_once( $incl );
 
@@ -392,7 +395,7 @@ var $id;
         // error, and failt.
         if (!class_exists( $plugin_class )) {
             trigger_error( "Unable to instantiate data class $action in $namespace." );
-            return false;
+            return $empty_value;
         }
 
         // Add the plugin to our repertoire.
@@ -444,7 +447,7 @@ var $id;
 
     function doAction ( $action, $options = array() ) {
 
-        $plugins = & $this->getPlugins( $action );
+        $plugins =  $this->getPlugins( $action );
 
         if (!isset( $plugins )|| !is_array($plugins) ) return;
         
@@ -564,11 +567,13 @@ var $id;
 
 
     function __sleep( ){
-        $this->dbcon = false;
+        $response = get_object_vars( $this );
+        unset( $response['dbcon']);
+        return array_keys( $response );
     }
 
     function __wakeup( ){
-        $this->dbcon = &AMP_Registry::getDbcon( );
+        $this->dbcon = AMP_Registry::getDbcon( );
     }
 
 }

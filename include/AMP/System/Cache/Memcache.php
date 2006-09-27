@@ -27,17 +27,35 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         $memcache_connection = &new Memcache;
         $result = $memcache_connection->connect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT );
         if ( $result ) {
-            $this->_memcache_connection = &$memcache_connection;
+            $this->set_connection( $memcache_connection );
         } else {
             trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, 'Memcache', 'connect', 'Request: '.$_SERVER['REQUEST_URI'] ) );
-            $this->_restart_memcached();
+            $result = $this->_restart_memcached();
+
+            //try again
+            if ( $result ) {
+                $this->set_connection( $memcache_connection );
+            }
         }
         return $result;
+    }
+    
+    function set_connection( &$connection ) {
+        $this->_memcache_connection = &$connection;
     }
 
     function _restart_memcached() {
         if(!defined('MEMCACHED_RC_SCRIPT')) define('MEMCACHED_RC_SCRIPT', '/usr/local/etc/rc.d/memcached.sh');
         if(!file_exists(MEMCACHED_RC_SCRIPT)) return false;
+
+        $memcache_connection = &new Memcache;
+
+        //just try again
+        $result = $memcache_connection->connect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT );
+        if ( $result ) {
+            $this->set_connection( $memcache_connection );
+            return true;
+        }
 
         $lock = fopen("/tmp/restart-memcached.lock", "w");
         flock($lock, LOCK_EX|LOCK_NB, $currently_restarting);
@@ -48,9 +66,9 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         } else {
             //we're the first one to try to restart
             trigger_error('connection to memcached failed, restarting');
-            $stats = $this->_memcache_connection->getStats();
+            $stats = $memcache_connection->getStats();
             $pid = $stats['pid'];
-            trigger_error(getmypid()." - aquired lock, restarting memcached with pid $pid");
+            trigger_error(getmypid()." - acquired lock, restarting memcached with pid $pid");
 
             //use the rc.d script to force a restart
             $ret = exec(MEMCACHED_RC_SCRIPT.' forcerestart',$message,$code);
@@ -60,18 +78,17 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
             }
 
             //give it 30 seconds to reconnect
-            $mc = &new Memcache;
             $start = 0; 
-            while(!($result = $mc->connect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT ))) {
+            while(!($result = $memcache_connection->connect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT ))) {
                 if(++$start > 30) {
                     break;
                 }
                 sleep(1);
             }
             if ( $result ) {
-                $new_stats = $mc->getStats();
-                $new_pid = $mc['pid'];
-                trigger_error("memcached restarted successfully, new pid is $pid");
+                $new_stats = $memcache_connection->getStats();
+                $new_pid = $new_stats['pid'];
+                trigger_error("memcached restarted successfully, new pid is $new_pid");
             } else {
                 trigger_error('could not reestablish connection after 30 seconds');
             }
@@ -109,6 +126,12 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$authorized_key ) return false;
 
         $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED );
+        if ( !$result ) {
+            trigger_error( 'retrying ADD ' . $authorized_key );
+            //try, try again
+            $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED );
+        }
+
         if ( $result ) {
             $this->_add_index_key( $authorized_key );
             if ( isset( $this->_items_retrieved[ $authorized_key ])) {
@@ -144,7 +167,13 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
     function _confirm_memcache_retrieve( $authorized_key ){
         if ( isset( $this->_items_retrieved[ $authorized_key ])) return $authorized_key;
-        $item = &$this->_memcache_connection->get( $authorized_key ) ;
+        $item = $this->_memcache_connection->get( $authorized_key ) ;
+        if ( !$item ) {
+            //try again
+            trigger_error( 'retrying RETRIEVE ' . $authorized_key );
+            $item = $this->_memcache_connection->get( $authorized_key ) ;
+        }
+
         $this->_items_retrieved[ $authorized_key ] = &$item;
         if ( !$item ) return false; 
         return $authorized_key;
@@ -172,6 +201,11 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$authorized_key ) return false;
 
         $result = $this->_memcache_connection->delete( $authorized_key );
+        if ( !$result ) {
+            //try again
+            trigger_error( 'retrying DELETE ' . $authorized_key );
+            $result = $this->_memcache_connection->delete( $authorized_key );
+        }
         if ( $result ) {
             $this->_remove_index_key( $authorized_key );
             unset( $this->_items_retrieved[ $authorized_key ]);

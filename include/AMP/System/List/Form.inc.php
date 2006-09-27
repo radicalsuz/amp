@@ -59,7 +59,7 @@ class AMP_System_List_Form extends AMPSystem_List {
         
         if ( $affected_qty = $this->_request->getAffectedQty( )) {
             $message = sprintf( AMP_TEXT_LIST_ACTION_SUCCESS, 
-                                AMP_PastParticiple( ucfirst( $this->_request->getPerformedAction( ))), 
+                                ucfirst( AMP_PastParticiple(  $this->_request->getPerformedAction( ))), 
                                 $affected_qty );
         } else {
             $message = sprintf( AMP_TEXT_LIST_ACTION_FAIL, 
@@ -143,7 +143,8 @@ class AMP_System_List_Form extends AMPSystem_List {
     }
 
     function renderDelete( &$toolbar ){
-        return "<input type='submit' name='". $toolbar->submitGroup ."[delete]' value='Delete' onclick='return confirmSubmit( \"".AMP_TEXT_LIST_CONFIRM_DELETE."\");'>";
+        $renderer = AMP_get_renderer( );
+        return "<input type='submit' name='". $toolbar->submitGroup ."[delete]' value='Delete' onclick='return confirmSubmit( \"".AMP_TEXT_LIST_CONFIRM_DELETE."\");'>\n" . $renderer->space( );
 
     }
 
