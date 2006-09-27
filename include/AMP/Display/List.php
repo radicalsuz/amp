@@ -211,7 +211,7 @@ class AMP_Display_List {
         if ( !empty( $criteria )) {
             $this->_source_criteria = array_merge (    
                 $this->_source_criteria, 
-                $list_source->makeCriteria( $criteria )
+                $criteria
                 );
         }
         $this->_init_criteria( );
@@ -286,6 +286,7 @@ class AMP_Display_List {
 
         if ( method_exists( $this, $local_sort_method)) {
             $this->$local_sort_method( $source, $sort_direction );
+            return ;
         }
 
         $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));

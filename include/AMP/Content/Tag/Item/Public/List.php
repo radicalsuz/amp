@@ -8,8 +8,8 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
     var $name = "Tagged Items";
     var $_source_object = 'AMP_Content_Tag_Item';
 
-    var $_sort = 'itemsByType';
-    var $_sort_default = 'item_type';
+    var $_sort_default = 'itemsByType';
+    var $_sort_sql_default = 'item_type';
 
     var $_suppress_header = true;
     var $_suppress_messages = true;

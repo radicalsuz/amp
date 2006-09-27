@@ -412,6 +412,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         }
 
         if ( !$this->setSortMethod( $sort_property )) {
+            print AMPbacktrace( );
             trigger_error( sprintf( AMP_TEXT_ERROR_SORT_PROPERTY_FAILED, $sort_property, get_class( $this )));
             return false;
         }
