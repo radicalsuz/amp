@@ -98,6 +98,10 @@ class AMP_System_Cache {
         return true;
     }
 
+    function failover( ) {
+        return false;
+    }
+
     //}}}
 
     //{{{ authorize methods

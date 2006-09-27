@@ -31,7 +31,7 @@ class AMP_Content_Nav_Layout extends AMPSystem_Data_Item {
         require_once( 'AMP/Content/Nav/Location/Location.php');
         $location = &new AMP_Content_Nav_Location( $this->dbcon );
         $criteria = $location->makeCriteria( array( 'layout_id' => $this->id ));
-        $this->_locations = & $location->search( $criteria );
+        $this->_locations = $location->search( $criteria );
 
         if ( !$this->_locations ) return false;
         $results = array( );

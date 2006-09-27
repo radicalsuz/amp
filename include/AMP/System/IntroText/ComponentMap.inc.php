@@ -7,6 +7,7 @@ class ComponentMap_IntroText extends AMPSystem_ComponentMap {
     var $heading = "Public Page";
     var $nav_name = "tools";
     var $_allow_inline_update = true;
+    var $_action_default = 'list';
 
     var $paths = array(
         'fields' => 'AMP/System/IntroText/Fields.xml',

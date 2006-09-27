@@ -5,6 +5,7 @@ require_once( 'AMP/System/ComponentMap.inc.php');
 class ComponentMap_Tool extends AMPSystem_ComponentMap {
     var $heading = "Tool";
     var $nav_name = "tools";
+    var $_action_default = 'list';
 
     var $paths = array( 
         'fields' => 'AMP/System/Tool/Fields.xml',

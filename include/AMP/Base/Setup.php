@@ -13,13 +13,11 @@ if ( !( $SystemSetup = AMP_cache_get( $system_setup_key ))) {
 }
 $SystemSetup->execute( );
 
-$dbcon = AMP_Registry::getDbcon( );
-$dbcon->cacheSecs = 0;
-
 // enable memcache for adodb if memcache is active
 if ( ( $cache = &AMP_get_cache( )) && ( strtolower( get_class( $cache )) == 'amp_system_cache_memcache')) {
+    $dbcon = &AMP_Registry::getDbcon( );
     $dbcon->memcache = true;
-    $dbcon->cacheSecs = $SystemSetup->getCacheTimeout( );
+    $dbcon->cacheSecs = AMP_SITE_CACHE_TIMEOUT; 
 } 
 
 ?>

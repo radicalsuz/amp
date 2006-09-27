@@ -22,9 +22,9 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
         if ( !( $page_limit = $this->_source_section->getListItemLimit( ))) $page_limit = $this->_pager_limit;
 
         foreach ($subsections as $subsection ) {
-            if( !($article_data = &$this->_getArticleData( $subsection->id , $page_limit ))) continue;
+            if( !($article_data = $this->_getArticleData( $subsection->id , $page_limit ))) continue;
             #if( !($article_data = &$this->_source->filter( 'type', $subsection->id , $page_limit ))) continue;
-            $articles  = &$this->_buildItems( $article_data );
+            $articles  = $this->_buildItems( $article_data );
             $listBody .= $this->_HTML_subheader( $subsection )
                          . $this->_HTML_listing( $articles )
                          . $this->_checkMoreLink( $subsection, $page_limit );
@@ -33,8 +33,9 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
 
     }
 
-    function _getArticleData( $section_id, $max_qty ){
-        if (!$this->_source->makeReady()) return false;
+    function &_getArticleData( $section_id, $max_qty ){
+        $empty_value = false;
+        if (!$this->_source->makeReady()) return $empty_value;
         $result = array();
         $related_set = AMPContentLookup_RelatedArticles::instance( $section_id );
         $related_ids = $related_set ? array_keys( $related_set) : array( );
@@ -45,7 +46,7 @@ class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
             $result[ $data['id'] ] = $data;
         }
 
-        if (empty($result)) return false;
+        if (empty($result)) return $empty_value;
         return $result;
 
     }

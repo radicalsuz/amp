@@ -778,6 +778,15 @@ class AMPSystemLookup_Filters extends AMPConstant_Lookup {
     }
 }
 
+/**
+ * AMPSystemLookup_Tags 
+ * 
+ * @uses AMPSystem_Lookup
+ * @version 3.6.2
+ * @copyright 2006 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org> 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
 class AMPSystemLookup_Tags extends AMPSystem_Lookup {
     var $datatable = 'tags';
     var $result_field = 'name';
@@ -809,6 +818,14 @@ class AMPSystemLookup_TagsSimple extends AMPSystemLookup_Tags {
     }
 }
 
+class AMPSystemLookup_TagsLive extends AMPSystemLookup_Tags {
+    var $criteria = 'publish=1';
+
+    function AMPSystemLookup_TagsLive( ) {
+        $this->init( );
+    }
+}
+
 class AMPSystemLookup_TagImages extends AMPSystem_Lookup {
     var $datatable = 'tags';
     var $result_field = 'image';
@@ -817,6 +834,18 @@ class AMPSystemLookup_TagImages extends AMPSystem_Lookup {
     function AMPSystemLookup_TagImages( ) {
         $this->init( );
     }
+}
+
+class AMPSystemLookup_TagTotals extends AMPSystem_Lookup {
+    var $datatable = 'tags_items';
+    var $id_field = 'tag_id';
+    var $result_field = 'count( item_id ) as qty';
+    var $criteria = '1 GROUP BY tag_id';
+
+    function AMPSystemLookup_TagTotals( ){
+        $this->init( );
+    }
+
 }
 
 class AMPSystemLookup_TagsByItem extends AMPSystem_Lookup {

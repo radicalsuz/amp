@@ -503,12 +503,12 @@
 		<label>View Navigation Layouts</label>
 	</item>
 	<item>
-		<href>nav.php?action=list</href>
+		<href>nav.php</href>
 		<label>View Navigation Elements</label>
 		<class>view</class>
 	</item>
 	<item>
-		<href>nav.php</href>
+		<href>nav.php?action=add</href>
 		<label>Add Navigation Elements</label>
 		<class>add</class>
 	</item>
@@ -554,24 +554,24 @@
 	<per>TOOLS_ACCESS</per>
 	<item>
 		<label>View Public Pages</label>
-		<href>introtext.php?action=list</href>
+		<href>introtext.php</href>
 		<class>view</class>
 		<per>TOOLS_INTROTEXT</per>
 	</item>
 	<item>
-		<href>introtext.php</href>
+		<href>introtext.php?action=add</href>
 		<label>Add Public Page</label>
 		<class>add</class>
 		<per>TOOLS_INTROTEXT</per>
 	</item>
 	<item>
-		<href>module.php</href>
+		<href>module.php?action=add</href>
 		<label>Add Tool</label>
 		<class>add</class>
 		<per>TOOLS_ADMIN</per>
 	</item>
 	<item>
-		<href>module.php?action=list</href>
+		<href>module.php</href>
 		<label>Edit Tool Settings</label>
 		<class>view</class>
 		<per>TOOLS_ADMIN</per>

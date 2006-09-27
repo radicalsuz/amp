@@ -82,7 +82,7 @@ class AMPSystem_Page_Display {
         if (!$this->show_template) return $content;
         if (isset($GLOBALS['modid'])) $modid = $GLOBALS['modid'];
 
-        $template = & call_user_func( array( $this->show_template, 'instance'));
+        $template = call_user_func( array( $this->show_template, 'instance'));
 
         if (isset($modid) && $modid) $template->setTool( $modid );
         $template->setToolName( $this->getNavName() );

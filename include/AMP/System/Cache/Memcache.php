@@ -168,11 +168,6 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     function _confirm_memcache_retrieve( $authorized_key ){
         if ( isset( $this->_items_retrieved[ $authorized_key ])) return $authorized_key;
         $item = $this->_memcache_connection->get( $authorized_key ) ;
-        if ( !$item ) {
-            //try again
-            trigger_error( 'retrying RETRIEVE ' . $authorized_key );
-            $item = $this->_memcache_connection->get( $authorized_key ) ;
-        }
 
         $this->_items_retrieved[ $authorized_key ] = &$item;
         if ( !$item ) return false; 
@@ -201,11 +196,6 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$authorized_key ) return false;
 
         $result = $this->_memcache_connection->delete( $authorized_key );
-        if ( !$result ) {
-            //try again
-            trigger_error( 'retrying DELETE ' . $authorized_key );
-            $result = $this->_memcache_connection->delete( $authorized_key );
-        }
         if ( $result ) {
             $this->_remove_index_key( $authorized_key );
             unset( $this->_items_retrieved[ $authorized_key ]);
@@ -232,6 +222,10 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
     function shutdown( ){
         return $this->_memcache_connection->close( );
+    }
+
+    function failover( ){
+        return 'file';
     }
 }
 

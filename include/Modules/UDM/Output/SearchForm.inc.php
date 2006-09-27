@@ -229,7 +229,11 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
         //tags
         if ( $tag_plugin = $this->udm->getPlugin( 'Tags', 'Start' )) {
-            $tags_lookup = AMPSystem_Lookup::instance( 'tags');
+            if ( $this->udm->admin ){
+                $tags_lookup = AMPSystem_Lookup::instance( 'tags');
+            } else {
+                $tags_lookup = AMPSystem_Lookup::instance( 'tagsLive' );
+            }
             if ( $tags_lookup ) {
                 $tag_request = ( isset( $_REQUEST['tag']) && $_REQUEST['tag'] ? $_REQUEST['tag'] : null );
                 $def['tag'] = array( 'type' => 'select', 'label' => 'By ' . AMP_TEXT_TAG , 'required'=>false, 'values' => $tags_lookup, 'size' =>null, 'value' => $tag_request, 'public' => 1 );

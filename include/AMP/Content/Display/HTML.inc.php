@@ -34,6 +34,10 @@ class AMPDisplay_HTML {
         return str_repeat( '&nbsp;', $count );
     }
 
+    function space_break( $count = 1 ) {
+        return str_repeat( " \n", $count );
+    }
+
     function inSpan( $text, $class=array() ) {
         return $this->_HTML_inSpan( $text, $class );
     }

@@ -88,7 +88,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
         if ( is_array( $this->_source ) ) {
             $sourceItems = &$this->_source ;
         } else {
-            $sourceItems = &$this->_buildItems( $this->_source->getArray() );
+            $sourceItems = $this->_buildItems( $this->_source->getArray() );
         }
 
         return  $this->_HTML_listing( $sourceItems ). 

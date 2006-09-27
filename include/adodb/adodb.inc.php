@@ -272,7 +272,8 @@
 	var $genID = 0; 			/// sequence id used by GenID();
 	var $raiseErrorFn = false; 	/// error function to call
 	var $isoDates = false; /// accepts dates in ISO format
-	var $cacheSecs = 3600; /// cache for 1 hour
+	//var $cacheSecs = 3600; /// cache for 1 hour
+	var $cacheSecs = 0; /// cache off by default
 
 	// memcache
 	var $memCache = false; /// should we use memCache instead of caching in files
@@ -1548,6 +1549,7 @@
 	function CacheFlush($sql=false,$inputarr=false)
 	{
 	global $ADODB_CACHE_DIR;
+    if ( !$this->cacheSecs ) return ;
 	
 		if ($this->memCache) {
 		global $ADODB_INCLUDED_MEMCACHE;
@@ -1752,7 +1754,7 @@
 					if ($this->debug) ADOConnection::outp( " Cache write error");
 				}
 			} else
-			if ($rs) {
+			if ($rs && $secs2cache ) {
 				$eof = $rs->EOF;
 				$rs = &$this->_rs2rs($rs); // read entire recordset into memory immediately
 				$txt = _rs2serialize($rs,false,$sql); // serialize

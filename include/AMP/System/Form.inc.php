@@ -73,6 +73,7 @@ class AMPSystem_Form extends AMPForm {
         //clear non_allowed submit actions as specified by the map
         $map = &$this->_get_map( );
         foreach( $this->submit_button['submitAction']['elements'] as $action => $field_def ) {
+            if ( !$map ) continue;
             if ( !$map->isAllowed( $action )) $this->removeSubmit( $action );
         }
         return $fields;

@@ -460,12 +460,12 @@
     </item>
     <item>
         <label>View Navigation Files</label>
-        <href>nav.php?action=list</href>
+        <href>nav.php</href>
         <per>CONTENT_NAVIGATION</per>
     </item>
     <item>
         <label>Add Navigation File</label>
-        <href>nav.php</href>
+        <href>nav.php?action=add</href>
         <per>CONTENT_NAVIGATION</per>
     </item>
     <item>
@@ -565,22 +565,22 @@
     <per>TOOLS_ACCESS</per>
     <item>
         <label>View Public Pages</label>
-        <href>introtext.php?action=list</href>
-        <per>TOOLS_INTROTEXT</per>
-    </item>
-    <item>
-        <label>Add Public Page</label>
         <href>introtext.php</href>
         <per>TOOLS_INTROTEXT</per>
     </item>
     <item>
+        <label>Add Public Page</label>
+        <href>introtext.php?action=add</href>
+        <per>TOOLS_INTROTEXT</per>
+    </item>
+    <item>
         <label>Edit Tool Settings</label>
-        <href>module.php?action=list</href>
+        <href>module.php</href>
         <per>TOOLS_ADMIN</per>
     </item>
     <item>
         <label>Add Tool</label>
-        <href>module.php</href>
+        <href>module.php?action=add</href>
         <per>TOOLS_ADMIN</per>
     </item>
 </tooladmin>

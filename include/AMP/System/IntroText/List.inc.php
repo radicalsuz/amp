@@ -13,7 +13,8 @@ class AMPSystem_IntroText_List extends AMPSystem_List {
         'Navigation' => 'navIndex',
         'Publish'  => 'publishButton'
         );
-    var $editlink = 'introtext.php';
+    var $editlink = AMP_SYSTEM_URL_PUBLIC_PAGE;
+    var $_url_add = AMP_SYSTEM_URL_PUBLIC_PAGE_ADD;
     var $_source_object = 'AMPSystem_Introtext';
     var $name_field = 'name';
 
@@ -27,7 +28,7 @@ class AMPSystem_IntroText_List extends AMPSystem_List {
     }
 
     function setTool( $tool_id ){
-        $this->editlink = AMP_Url_AddVars( $this->editlink, 'tool_id='.$tool_id );
+        $this->_url_add = AMP_url_add_vars( AMP_SYSTEM_URL_PUBLIC_PAGE_ADD, array( 'tool_id='.$tool_id ) );
         $this->addCriteria( 'modid='.$tool_id );
     }
 

@@ -1019,6 +1019,7 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
 
     function &_get_map( ) {
         if ( isset( $this->_map )) return $this->_map;
+        require_once( 'AMP/System/ComponentLookup.inc.php');
         $this->_map = &ComponentLookup::instance( get_class( $this ));
         return $this->_map;
     }

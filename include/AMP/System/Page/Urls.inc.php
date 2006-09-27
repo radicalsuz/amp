@@ -1,6 +1,7 @@
 <?php
 
 define( 'AMP_SYSTEM_URL_TOOLS',                 'module.php');
+define( 'AMP_SYSTEM_URL_TOOL_ADD',              'module.php?action=add');
 define( 'AMP_SYSTEM_URL_TOOL_CONTROL',          'tool_controls.php');
 define( 'AMP_SYSTEM_URL_PERMISSION_DETAILS',    'permissiondetail.php?action=list');
 define( 'AMP_SYSTEM_URL_PERMISSION_GROUPS',     'per.php?action=list');
@@ -15,9 +16,11 @@ define( 'AMP_SYSTEM_URL_GALLERY_IMAGES',        'gallery_image.php?action=list')
 define( 'AMP_SYSTEM_URL_IMAGE_UPLOAD',          'image_manager.php?action=add');
 define( 'AMP_SYSTEM_URL_IMAGES',                'image_manager.php');
 define( 'AMP_SYSTEM_URL_SYSTEM_IMAGES',         'images/');
-define( 'AMP_SYSTEM_URL_IMAGE_VIEW',                'image.php');
+define( 'AMP_SYSTEM_URL_IMAGE_VIEW',            'image.php');
+define( 'AMP_SYSTEM_URL_NAV',                   'nav.php');
+define( 'AMP_SYSTEM_URL_NAV_ADD',               'nav.php?action=add');
 define( 'AMP_SYSTEM_URL_NAV_LAYOUT',            'nav_layouts.php');
-define( 'AMP_SYSTEM_URL_NAV_LAYOUT_ADD',            'nav_layouts.php?action=add');
+define( 'AMP_SYSTEM_URL_NAV_LAYOUT_ADD',        'nav_layouts.php?action=add');
 define( 'AMP_SYSTEM_URL_DOCUMENT_UPLOAD',       'doc_manager.php?action=add');
 define( 'AMP_SYSTEM_URL_DOCUMENTS',             'doc_manager.php');
 define( 'AMP_SYSTEM_URL_ARTICLE_EDIT',          'article.php');
@@ -29,6 +32,7 @@ define( 'AMP_SYSTEM_URL_WEBACTION',             'action_center.php');
 define ('AMP_SYSTEM_URL_RSS_SUBSCRIPTION',      'rss_subscription.php');
 define ('AMP_SYSTEM_URL_PUBLIC_PAGES',          'introtext.php?action=list');
 define ('AMP_SYSTEM_URL_PUBLIC_PAGE',           'introtext.php');
+define ('AMP_SYSTEM_URL_PUBLIC_PAGE_ADD',       'introtext.php?action=add');
 define( 'AMP_SYSTEM_URL_CONTENTS',              'articlelist.php');
 define( 'AMP_SYSTEM_URL_STYLESHEET',            'stylesheet.php');
 define( 'AMP_SYSTEM_URL_SECTION',               'section.php');

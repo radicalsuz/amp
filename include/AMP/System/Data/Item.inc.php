@@ -365,8 +365,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
      * @access public
      * @return void
      */
-    function find( $criteria = null, $class_name = null ) {
-        return $this->search( $criteria, $class_name );
+    function find( $criteria = null ) {
+        return $this->search( $this->makeCriteria( $criteria ));
     }
 
     function &getSearchSource( $criteria = null ){

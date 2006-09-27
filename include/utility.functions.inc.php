@@ -1214,12 +1214,19 @@ if ( !function_exists( 'AMP_get_cache')){
         $cache_class = 'AMP_System_Cache_' . ucfirst( AMP_SYSTEM_CACHE );
         //$cache = call_user_func( array( $cache_class, 'instance'));
         $cache = new $cache_class;
-        if ( !$cache->has_connection( )) {
-            trigger_error('MEMCACHE FAILED, attempting file cacheing for ' . $_SERVER['REQUEST_URI']);
-            $cache = false;
-            require_once( 'AMP/System/Cache/'.ucfirst( 'file' ).'.php');
-            $cache = new AMP_System_Cache_File;
+        if ( !$cache->has_connection( ) ) {
+
+            if ( $failover = $cache->failover( )) {
+                trigger_error('MEMCACHE FAILED, attempting '.$failover.' cacheing for ' . $_SERVER['REQUEST_URI']);
+                require_once( 'AMP/System/Cache/'.ucfirst( $failover ).'.php');
+                $cache_class = 'AMP_System_Cache_' . ucfirst( $failover );
+
+                $cache = false;
+                $cache = new $cache_class;
+            }
+
             if ( !$cache->has_connection( )) {
+                trigger_error('cache failure for ' . $_SERVER['REQUEST_URI']);
                 $cache = false;
                 $cache_failure = true;
             }

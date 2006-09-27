@@ -5,7 +5,7 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
     var $datatable = "tags";
     var $name_field = "name";
 
-    var $_generator;
+    var $_class_name = 'AMP_Content_Tag';
     //var $_contents_criteria = array( );
     //var $_contents_class = 'ArticleSet';
     

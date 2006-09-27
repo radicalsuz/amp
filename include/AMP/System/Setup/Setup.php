@@ -44,7 +44,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     var $_translation_globals = array( 
         'SiteName'            => 'Name',
         'Web_url'             => 'URL',
-        'cacheSecs'           => 'CacheTimeout',
+        'cacheSecs'           => 'CacheTimeoutDefault',
         'admEmail'            => 'EmailSupport',
         'MM_email_usersubmit' => 'EmailNotifyUserContent',
         'MM_email_from'       => 'EmailSiteSender',	
@@ -308,6 +308,10 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
     function getCacheTimeout( ){
         return $this->getData( 'cacheSecs');
+    }
+
+    function getCacheTimeoutDefault( ){
+        return 0;
     }
 
     function getImageWidthThumb( ){
