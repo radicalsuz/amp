@@ -194,16 +194,16 @@ function DuplicateElementSet ( which, startRow ) {
 			}
 		} else {
 			if (which.dup_elements[i].type == 'hidden') {
-				newinput = which.formRef;
+				newinput = newrow;
 			} else {
 				newinput = newrow.insertCell( newrow.cells.length );
 			}
 		}
-        which.ElementSets[which.set_qty]['elements'][i] = which.makenew( which.dup_elements[i] );
-        if ( which.ElementSets[ which.set_qty ]['elements'][ i ] ) {
-            newinput.appendChild(  which.ElementSets[which.set_qty]['elements'][i] );
-        }
-        //newrow.appendChild( newinput );
+
+		which.ElementSets[which.set_qty]['elements'][i] = which.makenew( which.dup_elements[i] );
+		if ( which.ElementSets[ which.set_qty ]['elements'][ i ] ) {
+			newinput.appendChild(  which.ElementSets[which.set_qty]['elements'][i] );
+		}
 
     }
 }
