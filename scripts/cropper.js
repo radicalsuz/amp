@@ -39,7 +39,7 @@ this.options.drawMethod(p);
 var Cropper={};
 Cropper.Img=Class.create();
 Cropper.Img.prototype={initialize:function(_7,_8){
-this.options=Object.extend({ratioDim:{x:0,y:0},minWidth:0,minHeight:0,displayOnInit:false,onEndCrop:Prototype.emptyFunction,captureKeys:true},_8||{});
+this.options=Object.extend({ratioDim:{x:0,y:0},minWidth:0,minHeight:0,displayOnInit:false,onEndCrop:Prototype.emptyFunction,captureKeys:true,onloadCoords:null},_8||{});
 if(this.options.minWidth>0&&this.options.minHeight>0){
 this.options.ratioDim.x=this.options.minWidth;
 this.options.ratioDim.y=this.options.minHeight;
@@ -145,30 +145,41 @@ $(this.selArea).hide();
 var _15=Position.positionedOffset(this.imgWrap);
 this.wrapOffsets={"top":_15[1],"left":_15[0]};
 var _16={x1:0,y1:0,x2:0,y2:0};
-this.setAreaCoords(_16);
-if(this.options.ratioDim.x>0&&this.options.ratioDim.y>0&&this.options.displayOnInit){
+var _17=false;
+if(this.options.onloadCoords!=null){
+_16=this.cloneCoords(this.options.onloadCoords);
+_17=true;
+}else{
+if(this.options.ratioDim.x>0&&this.options.ratioDim.y>0){
 _16.x1=Math.ceil((this.imgW-this.options.ratioDim.x)/2);
 _16.y1=Math.ceil((this.imgH-this.options.ratioDim.y)/2);
 _16.x2=_16.x1+this.options.ratioDim.x;
 _16.y2=_16.y1+this.options.ratioDim.y;
+_17=true;
+}
+}
+this.setAreaCoords(_16,false,false,1);
+if(this.options.displayOnInit&&_17){
 this.selArea.show();
 this.drawArea();
 this.endCrop();
 }
 this.attached=true;
 },remove:function(){
+if(this.attached){
 this.attached=false;
 this.imgWrap.parentNode.insertBefore(this.img,this.imgWrap);
 this.imgWrap.parentNode.removeChild(this.imgWrap);
 Event.stopObserving(this.dragArea,"mousedown",this.startDrag.bindAsEventListener(this));
 Event.stopObserving(document,"mousemove",this.onDrag.bindAsEventListener(this));
 Event.stopObserving(document,"mouseup",this.endCrop.bindAsEventListener(this));
-var _17=[this.handleN,this.handleNE,this.handleE,this.handleSE,this.handleS,this.handleSW,this.handleW,this.handleNW];
-for(var i=0;i<_17.length;i++){
-Event.stopObserving(_17[i],"mousedown",this.startResize.bindAsEventListener(this));
+var _18=[this.handleN,this.handleNE,this.handleE,this.handleSE,this.handleS,this.handleSW,this.handleW,this.handleNW];
+for(var i=0;i<_18.length;i++){
+Event.stopObserving(_18[i],"mousedown",this.startResize.bindAsEventListener(this));
 }
 if(this.options.captureKeys){
 Event.stopObserving(document,"keydown",this.handleKeys.bindAsEventListener(this));
+}
 }
 },reset:function(){
 if(!this.attached){
@@ -207,171 +218,171 @@ Event.stop(e);
 return (this.areaCoords.x2-this.areaCoords.x1);
 },calcH:function(){
 return (this.areaCoords.y2-this.areaCoords.y1);
-},moveArea:function(_1b){
-this.setAreaCoords({x1:_1b[0],y1:_1b[1],x2:_1b[0]+this.calcW(),y2:_1b[1]+this.calcH()},true);
+},moveArea:function(_1c){
+this.setAreaCoords({x1:_1c[0],y1:_1c[1],x2:_1c[0]+this.calcW(),y2:_1c[1]+this.calcH()},true);
 this.drawArea();
-},cloneCoords:function(_1c){
-return {x1:_1c.x1,y1:_1c.y1,x2:_1c.x2,y2:_1c.y2};
-},setAreaCoords:function(_1d,_1e,_1f,_20,_21){
-var _22=typeof _1e!="undefined"?_1e:false;
+},cloneCoords:function(_1d){
+return {x1:_1d.x1,y1:_1d.y1,x2:_1d.x2,y2:_1d.y2};
+},setAreaCoords:function(_1e,_1f,_20,_21,_22){
 var _23=typeof _1f!="undefined"?_1f:false;
-if(_1e){
-var _24=_1d.x2-_1d.x1;
-var _25=_1d.y2-_1d.y1;
-if(_1d.x1<0){
-_1d.x1=0;
-_1d.x2=_24;
+var _24=typeof _20!="undefined"?_20:false;
+if(_1f){
+var _25=_1e.x2-_1e.x1;
+var _26=_1e.y2-_1e.y1;
+if(_1e.x1<0){
+_1e.x1=0;
+_1e.x2=_25;
 }
-if(_1d.y1<0){
-_1d.y1=0;
-_1d.y2=_25;
+if(_1e.y1<0){
+_1e.y1=0;
+_1e.y2=_26;
 }
-if(_1d.x2>this.imgW){
-_1d.x2=this.imgW;
-_1d.x1=this.imgW-_24;
+if(_1e.x2>this.imgW){
+_1e.x2=this.imgW;
+_1e.x1=this.imgW-_25;
 }
-if(_1d.y2>this.imgH){
-_1d.y2=this.imgH;
-_1d.y1=this.imgH-_25;
+if(_1e.y2>this.imgH){
+_1e.y2=this.imgH;
+_1e.y1=this.imgH-_26;
 }
 }else{
-if(_1d.x1<0){
-_1d.x1=0;
+if(_1e.x1<0){
+_1e.x1=0;
 }
-if(_1d.y1<0){
-_1d.y1=0;
+if(_1e.y1<0){
+_1e.y1=0;
 }
-if(_1d.x2>this.imgW){
-_1d.x2=this.imgW;
+if(_1e.x2>this.imgW){
+_1e.x2=this.imgW;
 }
-if(_1d.y2>this.imgH){
-_1d.y2=this.imgH;
+if(_1e.y2>this.imgH){
+_1e.y2=this.imgH;
 }
-if(typeof (_20)!="undefined"){
+if(typeof (_21)!="undefined"){
 if(this.ratioX>0){
-this.applyRatio(_1d,{x:this.ratioX,y:this.ratioY},_20,_21);
+this.applyRatio(_1e,{x:this.ratioX,y:this.ratioY},_21,_22);
 }else{
-if(_23){
-this.applyRatio(_1d,{x:1,y:1},_20,_21);
+if(_24){
+this.applyRatio(_1e,{x:1,y:1},_21,_22);
 }
 }
-var _26={a1:_1d.x1,a2:_1d.x2};
-var _27={a1:_1d.y1,a2:_1d.y2};
-var _28=this.options.minWidth;
-var _29=this.options.minHeight;
-if((_28==0||_29==0)&&_23){
-if(_28>0){
-_29=_28;
-}else{
+var _27={a1:_1e.x1,a2:_1e.x2};
+var _28={a1:_1e.y1,a2:_1e.y2};
+var _29=this.options.minWidth;
+var _2a=this.options.minHeight;
+if((_29==0||_2a==0)&&_24){
 if(_29>0){
-_28=_29;
-}
-}
-}
-this.applyMinDimension(_26,_28,_20.x,{min:0,max:this.imgW});
-this.applyMinDimension(_27,_29,_20.y,{min:0,max:this.imgH});
-_1d={x1:_26.a1,y1:_27.a1,x2:_26.a2,y2:_27.a2};
-}
-}
-this.areaCoords=_1d;
-},applyMinDimension:function(_2a,_2b,_2c,_2d){
-if((_2a.a2-_2a.a1)<_2b){
-if(_2c==1){
-_2a.a2=_2a.a1+_2b;
+_2a=_29;
 }else{
-_2a.a1=_2a.a2-_2b;
+if(_2a>0){
+_29=_2a;
 }
-if(_2a.a1<_2d.min){
-_2a.a1=_2d.min;
-_2a.a2=_2b;
+}
+}
+this.applyMinDimension(_27,_29,_21.x,{min:0,max:this.imgW});
+this.applyMinDimension(_28,_2a,_21.y,{min:0,max:this.imgH});
+_1e={x1:_27.a1,y1:_28.a1,x2:_27.a2,y2:_28.a2};
+}
+}
+this.areaCoords=_1e;
+},applyMinDimension:function(_2b,_2c,_2d,_2e){
+if((_2b.a2-_2b.a1)<_2c){
+if(_2d==1){
+_2b.a2=_2b.a1+_2c;
 }else{
-if(_2a.a2>_2d.max){
-_2a.a1=_2d.max-_2b;
-_2a.a2=_2d.max;
+_2b.a1=_2b.a2-_2c;
 }
-}
-}
-},applyRatio:function(_2e,_2f,_30,_31){
-var _32;
-if(_31=="N"||_31=="S"){
-_32=this.applyRatioToAxis({a1:_2e.y1,b1:_2e.x1,a2:_2e.y2,b2:_2e.x2},{a:_2f.y,b:_2f.x},{a:_30.y,b:_30.x},{min:0,max:this.imgW});
-_2e.x1=_32.b1;
-_2e.y1=_32.a1;
-_2e.x2=_32.b2;
-_2e.y2=_32.a2;
+if(_2b.a1<_2e.min){
+_2b.a1=_2e.min;
+_2b.a2=_2c;
 }else{
-_32=this.applyRatioToAxis({a1:_2e.x1,b1:_2e.y1,a2:_2e.x2,b2:_2e.y2},{a:_2f.x,b:_2f.y},{a:_30.x,b:_30.y},{min:0,max:this.imgH});
-_2e.x1=_32.a1;
-_2e.y1=_32.b1;
-_2e.x2=_32.a2;
-_2e.y2=_32.b2;
+if(_2b.a2>_2e.max){
+_2b.a1=_2e.max-_2c;
+_2b.a2=_2e.max;
 }
-},applyRatioToAxis:function(_33,_34,_35,_36){
-var _37=Object.extend(_33,{});
-var _38=_37.a2-_37.a1;
-var _39=Math.floor(_38*_34.b/_34.a);
-var _3a;
+}
+}
+},applyRatio:function(_2f,_30,_31,_32){
+var _33;
+if(_32=="N"||_32=="S"){
+_33=this.applyRatioToAxis({a1:_2f.y1,b1:_2f.x1,a2:_2f.y2,b2:_2f.x2},{a:_30.y,b:_30.x},{a:_31.y,b:_31.x},{min:0,max:this.imgW});
+_2f.x1=_33.b1;
+_2f.y1=_33.a1;
+_2f.x2=_33.b2;
+_2f.y2=_33.a2;
+}else{
+_33=this.applyRatioToAxis({a1:_2f.x1,b1:_2f.y1,a2:_2f.x2,b2:_2f.y2},{a:_30.x,b:_30.y},{a:_31.x,b:_31.y},{min:0,max:this.imgH});
+_2f.x1=_33.a1;
+_2f.y1=_33.b1;
+_2f.x2=_33.a2;
+_2f.y2=_33.b2;
+}
+},applyRatioToAxis:function(_34,_35,_36,_37){
+var _38=Object.extend(_34,{});
+var _39=_38.a2-_38.a1;
+var _3a=Math.floor(_39*_35.b/_35.a);
 var _3b;
-var _3c=null;
-if(_35.b==1){
-_3a=_37.b1+_39;
-if(_3a>_36.max){
-_3a=_36.max;
-_3c=_3a-_37.b1;
+var _3c;
+var _3d=null;
+if(_36.b==1){
+_3b=_38.b1+_3a;
+if(_3b>_37.max){
+_3b=_37.max;
+_3d=_3b-_38.b1;
 }
-_37.b2=_3a;
+_38.b2=_3b;
 }else{
-_3a=_37.b2-_39;
-if(_3a<_36.min){
-_3a=_36.min;
-_3c=_3a+_37.b2;
+_3b=_38.b2-_3a;
+if(_3b<_37.min){
+_3b=_37.min;
+_3d=_3b+_38.b2;
 }
-_37.b1=_3a;
+_38.b1=_3b;
 }
-if(_3c!=null){
-_3b=Math.floor(_3c*_34.a/_34.b);
-if(_35.a==1){
-_37.a2=_37.a1+_3b;
+if(_3d!=null){
+_3c=Math.floor(_3d*_35.a/_35.b);
+if(_36.a==1){
+_38.a2=_38.a1+_3c;
 }else{
-_37.a1=_37.a1=_37.a2-_3b;
+_38.a1=_38.a1=_38.a2-_3c;
 }
 }
-return _37;
+return _38;
 },drawArea:function(){
 if(!this.isIE){
 $(this.overlay).show();
 }
-var _3d=this.calcW();
-var _3e=this.calcH();
-var _3f=this.areaCoords.x2;
-var _40=this.areaCoords.y2;
-var _41=this.selArea.style;
-_41.left=this.areaCoords.x1+"px";
-_41.top=this.areaCoords.y1+"px";
-_41.width=_3d+"px";
-_41.height=_3e+"px";
-var _42=Math.ceil((_3d-6)/2)+"px";
+var _3e=this.calcW();
+var _3f=this.calcH();
+var _40=this.areaCoords.x2;
+var _41=this.areaCoords.y2;
+var _42=this.selArea.style;
+_42.left=this.areaCoords.x1+"px";
+_42.top=this.areaCoords.y1+"px";
+_42.width=_3e+"px";
+_42.height=_3f+"px";
 var _43=Math.ceil((_3e-6)/2)+"px";
-this.handleN.style.left=_42;
-this.handleE.style.top=_43;
-this.handleS.style.left=_42;
-this.handleW.style.top=_43;
+var _44=Math.ceil((_3f-6)/2)+"px";
+this.handleN.style.left=_43;
+this.handleE.style.top=_44;
+this.handleS.style.left=_43;
+this.handleW.style.top=_44;
 if(this.isIE){
 this.north.style.height=this.areaCoords.y1+"px";
-var _44=this.east.style;
-_44.top=this.areaCoords.y1+"px";
-_44.height=_3e+"px";
-_44.left=_3f+"px";
-_44.width=(this.img.width-_3f)+"px";
-var _45=this.south.style;
-_45.top=_40+"px";
-_45.height=(this.img.height-_40)+"px";
-var _46=this.west.style;
-_46.top=this.areaCoords.y1+"px";
-_46.height=_3e+"px";
-_46.width=this.areaCoords.x1+"px";
+var _45=this.east.style;
+_45.top=this.areaCoords.y1+"px";
+_45.height=_3f+"px";
+_45.left=_40+"px";
+_45.width=(this.img.width-_40)+"px";
+var _46=this.south.style;
+_46.top=_41+"px";
+_46.height=(this.img.height-_41)+"px";
+var _47=this.west.style;
+_47.top=this.areaCoords.y1+"px";
+_47.height=_3f+"px";
+_47.width=this.areaCoords.x1+"px";
 }else{
-_41.backgroundPosition="-"+this.areaCoords.x1+"px "+"-"+this.areaCoords.y1+"px";
+_42.backgroundPosition="-"+this.areaCoords.x1+"px "+"-"+this.areaCoords.y1+"px";
 }
 this.subDrawArea();
 this.forceReRender();
@@ -386,9 +397,9 @@ if(this.isWebKit){
 fixEl=document.getElementsByClassName("imgCrop_marqueeSouth",this.imgWrap)[0];
 d=Builder.node("div","");
 d.style.visibility="hidden";
-var _49=["SE","S","SW"];
-for(i=0;i<_49.length;i++){
-el=document.getElementsByClassName("imgCrop_handle"+_49[i],this.selArea)[0];
+var _4a=["SE","S","SW"];
+for(i=0;i<_4a.length;i++){
+el=document.getElementsByClassName("imgCrop_handle"+_4a[i],this.selArea)[0];
 if(el.childNodes.length){
 el.removeChild(el.childNodes[0]);
 }
@@ -414,72 +425,72 @@ Event.stop(e);
 },getCurPos:function(e){
 return curPos={x:Event.pointerX(e)-this.wrapOffsets.left,y:Event.pointerY(e)-this.wrapOffsets.top};
 },onDrag:function(e){
-var _4e=null;
+var _4f=null;
 if(this.dragging||this.resizing){
-var _4f=this.getCurPos(e);
-var _50=this.cloneCoords(this.areaCoords);
-var _51={x:1,y:1};
+var _50=this.getCurPos(e);
+var _51=this.cloneCoords(this.areaCoords);
+var _52={x:1,y:1};
 }
 if(this.dragging){
-if(_4f.x<this.clickCoords.x){
-_51.x=-1;
+if(_50.x<this.clickCoords.x){
+_52.x=-1;
 }
-if(_4f.y<this.clickCoords.y){
-_51.y=-1;
+if(_50.y<this.clickCoords.y){
+_52.y=-1;
 }
-this.transformCoords(_4f.x,this.clickCoords.x,_50,"x");
-this.transformCoords(_4f.y,this.clickCoords.y,_50,"y");
+this.transformCoords(_50.x,this.clickCoords.x,_51,"x");
+this.transformCoords(_50.y,this.clickCoords.y,_51,"y");
 }else{
 if(this.resizing){
-_4e=this.resizeHandle;
-if(_4e.match(/E/)){
-this.transformCoords(_4f.x,this.startCoords.x1,_50,"x");
-if(_4f.x<this.startCoords.x1){
-_51.x=-1;
+_4f=this.resizeHandle;
+if(_4f.match(/E/)){
+this.transformCoords(_50.x,this.startCoords.x1,_51,"x");
+if(_50.x<this.startCoords.x1){
+_52.x=-1;
 }
 }else{
-if(_4e.match(/W/)){
-this.transformCoords(_4f.x,this.startCoords.x2,_50,"x");
-if(_4f.x<this.startCoords.x2){
-_51.x=-1;
+if(_4f.match(/W/)){
+this.transformCoords(_50.x,this.startCoords.x2,_51,"x");
+if(_50.x<this.startCoords.x2){
+_52.x=-1;
 }
 }
 }
-if(_4e.match(/N/)){
-this.transformCoords(_4f.y,this.startCoords.y2,_50,"y");
-if(_4f.y<this.startCoords.y2){
-_51.y=-1;
+if(_4f.match(/N/)){
+this.transformCoords(_50.y,this.startCoords.y2,_51,"y");
+if(_50.y<this.startCoords.y2){
+_52.y=-1;
 }
 }else{
-if(_4e.match(/S/)){
-this.transformCoords(_4f.y,this.startCoords.y1,_50,"y");
-if(_4f.y<this.startCoords.y1){
-_51.y=-1;
+if(_4f.match(/S/)){
+this.transformCoords(_50.y,this.startCoords.y1,_51,"y");
+if(_50.y<this.startCoords.y1){
+_52.y=-1;
 }
 }
 }
 }
 }
 if(this.dragging||this.resizing){
-this.setAreaCoords(_50,false,e.shiftKey,_51,_4e);
+this.setAreaCoords(_51,false,e.shiftKey,_52,_4f);
 this.drawArea();
 Event.stop(e);
 }
-},transformCoords:function(_52,_53,_54,_55){
-var _56=new Array();
-if(_52<_53){
-_56[0]=_52;
-_56[1]=_53;
+},transformCoords:function(_53,_54,_55,_56){
+var _57=new Array();
+if(_53<_54){
+_57[0]=_53;
+_57[1]=_54;
 }else{
-_56[0]=_53;
-_56[1]=_52;
+_57[0]=_54;
+_57[1]=_53;
 }
-if(_55=="x"){
-_54.x1=_56[0];
-_54.x2=_56[1];
+if(_56=="x"){
+_55.x1=_57[0];
+_55.x2=_57[1];
 }else{
-_54.y1=_56[0];
-_54.y2=_56[1];
+_55.y1=_57[0];
+_55.y2=_57[1];
 }
 },endCrop:function(){
 this.dragging=false;
@@ -502,16 +513,16 @@ this.previewWrap.appendChild(this.previewImg);
 }
 },subDrawArea:function(){
 if(this.hasPreviewImg){
-var _57=this.calcW();
-var _58=this.calcH();
-var _59={x:this.imgW/_57,y:this.imgH/_58};
-var _5a={x:_57/this.options.minWidth,y:_58/this.options.minHeight};
-var _5b={w:Math.ceil(this.options.minWidth*_59.x)+"px",h:Math.ceil(this.options.minHeight*_59.y)+"px",x:"-"+Math.ceil(this.areaCoords.x1/_5a.x)+"px",y:"-"+Math.ceil(this.areaCoords.y1/_5a.y)+"px"};
-var _5c=this.previewImg.style;
-_5c.width=_5b.w;
-_5c.height=_5b.h;
-_5c.left=_5b.x;
-_5c.top=_5b.y;
+var _58=this.calcW();
+var _59=this.calcH();
+var _5a={x:this.imgW/_58,y:this.imgH/_59};
+var _5b={x:_58/this.options.minWidth,y:_59/this.options.minHeight};
+var _5c={w:Math.ceil(this.options.minWidth*_5a.x)+"px",h:Math.ceil(this.options.minHeight*_5a.y)+"px",x:"-"+Math.ceil(this.areaCoords.x1/_5b.x)+"px",y:"-"+Math.ceil(this.areaCoords.y1/_5b.y)+"px"};
+var _5d=this.previewImg.style;
+_5d.width=_5c.w;
+_5d.height=_5c.h;
+_5d.left=_5c.x;
+_5d.top=_5c.y;
 }
 }});
 

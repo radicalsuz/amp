@@ -30,7 +30,9 @@ class AMP_System_File_Controller extends AMP_System_Component_Controller_Standar
         $values = $this->get_form_data( );
         $this->_commit_save_actions( $values );
 
-        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $this->_file_name_uploaded ));
+        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $this->_file_name_uploaded ),
+                        $this->_unique_action_key( ), 
+                        $this->_model->get_url_edit( ) );
 
         $this->display_default( );
         return true;
@@ -46,6 +48,25 @@ class AMP_System_File_Controller extends AMP_System_Component_Controller_Standar
         $gallery_image = &new GalleryImage( AMP_Registry::getDbcon( ) );
         $gallery_image->setData( $data );
         return $gallery_image->save( );
+    }
+
+    function commit_megaupload( ){
+        $renderer = AMP_get_renderer( );
+        $buffer = new AMP_Content_Buffer( ) ;
+        $buffer->add( 
+              //$renderer->link( AMP_url_add_vars( "/upload_popup.php", array( 'doctype=img', 'handler=tesUpload')),
+              $renderer->newline( 2 )
+            . $renderer->link( "javascript:showPopup( '". AMP_url_add_vars( "file_uploader.php", array( 'doctype=img' )). "' );",
+                                AMP_TEXT_UPLOAD . $renderer->space( ) . AMP_TEXT_IMAGE
+                                //array( 'target' => '_blank'))
+                                )
+            . $renderer->newline( 2 )
+            . $renderer->link( "javascript:showPopup( 'file_uploader.php' );",
+                                AMP_TEXT_UPLOAD . $renderer->space( ) . AMP_TEXT_FILE,
+                                array( 'target' => '_blank'))
+            );
+        $this->_display->add( $buffer );
+        return true;
     }
 
 }

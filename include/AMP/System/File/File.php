@@ -253,6 +253,14 @@ class AMP_System_File {
         $this->_observers[] = &$observer;
     }
 
+    function get_url_edit( ){
+        return false;
+    }
+
+    function getURL( ){
+        return false;
+    }
+
 
 }
 

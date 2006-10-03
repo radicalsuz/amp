@@ -1,5 +1,4 @@
 <?php
-
 require_once( 'AMP/System/File/Image/ComponentMap.inc.php');
 $map = &new ComponentMap_Image( );
 $controller = &$map->get_controller( );

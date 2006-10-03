@@ -127,6 +127,11 @@ class AMP_System_File_Image extends AMP_System_File {
         $this->notify( 'gallery');
         return $result;
     }
+
+    function get_url_edit( ){
+        if ( !isset( $this->id )) return false;
+        return AMP_url_add_vars( AMP_SYSTEM_URL_IMAGE_EDIT, array( "id=" . $this->id ));
+    }
 }
 
 ?>

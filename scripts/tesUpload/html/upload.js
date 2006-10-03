@@ -24,7 +24,7 @@ function beginUpload(ul,sid) {
 	uploads_in_progress = uploads_in_progress + 1;
 	var pb = $(ul.name + "_progress");
 	Element.show(pb.parentNode);
-	uploaders[ul.name] = new Ajax.PeriodicalUpdater({},'scripts/tesUpload/html/fileprogress.php',{'decay': 2,'frequency' : 0.5,'method': 'post','parameters': 'sid=' + sid,'onSuccess' : function(request){updateProgress(pb,request)},'onFailure':function(request){updateFailure(pb,request)},'onComplete':function(){submitUpload(document.postform)}})
+	uploaders[ul.name] = new Ajax.PeriodicalUpdater({},'/scripts/tesUpload/html/fileprogress.php',{'decay': 2,'frequency' : 0.5,'method': 'post','parameters': 'sid=' + sid,'onSuccess' : function(request){updateProgress(pb,request)},'onFailure':function(request){updateFailure(pb,request)},'onComplete':function(){submitUpload(document.postform)}})
 }
 
 function updateProgress(pb,req) {

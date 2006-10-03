@@ -21,7 +21,7 @@ class AMP_System_File_List extends AMP_System_List_Form {
         $this->_path_files = AMP_LOCAL_PATH . AMP_CONTENT_URL_DOCUMENTS;
         $listSource = &new $this->_source_object( );
         $this->_init_pager( $listSource );
-        $source = &$listSource->search( $this->_path_files );
+        $source = $listSource->search( $this->_path_files );
         $this->init( $source );
     }
 

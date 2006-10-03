@@ -137,6 +137,13 @@ function AMP_openURL( target_url_here ) {
 	parent.location = target_url_here;
 }
 
+function showPopup( url, width, height ) {
+    if ( !width ) width = 300;
+    if ( !height ) height = 250;
+    hWnd = window.open ( url, 'recordWindow_'+new Date().getTime(), 'height='+height+',width='+width+',scrollbars=no,menubar=no,toolbar=no,resizeable=no,location=no,status=no' );
+
+}
+
 function showUploadWindow (parentform, calledfield, dtype, handler) {
     url  = 'http://'+location.host+'/upload_popup.php?pform='+parentform+'&pfield='+calledfield;
     if (dtype) url = url + '&doctype='+dtype;

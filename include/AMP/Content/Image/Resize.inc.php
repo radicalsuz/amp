@@ -48,7 +48,7 @@ class ContentImage_Resize {
 
     function makeVersion( $version_class, $save = true  ){
         $target_path = $this->_content_image_controller->getPath( $version_class );
-        $source = &$this->_getVersionSource( $version_class );
+        $source = $this->_getVersionSource( $version_class );
 
         $new_height = $source->height * ( $this->_widths[ $version_class ] / $source->width );
         $new_resource = &$source->resize( $this->_widths[ $version_class ], $new_height );

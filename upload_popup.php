@@ -6,6 +6,9 @@ include("AMP/System/Upload.inc.php");
 include("AMP/Content/Image/Resize.inc.php");
 
 function return_filename($filename) {
+    if ( !isset( $_GET['pform']) || !isset( $_GET['pfield'])) {
+        return false;
+    }
 $pass_script="
 <script type=\"text/javascript\">
 //<!--

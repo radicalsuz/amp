@@ -14,7 +14,6 @@ include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php"); 
 include('AMP/Content/Map/Select.inc.php');
 
-#$obj = new Menu; 
 // *** Edit Operations: declare Tables
 $MM_editAction = $PHP_SELF;
 if ($QUERY_STRING) {
@@ -65,9 +64,6 @@ if ( !isset( $HTTP_GET_VARS["thank"] )) { ?>
     </tr>
 	 <tr> 
       <td valign="top">Link in Section</td>
-      <!--
-      <td><select name="type"><option value="1" selected>Select Type</option> <?php //echo $obj->select_type_tree(6); ?></select></td>
-      -->
       <td><select name="type"><option value="1" selected>Select Section</option> <?php 
       echo ContentMap_Select::getIndentedOptions();
       ?></select></td>

@@ -100,7 +100,9 @@ class AMP_Authentication_Handler {
         $hash = $this->make_secure_cookie( $c_user, $c_perm, $secret );
         $old_hash = $this->has_cookie;
 
-        if (setcookie( $this->_loginType->getCookieName( ), "$hash:$c_user:$c_perm:$c_userid" )) {
+        if (setcookie(  $this->_loginType->getCookieName( ), 
+                        "$hash:$c_user:$c_perm:$c_userid" , 
+                        ( time( ) + $this->_loginType->getTimeout( ) ))) {
 			$this->notice('handler set cookie');
             $this->save_session( $hash, $secret );
             return true;

@@ -38,6 +38,8 @@ define( 'AMP_TEXT_WITH_SELECTED', 'With Selected:&nbsp;');
 define( 'AMP_TEXT_EDIT_ITEM', 'Edit this Item');
 define( 'AMP_TEXT_EDIT', 'Edit');
 define( 'AMP_TEXT_VIEW', 'View');
+define( 'AMP_TEXT_SAVE', 'Save');
+define( 'AMP_TEXT_UPLOAD', 'Upload');
 define( 'AMP_TEXT_LIST', 'List');
 define( 'AMP_TEXT_DELETE', 'Delete');
 define( 'AMP_TEXT_EXPORT', 'Export');
@@ -148,6 +150,8 @@ define( 'AMP_TEXT_SECTION', 'section');
 define( 'AMP_TEXT_SECTION_LIST', 'section list');
 define( 'AMP_TEXT_CLASS', 'class');
 define( 'AMP_TEXT_ARTICLE', 'article');
+define( 'AMP_TEXT_IMAGE', 'image');
+define( 'AMP_TEXT_FILE', 'file');
 define( 'AMP_TEXT_FORM', 'form');
 define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
 

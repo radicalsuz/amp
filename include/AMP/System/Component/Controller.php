@@ -345,6 +345,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         
     }
 
+
     function _init_form_request( &$form ){
         $request_id = $form->getIdValue( );
         if ( is_array( $request_id )) return false;

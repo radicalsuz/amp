@@ -15,6 +15,7 @@ define( 'AMP_SYSTEM_URL_GALLERY_IMAGE',         'gallery_image.php');
 define( 'AMP_SYSTEM_URL_GALLERY_IMAGES',        'gallery_image.php?action=list');
 define( 'AMP_SYSTEM_URL_IMAGE_UPLOAD',          'image_manager.php?action=add');
 define( 'AMP_SYSTEM_URL_IMAGES',                'image_manager.php');
+define( 'AMP_SYSTEM_URL_IMAGE_EDIT',            'image_manager.php?action=crop');
 define( 'AMP_SYSTEM_URL_SYSTEM_IMAGES',         'images/');
 define( 'AMP_SYSTEM_URL_IMAGE_VIEW',            'image.php');
 define( 'AMP_SYSTEM_URL_NAV',                   'nav.php');

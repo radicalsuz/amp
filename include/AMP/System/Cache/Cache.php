@@ -192,11 +192,11 @@ class AMP_System_Cache {
     // }}}
 
     // {{{ serialize wrappers: to_string, from_string
-    function to_string( &$item ) {
+    function to_string( $item ) {
         return serialize( $item );
     }
 
-    function from_string( &$item ){
+    function from_string( $item ){
         return unserialize( $item );
     }
     // }}}

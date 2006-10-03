@@ -1610,6 +1610,7 @@
 	function xCacheFlush($sql=false,$inputarr=false)
 	{
 	global $ADODB_CACHE_DIR;
+    if ( !$this->cacheSecs ) return ;
 	
 		if ($this->memCache) {
 			global $ADODB_INCLUDED_MEMCACHE;

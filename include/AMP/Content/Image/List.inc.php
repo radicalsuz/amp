@@ -21,7 +21,7 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
 
     var $_source_object = 'AMP_System_File_Image';
 
-    var $_thumb_attr = array();
+    var $_thumb_attr = array( 'border' => 0 );
     var $_pager_active = true;
     //var $editlink = AMP_SYSTEM_URL_IMAGE_UPLOAD;
     var $_url_add = AMP_SYSTEM_URL_IMAGE_UPLOAD;

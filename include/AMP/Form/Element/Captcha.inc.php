@@ -60,14 +60,14 @@
    define('CAPTCHA_HEIGHT', 50); // max 200
    define('CAPTCHA_NUM_CHARS', 5);
    define('CAPTCHA_NUM_LINES', 70);
-   define('CAPTCHA_CHAR_SHADOW', false);
+   define('CAPTCHA_CHAR_SHADOW', true);
    define('CAPTCHA_OWNER_TEXT', AMP_SITE_URL );
    define('CAPTCHA_CHAR_SET', ''); // defaults to A-Z
    define('CAPTCHA_CASE_INSENSITIVE', true);
    define('CAPTCHA_BACKGROUND_IMAGES', '');
    define('CAPTCHA_MIN_FONT_SIZE', 16);
    define('CAPTCHA_MAX_FONT_SIZE', 25);
-   define('CAPTCHA_USE_COLOUR', false);
+   define('CAPTCHA_USE_COLOUR', true);
    define('CAPTCHA_FILE_TYPE', 'jpeg');
    define('CAPTCHA_FLITE_PATH', '/usr/bin/flite');
    define('CAPTCHA_AUDIO_PATH', '/tmp/'); // must be writeable by PHP process
@@ -348,6 +348,7 @@
       function Create($sFilename = '') {
          // check for required gd functions
          if (!function_exists('imagecreate') || !function_exists("image$this->sFileType") || ($this->vBackgroundImages != '' && !function_exists('imagecreatetruecolor'))) {
+             trigger_error( 'needed libraries not loaded');
             return false;
          }
          

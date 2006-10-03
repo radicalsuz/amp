@@ -112,6 +112,7 @@ class NavigationManager {
 
     function findNavs_listClass() {
         $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByClass');
+        if ( !$layout_set ) return $this->findNavs_listSection( );
         $layout_id = array_search( $this->page->getClassId( ), $layout_set );
         if ( !$layout_id ) return $this->findNavs_listSection( );
         return $this->findNavs_standardBase( $layout_id, 'findNavs_listSection' );
@@ -120,6 +121,7 @@ class NavigationManager {
 
     function findNavs_IntroText() {
         $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext');
+        if ( !$layout_set ) return $this->findNavs_listSection( );
         $layout_id = array_search( $this->page->getIntroId( ), $layout_set );
         if ( !$layout_id ) return $this->findNavs_listSection( );
         return $this->findNavs_standardBase( $layout_id, 'findNavs_listSection' );
@@ -128,6 +130,7 @@ class NavigationManager {
 
     function findNavs_default() {
         $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext');
+        if ( !$layout_set ) return false;
         $layout_id = array_search( AMP_CONTENT_INTRO_ID_DEFAULT, $layout_set );
         if ( !$layout_id ) return false;
         $this->_default_attempted = true;
@@ -154,6 +157,7 @@ class NavigationManager {
 
     function findNavs_listFrontpage() {
         $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext');
+        if ( !$layout_set ) return $this->findNavs_default( );
         $layout_id = array_search( AMP_CONTENT_INTRO_ID_FRONTPAGE, $layout_set );
         if ( !$layout_id ) return $this->findNavs_default( );
 

@@ -354,8 +354,8 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         $this->form->setDefaults( array( $fieldname.'_value' => $data[$fieldname] ));
     }
 
-    function _addHiddenField( $fieldname ) {
-        $this->addFields( array(  $fieldname => array( 'type'=>'hidden', 'enabled'=>true, 'public'=>true )));
+    function _addHiddenField( $fieldname, $attr = array( ) ) {
+        $this->addFields( array(  $fieldname => array( 'type'=>'hidden', 'enabled'=>true, 'public'=>true, 'attr' => $attr )));
     }
 
 	function _makeDbDateTime( $data, $fieldname ) {
@@ -692,14 +692,9 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
         if ( !( isset( $data[$fieldname]) && $data[$fieldname ] )) return false;
         if ( ! isset( $def['block'])) return $data[$fieldname];
 
-        //$script =   '<script type="text/javascript" language="Javascript"><!--'."\n"
-        //            . 'change_form_block( "'.$def['block'].'");' . "\n"
-        //            . "--></script>";
         $script = 'change_form_block( "'.$def['block'].'");';
         $header = &AMP_getHeader( );
         $header->addJavascriptOnload( $script, 'form_block_'.$def['block'] );
-        //$this->registerJavascript( $script );
-        //$this->setJavascript( );
         return $data[$fieldname];
     }
 

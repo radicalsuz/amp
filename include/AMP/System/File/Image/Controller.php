@@ -40,6 +40,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $this->_form_crop->Build( true  );
         $crop_action = $this->_form_crop->submitted( );
         if ( !$crop_action || ( $crop_action && !$this->_form_crop->validate( ))){
+            $this->_form_crop->setValues( array( 'id' => $this->_model->getName( )));
             $this->_display->add( $this->_form_crop, 'crop');
             return true;
         }
@@ -83,7 +84,9 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 		$this->message( 
                 $renderer->image( $target_image->getURL( AMP_IMAGE_CLASS_ORIGINAL ), array('border'=>1 )) 
                 . $renderer->newline( 2 )
-                . sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $cropped_image->getName() )
+                . sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $cropped_image->getName()),
+                $this->_unique_action_key( ),
+                $this->_model->get_url_edit( )
             );
         return true;
 
@@ -115,7 +118,9 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 		$this->message( 
                 $renderer->image( $target_image->getURL( AMP_IMAGE_CLASS_CROP ), array('border'=>1 )) 
                 . $renderer->newline( 2 )
-                . sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $cropped_image->getName() . $renderer->space() . AMP_TEXT_CROP )
+                . sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $cropped_image->getName() . $renderer->space() . AMP_TEXT_CROP ), 
+                $this->_unique_action_key( ),
+                $this->_model->get_url_edit( )
             );
         return true;
 

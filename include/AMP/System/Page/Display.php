@@ -45,6 +45,14 @@ class AMP_System_Page_Display extends AMP_System_Component_Display {
         return $this->_template;
     }
 
+    function set_template( $template_class ) {
+        if ( !$template_class ) {
+            $this->_template_active = false;
+            return;
+        }
+        $this->_template_class = $template_class;
+    }
+
     function add_nav( $nav_name, $nav_key = null ) {
         if ( !isset( $nav_key )) return $this->_nav_set[] = $nav_name;
         $this->_nav_set[ $nav_key ] = $nav_name ;
