@@ -192,7 +192,10 @@
         $sql = "SELECT $column, count(" . $this->id_field . ") as qty FROM "
             . $this->datatable . $this->_makeCriteria() . " GROUP BY $column";
         if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." index"); 
-        return $this->dbcon->CacheGetAssoc($sql);
+        $result = $this->dbcon->CacheGetAssoc($sql);
+        if ( !$result && $db_error = $this->dbcon->ErrorMsg( )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($this), $dbError ) . $sql );
+        }
     }
 
     function RecordCount() {

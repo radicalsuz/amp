@@ -1,2 +1,2 @@
-alter table articles add column metadescription text null;
-alter table articles add column metakeywords text null;
+alter table articles_version add column metadescription text null;
+alter table articles_version add column metakeywords text null;
