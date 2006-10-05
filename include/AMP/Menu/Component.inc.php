@@ -266,6 +266,9 @@ class AMP_MenuComponent extends AMPSystem_Tree {
 
 // }}}
 
+    function __sleep( ){
+        return array_keys( get_object_vars( $this ) );
+    }
 }
 
 ?>

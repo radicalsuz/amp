@@ -46,9 +46,11 @@ class SectionMenu extends AMP_Menu {
             $cache_key_public = sprintf( AMP_CACHE_KEY_JAVASCRIPT, get_class( $this ));
             $cache_key_private = $this->_cache->identify( $cache_key_public, AMP_SYSTEM_USER_ID );
             
-            if ( $this->_cache->contains( $cache_key_private )) {
+            //if ( $this->_cache->contains( $cache_key_private )) {
+            if ( $js_values = $this->_cache->retrieve( $cache_key_private )) {
                 $this->_cache->refresh( $cache_key_private );
-                return $this->_apply_cached_javascript( $cache_key_public );
+                //return $this->_apply_cached_javascript( $cache_key_public );
+                return $this->_apply_cached_javascript( $js_values );
             }
         }
 
@@ -58,23 +60,22 @@ class SectionMenu extends AMP_Menu {
 
         if ( $this->_cache ) {
             $result = $this->_cache->add( $js_values, $cache_key_private );
-            if ( $result ) return $this->_apply_cached_javascript( $cache_key_public );
+            //if ( $result ) return $this->_apply_cached_javascript( $cache_key_public );
         }
 
         //$this->_header->addJavascriptDynamic( $js_values,  get_class( $this ).'base');
         $js_trigger =  "new tree (TREE_ITEMS_1, tree_tpl);\n" ;
         return 
          "<script language=\"Javascript\"  type=\"text/javascript\">$js_values\n\n$js_trigger</script>\n";
-        // "<script language=\"Javascript\"  type=\"text/javascript\">$js_values</script>\n";
     }
 
-    function _apply_cached_javascript( $key ){
-        $url = $this->_cache->url( $key );
-        $this->_header->addJavaScript( $url, get_class( $this ) );
-        #return "<script language=\"Javascript\"  type=\"text/javascript\" src=\"" . $url . "\"></script>\n";
+    //function _apply_cached_javascript( $key ){
+    function _apply_cached_javascript( $js_values ){
+        //$url = $this->_cache->url( $key );
+        //$this->_header->addJavaScript( $url, get_class( $this ) );
         $js_trigger =  "new tree (TREE_ITEMS_1, tree_tpl);\n" ;
         return 
-         "<script language=\"Javascript\"  type=\"text/javascript\">$js_trigger</script>\n";
+         "<script language=\"Javascript\"  type=\"text/javascript\">$js_values\n\n$js_trigger</script>\n";
     }
 
 }

@@ -391,6 +391,10 @@ class AMP_MenuComponent_LI extends AMP_MenuComponent {
     function makefolder() {
         return sprintf($this->folder_template, $this->id, $this->outputChildren());
     }
+
+    function __sleep( ){
+        return array_keys( get_object_vars( $this ) );
+    }
 }
 
 
