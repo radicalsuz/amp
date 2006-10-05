@@ -9,6 +9,7 @@ class AMPSystem_Form extends AMPForm {
     var $allow_copy = true;
     var $_editor_fieldswap_object_id = 'HTML_Override_Hider';
 
+    var $_submit_group = 'submitAction';
     var $submit_button = array( 'submitAction' => array(
         'type' => 'group',
         'elements'=> array(
@@ -44,7 +45,7 @@ class AMPSystem_Form extends AMPForm {
     }
 
     function defineSubmit( $value, $label = "Submit", $attr=null ) {
-        $this->submit_button['submitAction']['elements'][$value] = 
+        $this->submit_button[ $this->_submit_group ]['elements'][$value] = 
             array(
                 'type' => 'submit',
                 'label'=> $label,
@@ -53,7 +54,7 @@ class AMPSystem_Form extends AMPForm {
     }
 
     function removeSubmit ( $value ) {
-        unset ($this->submit_button['submitAction']['elements'][$value] );
+        unset ($this->submit_button[ $this->_submit_group ]['elements'][$value] );
     }
 
     function Build() {
@@ -72,7 +73,7 @@ class AMPSystem_Form extends AMPForm {
 
         //clear non_allowed submit actions as specified by the map
         $map = &$this->_get_map( );
-        foreach( $this->submit_button['submitAction']['elements'] as $action => $field_def ) {
+        foreach( $this->submit_button[ $this->_submit_group ]['elements'] as $action => $field_def ) {
             if ( !$map ) continue;
             if ( !$map->isAllowed( $action )) $this->removeSubmit( $action );
         }
@@ -114,12 +115,12 @@ class AMPSystem_Form extends AMPForm {
     }
 
     function submitted() {
-        if (!isset($_REQUEST['submitAction'])) return false;
-        $submitAction = $_REQUEST['submitAction'];
+        if (!isset($_REQUEST[ $this->_submit_group ])) return false;
+        $submitAction = $_REQUEST[ $this->_submit_group ];
         if (!is_array($submitAction)) return false;
 
         $key = key($submitAction);
-        if (isset($this->submit_button['submitAction']['elements'][$key])) return $key;
+        if (isset($this->submit_button[ $this->_submit_group ]['elements'][$key])) return $key;
 
         return false;
     }

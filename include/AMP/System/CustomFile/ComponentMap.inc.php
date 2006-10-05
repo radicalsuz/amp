@@ -6,6 +6,8 @@ class ComponentMap_CustomFile extends AMPSystem_ComponentMap {
     var $heading = "Custom File";
     var $nav_name = "template";
 
+    var $_component_controller = 'AMP_System_Component_Controller_Sticky';
+
     var $paths = array( 
         'fields' => 'AMP/System/CustomFile/Fields.xml',
         'list'   => 'AMP/System/CustomFile/List.inc.php',

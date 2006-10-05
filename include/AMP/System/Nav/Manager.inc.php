@@ -124,6 +124,7 @@ class AMPSystem_NavManager {
         $nav->addTitle( $form_names[$form_id] );
         $nav->addItem ( 'userdata_list.php?modin='.$form_id    , 'View Data',    'view' );
         $nav->addItem ( 'modinput4_view.php?modin='.$form_id   , 'Add Data',     'add' );
+        $nav->addItem ( 'form_manager.php?action=upload&modin='.$form_id   , 'Import Data',     'add' );
         $nav->addItem ( 'modinput4_search.php?modin='.$form_id , 'Search Data',  'search' );
         $nav->addItem ( 'modinput4_edit.php?modin='.$form_id   , 'Form Settings','form', AMP_PERMISSION_FORM_ADMIN );
         $nav->addItem ( 'modinput4_copy.php?modin='.$form_id   , 'Copy Form',    'add',  AMP_PERMISSION_FORM_ADMIN );

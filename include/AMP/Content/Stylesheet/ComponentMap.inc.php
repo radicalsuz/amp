@@ -6,6 +6,8 @@ class ComponentMap_Stylesheet extends AMPSystem_ComponentMap {
     var $heading = "Stylesheet";
     var $nav_name = "template";
 
+    var $_component_controller = 'AMP_System_Component_Controller_Sticky';
+
     var $paths = array( 
         'fields' => 'AMP/Content/Stylesheet/Fields.xml',
         'list'   => 'AMP/Content/Stylesheet/List.inc.php',

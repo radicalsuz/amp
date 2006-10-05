@@ -443,9 +443,13 @@ class AMPContent_Page {
      */
     function getTemplateId () {
         if (isset($this->template_id) && $this->template_id) return $this->template_id;
-        if ($template_id = $this->map->readAncestors( $this->section_id, 'templateid' ) ) {
+
+        if ( isset( $_GET['template_id']) && $_GET['template_id']) {
+            $this->template_id = $_GET['template_id'];
+        } elseif ($template_id = $this->map->readAncestors( $this->section_id, 'templateid' ) ) {
             $this->template_id = $template_id;
         }
+
         if (!isset($this->template_id)) $this->template_id = AMP_CONTENT_TEMPLATE_ID_DEFAULT;
         return $this->template_id;
     }

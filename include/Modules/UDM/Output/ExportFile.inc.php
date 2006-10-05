@@ -115,6 +115,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     }
 
     function validateColumn( $column ) {
+        if ($column == "id" && $this->udm->admin) return "text";
         if ($column == "timestamp") return "date";
         if ($column == "created_timestamp") return "date";
         if (!isset($this->udm->fields[$column])) return false;

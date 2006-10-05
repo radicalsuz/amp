@@ -71,6 +71,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 		$this->_allowed_keys[] = $key_name;
 	}
 
+    function getAllowedKeys( ) {
+        return $this->_allowed_keys;
+    }
+
     function dropID( ){
         unset ( $this->_itemdata_keys[ $this->id_field ] );
         unset ( $this->id );

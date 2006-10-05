@@ -35,11 +35,12 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
     var $_actions_global = array( 'recalculate' );
     var $_request_class = 'AMP_Content_Image_List_Request';
 
-    function AMP_Content_Image_List( ) {
+    function AMP_Content_Image_List( $dbcon, $criteria = array( ) ) {
         $this->_path_files = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_URL_IMAGES . "original/";
         $listSource = &new $this->_source_object( );
         //$this->_init_pager( $listSource );
-        $source = $listSource->search( $this->_path_files );
+        $this->_init_search( $listSource );
+        $source = $listSource->search( $this->_path_files, join( '', $this->_source_criteria ) );
         $this->init( $source );
     }
 

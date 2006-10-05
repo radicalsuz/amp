@@ -736,3 +736,20 @@ div.list_row_controls {
 	float: left;
 	padding-right: 2em;
 }
+
+div.userdata_pager {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 5px;
+    padding-top: 2px;
+    background-color: #E5E5E5;
+
+}
+
+div.userdata_pager_footer {
+    width:100%;
+    text-align:right;
+    padding-bottom:5px;
+    padding-top:2px;
+    background-color:#E5E5E5;
+}

@@ -165,7 +165,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     function _readTemplates( ){
        require_once( 'AMP/System/IntroText.inc.php') ;
        $frontpage = &new AMPSystem_IntroText( $this->dbcon, AMP_CONTENT_INTRO_ID_FRONTPAGE );
-       $this->setTemplateIdFrontpage( $frontpage->getTemplate( ));
+       $this->setTemplateIdFrontpage( $frontpage->getTemplate( ) );
 
     }
 
@@ -246,7 +246,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     }
 
     function getTemplateId( ){
-        return $this->getData( 'template');
+        return $this->getData( 'template' );
     }
 
     function getTemplateIdFrontpage( ){

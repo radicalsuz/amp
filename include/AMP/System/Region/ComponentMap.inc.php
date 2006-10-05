@@ -8,6 +8,7 @@ class ComponentMap_Region extends AMPSystem_ComponentMap {
     var $paths = array(
         'form' => 'AMP/System/Region/Form.inc.php',
         'list' => 'AMP/System/Region/List.inc.php',
+        'fields' => 'AMP/System/Region/Fields.xml',
         'source' => 'AMP/System/Region.inc.php' );
     var $components = array(
         'form' => 'AMPSystem_Region_Form',

@@ -6,6 +6,8 @@ class ComponentMap_Template extends AMPSystem_ComponentMap {
     var $heading = "Template";
     var $nav_name = "template";
 
+    var $_component_controller = 'AMP_System_Component_Controller_Sticky';
+
     var $paths = array( 
         'fields' => 'AMP/Content/Template/Fields.xml',
         'list'   => 'AMP/Content/Template/List.inc.php',

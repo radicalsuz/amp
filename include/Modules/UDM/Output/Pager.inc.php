@@ -86,7 +86,10 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         
         if ($this->udm->admin) $options['control_class']="list_controls";
 
-		$output ="<div class=".$options['control_class']." style=\"width:100%;text-align:center;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";
+		//$output ="<div class=".$options['control_class']." style=\"width:100%;text-align:center;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";
+        
+		$output ="<div class='".$options['control_class']." userdata_pager'>";
+
         if (!$this->executed)  {
             $output .="<Form name=\"".$options['form_name']."\" ACTION=\"".$_SERVER['PHP_SELF']."\" METHOD=\"GET\">";
         }
@@ -121,7 +124,10 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         if ($this->return_qty<$this->total_qty) {
 
 
-            $output .="</div><div class=".$options['control_class']." style=\"width:100%;text-align:right;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";
+            //$output .="</div><div class=".$options['control_class']." style=\"width:100%;text-align:right;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";
+            
+            $output .="</div><div class='".$options['control_class']." userdata_pager_footer' >";
+
 			//PREV button
 			if ($this->offset>0) {
 				$output .= "&nbsp;<a href=\"javascript: if (document.forms['".$options['form_name']."'].elements['qty_selector[]'].value>=".$this->offset.") { var newoffset=0; } else { var newoffset=(".$this->offset."- document.forms['".$options['form_name']."'].elements['qty_selector[]'].value);}  window.location.href='".$_SERVER['PHP_SELF']."?".join("&", $this->criteria)."&qty='+document.forms['".$options['form_name']."'].elements['qty_selector[]'].value + '&offset='+newoffset;";

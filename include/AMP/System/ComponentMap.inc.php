@@ -134,6 +134,13 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         return $controller;
     }
 
+    function get_action_display_type( $action ) {
+        if ( !isset( $this->_action_displays[$action] )) {
+            return $this->_default_display ;
+        }
+        return $this->_action_displays[ $action ];
+    }
+
     function &get_action_display( $action ){
         if ( !isset( $this->_action_displays[$action] )) {
             return $this->getComponent( $this->_default_display );

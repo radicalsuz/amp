@@ -261,6 +261,56 @@ class AMP_System_File {
         return false;
     }
 
+    function makeCriteriaName( $name ) {
+        return '*' . $name . '*';
+    }
+
+     //{{{ Object based Search methods: makeCriteria
+
+    /**
+     * makeCriteria 
+     * 
+     * @param mixed $data 
+     * @access public
+     * @return void
+     */
+    function makeCriteria( $data ){
+        $return = array( );
+        if ( !( isset( $data ) && is_array( $data ))) return false;
+        foreach ($data as $key => $value) {
+            $crit_method = 'makeCriteria' . ucfirst( $key );
+
+            if (method_exists( $this, $crit_method )) {
+                $return[$key] = $this->$crit_method( $value );
+                continue;
+            }
+            /*
+            if ( $crit_method = $this->_getCriteriaMethod( $key )){
+                $return[$key] = $this->$crit_method( $key, $value );
+            }
+            */
+
+        }
+        return $return;
+    }
+
+    /*
+    function _getCriteriaMethod( $fieldname ) {
+        if ( !$this->isColumn( $fieldname )) return false;
+        if (array_search( $fieldname, $this->_exact_value_fields ) !==FALSE) return '_makeCriteriaEquals';
+        return '_makeCriteriaContains';
+    }
+
+    function _makeCriteriaContains( $key, $value ) {
+        return "*" . $value . "*";
+    }
+
+    function _makeCriteriaEquals( $key, $value ) {
+        return $value;
+    }
+    */
+    
+    //}}}
 
 }
 

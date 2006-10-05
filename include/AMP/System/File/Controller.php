@@ -54,16 +54,10 @@ class AMP_System_File_Controller extends AMP_System_Component_Controller_Standar
         $renderer = AMP_get_renderer( );
         $buffer = new AMP_Content_Buffer( ) ;
         $buffer->add( 
-              //$renderer->link( AMP_url_add_vars( "/upload_popup.php", array( 'doctype=img', 'handler=tesUpload')),
               $renderer->newline( 2 )
             . $renderer->link( "javascript:showPopup( '". AMP_url_add_vars( "file_uploader.php", array( 'doctype=img' )). "' );",
-                                AMP_TEXT_UPLOAD . $renderer->space( ) . AMP_TEXT_IMAGE
-                                //array( 'target' => '_blank'))
-                                )
+                                AMP_TEXT_UPLOAD . $renderer->space( ) . AMP_TEXT_FILE )
             . $renderer->newline( 2 )
-            . $renderer->link( "javascript:showPopup( 'file_uploader.php' );",
-                                AMP_TEXT_UPLOAD . $renderer->space( ) . AMP_TEXT_FILE,
-                                array( 'target' => '_blank'))
             );
         $this->_display->add( $buffer );
         return true;

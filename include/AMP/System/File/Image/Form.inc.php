@@ -2,7 +2,6 @@
 require_once( 'AMP/System/File/Form.inc.php');
 
 class AMP_System_File_Image_Form extends AMP_System_File_Form {
-
     
     function AMP_System_File_Image_Form( ){
         $name = 'AMP_System_File_Image_Form';
@@ -24,7 +23,7 @@ class AMP_System_File_Image_Form extends AMP_System_File_Form {
         require_once( 'AMP/Content/Display/HTML.inc.php');
         $renderer = &new AMPDisplay_HTML;
         return $renderer->link( 
-                    AMP_url_add_vars( AMP_SYSTEM_URL_IMAGE, 'action=megaupload'),
+                    AMP_url_add_vars( AMP_SYSTEM_URL_IMAGES, 'action=megaupload'),
                     //'/system/imgup.php',
                     'Alternate upload page'
                    );

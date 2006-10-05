@@ -432,6 +432,16 @@ class UserData {
         }
     }
 
+    function clearData( ) {
+        foreach ($this->fields as $fname=>$fdef ) {
+
+            if (!isset($fdef[$value])) continue;
+
+            unset( $this->fields[$fname]['value'] );
+        }
+
+    }
+
     /*****
      *
      * getData( array $fields )
@@ -758,7 +768,7 @@ class UserData {
 
     function doAction ( $action, $options = array() ) {
 
-        $plugins = $this->getPlugins( $action );
+        $plugins =& $this->getPlugins( $action );
 
         if (!isset( $plugins )|| !is_array($plugins) ) return false;
         
@@ -988,7 +998,7 @@ class UserData {
                 $action    = $plugin[ 'action'    ];
                 $plugin_instance = $plugin[ 'id' ];
 
-                $r = $this->registerPlugin( $namespace, $action, $plugin_instance ) and $r;
+                $r = &$this->registerPlugin( $namespace, $action, $plugin_instance ) and $r;
             }
 
         } else {

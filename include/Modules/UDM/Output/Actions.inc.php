@@ -85,7 +85,6 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
             
             $this->action=$_POST['list_action'];
             $action=$this->action.'_set';
-            trigger_error( 'action is ' . $action );
             
             if (method_exists($this, $action)) {
 
@@ -98,6 +97,11 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                 }
 
                 $this->message = $message;
+                if ( isset($this->message)) {
+                    $flash = &AMP_System_Flash::instance( );
+                    $flash->add_message( $this->message );
+
+                }
             }
         }
     }
@@ -318,11 +322,6 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
            }*/
 
         $output .= $form->toHtml();
-        if ( isset($this->message)) {
-            $flash = &AMP_System_Flash::instance( );
-            $flash->add_message( $this->message );
-
-        }
 
         return  $output;
 

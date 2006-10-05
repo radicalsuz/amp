@@ -303,7 +303,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
     var $_action_default = 'list';
 
     function AMP_System_Component_Controller_Map ( ){
-        $this->init( );
+        $this->__construct( );
     }
 
     function set_map( &$map ){
@@ -421,10 +421,11 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
     var $_form;
 
     function AMP_System_Component_Controller_Input( ){
-        $this->init( );
+        $this->_construct( );
     }
 
     function display_default() {
+
         // if no list exists, return to the blank input form
         if ( !( $display = &$this->_map->getComponent( 'list' ))) {
            $display = &$this->_map->getComponent( 'form' );
@@ -505,7 +506,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
 class AMP_System_Component_Controller_Standard extends AMP_System_Component_Controller_Input {
 
     function AMP_System_Component_Controller_Standard( ){
-        $this->init( );
+        $this->__construct( );
     }
 
     function _init_search( &$search, &$display ){
@@ -587,6 +588,38 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->display_default( );
         return true;
 
+    }
+
+}
+
+/**
+ * AMP_System_Component_Controller_Sticky 
+ *
+ * This controller continues to keep an item open for editing after it has been saved
+ * 
+ * @uses AMP_System_Component_Controller_Standard
+ * @package Controllers
+ * @version 3.6.2
+ * @copyright 2006 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org> 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+class AMP_System_Component_Controller_Sticky extends AMP_System_Component_Controller_Standard {
+    function AMP_System_Component_Controller_Sticky( ) {
+        $this->__construct( );
+    }
+
+    function display_default( ){
+        if ( !( isset( $this->_model_id ) && $this->_model_id )) {
+            return parent::display_default( );
+        }
+        $display = &$this->_map->getComponent( 'form' );
+        $this->_form = &$display;
+        $this->_init_form( false );
+        $this->set_banner( 'edit');
+
+        $this->_display->add( $display, 'default' );
+        return true;
     }
 
 }

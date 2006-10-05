@@ -396,6 +396,7 @@ class AMPSystemLookup_Lists extends AMPSystem_Lookup {
 				$api =& DIA_API::create();
 				$groups = $api->getGroupNamesAssoc();
 				$this->dataset = isset($groups)?$groups:array();
+                if ( !$groups ) return false;
 
 				//update our local copy of available DIA lists
 				$dbcon =& AMP_Registry::getDbcon();

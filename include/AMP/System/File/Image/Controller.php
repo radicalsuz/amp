@@ -30,6 +30,20 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         return $result;
     }
 
+    function display_default( ) {
+        if ( $this->get_action( ) != 'save') {
+            return parent::display_default( );
+        }
+        //clear the REQUEST
+        $_POST = array( );
+        $this->_form = &$this->_map->getComponent( 'form' );
+        $this->_form->initNoId( );
+        $this->_init_form( false );
+        $this->set_banner( 'add');
+        $this->_display->add( $this->_form, 'default' );
+        return true;
+    }
+
     function commit_crop( ){
         if ( !isset( $this->_model_id )){
             $this->clear_actions( );

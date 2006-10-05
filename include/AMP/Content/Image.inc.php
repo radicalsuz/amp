@@ -131,6 +131,7 @@ class Content_Image {
     function imageRatio( ){
         return $this->getHeight( )/$this->getWidth( );
     }
+
 }
 
 ?>

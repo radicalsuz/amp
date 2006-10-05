@@ -169,7 +169,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             }
         }
 
-        $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate', 'tag');
+        //name
+        if ( isset( $_REQUEST['name']) && $_REQUEST['name']) {
+            $sql_criteria[] = 'Concat( if( isnull( First_Name ), "", First_Name ), if ( isnull( Last_Name ), "", Last_Name ))  LIKE ' . $this->dbcon->qstr( '%' . $_REQUEST['name'] . '%' );
+        }
+
+        $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate', 'tag', 'name');
         foreach( $this->_included_fields as $fieldname ) {
             if ( array_search( $fieldname, $specified_fields ) !== FALSE ) continue;
             if ( !( isset( $_REQUEST[ $fieldname ]) && $_REQUEST[ $fieldname ])) continue;
@@ -250,6 +255,13 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		    "";	
 			
 		$def['bydate']=array('type'=>'select', 'label'=>'Entered Date', 'required'=>false,  'values'=>$this->lookups['bydate']['Set'], 'size'=>null, 'value'=>$mydate, 'public'=>'1');
+
+		//date
+		$my_name =(isset($_REQUEST['name']) && $_REQUEST['name'])?
+			$_REQUEST['name']:
+		    "";	
+			
+		$def['name']=array('type'=>'text', 'label'=> AMP_TEXT_NAME, 'required'=>false,  'size'=>'25', 'value'=>$my_name, 'public'=>'1');
 	
 		//distance by zip
 		$distance_options=array('1'=>'1','5'=>'5', '10'=>'10', '25'=>'25', '100'=>'100', '250'=>'250');

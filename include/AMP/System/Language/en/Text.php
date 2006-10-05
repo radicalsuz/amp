@@ -43,7 +43,9 @@ define( 'AMP_TEXT_UPLOAD', 'Upload');
 define( 'AMP_TEXT_LIST', 'List');
 define( 'AMP_TEXT_DELETE', 'Delete');
 define( 'AMP_TEXT_EXPORT', 'Export');
+define( 'AMP_TEXT_IMPORT', 'Import');
 define( 'AMP_TEXT_ADD', 'Add');
+define( 'AMP_TEXT_NAME', 'Name');
 define( 'AMP_TEXT_ITEM_NAME', 'Item');
 define( 'AMP_TEXT_SEARCH', 'Search');
 

@@ -45,21 +45,30 @@ function process_uploaded_file($file_name, $file_path, $allow_existing_file=fals
     $image_path = AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL ; 
 
     $folder_okay = true ;
-    if ($_REQUEST['doctype']=='img' && (!$upLoader->setFolder( $image_path ))) {
+    $is_image = false;
+    if ( function_exists( 'mime_content_type')) {
+        $mime_type = mime_content_type( $file_path );
+        if ( substr( $mime_type, 0, 5 ) == 'image') {
+            $is_image = true;
+        }
+    } else {
+        if ( isset( $_REQUEST['doctype']) && $_REQUEST['doctype'] =='img') {
+            $is_image = true;
+        }
+    }
+    if ( $is_image && (!$upLoader->setFolder( $image_path ))) {
         $folder_okay=false;
     }
-    if ($folder_okay && $upLoader->execute( $file_path, $allow_existing_file ) ) { 
+    if ( $folder_okay && $upLoader->execute( $file_path, $allow_existing_file ) ) { 
         $new_file_name = basename( $upLoader->getTargetPath() ) ;
         $result_message = "<BR><font face='arial' size=2>File was successfully uploaded.<br>".
             "<br><b>Filename:</b>". $new_file_name ."</font>"; //"</a></font></b><br><br><br><br><br><br><br><br>\n"
             //.return_filename($new_file_name);
         
-        if ($_REQUEST['doctype']=='img') {
+        if ($is_image){
             $reSizer = &new ContentImage_Resize();
             require_once( 'AMP/Content/Image.inc.php');
-            if ( ! ( $reSizer->setImageFile( $upLoader->getTargetPath() ) && $reSizer->execute() )) {
-                $result_message = "Resize failed:<BR>". join( "<BR>", $reSizer->getErrors() ) . $result_message ;
-            } else {
+            if (  $reSizer->setImageFile( $upLoader->getTargetPath() ) && $reSizer->execute() ) {
                 $imageRef = &new Content_Image( $file_name );
                 $result_message = '<image src="'. $imageRef->getURL( AMP_IMAGE_CLASS_THUMB ) .  '" align="left" border="0">' . $result_message;
             }

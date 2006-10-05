@@ -129,8 +129,9 @@ class AMP_System_File_Image extends AMP_System_File {
     }
 
     function get_url_edit( ){
-        if ( !isset( $this->id )) return false;
-        return AMP_url_add_vars( AMP_SYSTEM_URL_IMAGE_EDIT, array( "id=" . $this->id ));
+        $file_name = $this->id;
+        if ( !$file_name || $file_name == 'downloads') return false;
+        return AMP_url_add_vars( AMP_SYSTEM_URL_IMAGE_EDIT, array( "id=" . $file_name ));
     }
 }
 
