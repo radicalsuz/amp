@@ -108,6 +108,22 @@ class AMP_Display_Detail {
     function _renderFooter( ) {
         return false;
     }
+
+    function _init_display_methods( ) {
+        $display_id = strtoupper( get_class( $this ));
+
+        if ( $display_id == 'AMP_DISPLAY_DETAIL' ) {
+            if ( isset( $this->_source_object )) {
+                $display_id .= '_' . $this->_source_object ;
+            } elseif ( isset( $this->name )) {
+                $display_id .= '_' . str_replace( ' ', '_' , $this->name );
+            } 
+        }
+        $display_id =  strtoupper( $display_id );
+        if ( defined( 'AMP_RENDER_' . $display_id )) {
+            $this->_item_display_method = constant( 'AMP_RENDER_' .$display_id );
+        }
+    }
 }
 
 

@@ -14,6 +14,18 @@ class WebAction_Lookup extends AMPSystem_Lookup {
 
 }
 
+class AMPSystemLookup_ActionTargets extends AMPSystem_Lookup {
+    function AMPSystemLookup_ActionTargets( ) {
+        $this->dataset = WebAction_Lookup::instance( 'targets' );
+    }
+}
+
+class AMPSystemLookup_WebActions extends AMPSystem_Lookup {
+    function AMPSystemLookup_WebActions {
+        $this->dataset = WebAction_Lookup::instance( 'names' );
+    }
+}
+
 class WebActionLookup_Targets extends WebAction_Lookup {
     var $datatable = 'webaction_targets';
     var $result_field = 'concat( First_Name, " ", Last_Name ) as Name';

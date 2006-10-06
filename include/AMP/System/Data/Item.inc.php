@@ -410,13 +410,12 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     //{{{ Sorting methods: sort, setSortMethod, _sort_default
 
     function sort( &$item_set, $sort_property=null, $sort_direction = null ){
-        if ( !isset( $sort_property)) {
+        if ( !( isset( $sort_property) && $sort_property )) {
             $this->_sort_default( $item_set );
             return true;
         }
 
         if ( !$this->setSortMethod( $sort_property )) {
-            print AMPbacktrace( );
             trigger_error( sprintf( AMP_TEXT_ERROR_SORT_PROPERTY_FAILED, $sort_property, get_class( $this )));
             return false;
         }

@@ -136,12 +136,17 @@ class AMPSystem_Data {
     function _getColumnNames( $sourceDef ) {
         $reg = &AMP_Registry::instance();
         $definedSources = &$reg->getEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
-        if (isset($definedSources[ $sourceDef ])) return $definedSources[ $sourceDef ];
+        if ( !$definedSources ) {
+            $definedSources = AMP_cache_get( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
+        }
+        if ($definedSources && isset($definedSources[ $sourceDef ])) return $definedSources[ $sourceDef ];
 
         if ( !isset( $this->dbcon )) trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this ), 'dbcon' ));
         $colNames = $this->dbcon->MetaColumnNames( $sourceDef );
         $definedSources[ $sourceDef ] = $colNames;
         $reg->setEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
+        AMP_cache_set( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
+
         return $colNames;
     }
 

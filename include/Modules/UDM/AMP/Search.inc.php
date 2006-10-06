@@ -14,6 +14,12 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
             'default' => '',
             'label'=>'Required SQL criteria in all searches'
             ),
+        'global_criteria_admin'=> array (
+            'available'=>true,
+            'type' => 'text',
+            'default' => '',
+            'label'=>'Required SQL criteria in all searches ( admin view )'
+            ),
         'criteria'=> array (
             'available'=>false,
             'label'=>'Passed criteria' ),
@@ -40,8 +46,13 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         
         if (isset($options['clear_criteria']) && $options['clear_criteria']) $this->criteria=array();
 
-		if (isset($options['global_criteria']) && $options['global_criteria']) { 
-            $new_criteria[]=$options['global_criteria']; 
+        if ( $this->udm->admin ) {
+            $global_crit_option = 'global_criteria_admin';
+        } else {
+            $global_crit_option = 'global_criteria';
+        }
+		if (isset($options[ $global_crit_option ]) && $options[ $global_crit_option ]) { 
+            $new_criteria[]=$options[ $global_crit_option ]; 
         }
 
 		if (!$this->udm->admin) { 

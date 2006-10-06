@@ -56,6 +56,8 @@ class AMP_Display_List {
     function __construct( $source = false, $criteria = array( ) ) {
         $this->_init_source( $source, $criteria  );
         $this->_init_translations( );
+        $this->_init_display_methods( );
+
         $this->_renderer = AMP_get_renderer();
         $this->_after_init( );
     }
@@ -245,6 +247,22 @@ class AMP_Display_List {
         
         if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
         if ( $this->_pager_target ) $this->_pager->setTarget( $this->_pager_target ); 
+    }
+
+    function _init_display_methods( ) {
+        $display_id = strtoupper( get_class( $this ));
+
+        if ( $display_id == 'AMP_DISPLAY_LIST' ) {
+            if ( isset( $this->_source_object )) {
+                $display_id .= '_' . $this->_source_object ;
+            } elseif ( isset( $this->name )) {
+                $display_id .= '_' . str_replace( ' ', '_' , $this->name );
+            } 
+        }
+        $display_id =  strtoupper( $display_id );
+        if ( defined( 'AMP_RENDER_' . $display_id )) {
+            $this->_item_display_method = constant( 'AMP_RENDER_' .$display_id );
+        }
     }
     // }}}
 

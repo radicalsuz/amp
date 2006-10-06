@@ -31,8 +31,8 @@ class AMP_Content_Image_Effects_Controller {
         $action = ( isset( $_REQUEST['action']) && $_REQUEST['action']) ? $_REQUEST['action'] : $this->_default_action;
 
         //validate request
-        if ( AMP_local_request( )
-             || AMP_Authenticate( 'admin')) {
+        if ( !( AMP_local_request( )
+             || AMP_Authenticate( 'admin'))) {
             $action = $this->_default_action;
         }
 

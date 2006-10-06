@@ -42,6 +42,22 @@ class AMPSystemLookup_SchedulesByItem extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_ScheduleItemSet extends AMPSystem_Lookup {
+    var $datatable = "scheduleitems";
+    var $result_field = "schedule_id";
+    var $sortby = "schedule_id, start_time";
+
+    function AMPSystemLookup_ScheduleItemSet( $schedule_id ) {
+        $this->criteria = $this->makeScheduleCriteria( $schedule_id );
+        $this->init( );
+    }
+
+    function makeScheduleCriteria( $schedule_id ) {
+        return 'schedule_id = ' . $schedule_id;
+    }
+
+}
+
 class ScheduleLookup_ItemSet {
     var $scheduleItems;
 

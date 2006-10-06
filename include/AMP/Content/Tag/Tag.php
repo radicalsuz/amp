@@ -108,7 +108,7 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
     function _create( $tag_name, $description = false ) {
         $tag = &new AMP_Content_Tag( AMP_Registry::getDbcon( ));
         $tag->setDefaults( );
-        $tag->setData( array( 'name' => $tag_name , 'description' => $description ));
+        $tag->mergeData( array( 'name' => $tag_name , 'description' => $description ));
         $result = $tag->save( );
         if ( !$result ) return false;
 

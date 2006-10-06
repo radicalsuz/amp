@@ -702,6 +702,8 @@ class AMPSystemLookup_PermissionLevel extends AMPSystem_Lookup {
 
 }
 
+// better to prefix all lookups the same for code reasons
+// this naming scheme is deprecated
 class AMPConstantLookup_NullDatetimes extends AMPConstant_Lookup {
     var $_prefix_values = 'AMP_NULL_DATETIME_VALUE';
     
@@ -710,6 +712,14 @@ class AMPConstantLookup_NullDatetimes extends AMPConstant_Lookup {
     }
 }
 
+class AMPSystemLookup_NullDateTimes extends AMPConstantLookup_NullDatetimes {
+    function AMPSystemLookup_NullDateTimes( ) {
+        $this->init( );
+    }
+}
+
+// better to prefix all lookups the same for code reasons
+// this naming scheme is deprecated
 class AMPConstantLookup_NullDates extends AMPConstant_Lookup {
     var $_prefix_values = 'AMP_NULL_DATE_VALUE';
     
@@ -718,6 +728,15 @@ class AMPConstantLookup_NullDates extends AMPConstant_Lookup {
     }
 }
 
+// better to prefix all lookups the same for code reasons
+class AMPSystemLookup_NullDates extends AMPConstantLookup_NullDates{
+    function AMPSystemLookup_NullDates( ) {
+        $this->init( );
+    }
+}
+
+// better to prefix all lookups the same for code reasons
+// this naming scheme is deprecated
 class AMPConstantLookup_BlastOptions extends AMPConstant_Lookup {
     var $dataset = array( 
         'DIA' => 'Democracy In Action',
@@ -727,6 +746,18 @@ class AMPConstantLookup_BlastOptions extends AMPConstant_Lookup {
     function AMPConstantLookup_BlastOptions( ){
         //interface
     }
+}
+
+class AMPSystemLookup_BlastOptions extends AMPSystem_Lookup {
+    var $dataset = array( 
+        'DIA' => 'Democracy In Action',
+        'phplist' => 'PHPlist'
+    );
+
+    function AMPSystemLookup_BlastOptions( ){
+        //interface
+    }
+
 }
 
 class AMPSystemLookup_DeclaredClasses {

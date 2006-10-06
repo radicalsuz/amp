@@ -1448,8 +1448,31 @@ function AMP_add_tags( $tag_ids = false, $tag_names = false, $item_id, $item_typ
 }
 
 function AMP_local_request( ){
-    return ( strpos( $_SERVER['SERVER_NAME'], $_SERVER['HTTP_REFERER']));
+    return ( strpos( $_SERVER['HTTP_REFERER'], $_SERVER['SERVER_NAME'] ));
 }
-			
+
+function AMP_lookup( $lookup_type, $lookup_var = null ) {
+    $lookup_types = array( 'AMPSystem_Lookup' => 'AMPSystemLookup_', 
+                            'AMPContent_Lookup' => 'AMPContentLookup_', 
+                            'Form_Lookup' => 'FormLookup_');
+    //the whole class name is passed
+    if ( class_exists( $lookup_type )) {
+        foreach ( $lookup_types as $base_type => $prefix ) {
+            if ( strpos( $lookup_type, $prefix ) === 0) {
+                $instance = str_replace( $prefix, '', $lookup_type );
+                return call_user_func_array( array( $base_type, 'instance'), array( $instance, $lookup_var ));
+            }
+        }
+        return new $lookup_type( $lookup_var );
+    }
+
+    //just the instance is passed
+    foreach( $lookup_types as $base_type => $prefix ) {
+        $values = call_user_func_array( array( $base_type, 'instance'), array( $instance, $lookup_var ));
+        if ( $values ) return $values;
+    }
+    return $values;
+}
+
 
 ?>

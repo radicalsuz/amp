@@ -14,22 +14,43 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
     var $_suppress_header = true;
     var $_suppress_messages = true;
 
-    var $_image_attr = array( 'width' => '16', 'height' => '16', 'border' => '0', 'align' => 'left' );
+    //var $_image_attr = array( 'width' => '16', 'height' => '16', 'border' => '0', 'align' => 'left' );
+    var $_image_attr = array( 'border' => '0', 'align' => 'left' );
+    var $_image_width = 64;
 
     var $_css_class_container_list = 'tagged_items';
 
     var $_pager_active = false;
+
+    var $_item_displays_custom = array( );
 
     function AMP_Content_Tag_Item_Public_List( $source = false, $criteria = array( ) ) {
         $this->__construct( $source, $criteria );
     }
 
     function _renderItem( &$source ) {
+        if ( isset( $this->_item_displays_custom[ $source->getItemCategory( )])) {
+            $custom_display = $this->_item_displays_custom[ $source->getItemCategory( )] ;
+            return $custom_display( $source, $this ) ;
+        }
         
-        $icon = $this->_makeIcon( $source->getImageRef( ) );
+        $image = $source->getImageRef( );
+        $icon = $this->_makeIcon( $image );
+        $height = $image ?
+                    $height = round( $image->getHeight( ) * ( $this->_image_width / $image->getWidth( ) ))
+                    : 0;
+        
         $name = $source->getItemName( );
         $url = $source->getURL( );
-        $item_output = $this->_renderer->link( $url, $icon . $name, array( 'class' => $this->_css_class_container_list_item ));
+        $link_attr = array( 'class' => $this->_css_class_container_list_item );
+        if ( $height ) {
+            $link_attr['style'] = 'height: '.$height.'px;' ;
+        }
+
+        $item_output = $this->_renderer->link( $url, 
+                                                $icon . $this->_renderer->space( 2 ) .  $name , 
+                                                $link_attr
+                                                );
 
         return $this->_renderSubheader( $source ) . $item_output;
 
@@ -51,8 +72,7 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
 
     function _makeIcon( $image ) {
         if ( !$image ) return false;
-        trigger_error( 'image found ' );
-        $image_url = $image->getURL( AMP_IMAGE_CLASS_THUMB );
+        $image_url = AMP_url_add_vars( AMP_CONTENT_URL_IMAGE, array( 'action=resize', 'class=thumb', 'filename=' . $image->getName( ), 'width=' . $this->_image_width ));
         return $this->_renderer->image( $image_url, $this->_image_attr );
     }
 
@@ -67,7 +87,12 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
         $source = false;
         $source = array( );
         foreach( $source_segments as $item_type => $item_set ) {
-            $itemSource->sort( $item_set );
+            $custom_display_constant  = 'AMP_RENDER_' . strtoupper( str_replace( ' ', '_', $item_type ));
+            if ( defined( $custom_display_constant )) {
+                $this->_item_displays_custom[ $item_type ] = constant( $custom_display_constant );
+            }
+
+            $itemSource->sort( $item_set, 'itemName' );
             $source =  $source + $item_set;
         }
 

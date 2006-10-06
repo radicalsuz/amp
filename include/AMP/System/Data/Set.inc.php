@@ -194,7 +194,7 @@
         if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." index"); 
         $result = $this->dbcon->CacheGetAssoc($sql);
         if ( !$result && $db_error = $this->dbcon->ErrorMsg( )) {
-            trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($this), $dbError ) . $sql );
+            trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($this) . __FUNCTION__, $db_error ) . $sql );
         }
     }
 
@@ -207,6 +207,10 @@
         $sql = "SELECT count(" . $this->id_field . ") as qty from "
             . $this->datatable . $this->_makeCriteria();
         $set = $this->dbcon->Execute( $sql );
+
+        if ( !$set && $db_error = $this->dbcon->ErrorMsg( )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($this) . __FUNCTION__, $db_error ) . $sql );
+        }
         return $set->Fields( 'qty' );
     }
 
@@ -226,6 +230,9 @@
             . $this->_makeCriteria();
 			$set = $this->dbcon->CacheGetAssoc( $sql );
             if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." lookup " .$field); 
+            if ( !$set && $db_error = $this->dbcon->ErrorMsg( )) {
+                trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($this) . __FUNCTION__, $db_error ) . $sql );
+            }
 		} else {
 			while($record = $this->getData()) {
 				$set[$record['id']] = $record[$field];

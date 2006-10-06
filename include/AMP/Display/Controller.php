@@ -52,7 +52,6 @@ class AMP_Display_Controller extends AMP_System_Component_Controller {
             require_once( 'AMP/Content/Page.inc.php');
             $page = & AMPContent_Page::instance( );
             $page->setIntroText( $this->_publicpage_request );
-            trigger_error( 'setting intro ' . $this->_publicpage_request );
             $intro = &$page->getIntroText( );
 
             if ( !$intro ) return false; 

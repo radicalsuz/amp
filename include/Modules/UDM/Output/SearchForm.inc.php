@@ -378,6 +378,9 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         $type     = isset( $field_def['type']) ? $field_def[ 'type'   ]:'';
         $label    = isset( $field_def['label']) ? $field_def[ 'label'  ] : '';
         $defaults = isset( $field_def['values']) ? $field_def[ 'values' ] : null; 
+        if ( isset( $field_def['lookup']) && is_object( $field_def['lookup'])) {
+            $defaults = $field_def['lookup']->dataset;
+        }
         $size     = isset( $field_def['size']) ? $field_def[ 'size' ]:null;
 		$renderer =& $form->defaultRenderer();
 

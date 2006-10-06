@@ -101,6 +101,10 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
                                      $label,
                                      $values );
             if ( isset( $field['size']) && $field['type'] == 'text') $el->setSize( $field['size']);
+            if ( $field['type'] == 'textarea') {
+                $el->setRows( 5 );
+                $el->setCols( 50 );
+            }
 
         }
     }
