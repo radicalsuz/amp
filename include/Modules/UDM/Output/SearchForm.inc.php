@@ -14,11 +14,6 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	var $control_class;
     var $_included_fields;
     var $options = array (
-        'show_distance'=>array(
-            'label'=>'Allow Search by Zip/Distance',
-            'type'=>'checkbox',
-            'available' => true,
-            'default'=>true), 
         'form_name'=>array(
             'label'=>'Name of Search Form',
             'available'=>false,
@@ -77,6 +72,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
 		//Zip Code Search Request
 		if (isset($_REQUEST['zip'])&&isset($_REQUEST['distance'])&&$_REQUEST['zip']&&$_REQUEST['distance']) {
+            trigger_error( 'zip it baby');
 			$srch_options['zip']=$_REQUEST['zip'];
 			$srch_options['distance']=$_REQUEST['distance'];
             $srch_loc=&new Geo ($this->dbcon, NULL, NULL, NULL, $_REQUEST['zip']);
@@ -89,7 +85,9 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
                 $zipset.=")";
                 $sql_criteria[]="zip IN $zipset";
 			} else {
-                $this->udm->errorMessage("Sorry, no match found for that zip code");
+                $flash = AMP_System_Flash::instance( );
+                $flash->add_message( "Sorry, no match found for that zip code" );
+                //$this->udm->errorMessage("Sorry, no match found for that zip code");
             }
 		} 
 		//State Request from index page
@@ -338,7 +336,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	    $form = &new HTML_QuickForm( $frmName, $frmMethod, $frmAction );
 
         //remove the zip field if distance search is disabled
-        if (!$options['show_distance']) unset ($this->fields_def['zip']);
+        //this is no longer relevant since all the fields can be specified directly
+        //if (!$options['show_distance']) unset ($this->fields_def['zip']);
 
 		if ( isset( $this->fields_def[ 'field_order' ] ) ) {
 		

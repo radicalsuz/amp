@@ -96,14 +96,17 @@ class UserDataPlugin_Sort_AMP extends UserDataPlugin {
 
     }
 
-    function makelink ($sortname) {
+    function makelink ($sortname, $display_name = false ) {
         #if ($searchform=&$this->udm->getPlugin('Output', 'SearchForm')) {
         #    $link=sprintf("<a href=\"javascript: document.forms['%1\$s'].elements['sortby'].value = '%2\$s'; 
         #        document.forms['%1\$s'].submit();\">%3\$s</a>", $searchform->options['form_name']['value'], $sortname, $sortname);
 
         $url_set = $this->udm->parse_URL_crit();
         unset($url_set['sortby']);
-        $link='<a href="'.$_SERVER['PHP_SELF'].'?'.join('&', $url_set).'&sortby='.$sortname.'">'.$sortname.'</a>';
+        if ( !$display_name ) {
+            $display_name = $sortname;
+        }
+        $link='<a href="'.$_SERVER['PHP_SELF'].'?'.join('&', $url_set).'&sortby='.$sortname.'">'.$display_name.'</a>';
 
         return $link;
     }

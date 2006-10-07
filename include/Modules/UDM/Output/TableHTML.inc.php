@@ -109,7 +109,12 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         foreach ($this->display_fieldset as $key) {
             if ($sort_set= $this->udm->getPlugins('Sort')) {
                 $sort_obj=&$sort_set[key($sort_set)];
-                $key=$sort_obj->makelink($key);
+
+                $display_name = false;
+                if ( isset( $this->udm->fields[$key]) && isset( $this->udm->fields[$key]['label'])) {
+                    $display_name = $this->udm->fields[ $key ]['label'];
+                }
+                $key=$sort_obj->makelink($key, $display_name );
             }
             $list_html_headers.=sprintf($options['list_html_header_template'], $key);
         }
@@ -132,10 +137,21 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         $list_row_start=sprintf($options['list_row_start_template'], $current_row['id'], $bgcolor, $bgcolor);
 
         foreach($this->display_fieldset as $key) {
-            //Check for values swapped by Lookup
+            $kvalue = false;
+            //Check for values swapped by Lookup ( legacy, probably doesn't work 2006-10 AP )
             if (isset($this->Lookups[$key])) {
                 $kvalue=$this->Lookups[$key]['Set'][$current_row[$key]];
-            } else {
+            } 
+            // swap values from active lookup def
+            if ( isset( $this->udm->fields[$key]['lookup'] ))  {
+                if ( $values = $this->udm->fields[$key]['lookup']->dataset ) {
+                    if ( isset( $values[ $current_row[ $key ]])) {
+                        $kvalue = $values[ $current_row[ $key ]];
+                    }
+                }
+            } 
+            
+            if ( !$kvalue ) {
                 $kvalue=$current_row[$key];
             }
             //Main Field Format Statement

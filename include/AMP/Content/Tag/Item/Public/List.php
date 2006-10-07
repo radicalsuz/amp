@@ -87,7 +87,7 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
         $source = false;
         $source = array( );
         foreach( $source_segments as $item_type => $item_set ) {
-            $custom_display_constant  = 'AMP_RENDER_' . strtoupper( str_replace( ' ', '_', $item_type ));
+            $custom_display_constant  = 'AMP_RENDER_LIST_ITEM_' . strtoupper( str_replace( ' ', '_', $item_type ));
             if ( defined( $custom_display_constant )) {
                 $this->_item_displays_custom[ $item_type ] = constant( $custom_display_constant );
             }
