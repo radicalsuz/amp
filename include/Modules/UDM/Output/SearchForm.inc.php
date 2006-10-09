@@ -169,7 +169,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
         //name
         if ( isset( $_REQUEST['name']) && $_REQUEST['name']) {
-            $sql_criteria[] = 'Concat( if( isnull( First_Name ), "", First_Name ), if ( isnull( Last_Name ), "", Last_Name ))  LIKE ' . $this->dbcon->qstr( '%' . $_REQUEST['name'] . '%' );
+            $sql_criteria[] = 'Concat( if( isnull( First_Name ), "", First_Name ), if ( isnull( Last_Name ), "", Last_Name ), if ( isnull( Company ), "", Company ))  LIKE ' . $this->dbcon->qstr( '%' . $_REQUEST['name'] . '%' );
         }
 
         $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate', 'tag', 'name');
