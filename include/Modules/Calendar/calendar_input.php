@@ -27,8 +27,18 @@ $MM_abortEdit = 0;
 $MM_editQuery = "";
 
 // *** Insert Record: set Variables
-
+$captcha_valid = false;
+$captcha_message = '';
 if (isset($_POST['MM_insert'])&&$_POST['MM_insert']) {
+    require_once( 'AMP/Form/Element/Captcha.inc.php');
+    $captcha_demo = &new PhpCaptcha( array( ) );
+    $captcha_valid = $captcha_demo->Validate( $_POST['captcha']);
+    if ( !$captcha_valid ) {
+        $captcha_message = AMP_TEXT_ERROR_FORM_CAPTCHA_FAILED;
+    }
+}
+
+if (isset($_POST['MM_insert'])&&$_POST['MM_insert'] && $captcha_valid ) {
 
 	// $MM_editConnection = MM__STRING;
 	$startdate = DateConvertIn($_REQUEST['startdate']);
@@ -110,19 +120,30 @@ if (!isset($_GET['thank'])) {
     $mod_id = 15;
     require_once("AMP/BaseTemplate.php"); 
     require_once("AMP/BaseModuleIntro.php"); 
+
+	$form_elements = array( 'type','startdate','time','event','description','longdescription','organization','contact','email','phone1','url','location','city','lstate','lcountry','laddress','lzip','fname2','lname2','organization2','address2','city2','state2','zip2','country2','email2','phone2','endorse','publish','repeat','student','region');
+    foreach( $form_elements as $element_name ) {
+        $form_values[ $element_name ] = isset( $_POST[ $element_name ]) ? $_POST[$element_name] : "" ;
+    }
 ?>
       <form action="<?php echo $MM_editAction?>" method="POST" name="form" onSubmit="MM_validateForm('event','','R','startdate','','R','contact','','R','email','','R','city','','R','description','','R');return document.MM_returnValue" >
         
   <table width="100%" align="center" class="form">
     <tr> 
       <td class="form">Event Name*</td>
-      <td> <input type="text" name="event" size="40"> </td>
+      <td> <input type="text" name="event" size="40" value="<?php print $form_values['event'];?>"> </td>
     </tr>
     <tr> 
       <td class="form">Type</font></td>
-      <td class="test"> <select NAME="type" id="type">
+      <td class="test"> 
+          <?php    
+          $event_type_options = AMPSystem_Lookup::instance( 'EventTypes');
+          $event_type_options = array( '' => 'Select Event Type') + $event_type_options; 
+          print AMP_buildSelect( 'type', $event_type_options, $form_values[ 'type'], 'id="type"');
+      /*    
+      <select NAME="type" id="type">
           <option value="0">Select Event Type</option>
-          <?php    if ($eventtype__totalRows > 0){
+          if ($eventtype__totalRows > 0){
     $eventtype__index=0;
     $eventtype->MoveFirst();
     WHILE ($eventtype__index < $eventtype__totalRows){
@@ -134,18 +155,22 @@ if (!isset($_GET['thank'])) {
     }
     $eventtype__index=0;  
     $eventtype->MoveFirst();
-  } ?>
-      </select> &nbsp;&nbsp;<?php if ($studenton == 1){?><br> <input name="student" type="checkbox" id="student" value="1">&nbsp;&nbsp;Student Event<?php } ?>
+  } 
+      </select> 
+  */
+      ?>
+      &nbsp;&nbsp;<?php if ($studenton == 1){?><br> <input name="student" type="checkbox" id="student" value="1" 
+      <?php if ( $form_values['student']) print 'checked'; ?>>&nbsp;&nbsp;Student Event<?php } ?>
 		</td>
     </tr>
     <tr> 
       <td class="form">Event Date*</font></td>
-      <td class="text"> <input name="startdate" type="text" value="00-00-0000" size="13">
+      <td class="text"> <input name="startdate" type="text" value="00-00-0000" size="13" value = "<?php print $form_values['startdate'];?>">
         Format must be month-day-year (12-30-2002) </td>
     </tr>
     <tr> 
       <td class="form">Event Time</td>
-      <td><input type="text" name="time" size="20"></td>
+      <td><input type="text" name="time" size="20" value="<?php print $form_values['time'];?>"></td>
     </tr>
     <tr> 
       <td class="form">Weekly or Repeating Event</td>
@@ -153,24 +178,24 @@ if (!isset($_GET['thank'])) {
     </tr>
     <tr> 
       <td class="form">Event Cost</td>
-      <td><input name="cost" type="text" id="cost" size="20"></td>
+      <td><input name="cost" type="text" id="cost" size="20" value="<?php print $form_values['cost'];?>"></td>
     </tr>
     <tr> 
       <td class="form">Web Site</td>
-      <td><input name="url" type="text" value="http://" size="35"></td>
+      <td><input name="url" type="text" value="http://" size="35" value="<?php print $form_values['url'];?>"></td>
     </tr>
     <tr> 
       <td colspan="2" class="form"> <br>
-        Brief Description of the event *<br> <textarea name="description" rows="4" cols="48" wrap="VIRTUAL"></textarea> 
+        Brief Description of the event *<br> <textarea name="description" rows="4" cols="48" wrap="VIRTUAL"><?php print $form_values['description'];?></textarea> 
       </td>
     </tr>
     <tr> 
       <td colspan="2" class="form"> <br>
-        Full Description of the event (optional)<br> <textarea name="longdescription" rows="10" cols="48" wrap="VIRTUAL"></textarea> 
+        Full Description of the event (optional)<br> <textarea name="longdescription" rows="10" cols="48" wrap="VIRTUAL"><?php print $form_values['longdescription'];?></textarea> 
       </td>
     </tr>
     <tr> 
-      <td colspan="2" class="form">Endorsing Organizations (If any):<br> <textarea name="organization" cols="48" rows="3" wrap="VIRTUAL"></textarea> 
+      <td colspan="2" class="form">Endorsing Organizations (If any):<br> <textarea name="organization" cols="48" rows="3" wrap="VIRTUAL"><?php print $form_values['organization'];?></textarea> 
         <br> </td>
     </tr>
     <tr> 
@@ -182,15 +207,15 @@ if (!isset($_GET['thank'])) {
                 </tr>
                 <tr> 
                   <td class="form">Contact</font> Name:*</td>
-                  <td><input name="contact" type="text" id="contact" size="40"></td>
+                  <td><input name="contact" type="text" id="contact" size="40" value="<?php print $form_values['contact'];?>"></td>
                 </tr>
                 <tr> 
                   <td class="form">Contact Email: *</td>
-                  <td><input type="text" name="email" id="email" size="40"></td>
+                  <td><input type="text" name="email" id="email" size="40" value="<?php print $form_values['email'];?>"></td>
                 </tr>
                 <tr> 
                   <td class="form">Contact Phone:</td>
-                  <td><input type="text" name="phone1" size="40"></td>
+                  <td><input type="text" name="phone1" size="40" value="<?php print $form_values['phone1'];?>"></td>
                 </tr>
               </table>
               <table width="100%" border="0">
@@ -200,15 +225,20 @@ if (!isset($_GET['thank'])) {
                 </tr>
                 <tr> 
                   <td class="form">Event Location</td>
-                  <td><input name="location" type="text" id="location" size="40"></td>
+                  <td><input name="location" type="text" id="location" size="40" value="<?php print $form_values['location'];?>"></td>
                 </tr>
                 <tr> 
                   <td class="form">Event City:*</td>
-                  <td><input name="city" type="text" id="city" size="40"></td>
+                  <td><input name="city" type="text" id="city" size="40" value="<?php print $form_values['city'];?>"></td>
                 </tr>
                 <tr> 
                   <td class="form">Event State*</td>
-                  <td><select NAME="lstate" id="lstate">
+                  <td><?php
+                  $state_values = AMPSystem_Lookup::instance( 'Regions_US');
+                  $state_values = array( '' => 'Select State') + $state_values;
+                  print AMP_buildSelect( 'lstate', $state_values, $form_values['lstate'], 'id="lstate"');
+/*
+                  <select NAME="lstate" id="lstate">
                       <option>Select State</option>
                       <?php    if ($state__totalRows > 0){
     $state__index=0;
@@ -224,12 +254,21 @@ if (!isset($_GET['thank'])) {
     $state__index=0;  
     $state->MoveFirst();
   } ?>
-                    </select></td>
+                    </select>
+                    */
+                  ?>
+                    </td>
                 </tr>
 				<tr> 
        <?php if ($nonstateregion ==1) {
 	   ?>           <td class="form">Region</td>
-                  <td><select NAME="region" id="region">
+                  <td>
+                  <?php
+                  $region_values = AMPSystem_Lookup::instance( 'regions');
+                  $region_values = array( '' => 'Select Region') + $region_values;
+                  print AMP_buildSelect( 'region', $region_values, $form_values['region'], 'id="region"');
+                  /*
+                  <select NAME="region" id="region">
                       <option>Select Region</option>
                       <?php  
 					  $regionsel=$dbcon->CacheExecute("SELECT * FROM region order by title asc") or DIE($dbcon->ErrorMsg());
@@ -241,20 +280,30 @@ if (!isset($_GET['thank'])) {
                       <?php
   $regionsel->MoveNext();
 } ?>
-                    </select></td>
+                    </select>
+                    */ ?>
+                    </td>
                 </tr><?php } ?>
                 <tr> 
                   <td class="form">Event Country:*</td>
-                  <td><select NAME="lcountry" id="lcountry">
-                      <?php echo $countryDropDown; ?> </select></td>
+                  <td> 
+                  <?php
+                  $country_values = AMPSystem_Lookup::instance( 'Regions_World');
+                  $country_values = array( '' => 'Select Country') + $country_values;
+                  print AMP_buildSelect( 'lcountry', $country_values, $form_values['lcountry'], 'id="lcountry"');
+                  /*
+                  <select NAME="lcountry" id="lcountry">
+                      <?php echo $countryDropDown; ?> </select>
+                      */?>
+                      </td>
                 </tr>
                 <tr> 
                   <td class="form">Event Street Address:</td>
-                  <td><input name="laddress" type="text" id="laddress" size="40"></td>
+                  <td><input name="laddress" type="text" id="laddress" size="40" value="<?php print $form_values['laddress'];?>"></td>
                 </tr>
                 <tr> 
                   <td class="form">Event Zip</td>
-                  <td><input name="lzip" type="text" id="lzip" size="40"></td>
+                  <td><input name="lzip" type="text" id="lzip" size="40" value="<?php print $form_values['lzip'];?>"></td>
                 </tr>
               </table></td>
             <td>&nbsp;</td>
@@ -268,29 +317,32 @@ if (!isset($_GET['thank'])) {
     </tr>
     <tr> 
       <td class="form">First Name:</td>
-      <td><input name="fname2" type="text" id="fname2" size="35"></td>
+      <td><input name="fname2" type="text" id="fname2" size="35" value="<?php print $form_values['fname2'];?>"></td>
     </tr>
     <tr> 
       <td class="form">Last Name:</td>
-      <td><input name="lname2" type="text" id="lname2" size="35"></td>
+      <td><input name="lname2" type="text" id="lname2" size="35" value="<?php print $form_values['lname2'];?>"></td>
     </tr>
     <tr> 
       <td class="form">Organization (if any):</td>
-      <td><input name="organization2" type="text" id="organization2" size="35"></td>
+      <td><input name="organization2" type="text" id="organization2" size="35" value="<?php print $form_values['organization2'];?>"></td>
     </tr>
     <tr> 
       <td class="form">Address</td>
-      <td><input name="address2" type="text" id="address2" size="35"></td>
+      <td><input name="address2" type="text" id="address2" size="35" value="<?php print $form_values['address2'];?>"></td>
     </tr>
     <tr> 
       <td class="form"> <div align="left">City</div></td>
       <td><div align="left"> 
-          <input name="city2" type="text" id="city2" size="35">
+          <input name="city2" type="text" id="city2" size="35" value="<?php print $form_values['city2'];?>">
         </div></td>
     </tr>
     <tr> 
       <td class="form"><div align="left">State</div></td>
       <td><div align="left"> 
+        <?php
+            print AMP_buildSelect( 'state2', $state_values, $form_values['state2'], 'id="state2"');
+            /*
           <select NAME="state2" id="state2">
             <option>Select State</option>
             <?php    if ($state__totalRows > 0){
@@ -308,32 +360,52 @@ if (!isset($_GET['thank'])) {
     $state->MoveFirst();
   } ?>
           </select>
+          */?>
         </div></td>
     </tr>
     <tr> 
       <td class="form"><div align="left">Zip</div></td>
       <td><div align="left"> 
-          <input name="zip2" type="text" id="zip2" size="15">
+          <input name="zip2" type="text" id="zip2" size="15" value="<?php print $form_values['zip2'];?>">
         </div></td>
     </tr>
     <tr> 
       <td class="form"><div align="left">Country</div></td>
       <td><div align="left"> 
+      <?php
+                  print AMP_buildSelect( 'country2', $country_values, $form_values['country2'], 'id="country2"');
+                  /*
           <select name="country2" id="select">
             <?php echo $countryDropDown; ?> 
           </select>
+          */?>
         </div></td>
     </tr>
     <tr> 
       <td class="form"><div align="left">Phone</div></td>
       <td><div align="left"> 
-          <input name="phone2" type="text" id="phone2" size="35">
+          <input name="phone2" type="text" id="phone2" size="35" value="<?php print $form_values['phone2'];?>">
         </div></td>
     </tr>
     <tr> 
       <td class="form"><div align="left">E-mail</div></td>
       <td><div align="left"> 
-          <input name="email2" type="text" id="email2" size="35">
+          <input name="email2" type="text" id="email2" size="35" value="<?php print $form_values['email2'];?>">
+        </div></td>
+    </tr>
+    <tr> 
+      <td class="form"> </td>
+      <td>
+      <div align="left"> 
+            <span class='red'><font color = 'red'><?php print $captcha_message; ?></font></span><BR />
+            <img src='<?php print AMP_url_add_vars( AMP_CONTENT_URL_CAPTCHA, array( 'key=' . AMP_SYSTEM_UNIQUE_VISITOR_ID ));?>'/>
+      </div></td>
+    </tr>
+    <tr> 
+      <td class="form"><div align="left">Enter the code from the image above</div></td>
+      <td><div align="left"> 
+          <input name="captcha" type="text" id="captcha" size="8"/>
+          <input name='AMP_SYSTEM_UNIQUE_VISITOR_ID' type='hidden' value='<?php print AMP_SYSTEM_UNIQUE_VISITOR_ID; ?>'/>
         </div></td>
     </tr>
    
