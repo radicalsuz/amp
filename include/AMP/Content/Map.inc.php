@@ -91,7 +91,7 @@ class AMPContent_Map {
         foreach( $children as $child ) {
             $results[] = $child;
             if (!($descendants = $this->getDescendants( $child ))) continue;
-            $results = $results + $descendants;
+            $results = array_merge( $results,$descendants );
         }
         return $results;
     }

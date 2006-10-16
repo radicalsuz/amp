@@ -580,7 +580,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->_model_id = $this->_model->id;
         $this->notify( 'copy' );
 
-        $this->message( sprintf( AMP_TEXT_COPY_SUCCESS, $this->_model->getName( )), 
+        $this->message( sprintf( AMP_TEXT_DATA_COPY_SUCCESS, $this->_model->getName( )), 
                         $this->_unique_action_key( ),
                         $this->_model->get_url_edit( ));
 
@@ -610,7 +610,9 @@ class AMP_System_Component_Controller_Sticky extends AMP_System_Component_Contro
     }
 
     function display_default( ){
-        if ( !( isset( $this->_model_id ) && $this->_model_id )) {
+        $sticky_actions = array( 'edit', 'save');
+        if ( !( isset( $this->_model_id ) && $this->_model_id )
+             || ( array_search( $this->get_action(), $sticky_actions ) === FALSE )) {
             return parent::display_default( );
         }
         $display = &$this->_map->getComponent( 'form' );

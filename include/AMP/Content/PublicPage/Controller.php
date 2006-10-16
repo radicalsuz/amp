@@ -28,7 +28,8 @@ class PublicPage_Controller extends AMP_System_Component_Controller_Map {
 
         require_once( 'AMP/Content/Article.inc.php');
         $this->_model = &new Article( AMP_Registry::getDbcon( ));
-        $this->_model->setData( $this->get_form_data( ));
+        $this->_model->setDefaults( );
+        $this->_model->mergeData( $this->get_form_data( ));
 
         //attempt to save the submitted data
         if ( !$this->_model->save( )) {

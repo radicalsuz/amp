@@ -88,7 +88,7 @@ class ComponentMap_PublicPage extends AMPSystem_ComponentMap {
             'link'  =>  $publish_item->getURL( )
             );
 
-        if ( !$form_values['link']){
+        if ( !$form_values['link']) {
             require_once( 'AMP/System/Flash.php');
             $flash = &AMP_System_Flash::instance( );
             $flash->add_message( AMP_TEXT_CONTENT_PUBLIC_NO_LINK );

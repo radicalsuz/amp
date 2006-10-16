@@ -109,6 +109,7 @@ class AMPSearchForm extends AMPForm_XML {
         }
         return $this->form->addElement( 'select', $name, $label, $valueset);
     }
+
     function &_addElementDefault ( $name, $field_def ) {
         $defaults = $this->_getDefault( $name );
         $final_label = $field_def['label'];

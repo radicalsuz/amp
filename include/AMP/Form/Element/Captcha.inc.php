@@ -60,7 +60,7 @@
    define('CAPTCHA_HEIGHT', 50); // max 200
    define('CAPTCHA_NUM_CHARS', 5);
    define('CAPTCHA_NUM_LINES', 70);
-   define('CAPTCHA_CHAR_SHADOW', true);
+   define('CAPTCHA_CHAR_SHADOW', false);
    define('CAPTCHA_OWNER_TEXT', AMP_SITE_URL );
    define('CAPTCHA_CHAR_SET', ''); // defaults to A-Z
    define('CAPTCHA_CASE_INSENSITIVE', true);

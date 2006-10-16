@@ -362,7 +362,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     /**
-     * Alias for searchf
+     * Alias for search
      * 
      * @param mixed $criteria 
      * @param mixed $class_name 

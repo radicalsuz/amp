@@ -1617,7 +1617,7 @@
 			$key = false;
 			if (empty($ADODB_INCLUDED_MEMCACHE)) include(ADODB_DIR.'/adodb-memcache.lib.inc.php');
 			if ($sql) $key = $this->_gencachename($sql.serialize($inputarr),false,true);
-			flushmemCache($key, $this->memCacheHost, $this->memCachePort, $this->debug);
+			FlushMemCache($key, $this->memCacheHost, $this->memCachePort, $this->debug);
 			return;
 		}
 

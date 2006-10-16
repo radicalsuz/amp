@@ -196,6 +196,7 @@
         if ( !$result && $db_error = $this->dbcon->ErrorMsg( )) {
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($this) . __FUNCTION__, $db_error ) . $sql );
         }
+        return $result;
     }
 
     function RecordCount() {

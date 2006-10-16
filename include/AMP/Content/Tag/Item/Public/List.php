@@ -29,8 +29,8 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
     }
 
     function _renderItem( &$source ) {
-        if ( isset( $this->_item_displays_custom[ $source->getItemCategory( )])) {
-            $custom_display = $this->_item_displays_custom[ $source->getItemCategory( )] ;
+        $custom_display = $this->_get_custom_render_function( $source->getItemCategory( )) ;
+        if ( $custom_display ) {
             return $custom_display( $source, $this ) ;
         }
         
@@ -87,16 +87,36 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
         $source = false;
         $source = array( );
         foreach( $source_segments as $item_type => $item_set ) {
-            $custom_display_constant  = 'AMP_RENDER_LIST_ITEM_' . strtoupper( str_replace( ' ', '_', $item_type ));
-            if ( defined( $custom_display_constant )) {
-                $this->_item_displays_custom[ $item_type ] = constant( $custom_display_constant );
-            }
-
             $itemSource->sort( $item_set, 'itemName' );
             $source =  $source + $item_set;
         }
 
         
+    }
+
+    function _get_custom_render_function( $item_type ) {
+        if ( isset( $this->_item_displays_custom[ $item_type ]))  {
+            return $this->_item_displays_custom[ $item_type ];
+        }
+
+        //check constants for defined RENDER method
+        $custom_display_constant  = 'AMP_RENDER_LIST_ITEM_' . strtoupper( str_replace( ' ', '_', $item_type ));
+        if ( !defined( $custom_display_constant )) {
+            $this->_item_displays_custom[ $item_type ] = false;
+            return false;
+        } 
+        
+        //make sure RENDER method is defined as a function
+        $custom_display_function = constant( $custom_display_constant );
+        if ( !function_exists( $custom_display_function )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $custom_display_function ));
+            $this->_item_displays_custom[ $item_type ] = false;
+            return false;
+        }
+
+        $this->_item_displays_custom[ $item_type ] = $custom_display_function ;
+        return $custom_display_function;
+
     }
 
 }

@@ -110,7 +110,7 @@ $ADODB_INCLUDED_MEMCACHE = 1;
 		return $true;
 	}
 
-	function flushmemcache($key=false, $host, $port, $debug=false)
+	function FlushMemCache($key=false, $host, $port, $debug=false)
 	{
         $AMP_key = AMP_CACHE_TOKEN_ADODB . $key;
 		if ($key) {

@@ -48,6 +48,7 @@ class AMPContentLookup_ActiveClasses {
         require_once ('AMP/Content/Article/Set.inc.php');
         $articleset = & new ArticleSet ( AMP_Registry::getDbcon() );
         if (!( $counts = $articleset->getGroupedIndex( 'class' ))) return false;
+
         $class_set = & AMPContent_Lookup::instance( 'class' );
         $this->dataset = array_combine_key( array_keys( $counts ), $class_set );
         asort( $this->dataset );
