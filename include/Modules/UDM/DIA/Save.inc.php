@@ -228,7 +228,7 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
     }
 
     function addLinkedMapping( $supporter_id, $mapped_data, $table ){
-        $mapped_data['supporter_KEY'] = $supporter_id;
+        $mapped_data['key'] = $supporter_id;
         /**
          * Hacktastic exceptions for calendar date/time fields 
          */
