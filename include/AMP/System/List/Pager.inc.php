@@ -156,6 +156,9 @@ class AMPSystem_ListPager extends AMPDisplay_HTML {
         if ( $new_offset ) $page_url_vars['offset'] ='offset=' . $new_offset ;
         if ( $this->_qty != $this->_default_qty) $page_url_vars['qty'] = 'qty=' . $this->_qty;
         if ( !isset( $this->_url_target )) $this->_url_target = $_SERVER['PHP_SELF'];
+        if ( strpos( $this->_url_target, '//') === 0 ) {
+            $this->_url_target = substr( $this->_url_target, 2 );
+        }
 
          return AMP_Url_AddVars( $this->_url_target , array_merge( $this->_getURLValues() , $page_url_vars )); 
     }

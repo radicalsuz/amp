@@ -282,5 +282,8 @@ class AMPFormTemplate {
         $this->pattern_parts['space'] = "&nbsp;&nbsp;";
     }
 
+    function __sleep( ) {
+        return array_keys( get_object_vars( $this ));
+    }
 }
 ?>

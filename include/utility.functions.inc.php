@@ -843,6 +843,34 @@ function AMP_is_cacheable_url( ) {
 
 }
 
+function AMP_cached_image_request( ) {
+    $cache_key = AMP_CACHE_TOKEN_IMAGE . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+    if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
+        $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
+    }
+    require_once( 'AMP/System/Cache/File.php');
+    $file_cache =  new AMP_System_Cache_File( );
+    $file_name = $file_cache->authorize( $cache_key );
+    $file_path = $file_cache->path( $file_name );
+    if ( !file_exists( $file_path )) {
+        return false;
+    }
+
+    header( "Content-Type: " . mime_content_type( $file_path ));
+    $fRef = fopen( $file_path, 'r');
+    fpassthru( $fRef );
+    fclose( $fRef );
+    return true;
+
+}
+
+function AMP_assert_var( $varname ) {
+    if ( !isset( $_REQUEST['varname'])) {
+        return false;
+    }
+    return $_REQUEST['varname'];
+}
+
 function AMP_cached_request( $timeout = null  ){
     //signal that the current request is cacheable
     //because it has requested a cached copy of itself
@@ -885,7 +913,17 @@ if (!function_exists( 'AMP_cachePageItem' )) {
 if (!function_exists( 'AMP_cacheFlush' )) {
     function AMP_cacheFlush( $key_token = null ) {
         $cache = &AMP_get_cache( );
-        if ( !$cache ) return false;
+
+        if ( isset( $key_token )) {
+            $flush_command = "find ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . " -name " . $key_token .'\* | xargs rm'; 
+        } else {
+            $flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "*";
+        }
+        system( $flush_command );
+
+        if ( !$cache )  {
+            return false;
+        }
         $cache->clear( $key_token );
     }
 }
@@ -1236,14 +1274,6 @@ if ( !function_exists( 'AMP_get_cache')){
     }
 }
 
-if ( !function_exists( 'AMP_validate_url')){
-    function AMP_validate_url( $test_url ){
-        if( preg_match( '/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}'
-                   .'((:[0-9]{1,5})?\/.*)?$/i' ,$test_url)) return $test_url;
-        return false;
-    }
-}
-
 if ( !function_exists( 'AMP_verifyDateValue')){
     function AMP_verifyDateValue( $date_value ){
         if ( !$date_value ) return false;
@@ -1468,6 +1498,8 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
 
     //just the instance is passed
     foreach( $lookup_types as $base_type => $prefix ) {
+        $instance = $lookup_type;
+        if ( !class_exists( $prefix . ucfirst( $instance ))) continue;
         $values = call_user_func_array( array( $base_type, 'instance'), array( $instance, $lookup_var ));
         if ( $values ) return $values;
     }

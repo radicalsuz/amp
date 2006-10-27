@@ -160,6 +160,7 @@ define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
 define( 'AMP_TEXT_TEMPLATE', 'template');
 define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
 define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
+define( 'AMP_TEXT_CACHE_RESET_INTERNAL', 'Cache flushed from %s by user: %s' );
 /**
  * Comment
  */

@@ -53,8 +53,38 @@ class AMPContent_Map {
         $this->buildLevel( $this->top );
     }
 
+    function _check_permissions( $parent_id, $child_ids = array( ) ) {
+        if ( !empty( $child_ids ))return $child_ids;
+        return true;
+
+        if ( isset( $_GET['init_permissions']) && ( $_GET['init_permissions'])) {
+            return true;
+        }
+        $reg = AMP_Registry::instance( );
+        $gacl =  &$reg->getEntry( AMP_REGISTRY_PERMISSION_MANAGER );
+        if ( !$gacl ) return true;
+
+        $user_key = 'admin_' . AMP_SYSTEM_USER_ID;
+        $section_key = 'view_section_' . $parent_id;
+        $result = $gacl->acl_check( 'section', $section_key , 'admin', $user_key );
+        if ( !$result ) return false;
+        if ( empty( $child_ids )) return $result;
+
+        $child_results = array( );
+        foreach( $child_ids as $child_id  ) {
+            $section_key = 'view_section_' . $child_id;
+            $result = $gacl->acl_check( 'section', $section_key , 'admin', $user_key );
+            if ( !$result ) continue;
+            $child_results[] = $child_id;
+        }
+        if ( empty( $child_results )) return false;
+        return $child_results;
+        
+    }
+
     function buildLevel( $current_parent, $recursive=true ) {
-        if (!( $keys = array_keys( $this->childset, $current_parent ) )) return false;
+        if (!( $key_set = array_keys( $this->childset, $current_parent ) )) return false;
+        if ( !( $keys = $this->_check_permissions( $current_parent, $key_set ))) return false;
 
         $this->map[$current_parent] = $keys;
         foreach( $keys as $child_id ) {
@@ -148,6 +178,7 @@ class AMPContent_Map {
         $menu_item_method = '_menuItem'. $itemtype;
         $menuset= array();
         foreach ($this->dataset as $section_id => $section_info) {
+            if ( !$this->_check_permissions( $section_id )) continue;
             $menuset[$this->getParent($section_id)][$section_id]=$this->$menu_item_method( $section_id );
         }
         return $menuset;

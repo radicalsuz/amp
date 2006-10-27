@@ -69,7 +69,7 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         $options = array_merge($this->getOptions(), $options);
 
         //create fieldset
-        $this->display_fieldset=split(',', $options['display_fields']);
+        $this->display_fieldset=preg_split('/\s?,\s?/', $options['display_fields']);
 
         //Print the current results list
         if (!($dataset=$this->udm->getData())) return false;
@@ -112,7 +112,10 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
 
                 $display_name = false;
                 if ( isset( $this->udm->fields[$key]) && isset( $this->udm->fields[$key]['label'])) {
+                    trigger_error( 'found udm field ' . $key );
                     $display_name = $this->udm->fields[ $key ]['label'];
+                } else {
+                    trigger_error( 'udm field ' . $key . ' NOT FOUND');
                 }
                 $key=$sort_obj->makelink($key, $display_name );
             }

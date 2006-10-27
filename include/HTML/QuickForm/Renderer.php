@@ -146,5 +146,9 @@ class HTML_QuickForm_Renderer
     {
         return;
     } // end func finishGroup
+
+    function __sleep( ) {
+        return array_keys( get_object_vars( $this ));
+    }
 } // end class HTML_QuickForm_Renderer
 ?>

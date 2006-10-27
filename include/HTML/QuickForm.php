@@ -1903,6 +1903,20 @@ class HTML_QuickForm extends HTML_Common {
     } // end func errorMessage
 
     // }}}
+    function __wakeup( ) {
+        $method = $this->getAttribute( 'method');
+        $this->_submitValues = 'get' == $method? $_GET: $_POST;
+        $this->_submitFiles  = $_FILES;
+        $GLOBALS['_HTML_QuickForm_default_renderer'] = $this->_defRender;
+    }
+
+
+    function __sleep( ) {
+        $this->_defRender = &$this->defaultRenderer( );
+        $result = parent::__sleep( );
+        return $result;
+    }
+
 } // end class HTML_QuickForm
 
 class HTML_QuickForm_Error extends PEAR_Error {

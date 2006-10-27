@@ -30,6 +30,9 @@ function AMP_init_user( ) {
 }
 AMP_init_user( );
 
+//Browser discovery
+setBrowser();
+
 // confirm whether WYSIWYG editor should be allowed for this machine
 // this should probably eventually become a user setting instead of a cookie
 if ( !defined( 'AMP_USER_CONFIG_USE_WYSIWYG') ){

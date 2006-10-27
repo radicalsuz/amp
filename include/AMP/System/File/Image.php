@@ -72,6 +72,13 @@ class AMP_System_File_Image extends AMP_System_File {
             return false;
         }
         if ( !isset( $path )) $path = $this->getPath( );
+        if ( !is_writeable( $path )) {
+            $file_part = basename( $path );
+            $path_only = $file_part ? str_replace( DIRECTORY_SEPARATOR . $file_part, '', $path ) : $path;
+            if ( !is_writeable( $path_only )) {
+                trigger_error( sprintf( AMP_TEXT_ERROR_FILE_WRITE_FAILED, $path_only ) );
+            }
+        }
 
         if( !($write_method = $this->_get_action_method( 'write') )) return false;
 

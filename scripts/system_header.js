@@ -234,3 +234,26 @@ function showUploadWindow (parentform, calledfield, dtype, handler) {
     if (handler) url = url + '&handler='+handler;
     hWnd = window.open( url, 'recordWindow', 'height=175,width=300,scrollbars=no,menubar=no,toolbar=no,resizeable=no,location=no,status=no' );
 }
+
+function AMP_flash_signal( ) {
+    $( 'AMP_flash').hide( );
+    $( 'AMP_flash').update( '<div id="ajax_signal" style="text-align:center;padding:1em;"><img src="/img/ajax-loader.gif"></div>' );
+    Effect.SlideDown( 'AMP_flash');
+}
+
+function clear_AMP_cache( ){
+    new Ajax.Updater ( 
+            'AMP_flash',
+            '/system/cache.php',
+             {
+                 method: 'post',
+                 parameters: 'action=flush',//'&source_url='+window.url.href,
+                 onLoading: AMP_flash_signal,
+                 onSuccess: AMP_flash_clear
+             }
+        );
+}
+
+function AMP_flash_clear( ) {
+    setTimeout( 'new Effect.BlindUp( "AMP_flash")', 3200 );
+}

@@ -78,7 +78,7 @@ class AMPSystem_Lookup {
         static $lookup_set = false;
         $empty_value = false;
         if (!$lookup_set) $lookup_set = array();
-        $req_class = $lookup_baseclass . '_' . $type;
+        $req_class = $lookup_baseclass . '_' . ucfirst( $type );
         if ( !class_exists( $req_class ) ){
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
             return $empty_value;
@@ -367,6 +367,17 @@ class AMPSystemLookup_Users extends AMPSystem_Lookup {
     function AMPSystemLookup_Users () {
         $this->init();
     }
+}
+
+class AMPSystemLookup_Admins extends AMPSystem_Lookup {
+    var $datatable = "users";
+    var $result_field = "name";
+    var $sortby = "name";
+
+    function AMPSystemLookup_Admins() {
+        $this->init();
+    }
+
 }
 
 class AMPSystemLookup_Lists extends AMPSystem_Lookup {

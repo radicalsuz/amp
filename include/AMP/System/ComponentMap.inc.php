@@ -36,41 +36,88 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 
     function getComponentClass( $component_type ) {
         if ( !isset( $this->components[ $component_type ])) return false;
-        if ( isset( $this->paths[ $component_type ])) {
+        if ( ( !class_exists( $this->components[ $components] ))
+                && isset( $this->paths[ $component_type ])) {
             require_once( $this->paths[ $component_type ]);
         }
         return $this->components[$component_type];
     }
 
     function &getCachedComponent( $component_type, $id=null, $passthru_value = null ){
+        if ( AMP_DEBUG_MODE_COMPONENT_CACHE_INACTIVE ) {
+            return $this->getComponent( $component_type, $passthru_value );
+        }
         $empty_value = false;
         $cache = &AMP_get_cache( );
-        if ( !(( $component_class = $this->getComponentClass( $component_type )) && ( $cache ))) return $empty_value;
+        $cache_key = $this->getCacheKey( $component_type, $id );
+        if ( !$cache_key ) return $empty_value;
 
-        $cache_key = $component_class;
-        if ( isset( $id )) $cache_key = $cache->identify( $component_class, $id );
-
-        if ( isset( $this->paths[ $component_type ])) {
+        $component_class = $this->getComponentClass( $component_type );
+        if ( !$component_class ) return $empty_value;
+        if ( ( !class_exists( $component_class )) &&  isset( $this->paths[ $component_type ])) {
             require_once( $this->paths[ $component_type ]);
         }
 
-        if ( $component = $cache->retrieve( $cache_key )) {
+        if ( $component = AMP_cache_get( $cache_key )) {
+            trigger_error(  $cache_key . ' found in cache ');
             return $component;
         }
 
         $component = $this->getComponent( $component_type, $passthru_value );
         if ( !$component ) return $empty_value;
-        $cache->add( $component, $cache_key );
+        $result = AMP_cache_set( $cache_key, $component );
+        //$cache->add( $component, $cache_key );
         return $component;
+    }
+
+    function getCacheKey( $component, $id = null ) {
+        static $cache = false;
+        if ( !$cache ) $cache = AMP_get_cache( );
+        $component_class = is_object( $component ) ? get_class( $component ) : $this->getComponentClass( $component ); 
+        $cache_key_base = false;
+
+        foreach( $this->components as $key => $class_name ) {
+            if ( strtolower( $class_name ) != strtolower( $component_class )) continue;
+            $cache_key_base = sprintf( AMP_CACHE_TOKEN_COMPONENT, $class_name );
+            break;
+        }
+
+        if ( !$cache_key_base ) return false;
+        if ( isset( $id )) {
+            return $cache->identify( $cache_key_base, $id );
+        }
+        return $cache_key_base;
+
+
+    }
+
+    function clearCached( $component ) {
+        if ( AMP_DEBUG_MODE_COMPONENT_CACHE_INACTIVE ) return true;
+        $id = isset( $component->id ) ? $component->id : null;
+        $cache_key = $this->getCacheKey( $component, $id );
+        return AMP_cache_delete( $cache_key ) ;
+    }
+
+    function cacheComponent( &$component ) {
+        if ( AMP_DEBUG_MODE_COMPONENT_CACHE_INACTIVE ) return true;
+        $id = isset( $component->id ) ? $component->id : null;
+        $cache_key = $this->getCacheKey( $component, $id );
+        if ( !$cache_key ) return false;
+
+        return AMP_cache_set( $cache_key, $component );
+
+
     }
 
     function &getComponent( $component_type, $passthru_value = null ){
         $empty_value = false;
+
         if ( !isset( $this->components[ $component_type ])) return $empty_value;
-        if ( isset( $this->paths[ $component_type ])) {
+        $component_class = $this->components[ $component_type ];
+
+        if ( ( !class_exists( $component_class )) &&  isset( $this->paths[ $component_type ])) {
             require_once( $this->paths[ $component_type ]);
         }
-        $component_class = $this->components[ $component_type ];
         if ( !isset( $passthru_value )) $passthru_value = &AMP_Registry::getDbcon( );
         $result = &new $component_class( $passthru_value );
         return $result;

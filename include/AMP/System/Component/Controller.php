@@ -317,11 +317,11 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
         //set methods based on map values
 
-        if ( $form  = &$this->_map->getComponent( 'form' )){
+        if ( $form  = &$this->_map->getCachedComponent( 'form' )){
             $this->_init_form_request ( $form ) ;
             $this->_form = &$form;
         }
-        if ( $model = &$this->_map->getComponent( 'source')) $this->_init_model( $model) ;
+        if ( $model = &$this->_map->getCachedComponent( 'source', $this->_model_id )) $this->_init_model( $model) ;
 
         if ( !$this->allow( $this->get_action( ))) $this->clear_actions( );
         $this->set_banner( $this->get_action( ));
@@ -342,6 +342,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         $init_running = false;
 
         $this->_form->Build( );
+        $this->_map->cacheComponent( $this->_form );
         
     }
 
@@ -428,7 +429,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
 
         // if no list exists, return to the blank input form
         if ( !( $display = &$this->_map->getComponent( 'list' ))) {
-           $display = &$this->_map->getComponent( 'form' );
+           $display = &$this->_map->getCachedComponent( 'form' );
            $this->_form = &$display;
            $this->_init_form( false );
            $this->set_banner( 'add');
@@ -489,6 +490,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
             return false;
         }
 
+        $this->_map->clearCached( $this->_model );
         $this->_model_id = $this->_model->id;
         $this->notify( 'save' );
 
@@ -538,6 +540,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $name = $this->_form->getItemName( );
         $this->notify( 'beforeDelete' );
         if ( !$name ) $name = AMP_TEXT_ITEM_NAME;
+        $this->_map->clearCached( $this->_model );
         if ( !$this->_model->deleteData( $this->_model_id )){
             if ( method_exists( $this->_model, 'getErrors')) $this->error( $this->_model->getErrors( ));
             $this->_display->add( $this->_form );
@@ -615,7 +618,7 @@ class AMP_System_Component_Controller_Sticky extends AMP_System_Component_Contro
              || ( array_search( $this->get_action(), $sticky_actions ) === FALSE )) {
             return parent::display_default( );
         }
-        $display = &$this->_map->getComponent( 'form' );
+        $display = &$this->_map->getCachedComponent( 'form' );
         $this->_form = &$display;
         $this->_init_form( false );
         $this->set_banner( 'edit');

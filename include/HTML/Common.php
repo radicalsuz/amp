@@ -415,5 +415,9 @@ class HTML_Common {
         print $this->toHtml();
     } // end func display
 
+    function __sleep( ) {
+        return array_keys( get_object_vars( $this ));
+    }
+
 } // end class HTML_Common
 ?>

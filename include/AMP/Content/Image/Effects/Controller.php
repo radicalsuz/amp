@@ -13,6 +13,8 @@ class AMP_Content_Image_Effects_Controller {
     var $_default_action;
     var $_image_sizes;
 
+    var $_cache;
+
     function AMP_Content_Image_Effects_Controller( ){
         $this->__construct( );
     }
@@ -102,6 +104,10 @@ class AMP_Content_Image_Effects_Controller {
             if ( !isset( $this->_image_sizes[$desired_value])) return false;
         }
         return true;
+    }
+
+    function get_sizes( ) {
+        return $this->_image_sizes;
     }
 }
 

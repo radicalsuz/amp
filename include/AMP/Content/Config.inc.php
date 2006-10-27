@@ -207,4 +207,14 @@ define ('AMP_ICON_MOV', 'mov.jpg' );
 
 define ('AMP_CONTENT_URL_ICONS', '/img/' );
 
+/**
+ * Settings for the Display Manager
+ */
+
+if (!defined( 'AMP_CONTENT_CONTAINER_ID_BUFFER' )) define ('AMP_CONTENT_CONTAINER_ID_BUFFER', false );
+if (!defined( 'AMP_CONTENT_CONTAINER_ID_FLASH' )) define ('AMP_CONTENT_CONTAINER_ID_FLASH', 'AMP_flash');
+if (!defined( 'AMP_CONTENT_DISPLAY_KEY_FLASH' )) define ('AMP_CONTENT_DISPLAY_KEY_FLASH', "flash");
+if (!defined( 'AMP_CONTENT_DISPLAY_KEY_INTRO' )) define ('AMP_CONTENT_DISPLAY_KEY_INTRO', "intro");
+if (!defined( 'AMP_CONTENT_DISPLAY_KEY_BUFFER' )) define ('AMP_CONTENT_DISPLAY_KEY_BUFFER', "buffer");
+
 ?>

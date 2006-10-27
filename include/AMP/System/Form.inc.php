@@ -167,5 +167,10 @@ class AMPSystem_Form extends AMPForm {
         //interface
     }
 
+    function __wakeup( ) {
+        parent::__wakeup( );
+        if ($this->allow_copy) $this->copy_button();
+    }
+
 }
 ?>

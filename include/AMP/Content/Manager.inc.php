@@ -1,10 +1,5 @@
 <?php
-
-if (!defined( 'AMP_CONTENT_BUFFER_CONTAINER_ID' )) define ('AMP_CONTENT_BUFFER_CONTAINER_ID', false );
-if (!defined( 'AMP_CONTENT_DISPLAY_KEY_FLASH' )) define ('AMP_CONTENT_DISPLAY_KEY_FLASH', "flash");
-if (!defined( 'AMP_CONTENT_DISPLAY_KEY_INTRO' )) define ('AMP_CONTENT_DISPLAY_KEY_INTRO', "intro");
-if (!defined( 'AMP_CONTENT_DISPLAY_KEY_BUFFER' )) define ('AMP_CONTENT_DISPLAY_KEY_BUFFER', "buffer");
-
+require_once( 'AMP/Content/Config.inc.php');
 /**
  * Controller for the main body of the page 
  *
@@ -265,7 +260,7 @@ class AMPContent_Manager {
 
 //  }}}
 
-// {{{ private output methods: _doDisplays, _doDisplay, _doDisplayBuffer
+// {{{ private output methods: _doDisplays, _doDisplay, _doDisplayBuffer, _doDisplayFlash
 
     /**
      * Executes the current collection of display objects and returns the results as a string
@@ -339,10 +334,10 @@ class AMPContent_Manager {
     /**
      * Returns the output of the display object, modifying the value in some configurations
      *
-     * smartMeme/CSS feature: If the constant( AMP_CONTENT_BUFFER_CONTAINER_ID ) is defined, this method 
-     * wraps the returned value in a div with the CSS "id" attribute specified by AMP_CONTENT_BUFFER_CONTAINER_ID.
+     * smartMeme/CSS feature: If the constant( AMP_CONTENT_CONTAINER_ID_BUFFER ) is defined, this method 
+     * wraps the returned value in a div with the CSS "id" attribute specified by AMP_CONTENT_CONTAINER_ID_BUFFER.
      *
-     * If constant( AMP_CONTENT_BUFFER_CONTAINER_ID ) is false, the "execute" method of the display object 
+     * If constant( AMP_CONTENT_CONTAINER_ID_BUFFER ) is false, the "execute" method of the display object 
      * is called and the result returned.
      * 
      * @param   object      $display    Display to be executed
@@ -351,11 +346,25 @@ class AMPContent_Manager {
      * @return  string      Output from display 
      */
     function _doDisplayBuffer( &$display ) {
-        if (!AMP_CONTENT_BUFFER_CONTAINER_ID ) return $display->execute() ;
-        return $this->_renderer->inDiv( $display->execute(), array( 'id' => AMP_CONTENT_BUFFER_CONTAINER_ID ));
+        if (!AMP_CONTENT_CONTAINER_ID_BUFFER ) return $display->execute() ;
+        return $this->_renderer->inDiv( $display->execute(), array( 'id' => AMP_CONTENT_CONTAINER_ID_BUFFER ));
+    }
+
+    /**
+     * returns the output of the Flash, wrapping it in a standard div for easy js script access 
+     * 
+     * @param   object      $display    Display to be executed
+     * @since   3.6.4
+     * @access  protected
+     * @return  string      Output from display 
+     */
+    function _doDisplayFlash( &$display ) {
+        if (!AMP_CONTENT_CONTAINER_ID_FLASH ) return $display->execute() ;
+        return $this->_renderer->inDiv( $display->execute( ), array( 'id' => AMP_CONTENT_CONTAINER_ID_FLASH ));
     }
 
 // }}}
+
 
 }
 ?>

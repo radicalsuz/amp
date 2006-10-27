@@ -44,7 +44,7 @@ class UserDataPlugin_ReadUrl_AMP extends UserDataPlugin {
             trigger_error( 'Function does not exist:' . $translate_function);
             return $data;
         }
-        return $translate_function( $data );
+        return $translate_function( $data, $this->udm );
     }
 }
 

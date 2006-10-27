@@ -29,4 +29,6 @@ if ( AMP_SYSTEM_CUSTOM_ERROR_HANDLER ) set_error_handler( AMP_SYSTEM_CUSTOM_ERRO
 if ( !defined( 'AMP_DEBUG_MODE_APD')) define ('AMP_DEBUG_MODE_APD', false );
 if ( AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
 
+if ( !defined( 'AMP_DEBUG_MODE_COMPONENT_CACHE_INACTIVE')) define( 'AMP_DEBUG_MODE_COMPONENT_CACHE_INACTIVE', false );
+
 ?>

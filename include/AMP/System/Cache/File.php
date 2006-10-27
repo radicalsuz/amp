@@ -107,7 +107,8 @@ class AMP_System_Cache_File extends AMP_System_Cache {
         $file_set = AMPfile_list( $this->_path_cache );
         $this->_load_file( );
 
-        foreach( $file_set as $file_name ){
+        foreach( $file_set as $file_name => $file_display ){
+            if ( !$file_name ) continue;
             if ( isset( $key_token ) && ( strpos( $file_name, $key_token ) === FALSE )) continue;
             $entry_ref = & new AMP_System_File( $this->_path( $file_name ));
 
@@ -120,6 +121,17 @@ class AMP_System_Cache_File extends AMP_System_Cache {
     function _path( $authorized_key ){
         $result = $this->_path_cache . DIRECTORY_SEPARATOR. $authorized_key ;
         return $result;
+    }
+
+    /**
+     * public version of path 
+     * 
+     * @param mixed $authorized_key 
+     * @access public
+     * @return void
+     */
+    function path( $authorized_key ) {
+        return $this->_path( $authorized_key );
     }
 
     function has_connection( ){

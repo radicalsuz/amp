@@ -10,7 +10,7 @@
  *
  *****/
 
-ob_start();
+//ob_start();
 
 require_once( 'AMP/Auth/Handler.inc.php' );
 

@@ -178,9 +178,12 @@ class AMPSystem_BaseTemplate {
     }
 
     function _HTML_topLinks() {
-        return '<p class = "toplinks"><a href="index.php"  class="toplinks" >Home</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
-               'User: ' . $_SERVER['REMOTE_USER'] . '&nbsp;&nbsp;&nbsp;&nbsp;' . 
-               '<a href="logout.php"  class="toplinks" >Logout</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>';
+        return '<p class = "toplinks">'
+                . '<a href="index.php"  class="toplinks" >Home</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' 
+                . '<a href="flushcache.php" id="cache_clear_link" onclick="window.clear_AMP_cache( );return false;" class="toplinks" >Clear&nbsp;Cache</a>&nbsp;&nbsp;&nbsp;&nbsp;'
+                . 'User: ' . $_SERVER['REMOTE_USER'] . '&nbsp;&nbsp;&nbsp;&nbsp;'  
+                . '<a href="logout.php"  class="toplinks" >Logout</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                . '</p>';
     }
 
     function _HTML_systemHeader() {

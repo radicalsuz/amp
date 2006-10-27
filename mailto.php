@@ -113,7 +113,7 @@ if ($submit) {
 	$subject="You were invited by $from to visit ".$GLOBALS["site_name"]."!";
 	$add="From: $site_name <$your_email>\nReply-To: $from_email\nDate: $date\n";
 	if (@mail ("$to_email","$subject","$message","$add")) {
-		echo "<center>Message sucessfully send!<br>Thank you!<br><br>[ <a href=\"javascript:window.close()\">Close this window</a> ]</center>";
+		echo "<center>Message successfully sent!<br>Thank you!<br><br>[ <a href=\"javascript:window.close()\">Close this window</a> ]</center>";
 	} else error ("Internal server error. Cannot send email, please try later!");
 
 } else show_form();

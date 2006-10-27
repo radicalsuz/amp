@@ -34,22 +34,69 @@ class AMP_Content_Image_Effects_Display {
     }
 
     function commit_resize( ){
+        $cache_filename = $this->get_cached_version( 'resize');
+        if ( $cache_filename === true ) {
+            return;
+        }
+
         extract( $this->_sizes );
 
         $resized_resource = &$this->_image_ref->resize( $width, $height );
-        $this->_image_ref->write_image_resource( $resized_resource, null, true );
+        $result = $this->_image_ref->write_image_resource( $resized_resource, $cache_filename, false );
+        if ( $result ) {
+            return $this->_display( $cache_filename );
+        }
+    }
+
+    function _display( $file_path ) {
+        if ( !file_exists( $file_path )) return false;
+        $fRef = fopen( $file_path, 'r');
+        fpassthru( $fRef );
+        fclose( $fRef );
+        return true;
+
     }
 
 
     function commit_display( ){
-        $fRef = fopen( $this->_image_ref->getPath( ), 'r');
-        fpassthru( $fRef );
+        return $this->_display( $this->_image_ref->getPath( ));
     }
 
     function execute( ){
         $action_method = 'commit_' . $this->_action;
         $this->image_header( );
         return $this->$action_method( );
+    }
+
+    function get_cached_version( $action ) {
+        require_once( 'AMP/System/Cache/File.php');
+        $file_cache =  new AMP_System_Cache_File( );
+        /*
+        $size_desc = "";
+        foreach( $this->_sizes as $key => $value ) {
+            if ( !$value ) continue;
+            $size_desc .= $key.'-'. round( $value ) . '_SZS_';
+        }
+        $key_hash = $action . '_' . $this->_image_ref->getName( ) . '__' . $size_desc ;
+        */
+        $cache_key = AMP_CACHE_TOKEN_IMAGE . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
+            $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
+        }
+        $file_name = $file_cache->authorize( $cache_key );
+        $file_path = $file_cache->path( $file_name );
+        if ( file_exists( $file_path )) {
+            if (  rand( 1, 10) === 2 ) {
+                trigger_error( 'found cached ' . $file_name);
+            }
+        }
+        
+        if ( $this->_display( $file_path )) {
+            return true;
+        }
+
+        return $file_path;
+        
     }
 }
 

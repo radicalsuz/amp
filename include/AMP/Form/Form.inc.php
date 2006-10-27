@@ -18,6 +18,10 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
  require_once( 'HTML/QuickForm.php' );
  require_once( 'AMP/Form/HTMLEditor.inc.php');
  require_once( 'AMP/Form/Template.inc.php');
+require_once( 'HTML/QuickForm/Renderer/Default.php');
+foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
+    include_once( $def[0]);
+}
 
  class AMPForm {
 
@@ -1022,6 +1026,14 @@ define('AMP_FORM_UPLOAD_MAX',8388608);
     function _allowedFields( $fields ) {
         //interface, no action taken
         return $fields;
+    }
+
+    function __sleep( ) {
+        return array_keys( get_object_vars( $this ));
+    }
+
+    function __wakeup( ) {
+        $this->_after_init( );
     }
 
  }

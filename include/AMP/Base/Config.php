@@ -30,6 +30,7 @@ require_once( 'AMP/Content/Config.inc.php');
 
 //load user
 require_once( 'AMP/System/User/Config.php');
+//require_once( 'AMP/Base/Permission.php');
 
 //activate the memcache class -- deprecated for 3.6.1
 //if ( AMP_SITE_MEMCACHE_ON ) require_once('AMP/System/Memcache.inc.php');

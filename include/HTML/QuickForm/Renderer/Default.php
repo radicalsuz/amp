@@ -136,6 +136,8 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     */
     var $_hiddenHtml = '';
 
+    var $_templateSource;
+
    /**
     * Constructor
     *
@@ -226,6 +228,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @see      renderElement()
     * @return   string      Html for element
     */
+   
     function _prepareTemplate($name, $label, $required, $error)
     {
         if (is_array($label)) {
@@ -264,6 +267,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         }
         return $html;
     } // end func _prepareTemplate
+    
 
    /**
     * Renders an element Html
@@ -275,6 +279,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @access public
     * @return void
     */
+    
     function renderElement(&$element, $required, $error)
     {
         if (!$this->_inGroup) {
@@ -295,7 +300,80 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             $this->_groupElements[] = $element->toHtml();
         }
     } // end func renderElement
-   
+
+  /* 
+    function _prepareTemplate($name, $label, $required, $error)
+    {
+        if (is_array($label)) {
+            $nameLabel = array_shift($label);
+        } else {
+            $nameLabel = $label;
+        }
+        if (isset($this->_templates[$name])) {
+            $html = str_replace('{label}', $nameLabel, $this->_templates[$name]);
+        } else {
+            $html = str_replace('{label}', $nameLabel, $this->_elementTemplate);
+        }
+        if ($required) {
+            $html = str_replace( array( '<!-- BEGIN required -->', '<!-- END required -->' ), '', $html);
+        } else {
+            $req_pattern = $this->getTemplateSource( 'required');
+            $html = str_replace( $req_pattern, '', $html );
+            //$html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN required -->(\s|\S)*<!-- END required -->([ \t\n\r]*)?/i", '', $html);
+        }
+        if (isset($error)) {
+            $html = str_replace( array( '{error}', '<!-- BEGIN error -->', '<!-- END error -->' ), 
+                                 array( $error, '', '' ), $html );
+        } else {
+            $error_pattern = $this->getTemplateSource( 'error');
+            $html = str_replace( $error_pattern, '', $html );
+            //$html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN error -->(\s|\S)*<!-- END error -->([ \t\n\r]*)?/i", '', $html);
+        }
+        if (is_array($label)) {
+            foreach($label as $key => $text) {
+                $key  = is_int($key)? $key + 2: $key;
+                $html = str_replace( array( "{label_{$key}}" , "<!-- BEGIN label_{$key} -->", "<!-- END label_{$key} -->" ), 
+                                     array( $text, '', '' ), $html);
+            }
+        }
+        if (strpos($html, '{label_')) {
+            //fixme this line shouldn't have *//* - just the 1st 2 chars
+            $html = preg_replace('/\s*<!-- BEGIN label_(\S+) -->.*<!-- END label_\1 -->\s*//*i', '', $html);
+        }
+        return $html;
+    } // end func _prepareTemplate
+
+   /**
+    * Renders an element Html
+    * Called when visiting an element
+    *
+    * @param object     An HTML_QuickForm_element object being visited
+    * @param bool       Whether an element is required
+    * @param string     An error message associated with an element
+    * @access public
+    * @return void
+    */
+   /*
+    function renderElement(&$element, $required, $error)
+    {
+        if (!$this->_inGroup) {
+            $html = $this->_prepareTemplate($element->getName(), $element->getLabel(), $required, $error);
+            $this->_html .= str_replace('{element}', $element->toHtml(), $html);
+
+        } elseif (!empty($this->_groupElementTemplate)) {
+            $html = str_replace('{label}', $element->getLabel(), $this->_groupElementTemplate);
+            if ($required) {
+                $html = str_replace( array( '<!-- BEGIN required -->', '<!-- END required -->' ), '', $html);
+            } else {
+                $html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN required -->(\s|\S)*<!-- END required -->([ \t\n\r]*)?/i", '', $html);
+            }
+            $this->_groupElements[] = str_replace('{element}', $element->toHtml(), $html);
+
+        } else {
+            $this->_groupElements[] = $element->toHtml();
+        }
+    } // end func renderElement
+  */ 
    /**
     * Renders an hidden element
     * Called when visiting a hidden element
@@ -467,5 +545,13 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         $this->setRequiredNoteTemplate('');
         $this->_templates = array();
     } // end func clearAllTemplates
+
+    function getTemplateSource( $pattern_type ) {
+        if ( !isset( $this->_templateSource )) {
+            require_once( 'AMP/Form/Template.inc.php');
+            $this->_templateSource = &new AMPFormTemplate( );
+        }
+        return $this->_templateSource->getPatternPart( $pattern_type );
+    }
 } // end class HTML_QuickForm_Renderer_Default
 ?>

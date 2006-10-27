@@ -78,6 +78,11 @@ class AMP_Display_Template {
     }
 
     function set_properties( $values ){
+        $this->_properties = array( );
+        return $this->add_properties( $values );
+    }
+
+    function add_properties( $values ) {
         foreach( $values as $name => $value ){
             $this->set_property( $name, $value );
         }

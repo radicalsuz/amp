@@ -97,7 +97,7 @@ class AMP_System_Flash extends AMP_Content_Buffer {
 			define( 'AMP_SYSTEM_FLASH_OUTPUT', true );
 			if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT' ) )$this->clear( );
 		}
-        return $value; 
+        return $value ; 
     }
 
     function active( ){

@@ -1,5 +1,8 @@
 <?php
 
+//standard system pages
+require_once( 'AMP/System/Page/Urls.inc.php');
+
 if ( !defined( 'AMP_CONTENT_MAP_ROOT_SECTION' )) define( 'AMP_CONTENT_MAP_ROOT_SECTION' , 1 );
 if ( !defined( 'AMP_SYSTEM_UNIQUE_ID')) define ( 'AMP_SYSTEM_UNIQUE_ID', AMP_DB_NAME );
 if ( !defined( 'AMP_SITE_MEMCACHE_ON' ))       define ('AMP_SITE_MEMCACHE_ON', true);
@@ -85,5 +88,11 @@ define( 'AMP_SYSTEM_ITEM_TYPE_FILE', 'file');
 define( 'AMP_SYSTEM_ITEM_TYPE_GALLERY', 'gallery');
 define( 'AMP_SYSTEM_ITEM_TYPE_GALLERY_IMAGE', 'gallery_image');
 define( 'AMP_SYSTEM_ITEM_TYPE_LINK', 'link');
+
+/**
+ * Permission System Settings 
+ */
+define( 'AMP_PATH_PHPGACL', 'phpgacl' );
+define( 'AMP_PATH_PHPGACL_ADMIN', 'phpgacl/admin');
 
 ?>
