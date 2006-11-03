@@ -55,7 +55,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'transfer_mode_setting','_checkTransferMode',  'get');
         $this->addTranslation( 'transfer_mode_setting','_evalTransferMode',  'set');
 
-        $this->setFieldValueSet( 'doc', AMPfile_list( 'downloads'));
+        //$this->setFieldValueSet( 'doc', AMPfile_list( 'downloads'));
         //$this->_initJavascriptActions( );
         //$this->HTMLEditorSetup( );
     }

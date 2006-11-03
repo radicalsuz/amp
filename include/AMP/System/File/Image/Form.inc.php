@@ -19,16 +19,6 @@ class AMP_System_File_Image_Form extends AMP_System_File_Form {
         }
     }
 
-    function _formFooter( ){
-        require_once( 'AMP/Content/Display/HTML.inc.php');
-        $renderer = &new AMPDisplay_HTML;
-        return $renderer->link( 
-                    AMP_url_add_vars( AMP_SYSTEM_URL_IMAGES, 'action=megaupload'),
-                    //'/system/imgup.php',
-                    'Alternate upload page'
-                   );
-    }
-
 }
 
 ?>

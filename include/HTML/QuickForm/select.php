@@ -484,12 +484,24 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
             }
             $strHtml .= $tabs . '<select' . $attrString . ">\n";
 
-            foreach ($this->_options as $option) {
-                if (is_array($this->_values) && in_array((string)$option['attr']['value'], $this->_values)) {
-                    $this->_updateAttrArray($option['attr'], array('selected' => 'selected'));
+            //alternate code to optimize form generation
+            if ( !$this->getMultiple( ) && function_exists( 'AMP_buildSelectOptions')) {
+                $option_values = array( );
+                foreach( $this->_options as $option ) {
+                    $option_values[$option['attr']['value']] = $option['text'] ;
                 }
-                $strHtml .= $tabs . "\t<option" . $this->_getAttrString($option['attr']) . '>' .
-                            $option['text'] . "</option>\n";
+                $selected_value = ( is_array( $this->_values ) && !empty( $this->_values )) ? $this->_values[0] : null;
+                $strHtml .= AMP_buildSelectOptions( $option_values, $selected_value );
+            } else {
+                //standard QF code
+                foreach ($this->_options as $option) {
+                    if (is_array($this->_values) && in_array((string)$option['attr']['value'], $this->_values)) {
+                        $this->_updateAttrArray($option['attr'], array('selected' => 'selected'));
+                    }
+                    $strHtml .= $tabs . "\t<option" . $this->_getAttrString($option['attr']) . '>' .
+                                $option['text'] . "</option>\n";
+                }
+
             }
 
             return $strHtml . $tabs . '</select>';

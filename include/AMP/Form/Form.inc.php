@@ -741,7 +741,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     function &_addImageSelect( $name, $field_def ) {
         $valuefield_name = $name;
         $display_name = $this->_addImageDisplay( $name );
-        $picker = &$this->form->addElement(  'select', $valuefield_name, $field_def['label'], AMPfile_list( 'img/thumb') );
+        $picker = &$this->form->addElement(  'select', $valuefield_name, $field_def['label'], AMPSystem_Lookup::instance( 'images') );
 
         $srcpath = AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_OPTIMIZED . DIRECTORY_SEPARATOR;
         $linkpath = AMP_SITE_URL . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL. DIRECTORY_SEPARATOR;
@@ -1034,6 +1034,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
 
     function __wakeup( ) {
         $this->_after_init( );
+        $this->_registerCustomElementTypes( );
     }
 
  }

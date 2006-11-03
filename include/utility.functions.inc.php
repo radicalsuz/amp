@@ -221,12 +221,35 @@ if ( !function_exists( 'AMP_buildSelect' )) {
 if (!function_exists( 'AMP_buildSelectOptions' )) {
     function AMP_buildSelectOptions( $values, $selected=null ) {
         $option_set = array();
+        $cache_key = false;
+
+        // pull large sets of options from cache
+        if ( count( $values ) > 100 ) {
+            $basic_text = join( '__K__', array_keys( $values ))
+                     . '===>>>'
+                     . join ( '__V__', $values )
+                     . '__S__'
+                     . $selected;
+            $enc_text = sha1( $basic_text );
+            $cache_key = sprintf( AMP_CACHE_TOKEN_COMPONENT, 'options') . $enc_text;
+            $result = AMP_cache_get( $cache_key );
+            if ( $result ) return $result;
+        }
+        
+        
+
         foreach ($values as $value => $text ) {
             $selected_flag = "";
             if (isset($selected) && $selected == $value ) $selected_flag = " selected";
             $option_set[] = "<option value=\"$value\"$selected_flag>$text</option>";
         }
-        return join( "\n", $option_set );
+        $result = join( "\n", $option_set );
+
+        //store large sets to cache
+        if ( $cache_key ) {
+            AMP_cache_set( $cache_key, $result );
+        }
+        return $result ;
     }
 }
 
@@ -680,7 +703,7 @@ if (!function_exists('filterConstants')) {
 		$constant_set = get_defined_constants();
 		$result_set = array();
 		$local_prefix = $prefix . ((substr($prefix, -1) != '_') ? '_': '');
-		
+
 		foreach ( $constant_set as $name => $value ) {
 			if ( strpos( $name, $local_prefix )!==0 ) continue;
             if (!isset( $value )) continue;
@@ -691,6 +714,7 @@ if (!function_exists('filterConstants')) {
 
 		return $result_set;
 	}
+
 }
 
 if (!function_exists( 'AMP_PastParticiple' )) {
@@ -988,7 +1012,7 @@ if ( !function_exists( 'AMP_Authorized')) {
         static $permissions = false;
         if ( !$permissions ) {
             require_once( 'AMP/System/Permission/Manager.inc.php');
-            $permissions = & AMPSystem_PermissionManager::instance();
+            $permissions = AMPSystem_PermissionManager::instance();
         }
         return $permissions->authorized ($id);
     }

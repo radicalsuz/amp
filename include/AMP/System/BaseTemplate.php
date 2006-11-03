@@ -41,7 +41,7 @@ class AMPSystem_BaseTemplate {
 
     function _init_menu( ){
         $system_menu = false;
-        $this->_menu = & new AMPSystem_Menu();
+        $this->_menu = & new AMPSystem_Menu( true );
         $this->_menu->init_header( );
     }
 

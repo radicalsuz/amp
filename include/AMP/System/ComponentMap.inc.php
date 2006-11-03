@@ -36,7 +36,7 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 
     function getComponentClass( $component_type ) {
         if ( !isset( $this->components[ $component_type ])) return false;
-        if ( ( !class_exists( $this->components[ $components] ))
+        if ( ( !class_exists( $this->components[ $component_type ] ))
                 && isset( $this->paths[ $component_type ])) {
             require_once( $this->paths[ $component_type ]);
         }
@@ -59,7 +59,6 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         }
 
         if ( $component = AMP_cache_get( $cache_key )) {
-            trigger_error(  $cache_key . ' found in cache ');
             return $component;
         }
 

@@ -23,13 +23,21 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
     var $_cache;
     var $_header;
     var $_final_output = false;
+
+    var $_is_built = false;
     
-    function AMPSystem_Menu () {
-        
+    function AMPSystem_Menu ( $hold_build = false ) {
+       if ( !$hold_build ) {
+           $this->_build( );
+       }
+
+    }
+
+    function _build( ) {
+        if ( $this->_is_built ) return true;
         $this->init( $this->loadMap(), 'AMPSystem_Menu'  );
         $this->setStyles();
-        
-
+        $this->_is_built = true;
     }
 
     function init_header( ){
@@ -65,6 +73,7 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
                 return $this->_apply_cached_stylesheet( $css_values );
             }
         }
+        $this->_build( );
         
 
         //no cached version of stylesheet exists
@@ -121,6 +130,7 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
                 return $script_trigger;
             }
         }
+        $this->_build( );
         
 
         //generate the js
@@ -154,6 +164,7 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
                 return $this->_cache->retrieve( $cache_key_private );
             }
         }
+        $this->_build( );
 
         $html_value = $this->menuset->output( );
         if ( !$this->_cache ) return $html_value;
@@ -180,8 +191,8 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
     */
 
     function loadMap() {
-        $map = & AMPSystem_Map::instance();
 
+        $map = & AMPSystem_Map::instance();
         $menumap = $map->getMenu();
         $menumap[ AMP_MENU_ROOT_ENTRY ] = $menumap[ $map->top ];
         return $menumap;

@@ -24,8 +24,13 @@ class AMP_Registry {
     var $_cache_stack;
     
     function AMP_Registry() {
-        $this->_cache_stack = array(array());
     }
+
+    function __construct( ) {
+        $this->_cache_stack = array();
+        $this->_cache_stack[] = array( );
+    }
+
     function setEntry($key, &$item) {
         $this->_cache_stack[0][$key] = &$item;
     }

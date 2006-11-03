@@ -93,10 +93,9 @@ class ArticleDisplay_Info extends Article_Display {
         }
 
         if ( $creator_id ){
-            require_once( 'AMP/System/User/User.php');
-            $user = &new AMPSystem_User( AMP_Registry::getDbcon( ), $creator_id );
-            $output .= $this->_renderer->inSpan( ' '. AMP_TEXT_BY . ' ' . $user->getName( ));
-            
+            $user_names = AMPSystem_Lookup::instance( 'users' );
+            $user_name = isset( $user_names[ $creator_id ]) ? $user_names[ $creator_id ] : "";
+            $output .= $this->_renderer->inSpan( ' '. AMP_TEXT_BY . ' ' . $user_name);
         }
         if ( $output ) $output = AMP_TEXT_CREATED . $output . $this->_renderer->newline( );
         return $output;
@@ -112,9 +111,9 @@ class ArticleDisplay_Info extends Article_Display {
         }
 
         if ( $last_editor_id ){
-            require_once( 'AMP/System/User/User.php');
-            $user = &new AMPSystem_User( AMP_Registry::getDbcon( ), $last_editor_id );
-            $output .= $this->_renderer->inSpan( ' '. AMP_TEXT_BY . ' ' . $user->getName( ));
+            $user_names = AMPSystem_Lookup::instance( 'users' );
+            $user_name = isset( $user_names[ $last_editor_id ]) ? $user_names[ $last_editor_id ] : "";
+            $output .= $this->_renderer->inSpan( ' '. AMP_TEXT_BY . ' ' . $user_name );
         }
 
         if ( $output ) $output = AMP_TEXT_UPDATED . $output . $this->_renderer->newline( ) ;

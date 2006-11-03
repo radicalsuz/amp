@@ -379,6 +379,7 @@
 	<doc>
 		<type>select</type>
 		<label>Document Name</label>
+        <lookup>downloads</lookup>
 	</doc>
 	<doc_direct_link>
 		<type>checkbox</type>

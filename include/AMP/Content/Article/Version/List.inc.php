@@ -49,9 +49,8 @@ class Article_Version_List extends AMPSystem_List {
         $renderer = $this->_getRenderer( );
         $user_name = false;
         if ( $editor_id = $source->getLastEditorId( )){
-            require_once( 'AMP/System/User/User.php');
-            $user = &new AMPSystem_User( AMP_Registry::getDbcon( ), $editor_id );
-            $user_name = $user->getName( );
+            $user_names = AMPSystem_Lookup::instance( 'users' );
+            $user_name = isset( $user_names[$editor_id]) ? $user_names[ $editor_id ] : "";
             $user_name = ' ' . AMP_TEXT_BY . ' ' . $user_name;
         }
         return $source->getItemDateChanged( ) 

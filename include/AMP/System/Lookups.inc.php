@@ -77,7 +77,16 @@ class AMPSystem_Lookup {
     function &instance( $type, $instance_var = null, $lookup_baseclass="AMPSystemLookup" ) {
         static $lookup_set = false;
         $empty_value = false;
-        if (!$lookup_set) $lookup_set = array();
+        $cache = AMP_get_cache( );
+
+        /*
+        if (!$lookup_set) {
+            $lookup_set = AMP_cache_get( AMP_CACHE_TOKEN_LOOKUP . 'Master__' . AMP_SYSTEM_USER_ID ); 
+            if ( !$lookup_set ) {
+                $lookup_set = array( );
+            }
+        }
+        */
         $req_class = $lookup_baseclass . '_' . ucfirst( $type );
         if ( !class_exists( $req_class ) ){
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
@@ -85,17 +94,35 @@ class AMPSystem_Lookup {
         }
         if ( !isset( $instance_var )) {
             //standard lookup
-            if (!isset($lookup_set[$type])) $lookup_set[$type] = &new $req_class(); 
+            if (!isset($lookup_set[$type])) {
+                $lookup_cache_key = $cache->identify( AMP_CACHE_TOKEN_LOOKUP . ( $type ), AMP_SYSTEM_USER_ID );
+                $cached_lookup = AMP_cache_get( $lookup_cache_key );
+                if ( !$cached_lookup ) {
+                    $lookup_set[$type] = &new $req_class(); 
+                    AMP_cache_set( $lookup_cache_key, $lookup_set[$type]);
+                } else {
+                    $lookup_set[$type] = $cached_lookup;
+                }
+            }
         } else {
             //instanced lookup
             if ( !isset( $lookup_set[$type])) {
                 $lookup_set[$type] = array( );
             }
             if ( !isset( $lookup_set[$type][$instance_var])) {
-                $lookup_set[$type][$instance_var] = &new $req_class( $instance_var );
+                $lookup_cache_key = $cache->identify( AMP_CACHE_TOKEN_LOOKUP . ( $type ), AMP_SYSTEM_USER_ID );
+                $lookup_cache_key = $cache->identify( $lookup_cache_key . 'K', $instance_var );
+                $cached_lookup = AMP_cache_get( $lookup_cache_key );
+                if ( !$cached_lookup ) {
+                    $lookup_set[$type][$instance_var] = &new $req_class( $instance_var );
+                    AMP_cache_set( $lookup_cache_key, $lookup_set[$type][$instance_var]);
+                } else {
+                    $lookup_set[$type][$instance_var] = $cached_lookup;
+                }
             }
             return $lookup_set[$type][$instance_var]->dataset;
         }
+        //AMP_cache_set( AMP_CACHE_TOKEN_LOOKUP . 'Master__' . AMP_SYSTEM_USER_ID, $lookup_set ); 
         return $lookup_set[$type]->dataset;
     }
 
@@ -988,6 +1015,26 @@ class AMPSystemLookup_ArticlesByTag extends AMPSystemLookup_ItemsByTag {
 
     function AMPSystemLookup_ArticlesByTag( $tag_id ) {
         $this->__construct( $tag_id );
+    }
+}
+
+class AMPSystemLookup_Downloads extends AMPSystem_Lookup {
+    function AMPSystemLookup_Downloads( $ext = null ) {
+        $this->__construct( $ext );
+    }
+
+    function __construct( $ext = null ) {
+        $this->dataset = AMPfile_list( 'downloads', $ext );
+    }
+}
+
+class AMPSystemLookup_Images extends AMPSystem_Lookup {
+    function AMPSystemLookup_Images( ) {
+        $this->__construct( );
+    }
+
+    function __construct( ) {
+        $this->dataset = AMPfile_list( 'img/thumb' );
     }
 }
 
