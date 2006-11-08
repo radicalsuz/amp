@@ -115,6 +115,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         $this->_updateTemplates( );
         $this->_updatePHPlistConfig( );
         $this->_updatePunbbConfig( );
+        $this->_clearCached( );
     }
 
     function execute( ) {
@@ -344,6 +345,11 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
     function get_DIA_orgcode( ){
         return $this->getData( 'dia_key') ;
+    }
+
+    function _clearCached( ) {
+        $system_setup_key = 'SYSTEM_SETUP_' . AMP_SYSTEM_UNIQUE_ID;
+        AMP_cache_delete( $system_setup_key );
     }
 }
 
