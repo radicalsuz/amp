@@ -1,5 +1,4 @@
 <?php
-
 require_once( 'AMP/System/Base.php');
 $AMP_Permission = &AMPSystem_PermissionManager::instance();
 ampredirect( $AMP_Permission->userHome( ));

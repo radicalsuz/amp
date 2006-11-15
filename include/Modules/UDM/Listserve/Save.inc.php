@@ -4,7 +4,7 @@ require_once( 'AMP/UserData/Plugin/Save.inc.php');
 
 class UserDataPlugin_Save_Listserve extends UserDataPlugin_Save {
     
-    var $available = false;
+    var $available = true;
     var $name = 'Listserve subscription Save';
 
     var $_listfield_template = array( 

@@ -20,7 +20,7 @@ echo "<tr><td><b>By Month</b> </td><td></td></tr>";
 $sql = "select distinct MONTH(date) as month,  YEAR(date) as year from action_history where actionid = ".$_REQUEST['report']	;
 $M= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
 while (!$M->EOF) {
-	$sql = 'select count(id) as number from action_history where actionid = '.$_REQUEST['report'] .' and MONTH(date) = '. $M->Fields('month')	;
+	$sql = 'select count(id) as number from action_history where actionid = '.$_REQUEST['report'] .' and MONTH(date) = '. $M->Fields('month') . ' and YEAR( date ) = ' . $M->Fields( 'year')	;
 	$C= $dbcon->Execute($sql)or DIE($sql.$dbcon->ErrorMsg());
 	
 	echo '<tr><td>'.date("F Y", mktime(0, 0, 0, $M->Fields('month'), 1, $M->Fields('year'))) ."</td><td> ".$C->Fields("number").'</td></tr>';
@@ -32,7 +32,3 @@ while (!$M->EOF) {
 echo '</table>';
 include ("footer.php");
 ?>
-	
-	
-	
-			

@@ -40,7 +40,7 @@ require_once( 'AMP/System/Page/Urls.inc.php');
         if (!$this->checkPermission()) return false;
 
         $output = $this->_HTML_NavTitle() . $this->_HTML_NavStart();
-        if (!is_array($this->items)) return $output . $this->_HTML_NavEnd();
+        if (!is_array($this->items)) return $output . $this->_HTML_NavSystem( ) . $this->_HTML_NavEnd();
 
         foreach ($this->items as $navkey => $nav_value) {
             if ( !is_array($nav_value) ) continue;
@@ -48,7 +48,7 @@ require_once( 'AMP/System/Page/Urls.inc.php');
             $output .= $this->_HTML_NavItem( $nav_value );
         }
 
-        return $output . $this->_HTML_NavEnd();
+        return $output . $this->_HTML_NavSystem( ) . $this->_HTML_NavEnd();
     }
 
 
@@ -117,8 +117,20 @@ require_once( 'AMP/System/Page/Urls.inc.php');
         return "\n<ul class=side>";
     }
 
+    function _HTML_NavSystem( ) {
+        return false;
+        return
+            '</ul>'
+            ."<p class='sidetitle'>&nbsp;</p>"
+            ."<p class='side_banner'>System</p>"
+            .'<ul class=side>'
+            . "\n" . '<li class= "side_add"><a href="permission.php" id="permission_update_link" onclick="window.AMP_permission_update( );return false;">Permission&nbsp;Update</a></li>';
+
+    }
+
     function _HTML_NavEnd() {
-        return "\n</ul><br clear='all' />";
+        return 
+            "\n</ul><br clear='all' />";
     }
 
     function _HTML_NavItem( $item ) {

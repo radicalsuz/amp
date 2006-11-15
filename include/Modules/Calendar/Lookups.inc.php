@@ -35,3 +35,4 @@ class AMPSystemLookup_DistributedEvent extends AMPSystem_Lookup {
 		$this->init();
 	}
 }
+?>

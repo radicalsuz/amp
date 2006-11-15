@@ -1017,6 +1017,31 @@ if ( !function_exists( 'AMP_Authorized')) {
         return $permissions->authorized ($id);
     }
 
+    function AMP_allow( $action, $item_type, $id ) {
+        static $gacl = false;
+        //trigger_error( AMP_SYSTEM_USER_ID );
+        if ( !$gacl ) {
+            $gacl_options = array( 
+                'smarty_dir' => 'phpgacl/admin/smarty/libs',
+                'smarty_template_dir' => 'phpgacl/admin/templates',
+                'smarty_compile_dir'  => AMP_SYSTEM_CACHE_PATH,
+                'db_type' 		    => AMP_DB_TYPE,
+                'db_host'			=> AMP_DB_HOST,
+                'db_user'			=> AMP_DB_USER,
+                'db_password'		=> AMP_DB_PASS, 
+                'db_name'			=> AMP_DB_NAME, 
+                'db_table_prefix'   => 'acl_',
+            //    'debug' => 1
+
+                );
+
+            require_once( 'phpgacl/gacl.class.php');
+            $gacl = &new gacl( $gacl_options );
+            AMP_Registry::setEntry( AMP_REGISTRY_PERMISSION_MANAGER, $gacl );
+        }
+        return $gacl->acl_check( 'commands', $action, AMP_SYSTEM_USER_TYPE, AMP_SYSTEM_USER_ID_ACL, AMP_pluralize( $item_type ), $item_type . '_' . $id );
+    }
+
 }
 if ( !function_exists( 'AMP_mkdir')) {
     function AMP_mkdir( $new_path, $per_level = 0775 ){

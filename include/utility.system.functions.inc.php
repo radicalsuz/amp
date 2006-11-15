@@ -55,4 +55,20 @@ function find_local_path () {
 	return $localPath;
 }
 }
+
+function AMP_init_local_path( ) {
+
+    // If we don't yet have a local path, find one.
+    if (!defined('AMP_LOCAL_PATH'))
+         define( 'AMP_LOCAL_PATH', find_local_path() );
+
+    if ( AMP_LOCAL_PATH ) {
+        $incpath = ini_get('include_path');
+        // Search local paths for includes.
+        ini_set( 'include_path', AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . "custom" . PATH_SEPARATOR .
+                                 AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . "lib" . PATH_SEPARATOR .
+                                 ini_get('include_path') );
+    }
+
+}
 ?>

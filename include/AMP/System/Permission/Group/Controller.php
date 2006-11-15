@@ -11,6 +11,7 @@ class AMP_System_Permission_Group_Controller extends AMP_System_Component_Contro
         require_once( 'phpgacl/setup.php');
         exit;
     }
+
 }
 
 

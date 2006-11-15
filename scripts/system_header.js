@@ -241,6 +241,19 @@ function AMP_flash_signal( ) {
     Effect.SlideDown( 'AMP_flash');
 }
 
+function AMP_permission_update( ) {
+    new Ajax.Updater ( 
+            'AMP_flash',
+            '/system/permission.php',
+            {
+                method: 'post',
+                parameters: 'action=update',
+                onLoading: AMP_flash_signal,
+                onSuccess: AMP_flash_clear
+            }
+        );
+}
+
 function clear_AMP_cache( ){
     new Ajax.Updater ( 
             'AMP_flash',

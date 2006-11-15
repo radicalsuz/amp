@@ -112,6 +112,7 @@ class AMP_System_Component_Controller {
     function execute( $output = true ){
         $data = $this->get_actions( );
         foreach ( $this->get_actions( ) as $action ){
+
             //try running the action cached
             if( $this->_commit_cached( $action )) {
                 continue;
@@ -149,6 +150,7 @@ class AMP_System_Component_Controller {
     }
 
     function _commit_default( ){
+
         $this->clear_actions( );
         return $this->execute( false );
     }

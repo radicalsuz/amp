@@ -1,18 +1,7 @@
 <?php
 
 require_once('utility.system.functions.inc.php');
-
-// If we don't yet have a local path, find one.
-if (!defined('AMP_LOCAL_PATH'))
-     define( 'AMP_LOCAL_PATH', find_local_path() );
-
-if ( AMP_LOCAL_PATH ) {
-	$incpath = ini_get('include_path');
-    // Search local paths for includes.
-    ini_set( 'include_path', AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . "custom" . PATH_SEPARATOR .
-                             AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . "lib" . PATH_SEPARATOR .
-                             ini_get('include_path') );
-}
+AMP_init_local_path( );
 
 require_once('utility.functions.inc.php');
 
