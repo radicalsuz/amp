@@ -35,6 +35,7 @@ class Section_List extends AMP_System_List_Form {
         $this->init( $this->_init_source( $dbcon  ) );
         $this->_map = &AMPContent_Map::instance( );
     }
+
     function _after_init( ){
         $this->addTranslation( 'name', '_formattedName');
         $this->addTranslation( 'order', '_makeInput');
@@ -77,9 +78,9 @@ class Section_List extends AMP_System_List_Form {
         $renderer = &$this->_getRenderer( );
         $section_options = &AMPContent_Lookup::instance( 'sectionMap' );
         if ( $section_options ) {
-            $section_options = array( '' => 'Select Section') + $section_options;
+            $section_options = array( '' => 'Select Section', AMP_CONTENT_MAP_ROOT_SECTION => '__' . AMP_SITE_NAME  . '__') + $section_options ;
         } else {
-            $section_options = array( '' => 'Select Section');
+            $section_options = array( '' => 'Select Section', AMP_CONTENT_MAP_ROOT_SECTION => AMP_SITE_NAME );
         }
                 
         $toolbar->addEndContent( 
@@ -95,7 +96,8 @@ class Section_List extends AMP_System_List_Form {
                             'id' => 'move_targeting')
                     ), 'move_targeting');
 
-        return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
+        //return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");window.scrollTo( 0, document.anchors[\"move_targeting\"].y );'>&nbsp;";
+        return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");$( \"move_targeting\").scrollTo();'>&nbsp;";
 
     }
 

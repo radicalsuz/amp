@@ -172,9 +172,10 @@ class Section extends AMPSystem_Data_Item {
 
 
     function _sort_default( &$item_set ){
-        require_once( 'AMP/Content/Map.inc.php');
-        $map = &AMPContent_Map::instance( );
-        $order = array_keys( $map->selectOptions( ));
+        #require_once( 'AMP/Content/Map.inc.php');
+        #$map = &AMPContent_Map::instance( );
+        if ( !( $order_base = AMP_lookup( 'sectionMap'))) return false;
+        $order = array_keys( $order_base );
         $item_set = array_combine_key( $order, $item_set );
     }
 
@@ -184,6 +185,7 @@ class Section extends AMPSystem_Data_Item {
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update' );
         $this->notify( 'reorder' );
+        AMP_cacheFlush( AMP_CACHE_TOKEN_LOOKUP );
         return $result;
 
     }
@@ -248,6 +250,8 @@ class Section extends AMPSystem_Data_Item {
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update' );
         $this->notify( 'move' );
+        AMP_cacheFlush( AMP_CACHE_TOKEN_LOOKUP );
+
         return $result;
 
     }
