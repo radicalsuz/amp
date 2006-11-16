@@ -166,7 +166,7 @@ class AMP_Authentication_Handler {
 
         $cookie['user'] = $cookie[1];
         $cookie['permission'] = $cookie[2];
-        $cookie['userid'] = $cookie[3];
+        $this->userid = $cookie['userid'] = $cookie[3];
 
         $cookie_sql = "SELECT hash, secret, last_time, userid FROM users_sessions WHERE hash=" . $this->dbcon->qstr( $cookie['hash'] );
         $authdata = $this->dbcon->GetRow( $cookie_sql );
@@ -181,6 +181,9 @@ class AMP_Authentication_Handler {
                     $this->user = $cookie['user'];
                     $this->permission = $cookie['permission'];
                     $this->has_cookie = $hash;
+                    if ( $this->userid ) {
+                        define( 'AMP_USER_PROFILE_ID', $this->userid );
+                    }
                     return true;
                 }
  
