@@ -12,59 +12,45 @@ $modid = 22;
 include("AMP/BaseDB.php");
 include_once("AMP/System/Email.inc.php");
 if (isset($modid)){
+  #this code initializes the $tophtml, $prmailtomessage, and $bthtml variables
 $modinstance = $dbcon->CacheExecute("SELECT * from module_control where modid = $modid") or DIE($dbcon->ErrorMsg());
 while (!$modinstance->EOF) {
 $a = $modinstance->Fields("var");
 $$a = $modinstance->Fields("setting");
 $modinstance->MoveNext();} }
 
-$setvar=$dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1") or DIE($dbcon->ErrorMsg());
+echo $tophtml; 
 
-echo $GLOBALS[tophtml]; 
-
-#
-# Title of the "poped" page:
-	
-# Path to mailto.php script:
-	$GLOBALS["path"]="mailto.php";
-# Site name:
-	$GLOBALS["site_name"]=  $SiteName;
-# webmaster's email:
-	$GLOBALS["your_email"]= $setvar->Fields("emfrom");
-	$setvar->Close();
-
-# Last words: You can distribute this script freely as long as my name and email are in header!
-
-############################ DO NOT EDIT BELOW ################################
 function show_form() {
+  $recommend = substr($_SERVER["QUERY_STRING"],4);
 ?>
 
-Recommend <b><?PHP echo substr ($GLOBALS["QUERY_STRING"],4); ?></b> to a friend ...
-<form method="post" action="<?PHP echo $GLOBALS["path"]; ?>">
-<input type=hidden name="url" value="<?PHP echo substr ($GLOBALS["QUERY_STRING"],4); ?>">
+Recommend <b><?PHP echo $recommend; ?></b> to a friend ...
+<form method="post" action="mailto.php">
+<input type=hidden name="url" value="<?PHP echo $recommend; ?>">
   <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr align="left" valign="top"> 
       <td width="50%"> Your name: </td>
       <td> 
-        <input type="text" name="form[from]" size="30">
+        <input type="text" name="from" size="30">
       </td>
     </tr>
     <tr align="left" valign="top"> 
       <td> <small>*</small> Your e-mail: </td>
       <td> 
-        <input type="text" name="form[from_email]" maxlength="40" size="30">
+        <input type="text" name="from_email" maxlength="40" size="30">
       </td>
     </tr>
     <tr align="left" valign="top"> 
       <td> <small>*</small> Friend's e-mail:</td>
       <td> 
-        <input type="text" name="form[to_email]" size="30">
+        <input type="text" name="to_email" size="30">
       </td>
     </tr>
     <tr align="left" valign="top"> 
       <td> Short note about this page: </td>
       <td> 
-        <textarea name="form[comment]" rows="5" cols="30"></textarea>
+        <textarea name="comment" rows="5" cols="30"></textarea>
       </td>
     </tr>
     <tr align="left" valign="top">
@@ -95,22 +81,26 @@ function check_email ($address) {
 	return (ereg('^[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+'.'@'.'[-!#$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.'.'[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+$',$address));
 }
 
-if ($submit) {
+if ($_REQUEST['submit']) {
 
-	if (! check_email ($form["from_email"]) || ! check_email ($form["to_email"]) ) error ("Invalid e-mail address!");
-        $date=date( "D, j M Y H:i:s -0600");
-	$to_email=$form["to_email"];
-	$from=$form["from"];
-	$from_email=AMPSystem_Email::sanitize($form["from_email"]);
-	$comment=$form["comment"];
-	$site_name=AMPSystem_Email::sanitize($GLOBALS["site_name"]);
-	$your_email=AMPSystem_Email::sanitize($GLOBALS["your_email"]);
-	$message="Hi\n$from ($from_email) invited you to visit $site_name\n".$GLOBALS['prmailtomessage']."\nCheck out this URL: $url";
-		if ($form["comment"] != "") {
+	if (! check_email ($_REQUEST["from_email"]) || ! check_email ($_REQUEST["to_email"]) ) error ("Invalid e-mail address!");
+        $date=date( "D, j M Y H:i:s -0800");
+	$to_email=$_REQUEST["to_email"];
+	$from=$_REQUEST["from"];
+	$from_email=AMPSystem_Email::sanitize($_REQUEST["from_email"]);
+	$comment=$_REQUEST["comment"];
+	$site_name=AMPSystem_Email::sanitize(AMP_SITE_NAME);
+  $url = $_REQUEST["url"];
+	$message="Hi\n$from ($from_email) invited you to visit $site_name\n".$prmailtomessage."\nCheck out this URL: $url";
+		if ($_REQUEST["comment"] != "") {
 			$message.="\n\n$from left you a note:\n$comment";
 		}
 	
-	$subject="You were invited by $from to visit ".$GLOBALS["site_name"]."!";
+  $setvar=$dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1") or DIE($dbcon->ErrorMsg());
+	$your_email=AMPSystem_Email::sanitize($setvar->Fields("emfrom"));
+	$setvar->Close();
+
+	$subject="You were invited by $from to visit ".$site_name."!";
 	$add="From: $site_name <$your_email>\nReply-To: $from_email\nDate: $date\n";
 	if (@mail ("$to_email","$subject","$message","$add")) {
 		echo "<center>Message successfully sent!<br>Thank you!<br><br>[ <a href=\"javascript:window.close()\">Close this window</a> ]</center>";
@@ -118,4 +108,4 @@ if ($submit) {
 
 } else show_form();
 
- echo $GLOBALS['bthtml']; ?>
+ echo $bthtml; ?>
