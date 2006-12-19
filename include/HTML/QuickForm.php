@@ -1830,7 +1830,7 @@ class HTML_QuickForm extends HTML_Common {
                 if (is_array($value)) {
                     // This shit throws a bogus warning in PHP 4.3.x
                     $values = HTML_QuickForm::arrayMerge($values, $value);
-                }
+                } 
             }
         } else {
             if (!is_array($elementList)) {

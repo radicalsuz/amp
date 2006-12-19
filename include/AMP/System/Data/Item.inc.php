@@ -46,6 +46,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $this->init($dbcon);
     }
 
+    function __construct( &$dbcon, $id = null ) {
+        $this->init( $dbcon, $id );
+    }
+
     function init ( &$dbcon, $item_id = null ) {
         if ( !is_object( $dbcon )){
             trigger_error( sprintf( AMP_TEXT_ERROR_DATABASE_CONNECTION_BAD, get_class( $this )));

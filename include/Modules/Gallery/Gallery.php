@@ -15,13 +15,16 @@ class Gallery extends AMPSystem_Data_Item {
 
     function &getDisplay( $displayType = 'Full') {
         if ( isset( $this->_display )) return $this->display;
-        require_once( 'Modules/Gallery/Display.inc.php');
-        $display_class = 'Gallery_Display';
-        $requested_class = $display_class . $displayType;
-
-        if ( class_exists( $requested_class )) $display_class = $requested_class;
+        //require_once( 'Modules/Gallery/Display.inc.php');
+        //$display_class = 'Gallery_Display';
+        //$requested_class = $display_class . $displayType;
+        // if ( class_exists( $requested_class )) $display_class = $requested_class;
         
-        $this->_display = &new $display_class ( $this );
+        require_once( 'Modules/Gallery/Public/Display.php');
+        $display_class = 'Gallery_Public_Display';
+        
+        $this->_display = &new $display_class ( false, array( 'gallery' => $this->id) );
+        $this->_display->set_source_gallery( $this );
         return $this->_display;
     }
 

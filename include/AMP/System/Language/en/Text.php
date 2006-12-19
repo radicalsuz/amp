@@ -75,6 +75,7 @@ define( 'AMP_TEXT_SELECT_NEW_WIDTHS_FOR', 'Select new widths for');
 define( 'AMP_TEXT_GALLERY', 'Gallery');
 define( 'AMP_TEXT_SELECT', 'Select %s');
 define( 'AMP_TEXT_ACTION_NOTICE', 'Performing %s on %s');
+define( 'AMP_TEXT_FULL_SIZE', 'Full Size');
 
 /**
  * RSS listpage text
@@ -159,8 +160,16 @@ define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
 
 define( 'AMP_TEXT_TEMPLATE', 'template');
 define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
+
+/**
+ * Misc result messages 
+ */
+
 define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
 define( 'AMP_TEXT_CACHE_RESET_INTERNAL', 'Cache flushed from %s by user: %s' );
+define( 'AMP_TEXT_MODULE_GALLERY_EMPTY', 'No photos are available in this gallery');
+
+
 /**
  * Comment
  */
@@ -221,9 +230,9 @@ define( 'AMP_TEXT_DATE_UPDATED', 'Date Updated' );
 define( 'AMP_TEXT_CREATED', 'Created');
 define( 'AMP_TEXT_UPDATED', 'Updated');
 define( 'AMP_TEXT_UPDATE', 'Update');
-define( 'AMP_TEXT_UPDATE', 'Insert');
+define( 'AMP_TEXT_INSERT', 'Insert');
 define( 'AMP_TEXT_READ', 'Read');
-define( 'AMP_TEXT_READ', 'Find');
+define( 'AMP_TEXT_FIND', 'Find');
 define( 'AMP_TEXT_CURRENT_ACTION', '%sing %s');
 define( 'AMP_TEXT_BY', 'by' );
 define( 'AMP_TEXT_ID', 'ID' );

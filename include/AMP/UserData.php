@@ -583,6 +583,7 @@ class UserData {
 	}
 
 	function getFormCallbacks($type) {
+        if ( !isset( $this->_form_callbacks[$type])) return array( );
 		return $this->_form_callbacks[$type];
 	}
 

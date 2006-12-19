@@ -64,7 +64,8 @@
    define('CAPTCHA_OWNER_TEXT', AMP_SITE_URL );
    define('CAPTCHA_CHAR_SET', ''); // defaults to A-Z
    define('CAPTCHA_CASE_INSENSITIVE', true);
-   define('CAPTCHA_BACKGROUND_IMAGES', '');
+   //define('CAPTCHA_BACKGROUND_IMAGES', '');
+   define('CAPTCHA_BACKGROUND_IMAGES', AMP_LOCAL_PATH . '/img/captcha_bg1.jpg,'. AMP_LOCAL_PATH . '/img/captcha_bg2.jpg' );
    define('CAPTCHA_MIN_FONT_SIZE', 16);
    define('CAPTCHA_MAX_FONT_SIZE', 25);
    define('CAPTCHA_USE_COLOUR', true);
@@ -192,7 +193,7 @@
       }
       
       function SetBackgroundImages($vBackgroundImages) {
-         $this->vBackgroundImages = $vBackgroundImages;
+         $this->vBackgroundImages = explode( ',', $vBackgroundImages );
       }
       
       function SetMinFontSize($iMinFontSize) {
@@ -265,13 +266,10 @@
          }
          
          // save code in session variable
-         if ($this->bCaseInsensitive) {
-            $this->_cache->add( strtoupper( $this->sCode ), CAPTCHA_SESSION_ID );
-            //$_SESSION[CAPTCHA_SESSION_ID] = strtoupper($this->sCode);
-         } else {
-            $this->_cache->add( $this->sCode, CAPTCHA_SESSION_ID );
-            //$_SESSION[CAPTCHA_SESSION_ID] = $this->sCode;
-         }
+         $captcha_code = $this->bCaseInsensitive ? strtoupper( $this->sCode ) : $this->sCode;
+         $this->_cache->add( $captcha_code, CAPTCHA_SESSION_ID );
+         AMP_Form_Element_Captcha::create( CAPTCHA_SESSION_ID, $this->sCode );
+         //$_SESSION[CAPTCHA_SESSION_ID] = $captcha_code;
       }
       
       function DrawCharacters() {
@@ -407,10 +405,18 @@
          }
          
          //if (!empty($_SESSION[CAPTCHA_SESSION_ID]) && $sUserCode == $_SESSION[CAPTCHA_SESSION_ID]) {
+         //$cached_code = $this->_cache->retrieve( CAPTCHA_SESSION_ID );
+         trigger_error( 'found cached code ' . $cached_code . 'vs '. $sUserCode );
+         if ( !$cached_code ) {
+             $cached_code = AMP_Form_Element_Captcha::validate( CAPTCHA_SESSION_ID ) ;
+         }
+         trigger_error( 'found cached code ' . $cached_code . 'vs '. $sUserCode );
+
          if (( $cached_code = $this->_cache->retrieve( CAPTCHA_SESSION_ID )) && $sUserCode == $cached_code ) {
             // clear to prevent re-use
             //unset($_SESSION[CAPTCHA_SESSION_ID]);
             $this->_cache->delete( CAPTCHA_SESSION_ID );
+            AMP_Form_Element_Captcha::delete( CAPTCHA_SESSION_ID );
             
             return true;
          }
@@ -505,5 +511,64 @@
          // set options
          $this->UseColour(true);
       }
+   }
+
+   require_once( 'AMP/System/Data/Item.inc.php');
+
+   class AMP_Form_Element_Captcha extends AMPSystem_Data_Item {
+       var $datatable = 'form_captchas';
+       var $class_name = 'AMP_Form_Element_Captcha';
+       var $id_field = 'session';
+
+        function AMP_Form_Element_Captcha( &$dbcon, $id = null ) {
+            $this->init( $dbcon, $id );
+        }
+
+        function create( $session_id, $captcha_value ) {
+            $dbcon = AMP_Registry::getDbcon( );
+            $item = &new AMP_Form_Element_Captcha( $dbcon ) ;
+            $item_data = array( 'session' => $session_id, 'captcha' => $captcha_value );
+            $item->setData( $item_data );
+            $result = $item->save( );
+            if ( $result ) return $item->id;
+            return false;
+        }
+
+        function makeCriteriaSession( $session_id ) {
+            return 'session=' . $this->dbcon->qstr( $session_id );
+        }
+
+        function makeCriteriaOlderThan( $timestamp ) {
+            return 'UNIX_TIMESTAMP( issued_at ) < ' . ( $timestamp );
+        }
+
+        function delete( $session_id ) {
+            $dbcon = AMP_Registry::getDbcon( );
+            $item = &new AMP_Form_Element_Captcha( $dbcon, $session_id ) ;
+            if ( $item->hasData( )) {
+                $result = $item->deleteData( $session_id );
+            }
+
+            mt_srand((double)microtime()*1000000);
+            if ( mt_rand( 0, 10 ) !== 1 ) return $result; 
+
+            $age_criteria = array( 'olderThan' => ( time( ) - 6000 ));
+            $result = $item->deleteByCriteria( $age_criteria );
+            return $result;
+
+        }
+
+        function getCaptcha( ) {
+            return $this->getData( 'captcha' );
+        }
+
+        function validate( $session_id ) {
+            $item = &new AMP_Form_Element_Captcha( AMP_Registry::getDbcon( ), $session_id );
+            if ( $item->hasData( )) {
+                return $item->getCaptcha( );
+            }
+            return false; 
+        }
+
    }
 ?>

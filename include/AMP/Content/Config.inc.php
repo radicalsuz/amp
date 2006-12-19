@@ -118,6 +118,7 @@ define ('AMP_SYSTEM_ICON_EDIT', '/system/images/edit.png' );
 define ('AMP_SYSTEM_ICON_VIEW', '/system/images/view2.png' ); 
 define ('AMP_SYSTEM_ICON_PREVIEW', '/system/images/view.gif' );
 define ('AMP_SYSTEM_ICON_DELETE', '/system/images/delete.png' );
+define ('AMP_SYSTEM_ICON_ENLARGE', '/img/magnify-clip.png' );
 
 /**
  * Default value for unlimited navs 

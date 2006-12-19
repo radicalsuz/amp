@@ -8,6 +8,7 @@ class ElementCopierScript {
     var $copier_name_default = "copymaker";
     var $copiers = array();
     var $_header;
+    var $_controls = array( 'remove' => array( 'type'=>'button'));
 
     function ElementCopierScript( $fields = null ) {
         $this->init($fields);
@@ -78,12 +79,34 @@ class ElementCopierScript {
 
     function addControlButtons( $copiername ) {
 									 
+        
+        /*
         $del_button =
             array( 'type'   => 'button',
                    'action' => 'window.' . $copiername . ".RemoveCurrentSet( this );",
                    'label'  => $this->getButtonText( 'remove', $copiername ) );
 
         $this->addField( $del_button, 'form_del_btn', $copiername );
+        */
+        
+
+        foreach( $this->_controls as $control_name => $control_def ) {
+            $control = $control_def;
+            if ( !isset( $control_def['label'])) {
+                $control['label'] = $this->getButtonText( $control_name, $copiername );
+            }
+
+            if ( !isset( $control['action'])) {
+                $control['action'] = 'window.' .$copiername . "." . ucfirst( $control_name ) . 'CurrentSet( this );';
+            }
+            
+            $this->addField( $control, 'form_control_' . $control_name, $copiername );
+        }
+
+    }
+
+    function addControl( $control_name, $control_def ) {
+        $this->_controls[$control_name] = $control_def;
 
     }
 
@@ -372,7 +395,9 @@ class ElementCopierScript {
 		return $value;
 	}
 
-
+    function __wakeup( ) {
+        $this->init( );
+    }
 
 
 }

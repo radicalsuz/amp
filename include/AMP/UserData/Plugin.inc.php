@@ -373,6 +373,13 @@ class UserDataPlugin {
         return $value;
     }
 
+    function imagepickerFieldtoText( $value, $keyname ) {
+        if ( !$this->udm->admin ) {
+            return $this->fileFieldtoText( $value, $keyname );
+        }
+        return $value;
+    }
+
     function fileFieldtoText( $value, $keyname ) {
         $value_key = $keyname . '_value';
         if (!( isset( $_FILES[ $keyname ][ 'tmp_name' ] ) && $_FILES[ $keyname ]['tmp_name'])) {
@@ -380,7 +387,7 @@ class UserDataPlugin {
         }
         
         $builder = &$this->udm->getPlugin( 'QuickForm', 'Build');
-        $engine = &$builder->getFormEngine( );
+        $engine = $builder->getFormEngine( );
         if ( !( $text = $engine->getValues(  array( $keyname )))) return false;
         return current( $text ); 
     }
@@ -421,7 +428,7 @@ class UserDataPlugin {
     //fix checkbox problem - blank checkboxes don't save values
     function reinstateBlankCheckBoxValues( $data, $local = true ) {
         $returnSet = array();
-        if (!isset($this->udm)) return false;
+        if (!isset($this->udm)) return $returnSet;
 
         foreach ($this->udm->fields as $fname =>$fDef) {
             if (isset($data[$fname])) continue;

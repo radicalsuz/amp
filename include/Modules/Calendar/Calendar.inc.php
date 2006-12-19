@@ -149,7 +149,7 @@ var $id;
 
     function addRecurringFields( ) {
         $fields = array();
-        if (!$this->allowRecurringEvents()) return null;
+        if (!$this->allowRecurringEvents()) return array( );
         $fields['header_recur']= array('type'=>'header', 'label'=>'Repeating Events<BR><span class=photocaption>The next three items apply to Repeating events only:</span>', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true);
         $fields['recurring_options']= array('type'=>'select', 'label'=>'Event Frequency', 'required'=>false, 'public'=>true, 'values'=>'Lookup(calendar_recur, name, id)', 'default'=>0, 'enabled'=>true);
         $fields['enddate']=array('type'=>'date', 'label'=>'Choose a date for the event to stop appearing on the calendar:', 'required'=>false, 'public'=>true,  'default'=>'today', 'enabled'=>true);
@@ -158,7 +158,7 @@ var $id;
     }
 
     function addRegistrationFields ( ) {
-        if (! $this->allowRegistration() ) return null;
+        if (! $this->allowRegistration() ) return array( );
         if ($this->admin) {
             $fields['registration_modin'] = array (
                 'label' => 'Registration Form',

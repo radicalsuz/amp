@@ -176,7 +176,13 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         foreach( $this->_included_fields as $fieldname ) {
             if ( array_search( $fieldname, $specified_fields ) !== FALSE ) continue;
             if ( !( isset( $_REQUEST[ $fieldname ]) && $_REQUEST[ $fieldname ])) continue;
-            $sql_criteria[] = $fieldname . ' LIKE ' . $this->dbcon->qstr( '%' . $_REQUEST[$fieldname] . '%' );
+            if ( is_int( $_REQUEST[$fieldname])) {
+                //do precise search for numeric values
+                $sql_criteria[] = $fieldname . ' = ' . $this->dbcon->qstr(  $_REQUEST[$fieldname] );
+            } else {
+                //do string 'contains' search
+                $sql_criteria[] = $fieldname . ' LIKE ' . $this->dbcon->qstr( '%' . $_REQUEST[$fieldname] . '%' );
+            }
         }
 
 		//Vet valid URL data
@@ -317,6 +323,12 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         foreach ( $this->_included_fields as $fieldname ) {
             if ( !isset( $this->udm->fields[ $fieldname ])) continue;
             $def[ $fieldname ] = $this->udm->fields[ $fieldname ];
+
+            $forbid_multi_search = array( 'radiogroup', 'checkgroup', 'multiselect');
+            if ( array_search( $def[$fieldname]['type'], $forbid_multi_search ) !== FALSE ) {
+                $def[ $fieldname ][ 'type' ] = 'select';
+                $def[ $fieldname ][ 'size' ] = 1;
+            }
         }
     }
 
@@ -414,6 +426,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
 		//get the element reference
 		$fRef =& $form->getElement( $name );
+        if ( !$fRef || strtolower( get_class( $fRef )) == 'html_quickform_error' ) return false;
 
 		$fRef->updateAttributes(array('class'=>$this->control_class, 'size'=>$size));
 		if ( isset( $selected ) ) {

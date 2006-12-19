@@ -2,6 +2,7 @@
 
 require_once( 'AMP/System/Form/XML.inc.php');
 require_once( 'AMP/Content/Nav/Layout/ComponentMap.inc.php');
+require_once( 'AMP/Content/Nav/Location/List.inc.php');
 
 class AMP_Content_Nav_Layout_Form extends AMPSystem_Form_XML {
 
@@ -68,7 +69,6 @@ class AMP_Content_Nav_Layout_Form extends AMPSystem_Form_XML {
 
     function _getPositionList( $id = null ) {
         if ( isset( $this->_positionList )) return $this->_positionList->execute( );
-        require_once( 'AMP/Content/Nav/Location/List.inc.php');
  
         $positionList = &new AMP_Content_Nav_Location_List( AMP_Registry::getDbcon( ));
         $positionList->applySearch( array( 'layout_id' => $id ));
@@ -80,6 +80,13 @@ class AMP_Content_Nav_Layout_Form extends AMPSystem_Form_XML {
 
     function _getLocations( $data, $fieldname ){
         return $this->_positionList->getPositions( );
+    }
+
+    function __wakeup( ) {
+        if ( isset( $this->_positionList )) {
+            $this->_positionList->execute( );
+        }
+        parent::__wakeup( );
     }
 
 

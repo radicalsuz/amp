@@ -23,8 +23,10 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
         // "enabled" fields will be returned for saving. This decision process
         // is in the UserData object itself.
 
-        $db_fields   = $this->udm->dbcon->MetaColumnNames('userdata');
-        $qf_fields   = array_keys( $this->udm->form->exportValues() );
+        //$db_fields   = $this->udm->dbcon->MetaColumnNames('userdata');
+        $db_fields   = $this->_getColumnNames( 'userdata');
+        $qf_fields   = $this->_include_file_fields( array_keys( $this->udm->form->exportValues() ));
+        
 
         $save_fields = array_intersect( $db_fields, $qf_fields );
         $this->_field_prefix="";
@@ -33,12 +35,27 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
     }
 
+    function _include_file_fields( $qf_fields ) {
+        if ( !in_array( 'MAX_FILE_SIZE', $qf_fields )) {
+            return $qf_fields;
+        }
+
+        foreach( $qf_fields as $fieldname ) {
+            $value_point = strlen( $fieldname ) - 6;
+            if ( substr( $fieldname, $value_point ) == '_value') {
+                $qf_fields[] = substr( $fieldname, 0, $value_point )   ;
+            }
+        }
+        return $qf_fields;
+
+    }
+
     function save ( $data ) {
 
         $sql = ($this->udm->uid) ? $this->updateSQL( $data ) :
                                    $this->insertSQL( $data );
 
-        $rs = $this->dbcon->CacheExecute( $sql ) or
+        $rs = $this->dbcon->Execute( $sql ) or
                     die( "Unable to save request data using SQL $sql: " . $this->dbcon->ErrorMsg() );
 
         if ($rs) {
@@ -96,6 +113,22 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
     }
 
+    function _getColumnNames( $sourceDef ) {
+        $reg = &AMP_Registry::instance();
+        $definedSources = &$reg->getEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
+        if ( !$definedSources ) {
+            $definedSources = AMP_cache_get( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
+        }
+        if ($definedSources && isset($definedSources[ $sourceDef ])) return $definedSources[ $sourceDef ];
+
+        if ( !isset( $this->dbcon )) trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this ), 'dbcon' ));
+        $colNames = $this->dbcon->MetaColumnNames( $sourceDef );
+        $definedSources[ $sourceDef ] = $colNames;
+        $reg->setEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
+        AMP_cache_set( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
+
+        return $colNames;
+    }
 }
 
 ?>

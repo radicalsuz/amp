@@ -11,7 +11,7 @@ $PHP_SELF = $_SERVER['PHP_SELF'];
 #load menu class	
 if (file_exists($base_path."Connections/menu.class.php")) {
     require_once($base_path."Connections/menu.class.php");
-    $obj = new Menu;
+    $obj = new Menu( );
 } 
 
 $MM_USERNAME = AMP_DB_USER;

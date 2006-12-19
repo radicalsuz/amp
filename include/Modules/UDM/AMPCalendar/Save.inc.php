@@ -57,7 +57,7 @@ class UserDataPlugin_Save_AMPCalendar extends UserDataPlugin_Save {
         $this->options['reg_modin']['values']    = array( '' => 'None selected') + $forms;
     }
 
-    function save ( $data, $options = null ) {
+    function save ( $data, $options = array( )) {
         $options = array_merge( $this->getOptions(), $options );
         if (!isset($this->udm->uid)) return false;
         $data['uid'] = $this->udm->uid;

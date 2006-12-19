@@ -43,7 +43,9 @@ class ContentImage_Resize {
     }
 
     function makeVersionOriginal( ){
-        return;
+        $target_path = $this->_content_image_controller->getPath( AMP_IMAGE_CLASS_ORIGINAL );
+		if ($target_path == $this->_image_ref->getPath()) return;
+        return $this->makeVersion( AMP_IMAGE_CLASS_ORIGINAL );
     }
 
     function makeVersion( $version_class, $save = true  ){
@@ -75,6 +77,7 @@ class ContentImage_Resize {
     function setImageFile( $filename ) {
 
         if ( !file_exists( $filename )) return false; 
+
         $image_ref = &new AMP_System_File_Image( $filename );
         if ( array_search( $image_ref->get_mimetype( ), $this->_allowed_mimetypes ) === FALSE ) {
             $this->addError( AMP_TEXT_ERROR_IMAGE_NOT_ALLOWED );

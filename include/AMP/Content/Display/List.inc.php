@@ -84,7 +84,9 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     }
 
     function execute() {
+
         if (!$this->_prepareData()) return $this->noResultsDisplay();
+
         if ( is_array( $this->_source ) ) {
             $sourceItems = &$this->_source ;
         } else {

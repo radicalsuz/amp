@@ -30,6 +30,7 @@ function ElementCopier ( formname, start_qty ) {
     this.MoveSet = MoveSet;
     this.RemoveSet = RemoveSet;
     this.RemoveCurrentSet = RemoveCurrentSet;
+    this.GetCurrentValue = GetCurrentValue;
     //this.ValidateItems = ValidateItems;
     //this.event = event;
     this.pushValue = pushValue;
@@ -302,6 +303,13 @@ function RemoveCurrentSet( elementRef ) {
     row_index = parentRow( elementRef ).rowIndex;
     set_index = this.findSetbyRow( row_index );
     this.RemoveSet( set_index );
+}
+
+function GetCurrentValue( elementRef, elementName ) {
+    elementIndex = this.findDupElementIndex( elementName );
+    row_index = parentRow( elementRef ).rowIndex;
+    set_index = this.findSetbyRow( row_index );
+    return this.pullValue( this.ElementSets[set_index]['elements'][elementIndex] );
 }
 
 function RemoveSet( set_index ) {

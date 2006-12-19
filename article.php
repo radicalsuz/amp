@@ -75,6 +75,7 @@ if ( ( !AMP_DISPLAYMODE_PREVIEW )  && ($currentArticle = &$currentPage->getArtic
  */
 if ( $currentPage->isList( AMP_CONTENT_LISTTYPE_SECTION ) 
     && ($currentSection = &$currentPage->getSection() )) {
+    if ( !$currentSection->isLive( )) AMP_make_404( );
     if ( $target = $currentSection->getHeaderRedirect() ) ampredirect( $target );
 }
 

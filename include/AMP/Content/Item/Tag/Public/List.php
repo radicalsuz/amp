@@ -16,7 +16,6 @@ class AMP_Content_Item_Tag_Public_List extends AMP_Display_List {
     }
 
     function _renderItem( &$source ) {
-        //default, should be overridden
         $url = $source->getTagURL( );
         return $this->_renderer->link( $url, $source->getTagName( ), array( 'class' => 'title' ))
                 . $this->_renderer->newline( );

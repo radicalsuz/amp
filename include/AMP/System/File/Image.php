@@ -47,13 +47,17 @@ class AMP_System_File_Image extends AMP_System_File {
 
 
     function &get_image_resource( ){
-        if( !($read_method = $this->_get_action_method( 'read') )) return false;
-        return $read_method( $this->getPath( ));
+        $false = false;
+        if( !($read_method = $this->_get_action_method( 'read') )) return $false;
+        $value = $read_method( $this->getPath( ));
+        return $value;
     }
 
     function &create_image_resource( $width, $height ) {
-        if( !($create_method = $this->_get_action_method( 'create') )) return false ;
-        return $create_method( $width, $height ) ;
+        $false = false;
+        if( !( $create_method = $this->_get_action_method( 'create') )) return $false;
+        $value = $create_method( $width, $height ) ;
+        return $value;
     }
 
     function _get_action_method( $action ) {

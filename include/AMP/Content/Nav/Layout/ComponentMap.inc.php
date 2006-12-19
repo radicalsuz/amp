@@ -8,6 +8,7 @@ class ComponentMap_Nav_Layout extends AMPSystem_ComponentMap {
     var $nav_name = "nav";
 
     var $_action_default = 'list';
+    var $_cache_allowed = array( 'form' => 'false' );
 
     var $paths = array( 
         'fields' => 'AMP/Content/Nav/Layout/Fields.xml',

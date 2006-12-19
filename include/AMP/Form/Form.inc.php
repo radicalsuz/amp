@@ -14,7 +14,7 @@
  *
  */
 
-define('AMP_FORM_UPLOAD_MAX',8388608);
+define('AMP_FORM_UPLOAD_MAX',33554432);
  require_once( 'HTML/QuickForm.php' );
  require_once( 'AMP/Form/HTMLEditor.inc.php');
  require_once( 'AMP/Form/Template.inc.php');
@@ -233,7 +233,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
 		$result_data = $data;
 		foreach ( $this->translations[ $action] as $fieldname => $translate_method_set ) {
             if ( !is_array( $translate_method_set )) continue;
-            if ( isset( $requested_fields ) && !isset( $requested_fields[ $fieldname ])) continue;
+            if ( isset( $requested_fields ) && !in_array( $fieldname, $requested_fields )) continue;
 
             foreach( $translate_method_set as $translate_method ){
                 if (!method_exists( $this, $translate_method )) continue;
@@ -379,6 +379,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         $time_stamped = mktime($hour,$minute,$second,$month,$day,$year);
         if ( !$time_stamped ) return false;
         $dat_is_good = date( 'Y-m-d H:i:s', $time_stamped );
+
         if ( !AMP_verifyDateTimeValue( date( 'Y-m-d H:i:s', $time_stamped ))) return AMP_NULL_DATETIME_VALUE;
         if ( !AMP_verifyDateValue( date( 'Y-m-d', $time_stamped ))) return AMP_NULL_DATETIME_VALUE;
 

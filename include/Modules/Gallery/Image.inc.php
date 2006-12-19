@@ -85,8 +85,9 @@ class GalleryImage extends AMPSystem_Data_Item {
     }
     function getGalleryName( ){
         if ( !$id = $this->getGallery( )) return false;
-        $galleries = &AMPContent_Lookup::instance( 'galleries');
-        if ( !isset( $galleries[$id])) return false;
+        //$galleries = AMPContent_Lookup::instance( 'galleries');
+        $galleries = AMP_lookup( 'galleries');
+        if ( !$galleries ||  !isset( $galleries[$id])) return false;
         return $galleries[$id];
     }
 
@@ -131,8 +132,15 @@ class GalleryImage extends AMPSystem_Data_Item {
 
     function getListOrder( ){
         $value = $this->getData( 'listorder' );
-        if ( !$value ) $value = AMP_CONTENT_LISTORDER_MAX . $this->getName( ) ;
-        return $this->getGalleryName( ) . $value;
+        if ( !$value ) $value = AMP_CONTENT_LISTORDER_MAX; 
+        $value .= '_' . $this->getName( ) ;
+        return $this->getGalleryName( ) . '_' . $value;
     }
+
+    function get_url_edit( ) {
+        if ( !$this->id ) return false;
+        return AMP_url_add_vars( AMP_SYSTEM_URL_GALLERY_IMAGE, array( 'id='.$this->id)) ;
+    }
+
 }
 ?>

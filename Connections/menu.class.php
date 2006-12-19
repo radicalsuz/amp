@@ -1,5 +1,4 @@
-<?
-
+<?php
 /*
 All source code copyright and proprietary Melonfire, 2001. All content, brand names and trademarks copyright and proprietary Melonfire, 2001. All rights reserved. Copyright infringement is a violation of law.
 

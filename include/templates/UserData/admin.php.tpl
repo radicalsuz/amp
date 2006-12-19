@@ -250,7 +250,7 @@ function addPlugin() {
     }
 </style>
 
-<form <?= $this->form['attributes'] ?>>
+<form <?php print $this->form['attributes'] ?>>
 
 <div id="tabs">
     <ul id="topnav">
@@ -259,13 +259,13 @@ function addPlugin() {
         <li class="tab3"><span id="custom_tab_btn" onclick="change('custom_tab');">Custom Fields</span></li>
         <li class="tab4"><span id="plugins_tab_btn" onclick="change('plugins_tab');">Plugins</span></li>
         <li class="tab5"><span id="preview_tab_btn" onclick="change('preview_tab');">Preview</span></li>
-        <li class="buttons" style="float: right;"><?php foreach ($this->form['sections'][0]['elements'] as $e): ?><?= $e['html'] ?><?php endforeach; ?></li>
+        <li class="buttons" style="float: right;"><?php foreach ($this->form['sections'][0]['elements'] as $e): ?><?php print $e['html'] ?><?php endforeach; ?></li>
     </ul>
 </div>
 
 <br style="clear: both;" />
 
-<?= $this->form['javascript'] ?>
+<?php print $this->form['javascript'] ?>
 
 <div id="formContainer">
 
@@ -273,30 +273,30 @@ function addPlugin() {
 
     <?php if (!isset($section['name']) || $section['name'] == '') continue; ?>
 
-    <div id="<?= $section['name'] ?>" class="tab">
+    <div id="<?php print $section['name'] ?>" class="tab">
 
         <?php foreach ( $section['elements'] as $e ): ?>
 
             <?php if (strpos($e['name'], 'arrow') !== false) { ?>
 
-                <div class="fieldset" id="<?= substr($e['name'], 6) ?>_parent">
+                <div class="fieldset" id="<?php print substr($e['name'], 6) ?>_parent">
 
             <?php } elseif (strpos($e['name'], 'type') !== false) { ?>
 
-                <div id="<?= substr($e['name'], 5) ?>" class="hidden">
+                <div id="<?php print substr($e['name'], 5) ?>" class="hidden">
 
             <?php } ?>
 
             <?php if ($e['name'] == 'plugin_add_btn') { ?>
 
                 <p style="clear: none;">
-                    <?= $e['html'] ?>
+                    <?php print $e['html'] ?>
                 </p>
 
             <?php } else { ?>
 
-            <p class="field<?= (strpos($e['name'],'title') !== false) ? ' title' : '' ?>">
-                <label for="<?= $e['name'] ?>"><?=$e['label']?></label> <?= $e['html'] ?>
+            <p class="field<?php print (strpos($e['name'],'title') !== false) ? ' title' : '' ?>">
+                <label for="<?php print $e['name'] ?>"><?php print$e['label']?></label> <?php print $e['html'] ?>
             </p>
 
             <?php } ?>

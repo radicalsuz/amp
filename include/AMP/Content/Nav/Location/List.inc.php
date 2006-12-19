@@ -3,6 +3,7 @@ require_once( 'AMP/System/List/Form.inc.php' );
 require_once( 'AMP/Content/Nav/Location/Location.php' );
 require_once( 'AMP/Content/Nav/Location/Toolbar.php');
 require_once( 'AMP/Content/Nav/Location/ComponentMap.inc.php');
+require_once( 'AMP/Form/ElementCopierScript.inc.php');
 
 class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
     var $name = "Nav_Location";
@@ -10,6 +11,7 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
         'Nav'        => 'navid',
         'Position'   =>  'position',
         'Remove'   =>  '_listControls',
+        'Edit'   =>  '_listControls',
         );
     var $editlink = AMP_SYSTEM_URL_NAV_LAYOUT;
     var $_source_object = 'AMP_Content_Nav_Location';
@@ -50,8 +52,11 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
     }
 
     function _listControls( &$source, $fieldname ){
-        $renderer = $this->_getRenderer( );
-		 return       "<input name='remove_nav_location[".$source->id."]' type='button' value='Remove'  onclick='RemoveItem(".$source->id.");' class='searchform_element'>";
+        //trigger_error( __FUNCTION__ . ' called');
+        //print AMPbacktrace( );
+        //$renderer = $this->_getRenderer( );
+		 return       "<input name='remove_nav_location[".$source->id."]' type='button' value='Remove'  onclick='RemoveItem(".$source->id.");' class='searchform_element'>"
+		              . "<input name='edit_nav_location[".$source->id."]' type='button' value='Edit'  onclick='window.open(\"".AMP_url_add_vars( AMP_SYSTEM_URL_NAV, 'id='.$source->getNavId( )) ."\");' class='searchform_element'>";
     }
 
     function _getSourceRow( ) {
@@ -85,7 +90,6 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
     }
 
     function _initCopier( ){
-        require_once( 'AMP/Form/ElementCopierScript.inc.php');
         require_once( 'AMP/Content/Nav/Location/Form.inc.php');
 
         $form = &new AMP_Content_Nav_Location_Form( );
@@ -95,12 +99,15 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
         $copier_fields = array( 
             'navid'     => $form->getField( 'navid'),
             'position'  => $form->getField( 'position'),
+//            'stuff'     => array( 'type' => 'text', 'default' => 'Blah', 'label' => 'Stuff'),
+//            'link'      => array( 'type' => 'button', 'attr' => array( 'onclick' => 'window.open( "'.AMP_SYSTEM_URL_NAV_EDIT.'?id=1" );')) ,
             'id'        => array( 'type' => 'hidden'));
         foreach( $copier_fields as $key => $field_def ){
             unset( $copier_fields[$key]['label']);
         }
 
         $this->_copier = &ElementCopierScript::instance( );
+        $this->_copier->addControl( 'edit', array( 'type' => 'button', 'action' => 'window.open( "'.AMP_url_add_vars( AMP_SYSTEM_URL_NAV, 'id=').'"+window.'.$this->copier_name.'.GetCurrentValue(this, "'.$this->copier_name.'_navid" ));', 'label' => AMP_TEXT_EDIT ));
         $this->_copier->addCopier( $this->copier_name, $copier_fields, $this->formname );
         $this->_copier->setSingleRow( true, $this->copier_name );
         $this->_copier->setLabelColumn( false, $this->copier_name );

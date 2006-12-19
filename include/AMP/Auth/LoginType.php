@@ -67,6 +67,7 @@ class AMP_Authentication_LoginType {
     }
 
     function showLoginScreen( ) {
+        $login_manager = $this;
         include( $this->_loginScreen );
     }
 

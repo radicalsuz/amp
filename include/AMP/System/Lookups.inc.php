@@ -76,8 +76,12 @@ class AMPSystem_Lookup {
 
     function &instance( $type, $instance_var = null, $lookup_baseclass="AMPSystemLookup" ) {
         static $lookup_set = false;
+        static $cache = false;
+        
         $empty_value = false;
-        $cache = AMP_get_cache( );
+        if ( !$cache ) {
+            $cache = AMP_get_cache( );
+        }
 
         /*
         if (!$lookup_set) {
@@ -95,7 +99,11 @@ class AMPSystem_Lookup {
         if ( !isset( $instance_var )) {
             //standard lookup
             if (!isset($lookup_set[$type])) {
-                $lookup_cache_key = $cache->identify( AMP_CACHE_TOKEN_LOOKUP . ( $type ), AMP_SYSTEM_USER_ID );
+                $lookup_cache_key_base = AMP_CACHE_TOKEN_LOOKUP . ( $type );
+                $lookup_cache_key = $lookup_cache_key_base;
+                if ( defined( 'AMP_SYSTEM_USER_ID')) {
+                    $lookup_cache_key = $cache->identify( $lookup_cache_key_base, AMP_SYSTEM_USER_ID );
+                }
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
                 if ( !$cached_lookup ) {
                     $lookup_set[$type] = &new $req_class(); 
@@ -103,7 +111,7 @@ class AMPSystem_Lookup {
                 } else {
                     $lookup_set[$type] = $cached_lookup;
                 }
-            }
+            } 
         } else {
             //instanced lookup
             if ( !isset( $lookup_set[$type])) {

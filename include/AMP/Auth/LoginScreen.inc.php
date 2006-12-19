@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title><?php print AMP_SITE_NAME . $this->_loginScreenText; ?> </title>
+    <title><?php echo ( AMP_SITE_NAME . $login_manager->_loginScreenText ); ?> </title>
     <style type="text/css">
 
         * {
@@ -76,7 +76,7 @@
             color: #333333;
         }
 
-        form#login label[FOR="<?php print $this->getFieldnamePassword( );?>"] {
+        form#login label[FOR="<?php print $login_manager->getFieldnamePassword( );?>"] {
             display: block;
             margin-top: 1.5ex;
         }
@@ -102,27 +102,27 @@
 <div id="wrapper">
 
     <div id="header">
-        <h1><? print AMP_SITE_NAME . $this->_loginScreenText; ?> </h1>
+        <h1><?php print AMP_SITE_NAME . $login_manager->_loginScreenText; ?> </h1>
     </div>
 
     <div id="content">
 
-        <?php print (isset($this->_handler->message)) ? "<p class=\"login {$this->_handler->message_type}\">{$this->_handler->message}</p>" : '' ?>
+        <?php print (isset($login_manager->_handler->message)) ? "<p class=\"login {$login_manager->_handler->message_type}\">{$login_manager->_handler->message}</p>" : '' ?>
 
-        <form id="login" method="post" action="<? print $this->getLoginUrl(); ?>" />
+        <form id="login" method="post" action="<?php print $login_manager->getLoginUrl(); ?>" />
 
             <div id="formWrap">
-                <?php print $this->getFormFields();?>
+                <?php print $login_manager->getFormFields();?>
 
                 <input type="submit" value="Login" id="login" />
-                <p class="authOptions"><?php print $this->getAuthOptions(); ?></p>
+                <p class="authOptions"><?php print $login_manager->getAuthOptions(); ?></p>
             </div>
 
         </form>
 
     </div>
 
-    <p class="loginNote"><?php print $this->getHelpLinks(); ?></p>
+    <p class="loginNote"><?php print $login_manager->getHelpLinks(); ?></p>
 
 </div>
 

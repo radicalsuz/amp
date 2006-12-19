@@ -29,6 +29,7 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     var $_public_page_id_list;
 
     var $_permissions = array( );
+    var $_cache_allowed = array( );
 
     function getComponents() {
         return $this->components;
@@ -44,7 +45,8 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     }
 
     function &getCachedComponent( $component_type, $id=null, $passthru_value = null ){
-        if ( AMP_DEBUG_MODE_COMPONENT_CACHE_INACTIVE ) {
+        if ( AMP_DEBUG_MODE_COMPONENT_CACHE_INACTIVE 
+             || ( isset( $this->_cache_allowed[ $component_type ]) && !$this->_cache_allowed[$component_type])) {
             return $this->getComponent( $component_type, $passthru_value );
         }
         $empty_value = false;

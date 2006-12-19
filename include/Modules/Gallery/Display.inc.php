@@ -103,7 +103,7 @@ class Gallery_Display extends AMPContent_DisplayList_HTML {
 
     function noResultsDisplay( ){
         require_once( 'AMP/Content/Display/NotFound.inc.php');
-        $display = &new Display_NotFound( "No photos are available in this gallery" );
+        $display = &new Display_NotFound( AMP_TEXT_MODULE_GALLERY_EMPTY ); 
         return  $this->_HTML_intro( ) .
                 $display->execute( );
     }
@@ -136,7 +136,7 @@ class Gallery_DisplaySingle extends Gallery_Display {
     }
 
     function _HTML_listItemDescription( &$image ) {
-        $caption = $this->_HTML_in_P ( $image->getCaption( ), array( 'class' => $this->_css_class_photocaption)); ;
+        $caption = $this->_HTML_in_P ( converttext( $image->getCaption( )), array( 'class' => $this->_css_class_photocaption)); ;
         
         $photo_desc_parts = array( );
         $source = $this->_HTML_listItemSource( $image->getSource( ) );
