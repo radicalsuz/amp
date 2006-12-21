@@ -1037,13 +1037,30 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         $this->_after_init( );
         $this->_registerCustomElementTypes( );
         $this->_awakenGroups( );
+        $this->_awakenJS( );
     }
 
     function _awakenGroups( ) {
         $group_types = array( 'group', 'checkgroup', 'radiogroup', 'date');
         foreach( $this->fields as $name => $field_def ) {
-            if ( array_search( $field_def['type'], $group_types )) {
+            if ( array_search( $field_def['type'], $group_types ) !== FALSE ) {
                 $this->addField( $field_def, $name);
+            }
+        }
+    }
+
+    function _awakenJS( ) {
+        if ( !AMP_USER_CONFIG_USE_WYSIWYG ) return;
+        if ( array_search( getBrowser( ), array( 'win/ie', 'mozilla' )) === FALSE) return; 
+
+        $js_types = array( 'wysiwyg');
+        foreach( $this->fields as $name => $field_def ) {
+            if ( array_search( $field_def['type'], $js_types ) !== FALSE ) {
+                if ( !isset( $editor )) {
+                    $editor = &AMPFormElement_HTMLEditor::instance();
+                }
+
+                $editor->addEditor( $name );
             }
         }
     }
