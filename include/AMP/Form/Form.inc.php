@@ -1036,6 +1036,16 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     function __wakeup( ) {
         $this->_after_init( );
         $this->_registerCustomElementTypes( );
+        $this->_awakenGroups( );
+    }
+
+    function _awakenGroups( ) {
+        $group_types = array( 'group', 'checkgroup', 'radiogroup', 'date');
+        foreach( $this->fields as $name => $field_def ) {
+            if ( array_search( $field_def['type'], $group_types )) {
+                $this->addField( $field_def, $name);
+            }
+        }
     }
 
  }

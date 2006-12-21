@@ -4,16 +4,21 @@ div.list_pager {
 		text-align: right;
 		float: right; 
 		width: 100%; 
-		position: relative;
 		font-size: 11px;
-		display: block;
+        position:relative;
+		display: inline;
 		padding: 5px 5px 10px 5px;
+        margin-top:3em;
 }
 
 div.list_pager a.pager_link {
 		font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 9px
 		margin-bottom: 5px;
 }
+  a.current_page_jump_link {
+      font-weight: bold;
+      font-size: 14px;
+  }
 
 .AMPComponent_hidden {
 		display: none;
@@ -113,11 +118,18 @@ font-size: 11px; font-weight: normal; font-style: italic; color: #666; }
 
 /* indiv gallery page */
 .gallerytitle { font-size: 16px; font-weight: bold; color: #333333; }
-div.gallery { padding: 0; margin: 0; border: 0; width: 400px; border: 1px solid #666; float:left; max-width: 400px;}
-div.gallerycon { width: 200px; height: 200px; float: left; margin: 10px; text-align: center; border: 0px solid #666; }
-.gallerycon img { float: center; padding: 5px; border: 1px solid #666; }
+/*div.gallery { padding: 0; margin: 0; border: 0; width: 400px; border: 1px solid #666; float:left; max-width: 400px;}*/
+div.gallerycon { min-width: 200px; min-height: 200px; float: left; margin: 10px; text-align: center; border: 0px; }
+.gallerycon img { float: center; padding: 5px; border: 1px solid #666000; }
+.gallerycon img.icon{ float: right; padding: 3px; border: 0px ; }
 .gallerycap { padding: 5px; border: 0px solid #666; margin: 5px; }
 div.gallery_pager { padding: 10px 0px 40px 0px; }
+div.gallery_image_details {
+  display:inline;
+  width: 200px;
+  font-family: Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; text-align: center; vertical-align: middle; 
+  clip:   rect(   ); padding-top: 3px; padding-bottom: 3px
+}
 
 /* errors and results */
 span.page_result {

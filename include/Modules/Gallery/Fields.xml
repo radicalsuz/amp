@@ -36,4 +36,9 @@
         <size>4</size>
         <label>Order</label>
     </listorder>
+	<list_item_limit>
+		<type>text</type>
+		<size>4</size>
+		<label>Items per Page</label>
+	</list_item_limit>
 </array>

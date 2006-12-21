@@ -631,5 +631,112 @@ class AMP_System_Component_Controller_Sticky extends AMP_System_Component_Contro
 
 }
 
+/**
+ * AMP_System_Component_Controller_Bookmark 
+ * remembers the users location in a given list
+ * 
+ * @uses AMP_System_Component_Controller_Standard
+ * @package 
+ * @version 3.6.2
+ * @copyright 2006 Radical Designs
+ * @author Austin Putman <austin@radicaldesigns.org> 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+class AMP_System_Component_Controller_Bookmark extends AMP_System_Component_Controller_Standard {
+    var $_cookie_bookmark;
+    var $_url_bookmark; // #REQUIRED VALUE# eg:= AMP_SYSTEM_URL_ARTICLE;
+
+    function AMP_System_Component_Controller_Bookmark( ) {
+        $this->__construct( );
+    }
+
+    function _get_cookie_name_bookmark( ) {
+        if ( isset( $this->_cookie_bookmark ) && $this->_cookie_bookmark ) {
+            return $this->_cookie_bookmark;
+        }
+        $display_class = strtolower( $this->_map->getComponentClass( 'list' ) );
+        $this->_cookie_bookmark =  $display_class  . '_ListLocation';
+        return $this->_cookie_bookmark;
+    }
+
+    function display_default( ) {
+        if ( defined( 'AMP_CONTENT_PAGE_REDIRECT' )) return true;
+        $url = $this->_url_bookmark;
+
+        //check for saved cookie
+        $list_location_cookie =  $this->_get_cookie_name_bookmark( );
+        if ( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie ]) {
+            $url = $_COOKIE[ $list_location_cookie ];
+        }
+
+        $current_url = $_SERVER['REQUEST_URI'];
+        if ( $current_url != $url ) {
+            ampredirect( $url );
+        }
+        return true;
+
+    }
+
+    function commit_clear_bookmark( ) {
+        $this->_clear_list_location( );
+        ampredirect( $this->_url_bookmark );
+    }
+
+    function _clear_list_location( ){
+        $list_location_cookie = $this->_get_cookie_name_bookmark( );
+        setcookie( $list_location_cookie, "");
+    }
+
+    function commit_list( ){
+        $list_location_cookie = $this->_get_cookie_name_bookmark( );
+
+        if ( $this->_is_basic_list_request( ) ) {
+            if ( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie]
+                 && ( $_COOKIE[ $list_location_cookie ] != $_SERVER['REQUEST_URI'] )) {
+                ampredirect( $_COOKIE[ $list_location_cookie ]);
+            }
+        } else {
+            if ( !$this->assert_action('clear_bookmark')) {
+                setcookie( $list_location_cookie, $_SERVER['REQUEST_URI']);
+            }
+        }
+        return parent::commit_list( );
+        
+    }
+
+    function _is_basic_list_request( ){
+        if ( !empty( $_POST )) return false;
+        if ( strpos( $_SERVER['REQUEST_URI'], $this->_url_bookmark ) === FALSE ) return true;
+        $request_vars = AMP_URL_Read( );
+        if ( empty( $request_vars )) return true;
+
+        $action_value = $this->assert_var( 'action'); 
+        if ( $action_value && $action_value != 'list' ) return false;
+        if ( count( $request_vars ) > 1  || !$action_value ) return false;
+        return true;
+    }
+
+    function update_list_location( $item_id, $location_item  ) {
+        $list_location_cookie = $this->_get_cookie_name_bookmark( );
+        $list_location_var = $location_item . '=' . $item_id;
+
+        if ( !( isset( $_COOKIE[ $list_location_cookie ]) && $_COOKIE[ $list_location_cookie] )) {
+            return false;
+        }
+        //confirm that existing cookie is for a similar search
+        if ( strpos( $_COOKIE[ $list_location_cookie ], $location_item ) 
+            && !strpos( $_COOKIE[ $list_location_cookie ], $location_item.'&' )) {
+
+            $new_url = AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE, $list_location_var );
+            ampredirect( $new_url );
+        }
+    }
+
+    function _init_map( ) {
+        $this->_url_bookmark = $this->_map->get_url_system( );
+        return parent::_init_map( );
+    }
+}
+
 
 ?>

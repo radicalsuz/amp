@@ -109,12 +109,13 @@ class AMPDisplay_HTML {
         return "<a href=\"".$href."\"$link_attr>". $text . "</a>";
     }
 
-    function newline($qty=null) {
-        return $this->_HTML_newline($qty) ;
+    function newline($qty=1, $attr = array( )) {
+        return $this->_HTML_newline($qty, $attr ) ;
     }
-    function _HTML_newline($qty=null) {
-        if (!isset($qty)) return "<BR>\n";
-        return str_repeat( "<BR>\n", $qty );
+    function _HTML_newline($qty=1, $attr = array( )) {
+        $nl_attr = $this->makeAttributes( $attr );
+        $nl_str = "<BR$nl_attr />\n";
+        return str_repeat( $nl_str, $qty );
     }
 
     function safeQuote( $item ) {
@@ -246,6 +247,22 @@ class AMPDisplay_HTML {
 
     function separator( ){
         return '&nbsp;&#124;&nbsp;';
+    }
+
+    function arrow_left( $count=1 ) {
+        return str_repeat( '&lt;', $count );
+    }
+
+    function arrow_right( $count=1 ) {
+        return str_repeat( '&gt;', $count );
+    }
+
+    function double_arrow_left( ) {
+        return '&laquo;';
+    }
+
+    function double_arrow_right( ) {
+        return '&raquo;';
     }
 }
 

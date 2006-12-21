@@ -23,6 +23,9 @@ class ComponentMap_GalleryImage extends AMPSystem_ComponentMap {
         'search'  => 'GalleryImageSearch',
         'source'=> 'GalleryImage'
         );
+
+    var $_url_system = AMP_SYSTEM_URL_GALLERY_IMAGE;
+    var $_component_controller = 'AMP_System_Component_Controller_Bookmark';
 }
 
 ?>

@@ -2,10 +2,6 @@
 
 require_once ( 'AMP/System/List/Pager.inc.php' );
 
-if ( !defined( 'AMP_TEXT_PAGER_LAST'))  define( 'AMP_TEXT_PAGER_LAST', 'Last Page');
-if ( !defined( 'AMP_TEXT_PAGER_FIRST')) define( 'AMP_TEXT_PAGER_FIRST', 'First Page');
-if ( !defined( 'AMP_TEXT_PAGER_ALL'))   define( 'AMP_TEXT_PAGER_ALL', 'Show Complete List');
-
 class AMPContent_Pager extends AMPSystem_ListPager {
 
     var $_default_qty = 20;
@@ -38,6 +34,10 @@ class AMPContent_Pager extends AMPSystem_ListPager {
                     $this->_pageLinks() ,
                     array( 'class' => $this->_css_class_container ) ).
                 $this->_HTML_newline();
+    }
+
+    function renderPosition( ) {
+        return $this->_HTML_topNotice( );
     }
 
     function _HTML_topNotice( $text = null ) {

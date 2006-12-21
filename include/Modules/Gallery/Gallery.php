@@ -23,8 +23,7 @@ class Gallery extends AMPSystem_Data_Item {
         require_once( 'Modules/Gallery/Public/Display.php');
         $display_class = 'Gallery_Public_Display';
         
-        $this->_display = &new $display_class ( false, array( 'gallery' => $this->id) );
-        $this->_display->set_source_gallery( $this );
+        $this->_display = &new $display_class ( $this );
         return $this->_display;
     }
 
@@ -107,6 +106,10 @@ class Gallery extends AMPSystem_Data_Item {
     function get_url_edit( ) {
         if ( !( isset( $this->id ) && $this->id )) return false;
         return AMP_Url_AddVars( AMP_SYSTEM_URL_GALLERY, array( 'id=' . $this->id ) );
+    }
+
+    function getListItemLimit( ) {
+        return $this->getData( 'list_item_limit');
     }
 }
 

@@ -240,7 +240,12 @@ if (!function_exists( 'AMP_buildSelectOptions' )) {
 
         foreach ($values as $value => $text ) {
             $selected_flag = "";
-            if (isset($selected) && $selected == $value ) $selected_flag = " selected";
+            if ( $value ) {
+                if (isset($selected) && $selected == $value ) $selected_flag = " selected";
+            } else {
+                //value is zero-equivalent, test for type
+                if (isset($selected) && $selected === $value ) $selected_flag = " selected";
+            }
             $option_set[] = "<option value=\"$value\"$selected_flag>$text</option>";
         }
         $result = join( "\n", $option_set );
@@ -655,13 +660,17 @@ if (!function_exists( 'AMP_URL_Values' ) ) {
     }
 }
 
-if (!function_exists( 'AMP_URL_Read' )) {
-
-    function AMP_URL_Read() {
+    function AMP_url_read( ) {
         parse_str($_SERVER['QUERY_STRING'], $url_criteria_set );
         if (empty($url_criteria_set)) return false;
         return $url_criteria_set;
     }
+
+if (!function_exists( 'AMP_URL_Read' )) {
+    function AMP_URL_Read( ) {
+        return AMP_url_read( );
+    }
+
 }
 
 if (!function_exists( 'urlencode_array' )) {

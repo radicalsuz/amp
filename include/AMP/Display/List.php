@@ -24,8 +24,8 @@ class AMP_Display_List {
     var $_pager_limit;
     var $_pager_target;
 
-    var $_class_pager = 'AMPContent_Pager';
-    var $_path_pager = 'AMP/Content/Display/Pager.inc.php';
+    var $_class_pager = 'AMP_Display_Pager';
+    var $_path_pager = 'AMP/Display/Pager.php';
 
     var $_suppress_messages;
     var $_suppress_header;
@@ -54,6 +54,7 @@ class AMP_Display_List {
     }
 
     function __construct( $source = false, $criteria = array( ) ) {
+        $this->_init_pager( );
         $this->_init_source( $source, $criteria  );
         $this->_init_translations( );
         $this->_init_display_methods( );
@@ -71,7 +72,7 @@ class AMP_Display_List {
     function set_source( &$source ) {
         $this->_source = &$source;
         $this->_init_sort( $this->_source );
-        $this->_init_pager( $this->_source );
+        $this->update_pager( $this->_source );
     }
 
 
@@ -174,8 +175,22 @@ class AMP_Display_List {
     }
 
     function _renderFooter( ) {
+        return $this->_renderPager( );
+    }
+
+    function _renderPager( ) {
         if ( $this->_pager_active && !$this->_suppress_pager ) {
-            return $this->_pager->execute( );
+            return  $this->_renderer->newline( 1, array( 'clear' => 'all'))
+                    . $this->_pager->execute( );
+        }
+    }
+
+    function _renderPagerHeader( ) {
+        if ( $this->_pager_active && !$this->_suppress_pager ) {
+            return  
+                    $this->_renderer->newline( 1, array( 'clear' => 'all'))
+                    . $this->_pager->render_top( )
+                    . $this->_renderer->newline( 1, array( 'clear' => 'all'));
         }
     }
 
@@ -208,8 +223,11 @@ class AMP_Display_List {
     }
 
     function _generate_source( $criteria = array( ) ) {
+        //create DB access object
         $dbcon = AMP_Registry::getDbcon( );
         $list_source = &new $this->_source_object( $dbcon );
+
+        //initialize criteria for search
         if ( !empty( $criteria )) {
             $this->_source_criteria = array_merge (    
                 $this->_source_criteria, 
@@ -217,12 +235,16 @@ class AMP_Display_List {
                 );
         }
         $this->_init_criteria( );
-        $list_sql_source = &$list_source->_getSearchSource( );
-        $this->_init_sort_sql( $list_sql_source );
-        $this->_init_pager( $list_sql_source );
 
+        //do any required sql-based sorting and paging
+        $list_sql_source = &$list_source->getSearchSource( $list_source->makeCriteria( $this->_source_criteria ) );
+        $this->_init_sort_sql( $list_sql_source );
+        $this->update_pager( $list_sql_source );
+
+        //source created as array of values
         $source = $list_source->find( $this->_source_criteria, $this->_source_object );
         $this->set_source( $source );
+
 
     }
     // }}}
@@ -237,16 +259,48 @@ class AMP_Display_List {
         //interface
     }
 
-    function _init_pager( &$source ){
+    function _init_pager( ){
         if ( !$this->_pager_active || isset( $this->_pager )) {
             return false;
         }
+
         require_once( $this->_path_pager );
         $pager_class = $this->_class_pager;
-        $this->_pager = &new $pager_class( $source );
+        $this->_pager = &new $pager_class( );
+
+        if ( $this->_pager->view_all( )) {
+            $this->_pager_active = false;
+            unset( $this->_pager );
+            return false;
+        }
+
+        if ( $request_limit = $this->_pager->get_limit( )) {
+            if ( ( $this->_pager_limit && ( $request_limit < $this->_pager_limit ))
+                || !$this->_pager_limit ) {
+                $this->_pager_limit = $request_limit;
+            }
+        }
+
+        //$this->_pager = &new $pager_class( $source );
+        //if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
+        //if ( $this->_pager_target ) $this->_pager->setTarget( $this->_pager_target ); 
         
-        if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
-        if ( $this->_pager_target ) $this->_pager->setTarget( $this->_pager_target ); 
+    }
+
+    function update_pager( &$source ) {
+        if ( !$this->_pager_active || !isset( $this->_pager )) {
+            return false;
+        }
+
+        if ( $this->_pager_limit ) $this->_pager->set_limit( $this->_pager_limit ); 
+        if ( $this->_pager_target ) $this->_pager->set_target( $this->_pager_target ); 
+
+        $total = $this->_pager->total( $source );
+        if ( $total > $this->_pager_limit ) {
+            $this->_pager->set_total( $total );
+            $this->_pager->trim( $source );
+        }
+
     }
 
     function _init_display_methods( ) {

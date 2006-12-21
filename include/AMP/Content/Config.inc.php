@@ -90,6 +90,8 @@ if (!defined('AMP_IMAGE_DEFAULT_ALIGNMENT')) define( 'AMP_IMAGE_DEFAULT_ALIGNMEN
 if ( !defined( 'AMP_IMAGE_PATH'))
     define( 'AMP_IMAGE_PATH', DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR ); 
 
+if ( !defined( 'AMP_IMAGE_GALLERY_PAGE_LIMIT')) define( 'AMP_IMAGE_GALLERY_PAGE_LIMIT', 24 );
+
 /**
  * Content List Types
  */

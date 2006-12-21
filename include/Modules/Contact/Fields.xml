@@ -20,4 +20,10 @@
         <public>1</public>
 		<required>1</required>
     </message>
+    <captcha_1>
+        <label>Please fill out the text as it &lt;br /&gt;appears in the image above</label>
+        <type>captcha</type>
+        <required>1</required>
+        <public>1</public>
+    </captcha_1>
 </array>

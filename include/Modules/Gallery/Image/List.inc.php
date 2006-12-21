@@ -27,6 +27,7 @@ class GalleryImage_List extends AMP_System_List_Form {
                 'reorder'   => array( 'order' )
                 );
     var $_actions_global= array( 'reorder' );
+    var $_thumb_attr = array( 'border' => 0 );
 
     function GalleryImage_List( &$dbcon, $criteria = null ){
         $this->init( $this->_init_source( $dbcon, $criteria ));

@@ -48,10 +48,14 @@ define( 'AMP_TEXT_ADD', 'Add');
 define( 'AMP_TEXT_NAME', 'Name');
 define( 'AMP_TEXT_ITEM_NAME', 'Item');
 define( 'AMP_TEXT_SEARCH', 'Search');
-
 define( 'AMP_TEXT_ALL', 'All');
+
 if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
 if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );
+if ( !defined( 'AMP_TEXT_PAGER_LAST'))  define( 'AMP_TEXT_PAGER_LAST', 'Last Page');
+if ( !defined( 'AMP_TEXT_PAGER_FIRST')) define( 'AMP_TEXT_PAGER_FIRST', 'First Page');
+if ( !defined( 'AMP_TEXT_PAGER_ALL'))   define( 'AMP_TEXT_PAGER_ALL', 'Show Complete List');
+
 define( 'AMP_TEXT_PAGER_POSITION', 'Displaying %s of %s');
 define( 'AMP_TEXT_PUBLISH', 'Publish');
 define( 'AMP_TEXT_DELETED', 'Deleted');
@@ -75,7 +79,7 @@ define( 'AMP_TEXT_SELECT_NEW_WIDTHS_FOR', 'Select new widths for');
 define( 'AMP_TEXT_GALLERY', 'Gallery');
 define( 'AMP_TEXT_SELECT', 'Select %s');
 define( 'AMP_TEXT_ACTION_NOTICE', 'Performing %s on %s');
-define( 'AMP_TEXT_FULL_SIZE', 'Full Size');
+define( 'AMP_TEXT_FULL_SIZE', 'Full Size Image');
 
 /**
  * RSS listpage text

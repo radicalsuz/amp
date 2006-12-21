@@ -209,9 +209,12 @@
             . $this->datatable . $this->_makeCriteria();
         $set = $this->dbcon->Execute( $sql );
 
+
         if ( !$set && $db_error = $this->dbcon->ErrorMsg( )) {
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($this) . __FUNCTION__, $db_error ) . $sql );
         }
+        if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." count"); 
+
         return $set->Fields( 'qty' );
     }
 

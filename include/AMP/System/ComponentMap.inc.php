@@ -31,6 +31,8 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     var $_permissions = array( );
     var $_cache_allowed = array( );
 
+    var $_url_system = false;
+
     function getComponents() {
         return $this->components;
     }
@@ -212,6 +214,10 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         $page = &new AMPSystem_IntroText( AMP_Registry::getDbcon( ), $id );
         if ( !$page->hasData( )) return false;
         return $page;
+    }
+
+    function get_url_system( ) {
+        return $this->_url_system;
     }
 
 }
