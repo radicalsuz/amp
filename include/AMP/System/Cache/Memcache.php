@@ -120,6 +120,38 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     }
     */
 
+    function log_memcache_failure() {
+        $log = '/tmp/amp-memcache-fails';
+        $memcache_fail_limit = 500;   // 500 failures in
+        $memcache_fail_window = 60*5; // 5 minutes
+        //try to create the file if it doesn't exist
+        if($fh = file_exists($log) ? fopen($log, 'r+') : fopen($log, 'x+')) {
+            if (flock($fh, LOCK_EX|LOCK_NB)) { // do an exclusive lock
+                $AMP_MEMCACHE_FAILS = explode("\n",file_get_contents($log));
+                $AMP_MEMCACHE_FAILS[] = time();
+
+                if(count($AMP_MEMCACHE_FAILS) > $memcache_fail_limit) {
+                    //if there's more than the limit of failures, restart and reset the log
+                    $this->_restart_memcached();
+                    $AMP_MEMCACHE_FAILS = array();
+                } else {
+                    //only keep failures that have happened within the window
+                    $AMP_MEMCACHE_FAILS = array_filter($AMP_MEMCACHE_FAILS, create_function('$var', 'return $var > time() - '.$memcache_fail_window.';'));
+                }
+
+                //write out the log
+                ftruncate($fh, 0);
+                fwrite($fh, implode("\n",$AMP_MEMCACHE_FAILS));
+                flock($fh, LOCK_UN); // release the lock
+            } else {
+                trigger_error("Couldn't lock the file !");
+            }
+
+            fclose($fh);
+        } else {
+            trigger_error('could not open memcache fail log at /tmp/amp-memcache-fails.php for reading and writing');
+        }
+    }
 
     function add( &$item, $key ){
         $authorized_key = $this->authorize( $key );
@@ -130,6 +162,9 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
             trigger_error( 'retrying ADD ' . $authorized_key );
             //try, try again
             $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED );
+
+            trigger_error('logging memcache failure');
+            $this->log_memcache_failure();
         }
 
         if ( $result ) {
