@@ -43,7 +43,7 @@ class SectionMenu extends AMP_Menu {
         //try to just apply the cached version of the script 
         if ( $this->_cache ) {
 
-            $cache_key_public = sprintf( AMP_CACHE_KEY_JAVASCRIPT, get_class( $this ));
+            $cache_key_public = AMP_CACHE_TOKEN_LOOKUP . sprintf( AMP_CACHE_KEY_JAVASCRIPT, get_class( $this ));
             $cache_key_private = $this->_cache->identify( $cache_key_public, AMP_SYSTEM_USER_ID );
             
             //if ( $this->_cache->contains( $cache_key_private )) {
