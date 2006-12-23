@@ -622,7 +622,7 @@ class AMP_System_Component_Controller_Sticky extends AMP_System_Component_Contro
              || ( array_search( $this->get_action(), $sticky_actions ) === FALSE )) {
             return parent::display_default( );
         }
-        $display = &$this->_map->getCachedComponent( 'form' );
+        $display = &$this->_map->getComponent( 'form' );
         $this->_form = &$display;
         $this->_init_form( false );
         $this->set_banner( 'edit');

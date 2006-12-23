@@ -535,14 +535,14 @@
 		<per>CONTENT_CSS</per>
 	</item>
 	<item>
-		<href>stylesheet.php</href>
-		<label>View/Edit Custom CSS</label>
+		<href>stylesheet.php?action=list</href>
+		<label>View Stylesheets</label>
 		<class>view</class>
 		<per>CONTENT_CSS</per>
 	</item>
 	<item>
 		<href>customfile.php</href>
-		<label>View/Edit Custom Files</label>
+		<label>View Custom Files</label>
 		<class>view</class>
 		<per>TOOLS_CUSTOMFILES</per>
 	</item>

@@ -511,7 +511,7 @@
     </item>
     <item>
         <label>View Stylesheets</label>
-        <href>stylesheet.php</href>
+        <href>stylesheet.php?action=list</href>
         <per>CONTENT_CSS</per>
     </item>
     <item>
