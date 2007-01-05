@@ -319,11 +319,14 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
         //set methods based on map values
 
-        if ( $form  = &$this->_map->getCachedComponent( 'form' )){
+        //getCachedComponent call was here
+        if ( $form  = &$this->_map->getComponent( 'form' )){
             $this->_init_form_request ( $form ) ;
             $this->_form = &$form;
         }
-        if ( $model = &$this->_map->getCachedComponent( 'source', $this->_model_id )) $this->_init_model( $model) ;
+        //getCachedComponent call was here
+        //if ( $model = &$this->_map->getCachedComponent( 'source', $this->_model_id )) $this->_init_model( $model) ;
+        if ( $model = &$this->_map->getComponent( 'source' )) $this->_init_model( $model) ;
 
         if ( !$this->allow( $this->get_action( ))) $this->clear_actions( );
         $this->set_banner( $this->get_action( ));
@@ -433,7 +436,8 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
 
         // if no list exists, return to the blank input form
         if ( !( $display = &$this->_map->getComponent( 'list' ))) {
-           $display = &$this->_map->getCachedComponent( 'form' );
+            //getCachedComponent call was here
+           $display = &$this->_map->getComponent( 'form' );
            $this->_form = &$display;
            $this->_init_form( false );
            $this->set_banner( 'add');
