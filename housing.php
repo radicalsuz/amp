@@ -19,8 +19,7 @@ $nhousing=$dbcon->CacheExecute("SELECT *  FROM userdata  Where   custom1='Need H
  ?>
 
 <p class="text"><a href="#have">View Available Housing</a> | <a href="#need">View Requested Housing</a><br>
-  <a href="modinput4.php?modin=11">Offer/Request  Housing on the Housing Board </a><br>
-<a href="modinput4_login.php?modin=11">Update Your Housing Board Listing </a></p>
+  <a href="modinput4.php?modin=11">Offer/Request  Housing on the Housing Board </a></p>
 <p class="title"><a name="have"></a>Have Housing </p>
 <?php while (!$housing->EOF)   { ?>
 <br>
