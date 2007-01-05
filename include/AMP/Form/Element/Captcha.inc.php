@@ -53,7 +53,7 @@
    
    // class defaults - change to effect globally
    $cache = &AMP_get_cache( );
-   $captcha_key_value = $cache->identify( 'php_captcha', AMP_SYSTEM_UNIQUE_VISITOR_ID );
+   $captcha_key_value = AMP_System_Cache::identify( 'php_captcha', AMP_SYSTEM_UNIQUE_VISITOR_ID );
    
    define('CAPTCHA_SESSION_ID', $captcha_key_value );
    define('CAPTCHA_WIDTH', 200); // max 500
@@ -96,7 +96,6 @@
       var $sFileType;
       var $sCode = '';
 
-      var $_cache;
       
       function PhpCaptcha(
          $aFonts, // array of TrueType fonts to use - specify full path
@@ -118,7 +117,6 @@
          $this->SetFileType(CAPTCHA_FILE_TYPE);   
          $this->SetWidth($iWidth);
          $this->SetHeight($iHeight);
-         $this->_cache = &AMP_get_cache( );
       }
       
       function CalculateSpacing() {
@@ -267,7 +265,7 @@
          
          // save code in session variable
          $captcha_code = $this->bCaseInsensitive ? strtoupper( $this->sCode ) : $this->sCode;
-         $this->_cache->add( $captcha_code, CAPTCHA_SESSION_ID );
+         AMP_cache_set( CAPTCHA_SESSION_ID, $captcha_code );
          AMP_Form_Element_Captcha::create( CAPTCHA_SESSION_ID, $this->sCode );
          //$_SESSION[CAPTCHA_SESSION_ID] = $captcha_code;
       }
@@ -405,17 +403,17 @@
          }
          
          //if (!empty($_SESSION[CAPTCHA_SESSION_ID]) && $sUserCode == $_SESSION[CAPTCHA_SESSION_ID]) {
-         //$cached_code = $this->_cache->retrieve( CAPTCHA_SESSION_ID );
-         trigger_error( 'found cached code ' . $cached_code . 'vs '. $sUserCode );
+         $cached_code = AMP_cache_get( CAPTCHA_SESSION_ID );
+         //trigger_error( 'found cached code ' . $cached_code . 'vs '. $sUserCode );
          if ( !$cached_code ) {
              $cached_code = AMP_Form_Element_Captcha::validate( CAPTCHA_SESSION_ID ) ;
          }
-         trigger_error( 'found cached code ' . $cached_code . 'vs '. $sUserCode );
+         //trigger_error( 'found cached code ' . $cached_code . 'vs '. $sUserCode );
 
-         if (( $cached_code = $this->_cache->retrieve( CAPTCHA_SESSION_ID )) && $sUserCode == $cached_code ) {
+         if ( $sUserCode == $cached_code ) {
             // clear to prevent re-use
             //unset($_SESSION[CAPTCHA_SESSION_ID]);
-            $this->_cache->delete( CAPTCHA_SESSION_ID );
+            AMP_cache_delete( CAPTCHA_SESSION_ID );
             AMP_Form_Element_Captcha::delete( CAPTCHA_SESSION_ID );
             
             return true;
@@ -430,7 +428,6 @@
       var $sFlitePath;
       var $sAudioPath;
       var $sCode;
-      var $_cache;
       
       function AudioPhpCaptcha(
          $sFlitePath = CAPTCHA_FLITE_PATH, // path to flite binary
@@ -439,10 +436,8 @@
          $this->SetFlitePath($sFlitePath);
          $this->SetAudioPath($sAudioPath);
          
-         $this->_cache = &AMP_get_cache( );
-
          // retrieve code if already set by previous instance of visual PhpCaptcha
-         if ($cached_code = $this->_cache->retrieve( CAPTCHA_SESSION_ID )) {
+         if ($cached_code = AMP_cache_get( CAPTCHA_SESSION_ID )) {
             $this->sCode = $cached_code;
          }
       }

@@ -102,7 +102,7 @@ class AMPSystem_Lookup {
                 $lookup_cache_key_base = AMP_CACHE_TOKEN_LOOKUP . ( $type );
                 $lookup_cache_key = $lookup_cache_key_base;
                 if ( defined( 'AMP_SYSTEM_USER_ID')) {
-                    $lookup_cache_key = $cache->identify( $lookup_cache_key_base, AMP_SYSTEM_USER_ID );
+                    $lookup_cache_key = AMP_System_Cache::identify( $lookup_cache_key_base, AMP_SYSTEM_USER_ID );
                 }
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
                 if ( !$cached_lookup ) {
@@ -118,8 +118,8 @@ class AMPSystem_Lookup {
                 $lookup_set[$type] = array( );
             }
             if ( !isset( $lookup_set[$type][$instance_var])) {
-                $lookup_cache_key = $cache->identify( AMP_CACHE_TOKEN_LOOKUP . ( $type ), AMP_SYSTEM_USER_ID );
-                $lookup_cache_key = $cache->identify( $lookup_cache_key . 'K', $instance_var );
+                $lookup_cache_key = AMP_System_Cache::identify( AMP_CACHE_TOKEN_LOOKUP . ( $type ), AMP_SYSTEM_USER_ID );
+                $lookup_cache_key = AMP_System_Cache::identify( $lookup_cache_key . 'K', $instance_var );
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
                 if ( !$cached_lookup ) {
                     $lookup_set[$type][$instance_var] = &new $req_class( $instance_var );
