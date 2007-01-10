@@ -1027,6 +1027,10 @@ if ( !function_exists( 'AMP_Authorized')) {
     }
 
     function AMP_allow( $action, $item_type, $id ) {
+        if ( defined( 'AMP_SYSTEM_PERMISSIONS_LOADING') || !defined( 'AMP_SYSTEM_USER_ID')) {
+            return true;
+        }
+
         static $gacl = false;
         //trigger_error( AMP_SYSTEM_USER_ID );
         if ( !$gacl ) {
@@ -1046,7 +1050,8 @@ if ( !function_exists( 'AMP_Authorized')) {
 
             require_once( 'phpgacl/gacl.class.php');
             $gacl = &new gacl( $gacl_options );
-            AMP_Registry::setEntry( AMP_REGISTRY_PERMISSION_MANAGER, $gacl );
+            $reg = AMP_Registry::instance( );
+            $reg->setEntry( AMP_REGISTRY_PERMISSION_MANAGER, $gacl );
         }
         return $gacl->acl_check( 'commands', $action, AMP_SYSTEM_USER_TYPE, AMP_SYSTEM_USER_ID_ACL, AMP_pluralize( $item_type ), $item_type . '_' . $id );
     }
@@ -1332,6 +1337,17 @@ if ( !function_exists( 'AMP_get_cache')){
     }
 }
 
+
+
+if ( !function_exists( 'AMP_validate_url')){
+    function AMP_validate_url( $test_url ){
+        if( preg_match( '/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}'
+                   .'((:[0-9]{1,5})?\/.*)?$/i' ,$test_url)) return $test_url;
+        return false;
+
+    }
+}
+
 if ( !function_exists( 'AMP_verifyDateValue')){
     function AMP_verifyDateValue( $date_value ){
         if ( !$date_value ) return false;
@@ -1564,5 +1580,11 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
     return $values;
 }
 
+function AMP_permission_update( ) {
+    require_once( 'AMP/System/Permission/ACL/Controller.php');
+    $controller = &new AMP_System_Permission_ACL_Controller( );
+    $controller->request( 'update');
+    $controller->execute( false );
+}
 
 ?>
