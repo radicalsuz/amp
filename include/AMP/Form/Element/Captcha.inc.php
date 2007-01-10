@@ -64,8 +64,8 @@
    define('CAPTCHA_OWNER_TEXT', AMP_SITE_URL );
    define('CAPTCHA_CHAR_SET', ''); // defaults to A-Z
    define('CAPTCHA_CASE_INSENSITIVE', true);
-   //define('CAPTCHA_BACKGROUND_IMAGES', '');
-   define('CAPTCHA_BACKGROUND_IMAGES', AMP_LOCAL_PATH . '/img/captcha_bg1.jpg,'. AMP_LOCAL_PATH . '/img/captcha_bg2.jpg' );
+   define('CAPTCHA_BACKGROUND_IMAGES', '');
+   //define('CAPTCHA_BACKGROUND_IMAGES', AMP_LOCAL_PATH . '/img/captcha_bg1.jpg,'. AMP_LOCAL_PATH . '/img/captcha_bg2.jpg' );
    define('CAPTCHA_MIN_FONT_SIZE', 16);
    define('CAPTCHA_MAX_FONT_SIZE', 25);
    define('CAPTCHA_USE_COLOUR', true);
