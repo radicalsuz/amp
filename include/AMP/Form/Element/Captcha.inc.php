@@ -191,7 +191,9 @@
       }
       
       function SetBackgroundImages($vBackgroundImages) {
-         $this->vBackgroundImages = explode( ',', $vBackgroundImages );
+         if ( $vBackgroundImages ) {
+             $this->vBackgroundImages = explode( ',', $vBackgroundImages );
+         }
       }
       
       function SetMinFontSize($iMinFontSize) {
