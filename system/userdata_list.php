@@ -14,7 +14,7 @@ require_once( 'AMP/System/Base.php' );
 require_once('AMP/UserData/Set.inc.php'); 
 
 if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
-    $modin=$_REQUEST['modin'];
+    $modin=$form_id_nav = $_REQUEST['modin'];
 } else {
     ampredirect( AMP_SYSTEM_URL_FORMS );
 }

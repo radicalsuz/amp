@@ -73,6 +73,11 @@ class AMPSystem_BaseTemplate {
         $this->modid =$modid;
     }
 
+    function setForm( $form_id ) {
+        $this->form_id =    $form_id;
+
+    }
+
     function setToolName( $nav_name ) {
         if ($nav_name == 'module') return $this->setToolName('tools');
         $this->nav_name = $nav_name;
