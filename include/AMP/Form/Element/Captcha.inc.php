@@ -64,8 +64,8 @@
    define('CAPTCHA_OWNER_TEXT', AMP_SITE_URL );
    define('CAPTCHA_CHAR_SET', ''); // defaults to A-Z
    define('CAPTCHA_CASE_INSENSITIVE', true);
-   define('CAPTCHA_BACKGROUND_IMAGES', '');
-   //define('CAPTCHA_BACKGROUND_IMAGES', AMP_LOCAL_PATH . '/img/captcha_bg1.jpg,'. AMP_LOCAL_PATH . '/img/captcha_bg2.jpg' );
+   //define('CAPTCHA_BACKGROUND_IMAGES', '');
+   define('CAPTCHA_BACKGROUND_IMAGES', AMP_LOCAL_PATH . '/img/captcha_bg1.jpg,'. AMP_LOCAL_PATH . '/img/captcha_bg2.jpg' );
    define('CAPTCHA_MIN_FONT_SIZE', 16);
    define('CAPTCHA_MAX_FONT_SIZE', 25);
    define('CAPTCHA_USE_COLOUR', true);
@@ -280,7 +280,8 @@
             
             // select random colour
             if ($this->bUseColour) {
-               $iTextColour = imagecolorallocate($this->oImage, rand(0, 100), rand(0, 100), rand(0, 100));
+               $iTextColour = imagecolorallocate($this->oImage, mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100));
+               //$iTextColour = mt_rand( 0, 255 );
             
                if ($this->bCharShadow) {
                   // shadow colour
@@ -388,6 +389,7 @@
          
          $this->GenerateCode();
          $this->DrawCharacters();
+         $this->Distort( );
          
          // write out image to file or browser
          $this->WriteFile($sFilename);
@@ -396,6 +398,13 @@
          imagedestroy($this->oImage);
          
          return true;
+      }
+
+      function Distort( ) {
+            for ( $j = 1; $j<200; $j++) {
+                $color = imagecolorallocate( $this->oImage, mt_rand( 50, 200 ), mt_rand( 50, 200 ), mt_rand( 50, 200 ));
+                imagesetpixel( $this->oImage, mt_rand( 0, $this->iWidth ), mt_rand( 0, $this->iHeight ), $color );
+            }
       }
       
       // call this method statically

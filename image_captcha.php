@@ -9,9 +9,12 @@ header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 
 $captcha_fonts = array( 
-    AMP_BASE_INCLUDE_PATH . 'TrueType/FreeSans.ttf',
-    AMP_BASE_INCLUDE_PATH . 'TrueType/FreeMono.ttf',
-    AMP_BASE_INCLUDE_PATH . 'TrueType/FreeSerif.ttf'
+    //AMP_BASE_INCLUDE_PATH . 'TrueType/FreeSans.ttf',
+    //AMP_BASE_INCLUDE_PATH . 'TrueType/FreeMono.ttf',
+    //AMP_BASE_INCLUDE_PATH . 'TrueType/FreeSerif.ttf',
+    AMP_BASE_INCLUDE_PATH . 'TrueType/handfont2.ttf',
+    AMP_BASE_INCLUDE_PATH . 'TrueType/Tuffy.ttf',
+    AMP_BASE_INCLUDE_PATH . 'TrueType/Tribal_Font.ttf'
     );
 $captcha = &new PhpCaptcha( $captcha_fonts );
 
