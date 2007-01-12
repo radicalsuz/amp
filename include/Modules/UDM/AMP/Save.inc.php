@@ -51,7 +51,6 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
     }
 
     function save ( $data ) {
-        AMP_varDump( $data );
 
         $sql = ($this->udm->uid) ? $this->updateSQL( $data ) :
                                    $this->insertSQL( $data );
