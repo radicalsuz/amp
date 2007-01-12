@@ -421,7 +421,7 @@
          }
          //trigger_error( 'found cached code ' . $cached_code . 'vs '. $sUserCode );
 
-         if ( $sUserCode == $cached_code ) {
+         if ( $cached_code && ( $sUserCode == $cached_code )) {
             // clear to prevent re-use
             //unset($_SESSION[CAPTCHA_SESSION_ID]);
             AMP_cache_delete( CAPTCHA_SESSION_ID );
