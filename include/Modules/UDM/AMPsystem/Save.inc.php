@@ -33,6 +33,9 @@ class UserDataPlugin_Save_AMPsystem extends UserDataPlugin_Save {
             $namespace = array_shift( $option_def );
             $option_name = join( '_', $option_def );
             $option_value = $this->udm->form->getSubmitValue( $field );
+            if ( is_array( $option_value )) {
+                $option_value = join( ',', $option_value );
+            }
             $plugin_options[$namespace][$action][$option_name] = $option_value;
         }
 

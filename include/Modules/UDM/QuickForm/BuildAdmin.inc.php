@@ -105,6 +105,12 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
                 $el->setRows( 5 );
                 $el->setCols( 50 );
             }
+            if ( $field['type'] == 'multiselect') {
+                $el->setMultiple( true );
+                if ( isset( $field['size'])) {
+                    $el->setSize( $field['size']);
+                }
+            }
 
         }
     }
