@@ -25,7 +25,16 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     function _init_connection( ){
         if (!class_exists( 'Memcache' )) return false;
         $memcache_connection = &new Memcache;
-        $result = $memcache_connection->connect( AMP_SYSTEM_MEMCACHE_SERVER, AMP_SYSTEM_MEMCACHE_PORT );
+
+        $server_list = explode( ',', AMP_SYSTEM_MEMCACHE_SERVER );
+        $primary_server = array_shift( $server_list );
+        $result = $memcache_connection->connect( $primary_server, AMP_SYSTEM_MEMCACHE_PORT );
+        if ( count( $server_list ) ) {
+            foreach( $server_list as $additional_server ) {
+                $result = ( $memcache_connection->addServer( $additional_server, AMP_SYSTEM_MEMCACHE_PORT ) || $result );
+            }
+        }
+
         if ( $result ) {
             $this->set_connection( $memcache_connection );
         } else {
@@ -122,7 +131,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
     function log_memcache_failure() {
         $log = '/tmp/amp-memcache-fails';
-        $memcache_fail_limit = 500;   // 500 failures in
+        $memcache_fail_limit = 100;   // 100 failures in
         $memcache_fail_window = 60*5; // 5 minutes
         //try to create the file if it doesn't exist
         if($fh = file_exists($log) ? fopen($log, 'r+') : fopen($log, 'x+')) {
