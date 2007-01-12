@@ -16,6 +16,7 @@ require_once( 'utility.functions.inc.php' );
 #set_error_handler( 'e' );
 $modin = (isset($_REQUEST['modin']) && $_REQUEST['modin'])?$_REQUEST['modin']:false;
 if ($modin) {
+    $form_id_nav = $modin;
     $modidselect=$dbcon->GetRow("SELECT id, perid from modules where userdatamodid=" . $modin) or DIE($dbcon->ErrorMsg());
     $modid=$modidselect['id'];
     $modin_permission=$modidselect["perid"];

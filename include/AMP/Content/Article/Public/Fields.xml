@@ -3,32 +3,52 @@
         <label>Title</label>
         <required>1</required>
         <type>textarea</type>
+        <enabled>1</enabled>
+        <public>1</public>
     </title>
     <subtitle>
         <label>Subtitle</label>
         <type>textarea</type>
+        <enabled>1</enabled>
+        <public>1</public>
     </subtitle>
     <author>
         <type>text</type>
         <label>Author</label>
+        <enabled>1</enabled>
+        <public>1</public>
     </author>
     <date>
         <type>date</type>
         <label>Date</label>
         <default>today</default>
+        <enabled>1</enabled>
+        <public>1</public>
     </date>
     <shortdesc>
         <type>textarea</type>
         <label>Short Description</label>
         <size>5:65</size>
+        <enabled>1</enabled>
+        <public>1</public>
     </shortdesc>
     <body>
         <type>textarea</type>
         <label>Full Text</label>
         <size>60:80</size>
+        <enabled>1</enabled>
+        <public>1</public>
     </body>
     <html>
         <type>checkbox</type>
         <label>The text in this field is pre-formatted as HTML</label>
+        <enabled>1</enabled>
+        <public>1</public>
     </html>
+    <human_test>
+        <type>captcha</type>
+        <label>Please enter the text &lt;br /&gt;you see in the image above</label>
+        <enabled>1</enabled>
+        <public>1</public>
+    </human_test>
 </array>

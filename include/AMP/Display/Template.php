@@ -12,7 +12,7 @@ class AMP_Display_Template {
     //var $_methods_output= array( );
     //var $_method_args = array( );
 
-    var $_helpers;
+    var $_helpers = array( );
     var $_tokens_active;
 
     var $_path_default = 'AMP/Display/';

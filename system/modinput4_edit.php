@@ -15,7 +15,7 @@ require_once( 'utility.functions.inc.php');
 
 require("Connections/freedomrising.php");
 
-$modin = $_REQUEST['modin'];
+$modin = $form_id_nave = $_REQUEST['modin'];
 
 $modidselect = $dbcon->Execute("SELECT id from modules where userdatamodid=" . $dbcon->qstr( $modin ) )
                     or die( "Couldn't get module information: " . $dbcon->ErrorMsg() );

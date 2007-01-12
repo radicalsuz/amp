@@ -28,6 +28,7 @@ class AMP_System_UserData_Controller extends AMP_System_Component_Controller_Sta
             'modidinput' => $this->_saved_input_page_id,
             'modidresponse' => $this->_saved_response_page_id )
         );
+        AMP_cacheFlush( );
         return $this->_model->save( );
 
     }
