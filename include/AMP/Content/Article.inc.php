@@ -595,6 +595,15 @@ class Article extends AMPSystem_Data_Item {
                     . ' or id in( ' . join( ',', array_keys( $related_articles ) ) . ' ) )';
     }
 
+    function makeCriteriaAllowed( ) {
+        $allowed_section_names = AMP_lookup( 'sectionMap');
+        if ( $allowed_section_names ) {
+            $allowed_sections = array_keys( $allowed_section_names );
+            array_unshift( $allowed_sections, AMP_CONTENT_MAP_ROOT_SECTION );
+        }
+        return 'type in ( ' . join( ',',  $allowed_sections ) . ')';
+    }
+
     function makeCriteriaTag( $tag_id ) {
         $tagged_articles = AMPSystem_Lookup::instance( 'articlesByTag', $tag_id );
         if ( !$tagged_articles || empty( $tagged_articles )) return 'FALSE';

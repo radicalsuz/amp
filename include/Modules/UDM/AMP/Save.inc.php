@@ -51,12 +51,17 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
     }
 
     function save ( $data ) {
+        AMP_varDump( $data );
 
         $sql = ($this->udm->uid) ? $this->updateSQL( $data ) :
                                    $this->insertSQL( $data );
 
-        $rs = $this->dbcon->Execute( $sql ) or
-                    die( "Unable to save request data using SQL $sql: " . $this->dbcon->ErrorMsg() );
+        $rs = $this->dbcon->Execute( $sql );
+
+        if ( !$rs ) {
+            trigger_error( "Unable to save request data using SQL $sql: " . $this->dbcon->ErrorMsg() );
+            return false;
+        }
 
         if ($rs) {
             if (!$this->udm->uid) $this->udm->uid = $this->dbcon->Insert_ID();
