@@ -80,7 +80,7 @@ Class Petition extends AMPSystem_Data_Item {
 		$sql= "SELECT First_Name, Last_Name, Company, Notes, City, State FROM userdata where modin = ".$this->getFormId( )." and custom19 = 1 order by id desc  Limit $offset, ".$this->limit;
 		$P  = $this->dbcon->CacheExecute($sql) or DIE("could not find signers ".$sql.$this->dbcon->ErrorMsg());
 
-		$sql= "SELECT  COUNT(DISTINCT id) FROM userdata  where modin = ".$this->getFormId( )." and custom19 =1";
+		$sql= "SELECT  COUNT(*) FROM userdata  where modin = ".$this->getFormId( )." and custom19 =1";
 		$ptct= $this->dbcon->CacheExecute($sql) or DIE("could not get count: ".$sql.$this->dbcon->ErrorMsg());
 		$count = $ptct->fields[0];
 		
