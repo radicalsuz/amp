@@ -877,11 +877,11 @@ function AMP_is_cacheable_url( ) {
 }
 
 function AMP_cached_image_request( ) {
+    require_once( 'AMP/System/Cache/File.php');
     $cache_key = AMP_CACHE_TOKEN_IMAGE . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
     if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
-        $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
+        $cache_key = AMP_System_Cache::identify( $cache_key, AMP_SYSTEM_USER_ID );
     }
-    require_once( 'AMP/System/Cache/File.php');
     $file_cache =  new AMP_System_Cache_File( );
     $file_name = $file_cache->authorize( $cache_key );
     $file_path = $file_cache->path( $file_name );
@@ -1585,6 +1585,26 @@ function AMP_permission_update( ) {
     $controller = &new AMP_System_Permission_ACL_Controller( );
     $controller->request( 'update');
     $controller->execute( false );
+}
+
+function AMP_s3_save( $file_path ) {
+    if ( !AMP_SYSTEM_FILE_S3_KEY ) return false; 
+    if ( !( $data = file_get_contents( $file_path ))) return false; 
+
+    static $s3_connection;   
+
+    $file_name = basename( $file_path );
+    $clean_file = str_replace(" ", "%20", $file_name);
+    $object_id  = str_replace( AMP_BASE_PATH, '', $file_path );
+    $bucket = AMP_SYSTEM_FILE_S3_BUCKET;
+
+    if ( !$s3_connection ) {
+        require_once("s3/s3.class.php");
+        $s3_connection = &new s3( );
+    }
+
+    return $s3_connection->putObject( $object_id, $data, $bucket, NULL, $type );
+
 }
 
 ?>
