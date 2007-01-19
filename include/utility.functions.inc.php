@@ -1595,7 +1595,8 @@ function AMP_s3_save( $file_path ) {
 
     $type = mime_content_type($file_path);
 
-    $clean_file = str_replace(" ", "%20", basename( $file_name ));
+    $file_name = basename( $file_path );
+    $clean_file = str_replace(" ", "%20",  $file_name );
     $file_path =  str_replace( $file_name, $clean_file, $file_path );
     $object_id  = str_replace( AMP_pathFlip( AMP_LOCAL_PATH . '/' ), '', $file_path );
     $bucket = AMP_SYSTEM_FILE_S3_BUCKET;
@@ -1615,7 +1616,8 @@ function AMP_s3_delete( $file_path ) {
 
     static $s3_connection = false;   
 
-    $clean_file = str_replace(" ", "%20", basename( $file_name ));
+    $file_name = basename( $file_path );
+    $clean_file = str_replace(" ", "%20", $file_path );
     $file_path =  str_replace( $file_name, $clean_file, $file_path );
     $object_id  = str_replace( AMP_pathFlip( AMP_LOCAL_PATH . '/' ), '', $file_path );
     $bucket = AMP_SYSTEM_FILE_S3_BUCKET;
