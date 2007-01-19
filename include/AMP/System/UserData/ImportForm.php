@@ -47,13 +47,38 @@ class AMP_System_UserData_ImportForm extends AMPSystem_Form {
                     'default' => '<TR><td colspan=2><br /><HR width = "100%"/><BR /></td></tr>',
                     'label' => '<TR><td colspan=2><br /><HR width = "100%"/><br /></td></tr>',
                     //'label' => '<HR width = "100%"/><BR />'
-                    )
-        );
+                    ),
+            );
+
+     var $_group_item_template = array( 
+            'value_source_' => array( 
+                    'type' => 'select',
+                    'label' => 'Choose Source Field'
+                    ),
+            'value_target_' => array( 
+                    'type' => 'text',
+                    'label' => 'Enter Target Value'
+                    ),
+            'separator_' => array( 
+                    'type' => 'html',
+                    'default' => '<TR><td colspan=2><br /><HR width = "100%"/><BR /></td></tr>',
+                    'label' => '<TR><td colspan=2><br /><HR width = "100%"/><br /></td></tr>',
+                    //'label' => '<HR width = "100%"/><BR />'
+                    ),
+            );
+
+     var $_group_template = array( 
+            'group_' => array( 
+                'type' => 'blocktrigger',
+                'label' => 'Options for '
+                )
+            );
 
     var $_source_fields_lookup;
     var $_target_fields_lookup;
 
     var $_source_fields;
+    var $_group_fields;
 
     var $_submit_group = 'submitImportAction';
     var $submit_button = array( 'submitImportAction' => array(
@@ -111,11 +136,21 @@ class AMP_System_UserData_ImportForm extends AMPSystem_Form {
         require_once( 'AMP/UserData.php');
         $udm = &new UserData( AMP_Registry::getDbcon( ), $this->_form_id, $admin = true );
         $fields_lookup = array( );
-        $types_to_avoid = array ("html", "static", "header");
+        $types_to_avoid = array ("html", "static", "header" );
+        $types_to_group = array( 'checkgroup', 'multiselect' );
 
         foreach( $udm->fields as $field_name => $field_def ) {
-            if ( !( isset( $field_def['enabled']) && $field_def['enabled'])) continue;
-            if ( !isset( $field_def['type']) || ( array_search( $field_def['type'], $types_to_avoid ) !== FALSE )) {
+            if ( !( isset( $field_def['enabled']) && $field_def['enabled']) 
+                || ( !isset( $field_def['type']))) {
+                continue;
+            }
+
+            if (array_search( $field_def['type'], $types_to_group ) !== FALSE ) {
+                $this->_group_fields[ $field_name ] = $field_def['label'];
+                continue;
+            }
+
+            if (array_search( $field_def['type'], $types_to_avoid ) !== FALSE ) {
                 continue;
             }
 
@@ -170,6 +205,32 @@ class AMP_System_UserData_ImportForm extends AMPSystem_Form {
             ++$field_count;
             
         }
+        /* code for creating an interface to import multiselect/checkgroup values
+         * this might be cool someday
+         
+        foreach( $this->_group_fields as $group_field_name => $group_field_label ) {
+            $block_name = 'block_' . $group_field_name;
+            $block_fields = array( );
+            $group_field_item_count = 0;
+            foreach( $this->_group_template as $template_key => $template_def ) {
+                $template_def['block'] = $block_name; 
+                $template_def['label'] .= $group_field_label;
+                foreach( $this->_source_fields_lookup as $source_field_name => $source_field_label ) {
+                    $item_designator = $group_field_name . '_' . $group_field_item_count;
+                    foreach( $this->_group_item_template as $group_item_name => $group_item_def ) {
+                        $block_fields[ $group_item_name . $item_designator ] = $group_item_def;
+                        $block_fields[ $group_item_name . $item_designator ]['block'] = $block_name;
+                        if ( $group_item_def['type'] == 'select' ) {
+                            $block_fields[ $group_item_name . $item_designator ]['values'] = $this->_source_fields_lookup;
+                        }
+                    }
+                    $group_field_item_count++;
+                }
+            }
+            $result_fields[$block_name] = $template_def;
+            $result_fields = array_merge( $result_fields, $block_fields );
+        }
+        */
 
         $this->addFields( $result_fields );
     }
