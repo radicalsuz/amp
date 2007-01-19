@@ -1153,7 +1153,7 @@ if ( !function_exists( 'AMP_evalLookup')){
         if ( is_object( $lookup_def )){
             return $lookup_def->dataset;
         }
-        if ( !is_array( $lookup_def )) return AMPSystem_Lookup::instance( $lookup_def );
+        if ( !is_array( $lookup_def )) return AMP_lookup( $lookup_def );
         if ( isset( $lookup_def['module'])){
             return AMPSystem_Lookup::locate( $lookup_def );
         }

@@ -551,6 +551,7 @@
         function delete( $session_id ) {
             $dbcon = AMP_Registry::getDbcon( );
             $item = &new AMP_Form_Element_Captcha( $dbcon, $session_id ) ;
+            $result = false;
             if ( $item->hasData( )) {
                 $result = $item->deleteData( $session_id );
             }

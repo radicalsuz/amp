@@ -179,6 +179,31 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             if ( is_int( $_REQUEST[$fieldname])) {
                 //do precise search for numeric values
                 $sql_criteria[] = $fieldname . ' = ' . $this->dbcon->qstr(  $_REQUEST[$fieldname] );
+            } elseif ( is_array( $_REQUEST[$fieldname] ) 
+                        && $this->udm->fields[$fieldname]['type'] == 'date' ) {
+                $date_preferences = 'form.'.$this->udm->instance.'.date.search.inc.php'; 
+
+                if ( !file_exists_incpath( $date_preferences )) {
+                    $request_year = ( isset( $_REQUEST[$fieldname]['Y']) && $_REQUEST[$fieldname]['Y'] ) ? $_REQUEST[$fieldname]['Y'] : false ;
+                    $request_month = ( isset( $_REQUEST[$fieldname]['M']) && $_REQUEST[$fieldname]['M']) ? $_REQUEST[$fieldname]['M'] : false ;
+                    //if ( $request_month && $request_year ) {
+                        //$sql_criteria[] = $fieldname . ' > ' . $this->dbcon->qstr( $]['Y'] . '-' . str_pad( $_REQUEST[$fieldname]['M'], 2, '0', STR_PAD_LEFT) . '-01' );
+                        //$sql_criteria[] = $fieldname . ' < ' . $this->dbcon->qstr( $_REQUEST[$fieldname]['Y'] . '-' . str_pad( $_REQUEST[$fieldname]['M'], 2, '0', STR_PAD_LEFT) . '-32' );
+
+                    //}
+                    if ( $request_year ) {
+                        $sql_criteria[] = 'YEAR( ' . $fieldname . ') =  ' . $this->dbcon->qstr( $_REQUEST[$fieldname]['Y'] );
+                    }
+
+                    if ( $request_month ) {
+                        $sql_criteria[] = 'MONTH( ' . $fieldname . ') =  ' . $this->dbcon->qstr( $_REQUEST[$fieldname]['M'] );
+                    }
+
+                } else {
+                    $date_crit_method = 'form_'.$this->udm->instance.'_date_search'; 
+                    include_once( $date_preferences );
+                    $sql_criteria[] = $date_crit_method( $fieldname );
+                }
             } else {
                 //do string 'contains' search
                 $sql_criteria[] = $fieldname . ' LIKE ' . $this->dbcon->qstr( '%' . $_REQUEST[$fieldname] . '%' );
@@ -420,19 +445,29 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 			} 
             if ( isset($field_def['value']) && $field_def['value'] ) $selected = $field_def['value'];
 		}
+
+        //set the search preferences for dates
+        if ( $type == 'date' ) {
+            $date_preferences = 'form.'.$this->udm->instance.'.date.search.inc.php'; 
+            if ( file_exists_incpath( $date_preferences )) {
+                include_once( $date_preferences );
+            } else {
+                $defaults = array( 'minYear' => 1990, 'addEmptyOption' => 1, 'emptyOptionText' => '--', 'format' => 'MY' );
+                trigger_error( 'assigned date array');
+            }
+        }
 		
 		//add the element
-		$form->addElement( $type, $name, $label, $defaults );
+		$fRef = &$form->addElement( $type, $name, $label, $defaults );
 
 		//get the element reference
-		$fRef =& $form->getElement( $name );
+		//$fRef =& $form->getElement( $name );
         if ( !$fRef || strtolower( get_class( $fRef )) == 'html_quickform_error' ) return false;
 
 		$fRef->updateAttributes(array('class'=>$this->control_class, 'size'=>$size));
 		if ( isset( $selected ) ) {
 			$fRef->setSelected( $selected );
 		}
-
 
 		if ($type=='static') {
 			  $renderer->setElementTemplate(" {label}", $name);
