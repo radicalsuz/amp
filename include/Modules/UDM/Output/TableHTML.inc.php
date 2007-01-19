@@ -112,11 +112,8 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
 
                 $display_name = false;
                 if ( isset( $this->udm->fields[$key]) && isset( $this->udm->fields[$key]['label'])) {
-                    trigger_error( 'found udm field ' . $key );
                     $display_name = $this->udm->fields[ $key ]['label'];
-                } else {
-                    trigger_error( 'udm field ' . $key . ' NOT FOUND');
-                }
+                } 
                 $key=$sort_obj->makelink($key, $display_name );
             }
             $list_html_headers.=sprintf($options['list_html_header_template'], $key);
