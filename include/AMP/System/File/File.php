@@ -265,6 +265,10 @@ class AMP_System_File {
         return '*' . $name . '*';
     }
 
+    function getErrors( ) {
+        return false;
+    }
+
      //{{{ Object based Search methods: makeCriteria
 
     /**

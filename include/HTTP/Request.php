@@ -762,7 +762,7 @@ class HTTP_Request {
 
         if (in_array($this->_method, $this->_bodyDisallowed) ||
             (HTTP_REQUEST_METHOD_POST != $this->_method && empty($this->_body)) ||
-            (HTTP_REQUEST_METHOD_POST != $this->_method && empty($this->_postData) && empty($this->_postFiles))) {
+            (HTTP_REQUEST_METHOD_POST == $this->_method && empty($this->_postData) && empty($this->_postFiles))) {
 
             $this->removeHeader('Content-Type');
         } else {

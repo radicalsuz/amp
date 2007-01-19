@@ -87,7 +87,11 @@ class AMP_System_File_Image extends AMP_System_File {
         if( !($write_method = $this->_get_action_method( 'write') )) return false;
 
         if ( $direct ) return $write_method( $image_resource );
-        return $write_method( $image_resource, $path );
+        $result = $write_method( $image_resource, $path );
+        if ( $result ) {
+            AMP_s3_save( $path );
+        }
+        return $result;
     }
 
     function &resize( $new_width, $new_height, $start_width = null, $start_height = null ) {

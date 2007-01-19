@@ -21,15 +21,26 @@ class AMPSystem_Upload {
     }
 
     function execute( $temp_name, $allow_existing_file=false) {
-        if ( $this->_autoRename ) $this->_path_target = $this->_findSafeFilename();
+        if ( $this->_autoRename ) {
+            $this->_cleanFilename( );
+            $this->_path_target = $this->_findSafeFilename();
+        }
+
         if(is_uploaded_file($temp_name)) {
             if (! move_uploaded_file( $temp_name, $this->_path_target )) return false;
         } elseif ($allow_existing_file) {
             if (! rename( $temp_name, $this->_path_target )) return false;
         } else return false;
         chmod( $this->_path_target, 0755 );
+
+        AMP_s3_save( $this->_path_target );
         return true;
     }
+
+    function _cleanFilename( ) {
+        $this->_file_name = str_replace( array( '#', '&'), '_', $this->_file_name );
+    }
+
 
     function getTargetPath() {
         return $this->_path_target ;
