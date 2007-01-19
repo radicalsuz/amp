@@ -1591,12 +1591,13 @@ function AMP_s3_save( $file_path ) {
     if ( !AMP_SYSTEM_FILE_S3_KEY ) return false; 
     if ( !( $data = file_get_contents( $file_path ))) return false; 
 
-    static $s3_connection;   
+    static $s3_connection = false;   
 
     $file_name = basename( $file_path );
     $clean_file = str_replace(" ", "%20", $file_name);
-    $object_id  = str_replace( AMP_BASE_PATH, '', $file_path );
+    $object_id  = str_replace( AMP_pathFlip( AMP_LOCAL_PATH . '/' ), '', $file_path );
     $bucket = AMP_SYSTEM_FILE_S3_BUCKET;
+    $type = mime_content_type($file_path);
 
     if ( !$s3_connection ) {
         require_once("s3/s3.class.php");
