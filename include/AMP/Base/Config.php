@@ -1,5 +1,5 @@
 <?php
-//load DB
+//load DB connection
 require_once( 'AMP/Base/DB.php');
 
 //server config file
@@ -31,10 +31,6 @@ require_once( 'AMP/Base/Lookups.php');
 //content configuration
 require_once( 'AMP/Content/Map.inc.php');
 
-
-
-//activate the memcache class -- deprecated for 3.6.1
-//if ( AMP_SITE_MEMCACHE_ON ) require_once('AMP/System/Memcache.inc.php');
 
 //old legacy settings
 require_once( 'AMP/LegacyRegistry.inc.php');
