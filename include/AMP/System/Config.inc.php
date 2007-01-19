@@ -76,6 +76,12 @@ define('ADODB_REPLACE_UPDATED',  1);
 define( "AMP_SYSTEM_VERSION_ID", '3.6.10');
 define( 'MAGIC_QUOTES_ACTIVE', get_magic_quotes_gpc());
 
+/**
+ * s3 settings - Amazon File Cache
+ */
+if ( !defined( 'AMP_SYSTEM_FILE_S3_KEY')) define( 'AMP_SYSTEM_FILE_S3_KEY', false );
+if ( !defined( 'AMP_SYSTEM_FILE_S3_KEY_SECRET')) define( 'AMP_SYSTEM_FILE_S3_KEY_SECRET', false );
+
 
 /**
  * Taggable Item Types
