@@ -1593,11 +1593,12 @@ function AMP_s3_save( $file_path ) {
 
     static $s3_connection = false;   
 
-    $file_name = basename( $file_path );
-    $clean_file = str_replace(" ", "%20", $file_name);
+    $type = mime_content_type($file_path);
+
+    $clean_file = str_replace(" ", "%20", basename( $file_name ));
+    $file_path =  str_replace( $file_name, $clean_file, $file_path );
     $object_id  = str_replace( AMP_pathFlip( AMP_LOCAL_PATH . '/' ), '', $file_path );
     $bucket = AMP_SYSTEM_FILE_S3_BUCKET;
-    $type = mime_content_type($file_path);
 
     if ( !$s3_connection ) {
         require_once("s3/s3.class.php");
@@ -1608,4 +1609,23 @@ function AMP_s3_save( $file_path ) {
 
 }
 
+function AMP_s3_delete( $file_path ) {
+    if ( !AMP_SYSTEM_FILE_S3_KEY ) return false; 
+    if ( !( $data = file_get_contents( $file_path ))) return false; 
+
+    static $s3_connection = false;   
+
+    $clean_file = str_replace(" ", "%20", basename( $file_name ));
+    $file_path =  str_replace( $file_name, $clean_file, $file_path );
+    $object_id  = str_replace( AMP_pathFlip( AMP_LOCAL_PATH . '/' ), '', $file_path );
+    $bucket = AMP_SYSTEM_FILE_S3_BUCKET;
+
+    if ( !$s3_connection ) {
+        require_once("s3/s3.class.php");
+        $s3_connection = &new s3( );
+    }
+
+    return $s3->deleteObject( $object_id, $bucket );
+
+}
 ?>
