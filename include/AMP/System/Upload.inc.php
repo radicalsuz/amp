@@ -38,7 +38,7 @@ class AMPSystem_Upload {
     }
 
     function _cleanFilename( ) {
-        $this->_file_name = str_replace( array( '#', '&'), '_', $this->_file_name );
+        $this->_file_name = str_replace( array( '#', '&', '\'' ), '_', $this->_file_name );
     }
 
 
