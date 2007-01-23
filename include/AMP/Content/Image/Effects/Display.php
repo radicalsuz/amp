@@ -81,7 +81,7 @@ class AMP_Content_Image_Effects_Display {
         */
         $cache_key = AMP_CACHE_TOKEN_IMAGE . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
         if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
-            $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
+            $cache_key = AMP_System_Cache::identify( $cache_key, AMP_SYSTEM_USER_ID );
         }
         $file_name = $file_cache->authorize( $cache_key );
         $file_path = $file_cache->path( $file_name );
