@@ -80,7 +80,7 @@ class AMP_System_Menu_Display {
                 // Set this to process menu show events for a given object.
                 addEvent(listMenu, 'show', repositionMenus, true);
 
-                listMenu.animations[listMenu.animations.length] = FSMenu.animFade;\n
+                //listMenu.animations[listMenu.animations.length] = FSMenu.animFade;\n
                 //listMenu.animations[listMenu.animations.length] = FSMenu.animSwipeDown;\n
                 //listMenu.animations[listMenu.animations.length] = FSMenu.animClipDown;
 
