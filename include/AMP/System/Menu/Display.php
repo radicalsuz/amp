@@ -26,7 +26,7 @@ class AMP_System_Menu_Display {
         $header = &AMP_get_header( );
         //$header->addStylesheet( 'scripts/listmenu_fallback.css' );
         $header->addStylesheet( 'scripts/listmenu_h.css' );
-        $header->addJavaScript( 'scripts/fsmenu_commented.js' );
+        $header->addJavaScript( 'scripts/fsmenu.js' );
         $header->addJavaScript( 'scripts/fsmenu_config.js' );
 
         $config_script = 
