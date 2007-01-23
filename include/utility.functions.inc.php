@@ -55,7 +55,7 @@ if ( !function_exists( 'ampredirect' ) ) {
         if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
             $target_url = $_REQUEST['pageredirect'];
         }
-        if ( defined( 'AMP_USERMODE_ADMIN' ) ) trigger_error ( 'redirect is for ' . $target_url );
+        if ( defined( 'AMP_USERMODE_ADMIN' ) && AMP_DISPLAYMODE_DEBUG ) trigger_error ( 'redirect is for ' . $target_url );
         if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT' ))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
         header("Location: $target_url");
     }
@@ -1628,6 +1628,43 @@ function AMP_s3_delete( $file_path ) {
     }
 
     return $s3->deleteObject( $object_id, $bucket );
+
+}
+
+function AMP_absolute_urls( $html ) {
+
+    $url = AMP_SITE_URL;
+
+    $pattern = '/href="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $replace = 'href="'.$url.'/$1"';
+    $data =  preg_replace($pattern, $replace, $html);
+
+    $pattern = '/src="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $replace = 'src="'.$url.'/$1"';
+    $data =  preg_replace($pattern, $replace, $data);
+
+    $pattern = '/src ="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $replace = 'src="'.$url.'/$1"';
+    $data =  preg_replace($pattern, $replace, $data);
+
+    $pattern = '/src=\'((?!http)[\w\d\.\/?=& -]*)\'/i';
+    $replace = 'src="'.$url.'/$1"';
+    $data =  preg_replace($pattern, $replace, $data);
+
+
+    $pattern = '/background="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $replace = 'background="'.$url.'/$1"';
+    $data =  preg_replace($pattern, $replace, $data);
+
+    $pattern = '/action="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $replace = 'action="'.$url.'/$1"';
+    $data =  preg_replace($pattern, $replace, $data);
+
+    $pattern = '/,\'\',\'((?!http)[\w\d\.\/?=& -]*)\'/i';
+    $replace = ',\'\',\''.$url.'/$1\'';
+    $data =  preg_replace($pattern, $replace, $data);
+
+    return $data;
 
 }
 ?>
