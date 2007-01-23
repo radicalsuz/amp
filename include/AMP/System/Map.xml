@@ -340,6 +340,7 @@
             <base>schedule_item.php?action=list</base>
             <var>schedule_id</var>
         </href>
+        <separator>1</separator>
     </list>
     <item>
         <label>View Schedule Slots</label>

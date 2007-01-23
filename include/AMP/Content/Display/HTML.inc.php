@@ -103,6 +103,17 @@ class AMPDisplay_HTML {
     function link( $href, $text, $attr = array() ) {
         return $this->_HTML_link( $href, $text, $attr ) ;
     }
+
+    function simple_li( $contents, $attr = array( )) {
+        $li_attr = $this->makeAttributes( $attr );
+        return '     <li'.$li_attr.'>'.$contents.'</li>'."\n" ;
+    }
+
+    function simple_ul( $contents, $attr = array( )) {
+        $ul_attr = $this->makeAttributes( $attr );
+        return '<ul'.$ul_attr.'>'.$contents.'</ul>'."\n\n";
+    }
+
     function _HTML_link( $href, $text, $attr = array() ) {
         if (!$href) return $this->_HTML_inSpan( $text, $attr);
         $link_attr = $this->_HTML_makeAttributes( $attr );
@@ -112,6 +123,7 @@ class AMPDisplay_HTML {
     function newline($qty=1, $attr = array( )) {
         return $this->_HTML_newline($qty, $attr ) ;
     }
+
     function _HTML_newline($qty=1, $attr = array( )) {
         $nl_attr = $this->makeAttributes( $attr );
         $nl_str = "<BR$nl_attr />\n";

@@ -42,7 +42,7 @@ class AMPSystem_Tree {
      * @var string 
      * @access protected
      */
-    var $_id_auto_suffix;
+    var $_id_auto_suffix = '1';
 
     /**
      * Class to be generated as default child component 
@@ -55,6 +55,10 @@ class AMPSystem_Tree {
 
 // {{{ methods: Initialization
     function AMPSystem_Tree() {
+
+    }
+
+    function __construct( ) {
 
     }
 

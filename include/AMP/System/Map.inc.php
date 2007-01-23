@@ -173,7 +173,7 @@ class AMPSystem_Map {
             else $itemset = &AMPSystem_Lookup::locate( $menu_def['list']['lookup'] );            
             if ( !$itemset ) continue;
             
-            $sep = true;
+            $sep = isset( $menu_def['list']['separator']) ? $menu_def['list']['separator'] : false;
             foreach ($itemset as $id => $name ) {
                 $this->_addListItem( $id, $name, $menu_id, $menu_def['list']['href'], $sep );
                 $sep = false;

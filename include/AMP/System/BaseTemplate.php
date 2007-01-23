@@ -31,7 +31,6 @@ class AMPSystem_BaseTemplate {
     }
 
     function __construct( ){
-        require_once( 'AMP/System/Menu.inc.php');
         require_once( 'AMP/System/Header.inc.php');
         $this->page_title = AMP_SITE_NAME . ' Administration';
         $this->_header = &AMPSystem_Header::instance( );
@@ -40,9 +39,10 @@ class AMPSystem_BaseTemplate {
     }
 
     function _init_menu( ){
-        $system_menu = false;
-        $this->_menu = & new AMPSystem_Menu( true );
-        $this->_menu->init_header( );
+        //require_once( 'AMP/System/Menu.inc.php');
+        //$this->_menu = & new AMPSystem_Menu( true );
+        require_once( 'AMP/System/Menu/Display.php');
+        $this->_menu = & new AMP_System_Menu_Display( );
     }
 
     function &instance() {
@@ -156,7 +156,7 @@ class AMPSystem_BaseTemplate {
     }
 
     function _HTML_systemMenu() {
-        return $this->_menu->output();
+        return $this->_menu->execute();
         
     }
 
