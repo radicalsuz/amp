@@ -51,6 +51,10 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
         
     }
 
+    function execute( ) {
+        return $this->output( );
+    }
+
     function cache_components( ){
         $this->_cache  = &AMP_get_cache( );
         $this->_header = &AMP_getHeader( );

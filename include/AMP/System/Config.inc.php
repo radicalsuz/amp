@@ -73,7 +73,7 @@ define('ADODB_REPLACE_UPDATED',  1);
 /**
  *  GLOBAL settings
  */
-define( "AMP_SYSTEM_VERSION_ID", '3.6.10');
+define( "AMP_SYSTEM_VERSION_ID", '3.6.11');
 define( 'MAGIC_QUOTES_ACTIVE', get_magic_quotes_gpc());
 
 /**
@@ -100,5 +100,9 @@ define( 'AMP_SYSTEM_ITEM_TYPE_LINK', 'link');
  */
 define( 'AMP_PATH_PHPGACL', 'phpgacl' );
 define( 'AMP_PATH_PHPGACL_ADMIN', 'phpgacl/admin');
+
+if ( !defined( 'AMP_SYSTEM_MENU_PATH')) {
+    define( 'AMP_SYSTEM_MENU_PATH', 'AMP/System/Menu.inc.php');
+}
 
 ?>
