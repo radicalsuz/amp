@@ -149,7 +149,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
     function _resize_ratio( $original_sizes, $ratio ){
         $result_sizes = array( );
         foreach( $original_sizes as $key => $size ){
-            $result_sizes[$key] = ceil( $size * $ratio );
+            $result_sizes[$key] = ceil( $size / $ratio );
         }
         return $result_sizes;
     }
