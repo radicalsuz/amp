@@ -11,13 +11,19 @@ To Do:  make multiple var pages send
 $modid = 22;
 include("AMP/BaseDB.php");
 include_once("AMP/System/Email.inc.php");
-if (isset($modid)){
+if (isset($modid) && $modid ){
   #this code initializes the $tophtml, $prmailtomessage, and $bthtml variables
+    require_once( 'AMP/System/Tool/Control/Set.inc.php' );
+    $controls = &new ToolControlSet( AMP_Registry::getDbcon( ), $modid );
+    $controls->globalizeSettings();
+    /* old way
 $modinstance = $dbcon->CacheExecute("SELECT * from module_control where modid = $modid") or DIE($dbcon->ErrorMsg());
 while (!$modinstance->EOF) {
 $a = $modinstance->Fields("var");
 $$a = $modinstance->Fields("setting");
-$modinstance->MoveNext();} }
+$modinstance->MoveNext();} 
+*/
+}
 
 echo $tophtml; 
 
@@ -91,14 +97,12 @@ if ($_REQUEST['submit']) {
 	$comment=$_REQUEST["comment"];
 	$site_name=AMPSystem_Email::sanitize(AMP_SITE_NAME);
   $url = $_REQUEST["url"];
-	$message="Hi\n$from ($from_email) invited you to visit $site_name\n".$prmailtomessage."\nCheck out this URL: $url";
+	$message="Hi\n$from ($from_email) invited you to visit ". AMP_SITE_NAME."\n".$prmailtomessage."\nCheck out this URL: $url";
 		if ($_REQUEST["comment"] != "") {
 			$message.="\n\n$from left you a note:\n$comment";
 		}
 	
-  $setvar=$dbcon->CacheExecute("SELECT * FROM sysvar WHERE id = 1") or DIE($dbcon->ErrorMsg());
-	$your_email=AMPSystem_Email::sanitize($setvar->Fields("emfrom"));
-	$setvar->Close();
+	$your_email=AMPSystem_Email::sanitize(AMP_SITE_EMAIL_SENDER);
 
 	$subject="You were invited by $from to visit ".$site_name."!";
 	$add="From: $site_name <$your_email>\nReply-To: $from_email\nDate: $date\n";
