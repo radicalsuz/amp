@@ -9,6 +9,7 @@ if ( $cached_output = AMP_cached_request( )) {
 
 $intro_id = ( isset( $_GET['intro_id']) && $_GET['intro_id'] ) ? $_GET['intro_id'] : false;
 $position = ( isset( $_GET['position']) && $_GET['position'] ) ? $_GET['position'] : false;
+$format = ( isset( $_GET['format']) && $_GET['format'] ) ? $_GET['format'] : false;
 
 if ( !$position ) {
     trigger_error( 'no position requested for ' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
@@ -28,7 +29,42 @@ if (!$template->hasData()) return false;
 $template->setPage( $current_page );
 $template->globalizeNavLayout();
 $nav_manager = &new NavigationManager( $template, $current_page );
-$finalPageHtml = $nav_manager->output( strtoupper( substr( $position, 0, 1 )));
+$nav_output = $nav_manager->output( strtoupper( substr( $position, 0, 1 )));
+$url = AMP_SITE_URL;
+
+$pattern = '/href="((?!http)[\w\d\.\/?=& -]*)"/i';
+$replace = 'href="'.$url.'/$1"';
+$data =  preg_replace($pattern, $replace, $nav_output);
+
+$pattern = '/src="((?!http)[\w\d\.\/?=& -]*)"/i';
+$replace = 'src="'.$url.'/$1"';
+$data =  preg_replace($pattern, $replace, $data);
+
+$pattern = '/src ="((?!http)[\w\d\.\/?=& -]*)"/i';
+$replace = 'src="'.$url.'/$1"';
+$data =  preg_replace($pattern, $replace, $data);
+
+$pattern = '/src=\'((?!http)[\w\d\.\/?=& -]*)\'/i';
+$replace = 'src="'.$url.'/$1"';
+$data =  preg_replace($pattern, $replace, $data);
+
+
+$pattern = '/background="((?!http)[\w\d\.\/?=& -]*)"/i';
+$replace = 'background="'.$url.'/$1"';
+$data =  preg_replace($pattern, $replace, $data);
+
+$pattern = '/action="((?!http)[\w\d\.\/?=& -]*)"/i';
+$replace = 'action="'.$url.'/$1"';
+$data =  preg_replace($pattern, $replace, $data);
+
+$pattern = '/,\'\',\'((?!http)[\w\d\.\/?=& -]*)\'/i';
+$replace = ',\'\',\''.$url.'/$1\'';
+$finalPageHtml =  preg_replace($pattern, $replace, $data);
+
+if ( $format = 'js' ) {
+    $finalPageHtml = 'document.write (\'' . $finalPageHtml . '\')';
+
+}
 print $finalPageHtml;
 
 if ( AMP_is_cacheable_url( ) ) {
