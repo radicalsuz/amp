@@ -31,8 +31,8 @@
 *******************************************/
 
 
-$mod_id = 2 ;
-include("AMP/BaseDB.php");
+$intro_id = 2 ;
+require_once("AMP/BaseDB.php");
 
 /*
 if (AMP_SITE_MEMCACHE_ON) {
