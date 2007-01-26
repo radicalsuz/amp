@@ -8,33 +8,37 @@
  * @date    2006-02-06
  */ 
 
-if ( !defined( 'AMP_MODULE_ID_CONTACT_US')) define( 'AMP_MODULE_ID_CONTACT_US', 17 );
-if ( !defined( 'AMP_INTROTEXT_ID_CONTACT_US')) define( 'AMP_INTROTEXT_ID_CONTACT_US', 52 );
-if ( !defined( 'AMP_INTROTEXT_ID_CONTACT_US_RESPONSE')) define( 'AMP_INTROTEXT_ID_CONTACT_US_RESPONSE', 53 );
-$modid = AMP_MODULE_ID_CONTACT_US;
 
 require_once("AMP/BaseDB.php");
-require_once( 'Modules/Contact/Form.inc.php');
 
+require_once( 'Modules/Contact/Form.inc.php');
 $form = &new ContactForm( );
+$form->Build( );
+$form->enforceRequiredFields( );
+
 $showForm = !( $form->submitted( ) && $form->validate( ));
-$intro_id = $showForm ? AMP_INTROTEXT_ID_CONTACT_US :
-                        AMP_INTROTEXT_ID_CONTACT_US_RESPONSE ;
+
+$intro_id = $showForm ? AMP_CONTENT_PUBLICPAGE_ID_CONTACT_US :
+                        AMP_CONTENT_PUBLICPAGE_ID_CONTACT_US_RESPONSE ;
+$modid = AMP_MODULE_ID_CONTACT_US;
 
 require_once("AMP/BaseTemplate.php");
+
+$flash = &AMP_System_Flash::instance( );
+print $flash->execute( );
+
 require_once("AMP/BaseModuleIntro.php");  
 if ( !isset( $MM_email_contact)) $MM_email_contact = false;
 if ( !defined( 'AMP_SITE_EMAIL_CONTACT')) define( 'AMP_SITE_EMAIL_CONTACT', $MM_email_contact );
 
-$form->Build( );
 if ( $showForm ) {
-    $form->enforceRequiredFields( );
     print $form->output( );
 } elseif ( AMP_SITE_EMAIL_CONTACT ){
+  $data = $form->getValues( );
+
   require_once( 'AMP/System/Email.inc.php');
   $email_maker = &new AMPSystem_Email( );
   $email_maker->setRecipient( AMP_SITE_EMAIL_CONTACT );
-  $data = $form->getValues( );
   $email_maker->setMessage( $data['message'] );
   $email_maker->setSender( $data['sender_email'] );
   $email_maker->setSubject( $data['subject'] );
