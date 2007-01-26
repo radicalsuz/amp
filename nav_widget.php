@@ -59,10 +59,14 @@ $data =  preg_replace($pattern, $replace, $data);
 
 $pattern = '/,\'\',\'((?!http)[\w\d\.\/?=& -]*)\'/i';
 $replace = ',\'\',\''.$url.'/$1\'';
-$finalPageHtml =  preg_replace($pattern, $replace, $data);
+$data =  preg_replace($pattern, $replace, $data);
 
-if ( $format = 'js' ) {
-    $finalPageHtml = 'document.write (\'' . $finalPageHtml . '\')';
+$pattern = array( "\r", "\n" );
+$finalPageHtml =  str_replace($pattern, '', $data);
+
+if ( $format == 'js' ) {
+    $nav_id = $position . mt_rand( 1000, 10000 );
+    $finalPageHtml = 'var '.$nav_id.'=  { value: \''. str_replace( "'", "\'", $finalPageHtml ) . "'};\ndocument.write( ".$nav_id.".value );";
 
 }
 print $finalPageHtml;
