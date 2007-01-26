@@ -38,6 +38,7 @@ class ContentSearch_Form extends AMPSearchForm {
         
     }
 
+
     function getComponentHeader() {
         return $this->component_header;
     }
@@ -80,7 +81,7 @@ class ContentSearch_Form extends AMPSearchForm {
                     $renderer->separator( )
                     .$renderer->link( 
                         AMP_Url_AddVars( AMP_SYSTEM_URL_CLASS, array( 'id='.$current_class )),
-                            $renderer->image( AMP_SYSTEM_ICON_EDIT )
+                            $renderer->image( AMP_SYSTEM_ICON_EDIT , array( 'width' => '16', 'height' => '16', 'border' => 0 ) )
                             . $renderer->space( ) 
                             . AMP_TEXT_EDIT 
                             . $renderer->space( ) 
@@ -99,6 +100,7 @@ class ContentSearch_Form extends AMPSearchForm {
         $results = parent::getSearchValues( );
         if ( !(isset( $results['search_by_date']) && $results['search_by_date'])) unset ( $results['date'] );
         unset( $results['search_by_date']);
+        $results['allowed'] = 1;
         return $results;
     }
 

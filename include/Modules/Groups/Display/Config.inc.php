@@ -52,7 +52,7 @@ function AMP_legacy_groups_get_display( $gdisplay ) {
             $list_options['subheader3'] = "subregion";
             //Sort choices
             $sort_options['default_orderby']  = '(if(Country="USA",1,if(Country="CAN",2,if((isnull(Country) or Country=""),3,Country)))),State,custom4,City,Company';
-            $sort_options['default_select']   = "if( ( !isnull( custom4) and custom4 !='0' and custom4 != ''), custom4, '') as subregion, Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))";
+            $sort_options['default_select']   = "if( ( !isnull( custom4) and custom4 !='0' and custom4 != '' and state='CA'), custom4, '') as subregion, Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,'')), if ( UPPER( State ) != 'INTL', State, '' ) as State";
             #$sort_options['default_select']   = "custom4 as subregion, Concat( if(!isnull(Country), Concat(Country, ' - '),''), if(!isnull(State), Concat(State, ' - '),''), if(!isnull(City), City,''))";
             break;
         default:

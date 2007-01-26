@@ -284,7 +284,7 @@ if (!function_exists('groups_layout_display')) {
 		
 		if ($City && $State) {
 			$html .= "<span class=\"eventsubtitle\">$City, ";
-			if ($State =='Intl') { 
+			if ( strtoupper( $State ) =='INTL' ) { 
 				$html .= $Country;
 			} else {
 				$html .= list_state_convert($State);

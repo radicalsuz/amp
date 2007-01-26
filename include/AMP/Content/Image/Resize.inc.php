@@ -62,6 +62,7 @@ class ContentImage_Resize {
             return false;
         }
         $this->setFilePermission( $target_path );
+        AMP_s3_save( $target_path );
 
     }
 

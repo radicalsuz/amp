@@ -148,6 +148,10 @@ class AMP_Content_Nav_Layout extends AMPSystem_Data_Item {
         $this->mergeData( array( 'layout_anchor' => $result ));
     }
 
+    function get_url_edit( ) {
+        return AMP_url_add_vars( AMP_SYSTEM_URL_NAV_LAYOUT, array( 'id=' . $this->id ));
+    }
+
 }
 
 ?>

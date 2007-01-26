@@ -145,11 +145,11 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
                 ."   background-image: url(".AMP_SYSTEM_URL_SYSTEM_IMAGES.AMP_ICON_SPACER.");\n"
                 ."}\n";
                 */
-        $page_header = &AMP_getHeader( );
+        //$page_header = &AMP_getHeader( );
 //        $page_header->addStylesheetDynamic( $css, 'cropper');
 
     // this code applies to non-implemented cropper based on prototype
-        $page_header = &AMP_getHeader( );
+        //$page_header = &AMP_getHeader( );
         #$page_header->addStylesheet( '/cropper.css', 'cropper');
 
     }

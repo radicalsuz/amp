@@ -72,7 +72,6 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
 		//Zip Code Search Request
 		if (isset($_REQUEST['zip'])&&isset($_REQUEST['distance'])&&$_REQUEST['zip']&&$_REQUEST['distance']) {
-            trigger_error( 'zip it baby');
 			$srch_options['zip']=$_REQUEST['zip'];
 			$srch_options['distance']=$_REQUEST['distance'];
             $srch_loc=&new Geo ($this->dbcon, NULL, NULL, NULL, $_REQUEST['zip']);
@@ -453,7 +452,6 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
                 include_once( $date_preferences );
             } else {
                 $defaults = array( 'minYear' => 1990, 'addEmptyOption' => 1, 'emptyOptionText' => '--', 'format' => 'MY' );
-                trigger_error( 'assigned date array');
             }
         }
 		
