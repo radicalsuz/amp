@@ -43,7 +43,7 @@ class UserDataSet extends UserData {
 
     }
 
-    function output_list ( $format='DisplayHTML', $options = null, $order = null, $search_options=null) {
+    function output_list ( $format='DisplayHTML', $options = array( ), $order = array( ), $search_options=array( )) {
         $output_html = "";
         //block unpublished data from appearing online
         if ((!$this->_module_def['publish'])&&(!$this->admin)) {
@@ -62,7 +62,7 @@ class UserDataSet extends UserData {
         
 
         //Specify a default output order
-        if (!isset($order)) {
+        if (!isset($order) || empty( $order )) {
             $order = array('SearchForm','GoogleMap','Pager','Actions',$format,'Pager','Index');
         }
         if ($this->uid) $order = array($format);

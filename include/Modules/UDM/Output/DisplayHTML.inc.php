@@ -169,10 +169,12 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
     function subheader_depth($options) {
         $level = 0;
         foreach ($options as $option_name=>$option_value) {
-            if (strpos($option_name, "subheader")===0) {
-                if (strlen($option_name)==9) $level=1;
-                else $level = intval(substr($option_name,9));
+            if (strpos($option_name, "subheader")===FALSE ) {
+                continue;
             }
+            if ( !$option_value ) continue;
+            if (strlen($option_name)==9) $level=1;
+            else $level = intval(substr($option_name,9));
         }
         return $level;
     }
@@ -212,7 +214,9 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         if ($level<1) return false;
         if ($level==1) $textlevel='';
         else $textlevel=strval($level);
-        $header_field = $options['subheader'.$textlevel];
+        $header_option = 'subheader' . ( $level>1 ? strval( $level ) : '' );
+        $header_field = $options[ $header_option ];
+        //$header_field = $options[( 'subheader'.$textlevel)];
         $output = "";
         if (!isset( $dataitem[$header_field])) {
             return false;
