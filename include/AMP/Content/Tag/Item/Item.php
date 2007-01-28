@@ -157,6 +157,9 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
         if ( !isset( $this->$item_type_class_var ) && $this->$item_type_class_var ) return false; 
         $item_type_class = $this->$item_type_class_var;
         $this->_tagged_item = & new $item_type_class( AMP_Registry::getDbcon( ), $this->getItemId( ) );
+        if ( !$this->_tagged_item->hasData( )) {
+            $this->delete( );
+        }
     }
 
     function getName( ) {
