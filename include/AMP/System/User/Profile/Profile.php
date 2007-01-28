@@ -49,7 +49,7 @@ class AMP_System_User_Profile extends AMPSystem_Data_Item {
             return $this->_fields;
         }
         $modin = $this->getModin( );
-        if ( !$modin ) return $false;
+        if ( !$modin ) return false;
         $sourceDef = get_class( $this ) . $modin;
 
         //check registry for field defs
@@ -119,7 +119,7 @@ class AMP_System_User_Profile extends AMPSystem_Data_Item {
     function &getImageRef( ) {
         $false = false;
         $field_defs = $this->_init_fields( );
-        if ( !$field_defs ) return false;
+        if ( !$field_defs ) return $false;
 
         foreach( $field_defs as $fname => $fdef ) {
             if ( isset( $fdef['type']) && $fdef['type'] == 'imagepicker') {
@@ -130,6 +130,17 @@ class AMP_System_User_Profile extends AMPSystem_Data_Item {
                 $result = &new Content_Image( $image_name );
                 return $result;
             }
+        }
+    }
+
+    function getBlurb( ) {
+        $modin = $this->getModin( );
+        trigger_error( 'found modin as ' . $modin);
+        if ( !$modin ) return false;
+        $blurb_field = 'AMP_FORM_DATA_BLURB_' . $modin;
+        trigger_error( 'hunting blurb field ' . $blurb_field . ' defined as ' . constant( $blurb_field ) );
+        if ( defined( $blurb_field )) {
+            return $this->getData( constant( $blurb_field ));
         }
     }
 

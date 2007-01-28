@@ -15,8 +15,8 @@ class AMP_Content_Redirect_List extends AMP_System_List_Form {
     var $_source_object = 'AMP_Content_Redirect';
     var $_observers_source = array( 'AMP_System_List_Observer');
 
-    function AMP_Content_Redirect_List( &$dbcon ) {
-        $this->init( $this->_init_source( $dbcon ) );
+    function AMP_Content_Redirect_List( &$dbcon, $criteria = array( ) ) {
+        $this->init( $this->_init_source( $dbcon, $criteria  ) );
     }
 }
 ?>
