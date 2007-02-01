@@ -57,45 +57,47 @@
 
                 // Here's a second method. This only works in IE 5.5+ on Windows, but it doesn't make
                 // select boxes appear and disappear (menus cleanly cover them).
+                if ( navigator.appVersion.match( /\bMSIE\b/)) {
+                    FSMenu.prototype.ieSelBoxFixShow = function(mN) { with (this)
+                    {
+                     var m = menus[mN];
+                     if (!isIE || !window.createPopup) return;
+                     if (navigator.userAgent.match(/MSIE ([\d\.]+)/) && parseFloat(RegExp.$1) > 6.5)
+                      return;
+                     // Create a new transparent IFRAME if needed, and insert under the menu.
+                     if (!m.ifr)
+                     {
+                      m.ifr = document.createElement('iframe');
+                      m.ifr.src = 'about:blank';
+                      with (m.ifr.style)
+                      {
+                       position = 'absolute';
+                       border = 'none';
+                       filter = 'progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0)';
+                      }
+                      m.lyr.ref.parentNode.insertBefore(m.ifr, m.lyr.ref);
+                     }
+                     // Position and show it on each call.
+                     with (m.ifr.style)
+                     {
+                      left = m.lyr.ref.offsetLeft + 'px';
+                      top = m.lyr.ref.offsetTop + 'px';
+                      width = m.lyr.ref.offsetWidth + 'px';
+                      height = m.lyr.ref.offsetHeight + 'px';
+                      visibility = 'visible';
+                     }
+                    }};
+                    FSMenu.prototype.ieSelBoxFixHide = function(mN) { with (this)
+                    {
+                     if (!isIE || !window.createPopup) return;
+                     var m = menus[mN];
+                     if (m.ifr) m.ifr.style.visibility = 'hidden';
+                    }};
 
-                FSMenu.prototype.ieSelBoxFixShow = function(mN) { with (this)
-                {
-                 var m = menus[mN];
-                 if (!isIE || !window.createPopup) return;
-                 if (navigator.userAgent.match(/MSIE ([\d\.]+)/) && parseFloat(RegExp.$1) > 6.5)
-                  return;
-                 // Create a new transparent IFRAME if needed, and insert under the menu.
-                 if (!m.ifr)
-                 {
-                  m.ifr = document.createElement('iframe');
-                  m.ifr.src = 'about:blank';
-                  with (m.ifr.style)
-                  {
-                   position = 'absolute';
-                   border = 'none';
-                   filter = 'progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0)';
-                  }
-                  m.lyr.ref.parentNode.insertBefore(m.ifr, m.lyr.ref);
-                 }
-                 // Position and show it on each call.
-                 with (m.ifr.style)
-                 {
-                  left = m.lyr.ref.offsetLeft + 'px';
-                  top = m.lyr.ref.offsetTop + 'px';
-                  width = m.lyr.ref.offsetWidth + 'px';
-                  height = m.lyr.ref.offsetHeight + 'px';
-                  visibility = 'visible';
-                 }
-                }};
-                FSMenu.prototype.ieSelBoxFixHide = function(mN) { with (this)
-                {
-                 if (!isIE || !window.createPopup) return;
-                 var m = menus[mN];
-                 if (m.ifr) m.ifr.style.visibility = 'hidden';
-                }};
+                    addEvent(listMenu, 'show', function(mN) { this.ieSelBoxFixShow(mN) }, 1);
+                    addEvent(listMenu, 'hide', function(mN) { this.ieSelBoxFixHide(mN) }, 1);
 
-                addEvent(listMenu, 'show', function(mN) { this.ieSelBoxFixShow(mN) }, 1);
-                addEvent(listMenu, 'hide', function(mN) { this.ieSelBoxFixHide(mN) }, 1);
+                }
 
                 var arrow = null;
                 if (document.createElement && document.documentElement)
