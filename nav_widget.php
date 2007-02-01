@@ -32,15 +32,19 @@ $nav_manager = &new NavigationManager( $template, $current_page );
 $nav_output = $nav_manager->output( strtoupper( substr( $position, 0, 1 )));
 $url = AMP_SITE_URL;
 
-$pattern = '/href="((?!http)[\w\d\.\/?=& -]*)"/i';
+$pattern = '/href\s?=\s?\'((?!http)[\w\d\.\/?=& -]*)\'/i';
 $replace = 'href="'.$url.'/$1"';
 $data =  preg_replace($pattern, $replace, $nav_output);
 
-$pattern = '/src="((?!http)[\w\d\.\/?=& -]*)"/i';
+$pattern = '/href\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
+$replace = 'href="'.$url.'/$1"';
+$data =  preg_replace($pattern, $replace, $nav_output);
+
+$pattern = '/src ="((?!http)[\w\d\.\/?=& -]*)"/i';
 $replace = 'src="'.$url.'/$1"';
 $data =  preg_replace($pattern, $replace, $data);
 
-$pattern = '/src ="((?!http)[\w\d\.\/?=& -]*)"/i';
+$pattern = '/src="((?!http)[\w\d\.\/?=& -]*)"/i';
 $replace = 'src="'.$url.'/$1"';
 $data =  preg_replace($pattern, $replace, $data);
 
