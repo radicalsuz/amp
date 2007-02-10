@@ -14,7 +14,7 @@ require_once("AMP/BaseDB.php");
 require_once( 'Modules/Contact/Form.inc.php');
 $form = &new ContactForm( );
 $form->Build( );
-$form->enforceRequiredFields( );
+$form->enforceRules( );
 
 $showForm = !( $form->submitted( ) && $form->validate( ));
 

@@ -81,6 +81,8 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
                             blocktrigger:: a DHTML envelope for a set of elements
                             imagepicker :: a selectbox that pulls from AMP's image library and displays a preview of the selected image
                             captcha     :: an image containing text that must be matched by the user for the form to submit
+
+         *  rules:     rules the element must fulfill during form validation, supplied as an array eg( 'type'=> 'email', 'message' => 'Must be a valid email address')
          *
          *
          ****************/
@@ -565,6 +567,20 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         return true;
     }
 
+    function enforceRules( ) {
+        foreach ($this->fields as $fname => $field_def) {
+            if (isset($field_def['rules']) && is_array( $field_def['rules'] ) && !empty( $field_def['rules'])) {
+                foreach( $field_def['rules'] as $rule_def ) {
+                    if ( !isset( $rule_def['type']) && $rule_def['type']) continue;
+                    if ( !isset( $rule_def['message']) && $rule_def['message']) continue;
+                    $this->form->addRule( $fname, $rule_def['message'], strtolower( $rule_def['type'] ) );
+                }
+            }
+        }
+        $this->enforceRequiredFields( );
+        return true;
+    }
+
     function enforceConstants() {
         if (!isset($this->fields)) return false;
         $consts = array();
@@ -941,6 +957,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
 		$newdef['elements'] = (isset($field_def['elements']))   ? $field_def['elements']       : null;
 		$newdef['block']    = (isset($field_def['block']))   ? $field_def['block']       : null;
 		$newdef['block_trigger']    = (isset($field_def['block_trigger']))   ? $field_def['block_trigger']       : null;
+		$newdef['rules']     = (isset($field_def['rules']))   ? $field_def['rules']       : null;
 
         $no_template_set = array( 'html', 'blocktrigger');
         if ( array_search( $newdef['type'], $no_template_set)!==FALSE) return $newdef + array( 'template' => null );   
