@@ -270,7 +270,7 @@ generate_admin_menu('options');
 				if (substr($entry, strlen($entry)-4) == '.css')
 					$styles[] = substr($entry, 0, strlen($entry)-4);
 			}
-			$d->close();
+		  //$d->close();
 		}
 
 		@natsort($styles);
