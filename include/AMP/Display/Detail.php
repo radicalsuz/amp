@@ -124,6 +124,11 @@ class AMP_Display_Detail {
             $this->_item_display_method = constant( 'AMP_RENDER_' .$display_id );
         }
     }
+
+    function set_source ( &$source ) {
+        $this->_source = $source;
+    }
+
 }
 
 

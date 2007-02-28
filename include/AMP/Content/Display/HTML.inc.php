@@ -152,6 +152,7 @@ class AMPDisplay_HTML {
     function _HTML_LI( $items, $attr = array( )){
 
         $output = "";
+        if ( !$items ) return false;
         foreach( $items as $item ){
             if ( is_array( $item )) {
                 $output = $this->_HTML_UL( $item );

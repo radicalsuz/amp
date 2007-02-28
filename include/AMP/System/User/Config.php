@@ -16,7 +16,7 @@ function AMP_init_user( ) {
 
         //ACL user def code
         if ( !defined( 'AMP_SYSTEM_USER_TYPE')) define( 'AMP_SYSTEM_USER_TYPE', 'users');
-        if ( !defined( 'AMP_SYSTEM_USER_ID_ACL' )) define( 'AMP_SYSTEM_USER_ID_ACL', 'admin_' . $AMP_CurrentUser->id);
+        if ( !defined( 'AMP_SYSTEM_USER_ID_ACL' )) define( 'AMP_SYSTEM_USER_ID_ACL', 'user_' . $AMP_CurrentUser->id);
 
         if ( !AMP_Authorized( AMP_PERMISSION_CONTENT_ACCESS)) {
             trigger_error( 'content access not authorized for user '.$AMP_CurrentUser->getName( ) );
@@ -73,5 +73,6 @@ if ( isset( $_COOKIE[ $unique_visitor_cookie_name ])) {
     setcookie( $unique_visitor_cookie_name, AMP_SYSTEM_UNIQUE_VISITOR_ID );
 //  trigger_error( $_SERVER['REQUEST_URI'] .' created unique id: ' . AMP_SYSTEM_UNIQUE_VISITOR_ID );
 }
+
 
 ?>

@@ -49,28 +49,30 @@ class WebAction extends AMPSystem_Data_Item {
         return $list_display;
     }
 
-    function getBlurb( ){
+    function getBlurb( ) {
         return $this->getData( 'blurb ');
     }
 
-    function getURL( ){
+    function getURL( )   {
         if ( !$this->id ) return AMP_CONTENT_URL_ACTION;
-        return AMP_Url_AddVars( AMP_CONTENT_URL_ACTION, 'action='.$this->id );
+        return AMP_url_add_vars( AMP_CONTENT_URL_ACTION, 'action='.$this->id );
     }
 
-    function getTitle( ){
+    function getTitle( ) {
         return $this->getName( );
     }
 
-    function getTargets( ){
-        return $this->getData( 'target_id');
+    function getTargets( ) {
+        $result = $this->getData( 'target_id') ;
+        if ( !$result ) return false;
+        return split( ',', $result );
     }
 
-    function getTargetMethod( ){
+    function getTargetMethod( ) {
         return $this->getData( 'target_method' );
     }
 
-    function getExpirationDate( ){
+    function getExpirationDate( ) {
         $result = $this->getData( 'enddate');
         if ( $result == AMP_NULL_DATETIME_VALUE ) return false;
         return $result;

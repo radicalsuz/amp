@@ -10,6 +10,7 @@ class AMPContent_Map {
     var $dataset;
     var $childset;
     var $top;
+    var $top_set = array( );
     var $_section_totals;
 
     function AMPContent_Map( &$dbcon, $top = AMP_CONTENT_MAP_ROOT_SECTION ) {
@@ -50,14 +51,39 @@ class AMPContent_Map {
         if ( AMP_DISPLAYMODE_DEBUG ) AMP_debugSQL( $sql, 'content_map');
         $this->dataset = &$this->dbcon->CacheGetAssoc( $sql );
         $this->childset = &AMPContent_Lookup::instance( 'sectionParents' );
+
+        //$this->top = $this->find_top( $this->top );
+        if ( $this->find_top( $this->top ) != $this->top ) {
+            foreach( $this->top_set as $topchild ) {
+                $this->childset[ $topchild ] = $this->top ;
+                $this->dataset[$topchild]['parent'] = $this->top;
+            }
+        }
+        
         $this->buildLevel( $this->top );
+    }
+
+    function find_top( $start ) {
+        if ( defined('AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING ) {
+            return $start;
+        }
+        if ( AMP_allow( 'access', 'section', $start )) return $start;
+        if (!( $keys = array_keys( $this->childset, $start ) )) return false;
+        foreach( $keys as $child) {
+            if ( $this->find_top( $child ) == $child ) {
+                $this->top_set[] = $child;
+            }
+        }
+        return false;
+
     }
 
     function _check_permissions( $parent_id, $child_ids = array( ) ) {
         $base_return = !empty( $child_ids ) ? $child_ids : true;
         //if ( $parent_id == AMP_CONTENT_MAP_ROOT_SECTION ) return $base_return;
 
-        if ( isset( $_GET['init_permissions']) && ( $_GET['init_permissions'])) {
+        //if ( isset( $_GET['init_permissions']) && ( $_GET['init_permissions'])) {
+        if ( defined('AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING ) {
             return $base_return;
         }
         $reg = AMP_Registry::instance( );
@@ -86,24 +112,37 @@ class AMPContent_Map {
     }
 
     function buildLevel( $current_parent, $recursive=true ) {
-        if ( !defined( 'AMP_SYSTEM_PERMISSIONS_LOADING') && defined( 'AMP_SYSTEM_USER_ID')) {
-            //if ( !AMP_allow( 'access', 'section', $current_parent )) return false;
-        }
+        //if ( !AMP_allow( 'access', 'section', $current_parent ))  {
+        //    return false;
+        //}
 
         if (!( $keys = array_keys( $this->childset, $current_parent ) )) return false;
         //if ( !( $keys = $this->_check_permissions( $current_parent, $key_set ))) return false;
 
-        $this->map[$current_parent] = $keys;
+        $allowed_keys = array( );
         foreach( $keys as $child_id ) {
             unset( $this->childset[ $child_id ] );
             if ($recursive) $this->buildLevel( $child_id );
+
+            if ( !( defined('AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING ) 
+             &&( !AMP_allow( 'access', 'section', $child_id)))  {
+                //trigger_error( 'flunk ' . $child_id );
+                continue; 
+            }
+
+            $allowed_keys[] = $child_id;
         }
+        $this->map[$current_parent] = $allowed_keys;
     }
 
     function getParent( $section_id ) {
         if ( $section_id == $this->top ) return false;
         if (!isset($this->dataset[$section_id]['parent'])) return false;
         return $this->dataset[$section_id]['parent'];
+    }
+
+    function getAllParents( ) {
+        return array_keys( $this->map );
     }
 
     function getAncestors( $section_id ) {

@@ -101,7 +101,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function &_init_source( &$dbcon, $criteria = null ){
         $listSource = &new $this->_source_object( $dbcon  );
-        if ( isset( $criteria )) {
+        if ( isset( $criteria ) && !empty( $criteria )) {
             $this->_source_criteria = array_merge (    
                 $this->_source_criteria, 
                 $listSource->makeCriteria( $criteria )
@@ -120,9 +120,9 @@ class AMPSystem_List extends AMPDisplay_HTML {
         $this->_activatePager( $searchSource );
     }
 
-    function _init_search( &$listSource ){
+    function _init_search( &$listSource ) {
         require_once('AMP/System/ComponentLookup.inc.php');
-		$map = &ComponentLookup::instance( get_class($this));
+		$map = &ComponentLookup::instance( get_class($this) );
 		if (!$map) return false;
         $this->_map = &$map;
         if ( !$map->isAllowed( 'search' )) return false;
@@ -185,7 +185,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
         require_once( 'AMP/System/List/Pager.inc.php');
         $this->_pager = &new AMPSystem_ListPager( $source );
         
-        if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
+        if ( $this->_pager_limit ) {
+            $this->_pager->setLimit( $this->_pager_limit ); 
+            $this->_pager->setPage( );
+        }
         if ( $this->_pager_target ) $this->_pager->setTarget( $this->_pager_target ); 
         $this->_afterPagerInit( );
     }
@@ -257,7 +260,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         if ( isset( $this->suppress['editcolumn']) && $this->suppress['editcolumn']) return $row_data[ $this->name_field ];
 
         return      "<A HREF='". $this->_getUrlEdit( $row_data ) ."' title='" . AMP_TEXT_EDIT_ITEM . "' target='".$this->_getEditLinkTarget( )."'>" 
-                    . $row_data[ $this->name_field ]
+                    . strip_tags( $row_data[ $this->name_field ] )
                     . '</a>';
 
     }
@@ -639,6 +642,15 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _dateFormat( $date_value ){
         if ( !$date_value ) return false;
+
+        $null_values = &AMPConstant_Lookup::instance( 'nullDates');
+        if ( is_string( $date_value )) {
+            if ( isset( $null_values[ $date_value])) return false;
+            $date_value = strtotime( $date_value );
+        }
+        $quick_result = date( 'Y-m-d', $date_value );
+        if ( isset( $null_values[ $quick_result])) return false;
+
         $result = date( 'M j, Y', $date_value );
 
         if ( $result != 'Dec 31, 1969') return $result;
@@ -652,7 +664,14 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     }
 
-    function _dateTimeFormat( $time_value ){
+    function _dateTimeFormat( $raw_time_value ){
+        // maybe this is a good idea, not sure of global implications -ap 2007-02-19
+        //if ( is_string( $raw_time_value )) {
+        //    $time_value = strtotime( $raw_time_value );
+        //} else {
+            $time_value = $raw_time_value;
+        //}
+        
         $null_values = &AMPConstant_Lookup::instance( 'nullDateTimes');
         $quick_result = date( "Y-m-d H:i:s", $time_value );
         if ( !isset( $null_values[ $quick_result ])){

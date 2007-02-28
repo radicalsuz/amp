@@ -137,7 +137,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
 		//Modin
 		if (isset($_REQUEST['modin'])&&$_REQUEST['modin']) {
-			$sql_criteria[]="modin=".$_REQUEST['modin'];
+			$sql_criteria['modin']="modin=".$_REQUEST['modin'];
 		}
 		
 		//Uid or Creator_id

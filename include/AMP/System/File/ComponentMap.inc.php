@@ -29,6 +29,9 @@ class ComponentMap_File extends AMPSystem_ComponentMap {
         'source' => 'AMP_System_File' 
     );
 
+    var $_allow_list = AMP_PERMISSION_CONTENT_DOCUMENTS_EDIT;
+    var $_allow_delete = AMP_PERMISSION_CONTENT_DOCUMENTS_EDIT;
+
     function ComponentMap_File( ){
         $this->_path_source = AMP_LOCAL_PATH . AMP_CONTENT_URL_DOCUMENTS;
     }

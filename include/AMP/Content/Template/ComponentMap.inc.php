@@ -18,6 +18,13 @@ class ComponentMap_Template extends AMPSystem_ComponentMap {
         'form'  => 'AMP_Content_Template_Form',
         'list'  => 'AMP_Content_Template_List',
         'source'=> 'AMPContent_Template');
+
+    var $_allow_list = AMP_PERMISSION_CONTENT_TEMPLATE ;
+    var $_allow_edit = AMP_PERMISSION_CONTENT_TEMPLATE ;
+    var $_allow_save = AMP_PERMISSION_CONTENT_TEMPLATE;
+    var $_allow_publish = AMP_PERMISSION_CONTENT_TEMPLATE;
+    var $_allow_unpublish = AMP_PERMISSION_CONTENT_TEMPLATE;
+    var $_allow_delete = AMP_PERMISSION_CONTENT_TEMPLATE;
 }
 
 ?>

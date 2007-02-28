@@ -33,6 +33,7 @@ class AMP_System_Component_Controller {
     var $_action_committed;
     var $_action_requested;
     var $_action_default;
+    var $_action_detail = 'edit';
 
     var $_results;
 
@@ -49,6 +50,7 @@ class AMP_System_Component_Controller {
     function init( ){
         $this->_init_request( );
         $this->_init_display( );
+        $this->notify( 'init' );
     }
 
     function set_model( &$model, $auto_init=true ){
@@ -336,7 +338,6 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
     }
 
     function _init_form( $read_request = true ){
-        
         // init_running is a flag to keep an infinite loop from forming;
         // in case an observer requests the form
         static $init_running = false;
@@ -365,7 +366,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         }
 
         if ( $request_id && !$action && !isset( $this->_request_vars['action'] )) {
-            $action  = 'edit';
+            $action  = $this->_action_detail;
         }
         
         if ( $action ) $this->request( $action );
@@ -398,7 +399,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
     }
 
     function allow( $action ){
-        if ( isset( $this->_map )) return $this->_map->isAllowed( $action );
+        if ( isset( $this->_map )) return $this->_map->isAllowed( $action, $this->_model_id );
         if ( !isset( $this->_model )) return true;
         if ( !isset( $this->_model->protected_actions[$action] ) ) return true;
         return AMP_Authorized( $this->_model->protected_actions[$action]);
@@ -412,8 +413,14 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
 
     function commit_list( ) {
         //$this->display_default( );
+        if ( !$this->_map->isAllowed( 'list' )) {
+            $this->error( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, 'list' ));
+            ampredirect( AMP_SYSTEM_URL_HOME );
+        }
         $display = &$this->_map->getComponent( 'list' );
-        $display->setController( $this );
+        if ( method_exists( $display, 'setController')) {
+            $display->setController( $this );
+        }
 
         $this->set_banner( 'list' );
         $this->notify( 'initList' );
@@ -460,6 +467,11 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
     }
 
     function commit_add( ){
+        if ( !$this->_map->isAllowed( 'save' )) {
+            $this->error( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, 'save' ));
+            ampredirect( AMP_SYSTEM_URL_HOME );
+        }
+
         //just-in-time Build call is a performance optimization, sorry for the repetitive code
         $this->_init_form( );
 
@@ -483,7 +495,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );
-            return false;
+            return true;
         }
 
         $this->notify( 'beforeUpdate' );
@@ -572,7 +584,7 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         //check if form validation succeeds
         if (!$this->_form->validate()) {
             $this->_display->add( $this->_form, 'form' );
-            return false;
+            return true;
         }
 
         $form_data = $this->get_form_data( );
@@ -694,6 +706,11 @@ class AMP_System_Component_Controller_Bookmark extends AMP_System_Component_Cont
     }
 
     function commit_list( ){
+        if ( !$this->_map->isAllowed( 'list' )) {
+            $this->error( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, 'list' ));
+            ampredirect( AMP_SYSTEM_URL_HOME );
+        }
+
         $list_location_cookie = $this->_get_cookie_name_bookmark( );
 
         if ( $this->_is_basic_list_request( ) ) {

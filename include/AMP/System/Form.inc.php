@@ -59,7 +59,7 @@ class AMPSystem_Form extends AMPForm {
 
     function Build() {
         parent::Build( true );
-        $this->enforceRequiredFields();
+        $this->enforceRules();
     }
 
     function _allowedFields( $fields ) {

@@ -209,7 +209,8 @@ class AMPContent_Header {
         foreach ( $this->styleSheets as $css_id => $url ) {
             $url = trim( $url );
             if (!(substr($url, 0, 4)=="http") && !(substr($url, 0, 1)=="/")) $url = "/" . $url;
-            $output .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $url . "\">\n";
+            $id_tag = is_numeric( $css_id ) ? "" : " id=\"$css_id\"" ;
+            $output .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $url . "\"$id_tag>\n";
         }
         if ( isset( $this->_styleSheet_buffer )) {
             $output .= $this->_styleSheet_buffer->execute( );

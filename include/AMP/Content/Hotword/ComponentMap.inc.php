@@ -1,5 +1,6 @@
 <?php
 
+require_once( 'AMP/System/Permission/Observer/Section.php' );
 require_once( 'AMP/System/ComponentMap.inc.php');
 
 class ComponentMap_Hotword extends AMPSystem_ComponentMap {
@@ -16,6 +17,9 @@ class ComponentMap_Hotword extends AMPSystem_ComponentMap {
         'form'  => 'Hotword_Form',
         'list'  => 'Hotword_List',
         'source'=> 'Hotword');
+
+    var $_observers = array( 'AMP_System_Permission_Observer_Section');
+
 }
 
 ?>

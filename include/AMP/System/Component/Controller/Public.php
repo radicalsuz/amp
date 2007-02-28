@@ -5,6 +5,7 @@ require_once( 'AMP/System/Component/Controller.php');
 class AMP_System_Component_Controller_Public extends AMP_System_Component_Controller_Input {
     var $_display_class = 'AMPContent_Manager';
     var $_public_page_id = false;
+    var $_action_detail = 'view';
 
     function AMP_System_Component_Controller_Public ( ){
         $this->init( );
@@ -26,7 +27,7 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
 
     }
 
-    function commit_save( ){
+    function commit_save( ) {
         if ( !$this->_form->isBuilt ) $this->_form->Build( );
 
         //check if form validation succeeds
@@ -78,6 +79,44 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
     function set_banner( $action, $heading = null ){
         //do nothing
     }
+
+    function commit_view( ) {
+        $intro = &$this->_map->getPublicPage( 'detail' );
+        $this->_set_public_page( $intro );
+
+        if ( !isset( $this->_model_id) && $this->_model_id ) {
+            return false;
+        }
+        if ( !$this->_model->readData( $this->_model_id )) return $this->_commit_fail( );
+        $this->display_search( );
+
+        $display = $this->_map->getComponent( 'view', $this->_model );
+        $this->_display->add( $display, 'view');
+        return true;
+    }
+
+    function display_search( ) {
+        $search = $this->_map->getComponent( 'search' );
+        if ( !$search ) return;
+        $search->Build( true );
+        $search->applyDefaults( );
+        $this->_display->add( $search, 'search');
+
+    }
+
+    function _set_public_page( &$public_page ) {
+        if ( !$public_page ) return;
+
+        $this->_public_page_id = $public_page->id;
+        $this->_display->add( $public_page->getDisplay( ));
+
+        $reg = &AMP_Registry::instance( );
+        $reg->setEntry( AMP_REGISTRY_CONTENT_INTRO_ID, $this->_public_page_id );
+
+        $this->_page->setIntroText( $this->_public_page_id );
+        $this->_page->initLocation( );
+    }
+
 }
 
 ?>

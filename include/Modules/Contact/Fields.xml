@@ -5,6 +5,12 @@
         <size>40</size>
         <public>1</public>
 		<required>1</required>
+        <rules>
+            <item>
+                <type>Email</type>
+                <message>Must be a valid email address</message>
+            </item>
+        </rules>
     </sender_email>
     <subject>
         <label>Subject</label>

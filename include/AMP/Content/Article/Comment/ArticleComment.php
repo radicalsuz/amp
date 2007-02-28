@@ -55,6 +55,26 @@ class ArticleComment extends AMPSystem_Data_Item {
         return 'userdata_id in ' . '( ' . join( ",", $used_ids ) . ')';
     }
 
+    function getArticle( ) {
+        return $this->getData( 'articleid');
+    }
+
+    function &getArticleRef( ) {
+        $false = false;
+        $article_id = $this->getArticle( );
+        if ( !$article_id ) return $false;
+        $article = new Article( $this->dbcon, $article_id );
+        if ( !$article->hasData( )) {
+            return $false;
+        }
+        return $article;
+    }
+
+    //function makeCriteriaAllowed( ) {
+        //would love something efficient here, this doesn't work'
+        //return 'articleid in( '. join( ',', array_keys( AMP_lookup( 'articles'))) . ')';
+    //}
+
     function getAuthor( ){
         return $this->getData( 'author' );
     }
@@ -76,6 +96,7 @@ class ArticleComment extends AMPSystem_Data_Item {
             'date'      => date( 'Y-m-d H:i:s' )
         ));
     }
+
 }
 
 ?>

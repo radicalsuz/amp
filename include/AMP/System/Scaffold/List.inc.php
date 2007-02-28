@@ -13,8 +13,8 @@ class %1\$s_List extends AMP_System_List_Form {
     var $_source_object = '%1\$s';
     var $_observers_source = array( 'AMP_System_List_Observer');
 
-    function %1\$s_List( &$dbcon ) {
-        $this->init( $this->_init_source( $dbcon ) );
+    function %1\$s_List( &$dbcon, $criteria = array( ) ) {
+        $this->init( $this->_init_source( $dbcon, $criteria ) );
     }
 }
 ?>

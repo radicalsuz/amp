@@ -17,6 +17,13 @@ class ComponentMap_Petition extends AMPSystem_ComponentMap {
         'form'  => 'Petition_Form',
         'list'  => 'Petition_List',
         'source'=> 'Petition');
+
+    var $_allow_list = AMP_PERMISSION_PETITION_ADMIN ;
+    var $_allow_edit = AMP_PERMISSION_PETITION_ADMIN ;
+    var $_allow_save = AMP_PERMISSION_PETITION_ADMIN;
+    var $_allow_publish = AMP_PERMISSION_PETITION_ADMIN;
+    var $_allow_unpublish = AMP_PERMISSION_PETITION_ADMIN;
+    var $_allow_delete = AMP_PERMISSION_PETITION_ADMIN;
 }
 
 ?>

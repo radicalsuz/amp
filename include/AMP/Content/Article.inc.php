@@ -150,14 +150,6 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function isPublicDate() {
-        //frontpage articles have the opposite 'display date' logic as standard
-        //articles
-        //this is the dumbest hack ever, but until we
-        //re-tool the backend forms, I have no choice
-
-        //this hack is disabled as of build 3.5.9
-        //if ($this->getClass() != AMP_CONTENT_CLASS_FRONTPAGE ) return !($this->getData( 'usedate' ));
-        //return $this->getData( 'usedate' );
         return !($this->getData( 'usedate' ));
     }
 
@@ -365,14 +357,17 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function _getSectionsRelatedDB( ){
-        $related_sections = &AMPContentLookup_SectionsByArticle::instance( $this->id );
+        $db_related_sections = AMP_lookup( 'sectionsByArticle', $this->id );
+        $allowed_sections = AMP_lookup( 'sectionMap');
+        $related_sections = array_combine_key( array_keys( $allowed_sections ), $db_related_sections );
+
         if ( !$related_sections ) return false;
 
         $this->mergeData( array(  'sections_related' => array_keys( $related_sections ) ));
         return array_keys( $related_sections );
     }
 
-    function clearAliasName( ){
+    function clearAliasName( ) {
         return $this->mergeData( array( 'new_alias_name' => false ));
     }
 
@@ -597,10 +592,10 @@ class Article extends AMPSystem_Data_Item {
 
     function makeCriteriaAllowed( ) {
         $allowed_section_names = AMP_lookup( 'sectionMap');
-        if ( $allowed_section_names ) {
-            $allowed_sections = array_keys( $allowed_section_names );
-            array_unshift( $allowed_sections, AMP_CONTENT_MAP_ROOT_SECTION );
-        }
+        if ( !$allowed_section_names ) return 'FALSE'; 
+
+        $allowed_sections = array_keys( $allowed_section_names );
+        array_unshift( $allowed_sections, AMP_CONTENT_MAP_ROOT_SECTION );
         return 'type in ( ' . join( ',',  $allowed_sections ) . ')';
     }
 

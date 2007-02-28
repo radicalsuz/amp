@@ -25,7 +25,7 @@ class RSS_Article_List extends AMP_System_List_Form {
     }
 
     function _after_init ( ){
-        $this->addTranslation( 'timestamp', '_makePrettyDateTime' );
+        //$this->addTranslation( 'timestamp', '_makePrettyDateTime' );
     }
 
 

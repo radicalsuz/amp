@@ -65,6 +65,7 @@ define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
 define( 'AMP_TEXT_LIST_CONFIRM_DELETE', 'Are you sure you want to DELETE these items?');
 define( 'AMP_TEXT_LIST_CONFIRM_RECALCULATE_IMAGES', 'Recalculating image sizes may take several minutes.\n  Please do not interfere with your browser during this time.\n  Are you sure you want to continue?');
 define( 'AMP_TEXT_LIST_EXPORT_PROCESS_TEXT', 'Your download should begin within one minute.<BR> If it does not, please <a href="%s">click here</a>.');
+define( 'AMP_TEXT_LIST_NAV_LAYOUT_TARGET_COPY', 'Select one or more targets for the current layouts');
 
 define( 'AMP_TEXT_PETITION_SIGNERS', 'signers');
 define( 'AMP_TEXT_CROP', 'Crop');
@@ -239,6 +240,7 @@ define( 'AMP_TEXT_READ', 'Read');
 define( 'AMP_TEXT_FIND', 'Find');
 define( 'AMP_TEXT_CURRENT_ACTION', '%sing %s');
 define( 'AMP_TEXT_BY', 'by' );
+define( 'AMP_TEXT_ONE', 'one' );
 define( 'AMP_TEXT_ID', 'ID' );
 define( 'AMP_TEXT_REDIRECTED_TO', 'Redirected To');
 define( 'AMP_TEXT_ALIAS', 'Alias');
@@ -264,5 +266,13 @@ define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_GALLERY_IMAGE', 'gallery_image');
 define( 'AMP_TEXT_SYSTEM_ITEM_TYPE_LINK', 'link');
 
 if ( !defined( 'AMP_TEXT_TAG')) define( 'AMP_TEXT_TAG', 'tag');
+
+/**
+ * Calendar Events
+ */
+
+define( 'AMP_TEXT_LOCATION', 'Location');
+define( 'AMP_TEXT_CONTACT',   'Contact');
+define( 'AMP_TEXT_SPONSORED',   'Sponsored By');
 
 ?>

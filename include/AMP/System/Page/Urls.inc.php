@@ -5,6 +5,7 @@ define( 'AMP_SYSTEM_URL_TOOL_ADD',              'module.php?action=add');
 define( 'AMP_SYSTEM_URL_TOOL_CONTROL',          'tool_controls.php');
 define( 'AMP_SYSTEM_URL_PERMISSION_DETAILS',    'permissiondetail.php?action=list');
 define( 'AMP_SYSTEM_URL_PERMISSION_GROUPS',     'per.php?action=list');
+define( 'AMP_SYSTEM_URL_PERMISSION_GROUP',      'per.php');
 define( 'AMP_SYSTEM_URL_USERS',                 'user.php?action=list');
 if ( !defined( 'AMP_SYSTEM_URL_HOME'))
         define( 'AMP_SYSTEM_URL_HOME',          'articlelist.php');
@@ -51,5 +52,7 @@ define( 'AMP_SYSTEM_URL_LINK_TYPES',            'link_type.php');
 define( 'AMP_SYSTEM_URL_PETITIONS',             'petition.php');
 define( 'AMP_SYSTEM_URL_TAG',                   'tag.php');
 define( 'AMP_SYSTEM_URL_TAG_INPUT',             'tag.php?action=add');
+define( 'AMP_SYSTEM_URL_TOOL_PUBLICPAGE',      'module_header_list.php');
+define( 'AMP_SYSTEM_URL_EVENT',                 'calendar.php');
 
 ?>

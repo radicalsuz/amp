@@ -20,16 +20,18 @@
 		<label>Email Address</label>
 	</email>
     <restricted_use_header>
-        <type>header</type>
-        <label>Access Settings</label>
+        <type>blocktrigger</type>
+        <label>Page By Page Access</label>
+        <block>pagebypage</block>
     </restricted_use_header>
 	<system_home>
 		<type>text</type>
 		<label>System side home page</label>
+        <block>pagebypage</block>
 	</system_home>
 	<system_allow_only>
 		<type>textarea</type>
 		<label>System side allowed pages:&lt;br&gt;&lt;span class=photocaption&gt;( separate with commas )&lt;/span&gt;</label>
+        <block>pagebypage</block>
 	</system_allow_only>
-
 </array>

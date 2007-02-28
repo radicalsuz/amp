@@ -216,7 +216,8 @@ class AMP_System_List_Form extends AMPSystem_List {
         return "\n<td nowrap><div align='center'>".
                 $this->_HTML_editLink( $id )    ."&nbsp;\n" .
                 $this->_HTML_previewLink( $id ) ."&nbsp;\n".
-                $this->_HTML_deleteLink( $id )  ."</div></td>\n";
+                $this->_HTML_deleteLink( $id )  
+                ."</div></td>\n";
     }
 
     function _HTML_previewLink( $id ) {

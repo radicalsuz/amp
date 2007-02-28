@@ -418,6 +418,25 @@
 		<class>add</class>
 		<per>ACTION_ACCESS</per>
 	</item>
+    <item>
+		<label>View Web Actions</label>
+		<href>action_center.php</href>
+		<class>view</class>
+		<per>ACTION_ACCESS</per>
+	</item>
+    <item>
+		<label>Add Web Action</label>
+		<href>action_center.php?action=new</href>
+		<class>add</class>
+		<per>ACTION_ACCESS</per>
+	</item>
+    <item>
+		<label>View Targets</label>
+		<href>webaction_target.php</href>
+		<class>view</class>
+		<per>ACTION_ACCESS</per>
+	</item>
+        
 </actions>
 
 <!--
@@ -604,8 +623,17 @@
 	<per>SYSTEM_ACCESS</per>
 	<item>
 		<href>AMP_SYSTEM_URL_PERMISSION_GROUPS</href>
-		<label>System Permissions</label>
+		<label>Permission Groups</label>
 		<class>user</class>
+		<per>SYSTEM_PERMISSIONS</per>
+	</item>
+	<item>
+		<href>permission.php?action=update</href>
+		<attr>
+			<onclick>AMP_permission_update( );return false;</onclick>
+		</attr>
+		<label>Update Permissions</label>
+		<class>settings</class>
 		<per>SYSTEM_PERMISSIONS</per>
 	</item>
 	<item>

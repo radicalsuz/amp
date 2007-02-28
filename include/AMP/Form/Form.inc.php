@@ -840,7 +840,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         $valueSet = $this->_getValueSet( $name );
         $group_set = array();
         foreach ($valueSet as $def_key=>$def_value) {
-                $group_set[] = HTML_QuickForm::createElement('checkbox',$def_key, null, $def_value);
+            $group_set[] = HTML_QuickForm::createElement('checkbox',$def_key, null, $def_value);
         }
         return $this->form->addGroup( $group_set, $name, $field_def['label'], '<BR>');
     }
@@ -849,7 +849,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         $valueSet = $this->_getValueSet( $name );
         $group_set = array();
         foreach ($valueSet as $def_key=>$def_value) {
-                $group_set[] = &HTML_QuickForm::createElement('radio', null, null, $def_value ,$def_key );
+            $group_set[] = &HTML_QuickForm::createElement('radio', null, null, $def_value ,$def_key );
         }
         return $this->form->addGroup( $group_set, $name, $field_def['label'], '<BR>');
     }
@@ -918,7 +918,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
 
     function _getValueSet ( $name ) {
         if (!($def = $this->getField( $name ))) return null;
-        if (isset($def['values'])) return $def['values'];
+        if (isset($def['values']) && $def['values']) return $def['values'];
         
         if ( isset( $def['lookup'] ) && $values = AMP_evalLookup( $def['lookup']) ) {
             $this->setFieldValueSet( $name, $values );

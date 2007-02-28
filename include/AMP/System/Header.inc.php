@@ -15,7 +15,7 @@ class AMPSystem_Header extends AMPContent_Header {
 
     var $javaScripts = array(
         'system_header' => 'scripts/system_header.js',
-        'calendar'      => 'system/Connections/popcalendar.js',
+        //'calendar'      => 'system/Connections/popcalendar.js',
         'functions'     => 'scripts/functions.js', 
         'prototype'     => 'scripts/ajax/prototype.js',
         'scriptaculous' => 'scripts/ajax/scriptaculous.js' );

@@ -536,12 +536,18 @@ function getBrowser() {
 }
   
 if (!function_exists('array_combine_key')) {
-    function &array_combine_key(&$arr1, &$arr2) {
+    function &array_combine_key( $arr1, &$arr2) {
         $empty_value = false;
         if (!is_array($arr1) || !is_array($arr2)) return $empty_value;
         $result = array();
         foreach ($arr1 as $key => $value) {
-            if (isset($arr2[$value])) $result[$value]=&$arr2[$value];
+            if (isset($arr2[$value])) {
+                if( is_object( $arr2[$value]))  {
+                    $result[$value] = &$arr2[$value];
+                } else {
+                    $result[$value] =  $arr2[$value];
+                }
+            }
         }
         return $result;
     }
@@ -1026,11 +1032,32 @@ if ( !function_exists( 'AMP_Authorized')) {
         return $permissions->authorized ($id);
     }
 
-    function AMP_allow( $action, $item_type, $id ) {
-        if ( defined( 'AMP_SYSTEM_PERMISSIONS_LOADING') || !defined( 'AMP_SYSTEM_USER_ID')) {
+    function AMP_allow( $action, $item_type, $id, $user_id = null ) {
+        if ( $action == 'cancel' ) return true;
+        $action_translations = array( 
+            'edit'      => 'access',
+            'publish'   => 'publish',
+            'unpublish' => 'publish',
+            'move'      => 'save',
+            'reorder'   => 'save',
+            'list'      => 'access',
+            'copy'      => 'create',
+            );
+
+        if ( defined( 'AMP_SYSTEM_PERMISSIONS_LOADING') || !defined( 'AMP_SYSTEM_USER_ID_ACL')) {
             return true;
         }
+        if ( !defined( $user_id )) $user_id = AMP_SYSTEM_USER_ID_ACL;
+        $gacl = &AMP_acl( );
+        if ( isset( $action_translations[ $action ])) {
+            $action = $action_translations[ $action ];
+        }
+        //trigger_error( 'checking ' . $action . ' for ' . AMP_SYSTEM_USER_TYPE . ' #' . $user_id . ' on ' . AMP_pluralize( $item_type ) . ' or ' . $item_type . '_' . $id );
 
+        return $gacl->acl_check( 'commands', $action, AMP_SYSTEM_USER_TYPE, $user_id, AMP_pluralize( $item_type ), $item_type . '_' . $id );
+    }
+
+    function &AMP_acl( $api = false ) {
         static $gacl = false;
         //trigger_error( AMP_SYSTEM_USER_ID );
         if ( !$gacl ) {
@@ -1048,13 +1075,20 @@ if ( !function_exists( 'AMP_Authorized')) {
 
                 );
 
-            require_once( 'phpgacl/gacl.class.php');
-            $gacl = &new gacl( $gacl_options );
+            if ( $api ) {
+                require_once( 'phpgacl/gacl_api.class.php');
+                $gacl = new gacl_api( $gacl_options );
+            } else {
+                require_once( 'phpgacl/gacl.class.php');
+                $gacl = new gacl( $gacl_options );
+            }
             $reg = AMP_Registry::instance( );
             $reg->setEntry( AMP_REGISTRY_PERMISSION_MANAGER, $gacl );
         }
-        return $gacl->acl_check( 'commands', $action, AMP_SYSTEM_USER_TYPE, AMP_SYSTEM_USER_ID_ACL, AMP_pluralize( $item_type ), $item_type . '_' . $id );
+        return $gacl;
+
     }
+
 
 }
 if ( !function_exists( 'AMP_mkdir')) {
@@ -1191,7 +1225,7 @@ if ( ! function_exists( 'AMP_navCountDisplay_Section')) {
         }
 
         if ( $layout_id_content ){
-            $count_content = "( " . $navcount_layouts[ $layout_id_content ] . " )";
+            $count_content = "(&nbsp;" . $navcount_layouts[ $layout_id_content ] . "&nbsp;)";
             $url_vars_content = array( 'id='.$layout_id_content );
         }
 
@@ -1229,7 +1263,7 @@ if ( ! function_exists( 'AMP_navCountDisplay_Class')) {
         $layout_id_lists = $layout_lists ? array_search( $class_id, $layout_lists ) : false;
 
         if ( $layout_id_lists ) {
-            $count_lists = "( " . $navcount_layouts[ $layout_id_lists   ] . " )";
+            $count_lists = "(&nbsp;" . $navcount_layouts[ $layout_id_lists   ] . "&nbsp;)";
             $url_vars_lists = array( 'id='.$layout_id_lists );
         }
 
@@ -1262,7 +1296,7 @@ if ( ! function_exists( 'AMP_navCountDisplay_Introtext')) {
         $layout_id_lists = $layout_lists ? array_search( $introtext_id, $layout_lists ) : false;
 
         if ( $layout_id_lists ){
-            $count_lists = "( " . $navcount_layouts[ $layout_id_lists   ] . " )";
+            $count_lists = "(&nbsp;" . $navcount_layouts[ $layout_id_lists   ] . "&nbsp;)";
             $url_vars_lists = array( 'id='.$layout_id_lists );
         }
 
@@ -1577,14 +1611,19 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
         $values = call_user_func_array( array( $base_type, 'instance'), array( $instance, $lookup_var ));
         if ( $values ) return $values;
     }
+    if ( !isset( $values )) {
+        trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $lookup_type ));
+    }
     return $values;
 }
 
 function AMP_permission_update( ) {
+    AMP_cacheFlush( );
     require_once( 'AMP/System/Permission/ACL/Controller.php');
     $controller = &new AMP_System_Permission_ACL_Controller( );
     $controller->request( 'update');
     $controller->execute( false );
+    AMP_cacheFlush( );
 }
 
 function AMP_s3_save( $file_path ) {
@@ -1635,28 +1674,27 @@ function AMP_absolute_urls( $html ) {
 
     $url = AMP_SITE_URL;
 
-    $pattern = '/href="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $pattern = '/href\s?=\s?\'((?!http)[\w\d\.\/?=& -]*)\'/i';
     $replace = 'href="'.$url.'/$1"';
     $data =  preg_replace($pattern, $replace, $html);
 
-    $pattern = '/src="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $pattern = '/href\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
+    $replace = 'href="'.$url.'/$1"';
+    $data =  preg_replace($pattern, $replace, $data);
+
+    $pattern = '/src\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
     $replace = 'src="'.$url.'/$1"';
     $data =  preg_replace($pattern, $replace, $data);
 
-    $pattern = '/src ="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $pattern = '/src\s?=\s?\'((?!http)[\w\d\.\/?=& -]*)\'/i';
     $replace = 'src="'.$url.'/$1"';
     $data =  preg_replace($pattern, $replace, $data);
 
-    $pattern = '/src=\'((?!http)[\w\d\.\/?=& -]*)\'/i';
-    $replace = 'src="'.$url.'/$1"';
-    $data =  preg_replace($pattern, $replace, $data);
-
-
-    $pattern = '/background="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $pattern = '/background\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
     $replace = 'background="'.$url.'/$1"';
     $data =  preg_replace($pattern, $replace, $data);
 
-    $pattern = '/action="((?!http)[\w\d\.\/?=& -]*)"/i';
+    $pattern = '/action\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
     $replace = 'action="'.$url.'/$1"';
     $data =  preg_replace($pattern, $replace, $data);
 
@@ -1667,4 +1705,59 @@ function AMP_absolute_urls( $html ) {
     return $data;
 
 }
+
+function AMP_js_write( $data, $uniq_id = null ) {
+    
+    $pattern = array( "\r", "\n" );
+    $output =  str_replace($pattern, '', $data);
+
+    if ( !isset( $uniq_id )) {
+        $uniq_id = $_SERVER['SERVER_NAME'] . mt_rand( 1000,10000 );
+    }
+
+    return 'var '.$uniq_id.'=  { value: \''. str_replace( "'", "\'", $output) . "'};\ndocument.write( ".$uniq_id.".value );";
+}
+
+function acl_identify( &$obj ) {
+    $object_types = AMP_lookup( 'objects' );
+    $designator = strtolower( current( array_keys( $object_types, get_class( $obj ))));
+    if ( !$designator ) {
+        trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED ), 'ACL', get_class( $obj ));
+        return false;
+    }
+    if ( isset( $obj->id )) {
+        return $designator . '_' . $id;
+    }
+    return $designator;
+}
+
+function AMP_base_select_options( $options, $default_text = null ) {
+    if ( !isset( $default_text )) $default_text = sprintf( AMP_TEXT_SELECT, AMP_TEXT_ONE );
+    if ( !$options || empty( $options )) {
+        return array( '' => $default_text );
+    }
+    return array( '' => $default_text ) + $options;
+}
+
+function &AMP_current_user( ) {
+    $false = false;
+    if ( !defined( 'AMP_SYSTEM_USER_ID' )) {
+        return $false;
+    }
+    static $current_user = false;
+    if ( $current_user ) {
+        return $current_user;
+    }
+    require_once( 'AMP/System/User/User.php');
+    $current_user = new AMPSystem_User( AMP_Registry::getDbcon( ), AMP_SYSTEM_USER_ID );
+
+    return $current_user;
+
+}
+
+function AMP_mailto( $address ) {
+    $renderer = AMP_get_renderer( );
+    return $renderer->link( 'mailto:' . $address, $address );
+}
+
 ?>

@@ -32,6 +32,8 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     var $_cache_allowed = array( );
 
     var $_url_system = false;
+    var $_observers = array( );
+    var $_gacl_obj = false;
 
     function getComponents() {
         return $this->components;
@@ -160,7 +162,12 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         return $handler->execute( );
     }
 
-    function isAllowed( $action ){
+    function isAllowed( $action, $id = false ){
+
+        if ( $this->_gacl_obj && $id ) {
+            if ( !AMP_allow( $action, $this->_gacl_obj, $id )) return false;
+        }
+
         //if edit is not allowed -- allow nothing
         $allow_any_action = 'edit';
         if ( $action != $allow_any_action && $action != 'search' ){
@@ -181,6 +188,13 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         $controller = &new $this->_component_controller( );
         $controller->set_map( $this );
         $this->_controller = &$controller;
+        if ( !empty( $this->_observers )) {
+            foreach( $this->_observers as $observer_class ) {
+                $observer = new $observer_class( );
+                $controller->add_observer( $observer );
+                unset( $observer );
+            }
+        }
         return $controller;
     }
 

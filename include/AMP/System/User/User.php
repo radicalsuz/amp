@@ -6,6 +6,7 @@ class AMPSystem_User extends AMPSystem_Data_Item {
 
     var $datatable = "users";
     var $name_field = "name";
+    var $class_name = 'AMPSystem_User';
 
     function AMPSystem_User ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -55,6 +56,14 @@ class AMPSystem_User extends AMPSystem_Data_Item {
         $manager = &new AMPSystem_PermissionManager( );
         $manager->readUser( $this->getName( ));
         return $manager->authorized( $permission_value );
+    }
+
+    function getPermission( ) {
+        return $this->getData( 'permission');
+    }
+
+    function getGroup( ) {
+        return $this->getPermission( );
     }
 
 }

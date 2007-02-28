@@ -34,6 +34,7 @@ class AMP_Display_List {
 
     var $_display_columns = 1;
     var $_current_subheaders = array( );
+    var $_subheader_methods = array( );
 
     var $_translations;
 
@@ -156,7 +157,6 @@ class AMP_Display_List {
                     $html,
                     array( 'class' => $this->_css_class_container_list_column )
                     );
-
     }
 
 
@@ -166,12 +166,16 @@ class AMP_Display_List {
         if ( method_exists( $source, 'getURL' )) {
             $url = $source->getURL( );
         }
-        return $this->_renderer->link( $url, $source->getName( ), array( 'class' => 'title' ))
-                . $this->_renderer->newline( );
+        return      $this->_renderer->link( $url, $source->getName( ), array( 'class' => 'title' ))
+                  . $this->_renderer->newline( );
     }
 
     function _renderHeader( ) {
+        //stub
+    }
 
+    function qty( ) {
+        return count( $this->_source );
     }
 
     function _renderFooter( ) {
@@ -194,6 +198,24 @@ class AMP_Display_List {
         }
     }
 
+    function _renderSubheader( &$source, $depth=0 ) {
+        if ( !isset( $this->_subheader_methods[$depth])) return false;
+        $header_method = $this->_subheader_methods[$depth];
+
+        $item_header = $source->$header_method( );
+        if ( isset( $this->_current_subheaders[$depth ])
+            && ( $item_header == $this->_current_subheaders[$depth] )) {
+            return false; 
+        }
+        $this->_current_subheaders[$depth] = $item_header;
+        return $this->_renderer->inDiv( 
+                    $item_header,
+                    array( 'class' => $this->_css_class_container_list_subheader )
+                );
+
+    }
+
+
     function _output_empty( ) {
         $this->message( AMP_TEXT_SEARCH_NO_MATCHES );
     }
@@ -201,13 +223,13 @@ class AMP_Display_List {
     function message( $message_text ) {
         if ( $this->_suppress_messages ) return false;
         $flash = &AMP_System_Flash::instance( );
-        $flash->add_message( );
+        $flash->add_message( $message_text );
     }
 
     // {{{ private source create methods: _init_source, _generate_source 
 
     function _init_source( $source, $criteria ) {
-        if ( $source ) {
+        if ( $source && substr( get_class( $source ), 0, 5 ) != 'ADODB') {
             //pre-loaded source
             return $this->set_source( $source );
         }
@@ -348,7 +370,7 @@ class AMP_Display_List {
     function _init_sort( &$source ) {
         $sort_request = $this->_sort_requested( );
         if ( !$sort_request ) {
-            if ( !isset( $this->_sort_default )) return;
+            if ( ! $this->_sort_default ) return;
             $sort_request = $this->_sort_default;
         }
 

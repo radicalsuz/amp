@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/System/ComponentMap.inc.php');
+require_once( 'AMP/System/Permission/Observer/Header.php');
 
 class ComponentMap_Class extends AMPSystem_ComponentMap {
     var $heading = "Class";
@@ -16,6 +17,11 @@ class ComponentMap_Class extends AMPSystem_ComponentMap {
         'form'  => 'Class_Form',
         'list'  => 'Class_List',
         'source'=> 'ContentClass');
+
+    var $_observers = array( 'AMP_System_Permission_Observer_Header' );
+
+    var $_allow_edit = AMP_PERMISSION_CONTENT_CLASS_EDIT;
+    var $_allow_delete = AMP_PERMISSION_CONTENT_CLASS_DELETE;
 }
 
 ?>

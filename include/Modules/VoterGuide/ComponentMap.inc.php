@@ -22,5 +22,11 @@ class ComponentMap_VoterGuide extends AMPSystem_ComponentMap {
         'list' => 'VoterGuide_List',
         'source' => 'VoterGuide' );
 
+    var $_allow_list = AMP_PERMISSION_VOTERGUIDE_ACCESS ;
+    var $_allow_edit = AMP_PERMISSION_VOTERGUIDE_ACCESS ;
+    var $_allow_save = AMP_PERMISSION_VOTERGUIDE_ACCESS;
+    var $_allow_publish = AMP_PERMISSION_VOTERGUIDE_PUBLISH;
+    var $_allow_unpublish = AMP_PERMISSION_VOTERGUIDE_PUBLISH;
+    var $_allow_delete = AMP_PERMISSION_VOTERGUIDE_ACCESS;
 }
 ?>

@@ -1,5 +1,6 @@
 <?php
 require_once( 'AMP/System/ComponentMap.inc.php');
+require_once( 'AMP/System/Permission/Observer/Section.php');
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );
 
 class ComponentMap_GalleryImage extends AMPSystem_ComponentMap {
@@ -26,6 +27,15 @@ class ComponentMap_GalleryImage extends AMPSystem_ComponentMap {
 
     var $_url_system = AMP_SYSTEM_URL_GALLERY_IMAGE;
     var $_component_controller = 'AMP_System_Component_Controller_Bookmark';
+
+    var $_observers = array( 'AMP_System_Permission_Observer_Section');
+
+    var $_allow_list = AMP_PERMISSION_GALLERY_ACCESS ;
+    var $_allow_edit = AMP_PERMISSION_GALLERY_ACCESS ;
+    var $_allow_save = AMP_PERMISSION_GALLERY_ACCESS;
+    var $_allow_publish = AMP_PERMISSION_GALLERY_IMAGE_PUBLISH;
+    var $_allow_unpublish = AMP_PERMISSION_GALLERY_IMAGE_PUBLISH;
+    var $_allow_delete = AMP_PERMISSION_GALLERY_IMAGE_DELETE;
 }
 
 ?>

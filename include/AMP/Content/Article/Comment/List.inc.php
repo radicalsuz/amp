@@ -23,7 +23,10 @@ class ArticleComment_List extends AMP_System_List_Form {
     var $_sort_default = array( 'date DESC' );
     var $_sort_translations_sql = array( );
 
+    var $_source_criteria = array( 'allowed' => 1 );
+
     function ArticleComment_List( &$dbcon, $criteria = null ) {
+        $criteria['allowed'] = 1;
         $this->init( $this->_init_source($dbcon, $criteria ));
     }
 
@@ -63,6 +66,19 @@ class ArticleComment_List extends AMP_System_List_Form {
         $this->_searchFailureNotice( );
         return parent::_noRecordsOutput( );
     }
+
+    function _HTML_editColumn( $id ) {
+        $source = new ArticleComment( AMP_Registry::getDbcon( ), $id );
+        $article_id = $source->getArticle( );
+        $allowed_articles = AMP_lookup( 'articles');
+        if ( !isset( $allowed_articles[$article_id])) {
+            return "\n<td nowrap><div align='center'>".
+                    "</div></td>\n";
+        }
+        return parent::_HTML_editColumn( $id );
+
+    }
+
 
 }
 ?>

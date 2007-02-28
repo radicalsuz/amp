@@ -21,7 +21,7 @@ class AMPSystemLookup_ActionTargets extends AMPSystem_Lookup {
 }
 
 class AMPSystemLookup_WebActions extends AMPSystem_Lookup {
-    function AMPSystemLookup_WebActions {
+    function AMPSystemLookup_WebActions ( ){
         $this->dataset = WebAction_Lookup::instance( 'names' );
     }
 }

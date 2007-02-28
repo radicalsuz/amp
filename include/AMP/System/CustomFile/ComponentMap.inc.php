@@ -21,6 +21,13 @@ class ComponentMap_CustomFile extends AMPSystem_ComponentMap {
         'source'=> 'AMP_System_CustomFile');
 
     var $_action_default = 'list';
+
+    var $_allow_list = AMP_PERMISSION_TOOLS_CUSTOMFILES ;
+    var $_allow_edit = AMP_PERMISSION_TOOLS_CUSTOMFILES ;
+    var $_allow_save = AMP_PERMISSION_TOOLS_CUSTOMFILES;
+    var $_allow_publish = AMP_PERMISSION_TOOLS_CUSTOMFILES;
+    var $_allow_unpublish = AMP_PERMISSION_TOOLS_CUSTOMFILES;
+    var $_allow_delete = AMP_PERMISSION_TOOLS_CUSTOMFILES;
 }
 
 ?>

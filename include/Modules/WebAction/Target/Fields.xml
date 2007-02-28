@@ -5,6 +5,7 @@
 	<publish>
 		<type>checkbox</type>
 		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+        <default>1</default>
 	</publish>
 	<Title>
 		<type>text</type>

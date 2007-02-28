@@ -37,8 +37,7 @@
 	</map_table>
 	<type>
 		<type>text</type>
-		<label>Table Instance ID</label>
-		<default>modin</default>
+		<label>Grouping ID ( Form ID or Calendar Type ID )</label>
 	</type>
 	<extra_sql>
 		<type>textarea</type>

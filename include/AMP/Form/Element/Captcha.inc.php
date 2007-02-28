@@ -556,13 +556,12 @@
                 $result = $item->deleteData( $session_id );
             }
 
-            mt_srand((double)microtime()*1000000);
-            if ( mt_rand( 0, 10 ) !== 1 ) return $result; 
+            $random = mt_rand( 0, 10 );
+            if ( $random != 1 ) return $result; 
 
             $age_criteria = array( 'olderThan' => ( time( ) - 6000 ));
             $result = $item->deleteByCriteria( $age_criteria );
             return $result;
-
         }
 
         function getCaptcha( ) {

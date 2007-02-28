@@ -21,6 +21,9 @@ class ComponentMap_RSS_Subscription extends AMPSystem_ComponentMap {
     var $_component_controller = 'RSS_Subscription_Controller';
 
     var $_action_default = 'list';
+
+    var $_allow_list = AMP_PERMISSION_CONTENT_RSS_AGGREGATOR;
+    var $_allow_save = AMP_PERMISSION_CONTENT_RSS_AGGREGATOR;
 }
 
 ?>

@@ -17,6 +17,11 @@ class ComponentMap_Setup extends AMPSystem_ComponentMap {
     var $components = array( 
         'form'  => 'AMP_System_Setup_Form',
         'source'=> 'AMP_System_Setup');
+
+    var $_allow_list = AMP_PERMISSION_SYSTEM_SETTINGS;
+    var $_allow_edit = AMP_PERMISSION_SYSTEM_SETTINGS;
+    var $_allow_save = AMP_PERMISSION_SYSTEM_SETTINGS;
+    var $_allow_delete = false;
 }
 
 ?>

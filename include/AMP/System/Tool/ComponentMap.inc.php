@@ -17,6 +17,13 @@ class ComponentMap_Tool extends AMPSystem_ComponentMap {
         'form'  => 'Tool_Form',
         'list'  => 'Tool_List',
         'source'=> 'AMPSystem_Tool');
+
+    var $_allow_list = AMP_PERMISSION_TOOLS_ACCESS;
+    var $_allow_edit = AMP_PERMISSION_TOOLS_ADMIN ;
+    var $_allow_save = AMP_PERMISSION_TOOLS_ADMIN;
+    var $_allow_publish = AMP_PERMISSION_TOOLS_ADMIN;
+    var $_allow_unpublish = AMP_PERMISSION_TOOLS_ADMIN;
+    var $_allow_delete = AMP_PERMISSION_TOOLS_ADMIN;
 }
 
 ?>

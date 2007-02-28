@@ -47,6 +47,7 @@ class AMPContentLookup_ActiveClasses {
     function AMPContentLookup_ActiveClasses() {
         require_once ('AMP/Content/Article/Set.inc.php');
         $articleset = & new ArticleSet ( AMP_Registry::getDbcon() );
+        $articleset->addCriteria( Article::makeCriteriaAllowed( ));
         if (!( $counts = $articleset->getGroupedIndex( 'class' ))) return false;
 
         $class_set = & AMPContent_Lookup::instance( 'class' );
@@ -486,14 +487,23 @@ class AMPContentLookup_Articles extends AMPContent_Lookup{
     var $id_field = "id";
     var $sortby = 'datecreated DESC, title';
     var $criteria = 'trim( title ) != "" and !isnull( title ) and publish=1';
+    var $_base_criteria = 'trim( title ) != "" and !isnull( title ) and publish=1';
     
     function AMPContentLookup_Articles( ){
         $this->__construct( );
     }
 
     function __construct( ) {
+        
+        $this->add_allowed( );
         $this->init( );
         $this->_clean_titles( );
+    }
+
+    function add_allowed( ) {
+        $allowed_sections = array_keys( AMP_lookup( 'sectionMap'));
+        array_unshift( $allowed_sections, AMP_CONTENT_MAP_ROOT_SECTION );
+        $this->criteria = $this->_base_criteria . ' AND type in( '.join( ',', $allowed_sections ) . ')';
     }
 
     function _clean_titles( ) {
@@ -507,6 +517,51 @@ class AMPContentLookup_Articles extends AMPContent_Lookup{
 class AMPSystemLookup_Articles extends AMPContentLookup_Articles{
     function AMPSystemLookup_Articles( ) {
         $this->__construct( );
+    }
+}
+class AMPContentLookup_Event extends AMPContent_Lookup {
+    var $datatable = 'calendar';
+    var $result_field = 'left( event, 50) as short_event';
+    var $id_field = "id";
+    var $sortby = 'event';
+    var $criteria = 'trim( event ) != "" and !isnull( event )';
+
+    function AMPContentLookup_Event( $partial_title ){
+        $this->criteria = isset( $partial_title ) ?
+                            $this->_getCriteriaPartialTitle( $partial_title ) :
+                            $this->_getBaseCriteria( );
+        $this->init( );
+        if ( empty( $this->dataset )) {
+            return false;
+        }
+        foreach( $this->dataset as $id => $title ){
+            $this->dataset[$id] = strip_tags( $title );
+        }
+    }
+
+    function _getCriteriaPartialTitle( $partial_title ) {
+        return join( ' AND ', array( "event LIKE '" . $partial_title . "%'" , $this->_getBaseCriteria( ) ));
+    }
+
+    function setCriteriaPartialTitle( $partial_title ) {
+        $this->criteria = $this->_getCriteriaPartialName( $partial_title );
+    }
+
+    function _getBaseCriteria( ) {
+        return 'trim( event ) != "" and !isnull( event )';
+    }
+
+    function &instance( $partial_title=null) {
+        if ( !isset( $partial_title )) return parent::instance( 'event');
+
+        static $lookup = false;
+        if ( !$lookup ) {
+            $lookup = new AMPContentLookup_Event( $partial_title );
+        } else {
+            $lookup->setCriteriaPartialName( $partial_title );
+            $lookup->init();
+        }
+        return $lookup->dataset;
     }
 }
 
@@ -691,7 +746,7 @@ class AMPContentLookup_SectionsByLink extends AMPContent_Lookup {
         $this->init( );
     }
 
-    function _addCriteriaLink( $link_id ){
+    function _addCriteriaLink( $link_id ) {
         $this->criteria = "linkid =" . $link_id ;
     }
 
@@ -705,6 +760,7 @@ class AMPContentLookup_SectionsByLink extends AMPContent_Lookup {
         }
         return $lookup->dataset;
     }
+
     function available( ){
         return false;
     }
@@ -891,7 +947,13 @@ class AMPContentLookup_NavLayouts extends AMPContent_Lookup {
     var $sortby = 'name';
 
     function AMPContentLookup_NavLayouts ( ){
+        $this->add_criteria_allowed( );
         $this->init( );
+    }
+
+    function add_criteria_allowed( ) {
+        require_once( 'AMP/Content/Nav/Layout/Layout.php');
+        $this->criteria = AMP_Content_Nav_Layout::makeCriteriaAllowed( );
     }
 }
 
@@ -899,10 +961,17 @@ class AMPContentLookup_CustomNavLayouts extends AMPContent_Lookup {
     var $datatable = 'nav_layouts';
     var $result_field = 'name';
     var $criteria = 'id not in ( 1, 2 )';
+    var $_base_criteria = 'id not in ( 1, 2 )';
     var $sortby = 'name';
 
     function AMPContentLookup_CustomNavLayouts ( ){
+        $this->add_allowed_criteria( );
         $this->init( );
+    }
+
+    function add_allowed_criteria( ) {
+        require_once( 'AMP/Content/Nav/Layout/Layout.php');
+        $this->criteria = $this->_base_criteria . ' AND ' . AMP_Content_Nav_Layout::makeCriteriaAllowed( );
     }
 }
 

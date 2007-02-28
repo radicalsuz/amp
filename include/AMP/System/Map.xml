@@ -181,7 +181,6 @@
     <item>
         <label>Page Redirection</label>
         <href>redirect.php?action=list</href>
-        <per>CONTENT_REDIRECTS</per>
     </item>
     <item>
         <label>Hot Words</label>
@@ -275,7 +274,6 @@
         <label>Directories</label>
         <href>system_map.php?id=directories</href>
         <child>directories</child>
-        <per>TOOLS_DIRECTORIES_ACCESS</per>
     </item>
     <item>
         <label>Boards</label>
@@ -358,7 +356,6 @@
 
 <directories>
     <title>Directories</title>
-    <per>TOOLS_DIRECTORIES_ACCESS</per>
     <item>
         <label>Links</label>
         <href>links.php?action=list</href>

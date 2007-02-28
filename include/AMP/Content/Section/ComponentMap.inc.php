@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/System/ComponentMap.inc.php');
+require_once( 'AMP/System/Permission/Observer/Header.php');
 
 class ComponentMap_Section extends AMPSystem_ComponentMap {
     var $heading = "Section";
@@ -25,6 +26,10 @@ class ComponentMap_Section extends AMPSystem_ComponentMap {
     var $_allow_delete    = AMP_PERMISSION_CONTENT_SECTION_DELETE;
     var $_allow_publish   = AMP_PERMISSION_CONTENT_PUBLISH;
     var $_allow_unpublish = AMP_PERMISSION_CONTENT_PUBLISH;
+
+    var $_observers = array( 'AMP_System_Permission_Observer_Header');
+    var $_gacl_obj = 'section';
+
 }
 
 ?>

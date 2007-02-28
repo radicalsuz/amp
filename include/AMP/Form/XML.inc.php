@@ -16,7 +16,7 @@ class AMPForm_XML extends AMPForm {
 
 	function init( $name, $method=null, $action=null ) {
 		parent::init( $name, $method, $action );
-		if (!($this->addFields( $this->readFields()) )) {
+		if (!($this->addFields( $this->adjustFields( $this->readFields()) ))) {
 			 trigger_error ( 'XML Field read failed for ' . get_class( $this ) );
 			 return;
 		}
@@ -31,6 +31,11 @@ class AMPForm_XML extends AMPForm {
 
         return false;
 
+    }
+
+    function adjustFields( $fields ) {
+        //stub
+        return $fields;
     }
 
 	function getFieldFile() {

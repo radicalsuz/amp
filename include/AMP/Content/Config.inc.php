@@ -127,6 +127,10 @@ define ('AMP_SYSTEM_ICON_ENLARGE', '/img/magnify-clip.png' );
  */
 if ( !defined( 'AMP_NAV_NO_LIMIT')) define('AMP_NAV_NO_LIMIT', 700);
 
+if (!defined('AMP_NAVLINK_ALTERNATE_CSS_CLASS')) define( 'AMP_NAVLINK_ALTERNATE_CSS_CLASS', 'sidelist2' );
+if (!defined( 'AMP_NAVLINK_CSS_CLASS' )) define ('AMP_NAVLINK_CSS_CLASS', 'sidelist' );
+if (!defined( 'AMP_CONTENT_NAV_LIMIT_DEFAULT' )) define ('AMP_CONTENT_NAV_LIMIT_DEFAULT', 20 );
+
 /**
  * Default Introtext pages
  */
@@ -143,12 +147,22 @@ if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT'))
         define( 'AMP_CONTENT_PUBLICPAGE_ID_COMMENT_INPUT', 34 );
 if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_TAGS_DISPLAY')) 
         define( 'AMP_CONTENT_PUBLICPAGE_ID_TAGS_DISPLAY', 28 );
+
+if (!defined('AMP_CONTENT_PUBLICPAGE_ID_WEBACTION_INPUT' ))
+     define( 'AMP_CONTENT_PUBLICPAGE_ID_WEBACTION_INPUT', 62 );
+
 if ( !defined( 'AMP_CONTENT_PUBLICPAGE_ID_CONTACT_US')) define( 'AMP_CONTENT_PUBLICPAGE_ID_CONTACT_US', 52 );
 if ( !defined( 'AMP_CONTENT_PUBLICPAGE_ID_CONTACT_US_RESPONSE')) define( 'AMP_CONTENT_PUBLICPAGE_ID_CONTACT_US_RESPONSE', 53 );
 
 if ( !defined( 'AMP_INTROTEXT_ID_CONTACT_US')) define( 'AMP_INTROTEXT_ID_CONTACT_US', 52 );
 if ( !defined( 'AMP_INTROTEXT_ID_CONTACT_US_RESPONSE')) define( 'AMP_INTROTEXT_ID_CONTACT_US_RESPONSE', 53 );
 
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_INPUT'))  
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_INPUT', 15 );
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_RESPONSE')) 
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_RESPONSE', 51 );
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_DISPLAY')) 
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_DISPLAY', 57 );
 /**
  * Allow multiple sections per article 
  */
@@ -175,6 +189,8 @@ if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SU
 if ( !defined( 'AMP_MODULE_ID_PETITION')) define( 'AMP_MODULE_ID_PETITION', 7 );
 define( 'AMP_MODULE_ID_LINKS', 11 );
 if ( !defined( 'AMP_MODULE_ID_CONTACT_US')) define( 'AMP_MODULE_ID_CONTACT_US', 17 );
+
+if ( !defined( 'AMP_FORM_ID_WEBACTION' )) define( 'AMP_FORM_ID_WEBACTION', 21 );
 
 /**
  * Content Caching Settings

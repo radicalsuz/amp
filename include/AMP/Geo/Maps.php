@@ -34,7 +34,8 @@ Class Maps {
 		'center_long'=>'',
 		'span_lat'=>'',
 		'span_long'=>'',
-		'geo_field'=>''
+		'geo_field'=>'',
+        'include_credit' => 0
 	);
 	
 	function Maps($dbcon,$map_ID){
@@ -55,7 +56,7 @@ Class Maps {
 	function load_data() {
 		$sql="select * from maps where id = ".$this->map_ID;
 	
-		$R= $this->dbcon->CacheExecute($sql)or DIE("Error loading map info  ".$sql.$this->dbcon->ErrorMsg());
+		$R= $this->dbcon->CacheExecute($sql)or trigger_error("Error loading map info  ".$sql.$this->dbcon->ErrorMsg());
 		$this->prop('default_color',$R);
 		$this->prop('background_color',$R);
 		$this->prop('outline_color',$R);
@@ -83,13 +84,15 @@ Class Maps {
 		$this->prop('span_lat',$R);
 		$this->prop('geo_field',$R);
 		$this->prop('span_long',$R);
-		$this->P['table'] = $R->Fields("map_table");;
-		if ($this->P['table'] == 'userdata') {
-			$this->P['extra_sql'] .= ' and modin = '.$R->Fields("type");
-		}
-		if ($this->P['table'] == 'calendar') {
-			if ($this->P['extra_sql']) {
-				$this->P['extra_sql'] .= ' and caltype = '.$R->Fields("type");
+		$this->P['table'] = $R->Fields("map_table");
+		if ($R->Fields("type")) {
+			if ($this->P['table'] == 'userdata') {
+				$this->P['extra_sql'] .= ' and modin = '.$R->Fields("type");
+			}
+			if ($this->P['table'] == 'calendar') {
+				if ($this->P['extra_sql']) {
+					$this->P['extra_sql'] .= ' and caltype = '.$R->Fields("type");
+				}
 			}
 		}
 	}
@@ -97,7 +100,7 @@ Class Maps {
 	//function that create the range array
 	function build_range() {
 		$sql="select * from map_range where map_ID = ".$this->map_ID;
-		$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting range data in build_range function ".$sql.$this->dbcon->ErrorMsg());
+		$R= $this->dbcon->CacheExecute($sql)or trigger_error("Error getting range data in build_range function ".$sql.$this->dbcon->ErrorMsg());
 		$x=0;
 		while (!$R->EOF) {
 			$this->Range[$x]['range'] = $R->Fields("range");
@@ -119,12 +122,12 @@ Class Maps {
 		}	
 
 		if ($this->P['table'] == 'calendar') {
-			$sql="select distinct id, lcity as City, lstate as State, lzip as Zip".$extra_fields." from calendar where  publish=1 ".$this->P['extra_sql']; // and typeid =$type 
+			$sql="select id, lcity as City, lstate as State, lzip as Zip".$extra_fields." from calendar where  publish=1 ".$this->P['extra_sql']; // and typeid =$type 
 		} else {
-			$sql="select distinct id, City, State, Street, Zip".$extra_fields." from ".$this->P['table']." where publish=1 ". $this->P['extra_sql'] ;
+			$sql="select id, City, State, Street, Zip".$extra_fields." from ".$this->P['table']." where publish=1 ". $this->P['extra_sql'] ;
 		}
 		
-		$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting city data in build_points function ".$sql.$this->dbcon->ErrorMsg());
+		$R= $this->dbcon->CacheExecute($sql)or trigger_error("Error getting city data in build_points function ".$sql.$this->dbcon->ErrorMsg());
 		$x=0;
 		while (!$R->EOF) {
 			if ($this->P['geo_field']  ) {
@@ -142,7 +145,7 @@ Class Maps {
 			
 
 			if ($location != ',' and isset($location)) {
-				$this->points[$x]['name'] = htmlspecialchars($R->Fields($this->P['label_field']));
+				$this->points[$x]['name'] = wordwrap( htmlspecialchars($R->Fields($this->P['label_field'])),30,htmlspecialchars( '<br>'));
 				$this->points[$x]['loc'] = $location;
 				$this->points[$x]['lat'] = $lat;
 				$this->points[$x]['long'] = $lng;
@@ -162,7 +165,7 @@ Class Maps {
 	
 	function build_count(){
 		$sql = "select * from states";
-		$S= $this->dbcon->CacheExecute($sql)or DIE("Error getting state list in functon build_count ".$sql.$this->dbcon->ErrorMsg());
+		$S= $this->dbcon->CacheExecute($sql)or trigger_error("Error getting state list in functon build_count ".$sql.$this->dbcon->ErrorMsg());
 		while (!$S->EOF) {
 			if ($this->P['table'] == 'calendar') {
 				$sql="select count(id) from calendar where lstate ='".$S->Fields("state")."' and publish=1 $extra"; // and typeid =$type 
@@ -170,7 +173,7 @@ Class Maps {
 				$sql="select count(id) from ".$this->P['table']." where State ='".$S->Fields("state")."' and  publish=1 ". $this->P['extra_sql'] ;
 			}
 			
-			$C= $this->dbcon->CacheExecute($sql)or DIE("Error getting state count in functon build_count Query:".$sql.$this->dbcon->ErrorMsg());
+			$C= $this->dbcon->CacheExecute($sql)or trigger_error("Error getting state count in functon build_count Query:".$sql.$this->dbcon->ErrorMsg());
 //			if ($S->Fields("state") =="CA") { die (count(id));}//die ($C[0][0]);
 			$this->Count[$S->Fields("State")]['data'] = $C->Fields("count(id)"); 
 			$this->Count[$S->Fields("State")]['label'] = $S->Fields("statename"); 
@@ -187,6 +190,13 @@ Class Maps {
 	
 	
 	function us_xml() {	
+		header('Content-type: text/xml');
+
+		$cache_key = __FILE__.'-'.__FUNCTION__.'-map_ID='.$this->map_ID;
+		$cached_map = AMP_cache_get( $cache_key );
+
+		if ($cached_map ) return $cached_map;
+
 		if (!$this->Range) {
 			//$this->build_range();
 		}
@@ -197,7 +207,6 @@ Class Maps {
 			$this->build_count();
 		}
 		
-		header('Content-type: text/xml');
         $out = "";
 		$out .= '<?xml version="1.0" encoding="iso-8859-1"?>';
 		$out .= '<us_states>';
@@ -258,6 +267,8 @@ Class Maps {
 			$out .=  '</state>';
 		}
 		$out .=  '</us_states>';
+
+		AMP_cache_set( $cache_key, $out );
 		return $out;
 	}
 	
@@ -299,7 +310,9 @@ Class Maps {
 		$html .= 'PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"> ';
 		$html .= '</EMBED> ';
 		$html .= '</OBJECT> ';
-		$html .= "<p><font size ='-4'> Powered by <a href='http://backspace.com/mapapp/'>DIY Map</a></font></p>";
+        if ( ( $this->P['include_credit'])) {
+            $html .= "<p><font size ='-4'> Powered by <a href='http://backspace.com/mapapp/'>DIY Map</a></font></p>";
+        }
 		
 		return $html;
 	}

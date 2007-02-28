@@ -1,4 +1,5 @@
 <?php
+
 require_once ('AMP/UserData/Plugin.inc.php');
 
 class UserDataPlugin_Search_AMP extends UserDataPlugin {
@@ -42,7 +43,7 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
 	}
 
     function initializeCriteria($options=array( )) {
-        $this->getUDMCrit();
+        $this->getUDMCrit($options);
         
         if (isset($options['clear_criteria']) && $options['clear_criteria']) $this->criteria=array();
 
@@ -79,10 +80,13 @@ class UserDataPlugin_Search_AMP extends UserDataPlugin {
         $this->udm->setSQLCriteria( $this->criteria );
     }
 
-    function getUDMCrit() {
+    function getUDMCrit($options) {
         if (isset($this->udm->sql_criteria)) { 
+            if ( isset( $options['multimodin'] ) && $options['multimodin']) {
+                unset( $this->udm->sql_criteria['modin']);
+            }
             $this->criteria=array_merge($this->criteria, $this->udm->sql_criteria);
-        }
+        } 
     }
 
     function SQLAliases() {

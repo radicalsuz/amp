@@ -27,7 +27,6 @@ class Article_ListForm extends AMP_System_List_Form {
     var $_action_args = array( 
             'reorder'   => array( 'order' ), 
             'move'      => array( 'section_id', 'class_id', 'related_section_id' ), 
-    //        'relate'    => array( 'related_section_id' ), 
             'regionize' => array( 'region_id' ),
             'tag'       => array( 'tag_id', 'tags_text' )
         );
@@ -46,6 +45,8 @@ class Article_ListForm extends AMP_System_List_Form {
     function Article_ListForm ( &$dbcon, $criteria = null ) {
         if ( isset( $criteria['type']) || isset( $criteria['section'])) {
             $this->_source_criteria = array( );
+        } else {
+            $criteria['allowed'] = 1;
         }
         $this->_init_default_sort( );
         $this->init( $this->_init_source( $dbcon, $criteria ));

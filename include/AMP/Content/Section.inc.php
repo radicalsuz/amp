@@ -201,7 +201,46 @@ class Section extends AMPSystem_Data_Item {
 
     function _afterSave( ){
         if ( $this->id != $this->dbcon->Insert_ID( )) return;
+        $this->_create_section_header( );
+        $this->_create_permission_values( );
+    }
 
+    function _create_permission_values( ) {
+        $groups = AMP_lookup( 'permissionGroups');
+        $gacl = AMP_acl( true );
+        foreach( $groups as $group_id => $name ) {
+            $allowed_sections = AMP_lookup( 'sectionsByGroup', $group_id );
+            if ( !$allowed_sections ) {
+                //all sections are allowed this group by default
+                continue;
+            }
+            
+            //if group has restrictions
+            $parent_id = $this->getParent( );
+            $current_user = AMP_current_user( );
+            if ( $current_user && ( $current_user->getGroup( ) == $group_id )) {
+                $allow_new_section = true;
+            } elseif ( $parent_id == AMP_CONTENT_MAP_ROOT_SECTION ) {
+                $map = AMPContent_Map::instance( );
+                $siblings = $map->getChildren( AMP_CONTENT_MAP_ROOT_SECTION );
+                $allowed_siblings = array_combine_key( $siblings, $allowed_sections );
+                $allow_new_section = ( count( $siblings ) == count( $allowed_sections ));
+            } else {
+                $allow_new_section = isset( $allowed_sections[ $parent_id ]);
+            }
+
+            if ( $allow_new_section ) {
+                require_once( 'AMP/System/Permission/Item/Item.php');
+                AMP_System_Permission_Item::create_for_group( $group_id, 'access', 'section', $this->id );
+
+            }
+
+        }
+
+        AMP_permission_update( );
+    }
+
+    function _create_section_header( ) {
         require_once( 'AMP/Content/Article.inc.php');
         $section_header = &new Article( $this->dbcon );
         $section_header->setDefaults( );
@@ -213,6 +252,7 @@ class Section extends AMPSystem_Data_Item {
             'section'      => $this->id );
         $section_header->setData( $article_data );
         return $section_header->save( );
+
     }
 
     function setBlurb( $blurb ){
@@ -223,20 +263,20 @@ class Section extends AMPSystem_Data_Item {
         return $this->mergeData( array( 'type' => $name ));
     }
 
-    function setParent( $parent_id = AMP_CONTENT_MAP_ROOT_SECTION ){
+    function setParent( $parent_id = AMP_CONTENT_MAP_ROOT_SECTION ) {
         return $this->mergeData( array( 'parent' => $parent_id ));
     }
 
-    function setListType( $listtype = AMP_SECTIONLIST_ARTICLES ){
+    function setListType( $listtype = AMP_SECTIONLIST_ARTICLES ) {
         return $this->mergeData( array( 'listtype' => $listtype ));
     }
 
-    function setOrder( $order ){
+    function setOrder( $order ) {
         return $this->mergeData( array( 'textorder' => $order ));
     }
 
 
-    function setDefaults( ){
+    function setDefaults( ) {
         $this->setListType( );
     }
 
@@ -260,6 +300,7 @@ class Section extends AMPSystem_Data_Item {
         if ( !isset( $this->id )) return false;
         return AMP_URL_AddVars( AMP_SYSTEM_URL_SECTION, array( 'id=' . $this->id ));
     }
+
 
 }
 ?>

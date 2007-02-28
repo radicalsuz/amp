@@ -270,6 +270,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $this->getData( $this->name_field );
     }
 
+    function getShortName( ) {
+        return AMP_trimText( $this->getName( ), 25, false);
+    }
+
 	function existsValue($column, $value) {
 		$records = $this->dbcon->Execute('SELECT * FROM '.$this->datatable
 										.' WHERE '.$column.' = '. $this->dbcon->qstr($value));
@@ -351,7 +355,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     //{{{ Search methods: search
 
     function search( $criteria = null, $class_name = null ){
-        $data_set = &$this->_getSearchSource( $criteria );
+        $data_set = $this->getSearchSource( $criteria );
         if ( !$data_set->readData( )) return false;
         if ( !( isset( $class_name) || isset( $this->_class_name ))) {
             trigger_error( sprintf( AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED, get_class( $this )) );
@@ -436,7 +440,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
         //sort descending
         if ( $this->_sort_direction == AMP_SORT_DESC ) {
-            return strnatcasecmp( $file2->$sort_method( ) , $file1->$sort_method( ) ); 
+            if ( !is_object( $file2)) {
+                print AMPbacktrace( );
+            }
+            return strnatcasecmp( $file2->$sort_method( ) , 
+                                    $file1->$sort_method( ) ); 
         }
 
         //sort ascending

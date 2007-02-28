@@ -43,7 +43,7 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
     }
 
     function _makeCriteriaReltypes( ){
-        return 'linkid=' . $this->id;
+        return 'linkid=' . $this->id . ' AND typeid in( '. join( ',', array_keys( AMP_lookup( "sectionMap" ))) . ')';
     }
 
     function _saveRelatedLinks( $link_values ){

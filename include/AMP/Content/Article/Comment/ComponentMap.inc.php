@@ -29,6 +29,17 @@ class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
         $form = &$controller->get_form( );
         $form->setDefaultValue( 'articleid', $article_id );
     }
+
+    function isAllowed( $action, $model_id = false ) {
+        if ( $model_id ) {
+            $allowed_articles = AMP_lookup( 'articles');
+            if ( !isset( $allowed_articles[ $model_id ])) {
+                return false;
+            }
+        }
+        return parent::isAllowed( $action, $model_id );
+
+    }
 }
 
 ?>

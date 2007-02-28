@@ -415,6 +415,23 @@ class AMPSystemLookup_Admins extends AMPSystem_Lookup {
 
 }
 
+class AMPSystemLookup_UsersByGroup extends AMPSystem_Lookup {
+    var $datatable = 'users';
+    var $result_field = 'name';
+    var $sortby = 'name';
+
+    function AMPSystemLookup_UsersByGroup( $group_id = null ) {
+        if ( isset( $group_id )) {
+            $this->add_criteria_group( $group_id );
+        }
+        $this->init( );
+    }
+
+    function add_criteria_group( $group_id ) {
+        $this->criteria = 'permission=' . $group_id;
+    }
+}
+
 class AMPSystemLookup_Lists extends AMPSystem_Lookup {
     var $datatable = 'lists';
     var $result_field = 'name';
@@ -475,6 +492,13 @@ class AMPSystemLookup_States extends AMPSystem_Lookup {
 	var $datatable = 'states';
 	var $result_field = 'state';
     function AMPSystemLookup_States( ){
+        $this->init( );
+    }
+}
+class AMPSystemLookup_Statenames extends AMPSystem_Lookup {
+	var $datatable = 'states';
+	var $result_field = 'statename';
+    function AMPSystemLookup_Statenames( ){
         $this->init( );
     }
 }
@@ -631,6 +655,29 @@ class AMPSystemLookup_CellProviderDomains {
     function available ( ){
         return false;
     }
+}
+
+class AMPSystemLookup_PersonalTitles {
+    var $name = "Personal Titles";
+    var $form_def =  'personalTitles';
+    var $dataset = array( 
+        "Mr.", "Ms.", "Mrs.", "Miss",
+        "Dr.", "Rabbi", "Fr.", "Rev.",
+        "Hon.", "Sr.", "Br.", "Msr."
+        );
+
+    function AMPSystemLookup_PersonalTitles( ) {
+        $this->init( );
+    }
+    
+    function init( ) {
+        //do nothing
+    }
+
+    function available( ) {
+        return true;
+    }
+
 }
 
 class AMPConstant_Lookup {
@@ -1046,5 +1093,64 @@ class AMPSystemLookup_Images extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_Objects extends AMPConstant_Lookup {
+    var $prefix_values = 'AMP_PERMISSION_OBJECT_';
+
+    function AMPSystemLookup_Objects( ) {
+        $this->init( );
+    }
+
+}
+
+class AMPSystemLookup_SectionsByGroup extends AMPSystem_Lookup {
+    var $datatable = 'permission_items';
+    var $id_field = 'target_id';
+    var $_base_criteria = 'target_type="section" AND allow=1'; 
+    var $criteria = 'target_type="section" AND allow=1'; 
+    var $result_field = 'target_type';
+
+    function AMPSystemLookup_SectionsByGroup( $group_id = null ) {
+        if ( isset( $group_id )) {
+            $this->add_criteria_group( $group_id );
+        }
+        $this->init( );
+        if ( !$this->dataset ) return;
+
+        $this->dataset = array_combine_key( array_keys( $this->dataset ), AMP_lookup( 'sections'));
+
+    }
+
+    function add_criteria_group( $group_id ) {
+        $this->criteria = $this->_base_criteria . ' AND group_id = ' . $group_id; 
+    }
+}
+
+class AMPSystemLookup_SectionPermissionItemsByGroup extends AMPSystem_Lookup {
+    var $datatable = 'permission_items';
+    var $result_field = 'id';
+    var $_base_criteria = 'target_type="section"';
+    var $criteria = 'target_type="section"';
+
+    function AMPSystemLookup_SectionPermissionItemsByGroup( $group_id = null ) {
+        if ( isset( $group_id )) {
+            $this->add_criteria_group( $group_id );
+        }
+        $this->init( );
+    }
+
+    function add_criteria_group( $group_id ) {
+        $this->criteria = $this->_base_criteria . ' AND group_id = ' . $group_id; 
+    }
+}
+
+class AMPSystemLookup_FormsByAction extends AMPSystem_Lookup {
+    var $datatable = 'webactions';
+    var $result_field = 'modin';
+    var $criteria = 'status = 1 and ( isnull( enddate ) or enddate > CURRENT_DATE)';
+
+    function AMPSystemLookup_FormsByAction( ) {
+        $this->init( );
+    }
+}
 
 ?>

@@ -16,5 +16,10 @@ class ComponentMap_PaymentItem extends AMPSystem_ComponentMap {
 			"form" => "PaymentItem_Form",
 			"list" => "PaymentItem_List",
 			"source" => "PaymentItem" );
+
+    var $_allow_list = AMP_PERMISSION_PAYMENT_ACCESS;
+    var $_allow_edit = AMP_PERMISSION_PAYMENT_ADMIN;
+    var $_allow_save = AMP_PERMISSION_PAYMENT_ADMIN;
+    var $_allow_delete = AMP_PERMISSION_PAYMENT_ADMIN;
 }
 ?>

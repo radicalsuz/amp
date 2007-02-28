@@ -1,4 +1,5 @@
 <?php
+require_once( 'AMP/System/ComponentLookup.inc.php');
 
 class AMP_System_List_Request {
     var $_actions = array();
@@ -64,6 +65,12 @@ class AMP_System_List_Request {
             trigger_error( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED, get_class( $target ), $action , get_class( $this )));
             return false;
         }
+        if ( !$this->allow( $action, $target ))  {
+            $flash = AMP_System_Flash::instance( );
+            $flash->add_message( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, $action ) ." " . $target->getShortName( ) );
+            return false;
+        }
+
         $local_args = $this->_getSpecificArgs( $target, $action, $args );
         return call_user_func_array( array( $target, $action ), $local_args ) ;
     }
@@ -98,8 +105,17 @@ class AMP_System_List_Request {
 
     }
 
-    function allow( $action ){
-        return ( array_search( $action, $this->_actions) !== FALSE );
+    function allow( $action, $target = false ){
+        if ( array_search( $action, $this->_actions) === FALSE ) {
+            return false;
+        }
+        if ( !$target ) return true;
+        if ( !isset( $target->id )) return true;
+
+        $map = ComponentLookup::instance( get_class( $target ));
+        return $map->isAllowed( $action, $target->id );
+        
+        
     }
 
     function isActive( ){

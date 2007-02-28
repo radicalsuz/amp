@@ -1,6 +1,8 @@
 <?php
 
 require_once ( 'AMP/System/ComponentMap.inc.php' );
+require_once( 'AMP/System/Permission/Observer/Section.php' );
+require_once( 'AMP/System/Permission/Observer/Tool.php' );
 
 class ComponentMap_IntroText extends AMPSystem_ComponentMap {
 
@@ -22,10 +24,34 @@ class ComponentMap_IntroText extends AMPSystem_ComponentMap {
         'copier' => 'AMPSystem_IntroText_Copy',
         'source' => 'AMPSystem_IntroText' );
 
+    var $_observers = array( 'AMP_System_Permission_Observer_Section', 'AMP_System_Permission_Observer_Tool' );
+
+    var $_allow_list = AMP_PERMISSION_TOOLS_INTROTEXT ;
+    var $_allow_edit = AMP_PERMISSION_TOOLS_INTROTEXT ;
+    var $_allow_save = AMP_PERMISSION_TOOLS_INTROTEXT;
+    var $_allow_publish = AMP_PERMISSION_TOOLS_INTROTEXT;
+    var $_allow_unpublish = AMP_PERMISSION_TOOLS_INTROTEXT;
+    var $_allow_delete = AMP_PERMISSION_TOOLS_INTROTEXT;
+
     function onInitForm( &$controller ){
-        if (!( $tool_id = $controller->assert_var( 'tool_id' ))) return false;
+        $tool_id = $controller->assert_var( 'tool_id' );
+        $form_id = $controller->assert_var( 'form_id' );
+        if (!( $tool_id || $form_id )) return false;
         $form = &$controller->get_form( );
-        $form->setDefaultValue( 'modid', $tool_id );
+        if ( $tool_id ) {
+            $form->setDefaultValue( 'modid', $tool_id );
+        }
+        if ( $form_id ) {
+            $form->setValues( array( 'list_form_id'=> $form_id ));
+        }
+    }
+
+    function onSave( &$controller ) {
+        $form = $controller->get_form( );
+        $values = $form->getValues( );
+        if ( isset( $values['list_form_id']) && $values['list_form_id']) {
+            ampredirect( AMP_url_add_vars( AMP_SYSTEM_URL_TOOL_PUBLICPAGE, array( 'modid=' . $values['modid']) ));
+        }
     }
 
 }

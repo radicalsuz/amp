@@ -118,7 +118,7 @@ require_once( 'AMP/System/Page/Urls.inc.php');
     }
 
     function _HTML_NavSystem( ) {
-        return false;
+        //return false;
         return
             '</ul>'
             ."<p class='sidetitle'>&nbsp;</p>"
@@ -135,12 +135,17 @@ require_once( 'AMP/System/Page/Urls.inc.php');
 
     function _HTML_NavItem( $item ) {
         
+        $renderer = AMP_get_renderer( );
         $class = "side_" . (isset($item['class'])? $item['class']  :  'type');
+        $attr = isset( $item['attr']) ? $item['attr'] : null;
         $href = ( defined( $item['href']) ?
                             constant( $item['href']) :
                             $item['href']);
         return  $this->_HTML_NavSubTitle( $item ) .
-                "\n<li class = \"$class\"><a href='".$href."' >".$item['label']."</a></li>";
+                "\n<li class = \"$class\">"
+                . $renderer->link( $href, $item['label'], $attr )
+                . "</li>";
+                //"<a href='".$href."' >".$item['label']."</a></li>";
     }
 
 

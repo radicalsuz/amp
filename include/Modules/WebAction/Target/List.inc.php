@@ -13,6 +13,7 @@ class WebAction_Target_List extends AMPSystem_List {
         'Status'    => 'publish');
     var $editlink = 'webaction_targets.php';
     var $_source_object = 'WebAction_Target';
+    var $_url_add = 'webaction_targets.php?action=add';
 
     function WebAction_Target_List( &$dbcon ) {
         $this->init( $this->_init_source( $dbcon ));

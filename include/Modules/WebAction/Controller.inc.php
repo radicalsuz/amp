@@ -4,7 +4,6 @@ require_once( 'AMP/System/Component/Controller.php');
 require_once( 'Modules/WebAction/WebAction.php');
 
 class WebAction_Controller extends AMP_System_Component_Controller_Standard {
-    var $_action_default = 'list';
 
     function WebAction_Controller(){
         $this->init( );

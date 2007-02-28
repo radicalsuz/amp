@@ -3,6 +3,7 @@
 require_once( 'AMP/System/ComponentMap.inc.php');
 
 class ComponentMap_PermissionGroup extends AMPSystem_ComponentMap {
+
     var $heading = "Permission Group";
     var $nav_name = "system";
 
@@ -20,6 +21,15 @@ class ComponentMap_PermissionGroup extends AMPSystem_ComponentMap {
         'form'  => 'PermissionGroup_Form',
         'list'  => 'PermissionGroup_List',
         'source'=> 'PermissionGroup');
+
+    var $_allow_list  = AMP_PERMISSION_SYSTEM_PERMISSIONS ;
+    var $_allow_edit  = AMP_PERMISSION_SYSTEM_PERMISSIONS ;
+    var $_allow_add = AMP_PERMISSION_SYSTEM_PERMISSIONS ;
+    var $_allow_save  = AMP_PERMISSION_SYSTEM_PERMISSIONS;
+    var $_allow_publish   = AMP_PERMISSION_SYSTEM_PERMISSIONS;
+    var $_allow_unpublish = AMP_PERMISSION_SYSTEM_PERMISSIONS;
+    var $_allow_delete = AMP_PERMISSION_SYSTEM_PERMISSIONS;
+
 }
 
 ?>

@@ -123,5 +123,17 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
 
     }
 
+    function isAllowed( $action, $model_id = false ) {
+        if ( $model_id ) {
+            require_once( 'AMP/Content/Article.inc.php');
+            $article = new Article( AMP_Registry::getDbcon( ), $model_id );
+            if ( !$article->hasData( )) return false;
+            $section_id = $article->getParent( );
+            $allowed_sections = AMP_lookup( 'sectionMap');
+            if ( !isset( $allowed_sections[ $section_id ])) return false;
+        }
+        return parent::isAllowed( $action, $model_id );
+    }
+
 }
 ?>

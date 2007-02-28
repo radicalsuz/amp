@@ -22,6 +22,7 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     var $datatable = 'moduletext';
     var $name_field = 'name';
     var $_exact_value_fields = array( 'modid' );
+    var $_class_name = 'AMPSystem_IntroText';
 
     function AMPSystem_IntroText ( &$dbcon, $text_id=null ) {
         $this->init( $dbcon, $text_id );
@@ -31,6 +32,7 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
         $this->legacyFieldname( $data, 'test', 'body' );
         $this->legacyFieldname( $data, 'subtitile', 'subtitle' );
         $this->legacyFieldname( $data, 'modid', 'tool_id' );
+        $this->legacyFieldname( $data, 'type', 'section' );
     }
 
     function &getDisplay() {
@@ -141,6 +143,9 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
         return AMP_Url_AddVars( AMP_SYSTEM_URL_PUBLIC_PAGE, array( 'id='. $this->id ));
     }
 
+    function _sort_default( &$item_set ){
+        return $this->sort( $item_set, 'toolName');
+    }
 }
 
 ?>

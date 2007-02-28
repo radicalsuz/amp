@@ -36,6 +36,9 @@ class ComponentMap_Image extends AMPSystem_ComponentMap {
         );
 
     var $_allow_search = true;
+    var $_allow_list = AMP_PERMISSION_CONTENT_IMAGES_EDIT;
+    var $_allow_crop = AMP_PERMISSION_CONTENT_IMAGES_EDIT;
+    var $_allow_delete = AMP_PERMISSION_CONTENT_IMAGES_EDIT;
 
     function ComponentMap_Image( ){
         $this->_path_source = AMP_LOCAL_PATH . AMP_CONTENT_URL_DOCUMENTS;

@@ -50,4 +50,7 @@
 		<type>text</type>
 		<label>Display Page Link</label>
 	</searchtype>
+    <list_form_id>
+        <type>hidden</type>
+    </list_form_id>
 </array>

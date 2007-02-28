@@ -21,6 +21,13 @@ class ComponentMap_Nav_Layout extends AMPSystem_ComponentMap {
         'list'  => 'AMP_Content_Nav_Layout_List',
         'source'=> 'AMP_Content_Nav_Layout');
 
+    var $_allow_list = AMP_PERMISSION_CONTENT_NAVIGATION ;
+    var $_allow_edit = AMP_PERMISSION_CONTENT_NAVIGATION ;
+    var $_allow_save = AMP_PERMISSION_CONTENT_NAVIGATION;
+    var $_allow_publish = AMP_PERMISSION_CONTENT_NAVIGATION;
+    var $_allow_unpublish = AMP_PERMISSION_CONTENT_NAVIGATION;
+    var $_allow_delete = AMP_PERMISSION_CONTENT_NAVIGATION;
+
     function onInitForm( &$controller ) {
         if ( $id = $controller->assert_var( 'id' )) return false;
         $permitted_names = array( 
@@ -57,6 +64,14 @@ class ComponentMap_Nav_Layout extends AMPSystem_ComponentMap {
             $location->delete( );
         }
         
+    }
+
+    function isAllowed( $action, $model_id = false ) {
+        $allowed_layouts = AMP_lookup( 'navLayouts' );
+        if ( $model_id && !isset( $allowed_layouts[$model_id])) {
+            return false;
+        }
+        return parent::isAllowed( $action, $model_id );
     }
 
 }

@@ -2,14 +2,15 @@
 
 require_once( 'AMP/System/Form/XML.inc.php');
 require_once( 'Modules/WebAction/ComponentMap.inc.php');
+require_once( 'Modules/WebAction/Lookups.inc.php');
 
 class WebAction_Form extends AMPSystem_Form_XML {
 
     var $name_field = 'name';
-    var $_intro_text_set = array( 'intro_id', 'response_id', 'message_id', 'tellfriend_message_id');
-    var $_title_template = array( 'type' => 'text', 'size' => 50, 'required' => false, 'label' => 'Title');
-    var $_text_template = array( 'type' => 'textarea', 'size' => '10:50', 'label' => 'Text');
-    var $_save_template = array( 'type' => 'submit', 'label' => 'Save');
+    var $_intro_text_set  = array( 'intro_id', 'response_id', 'message_id', 'tellfriend_message_id');
+    var $_title_template  = array( 'type' => 'text',     'size' => 50, 'required' => false, 'label' => 'Title');
+    var $_text_template   = array( 'type' => 'textarea', 'size' => '10:50', 'label' => 'Text');
+    var $_save_template   = array( 'type' => 'submit',   'label' => 'Save');
     var $_switch_template = array( 'type' => 'blocktrigger', 'label' => 'Edit', 'block' => '_block');
     var $_fieldswapper;
 

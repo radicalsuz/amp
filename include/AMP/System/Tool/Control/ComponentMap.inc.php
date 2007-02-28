@@ -16,6 +16,13 @@ class ComponentMap_ToolControl extends AMPSystem_ComponentMap {
         'form'  => 'ToolControl_Form',
         'list'  => 'ToolControl_List',
         'source'=> 'ToolControl');
+
+    var $_allow_list = AMP_PERMISSION_TOOLS_ADMIN ;
+    var $_allow_edit = AMP_PERMISSION_TOOLS_ADMIN ;
+    var $_allow_save = AMP_PERMISSION_TOOLS_ADMIN;
+    var $_allow_publish = AMP_PERMISSION_TOOLS_ADMIN;
+    var $_allow_unpublish = AMP_PERMISSION_TOOLS_ADMIN;
+    var $_allow_delete = AMP_PERMISSION_TOOLS_ADMIN;
 }
 
 ?>
