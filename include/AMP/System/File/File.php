@@ -133,7 +133,7 @@ class AMP_System_File {
         if ( isset( $filename_pattern)) {
             $regex_pattern_1 = str_replace( '.', '\.', $filename_pattern);  
             $regex_pattern   =    '/'
-                                . str_replace( '*' , '[0-9a-zA-Z\.-_ ]+' , $regex_pattern_1)  
+                                . str_replace( '*' , '[0-9a-zA-Z\.-_ ]?' , $regex_pattern_1)  
                                 . '/';
 
 
@@ -151,8 +151,10 @@ class AMP_System_File {
         $dir_contents = &AMP_cache_get( $folder_cache_key );
         if ( !$dir_contents ) {
 
+            $file_attempts_count =array( );
             while( $file_name = readdir( $folder )){
                 if (($file_name ==".") || ($file_name == "..")) continue; 
+                $file_attempts_count[$file_name] =1;
     /*
                 $this->_search_total++;
                 if ( isset( $this->_search_limit ) 
@@ -169,11 +171,13 @@ class AMP_System_File {
                 }
                 $result_set[ $file_name ] = &new $class_name( $folder_path . $file_name );
             }
+                trigger_error( 'reading dir contents ' . count( $file_attempts_count));
             //Cache Folder results for large searches
             if ( count( $result_set ) > 500 ) {
                 AMP_cache_set( $folder_cache_key, $result_set );
             }
         } else {
+            trigger_error( 'found dir contents ' . count( $dir_contents ));
             $result_set = &$dir_contents;
         }
         $this->sort( $result_set );
