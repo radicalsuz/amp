@@ -1,0 +1,115 @@
+<array>
+    <format_start>
+        <type>html</type>
+  <!--&lt;table width="100%" border="0" cellspacing="0" cellpadding="5"&gt;-->
+        <default>
+    <!--
+    &lt;tr&gt; 
+      &lt;td width="50%" valign="top"&gt;&lt;h3&gt;Read and Edit the Letter&lt;/h3&gt;&lt;/td&gt;
+
+    &lt;/tr&gt;
+    &lt;tr&gt; 
+-->
+    &lt;td&gt; 
+
+	&lt;div class=webaction_message&gt;
+    &lt;h3&gt;Read and Edit the Letter&lt;/h3&gt;
+    &lt;table&gt; 
+    &lt;tr&gt; 
+    &lt;td&gt; 
+        </default>
+    </format_start>
+    <subject>
+        <type>text</type>
+        <label>Subject</label>
+        <size>32</size>
+		<required>1</required>
+    </subject>
+    <target>
+        <type>checkgroup</type>
+        <label>Dear</label>
+        <lookup>
+            <module>webAction</module>
+            <instance>targets</instance>
+        </lookup>
+		<required>1</required>
+    </target>
+	<message>
+		<type>textarea</type>
+		<size>22:30</size>
+		<required>1</required>
+	</message>
+    <format_break>
+        <type>html</type>
+        <default>
+				&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;/table&gt;
+                Sincerely,&lt;br&gt; &lt;br&gt; &lt;i&gt; ( Your signature will be added &lt;br&gt;&amp;nbsp;&amp;nbsp;from the information 
+                you provide. )&lt;/i&gt;
+				&lt;/div&gt;
+				<!--
+				&lt;/td&gt;
+				&lt;td&gt;
+				-->
+				&lt;div class=webaction_form&gt;
+				&lt;h3&gt;Send the Message&lt;/h3&gt;
+				&lt;table&gt;
+				&lt;tr&gt;
+				&lt;td colspan=2&gt;
+		</default>
+    </format_break>
+    <channel>
+        <type>checkgroup</type>
+        <label>Send my message via</label>
+        <values>
+            <email>E-mail</email>
+            <fax>Fax</fax>
+        </values>
+    </channel>
+    <captcha_1>
+        <type>captcha</type>
+        <label>Enter the text &lt;br /&gt;in the image above</label>
+    </captcha_1>
+	<simple_header>
+		<type>html</type>
+		<default>
+				&lt;tr&gt;
+				&lt;td colspan=2&gt;
+				&lt;br /&gt;
+                &lt;B&gt;Already Taken Action? &lt;br&gt;
+                Just Enter Your Email and Send:&lt;/B&gt;
+				&lt;/td&gt;&lt;/tr&gt;
+        </default>
+	</simple_header>
+    <email_existing>
+        <type>text</type>
+        <label>Email</label>
+        <required>1</required>
+    </email_existing>
+    <existing>
+        <type>submit</type>
+        <label>Send</label>
+    </existing>
+	<new_header>
+		<type>html</type>
+		<default>
+				&lt;tr&gt;
+				&lt;td colspan=2&gt;
+				&lt;br /&gt;
+				&lt;hr&gt;
+				&lt;br /&gt;
+				&lt;/td&gt;&lt;/tr&gt;
+        </default>
+	</new_header>
+    <format_end>
+        <type>html</type>        
+        <default>
+    &lt;/td&gt; 
+    &lt;/tr&gt; 
+    &lt;/table&gt; 
+	&lt;/div&gt;
+        </default>
+    </format_end>
+
+</array>

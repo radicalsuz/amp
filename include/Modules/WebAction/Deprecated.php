@@ -106,5 +106,11 @@ class WebAction_Deprecated extends AMPSystem_Data_Item {
         $data['name'] = 'Action ' . ucfirst( $type ) . ': ' . $data['title'];
         return $data;
     }
+
+    function getURL( )   {
+        if ( !$this->id ) return AMP_CONTENT_URL_ACTION;
+        return AMP_url_add_vars( AMP_CONTENT_URL_ACTION, 'action='.$this->id );
+    }
+
 }
 ?>

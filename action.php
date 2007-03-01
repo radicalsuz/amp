@@ -1,13 +1,20 @@
 <?php
 
-$mod_id = 62;  
+$intro_id = 62;  
+$actionid = isset( $_REQUEST['action']) ? $_REQUEST['action'] : false; 
+if ( !$actionid ) {
+    $actionid = isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : false;
+}
+if ( !$actionid ) {
+    $actionid = isset( $_REQUEST['actionid'] ) ? $_REQUEST['actionid'] : false;
+}
 //$modid = 21;
 include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 //include("AMP/BaseModuleIntro.php");
 
 
-include("includes/emaillist_functions.php");
+include("emaillist_functions.php");
 
 
 function buildactionform($id,$error=NULL) {
@@ -71,10 +78,10 @@ function addFieldToCheck(value,name) {
           <TABLE CELLPADDING="2" CELLSPACING="2" bgcolor="#E1E1E1">
             <tr> 
               <td valign="top"> 
-                Subject:<BR> <input type="text" name="subjectText" size="42" style="width:225px" value="<?php if ($_POST[subjectText]) {echo $_POST[subjectText];} else { echo $act->Fields("subject"); }?>" > 
+                Subject:<BR> <input type="text" name="subjectText" size="42" style="width:225px" value="<?php if ($_POST['subjectText']) {echo $_POST['subjectText'];} else { echo $act->Fields("subject"); }?>" > 
                 <br></i>
                 <br>
-                Dear <?php echo $act->Fields("prefix")?>&nbsp;<?php echo $act->Fields("firstname")?>&nbsp;<?php echo $act->Fields("lastname")?>,<br> <br> <textarea name="Letter_Content" rows="22" cols="53" wrap="soft" style="width:250px"><?php if ($_POST[Letter_Content]) {echo $_POST[Letter_Content];} else { echo $act->Fields("text"); }?></textarea> 
+                Dear <?php echo $act->Fields("prefix")?>&nbsp;<?php echo $act->Fields("firstname")?>&nbsp;<?php echo $act->Fields("lastname")?>,<br> <br> <textarea name="Letter_Content" rows="22" cols="53" wrap="soft" style="width:250px"><?php if ($_POST['Letter_Content']) {echo $_POST['Letter_Content'];} else { echo $act->Fields("text"); }?></textarea> 
                 <br>
                 Sincerely,<br> <br> <i>Your signature will be added from the information 
                 you provide below.</i></td>
@@ -86,6 +93,23 @@ function addFieldToCheck(value,name) {
           <table border="0" cellpadding="0" cellspacing="2">
             <tr> 
               <td colspan="2" valign="top" class="form"><TABLE cellpadding=0 cellspacing=0>
+                <tr> 
+                  <td>
+                  <div align="left"> 
+                  First, enter the code from the image below 
+                        <span class='red'><font color = 'red'><?php print $GLOBALS['captcha_message']; ?></font></span><BR />
+                        <img src='<?php print AMP_url_add_vars( AMP_CONTENT_URL_CAPTCHA, array( 'key=' . AMP_SYSTEM_UNIQUE_VISITOR_ID ));?>'/>
+                  </div></td>
+                </tr>
+                <tr> 
+                  <td>
+                  <div align="left"> 
+                  <p>
+                      <input name="captcha" type="text" id="captcha" size="8"/>
+                      <input name='AMP_SYSTEM_UNIQUE_VISITOR_ID' type='hidden' value='<?php print AMP_SYSTEM_UNIQUE_VISITOR_ID; ?>'/>
+                    </p>
+                    </div></td>
+                </tr>
                   <tr> 
                     <td>  <B>Already Taken Action? <br>
                       Just Enter Your Email and Send:</B> </td>
@@ -99,7 +123,7 @@ function addFieldToCheck(value,name) {
                         <tr> 
                           <td> 
                             <?php if ($act->Fields("email")) { ?>
-                            <INPUT  type="checkbox"	NAME="Send_Email" checked> 
+                            <INPUT  type="checkbox"	NAME="'Send_Email'" checked> 
                             <span class="form">Send an Email</span> 
                             <?php } ?>
                             <?php if ($act->Fields("fax")) { ?>
@@ -126,7 +150,7 @@ function addFieldToCheck(value,name) {
             <tr> 
               <td valign="top"><div align="right">Title:&nbsp;</div></td>
               <td> <select name="Title" size="1" >
-  			  	<?php if ($_POST[Title]) {echo "<option>".$_POST[Title]."</option>";}?>
+  			  	<?php if ($_POST['Title']) {echo "<option>".$_POST['Title']."</option>";}?>
                   <option value=""SELECTED>Select Title 
                   <option value="Mr." >Mr. 
                   <option value="Ms." >Ms. 
@@ -143,33 +167,33 @@ function addFieldToCheck(value,name) {
             </tr>
             <tr> 
               <td valign="top"><div align="right"><nobr>First Name:&nbsp;</nobr></div></td>
-              <td> <input name="First_Name" type="text"  size="35" value="<?php echo $_POST[First_Name] ;?>" style="width:160px"> 
+              <td> <input name="First_Name" type="text"  size="35" value="<?php echo $_POST['First_Name'] ;?>" style="width:160px"> 
               </td>
             </tr>
             <tr> 
               <td valign="top"><div align="right"><nobr>Last Name:&nbsp;</nobr></div></td>
-              <td> <input name="Last_Name" type="text"  size="35" value="<?php echo $_POST[Last_Name] ;?>" style="width:165px"> 
+              <td> <input name="Last_Name" type="text"  size="35" value="<?php echo $_POST['Last_Name'] ;?>" style="width:165px"> 
               </td>
             </tr>
             <tr> 
               <td valign="top"><div align="right">Address:&nbsp;</div></td>
-              <td> <input name="Street" type="text"  size="35" value="<?php echo $_POST[Street] ;?>" style="width:165px"> 
+              <td> <input name="Street" type="text"  size="35" value="<?php echo $_POST['Street'] ;?>" style="width:165px"> 
               </td>
             </tr>
             <tr> 
               <td valign="top"><div align="right"></div></td>
-              <td> <input name="Street_2" type="text"  size="35" value="<?php echo $_POST[Street_2] ;?>" style="width:165px"> 
+              <td> <input name="Street_2" type="text"  size="35" value="<?php echo $_POST['Street_2'] ;?>" style="width:165px"> 
               </td>
             </tr>
             <tr> 
               <td valign="top"><div align="right">City:&nbsp;</div></td>
-              <td> <input name="City" type="text"  size="35" value="<?php echo $_POST[City] ;?>" style="width:165px"> 
+              <td> <input name="City" type="text"  size="35" value="<?php echo $_POST['City'] ;?>" style="width:165px"> 
               </td>
             </tr>
             <tr> 
               <td valign="top"><div align="right">State:&nbsp;</div></td>
               <td><nobr> <select TABINDEX=7 name="State" size="1">
-			  	<?php if ($_POST[State]) {echo "<option>".$_POST[State]."</option>";}?>
+			  	<?php if ($_POST['State']) {echo "<option>".$_POST['State']."</option>";}?>
                   <OPTION VALUE="">Select One...</option>
                   <OPTION VALUE="AL" >Alabama</OPTION>
                   <OPTION VALUE="AK" >Alaska</OPTION>
@@ -223,22 +247,22 @@ function addFieldToCheck(value,name) {
                   <OPTION VALUE="WI" >Wisconsin</OPTION>
                   <OPTION VALUE="WY" >Wyoming</OPTION>
                   <OPTION VALUE="">Other</OPTION>
-                </SELECT> &nbsp; <input name="State2" type="text" size="10" value="<?php echo $_POST[State2] ;?>" style="width:30px"></nobr>
+                </SELECT> &nbsp; <input name="State2" type="text" size="10" value="<?php echo $_POST['State2'] ;?>" style="width:30px"></nobr>
                 </td>
             </tr>
             <tr> 
               <td valign="top"><div align="right">Zip:&nbsp;</div></td>
-              <td> <input name="Zip" type="text" size="35" value="<?php echo $_POST[Zip] ;?>" style="width:165px"> 
+              <td> <input name="Zip" type="text" size="35" value="<?php echo $_POST['Zip'] ;?>" style="width:165px"> 
               </td>
             </tr>
             <tr> 
               <td valign="top"><div align="right">Country:&nbsp;</div></td>
-              <td> <input name="Country" type="text" id="Country" value="<?php echo $_POST[Country] ;?>"  size="35" style="width:165px"> 
+              <td> <input name="Country" type="text" id="Country" value="<?php echo $_POST['Country'] ;?>"  size="35" style="width:165px"> 
               </td>
             </tr>
             <tr> 
               <td valign="top"><div align="right">Phone:&nbsp;</div></td>
-              <td> <input name="Phone" type="text" id="Phone" size="35" value="<?php echo $_POST[Phone] ;?>" style="width:165px"> 
+              <td> <input name="Phone" type="text" id="Phone" size="35" value="<?php echo $_POST['Phone'] ;?>" style="width:165px"> 
               </td>
             </tr>
             <tr> 
@@ -302,13 +326,25 @@ function setckvalue($v) {
 		return $$v;
 	}
 	else {
-		$_REQUEST[kill_insert] = $_REQUEST[kill_insert]." ".$v;
+		$_REQUEST['kill_insert'] = $_REQUEST['kill_insert']." ".$v;
 		//buildactionform($_POST[actionid],$error_msg);
-		//$_REQUEST[kill_insert] ="1";
+		//$_REQUEST['kill_insert'] ="1";
 	}
 }
 
-if (isset($MM_insert)) {
+$captcha_valid = false;
+$captcha_message = '';
+if (isset($_POST['MM_insert'])&&$_POST['MM_insert']) {
+    require_once( 'AMP/Form/Element/Captcha.inc.php');
+    $captcha_demo = &new PhpCaptcha( array( ) );
+    $captcha_valid = $captcha_demo->Validate( $_POST['captcha']);
+    if ( !$captcha_valid ) {
+        $_REQUEST['kill_insert'] = 'captcha';
+        $captcha_message = AMP_TEXT_ERROR_FORM_CAPTCHA_FAILED;
+    }
+}
+
+if (isset($_REQUEST['MM_insert']) && $_REQUEST['MM_insert'] && $captcha_valid ) {
 	$getuser = getactionemail($_POST[old_EmailAddress]);
 
     if ($getuser->Fields("id")) {
@@ -336,7 +372,7 @@ if (isset($MM_insert)) {
 		$Street_2 = $_POST[Street_2];
 		$Country = $_POST[Country];
 		$Phone = setckvalue("Phone");
-		$Title = $_POST[Title];
+		$Title = $_POST['Title'];
 		if (!$_POST[State] && $_POST[State2]) { 
             $State = $_POST[State2];
         } else {
@@ -345,7 +381,7 @@ if (isset($MM_insert)) {
 	}		
 }
 
-if ((isset($MM_insert)) && (!$_REQUEST[kill_insert] ) ) {
+if ((isset($_REQUEST['MM_insert'])) && (!$_REQUEST['kill_insert'] ) ) {
 	    $MM_editTable  = "userdata";
 	    $modin =12;
 		$MM_fieldsStr =  "First_Name|value|Last_Name|value|Email|value|City|value|State|value|Zip|value|Street|value|Street_2|value|Country|value|Phone|value|Title|value|modin|value";
@@ -361,7 +397,7 @@ if ((isset($MM_insert)) && (!$_REQUEST[kill_insert] ) ) {
 #
 # Adds up to four email addresses to the user account.
 
-	if ($_POST[list1] ) { e_addemail($Email, $_POST[list1]); }
+	if ($_POST['list1'] ) { e_addemail($Email, $_POST['list1']); }
 	if ($_POST[list1] && $_POST[list2] ) { e_addemail($Email, $_POST[list2]); }
 	if ($_POST[list1] && $_POST[list3] ) { e_addemail($Email, $_POST[list3]); }
 	if ($_POST[list1] && $_POST[list4] ) { e_addemail($Email, $_POST[list4]); }
@@ -370,9 +406,9 @@ if ((isset($MM_insert)) && (!$_REQUEST[kill_insert] ) ) {
 #
 #insert into action history
 	$memberid = getmember($Email);
-	$actionid = $_POST[actionid];
-	$subject = $_POST[subject];
-	$text = $_POST[text];
+	$actionid = $_POST['actionid'];
+	$subject = $_POST['subject'];
+	$text = $_POST['text'];
 	$MM_editTable  = "action_history";
 	$MM_fieldsStr =  "actionid|value|memberid|value|subjectText|value|Letter_Content|value|date|value";
 	$MM_columnsStr = "actionid|',none,''|memberid|',none,''|subject|',none,''|text|',none,''|date|',none,now()";
@@ -382,7 +418,7 @@ if ((isset($MM_insert)) && (!$_REQUEST[kill_insert] ) ) {
 ##### mail to target
 # get send info
 
-	$actiondetails = $dbcon->Execute("select * from action_text where id = ".$_POST[actionid]." ") or DIE($dbcon->ErrorMsg());
+	$actiondetails = $dbcon->Execute("select * from action_text where id = ".$_POST['actionid']) or DIE($dbcon->ErrorMsg());
 
 # prepare email
 
@@ -406,10 +442,10 @@ $Title $First_Name $Last_Name \n";
 	}
      
 	 	 
-	if ($_POST[Send_Email] && ($emailemail != "vsform")) {mail($emailemail,$_POST[subjectText],$finalemail,$emailheaders);  }
-	if ($_POST[Send_Email] && ($emailemail == "vsform")) {
+	if ($_POST['Send_Email'] && ($emailemail != "vsform")) {mail($emailemail,$_POST['subjectText'],$finalemail,$emailheaders);  }
+	if ($_POST['Send_Email'] && ($emailemail == "vsform")) {
 		require_once( 'Modules/vsLetter.inc.php' );
-		$vsr = sendVSletter( $_POST[First_Name], $_POST[Last_Name], $_POST[Email], $finalemail );
+		$vsr = sendVSletter( $_POST['First_Name'], $_POST['Last_Name'], $_POST[Email], $finalemail );
 		if ( $vsr ) {
         	print "Success!";
 		} else {
@@ -418,7 +454,7 @@ $Title $First_Name $Last_Name \n";
 	}
 	
 	if ($_POST["Send_Fax"]) {mail($faxemail,$faxsubject,$finalemail,$faxheaders); }
-	if ($actiondetails->Fields("bcc")) {mail($actiondetails->Fields("bcc"),$_POST[subjectText],$finalemail,$temailheaders); }
+	if ($actiondetails->Fields("bcc")) {mail($actiondetails->Fields("bcc"),$_POST['subjectText'],$finalemail,$temailheaders); }
 	mail($Email,"Thank you for Taking Action",$finalemail,$temailheaders); 
 
 #go to tell a friend
@@ -430,13 +466,19 @@ $Title $First_Name $Last_Name \n";
 	}
  
 }
-if (($_POST[MM_insert]) && ($_REQUEST[kill_insert]) ) {
-	$error = "<p><b> <font color=red>Please fill the the following required fields: ".$_REQUEST[kill_insert]."</font></b></p>";
+if ( !$actionid ) {
+    require_once( 'Modules/WebAction/Public/ComponentMap.inc.php');
+    $map = new ComponentMap_WebAction_Public( );
+    $list = $map->getComponent( 'list');
+    print $list->execute( );
+}
+if (isset($_POST['MM_insert']) && ($_REQUEST['kill_insert'] && $actionid ) ) {
+	$error = "<p><b> <font color=red>Please fill the the following required fields: ".$_REQUEST['kill_insert']."</font></b></p>";
 	buildactionform($actionid,$error);
 }
 
-if ((!$_POST[MM_insert]) && (!$_REQUEST[kill_insert]) ) {
-	buildactionform($_GET[action]);
+if ((!isset( $_POST['MM_insert'])) && !isset($_REQUEST['kill_insert']) && $actionid ) {
+	buildactionform($actionid);
 }
 	
 include("AMP/BaseFooter.php");

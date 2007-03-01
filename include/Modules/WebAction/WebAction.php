@@ -78,6 +78,10 @@ class WebAction extends AMPSystem_Data_Item {
         return $result;
     }
 
+    function makeCriteriaLive( ) {
+        return ( 'status=1 and ( isnull( enddate ) or enddate = "0000-00-00" or enddate >= CURRENT_DATE )') ;
+    }
+
     function isLive( ){
         if ( !( $result = $this->getData( 'status'))) return false;
         return !$this->isExpired( );
