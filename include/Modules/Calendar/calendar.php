@@ -1,180 +1,287 @@
-<?php
+<?php 
+/*********************
+05-06-2003  v3.01
+Module:  Calendar
+Description:  displays the calendar
+CSS: go, title, text, eventsubtitle, eventtitle, 
+To Do: 
 
-require_once( 'AMP/System/Data/Item.inc.php');
-require_once( 'Modules/Calendar/Calendar.php');
+*********************/ 
 
-class Calendar extends AMPSystem_Data_Item {
+$mod_id = 57;
+$modid = 1;
+require_once("AMP/BaseDB.php"); 
+require_once("AMP/BaseTemplate.php"); 
+require_once("AMP/BaseModuleIntro.php");
 
-    var $datatable = "calendar";
-    var $name_field = "event";
-    var $_class_name = 'Calendar';
-    var $_exact_value_fields = array( 'id', 'typeid', 'region' );
-    var $_sort_auto = false;
-
-    function Calendar ( &$dbcon, $id = null ) {
-        $this->init( $dbcon, $id );
-    }
-
-    function _adjustSetData( $data ) {
-        $this->legacyFieldname( $data, 'lname2', 'Last_Name');
-        $this->legacyFieldname( $data, 'fname2', 'First_Name');
-        $this->legacyFieldname( $data, 'orgaznization2', 'Company');
-        $this->legacyFieldname( $data, 'address2', 'Street');
-        $this->legacyFieldname( $data, 'city2', 'City');
-        $this->legacyFieldname( $data, 'state2', 'State');
-        $this->legacyFieldname( $data, 'country2', 'Country');
-        $this->legacyFieldname( $data, 'zip2', 'Zip');
-        $this->legacyFieldname( $data, 'email2', 'Email');
-        $this->legacyFieldname( $data, 'phone2', 'Work_Phone');
-    }
-
-    function getState( ) {
-        return $this->getData( 'lstate' );
-    }
-
-    function getDate( ) {
-        return $this->getData( 'date');
-    }
-
-    function _sort_default( &$item_set ) {
-        $this->sort( $item_set, 'date', AMP_SORT_DESC );
-    }
-
-    function makeCriteriaEvent_type( $type_id ) {
-        return "typeid=" . $type_id;
-    }
-
-    function makeCriteriaCurrent( $value ) {
-        if ( $value === FALSE ) return TRUE;
-        return "date >= CURRENT_DATE";
-    }
-
-    function makeCriteriaFront_page( $fpevent_value ) {
-        if ( $fpevent_value === FALSE ) {
-            return "TRUE";
-        }
-        return "fpevent=" && $fpevent_value;
-    }
-
-    function makeCriteriaState( $state_abbrev ) {
-        $dbcon = AMP_Registry::getDbcon( );
-        return "lstate = " . $dbcon->qstr( $state_abbrev );
-    }
-
-    function makeCriteriaRepeat( $value) {
-        if ( $value === FALSE ) {
-            return "TRUE";
-        }
-        return $this->_makeCriteriaEquals( 'repeat', $value );
-    }
-
-    function makeCriteriaStudent( $student_value ) {
-        if ( $student_value === FALSE ) {
-            return "TRUE";
-        }
-        return $this->_makeCriteriaEquals( 'student', $student_value );
-    }
-
-    function makeCriteriaDate ( $date_value ) {
-        if ( !is_array( $date_value ) && $date_value ) {
-            return "UNIX_TIMESTAMP( date ) = " . $date_value;
-        }
-        $partial_date_crit = array( );
-        if ( isset( $date_value['Y']) && $date_value['Y'] ) {
-            $partial_date_crit[] = 'YEAR( date ) = ' .$date_value['Y'];
-        }
-        if ( isset( $date_value['M']) && $date_value['M'] ) {
-            $partial_date_crit[] = 'MONTH( date ) = ' . $date_value['M'];
-        }
-        if ( isset( $date_value['d']) && $date_value['d'] ) {
-            $partial_date_crit[] = 'DAY( date ) = ' . $date_value['d'];
-        }
-        if ( empty( $partial_date_crit )) return 'TRUE';
-        return join( ' AND ', $partial_date_crit );
-    }
-
-    function makeCriteriaArea( $state_id ) {
-        $states_lookup = AMP_lookup( 'states') ;
-        if ( !isset( $states_lookup[$state_id] )) return 'TRUE';
-        $dbcon = AMP_Registry::getDbcon( );
-        return '( lstate='. $dbcon->qstr( $states_lookup[ $state_id ]) . ' OR lstate= '.$state_id.')';
-    }
-
-    function getSection( ) {
-        return $this->getData( 'section' );
-    }
-
-    function getURL( ) {
-        return AMP_url_add_vars( AMP_CONTENT_URL_EVENT, array( 'id=' . $this->id ));
-    }
-
-    function makeCriteriaLive( ) {
-        return 'publish=1';
-    }
-
-    function makeCriteriaOld( $value ) {
-        if ( $value == 1 ) {
-            return 'date <= CURRENT_DATE';
-        }
-        return 'TRUE';
-    }
-
-    function getShortLocation( ) {
-        $basic_loc = $this->getData( 'lcity');
-        $renderer = AMP_get_renderer( );
-        $state = $this->getData( 'lstate' );
-        $region_desc = false;
-        if ( is_numeric( $state )) {
-            $state_listing  = AMP_lookup( 'statenames');
-            if ( !isset( $state_listing[ $state ])) {
-                return $basic_loc;
-            }
-            $region_desc = $state_listing[ $states ];
-        } elseif ( $state ) {
-            $state_listing = AMP_lookup( 'regions_US_and_Canada');
-            if ( isset( $state_listing['state'])) {
-                $region_desc = $state_listing[ $state ];
-            } else {
-                $region_desc = $state;
-            }
-        }
-        if ( !$region_desc || $region_desc == 'International') {
-            $country = $this->getData( 'lcountry');
-            $country_listing = AMP_lookup( 'regions_World');
-            if ( isset( $country_listing[$country ])) {
-                $region_desc = $country_listing[ $country ];
-            } else {
-                $region_desc = $country;
-            }
-        }
-        return ucwords( $basic_loc . ','. $renderer->space( ) . $region_desc );
-    }
-
-    function getItemDate( ) {
-        return $this->getData( 'date');
-    }
-
-    function getBlurb( ) {
-        return $this->getData( 'shortdesc');
-    }
-
-    function getBody( ) {
-        return $this->getData( 'fulldesc');
-    }
-
-    function getCountry( ) {
-        return $this->getData( 'lcountry' );
-    }
-
-    function getCountryName( ) {
-        if ( !( $result = $this->getCountry( ))) return false;
-        $countries = AMP_lookup( 'regions_World');
-        if ( !isset( $countries[ $result ])) {
-            return $result;
-        }
-        return $countries[ $result ];
-    }
-
+//$bydate= $_GET[bydate];
+//$caltype = $caltype;
+//$area = $_GET['area'];
+//$calid = $_GET['calid'];
+if (isset($_GET['area'])) {
+	if ($nonstateregion !=1) {
+		$sqlarea = " and lstate = ".$_GET['area']." " ;
+		$area=$dbcon->CacheExecute("SELECT statename from states where id = ".$_GET['area']."") or DIE($dbcon->ErrorMsg());
+	} else {  
+		$area=$dbcon->CacheExecute("SELECT title as statename from region where id = ".$_GET['area']."") or DIE($dbcon->ErrorMsg());
+		$sqlarea = " and region = ".$_GET['area']." " ;
+	}
 }
 
+if (isset($caltype)  and ($caltype != "By Event Type") and ($caltype != "student")) {
+	$sqltype = "and typeid = $caltype";
+}
+
+if ($caltype == "student") {
+	$sqltype = "and student = 1";
+}
+
+if (1 == $_REQUEST['old']) {
+	$sqldate = " and calendar.date <=  CURDATE()" ;
+} else if ("all" == $_REQUEST['old']) {
+	$sqldate = "" ;
+} else if ($caltype == "8") {
+	$sqldate = "" ;
+} else {
+	$sqldate = " and calendar.date >=  CURDATE()" ;
+}
+ 
+$repeatvar = "repeat = 0 and";
+if (isset($_GET['calid'])) {
+	$sqlid = "and calendar.id = $calid" ;
+	$sqldate = " " ;
+	$repeatvar ="";
+}
+ 
+if (isset($bydate) and ($bydate != "By Date (ex 01-28-03)")) {
+	if ((ereg ("([0-9]{1,2})-([0-9]{1,2})-([0-9]{2})", $bydate, $regs)) ) {
+		$bydate2 = $bydate;
+		$bydate = "$regs[3]$regs[1]$regs[2]";
+	}
+	$sqldate = "and calendar.date = $bydate" ;
+	$sqldate2 =$sqldate;
+}
+
+$event=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id, calendar.shortdesc  ,calendar.contact1  , calendar.event ,calendar.time ,calendar.date ,calendar.fulldesc ,calendar.email1 ,calendar.location ,calendar.org ,calendar.url ,calendar.typeid ,calendar.lcity ,calendar.lstate, calendar.lzip, calendar.phone1, calendar.laddress ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and  $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid order by calendar.date, calendar.lcity, calendar.lstate asc") or DIE($dbcon->ErrorMsg());
+
+$revent=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id, calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry, states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and repeat=1 and publish=1 $sqldate2 $sqlarea  $sqltype $sqlid order by calendar.date, calendar.event asc") or DIE($dbcon->ErrorMsg());
+
+$event_numRows=0;
+$event__totalRows=$event->RecordCount();
+$revent_numRows=0;
+$revent__totalRows=$revent->RecordCount();
+
+$typelist=$dbcon->CacheExecute("SELECT id, name from eventtype order by name asc");
+
+if ($searchon == 1) {
 ?>
+ <form name="form1" method="post" action="calendar.php<?php if  (isset($_GET["area"])){?>?area=<?php echo $_GET['area']; }?>" class="go">Search the Calendar<br> &nbsp;&nbsp;&nbsp;<select name="caltype" id="bytype" class="go">
+<option selected>By Event Type </option>
+<?php while (!$typelist->EOF) { ?>
+<option value="<?php echo $typelist->Fields("id"); ?>"><?php echo $typelist->Fields("name"); ?></option>
+  <?php $typelist->MoveNext();}?>
+  </option>
+<?php if ($studenton == "1") { ?>
+<option value="student">Student</option>
+<?php } ?>
+  </select>
+  &nbsp; or&nbsp;&nbsp; 
+  <input name="bydate" type="text" id="bydate" value="By Date (ex 01-28-03)" size="25" class="go">
+  <input name="Search" type="submit" id="Search" value="Search" class="go">
+     
+</form>
+<p> 
+<?php } ?>
+  <?php if  (isset($_GET["area"])) { ?>
+  <span class="title"><?php echo $area->Fields("statename"); ?> Events</span><br>
+  <br>
+  <?php
+$area->Close();}
+if  (isset($caltype) and ($caltype == "student")) { ?><span class="title">Student Events</span><br>
+  <br><?php }
+  elseif  (isset($caltype) && ($caltype != "By Event Type")) { ?><span class="title"><?php echo $event->Fields("name"); ?></span><br>
+  <br><?php }
+    elseif  (isset($bydate) && ($bydate != "By Date (ex 01-28-03)")) { ?><span class="title"><?php echo "Events On ".$bydate2 ; ?></span><br>
+  <br> <?php }
+
+
+ if  (isset($_GET["area"])) { //start area called
+ if (($revent__totalRows == 0) && ($event__totalRows == 0)){ //start failed area called?>
+</p>
+<p class="text">There are currently no events planned in this area.</p>
+<?php }//end failed area called
+ } //end areacalled?>
+ 
+ 
+<?php if  (isset($caltype) && ($caltype != "By Event Type")) { //start type called
+if ($event->Fields("event") == ($null)) { //start failed type called?>
+<p class="text">There are currently no events of this type planned.</p>
+<?php }//end failed type called
+ } //end typecalled
+
+ function AMP_old_Calendar_getRegionDescription( &$event ){
+    $statename = $event->Fields( 'statename');
+    if ( $statename != 'International') return $statename;
+    static $country_list = false;
+    if ( !$country_list ) {
+        require_once( 'AMP/Region.inc.php');
+        $region = &new Region( );
+        $country_list = $region->getSubRegions( 'WORLD');
+    }
+    if ( isset( $country_list[ $event->Fields( 'lcountry')])){
+        return $country_list [ $event->Fields( 'lcountry') ];
+    }
+    return $event->Fields('lcountry');
+ }
+//start calendar 
+####################################called event#######################################
+if (isset($calid)) { 
+    $region_description = AMP_old_Calendar_getRegionDescription( $event );
+    ?>
+<p><span class="title"><?php echo $event->Fields("event")?></span><br>
+ <span class="eventsubtitle"><?php echo DoDate( $event->Fields("date"), 'l, F jS Y') ?>&nbsp;<?php echo $event->Fields("time")?> <br>
+ <?php echo $event->Fields("lcity")?>,&nbsp;<?php echo $region_description; ?> </span><br><br>
+  <span class="text"> <?php if (($event->Fields("shortdesc") != ($null)) && ($event->Fields("fulldesc") == ($null))) { ?>
+  <?php echo converttext( $event->Fields("shortdesc"));?><br><?php }?>
+  <?php echo (converttext($event->Fields("fulldesc"))); ?><br>
+  <?php if ($event->Fields("location") != ($null)) { ?>
+  <br><br><b>Location:&nbsp;</b><br><?php echo $event->Fields("location")?>&nbsp;<?php echo $event->Fields("laddress")?>&nbsp;<?php echo $event->Fields("lcity")?>&nbsp;<?php echo $region_description; ?>&nbsp;<?php echo $event->Fields("lzip")?>&nbsp; 
+  <?php }?>
+  <?php if (($event->Fields("contact1") != ($null)) or ($event->Fields("phone1") != ($null)) or ($event->Fields("email1") != ($null)) ) { ?>
+  <br><br>
+  <b>Contact:</b>
+  <?php }?>
+  <?php if ($event->Fields("contact1") != ($null)) { ?><br><?php echo $event->Fields("contact1")?><?php } ?>
+  <?php if ($event->Fields("email1") != ($null)) { ?><br><a href="mailto:<?php echo $event->Fields("email1")?>"> 
+  <?php echo $event->Fields("email1")?></a> <?php } ?>
+   <?php if ($event->Fields("phone1") != ($null)) { ?><br><?php echo $event->Fields("phone1")?><?php } ?> 
+   
+  <?php if ($event->Fields("org") != ($null)) { ?>
+    <br><br><b>Sponsored By:</b><br><?php echo $event->Fields("org")?> 
+  <?php }?>
+  <?php if (($event->Fields("url") != ($null)) and ($event->Fields("url") != ("http://")))  { ?>
+  <a href="<?php echo $event->Fields("url")?>"><?php echo $event->Fields("url")?></a> 
+  <?php }?>
+  </span></p>
+<?php } 
+###############################sorted by area ################################################
+elseif (isset($area)) { 
+ 
+ $eventcountry=$dbcon->CacheExecute("SELECT distinct calendar.lcountry  FROM calendar  where repeat!=1 and publish=1 $sqldate $sqlarea  $sqltype $sqlid  order by calendar.lcountry asc") or DIE($dbcon->ErrorMsg());
+   while (!$eventcountry->EOF) 
+   { 
+     $calledcountry = $eventcountry->Fields("lcountry");
+   if ( $calledcountry != "USA") {  
+   echo "<br><b><big><font color=red>".$eventcountry->Fields("lcountry")."</font></big></b><br>";
+ }
+ 
+ 
+   $eventcity=$dbcon->CacheExecute("SELECT distinct calendar.lcity, calendar.lcountry FROM calendar  where repeat!=1 and publish=1  $sqldate $sqlarea  $sqltype $sqlid and calendar.lcountry='$calledcountry' order by calendar.lcountry, calendar.lcity asc") or DIE($dbcon->ErrorMsg());
+   
+       while (!$eventcity->EOF) 
+   { 
+   $calledcity = $eventcity->Fields("lcity");
+   $event2=$dbcon->CacheExecute("SELECT eventtype.name , calendar.id,
+calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry,  calendar.lstate, states.statename   FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and $repeatvar publish=1 $sqldate  $sqlarea $sqltype $sqlid and calendar.lcity = '".$calledcity."'  order by calendar.date, calendar.lcity, calendar.lstate asc") or DIE($dbcon->ErrorMsg());
+
+   echo "<br><b><big>".$event2->Fields("lcity");
+     if ($event2->Fields("lstate") == "53") { echo ",&nbsp;".$event2->Fields("lcountry");  }
+	  echo "</big></b><br>";
+   while (!$event2->EOF) 
+   { 
+?>
+<br><a href="calendar.php?calid=<?php echo $event2->Fields("id")?>" class="eventtitle"><?php echo $event2->Fields("event")?></a><br>
+ </b>
+  <span class="eventsubtitle"><?php echo DoDate( $event2->Fields("date"), 'l, F jS Y') ?>&nbsp;<?php echo $event2->Fields("time")?></span> 
+  <span class="text"> 
+  <?php if ($event2->Fields("shortdesc") != (NULL)) { ?>
+  <br>
+  <?php echo converttext( $event2->Fields("shortdesc")); }?></span><br>
+<?php
+
+  $event2->MoveNext();
+} 
+  $eventcity->MoveNext();
+} 
+   $eventcountry->MoveNext();
+}  ?>
+<?php if ($revent__totalRows != 0 ){?><h3>Weekly, Monthly or other Repeating Events</h3><?php } ?>
+<?php 
+$reventcountry=$dbcon->CacheExecute("SELECT distinct calendar.lcountry  FROM calendar  where repeat=1 and publish=1 $sqldate2 $sqlarea  $sqltype $sqlid  order by calendar.lcountry asc") or DIE($dbcon->ErrorMsg());
+    while (!$reventcountry->EOF) 
+   { 
+     $rcalledcountry = $reventcountry->Fields("lcountry");
+   if ( $rcalledcountry != "USA") {  
+   echo "<br><b><big><font color=red>".$reventcountry->Fields("lcountry")."</font></big></b><br>";
+ }
+   $reventcity=$dbcon->CacheExecute("SELECT distinct calendar.lcity, calendar.lcountry FROM calendar  where repeat=1 and publish=1 and calendar.lcountry='$rcalledcountry' $sqldate2 $sqlarea  $sqltype $sqlid order by calendar.lcountry, calendar.lcity asc") or DIE($dbcon->ErrorMsg());
+   
+    while (!$reventcity->EOF) 
+   { 
+   $rcalledcity = $reventcity->Fields("lcity");
+    echo "<br><b><big>".$rcalledcity."</big></b><br>";
+   $revent2=$dbcon->CacheExecute("SELECT eventtype.name, calendar.id,
+calendar.shortdesc, calendar.event ,calendar.time ,calendar.date ,calendar.typeid ,calendar.lcity ,calendar.lcountry,  states.statename  FROM calendar, states, eventtype where calendar.lstate = states.id and calendar.typeid = eventtype.id and repeat=1 and publish=1 $sqldate2 $sqlarea  $sqltype $sqlid and calendar.lcity = '".$rcalledcity."'  order by calendar.date asc") or DIE($dbcon->ErrorMsg());
+  
+   while (!$revent2->EOF) 
+   { 
+   
+?>
+<br><a href="calendar.php?calid=<?php echo $revent2->Fields("id")?>" class="eventtitle"><?php echo $revent2->Fields("event")?></a><br>
+ </b>
+  <span class="eventsubtitle"><?php echo $revent2->Fields("time")?></span> 
+  <span class="text"> 
+  <?php if ($revent2->Fields("shortdesc") != (NULL)) { ?>
+  <br>
+  <?php echo converttext( $revent2->Fields("shortdesc")); }?></span><br>
+<?php
+ 
+  $revent2->MoveNext();
+}
+$reventcity->MoveNext();
+} 
+  $reventcountry->MoveNext();
+} 
+}
+###############################DEFAULT LIST LAYOUT #############################################
+else {
+ while (!$event->EOF) 
+   { 
+    $region_description = AMP_old_Calendar_getRegionDescription( $event );
+?>
+<br><a href="calendar.php?calid=<?php echo $event->Fields("id")?>" class="eventtitle"><?php echo $event->Fields("lcity")?>,&nbsp;<?php echo $region_description;?>: <?php echo $event->Fields("event")?></a><br>
+ </b>
+  <span class="eventsubtitle"><?php echo DoDate( $event->Fields("date"), 'l, F jS Y') ?>&nbsp;<?php echo $event->Fields("time")?></span> 
+  <span class="text"> 
+  <?php if ($event->Fields("shortdesc") != (NULL)) { ?>
+  <br>
+  <?php echo converttext( $event->Fields("shortdesc")); }?></span><br>
+<?php
+
+  $event->MoveNext();
+} ?>
+<?php if ($revent__totalRows != 0 ){?><h3>Weekly, Monthly or other Repeating Events</h3><?php } ?>
+<?php while (!$revent->EOF) 
+   { 
+    $region_description = AMP_old_Calendar_getRegionDescription( $revent );
+   
+?>
+<br><a href="calendar.php?calid=<?php echo $revent->Fields("id")?>" class="eventtitle"><?php echo $revent->Fields("lcity")?>,&nbsp;<?php echo $region_description; ?>: <?php echo $revent->Fields("event")?></a><br>
+ </b>
+  <span class="eventsubtitle"><?php echo $revent->Fields("time")?></span> 
+  <span class="text"> 
+  <?php if ($revent->Fields("shortdesc") != (NULL)) { ?>
+  <br>
+  <?php echo converttext( $revent->Fields("shortdesc")); }?></span><br>
+<?php
+ 
+  $revent->MoveNext();
+}
+   
+}//end not called
+#################################################################################################
+
+  $event->Close();
+  $revent->Close();
+   
+ require_once("AMP/BaseFooter.php"); ?>

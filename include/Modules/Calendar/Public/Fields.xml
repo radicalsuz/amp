@@ -1,0 +1,191 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<event>;
+		<type>text</type>
+		<label>Event Name</label>
+        <required>1</required>
+	</event>
+    <typeid>
+        <type>select</type>
+        <label>Type</label>
+        <required>1</required>
+        <lookup>eventTypes</lookup>
+    </typeid>
+	<date>
+		<type>date</type>
+		<label>Event Date</label>
+        <default>next week</default>
+        <required>1</required>
+	</date>
+	<time>
+		<type>text</type>
+		<label>Event Time</label>
+	</time>
+    <repeat>
+        <type>checkbox</type>
+        <label>Weekly or Repeating Event</label>
+    </repeat>
+    <cost>
+        <type>text</type>
+        <size>6</size>
+        <label>Event Cost</label>
+    </cost>
+	<url>
+		<type>text</type>
+		<label>Website</label>
+	</url>
+    <!--
+	<student>
+		<type>checkbox</type>
+		<label>Student Event</label>
+	</student>
+    -->
+	<shortdesc>
+		<type>textarea</type>
+		<label>Brief Description of the Event</label>
+        <required>1</required>
+        <size>10:50</size>
+	</shortdesc>
+	<fulldesc>
+		<type>textarea</type>
+		<label>Full Description of the Event ( optional )</label>
+        <size>25:50</size>
+	</fulldesc>
+	<org>
+		<type>textarea</type>
+		<label>Endorsing Organizations ( if any )</label>
+        <size>5:50</size>
+	</org>
+    <contact_header>
+        <type>header</type>
+        <label>Public Contact Information</label>
+    </contact_header>
+	<contact1>
+		<type>text</type>
+		<label>Contact Name</label>
+        <required>1</required>
+	</contact1>
+	<email1>
+		<type>text</type>
+		<label>Contact Email</label>
+        <required>1</required>
+	</email1>
+	<phone1>
+		<type>text</type>
+		<label>Contact Phone</label>
+	</phone1>
+    <!--
+	<enddate>
+		<type>date</type>
+		<label>Enddate</label>
+
+        <default>today</default>
+	</enddate>
+	<areaID>
+		<type>text</type>
+		<label>AreaID</label>
+	</areaID>
+    -->
+    <location_header>
+        <type>header</type>
+        <label>Event Location</label>
+    </location_header>
+	<location>
+		<type>textarea</type>
+		<label>Event Location</label>
+        <size>2:50</size>
+	</location>
+	<laddress>
+		<type>text</type>
+		<label>Event Street Address</label>
+	</laddress>
+	<lcity>
+		<type>text</type>
+		<label>Event City</label>
+        <required>1</required>
+	</lcity>
+	<lstate>
+		<type>select</type>
+		<label>Event State</label>
+        <lookup>regions_US_and_Canada</lookup>
+        <required>1</required>
+	</lstate>
+	<lzip>
+		<type>text</type>
+		<label>Event Zip</label>
+        <size>10</size>
+	</lzip>
+	<region>
+		<type>select</type>
+		<label>Region</label>
+        <lookup>regions</lookup>
+	</region>
+	<lcountry>
+		<type>select</type>
+        <lookup>regions_World</lookup>
+		<label>Event Country</label>
+        <required>1</required>
+	</lcountry>
+    <user_contact_header>
+        <type>header</type>
+        <label>The following information is for our staff&lt;br /&gt; and will not be listed on the website, &lt;br /&gt;unless it is the same as the information above.</label>
+    </user_contact_header>
+	<First_Name>
+		<type>text</type>
+		<label>First Name</label>
+	</First_Name>
+	<Last_Name>
+		<type>text</type>
+		<label>Last Name</label>
+	</Last_Name>
+	<Company>
+		<type>text</type>
+		<label>Organization ( if any )</label>
+	</Company>
+	<Street>
+		<type>text</type>
+		<label>Address</label>
+	</Street>
+	<City>
+		<type>text</type>
+		<label>City</label>
+	</City>
+	<State>
+		<type>select</type>
+		<label>State</label>
+        <lookup>regions_US_and_Canada</lookup>
+	</State>
+	<Zip>
+		<type>text</type>
+		<label>Postal Code/Zip</label>
+        <size>10</size>
+	</Zip>
+	<Country>
+		<type>select</type>
+		<label>Country</label>
+        <lookup>regions_World</lookup>
+	</Country>
+	<Phone>
+		<type>text</type>
+		<label>Phone</label>
+	</Phone>
+	<Email>
+		<type>text</type>
+		<label>Email</label>
+        <rules>
+            <item>
+                <type>email</type>
+                <message>Must be a valid email address</message>
+            </item>
+        </rules>
+	</Email>
+    <humanity_test>
+        <type>captcha</type>
+        <label>Enter the text from the image above</label>
+        <required>1</required>
+    </humanity_test>
+
+</array>
+

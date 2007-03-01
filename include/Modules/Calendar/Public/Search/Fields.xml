@@ -1,0 +1,32 @@
+<array>
+	<state>
+		<type>select</type>
+		<label>By State</label>
+		<lookup>regions_US_and_Canada</lookup>
+	</state>
+    <region>
+        <type>select</type>
+        <label>By Region</label>
+        <lookup>regions</lookup>
+    </region>
+	<event_type>
+		<type>select</type>
+		<label>By Event Type</label>
+		<lookup>eventtypes</lookup>
+	</event_type>
+	<date>
+		<separator>newrow</separator>
+		<type>date</type>
+		<label> Date: </label>
+		<options>
+			<addEmptyOption>1</addEmptyOption>
+			<emptyOptionText>--</emptyOptionText>
+			<format>YM</format>
+		</options>
+    </date>
+    <current>
+        <type>checkbox</type>
+        <label>Upcoming Events Only</label>
+        <default>1</default>
+    </current>
+</array>

@@ -1,0 +1,69 @@
+<array>
+	<id>
+		<type>text</type>
+		<label>ID</label>
+		<size>4</size>
+	</id>
+	<state>
+		<type>select</type>
+		<label>By State</label>
+		<lookup>regions_US_and_Canada</lookup>
+		<attr><class>searchform_element</class></attr>
+	</state>
+	<event_type>
+		<type>select</type>
+		<label>By Event Type</label>
+		<lookup>eventtypes</lookup>
+		<attr><class>searchform_element</class></attr>
+	</event_type>
+    <publish>
+        <type>select</type>
+        <label>Status</label>
+        <lookup>
+            <module>constant</module>
+            <instance>status</instance>
+        </lookup>
+    </publish>
+	<date>
+		<separator>newrow</separator>
+		<type>date</type>
+		<label> By&amp;nbsp;Date: </label>
+		<options>
+			<addEmptyOption>1</addEmptyOption>
+			<emptyOptionText>--</emptyOptionText>
+			<format>YMd</format>
+		</options>
+		<attr><class>searchform_element</class></attr>
+	</date>
+	<event>
+		<label>Event Name</label>
+		<type>text</type>
+		<size>25</size>
+		<attr>
+			<class>searchform_element</class>
+			<id>event</id>
+		</attr>
+		<template>
+			{element}
+			&lt;div class="auto_complete" id="event_list"&gt;&lt;/div&gt;
+		</template>
+	</event>
+	<current>
+		<separator>newrow</separator>
+		<type>checkbox</type>
+		<label>Current Event</label>
+		<default>1</default>
+	</current>
+	<front_page>
+		<type>checkbox</type>
+		<label>Front Page</label>
+	</front_page>
+	<student>
+		<type>checkbox</type>
+		<label>Student</label>
+	</student>
+	<repeat>
+		<type>checkbox</type>
+		<label>Repeating</label>
+	</repeat>
+</array>
