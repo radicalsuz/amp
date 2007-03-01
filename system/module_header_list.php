@@ -1,5 +1,5 @@
 <?php
-/**/
+
 require_once( 'AMP/System/Base.php');
 
 $tool_id = isset( $_GET['modid'] ) && $_GET['modid'] ? $_GET['modid'] :false;

@@ -102,7 +102,9 @@ class PermissionGroup extends AMPSystem_Data_Item {
 
         $section_list = AMP_lookup( 'sectionMap' );
 
-        return array_combine_key( array_keys( AMP_lookup( 'sectionMap')), $allowed_sections );
+        $result = array_combine_key( array_keys( AMP_lookup( 'sectionMap')), $allowed_sections );
+        trigger_error( 'got settings ' . count( $result ));
+        return $result;
 
     }
 

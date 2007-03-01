@@ -9,6 +9,13 @@ class ComponentMap_Calendar extends AMPSystem_ComponentMap {
     var $_action_default = 'list';
     var $_allow_search = true;
 
+    var $_allow_add = AMP_PERMISSION_CALENDAR_ACCESS;
+    var $_allow_edit = AMP_PERMISSION_CALENDAR_ACCESS;
+    var $_allow_list = AMP_PERMISSION_CALENDAR_ACCESS;
+    var $_allow_delete = AMP_PERMISSION_CALENDAR_DELETE;
+    var $_allow_publish = AMP_PERMISSION_CALENDAR_PUBLISH;
+    var $_allow_unpublish = AMP_PERMISSION_CALENDAR_PUBLISH;
+
     var $paths = array( 
         'fields' => 'Modules/Calendar/Fields.xml',
         'list'   => 'Modules/Calendar/List.inc.php',

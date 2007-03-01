@@ -30,6 +30,8 @@ $template->setPage( $current_page );
 $template->globalizeNavLayout();
 $nav_manager = &new NavigationManager( $template, $current_page );
 $nav_output = $nav_manager->output( strtoupper( substr( $position, 0, 1 )));
+
+/*
 $url = AMP_SITE_URL;
 
 $pattern = '/href\s?=\s?\'((?!http)[\w\d\.\/?=& -]*)\'/i';
@@ -38,26 +40,21 @@ $data =  preg_replace($pattern, $replace, $nav_output);
 
 $pattern = '/href\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
 $replace = 'href="'.$url.'/$1"';
-$data =  preg_replace($pattern, $replace, $nav_output);
+$data =  preg_replace($pattern, $replace, $data);
 
-$pattern = '/src ="((?!http)[\w\d\.\/?=& -]*)"/i';
+$pattern = '/src\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
 $replace = 'src="'.$url.'/$1"';
 $data =  preg_replace($pattern, $replace, $data);
 
-$pattern = '/src="((?!http)[\w\d\.\/?=& -]*)"/i';
+$pattern = '/src\s?=\s?\'((?!http)[\w\d\.\/?=& -]*)\'/i';
 $replace = 'src="'.$url.'/$1"';
 $data =  preg_replace($pattern, $replace, $data);
 
-$pattern = '/src=\'((?!http)[\w\d\.\/?=& -]*)\'/i';
-$replace = 'src="'.$url.'/$1"';
-$data =  preg_replace($pattern, $replace, $data);
-
-
-$pattern = '/background="((?!http)[\w\d\.\/?=& -]*)"/i';
+$pattern = '/background\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
 $replace = 'background="'.$url.'/$1"';
 $data =  preg_replace($pattern, $replace, $data);
 
-$pattern = '/action="((?!http)[\w\d\.\/?=& -]*)"/i';
+$pattern = '/action\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
 $replace = 'action="'.$url.'/$1"';
 $data =  preg_replace($pattern, $replace, $data);
 
@@ -67,10 +64,14 @@ $data =  preg_replace($pattern, $replace, $data);
 
 $pattern = array( "\r", "\n" );
 $finalPageHtml =  str_replace($pattern, '', $data);
+*/
+
+$finalPageHtml = AMP_absolute_urls( $nav_output );
 
 if ( $format == 'js' ) {
     $nav_id = $position . mt_rand( 1000, 10000 );
-    $finalPageHtml = 'var '.$nav_id.'=  { value: \''. str_replace( "'", "\'", $finalPageHtml ) . "'};\ndocument.write( ".$nav_id.".value );";
+    $finalPageHtml = AMP_js_write( $finalPageHtml, $nav_id );
+    //$finalPageHtml = 'var '.$nav_id.'=  { value: \''. str_replace( "'", "\'", $finalPageHtml ) . "'};\ndocument.write( ".$nav_id.".value );";
 
 }
 print $finalPageHtml;

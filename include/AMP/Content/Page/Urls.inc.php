@@ -15,7 +15,7 @@ if ( !defined( 'AMP_CONTENT_URL_ARTICLE_INPUT'))    define ( 'AMP_CONTENT_URL_AR
 
 if ( !defined( 'AMP_CONTENT_URL_FORM' ))            define ( 'AMP_CONTENT_URL_FORM',         'modinput4.php');
 if ( !defined( 'AMP_CONTENT_URL_FORM_DISPLAY'))     define ( 'AMP_CONTENT_URL_FORM_DISPLAY', 'userdata_display.php');
-if ( !defined( 'AMP_CONTENT_URL_ACTION'))           define ( 'AMP_CONTENT_URL_ACTION',       'action_center.php');
+if ( !defined( 'AMP_CONTENT_URL_ACTION'))           define ( 'AMP_CONTENT_URL_ACTION',       'action.php');
 if ( !defined( 'AMP_CONTENT_URL_GALLERY'))          define ( 'AMP_CONTENT_URL_GALLERY',      'gallery.php');
 
 if ( !defined( 'AMP_CONTENT_URL_VOLUNTEERS' ))      define ( 'AMP_CONTENT_URL_VOLUNTEERS', 'modinput4.php?modin=8' );

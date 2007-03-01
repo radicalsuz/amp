@@ -218,3 +218,22 @@ div.userdata_pager_footer {
     padding-top:2px;
     background-color:#E5E5E5;
 }
+
+.name {
+	font-size: 11px;
+	text-align: left;
+}
+
+div.webaction_message {
+	background-color: #e1e1e1;
+	float: left;
+	padding: .5em;
+	margin: .5em;
+	height: 100%;
+}
+
+div.webaction_form {
+	float: left;
+	padding: .5em;
+	margin: .5em;
+}

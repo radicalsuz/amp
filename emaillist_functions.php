@@ -40,8 +40,8 @@ function subadd($emailid, $listid) {
  					   $MM_fieldsStr = "emailid|value|listid|value|entered|value";
   					   $MM_columnsStr = "userid|',none,''|listid|',none,''|entered|',none,now()";
 
-		require ("DBConnections/insetstuff.php");
-    	require ("DBConnections/dataactions.php"); 
+		require ("Connections/insetstuff.php");
+    	require ("Connections/dataactions.php"); 
 
 }
 
@@ -51,8 +51,8 @@ function e_subadd($emailid, $listid) {
 					$MM_editTable  = "subscription";
   					$MM_fieldsStr = "emailid|value|listid|value";
    					$MM_columnsStr = "userid|none,none,NULL|listid|none,none,NULL"; 
-		require ("DBConnections/insetstuff.php");
-    	require ("DBConnections/dataactions.php"); 
+		require ("Connections/insetstuff.php");
+    	require ("Connections/dataactions.php"); 
 
 }
 
@@ -65,8 +65,8 @@ function emailadd($email) {
  					   $MM_fieldsStr = "email|value|confirmed|value|randval|value|htmlemail|value|entered|value";
   					   $MM_columnsStr = "email|',none,''|confirmed|none,1,1|uniqid|',none,''|htmlemail|none,1,1|entered|',none,now()";
 
-		require ("DBConnections/insetstuff.php");
-    	require ("DBConnections/dataactions.php"); 
+		require ("Connections/insetstuff.php");
+    	require ("Connections/dataactions.php"); 
 		
 		$emailid = getid($email);
 		return $emailid;
@@ -78,8 +78,8 @@ function e_emailadd($email) {
 			 $MM_editTable  = "email";
    $MM_fieldsStr = "email|value|LastName|value|FirstName|value|Organization|value |html|value|Phone|value|WebPage|value|Address|value|Address2|value|City|value|State|value|PostalCode|value|Country|value|Fax|value";
    $MM_columnsStr = "email|',none,''|lastname|',none,''|firstname|',none,''|organization|',none,''|html|none,1,0|phone|',none,''|url|',none,''|address1|',none,''|address2|',none,''|city|',none,''|state|',none,''|zip|',none,''|country|',none,''|fax|',none,''";
-		require ("DBConnections/insetstuff.php");
-    	require ("DBConnections/dataactions.php"); 
+		require ("Connections/insetstuff.php");
+    	require ("Connections/dataactions.php"); 
 		
 		$emailid = e_getid($email);
 		return $emailid;
@@ -131,8 +131,8 @@ function emailat($id,$valuex,$recid) {
 					   $MM_editTable  = "phplist_user_user_attribute";
  					   $MM_fieldsStr = "recid|value|attributeid|value|valuex|value";
   					   $MM_columnsStr = "userid|',none,''|attributeid|',none,''|value|',none,''";
- 							    require ("DBConnections/insetstuff.php");
-  								require ("DBConnections/dataactions.php");
+ 							    require ("Connections/insetstuff.php");
+  								require ("Connections/dataactions.php");
 						}
 
 						
@@ -158,7 +158,7 @@ else {
 if (email_is_valid($email)){
 $emailid = e_emailcheck($email);
 if ($emailid) {  echo $emailid;
-		if (e_subchack($emailid, $listid) != true) {e_subadd($emailid, $listid);
+		if (e_subcheck($emailid, $listid) != true) {e_subadd($emailid, $listid);
 	
 		}
 			}
