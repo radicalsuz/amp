@@ -1,4 +1,5 @@
                 var listMenu = new FSMenu('listMenu', true, 'display', 'block', 'none');
+
                 page.winW=function()
                  { with (this) return Math.max(minW, MS?win.document[db].clientWidth:win.innerWidth) };
                 page.winH=function()
@@ -50,9 +51,9 @@
                 addEvent(listMenu, 'show', repositionMenus, true);
 
                 // Hide all menus when the document is clicked
-                addEvent(document, 'click',  function() {
-                 listMenu.hideAll();
-                });
+                //addEvent(document, 'click',  function() {
+                // listMenu.hideAll();
+                //});
 
 
                 // Here's a second method. This only works in IE 5.5+ on Windows, but it doesn't make
@@ -99,10 +100,3 @@
 
                 }
 
-                var arrow = null;
-                if (document.createElement && document.documentElement)
-                {
-                     arrow = document.createElement('span');
-                     arrow.appendChild(document.createTextNode('>'));
-                     arrow.className = 'subind';
-                }

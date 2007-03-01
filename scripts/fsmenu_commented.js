@@ -107,14 +107,14 @@ function FSMenu(myName, nested, cssProp, cssVis, cssHid)
  this.menuToShow = [];
  this.mtsTimer = null;
  // Other configurable defaults.
- this.showDelay = 0;
+ this.showDelay = 10;
  this.switchDelay = 125;
  this.hideDelay = 500;
  this.showOnClick = true;
- this.hideOnClick = true;
+ this.hideOnClick = false;
  // Animation speeds: set to a number between 0 and 1. Larger = faster. 1 = disabled.
- this.animInSpeed = 0.2;
- this.animOutSpeed = 0.2;
+ this.animInSpeed = 1;
+ this.animOutSpeed = 1;
  this.animations = [];
 
  // Free memory onunload in IE.
