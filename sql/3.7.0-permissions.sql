@@ -5,6 +5,6 @@ create table if not exists permission_items (
 	target_id	int(11) not null,
 	group_id	int(11) not null,
 	user_id		int(11) not null,
-	allow		int(6) default TRUE,
+	allow		int(6) default 1,
 	PRIMARY KEY (id)
 ) ;
