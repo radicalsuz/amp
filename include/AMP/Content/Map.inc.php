@@ -85,21 +85,11 @@ class AMPContent_Map {
 
     function _check_permissions( $parent_id, $child_ids = array( ) ) {
         $base_return = !empty( $child_ids ) ? $child_ids : true;
-        //if ( $parent_id == AMP_CONTENT_MAP_ROOT_SECTION ) return $base_return;
+        if ( $this->_no_permissions ) return $base_return; 
 
-        //if ( isset( $_GET['init_permissions']) && ( $_GET['init_permissions'])) {
-        if ( $this->_no_permissions ) {
-            return $base_return;
-        }
-        $reg = AMP_Registry::instance( );
-        $gacl =  &$reg->getEntry( AMP_REGISTRY_PERMISSION_MANAGER );
-        if ( !$gacl ) return $base_return;
-
-        $user_key = 'admin_' . AMP_SYSTEM_USER_ID;
-        $section_value = 'view';
+        $section_value = 'access';
         $section_section_parent = 'section_' . $parent_id;
         $result = AMP_allow( 'view', 'section', $parent_id );
-        //$result = $gacl->acl_check( 'commands', 'view', 'users', $user_key, 'sections', 'section_' . $parent_id );
         if ( !$result ) return false;
         if ( empty( $child_ids )) return $result;
 
@@ -107,7 +97,6 @@ class AMPContent_Map {
         foreach( $child_ids as $child_id  ) {
             $section_section = 'section_' . $child_id;
             $result = AMP_allow( 'view', 'section', $child_id );
-            //$result = $gacl->acl_check( 'commands', 'view', 'users', $user_key, 'sections', 'section_' . $child_id );
             if ( !$result ) continue;
             $child_results[] = $child_id;
         }
