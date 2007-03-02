@@ -9,7 +9,7 @@ class PermissionGroup_Form extends AMPSystem_Form_XML {
 
     function PermissionGroup_Form( ) {
         $name = 'PermissionGroup';
-        $this->init( $name );
+        $this->init( $name, 'POST', AMP_SYSTEM_URL_PERMISSION_GROUP );
     }
 
     function _after_init( ) {
@@ -28,6 +28,7 @@ class PermissionGroup_Form extends AMPSystem_Form_XML {
 
     function hideForSpecialUsers( $data, $fieldname ) {
         //don't allow removal of content for user groups 1 and 3 (  admin + all permissions )
+        if ( !isset( $data['id'])) return;
         if ( $data['id'] == 1 or $data['id'] == 3 ) {
             $this->form->removeElement( 'sections');
         //    $this->addField( array( 'type' => 'static', 'value' => 'Changes are not allowed for this group', 'block' => 'sectional'), 'section_plus');

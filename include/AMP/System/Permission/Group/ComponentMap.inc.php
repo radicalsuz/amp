@@ -9,6 +9,7 @@ class ComponentMap_PermissionGroup extends AMPSystem_ComponentMap {
 
     var $_path_controller = 'AMP/System/Permission/Group/Controller.php';
     var $_component_controller = 'AMP_System_Permission_Group_Controller';
+    var $_action_default = 'list';
 
     var $paths = array( 
         'fields' => 'AMP/System/Permission/Group/Fields.xml',
@@ -30,6 +31,10 @@ class ComponentMap_PermissionGroup extends AMPSystem_ComponentMap {
     var $_allow_unpublish = AMP_PERMISSION_SYSTEM_PERMISSIONS;
     var $_allow_delete = AMP_PERMISSION_SYSTEM_PERMISSIONS;
 
+    function onSave( &$controller  ) {
+        ampredirect( AMP_SYSTEM_URL_PERMISSION_GROUP );
+        AMP_permission_update( );
+    }
 }
 
 ?>

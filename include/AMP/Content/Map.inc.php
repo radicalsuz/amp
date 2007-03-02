@@ -12,8 +12,13 @@ class AMPContent_Map {
     var $top;
     var $top_set = array( );
     var $_section_totals;
+    var $_no_permissions = false ;
 
     function AMPContent_Map( &$dbcon, $top = AMP_CONTENT_MAP_ROOT_SECTION ) {
+        if ( defined( 'AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING ){
+            $this->_no_permissions = true;
+        }
+
         $this->init( $dbcon, $top );
     }
 
@@ -64,7 +69,7 @@ class AMPContent_Map {
     }
 
     function find_top( $start ) {
-        if ( defined('AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING ) {
+        if ( $this->_no_permissions ) {
             return $start;
         }
         if ( AMP_allow( 'access', 'section', $start )) return $start;
@@ -83,7 +88,7 @@ class AMPContent_Map {
         //if ( $parent_id == AMP_CONTENT_MAP_ROOT_SECTION ) return $base_return;
 
         //if ( isset( $_GET['init_permissions']) && ( $_GET['init_permissions'])) {
-        if ( defined('AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING ) {
+        if ( $this->_no_permissions ) {
             return $base_return;
         }
         $reg = AMP_Registry::instance( );
@@ -124,7 +129,7 @@ class AMPContent_Map {
             unset( $this->childset[ $child_id ] );
             if ($recursive) $this->buildLevel( $child_id );
 
-            if ( !( defined('AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING ) 
+            if ( !( $this->_no_permissions )
              &&( !AMP_allow( 'access', 'section', $child_id)))  {
                 //trigger_error( 'flunk ' . $child_id );
                 continue; 
@@ -212,11 +217,18 @@ class AMPContent_Map {
         return array( $this->top, AMP_SITE_NAME ) + $this->selectOptions();
     }
 
-    function &instance() {
+    function &instance( $complete = false ) {
         static $content_map = false;
 
-        if(!$content_map) $content_map = new AMPContent_Map( AMP_Registry::getDbcon() );
-        return $content_map;
+        if ( !$complete ) {
+            if(!$content_map) $content_map = new AMPContent_Map( AMP_Registry::getDbcon() );
+            return $content_map;
+        } else {
+            require_once( 'AMP/Content/Map/Complete.php');
+            $content_map_complete = new AMP_Content_Map_Complete( AMP_Registry::getDbcon(), AMP_CONTENT_MAP_ROOT_SECTION );
+            return $content_map_complete;
+
+        }
     }
 
 

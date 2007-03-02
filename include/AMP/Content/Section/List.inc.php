@@ -44,6 +44,7 @@ class Section_List extends AMP_System_List_Form {
     function _formattedName( $value, $column_name, $data ) {
         if ( !isset( $this->_sort )) {
             $depth = $this->_map->getDepth( $data['id'] ) - 1;
+            if ( $depth < 1 ) return $value;
             return '&nbsp;' . str_repeat( '&nbsp;', ( $depth*8)) . $value;
         }
         require_once( 'AMP/Content/Map/Breadcrumb.inc.php');

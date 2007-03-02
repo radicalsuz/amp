@@ -71,13 +71,18 @@ class PermissionGroup extends AMPSystem_Data_Item {
         $allowed_sections = $this->getData( 'sections');
         if ( !$allowed_sections ) $allowed_sections = array( );
 
-        $new_sections  = array_diff( $allowed_sections, $this->_readSections( ));
-        $deleted_sections  = array_diff( $this->_readSections( ), $allowed_sections );
+        $actual_sections = $this->_readSections( );
+
+        $new_section_ids  = array_diff( array_keys( $allowed_sections), array_keys( $actual_sections ));
+        $new_sections = array_combine_key( $new_section_ids, AMP_lookup( 'sectionMap'));
+
+        $deleted_section_ids  = array_diff( array_keys( $actual_sections ), array_keys( $allowed_sections ));
+        $deleted_sections = array_combine_key( $deleted_section_ids, AMP_lookup( 'sectionMap'));
 
         if ( empty( $new_sections ) && empty( $deleted_sections ) ) {
             return true;
         }
-        $visible_sections = AMP_lookup( 'sectionMap');
+        //$visible_sections = AMP_lookup( 'sectionMap');
         require_once( 'AMP/System/Permission/Item/Item.php');
         foreach ( $new_sections as $section_id => $section_name ) {
             $item = AMP_System_Permission_Item::create_for_group( $this->id, 'access', 'section', $section_id );
@@ -86,13 +91,23 @@ class PermissionGroup extends AMPSystem_Data_Item {
 
         $permissions_lookup = AMP_lookup( 'SectionPermissionItemsByGroup', $this->id );
         foreach( $deleted_sections as $section_id => $section_name ) {
-            if ( !isset( $permissions_lookup[$section_id ])) continue;
-            $item = new AMP_System_Permission_Item( $this->dbcon, $permissions_lookup[ $section_id ]);
+            if ( !$permissions_lookup ) continue;
+            if ( !( $permission_item_id = array_search( $section_id, $permissions_lookup ))) continue;
+            $item = new AMP_System_Permission_Item( $this->dbcon, $permission_item_id );
             $item->delete( );
             unset( $item );
         }
 
-        AMP_permission_update( );
+        /*
+        AMP_cacheFlush( AMP_CACHE_TOKEN_ADODB );
+        $current_cookie = $this->dbcon->Execute( 'Select * from users_sessions where user = ' . AMP_SYSTEM_USER_ID );
+        require_once( 'HTTP/Request.php');
+        $request = new HTTP_Request( 'http://local_ufpj.org/system/permission.php?action=update');
+        foreach( $_COOKIE as $cookie_name => $cookie_value ) {
+            $request->addCookie( $cookie_name, $cookie_value );
+        }
+        $request->sendRequest( );
+        */
         
     }
 
@@ -103,7 +118,6 @@ class PermissionGroup extends AMPSystem_Data_Item {
         $section_list = AMP_lookup( 'sectionMap' );
 
         $result = array_combine_key( array_keys( AMP_lookup( 'sectionMap')), $allowed_sections );
-        trigger_error( 'got settings ' . count( $result ));
         return $result;
 
     }

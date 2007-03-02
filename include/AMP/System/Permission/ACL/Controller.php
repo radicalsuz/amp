@@ -10,6 +10,7 @@ class AMP_System_Permission_ACL_Controller extends AMP_System_Component_Controll
 
     function commit_update( ) {
         //set phpgacl options
+        
         $gacl_options = array( 
             'smarty_dir' => 'phpgacl/admin/smarty/libs',
             'smarty_template_dir' => 'phpgacl/admin/templates',
@@ -24,11 +25,13 @@ class AMP_System_Permission_ACL_Controller extends AMP_System_Component_Controll
 
             );
 
-        define( 'AMP_SYSTEM_PERMISSIONS_LOADING', 1 );
+        if ( !defined ( 'AMP_SYSTEM_PERMISSIONS_LOADING')) define( 'AMP_SYSTEM_PERMISSIONS_LOADING', 1 );
         require_once( 'phpgacl/gacl_api.class.php');
 
         $gacl = &new gacl_api( $gacl_options );
-        $this->_upgrade_database( $gacl_options['db_table_prefix'] );
+        
+        //$gacl = AMP_acl( true );
+        $this->_upgrade_database( 'acl_' );
 
         $gacl->clear_database( );
 
@@ -78,17 +81,26 @@ class AMP_System_Permission_ACL_Controller extends AMP_System_Component_Controll
         $site_root    = $gacl->add_group( 'site', AMP_SITE_NAME, $system_root, 'AXO');
         $section_root = $gacl->add_object_section( AMP_SITE_NAME . ' Content', 'sections', 0, 0, 'AXO' );
 
-        $section_names = AMP_lookup( 'sections' );
-        $section_order_ref = AMP_lookup( 'sectionMap');
+        $section_order_ref = AMP_lookup( 'sectionMap' );
+        require_once( 'AMP/Content/Map/Complete.php');
+        $map = AMP_Content_Map_Complete::instance( );
+        $map_result = ( $map->selectOptions( ));
+        $section_order_ref = $map_result;
+
+        $section_names_source = new AMPContentLookup_Sections( );//AMP_lookup( 'sections' );
+        $section_parents_source = new AMPContentLookup_SectionParents( );AMP_lookup( 'sectionParents');
+        $section_names = $section_names_source->dataset;
+        $section_parents = $section_parents_source->dataset;
+
         $sections = array_combine_key( array_keys( $section_order_ref ), $section_names );
         $sections = array( AMP_CONTENT_MAP_ROOT_SECTION => AMP_SITE_NAME ) + $sections;
-        $map = AMPContent_Map::instance( );
         $axo_group_ids = array( );
 
         foreach( $sections as $id => $name ) {
             $parent_group_id = $site_root;
             
-            $parent_id_content = $map->getParent( $id );
+            $parent_id_content = isset( $section_parents[$id]) ? $section_parents[$id] : AMP_CONTENT_MAP_ROOT_SECTION;
+
             if ( isset( $axo_group_ids[$parent_id_content])) {
                 $parent_group_id = $axo_group_ids[$parent_id_content];
             }
@@ -105,7 +117,8 @@ class AMP_System_Permission_ACL_Controller extends AMP_System_Component_Controll
         $group_ids = AMP_lookup( 'permissionGroups');
         foreach( $group_ids as $group_id => $group_name ) {
             $acl_group_id = $gacl->add_group( 'group_'. $group_id, $group_name, $admin_group, 'ARO' );
-            $allowed_sections = AMP_lookup( 'sectionsByGroup', $group_id );
+            $allowed_sections_lookup = & new AMPSystemLookup_SectionsByGroup( $group_id ); //AMP_lookup( 'sectionsByGroup', $group_id );
+            $allowed_sections = $allowed_sections_lookup->dataset;
             $affected_users = AMP_lookup( 'usersByGroup', $group_id );
             if ( !$affected_users ) continue;
             foreach( $affected_users as $user_id => $user_name ) {

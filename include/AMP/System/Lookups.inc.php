@@ -1127,7 +1127,7 @@ class AMPSystemLookup_SectionsByGroup extends AMPSystem_Lookup {
 
 class AMPSystemLookup_SectionPermissionItemsByGroup extends AMPSystem_Lookup {
     var $datatable = 'permission_items';
-    var $result_field = 'id';
+    var $result_field = 'target_id';
     var $_base_criteria = 'target_type="section"';
     var $criteria = 'target_type="section"';
 

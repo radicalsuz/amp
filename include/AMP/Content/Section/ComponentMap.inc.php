@@ -30,6 +30,10 @@ class ComponentMap_Section extends AMPSystem_ComponentMap {
     var $_observers = array( 'AMP_System_Permission_Observer_Header');
     var $_gacl_obj = 'section';
 
+    function onSave( ) {
+        ampredirect( AMP_SYSTEM_URL_SECTION );
+    }
+
 }
 
 ?>

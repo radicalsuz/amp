@@ -207,9 +207,9 @@ class Section extends AMPSystem_Data_Item {
 
     function _create_permission_values( ) {
         $groups = AMP_lookup( 'permissionGroups');
-        $gacl = AMP_acl( true );
         foreach( $groups as $group_id => $name ) {
-            $allowed_sections = AMP_lookup( 'sectionsByGroup', $group_id );
+            $allowed_sections_source = new AMPSystemLookup_SectionsByGroup( $group_id );
+            $allowed_sections = $allowed_sections_source->dataset; //AMP_lookup( 'sectionsByGroup', $group_id );
             if ( !$allowed_sections ) {
                 //all sections are allowed this group by default
                 continue;

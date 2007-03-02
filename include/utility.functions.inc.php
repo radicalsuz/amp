@@ -959,6 +959,10 @@ if (!function_exists( 'AMP_cacheFlush' )) {
             $flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "*";
         }
         system( $flush_command );
+        if ( !isset( $key_token ) || $key_token == AMP_CACHE_TOKEN_ADODB ) {
+            $flush_command = "rm -f `find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' ." -name adodb_*.cache`"; 
+            system($flush_command);
+        }
 
         if ( !$cache )  {
             return false;
@@ -1034,6 +1038,18 @@ if ( !function_exists( 'AMP_Authorized')) {
 
     function AMP_allow( $action, $item_type, $id, $user_id = null ) {
         if ( $action == 'cancel' ) return true;
+        /*
+        $action = 'access';
+
+        if ( !$user_id ) $user_id = AMP_SYSTEM_USER_ID;
+        $crit_array = array( 'target_id' => $id, 'user_id' => $user_id, 'action' => $action, 'allow' => 1 );
+        $target_permission_lookup = AMP_lookup( 'permissionTarget'.ucfirst( $item_type ), $id );
+
+        if ( !$permission_lookup ) return true;
+        return ( isset( $permission_lookup[$id]) && $permission_lookup[$id] == $action) ;
+        */
+
+        //this code applies only in ACL mode. not currently in use
         $action_translations = array( 
             'edit'      => 'access',
             'publish'   => 'publish',
@@ -1059,8 +1075,9 @@ if ( !function_exists( 'AMP_Authorized')) {
 
     function &AMP_acl( $api = false ) {
         static $gacl = false;
+        static $gacl_api  = false;
         //trigger_error( AMP_SYSTEM_USER_ID );
-        if ( !$gacl ) {
+        if ( ( !$gacl && !$api) || ( !$gacl_api && $api ) ) {
             $gacl_options = array( 
                 'smarty_dir' => 'phpgacl/admin/smarty/libs',
                 'smarty_template_dir' => 'phpgacl/admin/templates',
@@ -1077,13 +1094,17 @@ if ( !function_exists( 'AMP_Authorized')) {
 
             if ( $api ) {
                 require_once( 'phpgacl/gacl_api.class.php');
-                $gacl = new gacl_api( $gacl_options );
+                $gacl_api = new gacl_api( $gacl_options );
             } else {
                 require_once( 'phpgacl/gacl.class.php');
                 $gacl = new gacl( $gacl_options );
             }
             $reg = AMP_Registry::instance( );
             $reg->setEntry( AMP_REGISTRY_PERMISSION_MANAGER, $gacl );
+        }
+
+        if ( $api ) {
+            return $gacl_api;
         }
         return $gacl;
 
@@ -1618,7 +1639,8 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
 }
 
 function AMP_permission_update( ) {
-    AMP_cacheFlush( );
+    AMP_cacheFlush( AMP_CACHE_TOKEN_ADODB );
+    AMP_cacheFlush( AMP_CACHE_TOKEN_LOOKUP );
     require_once( 'AMP/System/Permission/ACL/Controller.php');
     $controller = &new AMP_System_Permission_ACL_Controller( );
     $controller->request( 'update');
