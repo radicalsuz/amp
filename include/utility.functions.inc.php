@@ -1356,7 +1356,10 @@ if ( !function_exists( 'AMP_get_cache')){
     function &AMP_get_cache( ){
 //        trigger_error( 'getting cache');
         $empty_value = false;
-        if ( !AMP_SYSTEM_CACHE ) return $empty_value;
+        if ( !AMP_SYSTEM_CACHE ) {
+            require_once( 'AMP/System/Cache/Cache.php');
+            return $empty_value;
+        }
 //        trigger_error( 'cache is on');
         static $cache = false;
         static $cache_failure = false;

@@ -98,17 +98,6 @@ class PermissionGroup extends AMPSystem_Data_Item {
             unset( $item );
         }
 
-        /*
-        AMP_cacheFlush( AMP_CACHE_TOKEN_ADODB );
-        $current_cookie = $this->dbcon->Execute( 'Select * from users_sessions where user = ' . AMP_SYSTEM_USER_ID );
-        require_once( 'HTTP/Request.php');
-        $request = new HTTP_Request( 'http://local_ufpj.org/system/permission.php?action=update');
-        foreach( $_COOKIE as $cookie_name => $cookie_value ) {
-            $request->addCookie( $cookie_name, $cookie_value );
-        }
-        $request->sendRequest( );
-        */
-        
     }
 
     function _readSections( ) {

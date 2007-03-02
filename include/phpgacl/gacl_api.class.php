@@ -1087,7 +1087,7 @@ class gacl_api extends gacl {
 				$value_array = array_unique($value_array);
 
 				foreach ($value_array as $value) {
-					$object_id = &$this->get_object_id($section_value, $value, $map);
+					$object_id = $this->get_object_id($section_value, $value, $map);
 
 					if (empty($object_id))
 					{
@@ -1120,7 +1120,7 @@ class gacl_api extends gacl {
 			foreach ($map_group_ids as $group_id) {
 				$this->debug_text ('Insert: '. strtoupper($map) .' GROUP ID: '. $group_id);
 
-				$group_data = &$this->get_group_data($group_id, $map);
+				$group_data = $this->get_group_data($group_id, $map);
 
 				if (empty($group_data)) {
 					$this->debug_text('add_acl(): '. strtoupper($map) . " Group: $group_id DOES NOT exist in the database. Skipping...");
