@@ -200,6 +200,11 @@ class NavigationElement extends AMPSystem_Data_Item {
         $this->totalCount = $qty;
         return $qty;
     }
+
+    function getToolId( ) {
+        return $this->getData( 'modid');
+    }
+
 }
 
 ?>

@@ -70,6 +70,16 @@ class AMPSystem_IntroText_Form extends AMPSystem_Form_XML {
         return $renderer->inSpan( AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT, array( 'class' => 'intitle'))  
                 . AMP_navCountDisplay_Introtext( $this->getIdValue( ) );
     }
+
+    function validate( ){
+        $section_id = isset( $_REQUEST['type']) && $_REQUEST['type'] ? $_REQUEST['type'] : false;
+        if ( $section_id && !AMP_allow( 'access', 'section', $section_id )) {
+            $flash = AMP_System_Flash::instance( );
+            $flash->add_error( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, AMP_TEXT_SAVE ));
+            return false;
+        }
+        return parent::validate( );
+    }
 }
 
 ?>

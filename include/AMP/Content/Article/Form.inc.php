@@ -419,6 +419,19 @@ class Article_Form extends AMPSystem_Form_XML {
 
     }
 
+    
+    function validate( ){
+        $section_id = isset( $_REQUEST['section']) && $_REQUEST['section'] ? $_REQUEST['section'] : false;//$this->getValues( 'section');
+        if ( $section_id && !AMP_allow( 'access', 'section', $section_id )) {
+            $flash = AMP_System_Flash::instance( );
+            $flash->add_error( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, AMP_TEXT_SAVE ));
+            return false;
+        }
+        return parent::validate( );
+
+    }
+    
+
 
 }
 ?>
