@@ -92,8 +92,12 @@ class AMP_System_Permission_ACL_Controller extends AMP_System_Component_Controll
         $section_names = $section_names_source->dataset;
         $section_parents = $section_parents_source->dataset;
 
-        $sections = array_combine_key( array_keys( $section_order_ref ), $section_names );
-        $sections = array( AMP_CONTENT_MAP_ROOT_SECTION => AMP_SITE_NAME ) + $sections;
+		if ($section_order_ref && $section_names) {
+			$sections = array_combine_key( array_keys( $section_order_ref ), $section_names );
+			$sections = array( AMP_CONTENT_MAP_ROOT_SECTION => AMP_SITE_NAME ) + $sections;
+		} else {
+			$sections = array( AMP_CONTENT_MAP_ROOT_SECTION => AMP_SITE_NAME );
+		}
         $axo_group_ids = array( );
 
         foreach( $sections as $id => $name ) {
