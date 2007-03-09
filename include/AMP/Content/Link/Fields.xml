@@ -7,11 +7,11 @@
 		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
 	</publish>
 	<url>
-		<type>textarea</type>
+		<type>text</type>
 		<label>Link Url</label>
 	</url>
 	<linkname>
-		<type>textarea</type>
+		<type>text</type>
 		<label>Name</label>
 	</linkname>
 	<description>

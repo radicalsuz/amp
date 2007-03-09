@@ -31,7 +31,7 @@
 		<options>
 			<addEmptyOption>1</addEmptyOption>
 			<emptyOptionText>--</emptyOptionText>
-			<format>YMd</format>
+			<format>YM</format>
 		</options>
 		<attr><class>searchform_element</class></attr>
 	</date>

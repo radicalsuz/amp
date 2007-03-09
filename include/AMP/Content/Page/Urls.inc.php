@@ -46,7 +46,7 @@ if ( !defined( 'AMP_CONTENT_URL_CAPTCHA' ))         define ( 'AMP_CONTENT_URL_CA
 if ( !defined( 'AMP_CONTENT_URL_EVENT_SEARCH' ))    define ( 'AMP_CONTENT_URL_EVENT_SEARCH', 'calendar.php');
 if ( !defined( 'AMP_CONTENT_URL_EVENT_LIST' ))      define ( 'AMP_CONTENT_URL_EVENT_LIST', 'calendar.php');
 if ( !defined( 'AMP_CONTENT_URL_EVENT_ADD' ))       define ( 'AMP_CONTENT_URL_EVENT_ADD', 'calendar_input.php');
-if ( !defined( 'AMP_CONTENT_URL_EVENT' ))           define ( 'AMP_CONTENT_URL_EVENT', 'calendar_new.php');
+if ( !defined( 'AMP_CONTENT_URL_EVENT' ))           define ( 'AMP_CONTENT_URL_EVENT', 'calendar.php');
 if ( !defined( 'AMP_CONTENT_URL_COMMENT_ADD' ))     define ( 'AMP_CONTENT_URL_COMMENT_ADD', 'comment.php');
 
 if ( !defined( 'AMP_CONTENT_URL_TAG' ))             define ( 'AMP_CONTENT_URL_TAG', 'tag.php');

@@ -97,6 +97,11 @@ class ArticleComment extends AMPSystem_Data_Item {
         ));
     }
 
+    function get_url_edit( ) {
+        if ( !$this->id ) return AMP_SYSTEM_URL_ARTICLE_COMMENT;
+        return AMP_url_add_vars( AMP_SYSTEM_URL_ARTICLE_COMMENT, array( 'id=' . $this->id ));
+    }
+
 }
 
 ?>

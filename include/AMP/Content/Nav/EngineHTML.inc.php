@@ -58,7 +58,7 @@ class NavEngine_HTML extends NavEngine {
             'MM_typename'=> $map->getName( $page->getSectionId() ),
             'MM_website_name'=> AMP_SITE_NAME,
             'Web_url'		=> 	AMP_SITE_URL,
-            'MM_region' =>  $GLOBALS['MM_region'],
+            'MM_region' =>  isset( $GLOBALS['MM_region']) ? $GLOBALS['MM_region'] : false,
             'list'      =>  $page->getLegacyListType(),
             'id'        =>  $page->getArticleId()
         ) + $this->nav->template->globalizeNavLayout( true );

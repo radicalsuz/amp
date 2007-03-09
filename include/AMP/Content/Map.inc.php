@@ -52,7 +52,7 @@ class AMPContent_Map {
         $sql = "Select " . join(", ", $this->fields ) 
                 ." from articletype "
                 ." where id != ".AMP_CONTENT_SECTION_ID_TOOL_PAGES
-                ." order by " . $this->getParentFieldSql( ) . ", textorder, type";
+                ." order by " . $this->getParentFieldSql( ) . ", textorder, id DESC";
         if ( AMP_DISPLAYMODE_DEBUG ) AMP_debugSQL( $sql, 'content_map');
         $this->dataset = &$this->dbcon->CacheGetAssoc( $sql );
         $this->childset = &AMPContent_Lookup::instance( 'sectionParents' );

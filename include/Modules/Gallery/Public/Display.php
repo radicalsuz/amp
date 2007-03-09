@@ -58,9 +58,19 @@ class Gallery_Public_Display extends AMP_Display_List {
             $this->_height_max = $image_height;
         }
 
-        $image = $this->_renderer->link( $imageRef->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
-                                         $this->_renderer->image( $imageRef->getURL( ), array( 'border' => '1')),
-                                         array( 'alt' => AMP_TEXT_FULL_SIZE, 'border' => 0, 'target' => '_blank' ));
+        $image = $this->_renderer->link( 
+                                         //$imageRef->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
+                                         $imageRef->get_url_size( 0, 600 ),
+                                         $this->_renderer->image( 
+                                                    $imageRef->getURL( ), 
+                                                            array(  'border' => '1', 
+                                                                    )
+                                                            ),
+                                         array( 'alt' => AMP_TEXT_FULL_SIZE, 'border' => 0, 
+                                                'rel' => 'lightbox['. $this->_source_gallery->getName( ).']', 
+                                                'title' => $this->_photoByline( $source ),
+                                                'target' => '_blank' 
+                                                ));
 
         $image_byline = $this->_renderByline( $source, $imageRef );
 
@@ -70,7 +80,15 @@ class Gallery_Public_Display extends AMP_Display_List {
 
     }
 
-    function _renderByline( &$source, $image  ) {
+    function _photoByline( &$source ) {
+        $credit = $this->_photoCredit( $source );
+        $caption = $source->getCaption( );
+        if ( !$caption && !$credit ) return ' ';
+        if ( !$credit ) return $source->getCaption( );
+        return $credit . $this->_renderer->newline( ) . $source->getCaption( );
+    }
+
+    function _photoCredit( &$source ) {
         $image_desc = '';
         if ( $image_source = $source->getSource( )) {
             $image_desc .= $image_source;
@@ -83,6 +101,12 @@ class Gallery_Public_Display extends AMP_Display_List {
             }
             
         }
+
+        return $image_desc;
+    }
+
+    function _renderByline( &$source, $image  ) {
+        $image_desc = $this->_photoCredit( $source );
 
         $image_enlarge_url = $image->getURL( AMP_IMAGE_CLASS_ORIGINAL );
         if ( $image_enlarge_url ) {
@@ -134,6 +158,15 @@ class Gallery_Public_Display extends AMP_Display_List {
                 'onchange' => 'AMP_openURL( "'.AMP_CONTENT_URL_GALLERY.'?id="+this.value );'
             );
         return AMP_buildSelect( 'gallery_jump', AMPContent_Lookup::instance( 'galleryMap' ), $this->_source_gallery->id, $this->_renderer->makeAttributes( $sel_attr) );
+
+    }
+
+    function _renderJavascript( ) {
+        $header = AMP_get_header( );
+        $header->addJavaScript( '/scripts/ajax/prototype.js', 'prototype');
+        $header->addJavaScript( '/scripts/ajax/scriptaculous.js?load=effects', 'scriptaculous');
+        $header->addJavaScript( '/scripts/lightbox/js/lightbox.js', 'lightbox');
+        $header->addExtraHtml( '<link rel="stylesheet" href="http://local_pink.org/scripts/lightbox/css/lightbox.css" type="text/css" media="screen" />' );
 
     }
 

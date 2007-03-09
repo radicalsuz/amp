@@ -5,21 +5,21 @@
     <per>CALENDAR_ACCESS</per>
 
     <item>
-        <href>calendar_gxlist.php</href>
-        <label>View Events</label>
+        <href>calendar.php</href>
+        <label>View Upcoming Events</label>
         <class>view</class>
         <per>CALENDAR_ACCESS</per>
     </item>
 
     <item>
-        <href>calendar_gxlist.php?old=1</href>
-        <label>View Old Events</label>
+        <href>calendar.php?AMPSearch=Search</href>
+        <label>View All Events</label>
         <class>view</class>
         <per>CALENDAR_ACCESS</per>
     </item>
 
     <item>
-        <href>calendar_gxedit.php</href>
+        <href>calendar.php?action=add</href>
         <label>Add Event</label>
         <class>add</class>
         <per>CALENDAR_ACCESS</per>

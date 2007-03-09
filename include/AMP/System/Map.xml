@@ -251,7 +251,7 @@
 
     <item>
         <label>Calendar</label>
-        <href>calendar_gxlist.php</href>
+        <href>calendar.php</href>
         <per>CALENDAR_ACCESS</per>
 		<separator>1</separator>
     </item>

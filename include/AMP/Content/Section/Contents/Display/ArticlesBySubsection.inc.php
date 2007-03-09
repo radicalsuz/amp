@@ -1,7 +1,5 @@
 <?php
 
-if (!defined( 'AMP_CONTENT_LIST_SUBHEADER_CLASS' )) define( 'AMP_CONTENT_LIST_SUBHEADER_CLASS', 'title' );
-
 class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
 
     var $_subsections_display;

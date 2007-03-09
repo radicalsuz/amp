@@ -645,7 +645,7 @@ class UserDataPlugin {
 
         // Split string with commas into an array
         // Check to see if we have an array of values.
-        $defArray = split( "[ ]?,[ ]?", $defaults );
+        $defArray = preg_split( "/\s?,\s?/", $defaults );
         if (count( $defArray ) > 1) {
             $defaults = array();
             foreach ( $defArray as $option ) {

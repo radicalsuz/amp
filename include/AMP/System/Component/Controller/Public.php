@@ -32,8 +32,13 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
 
         //check if form validation succeeds
         if (!$this->_form->validate()) {
+            $flash = AMP_System_Flash::instance( );
+            $flash->add_error( AMP_TEXT_ERROR_FORM_DATA_INVALID );
+
+            $intro = &$this->_map->getPublicPage( 'input' );
+            $this->_set_public_page( $intro );
             $this->_display->add( $this->_form, 'form' );
-            return false;
+            return true;
         }
 
         $this->notify( 'beforeUpdate' );
@@ -115,6 +120,11 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
 
         $this->_page->setIntroText( $this->_public_page_id );
         $this->_page->initLocation( );
+    }
+
+    function commit_cancel( ){
+        ampredirect( AMP_CONTENT_URL_INDEX );
+        return true;
     }
 
 }

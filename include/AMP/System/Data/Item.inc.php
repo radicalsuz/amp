@@ -382,7 +382,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     function &getSearchSource( $criteria = null ){
-        $result = $this->_getSearchSource( $criteria );
+        $result = &$this->_getSearchSource( $criteria );
         return $result;
     }
 
@@ -438,11 +438,14 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function _sort_compare( $file1, $file2 ) {
         if ( !( $sort_method = $this->_sort_accessor )) return 0;
 
+        if ( !is_object( $file2)) {
+            //print AMPbacktrace( );
+            trigger_error( 'non-object detected by sort');
+            return 0;
+        }
+
         //sort descending
         if ( $this->_sort_direction == AMP_SORT_DESC ) {
-            if ( !is_object( $file2)) {
-                print AMPbacktrace( );
-            }
             return strnatcasecmp( $file2->$sort_method( ) , 
                                     $file1->$sort_method( ) ); 
         }

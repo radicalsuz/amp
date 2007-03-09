@@ -10,10 +10,11 @@ class PermissionGroup_List extends AMPSystem_List {
         'Group' => 'name',
         'ID'    => 'id',
         'Rights'=> '_calculatePermissionsPercentage');
-    var $editlink = 'per.php';
+    var $editlink = AMP_SYSTEM_URL_PERMISSION_GROUP;
     //var $extra_columns = array( 'Rights' => 'rights');
     var $name_field = 'name';
     var $_source_object = 'PermissionGroup';
+    var $_url_add = AMP_SYSTEM_URL_PERMISSION_GROUP_NEW;
 
     function PermissionGroup_List( &$dbcon, $criteria = array( ) ) {
         //$source = & new PermissionGroupSet( $dbcon );

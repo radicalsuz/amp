@@ -113,5 +113,9 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
         
     }
 
+    function getSection( ) {
+        return $this->getData( 'section_id');
+    }
+
 }
 ?>

@@ -514,7 +514,7 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
         $this->_model_id = $this->_model->id;
         $this->notify( 'save' );
 
-        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $this->_model->getName( )), 
+        $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, strip_tags( $this->_model->getName( ))), 
                         $this->_unique_action_key( ), 
                         $this->_model->get_url_edit( ) );
 

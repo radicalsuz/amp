@@ -1737,7 +1737,7 @@ function AMP_js_write( $data, $uniq_id = null ) {
     $output =  str_replace($pattern, '', $data);
 
     if ( !isset( $uniq_id )) {
-        $uniq_id = $_SERVER['SERVER_NAME'] . mt_rand( 1000,10000 );
+        $uniq_id = str_replace( '.', '_', $_SERVER['SERVER_NAME'] ) . mt_rand( 1000,10000 );
     }
 
     return 'var '.$uniq_id.'=  { value: \''. str_replace( "'", "\'", $output) . "'};\ndocument.write( ".$uniq_id.".value );";
@@ -1783,6 +1783,22 @@ function &AMP_current_user( ) {
 function AMP_mailto( $address ) {
     $renderer = AMP_get_renderer( );
     return $renderer->link( 'mailto:' . $address, $address );
+}
+
+function urlencode_array( $field_value, $fieldname ) {
+    if (!is_array($field_value)) return ( $fieldname . '=' . $field_value);
+    $separator = '&';
+    $toImplode = array();
+    foreach ($field_value as $key => $value) {
+        if (is_array($value)) {
+            $toImplode[] = urlencode_array($value, "{$fieldname}[{$key}]" );
+        } else {
+            $toImplode[] = "{$fieldname}[{$key}]=".urlencode($value);
+        }
+    }
+
+    return implode($separator, $toImplode);
+
 }
 
 ?>

@@ -130,6 +130,8 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
             if ( !$article->hasData( )) return false;
             $section_id = $article->getParent( );
             $allowed_sections = AMP_lookup( 'sectionMap');
+            if ( $section_id == AMP_CONTENT_MAP_ROOT_SECTION ) return true;
+            if ( !$allowed_sections ) return false;
             if ( !isset( $allowed_sections[ $section_id ])) return false;
         }
         return parent::isAllowed( $action, $model_id );

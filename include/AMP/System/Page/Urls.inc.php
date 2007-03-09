@@ -4,8 +4,9 @@ define( 'AMP_SYSTEM_URL_TOOLS',                 'module.php');
 define( 'AMP_SYSTEM_URL_TOOL_ADD',              'module.php?action=add');
 define( 'AMP_SYSTEM_URL_TOOL_CONTROL',          'tool_controls.php');
 define( 'AMP_SYSTEM_URL_PERMISSION_DETAILS',    'permissiondetail.php?action=list');
-define( 'AMP_SYSTEM_URL_PERMISSION_GROUPS',     'per.php?action=list');
+define( 'AMP_SYSTEM_URL_PERMISSION_GROUPS',     'per.php');
 define( 'AMP_SYSTEM_URL_PERMISSION_GROUP',      'per.php');
+define( 'AMP_SYSTEM_URL_PERMISSION_GROUP_NEW',      'per.php?action=add');
 define( 'AMP_SYSTEM_URL_USERS',                 'user.php?action=list');
 if ( !defined( 'AMP_SYSTEM_URL_HOME'))
         define( 'AMP_SYSTEM_URL_HOME',          'articlelist.php');

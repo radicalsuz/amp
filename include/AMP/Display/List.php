@@ -122,6 +122,7 @@ class AMP_Display_List {
 
         //put remaining output into column 
         if ( $items_output ) {
+            $this->_renderJavascript( );
             if ( !$column_output ) {
                 return $this->_renderBlock( $items_output );
             } else {
@@ -213,6 +214,10 @@ class AMP_Display_List {
                     array( 'class' => $this->_css_class_container_list_subheader )
                 );
 
+    }
+
+    function _renderJavascript( ) {
+        //do nothing
     }
 
 

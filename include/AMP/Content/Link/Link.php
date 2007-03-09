@@ -148,6 +148,10 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
     function setLinkType( $link_type_id ) {
         return $this->mergeData( array( 'linktype' => $link_type_id ));
     }
+
+    function getSection( ) {
+        return $this->getData( 'type');
+    }
     
 }
 

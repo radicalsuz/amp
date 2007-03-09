@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/Content/Section/Set.inc.php' );
+require_once( 'AMP/Content/Section/Contents/Source.inc.php');
 
 class SectionContentSource_Subsections extends SectionContentSource {
 

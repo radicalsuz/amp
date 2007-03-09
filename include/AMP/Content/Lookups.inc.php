@@ -514,6 +514,27 @@ class AMPContentLookup_Articles extends AMPContent_Lookup{
     }
 }
 
+class AMPContentLookup_AllowedArticles extends AMPContent_Lookup{
+    var $datatable = 'articles';
+    var $result_field = 'title';
+
+    function AMPContentLookup_AllowedArticles( ){
+        $this->__construct( );
+    }
+
+    function __construct( ) {
+        
+        $this->add_criteria_allowed( );
+        $this->init( );
+    }
+
+    function add_criteria_allowed( ) {
+        $allowed_sections = array_keys( AMP_lookup( 'sectionMap'));
+        array_unshift( $allowed_sections, AMP_CONTENT_MAP_ROOT_SECTION );
+        $this->criteria = 'type in( '.join( ',', $allowed_sections ) . ')';
+    }
+}
+
 class AMPSystemLookup_Articles extends AMPContentLookup_Articles{
     function AMPSystemLookup_Articles( ) {
         $this->__construct( );

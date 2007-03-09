@@ -99,6 +99,18 @@ class Content_Image {
         return $url_filename;
     }
 
+    function get_url_size( $width = 0 , $height = 0 ) {
+        $size_set = array( );
+        $sizes = '';
+        if ( $width ) $size_set[] = 'width=' . $width;
+        if ( $height) $size_set[] = 'height=' . $height;
+        if ( !empty( $size_set )) {
+            $sizes = join( '&', $size_set );
+        }
+        return AMP_url_add_vars( AMP_CONTENT_URL_IMAGE, array( 'action=resize&class=original&filename='.$this->getName( ), $sizes ));
+
+    }
+
     function getPath( $image_type = AMP_IMAGE_CLASS_OPTIMIZED ) {
         if ( array_search( $image_type, $this->getImageClasses()) === FALSE) return false;
 		$file_path = AMP_LOCAL_PATH . $this->getURL($image_type );

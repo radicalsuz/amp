@@ -93,6 +93,13 @@ class AMPContent_Header {
 
     function getMetaKeywords() {
         $keywords = AMP_SITE_META_KEYWORDS ;
+
+        if ( $section = &$this->_page->getSection() && ($section->id != AMP_CONTENT_MAP_ROOT_SECTION) ) {
+            $section_header = &$section->getHeaderRef() ;
+            if ( $section_header && ( $custom_keywords = $section_header->getMetaKeywords( ) )) {
+                $keywords = $custom_keywords;
+            } 
+        }
         if ( $article = &$this->_page->getArticle() ) {
             if ( $custom_keywords = $article->getMetaKeywords( ) ) {
                 $keywords = $custom_keywords ;

@@ -811,7 +811,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     }
 
     function _blankValueSet( $valueset, $name ){
-        return false;
+        return array( '' => 'None available' );
     }
 
     function _selectAddNull( $valueset, $name ) {
