@@ -1,0 +1,26 @@
+<array>
+	<fulltext>
+		<type>text</type>
+		<label>Text Search</label>
+	</fulltext>
+	<event_type>
+		<type>select</type>
+		<label>By Section</label>
+		<lookup>sectionMap</lookup>
+	</event_type>
+	<date>
+		<separator>newrow</separator>
+		<type>date</type>
+		<label> Date: </label>
+		<options>
+			<addEmptyOption>1</addEmptyOption>
+			<emptyOptionText>--</emptyOptionText>
+			<format>YM</format>
+		</options>
+    </date>
+    <region>
+        <type>select</type>
+        <label>By Region</label>
+        <lookup>regions</lookup>
+    </region>
+</array>

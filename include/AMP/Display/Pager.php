@@ -105,6 +105,7 @@ class AMP_Display_Pager {
         if ( !$new_offset || $new_offset < 0 ) {
             unset( $target_request['offset']);
         }
+		unset( $target_request['all']);
         foreach( $target_request as $var => $value ) {
             $target_request_vars[$var] = urlencode_array( $value, $var ); //$var . '=' . ( is_array( $value ) ? urlencode_array( $value ) : $value ) ;
         }

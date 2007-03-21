@@ -50,5 +50,6 @@ if ( !defined( 'AMP_CONTENT_URL_EVENT' ))           define ( 'AMP_CONTENT_URL_EV
 if ( !defined( 'AMP_CONTENT_URL_COMMENT_ADD' ))     define ( 'AMP_CONTENT_URL_COMMENT_ADD', 'comment.php');
 
 if ( !defined( 'AMP_CONTENT_URL_TAG' ))             define ( 'AMP_CONTENT_URL_TAG', 'tag.php');
+if ( !defined( 'AMP_CONTENT_URL_BADGE' ))             define ( 'AMP_CONTENT_URL_BADGE', 'badge_widget.php');
 
 ?>

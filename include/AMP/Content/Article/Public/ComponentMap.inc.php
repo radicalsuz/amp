@@ -14,18 +14,26 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
     var $_component_controller = 'Article_Public_Component_Controller';
     var $_public_page_id_input = AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_INPUT;
     var $_public_page_id_response = AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_RESPONSE;
+    var $_public_page_id_list = AMP_CONTENT_PUBLICPAGE_ID_SEARCH;
     var $public_permitted_sections = array( );
     var $public_permitted_classes  = array( );
 
+	var $_allow_search = true;
+
     var $paths = array(
         'fields' => 'AMP/Content/Article/Public/Fields.xml',
+        'list'   => 'AMP/Content/Article/Public/List.php',
         'form'          => 'AMP/Content/Article/Public/Form.inc.php',
         'source' => 'AMP/Content/Article.inc.php',
+        'search' => 'AMP/Content/Article/Public/Search/Form.inc.php',
+        'search_fields' => 'AMP/Content/Article/Public/Search/Fields.xml',
         );
 
     var $components = array (
         'form' => 'Article_Public_Form',
-        'source' => 'Article' 
+        'source' => 'Article',
+        'list'   => 'Article_Public_List',
+        'search' => 'Article_Public_Search_Form',
         );
 
     function onInitForm( &$controller ){

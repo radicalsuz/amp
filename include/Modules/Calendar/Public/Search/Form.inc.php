@@ -1,7 +1,7 @@
 <?php
 
 require_once ( 'AMP/Form/SearchForm.inc.php' );
-require_once ( 'Modules/Calendar/ComponentMap.inc.php');
+require_once ( 'Modules/Calendar/ComponentMap.inc.php' );
 
 class Calendar_Public_Search_Form extends AMPSearchForm {
 
@@ -21,6 +21,6 @@ class Calendar_Public_Search_Form extends AMPSearchForm {
         return $fields;
     }
 
-
 }
+
 ?>

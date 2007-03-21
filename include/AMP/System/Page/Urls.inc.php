@@ -55,5 +55,7 @@ define( 'AMP_SYSTEM_URL_TAG',                   'tag.php');
 define( 'AMP_SYSTEM_URL_TAG_INPUT',             'tag.php?action=add');
 define( 'AMP_SYSTEM_URL_TOOL_PUBLICPAGE',      'module_header_list.php');
 define( 'AMP_SYSTEM_URL_EVENT',                 'calendar.php');
+define( 'AMP_SYSTEM_URL_BADGE',                 'badges.php');
+define( 'AMP_SYSTEM_URL_BADGE_ADD',             'badges.php?action=new');
 
 ?>

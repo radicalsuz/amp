@@ -417,8 +417,9 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
             $this->error( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, 'list' ));
             ampredirect( AMP_SYSTEM_URL_HOME );
         }
+
         $display = &$this->_map->getComponent( 'list' );
-        if ( method_exists( $display, 'setController')) {
+        if ( method_exists( $display, 'setController' )) {
             $display->setController( $this );
         }
 

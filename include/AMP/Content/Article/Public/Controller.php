@@ -15,12 +15,6 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
     function display_default( ){
         //do nothing
     }
-/*
-    function set_page( &$page ){
-        $this->_page = &$page;
-        $this->_display = &$page->_contentManager;
-    }
-    */
 
     function commit_add( ){
         $intro = &$this->_map->getPublicPage( 'input' );
@@ -104,6 +98,38 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
        //do nothing
    }
     
+    function commit_list( ) {
+        $intro = &$this->_map->getPublicPage( 'list' );
+        $this->_set_public_page( $intro );
+        return parent::commit_list( );
+	}
+
+    function _set_public_page( &$public_page ) {
+        if ( !$public_page ) return;
+
+        $this->_public_page_id = $public_page->id;
+        $this->_display->add( $public_page->getDisplay( ));
+
+        $reg = &AMP_Registry::instance( );
+        $reg->setEntry( AMP_REGISTRY_CONTENT_INTRO_ID, $this->_public_page_id );
+
+        $this->_page->setIntroText( $this->_public_page_id );
+        $this->_page->initLocation( );
+    }
+
+	function commit_search( ) {
+		$search_form = $this->_map->getComponent('search');
+		$search_form->Build( true );
+		if ($search_form->submitted()) return $this->commit_list();
+
+        $intro = &$this->_map->getPublicPage( 'list' );
+        $this->_set_public_page( $intro );
+
+		$search_form->applyDefaults();
+		$this->_display->add($search_form);
+		return true;
+	}
+
 }
 
 ?>

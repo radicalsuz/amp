@@ -8,7 +8,7 @@ class NavEngine_PHP extends NavEngine {
         $this->init( $nav );
     }
 
-    function execute( ){
+    function execute( ) {
         if (!($filename = $this->nav->getIncludeFile())) return false;
         $fullpath = file_exists_incpath( $filename );
         if ( !$fullpath ) $fullpath = file_exists_incpath( 'AMP/Nav/' . $filename );

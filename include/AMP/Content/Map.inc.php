@@ -15,7 +15,10 @@ class AMPContent_Map {
     var $_no_permissions = false ;
 
     function AMPContent_Map( &$dbcon, $top = AMP_CONTENT_MAP_ROOT_SECTION ) {
-        if ( defined( 'AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING ){
+		if (   !defined('AMP_SYSTEM_USER_ID') 
+			|| ( AMP_SYSTEM_USER_ID == 0 )
+        	|| ( defined( 'AMP_SYSTEM_PERMISSIONS_LOADING') && AMP_SYSTEM_PERMISSIONS_LOADING )
+			){
             $this->_no_permissions = true;
         }
 

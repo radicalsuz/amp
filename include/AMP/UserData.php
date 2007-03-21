@@ -172,7 +172,7 @@ class UserData {
      *
      *****/
 
-    function output ( $format = 'html', $options = null ) {
+    function output ( $format = 'html', $options = array()) {
 
 			return $this->doPlugin( 'Output', $format, $options );
 

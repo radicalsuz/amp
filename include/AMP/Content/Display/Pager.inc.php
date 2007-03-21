@@ -95,6 +95,16 @@ class AMPContent_Pager extends AMPSystem_ListPager {
         $this->$linktext = $text;
     }
 
+	function _readRequestPage() {
+		parent::_readRequestPage();
+        if ( $this->allResultsRequested() ){
+            $this->setOffset( 0 );
+			$total = $this->getSourceTotal();
+			if ( $total > AMP_CONTENT_LIST_DISPLAY_MAX ) $total = AMP_CONTENT_LIST_DISPLAY_MAX;
+            $this->setLimit( $total );
+        }
+	}
+
 }
 
 ?>

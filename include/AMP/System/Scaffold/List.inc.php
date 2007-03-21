@@ -9,6 +9,7 @@ class %1\$s_List extends AMP_System_List_Form {
         '%3\$s' => '%3\$s',
         'ID'    => 'id');
     var $editlink = '%5\$s';
+    var $_url_add = '%5\$s?action=add';
     var $name_field = '%3\$s';
     var $_source_object = '%1\$s';
     var $_observers_source = array( 'AMP_System_List_Observer');

@@ -1153,4 +1153,11 @@ class AMPSystemLookup_FormsByAction extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_CustomFiles extends AMPSystem_Lookup {
+
+	function AMPSystemLookup_CustomFiles() {
+		$this->dataset = AMPfile_list('custom', 'php'); 
+	}
+}
+
 ?>

@@ -69,23 +69,23 @@ class AMPScaffold_Factory {
     }
 
     function getScaffoldPath( ) {
-        return AMP_BASE_INCLUDE_PATH . 'AMP/System/Scaffold/';
+        return AMP_pathFlip( AMP_BASE_INCLUDE_PATH . 'AMP/System/Scaffold/');
     }
 
     function getTargetPath( ) {
-        return AMP_LOCAL_PATH . '/lib/'. $this->_item_paths[ $this->_scaffold_item_type ] . str_replace( '_', DIRECTORY_SEPARATOR, $this->_scaffold_item);
+        return AMP_pathFlip( AMP_LOCAL_PATH . '/lib/'. $this->_item_paths[ $this->_scaffold_item_type ] . str_replace( '_', DIRECTORY_SEPARATOR, $this->_scaffold_item));
     }
 
     function execute( ) {
         if ( !$this->_verifyTable( )) return false;
         if ( !is_dir( $this->getTargetPath( ))) AMP_mkdir( $this->getTargetPath( ) );
 
-        $this->generateXML( $this->_datatable, $this->getTargetPath( ).'/Fields.xml' );
+        $this->generateXML( $this->_datatable, AMP_pathFlip($this->getTargetPath( ).'/Fields.xml' ));
         $this->generateComponents( );
     }
 
     function generateControllerPage( $merge_values ) {
-        $target_folder = AMP_LOCAL_PATH . '/custom/system/';
+        $target_folder = AMP_pathFlip(AMP_LOCAL_PATH . '/custom/system/');
         if ( !is_dir( $target_folder)) AMP_mkdir( $target_folder);
         $target_path = $target_folder . $this->getControllerPage( );
 
@@ -160,7 +160,7 @@ class AMPScaffold_Factory {
                 $this->_scaffold_item, 
                 $this->_datatable,
                 $this->_field_name,
-                $this->_item_paths[ $this->_scaffold_item_type ],
+                AMP_pathFlip($this->_item_paths[ $this->_scaffold_item_type ]),
                 $this->getControllerPage( ), 
                 $this->_getTranslations( ) 
         );
@@ -181,8 +181,8 @@ class AMPScaffold_Factory {
     }
 
     function _getComponentPath( $component_name ){
-        if ( "Item" == $component_name ) return $this->getTargetPath( ) . '/'. $this->_scaffold_item. '.php';
-        return $this->getTargetPath( ) . '/' . $component_name . '.inc.php' ;
+        if ( "Item" == $component_name ) return AMP_pathFlip($this->getTargetPath( ) . '/'. $this->_scaffold_item. '.php');
+        return AMP_pathFlip($this->getTargetPath( ) . '/' . $component_name . '.inc.php' );
     }
 
     function addError( $error ){

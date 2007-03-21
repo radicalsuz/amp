@@ -5,6 +5,7 @@ require_once( 'AMP/System/ComponentMap.inc.php');
 class ComponentMap_%1\$s extends AMPSystem_ComponentMap {
     var $heading = "%1\$s";
     var $nav_name = "%2\$s";
+	var $_action_default = 'list';
 
     var $paths = array( 
         'fields' => '%4\$s%1\$s/Fields.xml',

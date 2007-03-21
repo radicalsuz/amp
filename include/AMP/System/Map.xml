@@ -169,6 +169,10 @@
     <per>CONTENT_TOOLS_ACCESS</per>
     <title>Content Tools</title>
     <item>
+        <label>Badges</label>
+        <href>badges.php</href>
+    </item>
+    <item>
         <label>User Accounts</label>
         <href>userdata_list.php?modin=20</href>
         <per>CONTENT_USER_ADMIN</per>

@@ -127,6 +127,13 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
         return true;
     }
 
+    function commit_list( ) {
+        $intro = &$this->_map->getPublicPage( 'list' );
+        $this->_set_public_page( $intro );
+        return parent::commit_list( );
+	}
+
+
 }
 
 ?>

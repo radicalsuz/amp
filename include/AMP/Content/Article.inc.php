@@ -599,6 +599,13 @@ class Article extends AMPSystem_Data_Item {
         return 'type in ( ' . join( ',',  $allowed_sections ) . ')';
     }
 
+	function makeCriteriaFulltext( $search_string ) {
+		$dbcon = AMP_Registry::getDbcon();
+        $fulltext_fields = 	array('title', 'shortdesc', 'test', 'contact', 'source', 'author', 'metadescription', 'metakeywords' );
+        return "MATCH ( " . join( ",", $fulltext_fields ) . " ) AGAINST ( ". $dbcon->qstr( $search_string ) ."  IN BOOLEAN MODE )";
+		
+	}
+
     function makeCriteriaTag( $tag_id ) {
         $tagged_articles = AMPSystem_Lookup::instance( 'articlesByTag', $tag_id );
         if ( !$tagged_articles || empty( $tagged_articles )) return 'FALSE';
@@ -619,8 +626,30 @@ class Article extends AMPSystem_Data_Item {
         return $this->_makeCriteriaEquals( 'class', $class_id );
     }
 
+	function makeCriteriaDate( $date_value ) {
+        if ( !is_array( $date_value ) && $date_value ) {
+            return "UNIX_TIMESTAMP( date ) = " . $date_value;
+        }
+        $partial_date_crit = array( );
+        if ( isset( $date_value['Y']) && $date_value['Y'] ) {
+            $partial_date_crit[] = 'YEAR( date ) = ' .$date_value['Y'];
+        }
+        if ( isset( $date_value['M']) && $date_value['M'] ) {
+            $partial_date_crit[] = 'MONTH( date ) = ' . $date_value['M'];
+        }
+        if ( isset( $date_value['d']) && $date_value['d'] ) {
+            $partial_date_crit[] = 'DAY( date ) = ' . $date_value['d'];
+        }
+        if ( empty( $partial_date_crit )) return 'TRUE';
+        return join( ' AND ', $partial_date_crit );
+    }
+
     function makeCriteriaType( $section_id ) {
         return $this->makeCriteriaSection( $section_id );
+    }
+
+    function makeCriteriaRegion( $region_id ) {
+        return $this->_makeCriteriaEquals('state', $region_id ); 
     }
 
     function getMetaDescription( ){
@@ -633,15 +662,6 @@ class Article extends AMPSystem_Data_Item {
     function getMetaKeywords( ){
         return $this->getData( 'metakeywords');
     }
-/*
-    function save( $save_version = true ){
-        if ( isset( $this->id ) && $this->id && $save_version ) {
-            $this->saveVersion( );
-        }
-        if ( !iss)
-        return parent::save( );
-    }
-    */
 
     function get_url_edit( ) {
         return AMP_Url_AddVars( AMP_SYSTEM_URL_ARTICLE_EDIT, array( 'id=' . $this->id ) );

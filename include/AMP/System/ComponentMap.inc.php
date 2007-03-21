@@ -215,7 +215,7 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     function getPublicPageId( $action = 'input' ){
         $page_var = '_public_page_id_' . $action;
         if ( !isset( $this->$page_var )) {
-            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this->_map, $page_var )));
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this->_map) , $page_var ));
             return false;
         }
         return $this->$page_var;
