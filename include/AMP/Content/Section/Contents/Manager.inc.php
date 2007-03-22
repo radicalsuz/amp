@@ -58,7 +58,7 @@ class SectionContents_Manager {
     }
 
     function _setContentSourceSet( $result_dataset ) {
-        $this->_contentSourceSet = &$result_dataset;
+        $this->_contentSourceSet = $result_dataset;
     }
 
     function &getContents( $auto_read = false ) {

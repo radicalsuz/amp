@@ -69,6 +69,12 @@ class ArticleSet extends AMPSystem_Data_Set {
     }
 
     function addFilter( $filter_name, $filter_var = null ) {
+        $filter_class = 'ContentFilter_' . ucfirst( $filter_name );
+        if ( class_exists( $filter_class )) {
+            $sourceFilter = &new $filter_class( $filter_var );
+            return $sourceFilter->execute( $this );
+        }
+
         $filter_filename = ucfirst( $filter_name ) . '.inc.php';
         $filter_path = 'AMP/Content/Article/Filter/'. $filter_filename;
         if ( !file_exists_incpath( $filter_path )) {
@@ -77,7 +83,6 @@ class ArticleSet extends AMPSystem_Data_Set {
             }
         }
         include_once( $filter_path );
-        $filter_class = 'ContentFilter_' . ucfirst( $filter_name );
         $sourceFilter = &new $filter_class( $filter_var );
         return $sourceFilter->execute( $this );
     }

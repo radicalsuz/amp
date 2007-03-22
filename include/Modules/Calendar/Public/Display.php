@@ -25,7 +25,7 @@ class Calendar_Public_Display extends AMP_Display_Detail {
 
         $blurb = ( $description = $source->getBody( ) ? $description : $source->getBlurb( ));
         if ( $blurb ) {
-            $blurb = $this->_renderer->inSpan( $blurb, array( 'class' => $this->_css_class_text ));
+            $blurb = $this->_renderer->inSpan( $blurb, array( 'class' => $this->_css_class_blurb ));
         }
 
         $location = array( );

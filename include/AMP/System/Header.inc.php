@@ -56,7 +56,9 @@ class AMPSystem_Header extends AMPContent_Header {
 
     function _HTML_header () {
         $this->_sendCacheHeaders( );
-        return  $this->_HTML_linkRels() . 
+        return  
+                $this->_HTML_metatag_content_type() . 
+                $this->_HTML_linkRels() . 
                 $this->_HTML_pageTitle() . 
                 $this->_HTML_javaScripts() .
                 $this->_HTML_extra();

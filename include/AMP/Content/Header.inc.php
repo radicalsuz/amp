@@ -244,8 +244,13 @@ class AMPContent_Header {
         return $output;
     }
 
-    function _HTML_metaTags() {
+    function _HTML_metatag_content_type( ) {
         $tags = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$this->encoding."\">\n";
+        return $tags;
+    }
+
+    function _HTML_metaTags() {
+        $tags = $this->_HTML_metatag_content_type( );
         if ( $metadesc = $this->getMetaDesc() ) {
             $tags .= "<meta http-equiv=\"Description\" content=\"". $metadesc. "\">\n" ;
         }

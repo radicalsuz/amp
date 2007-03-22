@@ -892,6 +892,13 @@ class AMPSystemLookup_Filters extends AMPConstant_Lookup {
     var $dataset;
 
     function AMPSystemLookup_Filters( ){
+        require_once( 'AMP/Content/Article/Filter/Fp.inc.php');
+        require_once( 'AMP/Content/Article/Filter/General.inc.php');
+        require_once( 'AMP/Content/Article/Filter/News.inc.php');
+        require_once( 'AMP/Content/Article/Filter/New.inc.php');
+        require_once( 'AMP/Content/Article/Filter/Native.inc.php');
+        require_once( 'AMP/Content/Article/Filter/Related.inc.php');
+
         $dataset = AMPSystemLookup_DeclaredClasses::instance( 'ContentFilter_');
         if ( !$dataset ) {
             $this->dataset = false;

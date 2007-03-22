@@ -49,6 +49,8 @@ define( 'AMP_TEXT_NAME', 'Name');
 define( 'AMP_TEXT_ITEM_NAME', 'Item');
 define( 'AMP_TEXT_SEARCH', 'Search');
 define( 'AMP_TEXT_ALL', 'All');
+define( 'AMP_TEXT_RECENT' , 'Recent&nbsp;' );
+define( 'AMP_TEXT_MORE' , 'More&nbsp;' );
 
 if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
 if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );

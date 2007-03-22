@@ -1,4 +1,5 @@
 <?php
+require_once( 'AMP/UserData/Plugin.inc.php');
 
 class UserDataPlugin_Read_Comments extends UserDataPlugin {
     var $options = array( 
