@@ -29,6 +29,7 @@ if ( !empty($_POST) ) {
     AMP_cacheFlush( AMP_CACHE_TOKEN_URL_CONTENT );
     AMP_cacheFlush( AMP_CACHE_TOKEN_ADODB );
     AMP_cacheFlush( AMP_CACHE_TOKEN_LOOKUP );
+	AMP_flush_apache_cache_folders();
 }
 
 ?>

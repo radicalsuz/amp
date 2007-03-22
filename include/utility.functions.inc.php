@@ -969,6 +969,7 @@ if (!function_exists( 'AMP_cacheFlush' )) {
         }
         $cache->clear( $key_token );
     }
+
 }
 
 if (!function_exists( 'AMP_removeExtension' )) {
@@ -1801,4 +1802,12 @@ function urlencode_array( $field_value, $fieldname ) {
 
 }
 
+function AMP_flush_apache_cache_folders() {
+	$flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "article";
+	system($flush_command);
+	$flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "section";
+	system($flush_command);
+	$flush_command = "rm  ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "index.html";
+	system($flush_command);
+}
 ?>
