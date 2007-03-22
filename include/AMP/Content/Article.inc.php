@@ -670,6 +670,12 @@ class Article extends AMPSystem_Data_Item {
     function isVersion( ) {
         return $this->_version_status;
     }
+
+	function export_keys() {
+		$do_not_export = array( 'test', 'subtitile', 'shortdesc', 'type', 'picture' );
+		$keys = parent::export_keys();
+		return array_diff( $keys, $do_not_export );
+	}
 }
 
 

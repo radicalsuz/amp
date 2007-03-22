@@ -256,6 +256,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             $this->itemdata[$newname] = $data[$newname];
             $this->itemdata[$oldname] = $data[$newname];
         }
+		$this->_addAllowedKey($newname);
     }
 
     function getData( $fieldname = null ) {
@@ -601,6 +602,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function getBlurb( ) {
         return false;
     }
+
+	function export_keys() {
+		if (!is_array($this->_itemdata)) return $this->_allowed_keys;
+		return array_keys($this->_itemdata);
+	}
 
 }
 ?>

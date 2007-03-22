@@ -15,6 +15,22 @@ class Calendar_Event extends AMPSystem_Data_Item {
     }
 
     function _adjustSetData( $data ) {
+        $this->legacyFieldname( $data, 'shortdesc', 'blurb' );
+        $this->legacyFieldname( $data, 'fulldesc', 'description' );
+
+        $this->legacyFieldname( $data, 'laddress', 'event_address' );
+        $this->legacyFieldname( $data, 'lcity', 'event_city' );
+        $this->legacyFieldname( $data, 'lstate', 'event_state' );
+        $this->legacyFieldname( $data, 'lzip', 'event_zip' );
+        $this->legacyFieldname( $data, 'lcountry', 'event_country' );
+
+        $this->legacyFieldname( $data, 'org', 'endorsers' );
+        $this->legacyFieldname( $data, 'typeid', 'event_type_id' );
+
+        $this->legacyFieldname( $data, 'contact1', 'public_contact_name' );
+        $this->legacyFieldname( $data, 'email1', 'public_contact_email' );
+        $this->legacyFieldname( $data, 'phone1', 'public_contact_phone' );
+
         $this->legacyFieldname( $data, 'lname2', 'Last_Name');
         $this->legacyFieldname( $data, 'fname2', 'First_Name');
         $this->legacyFieldname( $data, 'orgaznization2', 'Company');
@@ -25,6 +41,9 @@ class Calendar_Event extends AMPSystem_Data_Item {
         $this->legacyFieldname( $data, 'zip2', 'Zip');
         $this->legacyFieldname( $data, 'email2', 'Email');
         $this->legacyFieldname( $data, 'phone2', 'Work_Phone');
+
+        $this->legacyFieldname( $data, 'fporder', 'front_page_order' );
+        $this->legacyFieldname( $data, 'datestamp', 'entered_at' );
     }
 
     function getState( ) {
@@ -173,6 +192,14 @@ class Calendar_Event extends AMPSystem_Data_Item {
         }
         return $countries[ $result ];
     }
+
+
+	function export_keys() {
+		$do_not_export = array( 'lname2', 'fname2', 'orgaznization2', 'address2', 'city2', 'state2', 'country2', 'zip2', 'email2', 'phone2', 'contact1', 'fulldesc', 'shortdesc', 'email1', 'phone1', 'endorse', 'lcity', 'lstate', 'enddate', 'lzip', 'lcountry', 'org', 'areaID', 'typeid', 'endtime', 'laddress' );
+		$keys = parent::export_keys();
+		return array_diff( $keys, $do_not_export );
+    }
+
 
 }
 

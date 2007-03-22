@@ -2,6 +2,7 @@
 
 require_once( 'AMP/System/List/Form.inc.php');
 require_once( 'Modules/Calendar/Event.php');
+require_once( 'Modules/Calendar/List/Request.inc.php' );
 
 class Calendar_List extends AMP_System_List_Form {
     var $name = "Calendar";
@@ -23,6 +24,9 @@ class Calendar_List extends AMP_System_List_Form {
         'name' => 'event',
         '_showState' => 'lstate' 
         );
+    var $_actions = array( 'publish', 'unpublish', 'delete', 'export');
+//    var $_actions_global = array( 'export' );
+    var $_request_class = 'Calendar_List_Request';
 
     function Calendar_List( &$dbcon, $criteria = array( ) ) {
         if ( !isset( $criteria['current'])) {

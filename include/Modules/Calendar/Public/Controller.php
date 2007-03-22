@@ -19,8 +19,6 @@ class Calendar_Public_Controller extends AMP_System_Component_Controller_Public 
     }
 
     function commit_list( ) {
-        $intro = &$this->_map->getPublicPage( 'list' );
-        $this->_set_public_page( $intro );
         $list_result = parent::commit_list( );
 
         $repeat_list = $this->_map->getComponent( 'list_repeat' );

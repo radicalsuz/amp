@@ -31,7 +31,7 @@ class Nav_Form extends AMPSystem_Form_XML {
     function _getRelatedContent( $section_id ){
         $this->_sql_basic = 
             "SELECT distinct a.title, a.id, a.type as typeid, a.linkover, a.link, a.linktext, t.type  "
-            . "FROM articles a, articletype t Left Join articlereltype   on articleid = a.id  "
+            . "FROM ( articles a, articletype t ) Left Join articlereltype   on articleid = a.id  "
             . "WHERE a.publish=1 and a.uselink=1 and ";
         $this->_sql_sort = 'order by a.date desc';
 
