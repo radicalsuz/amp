@@ -11,8 +11,8 @@ class ContentClass_Display extends ArticleSet_Display {
     var $_showListIntro = true;
 
     function ContentClass_Display( &$classRef, $read_data = true ) {
-        $this->init( $classRef->getContents(), $read_data );
         $this->_class = &$classRef;
+        $this->init( $classRef->getContents(), $read_data );
     }
 
     function execute() {
@@ -46,5 +46,13 @@ class ContentClass_Display extends ArticleSet_Display {
         if ( isset ($this->_pager) && !( $this->isFirstPage() && $intro )) return $this->_pager->_HTML_topNotice( $this->_class->getName() );
         return $intro->execute(); # . $this->_HTML_newline();
     }
+
+    function _activatePager() {
+        if ( $class_limit = $this->_class->getListItemLimit( )) {
+            $this->_pager_limit = $class_limit;
+        }
+        return parent::_activatePager( );
+    }
+
 }
 ?>

@@ -1810,4 +1810,19 @@ function AMP_flush_apache_cache_folders() {
 	$flush_command = "rm  ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "index.html";
 	system($flush_command);
 }
+
+function AMP_find_banner_image( ) {
+    $banner_image = false;
+    $currentPage = &AMPContent_Page::instance();
+
+    if ( $currentPage->isList( AMP_CONTENT_LISTTYPE_SECTION ) || $currentPage->isArticle( )) {
+        $map = &AMPContent_Map::instance();
+        $banner_image = $map->readAncestors( $currentPage->getSectionId(), 'flash' );
+    } elseif ( $currentPage->isList( AMP_CONTENT_LISTTYPE_CLASS )) {
+        $current_class = $currentPage->getClass( );
+        $banner_image = $current_class->get_image_banner( ) ;
+    }
+    return $banner_image;
+
+}
 ?>

@@ -162,6 +162,10 @@ class Section extends AMPSystem_Data_Item {
         return $image;
     }
 
+    function get_image_banner( ) {
+        return $this->getData( 'flash');
+    }
+
     function getOrder( ){
         return $this->getData( 'textorder');
     }

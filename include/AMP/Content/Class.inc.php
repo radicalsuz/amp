@@ -117,5 +117,14 @@ class ContentClass extends AMPSystem_Data_Item {
         if ( !( isset( $this->id ) && $this->id )) return false;
         return AMP_Url_AddVars( AMP_SYSTEM_URL_CLASS, array( 'id=' . $this->id ) );
     }
+
+    function getListItemLimit() {
+        return $this->getData( 'up' );
+    }
+
+    function get_image_banner( ) {
+        return $this->getData( 'flash');
+    }
+
 }
 ?>

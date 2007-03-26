@@ -395,6 +395,19 @@
         <label>File</label>
 		<block>doc_actions</block>
     </doc_upload>
+    <media_header>
+        <type>header</type>
+        <label>Attach Media</label>
+    </media_header>
+    <media_html>
+        <type>textarea</type>
+        <label>Embed Snippet</label>
+        <size>10:40</size>
+    </media_html>
+    <media_list_display>
+        <type>checkbox</type>
+        <label>Show media in List</label>
+    </media_list_display>
 <!-- new tab starts here -->
 	<tab_html_fancy>
 		<type>html</type>
