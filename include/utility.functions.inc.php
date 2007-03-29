@@ -1512,8 +1512,8 @@ function &AMP_get_renderer( ){
     static $renderer = false;
     if ( $renderer ) return $renderer;
 
-    require_once( 'AMP/Content/Display/HTML.inc.php');
-    $renderer = &new AMPDisplay_HTML( );
+    require_once( 'AMP/Renderer/HTML.php');
+    $renderer = &new AMP_Renderer_HTML( );
     return $renderer ;
 
 }

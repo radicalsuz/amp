@@ -146,6 +146,14 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     function _sort_default( &$item_set ){
         return $this->sort( $item_set, 'toolName');
     }
+
+    function getMediaUrl( ) {
+        return false;
+    }
+
+    function getMediaHtml( ) {
+        return false;
+    }
 }
 
 ?>

@@ -24,6 +24,7 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
     function getDescription() {
         return $this->getData( 'description' );
     }
+
     function getTitle() {
         return $this->getName();
     }
@@ -118,4 +119,5 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
     }
 
 }
+
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-class AMP_Display_Renderer_CSV {
+class AMP_Renderer_CSV {
 
     var $delimiter = ',';
 	var $file_extension = 'csv';

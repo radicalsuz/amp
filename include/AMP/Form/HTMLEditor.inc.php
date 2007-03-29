@@ -7,13 +7,14 @@ class AMPFormElement_HTMLEditor {
             "'SpellChecker'",
             "'FullScreen'",
             "'FindReplace'",
+            "'Stylist'",
 			 "'TableOperations'",
             "'SuperClean'",
             );
     var $config_location = "/scripts/xinha_config.js";
-    var $width = '550px';
-    var $height = '420px';
-    var $stylesheet = '/custom/styles.css';
+    var $width = 550;
+    var $height = 420;
+    var $stylesheet = '/custom/wysiwyg_styles.css';
     var $config_actions = array();
     var $_header;
 
@@ -78,6 +79,11 @@ class AMPFormElement_HTMLEditor {
     }
 
     function _config_script() {
+        if ($this->isPlugin('Stylist') && !file_exists( AMP_LOCAL_PATH . $this->stylesheet )) {
+            $this->removePlugin( 'Stylist');
+        } else {
+            $this->width += 200;
+        }
         $plugins = count( $this->plugins )?"\n[\n". join(",\n", $this->plugins)."\n]":"null";
 
         $output = "";
@@ -100,9 +106,9 @@ class AMPFormElement_HTMLEditor {
     function _xinha_config() {
         $output = "function xinha_config(){ \n";
         $output .= "    cfg = new HTMLArea.Config();\n";
-        $output .= "    cfg.width  = '".$this->width."';\n";
-        $output .= "    cfg.height = '".$this->height."';\n";
-        if ($this->isPlugin('Stylist')) {
+        $output .= "    cfg.width  = '".$this->width."px';\n";
+        $output .= "    cfg.height = '".$this->height."px';\n";
+        if ($this->isPlugin('Stylist') && file_exists( AMP_LOCAL_PATH . $this->stylesheet )) {
             $output .= "    cfg.stylistLoadStylesheet('".$this->stylesheet."');\n";
         }
         if (!empty($this->config_actions)) {

@@ -12,5 +12,12 @@ class Article_Public_Search_Form extends AMPSearchForm {
         $this->init( $name, 'GET', AMP_CONTENT_URL_SEARCH );
     }
 
+    function submitted( ) {
+        if ( isset( $_GET['Search']) && $_GET['Search'] == 'Go' && isset( $_GET['q']) && $_GET['q'] ) {
+            return true;
+        }
+        return parent::submitted( );
+    }
+
 }
 ?>

@@ -606,6 +606,10 @@ class Article extends AMPSystem_Data_Item {
 		
 	}
 
+	function makeCriteriaQ( $search_string ) {
+        return $this->makeCriteriaFulltext( $search_string );
+    }
+
     function makeCriteriaTag( $tag_id ) {
         $tagged_articles = AMPSystem_Lookup::instance( 'articlesByTag', $tag_id );
         if ( !$tagged_articles || empty( $tagged_articles )) return 'FALSE';
@@ -669,6 +673,14 @@ class Article extends AMPSystem_Data_Item {
 
     function isVersion( ) {
         return $this->_version_status;
+    }
+
+    function getMediaHtml( ) {
+        return $this->getData( 'media_html');
+    }
+
+    function getMediaUrl( ) {
+        return $this->getData( 'media_filename');
     }
 
 	function export_keys() {

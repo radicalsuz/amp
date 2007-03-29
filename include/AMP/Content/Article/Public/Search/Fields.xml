@@ -23,4 +23,7 @@
         <label>By Region</label>
         <lookup>regions</lookup>
     </region>
+    <q>
+        <type>hidden</type>
+    </q>
 </array>

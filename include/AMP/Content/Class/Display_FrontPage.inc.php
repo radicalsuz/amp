@@ -29,7 +29,7 @@ class ContentClass_Display_FrontPage extends ContentClass_Display {
     function _HTML_listTable( $content ) {
         if (!$content ) return false;
         if ( AMP_CONTENT_LAYOUT_CSS ) return $content;
-        return  '<table width="100%" class="'.$this->_css_class_text.'">' . $content . '</table>';
+        return  '<table width="100%" class="'.$this->_css_class_text.'" cellpadding="0" cellspacing="0">' . $content . '</table>';
     }
 
 

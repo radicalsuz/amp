@@ -48,7 +48,9 @@ class Article_Display extends AMPDisplay_HTML {
         $body = $this->_article->getBody();
         $body = $this->_processBody( $body );
 
-        return $this->_addImage( $body );
+        $body = $this->_addImage( $body );
+        $body = $this->render_media( ) . $body;
+        return $body;
     }
 
     function _processBody( $body ) {
@@ -74,6 +76,24 @@ class Article_Display extends AMPDisplay_HTML {
         $image = $this->_article->getImageRef();
         if (!$image || !$image->display_in_body( )) return $body;
         return $this->_HTML_imageBlock( $image ) . $body;
+    }
+
+    function render_media( ) {
+
+        $media_url  = $this->_article->getMediaUrl();
+        $media_html = $this->_article->getMediaHtml();
+        if ( !( $media_html || $media_url )) return $body;
+
+        $renderer = AMP_get_renderer( );
+        $output = '';
+        if ( $media_url ) {
+            $output .= $renderer->embed_flash_video( $media_url );
+        }
+        if ( $media_html ) {
+            $output .= $media_html;
+        }
+        return $renderer->div( $output, array( 'class' => 'article_media' )) ;
+        
     }
 
 

@@ -27,8 +27,8 @@ class Calendar_List_Request extends AMP_System_List_Request {
 			$safe_values = array_combine_key($keys, $values);
 			$dump[ $source->id ] = array_merge($blank_set, $safe_values);
 		}
-		require_once('AMP/Display/Renderer/CSV.php');
-		$renderer = new AMP_Display_Renderer_CSV();
+		require_once('AMP/Renderer/CSV.php');
+		$renderer = new AMP_Renderer_CSV();
 		$file =  $renderer->format(array( $keys ));
 	 	$file .= $renderer->format($dump);	
 		$renderer->header( date("Y_m_d__") . get_class($this));
