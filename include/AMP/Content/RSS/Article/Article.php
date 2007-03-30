@@ -84,9 +84,6 @@ class RSS_Article extends AMPSystem_Data_Item {
             'contact' => $this->getContacts( )  
             );
 
-        AMP_varDump( $this->itemdata);
-        AMP_varDump( $article_data );
-        exit;
 
         require_once( 'AMP/Content/Article.inc.php');
         $article = &new Article( $this->dbcon );
