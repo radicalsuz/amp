@@ -18,7 +18,9 @@ class RSS_Article extends AMPSystem_Data_Item {
 
     function getItemDate( ){
         $date_item = $this->getData( 'dcdate');
-        if ( $date_item == '1969-12-31') return AMP_NULL_DATE_VALUE;
+        if ( $date_item == '1969-12-31')  return AMP_NULL_DATE_VALUE;
+
+        return $date_item;
     }
 
     function getTimestamp( ){
@@ -82,8 +84,13 @@ class RSS_Article extends AMPSystem_Data_Item {
             'contact' => $this->getContacts( )  
             );
 
+        AMP_varDump( $this->itemdata);
+        AMP_varDump( $article_data );
+        exit;
+
         require_once( 'AMP/Content/Article.inc.php');
         $article = &new Article( $this->dbcon );
+        $article->setDefaults( );
         $article->setData( $article_data );
         if ( !$article->save( )) return false;
 
