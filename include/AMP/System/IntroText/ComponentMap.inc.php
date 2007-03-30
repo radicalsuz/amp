@@ -54,5 +54,19 @@ class ComponentMap_IntroText extends AMPSystem_ComponentMap {
         }
     }
 
+    /**
+     * &getComponent 
+     *  
+     * this is an ugly workaround that seems to fix a compatibility issue with PHP4
+     *
+     * @param mixed $component_type 
+     * @param mixed $passthru 
+     * @access public
+     * @return void
+     */
+    function &getComponent( $component_type, $passthru = null ) {
+        return parent::getComponent( $component_type, $passthru );
+    }
+
 }
 ?>
