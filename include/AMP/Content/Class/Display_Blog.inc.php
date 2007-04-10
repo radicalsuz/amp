@@ -5,6 +5,7 @@ require_once( 'AMP/Content/Class/Display.inc.php' );
 class ContentClass_Display_Blog extends ContentClass_Display {
 
     var $_css_id_container_list = "main_content";
+    var $_css_class_container_content = "blog";
 
     function ContentClass_Display_Blog( &$classRef, $read_data = true ) {
         $this->_class = &$classRef;
@@ -33,6 +34,7 @@ class ContentClass_Display_Blog extends ContentClass_Display {
     
         if (!($display = &$contentItem->getDisplay())) return false;
         $display->useShortComments();
+        $display->useTitleLinks();
         if ( AMP_CONTENT_LAYOUT_CSS ) return $this->_HTML_inDiv( $display->execute(), $this->_css_class_container_listentry );
         return  "<tr>".
                 $this->_HTML_inTD( $display->execute() ). 

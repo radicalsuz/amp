@@ -1,5 +1,4 @@
 <?php
-
 require_once ('AMP/Content/Display/HTML.inc.php' );
 if (!defined( 'AMP_CONTENT_LAYOUT_CSS' )) define( 'AMP_CONTENT_LAYOUT_CSS', false );
 
@@ -48,9 +47,8 @@ class Article_Display extends AMPDisplay_HTML {
         $body = $this->_article->getBody();
         $body = $this->_processBody( $body );
 
-        $body = $this->_addImage( $body );
-        $body = $this->render_media( ) . $body;
-        return $body;
+        return    $this->render_image( )
+                . $this->insert_media( $body );
     }
 
     function _processBody( $body ) {
@@ -78,11 +76,24 @@ class Article_Display extends AMPDisplay_HTML {
         return $this->_HTML_imageBlock( $image ) . $body;
     }
 
+    function render_image( ) {
+        return $this->_addImage( "");
+
+    }
+
+    function insert_media( $body ) {
+        $media = $this->render_media( );
+        if ( strpos( $body, '%media%') === FALSE ) {
+            return $body.$media;
+        }
+        return str_replace( '%media%', $media, $body );
+    }
+
     function render_media( ) {
 
         $media_url  = $this->_article->getMediaUrl();
         $media_html = $this->_article->getMediaHtml();
-        if ( !( $media_html || $media_url )) return $body;
+        if ( !( $media_html || $media_url )) return false;
 
         $renderer = AMP_get_renderer( );
         $output = '';

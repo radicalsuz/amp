@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/System/List/Request.inc.php');
+require_once( 'AMP/System/User/Profile/Profile.php');
 
 class Calendar_List_Request extends AMP_System_List_Request {
 
@@ -24,8 +25,18 @@ class Calendar_List_Request extends AMP_System_List_Request {
 
 		foreach($target_set as $source) {
 			$values = $source->getData();	
+            $user_values = array( );
+
+            if ( isset( $values['uid']) && $values['uid']) {
+                $owner = new AMP_System_User_Profile( AMP_Registry::getDbcon( ), $values['uid']);
+                if ( $owner->hasData( )) {
+                    $owner_data = $owner->getData( );
+                    unset( $owner_data['id'] );
+                    $user_values = array_combine_key( $keys, $owner_data );
+                } 
+            }
 			$safe_values = array_combine_key($keys, $values);
-			$dump[ $source->id ] = array_merge($blank_set, $safe_values);
+			$dump[ $source->id ] = array_merge($blank_set, $safe_values, $user_values );
 		}
 		require_once('AMP/Renderer/CSV.php');
 		$renderer = new AMP_Renderer_CSV();

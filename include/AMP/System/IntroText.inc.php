@@ -12,7 +12,6 @@
  *
  *****/
 require_once ( 'AMP/System/Data/Item.inc.php' );
-require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
 
  class AMPSystem_IntroText extends AMPSystem_Data_Item {
 
@@ -36,6 +35,7 @@ require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
     }
 
     function &getDisplay() {
+        require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
         $display = & new ArticleDisplay_IntroText( $this );
         return $display;
     }

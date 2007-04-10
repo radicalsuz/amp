@@ -16,15 +16,16 @@ class AMP_System_Observer {
         $objectSet = array( );
         //assign the array
         if ( is_array( $target )){
-            $objectSet = &$target;
+            $objectSet = $target;
         } else {
             $objectSet[] = &$target;
         }
+        $test_object = current( $objectSet );
         //check for interface
-        $add_method = method_exists( current( $objectSet ), 'addObserver') ?
+        $add_method = method_exists( $test_object , 'addObserver') ?
                         'addObserver' : 'add_observer';
-        if ( !method_exists( current( $objectSet ), $add_method )) {
-            trigger_error( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED, get_class( current( $objectSet )), $add_method, get_class( $this )) );
+        if ( !method_exists( $test_object, $add_method )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED, get_class( $test_object ), $add_method, get_class( $this )) );
             return false;
         }
         //attach same instance to each class

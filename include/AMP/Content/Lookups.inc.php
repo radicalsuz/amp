@@ -407,12 +407,8 @@ class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
     var $id_field = 'typeid';
 
     function AMPContentLookup_SectionsByArticle( $article_id = null ){
-        if ( isset( $article_id )) $this->_addCriteriaArticle( $article_id );
+        if ( isset( $article_id )) $this->criteria .= $this->_makeCriteriaArticle( $article_id );
         $this->init( );
-    }
-
-    function _addCriteriaArticle( $article_id ){
-        $this->criteria = $this->_makeCriteriaArticle( $article_id ) ;
     }
 
     function _makeCriteriaArticle( $article_id ) {
@@ -421,6 +417,7 @@ class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
 
     function &instance( $article_id ) {
         static $lookup = array( );
+        print 'instance for ' . $article_id . ' <BR>';
 
         if ( !isset( $lookup[ $article_id ])){
             $lookup[$article_id] = new AMPContentLookup_SectionsByArticle ( $article_id );

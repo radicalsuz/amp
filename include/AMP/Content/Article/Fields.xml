@@ -401,7 +401,11 @@
     </media_header>
     <media_html>
         <type>textarea</type>
-        <label>Embed Snippet</label>
+        <label>Embed HTML Snippet:&lt;br /&gt;
+        The HTML below will appear at the bottom of your article.&lt;br /&gt; 
+        To make it appear within the article, enter the tag %media% in the body of your article.&lt;br /&gt;
+        &lt;a href=&quot;http://youtube.com/my_videos_upload&quot; target=&quot;blank&quot;&gt;Upload&lt;/a&gt; your video to Youtube here.&lt;br /&gt;
+        </label>
         <size>10:40</size>
     </media_html>
     <!--

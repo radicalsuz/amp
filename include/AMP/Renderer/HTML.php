@@ -245,6 +245,10 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         }
         return $output;
     }
+
+    function hr( ) {
+        return '<hr />';
+    }
 }
 
 ?>

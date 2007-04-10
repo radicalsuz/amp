@@ -171,7 +171,7 @@ class AMP_System_File {
                 }
                 $result_set[ $file_name ] = &new $class_name( $folder_path . $file_name );
             }
-                trigger_error( 'reading dir contents ' . count( $file_attempts_count));
+                //trigger_error( 'reading dir contents ' . count( $file_attempts_count));
             //Cache Folder results for large searches
             if ( count( $result_set ) > 500 ) {
                 AMP_cache_set( $folder_cache_key, $result_set );
