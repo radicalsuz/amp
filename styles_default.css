@@ -237,3 +237,9 @@ div.webaction_form {
 	padding: .5em;
 	margin: .5em;
 }
+
+div.article_media {
+    margin-left:15%;
+    display: block;
+    padding: 1em;
+}
