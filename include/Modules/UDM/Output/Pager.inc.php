@@ -19,6 +19,11 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
             'default'   => 1,
             'label'=>'Show Jump Listing',
             'type' => 'checkbox'),
+        'use_basic'=>array (
+            'available'=>true,
+            'default'   => '',
+            'label'=>'Use Content-Style Pager',
+            'type' => 'checkbox'),
         'form_name'=>array (
             'available'=>true,
             'label'=>'Name of Pager form',
@@ -32,9 +37,10 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
     var $stored_dataset;
     var $available=true;
     var $_index_set;
+    var $_basic_pager_display;
 			
 	
-	function UserDataPlugin_Pager_Output (&$udm, $plugin_instance) {
+	function UserDataPlugin_Pager_Output (&$udm, $plugin_instance = null ) {
         $this->init ($udm, $plugin_instance);
 		$this->read_request();	
 	}
@@ -64,10 +70,12 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
 	
 	function execute($options=array( )) {
         $options=array_merge($this->getOptions(), $options);
+
         
         if ( defined( 'AMP_CONTENT_PAGER_EXECUTED_'.$this->udm->instance)) {
             $this->executed = true;
         }
+
 
         if ($this->udm->total_qty) $this->total_qty = $this->udm->total_qty;
         else $this->total_qty = count($this->udm->users);
@@ -84,6 +92,26 @@ class UserDataPlugin_Pager_Output extends UserDataPlugin {
         if (!isset($this->udm->url_criteria)) $this->criteria = $this->udm->parse_URL_crit();
         else $this->criteria=$this->udm->url_criteria;
         
+        if ( $options['use_basic'] && !$this->udm->admin  ) {
+            if ( !$this->executed ) {
+                require_once( 'AMP/Display/Pager.php');
+                $this->_basic_pager_display = new AMP_Display_Pager( );
+                $this->_basic_pager_display->set_offset( $this->offset);
+                $this->_basic_pager_display->set_limit( $this->return_qty);
+                $this->_basic_pager_display->set_target( $_SERVER['PHP_SELF']);
+                $this->_basic_pager_display->set_total( $this->total_qty );
+                $this->_basic_pager_display->enable_all( false );
+
+                $this->executed=true;
+                if ( !defined( 'AMP_CONTENT_PAGER_EXECUTED_'.$this->udm->instance)) {
+                    define( 'AMP_CONTENT_PAGER_EXECUTED_'.$this->udm->instance , true );
+                }
+
+                return $this->_basic_pager_display->render_top( );
+            }
+            return $this->_basic_pager_display->execute( );
+        }
+
         if ($this->udm->admin) $options['control_class']="list_controls";
 
 		//$output ="<div class=".$options['control_class']." style=\"width:100%;text-align:center;padding-bottom:5px;padding-top:2px;background-color:#E5E5E5;\">";

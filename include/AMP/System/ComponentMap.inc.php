@@ -89,7 +89,7 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 
         if ( !$cache_key_base ) return false;
         if ( isset( $id )) {
-            return $cache->identify( $cache_key_base, $id );
+            return AMP_System_Cache::identify( $cache_key_base, $id );
         }
         return $cache_key_base;
 

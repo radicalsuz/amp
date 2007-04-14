@@ -8,10 +8,15 @@ class AMP_Display_Pager_Content extends AMP_Display_Pager {
     }
 
     function render_links( ) {
-        return 
+        $links =  
             $this->render_first( ) . $this->_renderer->space( )
-            . $this->render_last( ) . $this->_renderer->newline( )
-            . (( $this->_qty_total < AMP_CONTENT_LIST_DISPLAY_MAX ) ? $this->render_all( ) : "");
+            . $this->render_last( ) . $this->_renderer->newline( );
+
+        if ( !$this->_enable_all || ( $this->_qty_total > AMP_CONTENT_LIST_DISPLAY_MAX )) {
+            return $links;
+        }
+
+        return $links.$this->render_all( );
     }
 }
 

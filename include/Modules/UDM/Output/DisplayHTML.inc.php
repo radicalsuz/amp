@@ -39,6 +39,16 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
                                'default'=>'1',
                                'available'=>true,
                                'type'=>'select'),
+        'column_count'=>array('label'=>'Columns for display',
+                               'default'=>'1',
+                               'available'=>true,
+                               'type'=>'text',
+                               'size'=>'3'
+                               ),
+        'column_renderer'=>array('label'=>'Column Wrapper Function Name',
+                               'default'=>'',
+                               'available'=>true,
+                               'type'=>'text'),
         '_userid' => array ('default'=>null,
                             'available'=>false)
         );
@@ -69,6 +79,13 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
                 'f_type'=>'text',
                 'f_sqlname'=>'if(publish=1,"Live","Draft")'
               ));
+
+    var $_css_class_container_list_column= 'list_column';
+    var $_css_class_container_list = 'list_form';
+    var $_css_class_container_list_item = 'list_item';
+
+    var $is_last_column = false;
+
     function UserDataPlugin_DisplayHTML_Output (&$udm, $instance=null) {   
         $this->init($udm, $instance);
         $this->regionset=new Region;
@@ -123,28 +140,129 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         $inclass = method_exists($this, $display_function);
         $comments_plugin = &$this->udm->getPlugin( 'Output', 'Comments' );
         
-        $output = false;
+        $output = '';
+        $column_output='';
+        $column_length = round( count( $dataset ) / $options['column_count'] );
+
+        $items_output = '';
+        $items_count=0;
+        $items_size_tracker = array( );
+        $items_header_size_tracker = array( );
+        $renderer = AMP_get_renderer( );
+
         //output display format
         foreach ($dataset as $dataitem) {
+
             //check if a new subheader is needed
-            if ($subheader_level) $output.=$this->subheader($dataitem, $options, $subheader_level);
+            if ($subheader_level){
+                $subheader_output = $this->subheader($dataitem, $options, $subheader_level);
+                //store the size of the subheader for each entry
+                if ( $subheader_output ) $items_header_size_tracker[ strlen( $items_output ) ] = $subheader_output;
+                $items_output .= $subheader_output; 
+
+            }
 
             //run the output function
             if($inclass) {
-                $output.=$this->$display_function($dataitem);
+                //$items_output.=$this->$display_function($dataitem);
+                $items_output.=$renderer->div( $this->$display_function($dataitem ), array( 'class' => $this->_css_class_container_list_item ));
 
             } else {
-                $output.=$display_function($dataitem, $options);
+                $items_output.=$renderer->div( $display_function($dataitem, $options), array( 'class' => $this->_css_class_container_list_item ));
             }
 
             //add comments
             if ( $comments_plugin ) {
-                $output .= $this->addComments( $dataitem, $comments_plugin );
+                $items_output .= $this->addComments( $dataitem, $comments_plugin );
+            }
+
+            //column formatting
+
+            $items_count++;
+            $size = strlen( $items_output );
+            //store the size of each entry in the column
+            $items_size_tracker[ $size ] = $items_count;
+        }
+
+        if ( !isset( $options['column_count']) || !$options['column_count'] || ( $options['column_count'] ==1)) {
+            //return output for single-column lists
+            return $items_output;
+        }
+
+        //put output into columns by data length
+        //this length # includes HTML tags, so further refinement is possible using strip_tags
+
+        $column_size_perfect = strlen( $items_output ) / $options['column_count'];
+        $column_end = $column_size_perfect;
+        $column_pointer = 0;
+        $next_column_header = '';
+
+        foreach( $items_size_tracker as $bytes => $item_count ) {
+            //if the current total_bytes is less than the next column break point, keep going 
+            if ( $bytes < $column_end ) continue;
+
+            $this->prepare_new_column( );
+            $column_size = $bytes - $column_pointer;
+            //pulls the column contents from the big $items_output string
+            $column_html = $next_column_header . substr( $items_output, $column_pointer, $column_size );
+            $column_output .= $this->renderColumn( $column_html, $options );
+
+            $next_column_header = $this->subheader( $dataset[$item_count], $options, $subheader_level ) ;
+            $column_end += $column_size;
+            $column_pointer += $column_size;
+
+            if ( isset( $items_header_size_tracker[ $bytes ]) && $next_column_header ) {
+                $column_pointer = $column_pointer + strlen( $items_header_size_tracker[$bytes]);
+            }
+
+            if ( $column_end >= strlen( $items_output )) {
+                $this->prepare_new_column( );
+                $column_html = $next_column_header . substr( $items_output, $column_pointer );
+                $column_output .= $this->renderColumnLast( $column_html, $options );
+                break; 
             }
         }
+        $output = $this->renderBlock( $column_output );
     
 
 		return $output;
+    }
+
+    function prepare_new_column( ) {
+        $this->current_subheader3 = '';
+        $this->current_subheader2 = '';
+
+
+    }
+
+
+    function renderBlock( $html ) {
+        $renderer = AMP_get_renderer( );
+        return $renderer->div( $html, array( 'class' => $this->_css_class_container_list ));
+    }
+
+    function renderColumnLast( $html, $options ) {
+        $this->is_last_column = true;
+        $stored_class = $this->_css_class_container_list_column;
+        $this->_css_class_container_list_column .= " list_column_last";
+
+        $result = $this->renderColumn( $html, $options );
+        $this->is_last_column = false;
+        $this->_css_class_container_list_column = $stored_class;
+        return $result;
+    }
+
+    function renderColumn( $html, $options = array( ) ) {
+        if ( isset( $options['column_renderer']) && $options['column_renderer']) {
+            $column_renderer = $options['column_renderer'];
+            return $column_renderer( $html, $this );
+        }
+
+        $renderer = AMP_get_renderer( );
+        return $renderer->inDiv( 
+                    $html,
+                    array( 'class' => $this->_css_class_container_list_column )
+                    );
     }
 
     function addComments( $dataitem, &$display  ) {

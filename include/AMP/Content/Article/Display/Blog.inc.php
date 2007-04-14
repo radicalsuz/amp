@@ -51,7 +51,7 @@ class ArticleDisplay_Blog extends Article_Display {
 
     function _HTML_authorDate ( $author, $date ) {
    
-        return $this->_HTML_inSpan('Posted by '.$author. ' on '.  DoDate( $date, 'F jS, Y'), $this->_css_class_date);
+        return $this->_HTML_inSpan(sprintf( AMP_TEXT_POSTED_BY, $author, DoDate( $date, 'F jS, Y')), $this->_css_class_date );
     }
 
     function _HTML_endHeading() {
@@ -64,7 +64,7 @@ class ArticleDisplay_Blog extends Article_Display {
         $url = $article->getSourceURL( );
         if (!$source ) return false;
         return    $this->newline( ) 
-                . $this->inSpan( $this->link( $url, $source  ), $this->_css_class_date );
+                . $this->inSpan( $this->link( $url, $source  ), array( 'class' => $this->_css_class_date ) );
     }
 
 

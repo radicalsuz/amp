@@ -249,6 +249,11 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
     function hr( ) {
         return '<hr />';
     }
+
+    function indent( $content, $indent_size = 10 ) {
+        return $this->div( $content, array( 'style' => ( 'padding-left:' . $indent_size . 'px' )));
+    }
+
 }
 
 ?>

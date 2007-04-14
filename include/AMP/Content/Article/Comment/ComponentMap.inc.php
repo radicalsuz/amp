@@ -35,7 +35,7 @@ class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
             $allowed_articles = AMP_lookup( 'AllowedArticles');
             $model = $this->getComponent( 'source');
             $model->readData( $model_id );
-            $article_id= $model->getArticle( );
+            $article_id = $model->getArticle( );
 
             if ( !isset( $allowed_articles[ $article_id ])) {
                 return false;

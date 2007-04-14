@@ -21,6 +21,11 @@ class Calendar_Public_Search_Form extends AMPSearchForm {
         return $fields;
     }
 
+    function submitted( ) {
+        if ( isset( $_GET['old']) && $_GET['old']) return true;
+        return parent::submitted( );
+    }
+
 }
 
 ?>

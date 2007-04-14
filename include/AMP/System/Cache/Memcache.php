@@ -28,7 +28,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
         $server_list = explode( ',', AMP_SYSTEM_MEMCACHE_SERVER );
         $primary_server = array_shift( $server_list );
-        $result = $memcache_connection->connect( $primary_server, AMP_SYSTEM_MEMCACHE_PORT );
+        $result = $memcache_connection->pconnect( $primary_server, AMP_SYSTEM_MEMCACHE_PORT );
         if ( count( $server_list ) ) {
             foreach( $server_list as $additional_server ) {
                 $result = ( $memcache_connection->addServer( $additional_server, AMP_SYSTEM_MEMCACHE_PORT ) || $result );

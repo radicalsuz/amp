@@ -24,6 +24,8 @@ class AMP_Display_Pager {
     var $_text_last  = AMP_TEXT_PAGER_LAST;
     var $_text_all   = AMP_TEXT_PAGER_ALL;
 
+    var $_enable_all  = true;
+
     var $_url_target;
 
     function AMP_Display_Pager( ) {
@@ -224,6 +226,7 @@ class AMP_Display_Pager {
     }
 
     function render_links( ) {
+        if ( !$this->_enable_all ) return $this->render_jump_set( );
         return 
             $this->render_all( ) . $this->_renderer->newline( )
             . $this->render_jump_set( );
@@ -276,6 +279,10 @@ class AMP_Display_Pager {
         $linktext = '_text_'.$whichlink;
         if ( !isset( $this->$linktext)) return false;
         $this->$linktext = $text;
+    }
+
+    function enable_all( $value = true ) {
+        $this->_enable_all = $value;
     }
 
 }

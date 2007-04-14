@@ -176,6 +176,11 @@ div.list_tags div.list_column {
 	float:left;
 }
 
+div.list_form div.list_column {
+	float:left;
+}
+
+
 a.list_item, div.list_item {
 	padding: 1em;
     display:block;

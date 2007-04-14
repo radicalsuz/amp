@@ -52,6 +52,7 @@ define( 'AMP_TEXT_ALL', 'All');
 define( 'AMP_TEXT_RECENT' , 'Recent&nbsp;' );
 define( 'AMP_TEXT_MORE' , 'More&nbsp;' );
 define( 'AMP_TEXT_POSTED_IN' , 'Posted in' );
+define( 'AMP_TEXT_POSTED_BY' , 'Posted by %s on %s' );
 
 if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
 if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );
