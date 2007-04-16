@@ -60,6 +60,16 @@ if ( AMP_is_cacheable_url( ) ) {
     AMP_cache_set( $cache_key, $finalPageHtml, $user_id );
 
 	//HTML caching code for apache redirection
+    $url_values = AMP_url_read(  );
+    if ( $url_values ) {
+        $allowed_vars = array( 'list', 'type', 'id' );
+        $url_vars = array_keys( $url_values );
+        $uncacheable_vars = array_diff( $allowed_vars, $url_vars );
+        if ( $uncacheable_vars && !empty( $uncacheable_vars ) ) {
+            //don't cache pages with any funny vars on them
+            return;
+        }
+    }
 	$cache_file = false;
 	$cache_folder = false;
 	if ( $currentPage->isArticle()) {
