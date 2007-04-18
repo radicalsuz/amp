@@ -18,6 +18,10 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         return '<span'.$this->makeAttributes( $html_attr ).'>' . $text .'</span>';
     }
 
+    function span( $output, $attr_set = array(  ) ) {
+        return $this->inSpan( $output, $attr_set );
+    }
+
     function inTD( $text, $attr_set = array() ) {
         $start_tag_ends = $this->makeAttributes( $attr_set );
         return "<td$start_tag_ends>$text</td>";

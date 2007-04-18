@@ -41,16 +41,24 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         if  ( $limit = $this->_section->getListItemLimit( )) {
             $read_source = false; 
         }
+        $display_class_vars = get_class_vars( $display_class );
 
-        $this->_display = &new $display_class( $contents, $read_source );
+        if (!isset( $display_class_vars['api_version'] ) || ( $display_class_vars['api_version'] == 1)) {
+            $this->_display = &new $display_class( $contents, $read_source );
 
-        if ( $limit && method_exists( $this->_display, 'setPageLimit') && (!$this->_display->allResultsRequested()) ) {
-            $this->_display->setPageLimit( $limit );
+            if ( $limit && method_exists( $this->_display, 'setPageLimit') && (!$this->_display->allResultsRequested()) ) {
+                $this->_display->setPageLimit( $limit );
+            }
+
+            if ( !$contents->hasData( )) $contents->readData( );
+
+            if (!method_exists( $this->_display, 'setSection' )) return;
+            $this->_display->setSection( $this->_section );
+
         }
-        if ( !$contents->hasData( )) $contents->readData( );
-
-        if (!method_exists( $this->_display, 'setSection' )) return;
-        $this->_display->setSection( $this->_section );
+		if ($display_class_vars['api_version'] == 2 ) {
+			$this->_display = new $display_class( $this->_section, array('section'=> $this->_section->id, 'displayable'=> 1));
+		}
     }
 
     function _getDisplayClass() {

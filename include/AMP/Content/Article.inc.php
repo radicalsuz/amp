@@ -113,6 +113,10 @@ class Article extends AMPSystem_Data_Item {
         return $this->getSourceURL() ;
     }
 
+    function get_source_url(  ) {
+        return $this->getSourceURL(  );
+    }
+
     function getBody() {
         return $this->getData( 'body' );
     }
@@ -655,6 +659,35 @@ class Article extends AMPSystem_Data_Item {
 
     function makeCriteriaRegion( $region_id ) {
         return $this->_makeCriteriaEquals('state', $region_id ); 
+    }
+
+    function makeCriteriaDisplayable(  ) {
+        trigger_error( 'makng dsiap' );
+        $crit = array(  );
+        $crit['class'] = $this->makeCriteriaDisplayableClass(  );
+        $crit['status'] = $this->makeCriteriaLive(  );
+        $crit['allowed'] = $this->makeCriteriaAllowed(  );
+        $public = $this->makeCriteriaPublic(  );
+        if ( $public ) {
+            $crit['public'] = $public;
+        }
+        return join (  " AND ", $crit );
+
+    }
+
+    function makeCriteriaDisplayableClass(  ) {
+        $excluded_classes = array( 
+            AMP_CONTENT_CLASS_SECTIONHEADER,
+            AMP_CONTENT_CLASS_USERSUBMITTED,
+            AMP_CONTENT_CLASS_FRONTPAGE
+            );
+        return "class not in (" . join( ",", $excluded_classes ) . ")" ;
+    }
+
+    function makeCriteriaPublic(  ) {
+        $protected_sections = AMPContent_Lookup::instance( 'protectedSections');
+        if ( empty( $protected_sections )) return false;
+        return 'type not in( '. join( ',', array_keys( $protected_sections) ) .' )';
     }
 
     function getMetaDescription( ){

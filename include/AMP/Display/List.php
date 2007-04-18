@@ -28,11 +28,12 @@ class AMP_Display_List {
     var $_path_pager = 'AMP/Display/Pager.php';
 
     var $_suppress_messages;
-    var $_suppress_header;
-    var $_suppress_footer;
-    var $_suppress_pager;
+    var $_suppress_header = false;
+    var $_suppress_footer = false;
+    var $_suppress_pager  = false;
 
     var $_display_columns = 1;
+    var $_current_columns = 0;
     var $_current_subheaders = array( );
     var $_subheader_methods = array( );
 
@@ -41,12 +42,16 @@ class AMP_Display_List {
     var $_css_class_container_list = 'list_block';
     var $_css_class_container_list_item = 'list_item';
     var $_css_class_container_list_column= 'list_column';
+    var $_css_class_container_list_column_last= 'list_column list_column_last';
     var $_css_class_container_list_subheader = 'list_header';
+    var $_css_class_container_list_column_count = ' list_column_count_';
 
     var $_sort_default = false;
     var $_sort_sql_default = false;
     var $_sort_sql_translations = array( );
     var $_sort;
+
+    var $api_version = 2;
 
     // {{{ constructors: __construct, _after_init
 
@@ -95,9 +100,11 @@ class AMP_Display_List {
 
         $items_output = '';
         $items_count = 0;
+        $this->_current_columns = 0;
 
         $column_output = '';
         $column_length = round( count( $this->_source ) / $this->_display_columns );
+        trigger_error( 'LENGTH ' . $column_length );
 
         foreach( $this->_source as $source_item ) {
             if ( $local_method ) {
@@ -113,16 +120,21 @@ class AMP_Display_List {
 
             //column-making code
             $items_count++;
-            if ( $items_count > $column_length ) {
+
+            if ( $items_count >= $column_length 
+                 &&  (( $this->_current_columns + 1 ) < $this->_display_columns )) {
                 $column_output .= $this->_renderColumn( $items_output );
                 $items_output = '';
                 $items_count = 0;
             }
         }
 
+        if ( $items_output || $column_output ) {
+            $this->_renderJavascript( );
+        }
+
         //put remaining output into column 
         if ( $items_output ) {
-            $this->_renderJavascript( );
             if ( !$column_output ) {
                 return $this->_renderBlock( $items_output );
             } else {
@@ -154,12 +166,36 @@ class AMP_Display_List {
     }
 
     function _renderColumn( $html ) {
+        $this->_current_columns++;
+        $css_class_list_column = 
+                ( $this->is_last_column(  ) ) ?
+                 $this->_css_class_container_list_column_last
+                : $this->_css_class_container_list_column;
+        $css_class_list_column .= $this->_css_class_container_list_column_count . $this->_display_columns;
+
         return $this->_renderer->inDiv( 
-                    $html,
-                    array( 'class' => $this->_css_class_container_list_column )
+                      $this->_render_column_header(  )
+                    . $html
+                    . $this->_render_column_footer(  ),
+                    array( 'class' => $css_class_list_column )
                     );
     }
 
+    function is_first_column(  ) {
+        return $this->_current_columns == 1;
+    }
+
+    function is_last_column(  ) {
+        return $this->_current_columns == $this->_display_columns;
+    }
+
+    function _render_column_header(  ) {
+        //stub
+    }
+
+    function _render_column_footer(  ) {
+        //stub
+    }
 
     function _renderItem( &$source ) {
         //default, should be overridden

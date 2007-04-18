@@ -62,7 +62,7 @@ class SectionContents_Manager {
     }
 
     function &getContents( $auto_read = false ) {
-        if (!isset($this->_contentSourceSet)) return false;
+        if (!isset($this->_contentSourceSet) || !method_exists( $this->_contentSourceSet, 'makeReady' )) return false;
         if ((!$this->_contentSourceSet->makeReady()) && $auto_read ) $this->_contentSourceSet->readData();
 
         return $this->_contentSourceSet;

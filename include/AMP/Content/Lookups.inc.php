@@ -417,7 +417,6 @@ class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
 
     function &instance( $article_id ) {
         static $lookup = array( );
-        print 'instance for ' . $article_id . ' <BR>';
 
         if ( !isset( $lookup[ $article_id ])){
             $lookup[$article_id] = new AMPContentLookup_SectionsByArticle ( $article_id );

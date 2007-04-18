@@ -181,11 +181,15 @@ div.list_form div.list_column {
 }
 
 
-a.list_item, div.list_item {
+div.list_item {
 	padding: 1em;
     display:block;
+    overflow: hidden;
 }
+
 a.list_item{
+	padding: 1em;
+    display:block;
     width: 100%;
     font-size: 1.2em;
 }
@@ -247,4 +251,10 @@ div.article_media {
     margin-left:15%;
     display: block;
     padding: 1em;
+}
+
+div.list_image {
+    float: left;
+    margin-right: 1em;
+    margin-bottom: 1em;
 }
