@@ -62,10 +62,9 @@ if ( AMP_is_cacheable_url( ) ) {
 	//HTML caching code for apache redirection
     $url_values = AMP_url_read(  );
     if ( $url_values ) {
-        $allowed_vars = array( 'list', 'type', 'id' );
-        $url_vars = array_keys( $url_values );
-        $uncacheable_vars = array_diff( $allowed_vars, $url_vars );
-        if ( $uncacheable_vars && !empty( $uncacheable_vars ) ) {
+        $section_okay = ( ( count( $url_values ) == 2) && isset( $url_values['list'] ) && isset( $url_values['type'] ));
+        $article_okay = ( ( count( $url_values ) == 1) && isset( $url_values['id'] ));
+        if ( !( $section_okay || $article_okay ) ) {
             //don't cache pages with any funny vars on them
             return;
         }
