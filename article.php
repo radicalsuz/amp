@@ -64,10 +64,22 @@ if (!( $listType  || $currentPage->isArticle() )) {
 /**
  * Redirect to Search Page for unpublished articles unless in preview mode
  */
-if (!( $listType  || $currentPage->isArticle() ))   AMP_make_404( );
 if ( ( !AMP_DISPLAYMODE_PREVIEW )  && ($currentArticle = &$currentPage->getArticle()) ){
 
     if (!$currentArticle->isLive() ) AMP_make_404( ) ;
+}
+
+/**
+ * Check if specified article is a section header and redirect to that section
+ */
+if ( $currentPage->isArticle(  ) && ( $currentArticle = $currentPage->getArticle(  )) ) {
+    if ( $currentArticle->getClass(  ) == AMP_CONTENT_CLASS_SECTIONHEADER ) {
+        require_once( 'AMP/Content/Section.inc.php' );
+        $currentSection = new Section( AMP_Registry::getDbcon(  ), $currentArticle->getParent(  ) );
+        if ( $currentSection->hasData(  ) ) {
+            ampredirect( $currentSection->getURL(  ) );
+        }
+    }
 }
 
 /**
