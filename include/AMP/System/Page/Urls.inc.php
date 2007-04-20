@@ -53,8 +53,9 @@ define( 'AMP_SYSTEM_URL_LINK_TYPES',            'link_type.php');
 define( 'AMP_SYSTEM_URL_PETITIONS',             'petition.php');
 define( 'AMP_SYSTEM_URL_TAG',                   'tag.php');
 define( 'AMP_SYSTEM_URL_TAG_INPUT',             'tag.php?action=add');
-define( 'AMP_SYSTEM_URL_TOOL_PUBLICPAGE',      'module_header_list.php');
+define( 'AMP_SYSTEM_URL_TOOL_PUBLICPAGE',       'module_header_list.php');
 define( 'AMP_SYSTEM_URL_EVENT',                 'calendar.php');
+define( 'AMP_SYSTEM_URL_EVENT_ADD',             'calendar.php?action=new');
 define( 'AMP_SYSTEM_URL_BADGE',                 'badges.php');
 define( 'AMP_SYSTEM_URL_BADGE_ADD',             'badges.php?action=new');
 

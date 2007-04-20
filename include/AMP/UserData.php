@@ -714,7 +714,7 @@ class UserData {
         $plugin_class = "UserDataPlugin_" . $action . "_" . $namespace;
 
         // If the class doesn't exist (but we have a file for it), trigger an
-        // error, and failt.
+        // error, and fail.
         if (!class_exists( $plugin_class )) {
             trigger_error( "Unable to instantiate data class $action in $namespace." );
             return false;

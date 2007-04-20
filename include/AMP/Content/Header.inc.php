@@ -277,6 +277,9 @@ class AMPContent_Header {
         return "</head>\n";
     }
 
+    function setPageAction(  ) {
+        //stub
+    }
         
 
 }

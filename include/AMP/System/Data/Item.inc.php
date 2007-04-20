@@ -41,6 +41,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     var $_exact_value_fields = array( );
     var $_allow_db_cache = true;
+    var $_keys_sterile = array(  );
 
     function AMPSystem_Data_Item ( &$dbcon ) {
         $this->init($dbcon);
@@ -200,6 +201,8 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         } else {
             $save_fields = $this->_save_update_actions( $save_fields );
         }
+
+        $save_fields = $this->_make_safe_keys( $save_fields );
         
         $result = $this->dbcon->Replace( $this->datatable, $save_fields, $this->id_field, $quote=true);
 
@@ -440,8 +443,6 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( !( $sort_method = $this->_sort_accessor )) return 0;
 
         if ( !is_object( $file2)) {
-            //print AMPbacktrace( );
-            trigger_error( 'non-object detected by sort');
             return 0;
         }
 
@@ -607,6 +608,22 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 		if (!is_array($this->_itemdata)) return $this->_allowed_keys;
 		return array_keys($this->_itemdata);
 	}
+
+    function _make_safe_keys( $data ) {
+        if ( empty( $this->_keys_sterile ) ) {
+            return $data;
+        }
+
+        foreach( $this->_keys_sterile as $standard_key => $safe_key ) {
+            if ( !isset( $data[$standard_key] ) ) {
+                continue;
+            }
+            $data[ $safe_key ] = $data[ $standard_key ];
+            unset( $data[ $standard_key ] );
+        }
+
+        return $data;
+    }
 
 }
 ?>

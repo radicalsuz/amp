@@ -2,7 +2,7 @@
 	<id>
 		<type>hidden</type>
 	</id>
-	<event>;
+	<event>
 		<type>text</type>
 		<label>Event Name</label>
         <required>1</required>
@@ -23,10 +23,6 @@
 		<type>text</type>
 		<label>Event Time</label>
 	</time>
-    <repeat>
-        <type>checkbox</type>
-        <label>Weekly or Repeating Event</label>
-    </repeat>
     <cost>
         <type>text</type>
         <size>6</size>
@@ -36,12 +32,20 @@
 		<type>text</type>
 		<label>Website</label>
 	</url>
+    <repeat>
+        <type>checkbox</type>
+        <label>Weekly or Repeating Event</label>
+    </repeat>
     <!--
 	<student>
 		<type>checkbox</type>
 		<label>Student Event</label>
 	</student>
     -->
+    <desc_header>
+        <type>header</type>
+        <label>Event Description</label>
+    </desc_header>
 	<shortdesc>
 		<type>textarea</type>
 		<label>Brief Description of the Event</label>

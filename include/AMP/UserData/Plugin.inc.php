@@ -724,6 +724,15 @@ class UserDataPlugin {
     function __wakeup( ){
         $this->dbcon = &AMP_Registry::getDbcon( );
     }
+
+    function enable_all( $field_defs ) {
+        foreach( $field_defs as $name => $field_def ) {
+            $field_defs[$name]['enabled'] = 1;
+            $field_defs[$name]['public'] = 1;
+        }
+        return $field_defs;
+
+    }
 }
 
 ?>

@@ -952,16 +952,36 @@ if (!function_exists( 'AMP_cachePageItem' )) {
 if (!function_exists( 'AMP_cacheFlush' )) {
     function AMP_cacheFlush( $key_token = null ) {
         $cache = &AMP_get_cache( );
+        if ( $cache && ( strtolower( get_class( $cache ) == 'AMP_System_Cache_File' ) ) 
+             && !is_dir( AMP_pathFlip( AMP_SYSTEM_CACHE_PATH ) )) {
+            //don't endlessly repeat file cache clearing
+            return;
+        }
 
         if ( isset( $key_token )) {
-            $flush_command = "find ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . " -name " . $key_token .'\* | xargs rm'; 
+            $flush_command = "find ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . " -name " . $key_token .'\* | xargs rm &'; 
         } else {
-            $flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "*";
+            $flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "* &";
         }
-        system( $flush_command );
+        $command_result = false;
+        system( $flush_command, $command_result );
+
+        if ( $command_result ) {
+            //unix systems should return 0 on success, try a DOS filesystem command
+            //this function will not flush memcache on windows, probably no one cares
+            $flush_command = "rmdir /S /Q " . AMP_pathFlip(  AMP_SYSTEM_CACHE_PATH );
+            system($flush_command, $command_result );
+            trigger_error( 'Win flush result was ' . $command_result );
+            return;
+        }
+
         if ( !isset( $key_token ) || $key_token == AMP_CACHE_TOKEN_ADODB ) {
-            $flush_command = "rm -f `find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' ." -name adodb_*.cache`"; 
-            system($flush_command);
+            $flush_command = "rm -f `find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' ." -name adodb_*.cache` &"; 
+            $command_result = false;
+            system($flush_command, $command_result );
+
+            $dbcon = AMP_Registry::getDbcon(  );
+            $dbcon->CacheFlush(  );
         }
 
         if ( !$cache )  {
@@ -1823,6 +1843,66 @@ function AMP_find_banner_image( ) {
         $banner_image = $current_class->get_image_banner( ) ;
     }
     return $banner_image;
+
+}
+
+function AMP_get_column_names( $table_name ) {
+    //caches calls to dbcon::metacolumns, which are expensive
+    $reg = &AMP_Registry::instance();
+    $definedSources = &$reg->getEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
+    if ( !$definedSources ) {
+        $definedSources = AMP_cache_get( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
+    }
+    if ($definedSources && isset($definedSources[ $table_name ])) return $definedSources[ $table_name ];
+
+    $dbcon = AMP_Registry::getDbcon(  );
+    $colNames = $dbcon->MetaColumnNames( $table_name );
+    $definedSources[ $table_name ] = $colNames;
+    $reg->setEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
+    AMP_cache_set( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
+
+    return $colNames;
+}
+
+/**
+ * AMP_array_splice 
+ *
+ * preserves associative keys from a replacement array
+ * 
+ * @param mixed $target 
+ * @param int $offset 
+ * @param int $length 
+ * @param array $replacement 
+ * @access public
+ * @return void
+ */
+function AMP_array_splice( $target, $offset =0, $length = null, $replacement = array(  ) ) {
+    if (!isset( $target[$offset] )) {
+        trigger_error( sprintf(  AMP_TEXT_ERROR_NOT_DEFINED, 'Array', $offset ));
+        return array_merge(  $target, $replacement );
+    }
+    if ( is_string( $offset ) ) {
+        $keys = array_keys( $target );
+        $offset = current( array_keys( $keys, $offset ));
+    }
+    if ( empty( $replacement ) ) {
+        return array_splice( $target, $offset, $length );
+    }
+
+    $second_offset = isset( $length ) ? $offset+$length : $offset;
+
+    $first_chunk = array_slice( $target, 0, $offset);
+    $second_chunk = array_slice( $target, $second_offset );
+
+    foreach( $replacement as $key => $value ) {
+        if ( isset( $first_chunk[$key] ) ) {
+            if ( is_numeric( $key ) ) continue;
+            unset( $first_chunk[$key] );
+        }
+    }
+
+    return array_merge( $first_chunk, $replacement, $second_chunk );
+
 
 }
 ?>

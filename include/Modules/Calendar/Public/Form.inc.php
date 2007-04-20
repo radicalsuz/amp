@@ -2,9 +2,10 @@
 
 require_once( 'AMP/System/Form/XML.inc.php');
 require_once( 'Modules/Calendar/ComponentMap.inc.php');
+require_once( 'Modules/Calendar/Form.inc.php');
 require_once( 'Modules/Calendar/Lookups.inc.php');
 
-class Calendar_Public_Form extends AMPSystem_Form_XML {
+class Calendar_Public_Form extends Calendar_Form {
 
     var $name_field = 'event';
 
@@ -13,6 +14,7 @@ class Calendar_Public_Form extends AMPSystem_Form_XML {
         $this->init( $name, 'POST', AMP_CONTENT_URL_EVENT_ADD );
     }
 
+    /*
     function setDynamicValues( ){
        $this->addTranslation( 'date', '_makeDbDateTime', 'get');
        $this->addTranslation( 'lstate', '_makeStateAbbrev', 'set');
@@ -35,6 +37,7 @@ class Calendar_Public_Form extends AMPSystem_Form_XML {
         }
         return $data[$fieldname];
     }
+    */
 }
 
 ?>

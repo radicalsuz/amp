@@ -1,0 +1,23 @@
+<array>
+    <rsvp_header>
+        <type>header</type>
+        <label>Registration Options</label>
+    </rsvp_header>
+    <rsvp>
+        <type>select</type>
+        <lookup>RegistrationFormats</lookup>
+        <label>Registration Type</label>
+        <public>1</public>
+        <enabled>1</enabled>
+    </rsvp>
+    <cost>
+        <type>text</type>
+        <size>6</size>
+        <label>Event Cost</label>
+    </cost>
+    <repeat>
+        <type>hidden</type>
+        <constant>1</constant>
+        <default>0</default>
+    </repeat>
+</array>

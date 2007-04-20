@@ -135,13 +135,12 @@ class AMP_System_User_Profile extends AMPSystem_Data_Item {
 
     function getBlurb( ) {
         $modin = $this->getModin( );
-        trigger_error( 'found modin as ' . $modin);
         if ( !$modin ) return false;
         $blurb_field = 'AMP_FORM_DATA_BLURB_' . $modin;
-        trigger_error( 'hunting blurb field ' . $blurb_field . ' defined as ' . constant( $blurb_field ) );
         if ( defined( $blurb_field )) {
             return $this->getData( constant( $blurb_field ));
         }
+        trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $blurb_field ));
     }
 
 }

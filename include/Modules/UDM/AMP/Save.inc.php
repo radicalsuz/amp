@@ -118,6 +118,10 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
     }
 
     function _getColumnNames( $sourceDef ) {
+        if ( function_exists( 'AMP_get_column_names' ) ) {
+            return AMP_get_column_names( $sourceDef );
+        }
+
         $reg = &AMP_Registry::instance();
         $definedSources = &$reg->getEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
         if ( !$definedSources ) {

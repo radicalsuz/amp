@@ -22,6 +22,13 @@ class Calendar_Form extends AMPSystem_Form_XML {
         if ( !isset( $_GLOBALS['nonstateregion']) && !( defined( 'AMP_CALENDAR_USE_REGIONS'))) {
             unset( $fields['region']);
         }
+        if ( defined( 'AMP_CALENDAR_ALLOW_RSVP' ) && AMP_CALENDAR_ALLOW_RSVP ) {
+            $rsvp_fields = $this->_readXML( 'Modules/Calendar/RsvpFields.xml' );
+            if ( $rsvp_fields ) {
+                $fields = AMP_array_splice( $fields, 'desc_header', null, $rsvp_fields );
+            }
+        }
+
         return $fields;
     }
 
