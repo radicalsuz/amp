@@ -728,7 +728,9 @@ class UserDataPlugin {
     function enable_all( $field_defs ) {
         foreach( $field_defs as $name => $field_def ) {
             $field_defs[$name]['enabled'] = 1;
-            $field_defs[$name]['public'] = 1;
+            if ( !isset( $field_defs[$name]['public'])) {
+                $field_defs[$name]['public'] = 1;
+            }
         }
         return $field_defs;
 

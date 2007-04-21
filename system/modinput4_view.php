@@ -13,8 +13,26 @@ require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Connections/freedomrising.php' );
 require_once( 'utility.functions.inc.php' );
 
+// User ID.
+$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+if ( !$uid ) $uid = ( isset( $_REQUEST['id']) ? $_REQUEST['id'] : false );
+
 #set_error_handler( 'e' );
 $modin = (isset($_REQUEST['modin']) && $_REQUEST['modin'])?$_REQUEST['modin']:false;
+if ( $uid && !$modin ) {
+    //look up the modin via uid
+    require_once( 'AMP/System/User/Profile/Profile.php');
+    $profile = new AMP_System_User_Profile( AMP_Registry::getDbcon( ), $uid );
+    if ( $profile->hasData( ) &&  ( $modin = $profile->getModin( ))) {
+        //redirect to the standard URL
+        $url_vars = AMP_URL_Values( );
+        if ( !$url_vars ) $url_vars = array( );
+        $url_vars = array_merge( $url_vars, array( 'uid' => 'uid=' . $uid, 'modin' => 'modin=' . $modin ));
+        unset( $url_vars['id']);
+        ampredirect( AMP_url_add_vars( AMP_SYSTEM_URL_FORM_ENTRY, $url_vars ));
+    } 
+}
+
 if ($modin) {
     $form_id_nav = $modin;
     $modidselect=$dbcon->GetRow("SELECT id, perid from modules where userdatamodid=" . $modin) or DIE($dbcon->ErrorMsg());
@@ -31,7 +49,6 @@ $admin = (AMP_Authorized(AMP_PERMISSION_FORM_DATA_EDIT)
 $udm = &new UserDataInput( $dbcon, $modin ,$admin );
 
 // User ID.
-$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
 $udm->authorized = true;
 $udm->uid = $uid;
 

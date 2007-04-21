@@ -739,7 +739,7 @@ class UserData {
      *
      *****/
 
-    function unregisterPlugin ( $action, $namespace ) {
+    function unregisterPlugin ( $namespace, $action ) {
 
         if ($plugin = &$this->getPlugin( $namespace, $action ) ) {
 

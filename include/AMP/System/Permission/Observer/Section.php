@@ -13,7 +13,9 @@ class AMP_System_Permission_Observer_Section extends AMP_System_Observer {
     function onInitForm( &$controller ) {
         $model = $controller->get_model( );
         if ( !isset( $model->id )) {
-            $model->readData( $controller->get_model_id( ));
+            $model_id = $controller->get_model_id( );
+            if ( !$model_id ) return false;
+            $model->readData( $model_id );
         }
         $section = $model->getSection( );
         if ( !$section ) return false;

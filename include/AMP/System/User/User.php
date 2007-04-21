@@ -47,8 +47,13 @@ class AMPSystem_User extends AMPSystem_Data_Item {
     }
 
     function readUsername( $username ){
-        $this->addCriteria( 'name='.$this->dbcon->qstr( $username));
-        $this->readData( FALSE );
+        $names = AMP_lookup( 'users');
+        $key = array_keys( $names, $username );
+        if ( !empty( $key )) {
+            $user_id = current( $key );
+        }
+        //$this->addCriteria( 'name='.$this->dbcon->qstr( $username));
+        $this->readData( $user_id );
     }
 
     function hasPermission( $permission_value ){

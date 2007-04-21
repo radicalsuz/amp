@@ -684,7 +684,7 @@ if (!function_exists( 'urlencode_array' )) {
     function urlencode_array(
         $var,                // the array value
         $varName,            // variable name to be used in the query string
-        $separator = '&'    // what separating character to use in the query string
+        $separator = '&amp;'    // what separating character to use in the query string
         ) {
         $toImplode = array();
         foreach ($var as $key => $value) {
@@ -1905,4 +1905,37 @@ function AMP_array_splice( $target, $offset =0, $length = null, $replacement = a
 
 
 }
+
+function AMP_url_update( $url, $attr = array( )) {
+
+    if ( empty( $attr ) || !$attr ) return $url;
+    $url_segments = split( '\?', $url );
+    $base_url = $url_segments[0];
+    $updated_values = AMP_url_build_query( $attr );
+    if ( !isset( $url_segments[1])) {
+        return $url. '?' . join( '&', $updated_values );
+    }
+
+    parse_str($_SERVER['QUERY_STRING'], $start_values );
+    $url_start_values = AMP_url_build_query( $start_values );
+    $final_values = array_merge( $url_start_values, $updated_values );
+    return ( $base_url . '?' . join( '&', $final_values ));
+
+}
+
+function AMP_url_print( $value, $key ) {
+    if ( is_array( $value )) return urlencode_array( $value, $key );
+    if ( strpos( $value, $key.'=') === 0 ) return $value;
+    return $key.'='.urlencode( $value );
+}
+
+function AMP_url_build_query( $attr = array( )) {
+    if ( empty( $attr )) return false;
+    $complete = array( );
+    foreach( $attr as $key => $value ) {
+        $complete[$key] = AMP_url_print( $value, $key );
+    }
+    return $complete;
+}
+
 ?>

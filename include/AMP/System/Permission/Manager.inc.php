@@ -33,10 +33,12 @@ class AMPSystem_PermissionManager {
     }
 
     function &readUser( $userName ) {
+        $false = false;
         require_once( 'AMP/System/User/User.php');
         $user = &new AMPSystem_User( AMP_Registry::getDbcon( ) );
         $user->readUsername( $userName );
-        if ( !$user->hasData( )) return false;
+        if ( !$user->hasData( )) return $false;
+
         $this->readLevel( $user->getPermissionGroup( ));
         $this->setUser( $user );
         return $user;
