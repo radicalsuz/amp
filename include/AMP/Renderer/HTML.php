@@ -18,8 +18,12 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         return '<span'.$this->makeAttributes( $html_attr ).'>' . $text .'</span>';
     }
 
-    function span( $output, $attr_set = array(  ) ) {
-        return $this->inSpan( $output, $attr_set );
+    function span( $text, $attr_set = array( )) {
+        return $this->inSpan( $text, $attr_set );
+    }
+
+    function p( $text, $attr_set = array( )) {
+        return $this->in_P( $text, $attr_set );
     }
 
     function inTD( $text, $attr_set = array() ) {

@@ -44,6 +44,8 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
     var $_subheader = 'LinkTypeName';
 	var $api_version = 1;
 
+    var $api_version = 1;
+
     function AMPContent_DisplayList_HTML ( &$source, $read_data = true ) {
         $this->init( $source, $read_data );
     }
