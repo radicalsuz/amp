@@ -59,10 +59,10 @@
 		<label>Related to Section</label>
         <lookup>sectionMap</lookup>
 	</section>
-    <repeat>
+    <repeat_event>
         <type>checkbox</type>
         <label>Weekly or Repeating Event</label>
-    </repeat>
+    </repeat_event>
 	<student>
 		<type>checkbox</type>
 		<label>Student Event</label>
@@ -161,6 +161,10 @@
         <type>header</type>
         <label>Personal Info</label>
     </user_contact_header>
+    <owner_link>
+        <type>hidden</type>
+        <public>0</public>
+    </owner_link>
 	<First_Name>
 		<type>text</type>
 		<label>First Name</label>

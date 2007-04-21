@@ -26,6 +26,22 @@ class AMPSystemLookup_CalendarEventOwner extends AMPSystem_Lookup {
 	}
 }
 
+class AMPSystemLookup_EventsByOwner extends AMPSystem_Lookup {
+	var $datatable = "calendar";
+	var $result_field = "event";
+	var $criteria = 'uid != "" AND !isNull(uid)';
+
+    function AMPSystemLookup_EventsByOwner( $owner_id = null ) {
+        if ( isset( $owner_id )) $this->_add_criteria_owner( $owner_id );
+		$this->init();
+    }
+
+    function _add_criteria_owner( $owner_id ) {
+        $this->criteria = 'uid=' . $owner_id;
+    }
+
+}
+
 class AMPSystemLookup_DistributedEvent extends AMPSystem_Lookup {
 	var $datatable = "eventtype";
 	var $result_field = "distributed_event_key";

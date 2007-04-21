@@ -68,7 +68,7 @@ class CalendarPlugin {
      *
      *****/
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         trigger_error( 'Plugin ' . $this->short_name . ' failed to override execute function.', E_USER_WARNING );
         return false;
@@ -195,9 +195,9 @@ class CalendarPlugin {
      *
      *****/
 
-    function getFields ( $fields = null ) {
+    function getFields ( $fields = array( )) {
 
-        if (isset($fields)) {
+        if (isset($fields) && !empty( $fields )) {
 
             if (!is_array( $fields )) $fields = array( $fields );
 
@@ -252,8 +252,8 @@ class CalendarPlugin {
         return $this->calendar->setData( $data );
     }
 
-    function getOptions( $options=null ) {
-        if (!isset($options)) $options = array_keys($this->options);
+    function getOptions( $options=array( )) {
+        if (!isset($options) || empty( $options )) $options = array_keys($this->options);
         
         if (is_array($options)) {
 
@@ -270,7 +270,7 @@ class CalendarPlugin {
                 }
             }
         }
-        if (!isset ($return_options)) return false;
+        if (!isset ($return_options)) return array( );
 
         return $return_options;
     }

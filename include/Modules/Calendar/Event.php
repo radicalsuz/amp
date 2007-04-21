@@ -9,7 +9,6 @@ class Calendar_Event extends AMPSystem_Data_Item {
     var $_class_name = 'Calendar_Event';
     var $_exact_value_fields = array( 'id', 'typeid', 'region' );
     var $_sort_auto = false;
-    var $_keys_sterile = array( 'repeat' => '`repeat`' );
 
     var $_legacy_fields = array( 
                 'shortdesc'     =>  'blurb',
@@ -129,7 +128,7 @@ class Calendar_Event extends AMPSystem_Data_Item {
         if ( $value === FALSE ) {
             return "TRUE";
         }
-        return $this->_makeCriteriaEquals( 'repeat', $value );
+        return $this->_makeCriteriaEquals( 'repeat_event', $value );
     }
 
     function makeCriteriaStudent( $student_value ) {
@@ -279,6 +278,7 @@ class Calendar_Event extends AMPSystem_Data_Item {
         if ( empty( $event_data ) ) {
             $event_data = $this->getData(  );
         }
+        $uid = false;
 
         if (  ( !( defined( 'AMP_FORM_ID_EVENT_OWNER' ) ) && AMP_FORM_ID_EVENT_OWNER ) 
            && ( !( isset( $event_data['uid'] ) && ( $uid = $event_data['uid'] )  )) ) return false; 

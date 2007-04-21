@@ -7,6 +7,11 @@ require_once( 'Modules/Calendar/Lookups.inc.php');
 class Calendar_Form extends AMPSystem_Form_XML {
 
     var $name_field = 'event';
+    var $_owner_link_def = array( 
+        'type' => 'static',
+        'default' => 'View Owner Details',
+        'public'  => false
+        );
 
     function Calendar_Form( ) {
         $name = 'Calendar';
@@ -16,6 +21,7 @@ class Calendar_Form extends AMPSystem_Form_XML {
     function setDynamicValues( ){
        $this->addTranslation( 'date', '_makeDbDateTime', 'get');
        $this->addTranslation( 'lstate', '_makeStateAbbrev', 'set');
+       $this->addTranslation( 'uid', '_makeOwnerLink', 'set');
     }
 
     function adjustFields( $fields ) {
@@ -41,6 +47,14 @@ class Calendar_Form extends AMPSystem_Form_XML {
             return $states[$data[$fieldname]];
         }
         return $data[$fieldname];
+    }
+
+    function _makeOwnerLink( $data, $fieldname ) {
+        if ( !( isset( $data['uid']) && $data['uid'])) return;
+        $renderer = AMP_get_renderer( );
+        $owner_field = $this->_owner_link_def;
+        $owner_field['default'] = $renderer->link( AMP_url_add_vars( AMP_SYSTEM_URL_FORM_ENTRY, array( 'id=' . $data['uid'])), $owner_field['default'] );
+        $this->addField( $owner_field, 'owner_link');
     }
 }
 ?>

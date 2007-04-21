@@ -49,7 +49,7 @@ var $id;
 
 	}
 
-    function output ( $format = 'html', $options = null ) {
+    function output ( $format = 'html', $options = array( )) {
 	
 				return $this->doPlugin( 'Output', $format, $options );
 
@@ -138,7 +138,7 @@ var $id;
 			$fields['fulldesc'] = array('type'=>'textarea', 'label'=>'Full Description of the Event (optional)', 'required'=>false, 'public'=>false,  'values'=>null, 'size'=>"10:40", 'enabled'=>true);
 		}
 
-		$fields['header3']=array('type'=>'header', 'label'=>'The following information is for the staff at '. AMP_SITE_NAME .' and will not be listed on the website, unless it is the same as the information above.', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true) ;
+		$fields['header3']=array('type'=>'header', 'label'=>'The following information is for<br /> the staff at '. AMP_SITE_NAME .' and will<br /> not be listed on the website, unless<br /> it is the same as the information above.', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true) ;
 		$fields['lat']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 		$fields['lon']=array('type'=>'hidden', 'required'=>false, 'public'=>true, 'values'=>null, 'enabled'=>true);
 		$fields['dia_key']=array('type'=>'hidden', 'required'=>false, 'public'=>false, 'values'=>null, 'enabled'=>true);
@@ -152,7 +152,7 @@ var $id;
         if (!$this->allowRecurringEvents()) return array( );
         $fields['header_recur']= array('type'=>'header', 'label'=>'Repeating Events<BR><span class=photocaption>The next three items apply to Repeating events only:</span>', 'required'=>false, 'public'=>true,  'values'=>null, 'enabled'=>true);
         $fields['recurring_options']= array('type'=>'select', 'label'=>'Event Frequency', 'required'=>false, 'public'=>true, 'values'=>'Lookup(calendar_recur, name, id)', 'default'=>0, 'enabled'=>true);
-        $fields['enddate']=array('type'=>'date', 'label'=>'Choose a date for the event to stop appearing on the calendar:', 'required'=>false, 'public'=>true,  'default'=>'today', 'enabled'=>true);
+        $fields['enddate']=array('type'=>'date', 'label'=>'Choose a date for the event<br /> to stop appearing on the calendar:', 'required'=>false, 'public'=>true,  'default'=>'today', 'enabled'=>true);
         $fields['recurring_description']=array('type'=>'textarea', 'label'=>'Describe the schedule for a repeating event <BR>(e.g <i>Every 2nd Tuesday of the Month</i>)', 'required'=>false, 'public'=>true,  'values'=>null, 'size'=>'3:40', 'enabled'=>true);
         return $fields;
     }
@@ -296,7 +296,7 @@ var $id;
      *
      *****/
 
-    function doPlugin( $namespace, $action, $options = null ) {
+    function doPlugin( $namespace, $action, $options = array( )) {
         $plugin = $this->registerPlugin( $namespace, $action );
 
         if ($plugin) {

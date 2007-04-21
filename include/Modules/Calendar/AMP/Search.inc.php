@@ -2,7 +2,7 @@
 require_once ('Modules/Calendar/Plugin.inc.php');
 
 class CalendarPlugin_Search_AMP extends CalendarPlugin {
-	var $criteria;
+	var $criteria = array( );
 	var $total_qty;
 	var $sortby;
     var $options = array (
