@@ -532,7 +532,7 @@
 
         function create( $session_id, $captcha_value ) {
             $dbcon = AMP_Registry::getDbcon( );
-            $item = &new AMP_Form_Element_Captcha( $dbcon ) ;
+            $item = new AMP_Form_Element_Captcha( $dbcon ) ;
             $item_data = array( 'session' => $session_id, 'captcha' => $captcha_value );
             $item->setData( $item_data );
             $result = $item->save( );

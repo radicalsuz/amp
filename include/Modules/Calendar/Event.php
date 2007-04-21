@@ -16,6 +16,7 @@ class Calendar_Event extends AMPSystem_Data_Item {
 
                 'laddress'      =>  'event_address',
                 'lcity'         =>  'event_city',
+                'lstate'        =>  'event_state',
                 'lzip'          =>  'event_zip',
                 'lcountry'      =>  'event_country',
 
@@ -41,6 +42,7 @@ class Calendar_Event extends AMPSystem_Data_Item {
                 'phone2'        =>  'Work_Phone',
 
                 'fporder'       =>  'front_page_order',
+                'fpevent'       =>  'front_page_event',
                 'datestamp'     =>  'entered_at'
 
 
@@ -245,9 +247,11 @@ class Calendar_Event extends AMPSystem_Data_Item {
 
 
 	function export_keys() {
-		$do_not_export = array( 'lname2', 'fname2', 'orgaznization2', 'address2', 'city2', 'state2', 'country2', 'zip2', 'email2', 'phone2', 'contact1', 'fulldesc', 'shortdesc', 'email1', 'phone1', 'endorse', 'lcity', 'lstate', 'enddate', 'lzip', 'lcountry', 'org', 'areaID', 'typeid', 'endtime', 'laddress' );
+		$do_not_export = array( 'endorse', 'enddate', 'areaID', 'endtime' );
+        $legacy_keys = array_keys( $this->_legacy_fields );
+        
 		$keys = parent::export_keys();
-		return array_diff( $keys, $do_not_export );
+		return array_diff( $keys, $legacy_keys, $do_not_export );
     }
 
     function _afterRead(  ) {
@@ -260,6 +264,7 @@ class Calendar_Event extends AMPSystem_Data_Item {
         $owner_data = $owner->getData(  );
         unset( $owner_data['id'] );
         $allowed_owner_data = array_combine_key( $this->export_keys(  ), $owner_data );
+        //AMP_varDump( $export_keys );
         return $this->mergeData( $allowed_owner_data );
 
     }

@@ -42,7 +42,9 @@ class UserDataPlugin_Save_Event extends UserDataPlugin_Save {
         $allowed_fields = array_diff( array_keys( $this->fields ), $udm_fields );
         $this->fields = array_combine_key( $allowed_fields, $this->fields );
 
-        $captcha_def = $this->fields['humanity_test'];
+        if( isset( $this->fields['humanity_test'])) {
+            $captcha_def = $this->fields['humanity_test'];
+        }
 
         unset( $this->fields[ 'submit' ] );
         unset( $this->fields[ 'submitAction' ] );
@@ -51,7 +53,9 @@ class UserDataPlugin_Save_Event extends UserDataPlugin_Save {
         $this->insertBeforeFieldOrder( array_keys($this->fields) );
         $this->insertAfterFieldOrder( array(  'humanity_test' ) );
 
-        $this->fields[ 'humanity_test' ] = $captcha_def;
+        if ( isset( $captcha_def )) {
+            $this->fields[ 'humanity_test' ] = $captcha_def;
+        }
     }
 
     function _register_event_setup(  ) {

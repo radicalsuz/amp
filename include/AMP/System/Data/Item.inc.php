@@ -602,8 +602,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
 	function export_keys() {
+        return $this->_allowed_keys;
+        /*
 		if (!is_array($this->itemdata)) return $this->_allowed_keys;
 		return array_keys($this->itemdata);
+        */
 	}
 
 
