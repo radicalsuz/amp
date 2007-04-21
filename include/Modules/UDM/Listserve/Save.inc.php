@@ -48,7 +48,7 @@ class UserDataPlugin_Save_Listserve extends UserDataPlugin_Save {
         return $this->getAllDataFields( );
     }
 
-    function save( $data , $options = null ) {
+    function save( $data , $options = array( )) {
 		$options = array_merge( $this->getOptions(), $options );
         $contact_info = $this->udm->getData( );
         if ( !isset( $contact_info['Email'])) return true;

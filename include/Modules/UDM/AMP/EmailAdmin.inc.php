@@ -31,7 +31,7 @@ class UserDataPlugin_EmailAdmin_AMP extends UserDataPlugin_Email {
         $this->options['update_page']['default'] = "system/modinput4_view.php";
     }
 
-    function prepareMessage ( $options = null ) {
+    function prepareMessage ( $options = array( )) {
 
         $udm   =& $this->udm;
         $options = array_merge($this->getOptions(), $options);

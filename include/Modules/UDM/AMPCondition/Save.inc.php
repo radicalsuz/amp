@@ -21,7 +21,7 @@ class UserDataPlugin_Save_AMPCondition extends UserDataPlugin {
         $this->init( $udm, $plugin_instance );
     }
 
-    function execute( $options = null ){
+    function execute( $options = array( )){
         $options = array_merge( $this->getOptions( ), $options );
         $save_flag = true;
         if ( isset( $options['condition_function']) && $options['condition_function']){

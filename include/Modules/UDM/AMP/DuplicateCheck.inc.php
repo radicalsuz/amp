@@ -14,7 +14,7 @@ class UserDataPlugin_DuplicateCheck_AMP extends UserDataPlugin {
         $this->init($udm, $plugin_instance);
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         $dbcon =& $this->udm->dbcon;
 

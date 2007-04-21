@@ -30,7 +30,7 @@ class UserDataPlugin_EmailReceipt_AMPPayment extends UserDataPlugin_Email {
                                         'type'=> true );
     }
 
-    function prepareMessage ( $options = null ) {
+    function prepareMessage ( $options = array( )) {
 
         $options = array_merge($this->getOptions(), $options);
 

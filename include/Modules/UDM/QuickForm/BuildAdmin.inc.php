@@ -44,7 +44,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $this->init( $udm );
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         $form_name   = $this->udm->name;
         $form_method = ( isset($options['frmMethod']) ) ?

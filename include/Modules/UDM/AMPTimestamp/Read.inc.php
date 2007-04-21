@@ -20,7 +20,7 @@ class UserDataPlugin_Read_AMPTimestamp extends UserDataPlugin {
             'value'     => $this->_makeOutput( ));
     }
 
-    function execute( $options = null ){
+    function execute( $options = array( )){
         $options = array_merge( $this->getOptions( ), $options );
         $userid = (isset($options['_userid'])) ? $options['_userid'] : $this->options['_userid']['value'];
         if ( $this->readTime( $userid )) $this->setData( array( 'last_edited' => $this->_makeOutput( )));

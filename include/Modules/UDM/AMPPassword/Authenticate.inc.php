@@ -37,7 +37,7 @@ class UserDataPlugin_Authenticate_AMPPassword extends UserDataPlugin {
 		}
 	}
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         $options = array_merge($this->getOptions(), $options);
         require_once( 'AMP/Auth/Handler.inc.php');

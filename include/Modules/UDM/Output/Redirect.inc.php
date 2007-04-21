@@ -1,6 +1,6 @@
 <?php
 
-function udm_output_redirect ( $udm, $options = null ) {
+function udm_output_redirect ( $udm, $options = array( )) {
 
     if ( isset( $udm->redirectURL ) ) {
 

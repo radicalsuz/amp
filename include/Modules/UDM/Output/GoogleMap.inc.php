@@ -25,7 +25,7 @@ class UserDataPlugin_GoogleMap_Output extends UserDataPlugin {
         $this->init( $udm, $plugin_instance );
     }
 
-    function execute( $options = null ) {
+    function execute( $options = array( )) {
         $options = array_merge( $this->getOptions( ), $options );
         if ( !$options['map_display_admin'] && $this->admin) return false;
 

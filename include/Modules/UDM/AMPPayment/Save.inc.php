@@ -177,7 +177,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         return $itemOptions;
     }
 
-    function setupPaymentTypes( $options = null ) {
+    function setupPaymentTypes( $options = array( )) {
 
         //if the payment type is already set
         //return only the fields from the relevent processor
@@ -210,7 +210,7 @@ class UserDataPlugin_Save_AMPPayment extends UserDataPlugin_Save {
         return ($selector_field + $paymentType_fields);
     }
 
-    function _setupCheck( &$payment, $options = null ) { 
+    function _setupCheck( &$payment, $options = array( )) { 
         if (!isset($options['check_payable'])) return false;
         $payment->paymentType->setPayable( $options['check_payable'] );
     }

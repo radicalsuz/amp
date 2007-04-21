@@ -59,7 +59,7 @@ class UserDataPlugin_Save_PHPlist extends UserDataPlugin_Save {
         return $this->getAllDataFields( );
     }
 	 
-    function save ( $data, $options = null ) {
+    function save ( $data, $options = array( )) {
 		$options = array_merge( $this->getOptions(), $options );
 
         if( !( $lists = $this->udm->getRegisteredLists( ))) return true;

@@ -38,7 +38,7 @@ class UserDataPlugin_Read_AMPPayment extends UserDataPlugin {
             );
     }
 
-    function execute( $options = null ) {
+    function execute( $options = array( )) {
         $options = array_merge ($this->getOptions(), $options);
         if (!isset( $options['_userid'] ) ) return false;
         $uid = $options['_userid'];

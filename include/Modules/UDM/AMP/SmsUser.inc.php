@@ -19,7 +19,7 @@ class UserDataPlugin_SmsUser_AMP extends UserDataPlugin_Email {
         $this->options['subject']['default']='Thank you for registering';
     }
 
-    function prepareMessage ( $options = null ) {
+    function prepareMessage ( $options = array( )) {
         return false;
     }
 

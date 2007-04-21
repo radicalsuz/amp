@@ -27,7 +27,7 @@ class UserDataPlugin_Read_AMPVolunteer extends UserDataPlugin {
         $this->fields = $vol->fields;
     }
     
-    function execute( $options = null ) {
+    function execute( $options = array( )) {
         // Check for the existence of a userid.
         if (!isset( $options['_userid'] ) &&
             !isset($this->options['_userid']['value'] )) return false;

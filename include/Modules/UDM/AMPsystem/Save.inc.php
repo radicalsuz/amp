@@ -14,7 +14,7 @@ class UserDataPlugin_Save_AMPsystem extends UserDataPlugin_Save {
         $this->init( $udm );
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         // just make it work for now.
         udm_amp_save_admin( $this->udm, $options );
@@ -117,7 +117,7 @@ class UserDataPlugin_Save_AMPsystem extends UserDataPlugin_Save {
 
 }
 
-function udm_amp_save_admin ( &$udm, $options = null ) {
+function udm_amp_save_admin ( &$udm, $options = array( )) {
 
 	$dbcon = $udm->dbcon;
 

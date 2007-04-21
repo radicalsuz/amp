@@ -40,7 +40,7 @@ class UserDataPlugin_Labels_Output extends UserDataPlugin {
         $this->init( $udm, $plugin_instance );
     }
 
-    function execute( $options = null ) {
+    function execute( $options = array( )) {
         $options = array_merge( $options, $this->getOptions() );
 
         $labels = new PDF_Label_PostNet( $options['labels_type'] );

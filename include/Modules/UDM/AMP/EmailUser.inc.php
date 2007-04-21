@@ -28,7 +28,7 @@ class UserDataPlugin_EmailUser_AMP extends UserDataPlugin_Email {
         $this->options['subject']['default']='Update Your Posting';
     }
 
-    function prepareMessage ( $options = null ) {
+    function prepareMessage ( $options = array( )) {
 
         $udm =& $this->udm;
         $options = array_merge($this->getOptions(), $options);

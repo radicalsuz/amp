@@ -22,7 +22,7 @@ class UserDataPlugin_Read_AMP extends UserDataPlugin {
         $this->init( $udm, $plugin_instance );
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         $dbcon = $this->udm->dbcon;
         $this->_field_prefix="";

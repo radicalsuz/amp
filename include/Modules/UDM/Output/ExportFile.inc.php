@@ -59,7 +59,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
 
         $options = array_merge($this->getOptions(), $options);
 

@@ -15,7 +15,7 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
         $this->init( $udm, $plugin_instance );
     }
 
-    function execute ( $options = null ) {
+    function execute ( $options = array( )) {
         if (isset($options)) $this->setOptions( $options );
 
         $this->_field_prefix=null;

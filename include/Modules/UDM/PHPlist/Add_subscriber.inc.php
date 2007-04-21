@@ -1,6 +1,6 @@
 <?php
 
-function udm_PHPlist_add_subscriber ( $udm, $options = null ) {
+function udm_PHPlist_add_subscriber ( $udm, $options = array( )) {
 
 	mt_srand( (double) microtime() * 1000000 );
 	$rndVal = mt_rand();

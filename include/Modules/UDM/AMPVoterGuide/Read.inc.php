@@ -30,14 +30,17 @@ class UserDataPlugin_Read_AMPVoterGuide extends UserDataPlugin {
         $this->insertAfterFieldOrder( array_keys( $this->fields ) );
     }
 
-    function execute( $options = null ) {
+    function execute( $options = array( )) {
         $options = array_merge ($this->getOptions(), $options);
         if (!isset( $options['_userid'] ) ) return false;
         $uid = $options['_userid'];
         
         if ( $this->udm->admin ) {
-            $this->udm->unregisterPlugin( 'Save', 'AMPVoterGuide' );
-            $this->udm->unregisterPlugin( 'PositionSave', 'AMPVoterGuide' );
+            /* changed order of arguments here for consistency AP 2007-04 */
+            //$this->udm->unregisterPlugin( 'Save', 'AMPVoterGuide' );
+            //$this->udm->unregisterPlugin( 'PositionSave', 'AMPVoterGuide' );
+            $this->udm->unregisterPlugin( 'AMPVoterGuide', 'Save' );
+            $this->udm->unregisterPlugin( 'AMPVoterGuide', 'PositionSave' );
         }
 
         $vgList = &new VoterGuide_List ( $this->dbcon );

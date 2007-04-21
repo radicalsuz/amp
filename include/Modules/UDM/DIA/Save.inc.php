@@ -145,7 +145,7 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
         return array_intersect( $db_fields, $qf_fields );
     }
 
-    function &_init_api( $options = null ){
+    function &_init_api( $options = array( )){
         if ( isset( $this->_dia_api )) return $this->_dia_api;
 
         if(!( isset($options[ 'orgKey' ]) && $options['orgKey']) && defined('DIA_API_ORGCODE')) {

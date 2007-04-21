@@ -16,7 +16,7 @@ class UserDataPlugin_Read_PHPlist extends UserDataPlugin {
         $this->init( $udm, $plugin_instance );
     }
 
-    function execute( $options = null ) {
+    function execute( $options = array( )) {
         $this->_PHPlist = &new PHPlist_API( $this->dbcon );
 
         $all_lists = $this->udm->getRegisteredLists( ) ;
