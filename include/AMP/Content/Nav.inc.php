@@ -205,6 +205,15 @@ class NavigationElement extends AMPSystem_Data_Item {
         return $this->getData( 'modid');
     }
 
+    function getToolname( ) {
+        $tool_id = $this->getToolId( );
+        if ( !$tool_id ) return false;
+        $names = AMP_lookup( 'tools');
+        if ( !isset( $names[$tool_id ])) return false;
+        return $names[$tool_id];
+        
+    }
+
 }
 
 ?>
