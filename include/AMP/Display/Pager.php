@@ -74,6 +74,8 @@ class AMP_Display_Pager {
 
     function set_offset( $offset ) {
         $this->_current_offset = $offset;
+        if ( $this->_qty_page < 1 ) return ( $this->_current_page = 1 );
+
         $this->_current_page = ( $this->_current_offset / $this->_qty_page ) + 1;
     }
 

@@ -51,4 +51,22 @@ class AMPSystemLookup_DistributedEvent extends AMPSystem_Lookup {
 		$this->init();
 	}
 }
+
+class AMPSystemLookup_FormsWithEvents extends AMPSystem_Lookup {
+    var $datatable = 'userdata';
+    var $result_field = 'count( id ) as qty';
+    var $id_field = 'modin';
+    var $criteria = '1 GROUP BY modin';
+
+    function AMPSystemLookup_FormsWithEvents( ) {
+        $owned_events = AMP_lookup( 'calendarEventOwner');
+        if ( !$owned_events ) return;
+        $this->criteria = 'id in( '.join( ',', $owned_events ).') GROUP BY modin ';
+
+        $this->init( );
+
+        $allowed_forms = array_keys( $this->dataset );
+        $this->dataset = array_combine_key( $allowed_forms, AMP_lookup( 'forms'));
+    }
+}
 ?>

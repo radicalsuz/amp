@@ -162,14 +162,22 @@ class AMP_Content_Article_Display_List extends AMP_Display_List {
         if ( $this->is_last_column(  ) ) return;
 
         if ( $arrow_link ) return $arrow_link;
-        require_once( "AMP/Content/Image.inc.php");
-        $image = new Content_Image( 'arrow_22.gif');
+
+        if ( AMP_ICON_COLUMN_FOOTER ) {
+            require_once( "AMP/Content/Image.inc.php");
+            $image = new Content_Image( AMP_ICON_COLUMN_FOOTER );
+            $icon_value = $this->_renderer->image(
+                        $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
+                        array( 'align' => 'right', 'border' => '0'));
+
+        } else {
+            $icon_value = '&uarr;';
+        }
+
         $arrow_link =   $this->_renderer->newline( )
                       . $this->_renderer->link( AMP_Url_AddAnchor( $_SERVER['REQUEST_URI'], 'column_top' ) ,
-                                         $this->_renderer->image(
-                                                $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
-                                                array( 'align' => 'right', 'border' => '0')),
-                                         array( 'alt' => 'Next Column', 'border' => 0 ));
+                                         $icon_value,
+                                         array( 'alt' => 'Next Column', 'border' => 0, 'style' => 'float:right;' ));
         return $arrow_link;
     }
 

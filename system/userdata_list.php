@@ -48,7 +48,7 @@ if ($uid && $modin) {
 if (!$view_permission) $output = AMP_TEXT_PERMISSION_DENIED_LIST;
 
 require_once( 'header.php' );
-
+print '<div id="AMP_flash"></div>';
 print $output;
 
         

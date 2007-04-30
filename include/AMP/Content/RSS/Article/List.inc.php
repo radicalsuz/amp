@@ -19,6 +19,7 @@ class RSS_Article_List extends AMP_System_List_Form {
     var $_url_add = 'rss_content.php?action=update';
     var $_actions = array( 'publish', 'delete');
     var $_action_args = array( 'publish' => array( 'section_id', 'class_id'));
+    var $_sort_default = array( 'dcdate DESC', 'id');
 
     function RSS_Article_List( &$dbcon ) {
         $this->init( $this->_init_source( $dbcon ) );

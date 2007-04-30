@@ -236,7 +236,11 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _getSourceRow( ){
         // simple behavior for recordset map
-        if ( !is_array( $this->source )) return $this->source->getData( );
+        //if ( !is_array( $this->source )) return $this->source->getData( );
+        if ( !is_array( $this->source )) {
+
+            $data = $this->source->getData( );
+        }
 
         // more complex for arrays of objects
 
@@ -274,7 +278,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _getUrlEdit( $row_data ){
-        return AMP_Url_AddVars( $this->editlink, "id=".$row_data['id']);
+        $editlink = isset( $this->_url_edit ) ? $this->_url_edit : $this->editlink;
+        return AMP_url_add_vars( $editlink, array( "id=".$row_data['id']));
     }
 
     //for array objects only

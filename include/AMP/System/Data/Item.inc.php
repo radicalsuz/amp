@@ -58,6 +58,11 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $this->dbcon = & $dbcon;
         $this->setSource( $this->datatable );
         if (isset($item_id) && $item_id) $this->readData( $item_id );
+        $this->_after_init( );
+    }
+
+    function _after_init( ) {
+        //stub
     }
 
     function read( $item_id ) {

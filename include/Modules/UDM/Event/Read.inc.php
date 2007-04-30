@@ -40,6 +40,7 @@ class UserDataPlugin_Read_Event extends UserDataPlugin {
         $this->_event = $this->_event_map->getComponent( 'source' );
         $this->_event->read( $calid );
         if ( !$this->_event->hasData( )) return $this->_read_failure( );
+        $data = $this->_event->getData( );
 
         $this->setData( $this->_event->getData( ));
         return false;

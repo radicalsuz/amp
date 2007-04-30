@@ -72,6 +72,7 @@ if (!defined( 'AMP_CONTENT_SIDEBAR_CLASS_RIGHT'))      define ('AMP_CONTENT_SIDE
  * Definitions for system images 
  */
 define( 'AMP_ICON_SPACER', 'spacer.gif' );
+define( 'AMP_ICON_COLUMN_FOOTER', false );
 
 /**
  * Notation used within navs and introtexts to indicate a php include file 
@@ -252,5 +253,15 @@ if (!defined( 'AMP_CONTENT_DISPLAY_KEY_BUFFER' )) define ('AMP_CONTENT_DISPLAY_K
  */
 if (!defined( 'AMP_CONTENT_LIST_SUBHEADER_CLASS' )) define( 'AMP_CONTENT_LIST_SUBHEADER_CLASS', 'title' );
 
+
+/**
+ * DIA settings 
+ */
+
+if ( !defined( 'DIA_URL_EVENT_PAYMENT')) define( 'DIA_URL_EVENT_PAYMENT', 'https://secure.democracyinaction.org/dia/organizations/%s/event/checkOut.jsp?event_KEY=%s');
+if ( !defined( 'DIA_URL_EVENT_RSVP')) define( 'DIA_URL_EVENT_RSVP', 'http://www.democracyinaction.org/dia/organizations/%s/event/index.jsp?event_KEY=%s');
+
+//automatically save calendar events to DIA
+if ( !defined( 'AMP_CALENDAR_DIA_AUTO_SAVE')) define( 'AMP_CALENDAR_DIA_AUTO_SAVE', false );
 
 ?>

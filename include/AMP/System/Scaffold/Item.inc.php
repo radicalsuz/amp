@@ -8,7 +8,7 @@ class %1\$s extends AMPSystem_Data_Item {
     var $name_field = "%3\$s";
 
     function %1\$s ( &$dbcon, $id = null ) {
-        $this->init( $dbcon, $id );
+        $this->__construct( $dbcon, $id );
     }
 }
 

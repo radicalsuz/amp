@@ -104,7 +104,6 @@ class AMP_Display_List {
 
         $column_output = '';
         $column_length = round( count( $this->_source ) / $this->_display_columns );
-        trigger_error( 'LENGTH ' . $column_length );
 
         foreach( $this->_source as $source_item ) {
             if ( $local_method ) {

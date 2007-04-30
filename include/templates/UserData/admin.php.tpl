@@ -250,6 +250,9 @@ function addPlugin() {
     }
 </style>
 
+<script type="text/javascript" language="javascript" src="/scripts/system_header.js"></script>
+<div id="AMP_flash"></div>
+
 <form <?php print $this->form['attributes'] ?>>
 
 <div id="tabs">

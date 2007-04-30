@@ -7,8 +7,9 @@ class Calendar_Event extends AMPSystem_Data_Item {
     var $datatable = "calendar";
     var $name_field = "event";
     var $_class_name = 'Calendar_Event';
-    var $_exact_value_fields = array( 'id', 'typeid', 'region' );
+    var $_exact_value_fields = array( 'id', 'typeid', 'region', 'uid' , 'modin' );
     var $_sort_auto = false;
+    var $_owner;
 
     var $_legacy_fields = array( 
                 'shortdesc'     =>  'blurb',
@@ -114,6 +115,12 @@ class Calendar_Event extends AMPSystem_Data_Item {
         return "date >= CURRENT_DATE";
     }
 
+    function makeCriteriaForm_id( $value ) {
+        require_once( 'AMP/UserData/Lookups.inc.php');
+        $owner_ids = FormLookup_Names::instance( $value );
+        return 'uid in( ' . join( ',', array_keys( $owner_ids )) .')';
+    }
+
     function makeCriteriaFront_page( $fpevent_value ) {
         if ( $fpevent_value === FALSE ) {
             return "TRUE";
@@ -170,7 +177,25 @@ class Calendar_Event extends AMPSystem_Data_Item {
     }
 
     function getURL( ) {
-        return AMP_url_add_vars( AMP_CONTENT_URL_EVENT, array( 'id=' . $this->id ));
+        if ( !isset( $this->id )) return AMP_CONTENT_URL_EVENT;
+        $dia_key = $this->get_dia_key( );
+        $rsvp = $this->getData( 'rsvp' );
+        
+        //return a standard detail URL
+        if ( !( $dia_key && $rsvp && defined( 'AMP_CALENDAR_DISPLAY_DIA_DETAIL') && AMP_CALENDAR_DISPLAY_DIA_DETAIL )) {
+            return AMP_url_add_vars( AMP_CONTENT_URL_EVENT, array( 'id=' . $this->id ));
+        }
+
+        $dia_url = DIA_URL_EVENT_RSVP;
+
+        //see if there is a registration fee, if so send to DIA payment page
+        if ( ( $reg_fee = $this->getData( 'cost')) && is_numeric( $reg_fee )) {
+            $dia_url = DIA_URL_EVENT_PAYMENT;
+        } 
+
+        //send to DIA url
+        return sprintf( $dia_url, DIA_API_ORGANIZATION_SLUG , $dia_key );
+        
     }
 
     function get_url_edit(  ) {
@@ -255,6 +280,11 @@ class Calendar_Event extends AMPSystem_Data_Item {
     }
 
     function _afterRead(  ) {
+        $this->read_owner( );
+        $this->read_dia_event( );
+    }
+
+    function read_owner( ) {
         if ( !(  $uid = $this->getOwner(  ) )) return; 
         
         require_once( 'AMP/System/User/Profile/Profile.php' );
@@ -269,24 +299,65 @@ class Calendar_Event extends AMPSystem_Data_Item {
 
     }
 
+    function read_dia_event( ) {
+        if ( !AMP_CALENDAR_DIA_AUTO_SAVE ) return;
+        if ( !(  $dia_key = $this->get_dia_key(  ) )) return; 
+
+        require_once( 'Modules/Calendar/DIA/Event.php');
+        $dia_event = new Calendar_DIA_Event( $dia_key );
+        $dia_data = $dia_event->get( );
+        if ( empty( $dia_data )) return;
+
+        return $this->mergeData( $dia_data );
+
+    }
+
     function _save_create_actions( $data ) {
         $data['uid'] = $this->save_owner( $data );
+        //$data['dia_key'] = $this->save_dia_event( $data );
         return $data;
     }
 
     function _save_update_actions( $data ) {
         $data['uid'] = $this->save_owner( $data );
+        //$data['dia_key'] = $this->save_dia_event( $data );
         return $data;
+    }
+
+    function save_dia_event( $event_data ) {
+        if ( !AMP_CALENDAR_DIA_AUTO_SAVE ) {
+            return false;
+        }
+
+        if ( empty( $event_data ) ) {
+            $event_data = $this->getData(  );
+        }
+
+        $dia_key = isset( $event_data['dia_key']) ? $event_data['dia_key'] : false;
+
+        require_once( 'Modules/Calendar/DIA/Event.php');
+        $dia_event = new Calendar_DIA_Event( );
+        $dia_event->set( $event_data );
+        $result = $dia_event->save( );
+        if ( !$result ) {
+            return false; 
+        }
+        return $dia_event->id;
+
+
     }
 
     function save_owner ( $event_data = array(  ) ) {
         if ( empty( $event_data ) ) {
             $event_data = $this->getData(  );
         }
-        $uid = false;
 
-        if (  ( !( defined( 'AMP_FORM_ID_EVENT_OWNER' ) ) && AMP_FORM_ID_EVENT_OWNER ) 
-           && ( !( isset( $event_data['uid'] ) && ( $uid = $event_data['uid'] )  )) ) return false; 
+        $uid = isset( $event_data['uid'] ) ? $event_data['uid'] : false;
+
+        if ( !$uid && 
+           ( !defined( 'AMP_FORM_ID_EVENT_OWNER') || !AMP_FORM_ID_EVENT_OWNER )) {
+            return false;
+        }
 
         require_once( 'AMP/System/User/Profile/Profile.php' );
         $owner = new AMP_System_User_Profile( $this->dbcon, $uid );
@@ -308,8 +379,24 @@ class Calendar_Event extends AMPSystem_Data_Item {
         $result = $owner->save(  );
         if ( !$result ) return false;
 
+        $this->_owner = &$owner;
+
         return $owner->id;
 
+    }
+
+    function find_form_id( ) {
+        if ( !isset( $this->_owner )) return false;
+        return $this->_owner->getModin( );
+
+    }
+
+    function get_dia_key( ) {
+        return $this->getData( 'dia_key');
+    }
+
+    function set_dia_key( $value ) {
+        return $this->mergeData( array( 'dia_key' => $value ));
     }
 
 

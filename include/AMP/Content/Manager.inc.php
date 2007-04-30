@@ -36,8 +36,10 @@ class AMPContent_Manager {
      * Specifies a sequence of displays to be executed in order
      * 
      * Default values are:
-     * 1 constant( AMP_CONTENT_DISPLAY_KEY_INTRO ) = "intro"
-     * 2 constant( AMP_CONTENT_DISPLAY_KEY_BUFFER) = "buffer"
+     * 1 constant( AMP_CONTENT_DISPLAY_KEY_FLASH ) = "flash"
+     * 2 constant( AMP_CONTENT_DISPLAY_KEY_INTRO ) = "intro"
+     * 3 constant( AMP_CONTENT_DISPLAY_KEY_BUFFER) = "buffer"
+     * - "flash" is used to display any relevant system messages
      * - "intro" is used by {@link AMP/BaseModuleIntro.php} to assign an IntroText for the current Module.
      * - "buffer" is used by {@link AMP/BaseFooter.php} to store whatever output has been buffered for the current request.
      *

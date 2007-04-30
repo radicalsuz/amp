@@ -166,6 +166,7 @@ class NavEngine_SQL extends NavEngine {
 
     function _getLinkText( $item ) {
         $fieldname =  $this->nav->getLinkTextField();
+        if (isset($item[ 'linktext']) && $item['linktext']) return $item[ 'linktext' ];
         if (isset($item[ $fieldname ])) return $item[ $fieldname ];
         return "";
     }

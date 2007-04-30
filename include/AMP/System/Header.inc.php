@@ -39,7 +39,6 @@ class AMPSystem_Header extends AMPContent_Header {
         if ( isset( $this->_page_action )) {
             array_unshift( $pageTitle , $this->_page_action );
         }
-        // someday we should be able to put current admin-side location here
         
         $this->_pageTitle = join( $this->_title_separator, $pageTitle ); 
         return $this->_pageTitle;

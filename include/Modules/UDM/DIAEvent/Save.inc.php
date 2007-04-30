@@ -68,9 +68,19 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
             'fulldesc'  =>  'Description');
 
     function UserDataPlugin_Save_DIAEvent( &$udm, $plugin_instance ) {
-        $this->_calendar_plugin =& $udm->registerPlugin( 'AMPCalendar', 'Save');
-        $this->_field_prefix = $this->_calendar_plugin->getPrefix( );
+
         $this->init($udm, $plugin_instance);
+        $this->_register_event_setup( );
+    }
+
+    function _register_event_setup( ) {
+        if ( isset( $this->_calendar_plugin )) return;
+        if ( !( $plugin = $this->udm->getPlugin( 'Event', 'Save' )) ){
+            $this->_calendar_plugin = $this->udm->registerPlugin( 'AMPCalendar', 'Save');
+        } else {
+            $this->_calendar_plugin = &$plugin;
+        }
+        $this->_field_prefix = $this->_calendar_plugin->getPrefix( );
     }
 
     function getSaveFields() {
@@ -112,7 +122,8 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 		}
 
         $this->setEventKey( $event_key );
-        $this->_calendar_plugin->updateDIAKey( $event_key, $data['id'] );
+        $event_id = isset( $data['id']) ? $data['id'] : false;
+        $this->_calendar_plugin->updateDIAKey( $event_key, $event_id );
 
 		$this->error('returning event key: '.$this->getEventKey(), E_USER_NOTICE);
         return $this->getEventKey( );
@@ -153,23 +164,34 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 			}
 		}
 
-		$recurring_options = array( 0 => 'None',
-									4 => 'YEARLY',
-									3 => 'MONTHLY',
-									1 => 'DAILY');
-		if($data['recurring_options'] == 2) {
-			$return['Recurrence_Interval'] = 7;
-			$return['Recurrence_Frequency'] = 'DAILY';
-		} else {
-			$return['Recurrence_Frequency'] = $recurring_options[$data['recurring_options']];
-		}
+        if ( isset( $data['recurring_options'])) {
+            $recurring_options = array( 0 => 'None',
+                                        4 => 'YEARLY',
+                                        3 => 'MONTHLY',
+                                        1 => 'DAILY');
+            if($data['recurring_options'] == 2) {
+                $return['Recurrence_Interval'] = 7;
+                $return['Recurrence_Frequency'] = 'DAILY';
+            } else {
+                $return['Recurrence_Frequency'] = $recurring_options[$data['recurring_options']];
+            }
 
-		if($data['publish']) {
-			$return['Status'] = 'Active';
-		} else {
-			$return['Status'] = 'Inactive';
-		}
+        }
+
+        if ( isset( $data['publish'])) {
+            if($data['publish']) {
+                $return['Status'] = 'Active';
+            } else {
+                $return['Status'] = 'Inactive';
+            }
+
+        }
 		
+        if ( !isset( $data['date'])) $data['date'] = '';
+        if ( !isset( $data['time'])) $data['time'] = '';
+        if ( !isset( $data['enddate'])) $data['enddate'] = '';
+        if ( !isset( $data['endtime'])) $data['endtime'] = '';
+
 		$start = strtotime($data['date'].' '.$data['time']);
 		if(!$start || (-1 == $start)) {
 			$start = strtotime($data['date']);

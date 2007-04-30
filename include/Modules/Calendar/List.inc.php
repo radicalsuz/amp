@@ -11,9 +11,12 @@ class Calendar_List extends AMP_System_List_Form {
         'State' => '_showState',
         'Event' => 'name',
         'Status' => 'publish',
-        'ID'    => 'id'
+        'ID'    => 'id',
         );
-    var $editlink = 'calendar.php';
+    var $editlink = AMP_SYSTEM_URL_EVENT;
+    var $_url_add = AMP_SYSTEM_URL_EVENT_ADD;
+    var $editlink_uid = false;
+
     var $name_field = 'name';
     var $_source_object = 'Calendar_Event';
     var $_observers_source = array( 'AMP_System_List_Observer');
@@ -27,6 +30,8 @@ class Calendar_List extends AMP_System_List_Form {
     var $_actions = array( 'publish', 'unpublish', 'delete', 'export');
 //    var $_actions_global = array( 'export' );
     var $_request_class = 'Calendar_List_Request';
+
+    var $_saved_edit_urls = array( );
 
     function Calendar_List( &$dbcon, $criteria = array( ) ) {
         if ( !isset( $criteria['current'])) {
@@ -50,6 +55,26 @@ class Calendar_List extends AMP_System_List_Form {
             return $state_set[ $state_value ];
         }
         return $state_value;
+    }
+
+    function _getUrlEdit( $row_data ) {
+        if ( isset( $this->_saved_edit_urls[ $row_data['id']])) {
+            return $this->_saved_edit_urls[ $row_data['id']];
+        }
+
+        $source = &$this->source[ $this->_source_keys[ $this->_source_counter ]];
+        $uid =  $source ? $source->getOwner( ) : false ;
+
+        if ( $this->editlink_uid && $uid ) {
+            $editlink = isset( $this->_url_edit ) ? $this->_url_edit : $this->editlink;
+            $value = AMP_url_add_vars( AMP_SYSTEM_URL_FORM_ENTRY, array( "uid=".$uid  ));
+        } else {
+            $value = parent::_getUrlEdit( $row_data );
+        }
+
+        $this->_saved_edit_urls[$row_data['id']] = $value;
+        return $value;
+        
     }
 }
 ?>

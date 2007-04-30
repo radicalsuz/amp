@@ -2,6 +2,7 @@
 
 require_once ( 'AMP/Form/SearchForm.inc.php' );
 require_once ( 'Modules/Calendar/ComponentMap.inc.php');
+require_once ( 'Modules/Calendar/Lookups.inc.php');
 
 class Calendar_Search_Form extends AMPSearchForm {
 
@@ -9,7 +10,7 @@ class Calendar_Search_Form extends AMPSearchForm {
 
     function Calendar_Search_Form ( ) {
         $name = "Calendar_Search";
-        $this->init( $name, 'GET', AMP_SYSTEM_URL_EVENT );
+        $this->init( $name, 'GET', $_SERVER['PHP_SELF']);
     }
 
     function _initJavascriptActions( ) {
@@ -18,6 +19,13 @@ class Calendar_Search_Form extends AMPSearchForm {
     }
 
     function adjustFields( $fields ) {
+        $owned_events = AMP_lookup( 'formsWithEvents');
+        if ( !$owned_events ) {
+            unset( $fields['modin'] );
+            $fields['modin']['type'] = 'hidden';
+        }
+
+        //region adjustment
         if ( !isset( $_GLOBALS['nonstateregion']) && !( defined( 'AMP_CALENDAR_USE_REGIONS'))) {
             unset( $fields['region']);
         } else {

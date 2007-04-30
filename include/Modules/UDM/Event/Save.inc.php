@@ -15,6 +15,8 @@ class UserDataPlugin_Save_Event extends UserDataPlugin_Save {
     var $_event_map;
     var $_event_controller;
     var $_event_form;
+
+    var $_event_dia_key;
     var $options = array( 
             'allow_registration' => array( 
                 'type' => 'checkbox',
@@ -39,7 +41,11 @@ class UserDataPlugin_Save_Event extends UserDataPlugin_Save {
         $this->fields= $this->enable_all(  $this->_event_form->getFields() );
 
         $udm_fields = AMP_get_column_names( 'userdata' );
+        $udm_overlap = $this->udm->admin?  array( 'id', 'publish', 'dia_key') : array( 'id', 'dia_key'  );
+        $udm_fields = array_diff( $udm_fields, $udm_overlap );
+
         $allowed_fields = array_diff( array_keys( $this->fields ), $udm_fields );
+
         $this->fields = array_combine_key( $allowed_fields, $this->fields );
 
         if( isset( $this->fields['humanity_test'])) {
@@ -61,7 +67,7 @@ class UserDataPlugin_Save_Event extends UserDataPlugin_Save {
     function _register_event_setup(  ) {
         if ( isset( $this->_event_map ) ) return;
         $options = $this->getOptions(  );
-        if (( ( isset( $options['allow_registration_admin'] ) && $options['allow_registration_admin']  && $this->admin )
+        if (( ( isset( $options['allow_registration_admin'] ) && $options['allow_registration_admin']  && $this->udm->admin )
            || ( isset( $options['allow_registration'] ) && $options['allow_registration']  ))
            && ( !defined( 'AMP_CALENDAR_ALLOW_RSVP' ) )) { 
             define( 'AMP_CALENDAR_ALLOW_RSVP', true );
@@ -87,6 +93,10 @@ class UserDataPlugin_Save_Event extends UserDataPlugin_Save {
         if ( isset( $data['id'] ) && $data['id'] ) {
             $this->_event->readData( $data['id'] );
         }
+        if ( !( isset( $data['dia_key']) && $data['dia_key'] ) && $this->_event_dia_key ) {
+            $this->_event->set_dia_key( $this->_event_dia_key );
+        }
+
         $this->_event->mergeData( $data );
         return $this->_event->save(  );
 
@@ -94,6 +104,20 @@ class UserDataPlugin_Save_Event extends UserDataPlugin_Save {
 
     function getSaveFields(  ) {
         return $this->getAllDataFields(  );
+    }
+
+    function updateDIAKey( $value, $event_id ) {
+        if ( !$value ) return false;
+        if ( ( !isset( $this->_event ))) {
+            $this->_event_dia_key = $value;
+            return;
+        }
+
+        if ( $event_id && ( $this->_event->id != $event_id )) {
+            $this->_event->read( $event_id );
+        }
+        $this->_event->set_dia_key( $value );
+        return $this->_event->save( );
     }
 
 }

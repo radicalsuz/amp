@@ -130,6 +130,7 @@ class AMP_System_Component_Controller {
         if ( !$output ) return;
 
         if ( defined( 'AMP_CONTENT_PAGE_REDIRECT' )) return;
+        $this->_init_location( );
 
         $output = $this->_display->execute( );
         AMP_cache_close( );
@@ -300,6 +301,9 @@ class AMP_System_Component_Controller {
         return sha1( get_class( $this->_model ) . $this->_model->id . $this->get_action( ));
     }
         
+    function _init_location( ) {
+        //do nothing
+    }
 }
 
 class AMP_System_Component_Controller_Map extends AMP_System_Component_Controller {
@@ -331,6 +335,10 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         if ( $model = &$this->_map->getComponent( 'source' )) $this->_init_model( $model) ;
 
         if ( !$this->allow( $this->get_action( ))) $this->clear_actions( );
+        //$this->_init_location( );
+    }
+
+    function _init_location( ) {
         $this->set_banner( $this->get_action( ));
         if ( method_exists( $this->_display, 'add_nav')){
             $this->_display->add_nav( $this->_map->getNavName( ));
@@ -760,6 +768,7 @@ class AMP_System_Component_Controller_Bookmark extends AMP_System_Component_Cont
         $this->_url_bookmark = $this->_map->get_url_system( );
         return parent::_init_map( );
     }
+
 }
 
 

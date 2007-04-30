@@ -229,6 +229,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
 		if (empty( $this->translations) || empty( $this->translations[ $action ])) return $data;
         if ( is_object( $data ) && strtolower( get_class( $data )) == 'html_quickform_error') {
             trigger_error( $data->getMessage( ));
+            print AMPbacktrace( );
             return false;
         }
 

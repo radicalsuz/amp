@@ -769,11 +769,12 @@ class UserData {
 
     function doAction ( $action, $options = array() ) {
 
-        $plugins =& $this->getPlugins( $action );
+        $plugins = $this->getPlugins( $action );
 
         if (!isset( $plugins )|| !is_array($plugins) ) return false;
         
         $result = false;
+        
         foreach ( array_keys($plugins) as $plugin_name ) {
             $plugin =& $plugins[$plugin_name];
 

@@ -14,10 +14,16 @@
         <type>text</type>
         <size>6</size>
         <label>Event Cost</label>
+        <rules>
+            <item>
+                <type>numeric</type>
+                <message>Should be a number of US dollars ( without a $ )&lt;br /&gt; -leave blank for free events-</message>
+            </item>
+        </rules>
     </cost>
-    <repeat>
+    <repeat_event>
         <type>hidden</type>
         <constant>1</constant>
         <default>0</default>
-    </repeat>
+    </repeat_event>
 </array>

@@ -13,7 +13,7 @@ class UserDataPlugin_ListAdmin_Output extends UserDataPlugin_List_Output {
         'component_order' =>  array( 
             'type'      => 'text',
             'default'   => 'Messages,SearchForm,Pager,Actions,TableHTML,Pager',
-            'label'     => 'List Components',
+            'label'     => 'List Component Order',
             'available' => true ),
         'qty_default'   => array (
             'available' =>  true,

@@ -214,5 +214,8 @@
             </item>
         </rules>
 	</Email>
+    <dia_key>
+        <type>hidden</type>
+    </dia_key>
 
 </array>

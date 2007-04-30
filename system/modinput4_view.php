@@ -90,6 +90,7 @@ $mod_id = $udm->modTemplateID;
 
 require_once( 'header.php' );
 
+print '<div id="AMP_flash"></div>';
 print "<h2>Add/Edit " . $udm->name . "</h2>";
 print "<font color = \"red\">".$udm->outputErrors()."</font>";
 print $udm->output();

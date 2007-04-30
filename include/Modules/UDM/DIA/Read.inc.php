@@ -97,7 +97,7 @@ class UserDataPlugin_Read_DIA extends UserDataPlugin {
 		$this->init($udm, $plugin_instance);
 	}
 
-    function &init_api( $options ){
+    function &init_api( $options = array( ) ){
         if ( isset( $this->_dia_api )) return $this->_dia_api;
 
         $this->_dia_api = &DIA_API::create( null, $options );
@@ -106,8 +106,8 @@ class UserDataPlugin_Read_DIA extends UserDataPlugin {
 
 	function execute($options=array( )) {
 		$options = array_merge($this->getOptions(), $options);
-		if (!(isset( $options['dia_key'] )&&$options['dia_key'])) return false;
-		$this->_dia_key = $options['dia_key'];
+		$this->_dia_key = $this->find_dia_key( $options );
+        if ( !$this->_dia_key ) return false;
         $start_data = $this->udm->getData( );
 
         //accepts passed API options for testing purposes
@@ -135,7 +135,7 @@ class UserDataPlugin_Read_DIA extends UserDataPlugin {
             
         }
 
-		return false;
+		return true;
     }
 
 	function translate( $dia_data, $mapping=null, $alternate = 'direct' ) {
@@ -194,6 +194,18 @@ class UserDataPlugin_Read_DIA extends UserDataPlugin {
 
     function readLinkedMapping( $dia_key, $table ){
         return $this->_dia_api->get( $table, $dia_key );
+
+    }
+
+    function find_dia_key( $options ) {
+		if ((isset( $options['dia_key'] )&&$options['dia_key'])) return $options['dia_key'];
+        if ( isset( $this->udm->uid )) {
+            require_once( 'AMP/System/User/Profile/Profile.php');
+            $user_data = new AMP_System_User_Profile( $this->udm->dbcon, $this->udm->uid );
+            $dia_key = $user_data->getData( 'dia_key');
+            if ( $dia_key ) return $dia_key;
+        }
+        return false;
 
     }
 }

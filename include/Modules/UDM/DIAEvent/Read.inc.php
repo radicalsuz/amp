@@ -1,12 +1,13 @@
 <?php
 
-require_once('AMP/UserData/Plugin.inc.php');
-require_once('DIA/API.php');
+require_once( 'AMP/UserData/Plugin.inc.php' );
+require_once( 'Modules/Calendar/Calendar.inc.php' );
+require_once( 'DIA/API.php' );
 
 class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 
     // We take one option, a DIA event key, and no fields.
-    var $cal;
+    //var $cal;
     var $options     = array( 
             'dia_event_key' => array(   'available' => false,
                                         'value' => null),
@@ -50,9 +51,24 @@ class UserDataPlugin_Read_DIAEvent extends UserDataPlugin {
 			'Description' => 'fulldesc');
 
 	function UserDataPlugin_Read_DIAEvent(&$udm, $plugin_instance=null) {
-        $this->cal = &new Calendar( $udm->dbcon, null, $udm->admin );
+        //$this->cal = &new Calendar( $udm->dbcon, null, $udm->admin );
+
 		$this->init($udm, $plugin_instance);
+        //$this->_register_event_setup( );
 	}
+
+    /*
+    function _register_event_setup( ) {
+        if ( isset( $this->_calendar_plugin )) return;
+        if ( !( $plugin = $this->udm->getPlugin( 'Event', 'Read' )) ){
+            $this->_calendar_plugin = $this->udm->registerPlugin( 'AMPCalendar', 'Read');
+        } else {
+            $this->_calendar_plugin = &$plugin;
+        }
+        $this->_field_prefix = $this->_calendar_plugin->getPrefix( );
+    }
+    */
+
 
 	function execute($options=array( )) {
 		$options = array_merge($this->getOptions(), $options);

@@ -216,6 +216,8 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
 		}
 
 		$lists = $this->udm->getRegisteredLists();
+        if ( !$lists ) return $supporter_id;
+
         $alldata = $this->udm->getData();
 		foreach( $lists as $list_id => $list_name ) {
             $subscribe = isset($alldata['list_'.$list_id]) && $alldata['list_'.$list_id];

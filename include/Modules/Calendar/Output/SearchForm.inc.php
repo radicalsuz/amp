@@ -61,7 +61,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
 	}	
 
     function _makeExactDate( ){
-        if ( !isset( $_REQUEST['ondate'] ) && $_REQUEST['ondate']) return false;
+        if ( !( isset( $_REQUEST['ondate'] ) && $_REQUEST['ondate'])) return false;
         $mydate = $_REQUEST['ondate'];
         if ( !( isset( $mydate['Y'] ) && isset( $mydate['m'] ) && isset( $mydate['d'] ))) return false;
         return $mydate['Y'].'-'.$mydate['m'] . $mydate['d'];
@@ -459,7 +459,7 @@ class CalendarPlugin_SearchForm_Output extends CalendarPlugin {
     //Lookups value 
 	function setupLookup($which) {
 		//if the Lookup is defined
-		if (is_array($this->lookups[$which])) {
+		if ( isset( $this->lookups[$which]) && is_array($this->lookups[$which] )) {
 			$this_lookup=$this->lookups[$which];
 			//if there is a LookupTable defined (assumes a LookupField is defined as well)
 			if (isset($this_lookup['LookupTable'])&&!isset($this_lookup['Set'])) {

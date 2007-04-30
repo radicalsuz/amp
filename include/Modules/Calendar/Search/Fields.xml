@@ -66,4 +66,10 @@
 		<type>checkbox</type>
 		<label>Repeating</label>
 	</repeat>
+    <modin>
+        <type>select</type>
+        <label>Select Form</label>
+        <lookup>formsWithEvents</lookup>
+		<separator>newrow</separator>
+    </modin>
 </array>

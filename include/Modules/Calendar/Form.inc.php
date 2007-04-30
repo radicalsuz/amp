@@ -15,7 +15,7 @@ class Calendar_Form extends AMPSystem_Form_XML {
 
     function Calendar_Form( ) {
         $name = 'Calendar';
-        $this->init( $name, 'POST', AMP_SYSTEM_URL_EVENT );
+        $this->init( $name, 'POST', $_SERVER['PHP_SELF'] );
     }
 
     function setDynamicValues( ){
