@@ -995,7 +995,7 @@ class AMPSystemLookup_TagsByItem extends AMPSystem_Lookup {
 
     function _init_tag_names( ) {
         $tag_lookup = AMPSystem_Lookup::instance( 'tags' );
-        $this->dataset = array_combine_key( $this->dataset, $tag_lookup );
+        $this->dataset = array_combine_key( array_keys( $this->dataset ), $tag_lookup );
 
         if ( $this->dataset ) {
             natcasesort( $this->dataset );
