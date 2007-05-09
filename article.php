@@ -67,6 +67,13 @@ if (!( $listType  || $currentPage->isArticle() )) {
 if ( ( !AMP_DISPLAYMODE_PREVIEW )  && ($currentArticle = &$currentPage->getArticle()) ){
 
     if (!$currentArticle->isLive() ) AMP_make_404( ) ;
+
+    //check to make sure parent section is live
+    require_once( 'AMP/Content/Section.inc.php' );
+    $currentSection = new Section( AMP_Registry::getDbcon(  ), $currentArticle->getParent(  ) );
+    if ( !$currentSection->hasData(  ) || !$currentSection->isLive( )) {
+        AMP_make_404( );
+    }
 }
 
 /**

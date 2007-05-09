@@ -1037,4 +1037,14 @@ class AMPConstantLookup_ToolLinks extends AMPConstant_Lookup {
     }
 }
 
+class AMPContentLookup_SectionsLive extends AMPContent_Lookup {
+    var $datatable = 'articletype';
+    var $result_field = 'type';
+    var $criteria = 'usenav=1';
+
+    function AMPContentLookup_SectionsLive( ){
+        $this->init( );
+    }
+}
+
 ?>

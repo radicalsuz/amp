@@ -305,6 +305,21 @@ class Section extends AMPSystem_Data_Item {
         return AMP_URL_AddVars( AMP_SYSTEM_URL_SECTION, array( 'id=' . $this->id ));
     }
 
+    function isLive() {
+        if ( !parent::isLive( )) return false;
+
+        $map = AMPContent_Map::instance( );
+        $ancestors = $map->getAncestors( $this->id );
+        $live_set = AMP_lookup( 'sectionsLive' );
+        foreach( $ancestors as $parent_id => $parent_name ) {
+            if ( !isset( $live_set[ $parent_id ])) {
+            return false;
+
+            }
+        }
+
+        return true;
+    }
 
 }
 ?>
