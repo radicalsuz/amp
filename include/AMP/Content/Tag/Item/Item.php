@@ -65,6 +65,9 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
         $name_value = false;
         if ( $item_type == AMP_TEXT_SYSTEM_ITEM_TYPE_FORM ) {
             $form_id = $this->_tagged_item->getModin( );
+            if ( !$form_id ) {
+                return false;
+            }
             $form_names = AMPSystem_Lookup::instance( 'formsPublic');
             if ( isset( $form_names[ $form_id ])) {
                 return $form_names[ $form_id ] ;

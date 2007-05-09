@@ -58,6 +58,8 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
 
     function _renderSubheader( &$source, $depth = 0 ) {
         $item_header = $source->getItemCategory( );
+        if ( !$item_header ) return false;
+
         if ( isset( $this->_current_subheaders[$depth ])
             && ( $item_header == $this->_current_subheaders[$depth] )) {
             return false; 
