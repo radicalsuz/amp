@@ -75,7 +75,7 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 
     function _register_event_setup( ) {
         if ( isset( $this->_calendar_plugin )) return;
-        if ( !( $plugin = $this->udm->getPlugin( 'Event', 'Save' )) ){
+        if ( !( $plugin = &$this->udm->getPlugin( 'Event', 'Save' )) ){
             $this->_calendar_plugin = $this->udm->registerPlugin( 'AMPCalendar', 'Save');
         } else {
             $this->_calendar_plugin = &$plugin;

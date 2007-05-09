@@ -20,7 +20,7 @@ class AMPSystem_IntroText_List extends AMP_System_List_Form {
 
     function AMPSystem_IntroText_List( &$dbcon, $criteria = null ) {
         #$source   =  & new AMPSystem_IntroText_Set($dbcon);
-        $this->init( $this->_init_source( $dbcon ) );
+        $this->init( $this->_init_source( $dbcon, $criteria ) );
     }
 
     function getModuleNames () {

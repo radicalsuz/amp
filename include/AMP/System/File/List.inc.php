@@ -36,7 +36,8 @@ class AMP_System_File_List extends AMP_System_List_Form {
     }
 
     function _getUrlEdit( $row_data ){
-        return substr( AMP_SITE_URL, 0, -1 ) . AMP_CONTENT_URL_DOCUMENTS . $row_data['name'];
+        $base_url = ( substr( AMP_SITE_URL, -1 ) == '/' ) ? substr( AMP_SITE_URL, 0, -1 ) : AMP_SITE_URL;
+        return $base_url . AMP_CONTENT_URL_DOCUMENTS . $row_data['name'];
     }
 
     function _getNameColumnFormat( $row_data ) {

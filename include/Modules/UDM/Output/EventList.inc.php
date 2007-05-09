@@ -26,6 +26,7 @@ class UserDataPlugin_EventList_Output extends UserDataPlugin {
         //$list = new Calendar_List( false, array( 'modin' => $this->udm->instance( )));
         $list = new Calendar_List( $this->udm->dbcon );
         $list->editlink_uid = true ;
+        $list->_url_add = 'modinput4_view.php?modin='. $this->udm->instance( );
         return $list->execute( );
     }
 
