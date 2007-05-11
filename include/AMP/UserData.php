@@ -617,7 +617,7 @@ class UserData {
      *
      *****/
 
-    function doPlugin( $namespace, $action, $options = null ) {
+    function doPlugin( $namespace, $action, $options = array( )) {
         
         $plugin =& $this->registerPlugin( $namespace, $action );
 
