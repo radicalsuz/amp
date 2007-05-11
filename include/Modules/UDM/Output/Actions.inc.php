@@ -231,11 +231,41 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
         $def['list_return_url']=array(  'type'=>'hidden',
                                 'value'=>'',
                                 'enabled'=>true);
+        /*pager compatibility*/
+        $def['qty']=array(  'type'=>'hidden',
+                                'value'=>'',
+                                'enabled'=>true);
+        $def['offset']=array(  'type'=>'hidden',
+                                'value'=>'',
+                                'enabled'=>true);
 		return $def;
 	
 	}
 
+    function pager_action_script( ) {
+        $pager = $this->udm->getPlugin( 'Output', 'Pager');
+        $pager_status = '';
+        if ( $pager ) {
+            $offset = ( isset( $_REQUEST['offset']) && $_REQUEST['offset']) ? $_REQUEST['offset'] : '';
+            $qty = ( isset( $_REQUEST['qty']) && $_REQUEST['qty']) ? $_REQUEST['qty'] : '';
+            if ( $qty ) {
+            $pager_status .= 
+                        'aform.elements["qty"].value = '.$qty.'; 
+                        ';
+
+            }
+            if ( $offset ) {
+            $pager_status .= 
+                        'aform.elements["offset"].value = '.$offset.'; 
+                        ';
+
+            }
+        }
+        return $pager_status;
+    }
+
     function action_script($options=array( )) {
+        $pager_status = $this->pager_action_script( );
         $script='
         <script type="text/javascript">
         function list_DoAction( action ) {
@@ -247,7 +277,8 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                 if (action=="export") {
 
                     if (confirm ( al_msg + "\nExport entire list?")) {
-                        aform.elements["list_action"].value = action;
+                        '.$pager_status
+                        .'aform.elements["list_action"].value = action;
                         aform.submit();
                     } else {
                         return false;
@@ -359,6 +390,10 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
     function export_set($set=null) {
 
         $criteria = $this->udm->getURLCriteria();
+        $qty = ( isset( $_REQUEST['qty']) && $_REQUEST['qty'] ) ? $_REQUEST['qty'] : '';
+        $offset = ( isset( $_REQUEST['offset']) && $_REQUEST['offset'] ) ? $_REQUEST['offset'] : '';
+        if ( $qty ) $criteria['qty'] = 'qty='.$qty;
+        if ( $offset ) $criteria['offset'] = 'offset='.$offset;
 
         if (isset($set) && $set) {
             $set_values = split(",", $set);
