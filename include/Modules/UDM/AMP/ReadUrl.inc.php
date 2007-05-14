@@ -14,8 +14,8 @@ class UserDataPlugin_ReadUrl_AMP extends UserDataPlugin {
             )
         );
 
-    function UserDataPlugin_ReadUrl_AMP( &$udm, $admin, $plugin_instance = null ){
-        $this->init( $udm, $admin, $plugin_instance );
+    function UserDataPlugin_ReadUrl_AMP( &$udm, $plugin_instance = null ){
+        $this->init( $udm, $plugin_instance );
     }
 
     function _register_fields_dynamic ( ){
