@@ -111,7 +111,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function getSQL() {
-        return $this->getData('sql');
+        return $this->getData('sql_statement');
     }
 
     function getIncludeFile( ){
@@ -153,7 +153,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function getLimit() {
-        if ( $limit = $this->getData( 'repeat' )) return $limit;
+        if ( $limit = $this->getData( 'list_limit' )) return $limit;
         return AMP_CONTENT_NAV_LIMIT_DEFAULT;
     }
 
@@ -193,7 +193,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function setLimit( $qty ) {
-        $this->mergeData( array( 'repeat' => $qty ) );
+        $this->mergeData( array( 'list_limit' => $qty ) );
     }
 
     function setCount( $qty ) {

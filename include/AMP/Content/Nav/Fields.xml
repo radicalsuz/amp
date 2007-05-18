@@ -65,7 +65,7 @@
         <type>blocktrigger</type>
         <label>Dynamic Navigation</label>
         <block>dynamic_header</block>
-        <block_trigger>sql</block_trigger>
+        <block_trigger>sql_statement</block_trigger>
     </dynamic_header>
     <section>
         <type>select</type>
@@ -85,12 +85,12 @@
             <instance>class</instance>
         </lookup>
     </class>
-	<sql>
+	<sql_statement>
 		<type>textarea</type>
 		<label>SQL</label>
         <block>dynamic_header</block>
 		<size>20:60</size>
-	</sql>
+	</sql_statement>
     <link_header>
         <type>header</type>
         <label>Link for Dynamic Content</label>
@@ -129,11 +129,11 @@
         <label>More Link</label>
         <block>dynamic_header</block>
     </morelink_header>
-	<repeat>
+	<list_limit>
 		<type>text</type>
 		<label>Maximum Items Before More Link</label>
         <block>dynamic_header</block>
-	</repeat>
+	</list_limit>
     <morelink_explanation>
         <type>static</type>
         <default>&lt;div align=center>&amp;lt;A HREF=1?list=2&amp;amp;3=4&amp;gt;more&amp;lt;/a&amp;gt;&lt;br&gt; (where 4 is the db field from above sql)&lt;/div&gt;</default>
