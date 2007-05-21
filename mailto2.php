@@ -1,4 +1,5 @@
 <?PHP 
+/*
 $modid = 22;
 if ($_POST["FromEmail"]) {$mod_id = 32 ; }
 else {$mod_id = 33;}
@@ -39,4 +40,6 @@ else {
 	tellfriend($firstname,$lastname,$email,$subjector,$messsageor);
 }
 
-include("AMP/BaseFooter.php"); ?>
+include("AMP/BaseFooter.php"); 
+*/
+?>
