@@ -68,18 +68,21 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
 
     function get_form_data( ){
         $results = parent::get_form_data( );
-        if ( !empty( $this->_map->public_permitted_classes ) && isset( $results['class'])){
+        if ( !empty( $this->_map->public_permitted_classes ) && isset( $results['class']) && $results['class']){
             if ( array_search( $results['class'], $this->_map->public_permitted_classes) !== FALSE ){
                 $results['publish'] = 1;
-            } else {
-                $results['publish'] = 0;
-                $results['class'] = AMP_CONTENT_CLASS_USERSUBMITTED;
-            }
-        }
-        if ( !empty( $this->_map->public_permitted_sections ) && isset( $results['section'])){
+            } 
+        } else {
+			$results['publish'] = 0;
+			$results['class'] = AMP_CONTENT_CLASS_USERSUBMITTED;
+		}
+
+        if ( !empty( $this->_map->public_permitted_sections ) && isset( $results['section']) && $results['section']){
             $results['publish'] =
                ( array_search( $results['section'], $this->_map->public_permitted_sections ) !== FALSE );
-        }
+        } else {
+			$results['section'] = AMP_CONTENT_MAP_ROOT_SECTION;
+		}
 
         return $results;
     }
