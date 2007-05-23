@@ -19,5 +19,18 @@ class AMP_System_Setup_Form extends AMPSystem_Form_XML {
         $this->init( $name );
     }
 
+    function _after_init( ) {
+        $this->addTranslation( 'basepath', 'addTrailingSlash', 'get');
+    }
+
+    function addTrailingSlash( $data, $fieldname ) {
+        if ( substr( $data[$fieldname], -1 ) != '/' ) {
+            if ( isset( $_REQUEST[$fieldname])) $_REQUEST[$fieldname] .= '/';
+            if ( isset( $_POST[$fieldname])) $_POST[$fieldname] .= '/';
+            return $data[$fieldname] . '/';
+        }
+        return $data[ $fieldname ];
+    }
+
 }
 ?>
