@@ -111,6 +111,7 @@ class AMP_Display_Pager {
         }
 		unset( $target_request['all']);
         foreach( $target_request as $var => $value ) {
+            if ( strip_tags( $value ) != $value ) continue;
             $target_request_vars[$var] = urlencode_array( $value, $var ); //$var . '=' . ( is_array( $value ) ? urlencode_array( $value ) : $value ) ;
         }
         return AMP_url_add_vars( $this->_url_target, $target_request_vars );

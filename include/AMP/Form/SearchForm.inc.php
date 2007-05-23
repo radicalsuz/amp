@@ -26,6 +26,8 @@ class AMPSearchForm extends AMPForm_XML {
             'default'=>'AMPSearch')
         );
 
+    var $_alternate_submit_markers = array( );
+
     /**
      * AMPSearchForm 
      * 
@@ -49,7 +51,22 @@ class AMPSearchForm extends AMPForm_XML {
     function submitted() {
         $search_request = ( ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'search' )
                           || ( isset( $_REQUEST['AMPSearch'] ) && $_REQUEST[ 'AMPSearch' ]));
+
+        if ( !$search_request && !empty( $this->_alternate_submit_markers ) ) {
+            foreach( $this->_alternate_submit_markers as $marker_var ) {
+                if ( isset( $_REQUEST[ $marker_var ]) && $_REQUEST[ $marker_var ]) {
+                    $search_request = true; 
+                }
+            }
+        }
+
+        //avoid spam search requests
+        foreach( $_REQUEST as $ukey => $uvalue ) {
+            if ( strip_tags( $uvalue ) != $uvalue )  return false;
+        }
+
         if ( !$search_request ) return false;
+
         return 'search';
     }
 
