@@ -299,6 +299,9 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $add_button->setType( 'button' );
         $add_button->setValue( 'Add It' );
 
+        $renderer = AMP_get_renderer( );
+        $this->form->addElement( 'static', 'reminder', '',$renderer->span( AMP_TEXT_FORM_PLUGINS_REMINDER, array( 'class' => 'red')));
+
     }
 
     function _find_available_plugins() {
@@ -338,8 +341,12 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
                     $available_plugins[$namespace][$action] = $class_vars;
                 }
+                if ( isset( $available_plugins[$namespace] ) && is_array( $available_plugins[$namespace])) {
+                    ksort( $available_plugins[$namespace]);
+                }
             }
         }
+        ksort( $available_plugins );
 
         return $available_plugins;
     }
