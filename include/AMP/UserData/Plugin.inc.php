@@ -735,6 +735,27 @@ class UserDataPlugin {
         return $field_defs;
 
     }
+
+    function verify_captcha( ) {
+        if ( $this->udm->admin ) return;
+
+        foreach( $this->udm->fields as $field_name => $field_def ) {
+            if ( $field_def['type'] == 'captcha')  {
+                return true;
+            }
+        }
+
+        $this->fields['captcha_verification'] = 
+            array(  'type' => 'captcha',
+                    'label' => AMP_TEXT_CAPTCHA_LABEL,
+                    'enabled' => true,
+                    'public' => true,
+                    'required' => true 
+                    );
+
+        $this->insertAfterFieldOrder( array('captcha_verification') );
+        return true;
+    }
 }
 
 ?>

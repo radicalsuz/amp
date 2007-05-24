@@ -8,9 +8,25 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
     var $description = 'Save the submitted data into the AMP database';
 
     var $available = true;
+    var $options = array( 
+        'captcha_verification' => array( 
+                'type'  => 'checkbox',
+                'available' => true,
+                'label' => 'Use Captcha on public form',
+                'default' => 1
+            )
+        );
 
     function UserDataPlugin_Save_AMP ( &$udm, $plugin_instance=null ) {
         $this->init( $udm, $plugin_instance );
+    }
+
+    function _register_fields_dynamic( ) {
+        $options = $this->getOptions( );
+        if ( ( isset( $options['captcha_verification']) &&  $options['captcha_verification'] )
+             || ( !isset( $options['captcha_verification']))) {
+            $this->verify_captcha( );
+        }
     }
 
     function getSaveFields () {

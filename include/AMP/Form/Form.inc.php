@@ -51,6 +51,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
          *  lookup:     provides a dynamic set of values for select/group elements
          *      instance:   the name of the lookup
          *      module:     the type of lookup, currently ampsystem( default ), content, or form
+         *      instance_var:        an optional variable to narrow the range of values returned
          
          *  block:      include this element in a block set
          
@@ -122,6 +123,16 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
 
     var $isBuilt=false;
     var $_fileNames = array( );
+
+    /**
+     * _has_captcha 
+     *
+     * one captcha per customer, please
+     * 
+     * @var mixed
+     * @access protected
+     */
+    var $_has_captcha = false;
 
 
     function AMPForm( $name, $method="POST", $action = null ) {
@@ -629,6 +640,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         if (!method_exists ( $this, $adjust_method )) $adjust_method = false;
 
         $fRef = & $this->$add_method( $name, $field_def );
+        if ( !$fRef ) return false;
         if ($adjust_method) $this->$adjust_method( $fRef, $field_def );
 
 		if ( isset( $field_def['attr'] ) && is_array( $field_def['attr'] ) ) {
@@ -662,6 +674,10 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     }
 
     function &_addElementCaptcha ( $name, $field_def ) {
+        $false = false;
+        if ( $this->_has_captcha ) return $false;
+        $this->_has_captcha = true;
+
         $this->_addUniqueIdValue( );
 
         require_once('AMP/Content/Display/HTML.inc.php');
