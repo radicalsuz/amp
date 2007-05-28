@@ -1,0 +1,101 @@
+<array>
+    <custom1>
+        <label>Housing Post Type</label>
+        <type>select</type>
+        <values>
+            <offer>Have Housing</offer>
+            <request>Need Housing</request>
+        </values>
+        <required>1</required>
+    </custom1>
+    <custom19>
+        <type>checkbox</type>
+        <label>This housing post is public</label>
+        <default>1</default>
+    </custom19>
+    <custom18>
+        <type>textarea</type>
+        <label>Comments or General Information</label>
+        <size>4:35</size>
+    </custom18>
+    <custom2>
+        <type>header</type>
+        <label>Have Housing to Offer?</label>
+    </custom2>
+    <custom3>
+        <type>textarea</type>
+        <label>When Available</label>
+        <size>4:35</size>
+    </custom3>
+    <custom4>
+        <type>text</type>
+        <label>Number of Beds/Sofas</label>
+    </custom4>
+    <custom5>
+        <type>text</type>
+        <label>Floor Space</label>
+    </custom5>
+    <custom6>
+        <type>text</type>
+        <label>Tents in Yard</label>
+    </custom6>
+    <custom7>
+        <type>text</type>
+        <label>Handicapped accessibility</label>
+    </custom7>
+    <custom8>
+        <type>textarea</type>
+        <label>Location ( do not post address )</label>
+        <size>4:35</size>
+    </custom8>
+    <custom9>
+        <type>textarea</type>
+        <label>Access to Public Transportation</label>
+        <size>4:35</size>
+    </custom9>
+    <custom10>
+        <type>textarea</type>
+        <label>Parking</label>
+        <size>4:35</size>
+    </custom10>
+    <custom11>
+        <type>textarea</type>
+        <label>Cooking</label>
+        <size>4:35</size>
+    </custom11>
+    <custom13>
+        <type>textarea</type>
+        <label>Can you accomodate children?</label>
+        <size>4:35</size>
+    </custom13>
+    <custom14>
+        <type>textarea</type>
+        <label>Smoking</label>
+        <size>4:35</size>
+    </custom14>
+    <custom15>
+        <type>header</type>
+        <label>Need Housing?</label>
+    </custom15>
+    <custom16>
+        <type>text</type>
+        <label>When Needed</label>
+    </custom16>
+    <custom17>
+        <type>text</type>
+        <label>Number of People</label>
+    </custom17>
+    <contact_header>
+        <type>header</type>
+        <label>Contact Information</label>
+    </contact_header>
+    <!--
+    <modin>
+        <type>hidden</type>
+        <value>11</value>
+        <constant>1</constant>
+    </modin>
+    -->
+
+
+</array>

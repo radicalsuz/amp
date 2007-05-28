@@ -1,0 +1,142 @@
+<array>
+    <custom1>
+        <label>Housing Board Type</label>
+        <type>select</type>
+        <values>
+            <Have_Housing>Offer Housing</Have_Housing>
+            <Need_Housing>Request Housing</Need_Housing>
+        </values>
+        <required>1</required>
+    </custom1>
+    <custom2>
+        <type>header</type>
+        <label>Housing to Offer Information</label>
+    </custom2>
+    <custom3>
+        <type>textarea</type>
+        <label>When Available</label>
+        <size>4:35</size>
+    </custom3>
+    <custom4>
+        <type>text</type>
+        <label>Number of Beds/Sofas</label>
+    </custom4>
+    <custom5>
+        <type>text</type>
+        <label>Floor Space</label>
+    </custom5>
+    <custom6>
+        <type>text</type>
+        <label>Tents in Yard</label>
+    </custom6>
+    <custom7>
+        <type>text</type>
+        <label>Handicapped accessibility</label>
+    </custom7>
+    <custom8>
+        <type>textarea</type>
+        <label>Location ( do not post address )</label>
+        <size>4:35</size>
+    </custom8>
+    <custom9>
+        <type>textarea</type>
+        <label>Access to Public Transportation</label>
+        <size>4:35</size>
+    </custom9>
+    <custom10>
+        <type>textarea</type>
+        <label>Parking</label>
+        <size>4:35</size>
+    </custom10>
+    <custom11>
+        <type>textarea</type>
+        <label>Cooking</label>
+        <size>4:35</size>
+    </custom11>
+    <custom12>
+        <type>textarea</type>
+        <label>info</label>
+    </custom12>
+    <custom13>
+        <type>textarea</type>
+        <label>Can you accomodate children?</label>
+        <size>4:35</size>
+    </custom13>
+    <custom14>
+        <type>textarea</type>
+        <label>Smoking</label>
+        <size>4:35</size>
+    </custom14>
+    <custom15>
+        <type>header</type>
+        <label>Request for Housing Information</label>
+    </custom15>
+    <custom16>
+        <type>text</type>
+        <label>When Needed</label>
+    </custom16>
+    <custom17>
+        <type>text</type>
+        <label>Number of People</label>
+    </custom17>
+    <custom18>
+        <type>textarea</type>
+        <label>Comments or Other Information</label>
+        <size>4:35</size>
+    </custom18>
+    <custom19>
+        <type>checkbox</type>
+        <label>Show Information on Website</label>
+    </custom19>
+	<contact_header>
+		<type>header</type>
+		<label>Contact Information</label>
+	</contact_header>
+	<First_Name>
+		<type>text</type>
+		<label>First Name</label>
+		<required>1</required>
+	</First_Name>
+	<Last_Name>
+		<type>text</type>
+		<label>Last Name</label>
+	</Last_Name>
+	<Company>
+		<type>text</type>
+		<label>Organization</label>
+	</Company>
+	<Street>
+		<type>hidden</type>
+		<label>Address</label>
+	</Street>
+	<City>
+		<type>hidden</type>
+		<label>City</label>
+	</City>
+	<State>
+		<type>hidden</type>
+		<label>State</label>
+        <lookup>regions_US_and_Canada</lookup>
+	</State>
+	<Zip>
+		<type>text</type>
+		<label>Postal Code/Zip</label>
+        <size>10</size>
+	</Zip>
+	<Phone>
+		<type>text</type>
+		<label>Phone</label>
+	</Phone>
+	<Email>
+		<type>text</type>
+		<label>Email</label>
+        <rules>
+            <item>
+                <type>email</type>
+                <message>Must be a valid email address</message>
+            </item>
+        </rules>
+		<required>1</required>
+	</Email>
+
+</array>
