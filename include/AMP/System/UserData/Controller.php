@@ -121,7 +121,7 @@ class AMP_System_UserData_Controller extends AMP_System_Component_Controller_Sta
 
         $import_file = $this->_form_import->getSource( );
         $import_fields = $this->_form_import->getSourceFields( );
-        if ( !$import_file )
+        if ( !$import_file ) return false;
 
         $count = 0;
         // doing this with the UserData structure would be more correct

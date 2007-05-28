@@ -130,11 +130,15 @@ if (! defined(  'AMP_TEXT_SECTIONLIST_ARTICLES_PLUS_CLASS_TEMPLATE' ))
 
 if ( !defined( 'AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT')) 
         define( 'AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT', 'Edit Navigation Layouts');
+if ( !defined( 'AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_CREATE')) 
+        define( 'AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_CREATE', 'Create Navigation Layouts');
 if ( !defined( 'AMP_TEXT_CONTENT_NAV_LAYOUT_HEADER')) 
         define( 'AMP_TEXT_CONTENT_NAV_LAYOUT_HEADER', 'Navigation Layout for %s: %s');
 if ( !defined( 'AMP_TEXT_LIST_PAGES')) define('AMP_TEXT_LIST_PAGES', 'List Pages');
 if ( !defined( 'AMP_TEXT_CONTENT_PAGES')) define( 'AMP_TEXT_CONTENT_PAGES', 'Content Pages');
 if ( !defined( 'AMP_TEXT_PERMISSION_DENIED_LIST')) define( 'AMP_TEXT_PERMISSION_DENIED_LIST', 'You do not have permission to view this list');
+
+define ( 'AMP_TEXT_WHAT_FOR_WHAT', '%s for %s' );
 
 /**
  * Descriptions for Tools 
@@ -278,5 +282,31 @@ if ( !defined( 'AMP_TEXT_TAG')) define( 'AMP_TEXT_TAG', 'tag');
 define( 'AMP_TEXT_LOCATION', 'Location');
 define( 'AMP_TEXT_CONTACT',   'Contact');
 define( 'AMP_TEXT_SPONSORED',   'Sponsored By');
+
+/**
+ *  Housing and Ride Boards
+ *
+ */
+define( 'AMP_TEXT_OFFER', 'offer');
+define( 'AMP_TEXT_REQUEST', 'request');
+define( 'AMP_TEXT_AVAILABLE', 'Available');
+define( 'AMP_TEXT_TRANSIT', 'Bus/Metro');
+define( 'AMP_TEXT_PARKING', 'parking');
+define( 'AMP_TEXT_MEALS', 'meals');
+define( 'AMP_TEXT_ACCESSIBILITY', 'accessibility');
+define( 'AMP_TEXT_BEDS', 'beds');
+define( 'AMP_TEXT_FLOOR', 'floor');
+define( 'AMP_TEXT_TENT', 'tent');
+define( 'AMP_TEXT_SMOKING', 'smoking');
+define( 'AMP_TEXT_CHILDREN', 'children');
+define( 'AMP_TEXT_OTHER_COMMENTS', 'other comments');
+define( 'AMP_TEXT_NUMBER_OF_PEOPLE', 'Number of People');
+define( 'AMP_TEXT_DATES_NEEDED', 'Dates Needed');
+
+if ( !defined( 'AMP_TEXT_CAPTCHA_LABEL')) {
+    define( 'AMP_TEXT_CAPTCHA_LABEL', 'Please enter the distorted letters from the image above');
+}
+
+define( 'AMP_TEXT_FORM_PLUGINS_REMINDER', 'Remember to register AMP/Save and AMP/Read' );
 
 ?>

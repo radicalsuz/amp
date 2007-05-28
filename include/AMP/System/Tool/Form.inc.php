@@ -19,12 +19,12 @@ class Tool_Form extends AMPSystem_Form_XML {
     function _formFooter( ){
         if ( !( $modid = $this->getIdValue( ) )) return false;
         
-        require_once( 'AMP/System/IntroText/List.inc.php');
+        require_once( 'AMP/System/IntroText/List.php');
         require_once( 'AMP/System/Tool/Control/List.inc.php');
         require_once( 'AMP/Content/Nav/List.inc.php');
         
         $list_array = array( 
-            'Public Pages'  =>  'AMPSystem_IntroText_List',
+            'Public Pages'  =>  'AMP_System_IntroText_List',
             'Navigation Files'  => 'Nav_List', 
             'Tool Settings' =>  'ToolControl_List');
 
@@ -40,9 +40,14 @@ class Tool_Form extends AMPSystem_Form_XML {
         if ( !( $modid = $this->getIdValue( ) )) return false;
         $dbcon = &AMP_Registry::getDbcon( );
 
-        $list = &new $list_class( $dbcon ) ;
-        $list->setTool( $modid );
-        if ( !$list_html = $list->output( )) return false;
+        $list = &new $list_class( $dbcon, array( 'modid' => $modid )) ;
+        //$list->setTool( $modid );
+        $list->suppress( 'sort_links');
+        $list->suppress( 'messages');
+        $list->suppress( 'toolbar');
+        $list->drop_column( 'select');
+
+        if ( !$list_html = $list->execute( )) return false;
 
         require_once( 'AMP/System/Page/Display.inc.php');
         return AMPSystem_Page_Display::makeHeader( $header )

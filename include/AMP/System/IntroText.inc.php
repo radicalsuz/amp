@@ -139,7 +139,7 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     }
 
     function get_url_edit( ) {
-        if ( !isset( $this->id ) && $this->id ) return false;
+        if ( !( isset( $this->id ) && $this->id )) return AMP_SYSTEM_URL_PUBLIC_PAGE;
         return AMP_Url_AddVars( AMP_SYSTEM_URL_PUBLIC_PAGE, array( 'id='. $this->id ));
     }
 

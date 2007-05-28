@@ -38,7 +38,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
     var $_value_suffix_punbb = array( 
         'o_board_title' => ' Forum',
-        'o_base_url'    => '/punbb'
+        'o_base_url'    => 'punbb'
     );
 
     var $_translation_globals = array( 

@@ -459,7 +459,10 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
            $this->set_banner( 'add');
 
         } else {
-            $display->setController( $this );
+            if ( !isset( $display->api_version ) || $display->api_version < 2 ) {
+                $display->setController( $this );
+            }
+
             $this->set_banner( 'list');
             $this->notify( 'initList' );
             #if ( $search = $this->_map->getComponent( 'search' )) $this->_init_search( $search, $display );

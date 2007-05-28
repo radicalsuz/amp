@@ -150,6 +150,11 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
 	}
 	
 	function findComponent( $component_class ) {
+        if ( !is_array( $this->components ))  {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this ), 'components'));
+            return false;
+        }
+
 		foreach( $this->components as $key => $component_name ) {
 			if (strtolower( $component_name ) == strtolower( $component_class )) return $key;
 		}

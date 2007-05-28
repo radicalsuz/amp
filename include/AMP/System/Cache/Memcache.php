@@ -141,11 +141,21 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
                 if(count($AMP_MEMCACHE_FAILS) > $memcache_fail_limit) {
                     //if there's more than the limit of failures, restart and reset the log
+                    trigger_error( 'requested memcache restart');
                     $this->_restart_memcached();
                     $AMP_MEMCACHE_FAILS = array();
                 } else {
                     //only keep failures that have happened within the window
-                    $AMP_MEMCACHE_FAILS = array_filter($AMP_MEMCACHE_FAILS, create_function('$var', 'return $var > time() - '.$memcache_fail_window.';'));
+                    $current_failures = $AMP_MEMCACHE_FAILS;
+                    $AMP_MEMCACHE_FAILS = array();
+                    foreach( $current_failures as $fail_time ) {
+                        if ( $fail_time < ( time( ) - $memcache_fail_window ) ) {
+                            continue;
+                        }
+                        $AMP_MEMCACHE_FAILS[] = $fail_time;
+                    }
+                    trigger_error( 'returning ' . count( $AMP_MEMCACHE_FAILS ) . ' of ' . count( $current_failures ) . ' recent failures to the log');
+                    //$AMP_MEMCACHE_FAILS = array_filter($AMP_MEMCACHE_FAILS, create_function('$var', 'return $var > time() - '.$memcache_fail_window.';'));
                 }
 
                 //write out the log
@@ -153,12 +163,12 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
                 fwrite($fh, implode("\n",$AMP_MEMCACHE_FAILS));
                 flock($fh, LOCK_UN); // release the lock
             } else {
-                trigger_error("Couldn't lock the file !");
+                trigger_error("Couldn't lock memcache fail log at " . $log ); 
             }
 
             fclose($fh);
         } else {
-            trigger_error('could not open memcache fail log at /tmp/amp-memcache-fails.php for reading and writing');
+            trigger_error('could not open memcache fail log at '.$log.' for reading and writing');
         }
     }
 
@@ -172,7 +182,6 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
             //try, try again
             $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED );
 
-            trigger_error('logging memcache failure');
             $this->log_memcache_failure();
         }
 

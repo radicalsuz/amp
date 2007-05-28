@@ -142,7 +142,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             return true;
         }
         
-        trigger_error ( AMP_TEXT_DELETE . sprintf( AMP_TEXT_ERROR_DATABASE_SAVE_FAILED, get_class( $this ), $this->dbcon->ErrorMsg() ));
+        trigger_error ( AMP_TEXT_DELETE . ' ' . sprintf( AMP_TEXT_ERROR_DATABASE_SAVE_FAILED, get_class( $this ), $this->dbcon->ErrorMsg() . ' // ' . $sql  ));
         return false ;
     }
 
@@ -459,7 +459,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     function setSortMethod( $sort_property ) {
-        $access_method = 'get' . ucfirst( $sort_property );
+        $access_method = 'get' . AMP_to_camelcase( $sort_property );
         if ( !method_exists( $this, $access_method )) return false;
         $this->_sort_accessor = $access_method;
         return true;
@@ -500,7 +500,9 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         $return = array( );
         if ( !( isset( $data ) && is_array( $data ))) return false;
         foreach ($data as $key => $value) {
-            $crit_method = 'makeCriteria' . ucfirst( $key );
+            $crit_method1 = 'makeCriteria' . ucfirst( $key );
+            $crit_method2 = 'makeCriteria' . AMP_to_camelcase( $key );
+            $crit_method = ( method_exists( $this, $crit_method1)) ? $crit_method1 : $crit_method2;
 
             if (method_exists( $this, $crit_method )) {
                 $return[$key] = $this->$crit_method( $value );
@@ -613,6 +615,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 		return array_keys($this->itemdata);
         */
 	}
+
+    function getId( ) {
+        return $this->id;
+    }
 
 
 }

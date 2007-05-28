@@ -58,5 +58,7 @@ define( 'AMP_SYSTEM_URL_EVENT',                 'calendar.php');
 define( 'AMP_SYSTEM_URL_EVENT_ADD',             'calendar.php?action=new');
 define( 'AMP_SYSTEM_URL_BADGE',                 'badges.php');
 define( 'AMP_SYSTEM_URL_BADGE_ADD',             'badges.php?action=new');
+define( 'AMP_SYSTEM_URL_HOUSING',               'housing.php');
+define( 'AMP_SYSTEM_URL_HOUSING_ADD',           'housing.php?action=new');
 
 ?>
