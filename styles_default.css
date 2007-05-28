@@ -185,6 +185,8 @@ div.list_item {
 	padding: 1em;
     display:block;
     overflow: hidden;
+    padding-right: 1em;
+	width:100%;
 }
 
 a.list_item{
@@ -196,9 +198,6 @@ a.list_item{
 a.list_item:hover {
 	background-color: #EECC99;
     text-decoration: none;
-}
-div.list_item {
-    padding-right: 1em;
 }
 
 div.tagged_items div.list_item {
@@ -257,4 +256,14 @@ div.list_image {
     float: left;
     margin-right: 1em;
     margin-bottom: 1em;
+}
+
+span.intitle {
+	display: block;
+	width: 100%;
+	background-color: #50A0f0;
+	color: #FFF;
+	font-weight: bold;
+	padding: .5em;
+	margin: .25em;
 }

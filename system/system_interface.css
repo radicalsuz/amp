@@ -753,3 +753,107 @@ div.userdata_pager_footer {
     padding-top:2px;
     background-color:#E5E5E5;
 }
+
+.system .list_select {
+	text-align: center;
+}
+
+.system .list_row td, .system .list_row {
+	border-color: #333333;
+	background-color:#D5D5D5; 
+}
+
+.system .list_row td {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+.system .list_row_even td, .system .list_row_even {
+	background-color:#D5D5D5; 
+}
+
+.system .list_row_odd td, .system .list_row_odd {
+	background-color: #E5E5E5;
+}
+
+
+.system .list_row td:hover, .system .list_row:hover{
+	background-color: #CCFFCC;
+}
+
+.system .list_row_hover td, .system .list_row_hover {
+	background-color: #CCFFCC;
+}
+
+.system .list_row {
+	margin-top: 1em;
+}
+
+.system .list_column_header td{
+	font-size: .85em;
+	text-shadow: .2em black;
+	font-weight: bold;
+	color: white;
+	background-color : #006699;
+	background: url('images/intitle-bg.png') top left repeat-x;
+	padding: .25em; 
+	margin: .25em;
+}
+
+.system .list_column_header a {
+	font-size: 1em;
+	text-shadow: .2em black;
+	font-weight: bold;
+	color: white;
+	text-decoration:none;
+}
+
+.system .list_column_header a:hover {
+	color: #FFFFCC;
+	cursor: pointer;
+
+}
+
+.system li.list_row {
+	list-style-type: none;
+}
+
+ul.system {
+	margin: 0px;
+	padding: 0px;
+}
+
+.toolbar {
+    padding-top: .5em;
+	padding-bottom: .5em;
+}
+
+.toolbar .panel {
+	padding: .5em;
+}
+
+
+.system .list_row input {
+	text-align: right;
+	font-size: .8em;
+	text-decoration : none;
+	margin-left: 3px;
+}
+
+.system div.icon, .system div.icon a {
+	color: #3399cc;
+	font-weight: bold;
+	font-size: 1.25em;
+	text-align:left;
+	margin: .15em;
+	text-decoration: none;
+}
+
+.system div.icon a:hover {
+	background-color: #A0F0A0;
+}
+div.icon img, img.icon {
+	border: 0px;
+	vertical-align:bottom;
+}
+
