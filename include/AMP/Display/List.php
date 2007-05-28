@@ -52,6 +52,7 @@ class AMP_Display_List {
     var $_sort;
 
     var $api_version = 2;
+    var $list_id;
 
     // {{{ constructors: __construct, _after_init
 
@@ -63,7 +64,8 @@ class AMP_Display_List {
         $this->_init_pager( );
         $this->_init_source( $source, $criteria  );
         $this->_init_translations( );
-        $this->_init_display_methods( );
+        $this->_init_identity( );
+        $this->_init_tools( );
 
         $this->_renderer = AMP_get_renderer();
         $this->_after_init( );
@@ -112,10 +114,7 @@ class AMP_Display_List {
                 $single_item_output = $display_method( $source_item, $this );
             }
 
-            $items_output .= $this->_renderer->inDiv( 
-                                $single_item_output,
-                                array( 'class' => $this->_css_class_container_list_item )
-                                );
+            $items_output .= $this->_renderItemContainer( $single_item_output, $source_item );
 
             //column-making code
             $items_count++;
@@ -142,6 +141,13 @@ class AMP_Display_List {
         }
         return $this->_renderBlock( $column_output );
 
+    }
+
+    function _renderItemContainer( $output, $source ) {
+        return $this->_renderer->div( 
+                                $output,
+                                array( 'class' => $this->_css_class_container_list_item )
+                                );
     }
 
     function _renderBlock( $html ) {
@@ -244,11 +250,15 @@ class AMP_Display_List {
             return false; 
         }
         $this->_current_subheaders[$depth] = $item_header;
+        return $this->render_subheader_format( $item_header, $depth );
+
+    }
+
+    function render_subheader_format( $item_header, $depth=0 ) {
         return $this->_renderer->inDiv( 
                     $item_header,
                     array( 'class' => $this->_css_class_container_list_subheader )
                 );
-
     }
 
     function _renderJavascript( ) {
@@ -266,16 +276,26 @@ class AMP_Display_List {
         $flash->add_message( $message_text );
     }
 
+    function list_item_id( $source ) {
+        return $this->list_id . '_item_' . $source->id;
+    }
+
+    function suppress( $item ) {
+        $suppress_var = '_suppress_'. $item;
+        $this->$suppress_var = true;
+    }
+
     // {{{ private source create methods: _init_source, _generate_source 
 
     function _init_source( $source, $criteria ) {
-        if ( $source && substr( get_class( $source ), 0, 5 ) != 'ADODB') {
+        $source_valid = ( $source && substr( strtoupper( get_class( $source )), 0, 5 ) != 'ADODB'); 
+        if ( $source_valid ) {
             //pre-loaded source
             return $this->set_source( $source );
         }
 
         //no source object defined
-        if ( !$source && !isset( $this->_source_object )) {
+        if ( !$source_valid && !isset( $this->_source_object )) {
             trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this ), '_source_object'));
             return false;
         }
@@ -287,7 +307,7 @@ class AMP_Display_List {
     function _generate_source( $criteria = array( ) ) {
         //create DB access object
         $dbcon = AMP_Registry::getDbcon( );
-        $list_source = &new $this->_source_object( $dbcon );
+        $this->_source_sample = $list_source = &new $this->_source_object( $dbcon );
 
         //initialize criteria for search
         if ( !empty( $criteria )) {
@@ -318,6 +338,10 @@ class AMP_Display_List {
     }
 
     function _init_translations( ) {
+        //interface
+    }
+
+    function _init_tools( ) {
         //interface
     }
 
@@ -365,14 +389,19 @@ class AMP_Display_List {
 
     }
 
+    function _init_identity( ) {
+        $this->list_id = strtolower( get_class( $this ));
+        $this->_init_display_methods( );
+    }
+
     function _init_display_methods( ) {
-        $display_id = strtoupper( get_class( $this ));
+        $display_id = strtoupper( $this->list_id );
 
         if ( $display_id == 'AMP_DISPLAY_LIST' ) {
             if ( isset( $this->_source_object )) {
                 $display_id .= '_' . $this->_source_object ;
             } elseif ( isset( $this->name )) {
-                $display_id .= '_' . str_replace( ' ', '_' , $this->name );
+                $display_id .= '_' . str_replace( ' ', '_' , $this->list_id );
             } 
         }
         $display_id =  strtoupper( $display_id );
@@ -451,6 +480,22 @@ class AMP_Display_List {
         return $translated_sort_request . AMP_SORT_DESC; 
 
     }
+
+    function validate_sort_link( $sort_request ) {
+        $local_method = '_setSort' . AMP_to_camelcase( $sort_request );
+        $valid_method = method_exists( $this, $local_method );
+        if ( !isset( $this->_source_sample )) return false;
+
+        if ( !$valid_method ) {
+            $valid_method = $this->_translate_sort_sql_request( $sort_request, $this->_source_sample );
+        }
+        if ( !$valid_method ) {
+            $source_method = 'get' . AMP_to_camelcase( $sort_request );
+            $valid_method = method_exists( $this->_source_sample, $source_method );
+        }
+        return $valid_method;
+    }
+
     // }}}
 
 }

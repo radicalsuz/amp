@@ -52,7 +52,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     var $_pager_limit = false;
     var $_pager_target= false;
 
-    var $_css_class_columnheader = 'intitle';
+    var $_css_class_columnheader = 'list_column_header';
     var $_css_class_container = 'list_table';
     var $_css_id_container_table;
     var $_css_id_container_div;
@@ -99,7 +99,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     }
 
-    function &_init_source( &$dbcon, $criteria = null ){
+    function &_init_source( &$dbcon, $criteria = array( )){
         $listSource = &new $this->_source_object( $dbcon  );
         if ( isset( $criteria ) && !empty( $criteria )) {
             $this->_source_criteria = array_merge (    
@@ -107,6 +107,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
                 $listSource->makeCriteria( $criteria )
                );
         }
+        $this->_init_criteria( $criteria );
         $this->_init_search( $listSource );
         $this->_init_pager( $listSource->_getSearchSource( ) );
 
@@ -118,6 +119,10 @@ class AMPSystem_List extends AMPDisplay_HTML {
     function _init_pager( &$searchSource ){
         $this->_setSort( $searchSource );
         $this->_activatePager( $searchSource );
+    }
+
+    function _init_criteria( ) {
+        //interface stub
     }
 
     function _init_search( &$listSource ) {
@@ -149,6 +154,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
      
         if ( !$source ) return;
         $this->setSource( $source );
+
         $this->_setSort( $this->source );
         $this->_activatePager( $this->source );
         $this->_prepareData();
@@ -238,8 +244,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
         // simple behavior for recordset map
         //if ( !is_array( $this->source )) return $this->source->getData( );
         if ( !is_array( $this->source )) {
-
             $data = $this->source->getData( );
+            return $data;
         }
 
         // more complex for arrays of objects
@@ -329,6 +335,18 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
     function suppressToolbar( $value = true ){
         $this->suppress['toolbar'] = $value;
+
+    }
+
+    function drop_column( $item ) {
+        return $this->suppress( $item );
+    }
+
+    function suppress( $item ) {
+        $local_call = 'suppress' . AMP_to_camelcase( $item );
+        if ( method_exists( $this, $local_call )) {
+            return $this->$local_call( );
+        }
 
     }
 
@@ -482,6 +500,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
         }
         $container_output .= "\n<div". $renderer->makeAttributes( $div_attrs ). ">";
         $container_output .= "\n<table".$renderer->makeAttributes( $table_attrs ). ">";
+        $container_output .= "\n<tbody".$renderer->makeAttributes( array( 'class' => 'system')). ">";
         $container_output .= "\n<tr".$renderer->makeAttributes( $column_header_attrs ) . "> ";
         return $container_output ;
 
@@ -555,7 +574,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
     }
 
     function _HTML_endList( ){
-        return  "\n	</table>\n"
+        return  
+                "\n	</tbody></table>\n"
                 . ( ($this->_pager_active && $this->_pager_display ) ? $this->_pager->execute() : false ) 
                 . "</div>\n<br>&nbsp;&nbsp;";
 
