@@ -14,11 +14,17 @@ include_once("AMP/BaseDB.php");
 include_once("AMP/BaseTemplate.php");
 #include_once("AMP/BaseModuleIntro.php"); 
 require_once( 'AMP/UserData/Input.inc.php' );
-require_once( 'Modules/Petition/Petition.php' );
+require_once( 'Modules/Petition/ComponentMap.inc.php' );
 
 $pid = isset( $_REQUEST['pid']) && $_REQUEST['pid'] ? $_REQUEST['pid'] : false;
 $modin = isset( $_REQUEST['modin']) && $_REQUEST['modin'] ? $_REQUEST['modin'] : false;
-$current_petition = &new Petition( $dbcon, $pid, $modin );
+
+$map = new ComponentMap_Petition( );
+$current_petition = $map->getComponent( 'source' );
+if ( $modin && !$pid ) {
+    $pid = Petition::findByModin( $modin );
+}
+$current_petition->read( $pid );
 
 if ($current_petition->id) {
 	
