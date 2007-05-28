@@ -717,7 +717,7 @@ class UserData {
         // error, and fail.
         if (!class_exists( $plugin_class )) {
             trigger_error( "Unable to instantiate data class $action in $namespace." );
-            return false;
+            return $empty_value;
         }
 
         // Add the plugin to our repertoire.
