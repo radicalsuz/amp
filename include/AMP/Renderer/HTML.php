@@ -27,8 +27,37 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
     }
 
     function inTD( $text, $attr_set = array() ) {
+        return $this->td( $text, $attr_set );
+    }
+
+    function td( $content, $attr_set = array( )) {
+        if ( $content ) {
+            $content = "\n\t" . str_replace( "\n", "\n\t", $content ) . "\n";
+        }
+        return "\n" . $this->tag( 'td', $content, $attr_set ) ;
+        
+        //$start_tag_ends = $this->makeAttributes( $attr_set );
+        //return "<td$start_tag_ends>$content</td>";
+    }
+
+    function tr( $content, $attr_set = array( )) {
+        $content = str_replace( "\n", "\n\t", $content ) . "\n";
+        return $this->tag( 'tr', $content, $attr_set ) . "\n";
+    }
+
+    function table( $content, $attr_set = array( )) {
+        $content = "\n\t" . str_replace( "\n", "\n\t", $content ) ;
+        return $this->tag( 'table', $content, $attr_set ) . "\n";
+    }
+
+    function tag( $tag, $content, $attr_set = array( ) ) {
         $start_tag_ends = $this->makeAttributes( $attr_set );
-        return "<td$start_tag_ends>$text</td>";
+        return "<$tag$start_tag_ends>$content</$tag>";
+    }
+
+    function tag_single( $tag, $attr_set = array( ) ) {
+        $start_tag_ends = $this->makeAttributes( $attr_set );
+        return "<$tag$start_tag_ends />";
     }
 
     function in_P ( $text, $attr_set = array() ) {
@@ -133,6 +162,10 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
     function bold ( $text ) {
         if (!$text) return false;
         return '<b>' . $text . '</b>';
+    }
+
+    function strong( $text ) {
+        return $this->tag( 'strong', $text );
     }
 
     function italics ( $text ) {
@@ -260,6 +293,33 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
 
     function indent( $content, $indent_size = 10 ) {
         return $this->div( $content, array( 'style' => ( 'padding-left:' . $indent_size . 'px' )));
+    }
+
+    function mailto( $address, $text = '', $attr_set = array( ) ) {
+        return AMP_protect_email( $address, $text );
+        //return $this->link( 'mailto:' . $address, ( $text?$text:$address), $attr_set );
+    }
+
+    function a( $content, $attr_set = array( )) {
+        return $this->tag( 'a', $content, $attr_set );
+    }
+
+    function anchor_named( $name ) {
+        return $this->a( '', array( 'name' => $name ));
+    }
+
+    function input( $name, $value = null, $attr_set = array( )) {
+        $attr_set['name'] = $name;
+        $attr_set['value'] = $value;
+        return $this->tag_single( 'input', $attr_set );
+    }
+
+    function select( $name, $value = null, $options = array( ), $attr_set = array( )) {
+        return AMP_buildSelect( $name, $options, $value, $this->makeAttributes( $attr_set ));
+    }
+
+    function form( $content, $attr_set = array( ) ) {
+        return $this->tag( 'form', $content, $attr_set );
     }
 
 }

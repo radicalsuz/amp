@@ -1230,7 +1230,7 @@ if ( !function_exists( 'AMP_evalLookup')){
             return $lookup_def->dataset;
         }
         if ( !is_array( $lookup_def )) return AMP_lookup( $lookup_def );
-        if ( isset( $lookup_def['module'])){
+        if ( isset( $lookup_def['instance'])){
             return AMPSystem_Lookup::locate( $lookup_def );
         }
         return array( );
@@ -1262,21 +1262,34 @@ if ( ! function_exists( 'AMP_navCountDisplay_Section')) {
         $url_vars_content = array( 'action=add', 'section_id='.$section_id );
 
         if ( $layout_id_lists ){
-            $count_lists = "( " . $navcount_layouts[ $layout_id_lists   ] . " )";
+            //$count_lists = "( " . $navcount_layouts[ $layout_id_lists   ] . " )";
+            $count_lists =  $navcount_layouts[ $layout_id_lists ];
             $url_vars_lists = array( 'id='.$layout_id_lists );
         }
 
         if ( $layout_id_content ){
-            $count_content = "(&nbsp;" . $navcount_layouts[ $layout_id_content ] . "&nbsp;)";
+            //$count_content = "(&nbsp;" . $navcount_layouts[ $layout_id_content ] . "&nbsp;)";
+            $count_content = $navcount_layouts[ $layout_id_content ];
             $url_vars_content = array( 'id='.$layout_id_content );
         }
 
         $navlink_lists = 
             $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, $url_vars_lists ),
-                             AMP_TEXT_LIST_PAGES . $count_lists );
+                             $count_lists 
+                             . $renderer->image( '/img/list_page'.( $count_lists?'':'_create').'.png' ),
+                             array( 'title' => 
+                                sprintf( AMP_TEXT_WHAT_FOR_WHAT, 
+                                         ( $count_content ? AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT : AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_CREATE ), 
+                                         AMP_TEXT_LIST_PAGES )));
         $navlink_content = 
             $renderer->link( AMP_URL_AddVars( AMP_SYSTEM_URL_NAV_LAYOUT, $url_vars_content ),
-                             AMP_TEXT_CONTENT_PAGES . $count_content );
+                             $count_content 
+                             . $renderer->image( '/img/content_page'.( $count_content?'':'_create').'.png' ),
+                             array( 'title' => 
+                                sprintf( AMP_TEXT_WHAT_FOR_WHAT, 
+                                         ( $count_content ? AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT : AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_CREATE ), 
+                                         AMP_TEXT_CONTENT_PAGES )));
+        return $renderer->div( $navlink_lists . $navlink_content, array( 'class' => 'icon' ));
 
         return  $renderer->in_P( 
                     $navlink_lists 
@@ -1835,12 +1848,16 @@ function AMP_find_banner_image( ) {
     $banner_image = false;
     $currentPage = &AMPContent_Page::instance();
 
-    if ( $currentPage->isList( AMP_CONTENT_LISTTYPE_SECTION ) || $currentPage->isArticle( )) {
-        $map = &AMPContent_Map::instance();
-        $banner_image = $map->readAncestors( $currentPage->getSectionId(), 'flash' );
-    } elseif ( $currentPage->isList( AMP_CONTENT_LISTTYPE_CLASS )) {
+    //if ( $currentPage->isList( AMP_CONTENT_LISTTYPE_SECTION ) || $currentPage->isArticle( )) {
+    //    $map = &AMPContent_Map::instance();
+    //    $banner_image = $map->readAncestors( $currentPage->getSectionId(), 'flash' );
+    //} else
+    if ( $currentPage->isList( AMP_CONTENT_LISTTYPE_CLASS )) {
         $current_class = $currentPage->getClass( );
         $banner_image = $current_class->get_image_banner( ) ;
+    } elseif ( $currentPage->getSectionId( )) {
+        $map = &AMPContent_Map::instance();
+        $banner_image = $map->readAncestors( $currentPage->getSectionId(), 'flash' );
     }
     return $banner_image;
 
@@ -1916,7 +1933,7 @@ function AMP_url_update( $url, $attr = array( )) {
         return $url. '?' . join( '&', $updated_values );
     }
 
-    parse_str($_SERVER['QUERY_STRING'], $start_values );
+    parse_str($url_segments['1'], $start_values );
     $url_start_values = AMP_url_build_query( $start_values );
     $final_values = array_merge( $url_start_values, $updated_values );
     return ( $base_url . '?' . join( '&', $final_values ));
@@ -1930,12 +1947,38 @@ function AMP_url_print( $value, $key ) {
 }
 
 function AMP_url_build_query( $attr = array( )) {
-    if ( empty( $attr )) return false;
+    if ( empty( $attr )) return array( );
     $complete = array( );
     foreach( $attr as $key => $value ) {
         $complete[$key] = AMP_url_print( $value, $key );
     }
     return $complete;
+}
+
+function AMP_protect_email( $address, $text='' ) {
+    require_once( 'enkoder/enkoder.php');
+    return enkode_mailto( $address, ( $text?$text:$address ) );
+}
+
+function AMP_to_camelcase( $value ) {
+    return str_replace( ' ', '', ucwords( str_replace( '_', ' ', $value )));
+}
+
+function AMP_from_camelcase( $value ) {
+    $start = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
+    $end = "_a,_b,_c,_d,_e,_f,_g,_h,_i,_j,_k,_l,_m,_n,_o,_p,_q,_r,_s,_t,_u,_v,_w,_x,_y,_z";
+    $start_set = split( ',', $start );
+    $end_set = split( ',', $end );
+    return str_replace( $start_set, $end_set, $value );
+}
+
+
+function AMP_flush_common_cache ( ) {
+    require_once( 'AMP/System/Cache/Config.inc.php');
+    AMP_cacheFlush( AMP_CACHE_TOKEN_URL_CONTENT );
+    AMP_cacheFlush( AMP_CACHE_TOKEN_ADODB );
+    AMP_cacheFlush( AMP_CACHE_TOKEN_LOOKUP );
+	AMP_flush_apache_cache_folders();
 }
 
 ?>
