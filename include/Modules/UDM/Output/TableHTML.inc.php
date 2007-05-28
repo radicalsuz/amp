@@ -143,7 +143,7 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
                 $kvalue=$this->Lookups[$key]['Set'][$current_row[$key]];
             } 
             // swap values from active lookup def
-            if ( isset( $this->udm->fields[$key]['lookup'] ))  {
+            if ( isset( $this->udm->fields[$key]['lookup'] ) && is_object( $this->udm->fields[$key]['lookup']))  {
                 if ( $values = $this->udm->fields[$key]['lookup']->dataset ) {
                     if ( isset( $values[ $current_row[ $key ]])) {
                         $kvalue = $values[ $current_row[ $key ]];
