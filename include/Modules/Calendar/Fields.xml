@@ -45,6 +45,9 @@
 		<type>text</type>
 		<label>Event Time</label>
 	</time>
+    <endtime>
+        <type>hidden</type>
+    </endtime>
 	<url>
 		<type>text</type>
 		<label>Website</label>
@@ -103,6 +106,9 @@
         <type>header</type>
         <label>Event Location</label>
     </location_header>
+    <standard_location>
+        <type>hidden</type>
+    </standard_location>
 	<location>
 		<type>textarea</type>
 		<label>Event Location</label>
