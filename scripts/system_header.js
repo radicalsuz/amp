@@ -270,3 +270,29 @@ function clear_AMP_cache( ){
 function AMP_flash_clear( ) {
     setTimeout( 'new Effect.BlindUp( "AMP_flash")', 3200 );
 }
+
+function AMP_show_panel( panel_id ) {
+    $( panel_id ).show( );
+    new Effect.ScrollTo( panel_id, { offset: -50 } ); 
+    new Effect.Highlight( panel_id, { duration: 3 } );
+    new Effect.Pulsate( panel_id, { from: 0.3, pulses: 3, duration: 2 } );
+    return false;
+}
+
+function AMP_change_list_order( list_id, item_id, offset_to_new_location ) {
+    //only works for offsets of 1 and -1, will only switch 2 elements
+    original_set = Sortable.sequence( list_id );
+    old_location = original_set.indexOf( item_id );
+    set_length = original_set.length;
+    new_location = old_location + offset_to_new_location;
+
+    if ( ( new_location < 0 ) || ( new_location > set_length )) {
+             return false;
+    }
+    tmp = original_set[ new_location ];
+    original_set[ new_location ] = original_set[ old_location ];
+    original_set[old_location] = tmp;
+
+    Sortable.setSequence( list_id, original_set );
+
+}

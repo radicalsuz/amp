@@ -150,3 +150,4 @@ function showUploadWindow (parentform, calledfield, dtype, handler) {
     if (handler) url = url + '&handler='+handler;
     hWnd = window.open( url, 'recordWindow', 'height=175,width=300,scrollbars=no,menubar=no,toolbar=no,resizeable=no,location=no,status=no' );
 }
+
