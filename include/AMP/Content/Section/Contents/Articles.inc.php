@@ -57,7 +57,7 @@ class SectionContentSource_Articles extends SectionContentSource {
         if (!isset($section_id)) $section_id = $this->_section->id;
 
         $related = &new SectionRelatedSet( $this->_section->dbcon, $section_id );
-        $relatedContent = &$related->getLookup( 'typeid' );
+        $relatedContent = $related->getLookup( 'typeid' );
         if (empty( $relatedContent )) return false;
 
         return "id in (" . join( ", ", array_keys( $relatedContent) ). ")";

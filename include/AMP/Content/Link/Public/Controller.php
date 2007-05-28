@@ -21,7 +21,7 @@ $link_type_source = &new Link_Type( $dbcon );
 $requested_section =  (isset($_GET['linktype']) && $_GET['linktype']) ? $_GET['linktype'] : false; 
 $content_map = AMPContent_Lookup::instance( 'sectionMap' );
 
-$link_types = &$link_type_source->search( $link_type_source->makeCriteria( array( 'live' => true )));
+$link_types = $link_type_source->search( $link_type_source->makeCriteria( array( 'live' => true )));
 $display_types = false;
 
 if ( $requested_section ) {
@@ -55,7 +55,7 @@ if ( $link_types ) {
 
 function AMP_display_linkset( &$link_source, $criteria = array( ), $level=0  ){
     //static $link_source = false;
-    $source_set = &$link_source->search( $link_source->makeCriteria( $criteria ));
+    $source_set = $link_source->search( $link_source->makeCriteria( $criteria ));
     if ( !$source_set ) return; 
     print "\n<div class='heading_".$level."' style='padding-left:".( $level*50 ). "px;'>\n";
     foreach( $source_set as $link ) {

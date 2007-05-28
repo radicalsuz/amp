@@ -6,6 +6,7 @@ require_once ( 'AMP/Content/Article/ComponentMap.inc.php');
 class ContentSearch_Form extends AMPSearchForm {
 
     var $component_header = "Search Articles";
+    var $alternate_search_markers = array( );
 
     function ContentSearch_Form (){
         $name = "AMP_ContentSearch";

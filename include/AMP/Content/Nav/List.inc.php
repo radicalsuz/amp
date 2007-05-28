@@ -28,5 +28,11 @@ class Nav_List extends AMP_System_List_Form {
         $this->addCriteria( 'modid='.$tool_id );
     }
 
+    function _init_criteria( $criteria ) {
+        if ( isset( $criteria['modid']) && ( $tool_id = $criteria['modid'])) {
+            $this->_url_add = AMP_url_add_vars( AMP_SYSTEM_URL_NAV_ADD, array( 'tool_id='.$tool_id ));
+        }
+    }
+
 }
 ?>

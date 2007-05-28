@@ -39,9 +39,14 @@ class ArticleDisplay_Blog extends Article_Display {
             if ($this->use_short_comments) {
                $output .=  $this->_HTML_commentLink($comments);       
             } else {
+
                $output .= $this->newline( 3 );
-               $output .= AMP_TEXT_POSTED_IN . $this->space( ) 
-                            . $this->render_sections( ) . $this->newline( 2 );
+
+               if ( $sections_output = $this->render_sections( )) {
+                   $output .= AMP_TEXT_POSTED_IN . $this->space( ) 
+                                . $sections_output . $this->newline( 2 );
+               }
+
                $output .= $comments->display(); 
             }
         
@@ -68,16 +73,23 @@ class ArticleDisplay_Blog extends Article_Display {
     }
 
 
-     function load_sections( ) {
+     function load_sections( $live_only = 0 ) {
         $allowed_sections = AMP_lookup( 'sectionMap' );
-        $section_names = array_combine_key( array_keys( $allowed_sections ), AMP_lookup( 'sections')) ;
+        $lookup_name =  ( $live_only ) ? 'sectionsLive' : 'sections';
+        $section_names = array_combine_key( array_keys( $allowed_sections ), AMP_lookup( $lookup_name )) ;
 
         $article_locations = $this->_article->getAllSections();
         $section_list = array_combine_key( $article_locations, $section_names );
         asort( $section_list );
-        unset( $section_list[AMP_CUSTOM_ITEM_BLOG_SECTION]);
+        if ( defined( 'AMP_CUSTOM_ITEM_BLOG_SECTION')) {
+            unset( $section_list[AMP_CUSTOM_ITEM_BLOG_SECTION]);
+        }
         return $section_list;
 
+     }
+
+     function load_live_sections( ) {
+         return $this->load_sections( true );
      }
 
      function _HTML_commentLink( &$commentSet) {
@@ -87,12 +99,18 @@ class ArticleDisplay_Blog extends Article_Display {
         $text= ($commentSet->RecordCount()? $commentSet->RecordCount():'no') .' comments';
         $comments =  $renderer->link(AMP_Url_AddAnchor($this->_article->getURL(), 'comments'),$text);
 
+        $sections_output = '';
         $sections = $this->render_sections( );
-        return 
-              $renderer->div( 
+        if ( $sections ) {
+            $sections_output = 
                   AMP_TEXT_POSTED_IN 
                   . $renderer->space( ) 
-                  . $sections 
+                  . $sections ;
+        }
+
+        return 
+              $renderer->div( 
+                  $sections_output
                   . $renderer->separator( ) 
                   . $comments,
                   array( 'align' => 'right'))
@@ -104,7 +122,8 @@ class ArticleDisplay_Blog extends Article_Display {
      }  
 
      function render_sections( ) {
-         $section_list = $this->load_sections( );
+         $section_list = $this->load_live_sections( );
+         $sections = array( );
          foreach( $section_list as $section_id => $section_name ) {
             $sections[] = $this->_HTML_link('article.php?list=class&type='. $section_id.'&class='.AMP_CONTENT_CLASS_BLOG,$section_name) ;
          }

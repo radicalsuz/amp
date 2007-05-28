@@ -12,12 +12,14 @@ class ComponentMap_Section extends AMPSystem_ComponentMap {
     var $paths = array( 
         'fields' => 'AMP/Content/Section/Fields.xml',
         'list'   => 'AMP/Content/Section/List.inc.php',
+        //'list'   => 'AMP/Content/Section/List.php',
         'form'   => 'AMP/Content/Section/Form.inc.php',
         'source' => 'AMP/Content/Section.inc.php');
     
     var $components = array( 
         'form'  => 'Section_Form',
         'list'  => 'Section_List',
+        //'list'  => 'AMP_Content_Section_List',
         'source'=> 'Section');
 
     var $_allow_add  = AMP_PERMISSION_CONTENT_SECTION_EDIT;

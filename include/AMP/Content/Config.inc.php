@@ -72,7 +72,14 @@ if (!defined( 'AMP_CONTENT_SIDEBAR_CLASS_RIGHT'))      define ('AMP_CONTENT_SIDE
  * Definitions for system images 
  */
 define( 'AMP_ICON_SPACER', 'spacer.gif' );
-define( 'AMP_ICON_COLUMN_FOOTER', false );
+define( 'AMP_ICON_UP', 'go-up.png' );
+define( 'AMP_ICON_DOWN', 'go-down.png' );
+define( 'AMP_ICON_LIST', 'list_page.png' );
+define( 'AMP_ICON_LIST_ADD', 'list_page_create.png' );
+define( 'AMP_ICON_CONTENT', 'content_page.png' );
+define( 'AMP_ICON_CONTENT_ADD', 'content_page_create.png' );
+
+if ( !defined( 'AMP_ICON_COLUMN_FOOTER' ))              define( 'AMP_ICON_COLUMN_FOOTER', false );
 
 /**
  * Notation used within navs and introtexts to indicate a php include file 
@@ -167,6 +174,13 @@ if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_RESPONSE'))
         define( 'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_RESPONSE', 51 );
 if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_DISPLAY')) 
         define( 'AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_DISPLAY', 57 );
+
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_DISPLAY')) 
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_DISPLAY', 8 );
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_INPUT'))  
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_INPUT', 6 );
+if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_RESPONSE')) 
+        define( 'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_RESPONSE', 19 );
 /**
  * Allow multiple sections per article 
  */

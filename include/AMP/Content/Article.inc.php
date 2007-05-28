@@ -393,6 +393,8 @@ class Article extends AMPSystem_Data_Item {
         $sections_related = $this->_getSectionsRelatedBase( );
         $active_related = $this->_getSectionsRelatedDB( ) ;
         if ( !$active_related && !$sections_related ) return false;
+
+        if ( !$sections_related ) $sections_related = array( );
         if ( $active_related ) {
             $deleted_items = array_diff( $active_related, $sections_related );
             $new_items = array_diff( $sections_related, $active_related );
@@ -662,7 +664,6 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaDisplayable(  ) {
-        trigger_error( 'makng dsiap' );
         $crit = array(  );
         $crit['class'] = $this->makeCriteriaDisplayableClass(  );
         $crit['status'] = $this->makeCriteriaLive(  );

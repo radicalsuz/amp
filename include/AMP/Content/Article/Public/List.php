@@ -11,6 +11,7 @@ class Article_Public_List extends AMP_Display_List {
     var $_pager_limit = 100;
     var $_class_pager = 'AMP_Display_Pager_Content';
     var $_path_pager = 'AMP/Display/Pager/Content.php';
+    var $_css_class_container_list = 'list_block content_search';
 
     var $_source_criteria = array( 'live' => 1, 'allowed' => 1 );
     //var $_sort_sql_default = 'default';
@@ -93,17 +94,23 @@ class Article_Public_List extends AMP_Display_List {
 		$source_url = $article->getSourceUrl();
 
         if (!(trim($author) || $source_name || $source_url)) return false;
+
         $output_author = FALSE;
         $output_source = FALSE;
 
         if (trim($author)) {
             $output_author =  $this->_renderer->inSpan( 'by&nbsp;' . converttext($author), $this->_css_class_author );
-            if (!$source) return $output_author . $this->_renderer->newline();
         }
 
-        if ($source) $output_source = $this->_renderer->inSpan( $this->_renderer->link( $source_url, $source_name  ), $this->_css_class_source );
+        if ($source_name || $source_url)  {
+            if ( !$source_name ) {
+                $source_name = $source_url;
+            }
+            $output_source = $this->_renderer->inSpan( $this->_renderer->link( $source_url, $source_name  ), $this->_css_class_source );
+        }
 
         if ($output_author && $output_source) return $output_author . ',' . $this->_renderer->space() . $output_source . $this->_renderer->newline();
+        if ($output_author && !$output_source) return $output_author . $this->_renderer->newline();
 
         return $output_source . $this->_renderer->newline();
     }

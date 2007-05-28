@@ -22,6 +22,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     var $_engine;
     var $_exceedsLimit;
     var $name_field = 'name';
+    var $_class_name = 'NavigationElement';
 
     function NavigationElement( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -149,7 +150,6 @@ class NavigationElement extends AMPSystem_Data_Item {
         
         $currentPage = & AMPContent_Page::instance();
         return $currentPage->getSectionId();
-
     }
 
     function getLimit() {
@@ -213,6 +213,7 @@ class NavigationElement extends AMPSystem_Data_Item {
         return $names[$tool_id];
         
     }
+
 
 }
 

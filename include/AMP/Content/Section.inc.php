@@ -170,6 +170,10 @@ class Section extends AMPSystem_Data_Item {
         return $this->getData( 'textorder');
     }
 
+    function getListOrder( ) {
+        return $this->getOrder( );
+    }
+
     function getImageFileName() {
         return $this->getData( 'image2' );
     }
@@ -319,6 +323,10 @@ class Section extends AMPSystem_Data_Item {
         }
 
         return true;
+    }
+
+    function getStatus( ) {
+        return $this->isLive( ) ? AMP_PUBLISH_STATUS_LIVE : AMP_PUBLISH_STATUS_DRAFT;
     }
 
 }

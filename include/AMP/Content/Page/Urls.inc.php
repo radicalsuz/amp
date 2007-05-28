@@ -35,6 +35,7 @@ if ( !defined( 'AMP_CONTENT_URL_TRAINER_ADD'))      define ( 'AMP_CONTENT_URL_TR
 if ( !defined( 'AMP_CONTENT_URL_PETITIONS'))        define ( 'AMP_CONTENT_URL_PETITIONS',       'petition.php');
 if ( !defined( 'AMP_CONTENT_URL_FAQ'))              define ( 'AMP_CONTENT_URL_FAQ',       'faq.php');
 if ( !defined( 'AMP_CONTENT_URL_BOARD_HOUSING'))    define ( 'AMP_CONTENT_URL_BOARD_HOUSING',       'housing.php');
+if ( !defined( 'AMP_CONTENT_URL_BOARD_HOUSING_ADD'))    define ( 'AMP_CONTENT_URL_BOARD_HOUSING_ADD',       'modinput4.php?modin=11');
 if ( !defined( 'AMP_CONTENT_URL_BOARD_RIDE'))       define ( 'AMP_CONTENT_URL_BOARD_RIDE',       'ride.php');
 if ( !defined( 'AMP_CONTENT_URL_LINKS'))            define ( 'AMP_CONTENT_URL_LINKS',       'links.php');
 //if ( !defined( 'AMP_CONTENT_URL_TRACKBACKS'))   define ( 'AMP_CONTENT_URL_TRACKBACKS',       AMP_SITE_URL . 'article_trackback.php');
