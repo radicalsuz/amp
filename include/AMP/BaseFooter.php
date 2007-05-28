@@ -87,7 +87,7 @@ if ( AMP_is_cacheable_url( ) ) {
 		$cache_file = $cache_folder . DIRECTORY_SEPARATOR . 'index.html'; 
 	}
 	if ($cache_file && !file_exists($cache_file) ) {
-		$cache_out = &fopen( $cache_file, 'w' );
+		$cache_out = fopen( $cache_file, 'w' );
 		fwrite($cache_out, $finalPageHtml );
 		fclose( $cache_out );	
 	}
