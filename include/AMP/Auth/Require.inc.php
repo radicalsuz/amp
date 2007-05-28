@@ -25,11 +25,7 @@ AMP_init_user( );
 $AMP_Authen_Handler->redirect_page( );
 
 if ( !empty($_POST) ) {
-    require_once( 'AMP/System/Cache/Config.inc.php');
-    AMP_cacheFlush( AMP_CACHE_TOKEN_URL_CONTENT );
-    AMP_cacheFlush( AMP_CACHE_TOKEN_ADODB );
-    AMP_cacheFlush( AMP_CACHE_TOKEN_LOOKUP );
-	AMP_flush_apache_cache_folders();
+    AMP_flush_common_cache( );
 }
 
 ?>
