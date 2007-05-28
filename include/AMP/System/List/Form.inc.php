@@ -98,12 +98,7 @@ class AMP_System_List_Form extends AMPSystem_List {
         $map = &ComponentLookup::instance( get_class( $this ));
         if ( !$map ) return $this->_actions;
 
-        foreach( $this->_actions as $action ) {
-            if ( $map->isAllowed( $action )) {
-                $result[] = $action;
-            }
-        }
-        return $result;
+        return array_filter( $this->_actions, array( $map, 'isAllowed') );
     }
 
     function getName( ){
