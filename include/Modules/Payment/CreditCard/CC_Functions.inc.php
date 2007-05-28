@@ -341,6 +341,9 @@ class CC_Functions {
 		  {
 	
 			$PathToSDK="/usr/local/lib/verisign/payflowpro/amp/";
+            if ( !is_dir( $PathToSDK)) {
+                trigger_error( 'Payment SDK not found at: ' . $PathToSDK );
+            }
 	
 			 $expire_parts = split("/", $strCCExpireDate);
 			 $strCCExpireDate = $expire_parts[0] . substr($expire_parts[1], -2);
@@ -622,6 +625,7 @@ class CC_Functions {
 			}
 	
 			return $ascReturnCodes;
+
 		  }  //End of function ChargeCreditCard.
 }
 ?>
