@@ -756,6 +756,31 @@ class UserDataPlugin {
         $this->insertAfterFieldOrder( array('captcha_verification') );
         return true;
     }
+
+    function _verifyBasics( $read_priority = 1, $save_priority = 2 ){
+        
+        if ( !isset( $this->plugin_instance )) return;
+        $read_plugin = $this->udm->getPlugin( 'AMP', 'Read');
+        $save_plugin = $this->udm->getPlugin( 'AMP', 'Save');
+        if ( $read_plugin && $save_plugin ) return;
+
+        $warning_constant_read = 'AMP_USERDATA_REGISTERED_READ_' . $this->udm->instance;
+        $warning_constant_save = 'AMP_USERDATA_REGISTERED_SAVE_' . $this->udm->instance;
+        if ( defined( $warning_constant_save ) || defined( $warning_constant_read )) return;
+
+        if ( !( $read_plugin )){
+            trigger_error( get_class( $this ) . ' is saving AMP/Read AUTO');
+            $read_plugin = $this->udm->registerPlugin( 'AMP', 'Read');
+            $read_plugin->saveRegistration( 'AMP', 'Read', $read_priority );
+            define( $warning_constant_read, true );
+        }
+        if ( !( $save_plugin )) {
+            trigger_error( get_class( $this ) . ' is saving AMP/Save AUTO');
+            $save_plugin = $this->udm->registerPlugin( 'AMP', 'Save');
+            $save_plugin->saveRegistration( 'AMP', 'Save', $save_priority );
+            define( $warning_constant_save, true );
+        }
+    }
 }
 
 ?>
