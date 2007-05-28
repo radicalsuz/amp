@@ -10,11 +10,16 @@ Class Petition extends AMPSystem_Data_Item {
     var $name_field = 'title';
 	
 	function Petition(&$dbcon, $pid=NULL,$modin=NULL) {
+        $this->__construct( $dbcon, $pid, $modin );
+	}
+
+    function __construct( &$dbcon, $pid=NULL, $modin=NULL ) {
         if ( isset( $modin ) && $modin_petition_id = $this->findByModin( $modin )){
             $pid = $modin_petition_id;
         }
         $this->init( $dbcon, $pid );
-	}
+
+    }
 
     function findByModin( $modin ){
         require_once( 'Modules/Petition/Lookups.inc.php');
@@ -25,6 +30,10 @@ Class Petition extends AMPSystem_Data_Item {
 
     function getFormId( ){
         return $this->getData( 'udmid');
+    }
+
+    function setFormId( $modin ) {
+        return $this->mergeData( array( 'udmid' => $modin ));
     }
 
     function getStartDate( ){
@@ -73,6 +82,13 @@ Class Petition extends AMPSystem_Data_Item {
 	}
 		
 	function petition_signers(){
+        require_once( 'AMP/UserData/Set.inc.php');
+        $udm = new UserDataSet( $this->dbcon, $this->getFormId( ));
+        if ( $list_plugin = $udm->getPlugin( 'Output', 'List')) {
+            trigger_error( get_class( $list_plugin ));
+            return $udm->doPlugin( 'Output', 'List');
+        }
+        
         $offset = 0;  
         if ( isset( $_REQUEST['offset'] ) && $_REQUEST['offset'] ) {
             $offset = $_REQUEST['offset'];
