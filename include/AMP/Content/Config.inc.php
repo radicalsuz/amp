@@ -209,6 +209,7 @@ if ( !defined( 'AMP_MODULE_ID_RSS_SUBSCRIPTIONS')) define( 'AMP_MODULE_ID_RSS_SU
 if ( !defined( 'AMP_MODULE_ID_PETITION')) define( 'AMP_MODULE_ID_PETITION', 7 );
 define( 'AMP_MODULE_ID_LINKS', 11 );
 if ( !defined( 'AMP_MODULE_ID_CONTACT_US')) define( 'AMP_MODULE_ID_CONTACT_US', 17 );
+if ( !defined( 'AMP_MODULE_ID_TELL_A_FRIEND')) define( 'AMP_MODULE_ID_TELL_A_FRIEND', 22 );
 
 if ( !defined( 'AMP_FORM_ID_WEBACTION' )) define( 'AMP_FORM_ID_WEBACTION', 21 );
 

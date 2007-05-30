@@ -398,6 +398,11 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
         $output = $form->toHtml();
         if ($options['show_search_header']) $output = $this->search_text_header(). $output;
+        if ( $this->udm->admin ) {
+            $renderer = AMP_get_renderer( );
+            $live_url = AMP_SITE_URL . AMP_url_update( AMP_CONTENT_URL_FORM, array( 'modin' => $this->udm->instance ));
+            $output .= $renderer->div( AMP_TEXT_LIVE_LINK . ': '. $renderer->link( $live_url, $live_url, array( 'target' => 'blank' )), array( 'class' => 'preview_link' )) . $renderer->newline( );
+        }
 
 		return $output;
     

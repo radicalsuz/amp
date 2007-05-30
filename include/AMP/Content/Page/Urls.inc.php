@@ -55,5 +55,7 @@ if ( !defined( 'AMP_CONTENT_URL_COMMENT_ADD' ))     define ( 'AMP_CONTENT_URL_CO
 
 if ( !defined( 'AMP_CONTENT_URL_TAG' ))             define ( 'AMP_CONTENT_URL_TAG', 'tag.php');
 if ( !defined( 'AMP_CONTENT_URL_BADGE' ))             define ( 'AMP_CONTENT_URL_BADGE', 'badge_widget.php');
+if ( !defined( 'AMP_CONTENT_URL_CONTACT_US' ))             define ( 'AMP_CONTENT_URL_CONTACT_US', 'contactus.php');
+if ( !defined( 'AMP_CONTENT_URL_TELL_A_FRIEND' ))             define ( 'AMP_CONTENT_URL_TELL_A_FRIEND', 'mailto2.php');
 
 ?>

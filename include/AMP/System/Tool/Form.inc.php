@@ -6,10 +6,31 @@ require_once( 'AMP/System/Tool/ComponentMap.inc.php');
 class Tool_Form extends AMPSystem_Form_XML {
 
     var $name_field = 'name';
+    var $_linked_pages = array( 
+        AMP_MODULE_ID_CONTACT_US => AMP_CONTENT_URL_CONTACT_US, 
+        AMP_MODULE_ID_TELL_A_FRIEND => AMP_CONTENT_URL_TELL_A_FRIEND, 
+        );
 
     function Tool_Form( ) {
         $name = 'modules';
         $this->init( $name );
+    }
+
+    function adjustFields( $fields ) {
+        $tool_id = ( isset( $_REQUEST['id']) && $_REQUEST['id']) ? $_REQUEST['id'] : false;
+        if ( !$tool_id || !isset( $this->_linked_pages[$tool_id])) return $fields;
+        $url = AMP_SITE_URL . $this->_linked_pages[ $tool_id ];
+        $renderer = AMP_get_renderer( );
+
+        $fields['live_link'] = array( 
+            'type' => 'static',
+            'default' => $renderer->div( AMP_TEXT_LIVE_LINK. ': ' . 
+                        $renderer->link( $url, $url, 
+                                    array( 'target' => 'top')), 
+                        array( 'class' => 'preview_link'))
+        );
+        return $fields;
+
     }
 
     function setDynamicValues( ){
