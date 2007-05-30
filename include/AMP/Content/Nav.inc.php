@@ -136,7 +136,9 @@ class NavigationElement extends AMPSystem_Data_Item {
     }
 
     function getLinkPage() {
-        return $this->getData('linkfile');
+        $result = $this->getData('linkfile');
+        if ( $result ) return $result;
+        return AMP_CONTENT_URL_ARTICLE;
     }
 
     function getLinkVarName() {
@@ -212,6 +214,13 @@ class NavigationElement extends AMPSystem_Data_Item {
         if ( !isset( $names[$tool_id ])) return false;
         return $names[$tool_id];
         
+    }
+
+    function get_url_edit( ) {
+        if ( !( isset( $this->id ) && $this->id )) {
+            return AMP_SYSTEM_URL_NAV;
+        }
+        return AMP_url_update( AMP_SYSTEM_URL_NAV, array( 'id' => $this->id ));
     }
 
 
