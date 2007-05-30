@@ -15,7 +15,7 @@ class Nav_Form extends AMPSystem_Form_XML {
     }
 
     function setDynamicValues( ){
-        $this->addTranslation( 'sql', '_checkCriteriaSelects', 'get');
+        $this->addTranslation( 'sql_statement', '_checkCriteriaSelects', 'get');
     }
 
     function _checkCriteriaSelects( $data, $fieldname ) {
@@ -24,6 +24,7 @@ class Nav_Form extends AMPSystem_Form_XML {
         $criteria_values = array( );
         if ( isset( $data['section']) && $data['section']) $criteria_values[] = $this->_getRelatedContent( $data['section'] );
         if ( isset( $data['class']) && $data['class']) $criteria_values[] = 'class='.$data['class'];
+
         if ( empty( $criteria_values )) return false;
         return $this->_sql_basic . join( ' AND ', $criteria_values ) . $this->_sql_sort ;
     }
