@@ -60,7 +60,7 @@ class Gallery_Public_Display extends AMP_Display_List {
 
         $image = $this->_renderer->link( 
                                          //$imageRef->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
-                                         $imageRef->get_url_size( 0, 600 ),
+                                         $imageRef->get_url_size( 0, $image_height > 600 ? 600 : 0),
                                          $this->_renderer->image( 
                                                     $imageRef->getURL( ), 
                                                             array(  'border' => '1', 
