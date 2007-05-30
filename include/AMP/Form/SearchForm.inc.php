@@ -27,6 +27,7 @@ class AMPSearchForm extends AMPForm_XML {
         );
 
     var $_alternate_submit_markers = array( );
+    var $_preview_links = array( );
 
     /**
      * AMPSearchForm 
@@ -161,5 +162,38 @@ class AMPSearchForm extends AMPForm_XML {
     }
 
 
+
+    function _add_preview_link( $url_id_var, $source_class ) {
+        $data = $_REQUEST;
+        if ( !( isset( $data[$url_id_var]) && $data[ $url_id_var ] )) {
+            return false;
+        }
+
+        if ( !class_exists( $source_class )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $this ), $source_class ));
+            return;
+        }
+
+        $source = &new $source_class( AMP_Registry::getDbcon( ), $data[$url_id_var] );
+        if ( !$source->hasData( )) return;
+        $renderer = AMP_get_renderer( );
+        
+        //$this->_preview_links[] = 
+        $result = 
+            $renderer->div( 
+            $renderer->link( 
+                '/'. $source->getURL( ), 
+                    $renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'class' => 'icon' )) 
+                    . AMP_TEXT_PREVIEW 
+                    . $renderer->space( ) 
+                    . AMP_trimText( $source->getName( ), 20, false )
+                    , array( 'target' => 'blank' )
+                ), array( 'class' => 'icon'));
+        $result .= 'Link Here With: '. $renderer->input( 'easy_link', AMP_SITE_URL.$source->getURL( ),  array('size' => '50' ));
+        $this->_preview_links[] = $result;
+        
+
+        
+    }
 }
 ?>
