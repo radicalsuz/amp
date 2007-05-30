@@ -251,7 +251,7 @@ class AMP_System_Component_Controller {
     function add_component_header( $action_text, $heading, $css_class = 'system_heading', $display_key = null ){
 
         $header_text = $action_text . ' ' . $heading;
-        $renderer = &new AMPDisplay_HTML( );
+        $renderer = AMP_get_renderer( ) ;
 
         $buffer = &new AMP_Content_Buffer( );
         $buffer->add( $renderer->inDiv( $header_text, array( 'class' => $css_class )));
@@ -563,9 +563,29 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->_init_form( );
 
         $this->_form->setValues( $this->_model->getData( ));
+        $this->show_preview_link( );
 		$this->_display->add( $this->_form, 'form' ); 
 		return true;
     }
+
+    function show_preview_link( ) {
+        if ( !method_exists( $this->_model, 'getURL')) return  
+        $preview = new AMP_Content_Buffer( );
+        $renderer  = AMP_get_renderer( );
+        $preview->add( 
+            $renderer->div( 
+            $renderer->link( 
+                '/'. $source->getURL( ), 
+                    $renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'class' => 'icon' )) 
+                    . AMP_TEXT_PREVIEW 
+                    . $renderer->space( ) 
+                    . AMP_trimText( $source->getName( ), 20, false )
+                    , array( 'target' => 'blank' )
+                ), array( 'class' => 'icon'))
+            );
+        $this->_display->add( $preview );
+    }
+
 
     function commit_delete( ){
         if ( !$this->_model_id ) return $this->_commit_fail( );
