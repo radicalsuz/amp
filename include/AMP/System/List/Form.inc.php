@@ -156,6 +156,20 @@ class AMP_System_List_Form extends AMPSystem_List {
         return $output;
     }
 
+    function list_preview_link( ) {
+        if ( !( isset( $this->previewlink ) && $this->previewlink )) {
+            return false;
+        }
+        $renderer = $this->_getRenderer( );
+        $url = AMP_SITE_URL . $this->previewlink; 
+
+        return $renderer->newline( )
+                . $renderer->div( AMP_TEXT_LIVE_LINK. ': ' . 
+                                  $renderer->link( $url, $url, array( 'target' => 'blank')), 
+                                array( 'class' => 'preview_link'))
+                . $renderer->newline( );
+    }
+
 
     function _HTML_startForm() {
         if ( isset( $this->suppress['form_tag']) && $this->suppress['form_tag']) return false;
@@ -217,7 +231,7 @@ class AMP_System_List_Form extends AMPSystem_List {
 
     function _HTML_previewLink( $id ) {
         if ( !isset( $this->previewlink )) return false;
-        return  '<a href="' . AMP_URL_AddVars( $this->previewlink , 'id='.$id) .'" target="_blank" title="'.AMP_TEXT_PREVIEW_ITEM.'">' .
+        return  '<a href="/' . AMP_URL_AddVars( $this->previewlink , 'id='.$id) .'" target="_blank" title="'.AMP_TEXT_PREVIEW_ITEM.'">' .
                 '<img src="' . AMP_SYSTEM_ICON_PREVIEW . '" width="16" height="16" border=0></a>';
     }
 

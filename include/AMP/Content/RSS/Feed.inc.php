@@ -118,6 +118,14 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
         return $this->getData( 'section_id');
     }
 
+    function getURL( ) {
+        return $this->get_live_url( "rssfeed") ;
+    }
+
+    function get_url_edit( ) {
+        return $this->get_system_url( "rssfeed");
+    }
+
 }
 
 ?>

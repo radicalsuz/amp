@@ -2,6 +2,7 @@
 
 define( 'AMP_SYSTEM_URL_TOOLS',                 'module.php');
 define( 'AMP_SYSTEM_URL_TOOL_ADD',              'module.php?action=add');
+define( 'AMP_SYSTEM_URL_MAP',              'maps.php' );
 define( 'AMP_SYSTEM_URL_TOOL_CONTROL',          'tool_controls.php');
 define( 'AMP_SYSTEM_URL_PERMISSION_DETAILS',    'permissiondetail.php?action=list');
 define( 'AMP_SYSTEM_URL_PERMISSION_GROUPS',     'per.php');
@@ -33,6 +34,7 @@ define( 'AMP_SYSTEM_URL_ARTICLE_COMMENT',       'comments.php');
 define( 'AMP_SYSTEM_URL_ARTICLE_FRONTPAGE',     'article_frontpage.php');
 define( 'AMP_SYSTEM_URL_WEBACTION',             'action_center.php');
 define ('AMP_SYSTEM_URL_RSS_SUBSCRIPTION',      'rss_subscription.php');
+define ('AMP_SYSTEM_URL_RSSFEED',               'rssfeed.php');
 define ('AMP_SYSTEM_URL_PUBLIC_PAGES',          'introtext.php?action=list');
 define ('AMP_SYSTEM_URL_PUBLIC_PAGE',           'introtext.php');
 define ('AMP_SYSTEM_URL_PUBLIC_PAGE_ADD',       'introtext.php?action=add');
@@ -60,5 +62,6 @@ define( 'AMP_SYSTEM_URL_BADGE',                 'badges.php');
 define( 'AMP_SYSTEM_URL_BADGE_ADD',             'badges.php?action=new');
 define( 'AMP_SYSTEM_URL_HOUSING',               'housing.php');
 define( 'AMP_SYSTEM_URL_HOUSING_ADD',           'housing.php?action=new');
+define( 'AMP_SYSTEM_URL_FAQ',              'faq.php' );
 
 ?>

@@ -284,11 +284,7 @@
         <href>system_map.php?id=boards</href>
         <child>boards</child>
     </item>
-    <item>
-        <label>Schedules</label>
-        <href>schedule.php?action=list</href>
-        <child>schedule</child>
-    </item>
+ 
     <item>
         <label>Volunteer</label>
         <href>userdata_list.php?modin=8</href>
@@ -306,12 +302,12 @@
     </item>
     <item>
         <label>Tell A Friend</label>
-        <href>module_header_list.php?modid=22</href>
+        <href>module.php?id=22</href>
         <per>TOOLS_INTROTEXT</per>
     </item>
     <item>
         <label>Contact Us</label>
-        <href>module_header_list.php?modid=17</href>
+        <href>module.php?id=17</href>
         <per>TOOLS_INTROTEXT</per>
     </item>
     <item>
@@ -370,7 +366,7 @@
         <href>userdata_list.php?modin=2</href>
         <per>FORM_GROUPS</per>
     </item>
-    <item>
+   <!-- <item>
         <label>Speakers Database</label>
         <href>userdata_list.php?modin=6</href>
         <per>FORM_SPEAKER</per>
@@ -379,7 +375,7 @@
         <label>Trainers Database</label>
         <href>userdata_list.php?modin=5</href>
         <per>FORM_TRAINER</per>
-    </item>
+    </item>-->
 </directories>
 
 <boards>
@@ -408,7 +404,7 @@
     </item>
     <item>
         <label>Web Actions</label>
-        <href>sendfax_edit.php</href>
+        <href>sendfax_list.php</href>
         <per>ACTION_ACCESS</per>
     </item>
     <item>

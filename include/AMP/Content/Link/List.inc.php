@@ -25,6 +25,7 @@ class AMP_Content_Link_List extends AMP_System_List_Form {
                 'reorder'   => array( 'order' )
                 );
     var $_actions_global = array( 'reorder');
+    var $previewlink = AMP_CONTENT_URL_LINKS;
 
     function AMP_Content_Link_List( &$dbcon ) {
         $this->init( $this->_init_source( $dbcon ) );
@@ -64,6 +65,14 @@ class AMP_Content_Link_List extends AMP_System_List_Form {
 
         return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");'>&nbsp;";
 
+    }
+
+    function _HTML_header() {
+        $this->previewlink = AMP_CONTENT_URL_LINKS;
+        //$result = parent::_HTML_header( ) . $this->list_preview_link( );
+        $result = $this->list_preview_link( ). parent::_HTML_header( );
+        unset( $this->previewlink );
+        return $result;
     }
 }
 ?>

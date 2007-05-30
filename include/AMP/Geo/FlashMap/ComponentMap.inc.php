@@ -6,6 +6,7 @@ class ComponentMap_FlashMap extends AMPSystem_ComponentMap {
 
 	var $heading = "FlashMap";
 	var $nav_name = "flashmap";
+    var $_action_default = 'list';
 
 	var $paths = array(
 		'fields' => 'AMP/Geo/FlashMap/Fields.xml',

@@ -87,16 +87,6 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
         return $this->render_toolbar_reorder( $toolbar );
     }
 
-    function render_preview( $source ) {
-        return $this->_renderer->link( 
-            AMP_url_add_vars( '/' . $source->getURL( ), array( 'preview=1' )),
-            //$this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'width' => 16, 'height' => 16, 'border' => '0')),
-            $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW),
-            array( 'target' => '_blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
-        );
-
-    }
-
     function render_content_view( $source ) {
         return $this->_renderer->link( 
             AMP_url_add_vars( AMP_SYSTEM_URL_ARTICLE, array( 'section='. $source->id )),

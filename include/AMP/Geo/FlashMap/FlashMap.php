@@ -22,6 +22,21 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     function AMPSystem_FlashMap ( &$dbcon, $id=null ) {
         $this->init( $dbcon, $id );
     }
+
+    function getURL( ) {
+        if ( !( isset( $this->id )) && $this->id ) {
+            return AMP_CONTENT_URL_MAP;
+        }
+        return AMP_url_update( AMP_CONTENT_URL_MAP, array( 'map'=> $this->id));
+    }
+
+    function get_url_edit( ) {
+        if ( !( isset( $this->id )) && $this->id ) {
+            return AMP_SYSTEM_URL_MAP;
+        }
+        return AMP_url_update( AMP_SYSTEM_URL_MAP, array( 'id'=> $this->id));
+
+    }
     
 
 

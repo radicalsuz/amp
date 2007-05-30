@@ -308,5 +308,6 @@ if ( !defined( 'AMP_TEXT_CAPTCHA_LABEL')) {
 }
 
 define( 'AMP_TEXT_FORM_PLUGINS_REMINDER', 'Remember to register AMP/Save and AMP/Read' );
+define( 'AMP_TEXT_LIVE_LINK', 'Live Link');
 
 ?>

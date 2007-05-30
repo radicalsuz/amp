@@ -158,6 +158,11 @@ Class Petition extends AMPSystem_Data_Item {
 		return $out;
 	}	
 
+    function get_url_edit( ) {
+        if (!( isset( $this->id ) && $this->id )) return AMP_SYSTEM_URL_PETITION;
+        return AMP_url_update( AMP_SYSTEM_URL_PETITIONS,array( 'id' => $this->id ) );
+    }
+
 }
 
 ?>

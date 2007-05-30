@@ -563,14 +563,13 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->_init_form( );
 
         $this->_form->setValues( $this->_model->getData( ));
-        //$this->show_preview_link( );
 		$this->_display->add( $this->_form, 'form' ); 
+        $this->show_preview_link( );
 		return true;
     }
 
     /**
      * show_preview_link 
-     * NOT ENABLED 
      *
      * @access public
      * @return void
@@ -579,17 +578,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         if ( !method_exists( $this->_model, 'getURL')) return  ;
         $preview = new AMP_Content_Buffer( );
         $renderer  = AMP_get_renderer( );
-        $preview->add( 
-            $renderer->div( 
-            $renderer->link( 
-                '/'. $this->_model->getURL( ), 
-                    $renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'class' => 'icon' )) 
-                    . AMP_TEXT_PREVIEW 
-                    . $renderer->space( ) 
-                    . AMP_trimText( $this->_model->getName( ), 20, false )
-                    , array( 'target' => 'blank' )
-                ), array( 'class' => 'icon'))
-            );
+        $url = AMP_SITE_URL . $this->_model->getURL( );
+        $preview->add( $renderer->newline( ). $renderer->div(  AMP_TEXT_LIVE_LINK.': '. $renderer->link( $url, $url, array( 'target' => 'blank') ), array( 'class' => 'preview_link')));
         $this->_display->add( $preview );
     }
 

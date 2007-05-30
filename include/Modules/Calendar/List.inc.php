@@ -16,6 +16,7 @@ class Calendar_List extends AMP_System_List_Form {
     var $editlink = AMP_SYSTEM_URL_EVENT;
     var $_url_add = AMP_SYSTEM_URL_EVENT_ADD;
     var $editlink_uid = false;
+    var $previewlink = AMP_CONTENT_URL_EVENT;
 
     var $name_field = 'name';
     var $_source_object = 'Calendar_Event';
@@ -76,5 +77,10 @@ class Calendar_List extends AMP_System_List_Form {
         return $value;
         
     }
+
+    function _HTML_header( ) {
+        return $this->list_preview_link( ) . parent::_HTML_header( );
+    }
+
 }
 ?>

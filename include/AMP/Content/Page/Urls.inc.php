@@ -4,6 +4,7 @@ if ( !defined( 'AMP_CONTENT_URL_FRONTPAGE' ))       define ( 'AMP_CONTENT_URL_FR
 if ( !defined( 'AMP_CONTENT_URL_LIST_SECTION' ))    define ( 'AMP_CONTENT_URL_LIST_SECTION', 'article.php?list=type');
 if ( !defined( 'AMP_CONTENT_URL_LIST_CLASS' ))      define ( 'AMP_CONTENT_URL_LIST_CLASS',   'article.php?list=class');
 if ( !defined( 'AMP_CONTENT_URL_SITEMAP' ))         define ( 'AMP_CONTENT_URL_SITEMAP',   'sitemap.php' );
+if ( !defined( 'AMP_CONTENT_URL_MAP' ))         define ( 'AMP_CONTENT_URL_MAP',   'flashmap.php' );
 
 if ( !defined( 'AMP_CONTENT_URL_ARTICLE'))          define ( 'AMP_CONTENT_URL_ARTICLE',      'article.php');
 if ( !defined( 'AMP_CONTENT_URL_SEARCH'))           define ( 'AMP_CONTENT_URL_SEARCH',       'search.php');
@@ -11,12 +12,14 @@ if ( !defined( 'AMP_CONTENT_URL_SEARCH'))           define ( 'AMP_CONTENT_URL_SE
 if ( !defined( 'AMP_CONTENT_URL_404'))              define ( 'AMP_CONTENT_URL_404',          AMP_CONTENT_URL_SEARCH );
 if ( !defined( 'AMP_CONTENT_URL_404_CORE'))         define ( 'AMP_CONTENT_URL_404_CORE',     '404.php' );
 if ( !defined( 'AMP_CONTENT_URL_RSSFEED'))          define ( 'AMP_CONTENT_URL_RSSFEED',      'rssfeed.php');
+if ( !defined( 'AMP_CONTENT_URL_RSSFEED_LIST'))          define ( 'AMP_CONTENT_URL_RSSFEED_LIST',      'rss.php');
 if ( !defined( 'AMP_CONTENT_URL_ARTICLE_INPUT'))    define ( 'AMP_CONTENT_URL_ARTICLE_INPUT',       'article_submit.php');
 
 if ( !defined( 'AMP_CONTENT_URL_FORM' ))            define ( 'AMP_CONTENT_URL_FORM',         'modinput4.php');
 if ( !defined( 'AMP_CONTENT_URL_FORM_DISPLAY'))     define ( 'AMP_CONTENT_URL_FORM_DISPLAY', 'userdata_display.php');
 if ( !defined( 'AMP_CONTENT_URL_ACTION'))           define ( 'AMP_CONTENT_URL_ACTION',       'action.php');
 if ( !defined( 'AMP_CONTENT_URL_GALLERY'))          define ( 'AMP_CONTENT_URL_GALLERY',      'gallery.php');
+if ( !defined( 'AMP_CONTENT_URL_GALLERY_IMAGE'))          define ( 'AMP_CONTENT_URL_GALLERY_IMAGE',      'gallery.php');
 
 if ( !defined( 'AMP_CONTENT_URL_VOLUNTEERS' ))      define ( 'AMP_CONTENT_URL_VOLUNTEERS', 'modinput4.php?modin=8' );
 if ( !defined( 'AMP_CONTENT_URL_GROUPS'))           define ( 'AMP_CONTENT_URL_GROUPS',       'groups.php');

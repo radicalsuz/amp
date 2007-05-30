@@ -60,6 +60,11 @@ class AMP_Display_System_List extends AMP_Display_List {
         return $this->render_create_link( );
     }
 
+    function _output_empty( ) {
+        parent::_output_empty( );
+        return $this->render_create_link( );
+    }
+
     function render_create_link( ) {
         if ( isset( $this->_source_sample )) {
             $edit_url = $this->_source_sample->get_url_edit( );
@@ -102,6 +107,15 @@ class AMP_Display_System_List extends AMP_Display_List {
                 $this->_renderer->image( AMP_SYSTEM_ICON_EDIT, array('alt'=>AMP_TEXT_EDIT, 'class'=>'icon' )),
                 array( 'title' => AMP_TEXT_EDIT_ITEM, 'target' => $this->link_target_edit )
             );
+    }
+
+    function render_preview( $source ) {
+        return $this->_renderer->link( 
+            AMP_url_add_vars( '/' . $source->getURL( ), array( 'preview=1' )),
+            //$this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'width' => 16, 'height' => 16, 'border' => '0')),
+            $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'class' => 'icon')),
+            array( 'target' => '_blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
+        );
     }
 
     function drop_column( $column_name ) {
@@ -177,6 +191,13 @@ class AMP_Display_System_List extends AMP_Display_List {
                 AMP_url_add_vars( $_SERVER['PHP_SELF'], AMP_url_build_query( $url_values )),
                 $column_header_value );
 
+    }
+    function render_header_preview( ) {
+        return false;
+    }
+
+    function render_header_id( ) {
+        return 'ID';
     }
 
     function render_header_select( ) {
@@ -269,6 +290,26 @@ class AMP_Display_System_List extends AMP_Display_List {
 
     function add_link_var( $var, $value ) {
         $this->link_vars[ $var ] = $value;
+    }
+
+    function render_list_preview_link( ) {
+        if ( !( isset( $this->link_list_preview ) && $this->link_list_preview )) {
+            return false;
+        }
+        $renderer = $this->_renderer;
+        $url = AMP_SITE_URL . $this->link_list_preview; 
+
+        return $renderer->newline( )
+                . $renderer->div( AMP_TEXT_LIVE_LINK. ': ' . 
+                                  $renderer->link( $url, $url, array( 'target' => 'blank')), 
+                                array( 'class' => 'preview_link'))
+                . $renderer->newline( );
+    }
+
+    function _renderHeader( ) {
+        if ( isset( $this->link_list_preview ) && $this->link_list_preview ) {
+            return $this->render_list_preview_link( );
+        }
     }
 
 }

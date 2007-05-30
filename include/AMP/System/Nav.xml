@@ -76,7 +76,7 @@
 		<per>FAQ_ACCESS</per>
 	</item>
 	<item>
-		<href>faq.php</href>
+		<href>faq.php?action=new</href>
 		<label>Add FAQ</label>
 		<class>add</class>
 		<per>FAQ_ACCESS</per>
@@ -96,7 +96,7 @@
 		<class>view</class>
 	</item>
 	<item>
-		<href>maps.php</href>
+		<href>maps.php?action=new</href>
 		<label>Add Map</label>
 		<class>add</class>
 	</item>

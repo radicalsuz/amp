@@ -25,6 +25,7 @@ class Gallery_List extends AMP_System_List_Form {
                 'reorder'   => array( 'order' )
                 );
     var $_actions_global= array( 'reorder' );
+    var $previewlink = AMP_CONTENT_URL_GALLERY;
 
     function Gallery_List ( &$dbcon ){
         //$source = &new GallerySet( $dbcon );
@@ -90,5 +91,10 @@ class Gallery_List extends AMP_System_List_Form {
         return "<input type='button' name='showMove' value='Move' onclick='window.change_any( \"move_targeting\");'>&nbsp;";
 
     }
+
+    function _HTML_header( ) {
+        return $this->list_preview_link( ) . parent::_HTML_header( );
+    }
+
 }
 ?>

@@ -620,6 +620,24 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $this->id;
     }
 
+    function get_live_url( $url_type ) {
+        return $this->get_constant_url( $url_type, 'AMP_CONTENT_URL_');
+    }
+
+    function get_constant_url( $url_type, $interface_type ) {
+        $url_constant = strtoupper( $interface_type . $url_type );
+        if ( !defined( $url_constant )) return false;
+        if ( !( isset( $this->id ) && $this->id )) {
+            return constant( $url_constant );
+        }
+        return AMP_url_update( constant( $url_constant ), array( 'id'=> $this->id));
+
+    }
+
+    function get_system_url( $url_type ) {
+        return $this->get_constant_url( $url_type, 'AMP_SYSTEM_URL_');
+    }
+
 
 }
 ?>

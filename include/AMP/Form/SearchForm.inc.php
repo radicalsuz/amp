@@ -178,18 +178,8 @@ class AMPSearchForm extends AMPForm_XML {
         if ( !$source->hasData( )) return;
         $renderer = AMP_get_renderer( );
         
-        //$this->_preview_links[] = 
-        $result = 
-            $renderer->div( 
-            $renderer->link( 
-                '/'. $source->getURL( ), 
-                    $renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'class' => 'icon' )) 
-                    . AMP_TEXT_PREVIEW 
-                    . $renderer->space( ) 
-                    . AMP_trimText( $source->getName( ), 20, false )
-                    , array( 'target' => 'blank' )
-                ), array( 'class' => 'icon'));
-        $result .= 'Link Here With: '. $renderer->input( 'easy_link', AMP_SITE_URL.$source->getURL( ),  array('size' => '50' ));
+        $url = AMP_SITE_URL.$source->getURL( );
+        $result = $renderer->div( AMP_TEXT_LIVE_LINK . ': '. $renderer->link( $url, $url, array( 'target'=>'top')), array( 'class' => 'preview_link'));
         $this->_preview_links[] = $result;
         
 
