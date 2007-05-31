@@ -7,6 +7,7 @@ class AMP_Display_List {
     var $_source;
     var $_source_object;
     var $_source_criteria = array( );
+    var $_source_sample;
 
     var $_url_add;
     var $_url_edit;
@@ -23,14 +24,19 @@ class AMP_Display_List {
     var $_pager_active = false;
     var $_pager_limit;
     var $_pager_target;
+    var $_pager_max = AMP_CONTENT_LIST_DISPLAY_MAX;
 
     var $_class_pager = 'AMP_Display_Pager';
     var $_path_pager = 'AMP/Display/Pager.php';
 
-    var $_suppress_messages;
+    var $_search;
+
+    var $_suppress_messages = false;
     var $_suppress_header = false;
     var $_suppress_footer = false;
     var $_suppress_pager  = false;
+    var $_suppress_sort_links = false;
+    var $_suppress_search_form = false;
 
     var $_display_columns = 1;
     var $_current_columns = 0;
@@ -214,6 +220,7 @@ class AMP_Display_List {
 
     function _renderHeader( ) {
         //stub
+        return $this->render_search_form( ) ;
     }
 
     function qty( ) {
@@ -259,6 +266,12 @@ class AMP_Display_List {
                     $item_header,
                     array( 'class' => $this->_css_class_container_list_subheader )
                 );
+    }
+
+    function render_search_form ( ) {
+        if ( !isset( $this->_search_form )) return false;
+        if ( $this->_suppress_search_form ) return false;
+        return $this->_search_form->execute( );
     }
 
     function _renderJavascript( ) {
@@ -316,6 +329,7 @@ class AMP_Display_List {
                 $criteria
                 );
         }
+        $this->_init_search_form( );
         $this->_init_criteria( );
 
         //do any required sql-based sorting and paging
@@ -354,9 +368,13 @@ class AMP_Display_List {
         $pager_class = $this->_class_pager;
         $this->_pager = &new $pager_class( );
 
-        if ( $this->_pager->view_all( )) {
-            $this->_pager_active = false;
-            unset( $this->_pager );
+        if ( $this->_pager->view_all( ) ) {
+            if ( !$this->_pager_max ) {
+                $this->_pager_active = false;
+                unset( $this->_pager );
+                return false;
+            }
+            $this->_pager_limit = $this->_pager_max;
             return false;
         }
 
@@ -365,7 +383,7 @@ class AMP_Display_List {
                 || !$this->_pager_limit ) {
                 $this->_pager_limit = $request_limit;
             }
-        }
+        } 
 
         //$this->_pager = &new $pager_class( $source );
         //if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
@@ -409,6 +427,28 @@ class AMP_Display_List {
             $this->_item_display_method = constant( 'AMP_RENDER_' .$display_id );
         }
     }
+
+    function _init_search_form( ) {
+        require_once( 'AMP/System/ComponentLookup.inc.php');
+        $map = ComponentLookup::instance( get_class( $this ));
+        if ( !$map->isAllowed( 'search' )) return;
+
+        $search = $map->getComponent( 'search');
+        if ( !$search ) return;
+        $search->Build( true );
+        $search_criteria = array( );
+
+        if ( $search->submitted( )){
+            $search_criteria = $search->getSearchValues( );
+        } else {
+            $search->applyDefaults( );
+        }
+
+        $this->_search_form = &$search;
+
+        $this->_source_criteria = array_merge( $this->_source_criteria, $search_criteria );
+
+    }
     // }}}
 
     // {{{ private sort helper methods: _init_sort, _init_sort_sql, _sort_requested, _translate_sort_sql_request
@@ -437,6 +477,8 @@ class AMP_Display_List {
     }
 
     function _init_sort( &$source ) {
+        if ( isset( $this->_sort )) return;
+
         $sort_request = $this->_sort_requested( );
         if ( !$sort_request ) {
             if ( ! $this->_sort_default ) return;
@@ -455,6 +497,7 @@ class AMP_Display_List {
         $itemSource = &new $this->_source_object ( AMP_Registry::getDbcon( ));
         if( $itemSource->sort( $source, $sort_request , $sort_direction )){
             $this->_sort = $sort_request;
+            $this->_sort_direction = $sort_direction;
         }
     }
 
@@ -474,17 +517,47 @@ class AMP_Display_List {
         $translated_sort_request = $this->_sort_sql_translations[ $sort_request ];
         if ( !isset( $_REQUEST['sort_direction']) || $_REQUEST['sort_direction'] != AMP_SORT_DESC ) return $translated_sort_request;
 
-        if ( strpos( $translated_sort_request, AMP_SORT_DESC ) !== FALSE ){
-            return str_replace( AMP_SORT_DESC, '', $translated_sort_request );
+        $this->_sort_direction = AMP_SORT_DESC;
+        return $this->_reverse_sort_direction( $translated_sort_request );
+    }
+
+    function _reverse_sort_direction( $sort_sql ) {
+        $clauses = preg_split( "/\s?,\s?/", $sort_sql );
+        $reversed_clauses = array( );
+        foreach( $clauses as $clause ) {
+            if ( strpos( $clause, AMP_SORT_DESC ) !== FALSE ){
+                $reversed_clauses[] = str_replace( AMP_SORT_DESC, '', $clause );
+            } else {
+                $reversed_clauses[] = $clause . AMP_SORT_DESC;
+            }
+
         }
-        return $translated_sort_request . AMP_SORT_DESC; 
+        return join( ',', $reversed_clauses );
+
+    }
+
+    function render_sort_link( $text, $sort_to_request ) {
+        if ( $this->_suppress_sort_links ) return $text;
+        if ( !$this->validate_sort_link( $sort_to_request )) return $text;
+
+        $url_values = $_GET;
+        $url_values['sort'] = $sort_to_request;
+        unset( $url_values['sort_direction'] ) ;
+        if ( isset( $this->_sort ) && ( $this->_sort == $sort_to_request ) 
+             && !( isset( $this->_sort_direction ) && ( $this->_sort_direction == AMP_SORT_DESC ) )) {
+            $url_values['sort_direction'] = AMP_SORT_DESC;
+        }
+
+        return $this->_renderer->link( 
+                AMP_url_add_vars( $_SERVER['PHP_SELF'], AMP_url_build_query( $url_values )),
+                $text );
 
     }
 
     function validate_sort_link( $sort_request ) {
         $local_method = '_setSort' . AMP_to_camelcase( $sort_request );
         $valid_method = method_exists( $this, $local_method );
-        if ( !isset( $this->_source_sample )) return false;
+        if ( !$valid_method && !isset( $this->_source_sample )) return false;
 
         if ( !$valid_method ) {
             $valid_method = $this->_translate_sort_sql_request( $sort_request, $this->_source_sample );

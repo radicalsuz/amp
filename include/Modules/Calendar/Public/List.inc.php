@@ -39,7 +39,7 @@ class Calendar_Public_List extends AMP_Display_List {
     }
 
     function _init_criteria( ) {
-        $this->_init_search( );
+        //$this->_init_search( );
         if ( isset( $this->_source_criteria['date']) 
             &&  ((   isset( $this->_source_criteria['date']['Y']) && $this->_source_criteria['date']['Y'])
                 || ( isset( $this->_source_criteria['date']['M'])  && $this->_source_criteria['date']['M']))) {
@@ -59,38 +59,9 @@ class Calendar_Public_List extends AMP_Display_List {
 
     }
 
-    function _init_search( ) {
-        require_once( 'AMP/System/ComponentLookup.inc.php');
-        $map = ComponentLookup::instance( get_class( $this ));
-        $search = $map->getComponent( 'search');
-        if ( !$search ) return;
-        $search->Build( true );
-        $search_criteria = array( );
-
-        if ( $search->submitted( )){
-            $search_criteria = $search->getSearchValues( );
-        } else {
-            $search->applyDefaults( );
-        }
-
-        $this->_search = &$search;
-
-        $this->_source_criteria = array_merge( $this->_source_criteria, $search_criteria );
-    }
-
     function _output_empty( ) {
         $this->message( AMP_TEXT_SEARCH_NO_MATCHES );
         return $this->render_search( ) . AMP_TEXT_SEARCH_NO_MATCHES;
-    }
-
-    function _renderHeader( ) {
-        return $this->render_search( ) ;
-
-    }
-
-    function render_search( ) {
-        if ( !isset( $this->_search )) return false;
-        return $this->_search->execute( );
     }
 
 }
