@@ -37,6 +37,7 @@ a.standout {
 
 img.image_frontpage {
 		border: 1px solid #000000;
+        margin: 4px;
 }
 
 span.morelink {
@@ -266,4 +267,9 @@ span.intitle {
 	font-weight: bold;
 	padding: .5em;
 	margin: .25em;
+}
+
+img.img_main {
+    margin: 4px;
+    border: 0px;
 }

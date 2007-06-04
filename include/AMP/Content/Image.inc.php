@@ -4,9 +4,6 @@ require_once( 'AMP/Content/Config.inc.php');
 class Content_Image {
 
     var $style_def = array(
-       'hspace' => '4',
-       'vspace' => '4',
-       'border' => '0',
        'class'  => 'img_main' 
        );
     var $_itemdata = array();
