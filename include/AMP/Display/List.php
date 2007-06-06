@@ -25,6 +25,7 @@ class AMP_Display_List {
     var $_pager_limit;
     var $_pager_target;
     var $_pager_max = AMP_CONTENT_LIST_DISPLAY_MAX;
+    var $_pager_index = false;
 
     var $_class_pager = 'AMP_Display_Pager';
     var $_path_pager = 'AMP/Display/Pager.php';
@@ -261,6 +262,15 @@ class AMP_Display_List {
 
     }
 
+    //accessor render methods
+    function render_item( &$source ) {
+        return $this->_renderItem( $source );
+    }
+
+    function render_subheader( &$source ) {
+        return $this->_renderSubheader( $source );
+    }
+
     function render_subheader_format( $item_header, $depth=0 ) {
         return $this->_renderer->inDiv( 
                     $item_header,
@@ -270,6 +280,7 @@ class AMP_Display_List {
 
     function render_search_form ( ) {
         if ( !isset( $this->_search_form )) return false;
+
         if ( $this->_suppress_search_form ) return false;
         return $this->_search_form->execute( );
     }
@@ -399,6 +410,10 @@ class AMP_Display_List {
         if ( $this->_pager_limit ) $this->_pager->set_limit( $this->_pager_limit ); 
         if ( $this->_pager_target ) $this->_pager->set_target( $this->_pager_target ); 
 
+        if ( $this->_pager_index ) {
+            $this->_pager->pull_jumps( $source, $this->_pager_index );
+        }
+
         $total = $this->_pager->total( $source );
         if ( $total > $this->_pager_limit ) {
             $this->_pager->set_total( $total );
@@ -473,7 +488,13 @@ class AMP_Display_List {
         if ( !$sort_sql ) return;
 
         $this->_sort = $sort_request;
+        $this->update_pager_index( $sort_sql );
         $source->addSort( $sort_sql );
+    }
+
+    function update_pager_index( $sql ) {
+        if ( !$this->_pager_index ) return;
+        $this->_pager_index = $this->_source_sample->get_select_from_sort( $sql );
     }
 
     function _init_sort( &$source ) {
