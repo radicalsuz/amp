@@ -229,7 +229,7 @@ if (!function_exists( 'AMP_buildSelectOptions' )) {
                      . '===>>>'
                      . join ( '__V__', $values )
                      . '__S__'
-                     . $selected;
+                     . ( isset( $selected ) ? $selected : '');
             $enc_text = sha1( $basic_text );
             $cache_key = sprintf( AMP_CACHE_TOKEN_COMPONENT, 'options') . $enc_text;
             $result = AMP_cache_get( $cache_key );
@@ -691,6 +691,7 @@ if (!function_exists( 'urlencode_array' )) {
             if (is_array($value)) {
                 $toImplode[] = urlencode_array($value, "{$varName}[{$key}]", $separator);
             } else {
+                if ( strip_tags( $value ) != $value ) return false;
                 $toImplode[] = "{$varName}[{$key}]=".urlencode($value);
             }
         }
@@ -959,12 +960,22 @@ if (!function_exists( 'AMP_cacheFlush' )) {
         }
 
         if ( isset( $key_token )) {
-            $flush_command = "find ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . " -name " . $key_token .'\* | xargs rm &'; 
+            $flush_command = "find ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . " -name " . $key_token ."\* | xargs rm &"; 
         } else {
+            $dbcon = AMP_Registry::getDbcon(  );
+            $dbcon->CacheFlush(  );
             $flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "* &";
         }
         $command_result = false;
         system( $flush_command, $command_result );
+
+        if ( !isset( $key_token ) || $key_token == AMP_CACHE_TOKEN_ADODB ) {
+            //$flush_command = "rm -f `find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' ." -name adodb_*.cache` &"; 
+            $flush_command = "find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' ." -name ?? | xargs rm -rf &"; 
+            //$flush_command = "find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' ." -name adodb_\*.cache | xargs rm &"; 
+            $command_result = false;
+            system($flush_command, $command_result );
+        }
 
         if ( $command_result ) {
             //unix systems should return 0 on success, try a DOS filesystem command
@@ -973,15 +984,6 @@ if (!function_exists( 'AMP_cacheFlush' )) {
             system($flush_command, $command_result );
             trigger_error( 'Win flush result was ' . $command_result );
             return;
-        }
-
-        if ( !isset( $key_token ) || $key_token == AMP_CACHE_TOKEN_ADODB ) {
-            $flush_command = "rm -f `find ". AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . 'cache' ." -name adodb_*.cache` &"; 
-            $command_result = false;
-            system($flush_command, $command_result );
-
-            $dbcon = AMP_Registry::getDbcon(  );
-            $dbcon->CacheFlush(  );
         }
 
         if ( !$cache )  {
@@ -1405,7 +1407,6 @@ if ( !function_exists( 'AMP_get_cache')){
         $cache_filename = ( 'AMP/System/Cache/'.ucfirst( AMP_SYSTEM_CACHE ).'.php');
         require_once( 'AMP/System/Cache/'.ucfirst( AMP_SYSTEM_CACHE ).'.php');
         $cache_class = 'AMP_System_Cache_' . ucfirst( AMP_SYSTEM_CACHE );
-        //$cache = call_user_func( array( $cache_class, 'instance'));
         $cache = new $cache_class;
         if ( !$cache->has_connection( ) ) {
 
@@ -1979,6 +1980,25 @@ function AMP_flush_common_cache ( ) {
     AMP_cacheFlush( AMP_CACHE_TOKEN_ADODB );
     AMP_cacheFlush( AMP_CACHE_TOKEN_LOOKUP );
 	AMP_flush_apache_cache_folders();
+}
+
+function AMP_subscribe_to_list( $addresses, $list_id ) {
+    if(AMP_MODULE_BLAST == 'PHPlist') {
+        require_once( 'Modules/Blast/API.inc.php');
+        $_PHPlist = &new PHPlist_API( $this->dbcon );
+        return $_PHPlist->add_subscribers( $addresses, $list_id );
+    } 
+    
+    if(AMP_MODULE_BLAST == 'DIA') {
+        require_once('DIA/API.php');
+        if(!isset($api)) {
+            $api =& DIA_API::create();
+        }
+        $result = $api->addMembersByEmail($addresses, $list_id);
+        return sizeof($result);
+    }
+
+    return false;
 }
 
 ?>
