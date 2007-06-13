@@ -210,7 +210,7 @@ class AMPSystemLookup_Lookups {
 
                 $lookup_name = $this->get_lookup_name( $test_class );
                 if ( strtolower( $lookup_name ) == 'lookup' ) continue;
-                $this->dataset[ $test_class ] = $lookup_name;
+                $this->dataset[ strtolower( $test_class ) ] = $lookup_name;
             }
         }
         asort( $this->dataset );
@@ -444,10 +444,6 @@ class AMPSystemLookup_Lists extends AMPSystem_Lookup {
     function AMPSystemLookup_Lists( ) {
         if ( isset( $GLOBALS['MM_listtable'])) {
             $this->datatable = $GLOBALS['MM_listtable'];
-            $this->criteria = 'active=1';
-        }
-        if ( defined('AMP_DBTABLE_BLAST_LISTS') && AMP_DBTABLE_BLAST_LISTS ) {
-            $this->datatable = AMP_DBTABLE_BLAST_LISTS;
             $this->criteria = 'active=1';
         }
 		if ( defined('AMP_MODULE_BLAST') ) {
@@ -690,6 +686,10 @@ class AMPConstant_Lookup {
     var $prefix_labels;
     var $name = false;
     var $basetype = 'AMPConstant';
+
+    function __construct( ) {
+        $this->init( );
+    }
 
     function init() {
         if (isset($this->_prefix_values)) {
