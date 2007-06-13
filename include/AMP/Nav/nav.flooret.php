@@ -15,6 +15,7 @@ Touch: Margot
 
 // function that makes a nav that shows sub sections if in that section
 
+/*
 function nav_sub_content($type) {
 	global $dbcon;
 	$html = '<ul class="nav_sub_list">';
@@ -113,9 +114,92 @@ function nav_menu_dd($type){
 
 	return $html;
 }
+*/
+
+function nav_menu_simple( $current_id ) {
+    //grab a map of the content system
+    $map = AMPContent_Map::instance( );
+    
+    //get the subsections, in order, of the root section
+    $sections_order = $map->getChildren( AMP_CONTENT_MAP_ROOT_SECTION );
+    if ( !$sections_order ) return false;
+
+    //get a list of live sections
+    $sections_live = AMP_lookup( 'sectionsLive');
+
+    //filter the top-level sections to make sure they are live
+    $sections = array_combine_key( $sections_order , $sections_live );
+
+    $links = array( );
+    $renderer = AMP_get_renderer( );
+
+    foreach( $sections as $id => $name ) {
+        $section_is_active = ( ( $id == $current_id ) || ( $id  == $map->getParent($current_id) ) );
+        $link_css_class = $section_is_active ? 'nav_active' : 'nav_list';
+
+        $links[ $id ] = $renderer->link( AMP_url_add_vars( AMP_CONTENT_URL_LIST_SECTION, array( "type=" . $id )),
+                            $name, array( 'class' => $link_css_class ));
+        $list_items[ $id ] = $renderer->simple_li( $links[$id], array( 'class' => 'nav_list'));
+        if ( $section_is_active ) {
+            $list_items[ $id ] .= nav_sub_listing( $id );
+        }
+        
+    }
+
+    return $renderer->simple_ul( join( "\n", $list_items), array( 'class' => 'nav_list'));
+
+}
+
+function nav_sub_listing( $section_id ) {
+    $map = AMPContent_Map::instance( );
+    $live_sections = AMP_lookup( 'sectionsLive' );
+    $listtype = $map->readSection( $section_id, 'listtype');
+
+    $include_articles =     !( $listtype == AMP_SECTIONLIST_SUBSECTIONS );
+    $include_subsections =  !( $listtype == AMP_SECTIONLIST_ARTICLES );
+
+    $links = array( );
+    $children = $map->getChildren( $section_id );
+    $renderer = AMP_get_renderer( );
+
+    if ( $include_subsections && $children ) {
+        $child_sections = array_combine_key( $children, $live_sections );
+        foreach( $child_sections as $child_id => $child_name ) {
+            $links[] = $renderer->link( AMP_url_add_vars( AMP_CONTENT_URL_LIST_SECTION, array( 'type='. $child_id )),
+                                    $child_name, array( 'class' => 'nav_sub_list'));
+
+        }
+    }
+
+    $articles = AMP_lookup( 'articleLinksBySectionLive', $section_id );
+    if ( $include_articles && $articles ) {
+		$page = AMPContent_Page::instance();
+		$article_id = $currentPage->getArticleId();
+        foreach( $articles as $id => $name ) {
+			$link_class = 'nav_sub_list';
+			if ($article_id && ($id == $article_id)) {
+				$link_class= 'nav_sub_active';
+			}
+
+            $links[] = $renderer->link( AMP_url_add_vars( AMP_CONTENT_URL_ARTICLE, array( 'type='. $id )), 
+                                $name, array( 'class' => $link_class ));
+        }
+
+    }
+
+    return $renderer->UL( $links, array( 'class' => 'nav_sub_list'), array( 'class' => 'nav_sub_list'));
+}
 
 
+function nav_flooret_output( ) {
+    $page = AMPContent_Page::instance( );
+    $section_id = $page->getSectionId( );
+    if ( !$section_id ) return false;
+    return nav_menu_simple( $section_id );
+}
 
-echo nav_menu_dd($MM_type);
+print nav_flooret_output( );
+
+//echo nav_menu_dd($MM_type);
 
 ?>
