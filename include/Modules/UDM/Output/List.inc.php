@@ -21,7 +21,7 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
                 'available' => true ),
         'format_list_item'  => array(
                 'label'     =>  'List Display Function Name',
-                'default'   =>  'groups_layout_display',
+                'default'   =>  'list_display_default',
                 'available' =>  true,
                 'type'      =>  'text'),
         'subheader' =>  array(

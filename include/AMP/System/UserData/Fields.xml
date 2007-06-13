@@ -19,7 +19,7 @@
     </input_page_text>
     <response_page_header>
         <type>header</type>
-        <default>Response Page Header</default>
+        <default>Response Page</default>
     </response_page_header>
     <response_page_title>
         <type>text</type>
@@ -30,6 +30,32 @@
         <label>Response Page Text</label>
         <size>8:60</size>
     </response_page_text>
+    <list_page_header>
+        <type>header</type>
+        <default>List Page</default>
+    </list_page_header>
+    <list_page_title>
+        <type>text</type>
+        <label>List Page Title</label>
+    </list_page_title>
+    <list_page_text>
+        <type>textarea</type>
+        <label>List Page Intro Text</label>
+        <size>8:60</size>
+    </list_page_text>
+    <detail_page_header>
+        <type>header</type>
+        <default>Detail Pages</default>
+    </detail_page_header>
+    <detail_page_title>
+        <type>text</type>
+        <label>Detail Page Title</label>
+    </detail_page_title>
+    <detail_page_text>
+        <type>textarea</type>
+        <label>Detail Page Intro Text</label>
+        <size>8:60</size>
+    </detail_page_text>
     <field_order>
         <type>hidden</type>
         <default>First_Name,Last_Name,Email,Company,occupation,Web_Page,Phone,Street,Street_2,City,State,Zip,Country,Home_Fax,custom1,custom2,custom3,custom4,custom5,custom6,custom7,custom8,custom9,custom10,Notes</default>

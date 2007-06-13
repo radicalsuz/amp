@@ -21,9 +21,13 @@ class AMP_System_UserData_Controller extends AMP_System_Component_Controller_Sta
     function commit_save( ){
         $result = parent::commit_save( );
         if ( !$result ) return false;
+
         $this->_saveModuleData( );
         $this->_saveInputPageData( );
         $this->_saveResponsePageData( );
+        $this->_saveListPageData( );
+        $this->_saveDetailPageData( );
+
         $this->_model->mergeData( array( 
             'modidinput' => $this->_saved_input_page_id,
             'modidresponse' => $this->_saved_response_page_id )
@@ -33,10 +37,32 @@ class AMP_System_UserData_Controller extends AMP_System_Component_Controller_Sta
 
     }
 
+    function _saveListPageData( ) {
+        $linkpage = AMP_URL_AddVars( AMP_CONTENT_URL_FORM_DISPLAY, array( 'modin='.$this->_model_id ));
+        $this->_saved_list_page_id = $this->_savePublicPageData( $this->_model->getName( ) . ' List',
+                                                                     $this->_request_vars['list_page_title'],
+                                                                     $this->_request_vars['list_page_text'],
+                                                                     $linkpage );
+
+    }
+
+    function _saveDetailPageData( ) {
+        $this->_saved_detail_page_id = $this->_savePublicPageData( $this->_model->getName( ) . ' Detail',
+                                                                     $this->_request_vars['detail_page_title'],
+                                                                     $this->_request_vars['detail_page_text'],
+                                                                     );
+
+    }
+
     function _saveInputPageData( ){
+        $linkpage = AMP_URL_AddVars( AMP_CONTENT_URL_FORM, array( 'modin='.$this->_model_id ));
+        $this->_saved_input_page_id = $this->_savePublicPageData( $this->_model->getName( ) . ' Input',
+                                                                     $this->_request_vars['input_page_title'],
+                                                                     $this->_request_vars['input_page_text'],
+                                                                     $linkpage );
+        /*
         require_once( 'AMP/System/IntroText.inc.php');
         $intro = &new AMPSystem_IntroText( AMP_Registry::getDbcon( ) );
-        $linkpage = AMP_URL_AddVars( AMP_CONTENT_URL_FORM, array( 'modin='.$this->_model_id ));
         $intro_data = array( 
             'title' => $this->_request_vars['input_page_title'],
             'body'  => $this->_request_vars['input_page_text'],
@@ -48,12 +74,38 @@ class AMP_System_UserData_Controller extends AMP_System_Component_Controller_Sta
         $result = $intro->save();
         $this->_saved_input_page_id = $intro->id;
         return $result;
+        */
+
+    }
+
+    function _savePublicPageData( $name, $title, $body, $linkpage =false ) {
+        require_once( 'AMP/System/IntroText.inc.php');
+        $page = &new AMPSystem_IntroText( AMP_Registry::getDbcon( ) );
+        $page->setDefaults( );
+        $page_data = array( 
+            'title' => $title,
+            'body'  => $body,
+            'name'  => $name,
+            'modid' => $this->_saved_tool_id,
+            'searchtype' => $linkpage,
+        );
+        $page->setDefaults( );
+        $page->setData( $page_data );
+        $result = $page->save( );
+        if ( $result ) return $page->id;
+        return false;
 
     }
 
     function _saveResponsePageData( ){
+        $this->_saved_response_page_id = $this->_savePublicPageData( $this->_model->getName( ) . ' Thank You',
+                                                                     $this->_request_vars['response_page_title'],
+                                                                     $this->_request_vars['response_page_text']);
+        return $this->_saved_response_page_id;
+        /*
         require_once( 'AMP/System/IntroText.inc.php');
         $response = &new AMPSystem_IntroText( AMP_Registry::getDbcon( ) );
+        $response->setDefaults( );
         $response_data = array( 
             'title' => $this->_request_vars['response_page_title'],
             'body'  => $this->_request_vars['response_page_text'],
@@ -65,6 +117,7 @@ class AMP_System_UserData_Controller extends AMP_System_Component_Controller_Sta
         $result = $response->save();
         $this->_saved_response_page_id = $response->id;
         return $result;
+        */
     }
 
     function _saveModuleData( ){

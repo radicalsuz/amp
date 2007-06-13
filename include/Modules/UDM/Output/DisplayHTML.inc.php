@@ -24,11 +24,11 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
                             'default'=>'',
                             'type'=>'text'),
         'display_format'=>array('label'=>'List Display Function Name',
-                                'default'=>'groups_layout_display',
+                                'default'=>'list_display_default',
                                 'available'=>true,
                                 'type'=>'text'),
         'detail_format'=>array('label'=>'Detail Display Function Name',
-                               'default'=>'groups_detail_display',
+                               'default'=>'detail_display_default',
                                'available'=>true,
                                'type'=>'text'),
         'header_text_list'=>array('label'=>'Intro Text For List Page',
@@ -433,6 +433,7 @@ if (!function_exists('groups_layout_display')) {
 		return $html;
 	}
 }
+
 if (!function_exists('list_state_convert')) {
 
 function list_state_convert($in) {
@@ -504,6 +505,14 @@ if (!function_exists('groups_detail_display')) {
 
 		return $html;
 	}
+}
+
+function list_display_default( $data, &$udm ) {
+    return $data['City'] . ',' . $data['State'] . '<br />';
+}
+
+function detail_display_default( $data, &$udm ) {
+    return $data['City'] . ',' . $data['State'] . '<br />';
 }
 
 ?>
