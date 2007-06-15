@@ -1,8 +1,18 @@
 <?php
 
+AMP_config_load( 'content');
+
+
+// why do you seek the living among the dead?
+// go to Config/content.ini.php
+// there you will find your answers
+/*
+
+define( 'AMP_CACHE_TOKEN_URL_CONTENT', '__URL__' );
+
 /**
  * Section List Configurations
- */
+ *
 if (!defined( 'AMP_CONTENT_LISTORDER_MAX')) define('AMP_CONTENT_LISTORDER_MAX', 999999999);
 if (!defined( 'AMP_CONTENT_LIST_DISPLAY_MAX')) define('AMP_CONTENT_LIST_DISPLAY_MAX', 300 );
 
@@ -23,7 +33,7 @@ if ( file_exists_incpath( 'custom.translations.inc.php' )) include_once ('custom
 
 /**
  * Class List Configurations
- */
+ *
 if ( !defined( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT'  ))
     define( 'AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT',    'ContentClass_Display' );
 if ( !defined( 'AMP_CONTENT_CLASSLIST_DISPLAY_BLOG'     ))
@@ -33,13 +43,13 @@ if ( !defined( 'AMP_CONTENT_CLASSLIST_DISPLAY_FRONTPAGE'))
 
 /**
  * Content Status Configuration
- */
+ *
 define ( 'AMP_CONTENT_STATUS_LIVE',  1);
 define ( 'AMP_CONTENT_STATUS_DRAFT', 0);
 
 /**
  *  Article Class Configurations
- */
+ *
 if (!defined( 'AMP_CONTENT_CLASS_DEFAULT'))         define ('AMP_CONTENT_CLASS_DEFAULT' , 1 );
 if (!defined( 'AMP_CONTENT_CLASS_FRONTPAGE' ))      define ('AMP_CONTENT_CLASS_FRONTPAGE' , 2 );
 if (!defined( 'AMP_CONTENT_CLASS_SECTIONHEADER' ))  define ('AMP_CONTENT_CLASS_SECTIONHEADER' , 8 );
@@ -54,7 +64,7 @@ if (!defined( 'AMP_CONTENT_CLASS_SECTIONFOOTER'))   define ('AMP_CONTENT_CLASS_S
 
 /**
  *  Article Layouts
- */
+ *
 if (!defined( 'AMP_ARTICLE_DISPLAY_DEFAULT'))   define( 'AMP_ARTICLE_DISPLAY_DEFAULT', 'Article_Display' );
 if (!defined( 'AMP_ARTICLE_DISPLAY_FRONTPAGE')) define( 'AMP_ARTICLE_DISPLAY_FRONTPAGE', 'ArticleDisplay_FrontPage' );
 if (!defined( 'AMP_ARTICLE_DISPLAY_NEWS'))      define( 'AMP_ARTICLE_DISPLAY_NEWS', 'ArticleDisplay_News' );
@@ -63,14 +73,14 @@ if (!defined( 'AMP_ARTICLE_DISPLAY_BLOG')) define( 'AMP_ARTICLE_DISPLAY_BLOG', '
 
 /**
  * Article Sidebar Configuration 
- */
+ *
 if (!defined( 'AMP_CONTENT_SIDEBAR_CLASS_DEFAULT'))      define ('AMP_CONTENT_SIDEBAR_CLASS_DEFAULT' , 'sidebar_right') ;
 if (!defined( 'AMP_CONTENT_SIDEBAR_CLASS_LEFT'))      define ('AMP_CONTENT_SIDEBAR_CLASS_LEFT' , 'sidebar_left') ;
 if (!defined( 'AMP_CONTENT_SIDEBAR_CLASS_RIGHT'))      define ('AMP_CONTENT_SIDEBAR_CLASS_RIGHT' , 'sidebar_right') ;
 
 /**
  * Definitions for system images 
- */
+ *
 define( 'AMP_ICON_SPACER', 'spacer.gif' );
 define( 'AMP_ICON_UP', 'go-up.png' );
 define( 'AMP_ICON_DOWN', 'go-down.png' );
@@ -83,13 +93,13 @@ if ( !defined( 'AMP_ICON_COLUMN_FOOTER' ))              define( 'AMP_ICON_COLUMN
 
 /**
  * Notation used within navs and introtexts to indicate a php include file 
- */
+ *
 define( 'AMP_INCLUDE_START_TAG', '{{' );
 define( 'AMP_INCLUDE_END_TAG', '}}' );
 
 /**
  * Image Classes and Image settings 
- */
+ *
 if ( !defined( 'AMP_IMAGE_CLASS_ORIGINAL')) define( 'AMP_IMAGE_CLASS_ORIGINAL', 'original' );
 if ( !defined( 'AMP_IMAGE_CLASS_THUMB'))    define( 'AMP_IMAGE_CLASS_THUMB', 'thumb' );
 if ( !defined( 'AMP_IMAGE_CLASS_OPTIMIZED'))define( 'AMP_IMAGE_CLASS_OPTIMIZED', 'pic' );
@@ -103,20 +113,15 @@ if ( !defined( 'AMP_IMAGE_GALLERY_PAGE_LIMIT')) define( 'AMP_IMAGE_GALLERY_PAGE_
 
 /**
  * Content List Types
- */
+ *
 define ( 'AMP_CONTENT_LISTTYPE_CLASS', 'class' );
 define ( 'AMP_CONTENT_LISTTYPE_SECTION', 'type' );
 define ( 'AMP_CONTENT_LISTTYPE_FRONTPAGE', 'index' );
 define ( 'AMP_CONTENT_LISTTYPE_REGION', 'region' );
 
 /**
- * Memcache Keys 
- */
-define ( 'MEMCACHE_KEY_CONTENTMAP', 'ContentMap' );
-
-/**
  * Page Types 
- */
+ *
 
 define( 'AMP_CONTENT_PAGETYPE_ARTICLE', 'article' );
 define( 'AMP_CONTENT_PAGETYPE_LIST', 'list' );
@@ -124,7 +129,7 @@ define( 'AMP_CONTENT_PAGETYPE_TOOL', 'tool' );
 
 /**
  * System Icon File Paths
- */
+ *
 define ('AMP_SYSTEM_ICON_EDIT', '/system/images/edit.png' ); 
 define ('AMP_SYSTEM_ICON_VIEW', '/system/images/view2.png' ); 
 define ('AMP_SYSTEM_ICON_PREVIEW', '/system/images/view.gif' );
@@ -133,8 +138,8 @@ define ('AMP_SYSTEM_ICON_ENLARGE', '/img/magnify-clip.png' );
 
 /**
  * Default value for unlimited navs 
- */
-if ( !defined( 'AMP_NAV_NO_LIMIT')) define('AMP_NAV_NO_LIMIT', 700);
+ *
+if ( !defined( 'AMP_CONTENT_NAV_NO_LIMIT_QTY')) define('AMP_CONTENT_NAV_NO_LIMIT_QTY', 700);
 
 if (!defined('AMP_NAVLINK_ALTERNATE_CSS_CLASS')) define( 'AMP_NAVLINK_ALTERNATE_CSS_CLASS', 'sidelist2' );
 if (!defined( 'AMP_NAVLINK_CSS_CLASS' )) define ('AMP_NAVLINK_CSS_CLASS', 'sidelist' );
@@ -142,7 +147,7 @@ if (!defined( 'AMP_CONTENT_NAV_LIMIT_DEFAULT' )) define ('AMP_CONTENT_NAV_LIMIT_
 
 /**
  * Default Introtext pages
- */
+ *
 if (!defined( 'AMP_CONTENT_INTRO_ID_DEFAULT' )) define( 'AMP_CONTENT_INTRO_ID_DEFAULT' , 1 );
 if (!defined( 'AMP_CONTENT_INTRO_ID_FRONTPAGE' )) define( 'AMP_CONTENT_INTRO_ID_FRONTPAGE' , 2 );
 if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_ARTICLE_INPUT'))  
@@ -181,11 +186,6 @@ if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_INPUT'))
         define( 'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_INPUT', 6 );
 if ( !defined(  'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_RESPONSE')) 
         define( 'AMP_CONTENT_PUBLICPAGE_ID_HOUSING_RESPONSE', 19 );
-/**
- * Allow multiple sections per article 
- */
-if ( !defined( 'AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS'))
-    define('AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS', ( ( isset($MM_reltype) && !$MM_reltype ) ? false : true ) );
 
 if ( !defined( 'AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT'))
     define( 'AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT', 750 );
@@ -194,14 +194,14 @@ if ( !defined( 'AMP_CONTENT_BLURB_LENGTH_MAX'))
 
 /**
  * RSS definitions 
- */
+ *
 if ( !defined( 'AMP_CONTENT_RSS_FULLTEXT'))
     define( 'AMP_CONTENT_RSS_FULLTEXT', false);
 if (!defined('AMP_CONTENT_RSS_CUSTOMFORMAT')) define ('AMP_CONTENT_RSS_CUSTOMFORMAT', false);
 
 /**
  * Default Module Definitions 
- */
+ *
 define( 'AMP_MODULE_ID_CONTENT', 19 );
 if ( !defined( 'AMP_MODULE_ID_GALLERY')) define( 'AMP_MODULE_ID_GALLERY', 8 );
 if ( !defined( 'AMP_MODULE_ID_COMMENTS')) define( 'AMP_MODULE_ID_COMMENTS', 23 );
@@ -215,13 +215,13 @@ if ( !defined( 'AMP_FORM_ID_WEBACTION' )) define( 'AMP_FORM_ID_WEBACTION', 21 );
 
 /**
  * Content Caching Settings
- */
+ *
 if ( !defined( 'AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE')) 
     define( 'AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE', AMP_SYSTEM_CACHE_TIMEOUT );
 
 /**
  * Bizarre Legacy Settings  
- */
+ *
 if ( !defined( 'AMP_CONTENT_SECTION_ID_TOOL_PAGES' ))
     define( 'AMP_CONTENT_SECTION_ID_TOOL_PAGES', 2 );
 
@@ -231,7 +231,7 @@ if ( !defined ( 'AMP_CONTENT_TRACKBACKS_ENABLED' )) {
 
 /**
  * Document Types
- */
+ *
 define ('AMP_CONTENT_DOCUMENT_PATH', 'downloads');
 define ('AMP_CONTENT_DOCUMENT_TYPE_PDF', 'pdf');
 define ('AMP_CONTENT_DOCUMENT_TYPE_WORD', 'word');
@@ -255,7 +255,7 @@ define ('AMP_CONTENT_URL_ICONS', '/img/' );
 
 /**
  * Settings for the Display Manager
- */
+ *
 
 if (!defined( 'AMP_CONTENT_CONTAINER_ID_BUFFER' )) define ('AMP_CONTENT_CONTAINER_ID_BUFFER', false );
 if (!defined( 'AMP_CONTENT_CONTAINER_ID_FLASH' )) define ('AMP_CONTENT_CONTAINER_ID_FLASH', 'AMP_flash');
@@ -265,18 +265,19 @@ if (!defined( 'AMP_CONTENT_DISPLAY_KEY_BUFFER' )) define ('AMP_CONTENT_DISPLAY_K
 
 /**
  * Default CSS classes 
- */
+ *
 if (!defined( 'AMP_CONTENT_LIST_SUBHEADER_CLASS' )) define( 'AMP_CONTENT_LIST_SUBHEADER_CLASS', 'title' );
 
 
 /**
  * DIA settings 
- */
+ *
 
 if ( !defined( 'DIA_URL_EVENT_PAYMENT')) define( 'DIA_URL_EVENT_PAYMENT', 'https://secure.democracyinaction.org/dia/organizations/%s/event/checkOut.jsp?event_KEY=%s');
 if ( !defined( 'DIA_URL_EVENT_RSVP')) define( 'DIA_URL_EVENT_RSVP', 'http://www.democracyinaction.org/dia/organizations/%s/event/index.jsp?event_KEY=%s');
 
 //automatically save calendar events to DIA
 if ( !defined( 'AMP_CALENDAR_DIA_AUTO_SAVE')) define( 'AMP_CALENDAR_DIA_AUTO_SAVE', false );
+*/
 
 ?>

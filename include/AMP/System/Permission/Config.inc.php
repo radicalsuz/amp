@@ -1,4 +1,11 @@
 <?php
+
+AMP_config_load( 'permission', 'AMP_permission');
+
+// why do you seek the living among the dead?
+// go to Config/permission.ini.php
+// there you will find your answers
+/*
 define('AMP_PERMISSION_CONTENT_ACCESS', 73);
 
 define('AMP_PERMISSION_CONTENT_EDIT', 1);
@@ -108,4 +115,5 @@ define('AMP_PERMISSION_CONTENT_USER_ADDED_CONTENT', 98);
 
 define( 'AMP_PERMISSION_VOTERGUIDE_ACCESS', 252);
 define( 'AMP_PERMISSION_VOTERGUIDE_PUBLISH', 253);
+*/
 ?>
