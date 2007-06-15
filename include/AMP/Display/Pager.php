@@ -53,9 +53,6 @@ class AMP_Display_Pager {
         }
 
         $this->set_target( $_SERVER['PHP_SELF']);
-        //
-        //init view all settings
-        //
 
     }
 
@@ -111,7 +108,6 @@ class AMP_Display_Pager {
         }
 		unset( $target_request['all']);
         foreach( $target_request as $var => $value ) {
-            if ( strip_tags( $value ) != $value ) continue;
             $target_request_vars[$var] = urlencode_array( $value, $var ); //$var . '=' . ( is_array( $value ) ? urlencode_array( $value ) : $value ) ;
         }
         return AMP_url_add_vars( $this->_url_target, $target_request_vars );
@@ -266,6 +262,8 @@ class AMP_Display_Pager {
     }
 
     function trim( &$source ) {
+        if ( !$this->get_limit( )) return;
+
         if ( is_array( $source )) {
             $source = array_slice( $source, $this->get_offset( ), $this->get_limit( ) );
         } elseif ( is_object( $source )) {

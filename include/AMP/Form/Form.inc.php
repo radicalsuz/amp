@@ -394,8 +394,8 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         if ( !$time_stamped ) return false;
         $dat_is_good = date( 'Y-m-d H:i:s', $time_stamped );
 
-        if ( !AMP_verifyDateTimeValue( date( 'Y-m-d H:i:s', $time_stamped ))) return AMP_NULL_DATETIME_VALUE;
-        if ( !AMP_verifyDateValue( date( 'Y-m-d', $time_stamped ))) return AMP_NULL_DATETIME_VALUE;
+        if ( !AMP_verifyDateTimeValue( date( 'Y-m-d H:i:s', $time_stamped ))) return AMP_NULL_DATETIME_VALUE_DB;
+        if ( !AMP_verifyDateValue( date( 'Y-m-d', $time_stamped ))) return AMP_NULL_DATETIME_VALUE_DB;
 
 		return date( 'YmdHis', $time_stamped );
 	}
@@ -828,7 +828,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     }
 
     function _blankValueSet( $valueset, $name ){
-        return array( '' => 'None available' );
+        return array( '' => AMP_TEXT_NONE_AVAILABLE );
     }
 
     function _selectAddNull( $valueset, $name ) {

@@ -42,6 +42,12 @@ class AMPSearchForm extends AMPForm_XML {
         $this->init( $name, $method, $action );
     }
 
+    function __construct( $name = false, $method='GET', $action=false ) {
+        if ( !$name ) $name = get_class( $this );
+        if ( !$action ) $action = $_SERVER['PHP_SELF'];
+        $this->init( $name, $method, $action );
+    }
+
     function init( $name, $method="GET", $action=null ) {
         parent::init( $name, $method, $action );
         $this->defineSubmit( 'AMPSearch', 'Search' );
@@ -63,7 +69,14 @@ class AMPSearchForm extends AMPForm_XML {
 
         //avoid spam search requests
         foreach( $_REQUEST as $ukey => $uvalue ) {
-            if ( strip_tags( $uvalue ) != $uvalue )  return false;
+            if ( !is_array( $uvalue )) {
+                if ( strip_tags( $uvalue ) != $uvalue )  return false;
+                continue;
+            }
+            foreach( $uvalue as $uuvalue ) {
+                if ( strip_tags( $uuvalue ) != $uuvalue )  return false;
+            }
+
         }
 
         if ( !$search_request ) return false;
@@ -182,8 +195,11 @@ class AMPSearchForm extends AMPForm_XML {
         $result = $renderer->div( AMP_TEXT_LIVE_LINK . ': '. $renderer->link( $url, $url, array( 'target'=>'top')), array( 'class' => 'preview_link'));
         $this->_preview_links[] = $result;
         
+    }
 
-        
+    function execute( ){
+        $renderer = AMP_get_renderer( );
+        return $renderer->div( $this->output( ), array( 'class' => 'search' ));
     }
 }
 ?>

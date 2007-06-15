@@ -296,7 +296,7 @@ class AMP_Display_List {
 
     function message( $message_text ) {
         if ( $this->_suppress_messages ) return false;
-        $flash = &AMP_System_Flash::instance( );
+        $flash = & AMP_System_Flash::instance( );
         $flash->add_message( $message_text );
     }
 

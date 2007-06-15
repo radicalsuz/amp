@@ -12,6 +12,7 @@ class AMPFormElement_HTMLEditor {
             "'SuperClean'",
             );
     var $config_location = "/scripts/xinha_config.js";
+    var $base_width = 550;
     var $width = 550;
     var $height = 420;
     var $stylesheet = '/custom/wysiwyg_styles.css';
@@ -64,7 +65,7 @@ class AMPFormElement_HTMLEditor {
             '_editor_url  = "/scripts/xinha/";' . "\n"
             . '_editor_lang = "en";      // And the language we need to use in the editor.',
             'editor_options');
-        $this->_header->addJavascript( 'scripts/xinha/htmlarea.js', 'htmlarea' );
+        $this->_header->addJavascript( 'scripts/xinha/XinhaCore.js', 'htmlarea' );
         #return '<script type="text/javascript" src="/scripts/xinha/htmlarea.js"></script>'."\n";
         return false;
           
@@ -82,7 +83,7 @@ class AMPFormElement_HTMLEditor {
         if ($this->isPlugin('Stylist') && !file_exists( AMP_LOCAL_PATH . $this->stylesheet )) {
             $this->removePlugin( 'Stylist');
         } else {
-            $this->width += 200;
+            $this->width = $this->base_width + 200;
         }
         $plugins = count( $this->plugins )?"\n[\n". join(",\n", $this->plugins)."\n]":"null";
 
@@ -105,7 +106,8 @@ class AMPFormElement_HTMLEditor {
 
     function _xinha_config() {
         $output = "function xinha_config(){ \n";
-        $output .= "    cfg = new HTMLArea.Config();\n";
+        //$output .= "    cfg = new HTMLArea.Config();\n";
+        $output .= "    cfg = new Xinha.Config();\n";
         $output .= "    cfg.width  = '".$this->width."px';\n";
         $output .= "    cfg.height = '".$this->height."px';\n";
         if ($this->isPlugin('Stylist') && file_exists( AMP_LOCAL_PATH . $this->stylesheet )) {

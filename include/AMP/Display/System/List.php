@@ -19,12 +19,14 @@ class AMP_Display_System_List extends AMP_Display_List {
     var $_actions = array( 'publish', 'unpublish', 'delete' );
     var $_action_args = array( );
     var $_actions_global = array( );
-    var $_suppress_sort_links = false;
     var $_suppress_toolbar = false;
+
+    var $_pager_max = false;
 
     var $url_create;
     var $link_target_edit = '_top';
     var $link_vars = array( );
+    var $_pager_limit = 50;
 
     function AMP_Display_System_List( &$source, $criteria = array( )) {
         $this->__construct( $source, $criteria );
@@ -57,12 +59,14 @@ class AMP_Display_System_List extends AMP_Display_List {
     }
 
     function _renderFooter( ) {
-        return $this->render_create_link( );
+        return 
+          $this->render_create_link( )
+        . $this->_renderPager( ) ;
     }
 
     function _output_empty( ) {
         parent::_output_empty( );
-        return $this->render_create_link( );
+        return $this->render_search_form( ) . $this->render_create_link( );
     }
 
     function render_create_link( ) {
@@ -109,10 +113,25 @@ class AMP_Display_System_List extends AMP_Display_List {
             );
     }
 
+    function render_controls( $source ) {
+        return 
+              $this->_renderer->div( 
+                  $this->render_edit( $source )
+                . $this->render_preview( $source )
+            , array( 'class' => 'icon list_control' ));
+
+    }
+
     function render_preview( $source ) {
+        if ( !method_exists( $source, 'getURL')) return false;
+        $url = $source->getURL( );
+        if ( !$url ) return false;
+        if ( ( substr( $url, 0, 7 ) != 'http://') && substr( $url, 0, 1 ) != '/') {
+            $url = '/' . $url;
+        }
+
         return $this->_renderer->link( 
-            AMP_url_add_vars( '/' . $source->getURL( ), array( 'preview=1' )),
-            //$this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'width' => 16, 'height' => 16, 'border' => '0')),
+            AMP_url_add_vars( $url, array( 'preview=1' )),
             $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'class' => 'icon')),
             array( 'target' => '_blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
         );
@@ -127,7 +146,9 @@ class AMP_Display_System_List extends AMP_Display_List {
     }
 
     function render_select( $source ) {
-        return $this->_renderer->input( 
+        return 
+            $this->_renderer->div( 
+                $this->_renderer->input( 
                         "list_action_id[]", 
                         $source->id, 
                         array( 
@@ -136,7 +157,9 @@ class AMP_Display_System_List extends AMP_Display_List {
                             'class' => 'list_select', 
                             'id' => ( 'select_'. $this->list_item_id( $source ) 
                             )
-               ));
+               )),
+           array( 'class' => 'list_control')
+           );
     }
 
     function _renderBlock( $output ) {
@@ -175,23 +198,6 @@ class AMP_Display_System_List extends AMP_Display_List {
 
     }
 
-    function render_sort_link( $column_header_value, $column_name ) {
-        if ( $this->_suppress_sort_links ) return $column_header_value;
-        if ( !$this->validate_sort_link( $column_name )) return $column_header_value;
-
-        $url_values = $_GET;
-        $url_values['sort'] = $column_name;
-        unset( $url_values['sort_direction'] ) ;
-        if ( isset( $_REQUEST['sort']) 
-             && ( $_REQUEST['sort'] == $column_name ) 
-             &&   ! isset( $_REQUEST['sort_direction'] )) {
-            $url_values['sort_direction'] = AMP_SORT_DESC;
-        }
-        return $this->_renderer->link( 
-                AMP_url_add_vars( $_SERVER['PHP_SELF'], AMP_url_build_query( $url_values )),
-                $column_header_value );
-
-    }
     function render_header_preview( ) {
         return false;
     }
@@ -203,12 +209,20 @@ class AMP_Display_System_List extends AMP_Display_List {
     function render_header_select( ) {
         reset( $this->_source );
         $first_item_id = 'select_' . $this->list_item_id( current( $this->_source ));
-        return $this->_renderer->a( AMP_TEXT_ALL, array( 
-                'onClick' => 
-                'new_value = !$( "'.$first_item_id.'").checked; $$( "#'.$this->list_id.' input.list_select").each( function( slbx  ) { slbx.checked=new_value; } );'));
+        return 
+            $this->_renderer->div( 
+                $this->_renderer->a( AMP_TEXT_ALL, array( 
+                    'onClick' => 
+                    'new_value = !$( "'.$first_item_id.'").checked; $$( "#'.$this->list_id.' input.list_select").each( function( slbx  ) { slbx.checked=new_value; } );'))
+                , array( 'class' => 'list_control')
+                );
     }
 
     function render_header_edit( ) {
+        return false;
+    }
+
+    function render_header_controls( ) {
         return false;
     }
 
@@ -266,19 +280,21 @@ class AMP_Display_System_List extends AMP_Display_List {
     function do_request( ) {
         if ( !$this->_request->execute( )) return false;
         
+        if ( !AMP_DISPLAYMODE_DEBUG ) {
+            ampredirect( AMP_url_update( $_SERVER['REQUEST_URI']));
+        }
+
         if ( $affected_qty = $this->_request->getAffectedQty( )) {
             $this->message( sprintf( AMP_TEXT_LIST_ACTION_SUCCESS, 
                                 ucfirst( AMP_PastParticiple(  $this->_request->getPerformedAction( ))), 
                                 $affected_qty ));
+            AMP_flush_common_cache( );
+
         } else {
             $this->message( sprintf( AMP_TEXT_LIST_ACTION_FAIL, 
                                 AMP_PastParticiple( $this->_request->getPerformedAction( )))); 
         }
 
-        if ( !AMP_DISPLAYMODE_DEBUG ) {
-            ampredirect( AMP_url_update( $_SERVER['REQUEST_URI']));
-        }
-        AMP_flush_common_cache( );
 
         $this->_after_request( );
         
@@ -307,9 +323,9 @@ class AMP_Display_System_List extends AMP_Display_List {
     }
 
     function _renderHeader( ) {
-        if ( isset( $this->link_list_preview ) && $this->link_list_preview ) {
-            return $this->render_list_preview_link( );
-        }
+        $output = $this->render_search_form( )
+                . $this->render_list_preview_link( );
+        return $output;
     }
 
 }
