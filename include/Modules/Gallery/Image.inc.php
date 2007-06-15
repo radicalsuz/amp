@@ -132,7 +132,7 @@ class GalleryImage extends AMPSystem_Data_Item {
 
     function getListOrder( ){
         $value = $this->getData( 'listorder' );
-        if ( !$value ) $value = AMP_CONTENT_LISTORDER_MAX; 
+        if ( !$value ) $value = AMP_SORT_MAX;; 
         $value .= '_' . $this->getName( ) ;
         return $this->getGalleryName( ) . '_' . $value;
     }

@@ -111,6 +111,16 @@ class Gallery extends AMPSystem_Data_Item {
     function getListItemLimit( ) {
         return $this->getData( 'list_item_limit');
     }
+
+    function _sort_default( &$item_set ) {
+        $this->sort( $item_set, 'listOrder');
+    }
+
+    function getListOrder() {
+        $defined_order= $this->getOrder();
+        if (!$defined_order) $defined_order = AMP_SORT_MAX;
+        return $defined_order . ':' .  $this->getName();
+    }
 }
 
 ?>
