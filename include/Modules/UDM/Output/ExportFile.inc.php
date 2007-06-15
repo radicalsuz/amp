@@ -34,12 +34,22 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
                                         'available' =>  true,
                                         'type'      =>  'textarea',
                                         'label'     =>  'Export Raw Values for These Fields'),
-        'delimiter_type'=> array ( 'default'=> 'csv',
-                                'available'=> true,
-                                'type'=>'select',
-                                'values'=>array( 'csv'=>'Comma Separated (CSV)',
-                                                 'tab'=>'Tab Separated (TXT)' ),
-                                'label'=>'Format Type' )
+        'export_mapping1' => array(
+            'type' => 'textarea',
+            'default' => '',
+            'size' => '3:15',
+            'label' => 'Custom Column Headers<br /><span class="photocaption">  ex: custom1=<br/>PlaceName&custom2<br/>=LastSighting...</span>',
+            'available' => true),
+                                
+        'delimiter_char'=> array ( 
+            'label'=>'Format Type' ,
+            'default'=> 'csv',
+            'available'=> true,
+            'type'=>'select',
+            'values'=>array( 'csv'=>'Comma Separated (CSV)',
+                             'tab'=>'Tab Separated (TXT)' ),
+            ),
+            
     );
 
     var $format_values = array( 'csv'=> array('delimiter'=>',', 'extension'=>'csv'), 
@@ -52,6 +62,8 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     var $dataset;
     var $Lookups;
     var $_raw_values = array( );
+
+    var $_export_keys = array( );
 
 
     function UserDataPlugin_ExportFile_Output ( &$udm, $plugin_instance=null ) {
@@ -74,6 +86,8 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         $this->setupColumns($this->definedColumns($options));
         
         $dataset = $this->translateValues();
+
+        $this->_init_export_keys(  $options );
 
         $column_headers = ($options['show_headers'])?$this->getHeaders():'';
 
@@ -221,6 +235,9 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     }
 
     function getLabel($field) {
+        if ( isset( $this->_export_keys[ $field ])) {
+            return $this->_export_keys[ $field ];
+        }
         if (!isset($this->udm->fields[$field])) return false;
         return strip_tags($this->udm->fields[$field]['label']);
     }
@@ -301,8 +318,8 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
     function _register_options_dynamic() {
         $options = $this->getOptions();
-        $this->file_extension = $this->format_values[$options['delimiter_type']]['extension'];
-        $this->delimiter = $this->format_values[$options['delimiter_type']]['delimiter'];
+        $this->file_extension = $this->format_values[$options['delimiter_char']]['extension'];
+        $this->delimiter = $this->format_values[$options['delimiter_char']]['delimiter'];
         $this->setLookup('publish', array("0"=>"draft" , "1"=>"live"));
         if ( isset( $options['export_raw_values'] ) && $options['export_raw_values']) {
             $this->_raw_values = preg_split( "/\s?,\s?/", $options['export_raw_values']);
@@ -310,6 +327,24 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
         
      }
+
+     function _init_export_keys( $options = array( ) ) {
+         if ( !(isset( $options['export_mapping1']) && $options['export_mapping1'] )) {
+             return;
+         }
+         $this->_export_keys = $this->extractMapping( $options['export_mapping1']);
+
+     }
+
+    function extractMapping($string) {
+        $mappings = preg_split("/\s?&\s?/",$string);
+        $return = array( );
+        foreach($mappings as $map) {
+            list($key, $value) = explode('=',$map);
+            $return[$key] = $value;
+        }
+        return $return;
+    }
 }
 
 
