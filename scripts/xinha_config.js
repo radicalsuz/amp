@@ -25,7 +25,7 @@ xinha_init = xinha_init ? xinha_init : function()
         'TableOperations'
         ];
     // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
-    if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+    if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
 
     /** STEP 2 ***************************************************************
      * Now, what are the names of the textareas you will be turning into
@@ -45,13 +45,13 @@ xinha_init = xinha_init ? xinha_init : function()
      *
      * If you want to modify the default config you might do something like this.
      *
-     *   xinha_config = new HTMLArea.Config();
+     *   xinha_config = new Xinha.Config();
      *   xinha_config.width  = '640px';
      *   xinha_config.height = '420px';
      *
     *************************************************************************/
 
-    xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
+    xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
         //xinha_config.pageStyle = "@import url(/custom/styles.css)";
         //xinha_config.stylistLoadStylesheet('/custom/styles.css');
 
@@ -60,11 +60,11 @@ xinha_init = xinha_init ? xinha_init : function()
      *
      * You can do this in two ways, either
      *
-     *   xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+     *   xinha_editors   = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
      *
      * if you want all the editor objects to use the same set of plugins, OR;
      *
-     *   xinha_editors = HTMLArea.makeEditors(xinha_editors, xinha_config);
+     *   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config);
      *   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
      *   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
      *
@@ -72,7 +72,7 @@ xinha_init = xinha_init ? xinha_init : function()
      * editors.
     ************************************************************************/
 
-    xinha_editors   = HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+    xinha_editors   = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
 
     /** STEP 5 ***************************************************************
      * If you want to change the configuration variables of any of the
@@ -90,7 +90,7 @@ xinha_init = xinha_init ? xinha_init : function()
      * Xinha editors.
     ************************************************************************/
 
-    HTMLArea.startEditors(xinha_editors);
+    Xinha.startEditors(xinha_editors);
 }
 
 //window.onload = xinha_init;
