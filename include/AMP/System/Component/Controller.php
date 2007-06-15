@@ -352,7 +352,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         if ( $this->_form->isBuilt || $init_running ) return false;
 
         $init_running = true;
-        $this->notify( 'initForm' );
+        $this->notify( 'initForm', $this->_form );
         $init_running = false;
 
         $this->_form->Build( );
@@ -432,7 +432,7 @@ class AMP_System_Component_Controller_Map extends AMP_System_Component_Controlle
         }
 
         $this->set_banner( 'list' );
-        $this->notify( 'initList' );
+        $this->notify( 'initList', $display );
 
         $this->_display->add( $display, 'default' );
         return true;

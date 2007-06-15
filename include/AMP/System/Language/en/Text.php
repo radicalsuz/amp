@@ -181,6 +181,7 @@ define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
 define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
 define( 'AMP_TEXT_CACHE_RESET_INTERNAL', 'Cache flushed from %s by user: %s' );
 define( 'AMP_TEXT_MODULE_GALLERY_EMPTY', 'No photos are available in this gallery');
+define( 'AMP_TEXT_NONE_AVAILABLE', 'None available');
 
 
 /**

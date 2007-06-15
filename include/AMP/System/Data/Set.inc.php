@@ -228,11 +228,14 @@
         $this->_id_field_lookups = $field; 
     }
 
-	function getLookup($field) {
+	function getLookup($field, $use_sort = false ) {
         $set = array();
 		if( !$this->makeReady() ) {
 			$sql = "SELECT " . $this->getIdFieldLookups( ). ", $field " . $this->_makeSource()
             . $this->_makeCriteria();
+            if ( $use_sort ) {
+                $sql .= $this->_makeSort( );
+            }
 			$set = $this->dbcon->CacheGetAssoc( $sql );
             if (defined( $this->_debug_constant ) && constant( $this->_debug_constant )) AMP_DebugSQL( $sql, get_class($this)." lookup " .$field); 
             if ( !$set && $db_error = $this->dbcon->ErrorMsg( )) {

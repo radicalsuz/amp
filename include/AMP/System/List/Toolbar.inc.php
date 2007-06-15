@@ -93,7 +93,7 @@ class AMP_System_List_Toolbar {
     function add_panel( $action, $contents = array( )) {
         $renderer = AMP_get_renderer( );
         $tab_name = $action . '_targeting';
-        $this->_tabs[$action] = $tab_name;
+        //$this->_tabs[$action] = $tab_name;
         if ( is_array( $contents )) {
             $contents = join( $renderer->space( ), $contents );
         }

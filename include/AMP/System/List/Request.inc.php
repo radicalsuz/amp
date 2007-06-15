@@ -22,10 +22,14 @@ class AMP_System_List_Request {
     var $_submitGroup = 'submitAction';
 
     function AMP_System_List_Request( &$source ){
-        $this->init( $source );
+        $this->__construct( $source );
     }
 
     function init( &$source ){
+        $this->__construct( $source );
+    }
+
+    function __construct( &$source ) {
         $this->_source = &$source;
         if ( $url_vars = AMP_URL_Read( )){
             $this->_request_vars = array_merge( $_POST, AMP_URL_Read( ));
@@ -56,6 +60,8 @@ class AMP_System_List_Request {
             ++$this->_committed_qty ;
         }
 
+        AMP_cacheFlush( AMP_CACHE_TOKEN_LOOKUP );
+
         return true;
     
     }
@@ -66,7 +72,7 @@ class AMP_System_List_Request {
             return false;
         }
         if ( !$this->allow( $action, $target ))  {
-            $flash = AMP_System_Flash::instance( );
+            $flash = &AMP_System_Flash::instance( );
             $flash->add_message( sprintf( AMP_TEXT_ERROR_ACTION_NOT_ALLOWED, $action ) ." " . $target->getShortName( ) );
             return false;
         }
@@ -76,6 +82,10 @@ class AMP_System_List_Request {
     }
 
     function commitActionLocal( &$target_set, $action, $args = null ){
+        if ( method_exists( $this, $action )) {
+            $this->$action( $target_set, $args );
+            return true;
+        }
         return false;
     }
 
@@ -169,6 +179,31 @@ class AMP_System_List_Request {
     }
 
 
+    function export( &$target_set, $args = null ) {
+		$sample = current($target_set);
+		$keys = $sample->export_keys();
+		$dump = array();
+		foreach($keys as $key ) {
+			$blank_set[ $key ] = null;
+		}
+
+		foreach($target_set as $source) {
+			$values = $source->getData();	
+			$safe_values = array_combine_key($keys, $values);
+			$dump[ $source->id ] = array_merge($blank_set, $safe_values );
+
+            if ( $exp_values = $source->before_export( $safe_values )) {
+                $dump[ $source->id ] = array_merge($blank_set, $safe_values, $exp_values );
+            }
+		}
+		require_once('AMP/Renderer/CSV.php');
+		$renderer = new AMP_Renderer_CSV();
+		$file =  $renderer->format(array( $keys ));
+	 	$file .= $renderer->format($dump);	
+		$renderer->header( date("Y_m_d__") . AMP_pluralize( get_class($sample)));
+		print $file;
+		exit;
+    }
 }
 
 ?>

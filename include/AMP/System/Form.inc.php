@@ -40,7 +40,7 @@ class AMPSystem_Form extends AMPForm {
         parent::init( $name, $method, $action );
         $this->template->setClass( 'label', 'name' );
         $this->template->setClass( 'span', 'name' );
-        $this->template->setClass( 'header', 'intitle' );
+        $this->template->setClass( 'header', 'form_header' );
         if ($this->allow_copy) $this->copy_button();
     }
 

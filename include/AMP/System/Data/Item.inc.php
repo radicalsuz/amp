@@ -363,6 +363,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function search( $criteria = null, $class_name = null ){
         $data_set = $this->getSearchSource( $criteria );
         if ( !$data_set->readData( )) return false;
+
         if ( !( isset( $class_name) || isset( $this->_class_name ))) {
             trigger_error( sprintf( AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED, get_class( $this )) );
         }
@@ -596,7 +597,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             return false;
         }
         $result = $this->getData( $this->_field_listorder );
-        if ( !$result ) return AMP_CONTENT_LISTORDER_MAX . $this->getName( );
+        if ( !$result ) return AMP_SORT_MAX. $this->getName( );
         return $result;
     }
 
@@ -615,6 +616,12 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 		return array_keys($this->itemdata);
         */
 	}
+
+    function before_export( $values ) {
+        //stub
+        return false;
+
+    }
 
     function getId( ) {
         return $this->id;
@@ -636,6 +643,39 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function get_system_url( $url_type ) {
         return $this->get_constant_url( $url_type, 'AMP_SYSTEM_URL_');
+    }
+
+    function get_select_from_sort( $sort_sql ) {
+        $sort_clauses = preg_split( '/\s?,\s?/', $sort_sql );
+
+        if ( count( $sort_clauses) === 1 ) {
+            return str_replace( AMP_SORT_DESC, '', $sort_sql );
+        }
+
+        $previous_sort_segment = false;
+        $delimiter= "''";
+        foreach( $sort_clauses as $sort_segment ) {
+            if ( $previous_sort_segment ) {
+                $delimiter = 'if ( isnull( '.$previous_sort_segment.'), \'\', \', \')';
+            } 
+
+            $index_segment = str_replace( AMP_SORT_DESC, '', $sort_segment );
+            $local_method = 'make_readable_select_for_'. AMP_from_camelcase( $index_segment );
+
+            if ( method_exists( $this, $local_method )) {
+                $index_segment = $this->$local_method( ) ;
+            }
+            $index_sort[] = '( if( isnull( '.$index_segment.'), \'\', Concat( '.$delimiter.','.$index_segment.')))';
+
+            //after first time through loop all segments need leading punctuation
+            $previous_sort_segment = $index_segment;
+        }
+
+        return "Concat( ".join( ',', $index_sort )." ) as index_field";
+    }
+
+    function make_readable_select_for_publish( ) {
+        return 'if ( isnull( publish ) or publish = \'\' or publish=0, \''.AMP_PUBLISH_STATUS_DRAFT.'\', \''.AMP_PUBLISH_STATUS_LIVE.'\' )';
     }
 
 
