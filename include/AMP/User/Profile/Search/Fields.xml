@@ -1,0 +1,31 @@
+<array>
+    <modin>
+        <type>select</type>
+        <label>Select Form</label>
+        <lookup>forms</lookup>
+        <default>20</default>
+    </modin>
+	<publish>
+		<label>Status</label>
+		<type>select</type>
+		<lookup>status</lookup>
+		<attr><class>searchform_element</class></attr>
+	</publish>
+	<state>
+        <separator>newrow</separator>
+		<type>select</type>
+		<label>By State/Province</label>
+		<lookup>regions_US_and_Canada</lookup>
+		<attr><class>searchform_element</class></attr>
+	</state>
+	<entered_at>
+		<label>Entered Date</label>
+		<type>date</type>
+		<options>
+			<format>YM</format>
+			<addEmptyOption>1</addEmptyOption>
+			<emptyOptionText>--</emptyOptionText>
+		</options>
+		<attr><class>searchform_element</class></attr>
+	</entered_at>
+</array>

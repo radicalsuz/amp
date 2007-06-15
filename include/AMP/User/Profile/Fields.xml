@@ -1,0 +1,62 @@
+<array>
+	<id>
+		<type>hidden</type>
+	</id>
+	<publish>
+		<type>checkbox</type>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
+	</publish>
+	<First_Name>
+		<type>text</type>
+		<label>First Name</label>
+	</First_Name>
+	<Last_Name>
+		<type>text</type>
+		<label>Last Name</label>
+	</Last_Name>
+	<Company>
+		<type>text</type>
+		<label>Organization ( if any )</label>
+	</Company>
+	<Street>
+		<type>text</type>
+		<label>Address</label>
+	</Street>
+	<City>
+		<type>text</type>
+		<label>City</label>
+	</City>
+	<State>
+		<type>select</type>
+		<label>State</label>
+        <lookup>regions_US_and_Canada</lookup>
+	</State>
+	<Zip>
+		<type>text</type>
+		<label>Postal Code/Zip</label>
+        <size>10</size>
+	</Zip>
+	<Country>
+		<type>select</type>
+		<label>Country</label>
+        <lookup>regions_World</lookup>
+	</Country>
+	<Phone>
+		<type>text</type>
+		<label>Phone</label>
+	</Phone>
+	<Email>
+		<type>text</type>
+		<label>Email</label>
+        <rules>
+            <item>
+                <type>email</type>
+                <message>Must be a valid email address</message>
+            </item>
+        </rules>
+	</Email>
+    <dia_key>
+        <type>hidden</type>
+    </dia_key>
+
+</array>
