@@ -6,6 +6,7 @@ class AMP_System_Menu_Display {
     var $_tree;
 
     var $menu_id = 'listMenuRoot';
+    var $api_version = 2;
 
     function AMP_System_Menu_Display( ) {
         $this->__construct( );
