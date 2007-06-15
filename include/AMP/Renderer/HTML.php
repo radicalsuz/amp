@@ -322,6 +322,51 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         return $this->tag( 'form', $content, $attr_set );
     }
 
+    function textarea( $name, $content=null, $attr_set=array( )) {
+        $attr_set['name'] = $name;
+        if ( isset( $attr_set['size'])) {
+            if ( !isset( $attr_set['cols'])) {
+                $attr_set['cols'] = $attr_set['size'];
+            }
+            if ( strpos( $attr_set['size'], ':') != 0 ) {
+                $sizes = split( ':', $attr_set['size']);
+                $attr_set['rows'] = $sizes[0];
+                $attr_set['cols'] = $sizes[1];
+            }
+        }
+        if ( !isset( $attr_set['rows'])) {
+            $attr_set['rows'] = 4;
+        }
+        return $this->tag( 'textarea', $content, $attr_set );
+    }
+
+    function label( $element_name, $value, $attr_set=array( )) {
+        $attr_set['for'] = $element_name;
+        return $this->tag( 'label', $value, $attr_set );
+    }
+
+    function wysiwyg( $name, $value=null, $attr_set= array( )) {
+        $attr_set['id'] = $name;
+        $textarea = $this->textarea( $name, $value, $attr_set );
+
+        if ( !AMP_USER_CONFIG_USE_WYSIWYG 
+            || ( array_search( getBrowser( ), array( 'win/ie', 'mozilla' )) === FALSE))  {
+            return $textarea;
+        }
+
+        require_once( 'AMP/Form/Element/Wysiwyg.php');
+        $editor_script = new AMP_Form_Element_Wysiwyg( $name );
+        $editor_script->execute( );
+        /*
+        $editor_factory = AMPFormElement_HTMLEditor::instance( );
+        $editor_factory->addEditor( $name );
+        $editor_factory->width = 300;
+        $editor_factory->output( );
+        */
+        return $textarea;
+
+    }
+
 }
 
 ?>

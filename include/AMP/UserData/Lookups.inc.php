@@ -385,4 +385,14 @@ class FormLookup_CommentCounts extends FormLookup {
     }
 }
 
+class AMPSystemLookup_LiveForms extends AMPSystem_Lookup {
+    var $datatable = 'userdata_fields';
+    var $result_fields = 'name';
+    var $criteria = 'publish=1';
+
+    function AMPSystemLookup_LiveForms( ) {
+        $this->init( );
+    }
+}
+
 ?>
