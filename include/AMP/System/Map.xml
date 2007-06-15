@@ -586,8 +586,12 @@
 <help>
     <title>Help</title>
     <item>
-        <label>Help</label>
+        <label>Manual</label>
         <href>http://www.radicaldesigns.org/downloads/manual.pdf</href>
+    </item>
+    <item>
+        <label>Email Help</label>
+        <href>mailto:help@radicaldesigns.org</href>
     </item>
     <item>
         <label>HTML Tips</label>
