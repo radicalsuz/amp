@@ -1,5 +1,12 @@
 <?php
 
+AMP_config_load('urls' );
+
+// why do you seek the living among the dead?
+// go to Config/urls.ini.php
+// there you will find your answers
+/*
+
 define( 'AMP_SYSTEM_URL_TOOLS',                 'module.php');
 define( 'AMP_SYSTEM_URL_TOOL_ADD',              'module.php?action=add');
 define( 'AMP_SYSTEM_URL_MAP',              'maps.php' );
@@ -9,6 +16,7 @@ define( 'AMP_SYSTEM_URL_PERMISSION_GROUPS',     'per.php');
 define( 'AMP_SYSTEM_URL_PERMISSION_GROUP',      'per.php');
 define( 'AMP_SYSTEM_URL_PERMISSION_GROUP_NEW',      'per.php?action=add');
 define( 'AMP_SYSTEM_URL_USERS',                 'user.php?action=list');
+define( 'AMP_SYSTEM_URL_PROFILE',                 'profile.php' );
 if ( !defined( 'AMP_SYSTEM_URL_HOME'))
         define( 'AMP_SYSTEM_URL_HOME',          'articlelist.php');
 define( 'AMP_SYSTEM_URL_REDIRECT',              '/system/login_redirect.php');
@@ -63,5 +71,6 @@ define( 'AMP_SYSTEM_URL_BADGE_ADD',             'badges.php?action=new');
 define( 'AMP_SYSTEM_URL_HOUSING',               'housing.php');
 define( 'AMP_SYSTEM_URL_HOUSING_ADD',           'housing.php?action=new');
 define( 'AMP_SYSTEM_URL_FAQ',              'faq.php' );
+*/
 
 ?>

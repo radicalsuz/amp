@@ -1,4 +1,11 @@
 <?php
+
+AMP_config_load('urls' );
+
+// why do you seek the living among the dead?
+// go to Config/urls.ini.php
+// there you will find your answers
+/*
 if ( !defined( 'AMP_CONTENT_URL_INDEX' ))           define ( 'AMP_CONTENT_URL_INDEX',        'index.php');
 if ( !defined( 'AMP_CONTENT_URL_FRONTPAGE' ))       define ( 'AMP_CONTENT_URL_FRONTPAGE',    'index.php');
 if ( !defined( 'AMP_CONTENT_URL_LIST_SECTION' ))    define ( 'AMP_CONTENT_URL_LIST_SECTION', 'article.php?list=type');
@@ -57,5 +64,6 @@ if ( !defined( 'AMP_CONTENT_URL_TAG' ))             define ( 'AMP_CONTENT_URL_TA
 if ( !defined( 'AMP_CONTENT_URL_BADGE' ))             define ( 'AMP_CONTENT_URL_BADGE', 'badge_widget.php');
 if ( !defined( 'AMP_CONTENT_URL_CONTACT_US' ))             define ( 'AMP_CONTENT_URL_CONTACT_US', 'contactus.php');
 if ( !defined( 'AMP_CONTENT_URL_TELL_A_FRIEND' ))             define ( 'AMP_CONTENT_URL_TELL_A_FRIEND', 'mailto2.php');
+*/
 
 ?>
