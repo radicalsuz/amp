@@ -74,7 +74,8 @@ class WebAction extends AMPSystem_Data_Item {
 
     function getExpirationDate( ) {
         $result = $this->getData( 'enddate');
-        if ( $result == AMP_NULL_DATETIME_VALUE ) return false;
+        if ( !AMP_verifyDateTimeValue( $result )) return false;
+        //if ( $result == AMP_NULL_DATETIME_VALUE ) return false;
         return $result;
     }
 
