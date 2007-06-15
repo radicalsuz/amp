@@ -155,4 +155,7 @@ flash="flash"
 intro="intro"
 buffer="buffer"
 
+[content redirect]
+sectionheaders_to_sections=true
+
 ;?>

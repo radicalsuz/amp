@@ -15,21 +15,6 @@
 require_once("AMP/BaseDB.php");
 
 /**
- *  Check for a cached page
- */
-/*
-if (AMP_SITE_MEMCACHE_ON) {
-    $flash = &AMP_System_Flash::instance( );
-    if ( !$flash->active( )) {
-        require_once( "AMP/Content/Page/Cached.inc.php" );
-        $cached_page = &new AMPContent_Page_Cached();
-        if ($cached_page->execute()) exit;
-
-    }
-}
-*/
-
-/**
  * Check for a cached copy of this request
  */
 if ( $cached_output = AMP_cached_request( )) {
@@ -74,13 +59,15 @@ if ( ( !AMP_DISPLAYMODE_PREVIEW )  && ($currentArticle = &$currentPage->getArtic
     if ( !$currentSection->hasData(  ) || !$currentSection->isLive( )) {
         AMP_make_404( );
     }
+
 }
+
 
 /**
  * Check if specified article is a section header and redirect to that section
  */
-if ( $currentPage->isArticle(  ) && ( $currentArticle = $currentPage->getArticle(  )) ) {
-    if ( $currentArticle->getClass(  ) == AMP_CONTENT_CLASS_SECTIONHEADER ) {
+if ( $currentArticle = &$currentPage->getArticle() ){
+    if ( AMP_CONTENT_REDIRECT_SECTIONHEADERS_TO_SECTIONS && ( $currentArticle->getClass(  ) == AMP_CONTENT_CLASS_SECTIONHEADER )) {
         require_once( 'AMP/Content/Section.inc.php' );
         $currentSection = new Section( AMP_Registry::getDbcon(  ), $currentArticle->getParent(  ) );
         if ( $currentSection->hasData(  ) ) {
