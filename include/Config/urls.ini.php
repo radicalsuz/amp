@@ -159,6 +159,7 @@ redirect=      "/system/login_redirect.php"
 
 rss_subscription="rss_subscription.php"
 rssfeed=       "rssfeed.php"
+rss_aggregator=  "rss_content.php"
 
 section=       "section.php"
 share=          "share.php"
