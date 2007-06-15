@@ -285,6 +285,12 @@ class AMP_Display_List {
         return $this->_search_form->execute( );
     }
 
+    function format_date( $value ) {
+        if ( !AMP_verifyDateValue( $value )) return false;
+        $date_value = strtotime( $value );
+        return date( 'M j, Y', $date_value );
+    }
+
     function _renderJavascript( ) {
         //do nothing
     }
@@ -448,7 +454,7 @@ class AMP_Display_List {
         $map = ComponentLookup::instance( get_class( $this ));
         if ( !$map->isAllowed( 'search' )) return;
 
-        $search = $map->getComponent( 'search');
+        $search = $map->getComponent( 'search', false);
         if ( !$search ) return;
         $search->Build( true );
         $search_criteria = array( );

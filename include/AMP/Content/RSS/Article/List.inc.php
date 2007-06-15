@@ -65,7 +65,7 @@ class RSS_Article_List extends AMP_System_List_Form {
 
     }
 
-    function _itemDate( &$source ){
+    function _itemDate( &$source ) {
         $renderer = &$this->_getRenderer( );
         $item_date = $source->getItemDate( );
         $renderer->inSpan( $this->_dateFormat( $source->getItemDate( )), array( 'class'=>'photocaption'))

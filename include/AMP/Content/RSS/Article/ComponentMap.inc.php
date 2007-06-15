@@ -9,13 +9,15 @@ class ComponentMap_RSS_Article extends AMPSystem_ComponentMap {
     var $_component_controller = 'RSS_Article_Controller';
 
     var $paths = array( 
-        'list'   => 'AMP/Content/RSS/Article/List.inc.php',
+        //'list'   => 'AMP/Content/RSS/Article/List.inc.php',
+        'list'   => 'AMP/Content/RSS/Article/List.php',
         'search_fields'   => 'AMP/Content/RSS/Article/SearchFields.xml',
         'search'  => 'AMP/Form/SearchForm.inc.php',
         'source' => 'AMP/Content/RSS/Article/Article.php');
     
     var $components = array( 
-        'list'  => 'RSS_Article_List',
+        //'list'  => 'RSS_Article_List',
+        'list'  => 'AMP_Content_RSS_Article_List',
         'search'  => 'AMPSearchForm',
         'source'=> 'RSS_Article');
 

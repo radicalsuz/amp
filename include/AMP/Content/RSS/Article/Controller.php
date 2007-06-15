@@ -15,6 +15,8 @@ class RSS_Article_Controller extends AMP_System_Component_Controller_Map {
             $sub = & new RSS_Subscription( AMP_Registry::getDbcon( ), $subscription_id );
             $sub->update( );
         }
+        AMP_flush_common_cache( );
+        ampredirect( AMP_SYSTEM_URL_RSS_AGGREGATOR );
     }
 
 

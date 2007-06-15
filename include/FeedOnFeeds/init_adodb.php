@@ -574,7 +574,7 @@ function fof_update_feed($url)
             $dcsubject = mysql_escape_string($item['category']);
         }
 
-		if(!$link)
+		if(!$link || ( strpos( $item['guid'], 'http://' ) === 0 ))
 		{
 			$link = $item['guid'];
 		}
