@@ -245,10 +245,14 @@ class AMPContentLookup_SectionMap {
     var $dataset;
 
     function AMPContentLookup_SectionMap() {
+        $this->__construct( );
+
+    }
+
+    function __construct( ) {
         require_once( 'AMP/Content/Map.inc.php');
         $mapsource = &AMPContent_Map::instance( );
         $this->dataset = $mapsource->selectOptions( );
-
     }
     function available( ){
         return false;
@@ -1110,6 +1114,37 @@ class AMPSystemLookup_ArticleLinksBySectionLive extends AMPSystemLookup_Articles
         $this->_addCriteriaSection( $section_id );
         $this->_addCriteriaDisplayable( );
         $this->init( $section_id );
+    }
+}
+
+class AMPSystemLookup_SectionMapLive extends AMPContentLookup_SectionMap {
+
+    function AMPSystemLookup_SectionMapLive( ) {
+        $this->__construct( );
+    }
+
+    function __construct( ) {
+        parent::__construct( );
+        $live = AMP_lookup( 'sectionsLive');
+        foreach( $this->dataset as $id => $name ) {
+            if ( !isset( $live[$id])) {
+                unset( $this->dataset[$id]);
+            }
+        }
+    }
+
+}
+
+class AMPSystemLookup_SectionMapLiveChopped extends AMPSystemLookup_SectionMapLive {
+    function AMPSystemLookup_SectionMapLiveChopped( ) {
+        $this->__construct( );
+    }
+
+    function __construct( ) {
+        parent::__construct( );
+        foreach( $this->dataset as $id => $name ) {
+            $this->dataset[$id] = str_replace( '&nbsp;', ' ', AMP_trimText( $name, 60, false ));
+        }
     }
 }
 ?>
