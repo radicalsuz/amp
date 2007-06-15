@@ -2001,4 +2001,79 @@ function AMP_subscribe_to_list( $addresses, $list_id ) {
     return false;
 }
 
+function AMP_config_load( $file, $prefix='AMP') {
+    if ( !$file ) return array( );
+    static $loaded = array( );
+    $prefix = strtoupper( $prefix );
+    if ( !isset( $loaded[$prefix])) {
+        $loaded[$prefix] = array( );
+    }
+    if ( isset( $loaded[$prefix][$file])) {
+        return $loaded[$prefix][$file];
+    }
+    $file_name = 'Config/' . $file . '.ini.php';
+    if ( !file_exists_incpath( $file_name )) return array( );
+
+    //$loaded[$file]= parse_ini_file( 'Config/'.$file.'.ini.php', true );
+    $loaded[$prefix][$file]= parse_ini_file( $file_name, true );
+    AMP_set_constants( $loaded[$prefix][$file], $prefix );
+    return $loaded[$prefix][$file];
+    /*
+    foreach( $config_values as $heading => $items ) {
+        foreach( $items as $label => $value ) {
+            $constant_name = str_replace( ' ', '_', strtoupper(  $prefix . ' ' . $heading. ' ' . $label ));
+            if ( !defined( $constant_name )) {
+                define( $constant_name, $value );
+            }
+        }
+    }
+    */
+}
+
+function AMP_set_constants( $values, $prefix = '' ) {
+    foreach( $values as $label => $value ) {
+        $full_label = $prefix ? $prefix . ' ' . $label : $label;
+        if ( is_array( $value )) {
+            AMP_set_constants( $value, $full_label );
+            continue;
+        }
+
+        $full_label = strtoupper( str_replace( ' ', '_', $full_label ));
+        if ( !defined( $full_label )) {
+            define( $full_label, $value );
+        }
+    }
+
+}
+
+function AMP_config_update( $values, $file='custom/site', $prefix='AMP') {
+    if ( !$values || empty( $values )) return false;
+    $config_filename = AMP_LOCAL_PATH . DIRECTORY_SEPARATOR. $file . '.ini.php';
+
+    $config_file = fopen( $config_filename, 'w+');
+    $config_data = AMP_config_format( $values );
+    $formatted_config_data = ";<?php\n" . $config_data . "\n\n;?>" ;
+    $result = fwrite( $config_file, $formatted_config_data );
+    fclose( $config_file );
+    return $result;
+
+}
+
+function AMP_config_format( $values ) {
+    $output = array( );
+    foreach( $values as $key => $value ) {
+        if ( is_array( $value )) {
+            $output[] = "\n[".strtolower( str_replace( '_', ' ', $key))."]\n";
+            $output[] = AMP_config_format( $value );
+            continue;
+        }
+
+
+        $formatted_value = is_numeric( $value ) ? $value : ( '"'.$value.'"' );
+        $formatted_key = str_pad( strtolower( $key ) . "=", 15 );
+        $output[] = $formatted_key . $formatted_value;
+    }
+    return join( "\n", $output );
+}
+
 ?>
