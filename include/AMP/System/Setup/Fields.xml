@@ -87,7 +87,7 @@
 
     <cache_header>
         <type>header</type>
-        <default>Cache Settings</default>
+        <label>Cache Settings</label>
     </cache_header>
 	<cacheSecs>
 		<type>text</type>
@@ -97,8 +97,9 @@
 	</cacheSecs>
 
     <email_header>
-        <type>header</type>
-        <default>Email Settings</default>
+        <type>blocktrigger</type>
+        <label>Blast Tool Settings</label>
+		<block>emailstuff</block>
     </email_header>
 
 	<email_tool>
@@ -108,76 +109,120 @@
 			<module>constant</module>
 			<instance>blastOptions</instance>
 		</lookup>
+		<block>emailstuff</block>
 	</email_tool>
-	<dia_user>
-		<type>text</type>
-		<label>DIA User</label>
-	</dia_user>
-	<dia_key>
-		<type>text</type>
-		<label>DIA Key</label>
-	</dia_key>
 	<emmedia>
 		<type>text</type>
 		<label>AMP Email Blast From Address</label>
+		<block>emailstuff</block>
 	</emmedia>
 	<emailfromname>
 		<type>text</type>
 		<label>AMP Email Blast From Name</label>
+		<block>emailstuff</block>
 	</emailfromname>
+	<dia_header>
+		<type>blocktrigger</type>
+		<label>DIA Settings</label>
+		<block>dia</block>
+	</dia_header>
+	<dia_user>
+		<type>text</type>
+		<label>DIA User</label>
+		<block>dia</block>
+	</dia_user>
+	<dia_key>
+		<type>text</type>
+		<label>DIA Key</label>
+		<block>dia</block>
+	</dia_key>
 
     <phplist_header>
-        <type>header</type>
-        <default>PHPlist Settings</default>
+        <type>blocktrigger</type>
+        <label>PHPlist Settings</label>
+		<block>phplist</block>
     </phplist_header>
 
     <phplist_admin_email>
 		<type>text</type>
 		<label>PHPlist Admin Email</label>
+		<block>phplist</block>
     </phplist_admin_email>
     <phplist_admin_password>
 		<type>text</type>
 		<label>PHPlist Admin Password</label>
+		<block>phplist</block>
     </phplist_admin_password>
 	<phplist_bounce_host>
 		<type>text</type>
 		<label>PHPlist Bounce Host</label>
+		<block>phplist</block>
 	</phplist_bounce_host>
 	<phplist_bounce_user>
 		<type>text</type>
 		<label>PHPlist Bounce User</label>
+		<block>phplist</block>
 	</phplist_bounce_user>
 	<phplist_bounce_password>
 		<type>text</type>
 		<label>PHPlist Bounce Password</label>
+		<block>phplist</block>
 	</phplist_bounce_password>
     <phplist_website>
         <type>text</type>
         <label>PHPlist Website Domain ( no http )</label>
+		<block>phplist</block>
     </phplist_website>
     <phplist_domain>
         <type>text</type>
         <label>PHPlist Email Domain</label>
+		<block>phplist</block>
     </phplist_domain>
     <phplist_admin_address>
         <type>text</type>
         <label>PHPlist Admin Address</label>
+		<block>phplist</block>
     </phplist_admin_address>
     <phplist_report_address>
         <type>text</type>
         <label>PHPlist Report Address</label>
+		<block>phplist</block>
     </phplist_report_address>
     <phplist_message_from_address>
         <type>text</type>
         <label>PHPlist Message From Address</label>
+		<block>phplist</block>
     </phplist_message_from_address>
     <phplist_message_from_name>
         <type>text</type>
         <label>PHPlist Message From Name</label>
+		<block>phplist</block>
     </phplist_message_from_name>
     <phplist_message_replyto_address>
         <type>text</type>
         <label>PHPlist Reply-To Address</label>
+		<block>phplist</block>
     </phplist_message_replyto_address>
+	<s3_header>
+		<type>blocktrigger</type>
+		<label>Amazon s3 cache settings</label>
+		<block>s3</block>
+	</s3_header>
+	<s3_key>
+		<type>text</type>
+		<label>Key</label>
+		<block>s3</block>
+	</s3_key>
+	<s3_secret>
+		<type>text</type>
+		<label>Secret</label>
+		<block>s3</block>
+	</s3_secret>
+	<s3_bucket>
+		<type>text</type>
+		<label>Bucket</label>
+		<block>s3</block>
+	</s3_bucket>
+
 
 </array>

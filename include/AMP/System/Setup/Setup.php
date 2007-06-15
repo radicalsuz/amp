@@ -63,9 +63,16 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
         // Email Addresses
         'AMP_SITE_ADMIN'                => 'EmailSupport',
-        'AMP_SYSTEM_BLAST_EMAIL_SENDER' => 'EmailBlastSender', 
+        'AMP_SITE_ADMIN_EMAIL'          => 'EmailSupport',
         'AMP_SITE_EMAIL_SENDER'         => 'EmailSiteSender', 
+
+        // Blaster Settings
+        'AMP_MODULE_BLAST'              => 'Blaster',
+        'AMP_SYSTEM_BLAST_EMAIL_SENDER' => 'EmailBlastSender', 
         'AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME'  => 'NameBlastSender',
+
+        'AMP_BLAST_EMAIL_SENDER'        => 'EmailBlastSender', 
+        'AMP_BLAST_EMAIL_SENDER_NAME'  => 'NameBlastSender',
 
         //DB settings
         'AMP_SITE_CACHE_TIMEOUT'        => 'CacheTimeout',
@@ -85,7 +92,13 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
         //DIA Settings
         'DIA_API_ORGANIZATION_KEY'      => '_DIA_organization_key',
-        'DIA_API_ORGCODE'               => '_DIA_orgcode'
+        'DIA_API_ORGCODE'               => '_DIA_orgcode',
+
+        //s3 Settings
+        'AMP_SYSTEM_FILE_S3_KEY'        => '_s3_key',
+        'AMP_SYSTEM_FILE_S3_KEY_SECRET' => '_s3_secret',
+        'AMP_SYSTEM_FILE_S3_BUCKET' => '_s3_bucket',
+
     );
 
     function AMP_System_Setup ( &$dbcon, $id = AMP_SYSTEM_SETTING_DB_ID ) {
@@ -349,9 +362,28 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         return $this->getData( 'dia_key') ;
     }
 
+    function getBlaster( ) {
+
+        $result = $this->getData( 'email_tool');
+        return $result;
+        
+    }
+
     function _clearCached( ) {
         $system_setup_key = 'SYSTEM_SETUP_' . AMP_SYSTEM_UNIQUE_ID;
         AMP_cache_delete( $system_setup_key );
+    }
+
+    function get_s3_bucket( ) {
+        return $this->getData( 's3_bucket');
+    }
+
+    function get_s3_key( ) {
+        return $this->getData( 's3_key');
+    }
+
+    function get_s3_secret( ) {
+        return $this->getData( 's3_secret');
     }
 }
 
