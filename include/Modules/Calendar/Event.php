@@ -399,6 +399,10 @@ class Calendar_Event extends AMPSystem_Data_Item {
         return $this->mergeData( array( 'dia_key' => $value ));
     }
 
+    function getEventUrl( ) {
+        return $this->getData( 'url');
+    }
+
 
 }
 

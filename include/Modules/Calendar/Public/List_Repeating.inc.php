@@ -16,7 +16,7 @@ class Calendar_Public_List_Repeating extends Calendar_Public_List {
     }
 
     function _init_criteria( ) {
-        $this->_init_search( );
+    //    $this->_init_search( );
         unset( $this->_source_criteria['date']) ;
         unset( $this->_source_criteria['current']) ;
         if ( isset( $_REQUEST['area']) && $_REQUEST['area'] && !isset( $this->_source_criteria['area'] )) {
