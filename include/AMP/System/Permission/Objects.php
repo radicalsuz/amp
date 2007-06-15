@@ -7,7 +7,7 @@ define( 'AMP_PERMISSION_OBJECT_BLAST_LIST',         'BlastList' );
 define( 'AMP_PERMISSION_OBJECT_CLASS',              'ContentClass' );
 define( 'AMP_PERMISSION_OBJECT_COMMENT',            'ArticleComment' );
 define( 'AMP_PERMISSION_OBJECT_CUSTOMFILE',         'AMP_System_CustomFile' );
-define( 'AMP_PERMISSION_OBJECT_EVENT',              '' );
+define( 'AMP_PERMISSION_OBJECT_EVENT',              'Calendar_Event' );
 define( 'AMP_PERMISSION_OBJECT_EVENT_FEED',         'CalendarFeeds' );
 define( 'AMP_PERMISSION_OBJECT_EVENT_TYPE',         'Calendar_Type' );
 define( 'AMP_PERMISSION_OBJECT_FAQ',                'FAQ' );
