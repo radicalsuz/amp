@@ -388,10 +388,10 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         }
 
         $lookups_set = AMPSystem_Lookup::instance( 'lookups');
-        $lookups = array( '' => '--' );
+        $lookups = array( '' => AMP_TEXT_NONE_AVAILABLE );
 
         if ( $lookups_set ){
-            $lookups = array( '' => '--' ) + AMPSystem_Lookup::instance( 'lookups');
+            $lookups = array( '' => '--' ) + $lookups_set; 
         }
         #$regions = array( '' => '--' ) + $this->regions->getTLRegions();
 
