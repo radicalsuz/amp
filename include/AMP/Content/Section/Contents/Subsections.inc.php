@@ -36,7 +36,7 @@ class SectionContentSource_Subsections extends SectionContentSource {
     function _setSort() {
         $this->_source->setSort( $this->_base_sort );
         $this->_source->addSort(
-            "if(isnull(textorder), ". AMP_CONTENT_LISTORDER_MAX .", textorder) ASC");
+            "if(isnull(textorder), ". AMP_SORT_MAX.", textorder) ASC");
     }
 }
 ?>

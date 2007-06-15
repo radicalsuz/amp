@@ -92,7 +92,7 @@ class Section extends AMPSystem_Data_Item {
 
     function getSectionDate() {
         if (!($value = $this->getData( 'date2' ))) return false;
-        if ($value == AMP_NULL_DATE_VALUE) return false;
+        if (!AMP_verifyDateValue( $value )) return false;
         return $value;
     }
 

@@ -161,7 +161,7 @@ class NavigationElement extends AMPSystem_Data_Item {
 
     function getCssClass() {
         if ($css =  $this->getData('linkextra') ) return $css;
-        return AMP_NAVLINK_CSS_CLASS;
+        return AMP_CSS_CLASS_NAVLINK;
     }
 
     function getLinkTextField() {

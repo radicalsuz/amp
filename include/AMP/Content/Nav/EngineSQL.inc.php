@@ -116,7 +116,7 @@ class NavEngine_SQL extends NavEngine {
 
     function _getLimit() {
         if ($limit = $this->nav->getLimit()) {
-            if ($limit == AMP_NAV_NO_LIMIT) return false;
+            if ($limit == AMP_CONTENT_NAV_NO_LIMIT_QTY ) return false;
             return " LIMIT " . $limit;
         }
         return false;

@@ -39,7 +39,6 @@ class SectionContentSource_Articles extends SectionContentSource {
     function getSectionCriteria() { 
         //deprecated
         $base_section = "type=".$this->_section->id ;
-        if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return $base_section;
         if (!($related_ids = $this->_getRelatedArticles())) return $base_section;
 
         return "( ". $base_section . ' OR ' . $related_ids . ")";
@@ -48,7 +47,7 @@ class SectionContentSource_Articles extends SectionContentSource {
     function _setSort() {
         $this->_setBaseSort();
         $this->_source->addSort(
-        "if(isnull(pageorder) or pageorder='', ". AMP_CONTENT_LISTORDER_MAX .", pageorder) ASC");
+        "if(isnull(pageorder) or pageorder='', ". AMP_SORT_MAX.", pageorder) ASC");
     }
 
     function _getRelatedArticles( $section_id = null) {

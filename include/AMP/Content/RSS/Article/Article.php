@@ -18,7 +18,7 @@ class RSS_Article extends AMPSystem_Data_Item {
 
     function getItemDate( ){
         $date_item = $this->getData( 'dcdate');
-        if ( $date_item == '1969-12-31')  return AMP_NULL_DATE_VALUE;
+        if ( !AMP_verifyDateValue( $date_item ))  return AMP_NULL_DATE_VALUE_DB;
 
         return $date_item;
     }

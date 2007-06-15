@@ -1,6 +1,6 @@
 <?php
-require_once ( 'AMP/Content/Page/Urls.inc.php' );
-require_once ( 'AMP/Content/Config.inc.php');
+//require_once ( 'AMP/Content/Page/Urls.inc.php' );
+//require_once ( 'AMP/Content/Config.inc.php');
 
 class AMPContent_Map {
 

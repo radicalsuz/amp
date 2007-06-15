@@ -391,7 +391,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $id = $this->getIdValue( );
         if ( !$id ) return false;
 
-        require_once( 'AMP/Content/Article.inc.php');
+        require_once( 'AMP/Content/Article.inc.php' );
         require_once( 'AMP/Content/Article/Display/Info.php');
 
         $article = &new Article( AMP_Registry::getDbcon( ), $id ) ;

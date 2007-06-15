@@ -319,6 +319,12 @@ class AMPConstantLookup_Status extends AMPConstant_Lookup {
 
 }
 
+class AMPSystemLookup_Status extends AMPConstantLookup_Status {
+    function AMPSystemLookup_Status ( ) {
+        $this->__construct( );
+    }
+}
+
 
 class AMPContentLookup_Galleries extends AMPContent_Lookup{
     var $datatable = 'gallerytype';
@@ -448,8 +454,8 @@ class AMPContentLookup_RelatedArticles extends AMPContent_Lookup {
         $this->init( );
     }
 
-    function _addCriteriaSection( $article_id ){
-        $this->criteria = "typeid =" . $article_id ;
+    function _addCriteriaSection( $section_id ){
+        $this->criteria = "typeid =" . $section_id ;
     }
 
     function &instance( $section_id ) {
@@ -1047,4 +1053,63 @@ class AMPContentLookup_SectionsLive extends AMPContent_Lookup {
     }
 }
 
+class AMPSystemLookup_ArticlesBySection extends AMPSystem_Lookup {
+    var $datatable= 'articles';
+    var $result_field = 'title';
+
+    function AMPSystemLookup_ArticlesBySection( $section_id ) {
+        $this->__construct( $section_id );
+    }
+
+    function __construct( $section_id ) {
+        $this->_init_sort( );
+        $this->_addCriteriaSection( $section_id );
+        $this->init( );
+    }
+
+    function _init_sort ( ) {
+        $this->_sort =
+            "if(isnull(pageorder) or pageorder='', ". AMP_SORT_MAX.", pageorder) ASC, date DESC, id DESC" ;
+    }
+
+    function _addCriteriaSection( $section_id ) {
+        require_once( 'AMP/Content/Article.inc.php');
+        $article = new Article( AMP_Registry::getDbcon( ));
+        $this->criteria = $article->makeCriteriaSection( $section_id );
+    }
+
+}
+
+class AMPSystemLookup_ArticlesBySectionLive extends AMPSystemLookup_ArticlesBySection {
+    function AMPSystemLookup_ArticlesBySectionLive( $section_id ) {
+        $this->__construct( $section_id );
+    }
+
+    function __construct( $section_id ) {
+        $this->_init_sort( );
+        $this->_addCriteriaSection( $section_id );
+        $this->_addCriteriaDisplayable( );
+        $this->init( $section_id );
+    }
+
+    function _addCriteriaDisplayable( ) {
+        $article = new Article( AMP_Registry::getDbcon( ));
+        $this->criteria .= ' AND ' . $article->makeCriteriaDisplayable( );
+    }
+}
+
+class AMPSystemLookup_ArticleLinksBySectionLive extends AMPSystemLookup_ArticlesBySectionLive {
+    var $result_field = 'if ( isnull( linktext ) or linktext=""), title, linktext) as title';
+
+    function AMPSystemLookup_ArticleLinksBySectionLive( $section_id ) {
+        $this->__construct( $section_id );
+    }
+
+    function __construct( $section_id ) {
+        $this->_init_sort( );
+        $this->_addCriteriaSection( $section_id );
+        $this->_addCriteriaDisplayable( );
+        $this->init( $section_id );
+    }
+}
 ?>

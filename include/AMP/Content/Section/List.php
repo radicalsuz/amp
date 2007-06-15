@@ -98,12 +98,10 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
     function render_controls( $source ) {
         return 
               $this->_renderer->div( 
-              $this->render_edit( $source )
-//            . $this->_renderer->space( )
-            . $this->render_preview( $source )
-//            . $this->_renderer->space( )
-            . $this->render_content_view( $source )
-            , array( 'class' => 'icon' ));
+                  $this->render_edit( $source )
+                . $this->render_preview( $source )
+                . $this->render_content_view( $source )
+            , array( 'class' => 'icon list_control' ));
 
     }
 

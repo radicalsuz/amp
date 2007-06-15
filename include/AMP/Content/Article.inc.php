@@ -150,7 +150,7 @@ class Article extends AMPSystem_Data_Item {
 
     function getAssignedDate( ){
         $date_value =  $this->getData('date');
-        if ($date_value == AMP_NULL_DATE_VALUE) return false;
+        if (!AMP_verifyDateValue( $date_value )) return false;
         return $date_value;
     }
 
@@ -486,33 +486,33 @@ class Article extends AMPSystem_Data_Item {
     function getDefaultOrder( ){
         $item_date = $this->getAssignedDate( );
         $item_timestamp = $item_date ? strtotime ( $item_date ) :  strtotime( AMP_NULL_DATETIME_VALUE_UNIX  );
-        $desc_date_value = strtotime( AMP_FUTURE_DATETIME_VALUE + 100 ) -  $item_timestamp;
+        $desc_date_value = strtotime( AMP_FUTURE_DATETIME_VALUE_UNIX ) + 100 -  $item_timestamp;
         
         return
                   ':' . intval( !$this->isLive( ))
                 . ':' . intval( $this->getParent( ))
-                . ':' . ( intval( $this->getOrder( )) ? intval(  $this->getOrder( )) : AMP_CONTENT_LISTORDER_MAX  )
+                . ':' . ( intval( $this->getOrder( )) ? intval(  $this->getOrder( )) : AMP_SORT_MAX )
                 . ':' . $desc_date_value;
     }
 
-    function setOrder( $order ){
+    function setOrder( $order ) {
         return $this->mergeData( array( 'pageorder' => $order ));
     }
 
-    function setSection( $section_id ){
+    function setSection( $section_id ) {
         return $this->mergeData( array( 'type' => $section_id ));
     }
 
-    function setClass( $class_id ){
+    function setClass( $class_id ) {
         return $this->mergeData( array( 'class' => $class_id ));
     }
 
-    function setRegion ( $region_id ){
+    function setRegion ( $region_id ) {
         return $this->mergeData( array( 'state' => $region_id ));
     }
 
 
-    function reorder( $new_order_value ){
+    function reorder( $new_order_value ) {
         if ( $new_order_value == $this->getOrder( )) return false;
         if ( is_array( $new_order_value )) return false;
         $this->setOrder( $new_order_value );
@@ -544,7 +544,7 @@ class Article extends AMPSystem_Data_Item {
         return $result;
     }
 
-    function regionize( $region_id ){
+    function regionize( $region_id ) {
         if ( $region_id == $this->getRegion( )) return false;
         $this->setRegion( $region_id );
         if ( !( $result = $this->save( ))) return false;

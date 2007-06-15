@@ -123,13 +123,17 @@ class AMPContent_Manager {
     function output() {
         $flash = false;
         if ( isset( $this->_displays[ AMP_CONTENT_DISPLAY_KEY_FLASH ])) {
-            $flash = &$this->_displays[ AMP_CONTENT_DISPLAY_KEY_FLASH ];
+            $flash = $this->_displays[ AMP_CONTENT_DISPLAY_KEY_FLASH ];
             unset( $this->_displays[ AMP_CONTENT_DISPLAY_KEY_FLASH ]);
         }
 
         $output=$this->_doDisplays( $this->_display_order ).
                 $this->_doDisplays();
-        if ( !$flash ) return $output;
+                
+        if ( !$flash )  {
+            return $output;
+        }
+        
 
         return $this->_doDisplayFlash( $flash ). $output;
     }
