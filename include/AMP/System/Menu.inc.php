@@ -25,6 +25,7 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
     var $_final_output = false;
 
     var $_is_built = false;
+    var $api_version = 1;
     
     function AMPSystem_Menu ( $hold_build = false ) {
        if ( !$hold_build ) {

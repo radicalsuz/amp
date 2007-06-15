@@ -39,8 +39,9 @@ class AMPSystem_BaseTemplate {
     }
 
     function _init_menu( ){
-        require_once( AMP_SYSTEM_MENU_PATH );
-        if ( AMP_SYSTEM_MENU_PATH == 'AMP/System/Menu.inc.php') {
+        require_once( 'AMP/System/Menu.inc.php');
+        require_once( 'AMP/System/Menu/Display.php');
+        if ( AMP_SYSTEM_MENU_VERSION == 1 ) {
             $this->_menu = & new AMPSystem_Menu( true );
             $this->_menu->init_header( );
             return;
