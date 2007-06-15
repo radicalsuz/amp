@@ -286,7 +286,7 @@ span.intitle {
 	font-weight: bold;
 	color: white;
 	background-color : #006699;
-	background: url('images/intitle-bg.png') top left repeat-x;
+	background: url('images/tall_blue_gradient.png') top left repeat-x;
 	padding: 4px 2px 2px 6px;
 	height: 25px;
 	margin: 20px 0px 10px 0px;
@@ -311,7 +311,7 @@ tr.list_column_header td {
 	font-weight: bold;
 	color: white;
 	background-color : #006699;
-	background: url('images/intitle-bg.png') top left repeat-x;
+	background: url('images/tall_blue_gradient.png') top left repeat-x;
 	padding: 2px 2px 2px 6px;
 	height: 25px;
 	margin: 20px 0px 10px 0px;
@@ -547,6 +547,11 @@ div.list_pager_block {
 */
 }
 
+div.list_pager select {
+	margin-top:.5em;
+	margin-bottom:.5em;
+}
+
 div.filelink {
     display: block;
     padding: 10px;
@@ -594,7 +599,7 @@ div.fieldextra a.trigger {
     padding: 5px;
 	width: 95%;
 /*	background-color: #006699;*/
-	background: url('images/intitle-bg.png') top left repeat-x;
+	background: url('images/tall_blue_gradient.png') top left repeat-x;
 	color: #FFFFFF;
 	font-size: 12px;
 	text-shadow: 2px 2px 1px black;
@@ -754,8 +759,24 @@ div.userdata_pager_footer {
     background-color:#E5E5E5;
 }
 
+.search {
+	display:block;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.search form input, .search form select, .search {
+		font-size: 11px;
+		text-decoration: none;
+		margin-left: 3px;
+}
+
 .system .list_select {
 	text-align: center;
+}
+
+table.system {
+    width: 100%;
 }
 
 .system .list_row td, .system .list_row {
@@ -795,7 +816,7 @@ div.userdata_pager_footer {
 	font-weight: bold;
 	color: white;
 	background-color : #006699;
-	background: url('images/intitle-bg.png') top left repeat-x;
+	background: url('images/tall_blue_gradient.png') top left repeat-x;
 	padding: .25em; 
 	margin: .25em;
 }
@@ -852,8 +873,54 @@ ul.system {
 .system div.icon a:hover {
 	background-color: #A0F0A0;
 }
+
+.system div.list_control {
+	text-align:center;
+}
 div.icon img, img.icon {
 	border: 0px;
 	vertical-align:bottom;
 }
 
+
+span.form_header {
+	font-size: .85em;
+	text-shadow: .2em black;
+	font-weight: bold;
+	color: white;
+/*	background-color : #006699; */
+	background: url('images/tall_blue_gradient.png') top left repeat-x;
+	padding: .25em; 
+	margin: .25em;
+	display:block;
+	font-size: 1.2em;
+}
+
+form .row {
+    clear: both;
+    padding-top: 1em;
+}
+
+form .row label {
+    float: left;
+    width: 19%;
+    text-align: right;
+}
+
+form .row .element {
+    float: right;
+    width: 79%;
+    text-align: left;
+}
+form .row input, form .row textarea {
+    width: 90%;
+}
+
+form .block {
+    background-color: #FFFFcc;
+    border: 2px solid #F0C0C0;
+}
+
+div.spacer {
+    clear: both;
+}

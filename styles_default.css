@@ -273,3 +273,13 @@ img.img_main {
     margin: 4px;
     border: 0px;
 }
+
+span.form_header {
+	display: block;
+	width: 100%;
+	background-color: #50A0f0;
+	color: #FFF;
+	font-weight: bold;
+	padding: .5em;
+	margin: .25em;
+}
