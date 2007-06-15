@@ -2,6 +2,7 @@
 require_once("AMP/System/Permission/Manager.inc.php");
 //permission config file
 require_once( 'AMP/System/Permission/Config.inc.php' );
+AMP_config_load( 'permission', 'AMP_PERMISSION');
 require_once( 'AMP/System/Flash.php');
 
 //legacy setup from < 3.5.9 
