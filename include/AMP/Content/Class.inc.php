@@ -25,10 +25,11 @@ class ContentClass extends AMPSystem_Data_Item {
         $this->_contents = &new ArticleSet( $this->dbcon );
         $this->_contents->addCriteria( 'class='.$this->id );
         $this->_contents->setSort( array( 'date DESC', 'id DESC' ) );
-        /*
-        $this->_contents->addSort( 'if (( isnull( pageorder ) or pageorder="" or pageorder=0 ), ' 
-                                 . AMP_SORT_MAX. ', pageorder)' );
-        */
+        if ( $this->id == AMP_CONTENT_CLASS_FRONTPAGE ) {
+            $this->_contents->addSort( 'if (( isnull( pageorder ) or pageorder="" or pageorder=0 ), ' 
+                                     . AMP_SORT_MAX. ', pageorder)' );
+        }
+        
         foreach ($this->_contents_criteria as $criteria ) {
             $this->_contents->addCriteria( $criteria );
         }
