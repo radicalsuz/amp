@@ -71,6 +71,7 @@ rssfeed_list=  "rss.php"
 
 search=        "search.php"
 
+share=         "share.php"
 sitemap=       "sitemap.php"
 
 speaker_add=   "form.php?id=6"
@@ -162,7 +163,6 @@ rssfeed=       "rssfeed.php"
 rss_aggregator=  "rss_content.php"
 
 section=       "section.php"
-share=          "share.php"
 
 stylesheet=    "stylesheet.php"
 
