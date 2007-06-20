@@ -274,7 +274,7 @@ img.img_main {
     border: 0px;
 }
 
-span.form_header {
+div.form_header, span.form_header {
 	display: block;
 	width: 100%;
 	background-color: #50A0f0;
@@ -282,4 +282,33 @@ span.form_header {
 	font-weight: bold;
 	padding: .5em;
 	margin: .25em;
+}
+
+form .row {
+    clear: both;
+    padding-top: 1em;
+}
+
+form .row label {
+    float: left;
+    width: 19%;
+    text-align: right;
+}
+
+form .row .element {
+    float: right;
+    width: 79%;
+    text-align: left;
+}
+form .row input, form .row textarea {
+    width: 90%;
+}
+
+form .block {
+    background-color: #FFFFcc;
+    border: 2px solid #F0C0C0;
+}
+
+div.spacer {
+    clear: both;
 }

@@ -357,14 +357,13 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         require_once( 'AMP/Form/Element/Wysiwyg.php');
         $editor_script = new AMP_Form_Element_Wysiwyg( $name );
         $editor_script->execute( );
-        /*
-        $editor_factory = AMPFormElement_HTMLEditor::instance( );
-        $editor_factory->addEditor( $name );
-        $editor_factory->width = 300;
-        $editor_factory->output( );
-        */
         return $textarea;
 
+    }
+
+    function submit( $name, $label, $attr_set = array( )) {
+        $attr_set['type'] = 'submit';
+        return $this->input( $name, $label, $attr_set );
     }
 
 }
