@@ -6,7 +6,7 @@
 	<event_type>
 		<type>select</type>
 		<label>By Section</label>
-		<lookup>sectionMap</lookup>
+		<lookup>sectionMapLiveChopped</lookup>
 	</event_type>
 	<date>
 		<separator>newrow</separator>
