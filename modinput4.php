@@ -26,8 +26,10 @@ if ( $cached_output = AMP_cached_request( )) {
     exit;
 }
 
+$modin = ( isset( $_REQUEST['modin']) && $_REQUEST['modin']) ? $_REQUEST['modin'] : false;
+
 // Fetch the form instance specified by submitted modin value.
-$udm =& new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
+$udm =& new UserDataInput( $dbcon, $modin );
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;

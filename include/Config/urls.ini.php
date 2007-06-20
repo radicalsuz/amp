@@ -13,7 +13,7 @@ article_input= "article_submit.php"
 badge=         "badge_widget.php"
 
 board_housing= "housing.php"
-board_housing_add="modinput4.php?modin=11"
+board_housing_add="form.php?id=11"
 
 board_ride=    "ride.php"
 
@@ -25,9 +25,9 @@ contact_us=    "contactus.php"
 
 documents=     "/downloads/"
 
-email_add=     "modinput4.php?modin=3"
+email_add=     "form.php?modin=3"
 
-endorser_add=  "modinput4.php?modin=1"
+endorser_add=  "form.php?modin=1"
 endorser_list= "endorse.php"
 
 event=         "calendar.php"
@@ -37,7 +37,7 @@ event_search=  "calendar.php"
 
 faq=           "faq.php"
 
-form=          "modinput4.php"
+form=          "form.php"
 form_display=  "userdata_display.php"
 
 frontpage=     "index.php"
@@ -45,7 +45,7 @@ frontpage=     "index.php"
 gallery=       "gallery.php"
 gallery_image= "gallery.php"
 
-group_add=     "modinput4.php?modin=2"
+group_add=     "form.php?modin=2"
 groups=        "groups.php"
 
 icons=         "/img/"
@@ -62,7 +62,7 @@ list_section=  "article.php?list=type"
 
 map=           "flashmap.php"
 
-media_add=     "modinput4.php?modin=7"
+media_add=     "form.php?modin=7"
 
 petitions=     "petition.php"
 
@@ -84,7 +84,7 @@ tell_a_friend= "mailto2.php"
 trainer_add=   "form.php?id=5"
 trainer_list=  "userdata_display.php?modin=5"
 
-volunteers=    "modinput4.php?modin=8"
+volunteers=    "form.php?modin=8"
 
 
 
