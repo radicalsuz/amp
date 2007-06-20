@@ -1010,8 +1010,9 @@ if ( !function_exists( 'mime_content_type')) {
 
 if ( !function_exists( 'AMP_directDisplay')) {
     function AMP_directDisplay( $html, $display_name = null ) {
-        $direct_display = &new AMPDisplay_HTML( );
-        $direct_display->setContent( $html );
+        require_once( 'AMP/Content/Buffer.php' );
+        $direct_display = new AMP_Content_Buffer( );
+        $direct_display->add( $html );
         $currentPage = &AMPContent_Page::instance( );
         $currentPage->contentManager->addDisplay( $direct_display, $display_name );
     }
