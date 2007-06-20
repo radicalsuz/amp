@@ -1,0 +1,76 @@
+<array>
+	<from_header>
+		<label>From</label>
+		<type>header</type>
+	</from_header>
+	<name>
+		<type>text</type>
+		<label>Name</label>
+		<required>1</required>
+	</name>
+	<from_email>
+		<type>text</type>
+		<label>Email</label>
+		<required>1</required>
+		<rules>
+			<item>
+				<type>email</type>
+				<message>Must be a valid email address</message>
+			</item>
+		</rules>
+	</from_email>
+	<subject>
+		<type>text</type>
+		<label>Subject</label>
+		<required>1</required>
+	</subject>
+    <message>
+        <type>textarea</type>
+        <label>Message</label>
+        <required>1</required>
+        <size>10:38</size>
+    </message>
+	<to_header>
+		<type>header</type>
+		<label>To</label>
+	</to_header>
+	<recipient_name>
+		<type>text</type>
+		<label>Name</label>
+	</recipient_name>
+	<recipient_email>
+		<type>text</type>
+		<label>Email</label>
+		<required>1</required>
+		<rules>
+			<item>
+				<type>email</type>
+				<message>Must be a valid email address</message>
+			</item>
+		</rules>
+	</recipient_email>
+    <okay_button>
+        <type>button</type>
+        <label>Share This</label>
+        <attr>
+            <onClick>this.form.submit();</onClick>
+        </attr>
+    </okay_button>
+    <more_recipient_splitter>
+        <type>header</type>
+        <label>Add More Recipients</label>
+    </more_recipient_splitter>
+    <recipient_splitter>
+        <type>header</type>
+    </recipient_splitter>
+	<source_url>
+		<constant>1</constant>
+		<type>hidden</type>
+	</source_url>
+	<target_recipient_modin>
+		<constant>1</constant>
+		<type>hidden</type>
+        <default>21</default>
+	</target_recipient_modin>
+		
+</array>
