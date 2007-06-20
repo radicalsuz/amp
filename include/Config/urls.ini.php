@@ -38,7 +38,7 @@ event_search=  "calendar.php"
 faq=           "faq.php"
 
 form=          "form.php"
-form_display=  "userdata_display.php"
+form_display=  "display.php"
 
 frontpage=     "index.php"
 
@@ -75,14 +75,14 @@ share=         "share.php"
 sitemap=       "sitemap.php"
 
 speaker_add=   "form.php?id=6"
-speaker_list=  "userdata_display.php?modin=6"
+speaker_list=  "display.php?modin=6"
 
 tag=           "tag.php"
 
 tell_a_friend= "mailto2.php"
 
 trainer_add=   "form.php?id=5"
-trainer_list=  "userdata_display.php?modin=5"
+trainer_list=  "display.php?modin=5"
 
 volunteers=    "form.php?modin=8"
 
