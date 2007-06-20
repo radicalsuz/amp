@@ -7,7 +7,7 @@ class NavigationDisplay {
     var $position;
     var $css_class;
     var $_morelink_css_class = "go";
-    var $_morelink_text = "More&nbsp;&#187;";
+    var $_morelink_text = AMP_TEXT_NAV_MORELINK;
     var $_template;
 
     function NavigationDisplay( &$nav ) {

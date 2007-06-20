@@ -93,5 +93,16 @@ class AMPForm_XML extends AMPForm {
     function submitted( ){
         return isset($_REQUEST[$this->_submit_value]);
     }
+
+    function getIdValue( ) {
+        return false;
+        if ( !isset( $this->form )) return false;
+        if ( !$this->isBuilt ) return false;
+        
+        $set = $this->getValues( $this->id_field );
+        if ($set) return $set[ $this->id_field ];
+        return false;
+
+    }
 }
 ?>

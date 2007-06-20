@@ -13,17 +13,22 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
 
     function commit_add( ){
         $intro = &$this->_map->getPublicPage( 'input' );
-        if ( !$intro ) return parent::commit_add( );
+        if ( $intro ) {
+            $this->_set_public_page( $intro );
+        }
 
+        return parent::commit_add( );
+
+        /*
         $this->_public_page_id = $intro->id;
-        $this->_display->add( $intro->getDisplay( ));
+        $this->_display->add( $intro->getDisplay( ), AMP_CONTENT_DISPLAY_KEY_INTRO );
 
         $reg = &AMP_Registry::instance( );
         $reg->setEntry( AMP_REGISTRY_CONTENT_INTRO_ID, $this->_public_page_id );
 
         $this->_page->setIntroText( $this->_public_page_id );
         $this->_page->initLocation( );
-        return parent::commit_add( );
+        */
 
     }
 
@@ -113,11 +118,15 @@ class AMP_System_Component_Controller_Public extends AMP_System_Component_Contro
         if ( !$public_page ) return;
 
         $this->_public_page_id = $public_page->id;
-        $this->_display->add( $public_page->getDisplay( ));
+        $this->_display->add( $public_page->getDisplay( ), AMP_CONTENT_DISPLAY_KEY_INTRO );
 
         $reg = &AMP_Registry::instance( );
         $reg->setEntry( AMP_REGISTRY_CONTENT_INTRO_ID, $this->_public_page_id );
 
+        if ( !isset( $this->_page )) {
+            require_once( 'AMP/Content/Page.inc.php');
+            $this->_page = AMPContent_Page::instance( );
+        }
         $this->_page->setIntroText( $this->_public_page_id );
         $this->_page->initLocation( );
     }

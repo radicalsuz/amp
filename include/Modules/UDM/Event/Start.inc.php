@@ -40,14 +40,14 @@ class UserDataPlugin_Start_Event extends UserDataPlugin {
             'size'=>'5',
             'available'=>true,
             'default' => '',
-            'label'=>'DIA AMP User Name'
+            'label'=>'DIA User Name'
 			),
 		'password' => array(
             'type'=>'text',
             'size'=>'5',
             'available'=>true,
             'default' => '',
-            'label'=>'DIA AMP User Password'
+            'label'=>'DIA User Password'
 			),
 		'capacity' => array(
             'type'=>'text',

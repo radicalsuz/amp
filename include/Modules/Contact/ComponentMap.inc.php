@@ -11,7 +11,8 @@ class ComponentMap_Contact extends AMPSystem_ComponentMap {
 
 
     var $components = array( 
-        'form' => 'ContactForm' );
+        'form' => 'ContactForm' 
+        );
 }
 
 ?>

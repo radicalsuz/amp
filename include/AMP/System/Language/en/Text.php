@@ -51,6 +51,7 @@ define( 'AMP_TEXT_SEARCH', 'Search');
 define( 'AMP_TEXT_ALL', 'All');
 define( 'AMP_TEXT_RECENT' , 'Recent&nbsp;' );
 define( 'AMP_TEXT_MORE' , 'More&nbsp;' );
+if ( !defined( 'AMP_TEXT_NAV_MORELINK' )) define( 'AMP_TEXT_NAV_MORELINK' , 'More&nbsp;&#187;' );
 define( 'AMP_TEXT_POSTED_IN' , 'Posted in' );
 define( 'AMP_TEXT_POSTED_BY' , 'Posted by %s on %s' );
 
