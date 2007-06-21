@@ -10,6 +10,7 @@ class User_List extends AMPSystem_List {
         'Permission Group' => '_render_permission_link',
         'ID'    => 'id');
     var $editlink = 'user.php';
+    var $_url_add = 'user.php?action=new';
     var $name_field = 'name';
     var $_source_object = 'AMPSystem_User';
 

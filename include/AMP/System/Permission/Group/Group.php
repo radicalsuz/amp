@@ -16,6 +16,7 @@ class PermissionGroup extends AMPSystem_Data_Item {
     function _afterSave( ){
         $this->_renewPermissions( );
         $this->_updateSections( );
+        AMP_permission_update( );
     }
 
     function _afterRead( ){

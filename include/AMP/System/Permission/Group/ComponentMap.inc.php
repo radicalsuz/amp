@@ -33,7 +33,6 @@ class ComponentMap_PermissionGroup extends AMPSystem_ComponentMap {
 
     function onSave( &$controller  ) {
         ampredirect( AMP_SYSTEM_URL_PERMISSION_GROUP );
-        AMP_permission_update( );
     }
 }
 

@@ -5,6 +5,7 @@ require_once( 'AMP/System/ComponentMap.inc.php');
 class ComponentMap_User extends AMPSystem_ComponentMap {
     var $heading = "User";
     var $nav_name = "system";
+    var $_action_default = 'list';
 
     var $paths = array( 
         'fields' => 'AMP/System/User/Fields.xml',

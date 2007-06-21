@@ -71,6 +71,14 @@ class AMPSystem_User extends AMPSystem_Data_Item {
         return $this->getPermission( );
     }
 
+    function _afterSave( ) {
+        AMP_permission_update( );
+    }
+
+    function get_url_edit( ) {
+        return $this->get_system_url( 'user' );
+    }
+
 }
 
 ?>
