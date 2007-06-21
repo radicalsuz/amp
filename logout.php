@@ -1,4 +1,4 @@
-<?php;
+<?php
 
 // Unset the cookie, and redirect to the home page.
 
