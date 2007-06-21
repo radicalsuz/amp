@@ -51,7 +51,17 @@ class AMP_System_Page_OnLoad extends AMP_Content_Buffer {
     }
 
     function _jsFunctionCall( ){
-        return 'window.onload  = '. $this->_onload_script_name . ';' ."\n";
+        $attach_script = 
+<<<JAVASCRIPT
+if (window.addEventListener) //DOM method for binding an event
+    window.addEventListener("load", %1\$s, false)
+else if (window.attachEvent) //IE exclusive method for binding an event
+    window.attachEvent("onload", %1\$s )
+else if (document.getElementById) //support older modern browsers
+    window.onload=%1\$s;
+JAVASCRIPT;
+        return sprintf( $attach_script, $this->_onload_script_name );
+        //return 'window.onload  = '. $this->_onload_script_name . ';' ."\n";
     }
 }
 

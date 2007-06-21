@@ -83,10 +83,10 @@ if ( ( !$uid || $auth ) && $udm->submitted ) {
 
 $intro_id = $udm->modTemplateID;
 
+AMP_directDisplay( $udm->output());
 require_once( 'AMP/BaseTemplate.php' );
 require_once( 'AMP/BaseModuleIntro.php' );
 
-print $udm->output();
 
 // Append the footer and clean up.
 require_once( 'AMP/BaseFooter.php' );

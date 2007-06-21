@@ -62,7 +62,7 @@ if ( $sub ) {
     // Save only if submitted data is present, and the user is
     // authenticated, or if the submission is anonymous (i.e., !$uid)
 	if($udm->saveUser()) {
-			header ("Location:userdata_list.php?modin=".$udm->instance);
+			ampredirect( AMP_SYSTEM_URL_FORM_DATA . "?modin=".$udm->instance);
 	}
 	$udm->showForm = true;
 
@@ -88,14 +88,27 @@ if ( $sub ) {
 
 $mod_id = $udm->modTemplateID;
 
-require_once( 'header.php' );
+//require_once( 'header.php' );
+require_once( 'AMP/Content/Buffer.php' );
+require_once( 'AMP/System/Page/Display.php' );
 
-print '<div id="AMP_flash"></div>';
-print "<h2>Add/Edit " . $udm->name . "</h2>";
-print "<font color = \"red\">".$udm->outputErrors()."</font>";
-print $udm->output();
+$page_output = //'<div id="AMP_flash"></div>'
+             "<h2>Add/Edit " . $udm->name . "</h2>"
+             . "<font color = \"red\">".$udm->outputErrors()."</font>"
+             . $udm->output();
+
+$display = new AMP_Content_Buffer( );
+$display->add( $page_output );
+
+$flash = AMP_System_Flash::instance( );
+$fake_controller = $flash;
+
+$complete_page = &AMP_System_Page_Display::instance( $fake_controller );
+$complete_page->add( $flash, AMP_CONTENT_DISPLAY_KEY_FLASH );
+$complete_page->add( $display );
+print $complete_page->execute( );
 
 // Append the footer and clean up.
-require_once( 'footer.php' );
+//require_once( 'footer.php' );
 
 ?>
