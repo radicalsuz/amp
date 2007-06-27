@@ -21,7 +21,8 @@ class ListIntro_Display extends AMPDisplay_HTML {
             $output = $display->execute();
         } else {
             $output =
-                $this->_HTML_title( $this->_source->getName() ).
+                $this->_HTML_title( $this->_source->getName() 
+                                        . $this->_source->getListNameSuffix( ) ).
                 $this->_HTML_blurb( $this->_source->getBlurb() );
                 //$this->_HTML_date( $this->_source->getItemDate() );
         } 

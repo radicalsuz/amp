@@ -329,5 +329,60 @@ class Section extends AMPSystem_Data_Item {
         return $this->isLive( ) ? AMP_PUBLISH_STATUS_LIVE : AMP_PUBLISH_STATUS_DRAFT;
     }
 
+    function makeCriteriaParent( $parent_id ) {
+        return 'parent=' . $parent_id;
+    }
+
+    function delete( ){
+        return $this->trash( );
+    }
+
+    function trash( ) {
+        $section_set = $this->getSearchSource( );
+        $result = $section_set->updateData( array( 'parent='.AMP_CONTENT_SECTION_ID_TRASH ), 'id=' . $this->id );
+        if ( !$result ) return false;
+
+        //send a notice about the child sections
+        $map = AMPContent_Map::instance( );
+        $children = $map->getDescendants( $this->id );
+        $this->trash_contents( $this->id );
+
+        if ( !empty( $children )) {
+            foreach( $children as $child_id ) {
+                $this->trash_contents( $child_id );
+            }
+        }
+        $this->notify( 'trash', $this->id );
+        return ( count( $children ) + 1 );
+
+    }
+
+    function trash_contents( $section_id ) {
+        require_once( 'AMP/Content/Article.inc.php');
+        $article = new Article( $this->dbcon );
+        
+        $article_source = $article->getSearchSource( );
+        $article_count = $article_source->updateData( array( 'publish='.AMP_CONTENT_STATUS_DRAFT ), $article->makeCriteriaPrimarySection( $section_id ) );
+
+        $article_set = AMP_lookup( 'articlesByPrimarySection', $section_id );
+        foreach( $article_set as $id => $title ) {
+            $relations_count = Article::drop_all_relations( $id );
+        }
+        
+    }
+
+    function makeCriteriaAllowed( ) {
+        $allowed_section_names = AMP_lookup( 'sectionMap');
+        if ( !$allowed_section_names ) return 'FALSE'; 
+
+        $allowed_sections = array_keys( $allowed_section_names );
+        array_unshift( $allowed_sections, AMP_CONTENT_MAP_ROOT_SECTION );
+        return 'parent in ( ' . join( ',',  $allowed_sections ) . ') and id!='. AMP_CONTENT_SECTION_ID_TRASH;
+    }
+
+    function getListNameSuffix( ) {
+        return AMP_format_date_from_array( AMP_date_from_url( ));
+    }
+
 }
 ?>

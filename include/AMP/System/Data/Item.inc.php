@@ -169,7 +169,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( !isset( $this->id )) return false;
         if ( !$this->deleteData( $this->id )) return false;
 
-        $this->notify( 'delete');
+        $this->notify( 'delete', $this->id );
         return true;
         
     }
@@ -676,6 +676,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function make_readable_select_for_publish( ) {
         return 'if ( isnull( publish ) or publish = \'\' or publish=0, \''.AMP_PUBLISH_STATUS_DRAFT.'\', \''.AMP_PUBLISH_STATUS_LIVE.'\' )';
+    }
+
+    function getListNameSuffix( ) {
+        return false;
     }
 
 

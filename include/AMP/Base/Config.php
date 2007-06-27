@@ -43,6 +43,8 @@ if ( file_exists_incpath( 'custom.sources.inc.php' )) include_once ('custom.sour
 if ( file_exists_incpath( 'custom.includes.inc.php' )) include_once ('custom.includes.inc.php' );
 if ( file_exists_incpath( 'custom.translations.inc.php' )) include_once ('custom.translations.inc.php' );
 
+//stylesheets
+AMP_config_load( 'css', 'amp_content_css');
 
 //old legacy settings
 require_once( 'AMP/LegacyRegistry.inc.php');

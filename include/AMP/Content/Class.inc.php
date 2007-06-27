@@ -129,5 +129,11 @@ class ContentClass extends AMPSystem_Data_Item {
         return $this->getData( 'flash');
     }
 
+    function getListNameSuffix( ) {
+        return AMP_format_date_from_array( AMP_date_from_url( ));
+
+
+    }
+
 }
 ?>

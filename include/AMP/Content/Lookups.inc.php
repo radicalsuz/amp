@@ -1084,6 +1084,19 @@ class AMPSystemLookup_ArticlesBySection extends AMPSystem_Lookup {
 
 }
 
+class AMPSystemLookup_ArticlesByPrimarySection extends AMPSystemLookup_ArticlesBySection {
+    function AMPSystemLookup_ArticlesByPrimarySection( $section_id ) {
+        $this->__construct( $section_id );
+    }
+
+    function _addCriteriaSection( $section_id ) {
+        require_once( 'AMP/Content/Article.inc.php');
+        $article = new Article( AMP_Registry::getDbcon( ));
+        $this->criteria = $article->makeCriteriaPrimarySection( $section_id );
+    }
+
+}
+
 class AMPSystemLookup_ArticlesBySectionLive extends AMPSystemLookup_ArticlesBySection {
     function AMPSystemLookup_ArticlesBySectionLive( $section_id ) {
         $this->__construct( $section_id );
@@ -1145,6 +1158,32 @@ class AMPSystemLookup_SectionMapLiveChopped extends AMPSystemLookup_SectionMapLi
         foreach( $this->dataset as $id => $name ) {
             $this->dataset[$id] = str_replace( '&nbsp;', ' ', AMP_trimText( $name, 60, false ));
         }
+    }
+}
+
+class AMPSystemLookup_ArticlesByDate extends AMPSystem_Lookup {
+
+    var $id_field = 'DATE_FORMAT( date, "%M %Y") as pretty_date';
+    var $result_field = 'count( id ) as qty';
+    var $criteria= 'date != "0000-00-00" and !isnull( date ) GROUP BY pretty_date';
+    var $sortby = 'date DESC';
+    var $datatable = 'articles';
+
+    function AMPSystemLookup_ArticlesByDate( ) {
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_ClassArticlesByDate extends AMPSystemLookup_ArticlesByDate {
+    var $base_criteria= 'date != "0000-00-00" and !isnull( date ) GROUP BY pretty_date';
+
+    function AMPSystemLookup_ClassArticlesByDate ( $class_id ) {
+        $this->add_criteria_class( $class_id );
+        $this->init( );
+    }
+
+    function add_criteria_class( $class_id ) {
+        $this->criteria = 'class=' . $class_id . ' AND ' . $this->base_criteria;
     }
 }
 ?>

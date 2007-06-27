@@ -54,6 +54,14 @@ if ( $intro_id == AMP_CONTENT_INTRO_ID_DEFAULT ) {
     if ( isset( $_GET['region'])&& $_GET['region'])$currentPage->setRegion(  $_GET['region'] ); 
 
     /**
+     * Translate readable dates 
+     */
+    $date_values = AMP_date_from_url( );
+    foreach( $date_values as $token => $value ) {
+        $_GET['date'][$token] = $value;
+    }
+     
+    /**
      * Activate Preview Mode if requested
      * TODO: Preview mode should only be available to authenticated admin users
      */

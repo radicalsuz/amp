@@ -131,6 +131,11 @@ if ($listType) {
             }
         }
 
+        if ( isset( $_GET['date']) && $_GET['date']) {
+            $date_value = $_GET['date'];
+            $display->addFilter( 'date', $date_value );
+        }
+
     } else {
         AMP_make_404( );
     }

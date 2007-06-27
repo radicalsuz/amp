@@ -48,6 +48,12 @@ class ArticleSet extends AMPSystem_Data_Set {
         return SectionContents_Manager::getRelatedArticles( $section_id );
     }
 
+    function makeCriteriaDate( $date_value ) {
+        require_once( 'AMP/Content/Article.inc.php' );
+        $sample_article = new Article( $this->dbcon );
+        return $sample_article->makeCriteriaDate( $date_value );
+    }
+
 
     function addCriteriaPublic( ){
         $protected_sections = AMPContent_Lookup::instance( 'protectedSections');

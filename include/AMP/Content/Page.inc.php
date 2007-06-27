@@ -580,7 +580,7 @@ class AMPContent_Page {
      */
     function &getListDisplay() {
         $empty_value = false;
-        if (!$listType = $this->isList()) return $empty_value;
+        if (!( $listType = $this->isList() )) return $empty_value;
 
         if ( isset( $this->$listType)  && method_exists( $this->$listType, 'getDisplay' )) {
             return  $this->$listType->getDisplay();

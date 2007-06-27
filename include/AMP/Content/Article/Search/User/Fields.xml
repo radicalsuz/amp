@@ -12,11 +12,13 @@
 <section>
     <type>select</type>
     <label>Select Section</label>
+    <lookup>sectionMap</lookup>
     <attr><class>searchform_element</class></attr>
 </section>
 <class>
     <type>select</type>
     <label>Select Class</label>
+    <lookup>activeClasses</lookup>
     <attr><class>searchform_element</class></attr>
 </class>
 <id>
@@ -26,22 +28,27 @@
     <label>ID</label>
     <attr><class>searchform_element</class></attr>
 </id>
-<title>
-    <label>Title</label>
-    <type>text</type>
-    <size>25</size>
-    <attr><class>searchform_element</class></attr>
-</title>
-<author>
-    <label>Author</label>
-    <size>20</size>
-    <type>text</type>
-    <attr><class>searchform_element</class></attr>
-</author>
-<date>
-    <type>date</type>
-    <default>last year</default>
-    <label>Dated After: </label>
-    <attr><class>searchform_element</class></attr>
-</date>
+    <title>
+        <label>Title</label>
+        <type>text</type>
+        <size>25</size>
+        <attr><class>searchform_element</class></attr>
+    </title>
+    <author>
+        <label>Author</label>
+        <size>20</size>
+        <type>text</type>
+        <attr><class>searchform_element</class></attr>
+    </author>
+
+	<date>
+		<separator>newrow</separator>
+		<type>date</type>
+		<label> Date: </label>
+		<options>
+			<addEmptyOption>1</addEmptyOption>
+			<emptyOptionText>--</emptyOptionText>
+			<format>YM</format>
+		</options>
+    </date>
 </array>

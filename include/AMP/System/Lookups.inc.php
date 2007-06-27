@@ -21,8 +21,14 @@ class AMPSystem_LookupFactory {
     }
         
     function readData( &$lookup ) {
-        if (!isset($lookup->datatable)) return false;
-        if (!isset($lookup->result_field)) return false;
+        if (!isset($lookup->datatable)) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $lookup ), 'datatable' ));
+            return false;
+        }
+        if (!isset($lookup->result_field)) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $lookup ), 'result_field' ));
+            return false;
+        }
         if ( ! ($data = $this->dbcon->CacheGetAssoc( $this->assembleSQL( $lookup ) ))) {
             if ($dbError = $this->dbcon->ErrorMsg()) 
                 trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($lookup), $dbError ) );
@@ -1171,6 +1177,49 @@ class AMPSystemLookup_CustomFiles extends AMPSystem_Lookup {
 	function AMPSystemLookup_CustomFiles() {
 		$this->dataset = AMPfile_list('custom', 'php'); 
 	}
+}
+
+class AMPSystemLookup_SiteRoots extends AMPSystem_Lookup {
+    var $datatable = 'per_group';
+    var $result_field = 'root_section_id';
+
+    function AMPSystemLookup_SiteRoots( ) {
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_UserGroups extends AMPSystem_Lookup {
+    var $datatable = 'users';
+    var $result_field = 'permission';
+    var $criteria='!isnull( permission) and permission !=0';
+
+    function AMPSystemLookup_UserGroups( ) {
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_UserSiteRoots extends AMPSystem_Lookup {
+
+    function AMPSystemLookup_UserSiteRoots( ) {
+        $this->prepare_data( );
+    }
+
+    function prepare_data( ) {
+        $users = AMP_lookup( 'userGroups') ;
+        $roots = AMP_lookup( 'siteRoots');
+        foreach( $users as $user_id => $group_id ) {
+            $this->dataset[$user_id] = $roots[$group_id];
+        }
+    }
+}
+
+class AMPSystemLookup_Subsites extends AMPSystem_Lookup {
+    var $datatable = 'sysvar';
+    var $result_field = 'basepath';
+
+    function AMPSystemLookup_Subsites( ) {
+        $this->init( );
+    }
 }
 
 ?>

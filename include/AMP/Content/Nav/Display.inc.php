@@ -1,4 +1,5 @@
 <?php
+
 require_once ('AMP/Content/Nav.inc.php');
 define( 'AMP_NAVTYPE_DEFAULT_LINK_FORMAT', '_HTML_link' );
 

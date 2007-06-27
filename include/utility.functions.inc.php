@@ -52,9 +52,10 @@ if ( !function_exists( 'ampredirect' ) ) {
 
     function ampredirect($url) {
         $target_url = $url;
-        if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
-            $target_url = $_REQUEST['pageredirect'];
-        }
+        //this is a massive security hole AP 2007-06-25
+        //if ( isset( $_REQUEST[ 'pageredirect' ] ) && $_REQUEST['pageredirect'] ) {
+        //    $target_url = $_REQUEST['pageredirect'];
+        //}
         if ( defined( 'AMP_USERMODE_ADMIN' ) && AMP_DISPLAYMODE_DEBUG ) trigger_error ( 'redirect is for ' . $target_url );
         if ( !defined( 'AMP_CONTENT_PAGE_REDIRECT' ))  define( 'AMP_CONTENT_PAGE_REDIRECT', $target_url );
         header("Location: $target_url");
@@ -990,6 +991,9 @@ if (!function_exists( 'AMP_cacheFlush' )) {
             return false;
         }
         $cache->clear( $key_token );
+
+        $flash = AMP_System_Flash::instance( );
+        $flash->restore_cache( );
     }
 
 }
@@ -1082,6 +1086,7 @@ if ( !function_exists( 'AMP_Authorized')) {
             'reorder'   => 'save',
             'list'      => 'access',
             'copy'      => 'create',
+            'trash'     => 'delete',
             );
 
         if ( defined( 'AMP_SYSTEM_PERMISSIONS_LOADING') || !defined( 'AMP_SYSTEM_USER_ID_ACL')) {
@@ -1952,6 +1957,9 @@ function AMP_url_build_query( $attr = array( )) {
     if ( empty( $attr )) return array( );
     $complete = array( );
     foreach( $attr as $key => $value ) {
+        if ( strip_tags( $value ) != $value ) {
+            continue;
+        }
         $complete[$key] = AMP_url_print( $value, $key );
     }
     return $complete;
@@ -2075,6 +2083,55 @@ function AMP_config_format( $values ) {
         $output[] = $formatted_key . $formatted_value;
     }
     return join( "\n", $output );
+}
+
+function AMP_date_from_url( ) {
+    if ( isset( $_GET['date']) && is_array( $_GET['date'])) {
+        return $_GET['date'];
+    }
+
+    $result = array( );
+    $month =( isset( $_GET['month']) && $_GET['month'])         ? $_GET['month']        : false;
+    if ( $month ) {
+        $result['M'] = $month;
+    }
+    $year = ( isset( $_GET['year']) && $_GET['year'] )          ? $_GET['year']         : false;
+    if ( $year ) {
+        $result['Y'] = $year;
+    }
+    $day = ( isset( $_GET['day']) && $_GET['day'])         ? $_GET['day']        : false;
+    if ( $day ) {
+        $result['d'] = $day;
+    }
+    return $result;
+}
+
+function AMP_format_date_from_array( $date_values ) {
+    $real_day=false;
+
+    if ( !( isset( $date_values['Y']) || isset( $date_values['M']))) return false;
+    if ( !isset( $date_values['d']))  {
+        $date_values['d'] = 1;
+    } else {
+        $real_day = true;
+    }
+
+    $separator = ': ';
+    if ( !isset( $date_values['Y']) && isset( $date_values['M'])) {
+        $example_date = strtotime( date( 'Y') . '-' . $date_values['M'] . '-' . $date_values['d'] );
+        return $separator . date( 'F', $example_date );
+    }
+    if ( !isset( $date_values['M']) && isset( $date_values['Y'])) {
+        $example_date = strtotime( $date_values['Y'] . '-' . date( 'm') . '-' . $date_values['d'] );
+        return $separator . date( 'Y', $example_date );
+    }
+    $date_stamp = mktime( 0,0,0, $date_values['M'], $date_values['d'], $date_values['Y']);
+
+    if( $real_day ) {
+        return $separator . date( 'F j, Y', $date_stamp );
+    }
+
+    return $separator . date( 'F Y', $date_stamp );
 }
 
 ?>
