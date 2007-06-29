@@ -101,12 +101,9 @@ default_alignment="right"
 path="/img/"
 gallery_page_limit=24
 
-[css class]
-navlink="sidelist"
-list_subheader="title"
-
 [content nav]
 limit_default=20
+archive_limit=10
 no_limit_qty=700
 
 [content intro id]
@@ -131,6 +128,8 @@ content=19
 
 [content section id]
 tool_pages=2
+trash=2
+root=1
 
 [content trackbacks]
 enabled=false
@@ -158,5 +157,13 @@ buffer="buffer"
 
 [content redirect]
 sectionheaders_to_sections=true
+
+[content nav block]
+right="r"
+left="l"
+
+[content template token]
+standard="[-%s nav-]"
+body="[-body-]"
 
 ;?>

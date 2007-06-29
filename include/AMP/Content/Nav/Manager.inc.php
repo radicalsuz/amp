@@ -53,7 +53,18 @@ class NavigationManager {
             $nav = &$this->getElement( $navid, $position );
             $output .= $nav->output();
         }
-        return $output;
+        return $this->render_nav_block( $output, $position );
+    }
+
+    function render_nav_block( $content, $position ) {
+        $nav_blocks = AMP_lookup( 'navBlocks');
+        $nav_key = array_search( $position, $nav_blocks );
+
+        $renderer = AMP_get_renderer( );
+        return $renderer->div( $content, array( 
+                                'class' => AMP_CONTENT_CSS_CLASS_NAV_BLOCK,
+                                'id'    => sprintf( AMP_CONTENT_CSS_ID_NAV_BLOCK, $nav_key )));
+
     }
 
     ###############################
@@ -91,11 +102,13 @@ class NavigationManager {
         foreach ($locations as $locationDef) {
             $id = $locationDef[ 'navid' ];
             if (! ( $position = substr($locationDef['position'], 0, 1 ))) continue; 
+            $order = substr( $locationDef['position'], 1 );
 
             $nav = &new NavigationElement( $this->dbcon, $id );
             if (! $nav->hasData() ) continue;
 
             $nav->initTemplate( $position, $this->template );
+            $nav->order = $order;
             $this->_navSet[ $position ][ $id ] = &$nav;
         }
 

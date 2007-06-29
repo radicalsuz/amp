@@ -120,7 +120,7 @@ class AMPContentLookup_SectionTotals extends AMPContent_Lookup {
 
     function AMPContentLookup_SectionTotals( ){
         $this->init( );
-        //$this->_mergeRelatedArticles( );
+        $this->_mergeRelatedArticles( );
     }
 
     // merge related doesn't make the right totals for some reason
@@ -128,9 +128,10 @@ class AMPContentLookup_SectionTotals extends AMPContent_Lookup {
         $related = &AMPContent_Lookup::instance( 'sectionRelatedTotals');
         foreach( $related as $section_id => $count ) {
             if ( !isset( $this->dataset[$section_id])) {
-                $this->dataset[$section_id] = '*';
+                $this->dataset[$section_id] = 0;
             }
-            $this->dataset[$section_id] = $this->dataset[$section_id] . '*';
+            //$this->dataset[$section_id] = $this->dataset[$section_id] . '*';
+            $this->dataset[$section_id] = $this->dataset[$section_id] + $count ;
         }
     }
 }
@@ -903,29 +904,34 @@ class AMPContentLookup_Navs extends AMPContent_Lookup {
 }
 
 class AMPContentLookup_NavPositions extends AMPContent_Lookup {
-    var $dataset = array( 
-        'L1' => 'Left Side, Position 1',
-        'L2' => 'Left Side, Position 2',
-        'L3' => 'Left Side, Position 3',
-        'L4' => 'Left Side, Position 4',
-        'L5' => 'Left Side, Position 5',
-        'L6' => 'Left Side, Position 6',
-        'L7' => 'Left Side, Position 7',
-        'L8' => 'Left Side, Position 8',
-        'L9' => 'Left Side, Position 9',
-        'R1' => 'Right Side, Position 1',
-        'R2' => 'Right Side, Position 2',
-        'R3' => 'Right Side, Position 3',
-        'R4' => 'Right Side, Position 4',
-        'R5' => 'Right Side, Position 5',
-        'R6' => 'Right Side, Position 6',
-        'R7' => 'Right Side, Position 7',
-        'R8' => 'Right Side, Position 8',
-        'R9' => 'Right Side, Position 9',
-        );
+
     function AMPContentLookup_NavPositions( ){
-        //interface
+        $this->__construct( );
     }
+
+    function __construct( ) {
+        $nav_blocks = AMP_lookup( 'navBlocks') ;
+        foreach( $nav_blocks as $name => $db_token ) {
+            for( $i=1;$i<10;++$i) {
+                $current_token = strtoupper( $db_token . $i );
+                $this->dataset[$current_token] = sprintf( AMP_TEXT_NAV_POSITION_DESCRIPTION, ucfirst( $name ), $i );
+            }
+        }
+
+    }
+}
+
+class AMPContentLookup_NavBlocks extends AMPConstant_Lookup {
+    var $_prefix_values = 'AMP_CONTENT_NAV_BLOCK';
+
+    function AMPContentLookup_NavBlocks( ) {
+        $this->init( );
+        foreach( $this->dataset as $token => $key ) {
+            $new_dataset[ strtolower( $key ) ] = $token; 
+        }
+        $this->dataset = $new_dataset;
+    }
+
 }
 
 class AMPContentLookup_NavLayoutsByIntrotext extends AMPContent_Lookup {

@@ -10,6 +10,9 @@ class NavigationDisplay {
     var $_morelink_css_class = "go";
     var $_morelink_text = AMP_TEXT_NAV_MORELINK;
     var $_template;
+    var $_legacy_positions = array( 'l' => 1, 'r' => 1, 'L' => 1, 'R'=> 1 );
+    var $_renderer;
+    var $order;
 
     function NavigationDisplay( &$nav ) {
         $this->init( $nav );
@@ -18,13 +21,15 @@ class NavigationDisplay {
     function init( &$nav ) {
         $this->nav = &$nav;
         $this->position = $this->nav->position;
+        $this->order = $this->nav->order ;
         $this->_template = &$nav->template;
         $this->setCssClass( $nav->getCssClass() );
+        $this->_renderer = AMP_get_renderer( );
     }
 
     function execute() {
         if (!($body=$this->_HTML_body())) return false;
-        return $this->_HTML_title() . $body;
+        return $this->_templateElement( $this->_HTML_title( ) . $body );
     }
 
     ########################
@@ -73,7 +78,10 @@ class NavigationDisplay {
             $output .= $this->_HTML_moreLink();
         }
 
-        return $output . $this->_templateBodyClose();
+        if ( isset( $this->_legacy_positions[$this->position])) {
+            return $output . $this->_templateBodyClose();
+        }
+        return $this->_templateBody( $output );
     }
 
     function _HTML_link( $link ) {
@@ -110,20 +118,45 @@ class NavigationDisplay {
     ##################################
 
     function _templateBodyItem( $html ) {
-        return  $this->_template->getNavHtml( $this->position, 'start_content' ).
-                $html .
-                $this->_template->getNavHtml( $this->position, 'close_content' );
+        if ( isset( $this->_legacy_positions[$this->position])) {
+            return  $this->_template->getNavHtml( $this->position, 'start_content' ).
+                    $html .
+                    $this->_template->getNavHtml( $this->position, 'close_content' );
+
+        }
+        return $this->_renderer->span( $html, array( 'class' => AMP_CONTENT_CSS_CLASS_NAV_LINE_ITEM )) 
+                . $this->_renderer->newline( );
     }
 
     function _templateTitle( $html ) {
-        return  $this->_template->getNavHtml( $this->position, 'start_heading' ) .
-                $html .
-                $this->_template->getNavHtml( $this->position, 'close_heading' );
+        if ( isset( $this->_legacy_positions[$this->position])) {
+            return  $this->_template->getNavHtml( $this->position, 'start_heading' ) .
+                    $html .
+                    $this->_template->getNavHtml( $this->position, 'close_heading' );
+        }
+        return $this->_renderer->span( $html, array( 'class' => AMP_CONTENT_CSS_CLASS_NAV_HEADING )) 
+                . $this->_renderer->newline( );
     }
 
     function _templateBody( $html ) {
-        return  $this->_templateBodyItem( $html ) .
-                $this->_templateBodyClose();
+        if ( isset( $this->_legacy_positions[$this->position])) {
+            return  $this->_templateBodyItem( $html ) .
+                    $this->_templateBodyClose();
+        }
+        return $this->_renderer->div( $html, array( 'class' => AMP_CONTENT_CSS_CLASS_NAV_CONTENT )) ;
+    }
+
+    function _templateElement( $content ) {
+        if ( isset( $this->_legacy_positions[$this->position])) {
+            return $content;
+        }
+
+        $nav_blocks = AMP_lookup( 'navBlocks' );
+        $nav_key = array_search( $this->position, $nav_blocks );
+        return $this->_renderer->div( $content, 
+                                    array(  'class' => AMP_CONTENT_CSS_CLASS_NAV_ELEMENT,
+                                            'id'    => sprintf( AMP_CONTENT_CSS_CLASS_NAV_ELEMENT, $nav_key, $this->order ))
+                                    );
     }
 
     function _templateBodyClose(){
