@@ -3,11 +3,11 @@
 		<type>text</type>
 		<label>Text Search</label>
 	</fulltext>
-	<event_type>
+	<section>
 		<type>select</type>
 		<label>By Section</label>
 		<lookup>sectionMapLiveChopped</lookup>
-	</event_type>
+	</section>
 	<date>
 		<separator>newrow</separator>
 		<type>date</type>

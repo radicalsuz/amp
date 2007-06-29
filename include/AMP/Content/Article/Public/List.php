@@ -11,10 +11,10 @@ class Article_Public_List extends AMP_Display_List {
     var $_pager_limit = 100;
     var $_class_pager = 'AMP_Display_Pager_Content';
     var $_path_pager = 'AMP/Display/Pager/Content.php';
-    var $_css_class_container_list = 'list_block content_search';
 
     var $_source_criteria = array( 'live' => 1, 'allowed' => 1 );
-    //var $_sort_sql_default = 'default';
+
+    var $_sort_sql_default = 'default';
     var $_sort_sql_translations = array( 
         'default' => 'date DESC, id'
     );
@@ -28,64 +28,23 @@ class Article_Public_List extends AMP_Display_List {
 		$source = false;
 		$this->__construct($source, $criteria );
 	}
-
-    function _init_criteria( ) {
-        $this->_init_search( );
-		if (!isset($this->_source_criteria['fulltext'])) {
-			$this->_sort_sql_default = 'default';
-		}
-	}
-
-    function _init_search( ) {
-        require_once( 'AMP/System/ComponentLookup.inc.php');
-        $map = ComponentLookup::instance( get_class( $this ));
-        $search = $map->getComponent( 'search');
-        if ( !$search ) return;
-        $search->Build( true );
-        $search_criteria = array( );
-
-        if ( $search->submitted( )){
-            $search_criteria = $search->getSearchValues( );
-        } else {
-            $search->applyDefaults( );
-        }
-
-        $this->_search = &$search;
-
-        $this->_source_criteria = array_merge( $this->_source_criteria, $search_criteria );
-    }
-
-    function _output_empty( ) {
-        $this->message( AMP_TEXT_SEARCH_NO_MATCHES );
-        return $this->render_search( ) . AMP_TEXT_SEARCH_NO_MATCHES;
-    }
-
-    function _renderHeader( ) {
-        return $this->render_search( ) ;
-
-    }
-
-    function render_search( ) {
-        if ( !isset( $this->_search )) return false;
-        return $this->_search->execute( );
-    }
+    
 
     function _renderItem( &$source ) {
+        return      $this->render_title( $source )
+				  . $this->render_date(  $source )
+				  . $this->render_source($source )
+				  . $this->render_image( $source )
+                  . $this->render_blurb( $source );
+    }
+
+    function render_title( $source ) {
         $url = false;
         if ( method_exists( $source, 'getURL' )) {
             $url = $source->getURL( );
         }
-		$image = $source->getImageRef();
-		$rendered_image = false;
-		if ($image) {
-			$rendered_image = $this->_renderer->image($image->getURL(AMP_IMAGE_CLASS_THUMB), array('align'=>'right'));
-		}
-        return      $this->_renderer->link( $url, $source->getName( ), array( 'class' => 'title' ))
-                  . $this->_renderer->newline( )
-				  . $this->render_date($source)
-				  . $this->render_source($source)
-				  . $rendered_image
-				  . $this->_renderer->in_P( $source->getBlurb() );
+        return $this->_renderer->link( $url, $source->getName( ), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_TITLE ))
+                  . $this->_renderer->newline( );
     }
 
     function render_source( &$article ) {
@@ -99,28 +58,46 @@ class Article_Public_List extends AMP_Display_List {
         $output_source = FALSE;
 
         if (trim($author)) {
-            $output_author =  $this->_renderer->inSpan( 'by&nbsp;' . converttext($author), $this->_css_class_author );
+            $output_author =  $this->_renderer->span( sprintf( AMP_TEXT_BYLINE_SLUG, converttext($author)), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_AUTHOR ));
         }
 
         if ($source_name || $source_url)  {
             if ( !$source_name ) {
                 $source_name = $source_url;
             }
-            $output_source = $this->_renderer->inSpan( $this->_renderer->link( $source_url, $source_name  ), $this->_css_class_source );
+            $output_source = $this->_renderer->span( $this->_renderer->link( $source_url, $source_name  ), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_SOURCE ));
         }
 
-        if ($output_author && $output_source) return $output_author . ',' . $this->_renderer->space() . $output_source . $this->_renderer->newline();
-        if ($output_author && !$output_source) return $output_author . $this->_renderer->newline();
+        if (!$output_author){
+            return $output_source . $this->_renderer->newline();
+        }
+        if ( !$output_source ) {
+            return $output_author . $this->_renderer->newline();
+        }
 
-        return $output_source . $this->_renderer->newline();
+        return    $output_author . ',' . $this->_renderer->space() 
+                . $output_source . $this->_renderer->newline();
     }
 
 	function render_date( &$source ) {
 		$date = $source->getItemDate();
 		if (!$date) return false;
 
-        return $this->_renderer->inSpan( DoDate( $date, 'F jS, Y'), $this->_css_class_date ) . $this->_renderer->newline();
+        return $this->_renderer->span( DoDate( $date, 'F jS, Y'), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_DATE )) 
+                . $this->_renderer->newline();
 	}
+
+    function render_image( &$source ) {
+		$image = $source->getImageRef();
+		if ( !$image) return false; 
+
+        return $this->_renderer->image($image->getURL(AMP_IMAGE_CLASS_THUMB), array('align'=>'right'));
+    }
+
+    function render_blurb( $source ) {
+        return $this->_renderer->div( $source->getBlurb(), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_BLURB ) );
+    }
+    
 }
 
 ?>
