@@ -2021,7 +2021,10 @@ function AMP_config_load( $file, $prefix='AMP') {
         return $loaded[$prefix][$file];
     }
     $file_name = 'Config/' . $file . '.ini.php';
-    if ( !file_exists_incpath( $file_name )) return array( );
+    if ( !file_exists_incpath( $file_name )){
+        $file_name = $file . '.ini.php';
+        if ( !file_exists_incpath( $file_name )) return array( );
+    }
 
     //$loaded[$file]= parse_ini_file( 'Config/'.$file.'.ini.php', true );
     $loaded[$prefix][$file]= parse_ini_file( $file_name, true );

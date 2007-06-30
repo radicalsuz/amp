@@ -76,7 +76,10 @@ class AMP_System_Flash extends AMP_Content_Buffer {
                 if ( $this->_cache ) $this->_cache->add( $this->_message_urls, $this->_cache_key_message_urls );
             }
         }
-        if ( $this->_cache ) $this->_cache->add( $this->_messages, $this->_cache_key_messages );
+        if ( $this->_cache ) {
+            $this->_cache->add( $this->_messages, $this->_cache_key_messages );
+
+        }
     }
 
     function get_messages( ){
@@ -151,6 +154,17 @@ class AMP_System_Flash extends AMP_Content_Buffer {
             }
         }
         return $output;
+    }
+
+    function restore_cache( ) {
+        foreach( $this->_messages as $message_key  => $message ) {
+            $message_url = isset( $this->_message_urls[ $message_key ] ) ? $this->_message_urls[$message_key] : false;
+            $this->add_message( $message, $message_key, $message_url );
+        }
+        foreach( $this->_errors as $error_key => $message ) {
+            $this->add_error( $message, $error_key );
+        }
+        
     }
 
 }
