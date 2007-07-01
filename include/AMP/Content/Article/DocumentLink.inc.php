@@ -152,7 +152,8 @@ class ArticleDocumentLink_Display extends AMPDisplay_HTML {
 
     function _HTML_docLink() {
 
-        $linkhtml = $this->getIcon() . " Download as " . $this->getFileDescription();
+//        $linkhtml = $this->getIcon() . " Download as " . $this->getFileDescription();
+        $linkhtml = $this->getIcon() . sprintf( AMP_TEXT_DOWNLOAD_LINK, $this->document_link->getFileName( ));
 
         return $this->_HTML_link( $this->document_link->getURL(), $linkhtml );
     }
@@ -169,11 +170,12 @@ class ArticleDocumentLink_DisplayDiv extends ArticleDocumentLink_Display {
 
     function _HTML_docLink() {
 
-        $linkhtml = $this->getIcon() . " ". basename( $this->document_link->getPath( ) );
+        $linkhtml = basename( $this->document_link->getPath( ) );
 
         return $this->_HTML_inDiv( 
                     $this->_HTML_link( $this->document_link->getURL(), $linkhtml ),
-                    array( 'class'=>'filelink')
+                    array( 'class'=>'filelink ' . $this->document_link->getFileType( ),
+                            'title' => 'Download as ' . $this->getFileDescription( ))
                     );
     }
 

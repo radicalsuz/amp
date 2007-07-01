@@ -50,12 +50,18 @@ span.udm_header {
 		padding: 5px;
 }
 
-.searchform_label, .searchform_element, .searchform_header, .searchform_table, searchform_table.input {
+.searchform_label, .searchform_element, .searchform_header, .searchform_table, .searchform_table input {
 		font-size: 11px;
 		text-decoration: none;
 		margin-left: 3px;
 		/*text-align:left;*/
 }
+
+
+form#udm_search span.go, form#udm_search input, form#udm_search select { 
+	vertical-align:top;
+}
+
 
 .searchform_table {
 	text-align: left;
@@ -311,4 +317,30 @@ form .block {
 
 div.spacer {
     clear: both;
+}
+
+img.template_image {
+    border: 0;
+}
+
+div.filelink {
+    display:block;
+    width:100%;
+    text-align:center;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+div.filelink a {
+    border: 1px solid black;
+    padding: 1em;
+    padding-left: 3em;
+    background: url( /img/go-down.png ) 5% 50% no-repeat;
+}
+
+div.filelink a:hover {
+    background-color: #ddeeff;
+    text-decoration:none;
+    color: #006666;
+    border: #99CCFF 2px solid;
 }

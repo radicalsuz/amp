@@ -48,7 +48,7 @@ class Article_Display extends AMPDisplay_HTML {
         $body = $this->_processBody( $body );
 
         return    $this->render_image( )
-                . $this->insert_media( $body );
+                . $this->insert_blocks( $body );
     }
 
     function _processBody( $body ) {
@@ -81,12 +81,28 @@ class Article_Display extends AMPDisplay_HTML {
 
     }
 
+    function insert_blocks( $body ) {
+        $new_body = $this->insert_media( $body );
+        return $this->insert_document( $body );
+    }
+
+
     function insert_media( $body ) {
         $media = $this->render_media( );
         if ( strpos( $body, '%media%') === FALSE ) {
             return $body.$media;
         }
         return str_replace( '%media%', $media, $body );
+    }
+
+    function insert_document( $body ) {
+        $docbox = &$this->_article->getDocLinkRef();
+        $doc_insert = $docbox ? $docbox->display( 'div' ) : false;
+         
+        if ( strpos( $body, '%doc%') === FALSE ) {
+            return $body . $doc_insert;
+        }
+        return str_replace( '%doc%', $doc_insert, $body);
     }
 
     function render_media( ) {
@@ -113,9 +129,6 @@ class Article_Display extends AMPDisplay_HTML {
         if ($comments = &$this->_article->getComments()) {
             $comments->readPublished( );
             $output .= $comments->display();
-        }
-        if ($docbox = &$this->_article->getDocLinkRef()) {
-            $output .= $docbox->display();
         }
         return $output . $this->_HTML_end();
     }
