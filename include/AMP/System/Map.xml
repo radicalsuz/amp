@@ -494,12 +494,12 @@
     <per>CONTENT_TEMPLATE</per>
     <item>
         <label>View Templates</label>
-        <href>template.php?action=list</href>
+        <href>template.php</href>
         <per>CONTENT_TEMPLATE</per>
     </item>
     <item>
         <label>Add Template</label>
-        <href>template.php</href>
+        <href>template.php?action=new</href>
         <per>CONTENT_TEMPLATE</per>
     </item>
     <item>

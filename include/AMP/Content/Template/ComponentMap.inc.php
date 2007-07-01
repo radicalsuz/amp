@@ -5,6 +5,7 @@ require_once( 'AMP/System/ComponentMap.inc.php');
 class ComponentMap_Template extends AMPSystem_ComponentMap {
     var $heading = "Template";
     var $nav_name = "template";
+	var $_action_default = 'list';
 
     var $_component_controller = 'AMP_System_Component_Controller_Sticky';
 

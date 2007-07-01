@@ -538,14 +538,19 @@
 	<title>Template</title>
 	<per>CONTENT_TEMPLATE</per>
 	<item>
-		<href>template.php?action=list</href>
-		<label>View/Edit Template</label>
+		<href>template.php</href>
+		<label>View Templates</label>
 		<class>view</class>
 	</item>
 	<item>
-		<href>template.php</href>
+		<href>template.php?action=new</href>
 		<label>Add Template</label>
 		<class>add</class>
+	</item>
+	<item>
+		<href>template_archive.php</href>
+		<label>View Template Archives</label>
+		<class>search</class>
 	</item>
 	<item>
 		<href>stylesheet.php?action=edit&amp;id=styles.css</href>
