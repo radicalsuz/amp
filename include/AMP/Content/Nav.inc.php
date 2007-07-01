@@ -7,10 +7,12 @@ define( 'AMP_NAVTYPE_PHP', 'PHP' );
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Nav/Display.inc.php' );
+/*
 require_once ( 'AMP/Content/Nav/EngineSQL.inc.php' );
 require_once ( 'AMP/Content/Nav/EngineRSS.inc.php' );
 require_once ( 'AMP/Content/Nav/EngineHTML.inc.php' );
 require_once ( 'AMP/Content/Nav/EnginePHP.inc.php' );
+*/
 
 
 class NavigationElement extends AMPSystem_Data_Item {
@@ -33,9 +35,13 @@ class NavigationElement extends AMPSystem_Data_Item {
         $this->_initEngine();
     }
 
-    function execute() {
+    function get_contents() {
         if (!isset($this->_engine)) return false;
         return $this->_engine->execute();
+    }
+
+    function execute( ) {
+        return $this->output( );
     }
 
     function output() {
@@ -49,6 +55,7 @@ class NavigationElement extends AMPSystem_Data_Item {
     #################################
     
     function _initEngine() {
+        if ($this->getBadgeId()) return $this->setEngine( AMP_NAVTYPE_PHP );
         if ($this->getIncludeFile()) return $this->setEngine( AMP_NAVTYPE_PHP );
         if ($this->getRSS()) return $this->setEngine( AMP_NAVTYPE_RSS );
         if ($this->getSQL()) return $this->setEngine( AMP_NAVTYPE_SQL );
@@ -58,6 +65,8 @@ class NavigationElement extends AMPSystem_Data_Item {
 
     function setEngine( $engineType=AMP_NAVTYPE_HTML ) {
         $engine_class = 'NavEngine_' . $engineType;
+
+        require_once ( 'AMP/Content/Nav/Engine'.$engineType.'.inc.php' );
         if (!class_exists( $engine_class )) return false;
         $this->_engine = &new $engine_class( $this );
     }
@@ -117,6 +126,10 @@ class NavigationElement extends AMPSystem_Data_Item {
 
     function getIncludeFile( ){
         return $this->getData( 'include_file');
+    }
+
+    function getBadgeId( ) {
+        return $this->getData( 'badge_id' );
     }
 
     function getIncludeClass( ){
