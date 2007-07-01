@@ -83,7 +83,7 @@ class Article_Display extends AMPDisplay_HTML {
 
     function insert_blocks( $body ) {
         $new_body = $this->insert_media( $body );
-        return $this->insert_document( $body );
+        return $this->insert_document( $new_body );
     }
 
 
