@@ -7,6 +7,11 @@
         </lookup>
         <label>Element</label>
     </navid>
+    <badge_id>
+        <type>select</type>
+        <lookup>badges</lookup>
+        <label>Badge</label>
+    </badge_id>
     <position>
         <type>select</type>
         <lookup>

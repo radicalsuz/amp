@@ -63,7 +63,7 @@ class NavigationDisplay {
     }
 
     function _HTML_body() {
-        if (!($result = $this->nav->execute())) return false;
+        if (!($result = $this->nav->get_contents())) return false;
         if (!is_array( $result )) return $this->_templateBody( $result );
 
         $output = "";

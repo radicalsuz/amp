@@ -38,6 +38,14 @@ class AMP_Content_Nav_Location extends AMPSystem_Data_Item {
         return $this->getData( 'layout_id' );
     }
 
+    function getBadge_id( ) {
+        return $this->getBadgeId( );
+    }
+
+    function getBadgeId( ) {
+        return $this->getData( 'badge_id' );
+    }
+
 }
 
 ?>

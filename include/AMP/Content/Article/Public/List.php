@@ -12,7 +12,7 @@ class Article_Public_List extends AMP_Display_List {
     var $_class_pager = 'AMP_Display_Pager_Content';
     var $_path_pager = 'AMP/Display/Pager/Content.php';
 
-    var $_source_criteria = array( 'live' => 1, 'allowed' => 1 );
+    var $_source_criteria = array( 'displayable' => 1 );
 
     var $_sort_sql_default = 'default';
     var $_sort_sql_translations = array( 
@@ -20,29 +20,31 @@ class Article_Public_List extends AMP_Display_List {
     );
 	var $_search;
 
-    var $_css_class_author = "bodygreystrong";
-    var $_css_class_source = "bodygreystrong";
-    var $_css_class_date   = "bodygreystrong";
-
-	function Article_Public_List ( $source = false, $criteria = array()) {
+	function Article_Public_List ( $source = false, $criteria = array(), $limit = null ) {
 		$source = false;
-		$this->__construct($source, $criteria );
+		$this->__construct($source, $criteria, $limit );
 	}
     
 
     function _renderItem( &$source ) {
-        return      $this->render_title( $source )
-				  . $this->render_date(  $source )
+        $text =     $this->render_title( $source )
 				  . $this->render_source($source )
-				  . $this->render_image( $source )
+				  . $this->render_date(  $source )
                   . $this->render_blurb( $source );
+
+        $image = $this->render_image( $source );
+        return    $this->_renderer->div( $image, array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_IMAGE ))
+                . $this->_renderer->div( $text,  array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_DESCRIPTION ) );
     }
 
+    function url_for( $source ) {
+        if ( !method_exists( $source, 'getURL' )) return false; 
+        return $source->getURL( );
+    }
+
+
     function render_title( $source ) {
-        $url = false;
-        if ( method_exists( $source, 'getURL' )) {
-            $url = $source->getURL( );
-        }
+        $url = $this->url_for( $source );
         return $this->_renderer->link( $url, $source->getName( ), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_TITLE ))
                   . $this->_renderer->newline( );
     }
@@ -90,8 +92,13 @@ class Article_Public_List extends AMP_Display_List {
     function render_image( &$source ) {
 		$image = $source->getImageRef();
 		if ( !$image) return false; 
+        $img_output = $this->_renderer->image($image->getURL(AMP_IMAGE_CLASS_THUMB));
 
-        return $this->_renderer->image($image->getURL(AMP_IMAGE_CLASS_THUMB), array('align'=>'right'));
+        $url = $this->url_for( $source ) ;
+        if ( !$url ) {
+            return $img_output;
+        }
+        return $this->_renderer->link( $url, $img_output );
     }
 
     function render_blurb( $source ) {

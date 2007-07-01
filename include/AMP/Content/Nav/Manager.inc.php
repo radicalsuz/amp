@@ -7,7 +7,6 @@ define( 'NAVIGATION_STANDARD_SEARCH', 'layout_id' );
 define( 'NAVIGATION_STANDARD_VALUE', '1' );
 
 require_once( 'AMP/Content/Nav/LocationSet.inc.php' );
-require_once( 'AMP/Content/Nav.inc.php' );
 
 /* * * * * * * * * * * * *
  * 
@@ -48,11 +47,12 @@ class NavigationManager {
     function output( $position ) {
         $output = "";
         if (!isset($this->_navSet[ $position ])) return false;
-        foreach( $this->_navSet[ $position ] as $navid => $navcopy ) {
 
-            $nav = &$this->getElement( $navid, $position );
-            $output .= $nav->output();
+        foreach( $this->_navSet[ $position ] as $order => $navcopy ) {
+            $element = &$this->getElement( $order, $position );
+            $output .= $element->execute();
         }
+
         return $this->render_nav_block( $output, $position );
     }
 
@@ -71,8 +71,8 @@ class NavigationManager {
     ### public accessor methods ###
     ###############################
 
-    function &getElement( $navid, $position ) {
-        if (isset($this->_navSet[ $position ][ $navid ])) return $this->_navSet[ $position ][ $navid ];
+    function &getElement( $order, $position ) {
+        if (isset($this->_navSet[ $position ][ $order ])) return $this->_navSet[ $position ][ $order ];
         return false;
     }
 
@@ -99,18 +99,54 @@ class NavigationManager {
 
     function _loadNavs( $locations ) {
         $this->_navSet = array();
+        $ordered_set = array( );
         foreach ($locations as $locationDef) {
-            $id = $locationDef[ 'navid' ];
+            $nav_id = $locationDef[ 'navid' ];
+            $badge_id = $locationDef[ 'badge_id' ];
+
             if (! ( $position = substr($locationDef['position'], 0, 1 ))) continue; 
             $order = substr( $locationDef['position'], 1 );
 
-            $nav = &new NavigationElement( $this->dbcon, $id );
-            if (! $nav->hasData() ) continue;
+            if ( $nav_id ) {
+                $element = $this->_loadNavElement( $nav_id, $position, $order );
+            }
+            if ( $badge_id ) {
+                $element = $this->_loadBadge( $badge_id, $position, $order );
+            }
+            if ( !$element ) continue;
 
-            $nav->initTemplate( $position, $this->template );
-            $nav->order = $order;
-            $this->_navSet[ $position ][ $id ] = &$nav;
+            $order_of = $this->find_actual_order( $order, $ordered_set ) ;
+            $this->_navSet[ $position ][ $order_of ] = &$element;
+            unset( $element );
         }
+
+    }
+
+    function find_actual_order( $order, &$ordered_set ) {
+        if ( !isset( $ordered_set[$order])) {
+            $ordered_set[$order] = 1;
+            return $order;
+        }
+        return $this->find_actual_order( ++$order, $ordered_set );
+    }
+
+    function &_loadNavElement( $nav_id, $nav_block, $order ) {
+        $false = false;
+        require_once( 'AMP/Content/Nav.inc.php' );
+        $nav = &new NavigationElement( $this->dbcon, $nav_id );
+        if (! $nav->hasData() ) return $false;
+
+        $nav->initTemplate( $nav_block, $this->template );
+        $nav->order = $order;
+        return $nav;
+    }
+
+    function &_loadBadge( $badge_id, $nav_block, $order ) {
+        $false = false;
+        require_once( 'AMP/Content/Badge/Badge.php' );
+        $badge = &new AMP_Content_Badge( $this->dbcon, $badge_id );
+        if (! $badge->hasData() ) return $false;
+        return $badge;
 
     }
 

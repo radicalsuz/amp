@@ -3,7 +3,7 @@ if (!defined( 'MAGPIE_DIR' )) define('MAGPIE_DIR', 'magpierss'.DIRECTORY_SEPARAT
 if (!defined( 'AMP_NAVTYPE_RSS_LINK_FORMAT')) define( 'AMP_NAVTYPE_RSS_LINK_FORMAT', '_HTML_link' );
 
 require_once( MAGPIE_DIR.'rss_fetch.inc' );
-require_once( 'AMP/Content/Nav/EngineRSS.inc.php' );
+require_once( 'AMP/Content/Nav/EngineHTML.inc.php' );
 
 class NavEngine_RSS extends NavEngine {
 

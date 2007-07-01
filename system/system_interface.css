@@ -924,3 +924,7 @@ form .block {
 div.spacer {
     clear: both;
 }
+
+div.preview_link {
+    margin-left: 25em;
+}

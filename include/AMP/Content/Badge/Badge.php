@@ -19,6 +19,39 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
 		return $this->getData('include_function');
 	}
 
+    function getIncludeFunctionArguments( ) {
+        $value = $this->getData( 'include_function_args');
+        if ( !$value ) return $this->getDefaultArguments( );
+        $tuples = split( "&&", $value );
+
+        $values = array( );
+        foreach( $tuples as $tuple ) {
+            $tuple_segments = split( '=', $tuple );
+            if ( count( $tuple_segments ) > 2 ) continue;
+
+            $values[ $tuple_segments[0]] = $tuple_segments[1];
+        }
+
+        return array_merge( $this->getDefaultArguments( ), $values );
+    }
+
+    function getDefaultArguments( ) {
+        $page = AMPContent_Page::instance( );
+        $values['section'] = $page->getSectionId( );
+        $values['class'] = $page->getClassId( );
+        $values['article'] = $page->getArticleId( );
+        $values['intro_id'] = $page->getIntroId( );
+
+        foreach( $values as $key => $value ) {
+            if ( !$value ) {
+                unset ( $values[ $key ] );
+            }
+        }
+
+        return $values;
+
+    }
+
 	function getHtml() {
 		return $this->getData('html');
 	}
@@ -35,6 +68,10 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
 		return $output;
 	}
 
+    function output( ) {
+        return $this->execute( );
+    }
+
 	function render_php_include() {
 		if (!($include_filename = $this->getInclude() )) return false;
 		if (!file_exists_incpath($include_filename)) {
@@ -43,9 +80,10 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
 		} 
 
 		if ($include_function = $this->getIncludeFunction()) {
-			include( $include_filename );
+			include_once( $include_filename );
 			if (is_callable($include_function)) {
-				return $include_function();
+                $arguments = $this->getIncludeFunctionArguments( );
+				return $include_function( $arguments );
 			} else {
 				trigger_error( AMP_TEXT_ERROR_NOT_DEFINED, $include_filename, $include_function );
 				return false;
@@ -84,6 +122,10 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
 		if (!$this->id) return false;
 		return AMP_url_add_vars( AMP_SYSTEM_URL_BADGE, "id=".$this->id);
 	}
+
+    function getStatus( ) {
+        return $this->isLive( ) ? AMP_PUBLISH_STATUS_LIVE : AMP_PUBLISH_STATUS_DRAFT;
+    }
 
 }
 

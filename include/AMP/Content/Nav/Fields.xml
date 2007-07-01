@@ -180,4 +180,10 @@
         <label>Include Function</label>
         <block>direct_include</block>
 	</include_function>
+	<badge_id>
+        <type>select</type>
+        <label>Badge</label>
+        <block>direct_include</block>
+		<lookup>badges</lookup>
+	</badge_id>
 </array>

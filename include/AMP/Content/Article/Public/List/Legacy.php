@@ -24,8 +24,8 @@ class Article_Public_List_Legacy extends Article_Public_List {
 
     function _renderItem( &$source ) {
         return      $this->render_title( $source )
-				  . $this->render_date(  $source )
 				  . $this->render_source($source )
+				  . $this->render_date(  $source )
                   . $this->render_blurb( $source );
     }
 

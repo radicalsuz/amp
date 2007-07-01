@@ -8,8 +8,9 @@ require_once( 'AMP/Form/ElementCopierScript.inc.php');
 class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
     var $name = "Nav_Location";
     var $col_headers = array( 
-        'Nav'        => 'navid',
         'Position'   =>  'position',
+        'Nav'        => 'navid',
+        'Badge'        => 'badge_id',
         'Remove'   =>  '_listControls',
         'Edit'   =>  '_listControls',
         );
@@ -44,12 +45,14 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
 		return "<input name='add_nav_location' type='button' value='Add Navigation Element'  onclick='DuplicateElementSet( window.nav_locations_copier, parentRow( this ).rowIndex );' class='searchform_element'>";
     }
 
+    /*
     function _navSelect( &$source, $fieldname ){
         return $this->_makeSelect( $source->getNavId( ), 'navid', $source->getData( ), AMPContent_Lookup::instance( 'navs' ));
     }
     function _positionSelect( &$source, $fieldname ){
         return $this->_makeSelect( $source->getPosition( ), 'position', $source->getData( ), AMPContent_Lookup::instance( 'navPositions' ));
     }
+    */
 
     function _listControls( &$source, $fieldname ){
         //trigger_error( __FUNCTION__ . ' called');
@@ -95,13 +98,14 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
         $form = &new AMP_Content_Nav_Location_Form( );
         $form->_getValueSet( 'navid');
         $form->_getValueSet( 'position');
+        $form->_getValueSet( 'badge_id');
 
         $copier_fields = array( 
-            'navid'     => $form->getField( 'navid'),
             'position'  => $form->getField( 'position'),
-//            'stuff'     => array( 'type' => 'text', 'default' => 'Blah', 'label' => 'Stuff'),
-//            'link'      => array( 'type' => 'button', 'attr' => array( 'onclick' => 'window.open( "'.AMP_SYSTEM_URL_NAV_EDIT.'?id=1" );')) ,
-            'id'        => array( 'type' => 'hidden'));
+            'navid'     => $form->getField( 'navid'),
+            'badge_id'  => $form->getField( 'badge_id'),
+            'id'        => array( 'type' => 'hidden'),
+            );
         foreach( $copier_fields as $key => $field_def ){
             unset( $copier_fields[$key]['label']);
         }

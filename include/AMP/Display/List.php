@@ -63,12 +63,12 @@ class AMP_Display_List {
 
     // {{{ constructors: __construct, _after_init
 
-    function AMP_Display_List( $source = false, $criteria = array( ) ) {
-        $this->__construct( $source, $criteria );
+    function AMP_Display_List( $source = false, $criteria = array( ), $limit = null ) {
+        $this->__construct( $source, $criteria, $limit );
     }
 
-    function __construct( $source = false, $criteria = array( ) ) {
-        $this->_init_pager( );
+    function __construct( $source = false, $criteria = array( ), $limit = null ) {
+        $this->_init_pager( $limit );
         $this->_init_source( $source, $criteria  );
         $this->_init_translations( );
         $this->_init_identity( );
@@ -376,7 +376,7 @@ class AMP_Display_List {
         //interface
     }
 
-    function _init_pager( ){
+    function _init_pager( $limit = null ){
         if ( !$this->_pager_active || isset( $this->_pager )) {
             return false;
         }
@@ -384,6 +384,12 @@ class AMP_Display_List {
         require_once( $this->_path_pager );
         $pager_class = $this->_class_pager;
         $this->_pager = &new $pager_class( );
+
+        if ( isset( $limit ) && $limit )  {
+            $this->_pager_limit = $limit;
+            $this->_pager_max = $limit;
+
+        }
 
         if ( $this->_pager->view_all( ) ) {
             if ( !$this->_pager_max ) {
@@ -401,6 +407,8 @@ class AMP_Display_List {
                 $this->_pager_limit = $request_limit;
             }
         } 
+
+        return true;
 
         //$this->_pager = &new $pager_class( $source );
         //if ( $this->_pager_limit ) $this->_pager->setLimit( $this->_pager_limit ); 
@@ -452,7 +460,7 @@ class AMP_Display_List {
     function _init_search_form( ) {
         require_once( 'AMP/System/ComponentLookup.inc.php');
         $map = ComponentLookup::instance( get_class( $this ));
-        if ( !$map->isAllowed( 'search' )) return;
+        if ( !( $map && $map->isAllowed( 'search' ))) return;
 
         $search = $map->getComponent( 'search', false);
         if ( !$search ) return;

@@ -22,7 +22,7 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
 
     var $paths = array(
         'fields' => 'AMP/Content/Article/Public/Fields.xml',
-        'list'   => 'AMP/Content/Article/Public/List.php',
+        'list'   => 'AMP/Content/Article/Public/Search/List.php',
         'form'          => 'AMP/Content/Article/Public/Form.inc.php',
         'source' => 'AMP/Content/Article.inc.php',
         'search' => 'AMP/Content/Article/Public/Search/Form.inc.php',
@@ -32,7 +32,7 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
     var $components = array (
         'form' => 'Article_Public_Form',
         'source' => 'Article',
-        'list'   => 'Article_Public_List',
+        'list'   => 'Article_Public_Search_List',
         'search' => 'Article_Public_Search_Form',
         );
 

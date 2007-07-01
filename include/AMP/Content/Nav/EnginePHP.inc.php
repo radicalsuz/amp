@@ -1,5 +1,5 @@
 <?php
-require_once( 'AMP/Content/Nav/EnginePHP.inc.php');
+require_once( 'AMP/Content/Nav/EngineHTML.inc.php');
 
 class NavEngine_PHP extends NavEngine {
     var $_engine_type = 'PHP';
@@ -9,6 +9,8 @@ class NavEngine_PHP extends NavEngine {
     }
 
     function execute( ) {
+        if ( $badge_id = $this->nav->getBadgeId( )) return $this->do_badge( $badge_id );
+
         if (!($filename = $this->nav->getIncludeFile())) return false;
         $fullpath = file_exists_incpath( $filename );
         if ( !$fullpath ) $fullpath = file_exists_incpath( 'AMP/Nav/' . $filename );
@@ -43,6 +45,16 @@ class NavEngine_PHP extends NavEngine {
         }
 
         return $this->_raw_include( $fullpath );
+
+    }
+
+    function do_badge( $badge_id ) {
+        require_once( 'AMP/Content/Badge/Badge.php');
+        $badge = new AMP_Content_Badge( AMP_Registry::getDbcon( ), $badge_id );
+        if( $badge->hasData( )) {
+            return $badge->execute( );
+        }
+        return false;
 
     }
 

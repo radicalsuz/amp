@@ -77,6 +77,7 @@ class AMP_Content_Nav_Layout extends AMPSystem_Data_Item {
     function _updateLocation( $location_data, $id  ){
         $location = &new AMP_Content_Nav_Location( $this->dbcon, $id );
         if ( (    $location->getNavid( )    == $location_data['navid'] )
+             && ( $location->getBadgeId( )  == $location_data['badge_id'] )
              && ( $location->getPosition( ) == $location_data['position'] )) {
             return true; 
         }

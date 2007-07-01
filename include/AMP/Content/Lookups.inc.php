@@ -1192,4 +1192,29 @@ class AMPSystemLookup_ClassArticlesByDate extends AMPSystemLookup_ArticlesByDate
         $this->criteria = 'class=' . $class_id . ' AND ' . $this->base_criteria;
     }
 }
+
+class AMPSystemLookup_Badges extends AMPSystem_Lookup {
+    var $datatable = 'badges';
+    var $result_field = 'name';
+    var $criteria = 'publish=1';
+
+    function AMPSystemLookup_Badges( ) {
+        $this->init( );
+    }
+}
+
+class AMPSystemLookup_BadgeFiles extends AMPSystem_Lookup {
+
+    function AMPSystemLookup_BadgeFiles( ) {
+        $core_badge_files = AMPfile_list( AMP_BASE_INCLUDE_PATH.'AMP/Badge', 'php');
+        $custom_files = AMP_lookup( 'customFiles');
+        foreach( $core_badge_files as $key => $core_file ) {
+            if ( !$key ) continue;
+            $full_core_file = 'AMP/Badge' .DIRECTORY_SEPARATOR. $core_file;
+            $this->dataset[ $full_core_file ] = $full_core_file  ;
+        }
+        $this->dataset = array_merge( $this->dataset, $custom_files );
+    }
+}
+
 ?>

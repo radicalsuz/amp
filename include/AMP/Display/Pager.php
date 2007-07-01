@@ -286,5 +286,9 @@ class AMP_Display_Pager {
         $this->_enable_all = $value;
     }
 
+    function render_spacer( ) {
+        return $this->_renderer->div( "", array( 'class' => 'spacer'));
+    }
+
 }
 ?>

@@ -79,7 +79,8 @@ class AMP_Content_Nav_Layout_Form extends AMPSystem_Form_XML {
     }
 
     function _getLocations( $data, $fieldname ){
-        return $this->_positionList->getPositions( );
+        $value = $this->_positionList->getPositions( );
+        return $value;
     }
 
     function __wakeup( ) {

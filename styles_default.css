@@ -2,13 +2,11 @@
 
 div.list_pager {
 		text-align: right;
-		float: right; 
 		width: 100%; 
 		font-size: 11px;
         position:relative;
 		display: inline;
 		padding: 5px 5px 10px 5px;
-        margin-top:3em;
 }
 
 div.list_pager a.pager_link {
@@ -85,10 +83,6 @@ div.list_entry {
 .element_list_container {
 	border: 1px solid silver;
 	padding: 10px;
-}
-
-div.spacer {
-	clear: both;
 }
 
 .sidebar_left {
@@ -343,4 +337,14 @@ div.filelink a:hover {
     text-decoration:none;
     color: #006666;
     border: #99CCFF 2px solid;
+}
+
+div.thumb {
+    float: left;
+    margin-right: 1em;
+
+}
+
+div.thumb img {
+    border: 0;
 }
