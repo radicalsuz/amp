@@ -16,7 +16,7 @@ class AMP_Content_Link_List extends AMP_System_List_Form {
     var $editlink = 'links.php';
     var $_url_add = 'links.php?action=add';
 
-    var $name_field = 'linkname';
+    var $name_field = 'name';
     var $_source_object = 'AMP_Content_Link';
     var $_observers_source = array( 'AMP_System_List_Observer' );
     var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'reorder');

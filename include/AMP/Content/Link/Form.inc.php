@@ -13,7 +13,6 @@ class AMP_Content_Link_Form extends AMPSystem_Form_XML {
     }
 
     function setDynamicValues( ){
-        /*auto scaffolded items here  auto scaffold items end */
     }
 }
 ?>

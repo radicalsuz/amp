@@ -4,7 +4,7 @@ require_once( 'AMP/Base/DB.php');
 
 //server config file
 if ( file_exists_incpath( 'AMP/HostConfig.inc.php')) {
-    include( 'AMP/HostConfig.inc.php');
+    include_once( 'AMP/HostConfig.inc.php');
 }
 
 //system wide configuration
