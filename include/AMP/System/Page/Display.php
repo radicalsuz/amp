@@ -11,8 +11,8 @@ class AMP_System_Page_Display extends AMP_System_Component_Display {
 
     var $_nav_set = array( );
 
-    function AMP_System_Page_Display ( &$controller ){
-        $this->__construct( $controller );
+    function AMP_System_Page_Display ( ){
+        $this->__construct( );
     }
 
 
@@ -21,9 +21,9 @@ class AMP_System_Page_Display extends AMP_System_Component_Display {
         return $this->template( $output );
     }
 
-    function &instance( &$controller ){
+    function &instance( ){
         static $page_display = false;
-        if ( !$page_display ) $page_display = new AMP_System_Page_Display( $controller );
+        if ( !$page_display ) $page_display = new AMP_System_Page_Display( );
         return $page_display;
     }
 

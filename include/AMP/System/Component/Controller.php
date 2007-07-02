@@ -87,7 +87,7 @@ class AMP_System_Component_Controller {
         if ( isset( $this->_display_custom[ $this->_action_requested ] )){
             $this->_display_class = $this->_display_custom[ $this->_action_requested ];
         }
-        $this->_display = call_user_func_array( array( $this->_display_class, 'instance'), $this );
+        $this->_display = call_user_func( array( $this->_display_class, 'instance') );
 
         $flash = &AMP_System_Flash::instance( );
         $this->_display->add( $flash, 'flash' );
@@ -144,6 +144,10 @@ class AMP_System_Component_Controller {
         if ( !method_exists( $target, $action )) {
             trigger_error( sprintf( AMP_TEXT_ERROR_METHOD_NOT_SUPPORTED, get_class( $target ), $action , get_class( $this )));
             return false;
+        }
+
+        if ( strtolower( get_class( $target )) == strtolower( get_class( $this->_model ))) {
+            $target->read( $this->_model_id );
         }
         return call_user_func_array( array( $target, $action ), $args ) ;
     }
@@ -510,9 +514,14 @@ class AMP_System_Component_Controller_Input extends AMP_System_Component_Control
             return true;
         }
 
-        $this->notify( 'beforeUpdate' );
+        if ( isset( $this->_model_id ) && $this->_model_id ) {
+            $this->_model->read( $this->_model_id );
+        }
+
+        $this->notify( 'beforeUpdate', array( 'model' => &$this->_model ));
+
         if ( !isset( $this->_model->id )) $this->_model->setDefaults( );
-        $this->_model->mergeData( $this->get_form_data( ));
+        $this->_model->mergeData( $this->get_form_data( ) );
 
         $this->notify( 'beforeSave' );
         //attempt to save the submitted data
@@ -563,8 +572,8 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         $this->_init_form( );
 
         $this->_form->setValues( $this->_model->getData( ));
-		$this->_display->add( $this->_form, 'form' ); 
         $this->show_preview_link( );
+		$this->_display->add( $this->_form, 'form' ); 
 		return true;
     }
 
@@ -578,24 +587,32 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
         if ( !method_exists( $this->_model, 'getURL')) return  ;
         $preview = new AMP_Content_Buffer( );
         $renderer  = AMP_get_renderer( );
-        $url = AMP_SITE_URL . $this->_model->getURL( );
-        $preview->add( $renderer->newline( ). $renderer->div(  AMP_TEXT_LIVE_LINK.': '. $renderer->link( $url, $url, array( 'target' => 'blank') ), array( 'class' => 'preview_link')));
-        $this->_display->add( $preview );
+        $model_url = $this->_model->getURL( );
+        if ( strpos( $model_url, 'http://' ) !== 0 ) {
+            $model_url = AMP_SITE_URL . $model_url;
+        }
+
+        $preview->add( $renderer->newline( ). $renderer->div(  AMP_TEXT_LIVE_LINK.': '. $renderer->link( $model_url, $model_url, array( 'target' => 'blank') ), array( 'class' => 'preview_link')));
+        $this->_display->add( $preview, 'preview_link' );
     }
 
 
     function commit_delete( ){
         if ( !$this->_model_id ) return $this->_commit_fail( );
-        $name = $this->_form->getItemName( );
         $this->notify( 'beforeDelete' );
+
+        $name = $this->_form->getItemName( );
         if ( !$name ) $name = AMP_TEXT_ITEM_NAME;
+
         $this->_map->clearCached( $this->_model );
-        if ( !$this->_model->deleteData( $this->_model_id )){
+        $this->_model->read( $this->_model_id );
+
+        if ( !$this->_model->delete( )){
             if ( method_exists( $this->_model, 'getErrors')) $this->error( $this->_model->getErrors( ));
             $this->_display->add( $this->_form );
             return false;
         }
-        $this->notify( 'delete' );
+        $this->notify( 'delete', $this->_model_id );
         $this->message( sprintf( AMP_TEXT_DATA_DELETE_SUCCESS, $name ));
         $this->display_default( ) ;
         return true;
