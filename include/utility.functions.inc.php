@@ -555,7 +555,8 @@ if (!function_exists('array_combine_key')) {
 }
 if (!function_exists('AMPfile_list')) {
 		function AMPfile_list($file,$ext=NULL) { 
-            if ( strpos( $file, AMP_LOCAL_PATH ) === FALSE ) {
+            if (( strpos( $file, AMP_LOCAL_PATH ) === FALSE )
+                && ( substr( $file, 0, 1 ) != DIRECTORY_SEPARATOR )) {
                 $dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
             } else {
                 $dir_name = $file;
