@@ -23,16 +23,18 @@ class Section_List extends AMP_System_List_Form {
     var $_map;
     var $_renderer;
     var $_observers_source = array( 'AMP_System_List_Observer');
-    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'reorder');
+    var $_actions = array( 'publish', 'unpublish', 'trash', 'move', 'reorder');
     var $_action_args = array(
             'reorder'   => array( 'order' ), 
             'move'      => array( 'section_id' ), 
         );
+
     var $_actions_global = array( 'reorder');
     var $name_field = 'name';
 
-    function Section_List( &$dbcon ) {
-        $this->init( $this->_init_source( $dbcon  ) );
+    function Section_List( &$dbcon, $criteria = array( ) ) {
+        $criteria['allowed'] = 1; 
+        $this->init( $this->_init_source( $dbcon, $criteria  ) );
         $this->_map = &AMPContent_Map::instance( );
     }
 
@@ -112,5 +114,23 @@ class Section_List extends AMP_System_List_Form {
                                     $renderer->image( AMP_SYSTEM_ICON_VIEW, array( 'width' => 16, 'height' => 16, 'border' => 0 ) ),
                                     array( 'title' => AMP_TEXT_CONTENT_PAGES ));
     }
+
+    function renderTrash( &$toolbar ){
+        $renderer = &AMP_get_renderer( );
+        $tool_name = $toolbar->submitGroup . '[trash]';
+        $label = AMP_TEXT_TRASH;
+        $attr['onclick'] = 'return confirmSubmit( "'.AMP_TEXT_LIST_CONFIRM_DELETE_SECTIONS.AMP_TEXT_LIST_CONFIRM_DELETE.'");';
+        return $renderer->submit( $tool_name, $label, $attr ) . $renderer->space( );
+        
+    }
+
+    function _after_request( ) {
+        if ( $this->_request->getPerformedAction( ) != 'trash') {
+            return;
+        }
+        ampredirect( $_SERVER['REQUEST_URI']);
+        AMP_permission_update( );
+    }
+
 }
 ?>

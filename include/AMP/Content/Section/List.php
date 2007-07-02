@@ -9,7 +9,7 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
     var $column_headers = array( 'name' => 'Section', 'id' => 'ID', 'nav_index' => 'Navigation');
     var $_source_object = 'Section';
 
-    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'reorder');
+    var $_actions = array( 'publish', 'unpublish', 'trash', 'move', 'reorder');
     var $_action_args = array(
             'reorder'   => array( 'order' ), 
             'move'      => array( 'section_id' ), 
@@ -51,12 +51,6 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
 
     function render_nav_index( $source ){
         return AMP_navCountDisplay_Section( $source->id );
-        /*
-        return  $this->_renderer->div( 
-                AMP_navCountDisplay_Section( $source->id ),
-                    array( 'style' => 'margin:3px;'));
-        */
-
     }
 
     function render_toolbar_reorder( &$toolbar ) {
@@ -175,6 +169,18 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
 
     function render_order( $source ) {
         return 
+            $this->_renderer->input( 
+                'order['.$source->id.']', 
+                $source->getOrder( ), 
+                    array(  'id' => 'order_'.$this->list_item_id( $source ), 
+                            'size' => '3', 
+                            'style' => 'margin-top:1em;',
+                            'type'=>'text' )
+                );
+
+            // Pause -- the following code is not in use
+            // Waiting to finish AJAX listener for reordering
+        return
        $this->_renderer->div(  
             $this->_renderer->div( 
                      $this->_renderer->a(  
@@ -198,6 +204,23 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
             . $this->_renderer->space( )
         ,array( 'style' => 'height: 3em;width:5em;margin-right:.5em')
         ) ;
+    }
+
+    function render_toolbar_trash ( &$toolbar ){
+        $tool_name = $toolbar->submitGroup . '[trash]';
+        $label = AMP_TEXT_TRASH;
+        $attr['onclick'] = 'return confirmSubmit( "'.AMP_TEXT_LIST_CONFIRM_DELETE_SECTIONS.AMP_TEXT_LIST_CONFIRM_DELETE.'");';
+        return $this->_renderer->submit( $tool_name, $label, $attr ) . $this->_renderer->space( );
+        
+    }
+
+    function _after_request( ) {
+        if (( $this->_request->getPerformedAction( ) != 'trash') 
+             && ( $this->_request->getPerformedAction( ) != 'move' )) {
+            return;
+        }
+        ampredirect( $_SERVER['REQUEST_URI']);
+        AMP_permission_update( );
     }
 }
 

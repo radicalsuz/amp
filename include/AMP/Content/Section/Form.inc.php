@@ -12,6 +12,20 @@ class Section_Form extends AMPSystem_Form_XML {
         $this->init( $name, 'POST', AMP_SYSTEM_URL_SECTION );
     }
 
+    function _after_init( ) {
+        $this->_send_preview_link_to_bottom( );
+    }
+
+    function _init_submit( ) {
+        $this->defineSubmit( 
+                'delete',
+                'Delete Record',
+                array ( 
+                    'onclick' => 
+                    "return confirmSubmit('".AMP_TEXT_RECORD_CONFIRM_DELETE_SECTION . AMP_TEXT_RECORD_CONFIRM_DELETE."');" )
+                );
+        if ($this->allow_copy) $this->copy_button();
+    }
     function setDynamicValues( ){
 
         $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
@@ -24,6 +38,20 @@ class Section_Form extends AMPSystem_Form_XML {
         return $fields;
     }
     */
+
+    function _send_preview_link_to_bottom( ) {
+        //lower preview link
+        $page = AMP_System_Page_Display::instance( );
+        $page->setDisplayOrder( array( 
+            AMP_CONTENT_DISPLAY_KEY_FLASH,
+            AMP_CONTENT_DISPLAY_KEY_INTRO,
+            AMP_CONTENT_DISPLAY_KEY_BUFFER,
+            'form',
+            'preview_link'
+            ));
+
+
+    }
 
     function _formHeader( ){
         $id = $this->getIdValue( );

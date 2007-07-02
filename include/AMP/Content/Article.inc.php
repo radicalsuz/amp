@@ -333,7 +333,7 @@ class Article extends AMPSystem_Data_Item {
     function saveVersion( ){
         require_once ( 'AMP/Content/Article/Version.inc.php' );
         $version = &new Article_Version( $this->dbcon );
-        $version->setData( $this->getData( ));
+        $version->mergeData( $this->getData( ));
         return $version->save( );
     }
 
@@ -589,12 +589,30 @@ class Article extends AMPSystem_Data_Item {
 
     }
 
+    function unrelate( $section_id ) {
+        require_once( 'AMP/Content/Section/RelatedSet.inc.php');
+        $related_section_set = new SectionRelatedSet( $this->dbcon );
+        return $related_section_set->deleteData( 'typeid=' . $section_id . ' AND ' . 'articleid=' . $this->id );
+
+    }
+
+    function drop_all_relations( $article_id ) {
+        require_once( 'AMP/Content/Section/RelatedSet.inc.php');
+        $related_section_set = new SectionRelatedSet( AMP_Registry::getDbcon( ) );
+        return $related_section_set->deleteData( 'articleid=' . $article_id );
+
+    }
+
     function makeCriteriaSection( $section_id ) {
         $related_articles = &AMPContentLookup_RelatedArticles::instance( $section_id );
         if ( !$related_articles ) return $this->_makeCriteriaEquals( 'type', $section_id ) ;
 
         return '( ' . $this->_makeCriteriaEquals( 'type', $section_id ) 
                     . ' or id in( ' . join( ',', array_keys( $related_articles ) ) . ' ) )';
+    }
+
+    function makeCriteriaPrimarySection( $section_id ) {
+        return $this->_makeCriteriaEquals( 'type', $section_id ) ;
     }
 
     function makeCriteriaAllowed( ) {
