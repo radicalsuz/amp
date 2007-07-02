@@ -1,4 +1,7 @@
 <?php
+
+header( "Location: /system/setup.php");
+/*
 $mod_name = "system";
 
   require("Connections/freedomrising.php");
@@ -300,6 +303,8 @@ if (isset($_REQUEST['MM_update']) && (isset($_REQUEST['MM_recordId']))) {
 
 <?php
   $setsysvar->Close(); ?>
- <?php include ("footer.php");?>
-
-
+ <?php include ("footer.php");
+ 
+ 
+ */
+?>
