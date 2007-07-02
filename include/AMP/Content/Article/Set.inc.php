@@ -43,7 +43,7 @@ class ArticleSet extends AMPSystem_Data_Set {
     }
 
     function _makeCriteriaSectionRelated( $section_id ) {
-        if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return false;
+//        if (!AMP_ARTICLE_ALLOW_MULTIPLE_SECTIONS) return false;
         require_once( 'AMP/Content/Section/Contents/Manager.inc.php');
         return SectionContents_Manager::getRelatedArticles( $section_id );
     }

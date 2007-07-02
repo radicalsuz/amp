@@ -376,6 +376,14 @@
         <type>header</type>
         <label>Attach Document</label>
     </doc_header>
+    <doc_html>
+        <type>static</type>
+        <default>
+		&lt;span class=name&gt;
+        The document selected below will appear as a link at the bottom of your article.&lt;br /&gt; 
+        To make it appear within the article, enter the tag %doc% in the body of your article.&lt;/span&gt;
+        </default>
+    </doc_html>
 	<doc>
 		<type>select</type>
 		<label>Document Name</label>

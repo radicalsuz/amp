@@ -162,6 +162,17 @@ class Article_Component_Controller extends AMP_System_Component_Controller_Stand
         }
     }
 
+    function show_preview_link( ) {
+        $this->_display->setDisplayOrder( array( 
+            AMP_CONTENT_DISPLAY_KEY_FLASH,
+            AMP_CONTENT_DISPLAY_KEY_INTRO,
+            AMP_CONTENT_DISPLAY_KEY_BUFFER,
+            'form',
+            'preview_link'
+        ));
+        parent::show_preview_link( );
+    }
+
 }
 
 ?>

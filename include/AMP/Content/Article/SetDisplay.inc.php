@@ -3,19 +3,17 @@
 require_once( 'AMP/Content/Article/Set.inc.php' );
 require_once( 'AMP/Content/Display/List.inc.php' );
 
-//this is a special version of Article display
-//i changed the cSS and added the subtitle - TED
-
-
 class ArticleSet_Display extends AMPContent_DisplayList_HTML {
     var $_css_class_author = "bodygreystrong";
     var $_css_class_source = "bodygreystrong";
 
+    /*
     var $_css_class_title    = "listtitle";
     var $_css_class_subtitle = "subtitle";
     var $_css_class_morelink = "go";
     var $_css_class_text     = "text";
     var $_css_class_date     = "fpdetails";
+    */
 
     function ArticleSet_Display( &$articleSet, $read_data = true ) {
         $this->init( $articleSet, $read_data );
