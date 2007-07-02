@@ -118,7 +118,7 @@ require_once( 'AMP/System/Page/Urls.inc.php');
     }
 
     function _HTML_NavSystem( ) {
-        return false;
+        if ( AMP_SYSTEM_MODE_PRODUCTION )return false;
         return
             '</ul>'
             ."<p class='sidetitle'>&nbsp;</p>"

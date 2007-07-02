@@ -65,4 +65,7 @@ link="link"
 phpgacl="phpgacl"
 phpgacl_admin="phpgacl/admin"
 
+[system mode]
+production=1
+
 ;?>
