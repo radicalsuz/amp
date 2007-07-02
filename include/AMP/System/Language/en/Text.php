@@ -44,11 +44,15 @@ define( 'AMP_TEXT_LIST', 'List');
 define( 'AMP_TEXT_DELETE', 'Delete');
 define( 'AMP_TEXT_EXPORT', 'Export');
 define( 'AMP_TEXT_IMPORT', 'Import');
+define( 'AMP_TEXT_MOVE', 'Move');
+define( 'AMP_TEXT_DEBUG', 'debug');
+define( 'AMP_TEXT_TRASH', 'Trash');
 define( 'AMP_TEXT_ADD', 'Add');
 define( 'AMP_TEXT_NAME', 'Name');
 define( 'AMP_TEXT_ITEM_NAME', 'Item');
 define( 'AMP_TEXT_SEARCH', 'Search');
 define( 'AMP_TEXT_ALL', 'All');
+define( 'AMP_TEXT_BYLINE_SLUG', 'by&nbsp;%s');
 define( 'AMP_TEXT_RECENT' , 'Recent&nbsp;' );
 define( 'AMP_TEXT_MORE' , 'More&nbsp;' );
 if ( !defined( 'AMP_TEXT_NAV_MORELINK' )) define( 'AMP_TEXT_NAV_MORELINK' , 'More&nbsp;&#187;' );
@@ -68,6 +72,7 @@ define( 'AMP_TEXT_ADD_ITEM','Add new record' );
 define( 'AMP_TEXT_PREVIEW_ITEM','Preview this Item' );
 define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
 define( 'AMP_TEXT_LIST_CONFIRM_DELETE', 'Are you sure you want to DELETE these items?');
+define( 'AMP_TEXT_LIST_CONFIRM_DELETE_SECTIONS', 'You are about to DELETE these sections and ALL ARTICLES and sections in them. ');
 define( 'AMP_TEXT_LIST_CONFIRM_RECALCULATE_IMAGES', 'Recalculating image sizes may take several minutes.\n  Please do not interfere with your browser during this time.\n  Are you sure you want to continue?');
 define( 'AMP_TEXT_LIST_EXPORT_PROCESS_TEXT', 'Your download should begin within one minute.<BR> If it does not, please <a href="%s">click here</a>.');
 define( 'AMP_TEXT_LIST_NAV_LAYOUT_TARGET_COPY', 'Select one or more targets for the current layouts');
@@ -183,6 +188,8 @@ define( 'AMP_TEXT_CACHE_RESET', 'The cache has been reset' );
 define( 'AMP_TEXT_CACHE_RESET_INTERNAL', 'Cache flushed from %s by user: %s' );
 define( 'AMP_TEXT_MODULE_GALLERY_EMPTY', 'No photos are available in this gallery');
 define( 'AMP_TEXT_NONE_AVAILABLE', 'None available');
+define( 'AMP_TEXT_RECORD_CONFIRM_DELETE', 'Are you sure you want to DELETE this record?');
+define( 'AMP_TEXT_RECORD_CONFIRM_DELETE_SECTION', 'You are about to DELETE this section and ALL ARTICLES and sections in it. ');
 
 
 /**
@@ -311,5 +318,8 @@ if ( !defined( 'AMP_TEXT_CAPTCHA_LABEL')) {
 
 define( 'AMP_TEXT_FORM_PLUGINS_REMINDER', 'Remember to register AMP/Save and AMP/Read' );
 define( 'AMP_TEXT_LIVE_LINK', 'Live Link');
+define( 'AMP_TEXT_NAV_POSITION_DESCRIPTION', 'Block: %s, Position %s');
+define( 'AMP_TEXT_TEMPLATE_ADD_TOKENS', 'Add these tokens to the template where you want content to appear:' );
+define( 'AMP_TEXT_DOWNLOAD_FILE_TYPE', ' Download as %s' );
 
 ?>
