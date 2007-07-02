@@ -134,7 +134,7 @@
 		<block>dia</block>
 	</dia_user>
 	<dia_pass>
-		<type>text</type>
+		<type>password</type>
 		<label>DIA Password</label>
 		<block>dia</block>
 	</dia_pass>
@@ -220,21 +220,25 @@
 		<type>blocktrigger</type>
 		<label>Amazon s3 cache settings</label>
 		<block>s3</block>
+		<block_trigger>s3_key</block_trigger>
 	</s3_header>
 	<s3_key>
 		<type>text</type>
 		<label>Key</label>
 		<block>s3</block>
+		<size>60</size>
 	</s3_key>
 	<s3_secret>
 		<type>text</type>
 		<label>Secret</label>
 		<block>s3</block>
+		<size>60</size>
 	</s3_secret>
 	<s3_bucket>
 		<type>text</type>
 		<label>Bucket</label>
 		<block>s3</block>
+		<size>60</size>
 	</s3_bucket>
 
 

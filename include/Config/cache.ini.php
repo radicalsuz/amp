@@ -17,9 +17,9 @@ output="%s.html"
 [system]
 cache_timeout_frontpage=AMP_SYSTEM_CACHE_TIMEOUT
 
-[system file s3]
-key=false
-secret=false
-bucket=false
+;[system file s3]
+;key=false
+;secret=false
+;bucket=false
 
 ;?>
