@@ -31,6 +31,7 @@ class PermissionGroup_Form extends AMPSystem_Form_XML {
         if ( !isset( $data['id'])) return;
         if ( $data['id'] == 1 or $data['id'] == 3 ) {
             $this->form->removeElement( 'sections');
+            $this->form->removeElement( 'root_section_id');
         //    $this->addField( array( 'type' => 'static', 'value' => 'Changes are not allowed for this group', 'block' => 'sectional'), 'section_plus');
         }
         return $data[$fieldname];
@@ -67,5 +68,10 @@ class PermissionGroup_Form extends AMPSystem_Form_XML {
         return $output;
     }
 
+    function _selectAddNull( $valueset, $name ) {
+        $required_selects = array( 'root_section_id' );
+        if ( array_search( $name, $required_selects ) === FALSE ) return parent::_selectAddNull( $valueset, $name );
+        return array( AMP_CONTENT_SECTION_ID_ROOT => '-- ' . AMP_SITE_NAME . ' --') + $valueset;
+    }
 }
 ?>

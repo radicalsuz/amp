@@ -12,6 +12,13 @@
         <block>sectional</block>
 		<block_trigger>sections</block_trigger>
     </sectional_header>
+	<root_section_id>
+		<type>select</type>
+		<label>Root Section</label>
+		<block>sectional</block>
+		<default>AMP_CONTENT_SECTION_ID_ROOT</default>
+        <lookup>sectionMap</lookup>
+	</root_section_id>
     <sections>
         <type>checkgroup</type>
         <label>Allowed Sections</label>
