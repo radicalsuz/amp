@@ -9,9 +9,12 @@ nav_heading="subside"
 nav_element="nav_element"
 nav_content="nav_element_content"
 nav_block="nav_block"
+badge_header="title"
 
 [class list]
-blurb='text'
+blurb="text"
+image="thumb"
+description="description"
 
 [class list article]
 title="listtitle"

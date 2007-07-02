@@ -172,6 +172,7 @@ tag=           "tag.php"
 tag_input=     "tag.php?action=add"
 
 template=      "template.php"
+template_archive = "template_archive.php"
 
 tool_add=      "module.php?action=add"
 tool_control=  "tool_controls.php"
@@ -179,6 +180,7 @@ tool_publicpage="module_header_list.php"
 tools=         "module.php"
 
 users=         "user.php?action=list"
+user=          "user.php"
 
 webaction=     "action_center.php"
 
