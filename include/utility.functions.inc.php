@@ -2021,27 +2021,28 @@ function AMP_config_load( $file, $prefix='AMP') {
     if ( isset( $loaded[$prefix][$file])) {
         return $loaded[$prefix][$file];
     }
-    $file_name = 'Config/' . $file . '.ini.php';
-    if ( !file_exists_incpath( $file_name )){
-        $file_name = $file . '.ini.php';
-        if ( !file_exists_incpath( $file_name )) return array( );
+
+    //parse values in the custom folder
+    $custom_ini = array();
+    $custom_file_name = AMP_LOCAL_PATH . 'custom/' . $file . 'ini.php';
+    if ( file_exists ( $custom_file_name )){
+        $custom_ini = parse_ini_file( AMP_pathFlip($custom_file_name), true );
     }
 
-    //$loaded[$file]= parse_ini_file( 'Config/'.$file.'.ini.php', true );
-    $loaded[$prefix][$file]= parse_ini_file( $file_name, true );
+    //parse the base config
+    $base_ini = array();
+    $custom_file_name = AMP_LOCAL_PATH . 'custom/' . $file . 'ini.php';
+    $base_file_name = AMP_BASE_INCLUDE_PATH . 'Config/' . $file . '.ini.php';
+    if ( file_exists ( $base_file_name ) ) {
+        $base_ini = parse_ini_file( AMP_pathFlip( $base_file_name ), true );
+    }
+    if (empty($custom_ini) && empty($base_ini)) return array();
+
+    $loaded[$prefix][$file]= array_merge( $base_ini, $custom_ini );
     AMP_set_constants( $loaded[$prefix][$file], $prefix );
     return $loaded[$prefix][$file];
-    /*
-    foreach( $config_values as $heading => $items ) {
-        foreach( $items as $label => $value ) {
-            $constant_name = str_replace( ' ', '_', strtoupper(  $prefix . ' ' . $heading. ' ' . $label ));
-            if ( !defined( $constant_name )) {
-                define( $constant_name, $value );
-            }
-        }
-    }
-    */
 }
+
 
 function AMP_set_constants( $values, $prefix = '' ) {
     foreach( $values as $label => $value ) {
