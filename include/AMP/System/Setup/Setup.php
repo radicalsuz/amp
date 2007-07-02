@@ -72,7 +72,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         'AMP_SYSTEM_BLAST_EMAIL_SENDER_NAME'  => 'NameBlastSender',
 
         'AMP_BLAST_EMAIL_SENDER'        => 'EmailBlastSender', 
-        'AMP_BLAST_EMAIL_SENDER_NAME'  => 'NameBlastSender',
+        'AMP_BLAST_EMAIL_SENDER_NAME'   => 'NameBlastSender',
 
         //DB settings
         'AMP_SITE_CACHE_TIMEOUT'        => 'CacheTimeout',
@@ -91,13 +91,15 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         'PHPLIST_BOUNCE_USER'           => 'PhplistBounceUser',
 
         //DIA Settings
-        'DIA_API_ORGANIZATION_KEY'      => '_DIA_organization_key',
-        'DIA_API_ORGCODE'               => '_DIA_orgcode',
+        'DIA_API_USERNAME'              => '_DIA_username',
+        'DIA_API_PASSWORD'              => '_DIA_password',
+        'DIA_API_ORGANIZATION_KEY'      => '_DIA_orgkey',
+        'DIA_API_ORGANIZATION_SLUG'     => '_DIA_url_slug',
 
         //s3 Settings
         'AMP_SYSTEM_FILE_S3_KEY'        => '_s3_key',
         'AMP_SYSTEM_FILE_S3_KEY_SECRET' => '_s3_secret',
-        'AMP_SYSTEM_FILE_S3_BUCKET' => '_s3_bucket',
+        'AMP_SYSTEM_FILE_S3_BUCKET'     => '_s3_bucket',
 
     );
 
@@ -354,12 +356,20 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         return $this->getData( 'phplist_bounce_password');
     }
 
-    function get_DIA_organization_key( ){
+    function get_DIA_username( ){
         return $this->getData( 'dia_user') ;
     }
 
-    function get_DIA_orgcode( ){
+    function get_DIA_password( ){
+        return $this->getData( 'dia_pass') ;
+    }
+
+    function get_DIA_orgkey( ){
         return $this->getData( 'dia_key') ;
+    }
+
+    function get_DIA_url_slug( ){
+        return $this->getData( 'dia_slug') ;
     }
 
     function getBlaster( ) {

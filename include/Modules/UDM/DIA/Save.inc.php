@@ -148,8 +148,8 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
     function &_init_api( $options = array( )){
         if ( isset( $this->_dia_api )) return $this->_dia_api;
 
-        if(!( isset($options[ 'orgKey' ]) && $options['orgKey']) && defined('DIA_API_ORGCODE')) {
-            $options['orgKey'] = DIA_API_ORGCODE;
+        if(!( isset($options[ 'orgKey' ]) && $options['orgKey']) && defined('DIA_API_ORGANIZATION_KEY')) {
+            $options['orgKey'] = DIA_API_ORGANIZATION_KEY;
         }
 		if(!( isset($options[ 'user' ]) && $options['user']) && defined('DIA_API_USERNAME')) {
             $options['user'] = DIA_API_USERNAME;

@@ -91,8 +91,8 @@ class UserDataPlugin_Save_DIAEvent extends UserDataPlugin_Save {
 		#$this->notice('entering diaevent save plugin');
         $options=array_merge($options, $this->getOptions());
 
-		if(!defined('DIA_API_ORGCODE') && isset($options[ 'orgKey' ])) {
-			define('DIA_API_ORGCODE', $options[ 'orgKey' ]);
+		if(!defined('DIA_API_ORGANIZATION_KEY') && isset($options[ 'orgKey' ])) {
+			define('DIA_API_ORGANIZATION_KEY', $options[ 'orgKey' ]);
 		}
 		if(!defined('DIA_API_USERNAME') && isset($options[ 'user' ])) {
 			define('DIA_API_USERNAME', $options[ 'user' ]);

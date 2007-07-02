@@ -147,6 +147,8 @@ permission_group="per.php"
 permission_groups="per.php"
 permission_group_new="per.php?action=add"
 
+phplist_login= "../phplist/admin"
+
 petitions=     "petition.php"
 
 profile=       "profile.php"
@@ -183,5 +185,8 @@ users=         "user.php?action=list"
 user=          "user.php"
 
 webaction=     "action_center.php"
+
+[dia url]
+login=          "http://hq.demaction.org/dia/hq/login.jsp"
 
 ;?>

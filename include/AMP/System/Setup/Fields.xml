@@ -100,6 +100,7 @@
         <type>blocktrigger</type>
         <label>Blast Tool Settings</label>
 		<block>emailstuff</block>
+		<block_trigger>email_tool</block_trigger>
     </email_header>
 
 	<email_tool>
@@ -125,22 +126,34 @@
 		<type>blocktrigger</type>
 		<label>DIA Settings</label>
 		<block>dia</block>
+		<block_trigger>dia_user</block_trigger>
 	</dia_header>
 	<dia_user>
 		<type>text</type>
 		<label>DIA User</label>
 		<block>dia</block>
 	</dia_user>
+	<dia_pass>
+		<type>text</type>
+		<label>DIA Password</label>
+		<block>dia</block>
+	</dia_pass>
 	<dia_key>
 		<type>text</type>
-		<label>DIA Key</label>
+		<label>DIA Organization Key</label>
 		<block>dia</block>
 	</dia_key>
+	<dia_slug>
+		<type>text</type>
+		<label>DIA Organization URL Slug</label>
+		<block>dia</block>
+	</dia_slug>
 
     <phplist_header>
         <type>blocktrigger</type>
         <label>PHPlist Settings</label>
 		<block>phplist</block>
+		<block_trigger>phplist_admin_email</block_trigger>
     </phplist_header>
 
     <phplist_admin_email>
