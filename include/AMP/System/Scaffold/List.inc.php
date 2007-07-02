@@ -1,21 +1,19 @@
 <?php
 
-require_once( 'AMP/System/List/Form.inc.php');
+require_once( 'AMP/Display/System/List.php');
 require_once( '%4\$s%1\$s/%1\$s.php');
 
-class %1\$s_List extends AMP_System_List_Form {
-    var $name = "%1\$s";
-    var $col_headers = array( 
-        '%3\$s' => '%3\$s',
-        'ID'    => 'id');
-    var $editlink = '%5\$s';
-    var $_url_add = '%5\$s?action=add';
-    var $name_field = '%3\$s';
-    var $_source_object = '%1\$s';
-    var $_observers_source = array( 'AMP_System_List_Observer');
+class %1\$s_List extends AMP_Display_System_List {
 
-    function %1\$s_List( &$dbcon, $criteria = array( ) ) {
-        $this->init( $this->_init_source( $dbcon, $criteria ) );
+    var $_source_object = '%1\$s';
+    var $columns = array( 'select', 'controls', 'name', 'id' ) ;
+    var $column_headers = array( );
+    var $_actions = array( 'publish', 'unpublish', 'delete' );
+
+    function %1\$s_List( &$source, $criteria = array( ) ) {
+        $this->__construct( $source, $criteria );
     }
+
 }
+
 ?>
