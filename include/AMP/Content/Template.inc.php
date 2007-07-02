@@ -10,13 +10,13 @@
  *
  * * * * * */
 
-define ( 'MEMCACHE_KEY_TEMPLATE' , 'CurrentTemplate' );
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'AMP/Content/Nav/Manager.inc.php' );
 
 class AMPContent_Template extends AMPSystem_Data_Item {
 
-	var $_nav_positions = array('left' => 'l', 'right' => 'r');
+	//var $_nav_positions = array('left' => 'l', 'right' => 'r');
+	var $_nav_positions = array();
 	var $_nav_html = array();
     var $_current_template_version;
     
@@ -27,6 +27,10 @@ class AMPContent_Template extends AMPSystem_Data_Item {
 	function AMPContent_Template( &$dbcon, $id = null) {
         $this->init( $dbcon, $id );
         $this->_assignNavHtml();
+    }
+
+    function _after_init( ) {
+        $this->_nav_positions = AMP_lookup( 'navBlocks' );
     }
 
     function execute( $html ) {
@@ -42,6 +46,13 @@ class AMPContent_Template extends AMPSystem_Data_Item {
             $this->_placeNav( $position, $this->_navManager->output( strtoupper($prefix) ) );
         }
 
+    }
+
+    function save_version( ){
+        require_once ( 'AMP/Content/Template/Archive/Archive.php' );
+        $archive = &new AMP_Content_Template_Archive( $this->dbcon );
+        $archive->setData( $this->getData( ));
+        return $archive->save( );
     }
 
 
@@ -89,7 +100,7 @@ class AMPContent_Template extends AMPSystem_Data_Item {
     }
 
     function containsNav( $position ) {
-        return (strpos( $this->_getCurrentTemplate(), "[-$position nav-]" ) !== FALSE );
+        return (strpos( $this->_getCurrentTemplate(), sprintf( AMP_CONTENT_TEMPLATE_TOKEN_STANDARD, $position ) ) !== FALSE );
     }
 
     function get_url_edit( ) {
@@ -113,11 +124,12 @@ class AMPContent_Template extends AMPSystem_Data_Item {
     }
 
     function _placeNav ( $position, $html ) {
-        $this->_setCurrentTemplate( str_replace( "[-$position nav-]", $html, $this->_getCurrentTemplate() ));
+        $nav_token = sprintf( AMP_CONTENT_TEMPLATE_TOKEN_STANDARD, strtolower( $position ));
+        $this->_setCurrentTemplate( str_replace( $nav_token, $html, $this->_getCurrentTemplate() ));
     }
 
     function _placeContent( $html ) {
-        return str_replace( "[-body-]", $html, $this->_getCurrentTemplate() );
+        return str_replace( AMP_CONTENT_TEMPLATE_TOKEN_BODY, $html, $this->_getCurrentTemplate() );
     }
 
     function _assignNavHtml() {
