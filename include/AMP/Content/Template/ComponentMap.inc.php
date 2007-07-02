@@ -26,6 +26,12 @@ class ComponentMap_Template extends AMPSystem_ComponentMap {
     var $_allow_publish = AMP_PERMISSION_CONTENT_TEMPLATE;
     var $_allow_unpublish = AMP_PERMISSION_CONTENT_TEMPLATE;
     var $_allow_delete = AMP_PERMISSION_CONTENT_TEMPLATE;
+
+    function onBeforeUpdate( &$controller, $args = array( ) ){
+        if ( isset( $args['model'])) {
+            $args['model']->save_version( );
+        }
+    }
 }
 
 ?>

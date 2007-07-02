@@ -928,3 +928,17 @@ div.spacer {
 div.preview_link {
     margin-left: 25em;
 }
+
+div.diff del {
+	background-color: #FFDDDD;
+	border: #CC0000 solid 1px;
+}
+div.diff ins {
+	background-color: #DDFFDD;
+	border: #00AA00 solid 1px;
+}
+div.diff {
+	background-color: #F3F3F3;
+	border: #c0c0c0 solid 1px;
+	padding: 1em;
+}
