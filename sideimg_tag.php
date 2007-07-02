@@ -6,7 +6,7 @@ if ( $image_name ) {
     $renderer = AMP_get_renderer( );
     $imageRef = &new Content_Image( $image_name );
     $image_url = $imageRef->getURL( AMP_IMAGE_CLASS_ORIGINAL );
-    print $renderer->image( $image_url );
+    print $renderer->image( $image_url, array( 'class' => 'template_image') );
 }
 
 ?>
