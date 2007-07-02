@@ -29,6 +29,8 @@ define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_REGISTRATION_FAILED',
 define( 'AMP_TEXT_ERROR_OPEN_FAILED', "Cannot open %s");
 define( 'AMP_TEXT_ERROR_XML_READ_FAILED', 'XML Read failed for %s');
 
+define( 'AMP_TEXT_ERROR_OPTION_FORMAT_INCORRECT', 'Value badly formatted, "%s" is missing "%s"' );
+
 
 if ( !defined( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED'))
         define( 'AMP_TEXT_ERROR_TOOL_NOT_CONFIGURED', 'This page has not been configured for use');

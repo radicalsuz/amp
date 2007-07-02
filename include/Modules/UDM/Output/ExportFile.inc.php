@@ -49,6 +49,10 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
             'values'=>array( 'csv'=>'Comma Separated (CSV)',
                              'tab'=>'Tab Separated (TXT)' ),
             ),
+        'multirow_fields'=>array(    'default'=>'',
+                                    'available'=>true,
+                                    'type'=>'textarea',
+                                    'label'=>'Fields to multiply output rows'),
             
     );
 
@@ -64,6 +68,8 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     var $_raw_values = array( );
 
     var $_export_keys = array( );
+
+    var $_multirow_fields = array( );
 
 
     function UserDataPlugin_ExportFile_Output ( &$udm, $plugin_instance=null ) {
@@ -83,6 +89,8 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
             return false;
         }
 
+        $this->_init_multirow_fields( $options );
+
         $this->setupColumns($this->definedColumns($options));
         
         $dataset = $this->translateValues();
@@ -93,7 +101,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
 	    	
         
-        if (!AMP_DISPLAYMODE_DEBUG) { 
+        if ( !AMP_DISPLAYMODE_DEBUG) { 
             header("Content-type: application/".$this->file_extension);
             header("Content-Disposition: attachment; filename=".$this->setFileName());
         }
@@ -204,7 +212,15 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
                 }
             }
 
-            $result_set[] = $result_row;
+            //hack for HARM form
+            if ( empty( $this->_multirow_fields )) {
+                $result_set[] = $result_row;
+            } else {
+                $result_row_set = $this->multiply( $result_row );
+                foreach( $result_row_set as $current_result_row ) {
+                    $result_set[] = $current_result_row;
+                }
+            }
         }
         $this->dataset->MoveFirst();
 
@@ -340,10 +356,69 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         $mappings = preg_split("/\s?&\s?/",$string);
         $return = array( );
         foreach($mappings as $map) {
+            $mapped_pair = explode('=',$map);
+            if ( count( $mapped_pair ) != 2 ) {
+                trigger_error( sprintf( AMP_TEXT_ERROR_OPTION_FORMAT_INCORRECT, $map, '='));
+            }
             list($key, $value) = explode('=',$map);
             $return[$key] = $value;
         }
         return $return;
+    }
+
+    //wild multirow HARM hack starts here
+    function _init_multirow_fields( $options = array( ) ) {
+        $multirow_fields = ( isset( $options['multirow_fields']) && $options['multirow_fields'] ) ? $options['multirow_fields'] : false;
+        $multirow_fields_token = 'AMP_FORM_' . $this->udm->instance . '_EXPORT_MULTIROW_FIELDS';
+        if ( defined( $multirow_fields_token )) {
+            $multirow_fields = constant( $multirow_fields_token );
+        }
+        if ( ! $multirow_fields ) return;
+
+        $this->_multirow_fields = preg_split( "/\s?,\s?/", $multirow_fields );
+        $this->_raw_values = array_merge( $this->_raw_values, $this->_multirow_fields );
+    }
+
+    function multiply( $data_row, $key_field_set = false ) {
+        //define the default fields to multiply rows by
+        if ( !$key_field_set ) {
+            $key_field_set = $this->_multirow_fields;
+        }
+
+        $new_rows = array( );
+
+        //grab the first item from the array of "key fields"
+        $key_field = array_shift( $key_field_set );
+
+        //if there is no value in the "key field" just return the row as is
+        if ( !( isset( $data_row[$key_field]) && $data_row[$key_field] )) {
+            $new_rows[] = $data_row;
+        } else {
+            //blow apart the "key field" by comma
+            $key_values = preg_split("/\s?,\s?/",$data_row[$key_field]);
+
+
+            //loop through the results adding to the new_rows list as you go
+            foreach( $key_values as $value ) {
+                $new_data_row = $data_row;
+                $new_data_row[$key_field] = $value;
+                $new_rows[] = $new_data_row;
+            }
+        }
+
+        //check to see if you have more "key fields" to multiply by
+        if ( !empty( $key_field_set )) {
+            $final_rows = array( );
+
+            //recursively call multiply on the new rows
+            foreach( $new_rows as $new_row ) {
+                $final_rows[] = $this->multiply( $new_row, $key_field_set );
+            }
+        } else {
+            $final_rows = $new_rows;
+        }
+
+        return $final_rows;
     }
 }
 
