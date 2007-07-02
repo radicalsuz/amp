@@ -19,6 +19,7 @@ class AMPSystem_Form extends AMPForm {
             'cancel' => array(
                 'type' => 'submit',
                 'label' => 'Cancel'),
+                /*
             'delete' => array(
                 'type' => 'submit',
                 'label' => 'Delete Record',
@@ -26,6 +27,7 @@ class AMPSystem_Form extends AMPForm {
                     'onclick' => 
                     "return confirmSubmit('Are you sure you want to DELETE this record?');" ),
                 )
+            */
             )
     ));
 
@@ -38,9 +40,24 @@ class AMPSystem_Form extends AMPForm {
 
     function init( $name, $method = "POST", $action = null ) {
         parent::init( $name, $method, $action );
+        $this->_init_template( );
+        $this->_init_submit( );
+    }
+
+    function _init_template( ) {
         $this->template->setClass( 'label', 'name' );
         $this->template->setClass( 'span', 'name' );
         $this->template->setClass( 'header', 'form_header' );
+    }
+
+    function _init_submit( ) {
+        $this->defineSubmit( 
+                'delete',
+                'Delete Record',
+                array ( 
+                    'onclick' => 
+                    "return confirmSubmit('".AMP_TEXT_RECORD_CONFIRM_DELETE."');" )
+                );
         if ($this->allow_copy) $this->copy_button();
     }
 
@@ -141,6 +158,7 @@ class AMPSystem_Form extends AMPForm {
     }
 
     function getItemName() {
+        if ( !$this->isBuilt ) $this->Build( );
         if (!$this->getField( $this->name_field )) return false;
         $set = $this->getValues( array($this->name_field) );
         if (!$set) return false;

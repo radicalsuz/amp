@@ -237,12 +237,11 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     }
 
 	function translate ( $data, $action = "get", $requested_fields = null ) {
-		if (empty( $this->translations) || empty( $this->translations[ $action ])) return $data;
         if ( is_object( $data ) && strtolower( get_class( $data )) == 'html_quickform_error') {
             trigger_error( $data->getMessage( ));
-            print AMPbacktrace( );
             return false;
         }
+		if (empty( $this->translations) || empty( $this->translations[ $action ])) return $data;
 
 		$result_data = $data;
 		foreach ( $this->translations[ $action] as $fieldname => $translate_method_set ) {

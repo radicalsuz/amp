@@ -24,6 +24,8 @@ class AMP_Display_System_List extends AMP_Display_List {
     var $_pager_max = false;
 
     var $url_create;
+    var $_suppress_create = false;
+
     var $link_target_edit = '_top';
     var $link_vars = array( );
     var $_pager_limit = 50;
@@ -44,6 +46,10 @@ class AMP_Display_System_List extends AMP_Display_List {
     function _renderItemContainer( $output, $source ) {
         $row_color_class = ( $this->item_count % 2 ) ? ' list_row_odd' : ' list_row_even';
         $hover_class = 'list_row_hover';
+        $onclick = false;
+        if ( array_search( 'select', $this->columns ) !== FALSE ) {
+            $onclick  = '$( "select_'.$this->list_item_id( $source ).'" ).checked = !$( "select_'.$this->list_item_id( $source ) .'").checked;';
+        } 
 
         return $this->_renderer->tr( 
             $output, 
@@ -52,7 +58,7 @@ class AMP_Display_System_List extends AMP_Display_List {
                 'class'         => 'list_row' . $row_color_class,
                 'onMouseover'   => 'this.addClassName( "'.$hover_class.'" );',
                 'onMouseout'    => 'this.removeClassName( "'.$hover_class.'" );',
-                'onClick'       => '$( "select_'.$this->list_item_id( $source ).'" ).checked = !$( "select_'.$this->list_item_id( $source ) .'").checked;',
+                'onClick'       => $onclick,
 
                 ) 
             );
@@ -70,6 +76,7 @@ class AMP_Display_System_List extends AMP_Display_List {
     }
 
     function render_create_link( ) {
+        if ( $this->_suppress_create ) return false;
         if ( isset( $this->_source_sample )) {
             $edit_url = $this->_source_sample->get_url_edit( );
             $url = AMP_url_update( $edit_url, array( 'action' => 'new'));
@@ -108,8 +115,8 @@ class AMP_Display_System_List extends AMP_Display_List {
         return
             $this->_renderer->link( 
                 AMP_url_update( $source->get_url_edit( ), $this->link_vars ),
-                $this->_renderer->image( AMP_SYSTEM_ICON_EDIT, array('alt'=>AMP_TEXT_EDIT, 'class'=>'icon' )),
-                array( 'title' => AMP_TEXT_EDIT_ITEM, 'target' => $this->link_target_edit )
+                $this->_renderer->image( AMP_SYSTEM_ICON_EDIT, array('alt' => AMP_TEXT_EDIT, 'class' => 'icon' )),
+                array( 'title' => AMP_TEXT_EDIT_ITEM, 'target' => $this->link_target_edit, 'id' => 'edit_'.$this->list_item_id( $source ) )
             );
     }
 

@@ -102,8 +102,12 @@ class AMPSystem_Map {
             $unique_id = isset($desc['child'])? $desc['child'] : $startLevel .'_'. $id;
             $result[$startLevel][ $unique_id ] = 
                 $desc;
-            if (isset($desc['child'])) $result = array_merge( $result, $this->getMenu( $desc['child'] ));
-
+            if (isset($desc['child'])) {
+                $child_menu = $this->getMenu( $desc['child']);
+                if ( !empty( $child_menu )) {
+                    $result = array_merge( $result, $child_menu );
+                }
+            }
         }
 
         return $result;
@@ -138,7 +142,7 @@ class AMPSystem_Map {
     function _buildMap() {
         if (!is_array($this->menuset)) return false;
         foreach ($this->menuset as $menuname => $m_desc) {
-            if (!isset($m_desc['item'])) continue;
+            if (empty($m_desc['item'])) continue;
             $this->_addChildren( $menuname, $m_desc['item'] );
         }
     }

@@ -8,7 +8,8 @@ require_once( 'AMP/Base/Lookups.php');
 require_once( 'AMP/Base/Setup.php');
 require_once( 'AMP/System/Permission/Config.inc.php');
 */
-require_once( 'AMP/System/Base.php');
+require_once( 'AMP/System/Base.php' );
+//require_once( 'AMP/Base/ConfigSystem.php' );
 
 class AMP_Authentication_Handler {
 

@@ -49,7 +49,7 @@ class AMP_System_UserData_Controller extends AMP_System_Component_Controller_Sta
     function _saveDetailPageData( ) {
         $this->_saved_detail_page_id = $this->_savePublicPageData( $this->_model->getName( ) . ' Detail',
                                                                      $this->_request_vars['detail_page_title'],
-                                                                     $this->_request_vars['detail_page_text'],
+                                                                     $this->_request_vars['detail_page_text']
                                                                      );
 
     }

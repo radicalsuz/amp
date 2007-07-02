@@ -58,6 +58,7 @@ define( 'AMP_TEXT_MORE' , 'More&nbsp;' );
 if ( !defined( 'AMP_TEXT_NAV_MORELINK' )) define( 'AMP_TEXT_NAV_MORELINK' , 'More&nbsp;&#187;' );
 define( 'AMP_TEXT_POSTED_IN' , 'Posted in' );
 define( 'AMP_TEXT_POSTED_BY' , 'Posted by %s on %s' );
+define( 'AMP_TEXT_LOGIN' , 'login' );
 
 if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
 if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );

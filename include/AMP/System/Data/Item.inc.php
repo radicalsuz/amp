@@ -637,7 +637,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( !( isset( $this->id ) && $this->id )) {
             return constant( $url_constant );
         }
-        return AMP_url_update( constant( $url_constant ), array( 'id'=> $this->id));
+        return AMP_url_update( constant( $url_constant ), array( $this->id_field => $this->id));
 
     }
 
