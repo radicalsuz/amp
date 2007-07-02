@@ -351,7 +351,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             $forbid_multi_search = array( 'radiogroup', 'checkgroup', 'multiselect');
             if ( array_search( $def[$fieldname]['type'], $forbid_multi_search ) !== FALSE ) {
                 $def[ $fieldname ][ 'type' ] = 'select';
-                $def[ $fieldname ][ 'size' ] = 1;
+                //$def[ $fieldname ][ 'size' ] = 1;
+                unset( $def[ $fieldname ][ 'size' ] );
             }
         }
     }
@@ -479,7 +480,8 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		} else {
 
 
-			  $renderer->setElementTemplate("\n\t\t<span align=\"right\" valign=\"top\" class=\"".$this->control_class."\">{label} {element}\n\t", $name);
+			  //$renderer->setElementTemplate("\n\t\t<span align=\"right\" valign=\"top\" class=\"".$this->control_class."\">{label} {element}</span\n\t", $name);
+			  $renderer->setElementTemplate("\n\t\t<span align=\"right\" class=\"".$this->control_class."\">{label} {element}</span>\n\t", $name);
 		}
 		
 		
