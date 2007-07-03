@@ -138,10 +138,16 @@ class AMPSystem_Data {
             return AMP_get_column_names( $sourceDef );
         }
 
+        trigger_error( 'BAD version of utility.functions.inc.php');
+        return array( );
+        /*
         $reg = &AMP_Registry::instance();
         $definedSources = &$reg->getEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
         if ( !$definedSources ) {
             $definedSources = AMP_cache_get( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
+            if ( $definedSources ) {
+                $reg->setEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
+            }
         }
         if ($definedSources && isset($definedSources[ $sourceDef ])) return $definedSources[ $sourceDef ];
 
@@ -152,6 +158,7 @@ class AMPSystem_Data {
         AMP_cache_set( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
 
         return $colNames;
+        */
     }
 
     function addError( $error ) {

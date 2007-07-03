@@ -1877,6 +1877,9 @@ function AMP_get_column_names( $table_name ) {
     $definedSources = &$reg->getEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
     if ( !$definedSources ) {
         $definedSources = AMP_cache_get( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS );
+        if ( $definedSources ) {
+            $reg->setEntry( AMP_REGISTRY_SYSTEM_DATASOURCE_DEFS, $definedSources );
+        }
     }
     if ($definedSources && isset($definedSources[ $table_name ])) return $definedSources[ $table_name ];
 
