@@ -538,9 +538,9 @@ class Article extends AMPSystem_Data_Item {
             $move_action = true;
         }
         if ( !$move_action ) return false;
-        if ( !( $result = $this->save( ))) return false;
+        if ( !( $result = $this->save( ) or $relate_result )) return false;
         $this->notify( 'update' );
-        $this->notify( 'move' );
+        $this->notify( 'move'   );
         return $result;
     }
 
@@ -579,7 +579,7 @@ class Article extends AMPSystem_Data_Item {
     function relate( $section_id ) {
         if ( !$section_id ) return false;
         $db_related = $this->_getSectionsRelatedDB( );
-        if ( $db_related || ( array_search( $section_id, $db_related ) !== FALSE ) ) return false;
+        if ( $db_related && ( array_search( $section_id, $db_related ) !== FALSE ) ) return false;
 
         require_once( 'AMP/Content/Section/RelatedSet.inc.php');
         $related_section_set = &new SectionRelatedSet( $this->dbcon );
