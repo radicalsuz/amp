@@ -43,7 +43,7 @@ class AMP_System_Page_Menu extends AMP_Menu {
             $cache_key_public = sprintf( AMP_CACHE_KEY_JAVASCRIPT, get_class( $this ));
             $cache_key_private = $this->_cache->identify( $cache_key_public, AMP_SYSTEM_USER_ID );
             
-            if ( $this->_cache->contains( $cache_key_private )) {
+            if ( $this->_cache->retrieve( $cache_key_private )) {
                 return $this->_apply_cached_javascript( $cache_key_public );
             }
         }

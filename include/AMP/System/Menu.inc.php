@@ -127,7 +127,6 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
             $cache_key_public = sprintf( AMP_CACHE_KEY_JAVASCRIPT, get_class( $this ));
             $cache_key_private = $this->_cache->identify( $cache_key_public, AMP_SYSTEM_USER_ID );
             
-            //if ( $this->_cache->contains( $cache_key_private )) {
             if ( $js_values = $this->_cache->retrieve( $cache_key_private )) {
                 $this->_cache->refresh( $cache_key_private );
                 //$this->_apply_cached_javascript( $cache_key_public );
@@ -164,9 +163,9 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
             $cache_key_public = sprintf( AMP_CACHE_KEY_OUTPUT, get_class( $this ));
             $cache_key_private = $this->_cache->identify( $cache_key_public, AMP_SYSTEM_USER_ID );
 
-            if ( $this->_cache->contains( $cache_key_private )) {
+            if ( $content = $this->_cache->retrieve( $cache_key_private )) {
                 $this->_cache->refresh( $cache_key_private );
-                return $this->_cache->retrieve( $cache_key_private );
+                return $content;
             }
         }
         $this->_build( );
@@ -184,7 +183,7 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
 /*
     function is_cached( ){
         if ( !( $cache = &AMP_get_cache( ))) return false;
-        return $cache->contains( AMP_CACHE_KEY_SYSTEM_MENU );
+        return $cache->retrieve( AMP_CACHE_KEY_SYSTEM_MENU );
 
     }
 

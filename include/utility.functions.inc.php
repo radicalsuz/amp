@@ -822,13 +822,6 @@ if (!function_exists('AMP_trimText')) {
     }
 }
 
-if (!function_exists( 'AMP_getCachedSiteItem' )) {
-    function &AMP_getCachedSiteItem( $item_key ) {
-        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
-        return $memcache->getSiteItem( $item_key );
-    }
-}
-
 function AMP_cache_close( ){
     $cache = &AMP_get_cache( );
     if ( !$cache ) return false;
@@ -836,9 +829,8 @@ function AMP_cache_close( ){
 }
 
 function &AMP_cache_get( $key, $id = null ){
-	$empty_value = false;
     $cache = &AMP_get_cache( );
-    if ( !$cache ) return $empty_value;
+    if ( !$cache ) return false;
     if ( isset( $id ) && $id ) $key = $cache->identify( $key, $id );
     return $cache->retrieve( $key );
 }
@@ -929,29 +921,6 @@ function AMP_cached_request( $timeout = null  ){
     return $cache->retrieve( $cache_key ) ;
 }
 
-if (!function_exists( 'AMP_cacheSiteItem' )) {
-    function AMP_cacheSiteItem( $item_key, $item ) {
-        trigger_error( 'Deprecated function ' . __FUNCTION__ . ' was called by ' . $_SERVER['REQUEST_URI']);
-        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
-        return $memcache->setSiteItem( $item_key, $item );
-    }
-}
-
-if (!function_exists( 'AMP_getCachedPageItem' )) {
-    function &AMP_getCachedPageItem( $item_key ) {
-        trigger_error( 'Deprecated function ' . __FUNCTION__ . ' was called by ' . $_SERVER['REQUEST_URI']);
-        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
-        return $memcache->getPageItem( $item_key );
-    }
-}
-
-if (!function_exists( 'AMP_cachePageItem' )) {
-    function AMP_cachePageItem( $item_key, $item ) {
-        trigger_error( 'Deprecated function ' . __FUNCTION__ . ' was called by ' . $_SERVER['REQUEST_URI']);
-        if (!( $memcache = &AMPSystem_Memcache::instance() )) return false;
-        return $memcache->setPageItem( $item_key, $item );
-    }
-}
 if (!function_exists( 'AMP_cacheFlush' )) {
     function AMP_cacheFlush( $key_token = null ) {
         $cache = &AMP_get_cache( );

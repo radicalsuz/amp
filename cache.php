@@ -24,15 +24,13 @@ if ( $content_type = $cache->header( $request_key )) {
 
 }
 
-$active_key = ( $cache->contains( $authorized_key )) ? $authorized_key : false;
-if ( !$active_key ) {
+$content = $cache->retrieve( $authorized_key );
+if ( !$content ) {
     trigger_error( 'item ' . $request_key . ' not found for user');
     exit;
 }
 
-//$result = $cache->retrieve( $authorized_key );
-//print $result;
-print $cache->retrieve( $active_key );
+print $content;
 
 AMP_cache_close( );
 ?>

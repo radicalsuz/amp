@@ -89,6 +89,7 @@ class AMP_System_Cache {
     }
 
     function age( $key ) {
+        trigger_error( 'Deprecated function ' . __FUNCTION__ . ' was called by ' . $_SERVER['REQUEST_URI']);
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key || !isset( $this->_index[ $authorized_key ])) return false;
         return time( ) - $this->_index[$authorized_key];
@@ -114,12 +115,6 @@ class AMP_System_Cache {
         if ( strpos( $key, '%s' ) === FALSE ) return $local_key ;
         return sprintf( $local_key, AMP_SYSTEM_USER_ID );
     }
-/*
-    function authorize_tainted( $key ){
-        if ( strpos( $key, '%s' ) === FALSE ) return false;
-        return $this->authorize( $key );
-    }
-    */
 
     function localize( $key ) {
         if ( !isset( $this->_unique_site_key )) return $key;

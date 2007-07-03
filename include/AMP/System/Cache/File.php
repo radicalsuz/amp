@@ -73,12 +73,11 @@ class AMP_System_Cache_File extends AMP_System_Cache {
     }
 
     function &retrieve( $key ){
-        $empty_value = false;
         $authorized_key = $this->authorize( $key );
-        if ( !$authorized_key ) return $empty_value;
-        if ( !$this->contains( $authorized_key )) return $empty_value;
+        if ( !$authorized_key ) return false;
+        if ( !$this->contains( $authorized_key )) return false;
         $serialized_item = file_get_contents( $this->_path( $authorized_key ));
-        if ( !$serialized_item )  return $empty_value;
+        if ( !$serialized_item )  return false;
         $value = $this->from_string( $serialized_item );
         return $value;
     }

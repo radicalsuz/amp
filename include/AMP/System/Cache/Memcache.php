@@ -5,7 +5,6 @@ require_once( 'AMP/System/Cache/Cache.php');
 class AMP_System_Cache_Memcache extends AMP_System_Cache {
 
     var $_memcache_connection;
-    var $_retrieved_items = array( );
 
     function AMP_System_Cache_Memcache( ){
         $this->__construct( );
@@ -17,9 +16,12 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         if ( !$connected ) {
             return;
         }
-        $this->_unique_site_key = AMP_SYSTEM_UNIQUE_ID;
-        $this->_load_index( );
+        $cache_version = $this->cache_version();
+        $this->_unique_site_key = AMP_SYSTEM_UNIQUE_ID . "@$cache_version";
+    }
 
+    //empty.  just here so as not to call _save_index from the parent.
+    function __destroy( ) {
     }
 
     function _init_connection( ){
@@ -53,127 +55,80 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
         $this->_memcache_connection = &$connection;
     }
 
+    //necessary?
     function has_connection( ){
         return isset( $this->_memcache_connection );
     }
-
-    /*
-    function &instance( ){
-        static $cache = false;
-        if ( $cache) return $cache;
-		
-		//creating the cache
-		$cache = new AMP_System_Cache_Memcache;
-        if ( !$cache->has_connection( )) {
-			trigger_error('MEMCACHE FAILED, attempting file cacheing for ' . $_SERVER['REQUEST_URI']);
-            $cache = AMP_System_Cache_File::instance();
-        } 
-
-        return $cache;
-    }
-    */
 
     function add( &$item, $key ){
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key ) return false;
 
         $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED );
+        #timeout? : cache->set( $authorized_key, $item, MEMCACHE_COMPRESSED, AMP_SYSTEM_CACHE_TIMEOUT );
         if ( !$result ) {
-            trigger_error( 'retrying ADD ' . $authorized_key );
             //try, try again
             $result = $this->_memcache_connection->set( $authorized_key, $item, MEMCACHE_COMPRESSED );
-
             $this->log_memcache_failure();
         }
-
-        if ( $result ) {
-            $this->_add_index_key( $authorized_key );
-            if ( isset( $this->_items_retrieved[ $authorized_key ])) {
-                $this->_items_retrieved[ $authorized_key ] = &$item;
-            }
-        } elseif ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
+        if ( !$result && AMP_DISPLAYMODE_DEBUG_CACHE ) {
             trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ) );
         }
-        
         return $result;
-
     }
 
-	function refresh( $key ) {
-		$authorized_key = $this->authorize($key);
-        if ( !$authorized_key ) return false;
-        $this->_add_index_key( $authorized_key );
-		if (isset($this->_items_retrieved[ $authorized_key ] )) {
-			$this->_memcache_connection->set( $authorized_key, $this->_items_retrieved[ $authorized_key ], MEMCACHE_COMPRESSED );
-		}
-	}
+	  function refresh( $key ) {
+        return; //memcache no refreshy
+    }
+    function age( $key ) {
+        return; //memcache no age
+    }
 
+    #XXX: unnecessary, delete me
     function contains( $key ){
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key ) return false;
 
-        if ( $authorized_key == $this->_index_key ) return true;
-        if ( !isset( $this->_index[$authorized_key] )) return false; 
-    
-        return $this->_confirm_memcache_retrieve( $authorized_key );
-
-    }
-
-    function _confirm_memcache_retrieve( $authorized_key ){
-        if ( isset( $this->_items_retrieved[ $authorized_key ])) return $authorized_key;
-        $item = $this->_memcache_connection->get( $authorized_key ) ;
-
-        $this->_items_retrieved[ $authorized_key ] = &$item;
-        if ( !$item ) return false; 
-        return $authorized_key;
+        return $this->_memcache_connection->get( $authorized_key );
     }
 
     function &retrieve( $key ){
-        $empty_value = false;
         $authorized_key = $this->authorize( $key );
-        if ( !$authorized_key ) return $empty_value;
-        if ( !$this->contains( $authorized_key )) {
-            if ( AMP_DISPLAYMODE_DEBUG_CACHE ) {
+        if ( !$authorized_key ) return false;
+
+        $result = $this->_memcache_connection->get( $authorized_key );
+        if ( !$result && AMP_DISPLAYMODE_DEBUG_CACHE ) {
                 trigger_error( sprintf( AMP_TEXT_ERROR_CACHE_REQUEST_FAILED, get_class( $this ), __FUNCTION__, $key ));
-            }
-            return $empty_value;
         }
-
-        $result = $this->_confirm_memcache_retrieve( $authorized_key );
-        if ( !$result ) return $empty_value;
-
-        return $this->_items_retrieved[ $authorized_key ];
+        return $result;
     }
 
     function delete( $key ){
         $authorized_key = $this->authorize( $key );
         if ( !$authorized_key ) return false;
 
-        $result = $this->_memcache_connection->delete( $authorized_key );
-        if ( $result ) {
-            $this->_remove_index_key( $authorized_key );
-            unset( $this->_items_retrieved[ $authorized_key ]);
+        return $this->_memcache_connection->delete( $authorized_key );
+    }
+
+    # $key_token is ignored for now - no internal namespaces at this point
+    function clear( $key_token = null ){
+        $cache_version = $this->_memcache_connection->increment( $this->cache_version_key() );
+        $this->_unique_site_key = AMP_SYSTEM_UNIQUE_ID . "@$cache_version";
+    }
+
+    function cache_version_key() {
+        return AMP_SYSTEM_UNIQUE_ID.'_cache_version';
+    }
+
+    function cache_version() {
+        $cache_version = $this->_memcache_connection->get( $this->cache_version_key() );
+        if($cache_version===false) {
+            $cache_version = rand(1, 10000);
+            $this->_memcache_connection->set($this->cache_version_key(), $cache_version);
         }
-        return $result;
+        return $cache_version;
     }
     
-    function clear( $key_token = null ){
-        $preserve_keys = array( );
-        foreach( $this->_index as $authorized_key => $time_stored ){
-            if ( isset( $key_token ) && ( strpos( $authorized_key, $key_token ) === FALSE )) {
-                $preserve_keys[] = $authorized_key;
-                continue;
-            }
-            $this->delete( $authorized_key );
-        }
-
-        if ( isset( $key_token ) && !empty( $preserve_keys )) {
-            $this->_items_retrieved = array_combine_key( $preserve_keys, $this->_items_retrieved );
-        } else {
-            $this->_items_retrieved = array( );
-        }
-    }
-
     function shutdown( ){
         return $this->_memcache_connection->close( );
     }
@@ -239,6 +194,7 @@ class AMP_System_Cache_Memcache extends AMP_System_Cache {
     }
 
     function log_memcache_failure() {
+        trigger_error('logging memcache failure');
         $log = '/tmp/amp-memcache-fails';
         $memcache_fail_limit = 100;   // 100 failures in
         $memcache_fail_window = 60*5; // 5 minutes

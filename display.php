@@ -15,13 +15,6 @@ require_once( 'AMP/BaseDB.php' );
 /**
  *  Check for a cached page
  */
-/*
-if (AMP_SITE_MEMCACHE_ON) {
-    require_once( "AMP/Content/Page/Cached.inc.php" );
-    $cached_page = &new AMPContent_Page_Cached();
-    if ($cached_page->execute()) exit;
-}
-*/
 
 /**
  * Check for a cached copy of this request
