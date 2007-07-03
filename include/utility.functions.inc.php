@@ -924,7 +924,7 @@ function AMP_cached_request( $timeout = null  ){
     if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
         $cache_key = $cache->identify( $cache_key, AMP_SYSTEM_USER_ID );
     }
-    if ( isset( $timeout ) && ( $cache->age( $cache_key ) > $timeout )) return false;
+    //if ( isset( $timeout ) && ( $cache->age( $cache_key ) > $timeout )) return false;
 
     return $cache->retrieve( $cache_key ) ;
 }
@@ -2140,6 +2140,51 @@ function AMP_format_date_from_array( $date_values ) {
     }
 
     return $separator . date( 'F Y', $date_stamp );
+}
+
+function AMP_cache_this_request(  ) {
+    if ( !AMP_is_cacheable_url( ) ) return; 
+
+    $cache_key = AMP_CACHE_TOKEN_URL_CONTENT . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+    $user_id =  ( defined( 'AMP_SYSTEM_USER_ID' ) && AMP_SYSTEM_USER_ID ) ? AMP_SYSTEM_USER_ID : null; 
+    AMP_cache_set( $cache_key, $finalPageHtml, $user_id );
+
+    //HTML caching code for apache redirection
+    $url_values = AMP_url_read(  );
+    if ( $url_values ) {
+        $section_okay = ( ( count( $url_values ) == 2) && isset( $url_values['list'] ) && isset( $url_values['type'] ));
+        $class_okay =   ( ( count( $url_values ) == 2) && isset( $url_values['list'] ) && isset( $url_values['class'] ));
+        $article_okay = ( ( count( $url_values ) == 1) && isset( $url_values['id'] ));
+        if ( !( $section_okay || $article_okay || $class_okay ) ) {
+            //don't cache pages with any funny vars on them
+            return;
+        }
+    }
+    $cache_file = false;
+    $cache_folder = false;
+    $currentPage = AMPContent_Page::instance( );
+
+    if ( $currentPage->isArticle()) {
+        $cache_folder = AMP_pathFlip(AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . 'article');
+        AMP_mkdir($cache_folder );
+        $cache_file = $cache_folder . DIRECTORY_SEPARATOR . $currentPage->getArticleId(). '.html'; 
+    }
+    if ( $currentPage->isList('type') ) {
+        $cache_folder = AMP_pathFlip(AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . 'section') ;
+        AMP_mkdir($cache_folder );
+        $cache_file = $cache_folder . DIRECTORY_SEPARATOR . $currentPage->getSectionId(). '.html'; 
+    }
+    if ( $currentPage->isList('index' ) ) {
+        $cache_folder = AMP_pathFlip( AMP_SYSTEM_CACHE_PATH );
+        AMP_mkdir( $cache_folder );
+        $cache_file = $cache_folder . DIRECTORY_SEPARATOR . 'index.html'; 
+    }
+    if ($cache_file && !file_exists($cache_file) ) {
+        $cache_out = fopen( $cache_file, 'w' );
+        fwrite($cache_out, $finalPageHtml );
+        fclose( $cache_out );	
+    }
+
 }
 
 ?>

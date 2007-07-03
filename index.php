@@ -34,17 +34,23 @@
 $intro_id = 2 ;
 require_once("AMP/BaseDB.php");
 
-/*
-if (AMP_SITE_MEMCACHE_ON) {
-    require_once( "AMP/Content/Page/Cached.inc.php" );
-    $cached_page = &new AMPContent_Page_Cached();
-    if ($cached_page->execute()) exit;
-}
-*/
-if ( $cached_output = AMP_cached_request( AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE )) {
+//if the frontpage timeout is actually set it will have a different value from the CACHE_TIMEOUT
+//otherwise no one cares about this case
+if ( 
+    //everything is normal
+     ( ( $cached_output = AMP_cached_request( ))
+         && ( AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE == AMP_SYSTEM_CACHE_TIMEOUT ))
+     || 
+     //stuff is weird but the timestamp is cool
+     ( $cached_output 
+        && ( $cached_frontpage_stamp = AMP_cache_get( AMP_CACHE_TOKEN_URL_CONTENT.'_TIMESTAMP_FRONTPAGE'))
+        && ( AMP_SYSTEM_CACHE_TIMEOUT_FRONTPAGE >= ( time( ) - $cached_frontpage_stamp ))
+     )
+   ) {
     print $cached_output;
     exit;
 }
+
 require_once ("AMP/BaseTemplate.php");
 if ( 'index.php' != AMP_CONTENT_URL_FRONTPAGE ) ampredirect( AMP_CONTENT_URL_FRONTPAGE );
 
@@ -55,6 +61,8 @@ require_once( 'AMP/Content/Class.inc.php');
 $currentClass = &new ContentClass( AMP_Registry::getDbcon( ), AMP_CONTENT_CLASS_FRONTPAGE );
 $display = &$currentClass->getDisplay( );
 $currentPage->contentManager->addDisplay( $display );
+
+AMP_cache_set( AMP_CACHE_TOKEN_URL_CONTENT .'_TIMESTAMP_FRONTPAGE', time( ));
 require_once( 'AMP/BaseFooter.php' );
 
 ?>
