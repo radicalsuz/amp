@@ -395,4 +395,23 @@ class AMPSystemLookup_LiveForms extends AMPSystem_Lookup {
     }
 }
 
+
+class AMPSystemLookup_FormFields extends AMPSystem_Lookup {
+    var $datatable = 'userdata_fields';
+   
+    function AMPSystemLookup_FormFields( $form_id ) {
+
+        if ( !$form_id ) return false;
+        require_once( 'AMP/System/UserData.php');
+        $form_def = &new AMPSystem_UserData( AMP_Registry::getDbcon( ), $form_id );
+        $data = $form_def->getData( );
+
+        foreach( $data as $key => $value ) {
+            if ( substr( $key, 0, 8 ) == 'enabled_' && $value ) {
+                $short_key = substr( $key, 8 );
+                $this->dataset[ $short_key ] = $data[ 'label_' . $short_key ];
+            }
+        }
+    }
+}
 ?>

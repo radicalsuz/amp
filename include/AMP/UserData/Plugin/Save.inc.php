@@ -46,7 +46,7 @@ class UserDataPlugin_Save extends UserDataPlugin {
 
         $data_fields = array();
         
-        $types_to_avoid = array ("html", "static", "header");
+        $types_to_avoid = array ("html", "static", "header", "button", "submit");
 
         foreach ($this->fields as $fname => $fdef) {
             if ( array_search($this->fields[$fname]['type'], $types_to_avoid)!==FALSE ) continue;

@@ -1,4 +1,5 @@
 <?php
+
 class UserDataPlugin {
 
     // A little bit of friendly information about the plugin.
