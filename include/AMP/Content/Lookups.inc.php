@@ -237,7 +237,7 @@ class AMPContentLookup_SectionParents extends AMPContent_Lookup {
 
     function AMPContentLookup_SectionParents() {
         $this->criteria = 'id != ' . AMP_CONTENT_SECTION_ID_TOOL_PAGES;
-        $this->result_field = "if ( id=". AMP_CONTENT_MAP_ROOT_SECTION .", 0, parent) as parent";
+        $this->result_field = "if ( id=". AMP_CONTENT_SECTION_ID_ROOT .", 0, parent) as parent";
         $this->init();
     }
 }

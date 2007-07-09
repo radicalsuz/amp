@@ -41,7 +41,7 @@ class UserDataPlugin_Save_Related extends UserDataPlugin_Save {
 
     var $_field_prefix = 'related';
     var $_hidden_def = array( 
-        'type' => 'text',
+        'type' => 'hidden',
         'public' => true,
         'enabled' => true,
     );

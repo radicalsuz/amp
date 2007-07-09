@@ -13,7 +13,7 @@ function related_add( form, fieldset, form_id ) {
 	for( i=0; i < field_count; ++i ) {
 		current_field = fieldset[i];
 		newitem = document.createElement('input');
-		newitem.type = 'text';
+		newitem.type = 'hidden';
 		newitem.value = form.elements[ current_field ].value;
 		newitem.name = current_field + '['+window.related_count+']';
 

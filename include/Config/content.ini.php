@@ -131,6 +131,12 @@ tool_pages=2
 trash=2
 root=1
 
+[content section name]
+root=AMP_SITE_NAME
+
+[content map]
+root section=1
+
 [content trackbacks]
 enabled=false
 

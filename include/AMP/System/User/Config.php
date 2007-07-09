@@ -17,12 +17,16 @@ function AMP_init_user( ) {
         $content_roots = AMP_lookup( 'userSiteRoots');
         
         if ( isset( $content_roots[AMP_SYSTEM_USER_ID] )) {
-            define( 'AMP_CONTENT_MAP_ROOT_SECTION', $content_roots[AMP_SYSTEM_USER_ID]);
+            if ( !defined( 'AMP_CONTENT_MAP_ROOT_SECTION')) {
+                define( 'AMP_CONTENT_MAP_ROOT_SECTION', $content_roots[AMP_SYSTEM_USER_ID]);
+            }
             $sections = AMP_lookup( 'sections');
-            if ( AMP_CONTENT_MAP_ROOT_SECTION != AMP_CONTENT_SECTION_ID_ROOT ) {
-                define( 'AMP_CONTENT_SECTION_NAME_ROOT', $sections[AMP_CONTENT_MAP_ROOT_SECTION]);
-            } else {
-                define( 'AMP_CONTENT_SECTION_NAME_ROOT', AMP_SITE_NAME );
+            if ( !defined( 'AMP_CONTENT_SECTION_NAME_ROOT')) {
+                if ( ( AMP_CONTENT_MAP_ROOT_SECTION != AMP_CONTENT_SECTION_ID_ROOT )) {
+                    define( 'AMP_CONTENT_SECTION_NAME_ROOT', $sections[AMP_CONTENT_MAP_ROOT_SECTION]);
+                } else {
+                    define( 'AMP_CONTENT_SECTION_NAME_ROOT', AMP_SITE_NAME );
+                }
             }
         } else {
             define( 'AMP_CONTENT_MAP_ROOT_SECTION', AMP_CONTENT_SECTION_ID_ROOT );
@@ -49,6 +53,15 @@ function AMP_init_user( ) {
 
 }
 AMP_init_user( );
+/*
+if ( !defined( 'AMP_CONTENT_MAP_ROOT_SECTION')) {
+    define( 'AMP_CONTENT_MAP_ROOT_SECTION', AMP_CONTENT_SECTION_ID_ROOT );
+}
+if ( !defined( 'AMP_CONTENT_SECTION_NAME_ROOT')) {
+    define( 'AMP_CONTENT_SECTION_NAME_ROOT', AMP_SITE_NAME );
+
+}
+*/
 
 //Browser discovery
 setBrowser();
