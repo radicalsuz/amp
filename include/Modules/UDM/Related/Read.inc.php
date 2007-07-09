@@ -58,6 +58,7 @@ class UserDataPlugin_Read_Related extends UserDataPlugin {
 
            
         $related_list = &new AMP_User_Profile_List( false, array( 'modin' => $options['related_form_id'], $options['related_form_owner_field'] => $options['_userid']) );
+        $related_list->columns = $options['included_fields'];
 
         $this->udm->fields[ $this->addPrefix('related_list') ]['values'] = $this->inForm($related_list->execute( ));
     }
