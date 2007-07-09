@@ -275,13 +275,13 @@ img.img_main {
 }
 
 div.form_header, span.form_header {
-	display: block;
 	width: 100%;
 	background-color: #50A0f0;
 	color: #FFF;
 	font-weight: bold;
 	padding: .5em;
 	margin: .25em;
+    clear: both;
 }
 
 form .row {
@@ -300,9 +300,11 @@ form .row .element {
     width: 79%;
     text-align: left;
 }
+
 form .row input, form .row textarea {
-    width: 90%;
+    width: auto;
 }
+
 
 form .block {
     background-color: #FFFFcc;
@@ -348,3 +350,8 @@ div.thumb {
 div.thumb img {
     border: 0;
 }
+
+form .submit input, form .number input {
+    width: auto;
+}
+

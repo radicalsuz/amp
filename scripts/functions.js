@@ -54,7 +54,7 @@ var url = url + "?url=" + document.location
 	//var IE = (document.all) ? true : false;
 
 //if(NS) {
-	window.open(url,"","scrollbars=no,menubar=no,personalbar=no,width=500,height=320,screenX=220,screenY=0");
+	window.open(url,"","scrollbars=yes,menubar=no,personalbar=no,width=500,height=520,screenX=220,screenY=0");
 //} else if(IE) {
 //	window.open(url,"","scrollbars=no,menubar=no,personalbar=no,width=500,height=290,left=220,top=0");
 //}

@@ -8,7 +8,18 @@ To Do:  make multiple var pages send
 			  add design and css to page
 
 *********************/ 
-$modid = 22;
+require_once( 'AMP/Base/Config.php' );
+require_once( 'Modules/Share/Public/ComponentMap.inc.php' );
+$intro_id = 22;
+$map = & new ComponentMap_Share_Public( );
+
+$controller = $map->get_controller( );
+$header = AMP_get_header( );
+print $header->output( );
+print $controller->execute( ) ;
+
+/*
+
 include("AMP/BaseDB.php");
 include_once("AMP/System/Email.inc.php");
 if (isset($modid) && $modid ){
@@ -23,6 +34,7 @@ $a = $modinstance->Fields("var");
 $$a = $modinstance->Fields("setting");
 $modinstance->MoveNext();} 
 */
+/*
 }
 
 echo $tophtml; 
@@ -112,4 +124,6 @@ if ($_REQUEST['submit']) {
 
 } else show_form();
 
- echo $bthtml; ?>
+ echo $bthtml; 
+ */
+?>
