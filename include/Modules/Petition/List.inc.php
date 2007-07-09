@@ -41,7 +41,7 @@ class Petition_List extends AMP_Display_System_List {
         $form_id = $source->getFormId( );
         if ( !$form_id ) return false;
 
-        $renderer = & $this->_getRenderer( );
+        $renderer = &AMP_get_renderer( ) ;
         return $renderer->link( 
                     AMP_Url_AddVars( AMP_SYSTEM_URL_FORM_DATA, array( 'modin' => 'modin=' . $form_id )),
                     AMP_TEXT_PETITION_SIGNERS );
