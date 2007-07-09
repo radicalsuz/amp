@@ -95,7 +95,7 @@ class MenuComponent_scriptBase extends AMP_MenuComponent {
     }
 
     function make_core() {
-        return "[\n '". $this->spacer10 . "<a class=\"standout\">". AMP_clearSpecialChars( AMP_SITE_NAME ) ."</a>', '', " . $this->outputChildren( false ) . "]";
+        return "[\n '". $this->spacer10 . "<a class=\"standout\">". AMP_clearSpecialChars( AMP_CONTENT_SECTION_NAME_ROOT ) ."</a>', '', " . $this->outputChildren( false ) . "]";
         /*
         return '[\'</a><a href="type_edit.php?id=1"><img src="images/edit.png" border="0" valign="bottom"></a>'.
                 '&nbsp;<a href="article_list.php?type=1"><img src="images/spacer.gif" width="7" border="0">'.

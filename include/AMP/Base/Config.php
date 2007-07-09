@@ -48,6 +48,8 @@ if ( file_exists_incpath( 'custom.translations.inc.php' )) include_once ('custom
 AMP_config_load( 'css', 'amp_content_css');
 
 //old legacy settings
-require_once( 'AMP/LegacyRegistry.inc.php');
+if ( !( isset( $no_legacy ) && $no_legacy )) {
+    require_once( 'AMP/LegacyRegistry.inc.php');
+}
 
 ?>

@@ -81,12 +81,12 @@ class Section_Form extends AMPSystem_Form_XML {
 
     function _selectAddNull( $valueset, $name ) {
         if ( $name != 'parent' ) return parent::_selectAddNull( $valueset, $name );
-        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --') + $valueset;
+        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_CONTENT_SECTION_NAME_ROOT . ' --') + $valueset;
     }
 
     function _blankValueSet( $valueset, $name ){
         if ( $name != 'parent' ) return parent::_blankValueSet( $valueset, $name );
-        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --');
+        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' .AMP_CONTENT_SECTION_NAME_ROOT . ' --');
 
     }
 

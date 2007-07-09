@@ -15,13 +15,20 @@ function AMP_init_user( ) {
     if ( $AMP_CurrentUser ) {
         if ( !defined( 'AMP_SYSTEM_USER_ID' )) define( 'AMP_SYSTEM_USER_ID', $AMP_CurrentUser->id);
         $content_roots = AMP_lookup( 'userSiteRoots');
-        /*
+        
         if ( isset( $content_roots[AMP_SYSTEM_USER_ID] )) {
             define( 'AMP_CONTENT_MAP_ROOT_SECTION', $content_roots[AMP_SYSTEM_USER_ID]);
+            $sections = AMP_lookup( 'sections');
+            if ( AMP_CONTENT_MAP_ROOT_SECTION != AMP_CONTENT_SECTION_ID_ROOT ) {
+                define( 'AMP_CONTENT_SECTION_NAME_ROOT', $sections[AMP_CONTENT_MAP_ROOT_SECTION]);
+            } else {
+                define( 'AMP_CONTENT_SECTION_NAME_ROOT', AMP_SITE_NAME );
+            }
         } else {
             define( 'AMP_CONTENT_MAP_ROOT_SECTION', AMP_CONTENT_SECTION_ID_ROOT );
+            define( 'AMP_CONTENT_SECTION_NAME_ROOT', AMP_SITE_NAME );
         }
-        */
+        
 
         //ACL user def code
         if ( !defined( 'AMP_SYSTEM_USER_TYPE')) define( 'AMP_SYSTEM_USER_TYPE', 'users');

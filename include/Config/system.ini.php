@@ -1,6 +1,6 @@
 ;<?php
-[content map]
-root section=1
+//[content map]
+//root section=1
 
 [system]
 version_id="3.7.2"

@@ -71,7 +71,7 @@ class PermissionGroup extends AMPSystem_Data_Item {
     function _updateSections( ) {
         $root_section = $this->getData( 'root_section_id' );
         $allowed_base = array( );
-        if ( $root_section != AMP_CONTENT_SECTION_ID_ROOT ) {
+        if ( $root_section && $root_section != AMP_CONTENT_SECTION_ID_ROOT ) {
             $map = AMPContent_Map::instance( );
             $allowed_by_root = $map->getDescendants( $root_section );
             $allowed_base = array_flip( $allowed_by_root );

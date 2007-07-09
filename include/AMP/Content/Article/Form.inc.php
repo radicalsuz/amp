@@ -111,13 +111,13 @@ class Article_Form extends AMPSystem_Form_XML {
     function _selectAddNull( $valueset, $name ) {
         $required_selects = array( 'section', 'new_section_parent');
         if ( array_search( $name, $required_selects ) === FALSE ) return parent::_selectAddNull( $valueset, $name );
-        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --') + $valueset;
+        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_CONTENT_SECTION_NAME_ROOT . ' --') + $valueset;
     }
 
     function _blankValueSet( $valueset, $name ){
         $required_selects = array( 'section', 'new_section_parent');
         if ( array_search( $name, $required_selects ) === FALSE ) return parent::_blankValueSet( $valueset, $name );
-        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_SITE_NAME . ' --');
+        return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_CONTENT_SECTION_NAME_ROOT . ' --');
     }
 
     function _checkNewSection( $data, $fieldname ){

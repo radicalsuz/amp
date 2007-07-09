@@ -1,14 +1,23 @@
 <?php
+
 /*
 require_once( 'AMP/Base/DB.php' );
+//server config file
+if ( file_exists_incpath( 'AMP/HostConfig.inc.php')) {
+    include_once( 'AMP/HostConfig.inc.php');
+}
 require_once( 'AMP/System/Config.inc.php' );
+
 require_once( 'AMP/System/Language/Config.php');
 require_once( 'AMP/Base/Debug.php');
 require_once( 'AMP/Base/Lookups.php');
 require_once( 'AMP/Base/Setup.php');
 require_once( 'AMP/System/Permission/Config.inc.php');
 */
-require_once( 'AMP/System/Base.php' );
+$no_legacy = 1;
+require_once( 'AMP/Base/Config.php' );
+$no_legacy = false;
+
 //require_once( 'AMP/Base/ConfigSystem.php' );
 
 class AMP_Authentication_Handler {
