@@ -10,7 +10,7 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
     var $col_headers = array( 
         'Position'   =>  'position',
         'Nav'        => 'navid',
-        'Badge'        => 'badge_id',
+//        'Badge'        => 'badge_id',
         'Remove'   =>  '_listControls',
         'Edit'   =>  '_listControls',
         );
@@ -98,12 +98,12 @@ class AMP_Content_Nav_Location_List extends AMP_System_List_Form {
         $form = &new AMP_Content_Nav_Location_Form( );
         $form->_getValueSet( 'navid');
         $form->_getValueSet( 'position');
-        $form->_getValueSet( 'badge_id');
+//        $form->_getValueSet( 'badge_id');
 
         $copier_fields = array( 
             'position'  => $form->getField( 'position'),
             'navid'     => $form->getField( 'navid'),
-            'badge_id'  => $form->getField( 'badge_id'),
+//            'badge_id'  => $form->getField( 'badge_id'),
             'id'        => array( 'type' => 'hidden'),
             );
         foreach( $copier_fields as $key => $field_def ){

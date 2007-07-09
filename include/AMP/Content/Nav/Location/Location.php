@@ -46,6 +46,45 @@ class AMP_Content_Nav_Location extends AMPSystem_Data_Item {
         return $this->getData( 'badge_id' );
     }
 
+    function get_url_edit( ) {
+        $badge = $this->getBadgeId( );
+        if ( $badge ) {
+            return AMP_url_update( AMP_SYSTEM_URL_BADGE, array( 'id' => $badge));
+        }
+
+        $nav = $this->getNavId( );
+        if ( $nav ) {
+            return AMP_url_update( AMP_SYSTEM_URL_NAV, array( 'id' => $nav ));
+        }
+        return false;
+    }
+
+    function getName( ) {
+        $badge = $this->getBadgeId( );
+        if ( $badge ) {
+            $badge_names = AMP_lookup( 'badges');
+            return ucwords( AMP_TEXT_BADGE ) . ': ' . $badge_names[ $badge ];
+        }
+
+        $nav = $this->getNavId( );
+        if ( $nav ) {
+            $nav_names = AMP_lookup( 'navs');
+            return ucwords( AMP_TEXT_NAV ). ': ' . $nav_names[ $nav ];
+        }
+        return false;
+    }
+
+    function getBlock( ) {
+        $blocks = AMP_lookup( 'navBlocks');
+        $position = $this->getPosition( );
+        foreach( $blocks as $block_header => $token ) {
+            if ( strpos( strtolower( $position), strtolower( $token )) === 0 ) {
+                return $block_header;
+            }
+        }
+
+    }
+
 }
 
 ?>

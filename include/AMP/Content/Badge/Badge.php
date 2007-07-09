@@ -36,6 +36,7 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
     }
 
     function getDefaultArguments( ) {
+        require_once( 'AMP/Content/Page.inc.php');
         $page = AMPContent_Page::instance( );
         $values['section'] = $page->getSectionId( );
         $values['class'] = $page->getClassId( );

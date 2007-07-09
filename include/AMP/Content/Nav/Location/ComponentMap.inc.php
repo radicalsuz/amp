@@ -17,6 +17,29 @@ class ComponentMap_Nav_Location extends AMPSystem_ComponentMap {
         'form'  => 'AMP_Content_Nav_Location_Form',
         'list'  => 'AMP_Content_Nav_Location_List',
         'source'=> 'AMP_Content_Nav_Location');
+
+    var $_allow_list = AMP_PERMISSION_CONTENT_NAVIGATION;
+    var $_allow_save = AMP_PERMISSION_CONTENT_NAVIGATION;
+    var $_allow_publish = AMP_PERMISSION_CONTENT_NAVIGATION;
+    var $_allow_unpublish = AMP_PERMISSION_CONTENT_NAVIGATION;
+    var $_allow_delete = AMP_PERMISSION_CONTENT_NAVIGATION;
+    var $_allow_edit = AMP_PERMISSION_CONTENT_NAVIGATION;
+
+    function onSave( &$controller, $args = array( ) ) {
+        $model = $controller->get_model( );
+        $nav_layout = $model->getLayoutId( );
+        if ( $nav_layout ) {
+            ampredirect( AMP_url_update( AMP_SYSTEM_URL_NAV_LAYOUT, array( 'id' => $nav_layout )) );
+        }
+    }
+
+    function onDelete( &$controller, $args = array( ) ) {
+        $model = $controller->get_model( );
+        $nav_layout = $model->getLayoutId( );
+        if ( $nav_layout ) {
+            ampredirect( AMP_url_update( AMP_SYSTEM_URL_NAV_LAYOUT, array( 'id' => $nav_layout )) );
+        }
+    }
 }
 
 ?>

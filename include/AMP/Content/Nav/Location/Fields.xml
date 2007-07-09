@@ -20,6 +20,10 @@
         </lookup>
         <label>Position</label>
     </position>
+    <layout_id>
+        <type>hidden</type>
+    </layout_id>
+    <!--
     <moduleid>
         <type>hidden</type>
     </moduleid>
@@ -32,4 +36,5 @@
     <typelist>
         <type>hidden</type>
     </typelist>
+    -->
 </array>
