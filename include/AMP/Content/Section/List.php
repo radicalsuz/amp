@@ -100,7 +100,7 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
     }
 
     function _renderBlock( $output ) {
-        $sortable_script = 'Sortable.create( "'.$this->list_id.'", { tag: "tr", only: "list_row", scroll: window  });';
+        //$sortable_script = 'Sortable.create( "'.$this->list_id.'", { tag: "tr", only: "list_row", scroll: window  });';
         return 
             $this->root_render_block( 
                 $this->_renderer->form( 
@@ -116,9 +116,9 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
                       array( 'name' => $this->list_id, 'action' => AMP_url_update( $_SERVER['REQUEST_URI']), 'method' => 'POST' )
                      )
             )
-                . AMP_HTML_JAVASCRIPT_START
-                . $sortable_script
-                . AMP_HTML_JAVASCRIPT_END
+            //    . AMP_HTML_JAVASCRIPT_START
+            //    . $sortable_script
+            //    . AMP_HTML_JAVASCRIPT_END
                 ;
     }
 

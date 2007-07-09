@@ -835,6 +835,17 @@ table.system {
 
 }
 
+.system .list_header {
+	text-shadow: .2em black;
+	font-weight: bold;
+	color: white;
+	background-color : #006699;
+	background: url('images/tall_blue_gradient.png') top left repeat-x;
+	padding: .25em; 
+	margin: .25em;
+}
+
+
 .system li.list_row {
 	list-style-type: none;
 }
@@ -877,6 +888,39 @@ ul.system {
 .system div.list_control {
 	text-align:center;
 }
+
+div#amp_content_nav_location_values .nav_block {
+	position: relative;
+	float: left;
+}
+
+div#amp_content_nav_location_values div.list_header {
+	text-transform: uppercase;
+	width: 300px;
+
+}
+ul.nav_locations div.list_control {
+	position: relative;
+	float: right;
+}
+ul.nav_locations div.list_control img.icon {
+	float:left;
+	margin-right: .5em;
+}
+
+ul.nav_locations li {
+	padding: .2em;
+	width: 300px;
+	background-color: #e3e3e3;
+	border: 1px solid silver;
+	margin-bottom:.5em;
+	list-style: none outside;
+	margin-left: -3em; 
+}
+ul.nav_locations li:hover {
+	background-color: #CCFFCC;
+	cursor: move;
+}
 div.icon img, img.icon {
 	border: 0px;
 	vertical-align:bottom;
@@ -901,7 +945,7 @@ form .row {
     padding-top: 1em;
 }
 
-form .row label {
+form .row label, form .row div.label {
     float: left;
     width: 19%;
     text-align: right;
@@ -915,6 +959,15 @@ form .row .element {
 form .row input, form .row textarea {
     width: 90%;
 }
+
+form .submit {
+	text-align: center;
+}
+
+form .submit input {
+    width: auto;
+}
+
 
 form .block {
     background-color: #FFFFcc;
@@ -941,4 +994,9 @@ div.diff {
 	background-color: #F3F3F3;
 	border: #c0c0c0 solid 1px;
 	padding: 1em;
+}
+
+form.AMP_Content_Location_Input .element {
+    position: relative;
+    float: left;
 }

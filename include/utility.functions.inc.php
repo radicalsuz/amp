@@ -1627,7 +1627,7 @@ function AMP_local_request( ){
 function AMP_lookup( $lookup_type, $lookup_var = null ) {
     $lookup_types = array( 'AMPSystem_Lookup' => 'AMPSystemLookup_', 
                             'AMPContent_Lookup' => 'AMPContentLookup_', 
-                            'Form_Lookup' => 'FormLookup_');
+                            'FormLookup' => 'FormLookup_');
     //the whole class name is passed
     if ( class_exists( $lookup_type )) {
         foreach ( $lookup_types as $base_type => $prefix ) {

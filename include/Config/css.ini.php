@@ -25,6 +25,9 @@ date="bodygreystrong"
 author="bodygreystrong"
 source="bodygreystrong"
 
+[class system]
+fineprint=photocaption
+
 [id]
 nav_element="%s_nav_%s"
 nav_block="%s_nav"

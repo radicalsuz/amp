@@ -8,6 +8,7 @@ require_once( 'AMP/Content/Page.inc.php');
 
 $intro_id = 22;
 $form = &new AMP_Display_Form( );
+$form->read_xml_fields( 'Modules/Share/Public/Fields.xml' );
 AMP_directDisplay( $form->execute( ));
 /*
 $map = & new ComponentMap_Share_Public( );

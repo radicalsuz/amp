@@ -13,9 +13,10 @@ class AMP_Display_Form {
     var $name;
     var $method = 'POST';
     var $action;
+    var $form_attr = array( );
 
     var $_request_values_clean;
-    var $_request_vars;
+    var $_request_vars = array( );
 
     var $_rules;
     var $_rules_error_messages;
@@ -41,14 +42,30 @@ class AMP_Display_Form {
 
     var $submit = array( 'save' => array( 'label' => 'Save Changes' ));
 
+    var $xml_fields_source;
+
+    var $field_def_defaults = array( 
+        'input' => array( 
+            'attr' => array( 
+                'size' => '40',
+                ),
+        ),
+        'textarea' => array( 
+            'attr' => array( 
+                'rows'  => '4',
+                'cols'  => '40'
+                ),
+        ),
+    );
+
 
     function AMP_Display_Form( ) {
         $this->__construct( );
     }
 
     function __construct( ) {
-        $this->name = get_class( $this );
-        $this->action = $_SERVER['PHP_SELF'];
+        if ( !$this->name ) $this->name = strtolower( get_class( $this ));
+        if ( !$this->action ) $this->action = $_SERVER['PHP_SELF'];
         $this->_renderer = AMP_get_renderer( );
         $this->_init_request( );
         $this->_init_fields( );
@@ -59,29 +76,58 @@ class AMP_Display_Form {
         //interface
     }
 
+    function _after_add_fields( ) {
+        //interface
+    }
+
     function _init_request( ) {
         if ( $this->method == 'POST') {
             $this->_request_vars = $_POST;
         } else {
             $this->_request_vars = $_GET;
         }
+        if ( !empty( $this->_request_vars)) {
+            $this->_request_values_clean = $this->clean( $this->_request_vars );
+        }
+        
 
     }
 
     function _init_fields( ) {
         $fields = $this->_init_fields_xml( );
         if ( !$fields ) return;
-        foreach( $fields as $name => $def ) {
-            $this->add_field( $name, $def );
-        }
     }
 
     function _init_fields_xml( ) {
-        $xml_file = 'Modules/Share/Public/Fields.xml';
+        if ( !$this->xml_fields_source ) return;
+        $this->read_xml_fields( $this->xml_fields_source );
+    }
+
+    function read_xml_fields( $xml_filename ) {
+        $xml = file_get_contents( $xml_filename, 1 );
+        return $this->add_xml_fields( $xml );
+
+    }
+
+    function add_xml_fields( $xml ) {
+        $fields = $this->xml_to_fields( $xml );
+        if ( !$fields ) return false;
+
+        foreach( $fields as $name => $def ) {
+            $this->add_field( $name, $def );
+        }
+
+        $this->_after_add_fields( );
+        return count( $fields );
+
+    }
+
+    function xml_to_fields( $xml ) {
+
         require_once( 'XML/Unserializer.php');
         $parser = &new XML_Unserializer( );
-        $xml = file_get_contents( $xml_file, 1 );
         if ( !$xml ) return false;
+
         $status = $parser->unserialize( $xml );
 
         if ( PEAR::isError( $status )) {
@@ -92,8 +138,9 @@ class AMP_Display_Form {
         $results = $parser->getUnserializedData( );
         $fields = array( );
         foreach( $results as $key => $value ) {
-            $fields[$key] = $this->update_legacy_xml( $value );
+            $fields[$key] = AMP_Display_Form::update_legacy_xml( $value );
         }
+
         return $fields;
 
     }
@@ -124,13 +171,20 @@ class AMP_Display_Form {
         $output = array( );
         foreach( $this->_fields as $name => $field_def ) {
             if ( !isset( $field_def['type']) && $field_def['type'] ) continue;
+            $output_type = ( $field_def['type'] == 'hidden') ? 'hidden' : 'visible';
+
             $render_method = $this->get_render_method( $name, $field_def['type']);
             if ( !method_exists( $this, $render_method )) {
-                $output[ $name ]= $render_method( $name, $field_def, $this );
+                $output[ $output_type ][ $name ] = $render_method( $name, $field_def, $this );
             }
-            $output[$name] = $this->$render_method( $name, $field_def );
+            $output[$output_type][$name] = $this->$render_method( $name, $field_def );
         }
-        return join( $this->_renderer->newline( ), $output );
+        return    join( "\n", $output['hidden'])
+                . join( $this->format_field_delimiter( ), $output['visible']);
+    }
+
+    function format_field_delimiter( ) {
+        return $this->_renderer->newline( );
     }
 
     function get_render_method( $name, $type ) {
@@ -152,24 +206,90 @@ class AMP_Display_Form {
     function render_field_textarea( $name, $field_def ) {
         return 
             $this->format_field( 
-                $this->_renderer->label( $name, $this->get_field_def( $name, 'label' ) )
+              $this->render_label( $name, $this->get_field_def( $name, 'label') )
             . $this->format_element( 
                 $this->_renderer->textarea( $name, $this->get( $name ), $this->get_field_def( $name, 'attr') )
                 ), $name );
+    }
+
+    function render_field_select( $name, $field_def ) {
+        $options = array( );
+        if ( isset( $field_def['lookup']) && $field_def['lookup']) {
+            $options = AMP_evalLookup( $field_def['lookup']);
+        }
+        if ( isset( $field_def['values']) && is_array( $field_def['values'])) {
+            foreach( $field_def['values'] as $key => $value ) {
+                if ( !is_array( $value ) ) {
+                    $options[$value] = $value;
+                    continue;
+                }
+                if ( isset( $value['key']) && isset( $value['value'])) {
+                    $options[ $value['key']] = $value['value'];
+                }
+            }
+        }
+        $options = $this->render_select_options( $name, $options );
+
+        return 
+            $this->format_field( 
+              $this->render_label( $name, $field_def['label'] )
+            . $this->format_element( 
+                $this->_renderer->select( $name, $this->get( $name ), $options, $this->get_field_def( $name, 'attr') )
+                ), $name );
+    }
+
+    function render_label( $name, $text ) {
+        return $this->_renderer->label( $name, $text );
+    }
+
+    function render_select_options( $name, $options = array( ) ) {
+        $default_option_var = 'option_text_default_' . strtolower( $name );
+        $default_option = ( isset( $this->$default_option_var )) ? $this->$default_option_var : AMP_TEXT_OPTION_DEFAULT;
+        if ( !empty( $options ) && is_array( $options )) {
+            return array( '' => $default_option ) + $options;
+        }
+
+        $blank_option_var = 'option_text_blank_' . strtolower( $name );
+        $blank_option = ( isset( $this->$blank_option_var )) ? $this->$blank_option_var : AMP_TEXT_OPTION_BLANK;
+        return array( '' => AMP_TEXT_OPTION_BLANK );
     }
 
     function render_field_default( $name, $field_def ) {
 
         return 
             $this->format_field( 
-                $this->_renderer->label( $name, $this->get_field_def( $name, 'label' ) )
+              $this->render_label( $name, $this->get_field_def( $name, 'label') )
             . $this->format_element( 
                 $this->_renderer->input( $name, $this->get( $name ), $this->get_field_def( $name, 'attr') )
                 ), $name );
     }
 
     function render_field_header( $name, $field_def ) {
-        return $this->format_header( $this->get_field_def( $name, 'label'), $name );
+        $display = $this->get_field_def( $name, 'value' ) ;
+        if ( !$display ) {
+            $display = $this->get_field_def( $name, 'default' ) ;
+        }
+        if ( !$display ) {
+            $display = $this->get_field_def( $name, 'label' ) ;
+        }
+        return $this->format_header( $display, $name );
+    }
+
+    function render_field_hidden( $name, $field_def ) {
+        $attr = $this->get_field_def( $name, 'attr' );
+        $attr['type'] = 'hidden';
+        return $this->_renderer->input( $name, $this->get( $name ), $attr );
+    }
+
+    function render_field_static( $name, $field_def ) {
+        $display = $this->get_field_def( $name, 'value' ) ;
+        if ( !$display ) {
+            $display = $this->get_field_def( $name, 'default' ) ;
+        }
+        if ( !$display ) {
+            $display = $this->get_field_def( $name, 'label' ) ;
+        }
+        return $this->format_field( $display, $name );
     }
 
     function render_submit( ) {
@@ -178,8 +298,16 @@ class AMP_Display_Form {
             $attr = isset( $def['attr']) ? $def['attr'] : array( );
             $output .= $this->_renderer->submit( $name, $def['label'], $attr );
         }
-        return $this->_renderer->div( $output, array( 'class' => 'submit'));
-
+        return $this->format_field( 
+                $this->_renderer->div( '', array( 'class' => 'label'))
+                . $this->_renderer->div( $output, array( 'class' => 'element submit')) 
+                , 'submit');
+        /*
+        return $this->format_field( 
+                $this->_renderer->div( $output, array( 'class' => 'submit')), 
+                'submit'
+                );
+        */
     }
 
     function format_header( $content, $field_name ) {
@@ -200,7 +328,8 @@ class AMP_Display_Form {
     }
 
     function format_form( $content ) {
-        return $this->_renderer->form( $content, array( 'name' => $this->name, 'method' => $this->method, 'action' => $this->action ));
+        $form_attr = array_merge( $this->form_attr, array( 'name' => $this->name, 'method' => $this->method, 'action' => $this->action ));
+        return $this->_renderer->form( $content, $form_attr ); 
     }
 
     function getValues( ) {
@@ -302,19 +431,28 @@ class AMP_Display_Form {
     }
 
     function update_legacy_xml( $def ) {
+        $new_def = $def;
         if ( isset( $def['size'])) {
             if ( $def['type']=='textarea') {
                 $sizes = split( ':', $def['size']);
-                $def['attr']['rows'] = $sizes[0];
-                $def['attr']['cols'] = $sizes[1];
+                $new_def['attr']['rows'] = $sizes[0];
+                $new_def['attr']['cols'] = $sizes[1];
             } else {
-                $def['attr']['size'] = $def['size'];
+                $new_def['attr']['size'] = $def['size'];
             }
-            unset( $def['size']);
-        } else {
-            $def['attr']['size'] = 40;
+
+            unset( $new_def['size']);
+        } 
+        return $new_def;
+    }
+
+    function field_def_validate( $def ) {
+        $new_def = AMP_Display_Form::update_legacy_xml( $def );
+        if ( !isset( $this->field_def_defaults[ $def[ 'type']])) {
+            return $new_def;
         }
-        return $def;
+        return array_merge_recursive( $this->field_def_defaults[ $def['type']], $def );
+
     }
 
     function revise_order( $field_name, $order=0 ) {
@@ -354,13 +492,19 @@ class AMP_Display_Form {
 
     function submitted( ) {
         if ( is_array( $this->submit )) {
-            return $this->assert_var( key( $this->submit ));
+            foreach( $this->submit as $key => $submit_def ) {
+                if ( $this->assert_var( $key )) return true;
+            }
         }
     }
 
     function assert_var( $var_name ) {
         if ( !isset( $this->_request_vars[ $var_name ])) return false;
         return $this->_request_vars[$var_name];
+    }
+
+    function clean( $values ) {
+        return $values;
     }
 
 }

@@ -71,6 +71,7 @@ define( 'AMP_TEXT_PUBLISH', 'Publish');
 define( 'AMP_TEXT_DELETED', 'Deleted');
 define( 'AMP_TEXT_ADD_ITEM','Add new record' );
 define( 'AMP_TEXT_PREVIEW_ITEM','Preview this Item' );
+define( 'AMP_TEXT_DELETE_ITEM','Delete this Item' );
 define( 'AMP_TEXT_SEARCH_NO_MATCHES', 'No items matched your search');
 define( 'AMP_TEXT_LIST_CONFIRM_DELETE', 'Are you sure you want to DELETE these items?');
 define( 'AMP_TEXT_LIST_CONFIRM_DELETE_SECTIONS', 'You are about to DELETE these sections and ALL ARTICLES and sections in them. ');
@@ -177,6 +178,8 @@ define( 'AMP_TEXT_IMAGE', 'image');
 define( 'AMP_TEXT_FILE', 'file');
 define( 'AMP_TEXT_FORM', 'form');
 define( 'AMP_TEXT_PUBLIC_PAGE', 'public page');
+define( 'AMP_TEXT_NAV', 'nav');
+define( 'AMP_TEXT_BADGE', 'badge');
 
 define( 'AMP_TEXT_TEMPLATE', 'template');
 define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
@@ -191,6 +194,13 @@ define( 'AMP_TEXT_MODULE_GALLERY_EMPTY', 'No photos are available in this galler
 define( 'AMP_TEXT_NONE_AVAILABLE', 'None available');
 define( 'AMP_TEXT_RECORD_CONFIRM_DELETE', 'Are you sure you want to DELETE this record?');
 define( 'AMP_TEXT_RECORD_CONFIRM_DELETE_SECTION', 'You are about to DELETE this section and ALL ARTICLES and sections in it. ');
+
+/**
+ * 3.7 forms engine text 
+ */
+
+define( 'AMP_TEXT_OPTION_DEFAULT', 'Select one');
+define( 'AMP_TEXT_OPTION_BLANK', 'None available');
 
 
 /**

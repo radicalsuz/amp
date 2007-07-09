@@ -1,4 +1,5 @@
 <?PHP 
+header( "Location: /share.php");
 /*
 $modid = 22;
 if ($_POST["FromEmail"]) {$mod_id = 32 ; }

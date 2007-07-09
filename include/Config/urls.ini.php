@@ -141,6 +141,7 @@ nav=           "nav.php"
 nav_add=       "nav.php?action=add"
 nav_layout=    "nav_layouts.php"
 nav_layout_add="nav_layouts.php?action=add"
+nav_location=  "nav_location.php"
 
 permission_details="permissiondetail.php?action=list"
 permission_group="per.php"

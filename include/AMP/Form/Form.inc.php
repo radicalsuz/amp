@@ -46,7 +46,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
                         value (enforceRequired() must be called by the controller)
 
          *  values:     set of values to choose from for select and group
-                        elements
+                        elements.  can be specified as an array, or an array in the form <key> <value>
 
          *  lookup:     provides a dynamic set of values for select/group elements
          *      instance:   the name of the lookup
@@ -934,14 +934,22 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
 
     function _getValueSet ( $name ) {
         if (!($def = $this->getField( $name ))) return null;
-        if (isset($def['values']) && $def['values']) return $def['values'];
-        
+
         if ( isset( $def['lookup'] ) && $values = AMP_evalLookup( $def['lookup']) ) {
             $this->setFieldValueSet( $name, $values );
             return $values;
         }
 
-        return null;
+        if (!( isset($def['values']) && $def['values'])) return null;  
+
+        if ( !is_array( current( $def['values']))) return $def['values'];
+
+        $option_array = array( );
+        foreach( $def['values'] as $v_key => $value ) {
+            if ( !isset( $value['key']) || !isset( $value['value'])) continue; 
+            $option_array[ $value['key']] = $value[ 'value' ];
+        }
+        return $option_array;
     }
 /*** moved to utility.function AMP_evalLookup 2006-03-01 AP
     function _evalLookup( $lookup_def ){

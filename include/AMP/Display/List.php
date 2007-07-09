@@ -2,7 +2,7 @@
 
 class AMP_Display_List {
 
-    var $name;
+    var $list_id;
 
     var $_source;
     var $_source_object;
@@ -59,7 +59,6 @@ class AMP_Display_List {
     var $_sort;
 
     var $api_version = 2;
-    var $list_id;
 
     // {{{ constructors: __construct, _after_init
 
@@ -253,8 +252,9 @@ class AMP_Display_List {
         $header_method = $this->_subheader_methods[$depth];
 
         $item_header = $source->$header_method( );
-        if ( isset( $this->_current_subheaders[$depth ])
-            && ( $item_header == $this->_current_subheaders[$depth] )) {
+        if ( !$item_header || 
+            ( isset( $this->_current_subheaders[$depth ])
+            && ( $item_header == $this->_current_subheaders[$depth] ))) {
             return false; 
         }
         $this->_current_subheaders[$depth] = $item_header;
@@ -447,7 +447,7 @@ class AMP_Display_List {
         if ( $display_id == 'AMP_DISPLAY_LIST' ) {
             if ( isset( $this->_source_object )) {
                 $display_id .= '_' . $this->_source_object ;
-            } elseif ( isset( $this->name )) {
+            } elseif ( isset( $this->list_id )) {
                 $display_id .= '_' . str_replace( ' ', '_' , $this->list_id );
             } 
         }
