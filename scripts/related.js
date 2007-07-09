@@ -7,8 +7,8 @@ var Related =  {
 function related_add( form, fieldset, form_id ) {
 	field_count = fieldset.length;
 	window.related_count++;
-	Related.form[form_id].push( form );
-	Related.fields[form_id] = Array( );
+	//Related.form[form_id].push( form );
+	//Related.fields[form_id] = Array( );
 
 	for( i=0; i < field_count; ++i ) {
 		current_field = fieldset[i];
@@ -17,7 +17,7 @@ function related_add( form, fieldset, form_id ) {
 		newitem.value = form.elements[ current_field ].value;
 		newitem.name = current_field + '['+window.related_count+']';
 
-		Related.fields[form_id][ window.related_count ].push( newitem.name ) ;
+		//Related.fields[form_id][ window.related_count ].push( newitem.name ) ;
 		form.appendChild( newitem );
 	}
 
@@ -25,7 +25,7 @@ function related_add( form, fieldset, form_id ) {
 }
 
 function related_delete( related_index, form_id ) {
-	field_count = Related.fields[form_id ][related_index].length;
+//	field_count = Related.fields[form_id ][related_index].length;
 	for( i=0; i < field_count; ++i ) {
 		current_field = Related.fields[form_id][ related_index ][i];
 		Related.forms[ form_id ].elements[ current_field ].remove( );

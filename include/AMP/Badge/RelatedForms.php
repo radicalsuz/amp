@@ -9,11 +9,7 @@ function amp_badge_related_form( $data ) {
     if ( !AMP_authenticate( 'admin')) {
         $live_forms = AMP_lookup( 'formsPublic');
         if ( !isset( $live_forms[ $modin ])) {
-            ob_start( );
-            AMP_varDump( $live_forms );
-            $include_value = ob_get_contents();
-            ob_end_clean();
-            return $include_value;
+            return 'Please publish the related form';
         }
 
 
@@ -37,9 +33,9 @@ function amp_badge_related_form( $data ) {
                                         ))
             );
     $result =  $renderer->div( 
-                    $renderer->tag( 'pre', 
-                        $delete_button 
-                        . $udm->doPlugin( 'Output', 'Text'))
+                    $delete_button 
+                    . $renderer->tag( 'pre', 
+                        $udm->doPlugin( 'Output', 'Text'))
                 , array( 'class' => 'form_related_item', 'id' => 'form_related_item_' . $related_index ));
     return $result;
 }
