@@ -53,7 +53,7 @@ if ( AMP_SITE_MEMCACHE_ON
         $cached_page->save( $finalPageHtml );
 }
 */
-AMP_cache_this_request( );
+AMP_cache_this_request( $finalPageHtml );
 
 AMP_cache_close( );
 

@@ -3,12 +3,12 @@
 		<label>From</label>
 		<type>header</type>
 	</from_header>
-	<name>
+	<sender_name>
 		<type>text</type>
 		<label>Name</label>
 		<required>1</required>
-	</name>
-	<from_email>
+	</sender_name>
+	<sender_email>
 		<type>text</type>
 		<label>Email</label>
 		<required>1</required>
@@ -18,7 +18,7 @@
 				<message>Must be a valid email address</message>
 			</item>
 		</rules>
-	</from_email>
+	</sender_email>
 	<subject>
 		<type>text</type>
 		<label>Subject</label>
@@ -49,6 +49,11 @@
 			</item>
 		</rules>
 	</recipient_email>
+    <captcha_1>
+        <type>captcha</type>
+        <label>Please enter the text from the image above</label>
+    </captcha_1>
+    <!--
     <okay_button>
         <type>button</type>
         <label>Share This</label>
@@ -63,6 +68,7 @@
     <recipient_splitter>
         <type>header</type>
     </recipient_splitter>
+    -->
 	<source_url>
 		<constant>1</constant>
 		<type>hidden</type>
@@ -72,5 +78,8 @@
 		<type>hidden</type>
         <default>21</default>
 	</target_recipient_modin>
+	<url>
+		<type>hidden</type>
+	</url>
 		
 </array>

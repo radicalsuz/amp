@@ -21,6 +21,7 @@ class AMP_Display_Form {
     var $_rules;
     var $_rules_error_messages;
     var $_rules_errors;
+    var $isBuilt = true;
 
     var $_messages = array( 
         'validation' => array( 
@@ -45,9 +46,14 @@ class AMP_Display_Form {
     var $xml_fields_source;
 
     var $field_def_defaults = array( 
-        'input' => array( 
+        'text' => array( 
             'attr' => array( 
                 'size' => '40',
+                ),
+        ),
+        'captcha' => array( 
+            'attr' => array( 
+                'size' => '10',
                 ),
         ),
         'textarea' => array( 
@@ -203,6 +209,17 @@ class AMP_Display_Form {
         return 'render_field_default';
     }
 
+    function render_field_captcha( $name, $field_def ) {
+        return $this->format_field( 
+                    $this->_renderer->div( '', array( 'class' => 'label'))
+                    . $this->_renderer->div( 
+                        $this->_renderer->image( AMP_url_add_vars( AMP_CONTENT_URL_CAPTCHA, array( 'key='. AMP_SYSTEM_UNIQUE_VISITOR_ID ) ), array( 'align' => 'center'))
+                        , array( 'class' => 'element')), 
+                   'captcha_image') 
+                . $this->format_field_delimiter( )
+                . $this->render_field_default( $name, $field_def );
+    }
+
     function render_field_textarea( $name, $field_def ) {
         return 
             $this->format_field( 
@@ -311,7 +328,10 @@ class AMP_Display_Form {
     }
 
     function format_header( $content, $field_name ) {
-        return $this->_renderer->div( $content, array( 'class' => 'form_header')) . $this->_renderer->div( false, array( 'class' => 'spacer'));
+        return $this->_renderer->div( $content, array( 'class' => 'form_header')) 
+        ;
+               // . $this->_renderer->div( false, array( 'class' => 'spacer')) 
+        //        . $this->_renderer->newline( 1, array( 'clear' => 'all'));
     }
 
     function format_field( $content, $field_name ) {
@@ -425,9 +445,8 @@ class AMP_Display_Form {
     }
 
     function add_field( $name, $def = array( 'type' => 'text' ), $order = 0 ) {
-        $this->_fields[$name] = $def;
+        $this->_fields[$name] = $this->field_def_validate( $def );
         $this->revise_order( $name, $order );
-
     }
 
     function update_legacy_xml( $def ) {
@@ -451,7 +470,20 @@ class AMP_Display_Form {
         if ( !isset( $this->field_def_defaults[ $def[ 'type']])) {
             return $new_def;
         }
-        return array_merge_recursive( $this->field_def_defaults[ $def['type']], $def );
+       
+        foreach( $this->field_def_defaults[ $def['type']] as $key => $default_value ) {
+            if ( isset( $new_def[$key]) && !is_array( $new_def[$key])) continue;
+            if ( isset( $new_def[$key]) && is_array( $new_def[$key]) && is_array( $default_value )) {
+                foreach( $default_value as $segment_key => $segment_value ) {
+                    if ( isset( $new_def[ $key ][$segment_key])) continue;
+                    $new_def[ $key ][$segment_key]  = $segment_value;
+                }
+                continue;
+            }
+            $new_def[$key] = $default_value;
+        }
+        
+        return $new_def;
 
     }
 
@@ -505,6 +537,20 @@ class AMP_Display_Form {
 
     function clean( $values ) {
         return $values;
+    }
+
+    function getIdValue( ) {
+        return $this->get( 'id');
+    }
+
+    function initNoId( ) {
+        //legacy stub
+    }
+    function Build( ) {
+        //legacy stub
+    }
+    function applyDefaults( ) {
+        //legacy stub
     }
 
 }

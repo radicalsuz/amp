@@ -108,7 +108,7 @@ class UserDataPlugin_Save_Related extends UserDataPlugin_Save {
     }
     
     function _register_fields_dynamic( ) {
-        $header = AMP_get_header( );
+        $header = &AMP_get_header( );
         $header->addJavascript( 'scripts/ajax/prototype.js', 'prototype');
         $header->addJavascript( 'scripts/related.js', 'related_form');
 

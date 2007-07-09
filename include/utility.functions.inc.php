@@ -2111,7 +2111,7 @@ function AMP_format_date_from_array( $date_values ) {
     return $separator . date( 'F Y', $date_stamp );
 }
 
-function AMP_cache_this_request(  ) {
+function AMP_cache_this_request( $finalPageHtml ) {
     if ( !AMP_is_cacheable_url( ) ) return; 
 
     $cache_key = AMP_CACHE_TOKEN_URL_CONTENT . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];

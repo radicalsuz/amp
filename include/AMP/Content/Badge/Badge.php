@@ -86,7 +86,7 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
                 $arguments = $this->getIncludeFunctionArguments( );
 				return $include_function( $arguments );
 			} else {
-				trigger_error( AMP_TEXT_ERROR_NOT_DEFINED, $include_filename, $include_function );
+				trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, $include_filename, $include_function ));
 				return false;
 			}
 			
