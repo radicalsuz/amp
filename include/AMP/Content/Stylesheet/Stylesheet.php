@@ -11,6 +11,9 @@ class AMP_Content_Stylesheet extends AMP_System_File_Text {
         $this->_base_path = AMP_LOCAL_PATH . '/custom';
     }
 
+    function read($id) {
+        //do nothing
+    }
 
 }
 
