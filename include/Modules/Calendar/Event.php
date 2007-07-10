@@ -2,6 +2,8 @@
 
 require_once( 'AMP/System/Data/Item.inc.php');
 
+AMP_config_load( 'dia', null);
+
 class Calendar_Event extends AMPSystem_Data_Item {
 
     var $datatable = "calendar";
