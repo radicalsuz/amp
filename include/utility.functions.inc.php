@@ -703,9 +703,16 @@ if (!function_exists( 'urlencode_array' )) {
 
 if (!function_exists('PHP_SELF_QUERY')) {
     function PHP_SELF_QUERY() {
-        if (!( isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'])) return $_SERVER['PHP_SELF'];
-        return $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
-
+        if (!( isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'])) {
+            $php_self_query = $_SERVER['PHP_SELF'];
+        } else {
+            $php_self_query = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+        }
+        //strip extra slashes
+        while(0 === strpos($php_self_query, '//')) {
+            $php_self_query = substr($php_self_query, 1);
+        }
+        return $php_self_query;
     }
 }
 
