@@ -61,7 +61,7 @@ class Calendar_Public_List extends AMP_Display_List {
 
     function _output_empty( ) {
         $this->message( AMP_TEXT_SEARCH_NO_MATCHES );
-        return $this->render_search( ) . AMP_TEXT_SEARCH_NO_MATCHES;
+        return $this->render_search_form( ) . AMP_TEXT_SEARCH_NO_MATCHES;
     }
 
 }
