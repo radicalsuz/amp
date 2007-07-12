@@ -13,7 +13,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
                 'type'  => 'checkbox',
                 'available' => true,
                 'label' => 'Use Captcha on public form',
-                'default' => 1
+                'default' => 0
             )
         );
 
