@@ -131,6 +131,7 @@ class GalleryImage extends AMPSystem_Data_Item {
     }
 
     function getListOrder( ){
+return 0; //sorting causes mysterious flaming death
         $value = $this->getData( 'listorder' );
         if ( !$value ) $value = AMP_SORT_MAX;; 
         $value .= '_' . $this->getName( ) ;
