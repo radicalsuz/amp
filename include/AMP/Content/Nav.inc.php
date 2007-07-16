@@ -37,7 +37,13 @@ class NavigationElement extends AMPSystem_Data_Item {
 
     function get_contents() {
         if (!isset($this->_engine)) return false;
-        return $this->_engine->execute();
+        $contents = $this->_engine->execute();
+        #XXX: this is totally fucked.  for some reason the display's instance of the nav is not
+        #     the same as the sql engine's instance, so count wasn't set properly.  HALP!!!
+        if(!$this->getTotalCount() && $this->_engine->nav->getTotalCount()) {
+            $this->setCount($this->_engine->nav->getTotalCount());
+        }
+        return $contents;
     }
 
     function execute( ) {
