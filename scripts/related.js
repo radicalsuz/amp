@@ -1,8 +1,10 @@
 var related_count = 0;
+/*
 var Related =  {
 	form: new Hash( ),
 	fields: new Hash( )
 }
+*/
 
 function related_add( form, fieldset, form_id ) {
 	field_count = fieldset.length;
@@ -10,6 +12,8 @@ function related_add( form, fieldset, form_id ) {
 	//Related.form[form_id].push( form );
 	//Related.fields[form_id] = Array( );
 
+  field_container = document.createElement('div');
+  field_container.id = 'form_' + form_id + '_related_custom_fields_' + window.related_count;
 	for( i=0; i < field_count; ++i ) {
 		current_field = fieldset[i];
 		newitem = document.createElement('input');
@@ -18,19 +22,15 @@ function related_add( form, fieldset, form_id ) {
 		newitem.name = current_field + '['+window.related_count+']';
 
 		//Related.fields[form_id][ window.related_count ].push( newitem.name ) ;
-		form.appendChild( newitem );
+		field_container.appendChild( newitem );
 	}
+  form.appendChild( field_container );
 
 	return false;
 }
 
 function related_delete( related_index, form_id ) {
-//	field_count = Related.fields[form_id ][related_index].length;
-	for( i=0; i < field_count; ++i ) {
-		current_field = Related.fields[form_id][ related_index ][i];
-		Related.forms[ form_id ].elements[ current_field ].remove( );
-	}
-
+  $('form_' + form_id + '_related_custom_fields_'+related_index).remove();
 }
 
 function related_describe( form, fieldset, badge_id, form_id, prefix ) {

@@ -21,22 +21,17 @@ function amp_badge_related_form( $data ) {
     $udm->setData( $data );
 
     $renderer = AMP_get_renderer( );
-    $delete_button = $renderer->form( 
-            $renderer->input( 'delete_' . $related_index, AMP_TEXT_DELETE_ITEM, 
-                                array(  'type' => 'image', 
-                                        'src' => AMP_SYSTEM_ICON_DELETE, 
-                                        'class' => 'icon', 
-                                        'alt' => AMP_TEXT_DELETE_ITEM, 
-                                        'title' => AMP_TEXT_DELETE_ITEM, 
-                                        //'onClick' => 'related_delete( document.forms["'.$udm->name.'"], Array( "'.join( '", "', $affected_fields ).'"), '.$related_index.' );' 
-                                        'onClick' => '$( "form_related_item_'.$related_index.'").remove( );'
-                                        ))
-            );
-    $result =  $renderer->div( 
-                    $delete_button 
-                    . $renderer->tag( 'pre', 
-                        $udm->doPlugin( 'Output', 'Text'))
-                , array( 'class' => 'form_related_item', 'id' => 'form_related_item_' . $related_index ));
+#    $delete_button = $renderer->form( 
+    $delete_button = $renderer->link( '#', 
+                      $renderer->image( AMP_SYSTEM_ICON_DELETE, 
+                        array( 'class' => 'icon', 'style' => 'border: 0;' )),
+                      array( 'alt' => AMP_TEXT_DELETE_ITEM, 
+                             'title' => AMP_TEXT_DELETE_ITEM, 
+                             'onClick' => "$('form_related_item_$related_index').remove( ); $('form_{$modin}_related_custom_fields_$related_index').remove(); return false;"
+                           )
+                     );
+    $content = $delete_button . $renderer->tag( 'pre', $udm->doPlugin( 'Output', 'Text'));
+    $result =  $renderer->div($content, array( 'class' => 'form_related_item', 'id' => 'form_related_item_' . $related_index ));
     return $result;
 }
 

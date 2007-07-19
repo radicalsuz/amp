@@ -79,6 +79,10 @@ class UserDataPlugin_Save_Related extends UserDataPlugin_Save {
             }
         }
 
+        # this is weak, but deep within quickform our shit is getting 
+        # overridden with values from the original udm (constant vs default vs submit values)
+        $temp_post = $_POST;
+        unset($_POST['modin']);
         $data_sets = $this->convert_to_sets( $data );
         foreach( $data_sets as $values ) {
             if ( isset( $options['related_form_owner_field']) && $options['related_form_owner_field']) {
@@ -86,10 +90,18 @@ class UserDataPlugin_Save_Related extends UserDataPlugin_Save {
             }
 
             $udm = &new UserDataInput( $this->dbcon, $options['related_form_id'], $this->udm->admin );
+            
+            # here's where the lameness comes in
+            foreach(array_keys($values) as $key) {
+                unset($_POST[$key]);
+                # we also have to make everything public, or it won't save
+                $udm->fields[$key]['public'] = 1;
+            }
             $udm->setData( $values );
             $results[] = $udm->saveUser( );
             unset( $udm );
         }
+        $_POST = $temp_post;
         return true;
 
     }
@@ -131,10 +143,17 @@ class UserDataPlugin_Save_Related extends UserDataPlugin_Save {
         $this->fields = array_merge( $this->fields, $included_fields);
 
         $dom_field_names = $this->convertFieldNamestoUDM( $related_udm->fields, $keys = true );
+        # there must be a better way than this, but this fucking field was causing problems
+        # in the javascript, and since we ignore it's value on submit anyway...
+        if(false !== ($owner_key = array_search($this->_field_prefix.'_'.$options['related_form_owner_field'],$dom_field_names))) {
+            unset($dom_field_names[$owner_key]);
+        }
+
         $add_button_targets = join( "', '", $dom_field_names );
         $this->add_button['attr']['onClick'] = sprintf( $this->add_button['attr']['onClick'], '\''.$add_button_targets.'\'', $options['badge_description'], $options['related_form_id'], $this->_field_prefix);
         $this->fields['add_button'] = $this->add_button;
 
+        #XXX: this appears to be trying to preserve values, why is it not working?
         foreach( $dom_field_names as $dom_field ) {
             if ( isset( $_POST[ $dom_field ]) && is_array( $_POST[ $dom_field ])) {
                 foreach( $_POST[ $dom_field ] as $key => $value ) {
