@@ -57,7 +57,7 @@ if ( ( !AMP_DISPLAYMODE_PREVIEW )  && ($currentArticle = &$currentPage->getArtic
     require_once( 'AMP/Content/Section.inc.php' );
     $currentSection = new Section( AMP_Registry::getDbcon(  ), $currentArticle->getParent(  ) );
     if ( !$currentSection->hasData(  ) || !$currentSection->isLive( )) {
-        AMP_make_404( );
+        if ( $currentSection->id != 1 ) AMP_make_404( );
     }
 
 }
