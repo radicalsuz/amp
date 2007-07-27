@@ -576,7 +576,7 @@ function fof_update_feed($url)
 
 		if(!$link || ( strpos( $item['guid'], 'http://' ) === 0 ))
 		{
-			$link = $item['guid'];
+			$link = mysql_escape_string($item['guid']);
 		}
 
 		if(!$title)
