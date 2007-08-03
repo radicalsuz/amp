@@ -85,9 +85,10 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
 
             $articleMeta['description'] = $this->_makeDescription( $article );
             if ($itemdate = $article->getItemDate() ) {
-                $articleMeta['pubDate'] = strtotime( $itemdate );
+#                $articleMeta['pubDate'] = strtotime( $itemdate );
+                $articleMeta['dc:date'] = date('Y-m-d', strtotime( $itemdate ));
             }
-            $articleMeta['guid'] = $url;
+#            $articleMeta['guid'] = $url;
 
             $display->addItem( $url, $article->getTitle(), $articleMeta);
         }
