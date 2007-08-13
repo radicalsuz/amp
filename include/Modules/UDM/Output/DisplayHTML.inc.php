@@ -418,7 +418,7 @@ if (!function_exists('groups_layout_display')) {
 			$html .= "<span class=\"bodygrey\">". $First_Name . "&nbsp;" . $Last_Name. "</span><br>\n";
 		}
 		if ($Email) {
-			$html .= "<span class=\"bodygrey\"><a href=\"mailto:$Email\">$Email</a></span><br>\n";
+			$html .= "<span class=\"bodygrey\">". AMP_protect_email( $Email ) ."</span><br />\n";
 		}
 		if ($Phone) {
 			$html .= "<span class=\"bodygrey\">". $Phone . "</span><br>\n";
@@ -487,7 +487,7 @@ if (!function_exists('groups_detail_display')) {
 			$html .= "<span class=\"bodygrey\">". $First_Name . "&nbsp;" . $Last_Name. "</span><br>\n";
 		}
 		if ($Email) {
-			$html .= "<span class=\"bodygrey\"><a href=\"mailto:$Email\">$Email</a></span><br>\n";
+			$html .= "<span class=\"bodygrey\">".AMP_protect_email( $Email ) ." </span><br />\n";
 		}
 		if ($Phone) {
 			$html .= "<span class=\"bodygrey\">". $Phone . "</span><br><br><br>\n";
