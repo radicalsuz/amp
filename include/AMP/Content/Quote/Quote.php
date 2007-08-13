@@ -10,6 +10,14 @@ class Quote extends AMPSystem_Data_Item {
     function Quote ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
     }
+
+    function getSection( ) {
+        return $this->getData( 'type');
+    }
+
+    function _adjustSetData( $data ) {
+        $this->legacyFieldname( $data, 'type', 'section' );
+    }
 }
 
 ?>
