@@ -120,11 +120,12 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
         $target_path = $target_image->getPath( AMP_IMAGE_CLASS_THUMB );
 
-        $thumb_ratio = AMP_IMAGE_WIDTH_THUMB / $cropped_image->width;
+        $thumb_ratio =  $cropped_image->width / AMP_IMAGE_WIDTH_THUMB;
         $thumb_sizes = $this->_resize_ratio( 
                             array( 'height' => $cropped_image->height,
-                                    'width' => $cropped_image->width ), 
+                                   'width'  => $cropped_image->width  ), 
                             $thumb_ratio );
+
         $thumb_image = &$cropped_image->resize( $thumb_sizes['width'], $thumb_sizes['height'] );
         if ( !$thumb_image ) return $this->_commit_crop_failure( AMP_TEXT_THUMBNAIL );
         $cropped_image->write_image_resource( $thumb_image, $target_path );
