@@ -90,6 +90,7 @@ volunteers=    "form.php?modin=8"
 
 [system url]
 
+alias=          "redirect.php"
 article=       "article.php"
 article_edit=  "article.php"
 article_version="article_version.php"
