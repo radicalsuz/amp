@@ -113,6 +113,10 @@ class AMPFormElement_HTMLEditor {
         if ($this->isPlugin('Stylist') && file_exists( AMP_LOCAL_PATH . $this->stylesheet )) {
             $output .= "    cfg.stylistLoadStylesheet('".$this->stylesheet."');\n";
         }
+        //allow javascripts
+        if ( defined( 'AMP_USERMODE_ADMIN') && AMP_USERMODE_ADMIN ) {
+            $output .= "cfg.stripScripts = false;\n" ;
+        }
         if (!empty($this->config_actions)) {
             foreach ($this->config_actions as $action) {
                 $output.= $action."\n";

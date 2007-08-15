@@ -89,8 +89,14 @@ JAVASCRIPT;
     }
 
     function render_extras( ) {
+        $this->extras = "";
+        //wysiwyg styles plugin
         if ( file_exists( AMP_LOCAL_PATH . $this->stylesheet )) {
             $this->extras = sprintf( $this->extra_stylesheet, $this->stylesheet );
+        }
+        //allow javascripts
+        if ( defined( 'AMP_USERMODE_ADMIN') && AMP_USERMODE_ADMIN ) {
+            $this->extras .= "\ncfg.stripScripts = false;" ;
         }
         return $this->extras;
     }
