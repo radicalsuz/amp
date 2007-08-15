@@ -67,10 +67,6 @@ class UserDataPlugin_Save_Tags extends UserDataPlugin_Save {
         if ( isset( $data['tag_add']) && ( $data['tag_add'])) {
             $selected_tags = split( ", ", $data['tag_add'] );
         }
-        if ( !$selected_tags && !$tag_names ) {
-            //continue saving, make no tag changes
-            return true;
-        }
         
         AMP_update_tags( $selected_tags, $tag_names, $this->udm->uid , AMP_SYSTEM_ITEM_TYPE_FORM);
         return true;
