@@ -58,7 +58,13 @@ class AMP_Content_Redirect extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaTarget( $target ){
-        return 'new =' .$this->dbcon->qstr( $target );
+        if ( !is_array( $target )) {
+            return 'new =' .$this->dbcon->qstr( $target );
+        }
+        foreach( $target as $target_url ) {
+            $crit[] = $this->dbcon->qstr( $target_url );
+        }
+        return 'new in ( '.join( ',', $crit ) . ')';
     }
 
     function assembleTargetUrl( $requested_url=null ){
@@ -74,6 +80,11 @@ class AMP_Content_Redirect extends AMPSystem_Data_Item {
         }
         return $target;
     }
+
+    function get_url_edit( ) {
+       return $this->get_system_url( 'ALIAS') ;
+    }
+
 }
 
 ?>
