@@ -1055,7 +1055,7 @@ class AMPSystemLookup_ItemsByTag extends AMPSystem_Lookup {
     }
 
     function _init_names( ) {
-        if ( !$this->_criteria_item == 'form') {
+        if ( !( $this->_criteria_item == 'form')) {
             $lookup_name = AMP_pluralize( $this->_criteria_item );
         } else {
             $lookup_name = 'formNames';
@@ -1063,7 +1063,7 @@ class AMPSystemLookup_ItemsByTag extends AMPSystem_Lookup {
         $lookup_values = AMPSystem_Lookup::instance( $lookup_name );
 
         if ( !$lookup_values ) return;
-        $this->dataset = array_combine_key( $this->dataset, $lookup_values );
+        $this->dataset = array_combine_key( array_keys( $this->dataset ), $lookup_values );
     }
 
     function makeCriteriaTag( $tag_id ) {

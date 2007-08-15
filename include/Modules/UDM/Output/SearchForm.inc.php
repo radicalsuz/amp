@@ -158,7 +158,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
         //tags
         if ( isset( $_REQUEST['tag']) && $_REQUEST['tag']) {
-            $tagged_forms = AMPSystem_Lookup::instance( 'formsByTag', $_REQUEST['tag']);
+            $tagged_forms = AMP_lookup( 'formsByTag', $_REQUEST['tag']);
             if ( !$tagged_forms || empty( $tagged_forms )) {
                 $sql_criteria[] = 'FALSE';
             } else {

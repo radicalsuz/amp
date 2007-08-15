@@ -37,9 +37,16 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
     function _build( ) {
         if ( $this->_is_built ) return true;
         $this->init( $this->loadMap(), 'AMPSystem_Menu'  );
-        $this->setStyles();
+		$this->_init_styles();
         $this->_is_built = true;
     }
+
+	function _init_styles() {
+        $this->setStyles();
+        $this->getCSS();
+        $this->script_set->setCSS();
+        $this->addCSS(  $this->script_set->getCSS() );
+	}
 
     function init_header( ){
         $this->_final_output = $this->cache_components( );
@@ -74,48 +81,36 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
 
             if ( $css_values = $this->_cache->retrieve( $cache_key_private )) {
                 $this->_cache->refresh( $cache_key_private );
-                //return $this->_apply_cached_stylesheet( $cache_key_public );
                 return $this->_apply_cached_stylesheet( $css_values );
             }
         }
-        $this->_build( );
-        
 
         //no cached version of stylesheet exists
-        $this->getCSS();
-        $this->script_set->setCSS();
-        $this->addCSS(  $this->script_set->getCSS() );
+        $this->_build( );
+
         $css_values = $this->output_css_to_file( );
 
         if ( $this->_cache && $css_values ) {
             $result = $this->_cache->add( $css_values, $cache_key_private );
-            //if ( $result ) return $this->_apply_cached_stylesheet( $cache_key_public );
         }
 
-        //cache is not active
         $this->_header->addStyleSheetDynamic( $css_values, 'AMP_System_Menu');
         return false;
 
     }
 
-    //function _apply_cached_stylesheet( $key ){
     function _apply_cached_stylesheet( $css_values ){
-        //$url = $this->_cache->url( $key );
-        //$this->_header->addStylesheet( $url, get_class( $this ) );
         $this->_header->addStyleSheetDynamic( $css_values, 'AMP_System_Menu');
         return false;
     }
 
-    //function _apply_cached_javascript( $key ){
     function _apply_cached_javascript( $js_values ){
-        //$url = $this->_cache->url( $key );
-        //$this->_header->addJavaScript( $url, get_class( $this ) );
         $this->_header->addJavascriptDynamic( $js_values,  get_class( $this ).'base');
         return false;
     }
 
     function cache_js( ) {
-        //try to just apply the cached version of the CSS
+        //try to just apply the cached version of the JS
         $this->_header->addJavaScript( 'scripts/fw_menu.js',  get_class( $this ).'base');
         $script_trigger = AMP_HTML_JAVASCRIPT_START  
                         . 'fwLoadMenus( );'
@@ -129,7 +124,6 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
             
             if ( $js_values = $this->_cache->retrieve( $cache_key_private )) {
                 $this->_cache->refresh( $cache_key_private );
-                //$this->_apply_cached_javascript( $cache_key_public );
                 $this->_apply_cached_javascript( $js_values );
                 return $script_trigger;
             }
@@ -142,14 +136,7 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
         
         if ( $this->_cache && $js_values ){
             $result = $this->_cache->add( $js_values, $cache_key_private );
-            /*
-            if ( $result ) {
-                $this->_apply_cached_javascript( $cache_key_public );
-                return $script_trigger;
-            }
-            */
         }
-        
 
         $this->_header->addJavascriptDynamic( $js_values,  get_class( $this ).'base');
 
@@ -180,19 +167,6 @@ class AMPSystem_Menu extends AMP_Menu_FWTableRow {
         return $html_value;
 
     }
-/*
-    function is_cached( ){
-        if ( !( $cache = &AMP_get_cache( ))) return false;
-        return $cache->retrieve( AMP_CACHE_KEY_SYSTEM_MENU );
-
-    }
-
-    function cachedVersion( ){
-        if ( !( $cache = &AMP_get_cache( ))) return false;
-        return $cache->retrieve( AMP_CACHE_KEY_SYSTEM_MENU );
-        
-    }
-    */
 
     function loadMap() {
 

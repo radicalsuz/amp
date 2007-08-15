@@ -465,7 +465,7 @@ class UserData {
             return $data;
         }
         
-        if ( isset( $fields ) ) {
+        if ( isset( $fields ) && is_array( $fields )) {
             foreach ($fields as $key=>$fname ) {
                 if (!$this->form->elementExists( $fname ) ) unset ($fields[$key] );
             }
