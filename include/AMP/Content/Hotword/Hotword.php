@@ -14,6 +14,11 @@ class Hotword extends AMPSystem_Data_Item {
     function getURL( ){
         return $this->getData( 'url');
     }
+
+    function getSection( ) {
+        return $this->getData( 'section');
+    }
+
 }
 
 ?>
