@@ -170,13 +170,16 @@ class AMP_Display_System_List extends AMP_Display_List {
     }
 
     function _renderBlock( $output ) {
+        $base_list = $this->_renderer->table( 
+                                $this->render_column_headers( ) . $output,
+                                array( 'class' => 'system', 'id' => $this->list_id  )
+                                );
+        if ( $this->_suppress_form ) return parent::_renderBlock( $base_list );
+
         return parent::_renderBlock(  
                     $this->_renderer->form( 
                           $this->render_toolbar( )
-                        . $this->_renderer->table( 
-                                $this->render_column_headers( ) . $output,
-                                array( 'class' => 'system', 'id' => $this->list_id  )
-                                )
+                        . $base_list
                         . $this->render_toolbar( ),
                         array( 'name' => $this->list_id, 'action' => AMP_url_update( $_SERVER['REQUEST_URI']), 'method' => 'POST' )
                         )

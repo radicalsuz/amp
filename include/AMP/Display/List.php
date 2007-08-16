@@ -38,6 +38,7 @@ class AMP_Display_List {
     var $_suppress_pager  = false;
     var $_suppress_sort_links = false;
     var $_suppress_search_form = false;
+    var $_suppress_form = false;
 
     var $_display_columns = 1;
     var $_current_columns = 0;
@@ -281,7 +282,7 @@ class AMP_Display_List {
     function render_search_form ( ) {
         if ( !isset( $this->_search_form )) return false;
 
-        if ( $this->_suppress_search_form ) return false;
+        if ( $this->_suppress_search_form || $this->_suppress_form ) return false;
         return $this->_search_form->execute( );
     }
 

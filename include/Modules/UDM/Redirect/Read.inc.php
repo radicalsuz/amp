@@ -38,7 +38,7 @@ class UserDataPlugin_Read_Redirect extends UserDataPlugin {
         $tag_list = &new AMP_Content_Redirect_List( AMP_Registry::getDbcon( ), array( 'target' => $alias_url ) );
 
         $tag_list->drop_column( 'select');
-        $tag_list->suppress( 'toolbar');
+        $tag_list->suppress( 'form');
         $tag_list->suppress( 'footer');
         $tag_list->suppress( 'messages');
 
