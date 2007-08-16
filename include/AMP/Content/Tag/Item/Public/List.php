@@ -23,6 +23,7 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
     var $_pager_active = false;
 
     var $_item_displays_custom = array( );
+    var $_source_criteria = array( 'live' => 1 );
 
     function AMP_Content_Tag_Item_Public_List( $source = false, $criteria = array( ) ) {
         $this->__construct( $source, $criteria );

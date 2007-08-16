@@ -188,6 +188,10 @@ class AMP_Content_Tag_Item extends AMPSystem_Data_Item {
         return $this->_tagged_item->getImageRef( );
     }
 
+    function isLive( ) {
+        return $this->_tagged_item->isLive( );
+    }
+
 }
 
 ?>
