@@ -104,7 +104,9 @@ class SectionContents_Display  extends AMPDisplay_HTML {
     function _HTML_listIntro( &$intro ) {
         if ( !$intro ) return false;
         if (!(isset($this->_display) && isset($this->_section))) return false;
-        if ( isset( $this->_display->_pager ) && !($this->_display->isFirstPage() && $intro)) return $this->_display->_pager->_HTML_topNotice( $this->_section->getName() );
+        if (!isset( $this->_display->api_version ) || ( $this->_display->api_version == 1)) {
+            if ( isset( $this->_display->_pager ) && !($this->_display->isFirstPage() && $intro)) return $this->_display->_pager->_HTML_topNotice( $this->_section->getName() );
+        }
         return $intro->execute() . $this->_HTML_newline();
     }
 
