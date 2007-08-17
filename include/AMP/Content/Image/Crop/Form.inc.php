@@ -83,12 +83,14 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
         }
         if ( $this->_image->height > $this->_image->width ){
             $this->setDisplayHeight( $this->_display_height_limit );
-            $this->_display_ratio = $this->_display_height / $this->_image->height;
+            //$this->_display_ratio = $this->_display_height / $this->_image->height;
+            $this->_display_ratio = $this->_image->height / $this->_display_height;
             $this->setDisplayWidth(     $this->_image->width * 
                                     (   $this->_display_height / $this->_image->height )) ;
         } else {
             $this->setDisplayWidth( $this->_display_width_limit );
-            $this->_display_ratio = $this->_display_width / $this->_image->width;
+            //$this->_display_ratio = $this->_display_width / $this->_image->width;
+            $this->_display_ratio = $this->_image->width / $this->_display_width;
             $this->setDisplayHeight( $this->_image->height *
                                    ( $this->_display_width / $this->_image->width ));
 
@@ -242,7 +244,7 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
 
     function _displayImageURL( ){
         $image_url = AMP_Url_AddVars(  AMP_SYSTEM_URL_IMAGE_VIEW, 
-                                        array( 'filename='.$this->_image->getName( ),
+                                        array( 'filename='.urlencode( $this->_image->getName( )),
                                                 'class='.AMP_IMAGE_CLASS_ORIGINAL ));
         if ( $this->_display_ratio == 1 ) return $image_url;
         return AMP_Url_AddVars( $image_url, array( 'action=resize', 'height='.$this->_display_height, 'width='.$this->_display_width ));

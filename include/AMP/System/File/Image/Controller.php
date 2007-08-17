@@ -120,7 +120,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
         $target_path = $target_image->getPath( AMP_IMAGE_CLASS_THUMB );
 
-        $thumb_ratio =  $cropped_image->width / AMP_IMAGE_WIDTH_THUMB;
+        //$thumb_ratio =  $cropped_image->width / AMP_IMAGE_WIDTH_THUMB;
+        $thumb_ratio =  AMP_IMAGE_WIDTH_THUMB / $cropped_image->width;
         $thumb_sizes = $this->_resize_ratio( 
                             array( 'height' => $cropped_image->height,
                                    'width'  => $cropped_image->width  ), 
@@ -150,7 +151,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
     function _resize_ratio( $original_sizes, $ratio ){
         $result_sizes = array( );
         foreach( $original_sizes as $key => $size ){
-            $result_sizes[$key] = ceil( $size / $ratio );
+            //$result_sizes[$key] = ceil( $size / $ratio );
+            $result_sizes[$key] = ceil( $size * $ratio );
         }
         return $result_sizes;
     }
@@ -160,11 +162,35 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         return parent::_commit_default( );
     }
 
+    function _save_image_db( $data ) {
+        $db_data = $data;
+        //translate values with new names
+        $db_data['name']    = $data['image'];
+        $db_data['author']  = $data['photoby'];
+        $db_data['publish'] = AMP_CONTENT_STATUS_LIVE;
+        $db_data['created_at'] = date( "Y-m-d h:i:s" );
+        $db_data['created_by'] = AMP_SYSTEM_USER_ID;
+
+        //read height and width from image file
+        $file_name = ( AMP_LOCAL_PATH . '/' . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL . '/' . $db_data['name'] );
+        $this->_model->setFile( $file_name );
+        $db_data['height'] = $this->_model->height;
+        $db_data['width'] =  $this->_model->width;
+
+        require_once( 'AMP/Content/Image/Image.php');
+        $image = new AMP_Content_Image( AMP_Registry::getDbcon( ));
+        $image->setDefaults( );
+        $image->mergeData( $db_data );
+        return $image->save( );
+
+    }
+
     function _commit_save_actions( $values ){
         if ( !isset( $values['image'])) return false;
         $image_name = $values['image'];
         $values['img'] = $image_name;
         $this->_save_galleryInfo( $values );
+        $this->_save_image_db( $values );
 
         require_once( 'AMP/Content/Image/Display.inc.php');
         $uploaded_image = &new ContentImage_Display_allVersions( $image_name );

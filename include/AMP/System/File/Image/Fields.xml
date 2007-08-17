@@ -51,4 +51,22 @@
         <default>today</default>
         <block>gallery</block>
     </date>
+    <foreign_key>
+        <type>text</type>
+        <label>Flickr ID</label>
+        <block>gallery</block>
+    </foreign_key>
+    <license_block>
+        <type>header</type>
+        <label>Content License</label>
+    </license_block>
+	<license>
+		<type>select</type>
+		<label>License</label>
+		<lookup>license</lookup>
+	</license>
+	<license_url>
+		<type>textarea</type>
+		<label>License URL</label>
+	</license_url>
 </array>
