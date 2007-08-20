@@ -86,7 +86,7 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         foreach ($dataset as $dataitem) {
             if (isset($options['subheader'])) $output.=$this->subheader($dataitem);
             if($inclass) $output.=$this->$display_function($dataitem);
-            else $output.=$display_function($dataitem, $options);
+            else $output.=$display_function($dataitem, $options, $this);
         }
 
 		return $options['list_html_start'].$output.$options['list_html_footer'];
