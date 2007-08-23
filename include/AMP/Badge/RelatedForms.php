@@ -2,6 +2,13 @@
 
 function amp_badge_related_form( $data ) {
     $data = array_merge( $data, $_GET );
+    foreach( $data as $key => $value ) {
+        if ( is_array( $value ) && count( $value ) == 1 ) {
+            $quick_val = array_values( $value );
+            $data[ $key ] = $quick_val[0];
+        }
+    }
+
     $modin = ( isset( $data['modin'] ) && $data['modin']) ? $data['modin'] : false;
     $related_index = ( isset( $data['related_index'] ) && $data['related_index']) ? $data['related_index'] : false;
     

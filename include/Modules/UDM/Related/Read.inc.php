@@ -82,11 +82,20 @@ class UserDataPlugin_Read_Related extends UserDataPlugin {
 
         $related_list = &new AMP_User_Profile_List( false, array( 'modin' => $options['related_form_id'], $options['related_form_owner_field'] => $options['_userid']) );
 
-        $related_list->suppress('toolbar');
+        $related_list->suppress('form');
+        $related_list->suppress('messages');
+        $related_list->suppress('create');
+
         $related_list->columns = array('controls');
         foreach($related_udm->fields as $name => $attrs) {
             if(!$attrs['enabled']) continue;
             if(!$attrs['public'] && !$this->udm->admin) continue;
+            if( isset( $options['included_fields']) 
+                && $options['included_fields']
+                && !preg_match( '/\b'.$name.'\b/', $options['included_fields'])) {
+                continue;
+            }
+
             $related_list->columns[] = $name;
             $related_list->column_headers[$name] = $attrs['label'];
         }
