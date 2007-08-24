@@ -209,6 +209,16 @@ class AMP_User_Profile extends AMPSystem_Data_Item {
         return $this->getData( 'email');
     }
 
+    function getFields( $modin=null ) {
+        if ( !isset( $modin ) && !( $my_modin = $this->getModin( ))) return false;
+        if ( !empty( $this->_fields ) && ( $modin == $my_modin )) {
+            return $this->_fields;
+        }
+        $this->mergeData( array( 'modin' => $modin )) ;
+        return $this->_init_fields();
+    }
+
+
 }
 
 ?>

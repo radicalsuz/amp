@@ -13,6 +13,7 @@ class AMP_User_Profile_List extends AMP_Display_System_List {
 
     var $_source_object = 'AMP_User_Profile' ;
     var $_source_criteria = array( 'modin' => 20 );
+    var $_source_fields = array( );
 
     var $columns = array( 'select', 'controls', 'name', 'org', 'location', 'contact', 'status' );
     var $_actions = array( 'publish', 'unpublish', 'delete', 'export', 'subscribe', 'email' );
@@ -93,7 +94,23 @@ class AMP_User_Profile_List extends AMP_Display_System_List {
         return $this->_renderer->wysiwyg( 'text_item');
     }
     */
+    function _init_criteria( ) {
+        if ( !(isset( $this->_source_criteria['modin'] ) && $modin = $this->_source_criteria['modin'])) return false;
+        $this->_source_fields = $this->_source_sample->getFields( $modin );
+    }
 
+    function render_value( $source, $column_name ) {
+        if ( isset( $this->_source_fields[ $column_name ]) 
+             && isset( $this->_source_fields[ $column_name]['values'])
+             && ( $lookup = $this->_source_fields[ $column_name ][ 'values' ] ) 
+			 && is_object($lookup)
+             ) {
+            $data = AMP_evalLookup( $lookup );
+			$value = $source->getData($column_name);
+			if (isset($data[$value])) return trim( str_replace('&nbsp;',' ',$data[$value]));
+        }
+        return parent::render_value( $source, $column_name );
+    }
 
 }
 
