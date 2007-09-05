@@ -57,24 +57,20 @@ if ( ( !AMP_DISPLAYMODE_PREVIEW )  && ($currentArticle = &$currentPage->getArtic
     require_once( 'AMP/Content/Section.inc.php' );
     $currentSection = new Section( AMP_Registry::getDbcon(  ), $currentArticle->getParent(  ) );
     if ( !$currentSection->hasData(  ) || !$currentSection->isLive( )) {
-        if ( $currentSection->id != 1 ) AMP_make_404( );
+        if ( $currentSection->id != AMP_CONTENT_SECTION_ID_ROOT ) AMP_make_404( );
     }
 
-}
-
-
-/**
- * Check if specified article is a section header and redirect to that section
- */
-if ( $currentArticle = &$currentPage->getArticle() ){
+    /**
+     * Check if specified article is a section header and redirect to that section
+     */
     if ( AMP_CONTENT_REDIRECT_SECTIONHEADERS_TO_SECTIONS && ( $currentArticle->getClass(  ) == AMP_CONTENT_CLASS_SECTIONHEADER )) {
-        require_once( 'AMP/Content/Section.inc.php' );
-        $currentSection = new Section( AMP_Registry::getDbcon(  ), $currentArticle->getParent(  ) );
         if ( $currentSection->hasData(  ) ) {
             ampredirect( $currentSection->getURL(  ) );
         }
     }
+
 }
+
 
 /**
  * Check Section List pages for a redirect in the SectionHeader 
