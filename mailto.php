@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /*********************
 05-07-2003  v3.01
 Module:  Mailto
@@ -14,8 +14,13 @@ $intro_id = 22;
 $map = & new ComponentMap_Share_Public( );
 
 $controller = $map->get_controller( );
+$controller->_form->action = "mailto.php";
+
 $header = AMP_get_header( );
+$flash  = &AMP_System_Flash::instance( );
+
 print $header->output( );
+print $flash->execute( ) ;
 print $controller->execute( ) ;
 
 /*

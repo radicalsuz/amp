@@ -21,10 +21,12 @@ class Share_Public_Controller extends AMP_System_Component_Controller_Public {
     }
 
     function commit_save( ) {
+
         if ( !$this->_form->validate( )) {
             $this->_display->add( $this->form );
             return false;
         }
+
         $message_data = $this->_form->getValues( );
         $target = $this->make_address( $message_data, 'recipient' );
         $sender = $this->make_address( $message_data, 'sender' );
@@ -37,8 +39,15 @@ class Share_Public_Controller extends AMP_System_Component_Controller_Public {
         $emailer->setSender( $sender );
         $emailer->setSubject( $message_data['subject']);
         $emailer->setMessage( $message_data['message']);
-        return $emailer->execute( );
-        
+
+        $result = $emailer->execute( );
+        if ( $result ) {
+            $message = new AMP_Content_Buffer( );
+            $message->add( "<center>Message successfully sent!<br>Thank you!<br><br>[ <a href=\"javascript:window.close()\">Close this window</a> ]</center>" );
+            $this->_display->add( $message );
+        }
+
+        return $result;
     }
 
     function make_address( $message_data, $type='recipient' ) {

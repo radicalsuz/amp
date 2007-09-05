@@ -8,7 +8,7 @@ class Share_Public_Form extends AMP_Display_Form {
 
     var $xml_fields_source = 'Modules/Share/Public/Fields.xml';
     var $submit = 
-            array( 'submitAction[save]' => array( 
+            array( 'save' => array( 
                         'label' => 'Share This',
                         ));
     var $action = AMP_CONTENT_URL_SHARE;
@@ -61,7 +61,8 @@ class Share_Public_Form extends AMP_Display_Form {
         if ( !$url ) return false;
         $this->set( 'url', $url );
 
-        if ( !( substr( $url, 0, 7) == 'http://' )) {
+        $full_url = $url;
+        if ( !( substr( $url, 0, 4) == 'http' )) {
             $full_url = AMP_SITE_URL . $url;
         }
         $this->set( 'message', $full_url );
@@ -87,15 +88,12 @@ class Share_Public_Form extends AMP_Display_Form {
 
         }
         if ( isset( $new_values['message'])) {
-            $new_values['message'] .= "\n\n\n This message sent to you from ".AMP_SITE_NAME .'  '.AMP_SITE_URL; 
-        }
-        if ( isset( $new_values['captcha_1'])) {
-            if ( !$this->validate_captcha( $values['captcha_1'] )) {
-                return array( );
+            if ( substr( $new_values['message'], strlen( $new_values['message'])-strlen( AMP_SITE_URL )) != AMP_SITE_URL ) {
+                $new_values['message'] .= "\n\n\n This message sent to you from ".AMP_SITE_NAME .'  '.AMP_SITE_URL; 
             }
         }
 
-        return $new_values;
+        return parent::clean( $new_values );
         
     }
 

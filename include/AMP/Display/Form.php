@@ -18,9 +18,9 @@ class AMP_Display_Form {
     var $_request_values_clean;
     var $_request_vars = array( );
 
-    var $_rules;
-    var $_rules_error_messages;
-    var $_rules_errors;
+    var $_rules = array( );
+    var $_rules_error_messages = array( );
+    var $_rules_errors = array( );
     var $isBuilt = true;
 
     var $_messages = array( 
@@ -256,6 +256,9 @@ class AMP_Display_Form {
     }
 
     function render_label( $name, $text ) {
+        if ( $this->get_field_def( $name, 'required')) {
+            $text = $this->_renderer->span( '* ', array( 'class' => 'required', 'title' => 'required')) . $text;
+        }
         return $this->_renderer->label( $name, $text );
     }
 
@@ -337,7 +340,8 @@ class AMP_Display_Form {
     function format_field( $content, $field_name ) {
         $item_class = 'row';
         if ( isset( $this->_rules_errors[$field_name] )) {
-            $content = $this->_rules_error_messages[$field_name] . $content;
+            $content .= $this->_renderer->newline( 2 )
+                        . $this->_renderer->div( $this->_rules_error_messages[$field_name], array( 'class' => 'error'));
             $item_class = 'row row_error';
         }
         return $this->_renderer->div( $content, array( 'class' => $item_class ));
@@ -366,6 +370,7 @@ class AMP_Display_Form {
 
     function get( $field_name ) {
         if ( $this->submitted( ) ) {
+            if ( !isset( $this->_request_values_clean[$field_name])) return false;
             return $this->_request_values_clean[$field_name];
         }
         return $this->get_field_def( $field_name, 'value' );
@@ -376,18 +381,25 @@ class AMP_Display_Form {
     }
 
     function validate( ) {
+        $validation_okay = true;
+        $flash = &AMP_System_Flash::instance( );
+
         foreach( $this->_rules as $rule_key => $rule_def ) {
             $rule_method = $this->get_rule_method( $rule_def['name']);
             $value = $this->get( $rule_def['field'] );
             $result = call_user_func_array( $rule_method, $value );
             if ( !$result ) {
-                $flash->add_error( 'There was a problem with some fields on this form' );
-                $this->_rules_errors[$rule_def['field']] = $rule_def['name'];
+                $flash->add_error( 'There was a problem with some fields on this form', 'form_errors' );
                 $label = $this->get_field_def( $rule_def['field'], 'label' ) ;
-                $this->_rules_error_messages[$rule_def['field']] = sprintf( $rule_def['alert'], $label );
-            }
 
+                $this->_rules_errors[$rule_def['field']] = $rule_def['name'];
+                $this->_rules_error_messages[$rule_def['field']] = sprintf( $rule_def['alert'], $label );
+
+                $validation_okay = false;
+            }
         }
+
+        return $validation_okay;
     }
 
     function get_rule_method( $rule ) {
@@ -446,6 +458,19 @@ class AMP_Display_Form {
 
     function add_field( $name, $def = array( 'type' => 'text' ), $order = 0 ) {
         $this->_fields[$name] = $this->field_def_validate( $def );
+
+        if ( isset( $def['rules'])) {
+            foreach( $def['rules'] as $rule_def ) {
+                $this->add_rule( $rule_def['type'], $name, $rule_def['message']);
+            }
+        }
+        if ( isset( $def['required']) && $def['required']) {
+            $this->add_rule( 'required', $name );
+        }
+
+        if ( $def['type'] == 'captcha') {
+            $this->add_rule( 'captcha', $name );
+        }
         $this->revise_order( $name, $order );
     }
 
@@ -525,9 +550,10 @@ class AMP_Display_Form {
     function submitted( ) {
         if ( is_array( $this->submit )) {
             foreach( $this->submit as $key => $submit_def ) {
-                if ( $this->assert_var( $key )) return true;
+                if ( $this->assert_var( $key )) return $key;
             }
         }
+        return false;
     }
 
     function assert_var( $var_name ) {
@@ -536,6 +562,16 @@ class AMP_Display_Form {
     }
 
     function clean( $values ) {
+        return $this->clean_constants( $values );
+    }
+
+    function clean_constants( $values ) {
+        foreach( $this->_fields as $name => $field_def ) {
+            if ( isset( $field_def['constant']) && $field_def['constant']) {
+                $values[$name] = $field_def[$name]['default'];
+            }
+
+        }
         return $values;
     }
 

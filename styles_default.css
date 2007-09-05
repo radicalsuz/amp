@@ -289,6 +289,24 @@ form .row {
     padding-top: 1em;
 }
 
+form .row .error {
+    width: 79%;
+    text-align: left;
+	position: relative;
+	margin-left: 21%;
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size: 10px
+}
+
+form .row_error {
+    margin-top: .5em;
+	padding-top: .5em;
+	border: #FF5599 2px solid;
+	background-color: #FF99CC;
+	color: #550000;
+	float: left;
+}
+
 form .row label {
     float: left;
     width: 19%;
@@ -310,6 +328,16 @@ form .block {
     background-color: #FFFFcc;
     border: 2px solid #F0C0C0;
 }
+
+form .submit input, form .number input {
+    width: auto;
+}
+
+form span.required {
+	color: red;
+}
+
+
 
 div.spacer {
     clear: both;
@@ -349,9 +377,5 @@ div.thumb {
 
 div.thumb img {
     border: 0;
-}
-
-form .submit input, form .number input {
-    width: auto;
 }
 
