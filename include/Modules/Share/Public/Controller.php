@@ -1,6 +1,7 @@
 <?php
 
 require_once( 'AMP/System/Component/Controller/Public.php');
+require_once( '/home/amp/public_html/includes/emaillist_functions.php');
 
 class Share_Public_Controller extends AMP_System_Component_Controller_Public {
 
@@ -28,6 +29,10 @@ class Share_Public_Controller extends AMP_System_Component_Controller_Public {
         }
 
         $message_data = $this->_form->getValues( );
+        if ( $sender_name = $message_data['sender_name'] ) {
+            unset( $message_data['sender_name']);
+        }
+
         $target = $this->make_address( $message_data, 'recipient' );
         $sender = $this->make_address( $message_data, 'sender' );
         if ( !( $target && $sender )) return false;
@@ -37,10 +42,13 @@ class Share_Public_Controller extends AMP_System_Component_Controller_Public {
         
         $emailer->setTarget( $target );
         $emailer->setSender( $sender );
+        if ( $sender_name ) $emailer->setSenderName( $sender_name );
+
         $emailer->setSubject( $message_data['subject']);
         $emailer->setMessage( $message_data['message']);
 
         $result = $emailer->execute( );
+
         if ( $result ) {
             $message = new AMP_Content_Buffer( );
             $message->add( "<center>Message successfully sent!<br>Thank you!<br><br>[ <a href=\"javascript:window.close()\">Close this window</a> ]</center>" );
