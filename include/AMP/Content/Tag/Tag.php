@@ -9,7 +9,16 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
     //var $_contents_criteria = array( );
     //var $_contents_class = 'ArticleSet';
     
-    function AMPTag( &$dbcon, $id = null ){
+    function AMP_Content_Tag( &$dbcon, $id = null ){
+        $this->__construct( $dbcon, $id );
+    }
+
+    function __construct( &$dbcon, $id = null ) {
+        if ( isset( $id ) && !is_numeric( $id )) {
+            $tags = AMP_lookup( 'tagsSimple');
+            $matches = array_keys( $tags, strtolower( $id ) ) ;
+            if ( $matches ) $id = current( $matches );
+        }
         $this->init( $dbcon, $id );
     }
 
@@ -122,6 +131,18 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
             'publish' => 1
             ));
 
+    }
+
+    function getDisplay( ) {
+        require_once( 'AMP/Content/Tag/Public/Intro.php');
+        $intro = new AMP_Content_Tag_Public_Intro( $this );
+        $intro->display_content = false;
+
+        $display = AMPContent_Manager::instance( );
+        $display->add( $intro, AMP_CONTENT_DISPLAY_KEY_INTRO );
+
+        require_once( 'AMP/Content/Article/Public/List.php');
+        return new Article_Public_List( $this->dbcon, array( 'tag' => $this->id ));
     }
 /*
     function display() {

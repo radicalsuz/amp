@@ -117,7 +117,7 @@ if ($listType) {
         if ( method_exists( $display, 'setListIntro') ) $display->setListIntro( $show_intro );
 
         //filter by tag(s) if specified
-        if ( isset( $_GET['tag']) && $_GET['tag']) {
+        if ( isset( $_GET['tag']) && $_GET['tag'] && $listType != AMP_CONTENT_LISTTYPE_TAG ) {
             $tag_filter = $_GET['tag'];
             if ( !is_array( $tag_filter )) {
                 $tag_filter = array( $tag_filter );

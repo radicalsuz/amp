@@ -38,6 +38,7 @@ class="class"
 section="type"
 frontpage="index"
 region="region"
+tag="tag"
 
 ;used by breadcrumb
 [content pagetype]

@@ -340,6 +340,20 @@ class AMPContent_Page {
     }
 
     /**
+     * setTag 
+     * 
+     * @param   mixed       $tag        a string or integer denoting a tag 
+     * @access public
+     * @since  3.7.3
+     * @return void
+     */
+    function setTag( $tag ) {
+        require_once('AMP/Content/Tag/Tag.php');
+        $tag = & new AMP_Content_Tag( $this->dbcon, $tag );
+        if ( !$tag->hasData( )) return false;
+        $this->tag = &$tag;
+    }
+    /**
      * Defines the page's response when an attempted setContent method fails to initialize the requested item 
      * 
      * @access  protected
@@ -403,6 +417,19 @@ class AMPContent_Page {
         $empty_value = false;
         if ( !isset( $this->introtext)) return $empty_value;
         return $this->introtext;
+    }
+
+    /**
+     * Returns a reference to the current tag if one is set 
+     * 
+     * @access public
+     * @since 3.7.3
+     * @return mixed    AMP_Content_Tag object if one is set, false otherwise 
+     */
+    function &getTag( ) {
+        $false= false;
+        if ( !isset( $this->tag )) return $false;
+        return $this->tag;
     }
 
     /**
@@ -500,6 +527,18 @@ class AMPContent_Page {
     function getClassId() {
         if (!isset($this->class)) return false;
         return $this->class->id;
+    }
+
+    /**
+     * get the database ID for the current AMP_Content_Tag 
+     * 
+     * @access public
+     * @since 3.7.3
+     * @return mixed        integer id value if AMP_Content_Tag is set, false otherwise 
+     */
+    function getTagId( ) {
+        if ( !isset( $this->tag )) return false;
+        return $this->tag->id;
     }
 
 

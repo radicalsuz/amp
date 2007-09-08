@@ -4,34 +4,34 @@ require_once( 'AMP/Display/Detail.php');
 
 class AMP_Content_Tag_Public_Detail extends AMP_Display_Detail {
 
+    var $display_content = true;
+
     function AMP_Content_Tag_Public_Detail( $source ) {
         $this->__construct( $source );
     }
 
     function renderItem( $source ) {
-        $name = $source->getName( );
-        $image = $source->getImageRef( );
-        $blurb = $source->getBlurb( );
+        return    $this->render_image( $source )
+                . $this->render_title( $source )
+                . $this->render_blurb( $source )
+                . $this->_renderer->newline( );
+    }
 
-        $output = '';
-        if ( $image ) {
-            $output .= $this->_renderImage( $image );
-        }
-        if ( $name ) {
-            $output .= $this->_renderer->inSpan( $name, array( 'class' => $this->_css_class_title ))
-                        . $this->_renderer->newline( );
-        }
-        if ( $blurb ) {
-            $output .= $this->_renderer->in_P( $blurb, array( 'class' => $this->_css_class_blurb ));
-        }
-        $output .= $this->_renderer->newline( );
-
-        return $output;
+    function render_title( $source ) {
+        if ( !( $name = $source->getName( ))) return false;
+        return $this->_renderer->inSpan( $name, array( 'class' => $this->_css_class_title ))
+                    . $this->_renderer->newline( );
 
     }
 
-    function _renderImage( $image ) {
-       $image_url = AMP_Url_AddVars( 
+    function render_blurb( $source ) {
+        if ( !( $blurb = $source->getBlurb( ))) return false;
+        return $this->_renderer->in_P( $blurb, array( 'class' => $this->_css_class_blurb ));
+    }
+
+    function render_image( $source ) {
+        if ( !( $image = $source->getImageRef( ))) return false;
+        $image_url = AMP_Url_AddVars( 
                         AMP_CONTENT_URL_IMAGE, 
                             array(  'filename=' . $image->getName( ), 
                                     'class=' . AMP_IMAGE_CLASS_THUMB, 
@@ -42,13 +42,21 @@ class AMP_Content_Tag_Public_Detail extends AMP_Display_Detail {
     }
 
     function _renderFooter( ) {
+        if ( $this->display_content ) {
+            return $this->_render_all_items_list( );
+        }
+    }
+
+    function _render_all_items_list( ) {
         $criteria = array( 'tag' => $this->_source->id );
 
         require_once( 'AMP/Content/Tag/Item/Public/List.php');
         $empty_value = false;
         $tagged_items_list = & new AMP_Content_Tag_Item_Public_List( $empty_value, $criteria );
         return $tagged_items_list->execute( );
+
     }
+
 }
 
 ?>
