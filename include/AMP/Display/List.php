@@ -23,6 +23,7 @@ class AMP_Display_List {
     var $_pager;
     var $_pager_active = false;
     var $_pager_limit;
+    var $_pager_limit_first_page;
     var $_pager_target;
     var $_pager_max = AMP_CONTENT_LIST_DISPLAY_MAX;
     var $_pager_index = false;
@@ -241,10 +242,12 @@ class AMP_Display_List {
 
     function _renderPagerHeader( ) {
         if ( $this->_pager_active && !$this->_suppress_pager ) {
-            return  
+            if( $pager_output = $this->_pager->render_top( )) {
+                return  
                     $this->_renderer->newline( 1, array( 'clear' => 'all'))
-                    . $this->_pager->render_top( )
+                    . $pager_output
                     . $this->_renderer->newline( 1, array( 'clear' => 'all'));
+            }
         }
     }
 
@@ -402,6 +405,12 @@ class AMP_Display_List {
             return false;
         }
 
+        if ( $this->_pager_limit_first_page && $this->_pager->get_offset( ) == 0) {
+            $internal_limit = $this->_pager_limit; #|| $this->_pager->get_limit( );
+            $this->_pager->set_limit_internal( $internal_limit );
+            $this->_pager_limit = $this->_pager_limit_first_page;
+        }
+
         if ( $request_limit = $this->_pager->get_limit( )) {
             if ( ( $this->_pager_limit && ( $request_limit < $this->_pager_limit ))
                 || !$this->_pager_limit ) {
@@ -433,7 +442,7 @@ class AMP_Display_List {
         if ( $total > $this->_pager_limit ) {
             $this->_pager->set_total( $total );
             $this->_pager->trim( $source );
-        }
+        } 
 
     }
 

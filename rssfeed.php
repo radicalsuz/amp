@@ -3,6 +3,10 @@ require_once( 'AMP/BaseDB.php' );
 
 require_once( 'AMP/Content/RSS/Feed.inc.php' );
 $feed_id = (isset($_GET['feed'])&&$_GET['feed']) ? $_GET['feed'] : null;
+if ( !$feed_id ) {
+    $feed_id = (isset($_GET['id'])&&$_GET['id']) ? $_GET['id'] : null;
+}
+
 $section_id = (isset($_GET['section'])&&$_GET['section']) ? $_GET['section'] : false;
 $class_id = (isset($_GET['class'])&&$_GET['class']) ? $_GET['class'] : false;
 

@@ -56,7 +56,7 @@ class UserDataSet extends UserData {
         if ( $this->admin && $format == 'TableHTML' && $list_plugin = &$this->registerPlugin( 'Output', 'ListAdmin') ){
             return $list_plugin->execute( );
         }
-        if ( $list_plugin = &$this->getPlugin( 'Output', 'List')){
+        if ( $list_plugin = &$this->getPlugin( 'Output', 'List')){;
             return $list_plugin->execute( );
         }
         

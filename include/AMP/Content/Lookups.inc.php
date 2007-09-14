@@ -126,6 +126,7 @@ class AMPContentLookup_SectionTotals extends AMPContent_Lookup {
     // merge related doesn't make the right totals for some reason
     function _mergeRelatedArticles( ){
         $related = &AMPContent_Lookup::instance( 'sectionRelatedTotals');
+        if ( !$related ) return;
         foreach( $related as $section_id => $count ) {
             if ( !isset( $this->dataset[$section_id])) {
                 $this->dataset[$section_id] = 0;

@@ -603,9 +603,20 @@ class Article extends AMPSystem_Data_Item {
 
     }
 
+    function makeCriteriaSet( $value, $criteria_method ) {
+        $all_criteria = array( );
+        foreach( $value as $single_value ) {
+            $all_criteria[] = $this->$criteria_method( $single_value );
+        }
+        return "( ( " . join( ' ) OR ( ', $all_criteria ) . ") )";
+    }
+
     function makeCriteriaSection( $section_id ) {
+        if ( is_array( $section_id )) {
+            return $this->makeCriteriaSet( $section_id, 'makeCriteriaSection');
+        }
         $related_articles = &AMPContentLookup_RelatedArticles::instance( $section_id );
-        if ( !$related_articles ) return $this->_makeCriteriaEquals( 'type', $section_id ) ;
+        if ( !$related_articles ) return $this->makeCriteriaPrimarySection( $section_id ) ;
 
         return '( ' . $this->_makeCriteriaEquals( 'type', $section_id ) 
                     . ' or id in( ' . join( ',', array_keys( $related_articles ) ) . ' ) )';
@@ -636,6 +647,9 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaTag( $tag_id ) {
+        if ( is_array( $tag_id )) {
+            return $this->makeCriteriaSet( $tag_id, 'makeCriteriaTag');
+        }
         $tagged_articles = AMPSystem_Lookup::instance( 'articlesByTag', $tag_id );
         if ( !$tagged_articles || empty( $tagged_articles )) return 'FALSE';
         return 'id in( ' . join( ',', array_keys( $tagged_articles )) . ')';
@@ -652,7 +666,28 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaClass( $class_id ){
+        if ( is_array( $class_id )) {
+            return "class in (".join( ",", $class_id ).")";
+        }
         return $this->_makeCriteriaEquals( 'class', $class_id );
+    }
+
+    function makeCriteriaFilter( $filter_name, $filter_var = null ) {
+        $filter_class = 'ContentFilter_' . ucfirst( $filter_name );
+        if ( !class_exists( $filter_class )) {
+            $filter_filename = ucfirst( $filter_name ) . '.inc.php';
+            $filter_path = 'AMP/Content/Article/Filter/'. $filter_filename;
+            if ( !file_exists_incpath( $filter_path )) {
+                if ( !( $filter_path = file_exists_incpath( $filter_filename ))) {
+                    return false;
+                }
+            }
+            include_once( $filter_path );
+        }
+        if ( class_exists( $filter_class )) {
+            $sourceFilter = &new $filter_class( $filter_var );
+            return $sourceFilter->execute( $this );
+        }
     }
 
 	function makeCriteriaDate( $date_value ) {
@@ -703,10 +738,47 @@ class Article extends AMPSystem_Data_Item {
         return "class not in (" . join( ",", $excluded_classes ) . ")" ;
     }
 
+    function makeCriteriaStatus( $value ) {
+        if ( !( $value || $value==='0')) return false;
+        return ( 'publish='.$value ) ;
+    }
+
     function makeCriteriaPublic(  ) {
         $protected_sections = AMPContent_Lookup::instance( 'protectedSections');
         if ( empty( $protected_sections )) return false;
         return 'type not in( '. join( ',', array_keys( $protected_sections) ) .' )';
+    }
+
+    function makeCriteriaSectionOrClass( $section_id, $class_id ) {
+        $section_crit = $this->makeCriteriaSection( $section_id );
+        $class_crit = $this->makeCriteriaClass( $section_id );
+        return "( ".$class_crit . " OR " . $section_crit . ")";
+    }
+
+    function makeCriteriaNotClass( $class_id ) {
+        if ( !$class_id ) return false;
+        if ( is_array( $class_id ) && !empty( $class_id )) return ( 'class not in ( ' . join( ',', $class_id ) . ' )');
+        return ( 'class!=' . $class_id ) ;
+    }
+
+    function makeCriteriaNotTag( $tag_id ) {
+        return "!( ".$this->makeCriteriaTag( $tag ) . ")";
+    }
+
+    function makeCriteriaNotSection( $section_id ) {
+        return "!( ".$this->makeCriteriaSection( $section_id ) . ")";
+    }
+
+    function makeCriteriaInSectionDescendant( $section_id ) {
+        $base_section = $this->makeCriteriaSection( $section_id );
+        $map = AMPContent_Map::instance( );
+        if ( !( $child_ids = $map->getDescendants( $section_id ))) return $base_section;
+
+        foreach( $child_ids as $child_id ) {
+            $child_sections[] = $this->makeCriteriaSection( $child_id );
+        }
+        $child_sections_criteria = '( '. join( ') OR ( ', $child_sections ) . ')';
+        return '( '.$child_sections_criteria. ' OR ' . $base_section . ')';
     }
 
     function getMetaDescription( ){

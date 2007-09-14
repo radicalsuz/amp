@@ -1,10 +1,9 @@
 <?php
 
-require_once( 'AMP/Display/Pager.php');
+require_once( 'AMP/Display/Pager/Content.php');
 
-class AMP_Display_Pager_Morelink extends AMP_Display_Pager {
-
-    function AMP_Display_Pager_Morelink( ) {
+class AMP_Display_Pager_Morelinkplus extends AMP_Display_Pager_Content {
+    function AMP_Display_Pager_Morelinkplus( ) {
         $this->__construct( );
     }
 
@@ -15,6 +14,11 @@ class AMP_Display_Pager_Morelink extends AMP_Display_Pager {
                 $this->render_controls( ),
                 array( 'class' => $this->_css_class_container )
             );
+    }
+
+    function render_top( ){
+        if ( $this->_current_offset > 0 ) return parent::render( );
+        return false;
     }
 
     function render_controls( ) {
@@ -31,14 +35,6 @@ class AMP_Display_Pager_Morelink extends AMP_Display_Pager {
                                 $target_url, 
                                 AMP_TEXT_MORE  . $this->_renderer->space( ) . $this->_renderer->arrow_right( 2 ), 
                                 array( 'class' => $this->_css_class_control ));
-    }
-
-    function _init_request( ) {
-        $this->_request = array( );
-    }
-
-    function url_offset( $new_offset = 0 ) {
-        return $this->_url_target;
     }
 
 }

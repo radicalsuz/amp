@@ -114,7 +114,7 @@ class UserDataPlugin {
         if ( $this->plugin_instance ){
             $this->setOptions( FormLookup_PluginOptions::instance( $this->plugin_instance ));
         }
-        
+
     
 
         // If the necessary method is set, fetch dynamic options.

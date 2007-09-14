@@ -173,6 +173,7 @@ class UserDataPlugin_Actions_Output extends UserDataPlugin {
                                 'attr'=>
                                     array('class'=>$options['control_class'],
                                     'onClick'=>"list_DoAction( 'export' );"),
+                                'public' => $options['allow_export'],
                                 'enabled'=>$options['allow_export']);
         //Email Button
         $def['email']=array(  'type'=>'button',

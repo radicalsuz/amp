@@ -18,6 +18,7 @@ $controller->_form->action = "mailto.php";
 
 $header = AMP_get_header( );
 $flash  = &AMP_System_Flash::instance( );
+$header->addStylesheet( 'custom/styles.css' );
 
 print $header->output( );
 print $flash->execute( ) ;

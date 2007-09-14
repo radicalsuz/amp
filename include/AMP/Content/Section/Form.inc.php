@@ -13,7 +13,15 @@ class Section_Form extends AMPSystem_Form_XML {
     }
 
     function _after_init( ) {
+        $this->addTranslation( 'list_by_class', 'to_text', 'get');
+        $this->addTranslation( 'list_by_section', 'to_text', 'get');
+        $this->addTranslation( 'list_by_tag', 'to_text', 'get');
         $this->_send_preview_link_to_bottom( );
+    }
+
+    function to_text( $data, $fieldname ) {
+        if ( !( isset( $data[$fieldname]) && $data[$fieldname])) return false;
+        return join( ", ", $data[$fieldname]);
     }
 
     function _init_submit( ) {

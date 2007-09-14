@@ -1,6 +1,7 @@
 <array>
 	<articleid>
 		<type>hidden</type>
+        <required>1</required>
     </articleid>
 	<userdata_id>
 		<type>hidden</type>

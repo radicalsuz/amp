@@ -35,9 +35,12 @@ if ( $uid && !$modin ) {
 
 if ($modin) {
     $form_id_nav = $modin;
-    $modidselect=$dbcon->GetRow("SELECT id, perid from modules where userdatamodid=" . $modin) or DIE($dbcon->ErrorMsg());
-    $modid=$modidselect['id'];
-    $modin_permission=$modidselect["perid"];
+    $form_permissions = &AMPSystem_Lookup::instance( 'PermissionsbyForm');
+    $tools = AMP_lookup( 'ToolsbyForm');
+    $modin_permission = ( isset( $form_permissions[$modin]) && $form_permissions[$modin]) ? $form_permissions[$modin] : false;
+    //$modidselect=$dbcon->GetRow("SELECT id, perid from modules where userdatamodid=" . $modin) or DIE($dbcon->ErrorMsg());
+    //$modid=$modidselect['id'];
+    $modid = ( isset( $tools[$modin]) && $tools[$modin]) ? $tools[$modin] : false;
 } else {
     ampredirect("modinput4_list.php");
 }
@@ -54,7 +57,6 @@ $udm->uid = $uid;
 
 // Was data submitted via the web?
 $sub = (isset($_REQUEST['btnUdmSubmit'])) ? $_REQUEST['btnUdmSubmit'] : false;
-
 
 // Fetch or save user data.
 if ( $sub ) {

@@ -111,14 +111,14 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
 
         $this->setHeaderTextId( $options['intro_id_list'] );
         $this->initTranslations( );
-        $this->_initComponents( );
+        $this->_initComponents( $options );
         $this->readData( $options );
 
         return $this->_outputComponents( $options );
        
     }
 
-    function _initComponents( ){
+    function _initComponents( $options =array( ) ){
         $options = $this->getOptions( );
         $sort_plugin = $this->udm->registerPlugin( 'AMP', 'Sort');
         $this->_translateOptions( $options, 'Sort', $sort_plugin );

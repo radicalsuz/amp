@@ -17,6 +17,8 @@ define( 'AMP_TEXT_ERROR_NOT_DEFINED', '%s does not define %s');
 define( 'AMP_TEXT_ERROR_CREATE_FAILED', '%s failed to create %s');
 define( 'AMP_TEXT_ERROR_ACTION_NOT_ALLOWED', "You do not have permission to %s"); 
 define( 'AMP_TEXT_ERROR_LOGIN_REQUIRED', "User should log in before trying to %s. URL: %s"); 
+if ( !defined( 'AMP_TEXT_ERROR_FORM_REQUIRED_FIELD'))
+        define( 'AMP_TEXT_ERROR_FORM_REQUIRED_FIELD', "This field is required." );
 
 define( 'AMP_TEXT_ERROR_USERDATA_PLUGIN_UPDATE_FAILED_MULTIPLE_INSTANCES', 
             'Cannot update multiple instances of plugin %s : %s using interface');

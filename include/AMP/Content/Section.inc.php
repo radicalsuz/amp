@@ -333,6 +333,48 @@ class Section extends AMPSystem_Data_Item {
         return 'parent=' . $parent_id;
     }
 
+    function makeCriteriaSection( $section_id ) {
+        return $this->makeCriteriaParent( $section_id );
+    }
+
+    function makeCriteriaDisplayable( ){
+        $crit['status'] = $this->makeCriteriaLive(  );
+        $crit['allowed'] = $this->makeCriteriaAllowed(  );
+        $public = $this->makeCriteriaPublic(  );
+        if ( $public ) {
+            $crit['public'] = $public;
+        }
+        return join( ' AND ', $crit );
+    }
+
+    function makeCriteriaPublic(  ) {
+        $protected_sections = AMPContent_Lookup::instance( 'protectedSections');
+        if ( empty( $protected_sections )) return false;
+        return 'type not in( '. join( ',', array_keys( $protected_sections) ) .' )';
+    }
+
+    function getDisplayCriteria( ) {
+        $sections = $this->getData( 'list_by_section');
+        $classes = $this->getData( 'list_by_class');
+        $tags = $this->getData( 'list_by_tag');
+        $global = $this->getData( 'list_is_global');
+        
+        $display_criteria = array( 'displayable' => 1 );
+        if ( !$global ) $display_criteria['section'] = $this->id;
+        if ( $classes ) $display_criteria['class'] = split( ', ', $classes );
+        if ( $tags ) $display_criteria['tag'] = split( ', ', $tags );
+        if ( $sections )  {
+            $specified_sections = split( ', ', $sections );
+            if ( isset( $display_criteria['section'])) {
+                $specified_sections[] = $display_criteria['section'];
+            }
+            $display_criteria['section'] = $specified_sections; 
+        }
+
+        return $display_criteria;
+    }
+
+
     function delete( ){
         return $this->trash( );
     }

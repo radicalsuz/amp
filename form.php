@@ -53,7 +53,6 @@ if ( $uid ) {
 
 }
 
-
 // Fetch or save user data.
 if ( ( !$uid || $auth ) && $udm->submitted ) {
 

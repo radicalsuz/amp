@@ -100,7 +100,7 @@
 	</filter>
     <listing_options_header>
         <type>blocktrigger</type>
-        <label>Section Header</label>
+        <label>Section Header and List Content</label>
         <block>listing_options</block>
         <block_trigger>url</block_trigger>
     </listing_options_header>
@@ -112,13 +112,45 @@
 	</header>
 	<url>
 		<type>select</type>
-		<label>Use This Article as Section Header</label>
+		<label>Use This Article &lt;BR /&gt;as Section Header</label>
         <block>listing_options</block>
         <lookup>
             <module>content</module>
             <instance>articles</instance>
         </lookup>
 	</url>
+	<logic_header>
+		<type>header</type>
+        <label>List Contents</label>
+        <block>listing_options</block>
+	</logic_header>
+	<list_is_global>
+		<default>0</default>
+		<type>checkbox</type>
+		<label>List Content &lt;BR /&gt;from Entire Site</label>
+		<block>listing_options</block>
+	</list_is_global>
+	<list_by_class>
+		<type>multiselect</type>
+		<label>Show Content from &lt;BR /&gt; these Classes</label>
+		<block>listing_options</block>
+		<lookup>activeClasses</lookup>
+		<size>15</size>
+	</list_by_class>
+	<list_by_tag>
+		<type>multiselect</type>
+		<size>15</size>
+		<label>Show Content from &lt;BR /&gt; these Tags</label>
+		<block>listing_options</block>
+		<lookup>tags</lookup>
+	</list_by_tag>
+	<list_by_section>
+		<type>multiselect</type>
+		<size>15</size>
+		<label>Show Content from &lt;BR /&gt; these Sections</label>
+		<block>listing_options</block>
+		<lookup>sectionMap</lookup>
+	</list_by_section>
     <!--
 	<searchbar>
 		<type>checkbox</type>

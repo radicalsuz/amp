@@ -25,6 +25,16 @@ date="bodygreystrong"
 author="bodygreystrong"
 source="bodygreystrong"
 
+[class article]
+date="bodygreystrong"
+author="author"
+source="author"
+subtitle="subtitle"
+image_caption = 'photocaption'
+image = 'image'
+body  = 'text'
+media = 'article_media'
+
 [class system]
 fineprint=photocaption
 

@@ -6,6 +6,7 @@ class AMP_Display_Pager {
 
     var $_qty_total;
     var $_qty_page;
+    var $_qty_page_internal = 0;
 
     var $_request;
 
@@ -69,6 +70,10 @@ class AMP_Display_Pager {
         $this->_current_page = ( $this->_current_offset / $this->_qty_page ) + 1;
     }
 
+    function set_limit_internal( $limit ) {
+        $this->_qty_page_internal = $limit;
+    }
+
     function set_offset( $offset ) {
         $this->_current_offset = $offset;
         if ( $this->_qty_page < 1 ) return ( $this->_current_page = 1 );
@@ -102,7 +107,8 @@ class AMP_Display_Pager {
     }
 
     function url_offset( $new_offset = 0 ) {
-        $target_request = array_merge( $this->_request, array( 'offset' => $new_offset, 'qty' => $this->_qty_page ));
+        $target_qty = ( $this->_qty_page_internal && ( $new_offset > 0)) ? $this->_qty_page_internal : $this->_qty_page;
+        $target_request = array_merge( $this->_request, array( 'offset' => $new_offset, 'qty' => $target_qty ));
         if ( !$new_offset || $new_offset < 0 ) {
             unset( $target_request['offset']);
         }

@@ -54,7 +54,7 @@ class UserDataPlugin_Read_Related extends UserDataPlugin {
     function _register_options_dynamic( ) {
         if ( !$this->udm->admin ) return;
         $form_set = AMP_lookup( 'forms');
-        if ( $form_set ) unset( $form_set( $this->udm->instance ));
+        if ( $form_set ) unset( $form_set[ $this->udm->instance ]);
         $this->options['related_form_id']['values']    = array( '' => AMP_TEXT_OPTION_DEFAULT ) + $form_set;
 
         $options = $this->getOptions( );

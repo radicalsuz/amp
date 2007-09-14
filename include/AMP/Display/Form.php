@@ -25,10 +25,10 @@ class AMP_Display_Form {
 
     var $_messages = array( 
         'validation' => array( 
-            'required'  => '% is required' ,
-            'email'     => '% must be a valid email address',
+            'required'  => '%s is required' ,
+            'email'     => '%s must be a valid email address',
             'captcha'   => AMP_TEXT_ERROR_FORM_CAPTCHA_FAILED,
-            'numeric'   => '% should be a number',
+            'numeric'   => '%s should be a number',
         )
     );
 

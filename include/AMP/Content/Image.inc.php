@@ -51,6 +51,11 @@ class Content_Image {
         return $this->getData( 'height' );
     }
 
+    function attributes( ) {
+        $attr = $this->getStyleAttrs( );
+        $attr['alt'] = $this->getAltTag( );
+    }
+
     function getStyleAttrs() {
         $extra = array();
         if ($align = $this->getAlignment() ) $extra = array( 'align' => $align );

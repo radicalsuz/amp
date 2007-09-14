@@ -509,16 +509,17 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
                 $return[$key] = $this->$crit_method( $value );
                 continue;
             }
-            if ( $crit_method = $this->_getCriteriaMethod( $key )){
+            if ( $crit_method = $this->_getCriteriaMethod( $key, $value )){
                 $return[$key] = $this->$crit_method( $key, $value );
             }
 
         }
         return $return;
     }
-    function _getCriteriaMethod( $fieldname ) {
+    function _getCriteriaMethod( $fieldname, $value  ) {
         if ( !$this->isColumn( $fieldname )) return false;
         if (array_search( $fieldname, $this->_exact_value_fields ) !==FALSE) return '_makeCriteriaEquals';
+        if ( is_numeric( $value )) return '_makeCriteriaEquals';
         return '_makeCriteriaContains';
     }
 

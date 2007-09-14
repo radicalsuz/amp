@@ -595,16 +595,25 @@ div.fieldset a.trigger {
 	font-size: 13px;
 }
 div.fieldextra a.trigger {
-	display: block;
-    padding: 5px;
 	width: 95%;
-/*	background-color: #006699;*/
-	background: url('images/tall_blue_gradient.png') top left repeat-x;
-	color: #FFFFFF;
-	font-size: 12px;
-	text-shadow: 2px 2px 1px black;
+	text-shadow: .2em black;
 	font-weight: bold;
+	color: white;
+/*	background-color : #006699; */
+	background: url('images/tall_blue_gradient.png') top left repeat-x;
+	padding: .25em; 
+	margin: .25em;
+	display:block;
+	font-size: 1.2em;
+	border: 2px solid #006699;
 }
+
+div.fieldextra a.trigger:hover {
+	background: none;
+	background-color : #007788; 
+	border: 2px solid #006699;
+}
+
 img.field_arrow {
 	float: left;
 	margin: 3px;
@@ -1000,3 +1009,4 @@ form.AMP_Content_Location_Input .element {
     position: relative;
     float: left;
 }
+

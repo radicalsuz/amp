@@ -32,6 +32,7 @@ $userlist=&new UserDataSet($dbcon, $modin, $admin);
 
 $userlist->_register_default_plugins();
 
+
 $uid= isset( $_REQUEST['uid'] ) ? $_REQUEST['uid'] : false;
 
 if ($uid && $modin) {

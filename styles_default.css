@@ -171,6 +171,7 @@ div.list_header {
 	padding: 5px;
 	font-size: 15px;
 	font-weight: bold;
+    clear:both;
 }
 
 div.list_tags div.list_column {
