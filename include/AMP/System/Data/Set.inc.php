@@ -171,7 +171,7 @@
     }
 
     function _makeLimit() {
-        if (!isset($this->limit)) return false;
+        if (!( isset($this->limit) && $this->limit )) return false;
         return " LIMIT " .$this->_buildLimit();
     }
 

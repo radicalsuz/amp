@@ -586,6 +586,12 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $this->_field_status . '=' . $value;
     }
 
+    function makeCriteriaId( $value ) {
+        if ( !$value ) return 'TRUE';
+        if ( !is_array( $value )) return $this->_makeCriteriaEquals( 'id', $value );
+        return 'id in ( '.join( ',', $value).')';
+    }
+
     //}}}
 
     function setDefaults( ) {

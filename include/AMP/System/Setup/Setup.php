@@ -57,6 +57,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         //Core config
         'AMP_SITE_URL'                  => 'URL',
         'AMP_SITE_NAME'                 => 'Name',
+        'AMP_CONTENT_ROOT_SECTION_NAME' => 'Name',
         'AMP_SITE_META_DESCRIPTION'     => 'MetaDescription',
         'AMP_SITE_META_KEYWORDS'        => 'MetaKeywords',
         'AMP_SITE_CONTENT_ENCODING'     => 'CharacterEncoding',
