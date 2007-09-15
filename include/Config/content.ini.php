@@ -132,8 +132,8 @@ tool_pages=2
 trash=2
 root=1
 
-[content section name]
-root=AMP_SITE_NAME
+;[content section name]
+;root=AMP_SITE_NAME
 
 [content map]
 root section=1
@@ -172,5 +172,10 @@ left="l"
 [content template token]
 standard="[-%s nav-]"
 body="[-body-]"
+
+[content media url]
+youtube_thumbnail="http://img.youtube.com/vi/%s/default.jpg"
+youtube="http://youtube.com/watch?v=%s"
+
 
 ;?>

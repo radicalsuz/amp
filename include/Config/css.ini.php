@@ -14,6 +14,7 @@ badge_header="title"
 [class list]
 blurb="text"
 image="thumb"
+image_empty="empty_thumb"
 description="description"
 
 [class list article]
