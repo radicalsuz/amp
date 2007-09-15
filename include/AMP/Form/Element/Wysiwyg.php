@@ -16,7 +16,7 @@ class AMP_Form_Element_Wysiwyg {
 
     var $_plugins = array(
             "SpellChecker",
-            "FullScreen",
+//            "FullScreen",
             "FindReplace",
             "Stylist",
 			"TableOperations",

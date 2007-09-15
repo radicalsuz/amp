@@ -5,7 +5,7 @@ class AMPFormElement_HTMLEditor {
     var $editors = array();
     var $plugins = array(
             "'SpellChecker'",
-            "'FullScreen'",
+//            "'FullScreen'",
             "'FindReplace'",
             "'Stylist'",
 			 "'TableOperations'",

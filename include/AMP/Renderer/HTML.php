@@ -151,7 +151,7 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
     }
 
     function attr( $attr_set ) {
-        return $this->makeAttributes( );
+        return $this->makeAttributes( $attr_set );
     }
 
     function p_commaJoin( $text_array, $attr=array( )) {
