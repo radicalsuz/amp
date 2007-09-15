@@ -416,6 +416,12 @@
         </label>
         <size>10:40</size>
     </media_html>
+    <media_thumbnail_url>
+        <label>Thumbnail URL &lt;BR /&gt;
+                &lt;a class=photocaption href=&quot;javascript:document.forms[&apos;article&apos;].elements[&apos;media_thumbnail_url&apos;].value=&apos;&apos;;find_youtube_url( )&quot;&gt;grab Youtube thumbnail&lt;/a&gt;
+        </label>
+        <type>text</type>
+    </media_thumbnail_url>
     <!--
     <media_list_display>
         <type>checkbox</type>

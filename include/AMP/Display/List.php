@@ -159,7 +159,7 @@ class AMP_Display_List {
     }
 
     function _renderBlock( $html ) {
-        $list_block = $this->_renderer->inDiv( 
+        $list_block = $this->_renderer->div( 
                             $html,
                             array( 'class' => $this->_css_class_container_list )
                         );
@@ -186,7 +186,7 @@ class AMP_Display_List {
                 : $this->_css_class_container_list_column;
         $css_class_list_column .= $this->_css_class_container_list_column_count . $this->_display_columns;
 
-        return $this->_renderer->inDiv( 
+        return $this->_renderer->div( 
                       $this->_render_column_header(  )
                     . $html
                     . $this->_render_column_footer(  ),
@@ -276,7 +276,7 @@ class AMP_Display_List {
     }
 
     function render_subheader_format( $item_header, $depth=0 ) {
-        return $this->_renderer->inDiv( 
+        return $this->_renderer->div( 
                     $item_header,
                     array( 'class' => $this->_css_class_container_list_subheader )
                 );

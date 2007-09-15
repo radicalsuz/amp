@@ -769,6 +769,12 @@ class Article extends AMPSystem_Data_Item {
         return "!( ".$this->makeCriteriaSection( $section_id ) . ")";
     }
 
+    function makeCriteriaNotId( $ids ) {
+        if ( !$ids ) return "TRUE";
+        if ( !( is_array( $ids ))) return 'id != '.$ids;
+        return "id not in ( " . join(",", $ids ) . ")";
+    }
+
     function makeCriteriaInSectionDescendant( $section_id ) {
         $base_section = $this->makeCriteriaSection( $section_id );
         $map = AMPContent_Map::instance( );
@@ -804,8 +810,27 @@ class Article extends AMPSystem_Data_Item {
         return $this->getData( 'media_html');
     }
 
+    function getMediaThumbnailUrl( ) {
+        if ( $url = $this->getData('media_thumbnail_url')) return $url;
+        if ( !( $html = $this->getMediaHtml( ))) return false;
+        preg_match( '/src=[^>]*youtube.com\/v\/([^>"\']+)/', $html, $youtube_id );
+        if ( isset($youtube_id[1]) && $youtube_id[1]) {
+            return sprintf( AMP_CONTENT_MEDIA_URL_YOUTUBE_THUMBNAIL, $youtube_id[1]);
+        }
+    }
+
+    function showMediaThumbnail() {
+        return !($this->getData('media_list_image'));
+    }
+
     function getMediaUrl( ) {
-        return $this->getData( 'media_filename');
+        if( $url = $this->getData('media_filename' )) return $url;
+        if ( !( $html = $this->getMediaHtml( ))) return false;
+        preg_match( '/src=[^>]*youtube.com\/v\/([^>"\']+)/', $html, $youtube_id );
+        if ( isset($youtube_id[1]) && $youtube_id[1]) {
+            return sprintf( AMP_CONTENT_MEDIA_URL_YOUTUBE, $youtube_id[1]);
+        }
+        return false;
     }
 
 	function export_keys() {

@@ -78,6 +78,26 @@ class Article_Form extends AMPSystem_Form_XML {
     function _initAutoLookups( &$header ){
         $header->addJavascriptOnload( 'new Ajax.Autocompleter( "author", "author_list", "ajax_request.php", {} );');
         $header->addJavascriptOnload( 'new Ajax.Autocompleter( "source", "source_list", "ajax_request.php", {} );');
+        $header->addJavascriptOnload( 
+<<<EVENTCODE
+Event.observe( document.forms['article'].elements['media_html'], 'change', 
+find_youtube_url = function( ) {
+    if (document.forms['article'].elements['media_thumbnail_url'].value )  {
+        return;
+    }
+    matcher = /src=[^>]*youtube.com\/v\/([^>"']+)/
+    matches = matcher.exec( document.forms['article'].elements['media_html'].value );
+    youtube_id = matches[1];
+    if (!youtube_id) return;
+    document.forms['article'].elements['media_thumbnail_url'].value = "http://img.youtube.com/vi/%s/default.jpg".replace( "%s", youtube_id ); 
+    new Effect.Highlight( document.forms['article'].elements['media_thumbnail_url'].parentNode.parentNode, { duration: 3 })
+    new Effect.Pulsate( document.forms['article'].elements['media_thumbnail_url'].parentNode.parentNode, { duration: 2, pulses: 3, from: 0.3 })
+}
+);
+
+
+EVENTCODE
+        );
         
     }
 

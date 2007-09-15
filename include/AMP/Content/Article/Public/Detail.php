@@ -34,6 +34,15 @@ class Article_Public_Detail extends AMP_Display_Detail {
     }
 
     function _renderFooter( ) {
+        if ( defined( 'AMP_RENDER_ARTICLE_PUBLIC_DETAIL_FOOTER' )) {
+            $footer_function = AMP_RENDER_ARTICLE_PUBLIC_DETAIL_FOOTER;
+            if ( method_exists( $this, $footer_function )) {
+                return $this->$footer_function( $this->_source );
+            }
+            if ( function_exists( $footer_function )) {
+                return $footer_function( $this->_source, $this );
+            }
+        }
         return $this->render_comments( $this->_source );
     }
 

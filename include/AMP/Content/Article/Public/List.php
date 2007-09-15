@@ -33,7 +33,8 @@ class Article_Public_List extends AMP_Display_List {
                   . $this->render_blurb( $source );
 
         $image = $this->render_image( $source );
-        return    $this->_renderer->div( $image, array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_IMAGE ))
+        $image_css = $image ? AMP_CONTENT_CSS_CLASS_LIST_IMAGE : AMP_CONTENT_CSS_CLASS_LIST_IMAGE_EMPTY;
+        return    $this->_renderer->div( $image, array( 'class' => $image_css ))
                 . $this->_renderer->div( $text,  array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_DESCRIPTION ) );
     }
 
@@ -77,7 +78,7 @@ class Article_Public_List extends AMP_Display_List {
             return $output_author . $this->_renderer->newline();
         }
 
-        return    $output_author . ',' . $this->_renderer->space() 
+        return    $output_author . ', '
                 . $output_source . $this->_renderer->newline();
     }
 
@@ -91,7 +92,8 @@ class Article_Public_List extends AMP_Display_List {
 
     function render_image( &$source ) {
 		$image = $source->getImageRef();
-		if ( !$image) return false; 
+		if ( !$image) return $this->render_image_media_thumbnail( $source ); 
+
         $img_output = $this->_renderer->image($image->getURL(AMP_IMAGE_CLASS_THUMB));
 
         $url = $this->url_for( $source ) ;
@@ -99,6 +101,16 @@ class Article_Public_List extends AMP_Display_List {
             return $img_output;
         }
         return $this->_renderer->link( $url, $img_output );
+    }
+
+    function render_image_media_thumbnail( $source ) {
+        $image_url = $source->getMediaThumbnailUrl( );
+        if ( !$image_url ) return false;
+        return $this->_renderer->link(  
+                    $this->url_for( $source ), 
+                    $this->_renderer->image( $image_url )
+                    );
+
     }
 
     function render_blurb( $source ) {

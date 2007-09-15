@@ -177,6 +177,10 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
             $thumb  = $this->_HTML_thumbnail( $contentItem->getImageRef() );
         }
 
+        if ( !$thumb && method_exists( $contentItem, 'getMediaThumbnailUrl') && $contentItem->showMediaThumbnail( )) {
+            $thumb = $this->_HTML_media_thumbnail( $contentItem->getMediaThumbnailUrl( ));
+        }
+
         $text_description   = $this->_HTML_listItemDescription( $contentItem );
 
         return $this->_HTML_listItemLayout( $text_description, $thumb, $attr );
@@ -220,6 +224,15 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
             }
         }
         return $this->_HTML_image( $image->getURL( $this->_list_image_class ), $this->_thumb_attr ) ;
+    }
+
+    function _HTML_media_thumbnail( $url ) {
+        if ( !$url ) return false;
+        $reg = &AMP_Registry::instance();
+        if ($thumb_attr = $reg->getEntry( AMP_REGISTRY_CONTENT_IMAGE_THUMB_ATTRIBUTES )) {
+            $this->_thumb_attr = array_merge( $this->_thumb_attr, $thumb_attr );
+        }
+        return $this->_HTML_image( $url, $this->_thumb_attr ) ;
     }
 
     function _HTML_subheader( $subheader ) {

@@ -74,7 +74,7 @@ class ArticleDisplay_Info extends Article_Display {
     }
 
     function _renderImage( ){
-        if ( !( $image = &$this->_article->getImageRef( ))) return false;
+        if ( !( $image = &$this->_article->getImageRef( ))) return $this->_renderMediaThumbnail( );
         $image_url = AMP_Url_AddVars( AMP_SYSTEM_URL_IMAGE_VIEW, 
                         array( 'filename='.$image->getName( ),
                                 'action=resize',
@@ -82,6 +82,16 @@ class ArticleDisplay_Info extends Article_Display {
                                 'height=70' ));
         return $this->_renderer->image( 
                     $image_url, array( 'align' => 'right', 'border'=> 1));
+    }
+
+    function _renderMediaThumbnail( ) {
+        if ( !( $image_url = $this->_article->getMediaThumbnailUrl( ))) return false;
+        $media_url = $this->_article->getMediaUrl( );
+        if ( !$media_url ) {
+            return $this->_renderer->image( $image_url, array( 'align' => 'right', 'border' => 1 ));
+        }
+
+        return $this->_renderer->link( $media_url, $this->_renderer->image( $image_url, array( 'align' => 'right', 'border' => 1 )), array( 'target' => '_blank'));
     }
 
     function _renderCreated( ){
