@@ -80,18 +80,27 @@ class ArticleDisplay_Info extends Article_Display {
                                 'action=resize',
                                 'image_class='. AMP_IMAGE_CLASS_THUMB,
                                 'height=70' ));
-        return $this->_renderer->image( 
-                    $image_url, array( 'align' => 'right', 'border'=> 1));
+        return $this->_renderer->div( 
+                    $this->_renderer->image( $image_url ),
+                        array( 'class' => 'thumb', 'id' => 'info_block_thumb' ));
+                    # array( 'align' => 'right', 'border'=> 1)
     }
 
     function _renderMediaThumbnail( ) {
-        if ( !( $image_url = $this->_article->getMediaThumbnailUrl( ))) return false;
+        if ( !( $image_url = $this->_article->getMediaThumbnailUrl( ))) return $this->_renderer->div( "&nbsp;", array( 'id' => 'info_block_thumb'));
         $media_url = $this->_article->getMediaUrl( );
         if ( !$media_url ) {
-            return $this->_renderer->image( $image_url, array( 'align' => 'right', 'border' => 1 ));
+            return $this->_renderer->div( 
+                        $this->_renderer->image( $image_url ),
+                        array( 'class' => 'thumb', 'id' => 'info_block_thumb' ));
         }
 
-        return $this->_renderer->link( $media_url, $this->_renderer->image( $image_url, array( 'align' => 'right', 'border' => 1 )), array( 'target' => '_blank'));
+        return $this->_renderer->div( 
+            $this->_renderer->link( 
+                $media_url, 
+                $this->_renderer->image( $image_url ), 
+                array( 'target' => '_blank')),
+            array( 'class' => 'thumb', 'id' => 'info_block_thumb' ));
     }
 
     function _renderCreated( ){

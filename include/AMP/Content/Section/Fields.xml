@@ -137,7 +137,7 @@
 		<type>multiselect</type>
 		<label>Show Content from &lt;BR /&gt; these Classes</label>
 		<block>listing_options</block>
-		<lookup>activeClasses</lookup>
+		<lookup>classes</lookup>
 		<size>15</size>
 	</list_by_class>
 	<list_by_tag>

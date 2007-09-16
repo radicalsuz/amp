@@ -418,7 +418,8 @@
     </media_html>
     <media_thumbnail_url>
         <label>Thumbnail URL &lt;BR /&gt;
-                &lt;a class=photocaption href=&quot;javascript:document.forms[&apos;article&apos;].elements[&apos;media_thumbnail_url&apos;].value=&apos;&apos;;find_youtube_url( )&quot;&gt;grab Youtube thumbnail&lt;/a&gt;
+                &lt;input class=go type=button name=grab_thumb onClick=&quot;javascript:document.forms[&apos;article&apos;].elements[&apos;media_thumbnail_url&apos;].value=&apos;&apos;;find_youtube_url( )&quot; value=&quot;Grab It!&quot;/&gt;&lt;BR /&gt;
+                &lt;span class=photocaption&gt;( auto-grab Youtube thumbs )&lt;/span&gt;
         </label>
         <type>text</type>
     </media_thumbnail_url>

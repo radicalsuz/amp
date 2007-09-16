@@ -89,11 +89,19 @@ find_youtube_url = function( ) {
     matches = matcher.exec( document.forms['article'].elements['media_html'].value );
     youtube_id = matches[1];
     if (!youtube_id) return;
-    document.forms['article'].elements['media_thumbnail_url'].value = "http://img.youtube.com/vi/%s/default.jpg".replace( "%s", youtube_id ); 
-    new Effect.Highlight( document.forms['article'].elements['media_thumbnail_url'].parentNode.parentNode, { duration: 3 })
-    new Effect.Pulsate( document.forms['article'].elements['media_thumbnail_url'].parentNode.parentNode, { duration: 2, pulses: 3, from: 0.3 })
+    new_url_value = ( "http://img.youtube.com/vi/%s/"+youtube_thumbnail_options[youtube_thumbnail_counter]+".jpg").replace( "%s", youtube_id ); 
+    document.forms['article'].elements['media_thumbnail_url'].value = new_url_value;
+
+    youtube_thumbnail_counter++;
+    if ( youtube_thumbnail_counter >= youtube_thumbnail_options.length ) youtube_thumbnail_counter = 0;
+    $( 'info_block_thumb').update( "<img src='"+new_url_value+"'>");
+    AMP_show_panel( 'info_block_thumb' );
+    //new Effect.Highlight( document.forms['article'].elements['media_thumbnail_url'].parentNode.parentNode, { duration: 3 })
+    //new Effect.Pulsate( document.forms['article'].elements['media_thumbnail_url'].parentNode.parentNode, { duration: 2, pulses: 3, from: 0.3 })
 }
 );
+window.youtube_thumbnail_options = new Array( "default", "1", "2", "3" );
+window.youtube_thumbnail_counter = 0;
 
 
 EVENTCODE
