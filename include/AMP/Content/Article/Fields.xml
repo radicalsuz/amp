@@ -418,11 +418,27 @@
     </media_html>
     <media_thumbnail_url>
         <label>Thumbnail URL &lt;BR /&gt;
-                &lt;input class=go type=button name=grab_thumb onClick=&quot;javascript:document.forms[&apos;article&apos;].elements[&apos;media_thumbnail_url&apos;].value=&apos;&apos;;find_youtube_url( )&quot; value=&quot;Grab It!&quot;/&gt;&lt;BR /&gt;
+                <!--&lt;input type=button name=grab_thumb onClick=&quot;javascript:document.forms[&apos;article&apos;].elements[&apos;media_thumbnail_url&apos;].value=&apos;&apos;;find_youtube_url( )&quot; value=&quot;Grab It!&quot;/&gt;&lt;BR /&gt;
                 &lt;span class=photocaption&gt;( auto-grab Youtube thumbs )&lt;/span&gt;
+                &lt;div id=info_block_thumb_close&gt;&amp;nbsp;&lt;/div&gt;-->
         </label>
         <type>text</type>
     </media_thumbnail_url>
+    <media_thumbnail_grabber>
+        <type>static</type>
+        <!--
+        <attr>
+            <onClick>
+                document.forms[&apos;article&apos;].elements[&apos;media_thumbnail_url&apos;].value=&apos;&apos;;find_youtube_url( );
+            </onClick>
+        </attr>
+        -->
+        <default>
+            &lt;span class=photocaption&gt;( auto-grab Youtube thumbs )&lt;/span&gt;
+            &lt;input type=button name=grab_thumb onClick=&quot;javascript:document.forms[&apos;article&apos;].elements[&apos;media_thumbnail_url&apos;].value=&apos;&apos;;find_youtube_url( )&quot; value=&quot;Grab It!&quot;/&gt;&lt;BR /&gt;
+            &lt;div id=info_block_thumb_close&gt;&amp;nbsp;&lt;/div&gt;
+        </default>
+    </media_thumbnail_grabber>
     <!--
     <media_list_display>
         <type>checkbox</type>

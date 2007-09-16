@@ -95,9 +95,8 @@ find_youtube_url = function( ) {
     youtube_thumbnail_counter++;
     if ( youtube_thumbnail_counter >= youtube_thumbnail_options.length ) youtube_thumbnail_counter = 0;
     $( 'info_block_thumb').update( "<img src='"+new_url_value+"'>");
-    AMP_show_panel( 'info_block_thumb' );
-    //new Effect.Highlight( document.forms['article'].elements['media_thumbnail_url'].parentNode.parentNode, { duration: 3 })
-    //new Effect.Pulsate( document.forms['article'].elements['media_thumbnail_url'].parentNode.parentNode, { duration: 2, pulses: 3, from: 0.3 })
+    $( 'info_block_thumb_close').update( "<img src='"+new_url_value+"'>");
+    AMP_show_panel( 'info_block_thumb_close' );
 }
 );
 window.youtube_thumbnail_options = new Array( "default", "1", "2", "3" );
