@@ -130,6 +130,9 @@
 		<label>List Content &lt;BR /&gt;from Entire Site</label>
 		<block>listing_options</block>
 	</list_is_global>
+	<list_by_custom>
+		<type>hidden</type>
+	</list_by_custom>
 	<list_by_class>
 		<type>multiselect</type>
 		<label>Show Content from &lt;BR /&gt; these Classes</label>

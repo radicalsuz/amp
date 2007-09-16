@@ -70,7 +70,10 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         if (isset($custom_displays [ strtoupper( $this->_manager->getDisplayType() ) ] )) {
             $result = $custom_displays [ strtoupper( $this->_manager->getDisplayType() ) ];
         }
-        if (!class_exists( $result )) return AMP_SECTION_DISPLAY_DEFAULT;
+        if (!class_exists( $result ))  {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $result ));
+            return AMP_SECTION_DISPLAY_DEFAULT;
+        }
         return $result;
     }
 
