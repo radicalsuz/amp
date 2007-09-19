@@ -384,3 +384,9 @@ div.list_intro {
 	margin: 1em;
 }
 
+.nav_element .list_item .empty_thumb {
+	width: 0px;
+	height: 0px;
+	margin: 0;
+}
+
