@@ -319,6 +319,14 @@ class AMP_Display_List {
         $this->$suppress_var = true;
     }
 
+    function set_display_method( $function_name ) {
+        if ( !function_exists( $function_name )) {
+            trigger_error( sprintf(  AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $function_name ));
+            return false;
+        }
+        $this->_item_display_method = $function_name;
+    }
+
     // {{{ private source create methods: _init_source, _generate_source 
 
     function _init_source( $source, $criteria ) {

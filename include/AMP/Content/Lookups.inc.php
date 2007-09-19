@@ -1218,4 +1218,14 @@ class AMPSystemLookup_BadgeFiles extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_ExcludedClassesForDisplay extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_CONTENT_DISPLAY_EXCLUDED_CLASS";
+
+    function AMPSystemLookup_ExcludedClassesForDisplay() {
+        $this->init();
+        $this->dataset = array_flip( $this->dataset );
+    }
+
+}
+
 ?>

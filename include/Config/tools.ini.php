@@ -26,6 +26,7 @@ petition=7
 links=11
 contact_us=17
 tell_a_friend=22
+content=19
 
 [form id]
 webaction=21

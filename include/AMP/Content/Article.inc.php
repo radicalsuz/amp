@@ -86,7 +86,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function getBlurb() {
-        return $this->getData( 'shortdesc' );
+        return $this->getData( 'blurb' );
     }
 
     function getRedirect() {
@@ -730,11 +730,14 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaDisplayableClass(  ) {
+        $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
+        /*
         $excluded_classes = array( 
             AMP_CONTENT_CLASS_SECTIONHEADER,
             AMP_CONTENT_CLASS_USERSUBMITTED,
             AMP_CONTENT_CLASS_FRONTPAGE
             );
+        */
         return "class not in (" . join( ",", $excluded_classes ) . ")" ;
     }
 

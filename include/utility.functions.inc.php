@@ -1647,14 +1647,15 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
     }
 
     //just the instance is passed
+    $instance = AMP_to_camelcase( $lookup_type );
+    $value = false;
     foreach( $lookup_types as $base_type => $prefix ) {
-        $instance = $lookup_type;
         if ( !class_exists( $prefix . ucfirst( $instance ))) continue;
         $values = call_user_func_array( array( $base_type, 'instance'), array( $instance, $lookup_var ));
         if ( $values ) return $values;
     }
     if ( !isset( $values )) {
-        trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $lookup_type ));
+        trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $lookup_type . ' / ' . $instance ));
     }
     return $values;
 }
@@ -1937,7 +1938,9 @@ function AMP_url_build_query( $attr = array( )) {
     if ( empty( $attr )) return array( );
     $complete = array( );
     foreach( $attr as $key => $value ) {
-        if ( strip_tags( $value ) != $value ) {
+        if ( is_array( $value )) {
+            $value = urlencode_array( $value, $key );
+        } elseif ( strip_tags( $value ) != $value ) {
             continue;
         }
         $complete[$key] = AMP_url_print( $value, $key );

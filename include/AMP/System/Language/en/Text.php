@@ -49,6 +49,7 @@ define( 'AMP_TEXT_DEBUG', 'debug');
 define( 'AMP_TEXT_TRASH', 'Trash');
 define( 'AMP_TEXT_ADD', 'Add');
 define( 'AMP_TEXT_NAME', 'Name');
+define( 'AMP_TEXT_LINK', 'Link');
 define( 'AMP_TEXT_ITEM_NAME', 'Item');
 define( 'AMP_TEXT_SEARCH', 'Search');
 define( 'AMP_TEXT_ALL', 'All');

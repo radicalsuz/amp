@@ -106,6 +106,7 @@ gallery_page_limit=24
 limit_default=20
 archive_limit=10
 no_limit_qty=700
+legacy_element_template=0
 
 [content intro id]
 default=1
@@ -177,5 +178,9 @@ body="[-body-]"
 youtube_thumbnail="http://img.youtube.com/vi/%s/default.jpg"
 youtube="http://youtube.com/watch?v=%s"
 
+[content display excluded class]
+sectionheader=8
+usersubmitted=9
+frontpage=2
 
 ;?>

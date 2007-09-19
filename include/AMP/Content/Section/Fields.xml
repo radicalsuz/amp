@@ -71,6 +71,21 @@
         <block>security</block>
 		<label>Require Login to View Content</label>
 	</secure>
+	<custom_data_header>
+		<type>hidden</type>
+	</custom_data_header>
+	<custom1>
+		<type>hidden</type>
+	</custom1>
+	<custom2>
+		<type>hidden</type>
+	</custom2>
+	<custom3>
+		<type>hidden</type>
+	</custom3>
+	<custom4>
+		<type>hidden</type>
+	</custom4>
     <listing_settings_header>
         <type>header</type>
         <label>List Page Options</label>
@@ -98,37 +113,37 @@
 		<label>Default Filter</label>
 		<lookup>filters</lookup>
 	</filter>
-    <listing_options_header>
+    <section_header_options_header>
         <type>blocktrigger</type>
-        <label>Section Header and List Content</label>
-        <block>listing_options</block>
+        <label>Section Header</label>
+        <block>section_header_options</block>
         <block_trigger>url</block_trigger>
-    </listing_options_header>
+    </section_header_options_header>
 	<header>
         <default>1</default>
 		<type>checkbox</type>
 		<label>Use Section Header</label>
-        <block>listing_options</block>
+        <block>section_header_options</block>
 	</header>
 	<url>
 		<type>select</type>
 		<label>Use This Article &lt;BR /&gt;as Section Header</label>
-        <block>listing_options</block>
+        <block>section_header_options</block>
         <lookup>
             <module>content</module>
             <instance>articles</instance>
         </lookup>
 	</url>
 	<logic_header>
-		<type>header</type>
+		<type>blocktrigger</type>
         <label>List Contents</label>
-        <block>listing_options</block>
+        <block>list_contents</block>
 	</logic_header>
 	<list_is_global>
 		<default>0</default>
 		<type>checkbox</type>
 		<label>List Content &lt;BR /&gt;from Entire Site</label>
-		<block>listing_options</block>
+		<block>list_contents</block>
 	</list_is_global>
 	<list_by_custom>
 		<type>hidden</type>
@@ -136,7 +151,7 @@
 	<list_by_class>
 		<type>multiselect</type>
 		<label>Show Content from &lt;BR /&gt; these Classes</label>
-		<block>listing_options</block>
+		<block>list_contents</block>
 		<lookup>classes</lookup>
 		<size>15</size>
 	</list_by_class>
@@ -144,14 +159,14 @@
 		<type>multiselect</type>
 		<size>15</size>
 		<label>Show Content from &lt;BR /&gt; these Tags</label>
-		<block>listing_options</block>
+		<block>list_contents</block>
 		<lookup>tags</lookup>
 	</list_by_tag>
 	<list_by_section>
 		<type>multiselect</type>
 		<size>15</size>
 		<label>Show Content from &lt;BR /&gt; these Sections</label>
-		<block>listing_options</block>
+		<block>list_contents</block>
 		<lookup>sectionMap</lookup>
 	</list_by_section>
     <!--

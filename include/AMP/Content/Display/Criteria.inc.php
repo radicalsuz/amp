@@ -5,13 +5,16 @@ class AMPContent_DisplayCriteria {
     var $_include_draft_status = false;
     var $_status_field = "publish";
 
-    var $_excluded_classes = array(
+    var $_excluded_classes = array( );
+    /*
         AMP_CONTENT_CLASS_SECTIONHEADER,
         AMP_CONTENT_CLASS_FRONTPAGE,
         AMP_CONTENT_CLASS_USERSUBMITTED
         );
+        */
 
     function AMPContent_DisplayCriteria() {
+        $this->_excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
         if (AMP_CONTENT_CLASS_SECTIONFOOTER) $this->_excluded_classes[] = AMP_CONTENT_CLASS_SECTIONFOOTER;
     }
 

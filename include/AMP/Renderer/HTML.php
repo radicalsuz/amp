@@ -242,12 +242,12 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         return str_repeat( '&gt;', $count );
     }
 
-    function double_arrow_left( ) {
-        return '&laquo;';
+    function double_arrow_left( $count = 1 ) {
+        return str_repeat( '&laquo;', $count );
     }
 
-    function double_arrow_right( ) {
-        return '&raquo;';
+    function double_arrow_right( $count = 1 ) {
+        return str_repeat( '&raquo;', $count );
     }
 
     function embed_flash_video( $url, $attr=array( ) ) {

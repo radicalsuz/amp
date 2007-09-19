@@ -54,13 +54,12 @@ class SectionContents_Display  extends AMPDisplay_HTML {
 
             if (!method_exists( $this->_display, 'setSection' )) return;
             $this->_display->setSection( $this->_section );
-        }
-
-		if ($display_class_vars['api_version'] == 2 ) {
+        } elseif ($display_class_vars['api_version'] == 2 ) {
 			#$this->_display = new $display_class( $this->_section, array('section'=> $this->_section->id, 'displayable'=> 1));
 			$this->_display = new $display_class( 
-                                    $this->_section, 
-                                    $this->_section->getDisplayCriteria( ));
+                                    ( $null = null ),
+                                    $this->_section->getDisplayCriteria( ),
+                                    $this->_section->getListItemLimit( ));
 		}
     }
 
@@ -112,7 +111,9 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         if (!(isset($this->_display) && isset($this->_section))) return false;
         if (!isset( $this->_display->api_version ) || ( $this->_display->api_version == 1)) {
             if ( isset( $this->_display->_pager ) && !($this->_display->isFirstPage() && $intro)) return $this->_display->_pager->_HTML_topNotice( $this->_section->getName() );
-        } 
+        } elseif ( method_exists( $this->_display, 'render_intro')) {
+            return $this->_display->render_intro( );
+        }
         return $intro->execute() . $this->_HTML_newline();
     }
 
