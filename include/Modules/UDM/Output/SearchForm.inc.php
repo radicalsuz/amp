@@ -1,4 +1,6 @@
 <?php
+//NOTE: Added keyword "Search All" Features to read_request and 
+
 require_once('AMP/Region.inc.php');
 require_once('HTML/QuickForm.php');
 require_once('AMP/Geo/Geo.php');
@@ -129,7 +131,43 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 			}
             $sql_criteria[] = "( ".$criteria_code." OR ( Country=".$this->dbcon->qstr( $_REQUEST['country'])."))";
 		}
+        //Keyword - fulltext search
+        if (isset($_REQUEST['keyword'])&& $_REQUEST['keyword']) {
+            //Create a set of phrases to search for
+            $kwsearch=$_REQUEST['keyword'];
+            if (substr_count($kwsearch, '"')>=2) {
+                //extract quoted phrases
+                //method kudos to insipience.com
+                preg_match_all("/\"([\w\s]+)(\"|$)/", $kwsearch, $matches, PREG_PATTERN_ORDER); 
+                $phrases = $matches[1]; 
+                $terms = explode(" ", preg_replace("/\"[\w\s]*(\"|$)/", "", $kwsearch));
+                $phrase_set = array_merge($terms , $phrases);
+            } else {
+                $phrase_set=split(' ', $kwsearch);
+            }
+            //determine the fields to include in the search
+            $db_fields   = $this->udm->dbcon->MetaColumnNames('userdata');
+            foreach ($this->udm->fields as $fname=>$fdef) {
+                if ($fdef['type']=='text'||$fdef['type']=='textarea') {
+                    $textfields[]=$fname;
+                }
+            }
 
+            if (is_array($textfields)) {
+                $src_fields = array_intersect( $db_fields, $textfields );
+                
+                //SQL should be case-insensitive by default
+                //but it's acting weird, so let's force the issue.
+                foreach ($src_fields as $key=>$value) $src_fields[$key]="if(isnull(`".$value."`),'',`".$value."`)";
+                $src_name = "Lower(Concat( ". join( ',' , $src_fields). "))";
+                foreach ($phrase_set as $keyword) {
+                    //make sure it's not an empty phrase
+                    if ($keyword) $sql_criteria[]="$src_name LIKE ".$this->dbcon->qstr('%'.strtolower($keyword).'%');
+                trigger_error("$src_name LIKE ".$this->dbcon->qstr('%'.strtolower($keyword).'%'));
+				}
+            }
+        }
+ 
         //Company
         if ( isset( $_REQUEST['Company']) && $_REQUEST['Company']) {
 			$sql_criteria[] = "Company LIKE" . $this->dbcon->qstr( '%' . $_REQUEST['Company'] .'%' );
@@ -158,7 +196,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
         //tags
         if ( isset( $_REQUEST['tag']) && $_REQUEST['tag']) {
-            $tagged_forms = AMP_lookup( 'formsByTag', $_REQUEST['tag']);
+            $tagged_forms = AMPSystem_Lookup::instance( 'formsByTag', $_REQUEST['tag']);
             if ( !$tagged_forms || empty( $tagged_forms )) {
                 $sql_criteria[] = 'FALSE';
             } else {
@@ -171,7 +209,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             $sql_criteria[] = 'Concat( if( isnull( First_Name ), "", First_Name ), if ( isnull( Last_Name ), "", Last_Name ), if ( isnull( Company ), "", Company ))  LIKE ' . $this->dbcon->qstr( '%' . str_replace( ' ', '%', $_REQUEST['name'] ) . '%' );
         }
 
-        $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate', 'tag', 'name');
+        $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate', 'tag', 'name', 'keyword');
         foreach( $this->_included_fields as $fieldname ) {
             if ( array_search( $fieldname, $specified_fields ) !== FALSE ) continue;
             if ( !( isset( $_REQUEST[ $fieldname ]) && $_REQUEST[ $fieldname ])) continue;
@@ -260,6 +298,14 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		
 		$def['state']=array('type'=>'select', 'label'=>'By State/Province', 'required'=>false,  'values'=>$this->lookups['state']['Set'], 'size'=>null, 'value'=>$state_code, 'public'=>'1');
 
+		//Keywords
+		$def['keyword']  =  array(
+            'type'=>'text',     
+            'label'=>'Search All',
+            'value'=>$_REQUEST['keyword'], 
+            'size'=>'20', 
+            'public'=>'1');
+	
         //tags
         if ( $tag_plugin = $this->udm->getPlugin( 'Tags', 'Start' )) {
             if ( $this->udm->admin ){
