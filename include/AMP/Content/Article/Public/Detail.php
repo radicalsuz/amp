@@ -58,25 +58,11 @@ class Article_Public_Detail extends AMP_Display_Detail {
     }
 
     function render_byline( $source ) {
-		$author = $source->getAuthor();
-		$source_name = $source->getSource();
-		$source_url = $source->getSourceUrl();
 
-        if (!(trim($author) || $source_name || $source_url)) return false;
+        $output_author = $this->render_author( $source );
+        $output_source = $this->render_source( $source );
 
-        $output_author = FALSE;
-        $output_source = FALSE;
-
-        if (trim($author)) {
-            $output_author =  $this->_renderer->span( sprintf( AMP_TEXT_BYLINE_SLUG, converttext($author)), array( 'class' => $this->_css_class_author ));
-        }
-
-        if ($source_name || $source_url)  {
-            if ( !$source_name ) {
-                $source_name = $source_url;
-            }
-            $output_source = $this->_renderer->span( $this->_renderer->link( $source_url, $source_name  ), array( 'class' => $this->_css_class_source ));
-        }
+        if ( !( $output_source || $output_author )) return false;
 
         if (!$output_author){
             return $output_source . $this->_renderer->newline();
@@ -87,6 +73,23 @@ class Article_Public_Detail extends AMP_Display_Detail {
 
         return    $output_author . ',' . $this->_renderer->space() 
                 . $output_source . $this->_renderer->newline();
+    }
+
+    function render_author( $source ) {
+		$author = $source->getAuthor();
+
+        if (!trim($author)) return false;
+        return $this->_renderer->span( sprintf( AMP_TEXT_BYLINE_SLUG, converttext($author)), array( 'class' => $this->_css_class_author ));
+    }
+
+    function render_source( $source ) {
+		$source_name = $source->getSource();
+		$source_url = $source->getSourceUrl();
+        if (!( $source_name || $source_url )) return false;
+        if ( !$source_name ) {
+            $source_name = $source_url;
+        }
+        return $this->_renderer->span( $this->_renderer->link( $source_url, $source_name  ), array( 'class' => $this->_css_class_source ));
     }
 
     function render_contact( $source ) {
