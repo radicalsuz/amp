@@ -28,6 +28,18 @@
 		<type>checkbox</type>
 		<label>Use Image as Title</label>
 	</titleti>
+    <badge_header>
+        <type>blocktrigger</type>
+        <label>Use Badge</label>
+        <block>badge_proxy</block>
+        <block_trigger>badge_id</block_trigger>
+    </badge_header>
+	<badge_id>
+        <type>select</type>
+        <label>Badge</label>
+        <block>badge_proxy</block>
+		<lookup>badges</lookup>
+	</badge_id>
 	<nosqlcode>
 		<type>textarea</type>
 		<label>Navigation HTML</label>
@@ -180,10 +192,4 @@
         <label>Include Function</label>
         <block>direct_include</block>
 	</include_function>
-	<badge_id>
-        <type>select</type>
-        <label>Badge</label>
-        <block>direct_include</block>
-		<lookup>badges</lookup>
-	</badge_id>
 </array>

@@ -58,7 +58,7 @@ class NavigationManager {
 
     function render_nav_block( $content, $position ) {
         $nav_blocks = AMP_lookup( 'navBlocks');
-        $nav_key = array_search( $position, $nav_blocks );
+        $nav_key = array_search( strtolower( $position ), $nav_blocks );
 
         $renderer = AMP_get_renderer( );
         return $renderer->div( $content, array( 

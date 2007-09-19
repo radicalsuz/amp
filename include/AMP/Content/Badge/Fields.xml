@@ -32,7 +32,7 @@
 	</include_function>
     <include_function_args>
         <type>textarea</type>
-        <label>Function Arguments ( eg: section=7&amp;&amp;heading=Summer Campaign&amp;&amp;limit=3 )</label>
+        <label>Function Arguments ( eg: section=7&amp;&amp;header=Summer Campaign&amp;&amp;limit=3 )</label>
     </include_function_args>
 	<!--
 	<gallery>

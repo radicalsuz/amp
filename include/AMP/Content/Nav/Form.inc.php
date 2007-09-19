@@ -16,6 +16,7 @@ class Nav_Form extends AMPSystem_Form_XML {
 
     function setDynamicValues( ){
         $this->addTranslation( 'sql_statement', '_checkCriteriaSelects', 'get');
+        $this->addTranslation( 'badge_id', 'link_to_badge', 'set');
     }
 
     function _checkCriteriaSelects( $data, $fieldname ) {
@@ -38,6 +39,16 @@ class Nav_Form extends AMPSystem_Form_XML {
 
         return "( a.type =$section_id  or typeid = $section_id )  and  t.id=$section_id and "
             . " ( a.class!=".AMP_CONTENT_CLASS_FRONTPAGE." AND a.class!=".AMP_CONTENT_CLASS_SECTIONHEADER.") ";
+    }
+
+    function link_to_badge( $data, $fieldname ) {
+        if ( !( isset( $data[$fieldname]) && $data[$fieldname])) return $data[$fieldname];
+        $badge_id = $data[ $fieldname ];
+        $renderer = AMP_get_renderer( );
+        $this->setFieldLabel( $fieldname, 
+            $this->fields['badge_id']['label'] 
+            . ' ( '.$renderer->link( AMP_url_update( AMP_SYSTEM_URL_BADGE, array( 'id' => $badge_id )), AMP_TEXT_EDIT ).' )' );
+        return $data[$fieldname];
     }
 }
 ?>

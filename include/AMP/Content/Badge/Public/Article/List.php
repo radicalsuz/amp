@@ -14,8 +14,9 @@ class AMP_Content_Badge_Public_Article_List extends Article_Public_List {
 
     function _init_criteria( ) {
         if ( !isset( $this->_pager )) return;
-        $section = ( isset( $this->_source_criteria['section']) && $this->_source_criteria['section']) ? $this->_source_criteria['section'] : false; 
-        $class = ( isset( $this->_source_criteria['class']) && $this->_source_criteria['class']) ? $this->_source_criteria['class'] : false; 
+        $section = ( isset( $this->_source_criteria['section']) && $this->_source_criteria['section'] && !is_array( $this->_source_criteria['section'])) ? $this->_source_criteria['section'] : false; 
+        $class = ( isset( $this->_source_criteria['class']) && $this->_source_criteria['class'] && !is_array( $this->_source_criteria['class'])) ? $this->_source_criteria['class'] : false; 
+
         if( $section && $class ) {
             $pager_target = AMP_url_update( AMP_CONTENT_URL_LIST_CLASS, array( 'type' => $section, 'class' => $class ));
         } elseif ( $section ) {
@@ -25,6 +26,7 @@ class AMP_Content_Badge_Public_Article_List extends Article_Public_List {
         }
         $this->_pager->set_target( $pager_target );
     }
+
 
 }
 

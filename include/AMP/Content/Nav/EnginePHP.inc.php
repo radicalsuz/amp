@@ -52,7 +52,9 @@ class NavEngine_PHP extends NavEngine {
         require_once( 'AMP/Content/Badge/Badge.php');
         $badge = new AMP_Content_Badge( AMP_Registry::getDbcon( ), $badge_id );
         if( $badge->hasData( )) {
-            return $badge->execute( );
+            #return $badge->execute( );
+            $result = $badge->execute( );
+            return $result;
         }
         return false;
 

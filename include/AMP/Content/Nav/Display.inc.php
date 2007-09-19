@@ -147,15 +147,16 @@ class NavigationDisplay {
     }
 
     function _templateElement( $content ) {
-        if ( isset( $this->_legacy_positions[$this->position])) {
+        
+        if ( AMP_CONTENT_NAV_LEGACY_ELEMENT_TEMPLATE && isset( $this->_legacy_positions[$this->position])) {
             return $content;
         }
 
         $nav_blocks = AMP_lookup( 'navBlocks' );
-        $nav_key = array_search( $this->position, $nav_blocks );
+        $nav_key = array_search( strtolower( $this->position ), $nav_blocks );
         return $this->_renderer->div( $content, 
                                     array(  'class' => AMP_CONTENT_CSS_CLASS_NAV_ELEMENT,
-                                            'id'    => sprintf( AMP_CONTENT_CSS_CLASS_NAV_ELEMENT, $nav_key, $this->order ))
+                                            'id'    => sprintf( AMP_CONTENT_CSS_ID_NAV_ELEMENT, $nav_key, $this->order ))
                                     );
     }
 
