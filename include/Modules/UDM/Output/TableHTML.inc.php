@@ -69,7 +69,7 @@ class UserDataPlugin_TableHTML_Output extends UserDataPlugin {
         $options = array_merge($this->getOptions(), $options);
 
         //create fieldset
-        $this->display_fieldset=preg_split('/\s?\n?,\s?\n?/', $options['display_fields']);
+        $this->display_fieldset=preg_split('/\s{0,2},\s{0,2}/', $options['display_fields']);
 
         //Print the current results list
         if (!($dataset=$this->udm->getData())) return false;

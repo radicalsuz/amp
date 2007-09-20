@@ -307,9 +307,33 @@ if ( !function_exists( 'evalhtml' ) ) {
     }
 }
 
+if ( !function_exists( 'AMP_get_include_output' ) ) {
+    function AMP_get_include_output( $match_value) {
+        $filename = $match_value[1];
+        if (!file_exists_incpath($filename)) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_FILE_EXISTS_NOT, $filename ));
+            return false;
+        }
+        ob_start();
+        include($filename);
+        $value = ob_get_contents();
+        ob_end_clean();
+        return $value;
+    }
+}
+
 if ( !function_exists( 'eval_includes' ) ) {
     //evaluates php include files contained within the given text
-    function eval_includes ($text, $basedir=null) {
+    function eval_includes ( $text ) {
+        $php_pattern = '/<\?php[^(?:?>)]+include(?:_once)?\(?\s*["\']([^"\']+)["\']\)?\s*;\s*\?>/'; 
+        $alternate_pattern = sprintf( '/%1$s\s*([^(?:%2$s)]+)\s*%2$s/', AMP_INCLUDE_START_TAG, AMP_INCLUDE_END_TAG );
+        $result = preg_replace_callback( $php_pattern, 'AMP_get_include_output', $text);
+        return preg_replace_callback( $alternate_pattern, 'AMP_get_include_output', $result);
+
+        /**
+         * long, regex-free way to do this 
+         * 
+         *
         $pos = strpos ( $text, '<?php');
         if ($pos!==FALSE) {
 			$endpos = 0;
@@ -328,7 +352,6 @@ if ( !function_exists( 'eval_includes' ) ) {
 				$include_stop = strpos($code, '"', $include_start+1);
 	
 				$include_args = substr($code, $include_start, $include_stop-$include_start);
-				#$include_args = preg_replace("/.*include\s*[\(\s*]?\s*\"?([^\)\"\s]*)\"?[\)\s*]?.*/", "\$1", $code );
 				$incl = trim(str_replace('"','',$include_args));
 	
 				//catch the include
@@ -395,6 +418,7 @@ if ( !function_exists( 'eval_includes' ) ) {
 
         }
         return $result;
+        */
     }
 }
             
@@ -836,8 +860,9 @@ function AMP_cache_close( ){
 }
 
 function &AMP_cache_get( $key, $id = null ){
+    $false = false;
     $cache = &AMP_get_cache( );
-    if ( !$cache ) return false;
+    if ( !$cache ) return $false;
     if ( isset( $id ) && $id ) $key = $cache->identify( $key, $id );
     return $cache->retrieve( $key );
 }

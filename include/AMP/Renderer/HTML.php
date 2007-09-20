@@ -173,6 +173,10 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         return '<i>' . $text . '</i>';
     }
 
+    function activate_includes( $html ) {
+        return $this->_activateIncludes( $html );
+    }
+
     function _activateIncludes( $html ) {
         $start = $this->_findIncludeStartTag( $html );
         if ($start === FALSE) return $html;

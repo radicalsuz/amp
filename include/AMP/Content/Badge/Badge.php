@@ -22,7 +22,7 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
     function getIncludeFunctionArguments( ) {
         $value = $this->getData( 'include_function_args');
         if ( !$value ) return $this->getDefaultArguments( );
-        $tuples = preg_split( "/\s?\r?\n?&&\s?\r?\n?/", $value );
+        $tuples = preg_split( "/\s{0,2}&&\s{0,2}/", $value );
 
         $values = array( );
         foreach( $tuples as $tuple ) {

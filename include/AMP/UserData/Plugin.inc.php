@@ -639,14 +639,14 @@ class UserDataPlugin {
         if (is_string( $defaults ) && ( substr($defaults,0,7) == "Lookup(" ) ) {
 
             $just_values = str_replace(")", "", substr($defaults, 7));
-            $valueset = preg_split("/\s?\n?,\s?\n?/", $just_values );
+            $valueset = preg_split("/\s{0,2},\s{0,2}/", $just_values );
             if (isset($valueset[4])) $field_def['default'] = $valueset[4];
             return $this->returnLookup($valueset[0], $valueset[1], $valueset[2], ( isset( $valueset[3]) ? $valueset[3] : null ));
         }
 
         // Split string with commas into an array
         // Check to see if we have an array of values.
-        $defArray = preg_split( "/\s?\n?,\s?\n?/", $defaults );
+        $defArray = preg_split( "/\s{0,2},\s{0,2}/", $defaults );
         if (count( $defArray ) > 1) {
             $defaults = array();
             foreach ( $defArray as $option ) {

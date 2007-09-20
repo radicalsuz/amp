@@ -114,7 +114,7 @@ class AMPContent_Template extends AMPSystem_Data_Item {
 
     function _getCurrentTemplate() {
         if (!isset($this->_current_template_version)) {
-            $this->_setCurrentTemplate( evalhtml($this->getHtmlTemplate()));
+            $this->_setCurrentTemplate( evalhtml( eval_includes( $this->getHtmlTemplate())));
         }
         return $this->_current_template_version;
     }

@@ -115,7 +115,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
     function definedColumns($options) {
         if(isset($options['display_fields']) && $options['display_fields']) {
 
-            return preg_split('/\s?\n?,\s?\n?/', $options['display_fields']);
+            return preg_split('/\s{0,2},\s{0,2}/', $options['display_fields']);
         } else {
 
             $datarow = $this->dataset->FetchRow();
@@ -338,7 +338,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         $this->delimiter = $this->format_values[$options['delimiter_char']]['delimiter'];
         $this->setLookup('publish', array("0"=>"draft" , "1"=>"live"));
         if ( isset( $options['export_raw_values'] ) && $options['export_raw_values']) {
-            $this->_raw_values = preg_split( "/\s?\n?,\s?\n?/", $options['export_raw_values']);
+            $this->_raw_values = preg_split( "/\s{0,2},\s{0,2}/", $options['export_raw_values']);
         }
 
         
@@ -353,7 +353,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
      }
 
     function extractMapping($string) {
-        $mappings = preg_split("/\s?\n?&\s?\n?/",$string);
+        $mappings = preg_split("/\s{0,2}&\s{0,2}/",$string);
         $return = array( );
         foreach($mappings as $map) {
             $mapped_pair = explode('=',$map);
@@ -375,7 +375,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         }
         if ( ! $multirow_fields ) return;
 
-        $this->_multirow_fields = preg_split( "/\s?\n?,\s?\n?/", $multirow_fields );
+        $this->_multirow_fields = preg_split( "/\s{0,2},\s{0,2}/", $multirow_fields );
         $this->_raw_values = array_merge( $this->_raw_values, $this->_multirow_fields );
     }
 

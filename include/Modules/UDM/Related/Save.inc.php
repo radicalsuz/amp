@@ -145,7 +145,7 @@ class UserDataPlugin_Save_Related extends UserDataPlugin_Save {
 
         $this->_included_fieldnames = 
                 ( isset( $options['included_fields'] ) && $options['included_fields']) 
-                    ?  preg_split( "/\s?\n?,\s?\n?/", $options['included_fields'] ) 
+                    ?  preg_split( "/\s{0,2},\s{0,2}/", $options['included_fields'] ) 
                     : array_keys( $related_udm->fields );
         $included_fields = array_combine_key( $this->_included_fieldnames, $related_udm->fields );
 

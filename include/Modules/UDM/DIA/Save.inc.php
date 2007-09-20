@@ -292,7 +292,7 @@ class UserDataPlugin_Save_DIA extends UserDataPlugin_Save {
 
 
     function extractMapping($string) {
-        $mappings = preg_split("/\s?\n?&\s?\n?/",$string);
+        $mappings = preg_split("/\s{0,2}&\s{0,2}/",$string);
         $return = array( );
         foreach($mappings as $map) {
             list($key, $value) = explode('=',$map);

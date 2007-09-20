@@ -545,7 +545,7 @@ class UserData {
 
      function getFieldOrder() {
         if (isset($this->fieldOrder)) return $this->fieldOrder;
-        if ($this->_module_def['field_order']) return $this->setFieldOrder(preg_split("/\s?\n?,\s?\n?/", $this->_module_def['field_order']));
+        if ($this->_module_def['field_order']) return $this->setFieldOrder(preg_split("/\s{0,2},\s{0,2}/", $this->_module_def['field_order']));
         return array_keys($this->fields);
      }
 
