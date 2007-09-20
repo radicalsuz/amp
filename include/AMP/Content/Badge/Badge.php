@@ -22,17 +22,33 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
     function getIncludeFunctionArguments( ) {
         $value = $this->getData( 'include_function_args');
         if ( !$value ) return $this->getDefaultArguments( );
-        $tuples = preg_split( "/\s?&&\s?/", $value );
+        $tuples = preg_split( "/\s?\r?\n?&&\s?\r?\n?/", $value );
 
         $values = array( );
         foreach( $tuples as $tuple ) {
             $tuple_segments = preg_split( '/\s?=\s?/', $tuple );
             if ( count( $tuple_segments ) > 2 ) continue;
+            $value_segment = $this->checkValueForArray( $tuple_segments[1]);
 
-            $values[ $tuple_segments[0]] = $tuple_segments[1];
+            $values[ $tuple_segments[0]] = $value_segment;
         }
 
         return array_merge( $this->getDefaultArguments( ), $values );
+    }
+
+    function checkValueForArray( $value ) {
+        if ( !strpos( $value, ",")) return $value ;
+        $test_array = split( ",", $value ); 
+        $result_value = array( );
+        foreach( $test_array as $item ) {
+            if ( !is_numeric( $item )) {
+                return $value;
+            }
+
+            $result_value[] = $item;
+        }
+        return $result_value;
+
     }
 
     function getDefaultArguments( ) {

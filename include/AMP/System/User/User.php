@@ -14,7 +14,7 @@ class AMPSystem_User extends AMPSystem_Data_Item {
 
     function getAllowedPages( ) {
         if ( !( $pages = $this->getData( 'system_allow_only'))) return false;
-        return preg_split( "/\s?,\s?/", $pages );
+        return preg_split( "/\s?\n?,\s?\n?/", $pages );
     }
 
     function getURL( ){

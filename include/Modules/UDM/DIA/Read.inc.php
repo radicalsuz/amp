@@ -183,7 +183,7 @@ class UserDataPlugin_Read_DIA extends UserDataPlugin {
 
 
     function extractMapping($string) {
-        $mappings = preg_split("/\s?&\s?/",$string);
+        $mappings = preg_split("/\s?\n?&\s?\n?/",$string);
         $return = array( );
         foreach($mappings as $map) {
             list($key, $value) = explode('=',$map);
