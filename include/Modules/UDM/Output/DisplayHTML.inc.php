@@ -168,7 +168,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
                 $items_output.=$renderer->div( $this->$display_function($dataitem ), array( 'class' => $this->_css_class_container_list_item ));
 
             } else {
-                $items_output.=$renderer->div( $display_function($dataitem, $options), array( 'class' => $this->_css_class_container_list_item ));
+                $items_output.=$renderer->div( $display_function($dataitem, $options, $this ), array( 'class' => $this->_css_class_container_list_item ));
             }
 
             //add comments
