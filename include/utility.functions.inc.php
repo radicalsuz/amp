@@ -314,6 +314,7 @@ if ( !function_exists( 'AMP_get_include_output' ) ) {
             trigger_error( sprintf( AMP_TEXT_ERROR_FILE_EXISTS_NOT, $filename ));
             return false;
         }
+		$dbcon = AMP_Registry::getDbcon();	
         ob_start();
         include($filename);
         $value = ob_get_contents();

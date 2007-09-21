@@ -23,6 +23,7 @@ class AMPContent_Template extends AMPSystem_Data_Item {
     var $datatable = "template";
     var $_navManager;
     var $name_field = 'name';
+	var $_class_name = 'AMPContent_Template';
 
 	function AMPContent_Template( &$dbcon, $id = null) {
         $this->init( $dbcon, $id );
