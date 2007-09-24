@@ -39,7 +39,17 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             'label'=>'Admin View: Order of Fields',
             'type' => 'textarea',
             'available'=>true,
-            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,tag,search,sortby,modin,endline')
+            'default'=>'newline,start_text,country,state,city,endline,newline,bydate,publish,tag,search,sortby,modin,endline'),
+        'search_extra_fields'=>array(
+            'label'=>'Function to call for extra search controls',
+            'type'=>'text',
+            'available' => true,
+            'default'=>''),
+        'search_extra_fields_sql'=>array(
+            'label'=>'Function to call for extra search sql',
+            'type'=>'text',
+            'available' => true,
+            'default'=>''),
             );
         
                     
@@ -61,6 +71,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	
 	function read_request() {
 		$this->setupRegion();
+        $options = $this->getOptions( );
 
 
 		
@@ -209,8 +220,16 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
             $sql_criteria[] = 'Concat( if( isnull( First_Name ), "", First_Name ), if ( isnull( Last_Name ), "", Last_Name ), if ( isnull( Company ), "", Company ))  LIKE ' . $this->dbcon->qstr( '%' . str_replace( ' ', '%', $_REQUEST['name'] ) . '%' );
         }
 
+        //arbitrary "extra" fields sql
+        if ( isset( $options['search_extra_fields_sql']) && $options['search_extra_fields_sql'] && function_exists( $options['search_extra_fields_sql'])) {
+            $extra_sql_function = $options['search_extra_fields_sql'];
+            $extra_criteria = $extra_sql_function( $this );
+            $sql_criteria = array_merge( $sql_criteria, $extra_criteria );
+        }
+
         $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate', 'tag', 'name', 'keyword');
         foreach( $this->_included_fields as $fieldname ) {
+            if ( !isset( $this->udm->fields[$fieldname] )) continue;
             if ( array_search( $fieldname, $specified_fields ) !== FALSE ) continue;
             if ( !( isset( $_REQUEST[ $fieldname ]) && $_REQUEST[ $fieldname ])) continue;
             if ( is_int( $_REQUEST[$fieldname])) {
@@ -363,6 +382,17 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$publish_options = array (''=>'Any', '0'=>'draft', '1'=>'live');
         $publish_value   = ( isset( $_REQUEST[ 'publish' ]) && $_REQUEST[ 'publish'] ) ? $_REQUEST[ 'publish' ] : null;
 		$def['publish']  = array( 'type'=>'select', 'label'=>'Status', 'value'=>$publish_value, 'values'=>$publish_options );
+
+		//Arbitrary Form Items
+	    if (isset($options['search_extra_fields']) && $options['search_extra_fields'] && function_exists( $options['search_extra_fields'] )) {
+		    $extra_def_function = $options['search_extra_fields']	;
+            $extra_def = $extra_def_function( $this );
+            if ( !empty( $extra_def )) {
+                $def = array_merge( $def, $extra_def );
+            }
+		}
+		
+
 		#city is defined by state read_request routine
         #$def['city']=array('type'=>'select', 'label'=>'Select City', 'values'=>$this->lookups['city'], 'value'=>$_REQUEST['city']);
         if ( isset( $_REQUEST['sortby']) && $_REQUEST['sortby'] ) {
