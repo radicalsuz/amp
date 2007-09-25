@@ -23,7 +23,8 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'source' => 'AMP/Content/Article.inc.php',
         'list' => 'AMP/Content/Article/ListForm.inc.php',
         'menu' => 'AMP/Content/Section/Menu.inc.php',
-        'classlinks' => 'AMP/Content/Class/Links.inc.php' 
+        'classlinks' => 'AMP/Content/Class/Links.inc.php', 
+        'pending' => 'AMP/Content/Article/List/Pending.php' 
         );
 
     var $components = array (
@@ -33,7 +34,8 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'classlinks' => 'Class_Links',
         'list' => 'Article_ListForm',
         'form' => 'Article_Form',
-        'source' => 'Article' 
+        'source' => 'Article',
+        'pending' => 'Article_List_Pending'
         );
 
     var $_allow_add = AMP_PERMISSION_CONTENT_EDIT;

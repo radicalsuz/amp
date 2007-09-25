@@ -841,6 +841,25 @@ class Article extends AMPSystem_Data_Item {
 		$keys = parent::export_keys();
 		return array_diff( $keys, $do_not_export );
 	}
+
+    function request_revision( $comments = false ) {
+        $updated_values = array( 'publish' => AMP_CONTENT_STATUS_REVISION );
+        if ( $comments ) {
+            $user_names = AMP_lookup( 'users' );
+            $current_user = $user_names[AMP_SYSTEM_USER_ID];
+
+            $existing_notes = $this->getData( 'notes' );
+            $new_notes = sprintf( AMP_TEXT_REVISION_COMMENTS_HEADER, date( 'Y-m-d'), $current_user ) . "\n"
+                        . $comments . "\n"
+                        . str_repeat( '-', 30 ) . "\n"
+                        . $existing_notes;
+
+            $updated_values['notes'] = $new_notes;
+        }
+        $this->mergeData( $updated_values ); 
+        return $this->save( );
+
+    }
 }
 
 

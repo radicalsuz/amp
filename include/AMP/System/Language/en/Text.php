@@ -10,6 +10,8 @@ define( 'AMP_TEXT_NO', 'no');
  */
 define( 'AMP_PUBLISH_STATUS_LIVE' , 'live' );
 define( 'AMP_PUBLISH_STATUS_DRAFT' , 'draft' );
+define( 'AMP_TEXT_CONTENT_STATUS_PENDING' , 'pending' );
+define( 'AMP_TEXT_CONTENT_STATUS_REVISION' , 'revision' );
 define( 'AMP_TEXT_CONTENT_STATUS_EXPIRED' , 'expired' );
 define( 'AMP_TEXT_CONTENT_STATUS_LIVE' , AMP_PUBLISH_STATUS_LIVE );
 define( 'AMP_TEXT_CONTENT_STATUS_DRAFT' , AMP_PUBLISH_STATUS_DRAFT );
@@ -184,6 +186,7 @@ define( 'AMP_TEXT_BADGE', 'badge');
 
 define( 'AMP_TEXT_TEMPLATE', 'template');
 define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
+define( 'AMP_TEXT_PENDING_LIST_HEADING', 'Waiting for Approval');
 
 /**
  * Misc result messages 
@@ -333,5 +336,7 @@ define( 'AMP_TEXT_LIVE_LINK', 'Live Link');
 define( 'AMP_TEXT_NAV_POSITION_DESCRIPTION', 'Block: %s, Position %s');
 define( 'AMP_TEXT_TEMPLATE_ADD_TOKENS', 'Add these tokens to the template where you want content to appear:' );
 define( 'AMP_TEXT_DOWNLOAD_FILE_TYPE', ' Download as %s' );
+
+define( 'AMP_TEXT_REVISION_COMMENTS_HEADER', '==%s== revision notes by %s ==');
 
 ?>

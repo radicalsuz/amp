@@ -549,9 +549,21 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         return $this->isLive( ) ;
     }
 
+    function getStatus( ) {
+        if (!$this->isColumn( $this->_field_status )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_REQUIRED_FIELD_MISSING, get_class( $this ), $this->_field_status ));
+            return false;
+        }
+        return $this->getData( $this->_field_status );
+    }
+
     function getStatusText( ){
-        if ( $this->isLive( )) return AMP_TEXT_CONTENT_STATUS_LIVE;
-        return AMP_TEXT_CONTENT_STATUS_DRAFT; 
+        $status_options = AMP_lookup( 'status' );
+        $status_value = $this->getStatus( ) ;
+        if ( !( $status_value && isset( $status_options[$status_value]))) return AMP_TEXT_CONTENT_STATUS_DRAFT;
+        return $status_options[ $status_value ];
+        //if ( $this->isLive( )) return AMP_TEXT_CONTENT_STATUS_LIVE;
+        //return AMP_TEXT_CONTENT_STATUS_DRAFT; 
     }
 
     function publish( ){

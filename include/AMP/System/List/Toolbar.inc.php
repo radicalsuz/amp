@@ -58,7 +58,8 @@ class AMP_System_List_Toolbar {
 
     function renderDefault( $action ){
         $renderer = AMP_get_renderer( );
-        return "<input type='submit' name='". $this->submitGroup ."[" . $action ."]' value='" . ucfirst( $action ) ."'>\n" . $renderer->space( );
+        $display_text = ucwords( str_replace( '_', ' ', $action ));
+        return "<input type='submit' name='". $this->submitGroup ."[" . $action ."]' value='" . $display_text ."'>\n" . $renderer->space( );
     }
 
     function renderToolbarStart( ){
@@ -113,9 +114,10 @@ class AMP_System_List_Toolbar {
                             )
                     );
             $this->addEndContent( $tab_contents, $tab_name);
+        $display_text = ucwords( str_replace( '_', ' ', $action ));
 
         return  
-            $renderer->input( 'show_'. $action .'_panel', ucfirst( $action ), 
+            $renderer->input( 'show_'. $action .'_panel', $display_text, 
                     array(  'type' => 'button', 'onclick' => '$$( ".toolbar .panel").invoke( "hide");AMP_show_panel( "'.$tab_name.'" );' ))
             . $renderer->space( );
 

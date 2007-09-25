@@ -19,6 +19,8 @@ frontpage="ContentClass_Display_FrontPage"
 [content status]
 live=1
 draft=0
+pending=2
+revision=3
 
 [content class]
 default=1

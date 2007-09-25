@@ -54,10 +54,24 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'transfer_mode_setting','_returnBlankCheckbox',  'get');
         $this->addTranslation( 'transfer_mode_setting','_checkTransferMode',  'get');
         $this->addTranslation( 'transfer_mode_setting','_evalTransferMode',  'set');
+        
+        $map = new ComponentMap_Article( );
+
+        #if ( ( $id = $this->getIdValue( )) && !AMP_allow( 'publish', 'article', $id )) {
+        if ( !$map->isAllowed( 'publish')) {
+            $this->fields['pending']['type'] = 'select';
+            $this->fields['pending']['values'] = AMP_lookup( 'status_no_publish' );
+            $this->addTranslation( 'publish', 'set_status_pending', 'get');
+            $this->addTranslation( 'pending', 'set_status_select', 'set');
+        }
 
         //$this->setFieldValueSet( 'doc', AMPfile_list( 'downloads'));
         //$this->_initJavascriptActions( );
         //$this->HTMLEditorSetup( );
+    }
+
+    function set_status_select( $data, $fieldname ) {
+        return $data['publish'];
     }
 
     function _initJavascriptActions( ){
@@ -456,6 +470,13 @@ EVENTCODE
         }
         return parent::validate( );
 
+    }
+
+    function set_status_pending( &$data, $fieldname ) {
+        if ( isset( $data['pending']) && $data['pending'] != AMP_CONTENT_STATUS_LIVE ) {
+            return $data['pending'];
+        }
+        return $data['publish'];
     }
     
 

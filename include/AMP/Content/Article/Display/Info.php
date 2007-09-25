@@ -24,7 +24,8 @@ class ArticleDisplay_Info extends Article_Display {
                 . $this->_renderSectionHeader( )
                 . $this->_renderAttachments( )
                 . $this->_renderCreated( )
-                . $this->_renderUpdated( );
+                . $this->_renderUpdated( )
+                . $this->_renderRevisionNotes( );
 
     }
 
@@ -185,6 +186,17 @@ class ArticleDisplay_Info extends Article_Display {
                     AMP_TEXT_ATTACHED_FILE . ': ' . 
                     $this->_renderer->link( AMP_SITE_URL . AMP_CONTENT_URL_DOCUMENTS . $filename, $filename ) )
                 . $this->_renderer->newline( );
+    }
+
+    function _renderRevisionNotes( ) {
+        if ( $this->_article->getStatus( ) != AMP_CONTENT_STATUS_REVISION ) {
+            return false;
+        }
+        $notes = $this->_article->getData( 'notes' );
+        preg_match( '/^.*?-{30}/s', $notes, $rev_matches );
+        if ( empty( $rev_matches )) return false;
+        $revision_notes = $rev_matches[0];
+        return $this->_renderer->div( converttext( $revision_notes ), array( 'class' => 'revision_notes', 'onclick' => "change_any( 'article_fancy', 'article_tab');Tabs_highlight_mirror( $( 'tab_2_mirror'));AMP_show_panel( 'editor_notes');"));
     }
 
 }

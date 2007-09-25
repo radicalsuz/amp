@@ -1100,7 +1100,7 @@ if ( !function_exists( 'AMP_Authorized')) {
         if ( isset( $action_translations[ $action ])) {
             $action = $action_translations[ $action ];
         }
-        //trigger_error( 'checking ' . $action . ' for ' . AMP_SYSTEM_USER_TYPE . ' #' . $user_id . ' on ' . AMP_pluralize( $item_type ) . ' or ' . $item_type . '_' . $id );
+        #trigger_error( 'checking ' . $action . ' for ' . AMP_SYSTEM_USER_TYPE . ' #' . $user_id . ' on ' . AMP_pluralize( $item_type ) . ' or ' . $item_type . '_' . $id );
 
         return $gacl->acl_check( 'commands', $action, AMP_SYSTEM_USER_TYPE, $user_id, AMP_pluralize( $item_type ), $item_type . '_' . $id );
     }

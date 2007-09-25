@@ -317,12 +317,18 @@ class AMPContentLookup_Sidebarclass extends AMPConstant_Lookup {
 
 class AMPConstantLookup_Status extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_CONTENT_STATUS";
-    #var $_prefix_labels = "AMP_TEXT_SECTIONLIST";
+    var $_prefix_labels = "AMP_TEXT_CONTENT_STATUS";
 
     function AMPConstantLookup_Status() {
         $this->init();
     }
 
+}
+class AMPSystemLookup_StatusNoPublish extends AMPConstantLookup_Status {
+    function AMPSystemLookup_StatusNoPublish( ) {
+        $this->__construct( );
+        unset( $this->dataset[1]);
+    }
 }
 
 class AMPSystemLookup_Status extends AMPConstantLookup_Status {
