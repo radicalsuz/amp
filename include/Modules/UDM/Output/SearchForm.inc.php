@@ -224,7 +224,9 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
         if ( isset( $options['search_extra_fields_sql']) && $options['search_extra_fields_sql'] && function_exists( $options['search_extra_fields_sql'])) {
             $extra_sql_function = $options['search_extra_fields_sql'];
             $extra_criteria = $extra_sql_function( $this );
+            if ($extra_criteria) {
             $sql_criteria = array_merge( $sql_criteria, $extra_criteria );
+            }
         }
 
         $specified_fields = array( 'publish', 'search', 'sortby', 'qty', 'offset', 'uid', 'modin', 'country', 'area', 'city', 'state', 'zip', 'distance', 'bydate', 'tag', 'name', 'keyword');
