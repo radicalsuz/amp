@@ -42,6 +42,9 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     var $_exact_value_fields = array( );
     var $_allow_db_cache = true;
 
+    //flag for actions based on whether a bulk request is being executed
+    var $list_action;
+
     function AMPSystem_Data_Item ( &$dbcon ) {
         $this->init($dbcon);
     }
@@ -571,6 +574,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( $this->isLive( )) return false;
         $this->mergeData( array( $this->_field_status => AMP_CONTENT_STATUS_LIVE ));
         if ( !isset( $this->id )) return true;
+        $this->list_action= 'publish';
 
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update');
@@ -579,9 +583,10 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
     function unpublish( ){
-        if ( !$this->isLive( )) return false;
+        if ( $this->getStatus( ) == AMP_CONTENT_STATUS_DRAFT ) return false;
         $this->mergeData( array( $this->_field_status => AMP_CONTENT_STATUS_DRAFT ));
         if ( !isset( $this->id )) return true;
+        $this->list_action= 'unpublish';
 
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update');

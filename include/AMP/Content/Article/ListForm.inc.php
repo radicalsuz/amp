@@ -1,10 +1,10 @@
 <?php
 
-//require_once ('AMP/Content/Article/List.inc.php' );
 //require_once ('AMP/Content/Article/Actions.inc.php' );
 //require_once ('AMP/System/List/Pager.inc.php' );
 require_once ('AMP/System/List/Form.inc.php' );
 require_once( 'AMP/Content/Article.inc.php');
+require_once ('AMP/Content/Article/List/Request.php' );
 
 //class Article_ListForm extends Article_List {
 class Article_ListForm extends AMP_System_List_Form {
@@ -23,12 +23,13 @@ class Article_ListForm extends AMP_System_List_Form {
     var $_source_object = 'Article';
 
     var $_observers_source = array( 'AMP_System_List_Observer');
-    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'regionize', 'tag','reorder' );
+    var $_actions = array( 'publish', 'unpublish', 'delete', 'move', 'regionize','tag','request_revision','reorder' );
     var $_action_args = array( 
             'reorder'   => array( 'order' ), 
             'move'      => array( 'section_id', 'class_id', 'related_section_id' ), 
             'regionize' => array( 'region_id' ),
-            'tag'       => array( 'tag_id', 'tags_text' )
+            'tag'       => array( 'tag_id', 'tags_text' ),
+            'request_revision' => array( 'revision_comments')
         );
     var $_actions_global = array( 'reorder' );
 
@@ -41,12 +42,20 @@ class Article_ListForm extends AMP_System_List_Form {
         'section'       => 'type', 
         'order'         => 'pageorder'
         );
+    var $_request_class = 'Article_List_Request';
 
-    function Article_ListForm ( &$dbcon, $criteria = null ) {
+    function Article_ListForm ( &$dbcon, $criteria = array( )) {
+        $this->__construct( $dbcon, $criteria );
+    }
+
+    function __construct( &$dbcon, $criteria = array( ) ) {
         if ( isset( $criteria['type']) || isset( $criteria['section'])) {
             $this->_source_criteria = array( );
         } else {
             $criteria['allowed'] = 1;
+        }
+        if ( !AMP_CONTENT_WORKFLOW_ENABLED ) {
+            $this->_actions = array_diff( $this->_actions, array( 'request_revision'));
         }
         $this->_init_default_sort( );
         $this->init( $this->_init_source( $dbcon, $criteria ));
@@ -265,5 +274,13 @@ class Article_ListForm extends AMP_System_List_Form {
         //does not auto_add 'action' value to URL
         return '<form name="' . $this->formname .'" method="POST" action="' . $url_value ."\">\n";
     }
+
+    function render_toolbar_request_revision( &$toolbar ) {
+        $panel_contents =     $this->_renderer->span( "Comments for Revision:", array( 'class' => 'searchform_label')) 
+                            . $this->_renderer->newline( )
+                            . $this->_renderer->textarea( 'revision_comments', null, array( 'class' => 'searchform_element', 'rows' => 15, 'cols' => 65  )) ;
+        return $toolbar->add_panel( 'request_revision', $panel_contents );
+    }
+
 }
 ?>

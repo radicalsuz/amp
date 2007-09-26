@@ -1234,4 +1234,40 @@ class AMPSystemLookup_ExcludedClassesForDisplay extends AMPConstant_Lookup {
 
 }
 
+class AMPSystemLookup_ArticlesPending extends AMPSystem_Lookup {
+    var $datatable = 'articles';
+    var $result_field = 'title';
+    var $criteria = 'publish=2';
+    var $_base_criteria = 'publish=2';
+
+    function AMPSystemLookup_ArticlesPending( ) {
+        $this->init( );
+    }
+
+    function allowedCriteria( ) {
+        $article = new Article( AMP_Registry::getDbcon( ));
+        $allowed_crit = $article->makeCriteriaAllowed( );
+        $this->criteria = $this->_base_criteria . ' AND '. $allowed_crit;
+    }
+}
+
+class AMPSystemLookup_ArticlesInRevision extends AMPSystem_Lookup {
+    var $datatable = 'articles';
+    var $result_field = 'title';
+    var $criteria = 'publish=3';
+    var $_base_criteria = 'publish=3';
+
+    function AMPSystemLookup_ArticlesInRevision( ) {
+        $this->init( );
+    }
+
+    function allowedCriteria( ) {
+        $article = new Article( AMP_Registry::getDbcon( ));
+        $allowed_crit = $article->makeCriteriaAllowed( );
+        $this->criteria = $this->_base_criteria . ' AND '. $allowed_crit;
+    }
+
+
+}
+
 ?>

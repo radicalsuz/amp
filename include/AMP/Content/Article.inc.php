@@ -316,6 +316,9 @@ class Article extends AMPSystem_Data_Item {
     function _save_update_actions( $data ) {
         $data['updatedby'] = AMP_SYSTEM_USER_ID ;
         $data['updated'] = date( 'Y-m-d H:i:s');
+        if ( $this->list_action ) {
+            $sections_related = $this->_getSectionsRelatedDB( );
+        }
         
         return $data;
 
@@ -402,6 +405,7 @@ class Article extends AMPSystem_Data_Item {
             $deleted_items = array( );
             $new_items = $sections_related;
         }
+        trigger_error( count( $deleted_items) . ' deleted and ' . count( $new_items ) . ' new items');
         if ( empty( $deleted_items ) && empty( $new_items )) return false;
 
         require_once( 'AMP/Content/Section/RelatedSet.inc.php');
@@ -538,6 +542,8 @@ class Article extends AMPSystem_Data_Item {
             $move_action = true;
         }
         if ( !$move_action ) return false;
+
+        $this->list_action= 'move';
         if ( !( $result = $this->save( ) or $relate_result )) return false;
         $this->notify( 'update' );
         $this->notify( 'move'   );
@@ -547,6 +553,8 @@ class Article extends AMPSystem_Data_Item {
     function regionize( $region_id ) {
         if ( $region_id == $this->getRegion( )) return false;
         $this->setRegion( $region_id );
+
+        $this->list_action= 'regionize';
         if ( !( $result = $this->save( ))) return false;
         $this->notify( 'update' );
         $this->notify( 'regionize' );
@@ -857,9 +865,21 @@ class Article extends AMPSystem_Data_Item {
             $updated_values['notes'] = $new_notes;
         }
         $this->mergeData( $updated_values ); 
-        return $this->save( );
+
+        $this->list_action= 'request_revision';
+        $result = $this->save( );
+
+        $this->notify( 'update' );
+        $this->notify( 'to_revision' );
+
+        return $result;
 
     }
+
+    function getPublish( ){
+        return $this->getStatus( ) ;
+    }
+
 }
 
 

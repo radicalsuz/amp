@@ -24,7 +24,7 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'list' => 'AMP/Content/Article/ListForm.inc.php',
         'menu' => 'AMP/Content/Section/Menu.inc.php',
         'classlinks' => 'AMP/Content/Class/Links.inc.php', 
-        'pending' => 'AMP/Content/Article/List/Pending.php' 
+        'status' => 'AMP/Content/Article/Display/Status.php' 
         );
 
     var $components = array (
@@ -35,7 +35,7 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
         'list' => 'Article_ListForm',
         'form' => 'Article_Form',
         'source' => 'Article',
-        'pending' => 'Article_List_Pending'
+        'status' => 'Article_Display_Status'
         );
 
     var $_allow_add = AMP_PERMISSION_CONTENT_EDIT;
@@ -43,6 +43,7 @@ class ComponentMap_Article extends AMPSystem_ComponentMap {
     var $_allow_delete = AMP_PERMISSION_CONTENT_DELETE;
     var $_allow_publish = AMP_PERMISSION_CONTENT_PUBLISH;
     var $_allow_unpublish = AMP_PERMISSION_CONTENT_PUBLISH;
+    var $_allow_request_revision = AMP_PERMISSION_CONTENT_PUBLISH;
     var $_allow_search = true;
 
     function onInitForm( &$controller ){

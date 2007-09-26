@@ -295,10 +295,11 @@ class AMPSystem_List extends AMPDisplay_HTML {
             return $this->$column( $row_data_source, $column );
 
         $get_method = 'get'.ucfirst( str_replace( ' ', '', $column ));
-        if ( method_exists( $row_data_source, $get_method )) 
+        if ( method_exists( $row_data_source, $get_method )) {
             return $row_data_source->$get_method();
+        }
         
-        return false;
+        return $row_data_source->getData( $column );
     }
 
 
@@ -657,6 +658,8 @@ class AMPSystem_List extends AMPDisplay_HTML {
 
     function _showPublishStatus( $publish_value, $field = "publish" ) {
         if ($publish_value == AMP_CONTENT_STATUS_LIVE ) return AMP_TEXT_CONTENT_STATUS_LIVE;
+        $status_values = AMP_lookup( 'status');
+        if ( isset( $status_values[$publish_value])) return $status_values[$publish_value];
         return AMP_TEXT_CONTENT_STATUS_DRAFT;
     }
 

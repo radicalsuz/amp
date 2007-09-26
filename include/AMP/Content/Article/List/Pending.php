@@ -18,7 +18,6 @@ class Article_List_Pending extends Article_List {
     }
 
     function _output_empty( ) {
-        trigger_error( 'is empty');
         //do nothing
     }
 
@@ -38,7 +37,7 @@ class Article_List_Pending extends Article_List {
     }
 
     function _renderHeader( ) {
-        $text = AMP_TEXT_PENDING_LIST_HEADING;
+        $text = AMP_TEXT_CONTENT_STATUS_DISPLAY_HEADING;
         return $this->_renderer->div( $text, array( 'class' => 'system_heading'));
     }
 

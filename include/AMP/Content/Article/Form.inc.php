@@ -55,23 +55,26 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'transfer_mode_setting','_checkTransferMode',  'get');
         $this->addTranslation( 'transfer_mode_setting','_evalTransferMode',  'set');
         
-        $map = new ComponentMap_Article( );
 
-        #if ( ( $id = $this->getIdValue( )) && !AMP_allow( 'publish', 'article', $id )) {
-        if ( !$map->isAllowed( 'publish')) {
-            $this->fields['pending']['type'] = 'select';
-            $this->fields['pending']['values'] = AMP_lookup( 'status_no_publish' );
-            $this->addTranslation( 'publish', 'set_status_pending', 'get');
-            $this->addTranslation( 'pending', 'set_status_select', 'set');
+        if ( AMP_CONTENT_WORKFLOW_ENABLED && isset( $this->fields['publish'])) {
+
+            $this->fields['publish']['label'] = str_replace( 'PUBLISH', 'Status', $this->fields['publish']['label'] );
+            $this->fields['publish']['type'] = 'select';
+            $this->fields['publish']['values'] = AMP_lookup( 'status' );
+            $this->addTranslation( 'notes', 'get_revision_notes', 'get');
+
+            require_once( 'AMP/Content/Article/ComponentMap.inc.php');
+            $map = new ComponentMap_Article( );
+            if ( !$map->isAllowed( 'publish')) {
+                $this->addTranslation( 'publish', 'no_publish_allowed', 'get');
+                $this->fields['publish']['values'] = AMP_lookup( 'status_no_publish' );
+            } else {
+                $this->fields['status_comments_header']['type'] = 'blocktrigger';
+                $this->fields['status_comments']['type'] = 'textarea';
+            }
+
         }
 
-        //$this->setFieldValueSet( 'doc', AMPfile_list( 'downloads'));
-        //$this->_initJavascriptActions( );
-        //$this->HTMLEditorSetup( );
-    }
-
-    function set_status_select( $data, $fieldname ) {
-        return $data['publish'];
     }
 
     function _initJavascriptActions( ){
@@ -151,6 +154,9 @@ EVENTCODE
 
     function _selectAddNull( $valueset, $name ) {
         $required_selects = array( 'section', 'new_section_parent');
+        $status_selects = array( 'publish' );
+
+        if ( array_search( $name, $status_selects) !== FALSE ) return $valueset;
         if ( array_search( $name, $required_selects ) === FALSE ) return parent::_selectAddNull( $valueset, $name );
         return array( AMP_CONTENT_MAP_ROOT_SECTION => '-- ' . AMP_CONTENT_SECTION_NAME_ROOT . ' --') + $valueset;
     }
@@ -237,6 +243,10 @@ EVENTCODE
     }
 
     function adjustFields( $fields ){
+        if ( AMP_CONTENT_WORKFLOW_ENABLED ) {
+            unset( $fields['publish']['per']);
+        }
+
         $fields['comment_list']['default'] = $this->_getCommentListOutput( $this->getIdValue( ));
         $fields = array_merge( $fields, $this->_defineCustomFields( ));
         return $fields;
@@ -472,13 +482,29 @@ EVENTCODE
 
     }
 
-    function set_status_pending( &$data, $fieldname ) {
-        if ( isset( $data['pending']) && $data['pending'] != AMP_CONTENT_STATUS_LIVE ) {
-            return $data['pending'];
-        }
-        return $data['publish'];
+    function no_publish_allowed( $data, $fieldname ) {
+        if ( !isset( $data[$fieldname])) return false;
+        if ( $data[$fieldname] == AMP_CONTENT_STATUS_LIVE ) return AMP_CONTENT_STATUS_DRAFT;
+        return $data[$fieldname];
     }
-    
+
+    function get_revision_notes( $data, $fieldname ) {
+        if ( !( isset( $data[$fieldname]) && $data[$fieldname])) {
+            return false;
+        }
+        if ( !( isset( $data['status_comments']) && $data['status_comments'])) {
+            return $data[$fieldname];
+        }
+        $user_names = AMP_lookup( 'users' );
+        $current_user = $user_names[AMP_SYSTEM_USER_ID];
+
+        return sprintf( AMP_TEXT_REVISION_COMMENTS_HEADER, date( 'Y-m-d'), $current_user ) . "\n"
+                        . $data['status_comments'] . "\n"
+                        . str_repeat( '-', 30 ) . "\n"
+                        . $data[$fieldname];
+
+    }
+
 
 
 }

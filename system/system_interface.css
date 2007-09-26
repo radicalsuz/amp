@@ -1018,4 +1018,26 @@ form.AMP_Content_Location_Input .element {
     position: relative;
     float: left;
 }
+.revision_notes {
+    margin: 1em;
+    padding: 1em;
+    background: #CDCDEF;
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    cursor: pointer;
+}
 
+.status_display .list_item {
+    margin-left: 1em;
+    position: relative;
+    clear: both;
+    width: 100%;
+    margin-bottom: .5em;
+}
+
+.status_display {
+    position: relative;
+    clear: both;
+    margin-bottom: 2em;
+
+}

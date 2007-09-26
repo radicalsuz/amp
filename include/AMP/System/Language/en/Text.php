@@ -10,8 +10,8 @@ define( 'AMP_TEXT_NO', 'no');
  */
 define( 'AMP_PUBLISH_STATUS_LIVE' , 'live' );
 define( 'AMP_PUBLISH_STATUS_DRAFT' , 'draft' );
-define( 'AMP_TEXT_CONTENT_STATUS_PENDING' , 'pending' );
-define( 'AMP_TEXT_CONTENT_STATUS_REVISION' , 'revision' );
+define( 'AMP_TEXT_CONTENT_STATUS_PENDING' , 'pending approval' );
+define( 'AMP_TEXT_CONTENT_STATUS_REVISION' , 'in revision' );
 define( 'AMP_TEXT_CONTENT_STATUS_EXPIRED' , 'expired' );
 define( 'AMP_TEXT_CONTENT_STATUS_LIVE' , AMP_PUBLISH_STATUS_LIVE );
 define( 'AMP_TEXT_CONTENT_STATUS_DRAFT' , AMP_PUBLISH_STATUS_DRAFT );
@@ -186,7 +186,7 @@ define( 'AMP_TEXT_BADGE', 'badge');
 
 define( 'AMP_TEXT_TEMPLATE', 'template');
 define( 'AMP_TEXT_CONTENT_MAP_HEADING', 'Site Map');
-define( 'AMP_TEXT_PENDING_LIST_HEADING', 'Waiting for Approval');
+define( 'AMP_TEXT_CONTENT_STATUS_DISPLAY_HEADING', 'Status Report');
 
 /**
  * Misc result messages 

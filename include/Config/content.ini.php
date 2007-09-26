@@ -185,4 +185,7 @@ sectionheader=8
 usersubmitted=9
 frontpage=2
 
+[content workflow]
+enabled=0
+
 ;?>

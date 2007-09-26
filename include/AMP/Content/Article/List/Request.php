@@ -10,7 +10,7 @@ class Article_List_Request extends AMP_System_List_Request {
 
     function getPerformedAction( ){
         if ( $this->_committed_action == 'request_revision') {
-            return 'requested revise';
+            return 'revision request';
         }
         return $this->_committed_action;
     }

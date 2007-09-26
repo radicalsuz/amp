@@ -36,10 +36,17 @@
         <per>CONTENT_PUBLISH</per>
         <default>1</default>
     </publish>
-    <pending>
-        <type>hidden</type>
-        <label>Publishing Status</label>
-    </pending>
+	<status_comments_header>
+		<type>hidden</type>
+		<label>Add Comments</label>
+		<block>status_comments</block>
+	</status_comments_header>
+	<status_comments>
+		<type>hidden</type>
+		<label>Comments on this Version</label>
+		<size>10:65</size>
+		<block>status_comments</block>
+	</status_comments>
     <picuse>
 		<!-- this value has to stay on the form because Internet Explorer is the most worthless browser ever created
 			 and will fail to retain the ID value if it is the first hidden field. ap 2006-07-31
