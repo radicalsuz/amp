@@ -2192,4 +2192,8 @@ function AMP_cache_this_request( $finalPageHtml ) {
 
 }
 
+function AMP_dump( $var ) {
+    return AMP_varDump( $var );
+}
+
 ?>

@@ -361,10 +361,10 @@ class Section extends AMPSystem_Data_Item {
         
         $display_criteria = array( 'displayable' => 1 );
         if ( !$global ) $display_criteria['section'] = $this->id;
-        if ( $classes ) $display_criteria['class'] = split( ', ', $classes );
-        if ( $tags ) $display_criteria['tag'] = split( ', ', $tags );
+        if ( $classes ) $display_criteria['class'] = preg_split( '/\s?,\s?/', $classes );
+        if ( $tags ) $display_criteria['tag'] = preg_split( '/\s?,\s?/', $tags );
         if ( $sections )  {
-            $specified_sections = split( ', ', $sections );
+            $specified_sections = preg_split( '/\s?,\s?/', $sections );
             if ( isset( $display_criteria['section'])) {
                 $specified_sections[] = $display_criteria['section'];
             }
