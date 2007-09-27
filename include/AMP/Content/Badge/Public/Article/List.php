@@ -14,7 +14,7 @@ class AMP_Content_Badge_Public_Article_List extends Article_Public_List {
 
     function _init_criteria( ) {
         if ( !isset( $this->_pager )) return;
-		$pager_targer = false;
+		$pager_target = false;
         $section = ( isset( $this->_source_criteria['section']) && $this->_source_criteria['section'] && !is_array( $this->_source_criteria['section'])) ? $this->_source_criteria['section'] : false; 
         $class = ( isset( $this->_source_criteria['class']) && $this->_source_criteria['class'] && !is_array( $this->_source_criteria['class'])) ? $this->_source_criteria['class'] : false; 
 
