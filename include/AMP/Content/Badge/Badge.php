@@ -28,7 +28,7 @@ class AMP_Content_Badge extends AMPSystem_Data_Item {
         foreach( $tuples as $tuple ) {
             $tuple_segments = preg_split( '/\s?=\s?/', $tuple );
             if ( count( $tuple_segments ) > 2 )  {
-                $value_segment = join( "=", array_slice( $tuple_segments( 1)));
+                $value_segment = join( "=", array_slice( $tuple_segments, 1));
             } else {
                 $value_segment = $this->checkValueForArray( $tuple_segments[1]);
             }
