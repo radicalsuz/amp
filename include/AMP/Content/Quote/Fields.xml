@@ -21,12 +21,12 @@
         <default>today</default>
 	</date>
 	<type>
-		<type>select</type>
+		<type>multiselect</type>
 		<label>Section</label>
         <lookup>
-            <module>content</module>
+ 			<module>content</module>
             <instance>sectionMap</instance>
-        </lookup>
+		</lookup>
 	</type>
 
 </array>
