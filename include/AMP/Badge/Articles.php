@@ -13,7 +13,7 @@ function amp_badge_articles( $options, $display = 'AMP_Content_Badge_Public_Arti
 
     $limit = ( isset( $options['limit']) && $options['limit'] ) ? $options['limit'] : false;
     $morelink = ( isset( $options['morelink']) ) ? $options['morelink'] : null;
-    $suppress_morelink = ( isset( $morelink ) && ( $morelink == 0 ));
+    $suppress_morelink = ( isset( $morelink ) && ( $morelink == false ));
 
     $criteria = array( );
     if ( $class ) {
@@ -34,8 +34,8 @@ function amp_badge_articles( $options, $display = 'AMP_Content_Badge_Public_Arti
     if ( $header ) {
         $renderer = AMP_get_renderer( );
         $image_path = AMP_LOCAL_PATH . 'img/original/' . $header;
-        if ( file_exists( $header )) {
-            $header = $renderer->image( $header );
+        if ( file_exists( $image_path )) {
+            $header = $renderer->image( 'img/original/'.$header );
         }
         $header_output = $renderer->span( $header, array( 'class' => AMP_CONTENT_CSS_CLASS_BADGE_HEADER ));
     }
@@ -45,11 +45,26 @@ function amp_badge_articles( $options, $display = 'AMP_Content_Badge_Public_Arti
     if ( $display ) $list->set_display_method( $display );
     if ( $display_header ) $list->set_display_header_method( $display_header );
     if ( $display_footer ) $list->set_display_footer_method( $display_footer );
-    if ( $morelink ) $list->set_pager_target( AMP_url_update( $morelink, $criteria ));
+    if ( $morelink )  {
+		$link_url = ( AMP_url_update( $morelink, AMP_criteria_join($criteria )));
+		//$list->set_pager_target( AMP_url_update( $morelink, $criteria ));
+		$list->set_pager_target( $link_url ); 
+		trigger_error( ($suppress_morelink?'noshow':'show') . ': morelinks is ' . $link_url );
+	}
     if ( $suppress_morelink ) $list->suppress( 'pager' );
     return $header_output . $list->execute( );
 
 }
+
+function AMP_criteria_join($criteria) {
+	$result_criteria = array();
+	foreach($criteria as $var => $value ) {
+		if (is_array($value)) $value = join(',', $value);
+	    $result_criteria[$var] = $value;	
+	}
+	return $result_criteria;
+}
+
 
 
 ?>
