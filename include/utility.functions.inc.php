@@ -2196,4 +2196,31 @@ function AMP_dump( $var ) {
     return AMP_varDump( $var );
 }
 
+function &AMP_current_section( ) {
+    $page = AMPContent_Page::instance( );
+    $current_section = $page->getSection( );
+    if ( $current_section ) return $current_section;
+
+    if ( !$current_section && ( $current_section_id = AMP_current_section_id( ))) {
+        require_once('AMP/Content/Section.inc.php');
+        return new Section( AMP_Registry::getDbcon( ), $current_section_id );
+    }
+
+    return ( $false = false );
+}
+
+function AMP_current_section_id( ) {
+    $page = AMPContent_Page::instance( );
+    $current_section = $page->getSection( );
+    if ( $current_section ) return $current_section->id;
+    if ( $current_article = $page->getArticle( )) {
+        return $current_article->getParent( );
+    }
+    if ( $current_intro = $page->getIntroText( )) {
+        return $current_intro->getSection( );
+    }
+    return false;
+
+}
+
 ?>
