@@ -17,6 +17,8 @@ class AMP_Display_List {
     var $_target_detail = '_top';
 
     var $_item_display_method = '_renderItem';
+    var $_header_display_method = '_renderHeader';
+    var $_footer_display_method = '_renderFooter';
 
     var $_renderer;
 
@@ -166,13 +168,25 @@ class AMP_Display_List {
 
         $output = '';
         if ( !$this->_suppress_header ) {
-            $output .= $this->_renderHeader( );
+            $header_method = $this->_header_display_method;
+            $local_method = ( $this->_header_display_method == '_renderHeader' ) ;
+            if ( $local_method ) {
+                $output .= $this->$header_method( );
+            } else {
+                $output .= $header_method( $this->_source, $this );
+            }
         }
 
         $output .= $list_block;
 
         if ( !$this->_suppress_footer ) {
-            $output .= $this->_renderFooter( );
+            $footer_method = $this->_footer_display_method;
+            $local_method = ( $this->_footer_display_method == '_renderFooter' ) ;
+            if ( $local_method ) {
+                $output .= $this->$footer_method( );
+            } else {
+                $output .= $footer_method( $this->_source, $this );
+            }
         }
         return $output;
 
@@ -295,6 +309,14 @@ class AMP_Display_List {
         return date( 'M j, Y', $date_value );
     }
 
+    function render_header( &$source ) {
+        return $this->_renderHeader( $source );
+    }
+
+    function render_footer( &$source ) {
+        return $this->_renderFooter( $source );
+    }
+
     function _renderJavascript( ) {
         //do nothing
     }
@@ -325,6 +347,22 @@ class AMP_Display_List {
             return false;
         }
         $this->_item_display_method = $function_name;
+    }
+
+    function set_display_header_method( $function_name ) {
+        if ( !function_exists( $function_name )) {
+            trigger_error( sprintf(  AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $function_name ));
+            return false;
+        }
+        $this->_header_display_method = $function_name;
+    }
+
+    function set_display_footer_method( $function_name ) {
+        if ( !function_exists( $function_name )) {
+            trigger_error( sprintf(  AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $function_name ));
+            return false;
+        }
+        $this->_footer_display_method = $function_name;
     }
 
     // {{{ private source create methods: _init_source, _generate_source 

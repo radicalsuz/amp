@@ -30,6 +30,9 @@ class AMP_Content_Badge_Public_Article_List extends Article_Public_List {
 		}
     }
 
+    function set_pager_target( $url ) {
+        $this->_pager->set_target( $url );
+    }
 
 }
 

@@ -489,11 +489,9 @@ EVENTCODE
     }
 
     function get_revision_notes( $data, $fieldname ) {
-        if ( !( isset( $data[$fieldname]) && $data[$fieldname])) {
-            return false;
-        }
+        $existing_notes = ( isset( $data[$fieldname]) && $data[$fieldname]) ? $data[$fieldname] : false;
         if ( !( isset( $data['status_comments']) && $data['status_comments'])) {
-            return $data[$fieldname];
+            return $existing_notes;
         }
         $user_names = AMP_lookup( 'users' );
         $current_user = $user_names[AMP_SYSTEM_USER_ID];
@@ -501,7 +499,7 @@ EVENTCODE
         return sprintf( AMP_TEXT_REVISION_COMMENTS_HEADER, date( 'Y-m-d'), $current_user ) . "\n"
                         . $data['status_comments'] . "\n"
                         . str_repeat( '-', 30 ) . "\n"
-                        . $data[$fieldname];
+                        . $existing_notes;
 
     }
 

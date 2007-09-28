@@ -14,6 +14,7 @@ class Quote_Form extends AMPSystem_Form_XML {
 
     function setDynamicValues( ){
        $this->addTranslation( 'date', '_makeDbDateTime', 'get');
+       $this->addTranslation( 'type', '_multiselectToText', 'get');
     }
 
     
