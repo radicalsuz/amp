@@ -8,8 +8,13 @@
 		<label>By Section</label>
 		<lookup>sectionMapLiveChopped</lookup>
 	</section>
-	<date>
+    <class>
 		<separator>newrow</separator>
+		<type>select</type>
+		<label>By Class</label>
+		<lookup>publicClasses</lookup>
+    </class>
+	<date>
 		<type>date</type>
 		<label> Date: </label>
 		<options>

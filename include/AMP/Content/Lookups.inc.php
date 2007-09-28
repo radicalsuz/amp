@@ -1234,6 +1234,15 @@ class AMPSystemLookup_ExcludedClassesForDisplay extends AMPConstant_Lookup {
 
 }
 
+class AMPSystemLookup_PublicClasses extends AMPSystem_Lookup {
+    function AMPSystemLookup_PublicClasses( ) {
+        $active_classes = AMP_lookup( 'active_classes');
+        $exclude = AMP_lookup( 'excluded_classes_for_display');
+        $allowed = array_diff( array_keys( $active_classes ), array_keys( $exclude ));
+        $this->dataset = array_combine_key( $allowed, $active_classes );
+    }
+}
+
 class AMPSystemLookup_ArticlesPending extends AMPSystem_Lookup {
     var $datatable = 'articles';
     var $result_field = 'title';
