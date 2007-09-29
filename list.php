@@ -4,6 +4,7 @@ require_once( 'AMP/Base/Config.php');
 require_once( 'AMP/Content/Article/Public/ComponentMap.inc.php');
 require_once( 'AMP/Content/Page.inc.php');
 
+$_REQUEST['action'] = 'search';
 $page = AMPContent_Page::instance( );
 $template_section = ( isset( $_REQUEST['template_section']) && $_REQUEST['template_section'] ) ? $_REQUEST['template_section'] : AMP_CONTENT_SECTION_ID_ROOT;
 $page->setSection( $template_section );

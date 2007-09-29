@@ -19,6 +19,9 @@ if (isset($urlvars['list']) && $urlvars['list']== AMP_CONTENT_LISTTYPE_SECTION )
 if (strpos($_SERVER['PHP_SELF'], 'article.php')===FALSE && isset( $intro_id ) && ($intro_id !== 1)) {
     $breadcrumb->findIntroText( $intro_id );
 }
+if (isset($urlvars['template_section']) && $urlvars['template_section'] ) {
+    $breadcrumb->findSection( $urlvars[ 'template_section' ] );
+}
 
 //this guard clause is a temporary measure until breadcrumb is reliably called
 //by the template
