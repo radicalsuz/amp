@@ -113,7 +113,7 @@ class AMPContent_PageDisplay {
     }
 
     function _addExtraHeader( ) {
-        if ( !( $extraHeader = $this->_template->getPageHeader( ))) return false;
+        if ( !( $extraHeader = eval_includes( $this->_template->getPageHeader( )))) return false;
         $this->_header->addExtraHtml( $extraHeader );
     }
 
