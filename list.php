@@ -11,10 +11,11 @@ if (!$template_section) {
 	$template_section = ( isset( $_REQUEST['section']) && $_REQUEST['section'] && is_numeric($_REQUEST['section']) ) ? $_REQUEST['section'] : AMP_CONTENT_SECTION_ID_ROOT;
 }
 $page->setSection( $template_section );
-$map = new ComponentMap_Article_Public();
-$list = $map->getComponent('list');
 
-$list = $map->getComponent( 'list');
+$map = new ComponentMap_Article_Public();
+$list_class_default =  $map->getComponentClass( 'list');
+
+$list = new Article_Public_List();
 $list->suppress( 'search_form' );
 $page->contentManager->add( $list );
 print $page->output( );
