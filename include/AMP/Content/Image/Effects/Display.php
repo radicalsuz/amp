@@ -71,25 +71,12 @@ class AMP_Content_Image_Effects_Display {
     function get_cached_version( $action ) {
         require_once( 'AMP/System/Cache/File.php');
         $file_cache =  new AMP_System_Cache_File( );
-        /*
-        $size_desc = "";
-        foreach( $this->_sizes as $key => $value ) {
-            if ( !$value ) continue;
-            $size_desc .= $key.'-'. round( $value ) . '_SZS_';
-        }
-        $key_hash = $action . '_' . $this->_image_ref->getName( ) . '__' . $size_desc ;
-        */
         $cache_key = AMP_CACHE_TOKEN_IMAGE . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
         if ( defined( 'AMP_SYSTEM_USER_ID') && AMP_SYSTEM_USER_ID ) {
             $cache_key = AMP_System_Cache::identify( $cache_key, AMP_SYSTEM_USER_ID );
         }
         $file_name = $file_cache->authorize( $cache_key );
         $file_path = $file_cache->path( $file_name );
-        if ( file_exists( $file_path )) {
-            if (  rand( 1, 10) === 2 ) {
-                trigger_error( 'found cached ' . $file_name);
-            }
-        }
         
         if ( $this->_display( $file_path )) {
             return true;

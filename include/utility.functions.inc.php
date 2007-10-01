@@ -2203,10 +2203,12 @@ function &AMP_current_section( ) {
 
     if ( !$current_section && ( $current_section_id = AMP_current_section_id( ))) {
         require_once('AMP/Content/Section.inc.php');
-        return new Section( AMP_Registry::getDbcon( ), $current_section_id );
+        $section = new Section( AMP_Registry::getDbcon( ), $current_section_id );
+        return $section;
     }
 
-    return ( $false = false );
+    $false = false ;
+    return $false;
 }
 
 function AMP_current_section_id( ) {
