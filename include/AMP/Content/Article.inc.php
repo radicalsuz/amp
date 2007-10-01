@@ -824,7 +824,7 @@ class Article extends AMPSystem_Data_Item {
     function getMediaThumbnailUrl( ) {
         if ( $url = $this->getData('media_thumbnail_url')) return $url;
         if ( !( $html = $this->getMediaHtml( ))) return false;
-        preg_match( '/src=[^>]*youtube.com\/v\/([^>"\']+)/', $html, $youtube_id );
+        preg_match( '/src=[^>]*youtube.com\/v\/([^>"\'&]+)/', $html, $youtube_id );
         if ( isset($youtube_id[1]) && $youtube_id[1]) {
             return sprintf( AMP_CONTENT_MEDIA_URL_YOUTUBE_THUMBNAIL, $youtube_id[1]);
         }

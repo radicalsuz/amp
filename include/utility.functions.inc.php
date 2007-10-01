@@ -1830,6 +1830,7 @@ function AMP_mailto( $address ) {
     return $renderer->link( 'mailto:' . $address, $address );
 }
 
+/*
 function urlencode_array( $field_value, $fieldname ) {
     if (!is_array($field_value)) return ( $fieldname . '=' . $field_value);
     $separator = '&';
@@ -1845,6 +1846,7 @@ function urlencode_array( $field_value, $fieldname ) {
     return implode($separator, $toImplode);
 
 }
+*/
 
 function AMP_flush_apache_cache_folders() {
 	$flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "article";

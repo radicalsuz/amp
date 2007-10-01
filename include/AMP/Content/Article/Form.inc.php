@@ -102,7 +102,7 @@ find_youtube_url = function( ) {
     if (document.forms['article'].elements['media_thumbnail_url'].value )  {
         return;
     }
-    matcher = /src=[^>]*youtube.com\/v\/([^>"']+)/
+    matcher = /src=[^>]*youtube.com\/v\/([^>"'&]+)/
     matches = matcher.exec( document.forms['article'].elements['media_html'].value );
     youtube_id = matches[1];
     if (!youtube_id) return;

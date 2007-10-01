@@ -46,10 +46,9 @@ function amp_badge_articles( $options, $display = 'AMP_Content_Badge_Public_Arti
     if ( $display_header ) $list->set_display_header_method( $display_header );
     if ( $display_footer ) $list->set_display_footer_method( $display_footer );
     if ( $morelink )  {
-		$link_url = ( AMP_url_update( $morelink, AMP_criteria_join($criteria )));
-		//$list->set_pager_target( AMP_url_update( $morelink, $criteria ));
-		$list->set_pager_target( $link_url ); 
-		trigger_error( ($suppress_morelink?'noshow':'show') . ': morelinks is ' . $link_url );
+		//$link_url = ( AMP_url_update( $morelink, AMP_criteria_join($criteria )));
+		$list->set_pager_target( AMP_url_update( $morelink, $criteria ));
+		//$list->set_pager_target( $link_url ); 
 	}
     if ( $suppress_morelink ) $list->suppress( 'pager' );
     return $header_output . $list->execute( );
