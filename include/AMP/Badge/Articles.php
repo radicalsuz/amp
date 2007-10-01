@@ -3,7 +3,10 @@
 function amp_badge_articles( $options, $display = 'AMP_Content_Badge_Public_Article_List' ) {
     $section = ( isset( $options['section']) && $options['section'] ) ? $options['section'] : false;
     $class = ( isset( $options['class']) && $options['class'] ) ? $options['class'] : false;
-    if ( !( $section || $class )) return false; 
+    $tag = ( isset( $options['tag']) && $options['tag'] ) ? $options['tag'] : false;
+    $new = ( isset( $options['new']) && $options['new'] ) ? $options['new'] : false;
+    $frontpage = ( isset( $options['frontpage']) && $options['frontpage'] ) ? $options['frontpage'] : false;
+    if ( !( $section || $class || $tag || $new || $frontpage )) return false; 
 
     $header_output = false;
     $header = ( isset( $options['header'] )) ? $options['header'] : null;
@@ -30,6 +33,17 @@ function amp_badge_articles( $options, $display = 'AMP_Content_Badge_Public_Arti
             $header =  isset( $section_names[$section]) ? $section_names[$section] : false;
         }
     }
+    if ( $tag ) {
+        $criteria['tag'] = $tag;
+        if ( !isset( $header ) && !is_array( $tag )) {
+            $tag_names = AMP_lookup( 'tagsLive');
+            $header =  isset( $tag_names[$tag]) ? $tag_names[$tag] : false;
+        }
+    }
+
+
+    if ( $new ) $criteria['new'] = $new; 
+    if ( $frontpage ) $criteria['frontpage'] = $frontpage; 
 
     if ( $header ) {
         $renderer = AMP_get_renderer( );
@@ -46,9 +60,7 @@ function amp_badge_articles( $options, $display = 'AMP_Content_Badge_Public_Arti
     if ( $display_header ) $list->set_display_header_method( $display_header );
     if ( $display_footer ) $list->set_display_footer_method( $display_footer );
     if ( $morelink )  {
-		//$link_url = ( AMP_url_update( $morelink, AMP_criteria_join($criteria )));
 		$list->set_pager_target( AMP_url_update( $morelink, $criteria ));
-		//$list->set_pager_target( $link_url ); 
 	}
     if ( $suppress_morelink ) $list->suppress( 'pager' );
     return $header_output . $list->execute( );
