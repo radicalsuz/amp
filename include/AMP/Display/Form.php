@@ -64,6 +64,17 @@ class AMP_Display_Form {
         ),
     );
 
+    var $_default_date_options = array(
+        'language'         => 'en',
+        'format'           => 'dMY',
+        'minYear'          => 2003,
+        'maxYear'          => 2012,
+        'addEmptyOption'   => false,
+        'emptyOptionValue' => '',
+        'emptyOptionText'  => '&nbsp;',
+        'optionIncrement'  => array('i' => 1, 's' => 1)
+    );
+
 
     function AMP_Display_Form( ) {
         $this->__construct( );
@@ -83,7 +94,20 @@ class AMP_Display_Form {
     }
 
     function _after_add_fields( ) {
+        $this->_init_default_values( );
         //interface
+    }
+
+    function _init_default_values( ) {
+        if ( !empty( $this->_request_values_clean )) return;
+        foreach( $this->_fields as $field_name => $def ) {
+            $default = $this->get_field_def($field_name, 'default');
+            $value = $this->get_field_def( $field_name, 'value') ;
+            if ( $default && !$value ) {
+                $this->set( $field_name, $default );
+            }
+        }
+
     }
 
     function _init_request( ) {
@@ -106,7 +130,7 @@ class AMP_Display_Form {
 
     function _init_fields_xml( ) {
         if ( !$this->xml_fields_source ) return;
-        $this->read_xml_fields( $this->xml_fields_source );
+        return $this->read_xml_fields( $this->xml_fields_source );
     }
 
     function read_xml_fields( $xml_filename ) {
@@ -185,7 +209,7 @@ class AMP_Display_Form {
             }
             $output[$output_type][$name] = $this->$render_method( $name, $field_def );
         }
-        return    join( "\n", $output['hidden'])
+        return    ( isset( $output['hidden']) ? join( "\n", $output['hidden']) : '' )
                 . join( $this->format_field_delimiter( ), $output['visible']);
     }
 
@@ -249,7 +273,7 @@ class AMP_Display_Form {
 
         return 
             $this->format_field( 
-              $this->render_label( $name, $field_def['label'] )
+              $this->render_label( $name, $this->get_field_def( $name, 'label' ) )
             . $this->format_element( 
                 $this->_renderer->select( $name, $this->get( $name ), $options, $this->get_field_def( $name, 'attr') )
                 ), $name );
@@ -271,7 +295,7 @@ class AMP_Display_Form {
 
         $blank_option_var = 'option_text_blank_' . strtolower( $name );
         $blank_option = ( isset( $this->$blank_option_var )) ? $this->$blank_option_var : AMP_TEXT_OPTION_BLANK;
-        return array( '' => AMP_TEXT_OPTION_BLANK );
+        return array( '' => $blank_option );
     }
 
     function render_field_default( $name, $field_def ) {
@@ -310,6 +334,101 @@ class AMP_Display_Form {
             $display = $this->get_field_def( $name, 'label' ) ;
         }
         return $this->format_field( $display, $name );
+    }
+
+    function render_field_date( $name, $field_def ) {
+        $date_options = $this->render_date_options( $field_def ) ;
+        $date_element = '';
+        $current_value = $this->get( $name );
+        foreach( $date_options['selects'] as $date_segment => $values ) {
+            if ( $date_options['addEmptyOption']){
+                $values = array( '' => $date_options['emptyOptionText']) + $values;
+            }
+            $date_element .= $this->_renderer->select( $name . '['.$date_segment.']', $current_value[ $date_segment ], $values, $this->get_field_def( $name, 'attr')); 
+        }
+
+        return 
+            $this->format_field( 
+                  $this->render_label( $name, $this->get_field_def( $name, 'label' ))
+                . $this->format_element( $date_element )
+            , $name );
+    }
+
+    function render_date_options( $field_def ) {
+        if ( !( isset( $field_def['options']) && is_array( $field_def['options']))) $field_def['options'] = array( );
+        $date_options = array_merge( $this->_default_date_options, $field_def['options']);
+        require_once( 'HTML/QuickForm/date.php');
+        $date_renderer = new HTML_QuickForm_date( );
+        $locale = $date_renderer->_locale[ $date_options['language']] ;
+        for ($i = 0, $length = strlen($date_options['format']); $i < $length; $i++) {
+            $sign = $date_options['format']{$i};
+            $options = array( );
+            switch ($sign) {
+                case 'D':
+                    // Sunday is 0 like with 'w' in date()
+                    $options = $locale['weekdays_short'];
+                    break;
+                case 'l':
+                    $options = $locale['weekdays_long'];
+                    break;
+                case 'd':
+                    $options = $date_renderer->_createOptionList(1, 31);
+                    break;
+                case 'M':
+                    $options = $locale['months_short'];
+                    array_unshift($options , '');
+                    unset($options[0]);
+                    break;
+                case 'm':
+                    $options = $date_renderer->_createOptionList(1, 12);
+                    break;
+                case 'F':
+                    $options = $locale['months_long'];
+                    array_unshift($options , '');
+                    unset($options[0]);
+                    break;
+                case 'Y':
+                    $options = $date_renderer->_createOptionList(
+                        $date_options['minYear'],
+                        $date_options['maxYear'], 
+                        $date_options['minYear'] > $date_options['maxYear']? -1: 1
+                    );
+                    break;
+                case 'y':
+                    $options = $date_renderer->_createOptionList(
+                        $date_options['minYear'],
+                        $date_options['maxYear'],
+                        $date_options['minYear'] > $date_options['maxYear']? -1: 1
+                    );
+                    array_walk($options, create_function('&$v,$k','$v = substr($v,-2);')); 
+                    break;
+                case 'h':
+                    $options = $date_renderer->_createOptionList(1, 12);
+                    break;
+                case 'H':
+                    $options = $date_renderer->_createOptionList(0, 23);
+                    break;
+                case 'i':
+                    $options = $date_renderer->_createOptionList(0, 59, $date_options['optionIncrement']['i']);
+                    break;
+                case 's':
+                    $options = $date_renderer->_createOptionList(0, 59, $date_options['optionIncrement']['s']);
+                    break;
+                case 'a':
+                    $options = array('am' => 'am', 'pm' => 'pm');
+                    break;
+                case 'A':
+                    $options = array('AM' => 'AM', 'PM' => 'PM');
+                    break;
+                default:
+                    break;
+            }
+            if ( empty( $options ) ) continue;
+            $date_options['selects'][$sign] = $options;
+
+        }
+        return $date_options;
+
     }
 
     function render_submit( ) {
@@ -366,6 +485,12 @@ class AMP_Display_Form {
             return $this->translate( $placed_values );
         }
         return $this->translate( $this->_request_values_clean );
+    }
+
+    function setValues( $values ) {
+        foreach( $values as $field_name => $value ) {
+            $this->set( $field_name, $value );
+        }
     }
 
     function get( $field_name ) {
@@ -510,6 +635,10 @@ class AMP_Display_Form {
         
         return $new_def;
 
+    }
+
+    function drop_field( $field_name ) {
+        unset( $this->_fields[ $field_name ]);
     }
 
     function revise_order( $field_name, $order=0 ) {

@@ -713,7 +713,9 @@ if (!function_exists( 'urlencode_array' )) {
         $varName,            // variable name to be used in the query string
         $separator = '&amp;'    // what separating character to use in the query string
         ) {
+        if (!is_array($var)) return ( $varName . '=' . $var );
         $toImplode = array();
+
         foreach ($var as $key => $value) {
             if (is_array($value)) {
                 $toImplode[] = urlencode_array($value, "{$varName}[{$key}]", $separator);
@@ -2224,6 +2226,17 @@ function AMP_current_section_id( ) {
         return $current_intro->getSection( );
     }
     return false;
+
+}
+
+function &AMP_searchform_xml( $xml_filename, $action = false ) {
+    require_once( 'AMP/Display/Form/Search.php') ;
+    $form = &new AMP_Display_Form_Search( );
+    if ( $action ) {
+        $form->action = $action;
+    }
+    $form->read_xml_fields( $xml_filename );
+    return $form;
 
 }
 

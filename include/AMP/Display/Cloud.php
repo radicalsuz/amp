@@ -10,7 +10,7 @@ class AMP_Display_Cloud {
     var $_display_offset = 0;
 
     var $_size_steps = 5;
-    var $_css_class_base = 'AMP_cloud_link_';
+    var $_css_class_base = 'amp_cloud_link amp_cloud_link_';
 
     function AMP_Display_Cloud( &$source_items, $qty_set ) {
         $this->__construct( $source_items, $qty_set );

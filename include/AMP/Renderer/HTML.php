@@ -370,6 +370,12 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         return $this->input( $name, $label, $attr_set );
     }
 
+    function invert_tag( $tag, $contents, $attr_set = array( )) {
+        $base_tag = $this->tag( $tag, $contents, $attr_set );
+        $end_tag = strrpos( $base_tag, '<');
+        return substr( $base_tag, $end_tag ) . substr( $base_tag, 0, $end_tag);
+    }
+
 }
 
 ?>

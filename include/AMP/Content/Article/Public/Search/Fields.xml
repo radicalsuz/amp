@@ -31,4 +31,11 @@
     <q>
         <type>hidden</type>
     </q>
+    <section_logic>
+        <type>hidden</type>
+    </section_logic>
+    <author>
+        <type>hidden</type>
+        <label>By Author</label>
+    </author>
 </array>

@@ -389,4 +389,43 @@ div.list_intro {
 	height: 0px;
 	margin: 0;
 }
+a.amp_cloud_link {
+	position: relative;
+	float:left;
+}
+a.amp_cloud_link_1 {
+	font-size: .5em;
+}
+a.amp_cloud_link_2 {
+	font-size: .75em;
+}
+a.amp_cloud_link_3 {
+	font-size: 1em;
+}
+a.amp_cloud_link_4 {
+	font-size: 1.5em;
+}
+a.amp_cloud_link_5 {
+	font-size: 2em;
+}
+.search_form .item {
+	position: relative;
+	float: left;
+	margin-left: 3px;
+}
 
+.search_form .row label, .search_form .row .element {
+	position:relative;
+	float: left;
+	width:auto;
+	vertical-align: top;
+}
+.search_form label {
+	padding-top: .5em;
+}
+
+.search_form, .search_form input, .search_form select {
+	font-size: 11px;
+	text-decoration: none;
+	margin-left: 3px;
+}

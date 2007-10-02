@@ -19,6 +19,7 @@ class AMP_Display_List {
     var $_item_display_method = '_renderItem';
     var $_header_display_method = '_renderHeader';
     var $_footer_display_method = '_renderFooter';
+    var $_search_create_method = 'create_search_form';
 
     var $_renderer;
 
@@ -493,11 +494,18 @@ class AMP_Display_List {
     }
 
     function _init_identity( ) {
-        $this->list_id = strtolower( get_class( $this ));
         $this->_init_display_methods( );
     }
 
     function _init_display_methods( ) {
+        $display_id = $this->display_id( );
+        if ( defined( 'AMP_RENDER_' . $display_id )) {
+            $this->_item_display_method = constant( 'AMP_RENDER_' .$display_id );
+        }
+    }
+
+    function display_id( ) {
+        if ( !isset( $this->list_id )) $this->list_id = strtolower( get_class( $this ));
         $display_id = strtoupper( $this->list_id );
 
         if ( $display_id == 'AMP_DISPLAY_LIST' ) {
@@ -507,20 +515,49 @@ class AMP_Display_List {
                 $display_id .= '_' . str_replace( ' ', '_' , $this->list_id );
             } 
         }
-        $display_id =  strtoupper( $display_id );
-        if ( defined( 'AMP_RENDER_' . $display_id )) {
-            $this->_item_display_method = constant( 'AMP_RENDER_' .$display_id );
+        return strtoupper( $display_id );
+    }
+
+    function &create_search_form( ) {
+        require_once( 'AMP/System/ComponentLookup.inc.php');
+        $false = false;
+        $map = ComponentLookup::instance( get_class( $this ));
+        if ( !( $map && $map->isAllowed( 'search' ))) return $false;
+
+        $search = $map->getComponent( 'search', false);
+        if ( !$search ) return $false;
+
+        $search->Build( true );
+        return $search ;
+    }
+
+    function &_init_search_factory( ) {
+        $false = false;
+        $search = false;
+        $display_id = $this->display_id( );
+
+        if ( defined( 'AMP_RENDER_SEARCH_' . $display_id )) {
+            $this->_search_create_method = constant( 'AMP_RENDER_SEARCH_' . $display_id );
         }
+
+        if ( $this->_search_create_method != 'create_search_form') {
+            if ( !function_exists( $this->_search_create_method )) {
+                trigger_error( sprintf(  AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $this->_search_create_method ));
+                return $false;
+            }
+            $search_method = $this->_search_create_method;
+            $search = &$search_method( $this );
+        } 
+        if ( !$search ) {
+            $search = &$this->create_search_form( );
+        }
+        return $search;
     }
 
     function _init_search_form( ) {
-        require_once( 'AMP/System/ComponentLookup.inc.php');
-        $map = ComponentLookup::instance( get_class( $this ));
-        if ( !( $map && $map->isAllowed( 'search' ))) return;
-
-        $search = $map->getComponent( 'search', false);
+        $search = &$this->_init_search_factory( );
         if ( !$search ) return;
-        $search->Build( true );
+
         $search_criteria = array( );
 
         if ( $search->submitted( )){

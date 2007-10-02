@@ -620,6 +620,11 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaSection( $section_id ) {
+        
+        if ( is_string( $section_id ) && strpos( $section_id, ',') != 0 ) {
+            $section_id = split( ',', $section_id );
+        }
+        
         if ( is_array( $section_id )) {
             return $this->makeCriteriaSet( $section_id, 'makeCriteriaSection');
         }
@@ -655,6 +660,10 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaTag( $tag_id ) {
+        if ( strpos( $tag_id, ',') != 0 ) {
+            $tag_id = split( ',', $tag_id );
+        }
+        
         if ( is_array( $tag_id )) {
             return $this->makeCriteriaSet( $tag_id, 'makeCriteriaTag');
         }
@@ -673,7 +682,26 @@ class Article extends AMPSystem_Data_Item {
         return 'new=1';
     }
 
+    function makeCriteriaSectionLogic( $section_id ) {
+        require_once( 'AMP/Content/Section.inc.php');
+        $section = &new Section( AMP_Registry::getDbcon( ), $section_id );
+        if ( !$section->hasData( )) {
+            return 'TRUE';
+        }
+        $scope = $section->getDisplayCriteria( );
+        unset( $scope['displayable']);
+        $value = $this->makeCriteria( $scope );
+        if ( $value ) {
+            return join( ' AND ', $value );
+        }
+        return 'TRUE';
+    }
+
     function makeCriteriaClass( $class_id ){
+        if ( is_string( $class_id ) && strpos( $class_id, ',') != 0 ) {
+            $class_id = split( ',', $class_id );
+        }
+        
         if ( is_array( $class_id )) {
             return "class in (".join( ",", $class_id ).")";
         }
