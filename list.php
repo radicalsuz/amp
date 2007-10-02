@@ -13,9 +13,9 @@ if (!$template_section) {
 $page->setSection( $template_section );
 
 $map = new ComponentMap_Article_Public();
-$list_class_default =  $map->getComponentClass( 'list');
+$list =  $map->getComponent( 'list2');
 
-$list = new Article_Public_List();
+//$list = new Article_Public_List();
 $list->suppress( 'search_form' );
 $page->contentManager->add( $list );
 print $page->output( );
