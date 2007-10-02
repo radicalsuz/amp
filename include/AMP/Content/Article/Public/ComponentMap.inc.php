@@ -27,6 +27,7 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
         'source' => 'AMP/Content/Article.inc.php',
         'search' => 'AMP/Content/Article/Public/Search/Form.inc.php',
         'search_fields' => 'AMP/Content/Article/Public/Search/Fields.xml',
+		'list2' => 'AMP/Content/Article/Public/List.php'
         );
 
     var $components = array (
@@ -34,6 +35,7 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
         'source' => 'Article',
         'list'   => 'Article_Public_Search_List',
         'search' => 'Article_Public_Search_Form',
+		'list2'  => 'Article_Public_List'
         );
 
     function onInitForm( &$controller ){
