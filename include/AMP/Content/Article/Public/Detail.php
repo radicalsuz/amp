@@ -12,24 +12,20 @@ class Article_Public_Detail extends AMP_Display_Detail {
     var $_css_class_photocaption = AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE_CAPTION;
     var $_css_class_body    = AMP_CONTENT_CSS_CLASS_ARTICLE_BODY;
     var $_css_class_media   = AMP_CONTENT_CSS_CLASS_ARTICLE_MEDIA;
+    var $_css_class_container_item = 'article_public_detail';
 
     function Article_Public_Detail( &$source ) {
         $this->__construct( $source );
     }
 
-    function _renderHeader( ) {
-        $source = $this->_source ;
+    function renderItem( $source ) {
         return
               $this->render_title( $source )
             . $this->render_subtitle( $source ) 
             . $this->render_byline( $source )
             . $this->render_contact( $source )
-            . $this->render_date( $source );
-    }
-
-    function renderItem( $source ) {
-        return
-              $this->render_image( $source )
+            . $this->render_date( $source )
+            . $this->render_image( $source )
             . $this->render_body( $source );
     }
 
@@ -106,7 +102,7 @@ class Article_Public_Detail extends AMP_Display_Detail {
 		$date = $source->getItemDate();
 		if (!$date) return false;
 
-        return $this->_renderer->span( DoDate( $date, 'F jS, Y'), array( 'class' => $this->_css_class_date )) 
+        return $this->_renderer->span( DoDate( $date, AMP_CONTENT_DATE_FORMAT), array( 'class' => $this->_css_class_date )) 
                 . $this->_renderer->newline();
 	}
 

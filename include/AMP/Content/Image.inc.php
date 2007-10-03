@@ -54,6 +54,7 @@ class Content_Image {
     function attributes( ) {
         $attr = $this->getStyleAttrs( );
         $attr['alt'] = $this->getAltTag( );
+        return $attr;
     }
 
     function getStyleAttrs() {

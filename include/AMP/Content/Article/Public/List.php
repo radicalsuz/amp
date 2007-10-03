@@ -86,7 +86,7 @@ class Article_Public_List extends AMP_Display_List {
 		$date = $source->getItemDate();
 		if (!$date) return false;
 
-        return $this->_renderer->span( DoDate( $date, 'F jS, Y'), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_DATE )) 
+        return $this->_renderer->span( DoDate( $date, AMP_CONTENT_DATE_FORMAT), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_DATE )) 
                 . $this->_renderer->newline();
 	}
 

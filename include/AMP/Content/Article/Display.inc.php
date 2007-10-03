@@ -176,7 +176,7 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _HTML_date ( $date ) {
 		if (!$date) return false;
-        return $this->_HTML_inSpan( DoDate( $date, 'F jS, Y'), $this->_css_class_date) . $this->_HTML_newline();
+        return $this->_HTML_inSpan( DoDate( $date, AMP_CONTENT_DATE_FORMAT), $this->_css_class_date) . $this->_HTML_newline();
     }
 
     function _HTML_endHeading() {

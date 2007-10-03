@@ -169,7 +169,7 @@ class VoterGuide_Display extends AMPDisplay_HTML {
 
     function _HTML_date( $date ){
 		if (!$date) return false;
-        return "<h4 class=\"{$this->_css_class_date}\">".DoDate( $date, 'F jS, Y')."</h4>";
+        return "<h4 class=\"{$this->_css_class_date}\">".DoDate( $date, AMP_CONTENT_DATE_FORMAT )."</h4>";
     }
 
     function _HTML_blurb( $blurb ) {

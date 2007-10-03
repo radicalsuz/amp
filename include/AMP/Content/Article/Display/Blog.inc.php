@@ -56,7 +56,7 @@ class ArticleDisplay_Blog extends Article_Display {
 
     function _HTML_authorDate ( $author, $date ) {
    
-        return $this->_HTML_inSpan(sprintf( AMP_TEXT_POSTED_BY, $author, DoDate( $date, 'F jS, Y')), $this->_css_class_date );
+        return $this->_HTML_inSpan(sprintf( AMP_TEXT_POSTED_BY, $author, DoDate( $date, AMP_CONTENT_DATE_FORMAT )), $this->_css_class_date );
     }
 
     function _HTML_endHeading() {

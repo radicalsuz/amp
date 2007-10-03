@@ -85,7 +85,7 @@ class AMP_Content_Article_Display_List extends AMP_Display_List {
     function render_date( &$source ) {
         $date = $source->getItemDate( );
 		if (!$date) return false;
-        return $this->_renderer->span( DoDate( $date, 'F jS, Y'), $this->_css_class_date ) . $this->_renderer->newline();
+        return $this->_renderer->span( DoDate( $date, AMP_CONTENT_DATE_FORMAT), $this->_css_class_date ) . $this->_renderer->newline();
     }
 
     function render_source( &$item ) {

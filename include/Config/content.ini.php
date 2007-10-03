@@ -188,4 +188,7 @@ frontpage=2
 [content workflow]
 enabled=0
 
+[content date]
+format="F jS, Y"
+
 ;?>
