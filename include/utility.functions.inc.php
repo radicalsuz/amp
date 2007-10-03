@@ -1969,7 +1969,8 @@ function AMP_url_build_query( $attr = array( )) {
     $complete = array( );
     foreach( $attr as $key => $value ) {
         if ( is_array( $value )) {
-            $value = urlencode_array( $value, $key );
+            $complete[$key]= urlencode_array( $value, $key );
+            continue;
         } elseif ( strip_tags( $value ) != $value ) {
             continue;
         }
