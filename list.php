@@ -1,6 +1,13 @@
 <?php
 
 require_once( 'AMP/Base/Config.php');
+
+if ( $cached_output = AMP_cached_request( )) {
+    trigger_error( 'found cached page');
+    print $cached_output;
+    exit;
+}
+
 require_once( 'AMP/Content/Article/Public/ComponentMap.inc.php');
 require_once( 'AMP/Content/Page.inc.php');
 
@@ -18,6 +25,7 @@ $list =  $map->getComponent( 'list2');
 //$list = new Article_Public_List();
 $list->suppress( 'search_form' );
 $page->contentManager->add( $list );
-print $page->output( );
+
+require( 'AMP/BaseFooter.php');
 
 ?>

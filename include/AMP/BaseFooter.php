@@ -31,28 +31,10 @@ if  (isset($_GET['printsafe']) && $_GET['printsafe'] == 1) $displayType = AMP_CO
     
 /**
  * finalPageHtml is the complete representation of the Page  
- *
- * @var string
  */
 $finalPageHtml = $currentPage->output( $displayType );
 print $finalPageHtml;
 
-/**
- *  GLOBALS['cached_page'] is a signal that some part of the script checked the Memcache
- *
- *  @var    AMPContentPage_Cached
- */
-/*
-if ( AMP_SITE_MEMCACHE_ON 
-    && isset($GLOBALS['cached_page']) 
-    && empty( $_POST) 
-    && ( ! $currentPage->isRedirected()) 
-    && ( ! AMP_Authenticate( 'content' )) 
-    && ( ! defined( 'AMP_SYSTEM_FLASH_OUTPUT')) 
-    ){
-        $cached_page->save( $finalPageHtml );
-}
-*/
 AMP_cache_this_request( $finalPageHtml );
 
 AMP_cache_close( );
