@@ -11,6 +11,7 @@ class AMP_Content_Redirect_Handler {
 
     var $_status_messages = array( 
         200 => '200 OK',
+        301 => '301 Moved Permanently',
         404 => '404 Not Found'
     );
 
@@ -75,6 +76,7 @@ class AMP_Content_Redirect_Handler {
                                     'status' => AMP_CONTENT_STATUS_LIVE ));
         } 
         if ( !$found_redirect ) return false;
+        $this->_request_status = 301;
         return $this->_sendRedirect( $found_redirect );
          
     }
@@ -98,7 +100,7 @@ class AMP_Content_Redirect_Handler {
     }
 
     function sendStatus( ){
-        //header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . $this->getStatusMessage( ));
+        header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . $this->getStatusMessage( ));
     }
 
     function getStatus( ){
