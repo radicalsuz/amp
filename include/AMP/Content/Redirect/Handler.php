@@ -100,7 +100,7 @@ class AMP_Content_Redirect_Handler {
     }
 
     function sendStatus( ){
-        header( 'Status: ' . $_SERVER['SERVER_PROTOCOL'] . ' ' . $this->getStatusMessage( ));
+        header( ''. $_SERVER['SERVER_PROTOCOL'] . ' ' . $this->getStatusMessage( ));
     }
 
     function getStatus( ){
