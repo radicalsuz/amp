@@ -241,6 +241,7 @@ class AMP_Display_List {
     }
 
     function qty( ) {
+        if ( $this->_source == false ) return 0;
         return count( $this->_source );
     }
 
