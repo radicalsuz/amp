@@ -37,4 +37,6 @@ A.toplinks:link {
 }
 A.toplinks:visited {
 	COLOR: white; FONT-STYLE: normal; FONT-WEIGHT: normal}
-
+body {
+    background-color: #FFFFFF;
+}
