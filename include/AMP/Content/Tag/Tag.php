@@ -138,7 +138,7 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
         $intro = new AMP_Content_Tag_Public_Intro( $this );
         $intro->display_content = false;
 
-        $display = AMPContent_Manager::instance( );
+        $display = &AMPContent_Manager::instance( );
         $display->add( $intro, AMP_CONTENT_DISPLAY_KEY_INTRO );
 
         require_once( 'AMP/Content/Article/Public/List.php');
