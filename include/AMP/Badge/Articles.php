@@ -1,6 +1,6 @@
 <?php
 
-function amp_badge_articles( $options, $display = 'AMP_Content_Badge_Public_Article_List' ) {
+function amp_badge_articles( $options ) {
     $section = ( isset( $options['section']) && $options['section'] ) ? $options['section'] : false;
     $class = ( isset( $options['class']) && $options['class'] ) ? $options['class'] : false;
     $tag = ( isset( $options['tag']) && $options['tag'] ) ? $options['tag'] : false;

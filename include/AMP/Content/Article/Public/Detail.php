@@ -139,6 +139,7 @@ class Article_Public_Detail extends AMP_Display_Detail {
         }
 
         //sidebar
+        /*
         if ( $sidebar = $this->render_sidebar( $source )) {
             $body = str_replace( array( "[-sidebar-]", "%sidebar%"), $sidebar, $body );
         }
@@ -156,6 +157,29 @@ class Article_Public_Detail extends AMP_Display_Detail {
                 $body .= $document;
             }
             $body = str_replace( '%doc%', $document, $body );
+        }
+        */
+
+        $blocks = AMP_lookup( 'article_includes' );
+
+        foreach( $blocks as $type => $render_method ) {
+            $block_content = false;
+            if ( method_exists( $this, $render_method )) {
+                $block_content = $this->$render_method( $source );
+            } elseif ( function_exists( $render_method ) ){ 
+                $block_content = $render_method( $source, $this );
+            } else {
+                trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $render_method ));
+            }
+            if ( !$block_content ) {
+                continue;
+            }
+
+            $block_token =  '%' . strtolower( $type ) . '%';
+            if ( strpos( $body, $block_token ) === FALSE ) {
+                $body .= $block_content;
+            }
+            $body = str_replace( $block_token, $block_content, $body );
         }
         
         return $this->_renderer->p( $body, array( 'class' => $this->_css_class_body ));
@@ -189,7 +213,7 @@ class Article_Public_Detail extends AMP_Display_Detail {
         if ( $media_html ) {
             $output .= $media_html;
         }
-        return $renderer->div( $output, array( 'class' => $this->_css_class_media )) ;
+        return $this->_renderer->div( $output, array( 'class' => $this->_css_class_media )) ;
 
     }
 

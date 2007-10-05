@@ -437,7 +437,7 @@ class Article extends AMPSystem_Data_Item {
     function getTags( ) {
         $tags = $this->_getTagsBase( );
         if ( !$tags ) {
-            $this->_getTagsDB( );
+            return $this->_getTagsDB( );
         }
         return $tags;
     }
@@ -453,6 +453,7 @@ class Article extends AMPSystem_Data_Item {
             $tags = array_keys( $tag_lookup );
             $this->mergeData( array( 'tags' => $tags ));
         }
+        return $tag_lookup;
 
     }
 

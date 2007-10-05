@@ -254,6 +254,10 @@ div.article_media {
     padding: 1em;
 }
 
+div.article_public_detail {
+    margin-left: 10px;
+}
+
 div.list_image {
     float: left;
     margin-right: 1em;
@@ -428,4 +432,21 @@ a.amp_cloud_link_5 {
 	font-size: 11px;
 	text-decoration: none;
 	margin-left: 3px;
+}
+
+ol.comments_list li.list_item {
+	clear: both;
+}
+ol.comments_list li.list_item p {
+	padding-bottom: 1em;
+}
+.comments_toolbar {
+	width: 100%;
+}
+.comments_block {
+	margin-left: 10px;
+	width: 100%;
+	border-top: 2px solid #A3a3a3;
+	padding: 1em 0 1em 0;
+	margin-top: .5em;
 }

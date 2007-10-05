@@ -1279,4 +1279,13 @@ class AMPSystemLookup_ArticlesInRevision extends AMPSystem_Lookup {
 
 }
 
+class AMPSystemLookup_ArticleIncludes extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_RENDER_ARTICLE_INCLUDE";
+
+    function AMPSystemLookup_ArticleIncludes( ) {
+        $this->init( );
+        $this->dataset = array_flip( $this->dataset );
+    }
+}
+
 ?>

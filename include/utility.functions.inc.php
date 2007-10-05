@@ -578,6 +578,7 @@ if (!function_exists('array_combine_key')) {
         return $result;
     }
 }
+
 if (!function_exists('AMPfile_list')) {
 		function AMPfile_list($file,$ext=NULL) { 
             if (( strpos( $file, AMP_LOCAL_PATH ) === FALSE )
@@ -2226,7 +2227,7 @@ function AMP_current_section_id( ) {
     if ( $current_intro = $page->getIntroText( )) {
         return $current_intro->getSection( );
     }
-    return false;
+    return AMP_CONTENT_SECTION_ID_ROOT;
 
 }
 

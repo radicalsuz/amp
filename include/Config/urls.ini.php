@@ -59,6 +59,7 @@ links=         "links.php"
 
 list_class=    "article.php?list=class"
 list_section=  "article.php?list=type"
+list_tag=      "article.php?list=tag"
 
 map=           "flashmap.php"
 

@@ -1,7 +1,7 @@
 <?php
 
 require_once( 'AMP/System/Component/Controller/Public.php');
-require_once( '/home/amp/public_html/includes/emaillist_functions.php');
+#require_once( '/home/amp/public_html/includes/emaillist_functions.php');
 
 class Share_Public_Controller extends AMP_System_Component_Controller_Public {
 

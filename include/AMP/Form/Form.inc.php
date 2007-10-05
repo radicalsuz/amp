@@ -571,7 +571,8 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     function enforceRequiredFields() {
         foreach ($this->fields as $fname => $field_def) {
             if (isset($field_def['required']) && $field_def['required'] ) {
-                $this->form->addRule( $fname, $field_def['label'] . ' is required.', 'required' );
+                $label = isset( $field_def['label']) ? $field_def['label'] : false;
+                $this->form->addRule( $fname, $label . ' is required.', 'required' );
                 $this->form->_requiredNote = '<span style="color:#ff0000;">*</span> Required Field';
             }
         }

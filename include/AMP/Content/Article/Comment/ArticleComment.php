@@ -55,6 +55,10 @@ class ArticleComment extends AMPSystem_Data_Item {
         return 'userdata_id in ' . '( ' . join( ",", $used_ids ) . ')';
     }
 
+    function makeCriteriaDisplayable( ) {
+        return $this->makeCriteriaLive( );
+    }
+
     function getArticle( ) {
         return $this->getData( 'articleid');
     }

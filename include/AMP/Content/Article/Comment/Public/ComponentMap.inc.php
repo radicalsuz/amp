@@ -18,7 +18,7 @@ class ComponentMap_Article_Comment_Public extends AMPSystem_ComponentMap {
     var $paths = array(
         'fields' => 'AMP/Content/Article/Comment/Public/Fields.xml',
         'form'   => 'AMP/Content/Article/Comment/Public/Form.inc.php',
-        'source' => 'AMP/Content/Article/Comment/ArticleComment.php',
+        'source' => 'AMP/Content/Article/Comment/ArticleComment.php'
         );
 
     var $components = array (

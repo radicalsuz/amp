@@ -47,6 +47,8 @@ define( 'AMP_TEXT_DELETE', 'Delete');
 define( 'AMP_TEXT_EXPORT', 'Export');
 define( 'AMP_TEXT_IMPORT', 'Import');
 define( 'AMP_TEXT_MOVE', 'Move');
+define( 'AMP_TEXT_PRINT', 'Print');
+define( 'AMP_TEXT_EMAIL', 'Email');
 define( 'AMP_TEXT_DEBUG', 'debug');
 define( 'AMP_TEXT_TRASH', 'Trash');
 define( 'AMP_TEXT_ADD', 'Add');
@@ -62,6 +64,7 @@ if ( !defined( 'AMP_TEXT_NAV_MORELINK' )) define( 'AMP_TEXT_NAV_MORELINK' , 'Mor
 define( 'AMP_TEXT_POSTED_IN' , 'Posted in' );
 define( 'AMP_TEXT_POSTED_BY' , 'Posted by %s on %s' );
 define( 'AMP_TEXT_LOGIN' , 'login' );
+define( 'AMP_TEXT_STARS' , '%1$s stars' );
 
 if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
 if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );

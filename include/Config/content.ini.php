@@ -191,4 +191,9 @@ enabled=0
 [content date]
 format="F jS, Y"
 
+[render article include]
+media="render_media"
+doc="render_document"
+sidebar="render_sidebar"
+
 ;?>

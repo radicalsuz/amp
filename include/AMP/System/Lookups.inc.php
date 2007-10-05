@@ -1055,6 +1055,7 @@ class AMPSystemLookup_ItemsByTag extends AMPSystem_Lookup {
     }
 
     function _init_names( ) {
+        if ( !$this->dataset ) return;
         if ( !( $this->_criteria_item == 'form')) {
             $lookup_name = AMP_pluralize( $this->_criteria_item );
         } else {

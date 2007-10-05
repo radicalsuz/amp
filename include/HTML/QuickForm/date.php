@@ -72,7 +72,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         'language'         => 'en',
         'format'           => 'dMY',
         'minYear'          => 2001,
-        'maxYear'          => 2010,
+        'maxYear'          => 2020,
         'addEmptyOption'   => false,
         'emptyOptionValue' => '',
         'emptyOptionText'  => '&nbsp;',

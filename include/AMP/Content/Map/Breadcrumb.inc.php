@@ -58,7 +58,22 @@ class AMP_Breadcrumb_Content {
 
     function execute() {
         if (!$this->hasTemplate()) return $this->_HTML_wrapper ($this->_HTML_output());
-        return $this->_HTML_wrapper( $this->_HTML_outputTemplated() );
+        return $this->_HTML_wrapper( $this->render_template() );
+    }
+
+    function render_template( ) {
+        if ( defined( 'AMP_RENDER_CONTENT_BREADCRUMB_TEMPLATE')) {
+            $template_method = AMP_RENDER_CONTENT_BREADCRUMB_TEMPLATE;
+            if ( !function_exists( $template_method )) {
+                trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $template_method ));
+                return $this->_HTML_outputTemplated( );
+            }
+        }
+        if ( $template_method == '_HTML_outputTemplated') {
+            return $this->_HTML_outputTemplated( );
+        }
+        return $template_method( $this->_HTML_output( ), $this ) ;
+
     }
 
     function _getMap() {
