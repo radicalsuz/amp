@@ -393,15 +393,22 @@ div.list_intro {
 	height: 0px;
 	margin: 0;
 }
+
+.tagcloud_badge {
+    margin: 1em;
+    text-align: center;
+}
 a.amp_cloud_link {
-	position: relative;
-	float:left;
+    margin-left: .2em;
+    white-space: nowrap;
 }
 a.amp_cloud_link_1 {
+    padding-top: 1.25em;
 	font-size: .5em;
 }
 a.amp_cloud_link_2 {
 	font-size: .75em;
+    padding-top: .25em;
 }
 a.amp_cloud_link_3 {
 	font-size: 1em;

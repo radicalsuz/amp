@@ -62,6 +62,10 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
         return 'id=' . $key;
     }
 
+    function makeCriteriaDisplayable( ) {
+        return $this->makeCriteriaLive( );
+    }
+
     /**
      * This function searches an array of tags for a given key.  If the key is supplied, it is added to the lookup. 
      * 

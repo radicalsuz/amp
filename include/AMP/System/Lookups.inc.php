@@ -1023,6 +1023,27 @@ class AMPSystemLookup_TagsByItem extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_TagTotalsArticlesBySectionLive extends AMPSystem_Lookup {
+    var $datatable = 'tags_items';
+    var $id_field = 'tag_id';
+    var $result_field = 'count( item_id ) as qty';
+    var $_base_criteria = 'item_id in( %s ) and item_type="article" GROUP BY tag_id';
+
+    function AMPSystemLookup_TagTotalsArticlesBySectionLive( $section_id ) {
+        $articles = AMP_lookup( 'articles_by_section_live', $section_id );
+        if ( !empty( $articles )) {
+            $this->setIncludedArticles( array_keys( $articles ));
+            $this->init( );
+        }
+    }
+
+    function setIncludedArticles( $id_set ) {
+        $keys = join( ",", $id_set ); 
+        $this->criteria = sprintf( $this->_base_criteria, $keys );
+    }
+
+}
+
 class AMPSystemLookup_TagsByForm extends AMPSystemLookup_TagsByItem {
     var $_criteria_item = AMP_SYSTEM_ITEM_TYPE_FORM;
 

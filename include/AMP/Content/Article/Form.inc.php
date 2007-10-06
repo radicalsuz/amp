@@ -362,7 +362,7 @@ EVENTCODE
     }
 
     function _checkNewTags( $data, $fieldname ) {
-        if ( !isset( $data['new_tags']) && $data['new_tags']) {
+        if ( !( isset( $data['new_tags']) && $data['new_tags'])) {
             return array( );
         }
         require_once( 'AMP/Content/Tag/Tag.php');

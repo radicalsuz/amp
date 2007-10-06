@@ -11,6 +11,7 @@ class AMP_Display_Cloud {
 
     var $_size_steps = 5;
     var $_css_class_base = 'amp_cloud_link amp_cloud_link_';
+    var $_url_method = 'getURL';
 
     function AMP_Display_Cloud( &$source_items, $qty_set ) {
         $this->__construct( $source_items, $qty_set );
@@ -74,8 +75,10 @@ class AMP_Display_Cloud {
     }
 
     function render_item( &$item ) {
+        $url_method = $this->_url_method;
+        $url = ( $url_method == 'getURL' ) ? $item->getURL( ) : $url_method( $item, $this );
         return $this->_renderer->link( 
-                        $item->getURL( ),
+                        $url, 
                         $item->getName( ),
                         array( 'class' => $this->_item_classes[ $item->id ])
                     )
@@ -89,6 +92,14 @@ class AMP_Display_Cloud {
 
     function render_footer( ) {
         return false;
+    }
+
+    function set_url_method( $method_name ) {
+        if ( !function_exists( $method_name )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $method_name ));
+            return;
+        }
+        return $this->_url_method = $method_name;
     }
 
 
