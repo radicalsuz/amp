@@ -547,7 +547,7 @@ class AMP_Display_List {
                 return $false;
             }
             $search_method = $this->_search_create_method;
-            $search = &$search_method( $this );
+            $search = $search_method( $this );
         } 
         if ( !$search ) {
             $search = &$this->create_search_form( );

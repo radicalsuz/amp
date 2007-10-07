@@ -378,6 +378,14 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         return substr( $base_tag, $end_tag ) . substr( $base_tag, 0, $end_tag);
     }
 
+    function a( $contents, $attr_set = array( )) {
+        return $this->link( $contents, $attr_set );
+    }
+
+    function img( $image_url, $attr_set = array( )) {
+        return $this->image( $contents, $attr_set );
+    }
+
 }
 
 ?>

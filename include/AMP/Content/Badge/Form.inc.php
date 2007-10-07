@@ -17,6 +17,7 @@ class AMP_Content_Badge_Form extends AMPSystem_Form_XML {
     }
 
     function render_nav_links( $data, $fieldname ) {
+        if ( !( isset( $data['id']) && $data['id'])) return false;
         $linked_navs = AMP_lookup( 'navs_by_badge', $data['id']);
         if ( !$linked_navs ) return false; 
 
