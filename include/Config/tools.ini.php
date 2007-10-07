@@ -30,5 +30,9 @@ content=19
 
 [form id]
 webaction=21
+share=22
+
+[module share]
+logging=false
 
 ;?>
