@@ -151,3 +151,15 @@ function showUploadWindow (parentform, calledfield, dtype, handler) {
     hWnd = window.open( url, 'recordWindow', 'height=175,width=300,scrollbars=no,menubar=no,toolbar=no,resizeable=no,location=no,status=no' );
 }
 
+function AMP_load_proto( ) {
+    if ( self.Ajax ) return true;
+    if( document.createElement && document.childNodes ) {
+        var scriptElem = document.createElement('script');
+        scriptElem.setAttribute('src','/scripts/ajax/prototype.js');
+        scriptElem.setAttribute('type','text/javascript');
+        document.getElementsByTagName('head')[0].appendChild(scriptElem);
+    }
+    return false;
+
+}
+
