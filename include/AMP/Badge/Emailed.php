@@ -11,6 +11,7 @@ function amp_badge_most_emailed( $options = array( ) ) {
     $display = array_chunk( $emailed, $limit, $keep_keys = true );
     if ( $display && !empty( $display[0] )) {
         $options['id'] = array_keys( $display[0] );
+        $options['morelink'] = false;
         unset( $options['section']);
         return amp_badge_articles( $options );
     }
