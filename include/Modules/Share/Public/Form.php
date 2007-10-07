@@ -12,6 +12,19 @@ class Share_Public_Form extends AMP_Display_Form {
                         'label' => 'Share This',
                         ));
     var $action = AMP_CONTENT_URL_SHARE;
+
+    var $udm_translations = array( 
+        'sender_name'       =>  'Last_Name',
+        'sender_email'      =>  'Email',
+        'subject'           =>  'custom1',
+//        'message'           =>  'custom2',
+
+        'recipient_email'   =>  'custom5',
+        'recipient_name'    =>  'custom6',
+        'url'               =>  'custom3',
+        'article'           =>  'custom4',
+
+    );
     /*
     var $submit_button = array( 'submitAction' => array(
         'type' => 'group',
@@ -58,6 +71,7 @@ class Share_Public_Form extends AMP_Display_Form {
 
     function _after_init( ) {
         $url = ( isset( $_GET['url']) && $_GET['url']) ? $_GET['url'] : false;
+        $article = ( isset( $_GET['article']) && $_GET['article']) ? $_GET['article'] : false;
         if ( !$url ) return false;
         $this->set( 'url', $url );
 
@@ -65,7 +79,17 @@ class Share_Public_Form extends AMP_Display_Form {
         if ( !( substr( $url, 0, 4) == 'http' )) {
             $full_url = AMP_SITE_URL . $url;
         }
-        $this->set( 'message', $full_url );
+        $this->set( 'message', $this->template_message( $full_url ));
+        $this->set( 'article', $article );
+    }
+
+    function template_message( $url ) {
+        if ( defined( 'AMP_RENDER_SHARE_MESSAGE') && function_exists( AMP_RENDER_SHARE_MESSAGE )) {
+            $share_message = AMP_RENDER_SHARE_MESSAGE;
+            return $share_message( $url, $this );
+        }
+        return $url;
+
     }
 
     function clean( $values ) {
@@ -96,6 +120,17 @@ class Share_Public_Form extends AMP_Display_Form {
         return parent::clean( $new_values );
         
     }
+
+    function translate_for_udm( $data ) {
+        $result = array( );
+        foreach( $data as $key => $value ) {
+            if ( isset( $this->udm_translations[$key])) {
+                $result[ $this->udm_translations[$key]] = $value;
+            }
+        }
+        return $result;
+    }
+
 
 }
 

@@ -7,6 +7,10 @@ class Share_Recipient extends AMP_User_Profile {
         $this->__construct( $dbcon, $id );
     }
 
+    function setDefaults( ) {
+        $this->mergeData( array( 'modin' => AMP_FORM_ID_SHARE ));
+    }
+
 }
 
 ?>

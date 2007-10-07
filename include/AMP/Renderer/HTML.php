@@ -90,8 +90,10 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
 
     function link( $href, $text, $attr = array() ) {
         if (!$href) return $this->inSpan( $text, $attr);
-        $link_attr = $this->makeAttributes( $attr );
-        return "<a href=\"".$href."\"$link_attr>". $text . "</a>";
+        if ( $href != 'NOLINK') {
+            $attr['href'] = $href;
+        }
+        return $this->tag( 'a', $text, $attr );
     }
 
     function simple_li( $contents, $attr = array( )) {

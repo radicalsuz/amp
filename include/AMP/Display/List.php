@@ -61,7 +61,6 @@ class AMP_Display_List {
     var $_sort_default = false;
     var $_sort_sql_default = false;
     var $_sort_sql_translations = array( );
-    var $_sort_sql_translations_reversed = array( );
     var $_sort;
 
     var $api_version = 2;
@@ -652,7 +651,7 @@ class AMP_Display_List {
     }
 
     function _reverse_sort_direction( $sort_sql, $sort_request ) {
-        if ( isset( $this->_sort_sql_translations_reversed[ $sort_request] )) return $this->_sort_sql_translations_reversed[ $sort_request ];
+        if ( isset( $this->_sort_sql_translations[ $sort_request . '_desc'] )) return $this->_sort_sql_translations[ $sort_request . '_desc' ];
         $clauses = preg_split( "/\s?,\s?/", $sort_sql );
         $reversed_clauses = array( );
         foreach( $clauses as $clause ) {

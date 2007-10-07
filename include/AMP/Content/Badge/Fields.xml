@@ -12,6 +12,10 @@
 		<label>Name</label>
 		<required>1</required>
 	</name>
+    <navlink>
+        <type>static</type>
+        <label>Linked Navs</label>
+    </navlink>
 	<html>
 		<type>textarea</type>
 		<label>HTML</label>

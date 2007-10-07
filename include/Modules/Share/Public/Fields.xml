@@ -81,5 +81,8 @@
 	<url>
 		<type>hidden</type>
 	</url>
+    <article>
+        <type>hidden</type>
+    </article>
 		
 </array>

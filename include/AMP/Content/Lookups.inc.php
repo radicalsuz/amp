@@ -1204,6 +1204,7 @@ class AMPSystemLookup_Badges extends AMPSystem_Lookup {
     var $datatable = 'badges';
     var $result_field = 'name';
     var $criteria = 'publish=1';
+    var $sortby = 'name';
 
     function AMPSystemLookup_Badges( ) {
         $this->init( );
@@ -1339,5 +1340,97 @@ class AMPSystemLookup_ListSortOptionsSection extends AMPConstant_Lookup {
         $this->dataset = $new_dataset;
     }
 }
+
+class AMPSystemLookup_ArticlesDisplayable extends AMPSystem_Lookup {
+    var $datatable = 'articles';
+    var $result_field = 'title' ;
+
+    function AMPSystemLookup_ArticlesDisplayable( ) {
+        $this->_init_criteria( );
+        $this->init( );
+    }
+
+    function _init_criteria( ) {
+        require_once( 'AMP/Content/Article.inc.php');
+        $article = new Article( AMP_Registry::getDbcon( ));
+        $this->criteria = $article->makeCriteriaDisplayable( );
+    }
+}
+
+class AMPSystemLookup_MostEmailedArticles extends AMPSystemLookup_MostCommentedArticles {
+    var $datatable = "userdata a left join articles b on a.custom4 = b.id";
+    var $result_field = 'count( a.id ) as qty';
+    var $id_field = 'a.custom4';
+    var $criteria = 'a.modin=22 and !isnull( a.custom4 ) and a.custom4 != "" GROUP BY a.custom4 HAVING qty>1';
+    var $_base_criteria = 'a.modin=22 and !isnull( a.custom4 ) and a.custom4 != "" GROUP BY a.custom4 HAVING qty>1';
+    var $sortby = 'count( a.id ) DESC limit 50';
+
+    function AMPSystemLookup_MostEmailedArticles( $section_id = false ) {
+        $this->_filter_by_section( $section_id );
+        $this->init( );
+        $this->_filter_undisplayable_articles( );
+    }
+
+}
+
+class AMPSystemLookup_MostCommentedArticles extends AMPSystem_Lookup {
+    var $datatable = "comments a left join articles b on a.articleid = b.id";
+    var $result_field = 'count( a.id ) as qty';
+    var $id_field = 'a.articleid';
+    var $criteria = 'a.publish=1 GROUP BY a.articleid HAVING qty>1';
+    var $_base_criteria = 'a.publish=1 GROUP BY a.articleid HAVING qty>1';
+    var $sortby = 'count( a.articleid ) DESC limit 50';
+
+    function AMPSystemLookup_MostCommentedArticles( $section_id = false ) {
+        $this->_filter_by_section( $section_id );
+        $this->init( );
+        $this->_filter_undisplayable_articles( );
+    }
+
+    function _filter_by_section( $section_id ) {
+        if ( !$section_id ) return;
+        $all_sections = split( ",", $section_id );
+        $all_related = array( );
+        foreach( $all_sections as $single_section ) {
+            $related = AMP_lookup( 'related_articles', $single_section );
+            if ( !$related ) continue;
+            $all_related = $all_related + array_keys( $related );
+        }
+        if ( !empty( $all_related) ){
+            $this->criteria = "( b.type in ( ". $section_id .") or b.id in ( ".join( ",", $all_related ) . ")) AND " . $this->_base_criteria;
+        } else {
+            $this->criteria = "( b.type in ( ". $section_id .") ) AND " . $this->_base_criteria;
+        }
+    }
+
+    function _filter_undisplayable_articles( ) {
+        if ( !$this->dataset ) return;
+        $allowed = AMP_lookup( 'articles_displayable');
+        foreach( $this->dataset as $id => $count ) {
+            if ( !isset( $allowed[$id])) {
+                unset( $this->dataset[$id]);
+            }
+        }
+    }
+}
+
+class AMPSystemLookup_NavsByBadge extends AMPSystem_Lookup {
+    var $datatable = 'navtbl';
+    var $result_field = 'name';
+    var $_base_criteria = 'badge_id = %s';
+
+    function AMPSystemLookup_NavsByBadge( $badge_id = false ) {
+        if ( $badge_id ) {
+            $this->_filter_by_badge( $badge_id );
+        }
+
+        $this->init( );
+    }
+
+    function _filter_by_badge( $badge_id ) { 
+        $this->criteria = sprintf( $this->_base_criteria, $badge_id );
+    }
+}
+
 
 ?>

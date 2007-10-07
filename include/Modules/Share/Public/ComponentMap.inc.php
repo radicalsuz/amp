@@ -11,7 +11,6 @@ class ComponentMap_Share_Public extends AMPSystem_ComponentMap {
     var $paths = array( 
         'source' => 'Modules/Share/Recipient.php',
         'form'   => 'Modules/Share/Public/Form.php',
-        'form'   => 'Modules/Share/Public/Form.php',
         'fields'   => 'Modules/Share/Public/Fields.xml',
     );
 

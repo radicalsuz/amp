@@ -6,7 +6,8 @@ function amp_badge_articles( $options ) {
     $tag = ( isset( $options['tag']) && $options['tag'] ) ? $options['tag'] : false;
     $new = ( isset( $options['new']) && $options['new'] ) ? $options['new'] : false;
     $frontpage = ( isset( $options['frontpage']) && $options['frontpage'] ) ? $options['frontpage'] : false;
-    if ( !( $section || $class || $tag || $new || $frontpage )) return false; 
+    $id = ( isset( $options['id']) && $options['id'] ) ? $options['id'] : false;
+    if ( !( $section || $class || $tag || $new || $frontpage || $id )) return false; 
 
     $header_output = false;
     $header = ( isset( $options['header'] )) ? $options['header'] : null;
@@ -44,6 +45,7 @@ function amp_badge_articles( $options ) {
 
     if ( $new ) $criteria['new'] = $new; 
     if ( $frontpage ) $criteria['frontpage'] = $frontpage; 
+    if ( $id ) $criteria['id'] = $id; 
 
     if ( $header ) {
         $renderer = AMP_get_renderer( );

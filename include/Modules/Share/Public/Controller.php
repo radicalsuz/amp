@@ -50,12 +50,21 @@ class Share_Public_Controller extends AMP_System_Component_Controller_Public {
         $result = $emailer->execute( );
 
         if ( $result ) {
+            $this->save_message_record( $message_data );
             $message = new AMP_Content_Buffer( );
-            $message->add( "<center>Message successfully sent!<br>Thank you!<br><br>[ <a href=\"javascript:window.close()\">Close this window</a> ]</center>" );
+            $message->add( "<center>Message successfully sent!<br>Thank you!<br><br>[ <a href=\"javascript:window.close();\" onclick='window.close( );'>Close this window</a> ]</center>" );
             $this->_display->add( $message );
         }
 
         return $result;
+    }
+
+    function save_message_record( $data ) {
+        if ( !AMP_MODULE_SHARE_LOGGING ) return;
+        $record = $this->_map->getComponent( 'source' );
+        $record->setDefaults( );
+        $record->mergeData( $this->_form->translate_for_udm( $data ));
+        return $record->save( );
     }
 
     function make_address( $message_data, $type='recipient' ) {
