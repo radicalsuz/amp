@@ -11,6 +11,18 @@ articles_by_subsection=3
 subsections_plus_articles=6
 articles_aggregator=7
 
+[content section listsort article]
+alpha="title"
+default="date DESC, id DESC"
+newest="date DESC, id DESC"
+ordered="if ( !isnull( pageorder ) and pageorder, pageorder, 9999999 ), if ( date != '0000-00-00', date, '2050-12-31') DESC, id DESC"
+
+[content section listsort section]
+alpha="name"
+default="date DESC, id DESC"
+newest="date DESC, id DESC"
+ordered="if ( !isnull( textorder ) and textorder, textorder, 9999999 ), if ( date != '0000-00-00', date, '2050-12-31') DESC, id DESC"
+
 [content classlist display]
 default="ContentClass_Display"
 blog="ContentClass_Display_Blog"

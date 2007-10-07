@@ -55,9 +55,8 @@ class SectionContents_Display  extends AMPDisplay_HTML {
             if (!method_exists( $this->_display, 'setSection' )) return;
             $this->_display->setSection( $this->_section );
         } elseif ($display_class_vars['api_version'] == 2 ) {
-			#$this->_display = new $display_class( $this->_section, array('section'=> $this->_section->id, 'displayable'=> 1));
 			$this->_display = new $display_class( 
-                                    ( $null = null ),
+                                    $this->_section,
                                     $this->_section->getDisplayCriteria( ),
                                     $this->_section->getListItemLimit( ));
 		}

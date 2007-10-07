@@ -12,6 +12,7 @@ function amp_badge_tag_cloud( $options = array( )) {
     $display_url = ( isset( $options['display_url']) && $options['display_url']) ? $options['display_url'] : false; 
     $source_item = new AMP_Content_Tag( AMP_Registry::getDbcon( ));
     $source = $source_item->find( array( 'displayable' => 1 ));
+    if ( !$source ) return false;
     
     $display = new AMP_Display_Cloud( $source, $qty_set );
     if ( $display_url ) {

@@ -1288,4 +1288,56 @@ class AMPSystemLookup_ArticleIncludes extends AMPConstant_Lookup {
     }
 }
 
+class AMPSystemLookup_ListSortOptionsTextArticle extends AMPConstant_Lookup {
+    var $_prefix_values= "AMP_TEXT_SECTION_LISTSORT";
+
+    function AMPSystemLookup_ListSortOptionsTextArticle( ) {
+        $this->init( );
+        $new_dataset = array( );
+        foreach( $this->dataset as $text => $key ) {
+            $new_dataset[strtolower( $key )] = $text;
+        }
+        $this->dataset = $new_dataset;
+    }
+}
+
+class AMPSystemLookup_ListSortOptionsTextSection extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_TEXT_SECTION_LISTSORT";
+
+    function AMPSystemLookup_ListSortOptionsTextSection( ) {
+        $this->init( );
+        $new_dataset = array( );
+        foreach( $this->dataset as $text => $key ) {
+            $new_dataset[strtolower( $key )] = $text;
+        }
+        $this->dataset = $new_dataset;
+    }
+}
+
+class AMPSystemLookup_ListSortOptionsArticle extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_CONTENT_SECTION_LISTSORT_ARTICLE";
+
+    function AMPSystemLookup_ListSortOptionsArticle( ) {
+        $this->init( );
+        $new_dataset = array( );
+        foreach( $this->dataset as $sql => $key ) {
+            $new_dataset[strtolower( $key )] = $sql;
+        }
+        $this->dataset = $new_dataset;
+    }
+}
+
+class AMPSystemLookup_ListSortOptionsSection extends AMPConstant_Lookup {
+    var $_prefix_values = "AMP_CONTENT_SECTION_LISTSORT_SECTION";
+
+    function AMPSystemLookup_ListSortOptionsSection( ) {
+        $this->init( );
+        $new_dataset = array( );
+        foreach( $this->dataset as $sql => $key ) {
+            $new_dataset[strtolower( $key )] = $sql;
+        }
+        $this->dataset = $new_dataset;
+    }
+}
+
 ?>

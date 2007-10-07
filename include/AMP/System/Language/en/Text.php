@@ -342,4 +342,9 @@ define( 'AMP_TEXT_DOWNLOAD_FILE_TYPE', ' Download as %s' );
 
 define( 'AMP_TEXT_REVISION_COMMENTS_HEADER', '==%s== revision notes by %s ==');
 
+define( 'AMP_TEXT_SECTION_LISTSORT_ALPHA', 'Titles, A-Z');
+define( 'AMP_TEXT_SECTION_LISTSORT_DEFAULT', 'Date, Newest First');
+define( 'AMP_TEXT_SECTION_LISTSORT_NEWEST', 'Date, Newest First');
+define( 'AMP_TEXT_SECTION_LISTSORT_ORDERED', 'Custom Order, then Date, Newest First');
+
 ?>

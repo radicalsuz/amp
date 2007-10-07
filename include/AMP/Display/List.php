@@ -61,6 +61,7 @@ class AMP_Display_List {
     var $_sort_default = false;
     var $_sort_sql_default = false;
     var $_sort_sql_translations = array( );
+    var $_sort_sql_translations_reversed = array( );
     var $_sort;
 
     var $api_version = 2;
@@ -644,13 +645,14 @@ class AMP_Display_List {
             if ( $_REQUEST['sort_direction'] == AMP_SORT_DESC ) return $sort_request . AMP_SORT_DESC; 
         }
         $translated_sort_request = $this->_sort_sql_translations[ $sort_request ];
-        if ( !isset( $_REQUEST['sort_direction']) || $_REQUEST['sort_direction'] != AMP_SORT_DESC ) return $translated_sort_request;
+        if ( !isset( $_REQUEST['sort_direction']) || ( trim( strtoupper( $_REQUEST['sort_direction'])) != trim( AMP_SORT_DESC ))) return $translated_sort_request;
 
         $this->_sort_direction = AMP_SORT_DESC;
-        return $this->_reverse_sort_direction( $translated_sort_request );
+        return $this->_reverse_sort_direction( $translated_sort_request, $sort_request );
     }
 
-    function _reverse_sort_direction( $sort_sql ) {
+    function _reverse_sort_direction( $sort_sql, $sort_request ) {
+        if ( isset( $this->_sort_sql_translations_reversed[ $sort_request] )) return $this->_sort_sql_translations_reversed[ $sort_request ];
         $clauses = preg_split( "/\s?,\s?/", $sort_sql );
         $reversed_clauses = array( );
         foreach( $clauses as $clause ) {

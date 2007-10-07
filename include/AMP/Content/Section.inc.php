@@ -426,5 +426,9 @@ class Section extends AMPSystem_Data_Item {
         return AMP_format_date_from_array( AMP_date_from_url( ));
     }
 
+    function getListSort( ) {
+        return $this->getData( 'list_sort');
+    }
+
 }
 ?>

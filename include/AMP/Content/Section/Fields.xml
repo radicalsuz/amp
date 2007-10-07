@@ -145,6 +145,13 @@
 		<label>List Content &lt;BR /&gt;from Entire Site</label>
 		<block>list_contents</block>
 	</list_is_global>
+	<list_sort>
+		<default>ordered</default>
+		<label>Sort By</label>
+		<lookup>list_sort_options_text_article</lookup>
+		<type>select</type>
+		<block>list_contents</block>
+	</list_sort>
 	<list_by_custom>
 		<type>hidden</type>
 	</list_by_custom>
