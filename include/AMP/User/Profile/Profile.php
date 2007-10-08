@@ -207,7 +207,7 @@ class AMP_User_Profile extends AMPSystem_Data_Item {
     }
 
     function getEmail( ) {
-        return $this->getData( 'email');
+        return $this->getData( 'Email');
     }
 
     function getFields( $modin=null ) {
