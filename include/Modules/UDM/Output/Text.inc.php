@@ -107,6 +107,16 @@ class UserDataPlugin_Text_Output extends UserDataPlugin {
                     }
                 }
                 break;
+            case 'checkgroup':
+            case 'radiogroup':
+            case 'multiselect':
+                $value_set = $this->getValueSet($fDef);
+                if ( !is_array( $value )) $value = preg_split( "/\s?,\s?/", $value );
+                if (is_array($value_set)) {
+                    $final_values = array_combine_key( $value, $value_set );
+                    $value = join( ', ', $final_values );
+                }
+                break;
             case 'wysiwyg':
                 //replace <BR> with \n
                 #$value =  preg_replace("/(\r\n|\n|\r)/", "", $value);
