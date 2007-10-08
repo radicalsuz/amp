@@ -3,7 +3,6 @@
 require_once( 'AMP/Base/Config.php');
 
 if ( $cached_output = AMP_cached_request( )) {
-    trigger_error( 'found cached page');
     print $cached_output;
     exit;
 }

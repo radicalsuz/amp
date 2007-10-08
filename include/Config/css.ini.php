@@ -31,10 +31,10 @@ date="bodygreystrong"
 author="author"
 source="author"
 subtitle="subtitle"
-image_caption = 'photocaption'
-image = 'image'
-body  = 'text'
-media = 'article_media'
+image_caption = "photocaption"
+image = "image"
+body  = "text"
+media = "article_media"
 
 [class system]
 fineprint=photocaption
@@ -42,5 +42,17 @@ fineprint=photocaption
 [id]
 nav_element="%s_nav_%s"
 nav_block="%s_nav"
+
+[class gallery list]
+container="gallery"
+title="gallerytitle"
+item="gallerycon"
+
+[class gallery]
+image_caption="gallerycap"
+container_credit="gallery_image_details"
+image_link="gallery_image_link"
+image_credit_text="byline"
+
 
 ;?>

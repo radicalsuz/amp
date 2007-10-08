@@ -9,12 +9,12 @@ class Gallery_Public_Display extends AMP_Display_List {
     var $_suppress_messages = true;
     //var $_sort_default = 'listorder, date DESC, id DESC';
     //
-    var $_css_class_container_list = 'gallery';
-    var $_css_class_list_title = 'gallerytitle';
-    var $_css_class_photocaption = "gallerycap";
-    var $_css_class_container_caption = "gallery_image_details";
+    var $_css_class_container_list = AMP_CONTENT_CSS_CLASS_GALLERY_LIST_CONTAINER ;
+    var $_css_class_list_title = AMP_CONTENT_CSS_CLASS_GALLERY_LIST_TITLE; 
+    var $_css_class_photocaption = AMP_CONTENT_CSS_CLASS_GALLERY_IMAGE_CAPTION; 
+    var $_css_class_container_caption = AMP_CONTENT_CSS_CLASS_GALLERY_CONTAINER_CREDIT; 
     var $_css_class_photocredit = "photocaption";
-    var $_css_class_container_list_item = 'gallerycon';
+    var $_css_class_container_list_item = AMP_CONTENT_CSS_CLASS_GALLERY_LIST_ITEM;
 
     var $_source_gallery;
 
@@ -45,6 +45,10 @@ class Gallery_Public_Display extends AMP_Display_List {
         }
     }
 
+    function add_to_count( $value) {
+        $this->_image_count= $this->_image_count+$value;
+    }
+
     function _renderItem( &$source ) {
         $caption = $this->_renderer->in_P ( converttext( $source->getCaption( )), array( 'class' => $this->_css_class_photocaption)); ;
 
@@ -68,11 +72,11 @@ class Gallery_Public_Display extends AMP_Display_List {
                                                             ),
                                          array( 'alt' => AMP_TEXT_FULL_SIZE, 'border' => 0, 
                                                 'rel' => 'lightbox['. $this->_source_gallery->getName( ).']', 
-                                                'title' => $this->_photoByline( $source ),
+                                                'title' => $this->render_photo_byline( $source ),
                                                 'target' => '_blank' 
                                                 ));
 
-        $image_byline = $this->_renderByline( $source, $imageRef );
+        $image_byline = $this->render_byline( $source, $imageRef );
 
         return    $image 
                 . $image_byline 
@@ -80,12 +84,20 @@ class Gallery_Public_Display extends AMP_Display_List {
 
     }
 
-    function _photoByline( &$source ) {
+    function _photoByline( $source ) {
+        return $this->render_photo_byline( $source );
+    }
+
+    function render_photo_byline( &$source ) {
         $credit = $this->_photoCredit( $source );
         $caption = $source->getCaption( );
         if ( !$caption && !$credit ) return ' ';
         if ( !$credit ) return $source->getCaption( );
         return $credit . $this->_renderer->newline( ) . $source->getCaption( );
+    }
+
+    function render_photo_credit( $source ) {
+        return $this->_photoCredit( $source );
     }
 
     function _photoCredit( &$source ) {
@@ -95,14 +107,18 @@ class Gallery_Public_Display extends AMP_Display_List {
         }
 
         if ( $image_date = $source->getItemDate( )) {
-            $nice_date = str_replace( ' ', '&nbsp;',DoDate( $image_date, 'F jS, Y' ));
+            $nice_date = str_replace( ' ', '&nbsp;',DoDate( $image_date, AMP_CONTENT_DATE_FORMAT ));
             if ( $image_source && $nice_date ) {
                 $image_desc .= ' / ' . $nice_date ;
             }
             
         }
 
-        return $image_desc;
+        return $this->_renderer->div( $image_desc, array( 'class' => AMP_CONTENT_CSS_CLASS_GALLERY_IMAGE_CREDIT_TEXT  ));
+    }
+
+    function render_byline( $source, $image ) {
+        return $this->_renderByline( $source, $image );
     }
 
     function _renderByline( &$source, $image  ) {
@@ -159,6 +175,9 @@ class Gallery_Public_Display extends AMP_Display_List {
             );
         return AMP_buildSelect( 'gallery_jump', AMPContent_Lookup::instance( 'galleryMap' ), $this->_source_gallery->id, $this->_renderer->makeAttributes( $sel_attr) );
 
+    }
+    function get_source_gallery( ) {
+        return $this->_source_gallery;
     }
 
     function _renderJavascript( ) {

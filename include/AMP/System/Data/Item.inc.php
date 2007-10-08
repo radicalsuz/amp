@@ -13,7 +13,7 @@
  *
  * * * * * **/
 
- require_once ( 'AMP/System/Data/Data.inc.php' );
+require_once ( 'AMP/System/Data/Data.inc.php' );
 
 class AMPSystem_Data_Item extends AMPSystem_Data {
 
@@ -607,6 +607,12 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
         if ( !$value ) return 'TRUE';
         if ( !is_array( $value )) return $this->_makeCriteriaEquals( 'id', $value );
         return 'id in ( '.join( ',', $value).')';
+    }
+
+    function makeCriteriaNotId( $ids ) {
+        if ( !$ids ) return "TRUE";
+        if ( !( is_array( $ids ))) return 'id != '.$ids;
+        return "id not in ( " . join(",", $ids ) . ")";
     }
 
     //}}}

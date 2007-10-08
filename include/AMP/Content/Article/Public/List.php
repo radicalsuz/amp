@@ -19,6 +19,9 @@ class Article_Public_List extends AMP_Display_List {
         'default' => 'date DESC, id'
     );
 
+    var $_css_class_author = AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_AUTHOR ;
+    var $_css_class_source  = AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_SOURCE;
+
 	var $_search;
 
     //section, class, or tag this list represents
@@ -31,16 +34,6 @@ class Article_Public_List extends AMP_Display_List {
     function __construct( $container= false, $criteria = array( ), $limit = null ) {
         $source = $this->_init_container( $container );
         parent::__construct( $source, $criteria, $limit );
-        /*
-        $this->_init_pager( $limit );
-        $this->_init_source( $source, $criteria  );
-        $this->_init_translations( );
-        $this->_init_identity( );
-        $this->_init_tools( );
-
-        $this->_renderer = AMP_get_renderer();
-        $this->_after_init( );
-        */
     }
 
     function _init_container( $container ) {
@@ -58,7 +51,7 @@ class Article_Public_List extends AMP_Display_List {
 
     function _renderItem( &$source ) {
         $text =     $this->render_title( $source )
-				  . $this->render_source($source )
+				  . $this->render_byline($source )
 				  . $this->render_date(  $source )
                   . $this->render_blurb( $source );
 
@@ -80,6 +73,7 @@ class Article_Public_List extends AMP_Display_List {
                   . $this->_renderer->newline( );
     }
 
+    /*
     function render_source( &$article ) {
 		$author = $article->getAuthor();
 		$source_name = $article->getSource();
@@ -110,6 +104,42 @@ class Article_Public_List extends AMP_Display_List {
 
         return    $output_author . ', '
                 . $output_source . $this->_renderer->newline();
+    }
+    */
+
+    function render_byline( $source ) {
+
+        $output_author = $this->render_author( $source );
+        $output_source = $this->render_source( $source );
+
+        if ( !( $output_source || $output_author )) return false;
+
+        if (!$output_author){
+            return $output_source . $this->_renderer->newline();
+        }
+        if ( !$output_source ) {
+            return $output_author . $this->_renderer->newline();
+        }
+
+        return    $output_author . ',' . $this->_renderer->space() 
+                . $output_source . $this->_renderer->newline();
+    }
+
+    function render_author( $source ) {
+		$author = $source->getAuthor();
+
+        if (!trim($author)) return false;
+        return $this->_renderer->span( sprintf( AMP_TEXT_BYLINE_SLUG, converttext($author)), array( 'class' => $this->_css_class_author ));
+    }
+
+    function render_source( $source ) {
+		$source_name = $source->getSource();
+		$source_url = $source->getSourceUrl();
+        if (!( $source_name || $source_url )) return false;
+        if ( !$source_name ) {
+            $source_name = $source_url;
+        }
+        return $this->_renderer->span( $this->_renderer->link( $source_url, $source_name  ), array( 'class' => $this->_css_class_source ));
     }
 
 	function render_date( &$source ) {

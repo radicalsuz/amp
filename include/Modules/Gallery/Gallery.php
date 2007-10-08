@@ -50,7 +50,7 @@ class Gallery extends AMPSystem_Data_Item {
 
     function getImageFilename( $choose_rand = false ){
         $value = $this->getData( 'img');
-        if ( !$choose_rand ) return $value;
+        if ( $value || !$choose_rand ) return $value;
 
         $all_images = &AMPContentLookup_GalleryImages::instance( $this->id );
         if ( empty( $all_images)) return false;
@@ -59,7 +59,8 @@ class Gallery extends AMPSystem_Data_Item {
 
     }
     function &getImageRef( $choose_rand = false ) {
-        if (! ($img_path = $this->getImageFileName( $choose_rand ))) return false;
+        $false = false;
+        if (! ($img_path = $this->getImageFileName( $choose_rand ))) return $false;
         require_once( 'AMP/Content/Image.inc.php');
         $image = &new Content_Image( $img_path );
         return $image;

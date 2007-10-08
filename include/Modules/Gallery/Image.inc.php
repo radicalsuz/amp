@@ -69,7 +69,10 @@ class GalleryImage extends AMPSystem_Data_Item {
 
     function getItemDate( ){
         if ( !$this->isPublicDate( )) return false;
-        return $this->getAssignedDate( );
+        $date = $this->getAssignedDate( );
+        if ( $date ) return $date; 
+        $image= $this->getImageRef( );
+        return $image->getData( 'date');
     }
 
     function getAssignedDate( ) {

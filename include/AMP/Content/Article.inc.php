@@ -809,12 +809,6 @@ class Article extends AMPSystem_Data_Item {
         return "!( ".$this->makeCriteriaSection( $section_id ) . ")";
     }
 
-    function makeCriteriaNotId( $ids ) {
-        if ( !$ids ) return "TRUE";
-        if ( !( is_array( $ids ))) return 'id != '.$ids;
-        return "id not in ( " . join(",", $ids ) . ")";
-    }
-
     function makeCriteriaInSectionDescendant( $section_id ) {
         $base_section = $this->makeCriteriaSection( $section_id );
         $map = AMPContent_Map::instance( );

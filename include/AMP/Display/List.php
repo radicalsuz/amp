@@ -111,6 +111,7 @@ class AMP_Display_List {
         }
         $display_method = $this->_item_display_method;
 
+        //setup for display loop
         $items_output = '';
         $items_count = 0;
         $this->_current_columns = 0;
@@ -118,6 +119,7 @@ class AMP_Display_List {
         $column_output = '';
         $column_length = round( count( $this->_source ) / $this->_display_columns );
 
+        //main loop begins here
         foreach( $this->_source as $source_item ) {
             if ( $local_method ) {
                 $single_item_output = $this->_renderItem( $source_item );
@@ -150,6 +152,8 @@ class AMP_Display_List {
                 $column_output .= $this->_renderColumn( $items_output );
             }
         }
+
+        //add templating output 
         return $this->_renderBlock( $column_output );
 
     }

@@ -11,7 +11,12 @@ class Content_Image {
     var $_files = array( );
 
     function Content_Image( $filename=null ) {
+        $this->__construct( $filename );
+    }
+
+    function __construct( $filename = null ) {
         if (isset($filename)) $this->setFile( $filename );
+        $this->_allowed_keys = $this->_itemdata_keys;
     }
 
     function setFile( $filename ) {
@@ -25,8 +30,28 @@ class Content_Image {
             $this->setSize( array( 0, 0 ));
             return ;
         }
+        $this->load_db_image( $filename );
         $this->setSize(getimagesize( $target_path ));
     }
+
+    function load_db_image( $filename ) {
+        require_once( 'AMP/Content/Image/Image.php');
+        $image_finder = new AMP_Content_Image( AMP_Registry::getDbcon( ));
+        $images = $image_finder->find( array( 'name' => $filename ));
+        if ( !$images ) return false;
+        $image = current( $images );
+
+        $keys = $image->getAllowedKeys( );
+        foreach( $keys as $key ) {
+            $this->_addAllowedKey( $key );
+        }
+        $this->setData( $image->getData( ));
+    }
+
+	function _addAllowedKey( $key_name ) {
+		if (array_search( $key_name, $this->_allowed_keys )!==FALSE) return true;
+		$this->_allowed_keys[] = $key_name;
+	}
 
     function setSize( $size_data ) {
         $this->_itemdata['width'] = $size_data[0];
@@ -125,7 +150,7 @@ class Content_Image {
     }
 
     function setData( $data ) {
-        $this->_itemdata = array_combine_key( $this->_itemdata_keys, $data );
+        $this->_itemdata = array_combine_key( $this->_allowed_keys, $data );
         if ($filename = $this->getData( 'filename' )) $this->setFile( $filename );
     }
 
