@@ -53,7 +53,11 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
                                     'available'=>true,
                                     'type'=>'textarea',
                                     'label'=>'Fields to multiply output rows'),
-            
+        'summation'=> array( 
+            'label'=>'Include Summation Fields',
+            'default'=> '',
+            'available'=>true,
+            'type'=>'checkbox'), 
     );
 
     var $format_values = array( 'csv'=> array('delimiter'=>',', 'extension'=>'csv'), 
@@ -99,8 +103,8 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
         $column_headers = ($options['show_headers'])?$this->getHeaders():'';
 
-	    	
-        
+        $sum = $this->summation( );
+	           
         if ( !AMP_DISPLAYMODE_DEBUG) { 
             header("Content-type: application/".$this->file_extension);
             header("Content-Disposition: attachment; filename=".$this->setFileName());
@@ -109,7 +113,7 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
         
         
         
-        return $column_headers . $this->formatFileOutput($dataset);
+        return $column_headers . $this->formatFileOutput($dataset) . $sum;
     }
 
     function definedColumns($options) {
@@ -420,6 +424,30 @@ class UserDataPlugin_ExportFile_Output extends UserDataPlugin {
 
         return $final_rows;
     }
+    
+    function summation( ){
+        if ($options['summation']) {
+            $summation = & $this->udm->getPlugin( 'Output','Summation');
+            $summation->execute( );
+            $i = 0;
+            $sum_row = array( );
+            $sum_dataset = array( );
+            foreach( $summation->fields_to_sum as $current_sum ) {
+                trigger_error( 'sum values:'.$summation->sum_values[$current_sum.'_total']);
+                $sum_row[]= $summation->titles_to_sum[$i];
+                $sum_row[]= $summation->sum_values[$current_sum.'_total'];
+                $sum_dataset[]=$sum_row;
+                $i++;
+                $sum_row = array( );
+        }
+        $sum =  $this->formatFileOutput($sum_dataset);
+
+       } else {
+            $sum = '';
+        }
+        return $sum;
+    } 
+
 }
 
 
