@@ -7,6 +7,7 @@ class AMP_User_Profile extends AMPSystem_Data_Item {
     var $datatable = 'userdata';
     var $_fields = array( );
     var $_exact_value_fields = array( 'modin' );
+    var $_class_name = 'AMP_User_Profile';
 
     function AMP_User_Profile( &$dbcon, $id =null ){
         $this->init( $dbcon, $id );
