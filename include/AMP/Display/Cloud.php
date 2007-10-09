@@ -49,9 +49,11 @@ class AMP_Display_Cloud {
         $this->_items = array_combine_key( $display_order, $source_items );
         $this->_item_qtys = array_combine_key( $display_order, $qty_set );
 
-        $max_qty = max( $this->_item_qtys );
-        $min_qty = min( $this->_item_qtys );
+        $this->max = $max_qty = max( $this->_item_qtys );
+        $this->min = $min_qty = min( $this->_item_qtys );
+        $this->step = $step_size = ( $max_qty - $min_qty ) / $this->_size_steps;
 
+        /*
         foreach( $this->_items as $item_id => $item ) {
             if ( !isset( $this->_item_qtys[$item->id])){
                 unset( $this->_items[ $item->id ]);
@@ -59,18 +61,44 @@ class AMP_Display_Cloud {
             }
             $this->_assign_class( $item->id, $this->_item_qtys[ $item->id ], $max_qty, $min_qty );
         }
+        */
+        $item_classes = array_map( array( $this, '_map_class'), $this->_items );
+        reset( $this->_items );
+        foreach( $item_classes as $key => $class ) {
+            $item_id = key( $this->_items );
+            if ( !$class )  {
+                unset( $this->_items[$item_id] );
+                continue;
+            }
+            $this->_item_classes[ $item_id ] = $this->_css_class_base . $class;
+            next( $this->_items );
+        }
         $item->sort( $this->_items );
 
     }
 
+    function _map_class( $item ) {
+        if ( !isset( $this->_item_qtys[$item->id])) return false;
+        $item_qty = $this->_item_qtys[$item->id];
+
+        if ( $item_qty >= $this->max ) return $this->_size_steps;
+        if ( $item_qty = $this->min ) return 1;
+
+        $range = $item_qty - $this->min;
+        return ceil( $range/$this->step ) + 1;
+    }
+
     function _assign_class( $item_id, $item_qty, $max_qty, $min_qty = 0 ) {
         $step_size = ( $max_qty - $min_qty ) / $this->_size_steps;
+        trigger_error( 'size  is ' . $step_size );
         for( $n = 0;$n<$this->_size_steps;$n++) {
-            if ( $item_qty >= ( $max_qty -( $n * $step_size ))){
+            if ( $item_qty >= ( $max_qty - ( $n * $step_size ))) {
                 $this->_item_classes[ $item_id ] = $this->_css_class_base . ( $n + 1 );
+                trigger_error( 'setting ' . ( $n+1 ). ' for ' . $item_qty );
                 return;
             }
         }
+        trigger_error( 'setting ' . $this->_size_steps . ' for ' . $item_qty );
         $this->_item_classes[ $item_id ] = $this->_css_class_base . $this->_size_steps;
     }
 
