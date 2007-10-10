@@ -38,4 +38,8 @@
         <type>hidden</type>
         <label>By Author</label>
     </author>
+	<tag>
+        <type>hidden</type>
+		<label>By Tag</label>
+	</tag>
 </array>
