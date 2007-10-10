@@ -255,7 +255,7 @@ class AMP_Display_List {
 
     function _renderPager( ) {
         if ( $this->_pager_active && !$this->_suppress_pager ) {
-            return  $this->_renderer->newline( 1, array( 'clear' => 'all'))
+            return  $this->_renderer->newline( 1, array( 'clear' => 'all', 'class' => 'pgr_newline'))
                     . $this->_pager->execute( );
         }
     }
