@@ -454,7 +454,7 @@ class UserData {
 
     function getData( $fields=null ) {
 
-        if (!$this->form)  {
+        if (!( isset( $this->form) && $this->form))  {
             $data=array();
             foreach ($this->fields as $fname=>$fDef) {
                 if (isset($fields) && (array_search($fname, $fields)===FALSE)) continue;

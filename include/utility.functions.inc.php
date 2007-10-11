@@ -1684,7 +1684,7 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
         if ( $values ) return $values;
     }
     if ( !isset( $values )) {
-        trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $lookup_type . ' / ' . $instance ));
+        trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $lookup_type . ' / ' . $instance . ( isset( $lookup_var ) ? ' / ' . $lookup_var :  '')));
     }
     return $values;
 }

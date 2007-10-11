@@ -18,10 +18,10 @@ newest="date DESC, id DESC"
 ordered="if ( !isnull( pageorder ) and pageorder, pageorder, 9999999 ), if ( date != '0000-00-00', date, '2050-12-31') DESC, id DESC"
 
 [content section listsort section]
-alpha="name"
-default="date DESC, id DESC"
-newest="date DESC, id DESC"
-ordered="if ( !isnull( textorder ) and textorder, textorder, 9999999 ), if ( date != '0000-00-00', date, '2050-12-31') DESC, id DESC"
+alpha="type"
+default="date2 DESC, id DESC"
+newest="date2 DESC, id DESC"
+ordered="if ( !isnull( textorder ) and textorder, textorder, 9999999 ), if ( date2 != '0000-00-00', date2, '2050-12-31') DESC, id DESC"
 
 [content classlist display]
 default="ContentClass_Display"

@@ -55,6 +55,8 @@ class UserDataInput extends UserData {
 
         if (!isset( $this->form )) {
             $result = $this->doPlugin( 'QuickForm', 'Build', $options );
+        } else {
+            $result = $this->form->validate( );
         }
 
         if ( !$result )     return false;

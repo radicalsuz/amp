@@ -1043,6 +1043,16 @@ class AMPSystemLookup_TagTotalsArticlesBySectionLive extends AMPSystem_Lookup {
     }
 
 }
+class AMPSystemLookup_TagTotalsArticlesBySectionLogicLive extends AMPSystemLookup_TagTotalsArticlesBySectionLive {
+
+    function AMPSystemLookup_TagTotalsArticlesBySectionLogicLive( $section_id ) {
+        $articles = AMP_lookup( 'articles_by_section_logic_live', $section_id );
+        if ( !empty( $articles )) {
+            $this->setIncludedArticles( array_keys( $articles ));
+            $this->init( );
+        }
+    }
+}
 
 class AMPSystemLookup_TagsByForm extends AMPSystemLookup_TagsByItem {
     var $_criteria_item = AMP_SYSTEM_ITEM_TYPE_FORM;

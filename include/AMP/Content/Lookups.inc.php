@@ -1128,6 +1128,51 @@ class AMPSystemLookup_ArticlesBySectionLive extends AMPSystemLookup_ArticlesBySe
     }
 }
 
+class AMPSystemLookup_ArticlesBySectionLogic extends AMPSystem_Lookup {
+    var $datatable= 'articles';
+    var $result_field = 'title';
+
+    function AMPSystemLookup_ArticlesBySectionLogic( $section_id ) {
+        $this->__construct( $section_id );
+    }
+
+    function __construct( $section_id ) {
+        $this->_init_sort( );
+        $this->_addCriteriaSection( $section_id );
+        $this->init( );
+    }
+
+    function _init_sort ( ) {
+        $this->sortby =
+            "if(isnull(pageorder) or pageorder='', ". AMP_SORT_MAX.", pageorder) ASC, date DESC, id DESC" ;
+    }
+
+    function _addCriteriaSection( $section_id ) {
+        require_once( 'AMP/Content/Article.inc.php');
+        $article = new Article( AMP_Registry::getDbcon( ));
+        $this->criteria = $article->makeCriteriaSectionLogic( $section_id );
+    }
+
+}
+
+class AMPSystemLookup_ArticlesBySectionLogicLive extends AMPSystemLookup_ArticlesBySectionLogic {
+    function AMPSystemLookup_ArticlesBySectionLogicLive( $section_id ) {
+        $this->__construct( $section_id );
+    }
+
+    function __construct( $section_id ) {
+        $this->_init_sort( );
+        $this->_addCriteriaSection( $section_id );
+        $this->_addCriteriaDisplayable( );
+        $this->init( $section_id );
+    }
+
+    function _addCriteriaDisplayable( ) {
+        $article = new Article( AMP_Registry::getDbcon( ));
+        $this->criteria .= ' AND ' . $article->makeCriteriaDisplayable( );
+    }
+}
+
 class AMPSystemLookup_ArticleLinksBySectionLive extends AMPSystemLookup_ArticlesBySectionLive {
     var $result_field = 'if ( isnull( linktext ) or linktext=""), title, linktext) as title';
 
@@ -1289,23 +1334,11 @@ class AMPSystemLookup_ArticleIncludes extends AMPConstant_Lookup {
     }
 }
 
-class AMPSystemLookup_ListSortOptionsTextArticle extends AMPConstant_Lookup {
-    var $_prefix_values= "AMP_TEXT_SECTION_LISTSORT";
 
-    function AMPSystemLookup_ListSortOptionsTextArticle( ) {
-        $this->init( );
-        $new_dataset = array( );
-        foreach( $this->dataset as $text => $key ) {
-            $new_dataset[strtolower( $key )] = $text;
-        }
-        $this->dataset = $new_dataset;
-    }
-}
-
-class AMPSystemLookup_ListSortOptionsTextSection extends AMPConstant_Lookup {
+class AMPSystemLookup_ListSortOptionsText extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_TEXT_SECTION_LISTSORT";
 
-    function AMPSystemLookup_ListSortOptionsTextSection( ) {
+    function AMPSystemLookup_ListSortOptionsText( ) {
         $this->init( );
         $new_dataset = array( );
         foreach( $this->dataset as $text => $key ) {

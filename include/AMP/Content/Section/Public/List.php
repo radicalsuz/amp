@@ -20,10 +20,25 @@ class Section_Public_List extends AMP_Display_List {
     );
 	var $_search;
 
-	function Section_Public_List ( $source = false, $criteria = array(), $limit = null ) {
-		$source = false;
+    //section this list represents
+    var $_source_container;
+
+	function Section_Public_List ( $container = false, $criteria = array(), $limit = null ) {
+        $source = $this->_init_container( $container );
 		$this->__construct($source, $criteria, $limit );
 	}
+    
+    function _init_container( $container ) {
+        if ( !$container ) return false;
+        if ( is_array( $container )) return $container;
+
+        $allowed_containers = array( 'section');
+        if ( array_search( strtolower( get_class( $container )), $allowed_containers) === FALSE ) {
+            return $container;
+        }
+        $this->_source_container = &$container;
+        return false;
+    }
     
 
     function _renderItem( &$source ) {
@@ -63,7 +78,21 @@ class Section_Public_List extends AMP_Display_List {
         return $this->_renderer->div( $source->getBlurb(), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_BLURB ) );
     }
     
+    function _init_sort_sql( &$source )  {
+        $sort_options = AMP_lookup( 'list_sort_options_section');
+        if ( $sort_options ) {
+            $this->_sort_sql_translations = array_merge( $this->_sort_sql_translations, $sort_options );
+        }
+        return parent::_init_sort_sql( $source );
+    }
+
+    function _sort_requested( ) {
+        $http_request = parent::_sort_requested( );
+        if ( $http_request || !isset( $this->_source_container )) return $http_request;
+        if ( !method_exists( $this->_source_container, 'getListSort')) return false;
+        return $this->_source_container->getListSort( );
+    }
+
 }
 
 ?>
-

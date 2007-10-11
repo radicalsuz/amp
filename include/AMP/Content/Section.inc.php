@@ -427,7 +427,9 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function getListSort( ) {
-        return $this->getData( 'list_sort');
+        $value = $this->getData( 'list_sort');
+        if ( $value ) return $value;
+        return 'ordered';
     }
 
 }

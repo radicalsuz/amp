@@ -70,7 +70,7 @@
    define('CAPTCHA_MAX_FONT_SIZE', 25);
    define('CAPTCHA_USE_COLOUR', true);
    define('CAPTCHA_FILE_TYPE', 'jpeg');
-   define('CAPTCHA_FLITE_PATH', '/usr/bin/flite');
+   define('CAPTCHA_FLITE_PATH', '/usr/local/bin/flite');
    define('CAPTCHA_AUDIO_PATH', '/tmp/'); // must be writeable by PHP process
    
    /************************ End Default Options **********************/
