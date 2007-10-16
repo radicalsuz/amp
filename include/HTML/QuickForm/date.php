@@ -71,7 +71,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
     var $_options = array(
         'language'         => 'en',
         'format'           => 'dMY',
-        'minYear'          => 2001,
+        'minYear'          => 2000,
         'maxYear'          => 2020,
         'addEmptyOption'   => false,
         'emptyOptionValue' => '',
