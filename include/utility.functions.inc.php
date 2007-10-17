@@ -1244,6 +1244,9 @@ if ( !function_exists( 'AMP_evalLookup')){
             return $lookup_def->dataset;
         }
         if ( !is_array( $lookup_def )) return AMP_lookup( $lookup_def );
+        if ( isset( $lookup_def['name']) && isset( $lookup_def['var'])) {
+            return AMP_lookup( $lookup_def['name'], $lookup_def['var']);
+        }
         if ( isset( $lookup_def['instance'])){
             return AMPSystem_Lookup::locate( $lookup_def );
         }
@@ -1687,6 +1690,12 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
         trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $lookup_type . ' / ' . $instance . ( isset( $lookup_var ) ? ' / ' . $lookup_var :  '')));
     }
     return $values;
+}
+
+function AMP_lookup_clear_cached( $type, $instance_var = null ) {
+    require_once( "AMP/System/Lookups.inc.php");
+    $key = AMPSystem_Lookup::cache_key( $type, $instance_var );
+    AMP_cache_delete( $key );
 }
 
 function AMP_permission_update( ) {

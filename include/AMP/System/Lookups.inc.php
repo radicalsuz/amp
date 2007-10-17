@@ -105,11 +105,14 @@ class AMPSystem_Lookup {
         if ( !isset( $instance_var )) {
             //standard lookup
             if (!isset($lookup_set[$type])) {
+                /*
                 $lookup_cache_key_base = AMP_CACHE_TOKEN_LOOKUP . ( $type );
                 $lookup_cache_key = $lookup_cache_key_base;
                 if ( defined( 'AMP_SYSTEM_USER_ID')) {
                     $lookup_cache_key = AMP_System_Cache::identify( $lookup_cache_key_base, AMP_SYSTEM_USER_ID );
                 }
+                */
+                $lookup_cache_key = AMPSystem_Lookup::cache_key( $type, $instance_var );
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
                 if ( !$cached_lookup ) {
                     $lookup_set[$type] = &new $req_class(); 
@@ -124,11 +127,15 @@ class AMPSystem_Lookup {
                 $lookup_set[$type] = array( );
             }
             if ( !isset( $lookup_set[$type][$instance_var])) {
+                /*
                 $lookup_cache_key = AMP_CACHE_TOKEN_LOOKUP . ( $type );
                 if ( defined( 'AMP_SYSTEM_USER_ID')) {
                     $lookup_cache_key = AMP_System_Cache::identify( AMP_CACHE_TOKEN_LOOKUP . ( $type ), AMP_SYSTEM_USER_ID );
                 }
                 $lookup_cache_key = AMP_System_Cache::identify( $lookup_cache_key . 'K', $instance_var );
+                $cached_lookup = AMP_cache_get( $lookup_cache_key );
+                */
+                $lookup_cache_key = AMPSystem_Lookup::cache_key( $type, $instance_var );
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
                 if ( !$cached_lookup ) {
                     $lookup_set[$type][$instance_var] = &new $req_class( $instance_var );
@@ -141,6 +148,18 @@ class AMPSystem_Lookup {
         }
         //AMP_cache_set( AMP_CACHE_TOKEN_LOOKUP . 'Master__' . AMP_SYSTEM_USER_ID, $lookup_set ); 
         return $lookup_set[$type]->dataset;
+    }
+
+    function cache_key( $type, $instance_var = null ) {
+        $lookup_cache_key = AMP_CACHE_TOKEN_LOOKUP . ( $type );
+        if ( defined( 'AMP_SYSTEM_USER_ID')) {
+            $lookup_cache_key = AMP_System_Cache::identify( $lookup_cache_key, AMP_SYSTEM_USER_ID );
+        }
+        if ( !isset( $instance_var ))  return $lookup_cache_key;
+        
+        //instanced lookup
+        return AMP_System_Cache::identify( $lookup_cache_key . 'K', $instance_var );
+
     }
 
     function &locate( $lookup_def ){

@@ -34,6 +34,7 @@ class AMPSystem_Upload {
         chmod( $this->_path_target, 0755 );
 
         AMP_s3_save( $this->_path_target );
+        AMP_lookup_clear_cached( 'downloads');
         return true;
     }
 

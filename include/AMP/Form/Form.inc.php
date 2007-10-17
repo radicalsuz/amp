@@ -349,6 +349,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         $reSizer=&new ContentImage_Resize();
         if ( $reSizer->setImageFile( $upLoader->getTargetPath( ))) {
             $reSizer->execute( );
+            AMP_lookup_clear_cached( 'images');
         }
 
         $this->_fileNames[ $filefield ] = basename( $upLoader->getTargetPath() );
@@ -428,6 +429,9 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     function dropField( $fieldname ) {
         if (!isset($this->fields[ $fieldname ])) return false; 
         unset ( $this->fields[ $fieldname ] );
+        if ( isset( $this->form )) {
+            $this->form->removeElement( $fieldname );
+        }
         return true; 
     }
 
