@@ -619,8 +619,7 @@ class AMP_Display_List {
         }
 
         $local_sort_method = '_setSort'.ucfirst( $sort_request );
-        $sort_direction = ( isset( $_REQUEST['sort_direction']) && $_REQUEST['sort_direction']) ?
-                            $_REQUEST['sort_direction'] : false;
+        $sort_direction = $this->_sort_direction_requested( );
 
         if ( method_exists( $this, $local_sort_method)) {
             $this->$local_sort_method( $source, $sort_direction );
@@ -638,17 +637,36 @@ class AMP_Display_List {
         return ( isset($_REQUEST['sort']) && $_REQUEST['sort'] ) ? $_REQUEST['sort'] : false; 
     }
 
+    function _sort_direction_requested( ) {
+        $request = ( isset($_REQUEST['sort_direction']) && $_REQUEST['sort_direction'] ) ? $_REQUEST['sort_direction'] : false; 
+        if( strtoupper( trim( $request )) == trim( AMP_SORT_DESC )) return AMP_SORT_DESC;
+    }
+
     function _translate_sort_sql_request( $sort_request, &$source ){
         if ( !isset( $this->_sort_sql_translations[ $sort_request ])){
             if ( !( $source->isColumn( $sort_request ) 
                 && $source->isColumn( str_replace( AMP_SORT_DESC, '', $sort_request )))) {
                 return false;
             }
-            if ( !( isset( $_REQUEST['sort_direction']))) return $sort_request;
-            if ( $_REQUEST['sort_direction'] == AMP_SORT_DESC ) return $sort_request . AMP_SORT_DESC; 
+            return $this->_set_sql_sort_direction( $sort_request, $sort_request );
+            
+            #if ( !$direction ) return $sort_request;
+            #if ( $direction == AMP_SORT_DESC ) {
+            #    $this->_sort_direction = AMP_SORT_DESC;
+            #    return $sort_request . AMP_SORT_DESC; 
+            #}
         }
         $translated_sort_request = $this->_sort_sql_translations[ $sort_request ];
-        if ( !isset( $_REQUEST['sort_direction']) || ( trim( strtoupper( $_REQUEST['sort_direction'])) != trim( AMP_SORT_DESC ))) return $translated_sort_request;
+        return $this->_set_sql_sort_direction( $sort_request, $translated_sort_request );
+
+        #$this->_sort_direction = AMP_SORT_DESC;
+        #return $this->_reverse_sort_direction( $translated_sort_request, $sort_request );
+    }
+
+    function _set_sql_sort_direction( $sort_request, $sql ) {
+        if( !$sql ) return false;
+        $direction = $this->_sort_direction_requested( );
+        if ( !$direction || ( $direction != AMP_SORT_DESC )) return $sql;
 
         $this->_sort_direction = AMP_SORT_DESC;
         return $this->_reverse_sort_direction( $translated_sort_request, $sort_request );
@@ -693,7 +711,7 @@ class AMP_Display_List {
         $valid_method = method_exists( $this, $local_method );
         if ( !$valid_method && !isset( $this->_source_sample )) return false;
 
-        if ( !$valid_method ) {
+        if ( !$valid_method && method_exists( $this->_source_sample, 'isColumn')) {
             $valid_method = $this->_translate_sort_sql_request( $sort_request, $this->_source_sample );
         }
         if ( !$valid_method ) {
