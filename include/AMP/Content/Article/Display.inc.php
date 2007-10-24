@@ -125,12 +125,27 @@ class Article_Display extends AMPDisplay_HTML {
 
 
     function _HTML_Footer() {
-        $output = "";
-        if ($comments = &$this->_article->getComments()) {
-            $comments->readPublished( );
-            $output .= $comments->display();
+        if ( defined( 'AMP_RENDER_ARTICLE_PUBLIC_DETAIL_FOOTER' )) {
+            $footer_function = AMP_RENDER_ARTICLE_PUBLIC_DETAIL_FOOTER;
+            if ( method_exists( $this, $footer_function )) {
+                return $this->$footer_function( $this->_source );
+            }
+            if ( function_exists( $footer_function )) {
+                return $footer_function( $this->_article, $this );
+            }
         }
-        return $output . $this->_HTML_end();
+        return $this->render_comments( ) . $this->render_end( );
+    }
+
+    function render_comments( ) {
+        $comments = &$this->_article->getComments();
+        if ( !$comments ) return false;
+        $comments->readPublished( );
+        return $comments->display();
+    }
+
+    function render_end( ) {
+        return $this->_HTML_end( );
     }
 
 
