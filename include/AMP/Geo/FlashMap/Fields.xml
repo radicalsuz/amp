@@ -133,6 +133,10 @@
 		<type>text</type>
 		<label>State Zoom</label>
 	</default_state>
+	<type>
+		<type>text</type>
+		<label>Map Type</label>
+	</type>
 	<header5>
 		<type>header</type>
 		<label>Google Map Config</label>
