@@ -12,7 +12,7 @@ nav_block="nav_block"
 badge_header="title"
 
 [class list]
-blurb="text"
+blurb="text blurb"
 image="thumb"
 image_empty="empty_thumb"
 description="description"
