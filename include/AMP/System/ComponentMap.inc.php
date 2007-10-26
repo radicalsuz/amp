@@ -1,6 +1,7 @@
 <?php
 require_once( 'AMP/System/Observer.php');
 require_once( 'AMP/System/Permission/Config.inc.php');
+require_once( 'AMP/System/ComponentLookup.inc.php');
 
 class AMPSystem_ComponentMap extends AMP_System_Observer {
     
@@ -34,6 +35,10 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
     var $_url_system = false;
     var $_observers = array( );
     var $_gacl_obj = false;
+
+    function __construct( ) {
+        ComponentLookup::store( $this );
+    }
 
     function getComponents() {
         return $this->components;

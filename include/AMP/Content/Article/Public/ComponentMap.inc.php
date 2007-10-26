@@ -25,9 +25,11 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
         'list'   => 'AMP/Content/Article/Public/Search/List.php',
         'form'          => 'AMP/Content/Article/Public/Form.inc.php',
         'source' => 'AMP/Content/Article.inc.php',
+		'content_list' => 'AMP/Content/Article/Public/List.php',
         'search' => 'AMP/Content/Article/Public/Search/Form.inc.php',
         'search_fields' => 'AMP/Content/Article/Public/Search/Fields.xml',
-		'list2' => 'AMP/Content/Article/Public/List.php'
+        'content_search_fields' => 'AMP/Content/Article/Public/Search/Content_Fields.xml',
+        'public_search_fields' => 'AMP/Content/Article/Public/Search/Fields.xml',
         );
 
     var $components = array (
@@ -35,8 +37,12 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
         'source' => 'Article',
         'list'   => 'Article_Public_Search_List',
         'search' => 'Article_Public_Search_Form',
-		'list2'  => 'Article_Public_List'
+		'content_list'  => 'Article_Public_List'
         );
+
+    function ComponentMap_Article_Public( ) {
+        $this->__construct( );
+    }
 
     function onInitForm( &$controller ){
 
@@ -52,6 +58,12 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
             $allowed_classes = array_combine_key( $this->public_permitted_classes, $class_values );
             $form->setFieldValueSet( 'class', $allowed_classes );
         }
+    }
+
+    function use_search( $search_type ) {
+        $fields_type = $search_type . '_search_fields';
+        if( !isset( $this->paths[$fields_type]) ) return;
+        $this->paths[ 'search_fields' ] = $this->paths[ $fields_type ];
     }
 
 }

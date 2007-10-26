@@ -1,0 +1,45 @@
+<array>
+	<fulltext>
+		<type>text</type>
+		<label>Text Search</label>
+	</fulltext>
+	<section>
+		<type>multiselect</type>
+		<label>By Section</label>
+		<lookup>sectionMapLiveChopped</lookup>
+	</section>
+    <class>
+		<separator>newrow</separator>
+		<type>multiselect</type>
+		<label>By Class</label>
+		<lookup>publicClasses</lookup>
+    </class>
+	<date>
+		<type>date</type>
+		<label> Date: </label>
+		<options>
+			<addEmptyOption>1</addEmptyOption>
+			<emptyOptionText>--</emptyOptionText>
+			<format>YM</format>
+		</options>
+    </date>
+    <region>
+        <type>select</type>
+        <label>By Region</label>
+        <lookup>regions</lookup>
+    </region>
+    <q>
+        <type>hidden</type>
+    </q>
+    <section_logic>
+        <type>hidden</type>
+    </section_logic>
+    <author>
+        <type>hidden</type>
+        <label>By Author</label>
+    </author>
+	<tag>
+        <type>hidden</type>
+		<label>By Tag</label>
+	</tag>
+</array>
