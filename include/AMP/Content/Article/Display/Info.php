@@ -165,12 +165,12 @@ class ArticleDisplay_Info extends Article_Display {
 
     function _renderSectionHeader( ){
         $section_header_lookup = AMPContent_Lookup::instance( 'sectionHeaders');
-        if ( !isset( $section_header_lookup[ $this->_article->id ])) return false;
+        $section_id = array_search( $this->_article->id, $section_header_lookup );
+        if ( !$section_id ) return false;
 
-        $section_id = $section_header_lookup[ $this->_article->id ];
         $section_url = AMP_SITE_URL . AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'list=type', 'type='.$section_id ));
 
-        $section_names_lookup = AMPContent_Lookup::instance( 'sections');
+        $section_names_lookup = AMP_lookup( 'sections');
         $section_name = isset( $section_names_lookup[ $section_id ]) ? $section_names_lookup[ $section_id ] : false ;
 
         return $this->_renderer->inSpan( 
