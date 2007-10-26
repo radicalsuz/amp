@@ -18,6 +18,15 @@ if (!$template_section) {
 }
 $page->setSection( $template_section );
 
+$tag_header = ( isset( $_REQUEST['tag_header']) && $_REQUEST['tag_header']) ? $_REQUEST['tag_header'] : false;
+$tag = ( isset( $_REQUEST['tag']) && $_REQUEST['tag']) ? $_REQUEST['tag'] : false;
+if( $tag_header && $tag ) {
+    require_once( 'AMP/Content/Tag/Public/Search/Description.php');
+
+    $tag_intro = new AMP_Content_Tag_Public_Search_Description( $tag );
+    $page->contentManager->add( $tag_intro, AMP_CONTENT_DISPLAY_KEY_INTRO );
+}
+
 $map = &new ComponentMap_Article_Public();
 $map->use_search( 'content' );
 $list =  $map->getComponent( 'content_list');
