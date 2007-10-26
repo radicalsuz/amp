@@ -18,7 +18,7 @@ if (!$template_section) {
 }
 $page->setSection( $template_section );
 
-$map = new ComponentMap_Article_Public();
+$map = &new ComponentMap_Article_Public();
 $map->use_search( 'content' );
 $list =  $map->getComponent( 'content_list');
 
