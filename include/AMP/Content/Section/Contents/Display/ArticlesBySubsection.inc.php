@@ -3,7 +3,7 @@
 class SectionContentDisplay_ArticlesBySubsection extends ArticleSet_Display {
 
     var $_subsections_display;
-    var $_css_class_subheader = AMP_CONTENT_CLASS_LIST_SUBHEADER;
+    var $_css_class_subheader = AMP_CONTENT_CSS_CLASS_LIST_SUBHEADER;
     var $_css_class_morelink= "go";
     var $_pager_active = false;
     var $_pager_limit = 20;

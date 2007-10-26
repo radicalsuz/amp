@@ -5,7 +5,7 @@ require_once ( 'AMP/Content/Section/SetDisplay.inc.php' );
 class SectionContentDisplay_SectionsBySubsection extends SectionSet_Display {
 
     var $_subsections_display;
-    var $_css_class_subheader = AMP_CONTENT_LIST_SUBHEADER_CLASS;
+    var $_css_class_subheader = AMP_CONTENT_CSS_CLASS_LIST_SUBHEADER;
 
     function SectionContentDisplay_SectionsBySubSection( &$sectionSet, $read_data = true ) {
         $this->init( $sectionSet, $read_data );
