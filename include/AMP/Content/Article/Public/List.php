@@ -174,6 +174,7 @@ class Article_Public_List extends AMP_Display_List {
     }
 
     function render_blurb( $source ) {
+        if( !( $blurb = $source->getBlurb( ))) return false;
         return $this->_renderer->div( $source->getBlurb(), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_BLURB ) );
     }
     
