@@ -57,8 +57,9 @@ class Article_Public_List extends AMP_Display_List {
 
         $image = $this->render_image( $source );
         $image_css = $image ? AMP_CONTENT_CSS_CLASS_LIST_IMAGE : AMP_CONTENT_CSS_CLASS_LIST_IMAGE_EMPTY;
+        $description_css = $image ? AMP_CONTENT_CSS_CLASS_LIST_DESCRIPTION_WITH_IMAGE : AMP_CONTENT_CSS_CLASS_LIST_DESCRIPTION;
         return    $this->_renderer->div( $image, array( 'class' => $image_css ))
-                . $this->_renderer->div( $text,  array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_DESCRIPTION ) );
+                . $this->_renderer->div( $text,  array( 'class' => $description_css ));
     }
 
     function url_for( $source ) {

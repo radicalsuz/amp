@@ -16,6 +16,7 @@ blurb="text blurb"
 image="thumb"
 image_empty="empty_thumb"
 description="description"
+description_with_image="description description_with_image"
 
 [class list article]
 title="listtitle"
