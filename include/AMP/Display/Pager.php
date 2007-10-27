@@ -46,10 +46,10 @@ class AMP_Display_Pager {
             return;
         }
 
-        if ( ( $limit = $this->assert_var( 'limit')) || ( $limit = $this->assert_var( 'qty'))) {
+        if ((( $limit = $this->assert_var( 'limit')) || ( $limit = $this->assert_var( 'qty'))) && !$this->view_all( )) {
             $this->set_limit( $limit );
         }
-        if ( $offset = $this->assert_var( 'offset')) {
+        if ( ( $offset = $this->assert_var( 'offset')) && !$this->view_all( )) {
             $this->set_offset( $offset );
         }
 
@@ -113,10 +113,12 @@ class AMP_Display_Pager {
             unset( $target_request['offset']);
         }
 		unset( $target_request['all']);
-        foreach( $target_request as $var => $value ) {
+
+        /* foreach( $target_request as $var => $value ) {
             $target_request_vars[$var] = urlencode_array( $value, $var ); //$var . '=' . ( is_array( $value ) ? urlencode_array( $value ) : $value ) ;
-        }
-        return AMP_url_add_vars( $this->_url_target, $target_request_vars );
+        } */
+
+        return AMP_url_update( $this->_url_target, $target_request );
     }
 
     function execute( ){
@@ -217,10 +219,11 @@ class AMP_Display_Pager {
     }
 
     function render_all( ) {
-        if ( $this->_qty_page >= $this->_qty_total ) {
+        if ( ( $this->_qty_page >= $this->_qty_total ) || ( $this->_qty_page_internal && ( $this->_qty_page >= $this->_qty_page_internal ))) {
             return false;
         }
-        $url = AMP_url_add_vars( $this->url_offset( ), 'all=1');
+        trigger_error( $this->_qty_page . ' && ' . $this->_qty_page_internal );
+        $url = AMP_url_update( $this->url_offset( ), array( 'all' =>'1', 'offset' => '', 'qty' => ''));
         return $this->_renderer->link( 
                             $url,
                             $this->_renderer->double_arrow_left( ) . $this->_renderer->space( )

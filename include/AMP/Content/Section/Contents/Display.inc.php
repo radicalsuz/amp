@@ -58,7 +58,10 @@ class SectionContents_Display  extends AMPDisplay_HTML {
 			$this->_display = new $display_class( 
                                     $this->_section,
                                     $this->_section->getDisplayCriteria( ),
-                                    $this->_section->getListItemLimit( ));
+                                    $limit = ((( isset( $_REQUEST['all']) && $_REQUEST['all']) 
+                                             ||(isset( $_REQUEST['qty']) && $_REQUEST['qty']))
+                                                    ? null : $this->_section->getListItemLimit( ))
+                                    );
 		}
     }
 
