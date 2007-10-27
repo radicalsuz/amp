@@ -69,6 +69,12 @@ class Article extends AMPSystem_Data_Item {
         return $return_set;
     }
 
+    function hasAncestor( $section_id ) {
+        $map = AMPContent_Map::instance( );
+        $ancestors = $map->getAncestors( $this->getParent( ));
+        return isset( $ancestors[$section_id]) ;
+    }
+
     function getClass() {
         return $this->getData( 'class' );
     }
@@ -743,6 +749,22 @@ class Article extends AMPSystem_Data_Item {
         }
         if ( empty( $partial_date_crit )) return 'TRUE';
         return join( ' AND ', $partial_date_crit );
+    }
+
+    function makeCriteriaAfterDate( $date_value ) {
+        if ( !is_array( $date_value ) && $date_value ) {
+            return "UNIX_TIMESTAMP( date ) >= " . $date_value;
+        }
+        $partial_date_crit = array( );
+        if ( isset( $date_value['Y']) && $date_value['Y'] ) {
+            $partial_date_crit[] = 'YEAR( date ) >= ' .$date_value['Y'];
+        }
+        if ( isset( $date_value['M']) && $date_value['M'] ) {
+            $partial_date_crit[] = 'MONTH( date ) >= ' . $date_value['M'];
+        }
+        if ( empty( $partial_date_crit )) return 'TRUE';
+        return join( ' AND ', $partial_date_crit );
+
     }
 
     function makeCriteriaType( $section_id ) {
