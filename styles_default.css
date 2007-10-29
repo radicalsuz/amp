@@ -409,15 +409,16 @@ div.list_intro {
 }
 a.amp_cloud_link {
     margin-left: .2em;
+    padding-top: 1.25em;
 }
 a.amp_cloud_link_1 {
-	font-size: .5em;
+	font-size: .9em;
 }
 a.amp_cloud_link_2 {
-	font-size: .75em;
+	font-size: 1em;
 }
 a.amp_cloud_link_3 {
-	font-size: 1em;
+	font-size: 1.2em;
 }
 a.amp_cloud_link_4 {
 	font-size: 1.5em;
