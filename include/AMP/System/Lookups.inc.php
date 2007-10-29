@@ -1048,7 +1048,7 @@ class AMPSystemLookup_TagTotalsArticlesLive extends AMPSystem_Lookup {
     var $result_field = 'count( a.item_id ) as qty';
     var $criteria = 'a.item_id = b.id AND b.publish=1 AND a.item_type="article" GROUP BY a.tag_id';
 
-    function AMPSystemLookup_TagTotalsArticlesLive( $section_id ) {
+    function AMPSystemLookup_TagTotalsArticlesLive( ) {
         $this->init( );
     }
 
