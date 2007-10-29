@@ -1042,6 +1042,18 @@ class AMPSystemLookup_TagsByItem extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_TagTotalsArticlesLive extends AMPSystem_Lookup {
+    var $datatable = 'tags_items a, articles b';
+    var $id_field = 'a.tag_id';
+    var $result_field = 'count( a.item_id ) as qty';
+    var $criteria = 'a.item_id = b.id AND b.publish=1 AND a.item_type="article" GROUP BY a.tag_id';
+
+    function AMPSystemLookup_TagTotalsArticlesLive( $section_id ) {
+        $this->init( );
+    }
+
+}
+
 class AMPSystemLookup_TagTotalsArticlesBySectionLive extends AMPSystem_Lookup {
     var $datatable = 'tags_items';
     var $id_field = 'tag_id';
