@@ -14,6 +14,7 @@ function amp_badge_articles( $options ) {
     $display = ( isset( $options['display']) && $options['display'] ) ? $options['display'] : false;
     $display_header = ( isset( $options['display_header']) && $options['display_header'] ) ? $options['display_header'] : false;
     $display_footer = ( isset( $options['display_footer']) && $options['display_footer'] ) ? $options['display_footer'] : false;
+    $display_morelink_url = ( isset( $options['display_morelink_url']) && $options['display_morelink_url'] ) ? $options['display_morelink_url'] : 'AMP_url_update';
 
     $limit = ( isset( $options['limit']) && $options['limit'] ) ? $options['limit'] : false;
     $morelink = ( isset( $options['morelink']) ) ? $options['morelink'] : null;
@@ -61,8 +62,9 @@ function amp_badge_articles( $options ) {
     if ( $display ) $list->set_display_method( $display );
     if ( $display_header ) $list->set_display_header_method( $display_header );
     if ( $display_footer ) $list->set_display_footer_method( $display_footer );
-    if ( $morelink )  {
-		$list->set_pager_target( AMP_url_update( $morelink, $criteria ));
+    
+    if ( $display_morelink_url && function_exists( $display_morelink_url ))  {
+		$list->set_pager_target( $display_morelink_url( $morelink, $criteria, $options ));
 	}
     if ( $suppress_morelink ) $list->suppress( 'pager' );
     return $header_output . $list->execute( );
