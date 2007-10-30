@@ -62,7 +62,9 @@ class AMP_Display_Cloud {
             $this->_assign_class( $item->id, $this->_item_qtys[ $item->id ], $max_qty, $min_qty );
         }
         */
+		AMP_dump($this->_item_qtys );
         $item_classes = array_map( array( $this, '_map_class'), $this->_items );
+		AMP_dump( $item_classes );
         reset( $this->_items );
         foreach( $item_classes as $key => $class ) {
             $item_id = key( $this->_items );
@@ -82,7 +84,7 @@ class AMP_Display_Cloud {
         $item_qty = $this->_item_qtys[$item->id];
 
         if ( $item_qty >= $this->max ) return $this->_size_steps;
-        if ( $item_qty = $this->min ) return 1;
+        if ( $item_qty == $this->min ) return 1;
 
         $range = $item_qty - $this->min;
         return ceil( $range/$this->step ) + 1;
@@ -90,15 +92,12 @@ class AMP_Display_Cloud {
 
     function _assign_class( $item_id, $item_qty, $max_qty, $min_qty = 0 ) {
         $step_size = ( $max_qty - $min_qty ) / $this->_size_steps;
-        trigger_error( 'size  is ' . $step_size );
         for( $n = 0;$n<$this->_size_steps;$n++) {
             if ( $item_qty >= ( $max_qty - ( $n * $step_size ))) {
                 $this->_item_classes[ $item_id ] = $this->_css_class_base . ( $n + 1 );
-                trigger_error( 'setting ' . ( $n+1 ). ' for ' . $item_qty );
                 return;
             }
         }
-        trigger_error( 'setting ' . $this->_size_steps . ' for ' . $item_qty );
         $this->_item_classes[ $item_id ] = $this->_css_class_base . $this->_size_steps;
     }
 
