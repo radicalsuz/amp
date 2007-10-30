@@ -62,9 +62,7 @@ class AMP_Display_Cloud {
             $this->_assign_class( $item->id, $this->_item_qtys[ $item->id ], $max_qty, $min_qty );
         }
         */
-		AMP_dump($this->_item_qtys );
         $item_classes = array_map( array( $this, '_map_class'), $this->_items );
-		AMP_dump( $item_classes );
         reset( $this->_items );
         foreach( $item_classes as $key => $class ) {
             $item_id = key( $this->_items );
