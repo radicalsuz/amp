@@ -50,10 +50,6 @@ function amp_badge_articles( $options ) {
 
     if ( $header ) {
         $renderer = AMP_get_renderer( );
-        $image_path = AMP_LOCAL_PATH . 'img/original/' . $header;
-        if ( file_exists( $image_path )) {
-            $header = $renderer->image( 'img/original/'.$header );
-        }
         $header_output = $renderer->span( $header, array( 'class' => AMP_CONTENT_CSS_CLASS_BADGE_HEADER ));
     }
 

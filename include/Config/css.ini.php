@@ -42,7 +42,7 @@ media = "article_media"
 fineprint=photocaption
 
 [id]
-nav_element="%s_nav_%s"
+nav_element="nav_id_%s"
 nav_block="%s_nav"
 
 [class gallery list]

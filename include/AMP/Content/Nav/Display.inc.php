@@ -153,10 +153,10 @@ class NavigationDisplay {
         }
 
         $nav_blocks = AMP_lookup( 'navBlocks' );
-        $nav_key = array_search( strtolower( $this->position ), $nav_blocks );
+        $nav_key = array_search( strtolower( $this->order ), $nav_blocks );
         return $this->_renderer->div( $content, 
                                     array(  'class' => sprintf( AMP_CONTENT_CSS_CLASS_NAV_ELEMENT_POSITIONED, $nav_key ),
-                                            'id'    => sprintf( AMP_CONTENT_CSS_ID_NAV_ELEMENT, $this->id, $this->order ))
+                                            'id'    => sprintf( AMP_CONTENT_CSS_ID_NAV_ELEMENT, $this->nav->id ))
                                     );
     }
 
