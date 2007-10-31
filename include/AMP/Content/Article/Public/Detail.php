@@ -100,7 +100,7 @@ class Article_Public_Detail extends AMP_Display_Detail {
 
 	function render_date( &$source ) {
 		$date = $source->getItemDate();
-		if (!$date) return false;
+		if (!AMP_verifyDateValue( $date )) return false;
 
         return $this->_renderer->span( DoDate( $date, AMP_CONTENT_DATE_FORMAT), array( 'class' => $this->_css_class_date )) 
                 . $this->_renderer->newline();
