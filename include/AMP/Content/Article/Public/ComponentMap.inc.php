@@ -26,6 +26,8 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
         'form'          => 'AMP/Content/Article/Public/Form.inc.php',
         'source' => 'AMP/Content/Article.inc.php',
 		'content_list' => 'AMP/Content/Article/Public/List.php',
+		'standard_list' => 'AMP/Content/Article/Public/List.php',
+        'legacy_list'   => 'AMP/Content/Article/Public/Search/List.php',
         'search' => 'AMP/Content/Article/Public/Search/Form.inc.php',
         'search_fields' => 'AMP/Content/Article/Public/Search/Fields.xml',
         'content_search_fields' => 'AMP/Content/Article/Public/Search/Content_Fields.xml',
@@ -37,7 +39,9 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
         'source' => 'Article',
         'list'   => 'Article_Public_Search_List',
         'search' => 'Article_Public_Search_Form',
-		'content_list'  => 'Article_Public_List'
+		'content_list'  => 'Article_Public_List',
+        'standard_list'   => 'Article_Public_List',
+        'legacy_list'   => 'Article_Public_Search_List',
         );
 
     function ComponentMap_Article_Public( ) {
@@ -60,11 +64,6 @@ class ComponentMap_Article_Public extends AMPSystem_ComponentMap {
         }
     }
 
-    function use_search( $search_type ) {
-        $fields_type = $search_type . '_search_fields';
-        if( !isset( $this->paths[$fields_type]) ) return;
-        $this->paths[ 'search_fields' ] = $this->paths[ $fields_type ];
-    }
 
 }
 ?>

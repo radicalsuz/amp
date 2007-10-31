@@ -28,7 +28,7 @@ if( $tag_header && $tag ) {
 }
 
 $map = &new ComponentMap_Article_Public();
-$map->use_search( 'content' );
+$map->use_prefix( 'content', 'search_fields' );
 $list =  $map->getComponent( 'content_list');
 
 //$list = new Article_Public_List();

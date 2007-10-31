@@ -244,6 +244,17 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
         return $this->_url_system;
     }
 
+    
+    function use_prefix( $type_prefix, $component ) {
+        $fields_type = $type_prefix . '_' . $component ;
+        if( isset( $this->paths[$fields_type]) ) {
+            $this->paths[ $component ] = $this->paths[ $fields_type ];
+        }
+        if( isset( $this->components[$fields_type]) ) {
+            $this->components[ $component ] = $this->components[ $fields_type ];
+        }
+    }                
+
 }
 
 ?>

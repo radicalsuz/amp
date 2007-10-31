@@ -6,6 +6,7 @@ require_once( 'AMP/Content/Page.inc.php' );
 require_once( 'AMP/Content/Article/Public/ComponentMap.inc.php' );
 
 $map = &new ComponentMap_Article_Public( );
+$map->use_prefix( AMP_CONTENT_ARTICLE_SEARCH_MAP_LIST_PREFIX, 'list' );
 $controller = &$map->get_controller( );
 $controller->request('search');
 

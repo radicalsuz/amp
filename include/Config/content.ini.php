@@ -17,6 +17,9 @@ default="date DESC, id DESC"
 newest="date DESC, id DESC"
 ordered="if ( !isnull( pageorder ) and pageorder, pageorder, 9999999 ), if ( date != '0000-00-00', date, '2050-12-31') DESC, id DESC"
 
+[content article search map]
+list_prefix="legacy"
+
 [content section listsort section]
 alpha="type"
 default="date2 DESC, id DESC"
@@ -71,6 +74,9 @@ news="ArticleDisplay_New"
 pressrelease="ArticleDisplay_PressRelease"
 blog="ArticleDisplay_Blog"
 
+[content comment]
+default_status=1
+
 [content sidebar class]
 default="sidebar_right"
 left="sidebar_left"
@@ -100,6 +106,7 @@ view="/system/images/view2.png"
 preview="/system/images/view.gif"
 delete="/system/images/delete.png"
 enlarge="/img/magnify-clip.png"
+crop="/system/images/crop.png"
 
 [include]
 start_tag="{{"
