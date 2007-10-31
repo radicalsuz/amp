@@ -34,6 +34,13 @@ class AMPSystem_Header extends AMPContent_Header {
         return $system_header;
     }
 
+    function _HTML_startHeader() {
+        return 
+            #AMP_TEXT_CONTENT_SITE_DOCTYPE . 
+            "\n<html>\n<head>\n";
+    }
+
+
     function getPageTitle( ){
         $pageTitle = array( AMP_SITE_NAME . ' ' . AMP_TEXT_ADMINISTRATION );
         if ( isset( $this->_page_action )) {
