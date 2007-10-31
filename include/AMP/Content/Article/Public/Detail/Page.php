@@ -1,6 +1,6 @@
 <?php
 require_once( 'AMP/Content/Article/Public/Detail.php');
-require_once( 'AMP/System/Introtext.inc.php');
+require_once( 'AMP/System/IntroText.inc.php');
 
 class Article_Public_Detail_Page extends Article_Public_Detail {
     function Article_Public_Detail_Page( $source ) {
