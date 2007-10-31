@@ -464,3 +464,28 @@ ol.comments_list li.list_item p {
 	padding: 1em 0 1em 0;
 	margin-top: .5em;
 }
+/* sitemap */
+.map_block {
+	margin: 0 1em 2em 1em;  
+}
+.map_2 {
+	margin-left: 2em;
+}
+.map_3 {
+	margin-left: 3.5em;
+}
+.map_4 {
+	margin-left: 5em;
+}
+.map_5, .map_6, .map_7, .map_8 {
+	margin-left: 6em;
+}
+.map_2 .title{
+	font-size: 16px;
+}
+.map_3 .title{
+	font-size: 14px;
+}
+.map_4 .title, .map_5 .title, .map_6 .title, .map_7 .title, .map_8 .title{
+	font-size: 12px;
+}
