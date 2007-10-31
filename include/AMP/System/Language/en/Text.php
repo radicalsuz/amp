@@ -65,6 +65,7 @@ define( 'AMP_TEXT_POSTED_IN' , 'Posted in' );
 define( 'AMP_TEXT_POSTED_BY' , 'Posted by %s on %s' );
 define( 'AMP_TEXT_LOGIN' , 'login' );
 define( 'AMP_TEXT_STARS' , '%1$s stars' );
+define( 'AMP_TEXT_GO_TO_PAGE', 'Go to page:');
 
 if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
 if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );
@@ -216,6 +217,7 @@ define( 'AMP_TEXT_OPTION_BLANK', 'None available');
 define( 'AMP_TEXT_YOUR_COMMENT', 'Your Comment' );
 define( 'AMP_TEXT_COMMENT', 'comment' );
 define( 'AMP_TEXT_ADD_A_COMMENT', 'Add a Comment' );
+if ( !defined( 'AMP_TEXT_NO_COMMENTS')) define( 'AMP_TEXT_NO_COMMENTS', 'no comments' );
 
 /**
  * DIA related 
@@ -346,5 +348,9 @@ define( 'AMP_TEXT_SECTION_LISTSORT_ALPHA', 'Titles, A-Z');
 define( 'AMP_TEXT_SECTION_LISTSORT_DEFAULT', 'Date, Newest First');
 define( 'AMP_TEXT_SECTION_LISTSORT_NEWEST', 'Date, Newest First');
 define( 'AMP_TEXT_SECTION_LISTSORT_ORDERED', 'Custom Order, then Date, Newest First');
+
+if ( !defined( 'AMP_TEXT_CONTENT_SITE_DOCTYPE')) {
+    define( 'AMP_TEXT_CONTENT_SITE_DOCTYPE', '');
+}
 
 ?>

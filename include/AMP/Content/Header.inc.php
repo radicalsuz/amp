@@ -168,7 +168,7 @@ class AMPContent_Header {
 
 
     function _HTML_startHeader() {
-        return "<html>\n<head>\n";
+        return AMP_TEXT_CONTENT_SITE_DOCTYPE . "\n<html>\n<head>\n";
     }
 
     function _HTML_linkRels() {
