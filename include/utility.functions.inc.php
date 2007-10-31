@@ -846,14 +846,21 @@ if (!function_exists('AMP_makeMergeFields')) {
 
 if (!function_exists('AMP_trimText')) {
     function AMP_trimText( $text, $max_length, $preserve_tags=true ) {
-        $trimmed = ($preserve_tags ? $text : html_entity_decode( strip_tags( $text )));
-        if (! (strlen( $trimmed ) > $max_length) ) return $trimmed; 
+        $no_tags_version = strip_tags( html_entity_decode( $text, ENT_COMPAT, ( AMP_SITE_CONTENT_ENCODING ) ));
+        $tag_length = mb_strlen( $text , AMP_SITE_CONTENT_ENCODING ) - mb_strlen( $no_tags_version , AMP_SITE_CONTENT_ENCODING );
+        $trimmed = $text;
+        if ( !$preserve_tags ) {
+            $trimmed = $no_tags_version;
+            $tag_length = 0;
+        }
+        $max_length = $max_length+$tag_length;
+        if (! (mb_strlen( $trimmed, AMP_SITE_CONTENT_ENCODING ) > $max_length ) ) return $trimmed; 
 
         $end_item = " ...";
-        $trimmed = substr( trim($trimmed), 0, $max_length );
-        if ( !($pos = strrpos( $trimmed, " " ))) return $trimmed . $end_item;
+        $trimmed = mb_substr( trim($trimmed), 0, $max_length, AMP_SITE_CONTENT_ENCODING );
+        if ( !($pos = mb_strrpos( $trimmed, " ", null, AMP_SITE_CONTENT_ENCODING  ))) return $trimmed . $end_item;
 
-        return substr( $trimmed, 0, $pos ) . $end_item;
+        return mb_substr( $trimmed, 0, $pos, AMP_SITE_CONTENT_ENCODING ) . $end_item;
     }
 }
 
@@ -1688,6 +1695,7 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
     }
     if ( !isset( $values )) {
         trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $lookup_type . ' / ' . $instance . ( isset( $lookup_var ) ? ' / ' . $lookup_var :  '')));
+        return false;
     }
     return $values;
 }
