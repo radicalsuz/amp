@@ -22,6 +22,7 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     var $name_field = 'name';
     var $_exact_value_fields = array( 'modid' );
     var $_class_name = 'AMPSystem_IntroText';
+    var $display_class = 'Article_Public_Detail_Page';
 
     function AMPSystem_IntroText ( &$dbcon, $text_id=null ) {
         $this->init( $dbcon, $text_id );
@@ -35,8 +36,14 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     }
 
     function &getDisplay() {
-        require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
-        $display = & new ArticleDisplay_IntroText( $this );
+        if( AMP_RENDER_DISPLAY_CLASS_PUBLICPAGE != $this->display_class ) {
+            require_once ( 'AMP/Content/Article/Display/Introtext.inc.php' );
+            $this->display_class = AMP_RENDER_DISPLAY_CLASS_PUBLICPAGE ? AMP_RENDER_DISPLAY_CLASS_PUBLICPAGE : 'ArticleDisplay_IntroText';
+        } else {
+            require_once ( 'AMP/Content/Article/Public/Detail/Page.php' );
+        }
+        $display_class = $this->display_class;
+        $display = & new $display_class( $this );
         return $display;
     }
 
@@ -47,6 +54,20 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
 
     function getSection() {
         return $this->getData( 'type' );
+    }
+
+    function getParent( ) {
+        return $this->getSection( );
+    }
+
+    function getSectionsRelated( ) {
+        return false;
+    }
+
+    function hasAncestor( $section_id ) {
+        $map = AMPContent_Map::instance( );
+        $ancestors = $map->getAncestors( $this->getParent( ));
+        return isset( $ancestors[$section_id]) ;
     }
 
     function getTemplate() {
@@ -107,6 +128,11 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     function getArticleDate() {
         return false;
     }
+
+    function getItemDate( ) {
+        return $this->getData( 'date');
+    }
+
     function getComments() {
         return false;
     }
