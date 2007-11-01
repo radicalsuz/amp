@@ -85,6 +85,15 @@ class AMP_Display_Pager {
         $this->_url_target = $url;
         if ( strpos( $url, '//') === 0 ) 
             $this->_url_target = substr( $url, 2 );
+        if ( !( $query_start = strpos( $url, '?') )) return;
+        $query = substr( $url, $query_start + 1 ) ;
+        parse_str( $query, $target_vars);
+        if( empty( $target_vars )) return;
+        $this->_request = array_merge( $this->_request, $target_vars );
+    }
+
+    function set_request( $vars ) {
+        $this->_request = $vars;
     }
 
     function get_offset( ) {
@@ -222,7 +231,6 @@ class AMP_Display_Pager {
         if ( ( $this->_qty_page >= $this->_qty_total ) || ( $this->_qty_page_internal && ( $this->_qty_page >= $this->_qty_page_internal ))) {
             return false;
         }
-        trigger_error( $this->_qty_page . ' && ' . $this->_qty_page_internal );
         $url = AMP_url_update( $this->url_offset( ), array( 'all' =>'1', 'offset' => '', 'qty' => ''));
         return $this->_renderer->link( 
                             $url,

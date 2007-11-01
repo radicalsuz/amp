@@ -62,6 +62,12 @@ class Article_Public_List extends AMP_Display_List {
                 . $this->_renderer->div( $text,  array( 'class' => $description_css ));
     }
 
+    function _renderHeader( ) {
+        //stub
+        return $this->render_search_form( ) 
+                . $this->_renderPagerHeader( );
+    }
+
     function url_for( $source ) {
         if ( !method_exists( $source, 'getURL' )) return false; 
         return $source->getURL( );

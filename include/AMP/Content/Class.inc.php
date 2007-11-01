@@ -80,7 +80,16 @@ class ContentClass extends AMPSystem_Data_Item {
         if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
 
         if (!class_exists( $display_class )) $display_class = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
-        $result = &new $display_class( $this );
+        $display_class_vars = get_class_vars( $display_class );
+
+        if (!isset( $display_class_vars['api_version'] ) || ( $display_class_vars['api_version'] == 1)) {
+            $result = &new $display_class( $this );
+        } elseif ($display_class_vars['api_version'] == 2 ) {
+			$result = new $display_class( 
+                                    $this,
+                                    array( 'class' => $this->id )
+                                    );
+        }
         return $result;
     }
 

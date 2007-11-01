@@ -18,6 +18,10 @@ class AMP_Display_Pager_Content extends AMP_Display_Pager {
 
         return $links.$this->render_all( );
     }
+    function render_top( ) {
+        if ( !$this->_current_offset ) return false;
+        return parent::render_top( );
+    }
 }
 
 ?>

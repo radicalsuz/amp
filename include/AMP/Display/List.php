@@ -370,7 +370,7 @@ class AMP_Display_List {
         }
         $this->_footer_display_method = $function_name;
     }
-
+    
     // {{{ private source create methods: _init_source, _generate_source 
 
     function _init_source( $source, $criteria ) {
@@ -496,6 +496,21 @@ class AMP_Display_List {
             $this->_pager->trim( $source );
         } 
 
+    }
+
+    function set_pager_target( $url ) {
+        $this->_pager_target = $url;
+        if ( !isset( $this->_pager )) {
+            return;
+        }
+        $this->_pager->set_target( $url );
+    }
+    function set_pager_request( $vars ) {
+        if ( !isset( $this->_pager )) {
+            $this->_pager_target = AMP_url_update( $this->_pager_target, $vars );
+            return;
+        }
+        $this->_pager->set_request( $vars );
     }
 
     function _init_identity( ) {
@@ -669,10 +684,10 @@ class AMP_Display_List {
         if ( !$direction || ( $direction != AMP_SORT_DESC )) return $sql;
 
         $this->_sort_direction = AMP_SORT_DESC;
-        return $this->_reverse_sort_direction( $translated_sort_request, $sort_request );
+        return $this->_reverse_sort_direction( $sort_request, $sql );
     }
 
-    function _reverse_sort_direction( $sort_sql, $sort_request ) {
+    function _reverse_sort_direction( $sort_request, $sort_sql ) {
         if ( isset( $this->_sort_sql_translations[ $sort_request . '_desc'] )) return $this->_sort_sql_translations[ $sort_request . '_desc' ];
         $clauses = preg_split( "/\s?,\s?/", $sort_sql );
         $reversed_clauses = array( );

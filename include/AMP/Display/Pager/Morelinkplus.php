@@ -31,6 +31,7 @@ class AMP_Display_Pager_Morelinkplus extends AMP_Display_Pager_Content {
             return false;
         }
         $target_url = $this->url_offset( $this->_current_offset + $this->_qty_page );
+        trigger_error( $target_url );
         return $this->_renderer->link( 
                                 $target_url, 
                                 AMP_TEXT_MORE  . $this->_renderer->space( ) . $this->_renderer->arrow_right( 2 ), 

@@ -9,6 +9,7 @@ class ContentClass_Display extends ArticleSet_Display {
 
     var $_class;
     var $_showListIntro = true;
+    var $api_version = 1;
 
     function ContentClass_Display( &$classRef, $read_data = true ) {
         $this->_class = &$classRef;
