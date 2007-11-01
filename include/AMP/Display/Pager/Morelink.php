@@ -1,8 +1,8 @@
 <?php
 
-require_once( 'AMP/Display/Pager.php');
+require_once( 'AMP/Display/Pager/Content.php');
 
-class AMP_Display_Pager_Morelink extends AMP_Display_Pager {
+class AMP_Display_Pager_Morelink extends AMP_Display_Pager_Content {
 
     function AMP_Display_Pager_Morelink( ) {
         $this->__construct( );
