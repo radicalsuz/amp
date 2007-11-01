@@ -14,7 +14,8 @@ class AMP_Content_Tag_Public_Search_Description extends AMP_Display_Detail {
     }
 
     function renderItem( $source ) {
-        $text = ucwords(  AMP_pluralize( AMP_TEXT_TAG )) . ':' . $this->_renderer->space( )
+        $descriptor = count( $source ) > 1 ? AMP_pluralize( AMP_TEXT_TAG ) : AMP_TEXT_TAG;
+        $text = ucwords(  $descriptor . ':' . $this->_renderer->space( ))
                 . join( ', ', array_map( array( $this, 'render_name'), $source ));
         return $this->_renderer->div( $text, array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_SUBHEADER));
     }
