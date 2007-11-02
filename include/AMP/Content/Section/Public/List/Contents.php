@@ -3,8 +3,7 @@
 class Section_Public_List_Contents extends Section_Public_List {
 
     function Section_Public_List_Contents( $container = false, $criteria = array( ), $limit = null ) {
-        $source = $this->_init_container( $container );
-        $this->__construct( $source, $criteria, $limit );
+        $this->__construct( $container, $criteria, $limit );
     }
 
     function _renderItem( &$source ) {

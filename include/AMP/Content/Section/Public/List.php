@@ -24,9 +24,13 @@ class Section_Public_List extends AMP_Display_List {
     var $_source_container;
 
 	function Section_Public_List ( $container = false, $criteria = array(), $limit = null ) {
-        $source = $this->_init_container( $container );
-		$this->__construct($source, $criteria, $limit );
+		$this->__construct($container, $criteria, $limit );
 	}
+
+    function __construct( $container = false, $criteria = array( ), $limit = null ) {
+        $source = $this->_init_container( $container );
+		parent::__construct($source, $criteria, $limit );
+    }
     
     function _init_container( $container ) {
         if ( !$container ) return false;

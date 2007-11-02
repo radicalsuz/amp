@@ -51,6 +51,7 @@ class Article_Public_List extends AMP_Display_List {
         if ( array_search( strtolower( get_class( $container )), $allowed_containers) === FALSE ) {
             return $container;
         }
+        $this->_source_container = &$container;
         return false;
     }
 
