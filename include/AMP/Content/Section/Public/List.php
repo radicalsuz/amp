@@ -45,9 +45,8 @@ class Section_Public_List extends AMP_Display_List {
         $text =     $this->render_title( $source )
                   . $this->render_blurb( $source );
 
-        $image = $this->render_image( $source );
-        return    $this->_renderer->div( $image, array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_IMAGE ))
-                . $this->_renderer->div( $text,  array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_DESCRIPTION ) );
+        return $this->render_image_format( $this->render_image( $source ), $source )
+             . $this->render_description_format( $text, $source );
     }
 
     function url_for( $source ) {
@@ -72,6 +71,18 @@ class Section_Public_List extends AMP_Display_List {
             return $img_output;
         }
         return $this->_renderer->link( $url, $img_output );
+    }
+
+    function render_image_format( $image, $source ) {
+        $container_class = $image ? AMP_CONTENT_CSS_CLASS_LIST_IMAGE : AMP_CONTENT_CSS_CLASS_LIST_IMAGE_EMPTY ;
+        return    $this->_renderer->div( $image, array( 'class' => $container_class ));
+    }
+
+    function render_description_format( $description, $source ) {
+        if ( !$description ) return false;
+        $image = $this->render_image( $source );
+        $description_css = $image ? AMP_CONTENT_CSS_CLASS_LIST_DESCRIPTION_WITH_IMAGE : AMP_CONTENT_CSS_CLASS_LIST_DESCRIPTION;
+        return $this->_renderer->div( $description,  array( 'class' => $description_css ) );
     }
 
     function render_blurb( $source ) {
