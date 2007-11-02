@@ -151,7 +151,7 @@ class UserDataPlugin_Save_Related extends UserDataPlugin_Save {
 
         $this->fields = array_merge( $this->fields, $included_fields);
 
-        $dom_field_names = $this->convertFieldNamestoUDM( $related_udm->fields, $keys = true );
+        $dom_field_names = $this->convertFieldNamestoUDM( $included_fields, $keys = true );
 
         # there must be a better way than this, but this field was causing problems
         # in the javascript, and since we ignore it's value on submit anyway...

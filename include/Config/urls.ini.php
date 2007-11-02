@@ -65,6 +65,8 @@ map=           "flashmap.php"
 
 media_add=     "form.php?modin=7"
 
+more         = "list.php"
+
 petitions=     "petition.php"
 
 rssfeed=       "rssfeed.php"
@@ -130,7 +132,8 @@ home=          "articlelist.php"
 housing=       "housing.php"
 housing_add=   "housing.php?action=new"
 
-image_edit=    "image_manager.php?action=crop"
+image_crop=    "image_manager.php?action=crop"
+image_edit=    "image_manager.php?action=edit"
 image_upload=  "image_manager.php?action=add"
 image_view=    "image.php"
 images=        "image_manager.php"

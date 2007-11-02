@@ -9,11 +9,12 @@ class Gallery_Display_Tree extends AMP_Content_Buffer {
     var $_renderer;
     var $_tree;
 
-    function Gallery_Display_Tree( &$source, $criteria = null ) {
+    function Gallery_Display_Tree( &$source, $criteria = array( )) {
         $this->__construct( $source, $criteria );
     }
 
-    function __construct( &$source, $criteria = null ) {
+    function __construct( &$source, $criteria = array( )) {
+        $criteria = $source->makeCriteria( $criteria );
         $this->_source_array = array_combine_key( array_keys( AMPContent_Lookup::instance( 'galleryMap' )), $source->search( $criteria ));
         $this->_init_renderer( $source );
         $this->_tree = &new AMP_System_Data_Tree( $source );

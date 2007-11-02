@@ -323,7 +323,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 		$def['keyword']  =  array(
             'type'=>'text',     
             'label'=>'Search All',
-            'value'=>$_REQUEST['keyword'], 
+            'value'=> ( isset( $_REQUEST['keyword']) ? $_REQUEST['keyword'] : ''), 
             'size'=>'20', 
             'public'=>'1');
 	

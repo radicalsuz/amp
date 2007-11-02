@@ -70,7 +70,7 @@ blurb_length_max=9000
 [article display]
 default="Article_Display"
 frontpage="ArticleDisplay_FrontPage"
-news="ArticleDisplay_New"
+news="ArticleDisplay_News"
 pressrelease="ArticleDisplay_PressRelease"
 blog="ArticleDisplay_Blog"
 

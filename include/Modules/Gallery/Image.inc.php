@@ -11,6 +11,10 @@ class GalleryImage extends AMPSystem_Data_Item {
     function GalleryImage( &$dbcon, $id = null ){
         $this->init( $dbcon, $id );
     }
+    
+    function _adjustSetData( $data ) {
+        $this->legacyFieldname( $data, 'photoby', 'author' );
+    }
 
     function &getDisplay() {
         if ( isset( $this->_display )) return $this->display;
