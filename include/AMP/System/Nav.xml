@@ -186,6 +186,12 @@
 		<per>GALLERY_ADMIN</per>
 		<class>view</class>
 	</item>
+	<item>
+		<href>image_manager.php</href>
+		<label>View All Images</label>
+		<class>img</class>
+		<per>CONTENT_IMAGES_EDIT</per>
+	</item>
 </gallery>
 
 

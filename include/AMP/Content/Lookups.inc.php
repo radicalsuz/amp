@@ -306,6 +306,28 @@ class AMPConstantLookup_Listtypes extends AMPConstant_Lookup {
 
 }
 
+class AMPSystemLookup_SectionDisplays extends AMPSystem_Lookup {
+    var $datatable = 'articletype';
+    var $id_field = 'id';
+    var $result_field = 'listtype';
+
+    function AMPSystemLookup_SectionDisplays( ) {
+        $this->init( );
+        $this->get_class_names( );
+    }
+
+    function get_class_names( ) {
+        $names = array_flip( filterConstants( 'AMP_SECTIONLIST' ));
+        $displays = filterConstants( 'AMP_SECTION_DISPLAY' );
+        foreach( $this->dataset as $section_id => $list_id ) {
+            if( !isset( $names[$list_id]) || !isset( $displays[ $names[ $list_id ]])) continue;
+           
+            $this->dataset[ $section_id ] = $displays[ $names[ $list_id ]];
+        }
+    }
+
+}
+
 class AMPContentLookup_Sidebarclass extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_CONTENT_SIDEBAR_CLASS";
 
@@ -388,6 +410,15 @@ class AMPContentLookup_GalleryImages extends AMPContent_Lookup {
     }
     function available( ){
         return false;
+    }
+}
+
+class AMPContentLookup_DbImages extends AMPSystem_Lookup {
+    var $datatable = 'images';
+    var $result_field= 'name';
+
+    function AMPContentLookup_DbImages( ) {
+        $this->init( );
     }
 }
 
@@ -554,6 +585,23 @@ class AMPSystemLookup_Articles extends AMPContentLookup_Articles{
         $this->__construct( );
     }
 }
+
+class AMPContentLookup_ArticlesExisting extends AMPContent_Lookup{
+    var $datatable = 'articles';
+    var $result_field = 'id';
+    var $id_field = "id";
+    
+    function AMPContentLookup_ArticlesExisting( ){
+        $this->__construct( );
+    }
+
+    function __construct( ) {
+        
+        $this->init( );
+    }
+
+}
+
 class AMPContentLookup_Event extends AMPContent_Lookup {
     var $datatable = 'calendar';
     var $result_field = 'left( event, 50) as short_event';
@@ -1214,7 +1262,7 @@ class AMPSystemLookup_SectionMapLiveChopped extends AMPSystemLookup_SectionMapLi
     function __construct( ) {
         parent::__construct( );
         foreach( $this->dataset as $id => $name ) {
-            $this->dataset[$id] = str_replace( '&nbsp;', ' ', AMP_trimText( $name, 60, false ));
+            $this->dataset[$id] = str_replace( '&nbsp;', ' ',  AMP_trimText( $name, 60, false ));
         }
     }
 }

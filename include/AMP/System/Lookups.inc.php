@@ -1098,6 +1098,7 @@ class AMPSystemLookup_TagsByArticle extends AMPSystemLookup_TagsByItem {
     var $_criteria_item = AMP_SYSTEM_ITEM_TYPE_ARTICLE;
 
     function AMPSystemLookup_TagsByArticle( $item_id ) {
+        if( empty( $item_id )) return;
         $this->__construct( $item_id );
     }
 
