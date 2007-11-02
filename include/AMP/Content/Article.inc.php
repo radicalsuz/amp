@@ -47,7 +47,10 @@ class Article extends AMPSystem_Data_Item {
         $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
         if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
 
-        if (!class_exists( $display_class )) $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
+        if (!class_exists( $display_class )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $display_class ));
+            $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
+        }
         $result = &new $display_class( $this );
         return $result;
     }
@@ -642,6 +645,10 @@ class Article extends AMPSystem_Data_Item {
                     . ' or id in( ' . join( ',', array_keys( $related_articles ) ) . ' ) )';
     }
 
+    function makeCriteriaParent( $section_id ) {
+        return $this->makeCriteriaSection( $section_id );
+    }
+
     function makeCriteriaPrimarySection( $section_id ) {
         return $this->_makeCriteriaEquals( 'type', $section_id ) ;
     }
@@ -702,6 +709,13 @@ class Article extends AMPSystem_Data_Item {
             return join( ' AND ', $value );
         }
         return 'TRUE';
+    }
+    function makeCriteriaSectionLogicAdmin( $section_id ) {
+        $logic = $this->makeCriteriaSectionLogic( $section_id );
+        $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
+        $admin_class = "class in (" . join( ",", $excluded_classes ) . ")" ;
+        $section = $this->makeCriteriaPrimarySection( $section_id );
+        return "( $logic OR ( $admin_class AND $section ))";
     }
 
     function makeCriteriaClass( $class_id ){
@@ -789,7 +803,6 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaDisplayableClass(  ) {
-        $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
         /*
         $excluded_classes = array( 
             AMP_CONTENT_CLASS_SECTIONHEADER,
@@ -797,6 +810,7 @@ class Article extends AMPSystem_Data_Item {
             AMP_CONTENT_CLASS_FRONTPAGE
             );
         */
+        $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
         return "class not in (" . join( ",", $excluded_classes ) . ")" ;
     }
 

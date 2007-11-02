@@ -12,7 +12,7 @@ class Article_Public_Detail extends AMP_Display_Detail {
     var $_css_class_photocaption = AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE_CAPTION;
     var $_css_class_body    = AMP_CONTENT_CSS_CLASS_ARTICLE_BODY;
     var $_css_class_media   = AMP_CONTENT_CSS_CLASS_ARTICLE_MEDIA;
-    var $_css_class_container_item = 'article_public_detail';
+    var $_css_class_container_item = AMP_CONTENT_CSS_CLASS_CONTAINER_DETAIL_ARTICLE;
 
     function Article_Public_Detail( &$source ) {
         $this->__construct( $source );
@@ -131,6 +131,7 @@ class Article_Public_Detail extends AMP_Display_Detail {
 
     function render_body( $source ) {
         if ( !( $body = $source->getBody( ))) return false;
+        trigger_error( $body );
         $body = ( $source->isHtml( )) ? $body : converttext( $body );
 
         //hot words

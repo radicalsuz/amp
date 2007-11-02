@@ -13,7 +13,7 @@ require_once( 'AMP/Content/Display/ListIntro.inc.php' );
 if ( !defined( 'AMP_SECTION_DISPLAY_DEFAULT' ))             define( 'AMP_SECTION_DISPLAY_DEFAULT',          'ArticleSet_Display' );
 if ( !defined( 'AMP_SECTION_DISPLAY_ARTICLES' ))            define( 'AMP_SECTION_DISPLAY_ARTICLES',         'ArticleSet_Display' );
 if ( !defined( 'AMP_SECTION_DISPLAY_SUBSECTIONS' ))         define( 'AMP_SECTION_DISPLAY_SUBSECTIONS',      'SectionSet_Display' );
-if ( !defined( 'AMP_SECTION_DISPLAY_ARTICLESAGGREGATOR' ))  define( 'AMP_SECTION_DISPLAY_ARTICLESAGGREGATOR','ArticleSet_Display' );
+if ( !defined( 'AMP_SECTION_DISPLAY_ARTICLES_AGGREGATOR' ))  define( 'AMP_SECTION_DISPLAY_ARTICLES_AGGREGATOR','ArticleSet_Display' );
 if ( !defined( 'AMP_PREFIX_SECTION_DISPLAY' ))              define( 'AMP_PREFIX_SECTION_DISPLAY',           'SectionContentDisplay_' );
 
 class SectionContents_Display  extends AMPDisplay_HTML {
@@ -116,7 +116,8 @@ class SectionContents_Display  extends AMPDisplay_HTML {
         } elseif ( method_exists( $this->_display, 'render_intro')) {
             return $this->_display->render_intro( );
         }
-        return $intro->execute() . $this->_HTML_newline();
+        $intro_output = $intro->execute( );
+        return $intro_output . ( trim( strip_tags( $intro_output )) ? $this->newline( ) : false );
     }
 
     function _HTML_listFooter() {

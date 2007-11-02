@@ -12,12 +12,18 @@ nav_content="nav_element_content"
 nav_block="nav_block"
 badge_header="title"
 
+[class container detail]
+item="item_detail"
+article="article_public_detail"
+empty="empty_detail"
+
 [class list]
 blurb="text blurb"
 image="thumb"
 image_empty="empty_thumb"
 description="description"
 description_with_image="description description_with_image"
+contents="contents"
 
 [class list article]
 title="listtitle"

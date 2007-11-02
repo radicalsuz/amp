@@ -11,7 +11,7 @@ class AMP_Display_Detail {
     var $_css_class_title = 'title';
     var $_css_class_image = 'image';
     var $_css_class_blurb = 'text';
-    var $_css_class_container_item = 'item_detail';
+    var $_css_class_container_item = AMP_CONTENT_CSS_CLASS_CONTAINER_DETAIL_ITEM;
 
     var $_item_display_method = 'renderItem';
 
@@ -55,9 +55,10 @@ class AMP_Display_Detail {
     }
 
     function _renderBlock( $html ) {
+        $css_class = $html ? $this->_css_class_container_item : ( $this->_css_class_container_item . ' ' . AMP_CONTENT_CSS_CLASS_CONTAINER_DETAIL_EMPTY );
         $list_block = $this->_renderer->inDiv( 
                             $html,
-                            array( 'class' => $this->_css_class_container_item )
+                            array( 'class' => $css_class )
                         );
 
         $output = '';
