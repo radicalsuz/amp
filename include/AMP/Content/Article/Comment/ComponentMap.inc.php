@@ -33,11 +33,12 @@ class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
     function isAllowed( $action, $model_id = false ) {
         if ( $model_id ) {
             $allowed_articles = AMP_lookup( 'AllowedArticles');
+            $articles = AMP_lookup( 'articles_existing');
             $model = $this->getComponent( 'source');
             $model->readData( $model_id );
             $article_id = $model->getArticle( );
 
-            if ( !isset( $allowed_articles[ $article_id ])) {
+            if ( isset( $articles[ $article_id ]) && !isset( $allowed_articles[ $article_id ])) {
                 return false;
             }
         }

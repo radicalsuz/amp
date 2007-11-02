@@ -71,7 +71,8 @@ class ArticleComment_List extends AMP_System_List_Form {
         $source = new ArticleComment( AMP_Registry::getDbcon( ), $id );
         $article_id = $source->getArticle( );
         $allowed_articles = AMP_lookup( 'articles');
-        if ( !isset( $allowed_articles[$article_id])) {
+        $existing_articles = AMP_lookup( 'articles_existing' );
+        if ( !isset( $allowed_articles[$article_id]) && isset( $existing_articles[ $article_id ])) {
             return "\n<td nowrap><div align='center'>".
                     "</div></td>\n";
         }
