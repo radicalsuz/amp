@@ -15,7 +15,7 @@ function amp_font_replace( selector, face, size, color, background_color, shadow
     if(!(document.createElement && document.getElementsByTagName && !navigator.userAgent.match(/opera\/?6/i))) return false;
 
 var base_url = 'showfont.php?';
-var url_vars = new Array( 'cache=0');
+var url_vars = new Array( 'cache=1');
 if ( face )             url_vars.push('face=' + face);
 if ( size )             url_vars.push('size=' + size);
 if ( color)             url_vars.push('color=' + color);

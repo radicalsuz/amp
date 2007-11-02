@@ -6,7 +6,9 @@ a {  color: #0066CC; text-decoration: none}
 .boxcontents {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; padding-bottom: 5px}
 .newsbody {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #FFFFFF}
 a:hover {  color: #0099FF; text-decoration: underline}
-.photocaption {  font-family: Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; text-align: center; vertical-align: middle; clip:   rect(   ); padding-top: 3px; padding-bottom: 3px}
+.photocaption {  font-family: Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; text-align: center; vertical-align: middle; 
+   /* clip:   rect(   );  */
+    padding-top: 3px; padding-bottom: 3px}
 .eventdate {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: bold; color: #000000}
 .eventname {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bolder; color: #006699}
 .eventtime {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: bold; color: #000000}
@@ -43,7 +45,7 @@ a:hover.newstitlefront{ font-family: Verdana, Arial, Helvetica, sans-serif; font
 .homeeventtime {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-weight: bold; color: #000000}
 .homebottom {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #FFFFFF; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; padding-left: 5px}
 .docbox {
-	border : 1px double Black; font-family: Verdana, Arial, Helvetica, sans-seri;
+	border : 1px double Black; font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size : 13px;
 	text-align : center;
 }

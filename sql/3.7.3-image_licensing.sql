@@ -3,6 +3,7 @@ create table if not exists `images` (
 	`name`		varchar( 100 ) not null,
 	`caption`   text null,
 	`author`    varchar( 100 ) not null,
+	`author_url`    varchar( 250 ) not null,
 	`date`		date not null,
 	`map_lon`	float not null,
 	`map_lat`	float not null,	
