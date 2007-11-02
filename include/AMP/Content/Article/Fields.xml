@@ -38,7 +38,7 @@
     </publish>
 	<status_comments_header>
 		<type>hidden</type>
-		<label>Add Comments</label>
+		<label>Add Revision Notes</label>
 		<block>status_comments</block>
 	</status_comments_header>
 	<status_comments>

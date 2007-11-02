@@ -99,8 +99,12 @@ class ContentSearch_Form extends AMPSearchForm {
 
     function getSearchValues( ) {
         $results = parent::getSearchValues( );
-        if ( !(isset( $results['search_by_date']) && $results['search_by_date'])) unset ( $results['date'] );
+        if ( !(isset( $results['search_by_date']) && $results['search_by_date'])) unset ( $results['after_date'] );
         unset( $results['search_by_date']);
+        if ( isset( $results['section']) && $results['section']  && !( isset( $results['section_logic']) && $results['section_logic_admin'])) {
+            $results['section_logic_admin'] = $results['section'];
+            unset( $results['section']);
+        }
         $results['allowed'] = 1;
         return $results;
     }

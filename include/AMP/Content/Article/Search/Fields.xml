@@ -81,12 +81,12 @@
     <label>Find Items by Date</label>
     <attr><class>searchform_element</class></attr>
 </search_by_date>
-<date>
+<after_date>
     <type>date</type>
     <default>last year</default>
     <label>After: </label>
     <attr><class>searchform_element</class></attr>
-</date>
+</after_date>
 <type>
 	<type>hidden</type>
 </type>

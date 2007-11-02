@@ -158,12 +158,12 @@ class Article_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_title( $title ) {
-        if (!$title) return false;
+        if (!trim( $title)) return false;
         return  $this->_HTML_in_P(  converttext( $title ),  array( 'class' => $this->_css_class_title ) ); 
 
     }
     function _HTML_subTitle( $subtitle ) {
-        if (!$subtitle) return false;
+        if (!trim( $subtitle )) return false;
         return $this->_HTML_inSpan( converttext( $subtitle ) , $this->_css_class_subtitle ). $this->_HTML_newline();
     } 
 
@@ -216,6 +216,7 @@ class Article_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_bodyText( $html ) {
+        if ( !$html ) return $html;
         return '<p class="'.$this->_css_class_text.'">'.$html;
     }
 

@@ -96,7 +96,7 @@ class ArticleDisplay_Blog extends Article_Display {
          $commentSet->execute( );
          $renderer = AMP_get_renderer( );
              
-        $text= ($commentSet->RecordCount()? $commentSet->RecordCount():'no') .' comments';
+        $text= ($commentSet->RecordCount()? $commentSet->RecordCount() . ' ' . AMP_pluralize( AMP_TEXT_COMMENT ): AMP_TEXT_NO_COMMENTS);
         $comments =  $renderer->link(AMP_Url_AddAnchor($this->_article->getURL(), 'comments'),$text);
 
         $sections_output = '';

@@ -133,6 +133,7 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
 		return true;
 	}
 
+
 }
 
 ?>
