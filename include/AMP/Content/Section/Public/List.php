@@ -40,6 +40,13 @@ class Section_Public_List extends AMP_Display_List {
         return false;
     }
     
+    function _init_identity( ) {
+        parent::_init_identity( );
+        if( isset( $this->_source_container )) {
+            $this->_css_class_container_list = $this->_css_class_container_list . ' list_' . strtolower( get_class( $this->_source_container )) . '_' . $this->_source_container->id;
+        }
+    }
+
 
     function _renderItem( &$source ) {
         $text =     $this->render_title( $source )

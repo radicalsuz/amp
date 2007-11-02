@@ -36,6 +36,13 @@ class Article_Public_List extends AMP_Display_List {
         parent::__construct( $source, $criteria, $limit );
     }
 
+    function _init_identity( ) {
+        parent::_init_identity( );
+        if( isset( $this->_source_container )) {
+            $this->_css_class_container_list = $this->_css_class_container_list . ' list_' . strtolower( get_class( $this->_source_container )) . '_' . $this->_source_container->id;
+        }
+    }
+
     function _init_container( $container ) {
         if ( !$container ) return false;
         if ( is_array( $container )) return $container;
