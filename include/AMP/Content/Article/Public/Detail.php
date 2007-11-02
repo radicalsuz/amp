@@ -131,7 +131,6 @@ class Article_Public_Detail extends AMP_Display_Detail {
 
     function render_body( $source ) {
         if ( !( $body = $source->getBody( ))) return false;
-        trigger_error( $body );
         $body = ( $source->isHtml( )) ? $body : converttext( $body );
 
         //hot words
