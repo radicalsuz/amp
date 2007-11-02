@@ -7,6 +7,7 @@ class Gallery_Public_Display extends AMP_Display_List {
     var $name = 'GalleryImages';
     var $_source_object = 'GalleryImage';
     var $_suppress_messages = true;
+//var $_display_columns = 2;
     //var $_sort_default = 'listorder, date DESC, id DESC';
     //
     var $_css_class_container_list = AMP_CONTENT_CSS_CLASS_GALLERY_LIST_CONTAINER ;
@@ -37,7 +38,9 @@ class Gallery_Public_Display extends AMP_Display_List {
         $this->set_source_gallery( $source );
         parent::__construct( false, array( 'gallery' => $source->id ) );
     }
-
+	function _after_init() {
+    	$this->_display_columns = ceil( $this->qty()/2);
+	}
     function set_source_gallery( &$gallery ) {
         $this->_source_gallery = &$gallery;
         if ( $limit = $gallery->getListItemLimit( )) {
@@ -161,7 +164,7 @@ class Gallery_Public_Display extends AMP_Display_List {
     }
 
     function _renderFooter( ) {
-        $this->export_styles( );
+       // $this->export_styles( );
         return
             $this->_renderPager( )
             . $this->_renderer->newline( 2 );
