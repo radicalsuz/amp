@@ -846,7 +846,7 @@ if (!function_exists('AMP_makeMergeFields')) {
 
 if (!function_exists('AMP_trimText')) {
     function AMP_trimText( $text, $max_length, $preserve_tags=true ) {
-        $no_tags_version = strip_tags( html_entity_decode( $text, ENT_COMPAT, ( AMP_SITE_CONTENT_ENCODING ) ));
+        $no_tags_version = strip_tags( html_entity_decode( $text, ENT_COMPAT, strtoupper( AMP_SITE_CONTENT_ENCODING ) ));
         $tag_length = mb_strlen( $text , AMP_SITE_CONTENT_ENCODING ) - mb_strlen( $no_tags_version , AMP_SITE_CONTENT_ENCODING );
         $trimmed = $text;
         if ( !$preserve_tags ) {

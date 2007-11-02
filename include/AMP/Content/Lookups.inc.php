@@ -1262,7 +1262,7 @@ class AMPSystemLookup_SectionMapLiveChopped extends AMPSystemLookup_SectionMapLi
     function __construct( ) {
         parent::__construct( );
         foreach( $this->dataset as $id => $name ) {
-            $this->dataset[$id] = AMP_trimText( str_replace( '&nbsp;', ' ',  $name), 60, false );
+            $this->dataset[$id] = str_replace( array( '&nbsp;', chr( 160 )), ' ',  AMP_trimText( $name, 60, false ));
         }
     }
 }
