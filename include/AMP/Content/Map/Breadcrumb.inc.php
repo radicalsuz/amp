@@ -57,7 +57,7 @@ class AMP_Breadcrumb_Content {
     }
 
     function execute() {
-        if (!$this->hasTemplate()) return $this->_HTML_wrapper ($this->_HTML_output() . '<br />');
+        if (!$this->hasTemplate()) return $this->_HTML_wrapper ($this->_HTML_output() . '<br /><br />');
         return $this->_HTML_wrapper( $this->render_template() );
     }
 
@@ -177,7 +177,7 @@ class AMP_Breadcrumb_Content {
             $final_link =  $this->separator . $this->current_element . "\n" ;
         }
 
-        return $final_link . "</span>\n<br />";
+        return $final_link . "</span>\n";
     }
 
     function _HTML_outputTemplated() {
@@ -185,7 +185,7 @@ class AMP_Breadcrumb_Content {
             '<table width="100%" border="0" cellspacing="0" cellpadding="3">'.
             "<tr><td>\n";
         $template_split = '</td><td>';
-        $template_end = "</td></tr></table><br />\n";
+        $template_end = "<br /></td></tr></table><br />\n";
 
         $html_end = $template_end;
         if ($this->hasActions()) $html_end = $template_split . $this->_HTML_outputActions() . $template_end;
