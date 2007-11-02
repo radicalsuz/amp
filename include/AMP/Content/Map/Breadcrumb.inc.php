@@ -57,7 +57,7 @@ class AMP_Breadcrumb_Content {
     }
 
     function execute() {
-        if (!$this->hasTemplate()) return $this->_HTML_wrapper ($this->_HTML_output());
+        if (!$this->hasTemplate()) return $this->_HTML_wrapper ($this->_HTML_output() . '<br />');
         return $this->_HTML_wrapper( $this->render_template() );
     }
 
@@ -68,8 +68,7 @@ class AMP_Breadcrumb_Content {
                 trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $template_method ));
                 return $this->_HTML_outputTemplated( );
             }
-        }
-        if ( $template_method == '_HTML_outputTemplated') {
+        } else {
             return $this->_HTML_outputTemplated( );
         }
         return $template_method( $this->_HTML_output( ), $this ) ;
@@ -150,7 +149,7 @@ class AMP_Breadcrumb_Content {
     #############################
 
     function _HTML_wrapper( $output ) {
-        return "<!-- BEGIN BREADCRUMB CODE -->\n". $output . "<!-- END BREADCRUMB CODE --><br>\n";
+        return "<!-- BEGIN BREADCRUMB CODE -->\n". $output . "<!-- END BREADCRUMB CODE -->\n";
     }
 
 
@@ -178,7 +177,7 @@ class AMP_Breadcrumb_Content {
             $final_link =  $this->separator . $this->current_element . "\n" ;
         }
 
-        return $final_link . "</span>\n";
+        return $final_link . "</span>\n<br />";
     }
 
     function _HTML_outputTemplated() {
@@ -186,7 +185,7 @@ class AMP_Breadcrumb_Content {
             '<table width="100%" border="0" cellspacing="0" cellpadding="3">'.
             "<tr><td>\n";
         $template_split = '</td><td>';
-        $template_end = "</td></tr></table>\n";
+        $template_end = "</td></tr></table><br />\n";
 
         $html_end = $template_end;
         if ($this->hasActions()) $html_end = $template_split . $this->_HTML_outputActions() . $template_end;
