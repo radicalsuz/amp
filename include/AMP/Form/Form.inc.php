@@ -436,6 +436,12 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     }
 
 	function addTranslation( $fieldname, $method, $action="get" ) {
+        if ( is_array( $this->translations ) 
+                && isset( $this->translations[$action]) 
+                && isset( $this->translations[$action][$fieldname]) 
+                && array_search( $method, $this->translations[$action][$fieldname]) !== FALSE ) {
+                    return;
+        }
 		$this->translations[$action][ $fieldname ][] = $method;
 	}
 

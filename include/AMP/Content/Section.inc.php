@@ -374,6 +374,17 @@ class Section extends AMPSystem_Data_Item {
         return $display_criteria;
     }
 
+    function getDisplayClass( ) {
+        $displays = AMP_lookup( 'section_displays');
+        $default = AMP_SECTION_DISPLAY_DEFAULT;
+        if( !isset( $displays[$this->id])) return $default;
+        if( !class_exists( $displays[$this->id])) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $displays[$this->id]));
+            return $default;
+        }
+        return $displays[$this->id];
+    }
+
 
     function delete( ){
         return $this->trash( );

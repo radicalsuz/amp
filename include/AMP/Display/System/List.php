@@ -22,6 +22,8 @@ class AMP_Display_System_List extends AMP_Display_List {
     var $_suppress_toolbar = false;
 
     var $_pager_max = false;
+    var $_class_pager = 'AMP_Display_System_Pager';
+    var $_path_pager = 'AMP/Display/System/Pager.php';
 
     var $url_create;
     var $_suppress_create = false;
