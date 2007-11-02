@@ -512,6 +512,13 @@ class AMP_Display_List {
         }
         $this->_pager->set_request( $vars );
     }
+    function set_pager_limit( $limit, $type = 'all') {
+        if ( $type == 'all') $this->_pager_limit = $limit;
+        if ( $type == 'first') $this->_pager_limit_first_page = $limit;
+        unset( $this->_pager );
+        #$this->_init_pager( );
+        $this->__construct( false, $this->_source_criteria );
+    }
 
     function _init_identity( ) {
         $this->_init_display_methods( );
