@@ -77,7 +77,7 @@ class ArticleRating {
         if( isset( $articles_rated[$item_id])) return ArticleRating::update( $item_id, $rating_value );
 
         $rating = new Rating( AMP_Registry::getDbcon( ));
-        $rating_data = array( 'session' => $session, 'item_type' => 'article', 'item_id' => $item_id, 'rating' => $rating_value );
+        $rating_data = array( 'session' => $session, 'item_type' => 'article', 'item_id' => $item_id, 'rating' => $rating_value, 'updated_at' => date('Y-m-d h:i:s' ) );
         $rating->mergeData( $rating_data );
         $result = $rating->save( );
         AMP_lookup_clear_cached( 'article_ids_rated_by_session', $session );
@@ -95,7 +95,7 @@ class ArticleRating {
 
         $rating = new Rating( AMP_Registry::getDbcon( ), $rating_id );
         if( !$rating->hasData( )) return false;
-        $rating->mergeData( array( 'rating' => $rating_value ));
+        $rating->mergeData( array( 'rating' => $rating_value , 'updated_at' => date( 'Y-m-d h:i:s')));
         $result = $rating->save( );
         AMP_lookup_clear_cached( 'article_ids_rated_by_session', $session );
         AMP_lookup_clear_cached( 'article_ratings_by_session', $session );
