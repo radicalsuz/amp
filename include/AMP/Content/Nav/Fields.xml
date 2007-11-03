@@ -40,6 +40,9 @@
         <block>badge_proxy</block>
 		<lookup>badges</lookup>
 	</badge_id>
+    <layouts>
+        <type>static</type>
+    </layouts>
 	<nosqlcode>
 		<type>textarea</type>
 		<label>Navigation HTML</label>

@@ -17,6 +17,7 @@ class Nav_Form extends AMPSystem_Form_XML {
     function setDynamicValues( ){
         $this->addTranslation( 'sql_statement', '_checkCriteriaSelects', 'get');
         $this->addTranslation( 'badge_id', 'link_to_badge', 'set');
+        $this->addTranslation( 'layouts', 'link_to_layouts', 'set');
     }
 
     function _checkCriteriaSelects( $data, $fieldname ) {
@@ -49,6 +50,19 @@ class Nav_Form extends AMPSystem_Form_XML {
             $this->fields['badge_id']['label'] 
             . ' ( '.$renderer->link( AMP_url_update( AMP_SYSTEM_URL_BADGE, array( 'id' => $badge_id )), AMP_TEXT_EDIT ).' )' );
         return $data[$fieldname];
+    }
+
+    function link_to_layouts( $data, $fieldname ) {
+
+        if ( !( isset( $data['id']) && $data['id'])) return false;
+        $linked_layouts = AMP_lookup( 'nav_layouts_by_nav', $data['id']);
+        if ( !$linked_layouts ) return false; 
+
+        $renderer = AMP_get_renderer( );
+        foreach( $linked_layouts as $id => $name ) {
+            $links[$id] = $renderer->link( AMP_url_update( AMP_SYSTEM_URL_NAV_LAYOUT, array( 'id' => $id )), $name );
+        }
+        return 'Used in Layouts:' . $renderer->UL( $links );
     }
 }
 ?>

@@ -948,6 +948,27 @@ class AMPContentLookup_StylesheetLocationTemplates extends AMPContent_Lookup {
     }
 }
 
+class AMPContentLookup_NavLayoutsByNav extends AMPSystem_Lookup {
+    var $datatable = 'nav';
+    var $result_field = 'navid';
+    var $id_field = 'layout_id';
+    
+    function AMPContentLookup_NavLayoutsByNav( $nav_id ) {
+        if ( $nav_id ) $this->_filter_by_nav( $nav_id );
+        $this->init( );
+        $names = AMP_lookup( 'nav_layouts');
+        foreach( $this->dataset as $key => $value ) {
+            $this->dataset[ $key ] = $names[ $key ];
+        }
+
+    }
+
+    function _filter_by_nav( $nav_id ) {
+        $this->criteria = 'navid='.$nav_id;
+    }
+
+}
+
 class AMPContentLookup_Navs extends AMPContent_Lookup {
     var $datatable = 'navtbl';
     var $result_field = 'name';
