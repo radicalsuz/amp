@@ -4,10 +4,10 @@ require_once( 'AMP/System/Data/Item.inc.php');
 class AMPSystemLookup_ArticleRatings extends AMPSystem_Lookup{
     var $datatable = 'ratings';
     var $id_field = 'item_id';
-    var $result_field = 'avg( rating )';
+    var $result_field = 'avg( rating ) as rank';
     var $criteria = 'item_type="article" GROUP BY item_id';
     var $_base_criteria = 'item_type="article" GROUP BY item_id';
-    var $sortby = 'avg( rating ) desc';
+    var $sortby = 'rank desc';
 
     function AMPSystemLookup_ArticleRatings( ) {
         $this->init( );
