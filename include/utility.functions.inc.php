@@ -1704,7 +1704,7 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
 
 function AMP_lookup_clear_cached( $type, $instance_var = null ) {
     require_once( "AMP/System/Lookups.inc.php");
-    $key = AMPSystem_Lookup::cache_key( $type, $instance_var );
+    $key = AMPSystem_Lookup::cache_key( AMP_to_camelcase( $type), $instance_var );
     AMP_cache_delete( $key );
 }
 
