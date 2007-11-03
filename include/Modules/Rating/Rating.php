@@ -4,11 +4,60 @@ require_once( 'AMP/System/Data/Item.inc.php');
 class AMPSystemLookup_ArticleRatings extends AMPSystem_Lookup{
     var $datatable = 'ratings';
     var $id_field = 'item_id';
-    var $result_field = 'average( rating )';
+    var $result_field = 'avg( rating )';
     var $criteria = 'item_type="article" GROUP BY item_id';
+    var $_base_criteria = 'item_type="article" GROUP BY item_id';
+    var $sortby = 'avg( rating ) desc';
 
     function AMPSystemLookup_ArticleRatings( ) {
         $this->init( );
+    }
+}
+
+class AMPSystemLookup_ArticleRatingsLastWeek extends AMPSystemLookup_ArticleRatings{
+
+    function AMPSystemLookup_ArticleRatingsLastWeek( ) {
+        $this->filter_by_week( );
+        $this->init( );
+    }
+
+    function filter_by_week( ) {
+        $this->criteria = 'updated_at > "'.date( 'Y-m-d h:i:s', time( ) - ( 60*60*24*7)) . '" and '
+                            . $this->_base_criteria;
+    }
+}
+
+class AMPSystemLookup_ArticleRatingsLastMonth extends AMPSystemLookup_ArticleRatings{
+
+    function AMPSystemLookup_ArticleRatingsLastMonth( ) {
+        $this->filter_by_month( );
+        $this->init( );
+    }
+
+    function filter_by_month( ) {
+        $this->criteria = 'updated_at > "'.date( 'Y-m-d h:i:s', time( ) - ( 60*60*24*30)) . '" and '
+                            . $this->_base_criteria;
+    }
+}
+
+class AMPSystemLookup_ArticleRatingsBySection extends AMPSystem_Lookup{
+    var $datatable = 'ratings a, articles b, articlereltype c';
+    var $id_field = 'a.item_id';
+    var $result_field = 'avg( a.rating )';
+    var $criteria = 'a.item_type="article" AND ( a.item_id = b.id OR a.item_id = c.articleid ) GROUP BY a.item_id';
+    var $_base_criteria = 'a.item_type="article" AND ( a.item_id = b.id OR a.item_id = c.articleid ) GROUP BY a.item_id';
+    var $sortby = 'avg( a.rating ) desc';
+
+    function AMPSystemLookup_ArticleRatingsBySection( $section_id ) {
+        if ( $section_id ) {
+            $this->_filter_by_section( $section_id );
+        }
+
+        $this->init( );
+    }
+
+    function _filter_by_section_id ( $section_id ) {
+        $this->criteria = '( b.type = ' . $section_id . ' OR c.typeid = ' . $section_id . ' ) AND ' .$this->_base_criteria ;
     }
 }
 
@@ -82,6 +131,9 @@ class ArticleRating {
         $result = $rating->save( );
         AMP_lookup_clear_cached( 'article_ids_rated_by_session', $session );
         AMP_lookup_clear_cached( 'article_ratings_by_session', $session );
+        AMP_lookup_clear_cached( 'article_ratings' );
+        AMP_lookup_clear_cached( 'article_ratings_last_week' );
+        AMP_lookup_clear_cached( 'article_ratings_last_month' );
         return $result;
 
     }
@@ -99,6 +151,9 @@ class ArticleRating {
         $result = $rating->save( );
         AMP_lookup_clear_cached( 'article_ids_rated_by_session', $session );
         AMP_lookup_clear_cached( 'article_ratings_by_session', $session );
+        AMP_lookup_clear_cached( 'article_ratings' );
+        AMP_lookup_clear_cached( 'article_ratings_last_week' );
+        AMP_lookup_clear_cached( 'article_ratings_last_month' );
         return $result;
 
     }

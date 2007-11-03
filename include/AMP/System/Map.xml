@@ -187,6 +187,11 @@
         <href>redirect.php?action=list</href>
     </item>
     <item>
+        <label>Ratings</label>
+        <href>ratings.php</href>
+        <per>CONTENT_USER_ADDED_CONTENT</per>
+    </item>
+    <item>
         <label>Hot Words</label>
         <href>hotwords.php?action=list</href>
         <per>CONTENT_HOTWORDS</per>
