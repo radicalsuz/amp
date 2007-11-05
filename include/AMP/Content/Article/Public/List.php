@@ -196,6 +196,10 @@ class Article_Public_List extends AMP_Display_List {
         return $this->_renderer->div( $source->getBlurb(), array( 'class' => AMP_CONTENT_CSS_CLASS_LIST_BLURB ) );
     }
     
+    function _output_empty( ) {
+        return $this->render_search_form( );
+    }
+
     function _init_sort_sql( &$source )  {
         $sort_options = AMP_lookup( 'list_sort_options_article');
         if ( $sort_options ) {
