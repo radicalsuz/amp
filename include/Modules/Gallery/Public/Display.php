@@ -30,6 +30,8 @@ class Gallery_Public_Display extends AMP_Display_List {
     var $_class_pager = 'AMP_Display_Pager_Content';
     var $_path_pager = 'AMP/Display/Pager/Content.php';
 
+    var $_items_per_row = AMP_MODULE_GALLERY_ITEMS_PER_ROW;
+
     function Gallery_Public_Display( &$source, $criteria = array( )) {
         $this->__construct( $source, $criteria );
     }
@@ -39,8 +41,15 @@ class Gallery_Public_Display extends AMP_Display_List {
         parent::__construct( false, array( 'gallery' => $source->id ) );
     }
 	function _after_init() {
-    	$this->_display_columns = ceil( $this->qty()/2);
+        $this->_init_rows( );
 	}
+
+    function _init_rows( ) {
+        if( $this->_items_per_row ) {
+            $this->_display_columns = ceil( $this->qty( )/$this->_items_per_row);
+        }
+    }
+
     function set_source_gallery( &$gallery ) {
         $this->_source_gallery = &$gallery;
         if ( $limit = $gallery->getListItemLimit( )) {

@@ -35,4 +35,7 @@ share=22
 [module share]
 logging=false
 
+[module gallery]
+items_per_row=2
+
 ;?>
