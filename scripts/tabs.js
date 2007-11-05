@@ -43,3 +43,29 @@ function Tabs_highlight_mirror( item_mirror ){
 	return Tabs_highlight( target_item );
 }
 
+function AMP_simple_tabs( ) {
+    return {
+        triggers : new Array( ),
+        segments : new Array( ),
+        segment_count: 0,
+        add: function( element, trigger  ) {
+            this.segments[ this.segment_count ] = $( element );
+            this.triggers[ this.segment_count ] = $( trigger );
+            ++this.segment_count;
+            },
+        show: function( trigger ) {
+            key = this.triggers.indexOf( trigger );
+            //this.segments.each( function( item ) { item.addClassName( 'AMPComponent_hidden');});
+			to_hide = this.segments.without( this.segments[ key ] );
+            to_hide.each( function( item ) { if (item.visible()) new Effect.SwitchOff( item );});
+            
+            //this.segments[ key ].removeClassName( 'AMPComponent_hidden');
+            if ( !this.segments[key].visible()) new Effect.Appear( this.segments[ key ] ) ;
+            this.triggers.each( function( item ) { item.removeClassName( 'active');});
+            trigger.addClassName( 'active');
+        }
+
+    };
+
+}
+
