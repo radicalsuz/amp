@@ -279,6 +279,7 @@ div.article_public_detail .image {
     position:relative;
     width: 250px;
     margin: 1em;
+	margin-top: 0;
     float: left;
 }
 div.article_public_detail .image-right .photocaption {
