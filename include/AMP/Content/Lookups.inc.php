@@ -75,6 +75,25 @@ class AMPContentLookup_CommentsByArticle {
     }
 }
 
+class AMPContentLookup_CommentsLiveByArticle extends AMPSystem_Lookup {
+    var $datatable = "comments";
+    var $result_field = 'comment';
+     
+    function AMPContentLookup_CommentsLiveByArticle( $article_id ) {
+        if( $article_id ) {
+            $this->_filter_by_article( $article_id );
+        }
+        $this->init( );
+    }
+
+    function _filter_by_article( $article_id ) {
+        require_once( 'AMP/Content/Article/Comment/ArticleComment.php');
+        $comment = new ArticleComment( AMP_Registry::getDbcon( ));
+        $this->criteria = $comment->makeCriteria( array( 'displayable' => 1, 'article' => $article_id ));
+    }
+    
+}
+
 class AMPContentLookup_Hotwords extends AMPContent_Lookup {
 
     var $datatable = "hotwords";
@@ -1533,6 +1552,32 @@ class AMPSystemLookup_NavsByBadge extends AMPSystem_Lookup {
         $this->criteria = sprintf( $this->_base_criteria, $badge_id );
     }
 }
+
+class AMPSystemLookup_License extends AMPSystem_Lookup {
+    var $name = 'License';
+    var $form_def= 'License';
+    function init (){
+    $this->dataset = array(
+              'none'=>'No License',
+				'by-nc-nd'=>'Attribution Non-commercial No Derivatives',
+				'by-nc-sa'=>'Attribution Non-commercial Share Alike',
+				'by-nc'=>'Attribution Non-commercial',
+				'by-nd'=>'Attribution No Derivatives',
+				'by-sa'=>'Attribution Share Alike',
+				'by'=>'Attribution',
+				'copyright'=>'Copyright',
+				'Fair Use'=>'Fair Use',
+				'publicdomain'=>'Public Domain'				                
+        );
+    }
+    function AMPSystemLookup_License(){
+        $this->init( );
+    }
+    function available( ){
+        return true;
+    }
+}
+
 
 
 ?>
