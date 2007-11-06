@@ -221,6 +221,15 @@ div.tagged_items a.list_item {
     font-size: 1.5em;
 }
 
+div.list_item_blog {
+	border-bottom: 2px groove #333333;
+	margin-bottom: 1em;
+}
+
+div.blog_footer {
+	text-align: right;
+}
+
 div.userdata_pager {
     width: 100%;
     text-align: center;
@@ -265,6 +274,27 @@ div.article_media {
 
 div.article_public_detail {
     margin-left: 10px;
+}
+div.article_public_detail .image {
+    position:relative;
+    width: 250px;
+    margin: 1em;
+    float: left;
+}
+div.article_public_detail .image-right .photocaption {
+    position:relative;
+}
+div.article_public_detail .image-right {
+    position:relative;
+    float: right;
+}
+
+div.photo-credit-article {
+    padding: .25em 1em .25em 1em;
+}
+div.photo-credit-article .content-license {
+    float:left;
+    margin-right: 1em;
 }
 
 div.list_image {

@@ -215,6 +215,9 @@ media="render_media"
 doc="render_document"
 sidebar="render_sidebar"
 
+[render article]
+photocredit=false
+
 [render display class]
 publicpage="Article_Public_Detail_Page"
 ;?>
