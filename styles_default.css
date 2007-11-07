@@ -290,6 +290,12 @@ div.article_public_detail .image {
     margin: 0 1em 1em 0;
     float: left;
 }
+
+div.article_public_detail .image a.image-link {
+	position:relative;
+	float: left;
+}
+
 div.article_public_detail img.img_main {
     margin: 0 0 4px 0;
 }
