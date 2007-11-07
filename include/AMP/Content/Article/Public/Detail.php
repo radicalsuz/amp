@@ -121,7 +121,6 @@ class Article_Public_Detail extends AMP_Display_Detail {
                 array( 'target' => '_blank', 'class' => 'image-link'))
             . $this->render_credit( $source )
             . $this->render_caption( $image ),
-            #array( 'class' => AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . ' ' . AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . '-' . $float_type )
             array( 'class' => $container_css )
         );
         
@@ -240,9 +239,10 @@ class Article_Public_Detail extends AMP_Display_Detail {
     }
 
     function render_comments( $source ) {
-        if (!( $comments = &$source->getComments())) return false;
-        $comments->readPublished( );
-        return $comments->display();
+        require_once( 'AMP/Content/Article/Comment/Public/List.php');
+        $comments = new Article_Comment_Public_List( null, array( 'article' => $source->id ));
+        return $comments->execute( );
+
     }
 
 }
