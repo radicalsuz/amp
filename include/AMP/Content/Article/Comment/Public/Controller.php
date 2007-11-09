@@ -25,6 +25,7 @@ class Article_Comment_Public_Controller extends AMP_System_Component_Controller_
                     );
                 */
         if ( $this->_article_id ) {
+            AMP_lookup_clear_cached( 'comments_live_by_article', $this->article_id );
             ampredirect( AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'id='.$this->_article_id ) ));
         }
         if ( $this->_userdata_id ) {
