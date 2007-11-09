@@ -28,12 +28,17 @@ class SectionContentSource_Articles extends SectionContentSource {
     function _setCriteria() {
         $this->_setBaseCriteria();
         $this->_addCriteriaSection( );
-        #$this->_source->addCriteria( $this->getSectionCriteria() );
         $this->_addLegacyCriteria() ;
     }
 
     function _addCriteriaSection( ){
-        $this->_source->addCriteriaSection( $this->_section->id );
+        require_once( 'AMP/Content/Article.inc.php');
+        $article = new Article(  AMP_Registry::getDbcon( ));
+        $crit = $article->makeCriteria( $this->_section->getDisplayCriteria( ));
+        foreach( $crit as $crit_item ) {
+            $this->_source->addCriteria( $crit_item );
+        }
+        #$this->_source->addCriteriaSection( $this->_section->id );
     }
 
     function getSectionCriteria() { 

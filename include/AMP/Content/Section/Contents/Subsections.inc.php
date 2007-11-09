@@ -25,7 +25,10 @@ class SectionContentSource_Subsections extends SectionContentSource {
     }
 
     function _addCriteriaSection( ){
-        $this->_source->addCriteriaSection( $this->_section->id );
+        $crit = $this->_section->makeCriteria( $this->_section->getDisplayCriteria( ));
+        foreach( $crit as $crit_item ) {
+            $this->_source->addCriteria( $crit_item );
+        }
     }
 
     function getSectionCriteria() {

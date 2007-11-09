@@ -9,7 +9,16 @@ class SectionContentSource_SectionsBySubsection extends SectionContentSource_Sub
     }
 
     function _addCriteriaSection( ){
-        $this->_source->addCriteriaSectionParent( $this->_section->id );
+        $raw_crit = $this->_section->getDisplayCriteria( );
+        if( isset( $raw_crit['section']) && $raw_crit['section'] ) {
+            $raw_crit['grandparent'] = $raw_crit['section'];
+            unset( $raw_crit['section']);
+        }
+        $crit = $this->_section->makeCriteria( $this->_section->getDisplayCriteria( ));
+        foreach( $crit as $crit_item ) {
+            $this->_source->addCriteria( $crit_item );
+        }
+        #$this->_source->addCriteriaSectionParent( $this->_section->id );
     }
 
     function getSectionCriteria() {

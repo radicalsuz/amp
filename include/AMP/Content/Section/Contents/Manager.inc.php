@@ -3,6 +3,7 @@
 require_once( 'AMP/Content/Section/Contents/Source.inc.php' );
 require_once( 'AMP/Content/Section/Contents/Display.inc.php' );
 
+require_once( 'AMP/Content/Section/Contents/Stub.php' );
 require_once( 'AMP/Content/Section/Contents/Articles.inc.php' );
 require_once( 'AMP/Content/Section/Contents/ArticlesBySubsection.inc.php' );
 require_once( 'AMP/Content/Section/Contents/Subsections.inc.php' );
@@ -35,7 +36,7 @@ class SectionContents_Manager {
             $contentSource_class = constant( $source_override_value ) ;
         } else {
             //standard parsing method to figure out source class
-            $this->_contentSourceType = str_replace( " ", "", ucwords( str_replace( "_", " ", strtolower( $this->getDisplayType( $listType ) ) ) ) );
+            $this->_contentSourceType = AMP_to_camelcase( strtolower( $this->getDisplayType( $listType ) )) ;
             $contentSource_class = 'SectionContentSource_'.$this->_contentSourceType;
             if ( !class_exists( $contentSource_class )) {
                 trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $contentSource_class ));

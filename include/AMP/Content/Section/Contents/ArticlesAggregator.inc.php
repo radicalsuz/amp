@@ -17,7 +17,17 @@ class SectionContentSource_ArticlesAggregator extends SectionContentSource_Artic
     ###################################
 
     function _addCriteriaSection( ){
-        $this->_source->addCriteriaSectionDescendent( $this->_section->id );
+        $article = new Article(  AMP_Registry::getDbcon( ));
+        $raw_crit = $this->_section->getDisplayCriteria( );
+        if( isset( $raw_crit['section'] ) && $raw_crit['section'] ) {
+            $raw_crit['in_section_descendant'] = $raw_crit['section'];
+            unset( $raw_crit['section']);
+        }
+        $crit = $article->makeCriteria( $raw_crit ); 
+        foreach( $crit as $crit_item ) {
+            $this->_source->addCriteria( $crit_item );
+        }
+        #$this->_source->addCriteriaSectionDescendent( $this->_section->id );
     }
 
     function getSectionCriteria() {
