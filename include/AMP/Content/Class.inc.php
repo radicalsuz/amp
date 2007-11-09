@@ -3,12 +3,18 @@
 require_once ('AMP/System/Data/Item.inc.php' );
 require_once ('AMP/Content/Class/Display.inc.php' );
 require_once ('AMP/Content/Display/Criteria.inc.php' );
+require_once ( 'AMP/Content/Article.inc.php');
 
 class ContentClass extends AMPSystem_Data_Item {
 
     var $datatable = "class";
     var $name_field = "class";
+    
+    // api v1 displays store sql fragments in here
     var $_contents_criteria = array();
+
+    // for api v2 displays, criteria are stored as an array
+    var $_display_criteria = array( );
 
     function ContentClass( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -47,8 +53,28 @@ class ContentClass extends AMPSystem_Data_Item {
         $this->_contents_criteria[] = $criteria;
     }
 
+    function getDisplayCriteria( ) {
+        return array_merge( array( 'class' => $this->id ), $this->_display_criteria );
+    }
+
+    function getDisplayIntro( ) {
+        if( !( $intro = $this->getHeaderRef( ))) {
+
+            $intro = new Article( AMP_Registry::getDbcon( ));
+            $intro->setDefaults( );
+            $intro->mergeData(  array( 
+                'publish'   => 1, 
+                'title'     => $this->getName( ) . $this->getListNameSuffix( ), 
+                'body'      => $this->getBlurb( ), 
+                'class'     => AMP_CONTENT_CLASS_SECTIONHEADER 
+                ));
+        }
+        return $intro->getDisplay( );
+    }
+
     function addContentsCriteriaSection( $section_id ) {
         $contents = &$this->getContents( );
+        $this->_display_criteria['section'] = $section_id ;
         $contents->addCriteriaSection( $section_id );
         /*
         $base_section = "type=".$section_id ;
@@ -71,15 +97,16 @@ class ContentClass extends AMPSystem_Data_Item {
     */
 
     function &getDisplay() {
-        $classes = filterConstants( 'AMP_CONTENT_CLASS' );
-        $display_def_constant= 'AMP_CONTENT_CLASSLIST_DISPLAY_' . array_search( $this->id , $classes );
         include_once( 'AMP/Content/Class/Display_Blog.inc.php');
         include_once( 'AMP/Content/Class/Display_FrontPage.inc.php');
 
-        $display_class = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
-        if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
+        $displays = AMP_lookup( 'class_displays');
+        $display_class = isset( $displays[$this->id] ) ? $displays[ $this->id ] : AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
+        if ( !class_exists( $display_class )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $display_class ));
+            $display_class = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
+        }
 
-        if (!class_exists( $display_class )) $display_class = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
         $display_class_vars = get_class_vars( $display_class );
 
         if (!isset( $display_class_vars['api_version'] ) || ( $display_class_vars['api_version'] == 1)) {
@@ -87,7 +114,8 @@ class ContentClass extends AMPSystem_Data_Item {
         } elseif ($display_class_vars['api_version'] == 2 ) {
 			$result = new $display_class( 
                                     $this,
-                                    array( 'class' => $this->id )
+                                    $this->getDisplayCriteria( ),
+                                    $this->getListItemLimit( )
                                     );
         }
         return $result;

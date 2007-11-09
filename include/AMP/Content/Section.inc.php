@@ -3,6 +3,7 @@
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
 require_once ( 'AMP/Content/Section/Contents/Manager.inc.php' );
+require_once ( 'AMP/Content/Article.inc.php');
 
 class Section extends AMPSystem_Data_Item {
 
@@ -11,6 +12,7 @@ class Section extends AMPSystem_Data_Item {
     var $_contents;
     var $_class_name = 'Section';
     var $_field_status = 'usenav';
+    var $display;
 
     function Section( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
@@ -24,13 +26,41 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function getCriteriaForContent() {
-        $contentsource = & $this->getContents();
-        return $contentsource->getSectionCriteria();
+        return join( ' AND ', $this->makeCriteria( $this->getDisplayCriteria( )));
+        #$contentsource = & $this->getContents();
+        #return $contentsource->getSectionCriteria();
     }
 
     function &getDisplay() {
-        $contents = &$this->getContents();
-        return $contents->getDisplay();
+        $display_class = $this->getDisplayClass( );
+        $display_class_vars = get_class_vars( $display_class );
+        if (!isset( $display_class_vars['api_version'] ) || ( $display_class_vars['api_version'] == 1)) {
+            $contents = &$this->getContents();
+            $this->display = $contents->getDisplay();
+            return $this->display;
+        }
+        $this->display = &new $display_class( 
+                                $this,
+                                $this->getDisplayCriteria( ),
+                                $limit = ((( isset( $_REQUEST['all']) && $_REQUEST['all']) 
+                                         ||(isset( $_REQUEST['qty']) && $_REQUEST['qty']))
+                                                ? null : $this->getListItemLimit( ))
+                                );
+        return $this->display;
+    }
+
+    function getDisplayIntro( ) {
+        if( !( $intro = $this->getHeaderRef( ))) {
+            $intro = new Article( AMP_Registry::getDbcon( ));
+            $intro->setDefaults( );
+            $intro->mergeData(  array( 
+                'publish'   => 1, 
+                'title'     => $this->getName( ) . $this->getListNameSuffix( ), 
+                'body'      => $this->getBlurb( ), 
+                'class'     => AMP_CONTENT_CLASS_SECTIONHEADER 
+                ));
+        }
+        return $intro->getDisplay( );
     }
 
     function display() {
@@ -330,7 +360,19 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaParent( $parent_id ) {
+        if( empty( $parent_id )) return TRUE;
+        if( is_array( $parent_id )) {
+            return 'parent in( '.join( ',', $parent_id ).' )';
+        }
         return 'parent=' . $parent_id;
+    }
+
+    function makeCriteriaGrandparent( $section_id ) {
+        $map = AMPContent_Map::instance( );
+        $parents = $map->getChildren( $section_id );
+        if( empty( $parents )) return 'FALSE';
+        return $this->makeCriteriaParent( $section_id );
+
     }
 
     function makeCriteriaSection( $section_id ) {

@@ -2,6 +2,7 @@
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
+require_once ( 'AMP/System/File/Image.php' );
 require_once ( 'AMP/Content/Article/Display.inc.php' );
 require_once ( 'AMP/Content/Config.inc.php');
 
@@ -41,11 +42,14 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function &getDisplay() {
+        /*
         $classes = filterConstants( 'AMP_CONTENT_CLASS' );
         $display_def_constant = 'AMP_ARTICLE_DISPLAY_' . array_search( $this->getClass() , $classes );
 
         $display_class = AMP_ARTICLE_DISPLAY_DEFAULT;
         if (defined( $display_def_constant )) $display_class = constant( $display_def_constant );
+        */
+        $display_class = $this->getDisplayClass( );
 
         if (!class_exists( $display_class )) {
             trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $display_class ));
@@ -53,6 +57,17 @@ class Article extends AMPSystem_Data_Item {
         }
         $result = &new $display_class( $this );
         return $result;
+    }
+
+    function getDisplayClass( ) {
+        $displays = AMP_lookup( 'article_displays');
+        $default = AMP_ARTICLE_DISPLAY_DEFAULT;
+        if( !isset( $displays[$this->getClass( )])) return $default;
+        if( !class_exists( $displays[$this->getClass( )])) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $displays[$this->getClass( )]));
+            return $default;
+        }
+        return $displays[$this->getClass( )];
     }
 
     function getParent() {
@@ -195,12 +210,28 @@ class Article extends AMPSystem_Data_Item {
         return array(   'filename'  =>  $this->getImageFileName(),
                         'caption'   =>  $this->getData( 'piccap' ),
                         'alignment' =>  $this->getData( 'alignment' ),
+                        'align'     =>  $this->getData( 'alignment' ),
                         'alttag'    =>  $this->getData( 'alttag' ),
+                        'alt'       =>  $this->getData( 'alttag' ),
                         'image_size'=>  $this->getImageClass() );
+    }
+
+    function getImageFile( ) {
+        if( !( $name = $this->getImageFileName( ))) return false;
+        $img_class = $this->getImageClass( );
+        if( !$img_class ) $img_class = AMP_IMAGE_CLASS_OPTIMIZED;
+        $image = new AMP_System_File_Image( AMP_image_path( $name, $img_class )) ;
+        if ( !$image->getPath( )) return false;
+        $image->set_article_metadata( $this->getImageData( ));
+        return $image;
     }
 
     function getImageClass() {
         return $this->getData( 'pselection' );
+    }
+
+    function display_image_in_body( ) {
+        return ( $this->getImageClass( ) != 'list_only');
     }
 
     function getShowInNavs( ){
@@ -645,6 +676,12 @@ class Article extends AMPSystem_Data_Item {
                     . ' or id in( ' . join( ',', array_keys( $related_articles ) ) . ' ) )';
     }
 
+    function makeCriteriaRelatedSection( $section_id ) {
+        $related_articles = &AMPContentLookup_RelatedArticles::instance( $section_id );
+        if( !$related_articles ) return false;
+        return 'id in ( '. join( ',', $related_articles ). ')';
+    }
+
     function makeCriteriaParent( $section_id ) {
         return $this->makeCriteriaSection( $section_id );
     }
@@ -674,7 +711,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaTag( $tag_id ) {
-        if ( strpos( $tag_id, ',') != 0 ) {
+        if ( is_string( $tag_id ) && ( strpos( $tag_id, ',') )) {
             $tag_id = split( ',', $tag_id );
         }
         
@@ -732,7 +769,15 @@ class Article extends AMPSystem_Data_Item {
         return $this->_makeCriteriaEquals( 'class', $class_id );
     }
 
-    function makeCriteriaFilter( $filter_name, $filter_var = null ) {
+    function makeCriteriaFilter( $filter_def ) {
+        $filter_name = is_array( $filter_def ) ? $filter_def['name'] : $filter_def;
+        $filter_var = is_array( $filter_def ) ? $filter_def['var'] : null;
+
+        if ( !( $filter = $this->_load_filter( $filter_name, $filter_var ))) return false;
+        return $filter->criteria;
+    }
+
+    function _load_filter( $filter_name, $filter_var ) {
         $filter_class = 'ContentFilter_' . ucfirst( $filter_name );
         if ( !class_exists( $filter_class )) {
             $filter_filename = ucfirst( $filter_name ) . '.inc.php';
@@ -743,12 +788,13 @@ class Article extends AMPSystem_Data_Item {
                 }
             }
             include_once( $filter_path );
+            if ( !class_exists( $filter_class )) return false;
         }
-        if ( class_exists( $filter_class )) {
-            $sourceFilter = &new $filter_class( $filter_var );
-            return $sourceFilter->execute( $this );
-        }
+        $filter = new $filter_class( $filter_var );
+        $filter->assign( );
+        return $filter;
     }
+
 
 	function makeCriteriaDate( $date_value ) {
         if ( !is_array( $date_value ) && $date_value ) {
@@ -792,6 +838,12 @@ class Article extends AMPSystem_Data_Item {
         return $this->_makeCriteriaEquals('state', $region_id ); 
     }
 
+    function makeCriteriaDisplayableFrontpage(  ) {
+        $class = $this->makeCriteriaDisplayableClass(  );
+        $fp = $this->makeCriteriaDisplayableClassFrontpage( );
+        return str_replace( $class, $fp, $this->makeCriteriaDisplayable( ) );
+    }
+
     function makeCriteriaDisplayable(  ) {
         $crit = array(  );
         $crit['class'] = $this->makeCriteriaDisplayableClass(  );
@@ -815,6 +867,13 @@ class Article extends AMPSystem_Data_Item {
         */
         $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
         return "class not in (" . join( ",", $excluded_classes ) . ")" ;
+    }
+
+    function makeCriteriaDisplayableClassFrontpage( ) {
+        $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
+        $excluded_classes_fp = array_diff( $excluded_classes, array( AMP_CONTENT_CLASS_FRONTPAGE ));
+        return "class not in (" . join( ",", $excluded_classes_fp ) . ")" ;
+
     }
 
     function makeCriteriaStatus( $value ) {
@@ -841,7 +900,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaNotTag( $tag_id ) {
-        return "!( ".$this->makeCriteriaTag( $tag ) . ")";
+        return "!( ".$this->makeCriteriaTag( $tag_id ) . ")";
     }
 
     function makeCriteriaNotSection( $section_id ) {
