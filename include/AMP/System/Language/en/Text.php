@@ -61,6 +61,7 @@ define( 'AMP_TEXT_BYLINE_SLUG', 'by&nbsp;%s');
 define( 'AMP_TEXT_RECENT' , 'Recent&nbsp;' );
 define( 'AMP_TEXT_MORE' , 'More&nbsp;' );
 if ( !defined( 'AMP_TEXT_NAV_MORELINK' )) define( 'AMP_TEXT_NAV_MORELINK' , 'More&nbsp;&#187;' );
+if (!defined( 'AMP_TEXT_CONTENT_FRONTPAGE_MORELINK' )) define( 'AMP_TEXT_CONTENT_FRONTPAGE_MORELINK', 'Read More&nbsp;&raquo;' );
 define( 'AMP_TEXT_POSTED_IN' , 'Posted in' );
 define( 'AMP_TEXT_POSTED_BY' , 'Posted by %s on %s' );
 define( 'AMP_TEXT_LOGIN' , 'login' );
@@ -285,6 +286,7 @@ define( 'AMP_TEXT_SECTION_HEADER', 'Section Header');
 define( 'AMP_TEXT_ATTACHED_FILE', 'Attached File');
 define( 'AMP_TEXT_VIEW_ALL', 'View All %s');
 define( 'AMP_TEXT_VERSION_ID', 'Archived Content - Version ID: %s');
+define( 'AMP_TEXT_PR_HEADING', 'For Immediate Release: ');
 
 define( 'AMP_TEXT_IMAGE_CLASS_THUMB', 'thumbnail' );
 define( 'AMP_TEXT_IMAGE_CLASS_OPTIMIZED_TALL', 'tall image' );
