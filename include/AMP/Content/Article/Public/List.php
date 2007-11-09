@@ -21,6 +21,7 @@ class Article_Public_List extends AMP_Display_List {
 
     var $_css_class_author = AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_AUTHOR ;
     var $_css_class_source  = AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_SOURCE;
+    var $_css_class_container_list = "article_public_list list_block";
 
 	var $_search;
 
@@ -53,6 +54,13 @@ class Article_Public_List extends AMP_Display_List {
         }
         $this->_source_container = &$container;
         return false;
+    }
+
+    function _init_pager( $limit = null ) {
+        $has_pager = parent::_init_pager( $limit );
+        if( $has_pager && isset( $this->_source_container )) {
+            $this->_pager->describe( $this->_source_container->getName( ));
+        }
     }
 
     function set_container( &$container ) {
@@ -213,6 +221,12 @@ class Article_Public_List extends AMP_Display_List {
         if ( $http_request || !isset( $this->_source_container )) return $http_request;
         if ( !method_exists( $this->_source_container, 'getListSort')) return false;
         return $this->_source_container->getListSort( );
+    }
+
+    function addFilter( $filter_name, $filter_var=null ) {
+        $filter_def = isset( $filter_var ) ? array( 'name' => $filter_name, 'var' => $filter_var ) : $filter_name;
+        $this->_source_criteria['filter'] = $filter_def;
+        $this->__construct( false, $this->_source_criteria );
     }
 
 }

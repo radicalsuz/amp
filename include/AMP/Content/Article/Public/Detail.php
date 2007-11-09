@@ -4,7 +4,7 @@ require_once( 'AMP/Display/Detail.php');
 
 class Article_Public_Detail extends AMP_Display_Detail {
 
-    var $_css_class_subtitle = "subtitle";
+    var $_css_class_subtitle = AMP_CONTENT_CSS_CLASS_ARTICLE_SUBTITLE;
     var $_css_class_author  = AMP_CONTENT_CSS_CLASS_ARTICLE_AUTHOR;
     var $_css_class_date    = AMP_CONTENT_CSS_CLASS_ARTICLE_DATE;
     var $_css_class_source  = AMP_CONTENT_CSS_CLASS_ARTICLE_SOURCE;
@@ -107,12 +107,18 @@ class Article_Public_Detail extends AMP_Display_Detail {
 	}
 
     function render_image( &$source ) {
+        $image = $source->getImageFile( );
+        if (!$image || !$source->display_image_in_body( )) return false;
+        return $image->display->execute( );
+        /*
         $image = $source->getImageRef();
         if (!$image || !$image->display_in_body( )) return false;
         $attributes = $image->attributes( );
         $float_type = $attributes['align'];
         unset( $attributes['align']);
         $container_css = $float_type ? AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . ' ' . AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . '-' . $float_type : AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE;
+        $container_attr = array( 'class' => $container_css );
+        if ( $width = $image->getWidth( )) $container_attr['style'] = "width: {$width}px";
 
         return $this->_renderer->div( 
             $this->_renderer->link( 
@@ -121,8 +127,9 @@ class Article_Public_Detail extends AMP_Display_Detail {
                 array( 'target' => '_blank', 'class' => 'image-link'))
             . $this->render_credit( $source )
             . $this->render_caption( $image ),
-            array( 'class' => $container_css )
+            $container_attr
         );
+        */
         
     }
 

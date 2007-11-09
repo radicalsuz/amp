@@ -123,7 +123,9 @@ class Article_Public_Component_Controller extends AMP_System_Component_Controlle
 	function commit_search( ) {
 		$search_form = $this->_map->getComponent('search');
 		$search_form->Build( true );
-		if ($search_form->submitted()) return $this->commit_list();
+		if ($search_form->submitted()) {
+            return $this->commit_list();
+        }
 
         $intro = &$this->_map->getPublicPage( 'list' );
         $this->_set_public_page( $intro );
