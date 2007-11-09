@@ -178,14 +178,17 @@ class AMPSystem_ComponentMap extends AMP_System_Observer {
             if ( !AMP_allow( $action, $this->_gacl_obj, $id )) return false;
         }
 
-        //if edit is not allowed -- allow nothing
-        $allow_any_action = 'edit';
-        if ( $action != $allow_any_action && $action != 'search' ){
-            if ( !$this->isAllowed( $allow_any_action )) return false;
+        $allow_var = '_allow_' . $action;
+
+        if ( !isset( $this->$allow_var )) {
+            //if edit is not allowed -- allow nothing
+            $allow_any_action = 'edit';
+            if ( $action != $allow_any_action && $action != 'search' ){
+                if ( !$this->isAllowed( $allow_any_action )) return false;
+            }
+            return true;
         }
 
-        $allow_var = '_allow_' . $action;
-        if ( !isset( $this->$allow_var )) return true;
         if ( !$this->$allow_var ) return false;
         if ( $this->$allow_var === true ) return true;
         return AMP_Authorized( $this->$allow_var );
