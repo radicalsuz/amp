@@ -24,6 +24,7 @@ class AMP_Display_List {
     var $_renderer;
 
     var $_pager;
+    var $pager;
     var $_pager_active = false;
     var $_pager_limit;
     var $_pager_limit_first_page;
@@ -440,6 +441,7 @@ class AMP_Display_List {
         require_once( $this->_path_pager );
         $pager_class = $this->_class_pager;
         $this->_pager = &new $pager_class( );
+        $this->pager = &$this->_pager;
 
         if ( isset( $limit ) && $limit )  {
             $this->_pager_limit = $limit;
@@ -491,8 +493,10 @@ class AMP_Display_List {
         }
 
         $total = $this->_pager->total( $source );
-        if ( $total > $this->_pager_limit ) {
+        if ( ( $total > $this->_pager_limit ) || $this->_pager->get_offset( )) {
             $this->_pager->set_total( $total );
+        }
+        if ( $total > $this->_pager_limit ) {
             $this->_pager->trim( $source );
         } 
 

@@ -24,6 +24,7 @@ class AMP_Display_Pager {
     var $_text_first = AMP_TEXT_PAGER_FIRST;
     var $_text_last  = AMP_TEXT_PAGER_LAST;
     var $_text_all   = AMP_TEXT_PAGER_ALL;
+    var $_text_description;
 
     var $_enable_all  = true;
 
@@ -62,6 +63,7 @@ class AMP_Display_Pager {
     }
 
     function set_total( $total ) {
+        trigger_error( 'total w '. get_class( $source ));
         $this->_qty_total = $total;
     }
 
@@ -121,11 +123,11 @@ class AMP_Display_Pager {
         if ( !$new_offset || $new_offset < 0 ) {
             unset( $target_request['offset']);
         }
-		unset( $target_request['all']);
+        unset( $target_request['all']);
 
         /* foreach( $target_request as $var => $value ) {
-            $target_request_vars[$var] = urlencode_array( $value, $var ); //$var . '=' . ( is_array( $value ) ? urlencode_array( $value ) : $value ) ;
-        } */
+           $target_request_vars[$var] = urlencode_array( $value, $var ); //$var . '=' . ( is_array( $value ) ? urlencode_array( $value ) : $value ) ;
+           } */
 
         return AMP_url_update( $this->_url_target, $target_request );
     }
@@ -136,12 +138,12 @@ class AMP_Display_Pager {
 
     function render( ) {
         return 
-            $this->_renderer->inDiv( 
-                          $this->render_position( )
-                        . $this->_renderer->newline( )
-                        . $this->render_controls( )
-                        . $this->_renderer->newline( )
-                        . $this->render_links( ),
+            $this->_renderer->div( 
+                    $this->render_position( )
+                    . $this->_renderer->newline( )
+                    . $this->render_controls( )
+                    . $this->_renderer->newline( )
+                    . $this->render_links( ),
                     array( 'class' => $this->_css_class_container )
                     );
     }
@@ -149,13 +151,14 @@ class AMP_Display_Pager {
     function render_top( ) {
         if ( $this->_qty_page == 1 || ( $this->_qty_total - $this->_current_offset ) == 1 ) return false;
         return
-            $this->_renderer->inDiv( 
-                          $this->render_position( )
-                        . $this->_renderer->newline( )
-                        . $this->render_controls( ),
+            $this->_renderer->div( 
+                    $this->render_description( )
+                    . $this->render_position( )
+                    . $this->_renderer->newline( )
+                    . $this->render_controls( ),
                     array( 'class' => $this->_css_class_container )
                     );
-            //. $this->_renderer->newline( 1, array( 'clear' => 'all'));
+        //. $this->_renderer->newline( 1, array( 'clear' => 'all'));
     }
 
     function render_position( ) {
@@ -176,6 +179,15 @@ class AMP_Display_Pager {
         }
 
         return sprintf( AMP_TEXT_PAGER_POSITION, $current_page_range, $this->_qty_total );
+    }
+
+    function render_description( ) {
+        if ( !isset( $this->_text_description )) return false;
+        return $this->_text_description . ' : ';
+    }
+
+    function describe( $text ) {
+        $this->_text_description = $text;
     }
 
     function render_controls( ) {
@@ -269,6 +281,7 @@ class AMP_Display_Pager {
     }
 
     function total( &$source ) {
+        trigger_error( 'called w '. get_class( $source ));
         if ( is_array( $source )) {
             return count( $source );
         } elseif ( is_object( $source )) {
