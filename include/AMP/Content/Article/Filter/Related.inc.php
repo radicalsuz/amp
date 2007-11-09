@@ -1,14 +1,22 @@
 <?php
 
 class ContentFilter_Related {
+    var $criteria;
+
+    function assign( ) {
+        $currentPage = &AMPContent_Page::instance( );
+        require_once( 'AMP/Content/Article.inc.php');
+        $crit_builder = new Article( AMP_Registry::getDbcon( ) );
+        $this->criteria = $crit_builder->makeCriteriaRelatedSection( $currentPage->getSectionId( ));
+    }
 
     function execute( &$source ) {
         $currentPage = &AMPContent_Page::instance( );
 
         switch( true ) {
             case $currentPage->isList( AMP_CONTENT_LISTTYPE_SECTION  )  :
-                $source->addCriteria( 
-                        $source->_makeCriteriaSectionRelated( $currentPage->getSectionId( )));
+                $this->assign( );
+                $source->addCriteria( $this->criteria );
                 break;
             default;
         }
