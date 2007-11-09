@@ -205,6 +205,9 @@ class AMP_MenuComponent_TableRow_System extends AMP_MenuComponent_TableRow {
             position: relative;
             float: right;
         }
+        TABLE#%5\$s td.AMPMenu:hover {
+            background-color: #fAfAfA;
+        }
         TABLE#%5\$s td.AMPMenu {
             font-family: Arial, Verdana,\"Trebuchet MS\",Helvetica,sans-serif; 
             background-color: transparent;
