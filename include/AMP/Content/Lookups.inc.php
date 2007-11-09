@@ -89,7 +89,7 @@ class AMPContentLookup_CommentsLiveByArticle extends AMPSystem_Lookup {
     function _filter_by_article( $article_id ) {
         require_once( 'AMP/Content/Article/Comment/ArticleComment.php');
         $comment = new ArticleComment( AMP_Registry::getDbcon( ));
-        $this->criteria = $comment->makeCriteria( array( 'displayable' => 1, 'article' => $article_id ));
+        $this->criteria = join( ' AND ', $comment->makeCriteria( array( 'displayable' => 1, 'article' => $article_id )));
     }
     
 }
@@ -345,6 +345,55 @@ class AMPSystemLookup_SectionDisplays extends AMPSystem_Lookup {
         }
     }
 
+}
+
+class AMPSystemLookup_ArticleDisplays extends AMPSystem_Lookup {
+    var $datatable = 'class';
+    var $id_field = 'id';
+    var $result_field = 'class';
+
+    function AMPSystemLookup_ArticleDisplays( ) {
+        $this->init( );
+        $this->get_display_class_names( );
+    }
+
+    function get_display_class_names( ) {
+        $names = array_flip( array_filter( filterConstants( 'AMP_CONTENT_CLASS')));
+        $displays = filterConstants( 'AMP_ARTICLE_DISPLAY' );
+        foreach( $this->dataset as $class_id => $class_name ) {
+            if( !isset( $names[$class_id]) || !isset( $displays[ $names[ $class_id ]])) {
+                $this->dataset[ $class_id ] = AMP_ARTICLE_DISPLAY_DEFAULT;
+                continue;
+            }
+           
+            $this->dataset[ $class_id ] = $displays[ $names[ $class_id ]];
+        }
+    }
+
+}
+
+class AMPSystemLookup_ClassDisplays extends AMPSystem_Lookup {
+    var $datatable = 'class';
+    var $id_field = 'id';
+    var $result_field = 'class';
+
+    function AMPSystemLookup_ClassDisplays( ) {
+        $this->init( );
+        $this->get_display_class_names( );
+    }
+
+    function get_display_class_names( ) {
+        $names = array_flip( array_filter( filterConstants( 'AMP_CONTENT_CLASS')));
+        $displays = filterConstants( 'AMP_CONTENT_CLASSLIST_DISPLAY' );
+        foreach( $this->dataset as $class_id => $class_name ) {
+            if( !isset( $names[$class_id]) || !isset( $displays[ $names[ $class_id ]])) {
+                $this->dataset[ $class_id ] = AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
+                continue;
+            }
+           
+            $this->dataset[ $class_id ] = $displays[ $names[ $class_id ]];
+        }
+    }
 }
 
 class AMPContentLookup_Sidebarclass extends AMPConstant_Lookup {
