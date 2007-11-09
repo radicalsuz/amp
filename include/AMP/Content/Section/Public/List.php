@@ -22,6 +22,7 @@ class Section_Public_List extends AMP_Display_List {
 
     //section this list represents
     var $_source_container;
+    var $_css_class_container_list = "section_public_list list_block";
 
 	function Section_Public_List ( $container = false, $criteria = array(), $limit = null ) {
 		$this->__construct($container, $criteria, $limit );
@@ -115,6 +116,9 @@ class Section_Public_List extends AMP_Display_List {
         return $this->_source_container->getListSort( );
     }
 
+    function addFilter( $filter_name, $filter_var ) {
+        //do nothing
+    }
 }
 
 ?>
