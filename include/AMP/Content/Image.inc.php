@@ -8,6 +8,7 @@ class Content_Image {
        );
     var $_itemdata = array();
     var $_itemdata_keys = array( 'width', 'height', 'alttag', 'caption', 'alignment', 'filename', 'image_size');
+    var $_allowed_keys = array( );
     var $_files = array( );
 
     function Content_Image( $filename=null ) {
@@ -35,13 +36,16 @@ class Content_Image {
     }
 
     function load_db_image( $filename ) {
-        require_once( 'AMP/Content/Image/Image.php');
-        $image_finder = new AMP_Content_Image( AMP_Registry::getDbcon( ));
-        $images = $image_finder->find( array( 'name' => $filename ));
+        require_once( 'AMP/System/File/Image.php');
+        $image = new AMP_System_File_Image( $this->getPath( $this->getImageClass( )));
+        /*
+        $image = $image_finder->find( array( 'name' => $filename ));
         if ( !$images ) return false;
         $image = current( $images );
 
-        $keys = $image->getAllowedKeys( );
+        */
+        $data = $image->getData( );
+        $keys = array_keys( $data );
         foreach( $keys as $key ) {
             $this->_addAllowedKey( $key );
         }
