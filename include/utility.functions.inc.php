@@ -578,6 +578,18 @@ if (!function_exists('array_combine_key')) {
         return $result;
     }
 }
+function array_elements_by_key( $keys, $data ) {
+    $super_data = array_fill( 0, count( $keys ), $data );
+    $set = array_map( 'array_find_element', $keys, $super_data );
+    $new_data = array_combine( $keys, $set );
+    return array_filter( $new_data );
+}
+
+function &array_find_element( $key, $data ) {
+    $false = false;
+    if( !isset( $data[ $key ])) return $false;
+    return( $data[$key]);
+}
 
 if (!function_exists('AMPfile_list')) {
 		function AMPfile_list($file,$ext=NULL) { 
@@ -827,7 +839,7 @@ if (!function_exists('AMP_Url_AddVars')) {
         return AMP_Url_AddVars( $current_value, $new_vars );
     }
 }
-if (!function_exists('AMP_Url_AddAnchor')) {
+if (!function_exists( 'AMP_Url_AddAnchor' )) {
     function AMP_Url_AddAnchor ( $current_value, $anchor_name) {
         return $current_value . '#' . $anchor_name;
     }
@@ -2259,6 +2271,10 @@ function &AMP_searchform_xml( $xml_filename, $action = false ) {
     $form->read_xml_fields( $xml_filename );
     return $form;
 
+}
+
+function AMP_image_path( $filename, $img_class = AMP_IMAGE_CLASS_OPTIMIZED ) {
+    return AMP_LOCAL_PATH . AMP_IMAGE_PATH . $img_class . DIRECTORY_SEPARATOR . $filename;
 }
 
 ?>

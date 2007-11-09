@@ -2,6 +2,8 @@
 [content list]
 order_max=9999999999
 display_max=300
+limit_default=20
+intro_display="ListIntro_Display"
 
 [sectionlist]
 articles=1
@@ -10,6 +12,13 @@ subsections=5
 articles_by_subsection=3
 subsections_plus_articles=6
 articles_aggregator=7
+
+[section display]
+default="ArticleSet_Display"
+articles="ArticleSet_Display"
+subsections="SectionSet_Display"
+articles_aggregator="ArticleSet_Display"
+grouped="Article_Public_List"
 
 [content section listsort article]
 alpha="title"
