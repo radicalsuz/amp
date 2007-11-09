@@ -1,6 +1,6 @@
 <array>
-    <name>
-        <label>Image Filename</label>
+    <pattern>
+        <label>Image Filename (use * as wildcard)</label>
         <type>text</type>
-    </name>
+    </pattern>
 </array>

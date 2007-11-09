@@ -10,7 +10,9 @@ class AMP_Content_Image_List_Request extends AMP_System_List_Request {
 
     function commitActionLocal( &$target_set, $action, $args = null ){
         if ( $action != 'recalculate' ) return false;
-        $this->recalculate( $target_set, $args );
+        $image_finder = new AMP_System_File_Image( );
+        $targets = $image_finder->find( array( 'path' => AMP_LOCAL_PATH . '/img/original/'));
+        $this->recalculate( $targets, $args );
         return true;
     }
 

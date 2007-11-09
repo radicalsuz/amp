@@ -2,6 +2,7 @@
 
 require_once( 'AMP/System/List/Form.inc.php');
 require_once( 'AMP/System/File/Image.php');
+require_once( 'AMP/Content/Image/Image.php');
 require_once( 'AMP/Content/Page/Urls.inc.php');
 require_once( 'AMP/Content/Image/Observer.inc.php');
 require_once( 'AMP/Content/Image/List/Request.inc.php' );
@@ -11,6 +12,7 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
     var $suppress = array( 'header'=>true , 'editcolumn' =>true );
     var $col_headers = array( 
         'Image'         => '_makeThumb',
+        'id'            => '_dbEdit',
         'File Name'     => 'name',
         'Date Uploaded' => 'time',
         'Galleries'     => 'galleryLinks',
@@ -63,6 +65,16 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
         require_once( 'AMP/Content/Image.inc.php');
         $img = &new Content_Image( $source->getName( ));
         return $this->_HTML_link( $img->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $this->_HTML_image($img->getURL( AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ), array( 'target' => 'blank' ));
+    }
+
+    function _dbEdit( $source, $column_name ) {
+        $db_images = AMP_lookup( 'db_images');
+        if ( !$db_images ) return false;
+        $image_db_id =  array_search( $source->getName( ), $db_images );
+        if ( $image_db_id  === FALSE ) return false;
+        $renderer = &$this->_getRenderer( );
+        return $renderer->link( AMP_url_update( AMP_SYSTEM_URL_IMAGES, array( 'id' => $image_db_id )), AMP_TEXT_EDIT );
+
     }
 
     function galleryLinks( $source, $column_name ) {

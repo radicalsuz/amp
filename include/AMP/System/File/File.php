@@ -10,6 +10,9 @@ class AMP_System_File {
     var $_sort_property;
     var $_sort_direction = AMP_SORT_ASC;
     var $_sort_method = "";
+    var $_sort_glob_property = 'name';
+    var $_sort_glob_direction = AMP_SORT_ASC;
+    var $_source_criteria = array( );
 
     var $_observers = array( );
     var $id;
@@ -23,7 +26,7 @@ class AMP_System_File {
 
     var $_search_offset;
     var $_search_limit;
-    var $_search_total;
+#    var $_search_total;
 
     function AMP_System_File( $file_path = null ){
         if ( isset( $file_path ) && !is_object( $file_path )) $this->setFile( $file_path );
@@ -83,106 +86,110 @@ class AMP_System_File {
     function get_mimetype( ){
         return $this->_mimetype;
     }
-/*
-    function lookup_mimetype( ){
-        $mimetype_lookup = &$this->_load_mimetype_cache( );
 
-        if ( !isset( $mimetype_lookup[ $this->getPath( ) ] )) return false;
-        return $mimetype_lookup[ $this->getPath( )];
+    function find( $criteria=array( ), $result_class=null ) {
+        $criteria = array_merge( $this->_source_criteria, $criteria );
+        if ( isset( $result_class )) $this->_class_name = $result_class;
+        $path = isset( $criteria['path']) && $criteria['path'] ? $criteria['path'] : false;
+        $pattern = isset( $criteria['pattern']) && $criteria['pattern'] ? $criteria['pattern'] : '*';
+        unset( $criteria['path'] );
+        unset( $criteria['pattern'] );
+        $result = $this->search( $path, $pattern );
+        if( empty( $criteria )) return $result;
+        if( !$result ) return false;
+        return $this->filter( $criteria, $result );
+
     }
 
-    function _load_mimetype_cache( ){
-        if ( isset( $this->_mimetype_cache )) return $this->_mimetype_cache;
-        $reg = &AMP_Registry::instance( );
-        $mimetype_lookup = &$reg->getEntry( AMP_REGISTRY_MIMETYPE_CACHE );
-        if ( !$mimetype_lookup ) {
-            $mimetype_lookup = &AMP_cache_get( AMP_REGISTRY_MIMETYPE_CACHE );
-            if ( !$mimetype_lookup ){
-                $blank_array= array( );
-                $reg->setEntry( AMP_REGISTRY_MIMETYPE_CACHE, $blank_array );
-                $this->_mimetype_cache = $blank_array;
-            }
-            
+    function create_glob_expression( $criteria = array( )) {
+        if( empty( $criteria)) return "*";
+        $path = isset( $criteria['path']) && $criteria['path'] ? $criteria['path'] : false;
+        $pattern = isset( $criteria['pattern']) && $criteria['pattern'] ? $criteria['pattern'] : '*';
+        if ( $path && ( substr( $path, -1 ) !== DIRECTORY_SEPARATOR )) $path .= DIRECTORY_SEPARATOR;
+        return $path . $pattern;
+
+    }
+
+    function assign_criteria( $criteria = array( )) {
+        $this->_source_criteria = array_merge( $this->_source_criteria, $criteria );
+    }
+
+    function filter( $criteria, $data ) {
+        $result_data = $data;
+        foreach( $criteria as $key => $test ) {
+            $crit_method = 'filterBy'. AMP_to_camelcase( $key );
+            if( !method_exists( $this, $crit_method )) continue;
+            $this->_filter_crit = $test;
+            $result_data = array_filter( $result_data, array( $this, $crit_method ));
         }
-        if ( $mimetype_lookup ) $this->_mimetype_cache = $mimetype_lookup;
-        return $this->_mimetype_cache;
-
+        return $result_data;
     }
 
-    function cache_mimetype( $mime_filetype ){
-        $this->_mimetype_cache[ $this->getPath( )] = $mime_filetype;
-        $reg = &AMP_Registry::instance( );
-        $reg->setEntry( AMP_REGISTRY_MIMETYPE_CACHE, $this->_mimetype_cache );
-    }
-    
-    function _save_mimetype_cache( ){
-        $mimetype_lookup = &$this->_load_mimetype_cache( );
-        if ( $mimetype_lookup && !empty( $mimetype_lookup )) {
-            AMP_cache_set( AMP_REGISTRY_MIMETYPE_CACHE, $mimetype_lookup );
-        }
-    }
-    */
+    function search( $folder_path = false, $filename_pattern = '*'){;
+        if ( !$folder_path ) return false;
 
-    function search( $folder_path, $filename_pattern = null ){
-        /** suggested patterns
-         * send in patterns as *php or *namestuff* or namestuff*
-         * wildcard * is replaced with regex ( [0-9a-zA-Z\.-_ ]+
-         * filename extension: /([0-9a-zA-z\.-_ ]+\.php)/
-         *
-         * */
-        if ( isset( $filename_pattern)) {
-            $regex_pattern_1 = str_replace( '.', '\.', $filename_pattern);  
-            $regex_pattern   =    '/'
-                                . str_replace( '*' , '[0-9a-zA-Z\.-_ ]?' , $regex_pattern_1)  
-                                . '/';
-
-
-        } 
-
-        $folder = opendir( $folder_path );
         if ( substr( $folder_path, -1 ) !== DIRECTORY_SEPARATOR ) $folder_path .= DIRECTORY_SEPARATOR;
-        $folder_cache_key = AMP_CACHE_TOKEN_DIR . $folder_path;
-        if ( isset( $filename_pattern )) $folder_cache_key .= $filename_pattern;
+        $complete_path = $folder_path . $filename_pattern;
+        $folder_cache_key = AMP_CACHE_TOKEN_DIR . $complete_path;
 
         $class_name = $this->_class_name;
-        $this->_search_total = 0;
+        $search_total = 0;
         $result_set = array( );
-        //trigger_error( 'search limit ' . $this->_search_limit . ' and offset ' . $this->_search_offset );
-        $dir_contents = &AMP_cache_get( $folder_cache_key );
+        $dir_contents = $this->_search_limit ? false : AMP_cache_get( $folder_cache_key );
         if ( !$dir_contents ) {
 
-            $file_attempts_count =array( );
-            while( $file_name = readdir( $folder )){
-                if (($file_name ==".") || ($file_name == "..")) continue; 
-                $file_attempts_count[$file_name] =1;
-    /*
-                $this->_search_total++;
-                if ( isset( $this->_search_limit ) 
-                     && ( count( $result_set ) > $this->_search_limit )) continue;
-                if ( isset( $this->_search_offset ) && ( $this->_search_total <= $this->_search_offset ) ){
+            #while( $file_name = readdir( $folder )){
+            $files = $this->sort_glob( glob( $complete_path ));
+            foreach( $files as $file_name ) {
+                if (!is_file( $file_name )) continue; 
+    
+                $search_total++;
+                if ( isset( $this->_search_offset ) && ( $search_total < $this->_search_offset ) ){
                     continue;
                 }
-                */
+                if ( isset( $this->_search_limit ) 
+                     && ( count( $result_set ) >= $this->_search_limit )) break;
 
-                if ( isset( $regex_pattern )){
-                    $name_matches = array( );
-                    preg_match( $regex_pattern, $file_name, $name_matches );
-                    if ( !count( $name_matches )) continue;
-                }
-                $result_set[ $file_name ] = &new $class_name( $folder_path . $file_name );
+                $result_set[ basename( $file_name )] = &new $class_name( $file_name );
+                
+
             }
-                //trigger_error( 'reading dir contents ' . count( $file_attempts_count));
             //Cache Folder results for large searches
-            if ( count( $result_set ) > 500 ) {
+            if ( ( count( $result_set ) > 500 ) && !$this->_search_limit ) {
                 AMP_cache_set( $folder_cache_key, $result_set );
             }
         } else {
-            trigger_error( 'found dir contents ' . count( $dir_contents ));
             $result_set = &$dir_contents;
         }
-        $this->sort( $result_set );
+        #$this->sort( $result_set );
 
         return $result_set;
+    }
+
+    function sort_glob( $file_names ) {
+        $glob_sort_method = 'sort_glob_' . $this->_sort_glob_property;
+        if( !isset( $this->_sort_glob_property ) || !method_exists( $this, $glob_sort_method )) return $file_names;
+        if( $this->_sort_direction != AMP_SORT_ASC ) return array_reverse( $this->$glob_sort_method( $file_names ));
+        return $this->$glob_sort_method( $file_names );
+    }
+
+    function sort_glob_name( $file_names ) {
+        natcasesort( $file_names );
+        return $file_names;
+    }
+    function sort_glob_time( $file_names ) {
+        $timeset = array_map( 'filemtime', $file_names );
+        asort( $timeset );
+        return array_combine_key( array_keys( $timeset ), $file_names );
+    }
+
+    function set_sort_glob( $sort_property, $direction = false ) {
+        $this->_sort_glob_property = $sort_property;
+        if( $direction ) $this->_sort_direction = $direction;
+    }
+
+    function filterByRegex( $item ) {
+        return preg_match( $this->_filter_crit, $item->getName( ));
     }
 
     function getCacheKeySearch( ){
@@ -192,12 +199,17 @@ class AMP_System_File {
     }
 
     function NoLimitRecordCount( ){
-        return $this->_search_total;
+        #return count( glob( $this->create_glob_expression( $this->_source_criteria )));
+        $set = ( glob( $this->create_glob_expression( $this->_source_criteria )));
+        $file_set = array_filter( $set, 'is_file' );
+        $value = count( $file_set );
+        return $value;
     }
 
     function sort( &$file_set, $sort_property=null, $sort_direction = null ){
         $this->_sort_default( $file_set );
-        if ( !isset( $sort_property)) return true;
+        if ( !isset( $sort_property) && !isset( $this->_sort_property)) return true;
+        if ( !isset( $sort_property)) $sort_property = $this->_sort_property;
 
         if ( !$this->setSortMethod( $sort_property )) {
             trigger_error( sprintf( AMP_TEXT_ERROR_SORT_PROPERTY_FAILED, $sort_property, get_class( $this ) ));
@@ -222,8 +234,10 @@ class AMP_System_File {
     function _sort_compare( $file1, $file2 ){
         if ( !( $sort_method = $this->_sort_accessor )) return 0;
         if ( $this->_sort_direction == AMP_SORT_DESC )
-            return ( $file1->$sort_method( ) < $file2->$sort_method( ) ) ? 1 : -1; 
-        return ( $file1->$sort_method( ) > $file2->$sort_method( ) ) ? 1 : -1; 
+            #return ( $file1->$sort_method( ) < $file2->$sort_method( ) ) ? 1 : -1; 
+            return ( strnatcasecmp( $file2->$sort_method( ), $file1->$sort_method( )));
+        return ( strnatcasecmp( $file1->$sort_method( ), $file2->$sort_method( )));
+        #return ( $file1->$sort_method( ) > $file2->$sort_method( ) ) ? 1 : -1; 
     }
 
     function setSortMethod( $sort_property ){
@@ -255,6 +269,22 @@ class AMP_System_File {
             return;
         }
         $this->_observers[] = &$observer;
+    }
+
+    function get_index( $property ) {
+        $set = ( glob( $this->create_glob_expression( $this->_source_criteria )));
+        if( !$set ) return array( );
+        $file_set = array_filter( $set, 'is_file' );
+        $file_set = $this->sort_glob( $file_set );
+        if ( $property == 'name' ) return array_map( 'basename', $file_set );
+        if ( $property == 'time') {
+            $format = array_fill( 0, count( $file_set), AMP_CONTENT_DATE_FORMAT );
+            return array_map( 'date', $format, array_map( 'filemtime', $file_set ));
+        }
+    }
+
+    function get_select_from_sort( $sort_property ) {
+        return $sort_property;
     }
 
     function get_url_edit( ){
@@ -292,7 +322,7 @@ class AMP_System_File {
                 $return[$key] = $this->$crit_method( $value );
                 continue;
             }
-            /*
+           /*
             if ( $crit_method = $this->_getCriteriaMethod( $key )){
                 $return[$key] = $this->$crit_method( $key, $value );
             }
@@ -302,21 +332,6 @@ class AMP_System_File {
         return $return;
     }
 
-    /*
-    function _getCriteriaMethod( $fieldname ) {
-        if ( !$this->isColumn( $fieldname )) return false;
-        if (array_search( $fieldname, $this->_exact_value_fields ) !==FALSE) return '_makeCriteriaEquals';
-        return '_makeCriteriaContains';
-    }
-
-    function _makeCriteriaContains( $key, $value ) {
-        return "*" . $value . "*";
-    }
-
-    function _makeCriteriaEquals( $key, $value ) {
-        return $value;
-    }
-    */
     
     //}}}
 

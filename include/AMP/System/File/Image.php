@@ -1,5 +1,6 @@
 <?php
 require_once( 'AMP/System/File/File.php');
+require_once( 'AMP/Content/Image/Public/Detail.php');
 
 class AMP_System_File_Image extends AMP_System_File {
 
@@ -27,9 +28,13 @@ class AMP_System_File_Image extends AMP_System_File {
     var $height;
     var $width;
     var $_class_name = 'AMP_System_File_Image';
+    var $db_metadata;
+    var $article_metadata = array( );
+    var $attributes = array( );
 
     function AMP_System_File_Image( $file_path = null ){
         if ( isset( $file_path ) && !is_object( $file_path )) $this->setFile( $file_path );
+        $this->_init_display( );
     }
 
     function setFile( $file_path ){
@@ -137,17 +142,78 @@ class AMP_System_File_Image extends AMP_System_File {
         $image_record->setImageFileName( $this->getName( ));
         $image_record->publish( );
         $image_record->setItemDate( date( 'Y-m-d', $this->getTime( )));
+        $db_metadata = $this->getData( );
+        $image_record->mergeData( $db_metadata );
+
         $result = $image_record->save( );
         $this->notify( 'update');
         $this->notify( 'gallery');
         return $result;
     }
 
-    function get_url_edit( ){
-        $file_name = $this->id;
-        if ( !$file_name || $file_name == 'downloads') return false;
-        return AMP_url_add_vars( AMP_SYSTEM_URL_IMAGE_EDIT, array( "id=" . $file_name ));
+    function _init_display( ) {
+        $this->display = new AMP_Content_Image_Public_Detail( $this );
     }
+
+    function getData($item=null ) {
+        if ( !isset( $this->db_metadata )) {
+            $this->_init_attributes( );
+        }
+        $values = array( );
+        foreach( $this->attributes as $key => $value ) {
+            if ( !$value ) continue;
+            $values[$key] = $value;
+        }
+        if( isset( $item ) ){
+            if ( isset( $values[$item]) ) return $values[ $item ];
+            return false;
+        }
+        return $values;
+        
+    }
+
+    function _init_attributes( ) {
+        if ( !( $image_db_id = $this->db_id( ))) return ( $this->attributes = array_merge( $this->attributes, $this->article_metadata ));
+        require_once( 'AMP/Content/Image/Image.php');
+        $this->db_metadata = new AMP_Content_Image( AMP_Registry::getDbcon( ), $image_db_id );
+        $this->attributes = $this->db_metadata->getData( );
+        if( !empty( $this->article_metadata )) $this->attributes = array_merge( $this->attributes, $this->article_metadata );
+    }
+
+    function set_article_metadata( $data ) {
+        $this->article_metadata = $data;
+        $this->_init_attributes( );
+    }
+
+    function get_url_edit( ){
+        if( $db_id = $this->db_id( )) {
+            return AMP_url_update( AMP_SYSTEM_URL_IMAGE_EDIT, array( "id" => $db_id));
+        }
+
+        $file_name = $this->id;
+        if ( !$file_name || $file_name == 'downloads') return AMP_url_update( AMP_SYSTEM_URL_IMAGES, array( 'action' => 'new' ));
+        return AMP_url_update( AMP_SYSTEM_URL_IMAGES, array( "file" => $file_name, 'action' => 'new' ));
+    }
+
+    function db_id( ) {
+        $db_images = AMP_lookup( 'db_images');
+        $name=$this->getName( );
+        if ( !( $db_images && $name )) return false;
+        return array_search( $name, $db_images );
+    }
+
+    function delete( ){
+        if ( $image_db_id = $this->db_id( )) {
+            require_once( 'AMP/Content/Image/Image.php');
+            $image = new AMP_Content_Image( AMP_Registry::getDbcon( ), $image_db_id );
+            $image->delete( );
+            AMP_lookup_clear_cached( 'images' );
+            AMP_lookup_clear_cached( 'db_images' );
+
+        }
+        return parent::delete( );
+    }
+
 }
 
 ?>
