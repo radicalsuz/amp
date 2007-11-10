@@ -26,6 +26,7 @@ STYLESHEET;
     function render_thumb( $source = null, $attr_set=array( )) {
         if ( !isset( $source )) $source = $this->_source;
         if( !isset( $attr_set['class']) ) $attr_set['class'] = 'thumb';
+        $this->use_class( AMP_IMAGE_CLASS_THUMB );
         return $this->_renderer->image( $this->url_for( AMP_IMAGE_CLASS_THUMB ), $attr_set );
     }
 
@@ -35,28 +36,69 @@ STYLESHEET;
         return( AMP_IMAGE_PATH . $url_type . $name );
     }
 
-    function renderItem( $source ) {
+    function container_attributes( $source ) {
         $attributes = $source->getData( );
         $float_type = isset( $attributes['align']) ? $attributes['align'] : AMP_IMAGE_DEFAULT_ALIGNMENT;
-        unset( $attributes['align']);
         $container_css = $float_type ? AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . ' ' . AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . '-' . $float_type : AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE;
         $container_attr = array( 'class' => $container_css );
+        if ( $width = $source->width) $container_attr['style'] = "width: {$width}px";
+        return $container_attr;
+    }
+
+    function image_attributes( $source ) {
+        $attributes = $source->getData( );
         if ( $width = $source->width) $container_attr['style'] = "width: {$width}px";
         $image_attr = array( 'class' => 'img_main');
         if ( isset( $attributes['alt']) && $attributes['alt']) {
             $image_attr['alt'] = $attributes['alt'];
         }
+        return $image_attr;
 
-        return $this->_renderer->div( 
+    }
+    
+    function source_class( $source = null ) {
+        if( !$source ) $source = $this->_source;
+        $path = $source->getPath( );
+        $classes = AMP_lookup( 'image_classes');
+        foreach( $classes as $class => $key ) {
+            if( strpos( $path, AMP_IMAGE_PATH . $class )) return $class;
+        }
+        return '';
+    }
+
+    function use_class( $class ) {
+        if( !( $current = $this->source_class( ))) return false;
+        $this->_source->setFile( AMP_image_path( $this->_source->getName( ), $class ));
+    }
+
+    function renderItem( $source ) {
+        $attributes = $source->getData( );
+        if ( !isset( $attributes['image_size'])) {
+            $attributes['image_size'] = $this->source_class( $source );
+        }
+        $image_attr = $this->image_attributes( $source );
+
+        return $this->render_image_format_main( 
             $this->_renderer->link( 
                 $this->url_for( AMP_IMAGE_CLASS_ORIGINAL ),
                 $this->_renderer->image( $this->url_for( $attributes['image_size']), array( 'class' => 'img_main')),
                 array( 'target' => '_blank', 'class' => 'image-link'))
             . $this->render_credit( $source )
             . $this->render_caption( $source ),
-            $container_attr
+            $source
         );
         
+    }
+
+    function render_image_format_main( $image_html, $source = null ) {
+        if( !isset( $source )) $source = $this->_source;
+        $container_attr = $this->container_attributes( $source );
+        return $this->_renderer->div( 
+            $image_html
+            ,
+            $container_attr
+        );
+
     }
 
     function render_credit( &$source ) {
