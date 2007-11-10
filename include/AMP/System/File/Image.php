@@ -29,7 +29,7 @@ class AMP_System_File_Image extends AMP_System_File {
     var $width;
     var $_class_name = 'AMP_System_File_Image';
     var $db_metadata;
-    var $article_metadata = array( );
+    var $display_metadata = array( );
     var $attributes = array( );
 
     function AMP_System_File_Image( $file_path = null ){
@@ -173,15 +173,15 @@ class AMP_System_File_Image extends AMP_System_File {
     }
 
     function _init_attributes( ) {
-        if ( !( $image_db_id = $this->db_id( ))) return ( $this->attributes = array_merge( $this->attributes, $this->article_metadata ));
+        if ( !( $image_db_id = $this->db_id( ))) return ( $this->attributes = array_merge( $this->attributes, $this->display_metadata ));
         require_once( 'AMP/Content/Image/Image.php');
         $this->db_metadata = new AMP_Content_Image( AMP_Registry::getDbcon( ), $image_db_id );
         $this->attributes = $this->db_metadata->getData( );
-        if( !empty( $this->article_metadata )) $this->attributes = array_merge( $this->attributes, $this->article_metadata );
+        if( !empty( $this->display_metadata )) $this->attributes = array_merge( $this->attributes, $this->display_metadata );
     }
 
-    function set_article_metadata( $data ) {
-        $this->article_metadata = $data;
+    function set_display_metadata( $data ) {
+        $this->display_metadata = $data;
         $this->_init_attributes( );
     }
 
