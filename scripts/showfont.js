@@ -200,7 +200,8 @@ function getElementsBySelector(selector)
 			var tagName = bits[0];
 			var id = bits[1];
 			var element = document.getElementById(id);
-			if(tagName && element.nodeName.toLowerCase() != tagName)
+			if (!element) return false;
+			if( tagName && element.nodeName.toLowerCase() != tagName)
 				return new Array();
 			currentContext = new Array(element);
 			continue;
