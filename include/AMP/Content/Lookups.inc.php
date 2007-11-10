@@ -808,7 +808,7 @@ class AMPContentLookup_ProtectedSections extends AMPContent_Lookup {
 class AMPSystemLookup_ImageClasses extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_IMAGE_CLASS";
 
-    function AMPConstantLookup_ImageClasses() {
+    function AMPSystemLookup_ImageClasses() {
         $this->init();
     }
 
