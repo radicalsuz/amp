@@ -222,6 +222,7 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
         ampredirect( $_SERVER['REQUEST_URI']);
         AMP_permission_update( );
     }
+
 }
 
 ?>

@@ -63,7 +63,6 @@ class AMP_Display_Pager {
     }
 
     function set_total( $total ) {
-        trigger_error( 'total w '. get_class( $source ));
         $this->_qty_total = $total;
     }
 
@@ -281,7 +280,6 @@ class AMP_Display_Pager {
     }
 
     function total( &$source ) {
-        trigger_error( 'called w '. get_class( $source ));
         if ( is_array( $source )) {
             return count( $source );
         } elseif ( is_object( $source )) {

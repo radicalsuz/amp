@@ -83,6 +83,9 @@ news="ArticleDisplay_News"
 pressrelease="ArticleDisplay_PressRelease"
 blog="ArticleDisplay_Blog"
 
+[content tag display]
+default="Article_Public_List"
+
 [content comment]
 default_status=1
 

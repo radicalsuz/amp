@@ -102,7 +102,7 @@ class NavigationManager {
         $ordered_set = array( );
         foreach ($locations as $locationDef) {
             $nav_id = $locationDef[ 'navid' ];
-            $badge_id = $locationDef[ 'badge_id' ];
+            $badge_id = isset( $locationDef['badge_id']) ? $locationDef[ 'badge_id' ] : false ;
 
             if (! ( $position = substr($locationDef['position'], 0, 1 ))) continue; 
             $order = substr( $locationDef['position'], 1 );

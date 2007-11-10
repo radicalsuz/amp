@@ -108,11 +108,6 @@
 		<type>checkbox</type>
 		<label>Hide Content List</label>
 	</usetype>
-	<filter>
-		<type>select</type>
-		<label>Default Filter</label>
-		<lookup>filters</lookup>
-	</filter>
     <section_header_options_header>
         <type>blocktrigger</type>
         <label>Section Header</label>
@@ -155,6 +150,12 @@
 	<list_by_custom>
 		<type>hidden</type>
 	</list_by_custom>
+	<filter>
+		<type>select</type>
+		<label>Default Filter</label>
+		<lookup>filters</lookup>
+		<block>list_contents</block>
+	</filter>
 	<list_by_class>
 		<type>multiselect</type>
 		<label>Show Content from &lt;BR /&gt; these Classes</label>

@@ -202,8 +202,8 @@ class Article_Display extends AMPDisplay_HTML {
     function _HTML_imageBlock( &$image ) {
 	    $output  = '<table width="' . $image->getWidth(). '" border="0" align="'.$image->getAlignment().'"';
 	    $output .= ' cellpadding="0" cellspacing="0"><tr><td>' . "\n";
-	    $output .=  '<a href="'. $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ).'" target="_blank"> <img src="' . $image->getURL( $image->getImageClass() ) . 
-                    '" alt="' . $image->getAltTag(). '"'. $this->_HTML_makeAttributes( $image->getStyleAttrs() ) . '></a>';
+	    $output .=  '<a href="'. $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ).'" target="_blank"> <img src="' . $image->getURL( $image->getImageClass() ) 
+                    . '" alt="' . $image->getAltTag(). '"'. $this->_HTML_makeAttributes( $image->getStyleAttrs() ) . '></a>';
 
 	    $output .= '</td></tr>' . $this->_HTML_photoCaption( $image->getCaption(), $image->getWidth() );
         return $output . '</table>';
