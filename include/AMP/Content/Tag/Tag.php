@@ -38,6 +38,14 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
         return $image;
     }
 
+    function getImageFile( ) {
+        if (! ($img_name = $this->getImageFileName())) return false;
+        require_once( 'AMP/System/File/Image.php');
+        $image = new AMP_System_File_Image( AMP_image_path( $img_name ));
+        return $image;
+
+    }
+
     function getItemDate() {
         //interface
         return false;
@@ -138,16 +146,31 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
     }
 
     function getDisplay( ) {
+        /*
         require_once( 'AMP/Content/Tag/Public/Intro.php');
         $intro = new AMP_Content_Tag_Public_Intro( $this );
         $intro->display_content = false;
 
         $display = &AMPContent_Manager::instance( );
         $display->add( $intro, AMP_CONTENT_DISPLAY_KEY_INTRO );
-
+        */
+        $tag_displays = AMP_lookup( 'tag_displays');
+        $display_class = isset( $tag_displays[ $this->id ] ) ? $tag_displays[ $this->id ] : AMP_CONTENT_TAG_DISPLAY_DEFAULT;
         require_once( 'AMP/Content/Article/Public/List.php');
-        return new Article_Public_List( $this->dbcon, array( 'tag' => $this->id ));
+        if( !class_exists( $display_class )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $display_class ));
+            $display_class = AMP_CONTENT_TAG_DISPLAY_DEFAULT;
+        }
+
+        return new $display_class( AMP_Registry::getDbcon( ), array( 'tag' => $this->id ));
     }
+
+    
+    function getDisplayIntro( ) {
+        require_once( 'AMP/Content/Tag/Public/Intro.php');
+        return new AMP_Content_Tag_Public_Intro( $this );
+    }
+    
 /*
     function display() {
         $display = &$this->getDisplay();
