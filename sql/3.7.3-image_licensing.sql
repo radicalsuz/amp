@@ -2,6 +2,7 @@ create table if not exists `images` (
 	`id`		int(11) null AUTO_INCREMENT,
 	`name`		varchar( 100 ) not null,
 	`caption`   text null,
+	`alt`	    varchar( 250 ) not null,
 	`author`    varchar( 100 ) not null,
 	`author_url`    varchar( 250 ) not null,
 	`date`		date not null,

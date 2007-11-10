@@ -88,7 +88,6 @@ if ($currentPage->isList( AMP_CONTENT_LISTTYPE_CLASS )
     &&  isset( $_GET['type']) 
     && ($currentSection = &$currentPage->getSection() ) 
     && ($currentClass = &$currentPage->getClass() )) {
-            #$currentClass->addContentsCriteria( $currentSection->getCriteriaForContent() );
             $currentClass->addContentsCriteriaSection( $currentSection->id );
 }
 
@@ -130,6 +129,22 @@ if ($listType) {
         if ( isset( $_GET['date']) && $_GET['date']) {
             $date_value = $_GET['date'];
             $display->addFilter( 'date', $date_value );
+        }
+
+        //add intro text for api_v2 displays
+        if ( isset( $display->api_version ) && $display->api_version == 2 ) {
+            if( !isset( $display->pager ) || $display->pager->is_first_page( )) {
+                if( method_exists( $display, 'render_intro')) {
+                    require_once( 'AMP/Content/Buffer.php');
+                    $intro = new AMP_Content_Buffer( );
+                    $intro->add( $display->render_intro( ));
+                } else {
+                    $intro = $currentPage->getListDisplayIntro( );
+                }
+                if( $intro ) {
+                    $currentPage->contentManager->add( $intro, AMP_CONTENT_DISPLAY_KEY_INTRO );
+                }
+            }
         }
 
     } else {

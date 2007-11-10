@@ -36,8 +36,12 @@ a.standout {
 }
 
 img.image_frontpage {
-		border: 1px solid #000000;
-        margin: 4px;
+	border: 1px solid #000000;
+	margin: 4px;
+}
+.home img.img_main {
+	border: 1px solid #000000;
+	margin: 4px;
 }
 
 span.morelink {
@@ -281,6 +285,9 @@ div.article_media {
     padding: 1em;
 }
 
+.article_public_list .list_item {
+    width: auto;
+}
 div.article_public_detail {
     margin-left: 10px;
 }
