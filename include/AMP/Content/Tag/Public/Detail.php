@@ -5,6 +5,7 @@ require_once( 'AMP/Display/Detail.php');
 class AMP_Content_Tag_Public_Detail extends AMP_Display_Detail {
 
     var $display_content = true;
+    var $_css_class_container_item = 'tag_public_detail';
 
     function AMP_Content_Tag_Public_Detail( $source ) {
         $this->__construct( $source );
@@ -19,14 +20,13 @@ class AMP_Content_Tag_Public_Detail extends AMP_Display_Detail {
 
     function render_title( $source ) {
         if ( !( $name = $source->getName( ))) return false;
-        return $this->_renderer->inSpan( $name, array( 'class' => $this->_css_class_title ))
-                    . $this->_renderer->newline( );
+        return $this->_renderer->div( $name, array( 'class' => $this->_css_class_title ));
 
     }
 
     function render_blurb( $source ) {
         if ( !( $blurb = $source->getBlurb( ))) return false;
-        return $this->_renderer->in_P( $blurb, array( 'class' => $this->_css_class_blurb ));
+        return $this->_renderer->div( $blurb, array( 'class' => $this->_css_class_blurb ));
     }
 
     function render_image( $source ) {
