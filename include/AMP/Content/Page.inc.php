@@ -631,6 +631,27 @@ class AMPContent_Page {
     }
 
     /**
+     * Returns the display object for a section or class header 
+     * 
+     * @since 3.7.3
+     * @access public
+     * @return mixed    if the pages content object supports an intro, a subclass of {@link AMP_Display_Detail} is returned, otherwise return false
+     */
+    function &getListDisplayIntro( ) {
+        $empty_value = false;
+        if (!( $listType = $this->isList() )) return $empty_value;
+
+        if ( isset( $this->$listType)  && method_exists( $this->$listType, 'getDisplayIntro' )) {
+            $display = &$this->$listType->getDisplayIntro();
+            return $display;
+        }
+
+        return $empty_value;
+
+
+    }
+
+    /**
      * Returns the AMP 3.5 + designator for a list type 
      *
      * This method is for legacy compatibility -- it handles the tricky stuff like changing type to section

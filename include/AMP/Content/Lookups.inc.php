@@ -396,6 +396,29 @@ class AMPSystemLookup_ClassDisplays extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_TagDisplays extends AMPSystem_Lookup {
+    var $datatable = 'tags';
+    var $id_field = 'id';
+    var $result_field = 'name';
+
+    function AMPSystemLookup_TagDisplays( ) {
+        $this->init( );
+        $this->get_display_class_names( );
+    }
+
+    function get_display_class_names( ) {
+        $displays = filterConstants( 'AMP_CONTENT_TAG_DISPLAY' );
+        foreach( $this->dataset as $tag_id => $tag_name ) {
+            if( !isset( $displays[ $tag_id ])) {
+                $this->dataset = AMP_CONTENT_TAG_DISPLAY_DEFAULT;
+                continue;
+            }
+           
+            $this->dataset[ $tag_id ] = $displays[ $tag_id ];
+        }
+    }
+}
+
 class AMPContentLookup_Sidebarclass extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_CONTENT_SIDEBAR_CLASS";
 
@@ -782,7 +805,7 @@ class AMPContentLookup_ProtectedSections extends AMPContent_Lookup {
     }
 }
 
-class AMPConstantLookup_ImageClasses extends AMPConstant_Lookup {
+class AMPSystemLookup_ImageClasses extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_IMAGE_CLASS";
 
     function AMPConstantLookup_ImageClasses() {
