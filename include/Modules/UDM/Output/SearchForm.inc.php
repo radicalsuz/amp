@@ -174,7 +174,6 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
                 foreach ($phrase_set as $keyword) {
                     //make sure it's not an empty phrase
                     if ($keyword) $sql_criteria[]="$src_name LIKE ".$this->dbcon->qstr('%'.strtolower($keyword).'%');
-                trigger_error("$src_name LIKE ".$this->dbcon->qstr('%'.strtolower($keyword).'%'));
 				}
             }
         }
@@ -441,7 +440,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	 */
 	function execute($options=array( )) {
         $options= array_merge($this->getOptions(), $options);
-        if ( isset( $options['search_form_display']) && !$options['search_form_display']) return false;
+        if ( isset( $options['search_form_display']) && !$options['search_form_display'] && !$this->udm->admin ) return false;
 		
 		
 		$frmName    = $options['form_name']; 

@@ -120,9 +120,9 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
 
     function _initComponents( $options =array( ) ){
         $options = $this->getOptions( );
-        $sort_plugin = $this->udm->registerPlugin( 'AMP', 'Sort');
+        $sort_plugin = &$this->udm->registerPlugin( 'AMP', 'Sort');
         $this->_translateOptions( $options, 'Sort', $sort_plugin );
-        $search_plugin = $this->udm->registerPlugin( 'AMP', 'Search');
+        $search_plugin = &$this->udm->registerPlugin( 'AMP', 'Search');
         $this->_translateOptions( $options, 'Sort', $search_plugin );
         if ( isset( $options['components'])){
             $component_set = $options['components'];
@@ -135,7 +135,6 @@ class UserDataPlugin_List_Output extends UserDataPlugin {
                 trigger_error( sprintf( AMP_TEXT_ERROR_USERDATA_PLUGIN_REGISTRATION_FAILED, 'Output', $action ));
                 continue;
             }
-
             $this->_translateOptions( $options, $action, $result );
         }
     }
