@@ -108,12 +108,12 @@ class ArticleDisplay_Info extends Article_Display {
         $date_created = $this->_article->getItemDateCreated( );
         $creator_id = $this->_article->getCreatorId( );
         $output = "";
-        if ( $date_created && array_search( $date_created, AMPConstant_Lookup::instance( 'nullDatetimes')) !== FALSE ){
+        if ( $date_created && array_search( $date_created, AMP_lookup( 'null_datetimes')) !== FALSE ){
             $output = $this->_renderer->inSpan( ': ' . $date_created );
         }
 
         if ( $creator_id ){
-            $user_names = AMPSystem_Lookup::instance( 'users' );
+            $user_names = AMP_lookup( 'users' );
             $user_name = isset( $user_names[ $creator_id ]) ? $user_names[ $creator_id ] : "";
             $output .= $this->_renderer->inSpan( ' '. AMP_TEXT_BY . ' ' . $user_name);
         }

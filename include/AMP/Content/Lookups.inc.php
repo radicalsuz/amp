@@ -315,11 +315,11 @@ class AMPContentLookup_GalleryMap {
     }
 }
 
-class AMPConstantLookup_Listtypes extends AMPConstant_Lookup {
+class AMPContentLookup_Listtypes extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_SECTIONLIST";
     var $_prefix_labels = "AMP_TEXT_SECTIONLIST";
 
-    function AMPConstantLookup_Listtypes() {
+    function AMPContentLookup_Listtypes() {
         $this->init();
     }
 
@@ -428,23 +428,23 @@ class AMPContentLookup_Sidebarclass extends AMPConstant_Lookup {
 
 }
 
-class AMPConstantLookup_Status extends AMPConstant_Lookup {
+class AMPContentLookup_Status extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_CONTENT_STATUS";
     var $_prefix_labels = "AMP_TEXT_CONTENT_STATUS";
 
-    function AMPConstantLookup_Status() {
+    function AMPContentLookup_Status() {
         $this->init();
     }
 
 }
-class AMPSystemLookup_StatusNoPublish extends AMPConstantLookup_Status {
+class AMPSystemLookup_StatusNoPublish extends AMPContentLookup_Status {
     function AMPSystemLookup_StatusNoPublish( ) {
         $this->__construct( );
         unset( $this->dataset[1]);
     }
 }
 
-class AMPSystemLookup_Status extends AMPConstantLookup_Status {
+class AMPSystemLookup_Status extends AMPContentLookup_Status {
     function AMPSystemLookup_Status ( ) {
         $this->__construct( );
     }
@@ -1196,11 +1196,11 @@ class AMPContentLookup_IntroTexts extends AMPContent_Lookup {
     }
 }
 
-class AMPConstantLookup_ToolLinks extends AMPConstant_Lookup {
+class AMPContentLookup_ToolLinks extends AMPConstant_Lookup {
     var $_prefix_values = 'AMP_CONTENT_URL';
     var $_prefix_labels = 'AMP_TEXT_CONTENT_PAGE';
 
-    function AMPConstantLookup_ToolLinks() {
+    function AMPContentLookup_ToolLinks() {
         $this->init();
     }
 

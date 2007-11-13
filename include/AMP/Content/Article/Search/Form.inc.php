@@ -23,8 +23,8 @@ class ContentSearch_Form extends AMPSearchForm {
         /*
         $map = &AMPContent_Map::instance();
         $this->setFieldValueSet( 'type',    $map->selectOptions() );
-        $this->setFieldValueSet( 'class',   AMPContent_Lookup::instance('activeClasses'));
-        $this->setFieldValueSet( 'publish',   AMPConstant_Lookup::instance('status'));
+        $this->setFieldValueSet( 'class',   AMP_lookup('active_classes'));
+        $this->setFieldValueSet( 'publish',   AMP_lookup('status'));
         */
     }
 

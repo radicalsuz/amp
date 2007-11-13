@@ -150,7 +150,7 @@ class Content_Image {
     }
 
     function getImageClasses( ){
-        return array_keys( AMPConstant_Lookup::instance( 'imageClasses' ));
+        return array_keys( AMP_lookup( 'image_classes' ));
     }
 
     function setData( $data ) {

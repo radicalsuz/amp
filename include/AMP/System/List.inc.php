@@ -671,7 +671,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
     function _dateFormat( $date_value ){
         if ( !$date_value ) return false;
 
-        $null_values = &AMPConstant_Lookup::instance( 'nullDates');
+        $null_values = AMP_lookup( 'null_dates');
         if ( is_string( $date_value )) {
             if ( isset( $null_values[ $date_value])) return false;
             $date_value = strtotime( $date_value );
@@ -700,7 +700,7 @@ class AMPSystem_List extends AMPDisplay_HTML {
             $time_value = $raw_time_value;
         //}
         
-        $null_values = &AMPConstant_Lookup::instance( 'nullDateTimes');
+        $null_values = AMP_lookup( 'null_datetimes');
         $quick_result = date( "Y-m-d H:i:s", $time_value );
         if ( !isset( $null_values[ $quick_result ])){
             $timestamp_value = $time_value;
