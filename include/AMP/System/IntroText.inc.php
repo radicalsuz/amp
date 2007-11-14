@@ -60,6 +60,14 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
         return $this->getSection( );
     }
 
+    function getImageFile( ) {
+        return false;
+    }
+
+    function getImageData( ) {
+        return array( );
+    }
+
     function getSectionsRelated( ) {
         return false;
     }
