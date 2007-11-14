@@ -482,7 +482,7 @@
         <type>select</type>
         <label>Link to Tool Page</label>
         <lookup>
-			<module>constant</module>
+			<module>content</module>
 			<instance>toolLinks</instance>
 		</lookup>
      </tool_page_link>

@@ -107,7 +107,6 @@
 		<type>select</type>
 		<label>Email Tool</label>
 		<lookup>
-			<module>constant</module>
 			<instance>blastOptions</instance>
 		</lookup>
 		<block>emailstuff</block>

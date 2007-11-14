@@ -94,7 +94,7 @@
     <label>Status</label>
     <type>select</type>
 	<lookup>
-		<module>constant</module>
+		<module>content</module>
 		<instance>status</instance>
 	</lookup>
 </publish>

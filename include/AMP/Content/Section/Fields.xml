@@ -94,7 +94,7 @@
 		<type>select</type>
 		<label>Display Format</label>
         <lookup>
-            <module>constant</module>
+            <module>content</module>
             <instance>listtypes</instance>
         </lookup>
         <default>1</default>

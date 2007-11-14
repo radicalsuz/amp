@@ -12,7 +12,7 @@
         <type>select</type>
         <lookup>
             <instance>status</instance>
-            <module>constant</module>
+            <module>content</module>
         </lookup>
     </status>
 </array>
