@@ -43,9 +43,21 @@ class GalleryImage extends AMPSystem_Data_Item {
         $image->setData( $this->getImageData( ));
         return $image;
     }
+
+    function getImageFile( ) {
+        if (! ($img_name = $this->getImageFileName())) return false;
+        require_once( 'AMP/System/File/Image.php');
+        $image = new AMP_System_File_Image( AMP_image_path( $img_name ));
+        $image->set_display_metadata( $this->getImageData( ));
+        return $image;
+    }
     function getImageData() {
-        return array(   'filename'  =>  $this->getImageFileName(),
-                        'caption'   =>  $this->getCaption( ));
+        return array(   
+            'filename'  =>  $this->getImageFileName( ),
+            'author'    =>  $this->getSource( ),
+            'date'      =>  $this->getAssignedDate( ),
+            'caption'   =>  $this->getCaption( )
+            );
     }
 
     function getSection( ){

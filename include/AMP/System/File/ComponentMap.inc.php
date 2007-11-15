@@ -19,7 +19,8 @@ class ComponentMap_File extends AMPSystem_ComponentMap {
     var $paths = array (
         'form'   => 'AMP/System/File/Form.inc.php',
         'fields' => 'AMP/System/File/Fields.xml',
-        'list'   => 'AMP/System/File/List.inc.php',
+        #'list'   => 'AMP/System/File/List.inc.php',
+        'list'   => 'AMP/System/File/List.php',
         'source' => 'AMP/System/File/File.php' 
     );
 

@@ -79,7 +79,8 @@ class Gallery_Public_Display extends AMP_Display_List {
                                          $imageRef->get_url_size( 0, $image_height > 600 ? 600 : 0),
                                          $this->_renderer->image( 
                                                     $imageRef->getURL( ), 
-                                                            array(  'border' => '1', 
+                                                            array(  
+                                                                //'border' => '1', 
                                                                     )
                                                             ),
                                          array( 'alt' => AMP_TEXT_FULL_SIZE, 'border' => 0, 
@@ -140,8 +141,8 @@ class Gallery_Public_Display extends AMP_Display_List {
         if ( $image_enlarge_url ) {
             $image_enlarge_link = $this->_renderer->link( 
                                         $image_enlarge_url, 
-                                        $this->_renderer->image( AMP_SYSTEM_ICON_ENLARGE, array( 'width' => 15, 'height' => 11, 'class'=>'icon', 'title' => AMP_TEXT_FULL_SIZE )),
-                                        array( 'target' => '_blank', 'border' => '0' ) )
+                                        '',//$this->_renderer->image( AMP_SYSTEM_ICON_ENLARGE, array( 'width' => 15, 'height' => 11, 'class'=>'icon', 'title' => AMP_TEXT_FULL_SIZE )),
+                                        array( 'target' => '_blank', 'class' => 'enlarge-link', 'title' => 'Enlarge Image' ) )
                                   .  $this->_renderer->space( 2 );
         } 
 
@@ -151,15 +152,17 @@ class Gallery_Public_Display extends AMP_Display_List {
     function export_styles( ){
         $float_setting = "";
         if ( $this->_pager_active && ( $this->_pager->get_limit( ) == 1 )) {
-            $float_setting = 'padding-left:33%';
+            $float_setting = 'padding-left:33%;';
         }
         $header = &AMP_get_header( );
-        $header->addStylesheetDynamic( "div." . $this->_css_class_container_list_item . " {
-            width: " . AMP_IMAGE_WIDTH_WIDE . "px;
-            /*height: " .   ( $this->_height_max + 5 ) . "px;*/
+        $header->addStylesheetDynamic( 
+        /*
+        "div." . $this->_css_class_container_list_item . " {
+            width: " . ( AMP_IMAGE_WIDTH_WIDE + 35). "px;
             ". $float_setting ."
-        }
-        div." . $this->_css_class_container_caption . " {
+        }".
+        */
+        "div." . $this->_css_class_container_caption . " {
             width: " . AMP_IMAGE_WIDTH_WIDE . "px;
             ". $float_setting ."
         }");
@@ -173,7 +176,7 @@ class Gallery_Public_Display extends AMP_Display_List {
     }
 
     function _renderFooter( ) {
-       // $this->export_styles( );
+        $this->export_styles( );
         return
             $this->_renderPager( )
             . $this->_renderer->newline( 2 );

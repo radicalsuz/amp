@@ -96,6 +96,7 @@ define( 'AMP_TEXT_SIZE', 'Size');
 define( 'AMP_TEXT_WIDTH', 'Width');
 define( 'AMP_TEXT_HEIGHT', 'Height');
 define( 'AMP_TEXT_ALL_IMAGE_SIZES', 'All Image Sizes');
+define( 'AMP_TEXT_CONTENT_SCALED_FOR_EASY_VIEWING', 'This Image has been scaled down for easy viewing. Click to see full sized original.');
 define( 'AMP_TEXT_SELECT_NEW_WIDTHS_FOR', 'Select new widths for');
 define( 'AMP_TEXT_GALLERY', 'Gallery');
 define( 'AMP_TEXT_SELECT', 'Select %s');

@@ -1042,3 +1042,34 @@ form.AMP_Content_Location_Input .element {
     margin-bottom: 2em;
 
 }
+
+.image_container {
+	margin: 1em;
+}
+.image_container img {
+	border: 0;
+}
+ul.linked_items {
+	margin: 0;
+	padding: 0;
+}
+ul.linked_items li {
+	float:left;
+	list-style:none;
+}
+
+ul.linked_items li a {
+	padding: .5em;
+	margin: .5em;
+	border: 1px solid #006666;
+	background-color: #e3e3e3;
+	display:block;
+	color: #006666;
+	text-decoration: none;
+	font-weight:bold;
+}
+
+ul.linked_items li a:hover {
+	color: #ffffff;
+	background-color: #006699;
+}

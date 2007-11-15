@@ -143,11 +143,13 @@ class AMP_System_File_Image extends AMP_System_File {
         $image_record->publish( );
         $image_record->setItemDate( date( 'Y-m-d', $this->getTime( )));
         $db_metadata = $this->getData( );
+        unset( $db_metadata['id']);
         $image_record->mergeData( $db_metadata );
 
         $result = $image_record->save( );
         $this->notify( 'update');
         $this->notify( 'gallery');
+        AMP_lookup_clear_cached( 'galleries_by_image', $this->getName( ));
         return $result;
     }
 
@@ -202,6 +204,13 @@ class AMP_System_File_Image extends AMP_System_File {
         return array_search( $name, $db_images );
     }
 
+    function read( $id ) {
+        $db_images = AMP_lookup( 'db_images');
+        if ( !isset( $db_images[ $id ])) return false;
+        $this->setFile( AMP_image_path( $db_images[$id]));
+        return $this->getPath( );
+    }
+
     function delete( ){
         if ( $image_db_id = $this->db_id( )) {
             require_once( 'AMP/Content/Image/Image.php');
@@ -211,7 +220,65 @@ class AMP_System_File_Image extends AMP_System_File {
             AMP_lookup_clear_cached( 'db_images' );
 
         }
+        
+        $image_classes = AMP_lookup( 'image_classes');
+        foreach( $image_classes as $class ) {
+            $path = AMP_image_path( $this->getName( ), $class );
+            if ( $path == $this->getPath( )) continue;
+            if( file_exists( $path )) unlink( $path );
+        }
         return parent::delete( );
+    }
+
+    function compile_image_metadata( ) {
+        $metadata = array( );
+        if ( !( $name = $this->getName( ))) return false;
+        $gallery_ids = AMP_lookup( 'galleries_by_image', $name);
+        $article_ids = AMP_lookup( 'articles_by_image', $name);
+        if( !( $gallery_ids || $article_ids )) return $this->compile_file_metadata( $name );
+        return array_merge( $this->compile_file_metadata( $name), 
+                            $this->compile_article_metadata( $article_ids), 
+                            $this->compile_gallery_metadata( $gallery_ids )
+                            );
+
+    }
+
+    function compile_file_metadata( $name ) {
+        return array( 'date' => date( 'Y-m-d', filemtime( AMP_image_path( $name, AMP_IMAGE_CLASS_ORIGINAL ))));
+    }
+
+    function compile_gallery_metadata( $gallery_image_ids ) {
+        if( !$gallery_image_ids ) return array( );
+        require_once( 'Modules/Gallery/Image.inc.php');
+        $image_finder = new GalleryImage( AMP_Registry::getDbcon( ));
+        $gallery_images = $image_finder->find( array( 'id' => array_keys( $gallery_image_ids )));
+        $metadata = array( );
+        foreach( $gallery_images as $image ) {
+            $data = $image->getImageData( );
+            foreach( $data as $key => $value ) {
+                if( !$value ) continue;
+                $metadata[$key] = $value;
+            }
+        }
+        return $metadata;
+        
+    }
+
+    function compile_article_metadata( $article_ids ) {
+        if( !$article_ids ) return array( );
+        require_once( 'AMP/Content/Article.inc.php');
+        $finder = new Article( AMP_Registry::getDbcon( ));
+        $articles = $finder->find( array( 'id' => array_keys( $article_ids )));
+        $metadata = array( );
+        foreach( $articles as $article ) {
+            $data = $article->getImageData( );
+            foreach( $data as $key => $value ) {
+                if( !$value ) continue;
+                $metadata[$key] = $value;
+            }
+        }
+        return $metadata;
+
     }
 
 }

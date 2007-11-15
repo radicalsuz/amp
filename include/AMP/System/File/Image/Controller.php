@@ -30,8 +30,18 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         return $result;
     }
 
+    function commit_add( ) {
+        $filename = $this->assert_var( 'file');
+        $this->_model->setFile( AMP_image_path( $filename ));
+        if( $this->_model->db_id( )) {
+            ampredirect( AMP_url_update( $_SERVER['REQUEST_URI'], array( 'action' => 'edit', 'file' => '', 'id' => $this->_model->db_id( ) )));
+            return true;
+        }
+        return parent::commit_add( );
+    }
+
     function display_default( ) {
-        if ( $this->get_action( ) != 'save') {
+        if ( ( $this->get_action( ) != 'save' ) || empty( $_FILES )) {
             return parent::display_default( );
         }
         //clear the REQUEST
@@ -164,44 +174,81 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
     function _save_image_db( $data ) {
         $db_data = $data;
-        //translate values with new names
-        $db_data['name']    = $data['image'];
-        $db_data['author']  = $data['photoby'];
-        $db_data['publish'] = AMP_CONTENT_STATUS_LIVE;
-        $db_data['created_at'] = date( "Y-m-d h:i:s" );
-        $db_data['created_by'] = AMP_SYSTEM_USER_ID;
+        if ( !( isset( $data['id']) && $data['id'])) {
+            //create new db record
+            $db_data['name']    = $data['image'];
+            $db_data['publish'] = AMP_CONTENT_STATUS_LIVE;
+            $db_data['created_at'] = date( "Y-m-d h:i:s" );
+            $db_data['created_by'] = AMP_SYSTEM_USER_ID;
+        } else {
+            // update db record
+            $db_data['updated_at'] = date( "Y-m-d h:i:s");
+        }
 
         //read height and width from image file
-        $file_name = ( AMP_LOCAL_PATH . '/' . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL . '/' . $db_data['name'] );
-        $this->_model->setFile( $file_name );
+        $this->_model->setFile( AMP_image_path( $this->_file_name_affected, AMP_IMAGE_CLASS_ORIGINAL ));
         $db_data['height'] = $this->_model->height;
         $db_data['width'] =  $this->_model->width;
+        $this->_model->set_display_metadata( $db_data );
+        AMP_lookup_clear_cached( 'db_images');
 
         require_once( 'AMP/Content/Image/Image.php');
         $image = new AMP_Content_Image( AMP_Registry::getDbcon( ));
         $image->setDefaults( );
-        $image->mergeData( $db_data );
+        $image->mergeData( $this->_model->getData( ));
         return $image->save( );
 
     }
 
     function _commit_save_actions( $values ){
-        if ( !isset( $values['image'])) return false;
-        $image_name = $values['image'];
+        $db_images = AMP_lookup( 'db_images');
+        if( isset( $this->_model_id ) && isset( $db_images[$this->_model_id])) {
+            $image_name = $this->_file_name_affected = $db_images[$this->_model_id];
+        } elseif ( !(isset( $values['image']) && $values['image'])) {
+            return false;
+        } else {
+            $image_name = $this->_file_name_affected = $values['image'];
+        }
+
         $values['img'] = $image_name;
         $this->_save_galleryInfo( $values );
         $this->_save_image_db( $values );
+        if( empty( $_FILES )) return;
 
         require_once( 'AMP/Content/Image/Display.inc.php');
-        $uploaded_image = &new ContentImage_Display_allVersions( $image_name );
-        $this->_display->add( $uploaded_image );
-        $this->_file_name_uploaded = $image_name;
+        $this->_model->setFile( AMP_image_path( $image_name , AMP_IMAGE_CLASS_ORIGINAL));
+        trigger_error( $image_name );
+        $buffer = new AMP_Content_Buffer( );
+        $buffer->add( $this->_model->display->render_proofsheet( $this->_model ));
+        #$uploaded_image = &new ContentImage_Display_allVersions( $image_name );
+        #$this->_display->add( $uploaded_image );
+        $this->_display->add( $buffer );
+        $this->_file_name_affected = $image_name;
         $this->_update_image_cache_add( $image_name );
     }
 
+    function commit_edit( ) {
+        //just-in-time Build call is a performance optimization, sorry for the repetitive code
+        $this->_init_form( );
+
+        if ( !$this->_model->read( $this->_model_id )) {
+            return $this->commit_list( );
+        }
+        $data = $this->_model->getData( );
+        $this->_form->setValues( $this->_model->getData( ));
+        /*
+        if( $db_image->hasData( )) {
+            $this->_form->setValues( $db_image->getData( ));
+        }
+        */
+		$this->_display->add( $this->_form, 'form' ); 
+		return true;
+    }
+
+
+    
     function _update_image_cache_add( $image_name ){
-        $content_imageRef = &new Content_Image( $image_name );
-        $imageRef = &new AMP_System_File_Image( $content_imageRef->getPath( AMP_IMAGE_CLASS_ORIGINAL ));
+        $imageRef = &new AMP_System_File_Image( AMP_image_path( $image_name, AMP_IMAGE_CLASS_ORIGINAL ));
         $image_cache_key = $imageRef->getCacheKeySearch( );
         $image_cache = &AMP_cache_get( $image_cache_key );
 

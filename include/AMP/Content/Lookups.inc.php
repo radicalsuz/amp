@@ -541,6 +541,23 @@ class AMPContentLookup_GalleriesByImage extends AMPContent_Lookup {
         return false;
     }
 }
+
+class AMPContentLookup_ArticlesByImage extends AMPContent_Lookup {
+    var $datatable = 'articles';
+    var $result_field = 'title';
+    var $sortby = 'date';
+
+    function AMPContentLookup_ArticlesByImage( $img_filename ) {
+        if ( !$img_filename ) return ;
+        $this->_add_image_criteria( $img_filename );
+        $this->init( );
+    }
+
+    function _add_image_criteria( $img_filename ) {
+        $dbcon = AMP_Registry::getDbcon( );
+        $this->criteria = 'picture = ' . $dbcon->qstr( $img_filename );
+    }
+}
 class AMPContentLookup_SectionsByArticle extends AMPContent_Lookup {
     var $datatable = 'articlereltype';
     var $result_field = 'articleid';

@@ -287,12 +287,16 @@ class AMP_System_File {
         return $sort_property;
     }
 
-    function get_url_edit( ){
+    function getURL( ){
+        $local = str_replace( AMP_LOCAL_PATH, '', dirname( $this->getPath( )));
+        if( strpos( $local, AMP_CONTENT_DOCUMENT_PATH ) !== FALSE ) return '/'. AMP_CONTENT_DOCUMENT_PATH . '/'. $this->getName( );
+        trigger_error( 'false');
         return false;
     }
 
-    function getURL( ){
-        return false;
+    function get_url_edit( ) {
+        if ( !$this->getName( )) return AMP_SYSTEM_URL_DOCUMENT_UPLOAD;
+        return $this->getURL( );
     }
 
     function makeCriteriaName( $name ) {

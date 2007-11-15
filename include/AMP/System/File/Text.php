@@ -60,6 +60,10 @@ class AMP_System_File_Text extends AMP_System_File {
         return $delete_target->delete( );
     }
 
+    function read( $file_name ) {
+        return $this->readData( $file_name );
+    }
+
     function readData( $file_name ){
         $file_path = $this->_base_path . DIRECTORY_SEPARATOR . $file_name ;
         if ( !file_exists( $file_path )) {

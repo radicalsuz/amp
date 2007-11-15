@@ -387,6 +387,7 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         if ( !$license || !isset( $licenses[$license])) {
             return false;
         }
+        if ( $license == 'copyright') return '&#169;';
         $license_icon = '/img/license/thin/' . $license . '.png'; 
         $license_url = 'http://creativecommons.org/licenses/'.$license.'/3.0/';
         return $this->div( $this->link( $license_url, $this->image( $license_icon, array( 'alt' => $licenses[ $license ]) ), array( 'target' => 'blank')), array( 'class' => 'content-license' ));

@@ -22,7 +22,7 @@ class ComponentMap_Image extends AMPSystem_ComponentMap {
         'search_fields' => 'AMP/Content/Image/SearchFields.xml',
         'search'   => 'AMP/Content/Image/SearchForm.inc.php',
         'form'   => 'AMP/System/File/Image/Form.inc.php',
-        'list'   => 'AMP/Content/Image/List.inc.php',
+        'list'   => 'AMP/System/File/Image/List.php',
         'fields' => 'AMP/System/File/Image/Fields.xml',
         'source' => 'AMP/System/File/Image.php' 
         );
@@ -30,7 +30,7 @@ class ComponentMap_Image extends AMPSystem_ComponentMap {
     var $components = array (
         'crop'   => 'AMP_Content_Image_Crop_Form',
         'form'   => 'AMP_System_File_Image_Form',
-        'list'   => 'AMP_Content_Image_List',
+        'list'   => 'AMP_System_File_Image_List',
         'search'  => 'AMP_Content_Image_Search',
         'source' => 'AMP_System_File_Image' 
         );

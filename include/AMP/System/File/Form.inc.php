@@ -21,6 +21,7 @@ class AMP_System_File_Form extends AMPSystem_Form_XML {
     }
 
     function _formFooter( ){
+        if( isset( $_REQUEST['id']) || isset( $_REQUEST['file'])) return false;
         require_once( 'AMP/Content/Display/HTML.inc.php');
         $renderer = &new AMPDisplay_HTML;
         return $renderer->link( 

@@ -59,10 +59,12 @@ class Nav_Form extends AMPSystem_Form_XML {
         if ( !$linked_layouts ) return false; 
 
         $renderer = AMP_get_renderer( );
+        asort( $linked_layouts );
         foreach( $linked_layouts as $id => $name ) {
+            if ( !$name ) continue;
             $links[$id] = $renderer->link( AMP_url_update( AMP_SYSTEM_URL_NAV_LAYOUT, array( 'id' => $id )), $name );
         }
-        return 'Used in Layouts:' . $renderer->UL( $links );
+        return 'Used in Layouts:' . $renderer->UL( $links, array( 'class' => 'linked_items') );
     }
 }
 ?>

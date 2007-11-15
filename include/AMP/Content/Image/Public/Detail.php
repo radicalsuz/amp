@@ -3,6 +3,7 @@ require_once( 'AMP/Display/Detail.php');
 
 class AMP_Content_Image_Public_Detail extends AMP_Display_Detail {
     var $_css_class_photocaption = AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE_CAPTION;
+    var $_css_class_container_item = 'item_container image_container';
 
     function AMP_Content_Image_Public_Detail( $source ) {
         $this->__construct( $source );
@@ -34,6 +35,18 @@ STYLESHEET;
         $name = $this->_source->getName( );
         $url_type .= $url_type ? '/' : '';
         return( AMP_IMAGE_PATH . $url_type . $name );
+    }
+
+    function render_url_for( $source ) {
+        return str_replace( AMP_LOCAL_PATH, '', $source->getPath( ));
+    }
+
+
+    function render_url_for_scaled( $source, $width_limit ) {
+        if( $source->width <= $width_limit ) return $this->render_url_for( $source );
+        $img_class = end( split( DIRECTORY_SEPARATOR,  dirname( $source->getPath( ))));
+        return AMP_url_update( AMP_CONTENT_URL_IMAGE, array( 'filename' => $source->getName( ), 'class' => $img_class, 'action' => 'resize', 'width' => $width_limit )) ;
+
     }
 
     function container_attributes( $source ) {
@@ -71,6 +84,11 @@ STYLESHEET;
         $this->_source->setFile( AMP_image_path( $this->_source->getName( ), $class ));
     }
 
+    function get_source_version( $source, $class ) {
+        if ( $this->source_class( $source_class ) == $class ) return $source;
+        return new AMP_System_File_Image( AMP_image_path( $source->getName( ), $class ));
+    }
+
     function renderItem( $source ) {
         $attributes = $source->getData( );
         if ( !isset( $attributes['image_size'])) {
@@ -103,7 +121,8 @@ STYLESHEET;
 
     function render_credit( &$source ) {
         if ( !AMP_RENDER_ARTICLE_PHOTOCREDIT ) return false;
-        $credit = $source->getData( 'author');
+        #$credit = $source->getData( 'author');
+        $credit = $this->render_author_link( $source );
         $license = $source->getData( 'license');
         if ( !$credit ) return false;
         return $this->_renderer->div( 
@@ -111,6 +130,14 @@ STYLESHEET;
             . $credit,
             array( 'class' => 'photo-credit-article')
             ) ;
+    }
+
+    function render_author_link( $source ) {
+        $credit = $source->getData( 'author');
+        $url = $source->getData( 'author_url');
+        if( !( $url && AMP_validate_url( $url ))) return $credit;
+        return $this->_renderer->link( $url, $credit, array( 'target' => 'blank' ));
+
     }
 
     function render_caption( $source ) {
@@ -121,6 +148,32 @@ STYLESHEET;
                     'width' => $source->width )
         );
 
+    }
+
+    function render_proofsheet( $source ) {
+        $classes = AMP_lookup( 'image_classes');
+        $items = array( );
+
+        foreach( $classes as $class => $class_name ) {
+            if ( $class == AMP_IMAGE_CLASS_CROP ) continue;
+            $version = $this->get_source_version( $source, $class );
+            $items[ $version->width ] = ucwords( strtolower( $class_name )) . ': '
+                        . $this->_renderer->newline( )
+                        . $this->render_scaled_as_link( $version, 600 );
+                        #. $this->_renderer->image( $this->url_for( $class) );
+        }
+        ksort( $items );
+        return $this->_renderer->span( AMP_TEXT_ALL_IMAGE_SIZES . ': ' . $source->getName( ), array( 'class' => 'page_result'))
+                . $this->_renderer->UL( $items );
+
+    }
+
+    function render_scaled_as_link( $source, $width ) {
+        if( $source->width <= $width ) return $this->_renderer->image( $this->render_url_for( $source ));
+        $height = ( $source->height / $source->width ) * $width;
+        $background_image = $this->render_url_for_scaled( $source, $width );
+        $inline_style = "display:block;text-align:center;padding-top:".ceil($height/3)."px;color:#333333;font-weight:bold;text-decoration:none;font-size:18px;height:$height;width:$width;background: url( $background_image ) no-repeat top left;";
+        return $this->_renderer->link( $this->render_url_for( $source ), AMP_TEXT_CONTENT_SCALED_FOR_EASY_VIEWING, array( 'style' => $inline_style, 'target' => 'blank' ));
     }
 }
 ?>

@@ -132,11 +132,18 @@ div.gallerycon { min-width: 200px; min-height: 200px; float: left; margin: 10px;
 .gallerycap { padding: 5px; border: 0px solid #666; margin: 5px; }
 div.gallery_pager { padding: 10px 0px 40px 0px; }
 div.gallery_image_details {
-  display:inline;
+  display:block;
   width: 200px;
   font-family: Arial, Helvetica, sans-serif; font-size: 10px; font-weight: normal; color: #333333; text-align: center; vertical-align: middle; 
  /* clip:   rect(   );  */
   padding-top: 3px; padding-bottom: 3px
+}
+.gallerycon .enlarge-link {
+    background: url( /img/magnify-clip.png ) no-repeat top left;
+    height:11px;
+    width: 15px;
+    display:block;
+    float:right;
 }
 a.gallery_image_link {
     border: 0;

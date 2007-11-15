@@ -1,4 +1,5 @@
 <?php
+/*
 $modid = "8";
 $mod_name="gallery";
 
@@ -105,4 +106,5 @@ else {
 	echo $form->fetch();
 }	
 include ("footer.php");
+*/
 ?>
