@@ -51,6 +51,9 @@ class Calendar_Event extends AMPSystem_Data_Item {
 
             );
 
+    var $_zip_distance_expected = false;
+    var $_zip_distance = array( );
+
     function Calendar_Event ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
     }
@@ -165,6 +168,43 @@ class Calendar_Event extends AMPSystem_Data_Item {
         }
         if ( empty( $partial_date_crit )) return 'TRUE';
         return join( ' AND ', $partial_date_crit );
+    }
+
+    function makeCriteriaZip( $zip_value ) {
+        return $this->makeCriteriaZipDistance( $zip_value, 'zip');
+    } 
+
+    function makeCriteriaDistance( $distance ) {
+        return $this->makeCriteriaZipDistance( $distance, 'distance');
+    }
+
+    function makeCriteriaZipDistance( $value, $value_type = 'zip') {
+        if ( !$this->_zip_distance_expected ) {
+            //a distance alone returns TRUE, a zip alone will be checked vs lzip
+            return $value_type == 'zip' ? $this->_makeCriteriaContains( 'lzip', $value ) : 'TRUE';
+        }
+        $this->_zip_distance[$value_type] = $value;
+        //check to make sure both parameters are set
+        if ( !(isset( $this->_zip_distance['distance']) && isset( $this->_zip_distance['zip']))) return 'TRUE';
+
+        require_once( 'AMP/Geo/Geo.php');
+        $geo_search = new Geo ( $this->dbcon, null, null, null, $this->_zip_distance['zip']);
+        $included_zips = $geo_search->zip_radius( $this->_zip_distance['distance']);
+        $included_zips[ $this->_zip_distance['zip']] = "base";
+        $included_zips = array_map( array( $this, '_zip_crit'), array_keys( $included_zips));
+        return 'lzip IN ( ' . join( ',', $included_zips ) . ')';
+    }
+
+    function _zip_crit( $zip ) {
+        if ( is_numeric( $zip ) && ( strlen( $zip ) == 4 )) {
+            $zip = '0' . $zip;
+        }
+        return $this->dbcon->qstr( $zip );
+    }
+
+    function makeCriteria( $criteria = array( )) {
+        $this->_zip_distance_expected = ( isset( $criteria['zip']) && $criteria['zip'] && isset( $criteria['distance']) && $criteria['distance']);
+        return parent::makeCriteria( $criteria );
     }
 
     function makeCriteriaArea( $state_id ) {
