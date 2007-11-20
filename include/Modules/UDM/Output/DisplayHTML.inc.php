@@ -321,6 +321,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
             $location .= '&nbsp;' . $country_name;
             $dataitem['Country'] = $country_name;
         }
+        if ( isset( $dataitem['Intl'] ) && $dataitem['Intl']) $dataitem['Intl'] = $dataitem['Country'];
         $dataitem["Location"] = $location;
 
 
