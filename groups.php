@@ -15,7 +15,7 @@ require_once( 'AMP/BaseDB.php' );
 require_once('AMP/UserData/Set.inc.php');
 require_once( 'Modules/Groups/Display/Config.inc.php');
 
-$intro_id = AMP_CONTENT_INTROTEXT_ID_GROUPS;
+$intro_id = defined( 'AMP_CONTENT_PUBLICPAGE_ID_GROUPS_DISPLAY') ? AMP_CONTENT_PUBLICPAGE_ID_GROUPS_DISPLAY : AMP_CONTENT_INTROTEXT_ID_GROUPS;
 
 if (!(isset($_REQUEST['modin']) && $_REQUEST['modin'])) $_REQUEST['modin'] = AMP_FORM_ID_GROUPS;
 $modin=$_REQUEST['modin'];
@@ -37,11 +37,21 @@ if ( isset( $gdisplay )) AMP_legacy_groups_get_display( $gdisplay );
 
 if ($uid && $modin) {
 
+    if( is_array( $list_options )) {
+        $list_options['detail_format'] = 'groups_detail_display';
+    } else {
+        $list_options = array( );
+    }
     $userlist->uid = $uid;
-    $list_options['detail_format'] = 'groups_detail_display';
     $output= $userlist->output('DisplayHTML', $list_options); 
 
 } else { 
+
+    if( is_array( $list_options )) {
+        $list_options['display_format'] = 'groups_layout_display';
+    } else {
+        $list_options = array( );
+    }
     #$userlist->registerPlugin("Output", "Index");
     if (is_array($sort_options)) {
         $sort = $userlist->getPlugins("Sort");
