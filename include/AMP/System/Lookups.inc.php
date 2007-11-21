@@ -570,6 +570,11 @@ class AMPSystemLookup_Regions_US extends Region_Lookup {
         $this->init( );
     }
 }
+class AMPSystemLookup_RegionsUS extends AMPSystemLookup_Regions_US {
+    function AMPSystemLookup_RegionsUS( ){
+        $this->init( );
+    }
+}
 
 class AMPSystemLookup_Regions_Canada extends Region_Lookup {
     var $_parent_region = 'CDN';
@@ -577,6 +582,11 @@ class AMPSystemLookup_Regions_Canada extends Region_Lookup {
     var $form_def =  'regions_Canada';
 
     function AMPSystemLookup_Regions_Canada( ){
+        $this->init( );
+    }
+}
+class AMPSystemLookup_RegionsCanada extends AMPSystemLookup_Regions_Canada {
+    function AMPSystemLookup_RegionsCanada( ){
         $this->init( );
     }
 }
@@ -590,12 +600,22 @@ class AMPSystemLookup_Regions_World extends Region_Lookup {
         $this->init( );
     }
 }
+class AMPSystemLookup_RegionsWorld extends AMPSystemLookup_Regions_World {
+    function AMPSystemLookup_RegionsWorld( ){
+        $this->init( );
+    }
+}
 
 class AMPSystemLookup_Regions_World_Long extends Region_Lookup {
     var $_parent_region = 'WORLD-LONG';
     var $name = 'Region: All Countries ( full names )';
     var $form_def =  'regions_World_Long';
 
+    function AMPSystemLookup_Regions_World_Long( ){
+        $this->init( );
+    }
+}
+class AMPSystemLookup_RegionsWorldLong extends AMPSystemLookup_Regions_World_Long{
     function AMPSystemLookup_Regions_World_Long( ){
         $this->init( );
     }
@@ -607,6 +627,11 @@ class AMPSystemLookup_Regions_US_and_Canada extends Region_Lookup {
     var $form_def =  'regions_US_and_Canada';
 
     function AMPSystemLookup_Regions_US_and_Canada( ){
+        $this->init( );
+    }
+}
+class AMPSystemLookup_RegionsUSAndCanada extends AMPSystemLookup_Regions_US_and_Canada{
+    function AMPSystemLookup_RegionsUSAndCanada( ){
         $this->init( );
     }
 }
