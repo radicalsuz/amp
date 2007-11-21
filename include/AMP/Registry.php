@@ -106,7 +106,8 @@ class AMP_Registry {
     }
 
     function __sleep( ){
-        $this->setEntry( AMP_REGISTRY_DBCON, false );
+        $false = false;
+        $this->setEntry( AMP_REGISTRY_DBCON, $false );
     }
 
     function __wakeup( ){
