@@ -276,13 +276,21 @@ class AMP_Display_List {
         if ( !isset( $this->_subheader_methods[$depth])) return false;
         $header_method = $this->_subheader_methods[$depth];
 
-        $item_header = $source->$header_method( );
+        if ( method_exists( $this, $header_method )) {
+            $item_header = $this->$header_method( $source );
+        } elseif ( method_exists( $source, $header_method )) {
+            $item_header = $source->$header_method( );
+        } else {
+            trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, ( get_class( $source ) . "/" . get_class( $this )), $header_method ));
+            return false;
+        }
+        
         if ( !$item_header || 
             ( isset( $this->_current_subheaders[$depth ])
-            && ( $item_header == $this->_current_subheaders[$depth] ))) {
+            && ( strtolower( trim( $item_header )) == strtolower( $this->_current_subheaders[$depth] )))) {
             return false; 
         }
-        $this->_current_subheaders[$depth] = $item_header;
+        $this->_current_subheaders[$depth] = trim( $item_header );
         return $this->render_subheader_format( $item_header, $depth );
 
     }
@@ -370,6 +378,10 @@ class AMP_Display_List {
             return false;
         }
         $this->_footer_display_method = $function_name;
+    }
+
+    function set_display_subheader_method( $function_name, $depth = 0 ) {
+        $this->_subheader_methods[$depth] = $function_name;
     }
     
     // {{{ private source create methods: _init_source, _generate_source 
