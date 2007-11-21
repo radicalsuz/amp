@@ -66,6 +66,10 @@
         <type>checkbox</type>
         <label>Weekly or Repeating Event</label>
     </repeat_event>
+	<repeat_desc>
+		<type>textarea</type>
+		<label>If this event repeats, describe the schedule</label>
+	</repeat_desc>
 	<student>
 		<type>checkbox</type>
 		<label>Student Event</label>

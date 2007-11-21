@@ -5,10 +5,8 @@ require_once( 'Modules/Calendar/Public/List.inc.php');
 class Calendar_Public_List_Repeating extends Calendar_Public_List {
     var $name = 'CalendarEventsRepeating';
     var $_source_criteria = array( 'live' => 1, 'repeat' => 1 );
-    var $_sort_sql_translations = array( 
-        'default' => 'lstate, lcity'
-    );
-    var $_subheader_methods = array( 'getCountryName' );
+    var $_sort_sql_default = 'location';
+    var $_subheader_methods = array( 'render_subheader_country' );
     
     function Calendar_Public_List_Repeating( $source = false, $criteria = array( )) {
         $source = false;
@@ -39,14 +37,22 @@ class Calendar_Public_List_Repeating extends Calendar_Public_List {
         return $this->_renderSubheader( $source ) . $item_output;
     }
 
+    function render_subheader_country( $source ) {
+        if( $source->getCountryName( ) == 'United States' ) return false;
+        return $source->getCountryName( );
+    }
+
+    /*
     function _renderSubheader( &$source, $depth=0 ) {
-        $result = parent::_renderSubheader( $source, $depth );
-        if ( $this->_current_subheaders[$depth] == 0 && $depth == 0 ) {
+        if ( !$this->_current_subheaders[$depth] && $depth == 0 ) {
+            parent::_renderSubheader( $source, $depth );
             return false;
         }
-        return $result;
+        return parent::_renderSubheader( $source, $depth );
 
     }
+    */
+    
 
 }
 

@@ -2,8 +2,11 @@
 	<state>
 		<type>select</type>
 		<label>By State</label>
-		<lookup>regions_US_and_Canada</lookup>
+		<lookup><instance>regions_US_and_Canada</instance></lookup>
 	</state>
+	<country>
+		<type>html</type>
+	</country>
     <region>
         <type>select</type>
         <label>By Region</label>
@@ -14,6 +17,12 @@
 		<label>By Event Type</label>
 		<lookup>eventtypes</lookup>
 	</event_type>
+	<distance>
+		<type>html</type>
+	</distance>
+	<zip>
+		<type>html</type>
+	</zip>
 	<date>
 		<separator>newrow</separator>
 		<type>date</type>

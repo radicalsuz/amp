@@ -12,12 +12,14 @@ class Calendar_Public_List extends AMP_Display_List {
     var $_class_pager = 'AMP_Display_Pager_Content';
     var $_path_pager = 'AMP/Display/Pager/Content.php';
 
+    var $_css_class_container_list = 'list_block calendar';
     var $_css_class_title = 'eventtitle';
     var $_css_class_byline = 'eventsubtitle';
     var $_css_class_blurb = 'text';
     var $_sort_sql_default = 'default';
     var $_sort_sql_translations = array( 
-        'default' => 'date, lstate, lcity'
+        'default' => 'date, lstate, lcity',
+        'location' => 'lcountry, lstate, lcity, date',
     );
 
     var $_search; 
@@ -30,12 +32,20 @@ class Calendar_Public_List extends AMP_Display_List {
 
     function _renderItem( &$source ) {
         return $this->_renderer->link( $source->getURL( ), $source->getShortLocation( ) . ': ' . $source->getName( ), array( 'class' => $this->_css_class_title ))
+                . $this->render_date( $source )
                 . $this->_renderer->newline( )
-                . $this->_renderer->inSpan( DoDate( $source->getItemDate( ), 'l, F jS Y' ) 
-                                                    . ( $source->getItemDate( ) ? $this->_renderer->space( 2 ) : '' ) 
-                                                    . $source->getData( 'time'), 
-                                                array( 'class' => $this->_css_class_byline )) 
-                . $this->_renderer->in_P( $source->getBlurb( ), array( 'class' => $this->_css_class_blurb ));
+                . $this->_renderer->p( $source->getBlurb( ), array( 'class' => $this->_css_class_blurb ));
+    }
+
+    function render_date( $source ) {
+        if ( $source->is_repeating( ) && $schedule = $source->getRepeatDescription( )) {
+            return $this->_renderer->tag( 'em', $schedule . $this->_renderer->space( ) . $source->getData( 'time' ), array( 'class' => $this->_css_class_byline) );
+        }
+        return $this->_renderer->span( DoDate( $source->getItemDate( ), 'l, F jS Y' ) 
+                                            . ( $source->getItemDate( ) ? $this->_renderer->space( 2 ) : '' ) 
+                                            . $source->getData( 'time'), 
+                                        array( 'class' => $this->_css_class_byline )) ;
+
     }
 
     function _init_criteria( ) {

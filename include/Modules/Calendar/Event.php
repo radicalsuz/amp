@@ -138,6 +138,11 @@ class Calendar_Event extends AMPSystem_Data_Item {
         return "lstate = " . $dbcon->qstr( $state_abbrev );
     }
 
+    function makeCriteriaCountry( $country_abbrev ) {
+        $dbcon = AMP_Registry::getDbcon( );
+        return "lcountry = " . $dbcon->qstr( $country_abbrev );
+    }
+
     function makeCriteriaRepeat( $value) {
         if ( $value === FALSE ) {
             return "TRUE";
@@ -257,7 +262,7 @@ class Calendar_Event extends AMPSystem_Data_Item {
     }
 
     function getShortLocation( ) {
-        $basic_loc = $this->getData( 'lcity');
+        $basic_loc = trim( $this->getData( 'lcity'));
         $renderer = AMP_get_renderer( );
         $state = $this->getData( 'lstate' );
         $region_desc = false;
@@ -275,7 +280,7 @@ class Calendar_Event extends AMPSystem_Data_Item {
                 $region_desc = $state;
             }
         }
-        if ( !$region_desc || $region_desc == 'International') {
+        if ( !$region_desc || $region_desc == 'International' || $region_desc == 'Intl') {
             $country = $this->getData( 'lcountry');
             $country_listing = AMP_lookup( 'regions_World');
             if ( isset( $country_listing[$country ])) {
@@ -310,6 +315,15 @@ class Calendar_Event extends AMPSystem_Data_Item {
             return $result;
         }
         return $countries[ $result ];
+    }
+
+    function is_repeating( ) {
+        return $this->getData( 'repeat_event');
+    }
+
+    function getRepeatDescription( ) {
+        return $this->getData( 'repeat_desc');
+
     }
 
 
