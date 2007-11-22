@@ -1073,3 +1073,11 @@ ul.linked_items li a:hover {
 	color: #ffffff;
 	background-color: #006699;
 }
+#picture_data {
+    width: 200px;
+}
+
+#picture_data div, #picture_data input {
+    float: right;
+    padding-left: 1em;
+}
