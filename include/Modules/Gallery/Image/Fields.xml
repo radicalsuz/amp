@@ -11,6 +11,10 @@
 		<label>Choose Image</label>
 	    <required>1</required>
 	</img>
+    <image_data>
+        <type>static</type>
+        <default>&lt;div id=&quot;picture_data&quot;&gt;&lt;/div&gt;</default>
+    </image_data>
     <galleryid>
         <type>select</type>
         <label>Photo Gallery</label>

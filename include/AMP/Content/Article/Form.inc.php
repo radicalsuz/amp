@@ -82,6 +82,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->_initTabDisplay( $header );
         $this->_initAutoLookups( $header );
         $this->_initTransferMode( $header );
+        $this->_initPhotoLookup( $header );
         $this->HTMLEditorSetup( );
     }
 
@@ -123,6 +124,78 @@ window.youtube_thumbnail_counter = 0;
 EVENTCODE
         );
         
+    }
+
+    function _initPhotoLookup( $header ) {
+        $script = <<<PHOTOCODE
+document.forms['article'].elements['picture'].observe( 'change', function( ) {
+    var picture_filename = document.forms['article'].elements['picture'].value;
+    var photo_data = photo_data_maker( );
+
+    new Ajax.Request( 
+        '/system/image_manager.php', 
+        { onSuccess:photo_data.update,
+          parameters: {
+              action:"read",
+              id: picture_filename
+          },
+          method: 'GET'
+                
+        });
+});
+
+function photo_data_maker( ) {
+    return {
+
+    update: function( response ) {
+        var json_object = eval( response.getResponseHeader( 'X-JSON'));
+        //alert( this.form.id );
+        if( !( json_object.alt || json_object.caption) ) {
+            $( 'picture_data').update( 'No Image Data Found');
+            return;
+        }
+        
+
+        go_button = document.createElement( 'input');
+        go_button.type = 'button';
+        go_button.value = "Use These";
+        go_button.style.className = 'photo_data_activate';
+        var display_value = "";
+        if( json_object.caption != undefined ) {
+            display_value += "Caption:"+ json_object.caption + "<br />";
+        }
+        if ( json_object.alt != undefined ) {
+            display_value += "Alt: " + json_object.alt + "<br />" ;
+        }
+        display_value = "<div class=photocaption>" + display_value + "</div>"; 
+
+        $( 'picture_data').update( display_value );
+        $( 'picture_data').appendChild( go_button );
+        AMP_show_panel( 'picture_data');
+        
+        go_button.observe( 'click', function( ) {
+            AMP_show_panel( 'image_details');
+            if ( $( 'image_details').getStyle('display') == 'none') {
+                change_form_block( 'image_details' );
+            }
+            if( json_object.alt != undefined ) {
+                $( 'article').alttag.value = json_object.alt;
+            }
+
+            if (json_object.caption != undefined ) {
+                document.forms['article'].elements['piccap'].value = json_object.caption;
+            }
+
+            $( 'picture_data').update( '');
+
+        });
+        
+    }
+    };
+}
+PHOTOCODE;
+        $header->addJavascriptOnload(  $script, 'photodata' );
+
     }
 
     function _makeNullDate( $data, $fieldname ) {

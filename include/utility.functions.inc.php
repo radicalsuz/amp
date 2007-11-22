@@ -1578,13 +1578,16 @@ if (version_compare(phpversion(), '5.0') < 0) {
     }');
 }
 
-function &AMP_get_renderer( ){
-    static $renderer = false;
-    if ( $renderer ) return $renderer;
+function &AMP_get_renderer( $type = 'HTML'){
+    static $renderer = array( );
+    if ( isset( $renderer[$type] )) return $renderer[$type];
 
-    require_once( 'AMP/Renderer/HTML.php');
-    $renderer = &new AMP_Renderer_HTML( );
-    return $renderer ;
+    $class = 'AMP_Renderer_'.strtoupper( $type);
+    $file = str_replace( '_', '/', $class ) . '.php';
+    require_once( $file );
+    $item = &new $class( );
+    $renderer[$type] = $item;
+    return $item;
 
 }
 

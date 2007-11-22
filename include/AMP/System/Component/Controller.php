@@ -659,6 +659,19 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
 
     }
 
+    function commit_read( ) {
+        if( !( isset( $this->_model_id ) && $this->_model_id )) return false;
+        $this->_model->read( $this->_model_id );
+
+        $format = $this->assert_var( 'format');
+        if( !$format ) $format = 'json';
+        $renderer = AMP_get_renderer( $format );
+        $output = $renderer->object( $this->_model->getData( ));
+        #print( 'X-JSON: ('.$output.')');
+        header( 'X-JSON: ('.$output.')');
+        exit;
+    }
+
 }
 
 /**
