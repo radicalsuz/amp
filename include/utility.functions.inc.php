@@ -581,7 +581,17 @@ if (!function_exists('array_combine_key')) {
 function array_elements_by_key( $keys, $data ) {
     $super_data = array_fill( 0, count( $keys ), $data );
     $set = array_map( 'array_find_element', $keys, $super_data );
-    $new_data = array_combine( $keys, $set );
+    if ( function_exists( 'array_combine')) {
+        $new_data = array_combine( $keys, $set );
+    } else {
+        $new_data = array( );
+        $index = 0;
+        while ( $index < count( $set )) {
+            $new_data[ $keys[ $index ]] = $set[ $index ];
+            ++$index;
+        }
+    }
+
     return array_filter( $new_data );
 }
 
