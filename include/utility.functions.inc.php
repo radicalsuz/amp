@@ -882,7 +882,7 @@ if (!function_exists('AMP_trimText')) {
 
         $end_item = " ...";
         $trimmed = mb_substr( trim($trimmed), 0, $max_length, AMP_SITE_CONTENT_ENCODING );
-        if ( !($pos = mb_strrpos( $trimmed, " ", null, AMP_SITE_CONTENT_ENCODING  ))) return $trimmed . $end_item;
+        if ( !($pos = mb_strrpos( $trimmed, " ", AMP_SITE_CONTENT_ENCODING  ))) return $trimmed . $end_item;
 
         return mb_substr( $trimmed, 0, $pos, AMP_SITE_CONTENT_ENCODING ) . $end_item;
     }
