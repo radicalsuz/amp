@@ -789,6 +789,10 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
 
         $srcpath = AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_OPTIMIZED . DIRECTORY_SEPARATOR;
         $linkpath = AMP_SITE_URL . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL. DIRECTORY_SEPARATOR;
+        if ( defined( 'AMP_USERMODE_ADMIN') && AMP_USERMODE_ADMIN ) {
+            $linkpath = AMP_SITE_URL . 'system/' . AMP_SYSTEM_URL_IMAGES . '?action=add&file=';
+        }
+
         $picker->updateAttributes( 
             array( 
                     'onChange' => 
