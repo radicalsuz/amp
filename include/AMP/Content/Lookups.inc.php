@@ -1582,7 +1582,33 @@ class AMPSystemLookup_MostEmailedArticles extends AMPSystemLookup_MostCommentedA
     }
 
 }
+class AMPSystemLookup_MostEmailedArticlesLastWeek extends AMPSystemLookup_MostEmailedArticles {
+    function AMPSystemLookup_MostEmailedArticlesLastWeek( $section_id = false ) {
+        $this->_filter_by_section( $section_id );
+        $this->_filter_by_week( );
+        $this->init( );
+        $this->_filter_undisplayable_articles( );
+    }
+    function _filter_by_week( ) {
+        $this->criteria = 'a.timestamp > "'.date( 'Y-m-d h:i:s', time( ) - ( 60*60*24*7)) . '" and '
+                            . $this->criteria;
+    }
 
+}
+
+class AMPSystemLookup_MostEmailedArticlesLastMonth extends AMPSystemLookup_MostEmailedArticles {
+    function AMPSystemLookup_MostEmailedArticlesLastMonth( $section_id = false ) {
+        $this->_filter_by_section( $section_id );
+        $this->_filter_by_month( );
+        $this->init( );
+        $this->_filter_undisplayable_articles( );
+    }
+    function _filter_by_month( ) {
+        $this->criteria = 'a.timestamp > "'.date( 'Y-m-d h:i:s', time( ) - ( 60*60*24*30)) . '" and '
+                            . $this->criteria;
+    }
+
+}
 class AMPSystemLookup_MostCommentedArticles extends AMPSystem_Lookup {
     var $datatable = "comments a left join articles b on a.articleid = b.id";
     var $result_field = 'count( a.id ) as qty';
@@ -1624,6 +1650,37 @@ class AMPSystemLookup_MostCommentedArticles extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_MostCommentedArticlesLastMonth extends AMPSystemLookup_MostCommentedArticles {
+    var $criteria = 'a.publish=1 GROUP BY a.articleid HAVING qty>1';
+    var $_base_criteria = 'a.publish=1 GROUP BY a.articleid HAVING qty>1';
+    function AMPSystemLookup_MostCommentedArticlesLastMonth( $section_id = false ) {
+        $this->_filter_by_section( $section_id );
+        $this->_filter_by_month( );
+        $this->init( );
+        $this->_filter_undisplayable_articles( );
+    }
+
+    function _filter_by_month( ) {
+        $this->criteria = 'a.date > "'.date( 'Y-m-d h:i:s', time( ) - ( 60*60*24*30)) . '" and '
+                            . $this->criteria;
+    }
+}
+
+class AMPSystemLookup_MostCommentedArticlesLastWeek extends AMPSystemLookup_MostCommentedArticles {
+    var $criteria = 'a.publish=1 GROUP BY a.articleid HAVING qty>1';
+    var $_base_criteria = 'a.publish=1 GROUP BY a.articleid HAVING qty>1';
+    function AMPSystemLookup_MostCommentedArticlesLastWeek( $section_id = false ) {
+        $this->_filter_by_section( $section_id );
+        $this->_filter_by_week( );
+        $this->init( );
+        $this->_filter_undisplayable_articles( );
+    }
+
+    function _filter_by_week( ) {
+        $this->criteria = 'a.date > "'.date( 'Y-m-d h:i:s', time( ) - ( 60*60*24*7)) . '" and '
+                            . $this->criteria;
+    }
+}
 class AMPSystemLookup_NavsByBadge extends AMPSystem_Lookup {
     var $datatable = 'navtbl';
     var $result_field = 'name';

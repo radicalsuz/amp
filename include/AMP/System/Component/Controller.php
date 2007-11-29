@@ -258,7 +258,7 @@ class AMP_System_Component_Controller {
         $renderer = AMP_get_renderer( ) ;
 
         $buffer = &new AMP_Content_Buffer( );
-        $buffer->add( $renderer->inDiv( $header_text, array( 'class' => $css_class )));
+        $buffer->add( $renderer->div( $header_text, array( 'class' => $css_class )));
         $this->_display->add( $buffer , $display_key );
     }
 

@@ -42,4 +42,8 @@ items_per_row=2
 
 [module groups]
 list_display_standard=0
+
+[module rating]
+scale_max=5
+
 ;?>

@@ -6,8 +6,8 @@ require_once( 'AMP/Content/Article.inc.php');
 
 class Rating_List extends AMP_Display_System_List {
 
-    var $columns = array( 'controls', 'name', 'rating' );
-    var $column_headers = array( 'name' => 'Article', 'rating' => 'Avg Rating' );
+    var $columns = array( 'controls', 'name', 'rating', 'comments', 'emails' );
+    var $column_headers = array( 'name' => 'Article', 'rating' => 'Avg Rating', 'comments' => 'Comments', 'emails' => 'Emailed' );
     var $_source_object = 'Article';
 
     var $_actions = array( );
@@ -22,10 +22,26 @@ class Rating_List extends AMP_Display_System_List {
 
     function _after_init( ) {
         $this->ratings = AMP_lookup( 'article_ratings');
+        $this->comments = AMP_lookup( 'most_commented_articles');
+        $this->shares = AMP_lookup( 'most_emailed_articles');
+    }
+
+    function prioritize( $column_name ) {
+        $start = array( 'controls', 'name', $column_name );
+        $others = array_diff( $this->columns, $start );
+        $this->columns = array_merge( $start, $others );
     }
 
     function render_rating( $source ) {
         return sprintf( '%01.2f', $this->ratings[ $source->id ]);
+    }
+
+    function render_comments( $source ) {
+        return $this->comments[ $source->id ];
+    }
+
+    function render_emails( $source ) {
+        return $this->shares[ $source->id ];
     }
 
     function _setSortRating( $source, $direction ) {

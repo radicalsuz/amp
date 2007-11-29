@@ -119,6 +119,12 @@ class ArticleRating {
         return $current_ratings[ $item_id ];
     }
 
+    function average( $item_id ) {
+        $current_ratings = AMP_lookup( 'article_ratings' );
+        if( !isset( $current_ratings[$item_id])) return false;
+        return $current_ratings[ $item_id ];
+    }
+
     function create( $item_id, $rating_value ) {
         if ( !AMP_SYSTEM_UNIQUE_VISITOR_ID ) return false;
         $session = AMP_SYSTEM_UNIQUE_VISITOR_ID;

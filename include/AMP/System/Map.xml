@@ -187,7 +187,7 @@
         <href>redirect.php?action=list</href>
     </item>
     <item>
-        <label>Ratings</label>
+        <label>Popularity</label>
         <href>ratings.php</href>
         <per>CONTENT_USER_ADDED_CONTENT</per>
     </item>
