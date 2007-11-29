@@ -21,5 +21,12 @@ class Gallery_Form extends AMPSystem_Form_XML {
             return $data['id'];
         }
     }
+
+    function _selectAddNull( $valueset, $name ) {
+        if( $name != 'parent') return parent::_selectAddNull( $valueset, $name );
+        $current_gallery_id = ( isset( $_REQUEST['id']) && $_REQUEST['id']) ? $_REQUEST['id'] : false;
+        if( $current_gallery_id ) unset( $valueset[$current_gallery_id]);
+        return parent::_selectAddNull( $valueset, $name );
+    }
 }
 ?>
