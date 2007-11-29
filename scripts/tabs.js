@@ -51,6 +51,7 @@ function AMP_simple_tabs( ) {
         add: function( element, trigger  ) {
             this.segments[ this.segment_count ] = $( element );
             this.triggers[ this.segment_count ] = $( trigger );
+            Event.observe( $( trigger ), 'click', function( ){ this.show( $( element ) ) }, this ) ;
             ++this.segment_count;
             },
         show: function( trigger ) {

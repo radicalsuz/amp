@@ -1081,3 +1081,43 @@ ul.linked_items li a:hover {
     float: right;
     padding-left: 1em;
 }
+
+.tabs_container > div {
+	float: left;
+	position: relative;
+	clear: both;
+}
+ul.tabs {
+	list-style:none;
+	display: block;
+	float: left;
+	width: 100%;
+	padding: 0;
+	margin: 1em 0 1em 0;
+	border-bottom: 1px solid #8a8a8a;
+}
+ul.tabs li {
+	float:left;
+	display: block;
+}
+ul.tabs li a {
+	cursor: pointer;
+	display: block;
+	color: #FFFFFF;
+	background-color: #c3c3c3;
+	border: 1px solid #8a8a8a;
+	border-bottom: 0;
+	padding: .5em;
+	margin-right: 1em;
+	font-weight: bold;
+	font-size: 14px;
+}
+ul.tabs li a:hover {
+	background-color: #595959;
+}
+ul.tabs li a.active {
+	color: #232399;
+	background-color: #FFFFFF;
+	border-style: dashed;
+	border-right: 0;
+}

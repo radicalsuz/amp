@@ -553,3 +553,50 @@ ol.comments_list li.list_item p {
 .map_4 .title, .map_5 .title, .map_6 .title, .map_7 .title, .map_8 .title{
 	font-size: 12px;
 }
+
+.rating_block label{
+	position: relative;
+	float: left;
+	display:block;
+    clear: both;
+}
+.rating_block #rating {
+	position: relative;
+	float: left;
+	margin-left: 1em;
+	height: 14px;
+    width: 80px;
+	overflow:hidden;
+
+}
+#rating div{
+	background:url(/img/star.gif ) top left no-repeat;
+	height: 14px;
+	width: 15px;
+	position: relative;
+	float:left;
+	cursor: pointer;
+}
+#rating .star_on {
+	background:url(/img/star_on.gif ) top left no-repeat;
+}
+#rating div:hover {
+	background:url(/img/star_hilite.gif ) top left no-repeat;
+}
+.rating_current_value {
+    margin-top:2em;
+    margin-bottom:1em;
+    line-height: 16px;
+}
+.rating_current_value .visual {
+    background:url( /img/star_hilite.gif ) repeat-x top left;
+    height: 14px;
+    float:left;
+    margin-right:.5em;
+}
+.rating_block {
+    padding: 1em;
+    display:block;
+    position:relative;
+}
+
