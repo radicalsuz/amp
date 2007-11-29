@@ -347,7 +347,8 @@
       function Create($sFilename = '') {
          // check for required gd functions
          if (!function_exists('imagecreate') || !function_exists("image$this->sFileType") || ($this->vBackgroundImages != '' && !function_exists('imagecreatetruecolor'))) {
-             trigger_error( 'needed libraries not loaded');
+             // $this->GenerateCode( );
+             trigger_error( 'needed libraries not loaded for captcha ' . $this->sCode );
             return false;
          }
          
