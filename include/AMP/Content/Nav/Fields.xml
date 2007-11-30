@@ -12,6 +12,9 @@
         <lookup>tools</lookup>
 		<required>1</required>
 	</modid>
+    <layouts>
+        <type>static</type>
+    </layouts>
     <content_header>
         <type>header</type>
         <label>Navigation Content</label>
@@ -28,21 +31,41 @@
 		<type>checkbox</type>
 		<label>Use Image as Title</label>
 	</titleti>
-    <badge_header>
+    <include_header>
         <type>blocktrigger</type>
-        <label>Use Badge</label>
-        <block>badge_proxy</block>
+        <label>Include File</label>
+        <block>direct_include</block>
+        <block_trigger>include_file</block_trigger>
         <block_trigger>badge_id</block_trigger>
+    </include_header>
+	<include_file>
+        <type>select</type>
+        <label>Include Filename</label>
+        <block>direct_include</block>
+		<lookup>navFiles</lookup>
+	</include_file>
+	<include_function>
+        <type>text</type>
+        <label>Function to call ( optional )</label>
+        <block>direct_include</block>
+	</include_function>
+	<include_function_args>
+        <type>textarea</type>
+        <size>10:50</size>;
+        <label>Function Arguments ( eg: section=7&amp;&amp;header=Summer Campaign&amp;&amp;limit=3 )</label>
+        <block>direct_include</block>
+    </include_function_args>
+    <badge_header>
+        <type>header</type>
+        <label>Use Badge</label>
+        <block>direct_include</block>
     </badge_header>
 	<badge_id>
         <type>select</type>
         <label>Badge</label>
-        <block>badge_proxy</block>
+        <block>direct_include</block>
 		<lookup>badges</lookup>
 	</badge_id>
-    <layouts>
-        <type>static</type>
-    </layouts>
 	<nosqlcode>
 		<type>textarea</type>
 		<label>Navigation HTML</label>
@@ -78,7 +101,7 @@
 	</rss>
     <dynamic_header>
         <type>blocktrigger</type>
-        <label>Dynamic Navigation</label>
+        <label>SQL Based Navigation</label>
         <block>dynamic_header</block>
         <block_trigger>sql_statement</block_trigger>
     </dynamic_header>
@@ -174,25 +197,4 @@
 		<label>More Field #2 ( 4 )</label>
         <block>dynamic_header</block>
 	</mcall2>
-    <include_header>
-        <type>blocktrigger</type>
-        <label>Include File</label>
-        <block>direct_include</block>
-        <block_trigger>include_file</block_trigger>
-    </include_header>
-	<include_file>
-        <type>text</type>
-        <label>Include File</label>
-        <block>direct_include</block>
-	</include_file>
-	<include_class>
-        <type>text</type>
-        <label>Include Class</label>
-        <block>direct_include</block>
-	</include_class>
-	<include_function>
-        <type>text</type>
-        <label>Include Function</label>
-        <block>direct_include</block>
-	</include_function>
 </array>

@@ -4,10 +4,12 @@ function amp_badge_articles( $options ) {
     $section = ( isset( $options['section']) && $options['section'] ) ? $options['section'] : false;
     $class = ( isset( $options['class']) && $options['class'] ) ? $options['class'] : false;
     $tag = ( isset( $options['tag']) && $options['tag'] ) ? $options['tag'] : false;
+    $author = ( isset( $options['author']) && $options['author'] ) ? $options['author'] : false;
     $new = ( isset( $options['new']) && $options['new'] ) ? $options['new'] : false;
     $frontpage = ( isset( $options['frontpage']) && $options['frontpage'] ) ? $options['frontpage'] : false;
     $id = ( isset( $options['id']) && $options['id'] ) ? $options['id'] : false;
-    if ( !( $section || $class || $tag || $new || $frontpage || $id )) return false; 
+    $not_id = ( isset( $options['not_id']) && $options['not_id'] ) ? $options['not_id'] : false;
+    if ( !( $section || $class || $tag || $new || $frontpage || $id || $author )) return false; 
 
     $header_output = false;
     $header = ( isset( $options['header'] )) ? $options['header'] : null;
@@ -21,32 +23,14 @@ function amp_badge_articles( $options ) {
     $suppress_morelink = ( isset( $morelink ) && ( $morelink == false ));
 
     $criteria = array( );
-    if ( $class ) {
-        $criteria['class'] = $class;
-        if ( !isset( $header ) && !is_array( $class )) {
-            $class_names = AMP_lookup( 'classes');
-            $header =  isset( $class_names[$class]) ? AMP_pluralize( $class_names[$class] ) : false;
-        }
-    }
-    if ( $section ) {
-        $criteria['section'] = $section;
-        if ( !isset( $header ) && !is_array( $section )) {
-            $section_names = AMP_lookup( 'sectionsLive');
-            $header =  isset( $section_names[$section]) ? $section_names[$section] : false;
-        }
-    }
-    if ( $tag ) {
-        $criteria['tag'] = $tag;
-        if ( !isset( $header ) && !is_array( $tag )) {
-            $tag_names = AMP_lookup( 'tagsLive');
-            $header =  isset( $tag_names[$tag]) ? $tag_names[$tag] : false;
-        }
-    }
-
-
+    if ( $class )  $criteria['class'] = $class; 
+    if ( $section )  $criteria['section'] = $section; 
+    if ( $tag )  $criteria['tag'] = $tag; 
     if ( $new ) $criteria['new'] = $new; 
     if ( $frontpage ) $criteria['frontpage'] = $frontpage; 
     if ( $id ) $criteria['id'] = $id; 
+    if ( $not_id ) $criteria['not_id'] = $not_id; 
+    if ( $author ) $criteria['author'] = $author; 
 
     if ( $header ) {
         $renderer = AMP_get_renderer( );

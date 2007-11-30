@@ -146,6 +146,10 @@ class NavigationElement extends AMPSystem_Data_Item {
         return $this->getData( 'include_function');
     }
 
+    function getIncludeFunctionArguments( ){
+        return $this->getData( 'include_function_args' );
+    }
+
     function getBaseHTML() {
         return $this->getData( 'nosqlcode' );
     }

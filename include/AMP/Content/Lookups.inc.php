@@ -1447,6 +1447,29 @@ class AMPSystemLookup_BadgeFiles extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_NavFiles extends AMPSystem_Lookup {
+
+    function AMPSystemLookup_NavFiles( ) {
+        $core_nav_files = AMPfile_list( AMP_BASE_INCLUDE_PATH.'AMP/Nav', 'php');
+        $core_badge_files = AMPfile_list( AMP_BASE_INCLUDE_PATH.'AMP/Badge', 'php');
+        $custom_files = AMP_lookup( 'customFiles');
+
+        foreach( $core_badge_files as $key => $core_file ) {
+            if ( !$key ) continue;
+            $full_core_file = 'AMP/Badge/'. $core_file;
+            $this->dataset[ $full_core_file ] = $full_core_file  ;
+        }
+        foreach( $core_nav_files as $key => $core_file ) {
+            if ( !$key ) continue;
+            $full_core_file = 'AMP/Nav/'. $core_file;
+            $this->dataset[ $core_file ] = $full_core_file  ;
+        }
+        $this->dataset = array_merge( $this->dataset, $custom_files );
+        asort( $this->dataset );
+    }
+
+}
+
 class AMPSystemLookup_ExcludedClassesForDisplay extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_CONTENT_DISPLAY_EXCLUDED_CLASS";
 
@@ -1724,6 +1747,46 @@ class AMPSystemLookup_License extends AMPSystem_Lookup {
     }
 }
 
+class AMPSystemLookup_ArticleArchivesByMonth extends AMPSystem_Lookup {
+    var $datatable = 'articles';
+    var $id_field = 'date_format( date, "%M %Y" ) as show_date';
+    var $result_field = 'count( id ) as qty';
+    var $criteria = 'GROUP BY year( date ), month( date )';
+    var $_base_criteria = 'GROUP BY year( date ), month( date )';
+    var $sortby = 'date DESC';
 
+    function AMPSystemLookup_ArticleArchivesByMonth( ) {
+        $this->_filter_by_date_allowed( );
+        $this->init( );
+    }
+
+    function _filter_by_date_allowed( ) {
+        $dbcon = AMP_Registry::getDbcon( );
+        $article = new Article( $dbcon );
+        $criteria = "date >" . $dbcon->qstr( date( 'Y-m-d', ( time( ) - ( 60*60*24*365*2 ))))
+                    . " AND date <" . $dbcon->qstr( date( 'Y-m-d', time( ) ));
+        $criteria .= " AND " . $article->makeCriteriaDisplayable( );
+        $this->criteria = $criteria . $this->_base_criteria;
+        
+    }
+
+}
+
+class AMPSystemLookup_ArticleArchivesByMonthByClass extends AMPSystemLookup_ArticleArchivesByMonth {
+    function AMPSystemLookup_ArticleArchivesByMonthByClass( $class_id ) {
+        $this->_filter_by_date_allowed( );
+        if( $class_id ) $this->_filter_by_class( $class_id );
+        $this->init( );
+    }
+
+    function _filter_by_class( $class_id ) {
+        $article = new Article( AMP_Registry::getDbcon( ) );
+        $crit = $article->makeCriteriaClass( $class_id );
+        if ( !$crit ) return;
+         
+        $this->criteria = $crit . ' AND ' . $this->criteria;
+    }
+
+}
 
 ?>

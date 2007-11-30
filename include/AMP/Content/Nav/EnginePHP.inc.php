@@ -27,9 +27,11 @@ class NavEngine_PHP extends NavEngine {
         include_once( $fullpath ) ;
 
         if ( !$nav_class && is_callable( $nav_function )) {
-            return $nav_function( );
+            return $nav_function( $this->get_arguments( ));
         }
 
+        return $this->_raw_include( $fullpath );
+        /*
         $nav = false;
         if ( $nav_class && class_exists( $nav_class )) {
             $nav = &new $nav_class( );
@@ -43,8 +45,8 @@ class NavEngine_PHP extends NavEngine {
                 return $nav->execute( );
             }
         }
+        */
 
-        return $this->_raw_include( $fullpath );
 
     }
 
@@ -58,6 +60,14 @@ class NavEngine_PHP extends NavEngine {
         }
         return false;
 
+    }
+
+    function get_arguments( ) {
+        $args = $this->nav->getIncludeFunctionArguments( );
+        require_once( 'AMP/Content/Badge/Badge.php');
+        $badge = new AMP_Content_Badge( AMP_Registry::getDbcon( ));
+        $badge->setData( array( 'include_function_args' => $args ));
+        return $badge->getIncludeFunctionArguments( );
     }
 
     function _raw_include( $fullpath ){
