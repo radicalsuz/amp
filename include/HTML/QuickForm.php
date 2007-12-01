@@ -51,6 +51,7 @@ $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =
 
 $GLOBALS['_HTML_QuickForm_registered_rules'] = array(
     'required'      => array('html_quickform_rule_required', 'HTML/QuickForm/Rule/Required.php'),
+    'blank'         => array('html_quickform_rule_blank',    'HTML/QuickForm/Rule/Blank.php'),
     'maxlength'     => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
     'minlength'     => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
     'rangelength'   => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),

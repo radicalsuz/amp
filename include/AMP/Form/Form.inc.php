@@ -155,6 +155,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         if (!$show_private_fields) $this->setConditional( 'public', true );
 
         $this->_registerCustomElementTypes();
+        $this->addFields( $this->render_bot_catcher( ));
         $this->addFields(  $this->submit_button  );
         if ( method_exists( $this, '_pastSubmitElements' )) $this->addFields ( $this->_pastSubmitElements() );
 		$this->renderer =& $this->form->defaultRenderer();
@@ -186,6 +187,21 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
                 . $form_footer 
                 . $script;
 		return $output;
+    }
+
+    function render_bot_catcher( ) {
+        return array( 
+            ('First_Name_'.date('Y'))=> 
+                array(  'type' => 'text', 
+                        'label' => 'First Name', 
+                        'rules' => array( array( 'type' => 'blank', 'message' => 'this field is for machine use only' )),
+                        'template' => 
+                            "\n\t<tr class='AMPComponent_hidden'>\n\t\t<td align=\"right\" valign=\"top\" class=\"%s\">
+                            <!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->
+                            {label}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"%s\">
+                            <!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t
+                            {element}</td>\n\t</tr>",
+                        ));
     }
 
     function execute( ){
