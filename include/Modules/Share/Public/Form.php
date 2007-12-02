@@ -99,7 +99,7 @@ class Share_Public_Form extends AMP_Display_Form {
                 $new_values[$key] = $this->clean( $value );
                 continue;
             } 
-            if ( strip_tags( $value ) != $value ) {
+            if ( ( $key != 'message') && ( strip_tags( $value ) != $value ) ) {
                 return array( );
             }
             $new_values[ $key ] = $value;

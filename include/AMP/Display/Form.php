@@ -29,6 +29,7 @@ class AMP_Display_Form {
             'email'     => '%s must be a valid email address',
             'captcha'   => AMP_TEXT_ERROR_FORM_CAPTCHA_FAILED,
             'numeric'   => '%s should be a number',
+            'blank'     => '%s is for machine use only',
         )
     );
 
@@ -95,7 +96,12 @@ class AMP_Display_Form {
 
     function _after_add_fields( ) {
         $this->_init_default_values( );
-        //interface
+        $this->_init_spam_check(  );
+    }
+
+    function _init_spam_check(  ) {
+        if ( isset( $this->_fields['First_Name_'.date('Y')] ) ) return;
+        $this->add_field( 'First_Name_'.date('Y'), array( 'type' => 'honeypot', 'label' => 'First Name'));
     }
 
     function _init_default_values( ) {
@@ -242,6 +248,19 @@ class AMP_Display_Form {
                    'captcha_image') 
                 . $this->format_field_delimiter( )
                 . $this->render_field_default( $name, $field_def );
+    }
+
+    function render_field_honeypot( $name, $field_def ) {
+        return 
+            $this->format_field( 
+                $this->_renderer->div(  
+                      $this->render_label( $name, $this->get_field_def( $name, 'label') )
+                    . $this->format_element( 
+                        $this->_renderer->input( $name, $this->get( $name ), $this->get_field_def( $name, 'attr') )
+                        ),
+                    array( 'class' => 'AMPComponent_hidden' ))
+                    , $name 
+        );
     }
 
     function render_field_textarea( $name, $field_def ) {
@@ -513,12 +532,14 @@ class AMP_Display_Form {
             $rule_method = $this->get_rule_method( $rule_def['name']);
             $value = $this->get( $rule_def['field'] );
             $result = call_user_func_array( $rule_method, $value );
+            trigger_error( ( $result ? 'OK: ' : 'BOO: ' ).$rule_method[1] . ' ## ' . $value );
             if ( !$result ) {
                 $flash->add_error( 'There was a problem with some fields on this form', 'form_errors' );
                 $label = $this->get_field_def( $rule_def['field'], 'label' ) ;
 
                 $this->_rules_errors[$rule_def['field']] = $rule_def['name'];
                 $this->_rules_error_messages[$rule_def['field']] = sprintf( $rule_def['alert'], $label );
+                trigger_error( $this->_rules_error_messages[$rule_def['field']] );
 
                 $validation_okay = false;
             }
@@ -581,6 +602,10 @@ class AMP_Display_Form {
         return $captcha->Validate($value);
     }
 
+    function validate_blank( $value ) {
+        return ( $value === '');
+    }
+
     function add_field( $name, $def = array( 'type' => 'text' ), $order = 0 ) {
         $this->_fields[$name] = $this->field_def_validate( $def );
 
@@ -596,6 +621,10 @@ class AMP_Display_Form {
         if ( $def['type'] == 'captcha') {
             $this->add_rule( 'captcha', $name );
         }
+        if ( $def['type'] == 'honeypot') {
+            $this->add_rule( 'blank', $name );
+        }
+
         $this->revise_order( $name, $order );
     }
 

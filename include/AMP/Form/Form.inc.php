@@ -194,6 +194,8 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
             ('First_Name_'.date('Y'))=> 
                 array(  'type' => 'text', 
                         'label' => 'First Name', 
+                        'enabled' => true, 
+                        'public' => true, 
                         'rules' => array( array( 'type' => 'blank', 'message' => 'this field is for machine use only' )),
                         'template' => 
                             "\n\t<tr class='AMPComponent_hidden'>\n\t\t<td align=\"right\" valign=\"top\" class=\"%s\">
