@@ -10,7 +10,8 @@ class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
 
     var $paths = array( 
         'fields' => 'AMP/Content/Article/Comment/Fields.xml',
-        'list'   => 'AMP/Content/Article/Comment/List.inc.php',
+        #'list'   => 'AMP/Content/Article/Comment/List.inc.php',
+        'list'   => 'AMP/Content/Article/Comment/List.php',
         'form'   => 'AMP/Content/Article/Comment/Form.inc.php',
         'search_fields'   => 'AMP/Content/Article/Comment/SearchFields.xml',
         'search'   => 'AMP/Content/Article/Comment/SearchForm.inc.php',
@@ -18,7 +19,8 @@ class ComponentMap_Article_Comment extends AMPSystem_ComponentMap {
     
     var $components = array( 
         'form'  => 'ArticleComment_Form',
-        'list'  => 'ArticleComment_List',
+        #'list'  => 'ArticleComment_List',
+        'list'  => 'Comment_List',
         'search'   => 'ArticleCommentSearch',
         'source'=> 'ArticleComment');
 

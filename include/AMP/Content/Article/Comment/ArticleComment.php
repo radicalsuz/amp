@@ -56,10 +56,20 @@ class ArticleComment extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaDisplayable( ) {
-        return $this->makeCriteriaLive( );
+        return join( ' AND ', 
+                array(    $this->makeCriteriaLive( )
+                        , $this->makeCriteriaSpam( false ))
+                );
+    }
+
+    function makeCriteriaSpam( $is_spam ) {
+        return 'spam=' . (  $is_spam ? "1" : "0" );
     }
 
     function getArticle( ) {
+        return $this->getArticleId(  );
+    }
+    function getArticleId( ) {
         return $this->getData( 'articleid');
     }
 
@@ -104,6 +114,87 @@ class ArticleComment extends AMPSystem_Data_Item {
     function get_url_edit( ) {
         if ( !$this->id ) return AMP_SYSTEM_URL_ARTICLE_COMMENT;
         return AMP_url_add_vars( AMP_SYSTEM_URL_ARTICLE_COMMENT, array( 'id=' . $this->id ));
+    }
+
+    function &to_akismet(  ) {
+        $false = false;
+        if ( !$this->hasData(  ) ) return $false;
+
+        $comment_data = $this->getData(  );
+        $comment_data['user_agent'] = $comment_data['agent'];
+        $comment_data['user_ip'] = $comment_data['author_IP'];
+        $comment_data['website'] = $comment_data['author_url'];
+        $comment_data['body'] = $comment_data['comment'];
+        $comment_data['permalink'] = ( isset( $comment_data['article_id'] ) && $comment_data['article_id'] ) ? 
+                                        AMP_url_update( AMP_SITE_URL . '/' . AMP_CONTENT_URL_ARTICLE, array( 'id' => $comment_data['article_id'] ) ) : false;
+        if ( !$comment_data['permalink'] ) {
+            $comment_data['permalink'] = ( isset( $comment_data['userdata_id'] ) && $comment_data['userdata_id'] ) ? 
+                                            AMP_url_update( AMP_SITE_URL . '/' . AMP_CONTENT_URL_FORM_DISPLAY, array( 'uid' => $comment_data['userdata_id'] ) ) : false;
+        }
+        $akismet_comment = array_elements_by_key( array( 'author', 'email', 'website', 'body', 'permalink' ), $comment_data );
+        require_once( 'akismet/akismet.class.php' );
+        $akismet = new Akismet( AMP_SITE_URL, AKISMET_KEY, $akismet_comment );
+
+        if ( $akismet->isError( AKISMET_SERVER_NOT_FOUND ) ) {
+            trigger_error( 'Akismet: Server Not Found' );
+            return $false;
+        }
+        if ( $akismet->isError( AKISMET_RESPONSE_FAILED ) ) {
+            trigger_error( 'Akismet: Response Failed' );
+            return $false;
+        }
+        if ( $akismet->isError( AKISMET_INVALID_KEY ) ) {
+            trigger_error( 'Akismet: Invalid Key' );
+            return $false;
+        }
+
+        return $akismet;
+    }
+
+    function isSpam(  ) {
+        return $this->getData( 'spam' );
+    }
+
+    function _save_update_actions( $data ) {
+        //check if spam status has been changed from saved version
+        $last_version = clone( $this );
+        $last_version->read( $last_version->id );
+        if( $data['spam'] == $last_version->isSpam(  ) ) return $data;
+        if( !$akismet = $this->to_akismet(  )) return $data;
+
+        $akismet_method = $data['spam'] ? 'submitSpam' : 'submitHam';
+        $akismet->$akismet_method(  );
+        return $data;
+    }
+
+
+    function spamify(  ) {
+        if ( $this->isSpam(  ) ) return false;
+        $this->mergeData( array( 'spam' => 1 ) );
+        //spam notice happens automatically in save sequence
+        if( !( $result = $this->save(  ) ) ) return false;
+
+        $this->notify( 'update' );
+        $this->notify( 'spamify' );
+        return $result; 
+
+    }
+
+    function despamify(  ) {
+        if ( !$this->isSpam(  ) ) return false;
+        $this->mergeData( array( 'spam' => 0 ) );
+        //despam notice happens automatically in save sequence
+        if( !( $result = $this->save(  ) ) ) return false;
+
+        $this->notify( 'update' );
+        $this->notify( 'despamify' );
+        return $result; 
+
+    }
+
+    function getStatus(  ) {
+        if( $this->getData( 'spam' ) ) return AMP_TEXT_SPAM;
+        return $this->isLive(  ) ? AMP_TEXT_CONTENT_STATUS_LIVE : AMP_TEXT_CONTENT_STATUS_DRAFT;
     }
 
 }

@@ -102,6 +102,9 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         'AMP_SYSTEM_FILE_S3_KEY_SECRET' => '_s3_secret',
         'AMP_SYSTEM_FILE_S3_BUCKET'     => '_s3_bucket',
 
+        //akismet Settings
+        'AKISMET_KEY'                   => '_akismet_key',
+
     );
 
     function AMP_System_Setup ( &$dbcon, $id = AMP_SYSTEM_SETTING_DB_ID ) {
@@ -371,6 +374,10 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
     function get_DIA_url_slug( ){
         return $this->getData( 'dia_slug') ;
+    }
+
+    function get_akismet_key(  ) {
+        return $this->getData( 'akismet_key') ;
     }
 
     function getBlaster( ) {

@@ -14,6 +14,12 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
                 'available' => true,
                 'label' => 'Use Captcha on public form',
                 'default' => 0
+            ),
+        'akismet_body_field' => array( 
+                'type'  => 'text',
+                'available' => true,
+                'label' => 'Validate this field with akismet',
+                'default' => ''
             )
         );
 
@@ -112,6 +118,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         $data['modin'] = $this->udm->instance;
         $data['created_timestamp'] = date( 'YmdHis') ;
+        $data['spam'] = $this->akismet_verify(  );
 
         $fields = $this->getSaveFields();
         $fields[] = 'created_timestamp';
@@ -131,6 +138,11 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         return $sql;
 
+    }
+
+    function akismet_verify(  ) {
+        if( !( $akismet = $this->to_akismet(  )  ) ) return false;
+        return $akismet->isSpam(  );
     }
 
     function _getColumnNames( $sourceDef ) {
@@ -155,6 +167,43 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         return $colNames;
         */
+    }
+
+    function &to_akismet( $item_data ) {
+        $false = false;
+        if( !AKISMET_KEY ) return $false;
+        $options = $this->getOptions(  );
+        if ( isset( $options['akismet_body_field'] ) && $options['akismet_body_field'] ) return $false;
+        $all_data = $this->udm->getData(  );
+        if( !isset( $all_data[$options['akismet_body_field']] ) ) return $false;
+
+        $body_field = $all_data[$options['akismet_body_field']];
+
+        $ak_data = array(  );
+        $ak_data['author'] = $item_data['First_Name'] . ' ' . $item_data['Last_Name'];
+        $ak_data['email'] = $item_data['Email'] ;
+        $ak_data['type'] = 'form_input';
+        $ak_data['website'] = $item_data['Website'];
+        $ak_data['body'] = $item_data[ $body_field ];
+        $ak_data['permalink'] = ( isset( $item_data['modin'] ) && $item_data['modin'] ) ? 
+                                AMP_url_update( AMP_SITE_URL . '/' . AMP_CONTENT_URL_FORM, array( 'modin' => $item_data['modin'] ) ) : false;
+        require_once( 'akismet/akismet.class.php' );
+        $akismet = new Akismet( AMP_SITE_URL, AKISMET_KEY, $ak_data );
+
+        if ( $akismet->isError( AKISMET_SERVER_NOT_FOUND ) ) {
+            trigger_error( 'Akismet: Server Not Found' );
+            return $false;
+        }
+        if ( $akismet->isError( AKISMET_RESPONSE_FAILED ) ) {
+            trigger_error( 'Akismet: Response Failed' );
+            return $false;
+        }
+        if ( $akismet->isError( AKISMET_INVALID_KEY ) ) {
+            trigger_error( 'Akismet: Invalid Key' );
+            return $false;
+        }
+
+        return $akismet;
     }
 }
 

@@ -16,6 +16,19 @@
         <label>Find by Form</label>
         <lookup>forms</lookup>
      </modin>
+     <status>
+        <type>select</type>
+        <label>Search Status</label>
+        <values>
+            <key>0</key><value>Draft</value>
+        </values>
+        <values>
+            <key>1</key><value>Live</value>
+        </values>
+        <values>
+            <key>2</key><value>Spam</value>
+        </values>
+     </status>
      <cid>
         <type>hidden</type>
      </cid>

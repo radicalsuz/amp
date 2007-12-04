@@ -270,6 +270,10 @@ class AMP_Display_Pager {
     }
 
     function render_jump( $target_offset ) {
+        if( !$this->_qty_page ) {
+            print AMPbacktrace(  );
+            exit;
+        }
         $target_page = ( $target_offset / $this->_qty_page) + 1; 
         $jump_class = $this->_css_class_jump;
         if ( $target_page == $this->_current_page ) {

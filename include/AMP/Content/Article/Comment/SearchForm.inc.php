@@ -9,5 +9,16 @@ class ArticleCommentSearch extends AMPSearchForm {
         $name = "CommentSearch";
         $this->init( $name );
     }
+
+    function getSearchValues(  ) {
+        $values = parent::getSearchValues(  );
+        //convert spam status to search spam field
+        if( isset( $values['status'] ) && ( $values['status'] == 2)) {
+            $values['spam'] = 1;
+            unset( $values['status'] );
+        }
+        return $values;
+
+    }
 }
 ?>

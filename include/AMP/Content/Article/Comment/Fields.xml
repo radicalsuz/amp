@@ -23,6 +23,10 @@
 
         <default>today</default>
 	</date>
+    <spam>
+        <type>checkbox</type>
+        <label>This is Spam</label>
+    </spam>
 	<comment>
 		<type>textarea</type>
 		<label>Comment</label>

@@ -239,6 +239,15 @@
 		<block>s3</block>
 		<size>60</size>
 	</s3_bucket>
-
-
+	<akismet_header>
+		<type>blocktrigger</type>
+		<label>Akismet settings</label>
+		<block>akismet</block>
+		<block_trigger>akismet_key</block_trigger>
+	</akismet_header>
+	<akismet_key>
+		<type>text</type>
+		<label>Key</label>
+		<block>akismet</block>
+	</akismet_key>
 </array>

@@ -68,6 +68,9 @@ define( 'AMP_TEXT_LOGIN' , 'login' );
 define( 'AMP_TEXT_STARS' , '%1$s stars' );
 define( 'AMP_TEXT_GO_TO_PAGE', 'Go to page:');
 define( 'AMP_TEXT_RATE_THIS', 'Rate This');
+define( 'AMP_TEXT_SPAM' , 'spam' );
+define( 'AMP_TEXT_DESIGNATE_AS_SPAM' , 'spamify' );
+define( 'AMP_TEXT_DESIGNATE_AS_NOT_SPAM' , 'despamify' );
 
 if ( !defined( 'AMP_TEXT_PAGER_NEXT'))      define( 'AMP_TEXT_PAGER_NEXT', 'Next' );
 if ( !defined( 'AMP_TEXT_PAGER_PREVIOUS'))  define( 'AMP_TEXT_PAGER_PREVIOUS', 'Prev' );
