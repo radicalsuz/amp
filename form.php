@@ -33,6 +33,10 @@ if ( !$modin ) {
 
 // Fetch the form instance specified by submitted modin value.
 $udm =& new UserDataInput( $dbcon, $modin );
+if( !$udm->isLive( )) {
+    ampredirect( AMP_CONTENT_URL_INDEX );
+    exit;
+}
 
 // User ID.
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;

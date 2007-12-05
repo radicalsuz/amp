@@ -1064,6 +1064,7 @@ class AMPContentLookup_NavLayoutsByNav extends AMPSystem_Lookup {
     function AMPContentLookup_NavLayoutsByNav( $nav_id ) {
         if ( $nav_id ) $this->_filter_by_nav( $nav_id );
         $this->init( );
+        if( !$this->dataset ) return;
         $names = AMP_lookup( 'nav_layouts');
         foreach( $this->dataset as $key => $value ) {
             $this->dataset[ $key ] = $names[ $key ];

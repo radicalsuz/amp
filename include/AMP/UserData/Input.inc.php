@@ -122,6 +122,11 @@ class UserDataInput extends UserData {
         #$r = $this->registerPlugin( 'AMP', 'EmailAdmin'     ) and $r;
 
     }
+
+    function isLive( ) {
+        if ( !isset( $this->_module_def['publish_form'])) return true;
+        return $this->_module_def['publish_form'];
+    }
 }
 
 ?>

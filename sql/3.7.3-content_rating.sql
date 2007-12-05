@@ -10,5 +10,3 @@ create table if not exists ratings (
 
 )  TYPE = MyISAM;
 
-replace into badges ( id, publish, name, include, include_function ) values ( 10, 1, "Rating Update", "AMP/Badge/Rating.php", "amp_badge_rating" );
-replace into badges ( id, publish, name, include, include_function ) values ( 11, 1, "Rate this Article", "AMP/Badge/Rating.php", "amp_badge_rating_block" );
