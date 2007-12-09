@@ -14,9 +14,44 @@ class Section extends AMPSystem_Data_Item {
     var $_field_status = 'usenav';
     var $display;
 
+    var $_custom_config = array( 
+            'search_custom' => 'AMP_RENDER_SEARCH_LIST_SECTION_%s',
+            'item_custom_method' => 'AMP_RENDER_ITEM_LIST_SECTION_%s',
+            'header_custom_method' => 'AMP_RENDER_HEADER_LIST_SECTION_%s'
+        );
+
     function Section( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
     }
+
+    function _after_init( ) {
+        foreach( $this->_custom_config as $local_key => $constant_pattern ) {
+            $this->_addAllowedKey( $local_key );
+        }
+    }
+
+    function _afterRead( ) {
+        $this->_read_custom_config( );
+    }
+
+    function _read_custom_config( ) {
+        foreach( $this->_custom_config as $local_key => $constant_pattern ) {
+            if( !defined( sprintf( $constant_pattern, $this->id ))) continue;
+            $value = constant( sprintf( $constant_pattern, $this->id ));
+            if( $value ) $this->mergeData( array( $local_key => $value ));
+        }
+    }
+
+    /*
+    function _adjustSetData( $data ) {
+        if( isset( $data['id']) && $data['id'] && ( $data['id'] != $this->id ) ) {
+            
+        }
+        AMP_dump( $data );
+        return $data;
+
+    }
+    */
 
     function &getContents() {
         if (isset($this->_contents)) return $this->_contents;
@@ -32,6 +67,7 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function &getDisplay() {
+        if( !$this->showContentList( )) return  $this->getDisplayIntro( );
         $display_class = $this->getDisplayClass( );
         $display_class_vars = get_class_vars( $display_class );
         if (!isset( $display_class_vars['api_version'] ) || ( $display_class_vars['api_version'] == 1)) {
@@ -46,10 +82,20 @@ class Section extends AMPSystem_Data_Item {
                                          ||(isset( $_REQUEST['qty']) && $_REQUEST['qty']))
                                                 ? null : $this->getListItemLimit( ))
                                 );
+        if( $display_method = $this->getCustomItemDisplay( )) {
+            $this->display->set_display_method( $display_method );
+        }
         return $this->display;
     }
 
     function getDisplayIntro( ) {
+        if( $custom = $this->getCustomHeaderDisplay( ) AND function_exists( $custom )) {
+            return AMP_to_buffer( $custom( $this ));
+        }
+        return $this->getHeaderArticle( )    ;
+    }
+
+    function getHeaderArticle( ) {
         if( !( $intro = $this->getHeaderRef( ))) {
             $intro = new Article( AMP_Registry::getDbcon( ));
             $intro->setDefaults( );
@@ -61,6 +107,7 @@ class Section extends AMPSystem_Data_Item {
                 ));
         }
         return $intro->getDisplay( );
+
     }
 
     function display() {
@@ -238,9 +285,36 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function _afterSave( ){
+        $this->_save_custom_config( );
         if ( $this->id != $this->dbcon->Insert_ID( )) return;
         $this->_create_section_header( );
         $this->_create_permission_values( );
+    }
+
+    function _save_custom_config( ) {
+        foreach( $this->_custom_config as $local_key => $constant_pattern ) {
+            $config_constant = sprintf( $constant_pattern, $this->id );
+            $new_value = $this->getData( $local_key );
+            //if the constant is defined and doesn't match the new value, redefine it'
+            if( defined( $config_constant ) && ( constant( $config_constant ) != $new_value )) {
+                AMP_config_write( $config_constant, $new_value ); 
+                continue;
+            }
+            //if a value has been defined and no constant exists, write it to the custom folder
+            if( $new_value && !defined( $config_constant ) ) {
+                AMP_config_write( $config_constant, $new_value );
+            }
+        }
+        /*
+        if( defined( 'AMP_RENDER_SEARCH_LIST_SECTION_'.$this->id)) {
+            if( constant( 'AMP_RENDER_SEARCH_LIST_SECTION_' . $this->id ) != $this->getData( 'search_custom')) {
+                AMP_config_write( 'AMP_RENDER_SEARCH_LIST_SECTION_' . $this->id , $this->getData( 'search_custom'));
+            }
+        } elseif ( $this->getData( 'search_custom')) {
+            AMP_config_write( 'AMP_RENDER_SEARCH_LIST_SECTION_' . $this->id, $this->getData( 'search_custom'));
+        }
+        */
+        
     }
 
     function _create_permission_values( ) {
@@ -485,5 +559,23 @@ class Section extends AMPSystem_Data_Item {
         return 'ordered';
     }
 
+    function getAllowSearchDisplay( ) {
+        return $this->getData( 'search_display');
+    }
+
+    function getCustomSearch( ) {
+        if( !( $this->id && defined( 'AMP_RENDER_SEARCH_LIST_SECTION_' . $this->id) )) return false;
+        return constant(  'AMP_RENDER_SEARCH_LIST_SECTION_' . $this->id );
+    }
+
+    function getCustomItemDisplay( ) {
+        if( !( $this->id && defined( 'AMP_RENDER_ITEM_LIST_SECTION_' . $this->id) )) return false;
+        return constant(  'AMP_RENDER_ITEM_LIST_SECTION_' . $this->id );
+    }
+
+    function getCustomHeaderDisplay( ) {
+        if( !( $this->id && defined( 'AMP_RENDER_HEADER_LIST_SECTION_' . $this->id) )) return false;
+        return constant(  'AMP_RENDER_HEADER_LIST_SECTION_' . $this->id );
+    }
 }
 ?>

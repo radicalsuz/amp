@@ -3,11 +3,11 @@
 		<type>text</type>
 		<label>Text Search</label>
 	</fulltext>
-	<section>
-		<type>select</type>
+    <section_logic>
 		<label>By Section</label>
+		<type>select</type>
 		<lookup>sectionMapLiveChopped</lookup>
-	</section>
+    </section_logic>
     <class>
 		<separator>newrow</separator>
 		<type>select</type>
@@ -31,9 +31,12 @@
     <q>
         <type>hidden</type>
     </q>
-    <section_logic>
+    <section>
         <type>hidden</type>
-    </section_logic>
+    </section>
+    <template_section>
+        <type>hidden</type>
+    </template_section>
     <author>
         <type>hidden</type>
         <label>By Author</label>

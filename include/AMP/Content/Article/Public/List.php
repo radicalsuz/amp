@@ -24,6 +24,7 @@ class Article_Public_List extends AMP_Display_List {
     var $_css_class_container_list = "article_public_list list_block";
 
 	var $_search;
+	var $_search_fields_xml = 'AMP/Content/Article/Public/Search/Fields.xml';
 
     //section, class, or tag this list represents
     var $_source_container;
@@ -67,6 +68,11 @@ class Article_Public_List extends AMP_Display_List {
         $this->_source_container = &$container;
     }
     
+    function _init_display_methods( ) {
+        if ( $this->_item_display_method == '_renderItem' ) {
+            return parent::_init_display_methods( );
+        }
+    }
 
     function _renderItem( &$source ) {
         $text =     $this->render_title( $source )
@@ -85,6 +91,45 @@ class Article_Public_List extends AMP_Display_List {
         //stub
         return $this->render_search_form( ) 
                 . $this->_renderPagerHeader( );
+    }
+
+    function &_init_search_factory( ) {
+        $false = false;
+        //check to see if a custom search method has been defined, the parent method will call that
+        if( ( $this->_search_create_method == 'create_search_form') && isset( $this->_source_container ) && method_exists( $this->_source_container, 'getAllowSearchDisplay')) {
+            if ( method_exists( $this->_source_container, 'getCustomSearch') && ( $search_method = $this->_source_container->getCustomSearch( ))) {
+                $this->set_display_search_method( $search_method );
+            }
+        }
+        $base_search = &parent::_init_search_factory( );
+        return $base_search;
+    }
+
+    function &create_search_form( ) {
+        $false = false;
+        //if this is not a section based list, use the parent search create method
+        if( !( isset( $this->_source_container ) && ( strtolower( get_class( $this->_source_container )) == 'section' ))) {
+            $result = &parent::create_search_form( );
+            return $result;
+        }
+        //if the section does not allow search display, return false
+        if ( !$this->_source_container->getAllowSearchDisplay( ))  return $false;
+
+        //have a search created based on xml
+        $search = $this->create_search_form_from_xml( );
+        return $search;
+
+    }
+
+    function &create_search_form_from_xml( ) {
+        $search = parent::create_search_form_from_xml( );
+        if( !$search ) return $search;
+        
+        //set defaults for the current section
+        $search->add_field( 'section_logic', array( 'type' => 'hidden', 'value' => $this->_source_container->id ));
+        $search->add_field( 'template_section', array( 'type' => 'hidden', 'value' => $this->_source_container->id ));
+        return $search;
+
     }
 
     function url_for( $source ) {

@@ -19,6 +19,7 @@ class Section_Form extends AMPSystem_Form_XML {
         $this->_send_preview_link_to_bottom( );
     }
 
+    
     function _init_submit( ) {
         $this->defineSubmit( 
                 'delete',
@@ -33,14 +34,6 @@ class Section_Form extends AMPSystem_Form_XML {
 
         $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
     }
-
-    /*
-    function adjustFields( $fields ) {
-        $id_display = $this->_setIdDisplay( );
-        if ( $id_display ) $fields['id_display'] = $id_display;
-        return $fields;
-    }
-    */
 
     function _send_preview_link_to_bottom( ) {
         //lower preview link

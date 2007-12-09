@@ -36,6 +36,7 @@ class AMP_Display_List {
     var $_path_pager = 'AMP/Display/Pager.php';
 
     var $_search;
+    var $_search_fields_xml;
 
     var $_suppress_messages = false;
     var $_suppress_header = false;
@@ -384,6 +385,15 @@ class AMP_Display_List {
         $this->_subheader_methods[$depth] = $function_name;
     }
     
+    function set_display_search_method( $function_name ) {
+        if( substr( $function_name, -4 ) == '.xml') {
+            $this->_search_fields_xml = $function_name;
+            $this->_search_create_method = 'create_search_form_from_xml';
+            return;
+        }
+        $this->_search_create_method = $function_name;
+    }
+
     // {{{ private source create methods: _init_source, _generate_source 
 
     function _init_source( $source, $criteria ) {
@@ -541,7 +551,7 @@ class AMP_Display_List {
     }
 
     function _init_display_methods( ) {
-        $display_id = $this->display_id( );
+        $display_id = strtoupper( $this->display_id( ));
         if ( defined( 'AMP_RENDER_' . $display_id )) {
             $this->_item_display_method = constant( 'AMP_RENDER_' .$display_id );
         }
@@ -574,6 +584,17 @@ class AMP_Display_List {
         return $search ;
     }
 
+    function &create_search_form_from_xml( ) {
+        $false = false;
+        $search = AMP_searchform_xml( $this->_search_fields_xml, 'list.php' ); 
+        $custom_search_fields = $search->get_fields( );
+        //if thero are no fields in this search form, return false
+        if( empty( $custom_search_fields )) {
+            return $false;
+        }
+        return $search;
+    }
+
     function &_init_search_factory( ) {
         $false = false;
         $search = false;
@@ -583,7 +604,7 @@ class AMP_Display_List {
             $this->_search_create_method = constant( 'AMP_RENDER_SEARCH_' . $display_id );
         }
 
-        if ( $this->_search_create_method != 'create_search_form') {
+        if ( !( $this->_search_create_method == 'create_search_form' or $this->_search_create_method == 'create_search_form_from_xml')) {
             if ( !function_exists( $this->_search_create_method )) {
                 trigger_error( sprintf(  AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $this->_search_create_method ));
                 return $false;
@@ -592,7 +613,8 @@ class AMP_Display_List {
             $search = $search_method( $this );
         } 
         if ( !$search ) {
-            $search = &$this->create_search_form( );
+            $search_method = $this->_search_create_method;
+            $search = &$this->$search_method( );
         }
         return $search;
     }

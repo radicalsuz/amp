@@ -129,6 +129,11 @@
             <instance>articles</instance>
         </lookup>
 	</url>
+    <header_custom_method>
+        <type>text</type>
+        <label>Custom Function</label>
+        <block>section_header_options</block>
+    </header_custom_method>
 	<logic_header>
 		<type>blocktrigger</type>
         <label>List Contents</label>
@@ -177,13 +182,22 @@
 		<block>list_contents</block>
 		<lookup>sectionMap</lookup>
 	</list_by_section>
-    <!--
-	<searchbar>
+    <search_header>
+        <type>blocktrigger</type>
+        <label>Search Form</label>
+        <block>search_block</block>
+        <block_trigger>search_display </block_trigger>
+    </search_header>
+	<search_display>
 		<type>checkbox</type>
-		<label>Show List Search Bar</label>
-        <block>listing_options</block>
-	</searchbar>
-    -->
+		<label>Show Search Form</label>
+        <block>search_block</block>
+	</search_display>
+    <search_custom>
+        <type>text</type>
+        <label>Search Display&lt;br /&gt;&lt;span class=photocaption&gt;enter xml file or custom function&lt;/span&gt;</label>
+        <block>search_block</block>
+    </search_custom>
     <appearance_header>
         <type>header</type>
         <label>Appearance</label>
@@ -219,10 +233,11 @@
     -->
     <template_css_header>
         <type>blocktrigger</type>
-        <label>Template and CSS</label>
+        <label>Template, CSS, Layout</label>
         <block>template_css</block>
         <block_trigger>templateid</block_trigger>
         <block_trigger>css</block_trigger>
+        <block_trigger>item_custom_method</block_trigger>
     </template_css_header>
 	<templateid>
 		<type>select</type>
@@ -239,6 +254,11 @@
 		<label>Override with CSS files</label>
         <block>template_css</block>
 	</css>
+    <item_custom_method>
+        <type>text</type>
+        <label>Custom List Item Layout function</label>
+        <block>template_css</block>
+    </item_custom_method>
     <!--
 	<imgcap>
 		<type>textarea</type>

@@ -1051,13 +1051,20 @@ if ( !function_exists( 'mime_content_type')) {
 
 if ( !function_exists( 'AMP_directDisplay')) {
     function AMP_directDisplay( $html, $display_name = null ) {
-        require_once( 'AMP/Content/Buffer.php' );
-        $direct_display = new AMP_Content_Buffer( );
-        $direct_display->add( $html );
+        $direct_display = AMP_to_buffer( $html );
         $currentPage = &AMPContent_Page::instance( );
         $currentPage->contentManager->addDisplay( $direct_display, $display_name );
     }
 }
+if ( !function_exists( 'AMP_to_buffer')) {
+    function AMP_to_buffer( $content ) {
+        require_once( 'AMP/Content/Buffer.php' );
+        $direct_display = new AMP_Content_Buffer( );
+        $direct_display->add( $content );
+        return $direct_display;
+    }
+}
+
 if ( !function_exists( 'AMP_removeBlankElements')) {
     function AMP_removeBlankElements( $value_array ) {
         if ( empty ( $value_array ) ) return $value_array;
@@ -2069,27 +2076,26 @@ function AMP_subscribe_to_list( $addresses, $list_id ) {
     return false;
 }
 
-function AMP_config_load( $file, $prefix='AMP') {
+function AMP_config_load( $file, $prefix='AMP', $cache=true ) {
     if ( !$file ) return array( );
     static $loaded = array( );
     $prefix = strtoupper( $prefix );
     if ( !isset( $loaded[$prefix])) {
         $loaded[$prefix] = array( );
     }
-    if ( isset( $loaded[$prefix][$file])) {
+    if ( isset( $loaded[$prefix][$file]) && $cache ) {
         return $loaded[$prefix][$file];
     }
 
     //parse values in the custom folder
     $custom_ini = array();
-    $custom_file_name = AMP_LOCAL_PATH . 'custom/' . $file . 'ini.php';
+    $custom_file_name = AMP_LOCAL_PATH . '/custom/' . $file . '.ini.php';
     if ( file_exists ( $custom_file_name )){
         $custom_ini = parse_ini_file( AMP_pathFlip($custom_file_name), true );
     }
 
     //parse the base config
     $base_ini = array();
-    $custom_file_name = AMP_LOCAL_PATH . 'custom/' . $file . 'ini.php';
     $base_file_name = AMP_BASE_INCLUDE_PATH . 'Config/' . $file . '.ini.php';
     if ( file_exists ( $base_file_name ) ) {
         $base_ini = parse_ini_file( AMP_pathFlip( $base_file_name ), true );
@@ -2133,10 +2139,12 @@ function AMP_config_update( $values, $file='custom/site', $prefix='AMP') {
 
 function AMP_config_format( $values ) {
     $output = array( );
+    $blocks_output = array( );
+    ksort( $values );
     foreach( $values as $key => $value ) {
         if ( is_array( $value )) {
-            $output[] = "\n[".strtolower( str_replace( '_', ' ', $key))."]\n";
-            $output[] = AMP_config_format( $value );
+            $blocks_output[] = "\n[".strtolower( str_replace( '_', ' ', $key))."]";
+            $blocks_output[] = AMP_config_format( $value ) . "\n";
             continue;
         }
 
@@ -2145,7 +2153,29 @@ function AMP_config_format( $values ) {
         $formatted_key = str_pad( strtolower( $key ) . "=", 15 );
         $output[] = $formatted_key . $formatted_value;
     }
+    $output = array_merge( $output, $blocks_output );
     return join( "\n", $output );
+}
+
+function AMP_config_write( $constant_name, $write_value, $prefix = 'AMP' ) {
+    $config_id = strtolower( $constant_name );
+    if( $prefix && strpos( strtolower( $constant_name ), strtolower( $prefix) . '_') === 0) {
+        $config_id = strtolower( substr( $constant_name, strlen( $prefix ) +1 ));
+    }
+    $current_config = AMP_config_load( 'site', 'AMP', $cache=false );
+    if( empty( $current_config )) return AMP_config_update( array( $config_id => $write_value ));
+    foreach( $current_config as $id => $value ) {
+        if( is_array( $value ) && strpos( $config_id, str_replace( ' ', '_', $id ) . '_') === 0 ) {
+            unset( $current_config[$config_id]);
+            $current_config[$id][substr( $config_id, strlen( $id ) + 1 )] = $write_value;
+            return AMP_config_update( $current_config );
+        }
+    }
+
+    $current_config[ $config_id ] = $write_value;
+    return AMP_config_update( $current_config );
+    
+
 }
 
 function AMP_date_from_url( ) {
