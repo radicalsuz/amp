@@ -156,7 +156,8 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $fields['core'] = Array( 'tab' => array( 'type' => 'header', 'label' => 'Settings', 'values' => 'Settings' ) );
 
         $fields['core']['name']          = array( 'label' => 'Name',                 'type' => 'text' );
-        $fields['core']['publish']       = array( 'label' => 'Publish Data',         'type' => 'checkbox' );
+        $fields['core']['publish']       = array( 'label' => 'Publish List',         'type' => 'checkbox' );
+        $fields['core']['publish_form']  = array( 'label' => 'Publish Form',         'type' => 'checkbox' );
         $fields['core']['modidinput']    = array( 'label' => 'Intro Text',           'type' => 'select', 'values' => $modules );
         $fields['core']['modidresponse'] = array( 'label' => 'Response Text',        'type' => 'select', 'values' => $modules );
         $fields['core']['uselists']      = array( 'label' => 'Use Lists',            'type' => 'checkbox' );
