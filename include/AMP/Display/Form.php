@@ -140,7 +140,16 @@ class AMP_Display_Form {
     }
 
     function read_xml_fields( $xml_filename ) {
+        if( !file_exists_incpath( $xml_filename )) {
+            trigger_error( sprintf( AMP_TEXT_ERROR_FILE_EXISTS_NOT, $xml_filename ));
+            return false;
+        }
         $xml = file_get_contents( $xml_filename, 1 );
+        $override_xml_file = str_replace( '.xml', '_Override.xml', $xml_filename );
+        if ( file_exists_incpath( $override_xml_file )) {
+            $this->add_xml_fields( $xml );
+            return $this->add_xml_fields( file_get_contents( $override_xml_file , 1 ));
+        }
         return $this->add_xml_fields( $xml );
 
     }
@@ -521,7 +530,12 @@ class AMP_Display_Form {
     }
 
     function set( $field_name, $value ) {
+        if ( !isset( $this->_fields[$field_name])) return;
         $this->_fields[$field_name]['value'] = $value;
+    }
+
+    function get_fields( ) {
+        return $this->_fields;
     }
 
     function validate( ) {
