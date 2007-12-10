@@ -642,7 +642,7 @@ class AMPContent_Page {
         if (!( $listType = $this->isList() )) return $empty_value;
 
         if ( isset( $this->$listType)  && method_exists( $this->$listType, 'getDisplayIntro' )) {
-            $display = &$this->$listType->getDisplayIntro();
+            $display = $this->$listType->getDisplayIntro();
             return $display;
         }
 
