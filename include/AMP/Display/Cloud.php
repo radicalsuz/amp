@@ -38,7 +38,7 @@ class AMP_Display_Cloud {
             foreach( $sorted_order as $item_id => $item_qty ) {
                 $display_order[] = $item_id;
                 if ( count( $display_order ) == $this->_display_qty ) {
-                    exit;
+                    break;
                 }
             }
         } else {
