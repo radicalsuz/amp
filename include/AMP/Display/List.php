@@ -612,7 +612,7 @@ class AMP_Display_List {
             $search_method = $this->_search_create_method;
             $search = $search_method( $this );
         } 
-        if ( !$search ) {
+        if ( !$search && method_exists( $this, $this->_search_create_method )) {
             $search_method = $this->_search_create_method;
             $search = &$this->$search_method( );
         }
