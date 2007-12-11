@@ -55,6 +55,7 @@ STYLESHEET;
         $container_css = $float_type ? AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . ' ' . AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . '-' . $float_type : AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE;
         $container_attr = array( 'class' => $container_css );
         if ( $width = $source->width) $container_attr['style'] = "width: {$width}px";
+        if ( isset( $attributes['width'])) $container_attr['style'] = "width: {$attributes['width']}px";
         return $container_attr;
     }
 
