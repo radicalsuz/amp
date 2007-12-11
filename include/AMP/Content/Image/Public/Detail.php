@@ -95,12 +95,18 @@ STYLESHEET;
             $attributes['image_size'] = $this->source_class( $source );
         }
         $image_attr = $this->image_attributes( $source );
+        if ( !( $link_url = $source->getData( 'link_url') )){
+            $link_url = $this->url_for( AMP_IMAGE_CLASS_ORIGINAL );
+        }
+        if ( !( $link_target = $source->getData( 'link_target') )){
+            $link_target = '_blank';
+        }
 
         return $this->render_image_format_main( 
             $this->_renderer->link( 
-                $this->url_for( AMP_IMAGE_CLASS_ORIGINAL ),
+                $link_url,
                 $this->_renderer->image( $this->url_for( $attributes['image_size']), array( 'class' => 'img_main')),
-                array( 'target' => '_blank', 'class' => 'image-link'))
+                array( 'target' => $link_target, 'class' => 'image-link'))
             . $this->render_credit( $source )
             . $this->render_caption( $source ),
             $source
