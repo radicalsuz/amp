@@ -3,11 +3,8 @@
 require_once( 'utility.system.functions.inc.php');
 
 if (!function_exists( 'array_intersect_key' ) ) {
-
     function array_intersect_key() {
-
         $numArgs = func_num_args();
-
         if (2 <= $numArgs) {
 
             $arrays =& func_get_args();
@@ -33,7 +30,6 @@ if (!function_exists( 'array_intersect_key' ) ) {
         trigger_error('Not enough parameters; two arrays expected', E_USER_ERROR);
         return false;
     }
-
 }
 
 if ( !function_exists( 'makesmall' ) ) {
