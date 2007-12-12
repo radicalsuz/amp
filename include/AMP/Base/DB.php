@@ -59,7 +59,7 @@ if (!defined( 'AMP_BASE_PATH' ))        define( 'AMP_BASE_PATH', $_SERVER['DOCUM
 if (!defined( 'AMP_BASE_INCLUDE_PATH')) define( 'AMP_BASE_INCLUDE_PATH', $_SERVER['DOCUMENT_ROOT'].'/include/' );
 
 // turn on APD debugger when set by config file
-if ( defined( 'AMP_DEBUG_MODE_APD' ) && AMP_DEBUG_MODE_APD ) apd_set_pprof_trace(); 
+if ( defined( 'AMP_DEBUG_MODE_APD' ) && AMP_DEBUG_MODE_APD && function_exists( 'apd_set_pprof_trace')) apd_set_pprof_trace(); 
 
 // Connect to the database.
 if (!defined('AMP_DB_TYPE'))
