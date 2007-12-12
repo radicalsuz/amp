@@ -1178,8 +1178,8 @@ class AMPContentLookup_NavLayouts extends AMPContent_Lookup {
 class AMPContentLookup_CustomNavLayouts extends AMPContent_Lookup {
     var $datatable = 'nav_layouts';
     var $result_field = 'name';
-    var $criteria = 'id not in ( 1, 2 )';
-    var $_base_criteria = 'id not in ( 1, 2 )';
+    var $criteria = 'id not in ( 1, 2, 3 )';
+    var $_base_criteria = 'id not in ( 1, 2, 3 )';
     var $sortby = 'name';
 
     function AMPContentLookup_CustomNavLayouts ( ){

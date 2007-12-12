@@ -20,7 +20,7 @@
         <label>Navigation Content</label>
     </content_header>
 	<titletext>
-		<type>text</type>
+		<type>textarea</type>
 		<label>Title</label>
 	</titletext>
 	<titleimg>

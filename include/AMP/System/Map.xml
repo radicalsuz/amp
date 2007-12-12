@@ -462,6 +462,11 @@
         <per>CONTENT_NAVIGATION</per>
     </item>
     <item>
+        <label>Article Navigation Layout</label>
+        <href>nav_layouts.php?id=3</href>
+        <per>CONTENT_NAVIGATION</per>
+    </item>
+    <item>
         <label>View Navigation Files</label>
         <href>nav.php</href>
         <per>CONTENT_NAVIGATION</per>

@@ -144,6 +144,7 @@ legacy_element_template=0
 [content intro id]
 default=1
 frontpage=2
+article=3
 
 [content publicpage id]
 article_input=41

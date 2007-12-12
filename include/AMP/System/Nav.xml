@@ -524,6 +524,10 @@
 		<label>Front Page Navigation Layout</label>
 	</item>
 	<item>
+		<href>nav_layouts.php?id=3</href>
+		<label>Articles Navigation Layout</label>
+	</item>
+	<item>
 		<href>nav_layouts.php</href>
 		<label>View Navigation Layouts</label>
 	</item>

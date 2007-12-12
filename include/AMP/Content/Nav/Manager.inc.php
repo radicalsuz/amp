@@ -29,6 +29,7 @@ class NavigationManager {
     var $_navSet;
     var $_current_seek_position;
     var $_default_attempted = false;
+    var $_default_attempted_article = false;
 
     function NavigationManager( &$template, &$page ) {
         $this->init( $template, $page );
@@ -88,6 +89,7 @@ class NavigationManager {
         $positions = $this->template->getNavPositions();
         foreach ($positions as $desc => $id ) {
             $this->_default_attempted = false;
+            $this->_default_attempted_article = false;
             $this->_setFindPosition( $id );
             if (!($result = $this->$find_method())) continue;
             $locationSet = array_merge( $locationSet, $result );
@@ -180,9 +182,19 @@ class NavigationManager {
     function findNavs_default() {
         $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext');
         if ( !$layout_set ) return false;
+        if( $this->page->isArticle( ) && !$this->_default_attempted_article ) return $this->findNavs_default_article( );
+
         $layout_id = array_search( AMP_CONTENT_INTRO_ID_DEFAULT, $layout_set );
         if ( !$layout_id ) return false;
         $this->_default_attempted = true;
+        return $this->findNavs_standardBase( $layout_id );
+    }
+
+    function findNavs_default_article() {
+        $this->_default_attempted_article = true;
+        $layout_set = &AMPContent_Lookup::instance( 'navLayoutsByIntrotext');
+        $layout_id = array_search( AMP_CONTENT_INTRO_ID_ARTICLE, $layout_set );
+        if ( !$layout_id ) return $this->findNavs_default( );
         return $this->findNavs_standardBase( $layout_id );
     }
 
