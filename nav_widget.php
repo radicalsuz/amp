@@ -26,10 +26,17 @@ require_once('AMP/Content/Nav/Manager.inc.php' );
 $template = & new AMPContent_Template( AMP_Registry::getDbcon( ), $current_page->getTemplateId( ));
 if (!$template->hasData()) return false;
 
+$header = &AMP_get_header( );
+$standard_js = $header->_HTML_javaScripts( );
+
 $template->setPage( $current_page );
 $template->globalizeNavLayout();
 $nav_manager = &new NavigationManager( $template, $current_page );
 $nav_output = $nav_manager->output( strtoupper( substr( $position, 0, 1 )));
+
+$new_js = $header->_HTML_javascripts( );
+$nav_js = array_diff( split( "\n", $new_js), split( "\n", $standard_js ));
+$nav_output = $nav_output.join( "\n",$nav_js );
 
 /*
 $url = AMP_SITE_URL;
