@@ -1,6 +1,7 @@
 <?php
-define( 'AMP_HTML_JAVASCRIPT_START', "\n<script language=\"Javascript\"  type=\"text/javascript\">\n//<!--\n\n");
-define( 'AMP_HTML_JAVASCRIPT_END', "\n//-->\n</script>\n");
+#define( 'AMP_HTML_JAVASCRIPT_START', "\n<script language=\"Javascript\"  type=\"text/javascript\">\n//<!--\n\n");
+define( 'AMP_HTML_JAVASCRIPT_START', "\n<script language=\"Javascript\"  type=\"text/javascript\">\n\n");
+define( 'AMP_HTML_JAVASCRIPT_END', "\n</script>\n");
 define( 'AMP_HTML_STYLESHEET_START', "<style type='text/css'>\n");
 define( 'AMP_HTML_STYLESHEET_END', "</style>\n");
 
