@@ -32,6 +32,11 @@ class Gallery_Public_Display extends AMP_Display_List {
 
     var $_items_per_row = AMP_MODULE_GALLERY_ITEMS_PER_ROW;
 
+    var $_sort_sql_default = 'ordered';
+    var $_sort_sql_translations = array( 
+        'ordered' => 'galleryid, if( listorder, listorder, 999999999), img'
+    );
+
     function Gallery_Public_Display( &$source, $criteria = array( )) {
         $this->__construct( $source, $criteria );
     }

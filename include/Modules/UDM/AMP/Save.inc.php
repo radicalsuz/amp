@@ -118,7 +118,7 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         $data['modin'] = $this->udm->instance;
         $data['created_timestamp'] = date( 'YmdHis') ;
-        $data['spam'] = $this->akismet_verify(  );
+        $data['spam'] = $this->akismet_verify( $data );
 
         $fields = $this->getSaveFields();
         $fields[] = 'created_timestamp';
@@ -140,8 +140,8 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
     }
 
-    function akismet_verify(  ) {
-        if( !( $akismet = $this->to_akismet(  )  ) ) return false;
+    function akismet_verify( $data ) {
+        if( !( $akismet = $this->to_akismet( $data )  ) ) return false;
         return $akismet->isSpam(  );
     }
 

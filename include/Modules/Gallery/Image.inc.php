@@ -6,6 +6,7 @@ class GalleryImage extends AMPSystem_Data_Item {
     var $datatable = "gallery";
     var $name_field  = 'img';
     var $_class_name = 'GalleryImage';
+    var $_sort_auto = false;
 
 
     function GalleryImage( &$dbcon, $id = null ){
@@ -145,12 +146,7 @@ class GalleryImage extends AMPSystem_Data_Item {
         return 'publish = ' . $status_value;
     }
 
-    function _sort_default( &$source ) {
-        return $this->sort( $source, 'listOrder' );
-    }
-
     function getListOrder( ){
-#return 0; //sorting causes mysterious flaming death
         $value = $this->getData( 'listorder' );
         if ( !$value ) $value = AMP_SORT_MAX;; 
         $value .= '_' . $this->getName( ) ;

@@ -13,14 +13,16 @@ class ComponentMap_GalleryImage extends AMPSystem_ComponentMap {
         'search_fields' => 'Modules/Gallery/Image/SearchFields.xml',
         'search'   => 'Modules/Gallery/Image/SearchForm.inc.php',
         'fields' => 'Modules/Gallery/Image/Fields.xml',
-        'list'   => 'Modules/Gallery/Image/List.inc.php',
+        #'list'   => 'Modules/Gallery/Image/List.inc.php',
+        'list'   => 'Modules/Gallery/Image/List.php',
         'form'   => 'Modules/Gallery/Image/Form.inc.php',
         'source' => 'Modules/Gallery/Image.inc.php'
         );
 
     var $components = array( 
         'form'  => 'GalleryImage_Form',
-        'list'  => 'GalleryImage_List',
+        #'list'  => 'GalleryImage_List',
+        'list'  => 'Gallery_Image_List',
         'search'  => 'GalleryImageSearch',
         'source'=> 'GalleryImage'
         );
