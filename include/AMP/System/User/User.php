@@ -41,9 +41,15 @@ class AMPSystem_User extends AMPSystem_Data_Item {
     }
 
     function validatePassword( $password ){
+        trigger_error( 'trying val: '.$password);
         if ( !$password ) return false;
-        if ( !( $valid_password = $this->getData( 'password'))) return false;
-        return ( $password == $valid_password );
+        if ( !( $valid_hash = $this->getData( 'hash'))) return false;
+        require_once( 'phpass/PasswordHash.php');
+        $hasher = new PasswordHash( 12, false );
+        return $hasher->CheckPassword( $password, $valid_hash );
+        
+        #if ( !( $valid_password = $this->getData( 'password'))) return false;
+        #return ( $password == $valid_password );
     }
 
     function readUsername( $username ){
@@ -61,6 +67,24 @@ class AMPSystem_User extends AMPSystem_Data_Item {
         $manager = &new AMPSystem_PermissionManager( );
         $manager->readUser( $this->getName( ));
         return $manager->authorized( $permission_value );
+    }
+
+    function _save_create_actions( $data ) {
+        return $this->_hash_password( $data );
+    }
+    function _save_update_actions( $data ) {
+        return $this->_hash_password( $data );
+    }
+    function _hash_password( $data ) {
+        if( !( isset( $data['password']) && $data['password'])) {
+            return $data;
+        }
+
+        require_once( 'phpass/PasswordHash.php');
+        $hasher = new PasswordHash( 12, FALSE );
+        $data['hash'] = $hasher->HashPassword( $data['password'] );
+        unset( $data['password']);
+        return $data;
     }
 
     function getPermission( ) {

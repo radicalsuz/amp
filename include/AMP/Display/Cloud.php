@@ -32,12 +32,11 @@ class AMP_Display_Cloud {
 
         arsort( $sorted_order );
 
-        //$display_order = array_keys( array_slice( $sorted_order, $this->_display_offset, $this->_display_qty ));
         if ( count( $sorted_order ) > $this->_display_qty ) {
             $display_order = array( );
             foreach( $sorted_order as $item_id => $item_qty ) {
                 $display_order[] = $item_id;
-                if ( count( $display_order ) == $this->_display_qty ) {
+                if ( count( $display_order ) >= $this->_display_qty ) {
                     break;
                 }
             }

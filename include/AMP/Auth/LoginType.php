@@ -41,6 +41,15 @@ class AMP_Authentication_LoginType {
             if( $result = $this->_handler->check_cookie($_COOKIE[ $this->_cookie_name ])) return $result;
 		}
 
+        //Check for a temporary auth token
+        if (isset($_GET[ $this->_cookie_name ]) && isset( $_GET['authtype']) && $_GET['authtype'] == 'temp') {
+            if( $result = $this->_handler->check_cookie($_GET[ $this->_cookie_name ])) {
+                $this->_handler->set_authen_tokens( );
+                return $result;
+            }
+		}
+
+
         if (isset($_REQUEST[ $this->_login_username_field ]) || isset($_SERVER['PHP_AUTH_USER'])) {
 			$this->notice('checking password');
             return $this->_handler->check_password();

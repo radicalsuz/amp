@@ -111,7 +111,7 @@ class AMP_Authentication_Handler {
         $old_hash = $this->has_cookie;
 
         if (setcookie(  $this->_loginType->getCookieName( ), 
-                        "$hash:$c_user:$c_perm:$c_userid" , 
+                        $this->build_cookie_value( $c_userid, $c_perm, $secret ),
                         ( time( ) + $this->_loginType->getTimeout( ) ))) {
 			$this->notice('handler set cookie');
             $this->save_session( $hash, $secret );
@@ -121,6 +121,14 @@ class AMP_Authentication_Handler {
 		$this->error('could not setcookie, no session saved');
         return false;
 
+    }
+
+    function build_cookie_value( $c_userid, $c_perm, $secret ) {
+        $users = AMP_lookup( 'admins');
+
+        $c_user   = $users[ $c_userid ];
+        $hash = $this->make_secure_cookie( $c_user, $c_perm, $secret );
+        return "$hash:$c_user:$c_perm:$c_userid";
     }
 
     function get_seed ( ) {
