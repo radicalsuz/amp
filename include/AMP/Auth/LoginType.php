@@ -44,7 +44,11 @@ class AMP_Authentication_LoginType {
         //Check for a temporary auth token
         if (isset($_GET[ $this->_cookie_name ]) && isset( $_GET['authtype']) && $_GET['authtype'] == 'temp') {
             if( $result = $this->_handler->check_cookie($_GET[ $this->_cookie_name ])) {
+                $cookie_bits = explode( ':', $_GET[$this->_cookie_name ]);
+                $hash = $cookie_bits[0];
                 $this->_handler->set_authen_tokens( );
+                $this->_dbcon->Execute( 'DELETE FROM users_sessions where hash=' . $dbcon->qstr( $hash ));
+
                 return $result;
             }
 		}
