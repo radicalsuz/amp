@@ -47,7 +47,7 @@ class AMP_Authentication_LoginType {
                 $cookie_bits = explode( ':', $_GET[$this->_cookie_name ]);
                 $hash = $cookie_bits[0];
                 $this->_handler->set_authen_tokens( );
-                $this->_dbcon->Execute( 'DELETE FROM users_sessions where hash=' . $dbcon->qstr( $hash ));
+                $this->_dbcon->Execute( 'DELETE FROM users_sessions where hash=' . $this->_dbcon->qstr( $hash ));
 
                 return $result;
             }
