@@ -6,7 +6,7 @@ class AMPSystem_User extends AMPSystem_Data_Item {
 
     var $datatable = "users";
     var $name_field = "name";
-    var $class_name = 'AMPSystem_User';
+    var $_class_name = 'AMPSystem_User';
 
     function AMPSystem_User ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
