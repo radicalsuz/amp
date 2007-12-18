@@ -1,18 +1,18 @@
 <?php
 $modid=21;
 $mod_name = 'actions';
-  require("Connections/freedomrising.php");
+  require_once("AMP/Base/DB.php");
   
-  if (!$MM_listtable) {$MM_listtable= "lists";}
+  $MM_listtable= ( isset( $_GET['MM_listtable']) && $_GET['MM_listtable']) ? $_GET['MM_listtable'] : "lists";
   // *** Update Record: set variables
  
-   if ( ((isset($MM_update)) && (isset($MM_recordId)) ) or (isset($MM_insert)) or ((isset($MM_delete)) && (isset($MM_recordId))) ) {
+   if ( ((isset($_REQUEST['MM_update'])) && (isset($_REQUEST['MM_recordId'])) ) or (isset($_REQUEST['MM_insert'])) or ((isset($_REQUEST['MM_delete'])) && (isset($_REQUEST['MM_recordId']))) ) {
   
 
 $enddate =  DateConvertIn($enddate);
     $MM_editTable  = "action_text";
     $MM_editColumn = "id";
-    $MM_recordId = "" . $MM_recordId . "";
+    $MM_recordId = "" . $_REQUEST['MM_recordId'] . "";
     $MM_editRedirectUrl = "sendfax_list.php";
 	  $MM_fieldsStr ="title|value|introtext|value|shortdesc|value|subject|value|text|value|firstname|value|lastname|value|prefix|value|position|value|actiontype|value|email|value|fax|value|uselist|value|list1|value|list2|value|list3|value|list4|value|enddate|value|tellfriend|value|tf_subject|value|tf_text|value|thankyou_title|value|thankyou_text|value|bcc|value|faxaccount|value|faxsubject|value";
   $MM_columnsStr =  "title|',none,''|introtext|',none,''|shortdesc|',none,''|subject|',none,''|text|',none,''|firstname|',none,''|lastname|',none,''|prefix|',none,''|position|',none,''|actiontype|',none,''|email|',none,''|fax|',none,''|uselist|',none,''|list1|',none,''|list2|',none,''|list3|',none,''|list4|',none,''|enddate|',none,''|tellfriend|',none,''|tf_subject|',none,''|tf_text|',none,''|thankyou_title|',none,''|thankyou_text|',none,''|bcc|',none,''|faxaccount|',none,''|faxsubject|',none,''";
@@ -22,15 +22,15 @@ $enddate =  DateConvertIn($enddate);
   ob_end_flush();
    } 
    $fax__MMColParam = "90000000";
-if ($_GET["id"])
-  {$fax__MMColParam = $_GET["id"];}
+if ( isset( $_REQUEST['id']) && $_REQUEST["id"])
+  {$fax__MMColParam = $_REQUEST["id"];}
    $fax=$dbcon->Execute("SELECT * FROM action_text WHERE id = " . ($fax__MMColParam) . "") or DIE($dbcon->ErrorMsg());
 	$list=$dbcon->Execute("SELECT id, name from $MM_listtable ORDER BY name ASC") or DIE($dbcon->ErrorMsg());
    $list_numRows=0;
    $list__totalRows=$list->RecordCount();
 ?><?php include("header.php"); ?>
 <h2 >Add/Edit Web Action</h2>
-<form ACTION="<?php echo $PHP_SELF?>" METHOD="POST" name="Form1">
+<form ACTION="<?php echo $_SERVER['PHP_SELF'];?>" METHOD="POST" name="Form1">
         <table width="100%" border="0" align="center" class="name">
           <tr class="intitle"> 
             <td colspan="2"  valign="top">Action Introduction</td>
@@ -261,7 +261,7 @@ if ($_GET["id"])
           </tr>
           <tr> 
             <td >Site Code</td>
-            <td> <input name="site" type="text" id="site" value="<?php if ($fax->Fields("site") == NULL) {echo "$CM_site";} else {   echo $fax->Fields("site");}?>" size="50"> 
+            <td> <input name="site" type="text" id="site" value="<?php if ($fax->Fields("site") == NULL AND isset( $_GET['CM_site'])) {echo $_GET['CM_site'];} else {   echo $fax->Fields("site");}?>" size="50"> 
             </td>
           </tr>
           <tr> 
@@ -275,15 +275,16 @@ if ($_GET["id"])
         </table>
   <p><input name="submit" type="submit" value="Save Changes">
                 <input name="MM_delete" type="submit" value="Delete Record" onclick="return confirmSubmit('Are you sure you want to DELETE this record?')">
-                <?php if (empty($HTTP_GET_VARS["id"])== TRUE) { ?>
+                <?php if (empty($_REQUEST["id"])) { ?>
                 <input type="hidden" name="MM_insert" value="true">
                 <?php 
 		}
 		else { ?>
                 <input type="hidden" name="MM_update" value="true">
                 <?php } ?>
-                <input type="hidden" name="MM_recordId" value="<?php echo $_GET["id"]; ?>">
+                <input type="hidden" name="MM_recordId" value="<?php echo $_REQUEST["id"]; ?>">
 </form>
-<?php include("footer.php"); ?><?php
+<?php 
+include("footer.php"); 
   $fax->Close();
 ?>
