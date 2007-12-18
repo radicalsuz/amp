@@ -700,6 +700,9 @@ class Article extends AMPSystem_Data_Item {
     }
 
 	function makeCriteriaFulltext( $search_string ) {
+        if( !preg_match( '/[-$<>+(~"*)]/', $search_string )) {
+            $search_string = '+'.str_replace( ' ', ' +', $search_string );
+        }
 		$dbcon = AMP_Registry::getDbcon();
         $fulltext_fields = 	array('title', 'shortdesc', 'test', 'contact', 'source', 'author', 'metadescription', 'metakeywords' );
         return "MATCH ( " . join( ",", $fulltext_fields ) . " ) AGAINST ( ". $dbcon->qstr( $search_string ) ."  IN BOOLEAN MODE )";
