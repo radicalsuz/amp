@@ -48,6 +48,11 @@ class AMP_Authentication_LoginType {
                 $hash = $cookie_bits[0];
                 $this->_handler->set_authen_tokens( );
                 $this->_dbcon->Execute( 'DELETE FROM users_sessions where hash=' . $this->_dbcon->qstr( $hash ));
+                if( isset( $_GET['auth_action']) && ( $_GET['auth_action'] == 'reset')) {
+                    trigger_error( 'redirecting to :' . AMP_url_update( '/system/'.AMP_SYSTEM_URL_USER, array( 'id' => $this->_handler->userid, 'action' => 'reset' )));
+                    ampredirect( AMP_url_update( '/system/'.AMP_SYSTEM_URL_USER, array( 'id' => $this->_handler->userid, 'action' => 'reset' )));
+                    exit;
+                }
 
                 return $result;
             }

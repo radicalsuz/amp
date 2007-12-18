@@ -41,7 +41,6 @@ class AMPSystem_User extends AMPSystem_Data_Item {
     }
 
     function validatePassword( $password ){
-        trigger_error( 'trying val: '.$password);
         if ( !$password ) return false;
         if ( !( $valid_hash = $this->getData( 'hash'))) return false;
         require_once( 'phpass/PasswordHash.php');

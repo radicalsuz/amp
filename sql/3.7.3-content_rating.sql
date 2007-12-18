@@ -9,4 +9,3 @@ create table if not exists ratings (
     PRIMARY KEY ( id ) 
 
 )  TYPE = MyISAM;
-

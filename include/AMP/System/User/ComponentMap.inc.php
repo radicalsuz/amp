@@ -17,6 +17,8 @@ class ComponentMap_User extends AMPSystem_ComponentMap {
         'form'  => 'User_Form',
         'list'  => 'User_List',
         'source'=> 'AMPSystem_User');
+    var $_path_controller = 'AMP/System/User/Controller.php';
+    var $_component_controller = 'AMP_System_User_Controller';
 
     var $_allow_list = AMP_PERMISSION_SYSTEM_USERS ;
     var $_allow_edit = AMP_PERMISSION_SYSTEM_USERS ;
@@ -24,6 +26,7 @@ class ComponentMap_User extends AMPSystem_ComponentMap {
     var $_allow_publish = AMP_PERMISSION_SYSTEM_USERS;
     var $_allow_unpublish = AMP_PERMISSION_SYSTEM_USERS;
     var $_allow_delete = AMP_PERMISSION_SYSTEM_USERS;
+
 }
 
 ?>

@@ -12,8 +12,13 @@ class User_Form extends AMPSystem_Form_XML {
         $this->init( $name );
     }
 
-    function setDynamicValues( ){
-        /*auto scaffolded items here  auto scaffold items end */
+    function _after_init( ) {
+        $this->addTranslation( 'password', 'show_blank', 'set');
     }
+
+    function show_blank( $values, $fieldname ) {
+        return false;
+    }
+
 }
 ?>
