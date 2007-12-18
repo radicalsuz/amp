@@ -205,7 +205,6 @@ class PasswordHash {
 		$random = '';
 
 		if (CRYPT_BLOWFISH == 1 && !$this->portable_hashes) {
-            trigger_error( 'using blowfish' );
 			$random = $this->get_random_bytes(16);
 			$hash =
 			    crypt($password, $this->gensalt_blowfish($random));
@@ -214,7 +213,6 @@ class PasswordHash {
 		}
 
 		if (CRYPT_EXT_DES == 1 && !$this->portable_hashes) {
-            trigger_error( 'using des' );
 			if (strlen($random) < 3)
 				$random = $this->get_random_bytes(3);
 			$hash =
@@ -225,7 +223,6 @@ class PasswordHash {
 
 		if (strlen($random) < 6)
 			$random = $this->get_random_bytes(6);
-            trigger_error( 'using private' );
 		$hash =
 		    $this->crypt_private($password,
 		    $this->gensalt_private($random));

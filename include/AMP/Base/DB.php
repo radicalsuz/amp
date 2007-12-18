@@ -42,7 +42,7 @@ if (file_exists_incpath( 'SiteConfig.php' )) {
         define('AMP_DB_PASS', $MM_PASSWORD);
         define('AMP_DB_NAME', $MM_DATABASE);
 
-    } else {
+    } elseif( !( defined('AMP_DB_HOST') && defined('AMP_DB_USER') && defined('AMP_DB_PASS') && defined('AMP_DB_NAME') )) {
         die( "Incomplete database configuration. Please contact your system administrator." );
     }
 
