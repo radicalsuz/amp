@@ -29,6 +29,7 @@ class Gallery_Public_Display extends AMP_Display_List {
 
     var $_class_pager = 'AMP_Display_Pager_Content';
     var $_path_pager = 'AMP/Display/Pager/Content.php';
+    var $_source_criteria = array( 'displayable' => 1 );
 
     var $_items_per_row = AMP_MODULE_GALLERY_ITEMS_PER_ROW;
 
@@ -70,6 +71,7 @@ class Gallery_Public_Display extends AMP_Display_List {
         $caption = $this->_renderer->in_P ( converttext( $source->getCaption( )), array( 'class' => $this->_css_class_photocaption)); ;
 
         $imageRef = &$source->getImageRef( );
+        if( !$imageRef ) return false;
 
         $this->_image_count++;
         $image_height = $imageRef->getHeight( );
