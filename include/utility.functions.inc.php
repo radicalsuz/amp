@@ -312,6 +312,7 @@ if ( !function_exists( 'AMP_get_include_output' ) ) {
         }
 		$dbcon = AMP_Registry::getDbcon();	
         ob_start();
+        extract( $GLOBALS );
         include($filename);
         $value = ob_get_contents();
         ob_end_clean();
