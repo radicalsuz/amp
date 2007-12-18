@@ -2,6 +2,7 @@
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'AMP/Content/Article/Set.inc.php' );
 require_once( 'AMP/Content/Section.inc.php' );
+require_once( 'AMP/Content/Article.inc.php' );
 require_once( 'RSSWriter/AMP_RSSWriter.php' );
 require_once( 'AMP/Content/Page/Urls.inc.php' );
 
@@ -51,8 +52,10 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
             $total_crit[] = "class =".$id;
         }
         if ( $id = $this->getData('section_id')) {
+            $article_search = new Article( $this->dbcon );
             $section = &new Section( $this->dbcon, $id );
-            $crit = $section->getCriteriaforContent();
+            $section_crit = $section->getDisplayCriteria();
+			$crit = join( ' AND ', $article_search->makeCriteria($section_crit));
             $total_crit[] = $crit;
         }
         if (empty( $total_crit)) return false;
