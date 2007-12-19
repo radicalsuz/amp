@@ -169,7 +169,10 @@ class AMPContent_Header {
 
 
     function _HTML_startHeader() {
-        return AMP_TEXT_CONTENT_SITE_DOCTYPE . "\n<html>\n<head>\n";
+        $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+            "http://www.w3.org/TR/html4/loose.dtd">'; 
+        if( defined( 'AMP_TEXT_CONTENT_SITE_DOCTYPE')) $doctype = AMP_TEXT_CONTENT_SITE_DOCTYPE;
+        return $doctype . "\n<html>\n<head>\n";
     }
 
     function _HTML_linkRels() {
