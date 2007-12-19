@@ -119,6 +119,7 @@ define( 'AMP_TEXT_PUBLISH_TO', AMP_TEXT_PUBLISH . ' To');
 /**
  *  Labels for each different Sectional Listing Type 
  */
+/*
 if (!  defined( 'AMP_TEXT_SECTIONLIST_ARTICLES'))
         define( 'AMP_TEXT_SECTIONLIST_ARTICLES', 'List of general content in section' );
 
@@ -148,6 +149,7 @@ if (! defined( 'AMP_TEXT_SECTIONLIST_ARTICLES_FEATURES_TEMPLATE'))
 
 if (! defined(  'AMP_TEXT_SECTIONLIST_ARTICLES_PLUS_CLASS_TEMPLATE' ))
         define( 'AMP_TEXT_SECTIONLIST_ARTICLES_PLUS_CLASS_TEMPLATE', 'Content in section plus all %s content' );
+        */
 
 if ( !defined( 'AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT')) 
         define( 'AMP_TEXT_SYSTEM_LINK_NAV_LAYOUT_EDIT', 'Edit Navigation Layouts');

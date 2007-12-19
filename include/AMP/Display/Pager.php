@@ -136,6 +136,7 @@ class AMP_Display_Pager {
     }
 
     function render( ) {
+        if( ( $this->_qty_page > $this->_qty_total) && $this->_current_page == 1 )return false;
         return 
             $this->_renderer->div( 
                     $this->render_position( )
