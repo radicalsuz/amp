@@ -32,6 +32,7 @@ class Calendar_Public_List extends AMP_Display_List {
 
     function _renderItem( &$source ) {
         return $this->_renderer->link( $source->getURL( ), $source->getShortLocation( ) . ': ' . $source->getName( ), array( 'class' => $this->_css_class_title ))
+                . $this->_renderer->newline( )
                 . $this->render_date( $source )
                 . $this->_renderer->newline( )
                 . $this->_renderer->p( $source->getBlurb( ), array( 'class' => $this->_css_class_blurb ));
