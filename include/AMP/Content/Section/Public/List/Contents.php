@@ -47,10 +47,15 @@ class Section_Public_List_Contents extends Section_Public_List {
     function _config_container( $source, &$display ) {
         $display->set_container( $source );
         
+        //use container custom display method
+        if( $display_method = $source->getCustomItemDisplay( )) {
+            $display->set_display_method( $display_method );
+        }
         //set custom display method
         if( $this->_displays_item_display_method ) {
             $display->set_display_method( $this->_displays_item_display_method );
         }
+
         //cut search form unless specifically defined
         if( !method_exists( $this->_source_container, 'getAllowSearchDisplay')
             || ( !$this->_source_container->getAllowSearchDisplay( )) ) {
