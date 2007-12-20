@@ -63,7 +63,7 @@ class AMP_Registry {
 
 	//convenient accessor methods
 	function setDbcon(&$dbcon) {
-		$registry =& $this->instance();
+		$registry = &AMP_Registry::instance();
 		return $this->setEntry(AMP_REGISTRY_DBCON, $dbcon);
 	}
 
@@ -71,7 +71,7 @@ class AMP_Registry {
         static $dbcon = false;
         if (!$dbcon) {
             $registry = &AMP_Registry::instance();
-            $dbcon = &$registry->getEntry(AMP_REGISTRY_DBCON);
+            $dbcon = $registry->getEntry(AMP_REGISTRY_DBCON);
         }
         return $dbcon;
 	}
