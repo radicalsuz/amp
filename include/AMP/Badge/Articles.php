@@ -51,15 +51,9 @@ function amp_badge_articles( $options ) {
 
 }
 
-function AMP_criteria_join($criteria) {
-	$result_criteria = array();
-	foreach($criteria as $var => $value ) {
-		if (is_array($value)) $value = join(',', $value);
-	    $result_criteria[$var] = $value;	
-	}
-	return $result_criteria;
+function amp_render_article_for_nav( $article, &$list ) {
+    return  $list->render_title( $article )
+            . $list->render_date( $article );
 }
-
-
 
 ?>
