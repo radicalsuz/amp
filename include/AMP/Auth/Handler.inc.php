@@ -126,7 +126,11 @@ class AMP_Authentication_Handler {
     function build_cookie_value( $c_userid, $c_perm, $secret ) {
         $users = AMP_lookup( 'admins');
 
-        $c_user   = $users[ $c_userid ];
+        $c_user   = isset( $this->user) ? 
+                        $this->user
+                        : ( (  $users && isset( $users[$c_userid])) ? 
+                            $users[ $c_userid ] 
+                            : "0");
         $hash = $this->make_secure_cookie( $c_user, $c_perm, $secret );
         return "$hash:$c_user:$c_perm:$c_userid";
     }
