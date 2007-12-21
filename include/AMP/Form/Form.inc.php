@@ -1104,7 +1104,9 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
     }
 
     function __sleep( ) {
-        return array_keys( get_object_vars( $this ));
+        $values = get_object_vars( $this );
+        unset( $values['_map']);
+        return array_keys( $values );
     }
 
     function __wakeup( ) {
