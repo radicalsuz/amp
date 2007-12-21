@@ -1597,7 +1597,7 @@ class AMPSystemLookup_MostEmailedArticles extends AMPSystemLookup_MostCommentedA
     var $id_field = 'a.custom4';
     var $criteria = 'a.modin=22 and !isnull( a.custom4 ) and a.custom4 != "" GROUP BY a.custom4 HAVING qty>1';
     var $_base_criteria = 'a.modin=22 and !isnull( a.custom4 ) and a.custom4 != "" GROUP BY a.custom4 HAVING qty>1';
-    var $sortby = 'qty DESC limit 50';
+    var $sortby = 'qty DESC, b.date DESC limit 50';
 
     function AMPSystemLookup_MostEmailedArticles( $section_id = false ) {
         $this->_filter_by_section( $section_id );
@@ -1639,7 +1639,7 @@ class AMPSystemLookup_MostCommentedArticles extends AMPSystem_Lookup {
     var $id_field = 'a.articleid';
     var $criteria = 'a.publish=1 GROUP BY a.articleid HAVING qty>1';
     var $_base_criteria = 'a.publish=1 GROUP BY a.articleid HAVING qty>1';
-    var $sortby = 'qty DESC limit 50';
+    var $sortby = 'qty DESC, b.date desc limit 50';
 
     function AMPSystemLookup_MostCommentedArticles( $section_id = false ) {
         $this->_filter_by_section( $section_id );

@@ -46,7 +46,7 @@ class AMPSystemLookup_ArticleRatingsBySection extends AMPSystem_Lookup{
     var $result_field = 'avg( a.rating ) as rank';
     var $criteria = 'a.item_type="article" AND ( a.item_id = b.id OR a.item_id = c.articleid ) GROUP BY a.item_id';
     var $_base_criteria = 'a.item_type="article" AND ( a.item_id = b.id OR a.item_id = c.articleid ) GROUP BY a.item_id';
-    var $sortby = 'rank desc';
+    var $sortby = 'rank desc, b.date desc';
 
     function AMPSystemLookup_ArticleRatingsBySection( $section_id ) {
         if ( $section_id ) {
