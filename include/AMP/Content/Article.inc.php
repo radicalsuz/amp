@@ -201,7 +201,7 @@ class Article extends AMPSystem_Data_Item {
     function &getImageRef() {
         $empty_value = false;
         if (! ($img_path = $this->getImageFileName())) return $empty_value;
-        $image = &new Content_Image();
+        $image = &new Content_Image( $img_path );
         $image->setData( $this->getImageData() );
         return $image;
     }
@@ -216,12 +216,13 @@ class Article extends AMPSystem_Data_Item {
                         'image_size'=>  $this->getImageClass() );
     }
 
-    function getImageFile( ) {
-        if( !( $name = $this->getImageFileName( ))) return false;
+    function &getImageFile( ) {
+		$false = false;
+        if( !( $name = $this->getImageFileName( ))) return $false;
         $img_class = $this->getImageClass( );
         if( !$img_class ) $img_class = AMP_IMAGE_CLASS_OPTIMIZED;
         $image = new AMP_System_File_Image( AMP_image_path( $name, $img_class )) ;
-        if ( !$image->getPath( )) return false;
+        if ( !$image->getPath( )) return $false;
         $image->set_display_metadata( $this->getImageData( ));
         return $image;
     }

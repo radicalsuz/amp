@@ -155,7 +155,7 @@ class Content_Image {
 
     function setData( $data ) {
         $this->_itemdata = array_combine_key( $this->_allowed_keys, $data );
-        if ($filename = $this->getData( 'filename' )) $this->setFile( $filename );
+        if ($filename = $this->getData( 'filename' ) and $filename != $this->filename ) $this->setFile( $filename );
     }
 
     function unsetData( $fieldname ) {
