@@ -66,6 +66,11 @@ class ArticleComment extends AMPSystem_Data_Item {
         return 'spam=' . (  $is_spam ? "1" : "0" );
     }
 
+    function makeCriteriaStatus( $value ) {
+        if( $value == 2 ) return $this->makeCriteriaSpam( true );
+        return join( ' AND ', array( $this->makeCriteriaPublish( $value ), $this->makeCriteriaSpam( false )));
+    }
+
     function getArticle( ) {
         return $this->getArticleId(  );
     }
@@ -119,6 +124,13 @@ class ArticleComment extends AMPSystem_Data_Item {
     function &to_akismet(  ) {
         $false = false;
         if ( !$this->hasData(  ) ) return $false;
+        if ( !defined( 'AKISMET_KEY')) return $false;
+        /*
+        if ( !defined( 'AKISMET_KEY')) {
+            print( 'wheres my key?');
+            exit;
+        }
+        */
 
         $comment_data = $this->getData(  );
         $comment_data['user_agent'] = $comment_data['agent'];

@@ -17,21 +17,13 @@ class Article_Comment_Public_Controller extends AMP_System_Component_Controller_
     function display_response( ){
         $renderer = &new AMPDisplay_HTML( );
         $this->message( sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, AMP_TEXT_YOUR_COMMENT ));
-        /*
-        print 'pretend redirect to : ' 
-                . $renderer->link( 
-                        AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'id='.$this->_article_id ) ),
-                        AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'id='.$this->_article_id ) )
-                    );
-                */
         if ( $this->_article_id ) {
-            AMP_lookup_clear_cached( 'comments_live_by_article', $this->article_id );
+            AMP_lookup_clear_cached( 'comments_live_by_article', $this->_article_id );
             ampredirect( AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, array( 'id='.$this->_article_id ) ));
         }
         if ( $this->_userdata_id ) {
             require_once( 'AMP/UserData/Lookups.inc.php' );
             $form_id_lookup = &FormLookup::instance( 'modin');
-#            AMP_varDump( $form_id_lookup );
             if ( isset( $form_id_lookup[ $this->_userdata_id ] )) {
                 $target_modin = $form_id_lookup[ $this->_userdata_id ];
                 ampredirect( AMP_Url_AddVars( AMP_CONTENT_URL_FORM_DISPLAY, array( 'uid='.$this->_userdata_id, 'modin='. $target_modin ) ));
