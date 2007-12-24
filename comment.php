@@ -1,6 +1,6 @@
 <?php
 
-require_once( 'AMP/BaseDB.php' );
+require_once( 'AMP/Base/Config.php' );
 require_once( 'AMP/Content/Map.inc.php' );
 require_once( 'AMP/Content/Page.inc.php' );
 require_once( 'AMP/Content/Article/Comment/Public/ComponentMap.inc.php' );

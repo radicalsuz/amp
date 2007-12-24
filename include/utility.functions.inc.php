@@ -1795,9 +1795,10 @@ function AMP_absolute_urls( $html ) {
 
     $url = AMP_SITE_URL;
 
-    $pattern = '/href\s?=\s?\'((?!http)[\w\d\.\/?=& -]*)\'/i';
-    $replace = 'href="'.$url.'/$1"';
+    $pattern = '/(href|src|background|action)\s?=\s?["\']((?!http)[]\w\d\.\/?=&[+% -]*)["\']/i';
+    $replace = '$1="'.$url.'/$2"';
     $data =  preg_replace($pattern, $replace, $html);
+    /*
 
     $pattern = '/href\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
     $replace = 'href="'.$url.'/$1"';
@@ -1818,6 +1819,7 @@ function AMP_absolute_urls( $html ) {
     $pattern = '/action\s?=\s?"((?!http)[\w\d\.\/?=& -]*)"/i';
     $replace = 'action="'.$url.'/$1"';
     $data =  preg_replace($pattern, $replace, $data);
+    */
 
     $pattern = '/,\'\',\'((?!http)[\w\d\.\/?=& -]*)\'/i';
     $replace = ',\'\',\''.$url.'/$1\'';

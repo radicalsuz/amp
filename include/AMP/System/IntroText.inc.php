@@ -188,6 +188,10 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     function getMediaHtml( ) {
         return false;
     }
+
+    function getClass( ) {
+        return AMP_CONTENT_CLASS_DEFAULT;
+    }
 }
 
 ?>

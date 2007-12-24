@@ -30,6 +30,7 @@ class ArticleCommentSet extends AMPSystem_Data_Set {
 
     function readPublished() {
         $this->addCriteria( "publish=1" );
+        $this->addCriteria( "spam!=1" );
     }
 
     function execute( $show_all=false ) {
