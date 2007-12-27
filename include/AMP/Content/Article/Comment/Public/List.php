@@ -38,6 +38,7 @@ class Article_Comment_Public_List extends AMP_Display_List {
     function render_author( $source ) {
 		$author = $source->getAuthor();
         $author_url = $source->getAuthorURL( );
+        if( !( AMP_validate_url( $author_url ))) $author_url = false;
 
         if (!trim($author)) $author = 'a stranger';
         return $this->_renderer->link( $author_url, converttext($author), array( 'class' => AMP_CONTENT_CSS_CLASS_ARTICLE_AUTHOR ));

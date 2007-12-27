@@ -114,7 +114,7 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_author( $author, $author_url = null ) {
-        $href = (isset( $author_url ) && $author_url) ? $author_url : false;
+        $href = (isset( $author_url ) && $author_url && AMP_validate_url( $author_url )) ? $author_url : false;
         return $this->_HTML_italics(  'Comment by '. $this->link( $href, $author, array( 'target' => 'blank' ) ) );
     }
 

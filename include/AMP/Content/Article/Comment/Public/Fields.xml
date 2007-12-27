@@ -29,6 +29,7 @@
 	<author_url>
 		<type>text</type>
 		<label>Website</label>
+        <default>http://</default>
 	</author_url>
     <captcha_baby>
         <type>captcha</type>
