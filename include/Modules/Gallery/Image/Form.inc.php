@@ -20,8 +20,8 @@ class GalleryImage_Form extends AMPSystem_Form_XML {
     }
 
     function _initPhotoLookup( $header ) {
-        $script = <<<PHOTOCODE
-document.forms['galleryImages'].elements['img'].observe( 'change', function( ) {
+        $init_script = <<<PHOTOCODE
+    Event.observe( document.forms['galleryImages'].elements['img'], 'change', function( ) {
     var picture_filename = document.forms['galleryImages'].elements['img'].value;
     var photo_data = photo_data_maker( );
 
@@ -36,7 +36,9 @@ document.forms['galleryImages'].elements['img'].observe( 'change', function( ) {
                 
         });
 });
+PHOTOCODE;
 
+        $support_script = <<<PHOTOCODE_SUPPORT
 function photo_data_maker( ) {
     return {
 
@@ -52,6 +54,7 @@ function photo_data_maker( ) {
         go_button = document.createElement( 'input');
         go_button.type = 'button';
         go_button.value = "Use These";
+        go_button.id = "use_ajax_image_data";
         go_button.style.className = 'photo_data_activate';
         var display_value = '';
         if( json_object.caption != undefined ) {
@@ -69,7 +72,7 @@ function photo_data_maker( ) {
         $( 'picture_data').appendChild( go_button );
         AMP_show_panel( 'picture_data');
         
-        go_button.observe( 'click', function( ) {
+        Event.observe( $( 'use_ajax_image_data'), 'click', function( ) {
             AMP_show_panel( 'galleryImages');
             if( json_object.caption != undefined ) {
                 document.forms['galleryImages'].elements['caption'].value = json_object.caption;
@@ -93,8 +96,9 @@ function photo_data_maker( ) {
     }
     };
 }
-PHOTOCODE;
-        $header->addJavascriptOnload(  $script, 'photodata' );
+PHOTOCODE_SUPPORT;
+        $header->addJavascriptOnload(  $init_script, 'photodata' );
+        $header->addJavascriptDynamic(  $support_script, 'photodata_support' );
 
     }
 

@@ -25,6 +25,13 @@ class Article_Comment_Public_Form extends AMPSystem_Form_XML {
 
     function _after_init(  ) {
         $this->addTranslation( 'spam', '_spamchecker', 'get' );
+        $this->addTranslation( 'author_url', '_http_prefix', 'get' );
+    }
+
+    function _http_prefix( $data, $fieldname ) {
+        if ( !isset( $data[$fieldname])) return false; 
+        if ( $data[$fieldname] == 'http://') return false; 
+        return $data[$fieldname];
     }
 
     function _spamchecker( $data, $fieldname ) {
