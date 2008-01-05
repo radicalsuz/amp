@@ -93,10 +93,7 @@
 	<listtype>
 		<type>select</type>
 		<label>Display Format</label>
-        <lookup>
-            <module>content</module>
-            <instance>listtypes</instance>
-        </lookup>
+        <lookup>listtypes</lookup>
         <default>1</default>
 	</listtype>
 	<up>

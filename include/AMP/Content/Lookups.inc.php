@@ -315,11 +315,11 @@ class AMPContentLookup_GalleryMap {
     }
 }
 
-class AMPContentLookup_Listtypes extends AMPConstant_Lookup {
+class AMPSystemLookup_Listtypes extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_SECTIONLIST";
     var $_prefix_labels = "AMP_TEXT_SECTIONLIST";
 
-    function AMPContentLookup_Listtypes() {
+    function AMPSystemLookup_Listtypes() {
         $this->init();
     }
 
