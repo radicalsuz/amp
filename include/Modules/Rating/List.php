@@ -33,14 +33,17 @@ class Rating_List extends AMP_Display_System_List {
     }
 
     function render_rating( $source ) {
+        if( !isset( $this->ratings[ $source->id ])) return false;
         return sprintf( '%01.2f', $this->ratings[ $source->id ]);
     }
 
     function render_comments( $source ) {
+        if( !isset( $this->comments[ $source->id ])) return false;
         return $this->comments[ $source->id ];
     }
 
     function render_emails( $source ) {
+        if( !isset( $this->shares[ $source->id ])) return false;
         return $this->shares[ $source->id ];
     }
 
