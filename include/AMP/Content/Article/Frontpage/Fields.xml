@@ -135,6 +135,10 @@
         <type>imagepicker</type>
         <label>Image Filename</label>
     </picture>
+    <image_data>
+        <type>static</type>
+        <default>&lt;div id=&quot;picture_data&quot;&gt;&lt;/div&gt;</default>
+    </image_data>
 	<image_actions_header>
 		<label>Upload Image</label>
 		<type>blocktrigger</type>
@@ -145,10 +149,6 @@
         <label>File</label>
 		<block>image_actions</block>
     </image_upload>
-    <picuse>
-        <type>hidden</type>
-        <default>1</default>
-    </picuse>
 	<image_gallery>
 		<type>select</type>
 		<block>image_actions</block>

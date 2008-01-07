@@ -81,6 +81,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $header = &AMP_getHeader( );
         $this->_initTabDisplay( $header );
         $this->_initAutoLookups( $header );
+        $this->_initMediaThumbnailLookup( $header );
         $this->_initTransferMode( $header );
         $this->_initPhotoLookup( $header );
         $this->HTMLEditorSetup( );
@@ -96,6 +97,10 @@ class Article_Form extends AMPSystem_Form_XML {
     function _initAutoLookups( &$header ){
         $header->addJavascriptOnload( 'new Ajax.Autocompleter( "author", "author_list", "ajax_request.php", {} );');
         $header->addJavascriptOnload( 'new Ajax.Autocompleter( "source", "source_list", "ajax_request.php", {} );');
+        
+    }
+
+    function _initMediaThumbnailLookup( $header ) {
         $header->addJavascriptOnload( 
 <<<EVENTCODE
 Event.observe( document.forms['article'].elements['media_html'], 'change', 
@@ -123,7 +128,7 @@ window.youtube_thumbnail_counter = 0;
 
 EVENTCODE
         );
-        
+
     }
 
     function _initPhotoLookup( $header ) {

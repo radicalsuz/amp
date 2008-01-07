@@ -4,7 +4,7 @@ require_once( 'AMP/Content/Article/Form.inc.php');
 class Article_Frontpage_Form extends Article_Form {
 
     function Article_Frontpage_Form( ) {
-        $name = "article_frontpage";
+        $name = "article";
         $this->init( $name, 'POST', AMP_SYSTEM_URL_ARTICLE_FRONTPAGE );
     }
 
@@ -19,6 +19,7 @@ class Article_Frontpage_Form extends Article_Form {
         $this->HTMLEditorSetup( );
         $header = &AMP_getHeader( );
         $this->_initAutoLookups( $header );
+        $this->_initPhotoLookup( $header );
     }
 
     function adjustFields( $fields ){
