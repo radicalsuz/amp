@@ -456,11 +456,13 @@ class Section extends AMPSystem_Data_Item {
     function makeCriteriaDisplayable( ){
         $crit['status'] = $this->makeCriteriaLive(  );
         $crit['allowed'] = $this->makeCriteriaAllowed(  );
-        $public = $this->makeCriteriaPublic(  );
-        if ( $public ) {
-            $crit['public'] = $public;
-        }
-        return join( ' AND ', $crit );
+        $crit['public']= $this->makeCriteriaPublicToUser(  );
+        return join( ' AND ', array_filter( $crit ));
+    }
+
+    function makeCriteriaPublicToUser(  ) {
+        if ( AMP_Authenticate( 'content') ) return false;
+        return $this->makeCriteriaPublic( );
     }
 
     function makeCriteriaPublic(  ) {
