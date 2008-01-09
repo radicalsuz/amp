@@ -853,11 +853,8 @@ class Article extends AMPSystem_Data_Item {
         $crit['class'] = $this->makeCriteriaDisplayableClass(  );
         $crit['status'] = $this->makeCriteriaLive(  );
         $crit['allowed'] = $this->makeCriteriaAllowed(  );
-        $public = $this->makeCriteriaPublic(  );
-        if ( $public ) {
-            $crit['public'] = $public;
-        }
-        return join (  " AND ", $crit );
+        $crit['public']= $this->makeCriteriaPublicToUser(  );
+        return join (  " AND ", array_filter( $crit ));
 
     }
 
@@ -883,6 +880,11 @@ class Article extends AMPSystem_Data_Item {
     function makeCriteriaStatus( $value ) {
         if ( !( $value || $value==='0')) return false;
         return ( 'publish='.$value ) ;
+    }
+
+    function makeCriteriaPublicToUser(  ) {
+        if ( AMP_Authenticate( 'content') ) return false;
+        return $this->makeCriteriaPublic( );
     }
 
     function makeCriteriaPublic(  ) {
