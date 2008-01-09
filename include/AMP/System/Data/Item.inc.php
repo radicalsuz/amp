@@ -517,7 +517,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             }
 
         }
-        return $return;
+        return array_filter( $return );
     }
     function _getCriteriaMethod( $fieldname, $value  ) {
         if ( !$this->isColumn( $fieldname )) return false;
