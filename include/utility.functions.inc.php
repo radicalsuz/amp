@@ -916,7 +916,7 @@ function AMP_cache_set( $key, &$item, $id = null ){
 function AMP_is_cacheable_url( ) {
     $cache = &AMP_get_cache( );
     $flash = &AMP_System_Flash::instance( );
-    $registry = &AMP_Registry::instance( )
+    $registry = &AMP_Registry::instance( );
 
     return 
         //is this page a valid caching candidate
