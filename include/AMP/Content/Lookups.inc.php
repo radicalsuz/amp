@@ -275,6 +275,11 @@ class AMPContentLookup_SectionMap {
         $mapsource = &AMPContent_Map::instance( );
         $this->dataset = $mapsource->selectOptions( );
     }
+
+    function allow_cache( ) {
+        return !AMP_Authenticate( 'content');
+    }
+
     function available( ){
         return false;
     }
