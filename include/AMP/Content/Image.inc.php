@@ -25,13 +25,16 @@ class Content_Image {
         if ( !$filename ) return;
         $target_path =  $this->getPath( $this->getImageClass( ));
         if ( !file_exists( $target_path )) return;
-        if ( !function_exists( 'mime_content_type' )) return ;
-        $mime_filetype  = mime_content_type( $target_path ) ;
+        $this->load_db_image( $filename );
+
+        if ( !function_exists( 'exif_imagetype' )) return ;
+        $mime_filetype = image_type_to_mime_type( exif_imagetype( $target_path ));
+        
         if ( strpos( $mime_filetype, 'image') === FALSE ){
-            $this->setSize( array( 0, 0 ));
+            $this->setSize(  array(  0, 0 ));
             return ;
         }
-        $this->load_db_image( $filename );
+        
         $this->setSize(getimagesize( $target_path ));
     }
 
@@ -154,7 +157,7 @@ class Content_Image {
     }
 
     function setData( $data ) {
-        $this->_itemdata = array_combine_key( $this->_allowed_keys, $data );
+        $this->_itemdata = array_merge( $this->_itemdata, array_combine_key( $this->_allowed_keys, $data ));
         if ($filename = $this->getData( 'filename' ) and $filename != $this->filename ) $this->setFile( $filename );
     }
 

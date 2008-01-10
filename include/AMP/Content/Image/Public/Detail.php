@@ -164,7 +164,7 @@ STYLESHEET;
         foreach( $classes as $class => $class_name ) {
             if ( $class == AMP_IMAGE_CLASS_CROP ) continue;
             $version = $this->get_source_version( $source, $class );
-            $items[ $version->width ] = ucwords( strtolower( $class_name )) . ': '
+            $items[ ( $version->width . substr( $class, 0, 1 )) ] = ucwords( strtolower( $class_name )) . ': '
                         . $this->_renderer->newline( )
                         . $this->render_scaled_as_link( $version, 600 );
                         #. $this->_renderer->image( $this->url_for( $class) );
