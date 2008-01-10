@@ -941,7 +941,7 @@ function AMP_is_cacheable_url( ) {
         && ( !AMP_Authenticate( 'content' ))
         && ( !$registry->getEntry( AMP_REGISTRY_CONTENT_SECURE ))
         
-        ); 
+        ; 
 
 }
 

@@ -114,7 +114,7 @@ class AMPSystem_Lookup {
                 */
                 $lookup_cache_key = AMPSystem_Lookup::cache_key( $type, $instance_var );
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
-                if ( !( $cached_lookup && $cached_lookup->allow_cache( )) ) {
+                if ( !( $cached_lookup && (!method_exists($cached_lookup,'allow_cache') || $cached_lookup->allow_cache( ))) ) {
                     $lookup_set[$type] = &new $req_class(); 
                     if( $lookup_set[$type]->allow_cache( ) ) AMP_cache_set( $lookup_cache_key, $lookup_set[$type]);
                 } else {
@@ -754,6 +754,10 @@ class AMPConstant_Lookup {
         }
         $this->_sort_default( );
     }
+
+	function allow_cache( ) {
+		return true;
+	}
 
     function _sort_default( ){
         ksort( $this->dataset );
