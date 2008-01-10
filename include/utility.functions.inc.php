@@ -916,6 +916,7 @@ function AMP_cache_set( $key, &$item, $id = null ){
 function AMP_is_cacheable_url( ) {
     $cache = &AMP_get_cache( );
     $flash = &AMP_System_Flash::instance( );
+    $registry = &AMP_Registry::instance( )
 
     return 
         //is this page a valid caching candidate
@@ -937,7 +938,10 @@ function AMP_is_cacheable_url( ) {
         && ( !$flash->active( )) 
 
         //is the user viewing protected content
-        && ( !AMP_Authenticate( 'content' )); 
+        && ( !AMP_Authenticate( 'content' ))
+        && ( !$registry->getEntry( AMP_REGISTRY_CONTENT_SECURE ))
+        
+        ); 
 
 }
 
@@ -1041,6 +1045,15 @@ if (!function_exists( 'AMP_removeExtension' )) {
 
 if ( !function_exists( 'mime_content_type')) {
     function mime_content_type($filepath) {
+         if( function_exists( 'finfo_open')) {
+             $finfo = finfo_open( FILEINFO_MIME );
+             $ftype = finfo_file( $finfo, $filepath );
+             finfo_close( $finfo );
+             return $ftype;
+         }
+         if( function_exists( 'exif_imagetype') && ( $ftype = exif_imagetype( $filepath ))) {
+             return image_type_to_mime_type( $ftype );
+         }
          $f = escapeshellarg($filepath);
          return trim( `file -bi $f` );
    }
@@ -2101,7 +2114,14 @@ function AMP_config_load( $file, $prefix='AMP', $cache=true ) {
     }
     if (empty($custom_ini) && empty($base_ini)) return array();
 
-    $loaded[$prefix][$file]= array_merge( $base_ini, $custom_ini );
+    //this part merges the custom settings with the base settings
+    $loaded[$prefix][$file]= array( );
+    foreach( $base_ini as $block_key => $block ) {
+        if( !isset( $custom_ini[$block_key])) $custom_ini[$block_key] = array( );
+        $loaded[$prefix][$file][$block_key]= array_merge( $base_ini[$block_key], $custom_ini[$block_key]);
+    }
+    $loaded[$prefix][$file] = array_merge( $loaded[$prefix][$file], array_diff( $custom_ini, $base_ini ));
+    #$loaded[$prefix][$file]= array_merge( $base_ini, $custom_ini );
     AMP_set_constants( $loaded[$prefix][$file], $prefix );
     return $loaded[$prefix][$file];
 }
