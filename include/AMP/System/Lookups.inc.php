@@ -116,7 +116,9 @@ class AMPSystem_Lookup {
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
                 if ( !( $cached_lookup && (!method_exists($cached_lookup,'allow_cache') || $cached_lookup->allow_cache( ))) ) {
                     $lookup_set[$type] = &new $req_class(); 
-                    if( $lookup_set[$type]->allow_cache( ) ) AMP_cache_set( $lookup_cache_key, $lookup_set[$type]);
+                    if( !( method_exists( $lookup_set[$type], 'allow_cache')) || $lookup_set[$type]->allow_cache( ) ) {
+                        AMP_cache_set( $lookup_cache_key, $lookup_set[$type]);
+                    }
                 } else {
                     $lookup_set[$type] = $cached_lookup;
                 }
