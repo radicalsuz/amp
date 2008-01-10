@@ -1,4 +1,6 @@
 ;<?php
+;3.7 legacy content settings
+
 [sectionlist]
 articles=1
 newsroom=2

@@ -1,4 +1,5 @@
 <?php
+# 3.8 preview: required includes
 
 require_once( 'AMP/Content/Article/Public/List.php' );
 require_once( 'AMP/Content/Article/Public/List/Grouped.php');

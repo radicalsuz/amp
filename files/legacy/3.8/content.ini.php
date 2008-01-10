@@ -1,4 +1,5 @@
 ;<?php
+; 3.8 preview custom settings
 [sectionlist]
 articles=1
 sections=5

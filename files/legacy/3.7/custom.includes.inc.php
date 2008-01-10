@@ -1,4 +1,5 @@
 <?php
+# 3.7 legacy content includes
 
 require_once( 'AMP/Content/Article/SetDisplay.inc.php' );
 require_once( 'AMP/Content/Section/SetDisplay.inc.php' );
