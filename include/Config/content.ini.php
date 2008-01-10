@@ -134,6 +134,9 @@ crop="crop"
 default_alignment="right"
 path="/img/"
 gallery_page_limit=24
+gallery_pager_class="AMP_Display_Pager_Content"
+gallery_pager_path="AMP/Display/Pager/Content.php"
+gallery_pager_thumb_width =30
 
 [content nav]
 limit_default=20
