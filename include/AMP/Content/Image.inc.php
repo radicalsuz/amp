@@ -10,6 +10,7 @@ class Content_Image {
     var $_itemdata_keys = array( 'width', 'height', 'alttag', 'caption', 'alignment', 'filename', 'image_size');
     var $_allowed_keys = array( );
     var $_files = array( );
+    var $filename;
 
     function Content_Image( $filename=null ) {
         $this->__construct( $filename );

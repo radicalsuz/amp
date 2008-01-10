@@ -151,6 +151,25 @@ a.gallery_image_link {
 a.gallery_image_link img {
     border: 1px solid black;
 }
+img.pager-thumb {
+	border: 1px solid;
+	margin: .25em;
+}
+img.pager-thumb:hover{
+	border-color: #FFFFFF;
+	opacity: .5;
+} 
+
+img.pager-thumb-current {
+	border: 4px solid;
+	border-color: #484848;
+	padding: 6px;
+	margin: 0 6px 0 6px;
+}
+div.pager-thumb-set {
+	margin:1em;
+	vertical-align: middle;
+}
 
 /* errors and results */
 span.page_result {

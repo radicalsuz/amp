@@ -510,7 +510,7 @@ class AMP_Display_List {
         if ( $this->_pager_limit ) $this->_pager->set_limit( $this->_pager_limit ); 
         if ( $this->_pager_target ) $this->_pager->set_target( $this->_pager_target ); 
 
-        if ( $this->_pager_index ) {
+        if ( $this->_pager_index && method_exists( $this->_pager, 'pull_jumps')) {
             $this->_pager->pull_jumps( $source, $this->_pager_index );
         }
 
@@ -667,7 +667,8 @@ class AMP_Display_List {
 
     function update_pager_index( $sql ) {
         if ( !$this->_pager_index ) return;
-        $this->_pager_index = $this->_source_sample->get_select_from_sort( $sql );
+        $select_index = $this->_source_sample->get_select_from_sort( $sql );
+        if( $select_index ) $this->_pager_index = $select_index;
     }
 
     function _init_sort( &$source ) {

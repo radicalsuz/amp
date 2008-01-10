@@ -272,7 +272,8 @@ class AMP_Display_Pager {
 
     function render_jump( $target_offset ) {
         if( !$this->_qty_page ) {
-            print AMPbacktrace(  );
+            trigger_error( "no page qty set for jumps");
+            #print AMPbacktrace(  );
             exit;
         }
         $target_page = ( $target_offset / $this->_qty_page) + 1; 

@@ -290,7 +290,6 @@ class AMP_System_File {
     function getURL( ){
         $local = str_replace( AMP_LOCAL_PATH, '', dirname( $this->getPath( )));
         if( strpos( $local, AMP_CONTENT_DOCUMENT_PATH ) !== FALSE ) return '/'. AMP_CONTENT_DOCUMENT_PATH . '/'. $this->getName( );
-        trigger_error( 'false');
         return false;
     }
 

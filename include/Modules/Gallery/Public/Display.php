@@ -2,6 +2,7 @@
 
 require_once( 'AMP/Display/List.php' );
 require_once( 'Modules/Gallery/Image.inc.php' );
+require_once( 'Modules/Gallery/Display/Pager.php');
 
 class Gallery_Public_Display extends AMP_Display_List {
     var $name = 'GalleryImages';
@@ -27,8 +28,8 @@ class Gallery_Public_Display extends AMP_Display_List {
     var $_height_avg = 0;
     var $_image_count = 0;
 
-    var $_class_pager = 'AMP_Display_Pager_Content';
-    var $_path_pager = 'AMP/Display/Pager/Content.php';
+    var $_class_pager = AMP_IMAGE_GALLERY_PAGER_CLASS;
+    var $_path_pager = AMP_IMAGE_GALLERY_PAGER_PATH; 
     var $_source_criteria = array( 'displayable' => 1 );
 
     var $_items_per_row = AMP_MODULE_GALLERY_ITEMS_PER_ROW;
@@ -37,6 +38,9 @@ class Gallery_Public_Display extends AMP_Display_List {
     var $_sort_sql_translations = array( 
         'ordered' => 'galleryid, if( listorder, listorder, 999999999), img'
     );
+    var $_item_width = AMP_IMAGE_WIDTH_WIDE;
+    var $extra_css_single_item_details = 'padding-left:33%;';
+    var $_pager_index = "img";
 
     function Gallery_Public_Display( &$source, $criteria = array( )) {
         $this->__construct( $source, $criteria );
@@ -68,7 +72,7 @@ class Gallery_Public_Display extends AMP_Display_List {
     }
 
     function _renderItem( &$source ) {
-        $caption = $this->_renderer->in_P ( converttext( $source->getCaption( )), array( 'class' => $this->_css_class_photocaption)); ;
+        $caption = $this->_renderer->p( converttext( $source->getCaption( )), array( 'class' => $this->_css_class_photocaption)); ;
 
         $imageRef = &$source->getImageRef( );
         if( !$imageRef ) return false;
@@ -159,7 +163,7 @@ class Gallery_Public_Display extends AMP_Display_List {
     function export_styles( ){
         $float_setting = "";
         if ( $this->_pager_active && ( $this->_pager->get_limit( ) == 1 )) {
-            $float_setting = 'padding-left:33%;';
+            $float_setting = $this->extra_css_single_item_details;
         }
         $header = &AMP_get_header( );
         $header->addStylesheetDynamic( 
@@ -170,7 +174,7 @@ class Gallery_Public_Display extends AMP_Display_List {
         }".
         */
         "div." . $this->_css_class_container_caption . " {
-            width: " . AMP_IMAGE_WIDTH_WIDE . "px;
+            width: " . $this->item_width . "px;
             ". $float_setting ."
         }");
     }
@@ -209,6 +213,10 @@ class Gallery_Public_Display extends AMP_Display_List {
         $header->addJavaScript( '/scripts/lightbox/js/lightbox.js', 'lightbox');
         $header->addExtraHtml( '<link rel="stylesheet" href="http://local_pink.org/scripts/lightbox/css/lightbox.css" type="text/css" media="screen" />' );
 
+    }
+
+    function update_pager_index( $sql ) {
+        return false;
     }
 
 }
