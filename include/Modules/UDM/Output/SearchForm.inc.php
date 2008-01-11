@@ -519,7 +519,7 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 	
 	    
 		// Add a default blank value to the select array.
-		if ( $type  == 'select' && is_array( $defaults ) ) {
+		if ( ( $type  == 'select' or $type == 'multiselect' or $type == 'checkgroup' or $type == 'radiogroup')  && is_array( $defaults ) ) {
 			//Move label into select box for non colonned entries.
 			if (substr($label, strlen($label)-1)!=":") {
 				$defaults = array('' => $label) + $defaults;
