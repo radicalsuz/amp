@@ -516,4 +516,182 @@ function detail_display_default( $data, &$udm ) {
     return $data['City'] . ',' . $data['State'] . '<br />';
 }
 
+function housing_display_list( $data, &$udm ) {
+    if( $data['custom1'] == 'Have Housing') {
+        return housing_display_offer_list( $data, $udm );
+    } else {
+        return housing_display_request_list( $data, $udm );
+    }
+}
+
+function housing_display_offer_list( $data, &$udm ) {
+    $renderer = AMP_get_renderer( );
+    $output = '';
+    $output .= $renderer->span( 
+                'Contact:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['First_Name']. ' '. $data['Last_Name'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+    if( isset( $data['Company']) && $data['Company']) {
+        $output .= $renderer->span( 
+                'Org:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['Company'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+    }
+    if( isset( $data['Phone']) && $data['Phone']) {
+        $output .= $renderer->span( 
+                'Phone:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['Phone'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+    }
+    if( isset( $data['Email']) && $data['Email']) {
+        $output .= $renderer->span( 
+                'Email:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( AMP_protect_email( $data['Email'] ), array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+    }
+    if( isset( $data['custom3']) && $data['custom3']) {
+        $output .= $renderer->span( 
+                'Available:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom3'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom8'])&& $data['custom8']) {
+        $output .= $renderer->span( 
+                'Location:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom8'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+
+    $summary_output = $renderer->div( $output, array( 'class' => 'board_summary'));
+    $output = '';
+    if( isset( $data['custom9']) && $data['custom9']) {
+        $output .= $renderer->span( 
+                'Bus/Metro:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom9'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom10']) && $data['custom10']) {
+        $output .= $renderer->span( 
+                'Parking:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom10'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom11']) && $data['custom11']) {
+        $output .= $renderer->span( 
+                'Meals:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom11'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom7']) && $data['custom7']) {
+        $output .= $renderer->span( 
+                'Accessibility:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom7'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom4']) && $data['custom4']) {
+        $output .= $renderer->span( 
+                'Beds:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom4'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom5']) && $data['custom5']) {
+        $output .= $renderer->span( 
+                'Floor:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom5'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom6']) && $data['custom6']) {
+        $output .= $renderer->span( 
+                'Tent:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom6'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom14']) && $data['custom14']) {
+        $output .= $renderer->span( 
+                'Smoking:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom14'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom13']) && $data['custom13']) {
+        $output .= $renderer->span( 
+                'Children:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom13'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom18']) && $data['custom18']) {
+        $output .= $renderer->span( 
+                'Other Comments:', array( 'class' => 'board_label')) . $renderer->newline( ) 
+                . $renderer->span( $data['custom18'], array( 'class' => 'board_data')) 
+                . $renderer->newline( 2 );
+
+    }
+    $detail_output = $renderer->div( $output, array( 'class' => 'board_details'));
+    return $summary_output . $detail_output;
+
+}
+
+function housing_display_request_list( $data, &$udm ) {
+    $renderer = AMP_get_renderer( );
+    $output = '';
+    $output .= $renderer->span( 
+                'Contact:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['First_Name']. ' '. $data['Last_Name'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+    if( isset( $data['Company']) && $data['Company']) {
+        $output .= $renderer->span( 
+                'Org:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['Company'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+    }
+    if( isset( $data['Phone']) && $data['Phone']) {
+        $output .= $renderer->span( 
+                'Phone:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['Phone'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+    }
+    if( isset( $data['Email']) && $data['Email']) {
+        $output .= $renderer->span( 
+                'Email:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( AMP_protect_email( $data['Email'] ), array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+    }
+    if( isset( $data['custom16']) && $data['custom16']) {
+        $output .= $renderer->span( 
+                'Dates Needed:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom16'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+    if( isset( $data['custom17']) && $data['custom17']) {
+        $output .= $renderer->span( 
+                'Number of People:', array( 'class' => 'board_label')) . $renderer->space( ) 
+                . $renderer->span( $data['custom17'], array( 'class' => 'board_data')) 
+                . $renderer->newline( );
+
+    }
+
+    $summary_output = $renderer->div( $output, array( 'class' => 'board_summary'));
+    $output = '';
+    if( isset( $data['custom18']) && $data['custom18']) {
+        $output .= $renderer->span( 
+                'Other Comments:', array( 'class' => 'board_label')) . $renderer->newline( ) 
+                . $renderer->span( $data['custom18'], array( 'class' => 'board_data')) 
+                . $renderer->newline( 2 );
+
+    }
+    $detail_output = $renderer->div( $output, array( 'class' => 'board_details'));
+    return $summary_output . $detail_output;
+
+}
 ?>
