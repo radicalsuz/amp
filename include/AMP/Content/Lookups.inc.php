@@ -98,11 +98,16 @@ class AMPContentLookup_Hotwords extends AMPContent_Lookup {
 
     var $datatable = "hotwords";
     var $result_field = " Concat( ' <a href=\"', url, '\">', word, '</a> ') as newlink";
-    var $id_field = " Concat( ' ', word, ' ') as hotword";
+    #var $id_field = " Concat( ' ', word, ' ') as hotword";
+    var $id_field = "word";
 
     function AMPContentLookup_Hotwords() {
         $this->criteria = "publish=1";
         $this->init();
+		foreach( $this->dataset as $key => $value ) {
+			$this->dataset[ " $key " ] = $value;
+			unset($this->dataset[ $key ]);
+		}
     }
 }
 
@@ -275,11 +280,6 @@ class AMPContentLookup_SectionMap {
         $mapsource = &AMPContent_Map::instance( );
         $this->dataset = $mapsource->selectOptions( );
     }
-
-    function allow_cache( ) {
-        return !AMP_Authenticate( 'content');
-    }
-
     function available( ){
         return false;
     }
@@ -320,11 +320,11 @@ class AMPContentLookup_GalleryMap {
     }
 }
 
-class AMPSystemLookup_Listtypes extends AMPConstant_Lookup {
+class AMPContentLookup_Listtypes extends AMPConstant_Lookup {
     var $_prefix_values = "AMP_SECTIONLIST";
     var $_prefix_labels = "AMP_TEXT_SECTIONLIST";
 
-    function AMPSystemLookup_Listtypes() {
+    function AMPContentLookup_Listtypes() {
         $this->init();
     }
 
