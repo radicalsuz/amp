@@ -11,7 +11,7 @@ class ComponentMap_Calendar_Public extends AMPSystem_ComponentMap {
     var $_public_page_id_input = AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_INPUT;
     var $_public_page_id_response = AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_RESPONSE;
     var $_public_page_id_list = AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_DISPLAY;
-    var $_public_page_id_detail = AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_DISPLAY;
+    var $_public_page_id_detail = AMP_CONTENT_PUBLICPAGE_ID_CALENDAR_DETAIL;
 
     var $paths = array( 
         'fields' => 'Modules/Calendar/Public/Fields.xml',

@@ -9,6 +9,7 @@ blast=false
 calendar_input=15
 calendar_response=51
 calendar_display=57
+calendar_detail=57
 
 groups_display=58
 
