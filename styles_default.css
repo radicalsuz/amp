@@ -624,3 +624,7 @@ ol.comments_list li.list_item p {
 	font-weight: bold;
 }
 
+span.board_label {
+    font-weight:bold;
+}
+

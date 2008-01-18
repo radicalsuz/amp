@@ -25,7 +25,7 @@ $nhousing=$dbcon->CacheExecute("SELECT *  FROM userdata  Where   custom1='Need H
 <br>
 <table width="100%" border="0" cellpadding="2" bordercolor="#000000"  class=boardbg>
   <tr > 
-    <td colspan="5" class="text"><strong>Contact:&nbsp;</strong><?php echo $housing->Fields("First_Name")?>&nbsp;<?php echo $housing->Fields("Last_Name")?>&nbsp;&nbsp;<?php echo $housing->Fields("Company")?>&nbsp;&nbsp;<a href="mailto:<?php echo $housing->Fields("Email")?>"><?php echo $housing->Fields("Email")?></a>&nbsp;&nbsp;<?php echo $housing->Fields("Phone")?> 
+    <td colspan="5" class="text"><strong>Contact:&nbsp;</strong><?php echo $housing->Fields("First_Name")?>&nbsp;<?php echo $housing->Fields("Last_Name")?>&nbsp;&nbsp;<?php echo $housing->Fields("Company")?>&nbsp;&nbsp;<?php echo AMP_protect_email( $housing->Fields("Email"));?>&nbsp;&nbsp;<?php echo $housing->Fields("Phone")?> 
     </td>
   </tr>
   <tr > 
@@ -71,7 +71,7 @@ $nhousing=$dbcon->CacheExecute("SELECT *  FROM userdata  Where   custom1='Need H
 <?php while (!$nhousing->EOF)   { ?><br>
 <table width="100%" border="0" cellpadding="2" bordercolor="#000000"  class=boardbg>
   <tr > 
-    <td class="text"><strong>Contact:&nbsp;</strong><?php echo $nhousing->Fields("First_Name")?>&nbsp;<?php echo $nhousing->Fields("Last_Name")?>&nbsp;&nbsp;<?php echo $housing->Fields("Company")?>&nbsp;&nbsp;<a href="mailto:<?php echo $housing->Fields("Email")?>"><?php echo $nhousing->Fields("Email")?></a>&nbsp;&nbsp;<?php echo $nhousing->Fields("Phone")?> 
+    <td class="text"><strong>Contact:&nbsp;</strong><?php echo $nhousing->Fields("First_Name")?>&nbsp;<?php echo $nhousing->Fields("Last_Name")?>&nbsp;&nbsp;<?php echo $housing->Fields("Company")?>&nbsp;&nbsp;<?php AMP_protect_email( $nhousing->Fields("Email")); ?>&nbsp;&nbsp;<?php echo $nhousing->Fields("Phone"); ?> 
     </td>
   </tr>
   <tr > 
