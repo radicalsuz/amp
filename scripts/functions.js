@@ -35,7 +35,7 @@ function select_id(find_id, form_name, id_element_name ) {
 
 function EmailToFriend(URL) { 
 day = new Date();  id = day.getTime(); 
-var url = url + "?url=" + document.location
+var url = url + "?url=" + escape(document.location)
 //document.location
 //URL = URL + "?page=" + window.location.href;
 eval("url" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=320');"); 
@@ -49,7 +49,7 @@ eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,lo
 }
 
 function openform(url) {
-var url = url + "?url=" + document.location
+var url = url + "?url=" + escape(document.location)
 	//var NS = (document.layers) ? true : false;
 	//var IE = (document.all) ? true : false;
 
