@@ -11,6 +11,7 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
     var $datatable = 'rssfeed';
     var $name_field =  'title';
     var $sourceSet;
+    var $_class_name = "AMPContent_RSSFeed";
 
     var $feed_metaData = array(
         'language' => 'en-us',
@@ -24,6 +25,10 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
 
     function getDescription() {
         return $this->getData( 'description' );
+    }
+
+    function getBlurb( ) {
+        return $this->getDescription( );
     }
 
     function getTitle() {
@@ -128,6 +133,10 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
 
     function get_url_edit( ) {
         return $this->get_system_url( "rssfeed");
+    }
+
+    function makeCriteriaDisplayable( ) {
+        return '';
     }
 
 }

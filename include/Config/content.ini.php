@@ -156,6 +156,7 @@ search=40
 links_display=12
 comment_input=34
 tags_display=28
+rss_feed_list=67
 share=33
 
 [content rss]
