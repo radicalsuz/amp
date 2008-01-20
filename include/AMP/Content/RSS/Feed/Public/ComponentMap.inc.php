@@ -17,6 +17,10 @@ class ComponentMap_RSS_Feed_Public extends AMPSystem_ComponentMap {
         'list'  => 'RSS_Feed_Public_List',
         'source'=> 'AMPContent_RSSFeed',
         );
+
+    var $_allow_new = false;
+    var $_allow_delete = false;
+    var $_allow_add = false;
 }
 
 ?>
