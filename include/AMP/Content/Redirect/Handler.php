@@ -83,10 +83,10 @@ class AMP_Content_Redirect_Handler {
 
     function commit_default( ){
         $this->sendStatus( );
-        if ( strpos( AMP_CONTENT_URL_404, 'http' ) !== false ) {
-            ampredirect(  AMP_CONTENT_URL_404 );
+        if ( strpos( AMP_CONTENT_URL_PAGE_NOT_FOUND, 'http' ) !== false ) {
+            ampredirect(  AMP_CONTENT_URL_PAGE_NOT_FOUND );
         } else {
-            ampredirect (AMP_SITE_URL . AMP_CONTENT_URL_404 );
+            ampredirect (AMP_SITE_URL . AMP_CONTENT_URL_PAGE_NOT_FOUND );
         }
     }
 

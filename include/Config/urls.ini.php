@@ -65,7 +65,9 @@ map=           "flashmap.php"
 
 media_add=     "form.php?modin=7"
 
-more         = "list.php"
+more=          "list.php"
+
+page_not_found="search.php"
 
 petitions=     "petition.php"
 
