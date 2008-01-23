@@ -192,6 +192,10 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     function getClass( ) {
         return AMP_CONTENT_CLASS_DEFAULT;
     }
+
+    function makeCriteriaTool( $tool_id ) {
+        return $this->_makeCriteriaEquals( 'modid', $tool_id );
+    }
 }
 
 ?>
