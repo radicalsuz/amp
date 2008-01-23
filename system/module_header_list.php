@@ -1,10 +1,10 @@
 <?php
 
-require_once( 'AMP/System/Base.php');
+require_once( 'AMP/Base/Config.php');
 
-$tool_id = isset( $_GET['modid'] ) && $_GET['modid'] ? $_GET['modid'] :false;
+$tool_id = ( isset( $_GET['modid'] ) && $_GET['modid'] ) ? $_GET['modid'] :false;
 if ( !$tool_id ) {
-    $tool_id = isset( $_GET['tool_id']) && $_GET['tool_id'] ? $_GET['tool_id'] :false;
+    $tool_id = ( isset( $_GET['tool_id']) && $_GET['tool_id'] ) ? $_GET['tool_id'] :false;
 }
 if ( !$tool_id ) ampredirect( AMP_SYSTEM_URL_PUBLIC_PAGES );
 $modid = $tool_id;

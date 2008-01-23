@@ -15,12 +15,16 @@ require_once( 'utility.functions.inc.php');
 
 require("Connections/freedomrising.php");
 
-$modin = $form_id_nave = $_REQUEST['modin'];
+$modin = $form_id_nav = $_REQUEST['modin'];
 
+$tool_set = &AMPSystem_Lookup::instance( 'ToolsbyForm');
+$modid = isset( $tool_set[$modin]) ? $tool_set[$modin] : null;
+/*
 $modidselect = $dbcon->Execute("SELECT id from modules where userdatamodid=" . $dbcon->qstr( $modin ) )
                     or die( "Couldn't get module information: " . $dbcon->ErrorMsg() );
 
 $modid = $modidselect->Fields("id");
+                   */ 
 
 // Fetch the form instance specified by submitted modin value.
 $udm = new UserDataInput( $dbcon, $modin, true );
@@ -33,6 +37,7 @@ $sub = (isset($_REQUEST['btnUdmSubmit']) && $_REQUEST['btnUdmSubmit']);
 // Fetch or save user data.
 if ( $sub ) {
     $udm->doPlugin( 'AMPsystem', 'Save' );
+    ampredirect( AMP_url_update( $_SERVER['PHP_SELF'], array( 'modin' => $modin )));
 }
 
 /* Now Output the Form.
