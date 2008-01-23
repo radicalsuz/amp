@@ -284,6 +284,10 @@ class AMPContentLookup_SectionMap {
     function available( ){
         return false;
     }
+
+    function allow_cache(  ) {
+        return !AMP_Authenticate(  'content' );
+    }
     
 }
 
