@@ -104,6 +104,7 @@ class AMPContentLookup_Hotwords extends AMPContent_Lookup {
     function AMPContentLookup_Hotwords() {
         $this->criteria = "publish=1";
         $this->init();
+		if( !$this->dataset ) return;
 		foreach( $this->dataset as $key => $value ) {
 			$this->dataset[ " $key " ] = $value;
 			unset($this->dataset[ $key ]);
