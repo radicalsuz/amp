@@ -24,7 +24,7 @@ class AMP_System_Introtext_List extends AMP_Display_System_List {
     }
 
     function setTool( $tool_id ) {
-        return;
+        #return;
         $this->add_link_var( 'tool_id', $tool_id );
         $forms_list = AMP_lookup( 'formsByTool');
         if ( isset( $forms_list[ $tool_id ])) $this->add_link_var( 'form_id', $forms_list[ $tool_id ]);

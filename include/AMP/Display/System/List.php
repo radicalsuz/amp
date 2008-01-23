@@ -239,7 +239,7 @@ class AMP_Display_System_List extends AMP_Display_List {
     }
 
     function render_name( $source ) {
-        return $this->_renderer->link( $source->get_url_edit( ), $source->getName( ));
+        return $this->_renderer->link( AMP_url_update( $source->get_url_edit( ), $this->link_vars), $source->getName( ));
     }
 
     function render_toolbar( ) {
