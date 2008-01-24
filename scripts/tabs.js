@@ -64,6 +64,10 @@ function AMP_simple_tabs( ) {
             if ( !this.segments[key].visible()) new Effect.Appear( this.segments[ key ] ) ;
             this.triggers.each( function( item ) { item.removeClassName( 'active');});
             trigger.addClassName( 'active');
+        },
+        collapse: function( ) {
+            this.segments.each( function( item ) { if (item.visible()) new Effect.SwitchOff( item );});
+            this.triggers.each( function( item ) { item.removeClassName( 'active');});
         }
 
     };
