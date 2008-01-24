@@ -178,7 +178,7 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     }
 
     function _sort_default( &$item_set ){
-        return $this->sort( $item_set, 'toolName');
+        return $this->sort( $item_set, 'tool_id');
     }
 
     function getMediaUrl( ) {
@@ -196,6 +196,7 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
     function makeCriteriaTool( $tool_id ) {
         return $this->_makeCriteriaEquals( 'modid', $tool_id );
     }
+
 }
 
 ?>

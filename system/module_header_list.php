@@ -10,7 +10,6 @@ if ( !$tool_id ) ampredirect( AMP_SYSTEM_URL_PUBLIC_PAGES );
 $modid = $tool_id;
 
 require_once( 'AMP/System/Component/Controller.php');
-#require_once( 'AMP/System/IntroText/List.inc.php');
 require_once( 'AMP/System/IntroText/List.php');
 
 $controller = &new AMP_System_Component_Controller( );
@@ -18,9 +17,7 @@ $controller->set_banner( AMP_TEXT_LIST , 'Public Page');
 $display = &$controller->get_display( );
 $display->add_nav( 'content' );
 
-#$list = &new AMPSystem_Introtext_List( $dbcon );
-$list = &new AMP_System_Introtext_List( $source = null, array( 'tool' => $tool_id ));
-$list->setTool( $tool_id );
+$list = &new AMP_System_Introtext_List( $source = false, array( 'tool' => $tool_id ));
 $display->add( $list );
 print $display->execute( );
 

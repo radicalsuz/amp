@@ -32,8 +32,8 @@ class AMP_Display_System_List extends AMP_Display_List {
     var $link_vars = array( );
     var $_pager_limit = 50;
 
-    function AMP_Display_System_List( &$source, $criteria = array( )) {
-        $this->__construct( $source, $criteria );
+    function AMP_Display_System_List( $source = false, $criteria = array( ), $limit = null ) {
+        $this->__construct( $source, $criteria, $limit );
     }
 
     function _renderItem( &$source ) {

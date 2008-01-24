@@ -10,8 +10,8 @@ class AMP_System_Introtext_List extends AMP_Display_System_List {
     var $column_headers = array( 'nav_index' => 'Navigation', 'publish_button' => 'Publish', 'id' => 'ID');
     var $_actions = array( 'delete' );
 
-    function AMP_System_Introtext_List( &$source, $criteria = array( )) {
-        $this->__construct( $source, $criteria );
+    function AMP_System_Introtext_List( $source = null, $criteria = array( ), $limit = null ) {
+        $this->__construct( $source, $criteria, $limit );
     }
 
     function render_nav_index( &$source ){
@@ -24,7 +24,6 @@ class AMP_System_Introtext_List extends AMP_Display_System_List {
     }
 
     function setTool( $tool_id ) {
-        #return;
         $this->add_link_var( 'tool_id', $tool_id );
         $forms_list = AMP_lookup( 'formsByTool');
         if ( isset( $forms_list[ $tool_id ])) $this->add_link_var( 'form_id', $forms_list[ $tool_id ]);
@@ -32,12 +31,16 @@ class AMP_System_Introtext_List extends AMP_Display_System_List {
     }
 
     function _init_criteria( ) {
-        if ( isset( $this->_source_criteria['modid']) && ( $tool_id = $this->_source_criteria['modid'] )) {
+        if (( isset( $this->_source_criteria['modid']) && ( $tool_id = $this->_source_criteria['modid'] )) 
+         	|| ( isset( $this->_source_criteria['tool']) && ( $tool_id = $this->_source_criteria['tool'] ))) {
+			$this->setTool($tool_id);
+/*
             $this->add_link_var( 'tool_id', $tool_id );
             $forms_list = AMP_lookup( 'formsByTool');
             if ( isset( $forms_list[ $tool_id ]) && $forms_list[$tool_id]) {
                 $this->add_link_var( 'form_id', $forms_list[ $tool_id ]);
             }
+*/
         }
 
     }
