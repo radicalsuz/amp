@@ -20,7 +20,6 @@ Class Geo {
 	var $Street;
 	var $City;
 	var $State;
-	var $Country;
 	var $Zip;
 	var $lat;
 	var $long;
@@ -54,39 +53,6 @@ Class Geo {
             $this->zip_lookup();
         }
 	}
-	
-	
-	function GeoIntl(&$dbcon,$City=NULL,$Country=NULL, $options=null) {
-		$this->dbcon =& $dbcon;
-		$this->City =$City;
-		$this->State =$Country;
-		
-		if(isset($options)) {
-			$this->setOptions($options);
-		}
-
-		$sql = "select latitude,longitude from goe_countries where city = ".$this->dbcon->qstr($this->City)." and  country = ".$this->dbcon->qstr($this->Country); 
-		$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting location list in functon get_latlong ".$sql.$this->dbcon->ErrorMsg());
-
-		if ( $this->city_fulltext && !(($R->Fields("latitude")) && ($R->Fields("longitude"))) ){
-			$sql = "SELECT latitude, longitude from zipcodes WHERE MATCH (city) AGAINST (".$this->dbcon->qstr($this->City).") AND country = ".$this->dbcon->qstr($this->State); 
-			$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting location list in functon get_latlong ".$sql.$this->dbcon->ErrorMsg());
-		}
-		if ( $this->city_soundex && !(($R->Fields("latitude")) && ($R->Fields("longitude"))) ){
-			$sql = "SELECT latitude, longitude from zipcodes WHERE city SOUNDS LIKE ".$this->dbcon->qstr($this->City)." AND country = ".$this->dbcon->qstr($this->State); 
-			$R= $this->dbcon->CacheExecute($sql)or DIE("Error getting location list in functon get_latlong ".$sql.$this->dbcon->ErrorMsg());
-		}
-
-		if ( ($R->Fields("latitude")) && ($R->Fields("longitude")) ){
-			$this->lat = $R->Fields("latitude") ;
-			$this->long = $R->Fields("longitude");			
-		}
-
-
-	}
-	
-	
-	
 	
 	function setOptions($options) {
 		if(!is_array($options)) {
