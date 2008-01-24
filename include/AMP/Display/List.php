@@ -281,6 +281,8 @@ class AMP_Display_List {
             $item_header = $this->$header_method( $source );
         } elseif ( method_exists( $source, $header_method )) {
             $item_header = $source->$header_method( );
+        } elseif ( function_exists( $header_method )) {
+            $item_header = $header_method( $source, $this );
         } else {
             trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, ( get_class( $source ) . "/" . get_class( $this )), $header_method ));
             return false;
