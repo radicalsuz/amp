@@ -18,12 +18,12 @@ function amp_badge_forms( $options = array( )) {
     $display_subheader = ( isset( $options['display_subheader']) && $options['display_subheader'] ) ? $options['display_subheader'] : false;
 
     $finder = new AMP_User_Data( AMP_Registry::getDbcon( ));
-    $search = &$finder->getSearchSource( $criteria );
+    $search = &$finder->getSearchSource( $finder->makeCriteria($criteria ));
     $search->addSort( $sort );
     $search->setLimit( $limit );
     $source = $finder->find( );
 
-    $list = new AMP_User_Data_List( $source, $criteria, $limit );
+    $list = &new AMP_User_Data_List( $source );#, $criteria, $limit );
     $list->_pager_active = false;
     if ( $display ) $list->set_display_method( $display );
     if ( $display_header ) $list->set_display_header_method( $display_header );
