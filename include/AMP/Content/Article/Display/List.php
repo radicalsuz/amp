@@ -109,7 +109,7 @@ class AMP_Content_Article_Display_List extends AMP_Display_List {
     function render_blurb( &$source ) {
         $blurb = $source->getBlurb( );
         if (!trim( $blurb )) return false;
-        return $this->_renderer->span( AMP_trimText( $blurb, AMP_CONTENT_BLURB_LENGTH_MAX ) , $this->_css_class_text ) ; 
+        return $this->_renderer->span( AMP_trimText( $blurb, AMP_CONTENT_ARTICLE_BLURB_LENGTH_MAX ) , $this->_css_class_text ) ; 
     }
 
     function render_image( &$source ) {

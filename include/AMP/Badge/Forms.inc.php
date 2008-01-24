@@ -16,15 +16,18 @@ function amp_badge_forms( $options = array( )) {
     $display = ( isset( $options['display']) && $options['display']) ? $options['display'] : false;
     $display_header = ( isset( $options['display_header']) && $options['display_header']) ? $options['display_header'] : false;
     $display_subheader = ( isset( $options['display_subheader']) && $options['display_subheader'] ) ? $options['display_subheader'] : false;
+    $extra_criteria = ( isset( $options['extra_criteria']) && $options['extra_criteria']) ? array( $options['extra_criteria'] ): array( );
+    $columns = ( isset( $options['columns']) && $options['columns']) ? $options['columns'] : 1;
 
     $finder = new AMP_User_Data( AMP_Registry::getDbcon( ));
-    $search = &$finder->getSearchSource( $finder->makeCriteria($criteria ));
+    $search = &$finder->getSearchSource( array_merge( $finder->makeCriteria( $criteria ), $extra_criteria ));
     $search->addSort( $sort );
     $search->setLimit( $limit );
     $source = $finder->find( );
 
-    $list = &new AMP_User_Data_List( $source );#, $criteria, $limit );
+    $list = &new AMP_User_Data_List( $source );
     $list->_pager_active = false;
+    $list->_display_columns=$columns;
     if ( $display ) $list->set_display_method( $display );
     if ( $display_header ) $list->set_display_header_method( $display_header );
     if ( $display_subheader ) $list->set_display_subheader_method( $display_subheader );
