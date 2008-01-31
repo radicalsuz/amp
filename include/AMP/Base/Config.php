@@ -23,6 +23,11 @@ AMP_config_load( 'cache');
 //db action : load DB system settings ( sysvar table )
 require_once( 'AMP/Base/Setup.php');
 
+//for running under fastcgi
+if( isset( $_SERVER['AMP_REQUIRE_AUTH']) && $_SERVER['AMP_REQUIRE_AUTH']) {
+    require_once( 'AMP/Auth/Require.inc.php');
+}
+
 //load user
 require_once( 'AMP/System/User/Config.php');
 

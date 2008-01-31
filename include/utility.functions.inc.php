@@ -2101,16 +2101,16 @@ function AMP_config_load( $file, $prefix='AMP', $cache=true ) {
 
     //parse values in the custom folder
     $custom_ini = array();
-    $custom_file_name = AMP_LOCAL_PATH . '/custom/' . $file . '.ini.php';
+    $custom_file_name = AMP_pathFlip( AMP_LOCAL_PATH . '/custom/' . $file . '.ini.php' );
     if ( file_exists ( $custom_file_name )){
-        $custom_ini = parse_ini_file( AMP_pathFlip($custom_file_name), true );
+        $custom_ini = parse_ini_file( $custom_file_name, true );
     }
 
     //parse the base config
     $base_ini = array();
-    $base_file_name = AMP_BASE_INCLUDE_PATH . 'Config/' . $file . '.ini.php';
+    $base_file_name = AMP_pathFlip( AMP_BASE_INCLUDE_PATH . 'Config/' . $file . '.ini.php' );
     if ( file_exists ( $base_file_name ) ) {
-        $base_ini = parse_ini_file( AMP_pathFlip( $base_file_name ), true );
+        $base_ini = parse_ini_file( $base_file_name , true );
     }
     if (empty($custom_ini) && empty($base_ini)) return array();
 
@@ -2337,6 +2337,39 @@ function &AMP_searchform_xml( $xml_filename, $action = false ) {
 
 function AMP_image_path( $filename, $img_class = AMP_IMAGE_CLASS_OPTIMIZED ) {
     return AMP_LOCAL_PATH . AMP_IMAGE_PATH . $img_class . DIRECTORY_SEPARATOR . $filename;
+}
+
+function AMP_request_to_include( $request ) {
+    $routes = array(
+        '/^articles\/(\d*)/' => 'article.php',
+        '/^sections\/(\d*)/' => 'article.php',
+        '/^list/' => 'list.php',
+        '/^(\d{4})\/(\d{1,2})\/(\d{1,2})\/(\w+)/' => 'articles.php',
+        );
+
+    foreach( $routes as $pattern => $target ) {
+        if( preg_match( $pattern, $request )) return $target;
+    }
+    return AMP_CONTENT_URL_404_CORE;
+}
+
+function AMP_request_to_vars( $request ) {
+    $routes = array(
+        '/^articles\/(\d*)/' => 'id=%s',
+        '/^sections\/(\d*)/' => 'list=type&type=%s',
+        '/^(\d{4})\/(\d{1,2})\/(\d{1,2})\/(\w+)/' => 'year=%s&month=%s&day=%s&permalink=%s',
+        );
+    foreach( $routes as $pattern => $target ) {
+        $found = array( );
+        if( preg_match( $pattern, $request, $found )) {
+            array_shift( $found );
+            parse_str( vsprintf( $target, $found), $new_vars);
+            return $new_vars;
+
+        }
+    }
+    return array( );
+
 }
 
 ?>

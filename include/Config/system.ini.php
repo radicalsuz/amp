@@ -4,7 +4,7 @@
 
 [system]
 version_id="3.7.4"
-unique id=AMP_DB_NAME
+;unique id=AMP_DB_NAME
 menu_version=1
 cache="memcache"
 cache_timeout=600

@@ -457,13 +457,13 @@
         <per>CONTENT_NAVIGATION</per>
     </item>
     <item>
-        <label>Front Page Navigation Layout</label>
-        <href>nav_layouts.php?id=2</href>
+        <label>Article Navigation Layout</label>
+        <href>nav_layouts.php?id=3</href>
         <per>CONTENT_NAVIGATION</per>
     </item>
     <item>
-        <label>Article Navigation Layout</label>
-        <href>nav_layouts.php?id=3</href>
+        <label>Front Page Navigation Layout</label>
+        <href>nav_layouts.php?id=2</href>
         <per>CONTENT_NAVIGATION</per>
     </item>
     <item>

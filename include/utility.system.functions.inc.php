@@ -36,11 +36,15 @@ function find_local_path () {
         $localInfo = apache_lookup_uri( '/custom/' );
         $localPath = preg_replace( "/(.*)\/custom.*$/", "\$1", $localInfo->filename );
         
+    } elseif ( isset( $_SERVER['AMP_LOCAL_PATH'])) {
+        $localPath = $_SERVER['AMP_LOCAL_PATH'];
     }
-    if (isset($localPath)) $customPath = $localPath . DIRECTORY_SEPARATOR . 'custom';
+
+    $customPath = isset( $localPath )? $localPath . DIRECTORY_SEPARATOR . 'custom' : '';
 
     $searchPath = '.';
     $depth = 0;
+   
     while ( !is_dir($customPath) && $depth++ < 4 ) {
         $customPath = $searchPath . DIRECTORY_SEPARATOR . 'custom';
         $localPath = realpath( $searchPath );

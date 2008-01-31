@@ -6,4 +6,6 @@ if ( !defined( 'PHPLIST_CONFIG_ADMIN_ID')) define( 'PHPLIST_CONFIG_ADMIN_ID', 1)
 define('ADODB_REPLACE_INSERTED', 2);
 define('ADODB_REPLACE_UPDATED',  1);
 
+define( 'AMP_SYSTEM_UNIQUE_ID', AMP_DB_NAME );
+
 ?>
