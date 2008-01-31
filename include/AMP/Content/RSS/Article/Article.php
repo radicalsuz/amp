@@ -60,7 +60,9 @@ class RSS_Article extends AMPSystem_Data_Item {
     function publish( $section_id, $class_id, $destroy_self=true ) {
         $text = utf8_decode( preg_replace( "/\\n/", "<br/>", $this->getBody( )) );
         $blurb = AMP_trimText( $text, AMP_CONTENT_ARTICLE_BLURB_LENGTH_DEFAULT, false );
-        $title = $this->dbcon->qstr( utf8_decode( $this->getName( )));
+        # this line doesnt work since upgrading adodb? ap
+        #$title = $this->dbcon->qstr( utf8_decode( $this->getName( )));
+        $title = utf8_decode( $this->getName( ));
         $feed_name = $this->getFeedName( );
         if ( !$section_id ) return false;
         
@@ -91,7 +93,8 @@ class RSS_Article extends AMPSystem_Data_Item {
         $article->setData( $article_data );
         if ( !$article->save( )) return false;
 
-        $this->delete( );
+        if ( $destroy_self ) $this->delete( );
+
         return true;
 
     }
