@@ -195,6 +195,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         require_once( 'AMP/Content/Image/Image.php');
         $image = new AMP_Content_Image( AMP_Registry::getDbcon( ));
         $image->setDefaults( );
+        //db data has to be merged explicitly to include blank values
+        $image->mergeData( $db_data );
         $image->mergeData( $this->_model->getData( ));
         return $image->save( );
 
@@ -217,7 +219,6 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
         require_once( 'AMP/Content/Image/Display.inc.php');
         $this->_model->setFile( AMP_image_path( $image_name , AMP_IMAGE_CLASS_ORIGINAL));
-        trigger_error( $image_name );
         $buffer = new AMP_Content_Buffer( );
         $buffer->add( $this->_model->display->render_proofsheet( $this->_model ));
         #$uploaded_image = &new ContentImage_Display_allVersions( $image_name );
