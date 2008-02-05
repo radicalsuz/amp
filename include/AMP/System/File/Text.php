@@ -6,7 +6,7 @@ class AMP_System_File_Text extends AMP_System_File {
     var $id_field = 'name';
     var $_file_contents;
     var $_base_path = '';
-    var $_file_name_pattern;
+    var $_file_name_pattern = '*';
 
     function AMP_System_File_Text( $dbcon = null, $file_path = null ){
         $this->__construct( $file_path );
@@ -83,9 +83,12 @@ class AMP_System_File_Text extends AMP_System_File {
         if ( !isset( $filename_pattern )) $filename_pattern = $this->_file_name_pattern;
         $results = parent::search( $folder_path, $filename_pattern );
         foreach( $results as $key => $result_file ){
-            if ( is_dir( $result_file->getPath( )) || !is_writable( $result_file->getPath( ))) {
+            if ( is_dir( $result_file->getPath( )) 
+                  || !is_writable( $result_file->getPath( ))
+                  || ( strpos( $result_file->get_mimetype( ), 'image') === 0)
+                  ) {
                 unset( $results[ $key ]);
-            }
+            } 
         }
         return $results;
 
