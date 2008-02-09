@@ -49,11 +49,13 @@ class AMP_Display_System_List extends AMP_Display_List {
 
     function _renderItemContainer( $output, $source ) {
         $row_color_class = ( $this->item_count % 2 ) ? ' list_row_odd' : ' list_row_even';
+        /*
         $hover_class = 'list_row_hover';
         $onclick = false;
         if ( array_search( 'select', $this->columns ) !== FALSE ) {
             $onclick  = '$( "select_'.$this->list_item_id( $source ).'" ).checked = !$( "select_'.$this->list_item_id( $source ) .'").checked;';
         } 
+        */
 
         return $this->_renderer->tr( 
             $output, 
@@ -355,44 +357,47 @@ class AMP_Display_System_List extends AMP_Display_List {
         $script = 
 <<<SCRIPT
 //checkbox select on row click
-Event.observe( $( '{$this->list_id}'),'click', function( e ){
-    var checkbox, row = e.findElement( 'tr')
-    if ( row )  {
-        var checkbox = row.down( 'input' );
-        if ( checkbox) {
-            if ( e.target != checkbox) checkbox.checked = !checkbox.checked;
-            row.toggleClassName( 'selected' );
-        }
-    }
-});
-//row highlighting for IE
-Element.select( $( '{$this->list_id }'), '.list_row').each( function( el ){
-    Event.observe( el, 'mouseover', function( e ){ e.findElement( 'tr').addClassName( '$hover_class')}) ;
-    Event.observe( el, 'mouseout', function( e ){ e.findElement( 'tr').removeClassName( '$hover_class')}) ;
-    if( el.down( 'input.list_select').checked ) el.addClassName( 'selected');
-
-});
-//select all script
-Event.observe( $( '{$this->list_id}_select_all_control'), 'click', function( e ) {
-    first_item  = $( "{$this->list_id}").down( 'tr', 1 ).down( 'input.list_select');
-    if ( !first_item ) return;
-    new_value = !first_item.checked; 
-    $( "{$this->list_id}").select( ".list_row").each( function( row ) { 
-        var slbx = row.down( "input.list_select");
-        if ( slbx ) {
-            slbx.checked=new_value; 
-            if( new_value ) { 
-                row.addClassName( "selected"); 
-            } else {
-                row.removeClassName( "selected"); 
+Event.observe( document, 'dom:loaded', function( ){
+    Event.observe( $( '{$this->list_id}'),'click', function( e ){
+        var checkbox, row = e.findElement( 'tr')
+        if ( row )  {
+            var checkbox = row.down( 'input.list_select' );
+            if ( checkbox) {
+                if ( e.target != checkbox) checkbox.checked = !checkbox.checked;
+                row.toggleClassName( 'selected' );
             }
         }
+    });
+    //row highlighting for IE
+    Element.select( $( '{$this->list_id }'), '.list_row').each( function( el ){
+        Event.observe( el, 'mouseover', function( e ){ e.findElement( 'tr').addClassName( '$hover_class')}) ;
+        Event.observe( el, 'mouseout', function( e ){ e.findElement( 'tr').removeClassName( '$hover_class')}) ;
+        if( el.down( 'input.list_select').checked ) el.addClassName( 'selected');
 
-    }); 
+    });
+    //select all script
+    Event.observe( $( '{$this->list_id}_select_all_control'), 'click', function( e ) {
+        first_item  = $( "{$this->list_id}").down( 'tr', 1 ).down( 'input.list_select');
+        if ( !first_item ) return;
+        new_value = !first_item.checked; 
+        $( "{$this->list_id}").select( ".list_row").each( function( row ) { 
+            var slbx = row.down( "input.list_select");
+            if ( slbx ) {
+                slbx.checked=new_value; 
+                if( new_value ) { 
+                    row.addClassName( "selected"); 
+                } else {
+                    row.removeClassName( "selected"); 
+                }
+            }
+
+        }); 
+    });
+
 });
 SCRIPT;
         $header = AMP_get_header( );
-        $header->addJavascriptOnLoad( $script, $this->list_id.'table_rows');
+        $header->addJavascriptDynamic( $script, $this->list_id.'table_rows');
     }
 
 }

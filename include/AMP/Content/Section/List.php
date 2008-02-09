@@ -146,26 +146,26 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
     function render_row( $column_output, $source ) {
         return join( $this->_renderer->newline( ), $column_output );
     }
-    */
 
     function _renderItemContainer( $output, $source ) {
         $row_color_class = ( $this->item_count % 2 ) ? ' list_row_odd' : ' list_row_even';
-        $hover_class = 'list_row_hover';
+        //$hover_class = 'list_row_hover';
 
         return $this->_renderer->tr(
             $output, 
             array( 
                 'id'            => $this->list_item_id( $source ), 
                 'class'         => 'list_row' . $row_color_class,
-                'onMouseover'   => 'this.addClassName( "'.$hover_class.'" );',
-                'onMouseout'    => 'this.removeClassName( "'.$hover_class.'" );',
-                'onClick'       => '$( "select_'.$this->list_item_id( $source ).'" ).checked = !$( "select_'.$this->list_item_id( $source ) .'").checked;',
+                //'onMouseover'   => 'this.addClassName( "'.$hover_class.'" );',
+                //'onMouseout'    => 'this.removeClassName( "'.$hover_class.'" );',
+                //'onClick'       => '$( "select_'.$this->list_item_id( $source ).'" ).checked = !$( "select_'.$this->list_item_id( $source ) .'").checked;',
 
 
                 ) 
             );
         
     }
+    */
 
     function render_order( $source ) {
         return 
