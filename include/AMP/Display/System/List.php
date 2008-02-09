@@ -40,6 +40,8 @@ class AMP_Display_System_List extends AMP_Display_List {
         $this->item_count++;
         foreach( $this->columns as $column_name ) {
             $output[ $column_name ] = $this->render_value( $source, $column_name );
+            //this is a presentational hack, borders dont show on cell w/o content
+            if( !$output[ $column_name ]) $output[$column_name] = '&nbsp;';
         }
         return $this->render_row( $output, $source );
 
@@ -58,9 +60,11 @@ class AMP_Display_System_List extends AMP_Display_List {
             array( 
                 'id'            => $this->list_item_id( $source ), 
                 'class'         => 'list_row' . $row_color_class,
+                /*
                 'onMouseover'   => 'this.addClassName( "'.$hover_class.'" );',
                 'onMouseout'    => 'this.removeClassName( "'.$hover_class.'" );',
                 'onClick'       => $onclick,
+                */
 
                 ) 
             );
@@ -162,7 +166,7 @@ class AMP_Display_System_List extends AMP_Display_List {
                         $source->id, 
                         array( 
                             'type' => 'checkbox', 
-                            'onclick' => 'this.checked=!this.checked;', 
+                            #'onclick' => 'this.checked=!this.checked;', 
                             'class' => 'list_select', 
                             'id' => ( 'select_'. $this->list_item_id( $source ) 
                             )
@@ -224,8 +228,10 @@ class AMP_Display_System_List extends AMP_Display_List {
         return 
             $this->_renderer->div( 
                 $this->_renderer->a( AMP_TEXT_ALL, array( 
-                    'onClick' => 
-                    'new_value = !$( "'.$first_item_id.'").checked; $$( "#'.$this->list_id.' input.list_select").each( function( slbx  ) { slbx.checked=new_value; } );'))
+                    'id' => $this->list_id.'_select_all_control'
+                   # 'onClick' => $select_all_js
+                    ))
+                    #'new_value = !$( "'.$first_item_id.'").checked; $( "'.$this->list_id.'").select( "input.list_select").each( function( slbx  ) { slbx.checked=new_value; if( new_value ) { slbx.up( "tr").addClassName( "selected"); } else { slbx.up( "tr").dropClassName( "selected");} );'))
                 , array( 'class' => 'list_control')
                 );
     }
@@ -338,6 +344,55 @@ class AMP_Display_System_List extends AMP_Display_List {
         $output = $this->render_search_form( )
                 . $this->render_list_preview_link( );
         return $output;
+    }
+
+    function _renderJavascript( ) {
+        $this->render_js_table_rows_ui( );
+    }
+
+    function render_js_table_rows_ui( ){
+        $hover_class = 'list_row_hover';
+        $script = 
+<<<SCRIPT
+//checkbox select on row click
+Event.observe( $( '{$this->list_id}'),'click', function( e ){
+    var checkbox, row = e.findElement( 'tr')
+    if ( row )  {
+        var checkbox = row.down( 'input' );
+        if ( checkbox) {
+            if ( e.target != checkbox) checkbox.checked = !checkbox.checked;
+            row.toggleClassName( 'selected' );
+        }
+    }
+});
+//row highlighting for IE
+Element.select( $( '{$this->list_id }'), '.list_row').each( function( el ){
+    Event.observe( el, 'mouseover', function( e ){ e.findElement( 'tr').addClassName( '$hover_class')}) ;
+    Event.observe( el, 'mouseout', function( e ){ e.findElement( 'tr').removeClassName( '$hover_class')}) ;
+    if( el.down( 'input.list_select').checked ) el.addClassName( 'selected');
+
+});
+//select all script
+Event.observe( $( '{$this->list_id}_select_all_control'), 'click', function( e ) {
+    first_item  = $( "{$this->list_id}").down( 'tr', 1 ).down( 'input.list_select');
+    if ( !first_item ) return;
+    new_value = !first_item.checked; 
+    $( "{$this->list_id}").select( ".list_row").each( function( row ) { 
+        var slbx = row.down( "input.list_select");
+        if ( slbx ) {
+            slbx.checked=new_value; 
+            if( new_value ) { 
+                row.addClassName( "selected"); 
+            } else {
+                row.removeClassName( "selected"); 
+            }
+        }
+
+    }); 
+});
+SCRIPT;
+        $header = AMP_get_header( );
+        $header->addJavascriptOnLoad( $script, $this->list_id.'table_rows');
     }
 
 }
