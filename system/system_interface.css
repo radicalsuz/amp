@@ -806,6 +806,7 @@ table.system {
 .system .list_row td {
 	padding-left: 0.5em;
 	padding-right: 0.5em;
+    border: #FFFFFF 1px transparent;
 }
 
 .system .list_row_even td, .system .list_row_even {
@@ -816,6 +817,12 @@ table.system {
 	background-color: #E5E5E5;
 }
 
+.system .selected, .system .selected td {
+	background-color: #C9EAC9; 
+    border-top: #559955 1px solid;
+    border-bottom: #559955 1px solid;
+
+}
 
 .system .list_row td:hover, .system .list_row:hover{
 	background-color: #CCFFCC;
@@ -828,6 +835,7 @@ table.system {
 .system .list_row {
 	margin-top: 1em;
 }
+
 
 .system .list_column_header td{
 	font-size: .85em;
