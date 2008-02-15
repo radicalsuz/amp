@@ -13,9 +13,12 @@ class Section_Form extends AMPSystem_Form_XML {
     }
 
     function _after_init( ) {
-        $this->addTranslation( 'list_by_class', '_multiselectToText', 'get');
-        $this->addTranslation( 'list_by_section', '_multiselectToText', 'get');
-        $this->addTranslation( 'list_by_tag', '_multiselectToText', 'get');
+        $multiselect_boxes = array( 'list_by_class', 'list_by_section', 'list_by_tag');
+        foreach( $multiselect_boxes as $field_name ) {
+            if( $this->fields[ $field_name]['type']) {
+                $this->addTranslation( $field_name, '_multiselectToText', 'get');
+            }
+        }
         $this->_send_preview_link_to_bottom( );
     }
 
