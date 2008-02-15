@@ -338,7 +338,7 @@ class AMPSystemLookup_FormsPublic extends AMPSystem_Lookup {
     var $sortby = "name";
     var $criteria = 'publish = 1';
 
-    function AMPSystemLookup_Forms() {
+    function AMPSystemLookup_FormsPublic() {
         $this->init( );
     }
 }
