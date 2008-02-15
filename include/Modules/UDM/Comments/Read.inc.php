@@ -37,8 +37,8 @@ class UserDataPlugin_Read_Comments extends UserDataPlugin {
 
         require_once( 'AMP/Content/Article/Comment/List_Basic.inc.php');
         $comment_list = & new AMP_Content_Article_Comment_List_Basic( $this->dbcon, array( 'userdata_id' => $uid ));
-        $commentList->setEditLinkTarget( 'blank' );
-        $commentList->appendAddLinkVar( 'userdata_id='.$uid );
+        $comment_list->setEditLinkTarget( 'blank' );
+        $comment_list->appendAddLinkVar( 'userdata_id='.$uid );
 
         $comment_list_output = $comment_list->execute( ) ;
         $this->udm->fields[ $this->addPrefix('comments_list') ]['values'] = $this->inForm( $comment_list_output );
