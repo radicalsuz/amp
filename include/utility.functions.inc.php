@@ -2372,4 +2372,16 @@ function AMP_request_to_vars( $request ) {
 
 }
 
+function AMP_block_frequent_requesters( ) {
+    if ( !( defined( 'AMP_BLOCK_FREQUENT_REQUESTERS') && AMP_BLOCK_FREQUENT_REQUESTERS)) return;
+    $key = 'REQUESTED_BY_' . $_SERVER['REMOTE_ADDR'] ;
+    if( !( $value = AMP_cache_get( $key ))) $value = 0;
+    ++$value;
+    AMP_cache_set( $key, $value );
+    if ( $value > 200 && !AMP_Authenticate( 'admin')) {
+        trigger_error( 'Blocking further requests from '. $_SERVER['REMOTE_ADDR']);
+        exit;
+    }
+}
+
 ?>

@@ -19,6 +19,7 @@ require_once( 'AMP/Base/Debug.php');
 //cache tokens and settings
 //require_once( 'AMP/System/Cache/Config.inc.php');
 AMP_config_load( 'cache');
+AMP_block_frequent_requesters( );
 
 //db action : load DB system settings ( sysvar table )
 require_once( 'AMP/Base/Setup.php');
