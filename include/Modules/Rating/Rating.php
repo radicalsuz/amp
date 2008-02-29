@@ -41,11 +41,11 @@ class AMPSystemLookup_ArticleRatingsLastMonth extends AMPSystemLookup_ArticleRat
 }
 
 class AMPSystemLookup_ArticleRatingsBySection extends AMPSystem_Lookup{
-    var $datatable = 'ratings a, articles b, articlereltype c';
+    var $datatable = 'ratings a left join articles b on a.item_id = b.id left join articlereltype c on a.item_id = c.articleid';
     var $id_field = 'a.item_id';
     var $result_field = 'avg( a.rating ) as rank';
-    var $criteria = 'a.item_type="article" AND ( a.item_id = b.id OR a.item_id = c.articleid ) GROUP BY a.item_id';
-    var $_base_criteria = 'a.item_type="article" AND ( a.item_id = b.id OR a.item_id = c.articleid ) GROUP BY a.item_id';
+    var $criteria = 'a.item_type="article" GROUP BY a.item_id';
+    var $_base_criteria = 'a.item_type="article" GROUP BY a.item_id';
     var $sortby = 'rank desc, b.date desc';
 
     function AMPSystemLookup_ArticleRatingsBySection( $section_id ) {
