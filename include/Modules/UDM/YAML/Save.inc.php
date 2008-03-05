@@ -25,8 +25,12 @@ class UserDataPlugin_Save_YAML extends UserDataPlugin_Save {
 
 
     function save( $data ) {
-        trigger_error( 'trying save');
-        $yaml_dump = Spyc::YAMLDump( $this->udm->getData( ));
+        $yaml_data = $this->udm->getData( ) ;
+        if ( isset( $yaml_data['Zip']) && $yaml_data['Zip']) {
+            $yaml_data['Zip'] = '"'.$yaml_data['Zip'].'"';
+        }
+        $yaml_dump = Spyc::YAMLDump( $yaml_data );
+
         $filename = $this->get_filename( $this->udm->uid );
         if ( !is_writeable( $this->get_foldername( ))) {
             trigger_error( sprintf( AMP_TEXT_ERROR_FILE_WRITE_FAILED, $filename ));
