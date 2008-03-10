@@ -119,6 +119,11 @@ class Section_Public_List extends AMP_Display_List {
     function addFilter( $filter_name, $filter_var ) {
         //do nothing
     }
+
+    function set_container( &$container ) {
+        $this->_source_container = &$container;
+    }
+    
 }
 
 ?>
