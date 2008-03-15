@@ -7,9 +7,8 @@ class AMP_Content_Badge_Public_Article_List extends Article_Public_List {
     var $_class_pager = 'AMP_Display_Pager_Morelink';
     var $_path_pager = 'AMP/Display/Pager/Morelink.php';
 
-    function AMP_Content_Badge_Public_Article_List( $source = false, $criteria=array( ), $limit = null ) {
-		$source = false;
-		$this->__construct($source, $criteria, $limit );
+    function AMP_Content_Badge_Public_Article_List( $container = false, $criteria=array( ), $limit = null ) {
+		$this->__construct($container, $criteria, $limit );
     }
 
     function _init_criteria( ) {

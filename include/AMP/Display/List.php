@@ -517,8 +517,9 @@ class AMP_Display_List {
         }
 
         $total = $this->_pager->total( $source );
-        if ( ( $total > $this->_pager_limit ) 
-            || ( $this->_pager->get_offset( ) && $total < $this->_pager_limit )) {
+        if ( ( ( $total > $this->_pager_limit ) 
+            || ( $this->_pager->get_offset( ) && $total < $this->_pager_limit ))
+            && ( !$this->_pager->get_total( ))) {
             $this->_pager->set_total( $total );
         }
         if ( $total > $this->_pager_limit ) {

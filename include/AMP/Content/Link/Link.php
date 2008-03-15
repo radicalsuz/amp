@@ -117,7 +117,7 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
     }
 
     function _sort_default( &$item_set ){
-        return $this->sort( $item_set, 'name');
+        return $this->sort( $item_set, 'order');
 #        $this->sort( $item_set, 'order');
 #        return $this->sort( $item_set, 'linkTypeName');
     }

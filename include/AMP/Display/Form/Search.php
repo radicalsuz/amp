@@ -61,7 +61,7 @@ class AMP_Display_Form_Search extends AMP_Display_Form {
                 continue;
             }
             
-            $search_values[ $ukey ] = $uvalue;
+            $search_values[ $ukey ] = strip_tags( $uvalue );
         }
 
         return $this->clean_constants( $search_values );

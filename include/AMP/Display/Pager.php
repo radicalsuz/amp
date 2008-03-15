@@ -66,6 +66,10 @@ class AMP_Display_Pager {
         $this->_qty_total = $total;
     }
 
+    function get_total( $total ) {
+        return $this->_qty_total;
+    }
+
     function set_limit( $limit ) {
         $this->_qty_page = $limit;
         $this->_current_page = ( $this->_current_offset / $this->_qty_page ) + 1;
@@ -285,7 +289,7 @@ class AMP_Display_Pager {
         return $this->_renderer->link( $target_url, $target_page, array( 'class' => $jump_class ));
     }
 
-    function total( &$source ) {
+    function total( &$source, $reset = false ) {
         if ( is_array( $source )) {
             return count( $source );
         } elseif ( is_object( $source )) {
