@@ -3,11 +3,11 @@
 		<type>text</type>
 		<label>Text Search</label>
 	</fulltext>
-    <section_logic>
+    <section_logic_plus>
 		<label>By Section</label>
 		<type>select</type>
 		<lookup>sectionMapLiveChopped</lookup>
-    </section_logic>
+    </section_logic_plus>
     <class>
 		<separator>newrow</separator>
 		<type>select</type>

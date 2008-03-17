@@ -34,6 +34,9 @@
     <section_logic>
         <type>hidden</type>
     </section_logic>
+    <section_logic_plus>
+        <type>hidden</type>
+    </section_logic_plus>
     <author>
         <type>hidden</type>
         <label>By Author</label>
