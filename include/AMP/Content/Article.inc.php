@@ -756,7 +756,7 @@ class Article extends AMPSystem_Data_Item {
         $logic[] = $this->makeCriteriaSectionLogic( $section_id );
         $logic[] = $this->makeCriteriaSection( $section_id );
         $logic = array_filter( $logic );
-        return join( ' OR ', $logic );
+        return '( '.join( ' OR ', $logic ). ')';
     }
     function makeCriteriaSectionLogicAdmin( $section_id ) {
         return $this->makeCriteriaSectionLogicPlus( $section_id );
