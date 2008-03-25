@@ -530,9 +530,9 @@ class UserDataPlugin_SearchForm_Output extends UserDataPlugin {
 
         //set the search preferences for dates
         if ( $type == 'date' ) {
-            $date_preferences = 'form.'.$this->udm->instance.'.date.search.inc.php'; 
-            if ( file_exists_incpath( $date_preferences )) {
-                include_once( $date_preferences );
+            $custom_defaults = 'defaults_'.$this->udm->instance.'_date_search'; 
+            if (function_exists($custom_defaults )) {
+                $defaults= $custom_defaults(&$this, $name );
             } else {
                 $defaults = array( 'minYear' => 1990, 'addEmptyOption' => 1, 'emptyOptionText' => '--', 'format' => 'MY' );
             }
