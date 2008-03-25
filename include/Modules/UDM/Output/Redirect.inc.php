@@ -1,41 +1,18 @@
 <?php
-require_once('AMP/UserData/Plugin.inc.php');
-if ( file_exists_incpath( 'custom.includes.inc.php')){
-    include_once( 'custom.includes.inc.php');
-}
-class UserDataPlugin_Redirect_Output extends UserDataPlugin {
-    var $redirURL;
-    var $available=true;
-    var $options = array ( 
-    'redirect_url'=>array( 
-        'label'=>'Redirect URL',
-        'type'=>'text',
-        'available'=>'true',
-        'default'=>''),
-    'redirect_function'=>array( 
-        'label'=>'Redirect Function',
-        'type'=>'text',
-        'available'=>'true',
-        'default'=>'')
-    );
 
-    function UserDataPlugin_Redirect_Output ( &$udm, $plugin_instance) {
-        $this->init( $udm, $plugin_instance);
+function udm_output_redirect ( $udm, $options = array( )) {
+
+    if ( isset( $udm->redirectURL ) ) {
+
+        $redirURL = $udm->redirectURL;
+
+    } elseif ( isset( $options[ 'redirectURL' ] ) ) {
+
+        $redirURL = $options[ 'redirectURL' ];
+
     }
 
-    function execute ( $options){
-        $options = array_merge( $thi->getOptions( ), $options);
-        $redirURL = $this->makeRedirect( );
-        ampredirect( $redirURL);
-    }
+    header( 'Location: ' . $redirURL );
 
-    function makeRedirect ( ){
-        $redirURL = '';
-        if ( $options['redirect_function'] !== ''){
-            $redirURL = $options['redirect_function']( $this->$udm->getData( ));
-        } else {
-            $redirURL = $options['redirect_url'];
-        }
-    } 
 }
 ?>

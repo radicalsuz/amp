@@ -1,4 +1,8 @@
 <?php
+require_once('AMP/UserData/Plugin.inc.php');
+if ( file_exists_incpath( 'custom.includes.inc.php')){
+    include_once( 'custom.includes.inc.php');
+}
 class UserDataPlugin_Save_SubmitRedirect extends UserDataPlugin {
     var $redirURL;
     var $available=true;
@@ -22,9 +26,7 @@ class UserDataPlugin_Save_SubmitRedirect extends UserDataPlugin {
     function execute ( $options){
         $options = array_merge( $this->getOptions( ), $options);
         $redirURL = $this->makeRedirect( $options);
-        if ( ! empty( $redirURL)){
-            ampredirect( $redirURL);
-        }
+        ampredirect( $redirURL);
     }
 
     function makeRedirect ( $options){
