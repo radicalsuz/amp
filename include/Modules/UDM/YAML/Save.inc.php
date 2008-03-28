@@ -27,6 +27,8 @@ class UserDataPlugin_Save_YAML extends UserDataPlugin_Save {
     function save( $data ) {
         $yaml_data = $this->udm->getData( ) ;
         if ( isset( $yaml_data['Zip']) && $yaml_data['Zip']) {
+            $yaml_data['Street'] = '"'.$yaml_data['Street'].'"';
+            $yaml_data['Street_2'] = '"'.$yaml_data['Street_2'].'"';
             $yaml_data['Zip'] = '"'.$yaml_data['Zip'].'"';
         }
         $yaml_dump = Spyc::YAMLDump( $yaml_data );
