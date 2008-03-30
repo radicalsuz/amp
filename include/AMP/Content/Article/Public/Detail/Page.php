@@ -24,5 +24,9 @@ class Article_Public_Detail_Page extends Article_Public_Detail {
         return $this->_renderer->p( eval_includes( $body ), array( 'class' => $this->_css_class_body ));
 
     }
+
+    function render_comments( $source ) {
+        return false;
+    }
 }
 ?>
