@@ -211,6 +211,10 @@ class AMPContent_Header {
         $final_rssfeed_url = empty( $rss_vars ) ? 
                             AMP_SITE_URL . AMP_CONTENT_URL_RSSFEED : 
                             AMP_Url_AddVars( AMP_SITE_URL . AMP_CONTENT_URL_RSSFEED, $rss_vars );
+
+        if( AMP_CONTENT_URL_RSSFEED_EXTERNAL ) {
+            $final_rssfeed_url = AMP_CONTENT_URL_RSSFEED_EXTERNAL;
+        }
         return "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"".$final_rssfeed_url."\">";
     }
 
