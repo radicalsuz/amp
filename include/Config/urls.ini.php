@@ -72,6 +72,7 @@ page_not_found="search.php"
 petitions=     "petition.php"
 
 rssfeed=       "rssfeed.php"
+rssfeed_external=""
 rssfeed_list=  "rss.php"
 
 search=        "search.php"

@@ -28,7 +28,7 @@ class AMPSystem_XMLEngine {
 
     function save( $data ) {
         require_once('XML/Serializer.php');
-        $xmlEngine = & new XML_Serializer();
+        $xmlEngine = & new XML_Serializer( array(  XML_SERIALIZER_OPTION_DEFAULT_TAG => 'values', XML_SERIALIZER_OPTION_INDENT => '    '));
         $xmlresult = $xmlEngine->serialize( $data );
 
         $locale = AMP_LOCAL_PATH . '/custom/' . $this->describeFile('_');

@@ -319,19 +319,35 @@ class AMPSystemLookup_Forms extends AMPSystem_Lookup {
     var $datatable = "userdata_fields";
     var $result_field = "name";
     var $sortby = "name";
+    var $_base_criteria = "TRUE";
 
     function AMPSystemLookup_Forms() {
+        $this->init();
+    }
+
+    function init( ) {
+        $this->filterByPermission( );
+        parent::init( );
+    }
+
+    function filterByPermission( ) {
         $formpermission = AMPSystem_Lookup::instance('PermissionsbyForm');
-        $modules = & AMPSystem_Lookup::instance( 'FormsbyTool' );
+        $modules = AMPSystem_Lookup::instance( 'FormsbyTool' );
 
         $un_designated = "id not in(" . join(', ', array_keys($formpermission)) . ")";
         $allowed = "id in(" . join(', ', $modules).")";
 
-        $this->criteria = "( $un_designated OR $allowed )";
-        $this->init();
+        $this->criteria = $this->_base_criteria . " and ( $un_designated OR $allowed )";
     }
 }
 
+class AMPSystemLookup_CustomForms extends AMPSystemLookup_Forms {
+    var $_base_criteria = "id>49";
+
+    function AMPSystemLookup_CustomForms() {
+        $this->init();
+    }
+}
 class AMPSystemLookup_FormsPublic extends AMPSystem_Lookup {
     var $datatable = "userdata_fields";
     var $result_field = "name";
