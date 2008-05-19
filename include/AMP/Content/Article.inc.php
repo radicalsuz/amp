@@ -24,6 +24,7 @@ class Article extends AMPSystem_Data_Item {
     var $_class_name = 'Article';
 
     var $_version_status = false;
+    var $_save_with_callbacks = true;
 
     /**
      * Article 
@@ -428,9 +429,11 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function _afterSave( ){
-        $this->_save_aliases( );
-        $this->_save_sections_related( );
-        $this->_save_tags( );
+        if ( $this->_save_with_callbacks ) {
+            $this->_save_aliases( );
+            $this->_save_sections_related( );
+            $this->_save_tags( );
+        }
     }
 
     function _save_sections_related( ){
@@ -562,7 +565,7 @@ class Article extends AMPSystem_Data_Item {
         if ( $new_order_value == $this->getOrder( )) return false;
         if ( is_array( $new_order_value )) return false;
         $this->setOrder( $new_order_value );
-        if ( !( $result = $this->save( ))) return false;
+        if ( !( $result = $this->save_without_callbacks( ))) return false;
         $this->notify( 'update' );
         $this->notify( 'reorder' );
         return $result;
@@ -586,9 +589,16 @@ class Article extends AMPSystem_Data_Item {
         if ( !$move_action ) return false;
 
         $this->list_action= 'move';
-        if ( !( $result = $this->save( ) or $relate_result )) return false;
+        if ( !( $result = $this->save_without_callbacks( ) or $relate_result )) return false;
         $this->notify( 'update' );
         $this->notify( 'move'   );
+        return $result;
+    }
+
+    function save_without_callbacks( ) {
+        $this->_save_with_callbacks = false;
+        $result = $this->save( );
+        $this->_save_with_callbacks = true;
         return $result;
     }
 
@@ -597,7 +607,7 @@ class Article extends AMPSystem_Data_Item {
         $this->setRegion( $region_id );
 
         $this->list_action= 'regionize';
-        if ( !( $result = $this->save( ))) return false;
+        if ( !( $result = $this->save_without_callbacks( ))) return false;
         $this->notify( 'update' );
         $this->notify( 'regionize' );
         return $result;
@@ -1001,7 +1011,7 @@ class Article extends AMPSystem_Data_Item {
         $this->mergeData( $updated_values ); 
 
         $this->list_action= 'request_revision';
-        $result = $this->save( );
+        $result = $this->save_without_callbacks( );
 
         $this->notify( 'update' );
         $this->notify( 'to_revision' );
