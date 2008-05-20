@@ -91,5 +91,19 @@ class AMP_RSSWriter extends RSSWriter {
 
 		return true;
 	}
+
+    function preamble() {
+        header("Content-type: text/xml");
+        print '<?xml version="1.0" encoding="'.AMP_SITE_CONTENT_ENCODING.'"?>
+<rdf:RDF 
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://purl.org/rss/1.0/"
+         xmlns:mn="http://usefulinc.com/rss/manifest/"
+';
+        foreach ($this->modules as $prefix => $uri) {
+            print "         xmlns:${prefix}=\"${uri}\"\n";
+        }
+        print ">\n\n";
+    }
 }
 ?>
