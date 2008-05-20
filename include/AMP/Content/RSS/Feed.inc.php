@@ -5,6 +5,8 @@ require_once( 'AMP/Content/Section.inc.php' );
 require_once( 'AMP/Content/Article.inc.php' );
 require_once( 'RSSWriter/AMP_RSSWriter.php' );
 require_once( 'AMP/Content/Page/Urls.inc.php' );
+require_once( 'AMP/Content/Article/Public/List.php');
+require_once( 'AMP/Content/Article/Public/Detail.php');
 
 class AMPContent_RSSFeed extends AMPSystem_Data_Item {
 
@@ -12,6 +14,7 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
     var $name_field =  'title';
     var $sourceSet;
     var $_class_name = "AMPContent_RSSFeed";
+    var $_display;
 
     var $feed_metaData = array(
         'language' => 'en-us',
@@ -86,7 +89,12 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
         $display = &new AMP_RSSWriter( AMP_SITE_URL, $feed_name, AMP_SITE_META_DESCRIPTION, $this->feed_metaData ); 
         $articleSet = $this->sourceSet->instantiateItems( $this->sourceSet->getArray(), $this->sourceItem_class );
         foreach( $articleSet as $article ) {
-            $articledMeta=array();
+            $articleMeta=array();
+            if ($this->getData('include_full_content')) {
+                $this->_display = &new AMP_Content_Article_Public_Detail( $article );
+            } else {
+                $this->_display = &new Article_Public_List( false, array(), 1 );
+            }
 
             $url = $article->getURL();
             if ( strpos( $url, "http://" ) === FALSE ) $url = AMP_SITE_URL . $url;
@@ -105,9 +113,11 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
 
     function _makeDescription( &$source ) {
         if ($this->getData('include_full_content')) {
-            return $source->getBody();
+            $output = $this->_display->render_body( $source );
+        } else {
+            $output = AMP_trimText( $this->_display->render_blurb( $source ), 9000 );
         }
-        return AMP_trimText( $source->getBlurb(), 9000 );
+        return $output;
     }
 
     function setSection( $section_id ){
