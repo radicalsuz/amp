@@ -3,7 +3,7 @@
 //root section=1
 
 [system]
-version_id="3.7.4"
+version_id="3.7.5-sandbox"
 ;unique id=AMP_DB_NAME
 menu_version=1
 cache="memcache"
