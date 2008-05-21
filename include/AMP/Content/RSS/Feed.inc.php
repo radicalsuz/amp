@@ -50,6 +50,7 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
     }
     function getCriteria() {
         $total_crit = array();
+		$article_search = new Article( $this->dbcon );
         if ($crit = $this->getData('sqlwhere')) {
             if ($bad_spot =  strpos( $crit, "or typeid" )) {
                 $crit = substr( $crit, 0, $bad_spot ) . ")"; 
@@ -57,24 +58,24 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
             $total_crit[] = $crit;
         }
         if ( $id = $this->getData('class_id')) {
-            $total_crit[] = "class =".$id;
+            #$total_crit[] = "class =".$id;
+            $total_crit[] = $article_search->makeCriteriaClass($id);
         }
         if ( $id = $this->getData('section_id')) {
-            $article_search = new Article( $this->dbcon );
             $section = &new Section( $this->dbcon, $id );
             $section_crit = $section->getDisplayCriteria();
 			$crit = join( ' AND ', $article_search->makeCriteria($section_crit));
             $total_crit[] = $crit;
         }
         if (empty( $total_crit)) return false;
-        return "( ". join( " ".$this->getCombineLogic()." ", $total_crit ). " )";
+        return "( ". join( " ".$this->getCombineLogic()." ", $total_crit ). " ) AND " . $article_search->makeCriteriaDisplayable();
 
     }
 
     function getDataSource() {
         $articles = &new ArticleSet( $this->dbcon );
         $articles->addCriteria( $this->getCriteria() );
-        $articles->addCriteria( 'publish=1' );
+        #$articles->addCriteria( 'publish=1' );
         $articles->setSort ( $this->getSort() );
         $articles->setLimit( $this->getLimit() );
         $articles->readData();
@@ -83,7 +84,7 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
 
     function &getDisplay() {
         $feed_name = ($name = $this->getTitle()) ? $name : AMP_SITE_NAME;
-        $this->feed_metaData['pubDate'] = date('r');
+        $this->feed_metaData['lastBuildDate'] = date('D, d M Y  H:i:s');
         $this->feed_metaData['generator'] = 'Activist Mobilization Platform '.AMP_SYSTEM_VERSION_ID;
         if ( ! $this->sourceSet->isReady() ) return false;
         $display = &new AMP_RSSWriter( AMP_SITE_URL, $feed_name, AMP_SITE_META_DESCRIPTION, $this->feed_metaData ); 
@@ -91,7 +92,7 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
         foreach( $articleSet as $article ) {
             $articleMeta=array();
             if ($this->getData('include_full_content')) {
-                $this->_display = &new AMP_Content_Article_Public_Detail( $article );
+                $this->_display = &new Article_Public_Detail( $article );
             } else {
                 $this->_display = &new Article_Public_List( false, array(), 1 );
             }
@@ -101,8 +102,9 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
 
             $articleMeta['description'] = $this->_makeDescription( $article );
             if ($itemdate = $article->getItemDate() ) {
-#                $articleMeta['pubDate'] = strtotime( $itemdate );
-                $articleMeta['dc:date'] = date('Y-m-d', strtotime( $itemdate ));
+                #$articleMeta['pubDate'] = strtotime( $itemdate );
+                #$articleMeta['dc:date'] = date('Y-m-d', strtotime( $itemdate ));
+                $articleMeta['pubDate'] = date('D, d M Y', strtotime( $itemdate ));
             }
 #            $articleMeta['guid'] = $url;
 

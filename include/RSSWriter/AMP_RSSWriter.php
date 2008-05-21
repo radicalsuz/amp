@@ -12,7 +12,7 @@ class AMP_RSSWriter extends RSSWriter {
 
 	function items() {
 		foreach ($this->items as $item) {
-			print "  <item rdf:about=\"" .  htmlspecialchars($item["uri"]) . "\">\n";
+			print "  <item>\n";// rdf:about=\"" .  htmlspecialchars($item["uri"]) . "\">\n";
 			foreach ($item as $key => $value) {
 				$key = trim($key);
 				if ($key!="uri") {
@@ -94,8 +94,11 @@ class AMP_RSSWriter extends RSSWriter {
 
     function preamble() {
         header("Content-type: text/xml");
-        print '<?xml version="1.0" encoding="'.AMP_SITE_CONTENT_ENCODING.'"?>
-<rdf:RDF 
+        print '<?xml version="1.0" encoding="'.AMP_SITE_CONTENT_ENCODING.'"?>'."\n";
+		#print '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>' . "\n";
+		print '<rss version="2.0">'."\n";
+		print '<channel>'."\n";
+/*<rdf:RDF 
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns="http://purl.org/rss/1.0/"
          xmlns:mn="http://usefulinc.com/rss/manifest/"
@@ -103,7 +106,34 @@ class AMP_RSSWriter extends RSSWriter {
         foreach ($this->modules as $prefix => $uri) {
             print "         xmlns:${prefix}=\"${uri}\"\n";
         }
-        print ">\n\n";
+        print ">\n\n"; */
     }
+	function postamble() {
+		print '</channel></rss>'. "\n";
+	}
+	function channelinfo() {
+		$i=$this->chaninfo;
+		foreach (array("title", "link", "dc:source", "description", "dc:language", "dc:publisher",
+			"dc:creator", "dc:rights") as $f) {
+			if (isset($i[$f])) {
+				print "    <${f}>" . htmlspecialchars($i[$f]) . "</${f}>\n";
+			}
+		}
+		if (isset($this->image)) {
+			#print "    <image rdf:resource=\"" . htmlspecialchars($this->image["uri"]) . "\" />\n";
+			print "    <image><url>" . htmlspecialchars($this->image["uri"]) . "</url></image>\n";
+		}
+	}
+
+	function deTag($in) {
+		return $in;
+	}
+
+	function addItem($uri, $title, $meta=array()) {
+		if (!(isset($meta['guid']) && $meta['guid'])) {
+			$meta['guid'] = $uri;
+		}
+		return parent::addItem($uri, $title, $meta);
+	}
 }
 ?>
