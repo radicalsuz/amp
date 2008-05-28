@@ -1,16 +1,45 @@
 <array>
-		<id>
-			<type>hidden</type>
-		</id>
+	<id>
+		<type>hidden</type>
+	</id>
 	<publish>
 		<type>checkbox</type>
-		<label>Publish</label>
+		<label>&lt;span class=publish_label&gt;Publish&lt;/span&gt;</label>
 		<default>1</default>
 	</publish>
 	<name>
 		<type>text</type>
 		<label>Quiz Name</label>
+		<required>1</required>
 	</name>
+	<modin>
+		<type>select</type>
+		<label>Quiz Form</label>
+		<lookup>custom_forms</lookup>
+	</modin>
+	<question_header>
+		<label>Questions</label>
+		<type>header</type>
+	</question_header>
+	<insert_block>
+		<type>static</type>
+		<default>&lt;div id="related_form_quiz"&gt;&lt;/div&gt;</default>
+	</insert_block>
+	
+	<new_question_header>
+		<label>New Question</label>
+		<type>header</type>
+	</new_question_header>
+	<new_question_top>
+		<type>button</type>
+		<label>Add a Question</label>
+		<attr>
+			<onClick>RelatedQuestions.save( );</onClick>
+			<!--
+			<onClick>related_add( this.up( "form"), Array( "question", "explanation", "correct_answer", "answer_1", "answer_2", "answer_3", "answer_4", "answer_5", "answer_6", "answer_7" ), 'quiz' ); related_describe(  this.up( "form"), Array( "question", "explanation", "correct_answer", "answer_1", "answer_2", "answer_3", "answer_4", "answer_5", "answer_6", "answer_7" ), 31, 'quiz');</onClick>
+			-->
+		</attr>
+	</new_question_top>
 	<question>
 		<type>textarea</type>
 		<label>Question</label>
@@ -47,13 +76,27 @@
 	<correct_answer>
 		<type>select</type>
 		<label>Correct Answer</label>
-
+		<attr><id>correct_answer</id></attr>
 	</correct_answer>
 
 	<explanation>
 		<type>textarea</type>
 		<label>Explanation</label>
 	</explanation>
+	<new_question>
+		<type>button</type>
+		<label>Add a Question</label>
+		<attr>
+			<onClick>RelatedQuestions.save( );</onClick>
+			<!--
+			<onClick>related_add( this.up( "form"), Array( "question", "explanation", "correct_answer", "answer_1", "answer_2", "answer_3", "answer_4", "answer_5", "answer_6", "answer_7" ), 'quiz' ); related_describe(  this.up( "form"), Array( "question", "explanation", "correct_answer", "answer_1", "answer_2", "answer_3", "answer_4", "answer_5", "answer_6", "answer_7" ), 31, 'quiz');</onClick>
+			-->
+		</attr>
+	</new_question>
+	<quiz>
+		<type>hidden</type>
+	</quiz>
+<!--
 	<link>
 		<type>text</type>
 		<label>Link 1</label>
@@ -69,6 +112,7 @@
 	<section>
 		<type>select</type>
 		<label>Section</label>
+		<lookup>section_map</lookup>
 	</section>
 	<date>
 		<type>date</type>
@@ -92,6 +136,5 @@
 				<format>MdY</format>
 			</options>
 	</date_end>
-
 -->
 </array>

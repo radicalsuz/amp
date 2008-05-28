@@ -235,11 +235,10 @@ class Article_Public_Detail extends AMP_Display_Detail {
         if ( !( $media_html || $media_url )) return false;
 
         $output = '';
-        if ( $media_url ) {
-            $output .= $this->_renderer->embed_flash_video( $media_url );
-        }
         if ( $media_html ) {
             $output .= $media_html;
+        } elseif ( $media_url ) {
+            $output .= $this->_renderer->embed_flash_video( $media_url );
         }
         return $this->_renderer->div( $output, array( 'class' => $this->_css_class_media )) ;
 
