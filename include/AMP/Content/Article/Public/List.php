@@ -16,7 +16,7 @@ class Article_Public_List extends AMP_Display_List {
 
     var $_sort_sql_default = 'default';
     var $_sort_sql_translations = array( 
-        'default' => 'date DESC, id'
+        'default' => 'date DESC, id DESC'
     );
 
     var $_css_class_author = AMP_CONTENT_CSS_CLASS_LIST_ARTICLE_AUTHOR ;
