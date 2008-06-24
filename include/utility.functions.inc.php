@@ -691,7 +691,7 @@ if (!function_exists('AMPbacktrace')) {
 
 if (!function_exists( 'lowerlimitInsertID' )) {
     function lowerlimitInsertID( $table, $num ) {
-		global $dbcon;
+		$dbcon = AMP_Registry::getDbcon( );
 		$getid=$dbcon->Execute( "SELECT id FROM $table ORDER BY id DESC LIMIT 1") or die($dbcon->ErrorMsg());
 		if ($getid->Fields("id") < $num) { $id = $num; } else { $id = NULL;} 
 		return $id;
