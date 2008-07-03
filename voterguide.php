@@ -1,4 +1,5 @@
 <?php
+/*
 
 $modid = 109;
 $mod_id = 74;
@@ -31,5 +32,5 @@ if($intro_id) {
 }
 
 include("AMP/BaseFooter.php"); 
-
+*/
 ?>

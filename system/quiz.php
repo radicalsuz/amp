@@ -5,11 +5,8 @@ require_once("AMP/System/Page.inc.php");
 $modid = 46;
 $map = &new ComponentMap_Quiz();
 
-$page = &new AMPSystem_Page ($dbcon, $map);
-if (isset($_GET['action']) && $_GET['action'] == "list")  $page->showList( true );
+$controller = &$map->get_controller( );
+print $controller->execute( );
 
-$page->execute();
-
-print $page->output( );
 
 ?>

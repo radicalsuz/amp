@@ -28,7 +28,7 @@ require_once('AMP/UserData/Set.inc.php');
 
 //bounce to the index if modin isn't set
 if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
-    $modin=$_REQUEST['modin'];
+    $modin=intval( $_REQUEST['modin'] );
 } else {
     header ("Location: index.php");
 }
@@ -45,7 +45,7 @@ if (!$userlist->_module_def['publish']) {
 }
 
 $sub = isset($_REQUEST['btnUDMSubmit']);
-$uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
+$uid= isset($_REQUEST['uid'])?intval( $_REQUEST['uid'] ):false;
 
 if ($uid && $modin) {
 

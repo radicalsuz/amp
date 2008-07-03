@@ -1,5 +1,8 @@
 <?php
+#no references to this file found in the codebase
+#commenting it until we receive complaints
 
+/*
 require_once "HTTP/Request.php";
 require_once "XML/Unserializer.php";
 
@@ -155,5 +158,5 @@ function geo_showmap($map_lat,$map_long) {
  
 }
 
- ?>
-  
+*/
+?>

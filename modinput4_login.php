@@ -14,8 +14,9 @@ ob_start();
 require_once( 'AMP/BaseDB.php' );
 require_once( 'AMP/UserData/Input.inc.php' );
 
+$modin = ( isset( $_REQUEST['modin']) && $_REQUEST['modin']) ? intval( $_REQUEST['modin'] ) : false;
 // Fetch the form instance specified by submitted modin value.
-$udm = new UserDataInput( $dbcon, $_REQUEST[ 'modin' ] );
+$udm = new UserDataInput( $dbcon, $modin );
 
 $mod_id = $udm->modTemplateID;
 

@@ -12,13 +12,13 @@ require_once( 'AMP/Content/Page.inc.php');
 
 $_REQUEST['action'] = 'search';
 $page = &AMPContent_Page::instance( );
-$template_section = ( isset( $_REQUEST['template_section']) && $_REQUEST['template_section'] ) ? $_REQUEST['template_section'] : false;
+$template_section = ( isset( $_REQUEST['template_section']) && $_REQUEST['template_section'] ) ? intval( $_REQUEST['template_section'] ) : false;
 if (!$template_section) {
 	$template_section = ( isset( $_REQUEST['section']) && $_REQUEST['section'] && is_numeric($_REQUEST['section']) ) ? $_REQUEST['section'] : AMP_CONTENT_SECTION_ID_ROOT;
 }
 $page->setSection( $template_section );
 
-$tag_header = ( isset( $_REQUEST['tag_header']) && $_REQUEST['tag_header']) ? $_REQUEST['tag_header'] : false;
+$tag_header = ( isset( $_REQUEST['tag_header']) && $_REQUEST['tag_header']) ? strip_tags( $_REQUEST['tag_header'] ) : false;
 $tag = ( isset( $_REQUEST['tag']) && $_REQUEST['tag']) ? $_REQUEST['tag'] : false;
 if( $tag_header && $tag ) {
     require_once( 'AMP/Content/Tag/Public/Search/Description.php');

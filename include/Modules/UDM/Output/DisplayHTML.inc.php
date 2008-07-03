@@ -123,7 +123,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         // if the UID is set, show only one record with the detail format
         if (isset($this->udm->uid)) {
             $display_function=isset($options['detail_format'])?($options['detail_format']):"display_detail";
-            $dataset = $this->udm->getUser( $this->udm->uid );
+            $dataset = $this->udm->getUser( intval( $this->udm->uid ) );
             $data_item = current($dataset);
             if (!($data_item['publish']||$this->udm->admin)) $dataset = false;
             $subheader_level=0;

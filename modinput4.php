@@ -26,7 +26,7 @@ if ( $cached_output = AMP_cached_request( )) {
     exit;
 }
 
-$modin = ( isset( $_REQUEST['modin']) && $_REQUEST['modin']) ? $_REQUEST['modin'] : false;
+$modin = ( isset( $_REQUEST['modin']) && $_REQUEST['modin']) ? intval( $_REQUEST['modin'] ) : false;
 
 // Fetch the form instance specified by submitted modin value.
 $udm =& new UserDataInput( $dbcon, $modin );
@@ -36,7 +36,7 @@ if( !$udm->isLive( )) {
 }
 
 // User ID.
-$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+$uid = (isset($_REQUEST['uid'])) ? intval( $_REQUEST['uid'] ) : false;
 $otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
 
 // Check for duplicates, setting $uid if found.

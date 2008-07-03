@@ -11,6 +11,7 @@
 //ob_start();
 
 // Set default module.
+/*
 $mod_id = 57;
 $modid = 1;
 
@@ -156,7 +157,7 @@ if ( ( !$uid || $auth ) && $sub ) {
 
 $insert_html = $slate_html;
 
-	 
+*/	 
 /* Now Output the Form.
 
    Any necessary changes to the form should have been registered
@@ -169,7 +170,7 @@ $insert_html = $slate_html;
 
 */
 
-
+/*
 $mod_id = $udm->modTemplateID;
 
 require_once( 'AMP/BaseTemplate.php' );
@@ -193,4 +194,5 @@ print $form_footer;
 
 // Append the footer and clean up.
 require_once( 'AMP/BaseFooter.php' );
+*/
 ?>

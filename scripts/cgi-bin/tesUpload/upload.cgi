@@ -157,7 +157,7 @@ while (read (STDIN ,$LINE, 4096) && $bRead < $len )
 {
 	$bRead += length $LINE;
 	
-	select(undef, undef, undef,0.35);	# sleep for 0.35 of a second.
+	# select(undef, undef, undef,0.35);	# sleep for 0.35 of a second.
 	
 	# Many thanx to Patrick Knoell who came up with the optimized value for
 	# the duration of the sleep

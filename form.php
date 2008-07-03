@@ -26,9 +26,9 @@ if ( $cached_output = AMP_cached_request( )) {
     exit;
 }
 
-$modin = ( isset( $_REQUEST['modin']) && $_REQUEST['modin']) ? $_REQUEST['modin'] : false;
+$modin = ( isset( $_REQUEST['modin']) && $_REQUEST['modin']) ? intval( $_REQUEST['modin'] ) : false;
 if ( !$modin ) {
-    $modin = ( isset( $_REQUEST['id']) && $_REQUEST['id']) ? $_REQUEST['id'] : false;
+    $modin = ( isset( $_REQUEST['id']) && $_REQUEST['id']) ? intval( $_REQUEST['id'] ): false;
 }
 
 // Fetch the form instance specified by submitted modin value.
@@ -39,7 +39,7 @@ if( !$udm->isLive( )) {
 }
 
 // User ID.
-$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : false;
+$uid = (isset($_REQUEST['uid']) && $_REQUEST['uid']) ? intval( $_REQUEST['uid'] ) : false;
 $otp = (isset($_REQUEST['otp'])) ? $_REQUEST['otp'] : null;
 
 // Check for duplicates, setting $uid if found.

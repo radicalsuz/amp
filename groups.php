@@ -17,15 +17,19 @@ require_once( 'Modules/Groups/Display/Config.inc.php');
 
 $intro_id = defined( 'AMP_CONTENT_PUBLICPAGE_ID_GROUPS_DISPLAY') ? AMP_CONTENT_PUBLICPAGE_ID_GROUPS_DISPLAY : AMP_CONTENT_INTROTEXT_ID_GROUPS;
 
-if (!(isset($_REQUEST['modin']) && $_REQUEST['modin'])) $_REQUEST['modin'] = AMP_FORM_ID_GROUPS;
-$modin=$_REQUEST['modin'];
+$modin=AMP_FORM_ID_GROUPS;
+if (isset($_REQUEST['modin']) && $_REQUEST['modin']) {
+    $modin= intval( $_REQUEST['modin'] );
+}
 
 $admin=false;
 $userlist=&new UserDataSet($dbcon, $modin, $admin);
 
 $sub = isset($_REQUEST['btnUDMSubmit']);
-$uid= isset($_REQUEST['uid'])?$_REQUEST['uid']:false;
-$uid= isset($_REQUEST['gid'])?$_REQUEST['gid']:$uid;
+$uid= isset($_REQUEST['uid']) ? intval( $_REQUEST['uid'] ):false;
+if( isset($_REQUEST['gid']) && $_REQUEST['gid'] ) {
+    $uid = intval( $_REQUEST['gid'] );
+}
 
 if (isset($modid) && $modid ) {
     require_once( 'AMP/System/Tool/Control/Set.inc.php' );

@@ -1,4 +1,6 @@
+This file has been disabled for security reasons.  If you are seeing this message, please contact the web administrator for helpr
 <?php
+/*
 #ob_start();
 set_time_limit(0);
 include("AMP/BaseDB.php");
@@ -108,5 +110,5 @@ function process_uploaded_file($file_name, $file_path, $allow_existing_file=fals
     }
     return $result_message;
 }
-
+*/
 ?>

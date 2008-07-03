@@ -1,12 +1,12 @@
 <?php
 
 $intro_id = 62;  
-$actionid = isset( $_REQUEST['action']) ? $_REQUEST['action'] : false; 
+$actionid = isset( $_REQUEST['action']) ? intval( $_REQUEST['action'] ): false; 
 if ( !$actionid ) {
-    $actionid = isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : false;
+    $actionid = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : false;
 }
 if ( !$actionid ) {
-    $actionid = isset( $_REQUEST['actionid'] ) ? $_REQUEST['actionid'] : false;
+    $actionid = isset( $_REQUEST['actionid'] ) ? intval( $_REQUEST['actionid'] ) : false;
 }
 //$modid = 21;
 include("AMP/BaseDB.php");

@@ -16,8 +16,8 @@ include_once("AMP/BaseTemplate.php");
 require_once( 'AMP/UserData/Input.inc.php' );
 require_once( 'Modules/Petition/ComponentMap.inc.php' );
 
-$pid = isset( $_REQUEST['pid']) && $_REQUEST['pid'] ? $_REQUEST['pid'] : false;
-$modin = isset( $_REQUEST['modin']) && $_REQUEST['modin'] ? $_REQUEST['modin'] : false;
+$pid = isset( $_REQUEST['pid']) && $_REQUEST['pid'] ? intval( $_REQUEST['pid'] ) : false;
+$modin = isset( $_REQUEST['modin']) && $_REQUEST['modin'] ? intval( $_REQUEST['modin'] ) : false;
 
 $map = new ComponentMap_Petition( );
 $current_petition = $map->getComponent( 'source' );
