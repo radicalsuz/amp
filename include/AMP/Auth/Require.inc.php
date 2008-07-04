@@ -16,7 +16,7 @@ require_once( 'AMP/Auth/Handler.inc.php' );
 
 $AMP_Authen_Handler = &new AMP_Authentication_Handler( $dbcon );
 
-if ( ISSET( $_POST['AMPLogin_password']) && (( $_POST['AMPLogin_password']== 'changeme')||( $_POST['AMPLogin_password']== 'chang#th1s'))){
+if ( isset( $_POST['AMPLogin_password']) && (( $_POST['AMPLogin_password']== 'changeme')||( $_POST['AMPLogin_password']== 'chang#th1s'))){
     $AMP_Authen_Handler->set_message( 'Default Passwords are no longer available.  Please contact <a style="color:#a5e2ff" href="mailto:help@radicaldesigns.org">help@radicaldesigns.org</a> for a new password.');
     $AMP_Authen_Handler->do_login( );
 }

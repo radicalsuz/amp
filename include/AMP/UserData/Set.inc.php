@@ -178,7 +178,7 @@ class UserDataSet extends UserData {
     function getUser ( $userid = null ) {
 
         if (!( isset($userid) && intval( $userid ))) return false; 
-        $userid = intval( $userid ))
+        $userid = intval( $userid );
         
         if ($result = $this->getData($userid)) return $result;
         
