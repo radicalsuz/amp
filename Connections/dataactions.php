@@ -1,4 +1,3 @@
-helloze
 <?php // *** Update Record: construct a sql update statement and execute it
   set_time_limit(0); 
 //check action globals
