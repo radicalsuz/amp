@@ -49,35 +49,4 @@ if ( $showForm ) {
 }
 
 require_once("AMP/BaseFooter.php");
-/*
-if ( (isset($_POST['send']) && $_POST["send"]) && $MM_email_contact ) {    
-	mail ( $MM_email_contact, $_POST["subject"], $_POST["message"], "From: ".$_POST["email"]." \nX-Mailer: My PHP Script\n");
-		
-}
-
-if (!isset($_POST['thank']) || $_POST["thank"] == NULL) { ?>
-<form method="post" action="<?php $PHP_SELF."?thank=1" ; ?>"><table width="100%" border="0" cellspacing="0" cellpadding="5" class="form">
-  <tr> 
-    <td valign="top">Your E-Mail:</td>
-    <td><input name="email" type="text" id="email" size="40"></td>
-  </tr>
-  <tr> 
-    <td valign="top">Subject:</td>
-    <td><input name="subject" type="text" id="subject" size="40"></td>
-  </tr>
-  <tr valign="top"> 
-    <td colspan="2"><p>Message:<br>
-          <textarea name="message" cols="48" rows="25" wrap="VIRTUAL" id="message"></textarea>
-          <input name="send" type="hidden" id="send" value="1">
-		    <input name="thank" type="hidden" id="send" value="1">
-        </p>
-        <p>
-          <input type="submit" name="Submit" value="Send E-Mail">
-        </p></td>
-  </tr>
-</table>
-</form>
-<?php
-}
-*/ 
 ?>

@@ -2,13 +2,13 @@
 require_once( 'AMP/BaseDB.php' );
 
 require_once( 'AMP/Content/RSS/Feed.inc.php' );
-$feed_id = (isset($_GET['feed'])&&$_GET['feed']) ? $_GET['feed'] : null;
+$feed_id = (isset($_GET['feed'])&&$_GET['feed']) ? intval( $_GET['feed'] ) : null;
 if ( !$feed_id ) {
-    $feed_id = (isset($_GET['id'])&&$_GET['id']) ? $_GET['id'] : null;
+    $feed_id = (isset($_GET['id'])&&$_GET['id']) ? intval( $_GET['id'] ) : null;
 }
 
-$section_id = (isset($_GET['section'])&&$_GET['section']) ? $_GET['section'] : false;
-$class_id = (isset($_GET['class'])&&$_GET['class']) ? $_GET['class'] : false;
+$section_id = (isset($_GET['section'])&&$_GET['section']) ? ( $_GET['section'] ): false;
+$class_id = (isset($_GET['class'])&&$_GET['class']) ? ( $_GET['class'] ) : false;
 
 $feed = &new AMPContent_RSSFeed( $dbcon, $feed_id );
 if ( $section_id ) $feed->setSection( $section_id );

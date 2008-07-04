@@ -1,4 +1,7 @@
 <?php
+/* disabled for security ap 2008-07
+ */
+/*
 # email form processor
 # from must post to this file woth the foloowing variables:
 # $emailsubject, $eamilto, $emailfrom, $redirect
@@ -47,4 +50,5 @@ else {$error = "Error - The email target is not valid";}
 
 if ($error) {echo $error;}
 else { header("Location: $redirect"); }
+*/
 ?>

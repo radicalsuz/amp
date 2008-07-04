@@ -2203,15 +2203,15 @@ function AMP_date_from_url( ) {
     }
 
     $result = array( );
-    $month =( isset( $_GET['month']) && $_GET['month'])         ? $_GET['month']        : false;
+    $month =( isset( $_GET['month']) && $_GET['month'])         ? intval( $_GET['month'] )          : false;
     if ( $month ) {
         $result['M'] = $month;
     }
-    $year = ( isset( $_GET['year']) && $_GET['year'] )          ? $_GET['year']         : false;
+    $year = ( isset( $_GET['year']) && $_GET['year'] )          ? intval( $_GET['year'] )           : false;
     if ( $year ) {
         $result['Y'] = $year;
     }
-    $day = ( isset( $_GET['day']) && $_GET['day'])         ? $_GET['day']        : false;
+    $day = ( isset( $_GET['day']) && $_GET['day'])              ? intval( $_GET['day'] )            : false;
     if ( $day ) {
         $result['d'] = $day;
     }

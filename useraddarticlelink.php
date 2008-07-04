@@ -1,4 +1,7 @@
 <?php
+/* disabled for security and lack of use ap 2008-07
+ */
+/*
 
 if  (isset($HTTP_GET_VARS["mod"])) {
 	$mod_id = $mod;
@@ -98,4 +101,5 @@ if ( !isset( $HTTP_GET_VARS["thank"] )) { ?>
 
 include("AMP/BaseFooter.php");
 
+*/
 ?>

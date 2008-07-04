@@ -1,4 +1,7 @@
- <?php  // 
+<?php
+/* disabled for security and disuse ap 2008-06
+ */
+/*
 
 if  (isset($HTTP_GET_VARS["mod"])) {$mod_id = $mod ; }
 else {$mod_id = 55;}
@@ -100,4 +103,6 @@ require ("DBConnections/dataactions.php");
  
 	 
 
-<?php include("AMP/BaseFooter.php"); ?>
+<?php include("AMP/BaseFooter.php"); 
+*/
+?>

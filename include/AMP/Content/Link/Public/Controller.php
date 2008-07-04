@@ -75,43 +75,6 @@ function AMP_display_link( &$source ){
 
 }
 
-/*
-$links = $dbcon->CacheExecute($sql) or DIE($dbcon->ErrorMsg());
-
-if (isset($_GET['linktype']) && $_GET['linktype']) { 
-	$linkt=$dbcon->CacheExecute("select type from articletype where id=" . $dbcon->qstr($_GET['linktype'])) or DIE($dbcon->ErrorMsg());
-	echo "<p class=title>".$linkt->Fields("type")."</p><br>";
-}
-
-if (!isset($curType)) $curType = null;
- 
-while  (!$links->EOF) { 
-   if (strtolower(trim($links->Fields("name"))) != $curType) {
-   		echo '<p class="linktype">
-   				<a name="'.$links->Fields("linktype").'"></a>'.$links->Fields("name")."</p>";
-   	}
-	$curType = strtolower(trim($links->Fields("name")));
-	
-	?>
-	<div class="links">
-	<a href="<?php echo $links->Fields("url")?>" target="_blank">
-	<? 
-	if ($links->Fields("image")) {  ?>
-    	<img name="thumbnail" src="img/thumb/<?php echo $links->Fields("image")?>" alt="thumbnail" border="0">
-    	<?php 
-    }      
-	echo $links->Fields("linkname") ?>
-	</a><p>
-    <?php echo $links->Fields("description")?></p> <br />
-	
-	<?php  echo '</div>';
-	$links->MoveNext();
-	if (strtolower(trim($links->Fields("name"))) != $curType) {
-		
-	}
-} 
-*/
-
 require_once("AMP/BaseFooter.php");
 
 ?>

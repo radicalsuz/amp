@@ -7,7 +7,7 @@ if ( $cached_output = AMP_cached_request( )) {
     exit;
 }
 
-$intro_id = ( isset( $_GET['intro_id']) && $_GET['intro_id'] ) ? $_GET['intro_id'] : false;
+$intro_id = ( isset( $_GET['intro_id']) && $_GET['intro_id'] ) ? intval( $_GET['intro_id'] ) : false;
 $position = ( isset( $_GET['position']) && $_GET['position'] ) ? $_GET['position'] : false;
 $format = ( isset( $_GET['format']) && $_GET['format'] ) ? $_GET['format'] : false;
 

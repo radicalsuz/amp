@@ -20,8 +20,6 @@ $Q = new Quiz($dbcon, $quiz_id );
 $Q->answer = $answer_id;
 $Q->id = $question_id;
 $Q->set_section();
-//$_GET['type'] = $Q->section;
-//$MM_type= $Q->section;
 
 
 

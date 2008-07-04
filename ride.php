@@ -5,9 +5,9 @@ include("AMP/BaseDB.php");
 include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
 
-$have=$dbcon->CacheExecute("SELECT *  FROM userdata  Where custom6 = 'Have a Ride to Offer' and  custom9='1' and modin=10  ORDER BY custom1 ASC") or DIE($dbcon->ErrorMsg());
+$have=$dbcon->CacheExecute("SELECT *  FROM userdata  Where custom6 = 'Have a Ride to Offer' and  custom9='1' and modin=10  ORDER BY custom1 ASC");
 
-$need=$dbcon->CacheExecute("SELECT *  FROM userdata  WHERE custom6 = 'Need a Ride' and custom9=1 and modin=10  ORDER BY custom1 ASC") or DIE($dbcon->ErrorMsg());
+$need=$dbcon->CacheExecute("SELECT *  FROM userdata  WHERE custom6 = 'Need a Ride' and custom9=1 and modin=10  ORDER BY custom1 ASC");
 
 ?> 
 <p class="text"><a href="#need">Need a Ride</a> | <a href="#have">Have a Ride 
@@ -26,7 +26,7 @@ $need=$dbcon->CacheExecute("SELECT *  FROM userdata  WHERE custom6 = 'Need a Rid
     <td class=board>&nbsp;</td>
   </tr>
 <?php
-while  (!$have->EOF)    { 
+while  ($have && !$have->EOF)    { 
 ?>
   <tr> 
     <td valign="top" class="text"> <?php echo $have->Fields("custom1")?> 
@@ -68,7 +68,7 @@ while  (!$have->EOF)    {
     <td class=board>&nbsp;</td>
   </tr>
   <?php
-while (!$need->EOF) { 
+while ($need && !$need->EOF) { 
 ?>
   <tr> 
     <td valign="top" class="text"> <?php echo $need->Fields("custom1")?> 

@@ -1,3 +1,4 @@
+helloze
 <?php // *** Update Record: construct a sql update statement and execute it
   set_time_limit(0); 
 //check action globals
@@ -36,6 +37,8 @@ if (!isset($MM_recordId)&&isset($_POST['MM_recordId'])&&$_POST['MM_recordId']) $
 			//deal with magic qoutes
 			else if ($delim == "'") 
 			{ 
+                $formVal = $dbcon->qstr( $formVal );
+                /*
          	if (!MAGIC_QUOTES_ACTIVE)
 				{
 				$formVal = "'" . str_replace("'","\'",$formVal) . "'";
@@ -44,6 +47,7 @@ if (!isset($MM_recordId)&&isset($_POST['MM_recordId'])&&$_POST['MM_recordId']) $
 				{
 				$formVal = "'" .$formVal . "'";
 				}
+                */
 				} 
 			//done with magic quotes 
 			else 
@@ -108,6 +112,8 @@ if (isset($MM_insert) && $MM_insert) {
       }			//deal with magic qoutes
 			else if ($delim == "'") 
 			{ 
+                $formVal = $dbcon->qstr( $formVal );
+                /*
          	if (!MAGIC_QUOTES_ACTIVE)
 				{
 				$formVal = "'" . str_replace("'","\'",$formVal) . "'";
@@ -116,6 +122,7 @@ if (isset($MM_insert) && $MM_insert) {
 				{
 				$formVal = "'" .$formVal . "'";
 				}
+                */
 				} 
 			//done with magic quotes
 
@@ -168,6 +175,8 @@ if (isset($WF_update) && (isset($MM_recordId))) {
 			//deal with magic qoutes
 			else if ($delim == "'") 
 			{ 
+                $formVal = $dbcon->qstr( $formVal );
+                /*
          	if (!MAGIC_QUOTES_ACTIVE)
 				{
 				$formVal = "'" . str_replace("'","\'",$formVal) . "'";
@@ -176,6 +185,7 @@ if (isset($WF_update) && (isset($MM_recordId))) {
 				{
 				$formVal = "'" .$formVal . "'";
 				}
+                */
 				} 
 			//done with magic quotes 
 			else 
@@ -229,6 +239,8 @@ if (isset($WF_insert)) {
 			//deal with magic qoutes
 			else if ($delim == "'") 
 			{ 
+                $formVal = $dbcon->qstr( $formVal );
+                /*
          	if (!MAGIC_QUOTES_ACTIVE)
 				{
 				$formVal = "'" . str_replace("'","\'",$formVal) . "'";
@@ -237,6 +249,7 @@ if (isset($WF_insert)) {
 				{
 				$formVal = "'" .$formVal . "'";
 				}
+                */
 				} 
 			//done with magic quotes
 

@@ -1,4 +1,7 @@
 <?php
+/* disabled for security ap 2008-07
+ */
+/*
 $modid =101;
 $mod_id = 100 ;
 include("AMP/BaseDB.php"); 
@@ -190,4 +193,6 @@ $Recordset1=$dbcon->Execute("SELECT * FROM neip WHERE id = $_GET[id] ") or DIE($
       <td><?php echo $Recordset1->Fields("action_implications");?></textarea></td>
     </tr>
   </table>
-  <?php include("AMP/BaseFooter.php");?>
+  <?php include("AMP/BaseFooter.php");
+*/
+?>

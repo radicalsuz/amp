@@ -3,8 +3,9 @@
 include("AMP/BaseDB.php"); 
 include("AMP/BaseTemplate.php"); 
 require_once("AMP/Geo/Maps.php");
-if ($_GET['map']) {
-	$map = new Maps($dbcon,$_GET['map']);
+$map_id = isset( $_GET['map']) && $_GET['map'] ? intval( $_GET['map'] ) : false;
+if ( $map_id ) {
+	$map = new Maps($dbcon, $map_id );
 
 	echo "<h3>".$map->P['title']."</h3>";
 	echo "<p>".$map->P['description']."</p>";

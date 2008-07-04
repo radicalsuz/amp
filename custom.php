@@ -1,4 +1,5 @@
 <?php
+/* this is not used and has the potential to be very bad ap 2008-07
 
 include("AMP/BaseDB.php");
 
@@ -21,5 +22,5 @@ include ($file);
 //if  (!$fileinfo->Fields("noincludes") == 0 ){
 include("AMP/BaseFooter.php");
 //}
-
+*/
 ?>

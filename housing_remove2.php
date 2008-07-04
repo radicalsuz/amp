@@ -17,7 +17,7 @@ if (isset($_POST["MM_update"]) && (isset($_POST["MM_recordId"]))) {
   
     $MM_editTable  = "housing";
     $MM_editColumn = "id";
-    $MM_recordId = $_POST["MM_recordId"] ;
+    $MM_recordId = intval( $_POST["MM_recordId"] );
     $MM_editRedirectUrl = "housing.php";
     $MM_fieldsStr = "publish|value";
     $MM_columnsStr = "publish|none,none,NULL";
@@ -30,8 +30,8 @@ if (isset($_GET["email"])){
 	$called__MMColParam = $_GET["email"];
 }
 
-$called=$dbcon->Execute("SELECT *  FROM housing  WHERE email = '" . ($called__MMColParam) . "'") or DIE($dbcon->ErrorMsg());
-
+$called=$dbcon->Execute("SELECT *  FROM housing  WHERE email = " . $dbcon->qstr($called__MMColParam) );
+if( $called ) {
 ?>
 
 <form ACTION="<?php echo $MM_editAction?>" METHOD="POST" name="form1">
@@ -46,5 +46,7 @@ $called=$dbcon->Execute("SELECT *  FROM housing  WHERE email = '" . ($called__MM
   <input type="hidden" name="MM_recordId" value="<?php echo $called->Fields("id") ?>">
 </form>
 <?php
+
+}
 include("AMP/BaseFooter.php"); 
 ?>

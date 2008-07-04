@@ -16,8 +16,8 @@ include("AMP/BaseModuleIntro.php");
 require_once( 'Modules/Gallery/Gallery.php');
 
 $currentPage = &AMPContent_Page::instance( );
-$gallery_id = ( isset( $_GET['gal']) && $_GET['gal']) ? $_GET['gal'] : false; 
-$gallery_id = ( isset( $_GET['id']) && $_GET['id']) ? $_GET['id'] : $gallery_id; 
+$gallery_id = ( isset( $_GET['gal']) && $_GET['gal']) ? intval( $_GET['gal'] ) : false; 
+$gallery_id = ( isset( $_GET['id']) && $_GET['id']) ? intval( $_GET['id'] ) : $gallery_id; 
 
 if ( isset( $fullgal ) && ( 2 == $fullgal ) && !defined( 'AMP_GALLERY_DISPLAYTYPE')) define( 'AMP_GALLERY_DISPLAYTYPE' , 'Single');
 if ( !defined( 'AMP_GALLERY_DISPLAYTYPE')) define( 'AMP_GALLERY_DISPLAYTYPE', 'Full');

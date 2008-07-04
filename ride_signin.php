@@ -20,9 +20,11 @@ function getid($uid) {
 	global $dbcon,$board, $modinid;
 	$sql="Select id from $board where uniqueid = ".$dbcon->qstr($uid);
 	#echo $sql."\r\n<P>";
-	$getuid=$dbcon->Execute($sql) or DIE($dbcon->ErrorMsg()); 
-	$id = $getuid->Fields("id");
-return $id;
+	$getuid=$dbcon->Execute($sql);
+    if( $getuid ) {
+        return $getuid->Fields("id");
+    }
+    return false;
 }
 
 function postposting($uid) {
@@ -30,9 +32,9 @@ function postposting($uid) {
    $id = getid($uid);
    if (!$id) {$reply = "Your posting is not in the system";}
    else{
-	$sql="Update $board set publish = 1 where id = $id";
+	$sql="Update $board set publish = 1 where id = ".$dbcon->qstr( $id );
    #echo $sql;
-   $dbcon->Execute($sql) or DIE($dbcon->ErrorMsg()); 
+   $dbcon->Execute($sql);
    	$reply = "Your posting has been added to the board. <a href=\"rides.php?uid=$uid\"><BR>Return to ride board</a><P>";
 	}
 	echo $reply;
@@ -41,7 +43,7 @@ function postposting($uid) {
 
 function confirmride($uid) {
 	global $dbcon, $board, $modinid, $Web_url, $user;
-	$sql="SELECT * FROM $board where DriverID='$uid'";
+	$sql="SELECT * FROM $board where DriverID=".$dbcon->qstr( $uid );
 	if ($getriders=$dbcon->execute($sql)) {
 		
 		$my_id="";
@@ -49,10 +51,9 @@ function confirmride($uid) {
 			#echo "howdy2/";
 			$my_id = $getriders->Fields("uniqueid"); #rider id field
 			$valuename="confirmed".$my_id;
-			$newvalue= $_GET[$valuename];
-			if ($newvalue=="on") {$newvalue=1;}else{$newvalue=0;}
-			if ($newvalue<>$getriders->Fields("Confirmed")) {
-				$sql= "UPDATE $board SET Confirmed='$newvalue' WHERE uniqueid='$my_id'";
+			$newvalue= isset( $_GET[$valuename] ) && $_GET[$valuename] == 'on' ? 1 : 0;
+			if ($newvalue <> $getriders->Fields("Confirmed")) {
+				$sql= "UPDATE $board SET Confirmed=".$dbcon->qstr( $newvalue )." WHERE uniqueid=".$dbcon->qstr( $my_id );
 				#echo $sql;
 				if($didwork = $dbcon->Execute($sql)) {
 					$messagetext2 = "\nYour status on the $board board at $Web_url has changed.\n";
@@ -77,7 +78,7 @@ function deleteposting($uid) {
 	$id = getid($uid);
 	if (!$id) {$reply = "Your posting is not in the system";}
    else{
-	$getuid=$dbcon->Execute("Delete from $board where id = $id")or DIE($dbcon->ErrorMsg());
+	$getuid=$dbcon->Execute("Delete from $board where id = ".$dbcon->qstr( $id ));
 	$reply = "Your posting has been removed from the board. <a href=\"$PHP_SELF\">Return to $board board</a><P>";}
 	echo $reply;
 }
@@ -96,7 +97,7 @@ global $board;
 
 function senddelemail($pemail) {
 global $board, $dbcon, $Web_url, $modinid;
-$getuid = $dbcon->Execute("Select id, uniqueid from $board where pemail = '$pemail'")or DIE($dbcon->ErrorMsg()); 
+$getuid = $dbcon->Execute("Select id, uniqueid from $board where pemail = ".$dbcon->qstr( $pemail ) );
 $uid = $getuid->Fields("uniqueid");
 $messagetext = "To remove your listing simply visit this page ".$Web_url.$board."_signin.php?deluid=$uid";
   if (email_is_valid($pemail)){
@@ -109,24 +110,24 @@ else {echo "Your email is invalid or not in our system<br><br>";
 $showlogin=1;
 
 // delete 
-if ($_GET[del]) {deleteform(); $showlogin=0;}
-if ($_GET[deluid]){deleteposting($_GET[deluid]); $showlogin=0;}
-if ($_POST[action] == 'delemailsend'){ senddelemail($_POST[pemail]); $showlogin=0; }
+if ($_GET['del']) {deleteform(); $showlogin=0;}
+if ($_GET['deluid']){deleteposting($_GET[deluid]); $showlogin=0;}
+if ($_POST['action'] == 'delemailsend'){ senddelemail($_POST['pemail']); $showlogin=0; }
 
 //confirm posting
-if (($_GET[uid])&&($_GET[action]=="confirm")) {postposting($_GET[uid]); $showlogin=0;}
-if ($_GET[step] == 'email') {echo "An e-mail has been sent to your e-mail account with instructions on how to confirm your posting."; $showlogin=0;}
-if ($_GET[step] == 'admin') { echo "Your posting has been added to the board.  The moderator will approve your posting soon."; $showlogin=0;}
+if (($_GET['uid'])&&($_GET['action']=="confirm")) {postposting($_GET['uid']); $showlogin=0;}
+if ($_GET['step'] == 'email') {echo "An e-mail has been sent to your e-mail account with instructions on how to confirm your posting."; $showlogin=0;}
+if ($_GET['step'] == 'admin') { echo "Your posting has been added to the board.  The moderator will approve your posting soon."; $showlogin=0;}
 
 //request ride
-if ($uid&&$_GET[setdriver]&&($action=="requestride")) {
+if ($uid && $_GET['setdriver'] && ($action=="requestride")) {
 	$showlogin=0;
-	$user=$dbcon->Execute("SELECT * from $board where uniqueid='$uid'");
-	$sql="SELECT * from $board where uniqueid='".$_GET[setdriver]."'";
+	$user=$dbcon->Execute("SELECT * from $board where uniqueid=".$dbcon->qstr( $uid ));
+	$sql="SELECT * from $board where uniqueid='".$_GET['setdriver']."'";
 	#echo $sql;
 	$getriders=$dbcon->Execute($sql);
 	
-	$sql="UPDATE $board SET DriverID=".$dbcon->qstr($_GET[setdriver])." WHERE uniqueid='".$uid."'";
+	$sql="UPDATE $board SET DriverID=".$dbcon->qstr($_GET['setdriver'])." WHERE uniqueid='".$uid."'";
 	if($didwork=$dbcon->Execute($sql)){ 
 		//send e-mail ride request notification to driver:
 		$messagetext2 = "\nRide Requested on $board board at $Web_url.\n";
@@ -140,19 +141,19 @@ if ($uid&&$_GET[setdriver]&&($action=="requestride")) {
 
 //confirmrides
 if ($uid&&($action=="confirmrides")) {
-	$user=$dbcon->Execute("Select * from $board where uniqueid='$uid'");
+	$user=$dbcon->Execute("Select * from $board where uniqueid=".$dbcon->qstr( $uid ));
 	confirmride($uid);
 	$showlogin=0;
 }
 
 //showpage redirect
 
-if ($_POST[action]=="showpage") {
+if ($_POST['action']=="showpage") {
 	$showlogin=0;
-	$sql="SELECT * FROM $board WHERE pemail=".$dbcon->qstr($_POST[pemail]);
+	$sql="SELECT * FROM $board WHERE pemail=".$dbcon->qstr($_POST['pemail']);
 	#echo $sql;
-	$user = $dbcon->Execute($sql) or DIE($dbcon->ErrorMsg());
-	if($user->RecordCount()>0) {
+	$user = $dbcon->Execute($sql);
+	if($user && $user->RecordCount()>0) {
 
 		header ("Location: ".$Web_url."rides.php?uid=".$user->Fields("uniqueid"));
 	} else {
@@ -166,7 +167,6 @@ if ($_POST[action]=="showpage") {
 
 //enables user signin if coming from external page
 if ($showlogin){
-	#echo "UID:".$_GET[uid]."\n PEMAIL: ".$_POST['pemail'];
 ?>
 
 <strong>Please login using your private e-mail address:</strong><BR>

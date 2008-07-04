@@ -1,4 +1,6 @@
 <?php 
+/* disabled for security reasons ap 2008-07
+ */
 /*****
  *
  * AMP UserData Form View

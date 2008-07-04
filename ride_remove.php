@@ -26,7 +26,8 @@ $messagetext = "To remove your listing simply visit this page ".$Web_url."ride_r
    
 
 ?><?php
-   $emails=$dbcon->Execute("SELECT *  FROM ride  where publish='1' and board='2'  ORDER BY email ASC") or DIE($dbcon->ErrorMsg());
+   $emails=$dbcon->Execute("SELECT *  FROM ride  where publish='1' and board='2'  ORDER BY email ASC") ;
+   if ( $emails ) {
    $emails_numRows=0;
    $emails__totalRows=$emails->RecordCount();
 ?>
@@ -69,6 +70,6 @@ $messagetext = "To remove your listing simply visit this page ".$Web_url."ride_r
 ?>
 
 <?php
-  $emails->Close();
+   }
 ?>
 <?php include("AMP/BaseFooter.php"); ?>

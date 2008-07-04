@@ -24,7 +24,7 @@ if ($MM_insert||$MM_update){
    $MM_columnsStr = "firstname|',none,''|lastname|',none,''|phone|',none,''|email|',none,''|state|',none,''|depatingfrom|',none,''|depaturedate|',none,''|returningto|',none,''|returndate|',none,''|numpeople|',none,''|need|',none,''|commets|',none,''|publish|',none,''|uniqueid|',none,''|pemail|',none,''";
    if ($MM_insert) {
 	   //Check to see if e-mail is in system
-	   $checkfirst=$dbcon->Execute("Select * from $board where pemail='".$_POST[pemail]."' or email='".$_POST[email]."'");
+	   $checkfirst=$dbcon->Execute("Select * from $board where pemail=".$dbcon->qstr( $_POST['pemail'] )." or email=".$dbcon->qstr( $_POST['email'] ));
 		if ($checkfirst->RecordCount()>0) { 
 			$MM_abortEdit=1; 
 			$problem="<strong><p class=docbox>The email address you entered is already registered on the ride board.  Please use <a href=\"rides.php?uid=".$checkfirst->Fields("uniqueid")."\">this link</a> to login or enter new information below.</strong><P>";
@@ -58,7 +58,7 @@ if ($MM_insert) echo "MMINSERT<BR>";
 #echo "hey$uid";
 if ($uid) { //load form edit vars from DB
 	
-	$sql="SELECT * FROM $board where uniqueid='".$_GET[uid]."'";
+	$sql="SELECT * FROM $board where uniqueid=".$dbcon->qstr( $_GET[uid] );
 	$user=$dbcon->Execute($sql);
 	if ($user->RecordCount()>0) {
 		$firstname=$user->Fields("firstname");
@@ -85,21 +85,21 @@ if ($uid) { //load form edit vars from DB
 } else {
 	$button_action="MM_insert";
 }
-if($_POST[pemail]) { //load form POST vars
-		$firstname=$_POST[firstname];
-		$lastname=$_POST[lastname];
-		$phone=$_POST[phone];
-		$email=$_POST[email];
-		$pemail=$_POST[pemail];
-		$depatingfrom=$_POST[depatingfrom];
-		$depaturedate=$_POST[depaturedate];
-		$returningto=$_POST[returningto];
-		$returndate=$_POST[returndate];
-		$state=$_POST[state];
-		$numpeople=$_POST[numpeople];
-		$publish=$_POST[publish];
-		$ride=$_POST[ride];
-		$commets=$_POST[commets];
+if($_POST['pemail']) { //load form POST vars
+		$firstname=$_POST['firstname'];
+		$lastname=$_POST['lastname'];
+		$phone=$_POST['phone'];
+		$email=$_POST['email'];
+		$pemail=$_POST['pemail'];
+		$depatingfrom=$_POST['depatingfrom'];
+		$depaturedate=$_POST['depaturedate'];
+		$returningto=$_POST['returningto'];
+		$returndate=$_POST['returndate'];
+		$state=$_POST['state'];
+		$numpeople=$_POST['numpeople'];
+		$publish=$_POST['publish'];
+		$ride=$_POST['ride'];
+		$commets=$_POST['commets'];
 		#$button_action="MM_insert";
 		
 }

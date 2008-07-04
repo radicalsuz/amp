@@ -1,4 +1,4 @@
-<?PHP 
+<?php 
 header( "Location: /share.php");
 /*
 $modid = 22;

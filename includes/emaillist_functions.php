@@ -28,7 +28,7 @@ function e_subadd($emailid, $listid) {
 }
 
 function e_emailadd($email) {
-	global $dbcon, $_POST;
+	global $dbcon;
 	global  $First_Name, $Last_Name,  $Company, $Street, $Street_2, $City, $State, $Zip, $Country, $Web_Page, $Phone, $Fax;
 	$MM_editTable  = "email";
 	$MM_fieldsStr = "Email|value|Last_Name|value|First_Name|value|Company|value |html|value|Phone|value|Web_Page|value|Street|value|Street_|value|City|value|State|value|Zip|value|Country|value|Fax|value";

@@ -1,4 +1,6 @@
 <?php 
+/* disabling for security reasons ap 2008-07
+ */
 /*********************
 05-06-2003  v3.01
 Module:  Calendar
@@ -7,6 +9,7 @@ CSS: go, title, text, eventsubtitle, eventtitle,
 To Do: 
 
 *********************/ 
+/*
 
 $mod_id = 57;
 $modid = 27;
@@ -263,4 +266,5 @@ else {
   $revent->Close();
    
  include("AMP/BaseFooter.php"); 
- ?>
+*/
+?>

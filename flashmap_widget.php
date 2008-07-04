@@ -1,12 +1,12 @@
 <?php
 
-$map_id =  isset( $_GET['map']) ? $_GET['map'] : false;
+$map_id =  isset( $_GET['map']) ? intval( $_GET['map'] ) : false;
 if ( !$map_id ) {
-    $map_id = isset( $_GET['id']) ? $_GET['id'] : false;
+    $map_id = isset( $_GET['id']) ? intval( $_GET['id'] ) : false;
 }
 
-$height = isset( $_GET['height'] ) ? $_GET['height'] : false ;
-$width = isset( $_GET['width']) ? $_GET['width'] : false;
+$height = isset( $_GET['height'] ) ? intval( $_GET['height'] ) : false ;
+$width = isset( $_GET['width']) ? intval( $_GET['width'] ) : false;
 
 if ( !$map_id ) exit;
 

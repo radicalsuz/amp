@@ -9,6 +9,9 @@ Get  Vars: area  -if set  shows only endorsements in that area
 To Do:  make modular so that  it can be passed  data from new modules
 				write a better sql statement
 *********************/ 
+/* disabled due to disuse ap 2008-07
+ */
+/*
 
 if (!defined( 'AMP_ENDORSE_FORM_ID_DEFAULT' )) define( 'AMP_ENDORSE_FORM_ID_DEFAULT', 1 );
 if (!defined( 'AMP_ENDORSE_MODULE_ID_DEFAULT' )) define( 'AMP_ENDORSE_MODULE_ID_DEFAULT', 1 );
@@ -92,5 +95,5 @@ print $output;
 
 // Append the footer and clean up.
 require_once( 'AMP/BaseFooter.php' );
-
+*/
 ?>

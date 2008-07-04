@@ -11,7 +11,7 @@ if ( !AMP_CONTENT_TRACKBACKS_ENABLED ) {
 
 $article_id = 0;
 if ( isset( $_GET['id']) && is_numeric( $_GET['id']) && $_GET['id']) {
-    $article_id = $_GET['id'];
+    $article_id = intval( $_GET['id'] );
 }
 
 $trackback = &new ArticleTrackback( $dbcon );

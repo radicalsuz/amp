@@ -19,7 +19,8 @@ include("emaillist_functions.php");
 
 function buildactionform($id,$error=NULL) {
 	global $dbcon;
-	$act = $dbcon->Execute("SELECT *  FROM action_text  WHERE id = $id and actiontype != 'Congress Merge'") or DIE($dbcon->ErrorMsg());
+	$act = $dbcon->Execute("SELECT *  FROM action_text  WHERE id = ".$dbcon->qstr( $id ) . " and actiontype != 'Congress Merge'") ;
+    if ( $act ) {
 
   
 ?>
@@ -291,6 +292,7 @@ function addFieldToCheck(value,name) {
 
 </form>
 <?php
+    }
 
 }
 
@@ -305,7 +307,7 @@ if(!function_exists('mail_sanitize')) {
 }
 function  getactionemail($email) {
 	global $dbcon;
-	$getuser = $dbcon->Execute("select * from userdata where Email ='".$email."' and modin=12 ") or DIE($dbcon->ErrorMsg());
+	$getuser = $dbcon->Execute("select * from userdata where Email =".$dbcon->qstr( $email )." and modin=12 ") ;
 	return $getuser;
 }
 
@@ -316,7 +318,7 @@ function memebershipemail($email) {
 
 function getmember($email){
 	global $dbcon;
-	$getid = $dbcon->Execute("select id from userdata where Email ='".$email."' and modin=12 ") or DIE($dbcon->ErrorMsg());
+	$getid = $dbcon->Execute("select id from userdata where Email =".$dbcon->qstr( $email )." and modin=12 ") ;
 	$id = $getid->Fields("id");
 	return $id;
 }
@@ -369,14 +371,14 @@ if (isset($_REQUEST['MM_insert']) && $_REQUEST['MM_insert'] && $captcha_valid ) 
 		$City = setckvalue("City");
 		$Zip = setckvalue("Zip");
 		$Street = setckvalue("Street");
-		$Street_2 = $_POST[Street_2];
-		$Country = $_POST[Country];
+		$Street_2 = $_POST['Street_2'];
+		$Country = $_POST['Country'];
 		$Phone = setckvalue("Phone");
 		$Title = $_POST['Title'];
-		if (!$_POST[State] && $_POST[State2]) { 
-            $State = $_POST[State2];
+		if (!$_POST['State'] && $_POST['State2']) { 
+            $State = $_POST['State2'];
         } else {
-            $State =  $_POST[State];
+            $State =  $_POST['State'];
         }
 	}		
 }
@@ -398,9 +400,9 @@ if ((isset($_REQUEST['MM_insert'])) && (!$_REQUEST['kill_insert'] ) ) {
 # Adds up to four email addresses to the user account.
 
 	if ($_POST['list1'] ) { e_addemail($Email, $_POST['list1']); }
-	if ($_POST[list1] && $_POST[list2] ) { e_addemail($Email, $_POST[list2]); }
-	if ($_POST[list1] && $_POST[list3] ) { e_addemail($Email, $_POST[list3]); }
-	if ($_POST[list1] && $_POST[list4] ) { e_addemail($Email, $_POST[list4]); }
+	if ($_POST['list1'] && $_POST['list2'] ) { e_addemail($Email, $_POST['list2']); }
+	if ($_POST['list1'] && $_POST['list3'] ) { e_addemail($Email, $_POST['list3']); }
+	if ($_POST['list1'] && $_POST['list4'] ) { e_addemail($Email, $_POST['list4']); }
 
 #################################################################
 #
@@ -418,7 +420,8 @@ if ((isset($_REQUEST['MM_insert'])) && (!$_REQUEST['kill_insert'] ) ) {
 ##### mail to target
 # get send info
 
-	$actiondetails = $dbcon->Execute("select * from action_text where id = ".$_POST['actionid']) or DIE($dbcon->ErrorMsg());
+	$actiondetails = $dbcon->Execute("select * from action_text where id = ".$dbcon->qstr( $_POST['actionid']));
+    if( $actiondetails ) {
 
 # prepare email
 
@@ -465,6 +468,8 @@ $Title $First_Name $Last_Name \n";
 		tellfriend($First_Name,$Last_Name,$Email,$actiondetails->Fields("tf_subject"),$actiondetails->Fields("tf_text"));
 	}
  
+
+    }
 }
 if ( !$actionid ) {
     require_once( 'Modules/WebAction/Public/ComponentMap.inc.php');

@@ -17,7 +17,7 @@ include("AMP/BaseModuleIntro.php");
 if (isset($_POST["MM_update"]) && (isset($_POST["MM_recordId"]))) {
     $MM_editTable  = "housing";
     $MM_editColumn = "id";
-    $MM_recordId = $_POST["MM_recordId"];
+    $MM_recordId = intval( $_POST["MM_recordId"] );
     $MM_editRedirectUrl = "housing.php";
     $MM_fieldsStr = "publish|value";
     $MM_columnsStr = "publish|none,none,NULL";
@@ -29,7 +29,7 @@ $called__MMColParam = "1";
 if (isset($_GET["email"])){
 	$called__MMColParam = $_GET["email"];
 }
-$called=$dbcon->Execute("SELECT *  FROM housing  WHERE email = '" . ($called__MMColParam) . "'") or DIE($dbcon->ErrorMsg());
+$called=$dbcon->Execute("SELECT *  FROM housing  WHERE email = " . $dbcon->qstr($called__MMColParam) );
 
 if ($_GET["step"] == "admin"){
 	echo "Your posting has been added to the board.  The moderator will appove yout posting soon."
@@ -38,7 +38,7 @@ if ($_GET["step"] == "email"){
 	echo "An e-mail has been sent to your e-mail account with insturctions on how to confirm your posting."
 }
 
-if ($_GET["step"] == NULL){ ?>
+if ( $called && $_GET["step"] == NULL){ ?>
 
 <form ACTION="<?php echo $MM_editAction?>" METHOD="POST" name="form1">
 

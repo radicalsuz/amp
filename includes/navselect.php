@@ -1,4 +1,7 @@
 <?php 
+/* disabled for security ap 2008-07
+ */
+/*
 function magpienav($url,$num_items=NULL,$title=NULL,$html1=NULL,$html2=NULL,$html3=NULL,$html4=NULL,$html5=NULL) {
 	global $base_path;
 
@@ -303,4 +306,5 @@ function getthenavs($navside) {
 
     return $shownav; 
 }
+*/
 ?>

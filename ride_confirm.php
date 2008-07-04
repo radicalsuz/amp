@@ -29,20 +29,20 @@ $called__MMColParam = "1";
 if (isset($HTTP_GET_VARS["email"]))
   {$called__MMColParam = $HTTP_GET_VARS["email"];}
 
-   $called=$dbcon->Execute("SELECT *  FROM ride  WHERE email = '" . ($called__MMColParam) . "'") or DIE($dbcon->ErrorMsg());
+   $called=$dbcon->Execute("SELECT *  FROM ride  WHERE email = " . $dbcon->qstr($called__MMColParam)) ;
 
 ?>
 
 
- <?php if ($HTTP_GET_VARS["step"] == (admin)){; ?>
+ <?php if ($HTTP_GET_VARS["step"] == 'admin'){; ?>
 
 Your posting has been added to the board.  The moderator will appove yout posting soon.<?php } ?>
 
- <?php if ($HTTP_GET_VARS["step"] == (email)){; ?>
+ <?php if ($HTTP_GET_VARS["step"] == 'email'){; ?>
 
 An e-mail has been sent to your e-mail account with insturctions on how to confirm your posting.<?php } ?>
 
- <?php if ($HTTP_GET_VARS["step"] == ($null)){; ?>
+ <?php if ($called && $HTTP_GET_VARS["step"] == ($null)){; ?>
 
 <form ACTION="<?php echo $MM_editAction?>" METHOD="POST" name="form1">
 
@@ -65,9 +65,5 @@ An e-mail has been sent to your e-mail account with insturctions on how to confi
   <input type="hidden" name="MM_recordId" value="<?php echo $called->Fields("id") ?>">
 
 </form><?php } ?>
-
-<?php
-  $called->Close();
-?>
 
 <?php include("AMP/BaseFooter.php"); ?>

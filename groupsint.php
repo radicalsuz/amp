@@ -1,4 +1,7 @@
 <?php
+/* disabled due to disuse and security concerns
+ * ap 2008-07
+ */
 /*********************
 12-15-2003  v3.01
 Module:  Groups
@@ -14,6 +17,8 @@ To Do:  write better sql
 				search box
 
 *********************/ 
+
+/*
  
 $modid = 5;
 $mod_id = 58;
@@ -177,4 +182,6 @@ while (!$dbcountry2->EOF)
 }}
 
 
- include("AMP/BaseFooter.php"); ?>
+include("AMP/BaseFooter.php");
+*/
+?>

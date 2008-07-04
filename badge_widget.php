@@ -6,8 +6,8 @@ if ( $cached_output = AMP_cached_request( )) {
     exit;
 }
 
-$badge_id = ( isset( $_GET['id']) && $_GET['id'] ) ? $_GET['id'] : false;
-if (!$badge_id) $badge_id = ( isset( $_GET['badge']) && $_GET['badge'] ) ? $_GET['badge'] : false;
+$badge_id = ( isset( $_GET['id']) && $_GET['id'] ) ? intval( $_GET['id'] ) : false;
+if (!$badge_id) $badge_id = ( isset( $_GET['badge']) && $_GET['badge'] ) ? intval( $_GET['badge'] ) : false;
 $format = ( isset( $_GET['format']) && $_GET['format'] ) ? $_GET['format'] : false;
 
 if ( !$badge_id ) {

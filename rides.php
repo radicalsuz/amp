@@ -10,6 +10,7 @@ include("dropdown.php");
 $board="ride";
 $confirmcolor="#F389A9";
 $unconfirmcolor="#FFFFBA";
+$uid = isset( $_GET['uid']) && $_GET['uid'] ? intval( $_GET['uid'] ) : false;
 
 ?>
 <?php
@@ -36,7 +37,7 @@ header ("Location: ".$website."ride_signin.php");
 	if (($user->Fields("need")=="have") || ($user->Fields("need")=="org")) {
 	$message1= "Below is a listing of riders who have requested a ride with you.  You may confirm their place in your vehicle by selecting the appropriate rider(s) and clicking confirm.  You will receive an e-mail notification and must respond to it for final confirmation.  Please notify riders who you are not able to accomodate.";
 	$message2= "No riders have requested a ride at this time";
-	$sql = "SELECT *  FROM $board  Where (need='need') and  publish='1' and DriverID='$uid' ORDER BY confirmed DESC, depatingfrom ASC";
+	$sql = "SELECT *  FROM $board  Where (need='need') and  publish='1' and DriverID='".$dbcon->qstr( $uid )." ORDER BY confirmed DESC, depatingfrom ASC";
 	#echo $sql;
 	$button_name="Confirm Riders";
 	$radio_name="confirmed";

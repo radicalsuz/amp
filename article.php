@@ -156,7 +156,7 @@ if ($listType) {
  * Get Article Display 
  */
 if ( $currentArticle = &$currentPage->getArticle() ) {
-    if (isset($_GET['vid']) && $_GET['vid']) $currentArticle->readVersion( $_GET['vid']);
+    if (isset($_GET['vid']) && $_GET['vid']) $currentArticle->readVersion( intval( $_GET['vid']));
     $display = $currentArticle->getDisplay(); 
 }
 

@@ -1154,7 +1154,7 @@ class AMPSystemLookup_ItemsByTag extends AMPSystem_Lookup {
         $dbcon = AMP_Registry::getDbcon( );
         $this->criteria = sprintf( $this->_criteria_base, 
                                     $dbcon->qstr( $this->_criteria_item ),
-                                    $tag_id
+                                    $dbcon->qstr( $tag_id )
                                     ); 
     }
 }

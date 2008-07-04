@@ -1,4 +1,8 @@
 <?php
+/* disabling for security ap 2008-07
+ *
+ */
+/*
 
 include("AMP/BaseDB.php"); 
 
@@ -65,4 +69,5 @@ else {
 
 include("AMP/BaseFooter.php");
 
+*/
 ?>

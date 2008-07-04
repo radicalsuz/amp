@@ -1,10 +1,13 @@
 <?php
+/* disabling for security reasons. 2008-07 ap
+ */
 /** $Id: example2.php 923 2003-11-18 17:18:40Z jrust $ */
 /**
 * A more complex example. We convert a remote HTML file
 * into a PDF file. Additionally, we set several options to
 * customize the look.
 */
+/*
 ?>
 <html>
 <head>
@@ -42,3 +45,6 @@ else {
 ?>
 </body>
 </html> 
+<?php
+*/
+?>

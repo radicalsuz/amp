@@ -33,7 +33,8 @@ $called__MMColParam = "1";
 if (isset($HTTP_GET_VARS["email"]))
   {$called__MMColParam = $HTTP_GET_VARS["email"];}
 
-   $called=$dbcon->Execute("SELECT *  FROM ride  WHERE email = '" . ($called__MMColParam) . "'") or DIE($dbcon->ErrorMsg());
+   $called=$dbcon->Execute("SELECT *  FROM ride  WHERE email = " . $dbcon->qstr($called__MMColParam) );
+   if( $called ) {
    $called_numRows=0;
    $called__totalRows=$called->RecordCount();
 ?>
@@ -52,5 +53,7 @@ if (isset($HTTP_GET_VARS["email"]))
 
 <?php
   $called->Close();
+
+   }
 ?>
 <?php include("AMP/BaseFooter.php"); ?>
