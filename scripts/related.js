@@ -45,7 +45,6 @@ function related_describe( form, fieldset, badge_id, form_id, prefix ) {
 			param_field = fieldset[i]
 		}
 		params = params + param_field + '=' + form.elements[current_field].value + delimiter; 
-		alert("adding " + form.elements[current_field].value + " for " + param_field );
 		if ( form.elements[current_field].type == 'select') {
 			form.elements[current_field ].selectedIndex = '';
 		} else {

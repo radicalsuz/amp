@@ -15,9 +15,8 @@ class AmpDatabase
 
   attr_accessor :name
 
-  def initialize( name )
-    @dbcon = self.class.new_connection name 
-    self.name = name
+  def initialize( name = nil )
+    @name = name
   end
 
   def self.new_connection( db_name = nil )
@@ -56,12 +55,17 @@ class AmpDatabase
   end
 
   def update(sql)
-    @dbcon.query(sql)
-    @dbcon.affected_rows
+	dbcon = self.class.new_connection(@name)
+    dbcon.query(sql)
+    result = dbcon.affected_rows
+	dbcon.close
+	result
   end
 
   def matches(sql)
-    result = @dbcon.query(sql)
+	dbcon = self.class.new_connection(@name)
+    result = dbcon.query(sql)
+	dbcon.close
     result.all_hashes 
   end
 
