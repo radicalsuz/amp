@@ -17,15 +17,15 @@ end
 
 unless defined?( SOURCE_PATH )
   SOURCE_PATH = File.dirname(__FILE__) + "/.."
-  #SITE_PATTERN = File.expand_path( SOURCE_PATH + "/../../%s/public_html" )
-  SITE_PATTERN = File.expand_path( SOURCE_PATH + "/../%s" )
+  SITE_PATTERN = File.expand_path( SOURCE_PATH + "/../../%s/public_html" )
+  #SITE_PATTERN = File.expand_path( SOURCE_PATH + "/../%s" )
   MIGRATIONS_PATH = File.dirname(__FILE__) + "/../sql"
 end
 
 namespace :amp do
     
   def connection
-    require 'amp_databases'
+    require File.dirname(__FILE__) + '/amp_databases'
     AmpDatabase
   end
 

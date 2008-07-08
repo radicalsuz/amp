@@ -34,7 +34,7 @@ namespace :deploy do
   end
 
   task :migrate, :roles => :db do
-    invoke_command "#{current_path}/config/rake amp:migrate:sql"
+    invoke_command "rake -f #{File.expand_path(current_path)}/config/amp_tasks.rb amp:migrate:sql"
   end
 
 end
