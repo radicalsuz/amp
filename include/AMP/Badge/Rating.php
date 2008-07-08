@@ -21,14 +21,14 @@ function amp_badge_rating_block( $options ) {
 }
 
 function amp_badge_rating( $options ) {
-    $queryd_item = ( isset( $_GET['article_id']) && $_GET['article_id'] )? $_GET['article_id'] : 0;
+    $queryd_item = ( isset( $_GET['article_id']) && $_GET['article_id'] )? intval( $_GET['article_id'] ) : 0;
     if( $queryd_item ) {
         $article = new Article( AMP_Registry::getDbcon( ), $queryd_item );
         $display = new Rating_Public_Display( $article );
         return $display->execute( );
     }
-    $rating = ( isset( $_POST['rating']) && $_POST['rating'] )? $_POST['rating'] : 1;
-    $posted_item = ( isset( $_POST['article_id']) && $_POST['article_id'] )? $_POST['article_id'] : 0;
+    $rating = ( isset( $_POST['rating']) && $_POST['rating'] )? intval( $_POST['rating'] ) : 1;
+    $posted_item = ( isset( $_POST['article_id']) && $_POST['article_id'] )? intval( $_POST['article_id'] ) : 0;
     $article = new Article( AMP_Registry::getDbcon( ), $posted_item );
     $display = new Rating_Public_Display( $article );
     if( $rating && $posted_item && AMP_SYSTEM_UNIQUE_VISITOR_ID && is_numeric( $rating ) && is_numeric( $posted_item )) {
