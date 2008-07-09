@@ -66,7 +66,7 @@ class AMP_Display_Pager {
         $this->_qty_total = $total;
     }
 
-    function get_total( $total ) {
+    function get_total( ) {
         return $this->_qty_total;
     }
 

@@ -12,9 +12,7 @@ set :deploy_via, :remote_cache
 set :current_dir, "../public_html"
 set :use_sudo, false
 
-role(:app,  "gertie.radicaldesigns.org", "sft.slice.radicaldesigns.org" )
-#     ,"sadie.radicaldesigns.org" 
-#     ,"grace.radicaldesigns.org" 
+role(:app,  "gertie.radicaldesigns.org", "sft.slice.radicaldesigns.org",  "sadie.radicaldesigns.org", "grace.radicaldesigns.org" )
 
 role :db,   "gertie.radicaldesigns.org"
 #role :db,  "sadie.radicaldesigns.org", :primary => true
@@ -29,7 +27,10 @@ namespace :deploy do
 
   task :www_group, :roles => :app do
     #if capture( 'id -Gn' ).include? 'www-data'
-      invoke_command "chgrp -h www-data #{current_path}"
+    begin
+    invoke_command "chgrp -h www-data #{current_path}"
+    rescue
+    end
     #end
   end
 
