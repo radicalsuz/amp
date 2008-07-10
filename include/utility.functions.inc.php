@@ -2120,8 +2120,8 @@ function AMP_config_load( $file, $prefix='AMP', $cache=true ) {
         if( !isset( $custom_ini[$block_key])) $custom_ini[$block_key] = array( );
         $loaded[$prefix][$file][$block_key]= array_merge( $base_ini[$block_key], $custom_ini[$block_key]);
     }
-    $loaded[$prefix][$file] = array_merge( $loaded[$prefix][$file], array_diff( $custom_ini, $base_ini ));
-    #$loaded[$prefix][$file]= array_merge( $base_ini, $custom_ini );
+    $loaded[$prefix][$file] = array_merge( $loaded[$prefix][$file], array_diff_assoc( $custom_ini, $base_ini ));
+
     AMP_set_constants( $loaded[$prefix][$file], $prefix );
     return $loaded[$prefix][$file];
 }

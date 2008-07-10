@@ -12,14 +12,15 @@ class Section_Form extends AMPSystem_Form_XML {
         $this->init( $name, 'POST', AMP_SYSTEM_URL_SECTION );
     }
 
-    function _after_init( ) {
+    function setDynamicValues( ){
         $multiselect_boxes = array( 'list_by_class', 'list_by_section', 'list_by_tag');
         foreach( $multiselect_boxes as $field_name ) {
-            if( $this->fields[ $field_name]['type']) {
+            if( $this->fields[ $field_name]['type'] == 'multiselect' ) {
                 $this->addTranslation( $field_name, '_multiselectToText', 'get');
             }
         }
         $this->_send_preview_link_to_bottom( );
+        $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
     }
 
     
@@ -32,10 +33,6 @@ class Section_Form extends AMPSystem_Form_XML {
                     "return confirmSubmit('".AMP_TEXT_RECORD_CONFIRM_DELETE_SECTION . AMP_TEXT_RECORD_CONFIRM_DELETE."');" )
                 );
         if ($this->allow_copy) $this->copy_button();
-    }
-    function setDynamicValues( ){
-
-        $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
     }
 
     function _send_preview_link_to_bottom( ) {

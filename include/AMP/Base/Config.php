@@ -58,10 +58,15 @@ if ( !( isset( $no_legacy ) && $no_legacy )) {
     require_once( 'AMP/LegacyRegistry.inc.php');
 }
 
+/*
 foreach( $_REQUEST as $rkey => $rvalue ) {
-    if ( $rkey != 'body' && preg_match( '/union.{1,8}select|insert.{1,8}into|delete.{1,8}from/', $rvalue )) {
-        trigger_error( 'SQL injection detected in '. $_SERVER['SCRIPT_NAME'].' '.$rkey.': '. $rvalue );
-        exit;
+    if( !is_array( $rvalue )) {
+        if ( $rkey != 'body' && preg_match( '/union.{1,8}select|insert.{1,8}into|delete.{1,8}from/', $rvalue )) {
+            trigger_error( 'SQL injection detected in '. $_SERVER['SCRIPT_NAME'].' '.$rkey.': '. $rvalue );
+            exit;
+        }
+
     }
 }
+*/
 ?>
