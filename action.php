@@ -350,7 +350,7 @@ if (isset($_REQUEST['MM_insert']) && $_REQUEST['MM_insert'] && $captcha_valid ) 
 	$getuser = getactionemail($_POST[old_EmailAddress]);
 
     if ($getuser->Fields("id")) {
-	    $Fisrt_Name = $getuser->Fields("First_Name");
+	    $First_Name = $getuser->Fields("First_Name");
         $Last_Name = $getuser->Fields("Last_Name");
         $Email = $getuser->Fields("Email");
         $City = $getuser->Fields("City");
@@ -426,16 +426,30 @@ if ((isset($_REQUEST['MM_insert'])) && (!$_REQUEST['kill_insert'] ) ) {
 # prepare email
 
 	$finalemail = 
-	"Dear ".$actiondetails->Fields("prefix")." ".$actiondetails->Fields("firstname")." ".$actiondetails->Fields("lastname").",
-$Letter_Content \n
-$Title $First_Name $Last_Name \n";
-	$finalemail .= "$City, $State $Country \n";
-	$finalemail .= "$Email \n";
+	"Dear "
+    .$actiondetails->Fields("prefix")." "
+    .$actiondetails->Fields("firstname")." "
+    .$actiondetails->Fields("lastname")
+    .",\n"
+    . strip_tags( $_REQUEST['Letter_Content'] 
+        . "\n"
+        . $_REQUEST['Title']  . " "
+        . $_REQUEST['First_Name'] . " "
+        . $_REQUEST['Last_Name'] 
+        . " \n"
+        . $_REQUEST['City']  . " "
+        . $_REQUEST['State'] . ' '
+        . $_REQUEST['Country'] 
+        . " \n"
+        . $_REQUEST['Email'] 
+        ." \n" );
  
 #send emails	
     $emailemail =  $actiondetails->Fields("email");
-	$emailheaders = mail_sanitize("From: $First_Name $Last_Name <$Email>")."\n".mail_sanitize("Reply-To: $Email");
-	$temailheaders = mail_sanitize("From: $MM_email_from");
+	$emailheaders = mail_sanitize("From: " . $_REQUEST['First_Name'] . " " . $_REQUEST['Last_Name'] . " <". $_REQUEST['Email'] . ">")
+                    . "\n"
+                    .mail_sanitize("Reply-To: ".$_REQUEST['Email']);
+	$temailheaders = mail_sanitize("From: " . AMP_SITE_EMAIL_SENDER );
 	$faxemail = $actiondetails->Fields("fax");
 	$faxheaders = mail_sanitize("From: ".$actiondetails->Fields("faxaccount"));
 	if ($actiondetails->Fields("faxsubject") != 'subject') {	
@@ -465,7 +479,7 @@ $Title $First_Name $Last_Name \n";
 	echo "<p class=text>".converttext($actiondetails->Fields("thankyou_text"))."</p>";
 	echo "<br><br><p class=title>Tell A Friend</p><br>";
 	if  ($actiondetails->Fields("tellfriend")) {
-		tellfriend($First_Name,$Last_Name,$Email,$actiondetails->Fields("tf_subject"),$actiondetails->Fields("tf_text"));
+		tellfriend($_REQUEST['First_Name'],$_REQUEST['Last_Name'],$_REQUEST['Email'],$actiondetails->Fields("tf_subject"),$actiondetails->Fields("tf_text"));
 	}
  
 
