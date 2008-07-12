@@ -203,7 +203,7 @@ class AMP_Authentication_Handler {
                     $this->user = $cookie['user'];
                     $this->permission = $cookie['permission'];
                     $this->has_cookie = $hash;
-                    if ( $this->userid ) {
+                    if ( $this->userid && !defined('AMP_USER_PROFILE_ID')) {
                         define( 'AMP_USER_PROFILE_ID', $this->userid );
                     }
                     return true;

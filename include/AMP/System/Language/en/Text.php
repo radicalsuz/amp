@@ -58,7 +58,7 @@ define( 'AMP_TEXT_ITEM_NAME', 'Item');
 define( 'AMP_TEXT_SEARCH', 'Search');
 define( 'AMP_TEXT_ALL', 'All');
 define( 'AMP_TEXT_BYLINE_SLUG', 'by&nbsp;%s');
-define( 'AMP_TEXT_RECENT' , 'Recent&nbsp;' );
+if(!defined('AMP_TEXT_RECENT')) define( 'AMP_TEXT_RECENT' , 'Recent&nbsp;' ); 
 define( 'AMP_TEXT_MORE' , 'More&nbsp;' );
 if ( !defined( 'AMP_TEXT_NAV_MORELINK' )) define( 'AMP_TEXT_NAV_MORELINK' , 'More&nbsp;&#187;' );
 if (!defined( 'AMP_TEXT_CONTENT_FRONTPAGE_MORELINK' )) define( 'AMP_TEXT_CONTENT_FRONTPAGE_MORELINK', 'Read More&nbsp;&raquo;' );
