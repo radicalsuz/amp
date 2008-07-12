@@ -185,6 +185,7 @@ class AMP_System_File_Image extends AMP_System_File {
     function set_display_metadata( $data ) {
         $this->display_metadata = $data;
         $this->_init_attributes( );
+        $this->_init_display( );
     }
 
     function get_url_edit( ){

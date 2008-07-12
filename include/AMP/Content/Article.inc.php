@@ -222,7 +222,7 @@ class Article extends AMPSystem_Data_Item {
         if( !( $name = $this->getImageFileName( ))) return $false;
         $img_class = $this->getImageClass( );
         if( !$img_class ) $img_class = AMP_IMAGE_CLASS_OPTIMIZED;
-        $image = new AMP_System_File_Image( AMP_image_path( $name, $img_class )) ;
+        $image = &new AMP_System_File_Image( AMP_image_path( $name, $img_class )) ;
         if ( !$image->getPath( )) return $false;
         $image->set_display_metadata( $this->getImageData( ));
         return $image;

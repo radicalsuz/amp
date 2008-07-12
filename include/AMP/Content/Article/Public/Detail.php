@@ -107,7 +107,7 @@ class Article_Public_Detail extends AMP_Display_Detail {
 	}
 
     function render_image( &$source ) {
-        $image = $source->getImageFile( );
+        $image = &$source->getImageFile( );
         if (!$image || !$source->display_image_in_body( )) return false;
         return $image->display->execute( );
         /*
