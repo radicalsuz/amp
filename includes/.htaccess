@@ -1,0 +1,4 @@
+# This is present to disallow access to the include directory, which may
+# contain sensitive data.
+Order allow,deny
+deny from all

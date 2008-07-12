@@ -20,6 +20,8 @@ housing_response=19
 webaction_input=62
 contact_us=52
 contact_us_response=53
+share=33
+share_response=32
 
 [module id]
 gallery=8

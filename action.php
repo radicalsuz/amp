@@ -460,6 +460,7 @@ if ((isset($_REQUEST['MM_insert'])) && (!$_REQUEST['kill_insert'] ) ) {
      
 	 	 
 	if ($_POST['Send_Email'] && ($emailemail != "vsform")) {mail($emailemail,$_POST['subjectText'],$finalemail,$emailheaders);  }
+    /*
 	if ($_POST['Send_Email'] && ($emailemail == "vsform")) {
 		require_once( 'Modules/vsLetter.inc.php' );
 		$vsr = sendVSletter( $_POST['First_Name'], $_POST['Last_Name'], $_POST[Email], $finalemail );
@@ -469,17 +470,35 @@ if ((isset($_REQUEST['MM_insert'])) && (!$_REQUEST['kill_insert'] ) ) {
         	print "Failure!";
 		}
 	}
+    */
 	
 	if ($_POST["Send_Fax"]) {mail($faxemail,$faxsubject,$finalemail,$faxheaders); }
 	if ($actiondetails->Fields("bcc")) {mail($actiondetails->Fields("bcc"),$_POST['subjectText'],$finalemail,$temailheaders); }
 	mail($Email,"Thank you for Taking Action",$finalemail,$temailheaders); 
 
 #go to tell a friend
+    require_once( 'AMP/System/IntroText.inc.php');
+    $page = &new AMPSystem_IntroText( AMP_Registry::getDbcon( ), AMP_CONTENT_PUBLICPAGE_ID_SHARE_RESPONSE );
+    $page_display = $page->getDisplay( );
+    print( $page_display->execute( ));
+
 	echo "<p class=title>".$actiondetails->Fields("thankyou_title")."</p>";
 	echo "<p class=text>".converttext($actiondetails->Fields("thankyou_text"))."</p>";
 	echo "<br><br><p class=title>Tell A Friend</p><br>";
 	if  ($actiondetails->Fields("tellfriend")) {
-		tellfriend($_REQUEST['First_Name'],$_REQUEST['Last_Name'],$_REQUEST['Email'],$actiondetails->Fields("tf_subject"),$actiondetails->Fields("tf_text"));
+		#tellfriend($_REQUEST['First_Name'],$_REQUEST['Last_Name'],$_REQUEST['Email'],$actiondetails->Fields("tf_subject"),$actiondetails->Fields("tf_text"));
+        require_once( 'Modules/Share/Public/ComponentMap.inc.php' );
+        $map = & new ComponentMap_Share_Public( );
+        $controller = $map->get_controller( );
+        $controller->_init_form( );
+        $controller->_form->applyDefaults( );
+        $controller->_form->setValues( array( 
+                'sender_name' => $_REQUEST['First_Name'] . ' ' . $_REQUEST['Last_Name'],
+                'sender_email' => $_REQUEST['Email'],
+                'message' => $actiondetails->Fields( 'tf_text' ), 
+                'subject' => $actiondetails->Fields(  'tf_subject') 
+                ) );
+        print( $controller->_form->execute( ) );
 	}
  
 
