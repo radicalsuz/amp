@@ -153,7 +153,7 @@ class AMPSystem_Lookup {
     }
 
     function cache_key( $type, $instance_var = null ) {
-        $lookup_cache_key = AMP_CACHE_TOKEN_LOOKUP . ( $type );
+        $lookup_cache_key = AMP_CACHE_TOKEN_LOOKUP . AMP_from_camelcase( $type );
         if ( defined( 'AMP_SYSTEM_USER_ID')) {
             $lookup_cache_key = AMP_System_Cache::identify( $lookup_cache_key, AMP_SYSTEM_USER_ID );
         }

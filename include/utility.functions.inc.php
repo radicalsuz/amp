@@ -1670,6 +1670,16 @@ function AMP_update_tags( $tag_ids = false, $tag_names = false, $item_id, $item_
         }
     }
 
+	//clear tags lookups
+	AMP_lookup_clear_cached( 'tags_totals_articles_live' );
+	AMP_lookup_clear_cached( 'tags_totals' );
+	AMP_lookup_clear_cached( 'tags_simple' );
+	AMP_lookup_clear_cached( 'tags_live' );
+	AMP_lookup_clear_cached( 'tags' );
+	if($item_type == AMP_SYSTEM_ITEM_TYPE_ARTICLE ) {
+		AMP_lookup_clear_cached( 'tags_by_article', $item_id );
+	}
+
 }
 
 function AMP_add_tags( $tag_ids = false, $tag_names = false, $item_id, $item_type ) {
@@ -1746,7 +1756,7 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
 
 function AMP_lookup_clear_cached( $type, $instance_var = null ) {
     require_once( "AMP/System/Lookups.inc.php");
-    $key = AMPSystem_Lookup::cache_key( AMP_to_camelcase( $type), $instance_var );
+    $key = AMPSystem_Lookup::cache_key( $type, $instance_var );
     AMP_cache_delete( $key );
 }
 
@@ -2057,7 +2067,11 @@ function AMP_from_camelcase( $value ) {
     $end = "_a,_b,_c,_d,_e,_f,_g,_h,_i,_j,_k,_l,_m,_n,_o,_p,_q,_r,_s,_t,_u,_v,_w,_x,_y,_z";
     $start_set = split( ',', $start );
     $end_set = split( ',', $end );
-    return str_replace( $start_set, $end_set, $value );
+    $underscored = str_replace( $start_set, $end_set, $value );
+	if( substr($underscored, 0, 1) == '_' ) {
+		$underscored = substr($underscored,1 );
+	}
+	return $underscored;
 }
 
 
