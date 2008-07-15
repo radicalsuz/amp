@@ -42,7 +42,7 @@ class AMPContent_RSSFeed extends AMPSystem_Data_Item {
         return $limit;
     }
     function getSort() {
-        if(!($sortdef= $this->getData('orderbysql'))) return 'date desc';
+        if(!($sortdef= $this->getData('orderbysql'))) return 'date desc, id desc';
         return $sortdef ." ". $this->getData('orderbyorder');
     }
     function getCombineLogic() {
