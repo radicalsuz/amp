@@ -51,7 +51,7 @@ class Calendar_Public_Display extends AMP_Display_Detail {
             $contact_output .= $this->_renderer->newline( ) . $contact_name ;
         }
         if ( $contact_email ) {
-            $rendered_contact_email = AMP_mailto( $contact_email );
+            $rendered_contact_email = AMP_protect_email( $contact_email );
             $contact_output .= $this->_renderer->newline( ) . $rendered_contact_email;
         }
         if ( $contact_phone ) {
