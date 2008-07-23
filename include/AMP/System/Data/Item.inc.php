@@ -388,6 +388,21 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
      * @return void
      */
     function find( $criteria = null, $class_name = null  ) {
+        $order_by = isset( $criteria['sort']) && $criteria['sort'] ? $criteria['sort'] : false;
+        $source_limit = isset( $criteria['limit']) && $criteria['limit'] ? $criteria['limit'] : false;
+        $source_offset = isset( $criteria['offset']) && $criteria['offset'] ? $criteria['offset'] : false;
+        if ( $order_by || $source_limit || $source_offset ) {
+            $source = &$this->_getSearchSource( );
+            if( $order_by ) {
+                $source->setSort( $order_by );
+            }
+            if ( $source_limit ) {
+                $source->setLimit( $source_limit );
+            }
+            if ( $source_offset ) {
+                $source->setOffset( $source_offset );
+            }
+        }
         return $this->search( $this->makeCriteria( $criteria ), $class_name );
     }
 
