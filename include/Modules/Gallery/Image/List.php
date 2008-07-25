@@ -31,7 +31,7 @@ class Gallery_Image_List extends AMP_Display_System_List {
         return $sections[$section_id];
     }
     function render_thumb( $source ) {
-        $img = $source->getImageFile( );
+        if(!$img = &$source->getImageFile( )) return false;
         return $this->_renderer->link( $source->get_url_edit( ),
                                         $img->display->render_thumb( )
                                         );
