@@ -91,13 +91,16 @@ class UserDataPlugin_Email extends UserDataPlugin {
 		//This sucks.  why can't i just call udm->getData???
         $merge = false;
         if(isset($options['merge_fields']) && $options['merge_fields']) {
-	    	$form =& $this->udm->form;
+			$constructor = $this->udm->getPlugin( 'QuickForm', 'Build' );
+			#$constructor->execute();
+			$merge = $constructor->_formEngine->getValues();
+/*	    	$form =& $this->udm->form;
 	    	unset($this->udm->form);
             $merge = $this->udm->getData();
             $this->udm->form =& $form;
-        }
-
-        $this->message .= $this->_getBodyHeader ( $options, $merge );
+*/  
+ 	    }
+		$this->message .= $this->_getBodyHeader ( $options, $merge );
 
         $this->message .= $this->prepareMessage( $options );
 
