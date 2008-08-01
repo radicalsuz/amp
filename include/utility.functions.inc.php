@@ -2398,4 +2398,9 @@ function AMP_block_frequent_requesters( ) {
     }
 }
 
+function &AMP_dbcon( ) {
+    $dbcon = &AMP_Registry::getDbcon( );)
+    return $dbcon;
+}
+
 ?>

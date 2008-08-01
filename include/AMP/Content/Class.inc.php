@@ -28,8 +28,9 @@ class ContentClass extends AMPSystem_Data_Item {
     function &getContents() {
         if (isset($this->_contents)) return $this->_contents;
 
+        $finder = new Article( $this->dbcon );
         $this->_contents = &new ArticleSet( $this->dbcon );
-        $this->_contents->addCriteria( 'class='.$this->id );
+        $this->_contents->addCriteria( join( $finder->makeCriteria( array( 'class' => $this->id, 'displayable' => 1 )), " AND "));
         $this->_contents->setSort( array( 'date DESC', 'id DESC' ) );
         if ( $this->id == AMP_CONTENT_CLASS_FRONTPAGE ) {
             $this->_contents->addSort( 'if (( isnull( pageorder ) or pageorder="" or pageorder=0 ), ' 

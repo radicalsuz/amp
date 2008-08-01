@@ -1248,13 +1248,18 @@ class AMPContentLookup_ToolLinks extends AMPConstant_Lookup {
     }
 }
 
-class AMPContentLookup_SectionsLive extends AMPContent_Lookup {
-    var $datatable = 'articletype';
-    var $result_field = 'type';
-    var $criteria = 'usenav=1';
+class AMPContentLookup_SectionsLive extends AMPSystem_Lookup {
+#    var $datatable = 'articletype';
+#    var $result_field = 'type';
+#    var $criteria = 'usenav=1';
 
     function AMPContentLookup_SectionsLive( ){
         $this->init( );
+    }
+
+    function init( ){
+        $map = &AMPContent_Map::instance( );
+        $this->dataset = $map->selectOptionsLive( );
     }
 }
 

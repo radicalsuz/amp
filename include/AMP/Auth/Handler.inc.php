@@ -46,7 +46,7 @@ class AMP_Authentication_Handler {
 
         if ( class_exists( $loginType )) {
             $this->_loginType = &new $loginType( $this );
-            $this->_loginType->setTimeout( $timeout );
+            if(  $timeout ) $this->_loginType->setTimeout( $timeout );
             if( method_exists( $this->_loginType, 'initLoginState')) $this->_loginType->initLoginState( $this );
         }
 
