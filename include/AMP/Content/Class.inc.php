@@ -30,12 +30,15 @@ class ContentClass extends AMPSystem_Data_Item {
 
         $finder = new Article( $this->dbcon );
         $this->_contents = &new ArticleSet( $this->dbcon );
-        $this->_contents->addCriteria( join( $finder->makeCriteria( array( 'class' => $this->id, 'displayable' => 1 )), " AND "));
+        trigger_error( join( $finder->makeCriteria( array( 'class' => $this->id, 'displayable' => true )), " AND "));
         $this->_contents->setSort( array( 'date DESC', 'id DESC' ) );
         if ( $this->id == AMP_CONTENT_CLASS_FRONTPAGE ) {
+			$this->_contents->addCriteria( join( $finder->makeCriteria( array( 'class' => $this->id, 'live' => 1 )), " AND "));
             $this->_contents->addSort( 'if (( isnull( pageorder ) or pageorder="" or pageorder=0 ), ' 
                                      . AMP_SORT_MAX. ', pageorder)' );
-        }
+        } else {
+			$this->_contents->addCriteria( join( $finder->makeCriteria( array( 'class' => $this->id, 'displayable' => true )), " AND "));
+		}
         
         foreach ($this->_contents_criteria as $criteria ) {
             $this->_contents->addCriteria( $criteria );

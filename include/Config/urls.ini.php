@@ -2,7 +2,6 @@
 
 [content url]
 
-404=           "search.php"
 404_core=      "404.php"
 
 action=        "action.php"
