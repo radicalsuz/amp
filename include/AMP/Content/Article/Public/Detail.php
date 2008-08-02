@@ -245,9 +245,12 @@ class Article_Public_Detail extends AMP_Display_Detail {
     }
 
     function render_comments( $source ) {
+		if( !$source->allowsComments() ) return false;
         require_once( 'AMP/Content/Article/Comment/Public/List.php');
         $comments = new Article_Comment_Public_List( null, array( 'article' => $source->id ));
-        return $comments->execute( );
+        $comment_header = '<p class="subtitle comment_header"><a name="comments"></a>Comments</p>';
+		$add_link = $this->_renderer->link( AMP_url_update( AMP_CONTENT_URL_COMMENT_ADD, array('articleid' => $source->id)), AMP_TEXT_ADD_A_COMMENT);
+        return $comment_header . $comments->execute( ) . $add_link;
 
     }
 

@@ -869,7 +869,7 @@ class Article extends AMPSystem_Data_Item {
         $crit = array(  );
         $crit['class'] = $this->makeCriteriaDisplayableClass(  );
         $crit['status'] = $this->makeCriteriaLive(  );
-        $crit['section_status'] = $this->makeCriteriaLiveParent(  );
+        #$crit['section_status'] = $this->makeCriteriaLiveParent(  );
         $crit['allowed'] = $this->makeCriteriaAllowed(  );
         $crit['public']= $this->makeCriteriaPublicToUser(  );
         return join (  " AND ", array_filter( $crit ));
@@ -889,7 +889,13 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function makeCriteriaLiveParent( ){
-        $published_sections = AMP_lookup( 'sections_live' );
+        if ( AMP_Authenticate( 'content') ) {
+			AMP_lookup_clear_cached( 'sections_live' );
+			$published_sections = AMP_lookup( 'sections_live' );
+			AMP_lookup_clear_cached( 'sections_live' );
+		} else {
+			$published_sections = AMP_lookup( 'sections_live' );
+		}
         return "type in( " . join( ",", array_keys( $published_sections) ) . ")";
     }
 
