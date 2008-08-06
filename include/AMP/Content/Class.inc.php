@@ -57,11 +57,7 @@ class ContentClass extends AMPSystem_Data_Item {
     }
 
     function getDisplayCriteria( ) {
-		if ($this->id == AMP_CONTENT_CLASS_FRONTPAGE ) {
-			return array_merge( array( 'class' => $this->id ), $this->_display_criteria );
-		} else {
-			return array_merge( array( 'class' => $this->id , 'displayable' => true ), $this->_display_criteria );
-		}
+        return array_merge( array( 'class' => $this->id ), $this->_display_criteria );
     }
 
     function getDisplayIntro( ) {
