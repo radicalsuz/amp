@@ -1271,14 +1271,16 @@ class AMPContentLookup_SectionsLive extends AMPSystem_Lookup {
 class AMPContentLookup_SectionsDraft extends AMPSystem_Lookup {
     var $datatable = 'articletype';
     var $result_field = 'type';
-    var $criteria = 'usenav != 1';
+    var $criteria = 'isnull(usenav) OR usenav != 1';
 	function AMPContentLookup_SectionsDraft() {
 		$this->init();
 	}
     function init( ){
+		parent::init();
         if ( empty( $this->dataset )) return;
         $map = &AMPContent_Map::instance( );
         foreach( $this->dataset as $section_id => $draft ){
+			if ($section_id == AMP_CONTENT_SECTION_ID_ROOT ) continue;
             if ( !( $children = $map->getDescendants( $section_id ))) continue;
             $this->appendChildren( $children );
         }
