@@ -1258,8 +1258,36 @@ class AMPContentLookup_SectionsLive extends AMPSystem_Lookup {
     }
 
     function init( ){
+		$sections = AMP_lookup('sections');
+		$draft_sections = AMP_lookup('sections_draft');
+		foreach($draft_sections as $id => $value ) {
+			unset($sections[ $id ] );
+		}
+		$this->dataset = $sections;
+    }
+
+}
+
+class AMPContentLookup_SectionsDraft extends AMPSystem_Lookup {
+    var $datatable = 'articletype';
+    var $result_field = 'type';
+    var $criteria = 'usenav != 1';
+	function AMPContentLookup_SectionsDraft() {
+		$this->init();
+	}
+    function init( ){
+        if ( empty( $this->dataset )) return;
         $map = &AMPContent_Map::instance( );
-        $this->dataset = $map->selectOptionsLive( );
+        foreach( $this->dataset as $section_id => $draft ){
+            if ( !( $children = $map->getDescendants( $section_id ))) continue;
+            $this->appendChildren( $children );
+        }
+    }
+
+    function appendChildren( $child_set ){
+        foreach( $child_set as $section_id ){
+            $this->dataset[$section_id] = 1;
+        }
     }
 }
 

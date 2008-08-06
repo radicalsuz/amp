@@ -30,7 +30,6 @@ class ContentClass extends AMPSystem_Data_Item {
 
         $finder = new Article( $this->dbcon );
         $this->_contents = &new ArticleSet( $this->dbcon );
-        trigger_error( join( $finder->makeCriteria( array( 'class' => $this->id, 'displayable' => true )), " AND "));
         $this->_contents->setSort( array( 'date DESC', 'id DESC' ) );
         if ( $this->id == AMP_CONTENT_CLASS_FRONTPAGE ) {
 			$this->_contents->addCriteria( join( $finder->makeCriteria( array( 'class' => $this->id, 'live' => 1 )), " AND "));
@@ -58,7 +57,11 @@ class ContentClass extends AMPSystem_Data_Item {
     }
 
     function getDisplayCriteria( ) {
-        return array_merge( array( 'class' => $this->id ), $this->_display_criteria );
+		if ($this->id == AMP_CONTENT_CLASS_FRONTPAGE ) {
+			return array_merge( array( 'class' => $this->id ), $this->_display_criteria );
+		} else {
+			return array_merge( array( 'class' => $this->id , 'displayable' => true ), $this->_display_criteria );
+		}
     }
 
     function getDisplayIntro( ) {
