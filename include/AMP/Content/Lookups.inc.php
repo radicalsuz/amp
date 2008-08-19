@@ -1271,7 +1271,7 @@ class AMPContentLookup_SectionsLive extends AMPSystem_Lookup {
 class AMPContentLookup_SectionsDraft extends AMPSystem_Lookup {
     var $datatable = 'articletype';
     var $result_field = 'type';
-    var $criteria = 'isnull(usenav) OR usenav != 1';
+    var $criteria = '(isnull(usenav) OR usenav != 1) and id != 1';
 	function AMPContentLookup_SectionsDraft() {
 		$this->init();
 	}
