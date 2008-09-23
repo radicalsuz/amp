@@ -11,11 +11,11 @@ include("AMP/BaseModuleIntro.php");
 
 //$modid = 46;
 //$mod_id = 69;
-$quiz_id = isset( $_REQUEST['quiz_id'] ) && $_REQUEST['quiz_id'] ? intval(  $_REQUEST['quiz_id']) : false;
-$question_id = isset( $_REQUEST['question_id'] ) && $_REQUEST['question_id'] ? intval(  $_REQUEST['question_id']) : false;
+#$quiz_id = isset( $_REQUEST['quiz_id'] ) && $_REQUEST['quiz_id'] ? intval(  $_REQUEST['quiz_id']) : false;
+$question_id = isset( $_REQUEST['question_id'] ) && $_REQUEST['question_id'] ? intval(  $_REQUEST['question_id']) : 1;
 $answer_id = isset( $_REQUEST['answer_id'] ) && $_REQUEST['answer_id'] ? intval(  $_REQUEST['answer_id']) : false;
 
-$Q = new Quiz($dbcon, $quiz_id );
+$Q = new Quiz($dbcon);
 
 $Q->answer = $answer_id;
 $Q->id = $question_id;
