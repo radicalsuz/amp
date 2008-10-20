@@ -47,8 +47,12 @@ class UserDataPlugin_Save_AMP extends UserDataPlugin_Save {
 
         //$db_fields   = $this->udm->dbcon->MetaColumnNames('userdata');
         $db_fields   = $this->_getColumnNames( 'userdata');
-        $qf_fields   = $this->_include_file_fields( array_keys( $this->udm->form->exportValues() ));
-        
+        if( $quick_form = &$this->udm->getPlugin( 'QuickForm', 'Build' ) ) {
+          $params = array_keys( $quick_form->_formEngine->getValues() );
+        } else {
+          $params = array_keys( $this->udm->form->exportValues() );
+        }
+        $qf_fields   = $this->_include_file_fields( $params ); 
 
         $save_fields = array_intersect( $db_fields, $qf_fields );
         $this->_field_prefix="";
