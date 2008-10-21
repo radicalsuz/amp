@@ -16,6 +16,7 @@ $controller->request('search');
 
 $currentPage = &AMPContent_Page::instance();
 $controller->set_page( $currentPage );
+header( $_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found' );
 AMP_directDisplay( $controller->execute( ));
 
 require_once("AMP/BaseFooter.php");
