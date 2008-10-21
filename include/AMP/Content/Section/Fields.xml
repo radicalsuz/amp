@@ -23,7 +23,7 @@
 		<label>Subsection of</label>
         <lookup>
             <module>content</module>
-            <instance>sectionmap</instance>
+            <instance>sectionmapwithoutcurrentsection</instance>
         </lookup>
         <required>1</required>
 	</parent>

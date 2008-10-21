@@ -210,6 +210,22 @@ class AMPContent_Map {
         return $option_set;
     }
 
+    function selectOptionsWithoutCurrentSection( $startLevel=null ) {
+        if (!isset($startLevel)) $startLevel = $this->top;
+        if (!$this->hasChildren ($startLevel)) return;
+
+        $option_set =array();
+        foreach( $this->map[ $startLevel ] as $child_section ) {
+            trigger_error( $child_section);
+            if ( $child_section == $_GET['id']) continue;
+            $option_set[ $child_section ] = str_repeat( '&nbsp;&nbsp;&nbsp;&nbsp;', $this->getDepth( $child_section )-1) . $this->getName( $child_section );
+            if (!($child_options =  $this->selectOptionsWIthoutCurrentSection( $child_section ))) continue ;
+            $option_set = $option_set + $child_options;
+        }
+        return $option_set;
+    }
+
+
     function selectOptionsLive( $startLevel=null ) {
         if (!isset($startLevel)) $startLevel = $this->top;
         if (!$this->hasChildren ($startLevel)) return;
