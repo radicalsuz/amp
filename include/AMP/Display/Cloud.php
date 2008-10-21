@@ -140,6 +140,9 @@ class AMP_Display_Cloud {
     }
 
     function _init_css( ) {
+        if (!AMP_CONTENT_CLOUD_DYNAMIC_CSS) {
+          return;
+       }
         $css_source = '';
         for( $n = 0;$n<$this->_size_steps;$n++) {
             $css_source .= 
@@ -150,6 +153,7 @@ class AMP_Display_Cloud {
         }
         $header = &AMP_get_header( );
         $header->addStylesheetDynamic( $css_source, 'AMP_cloud'.get_class( $this ));
+
     }
 
 }

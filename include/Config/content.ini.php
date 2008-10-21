@@ -240,4 +240,7 @@ photocredit=false
 
 [render display class]
 publicpage="Article_Public_Detail_Page"
+
+[content cloud]
+dynamic_css=true 
 ;?>
