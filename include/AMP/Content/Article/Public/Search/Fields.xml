@@ -10,7 +10,7 @@
     </section_logic_plus>
     <class>
 		<separator>newrow</separator>
-		<type>select</type>
+		<type>hidden</type>
 		<label>By Class</label>
 		<lookup>publicClasses</lookup>
     </class>
@@ -24,7 +24,7 @@
 		</options>
     </date>
     <region>
-        <type>select</type>
+        <type>hidden</type>
         <label>By Region</label>
         <lookup>regions</lookup>
     </region>

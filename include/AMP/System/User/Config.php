@@ -9,7 +9,7 @@ require_once( 'AMP/System/Flash.php');
 function AMP_init_user( ) {
     if ( !isset( $_SERVER['REMOTE_USER'])) return false; 
 
-    $AMP_Permission = & AMPSystem_PermissionManager::instance();
+    $AMP_Permission = &AMPSystem_PermissionManager::instance();
     $AMP_CurrentUser = false;
     $AMP_CurrentUser = &$AMP_Permission->readUser( $_SERVER['REMOTE_USER'] );
     if ( $AMP_CurrentUser ) {
