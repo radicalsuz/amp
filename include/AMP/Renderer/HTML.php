@@ -267,7 +267,7 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         $params = array( 'movie' => $url, 'wmode' => $attr_set['wmode']);
 
         $output = $this->params( $params );
-        $output .= $this->embed( $url, $attr ) ;
+        $output .= $this->embed( $url, $attr_set ) ;
 
         $object_attrs = array( 'height' => $attr_set['height'], 'width' => $attr_set['width'] );
         return $this->object( $output, $object_attrs );
@@ -280,7 +280,7 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
     }
 
     function object( $content, $attr = array( ) ) {
-        return '<object' . $this->attr( $attr ) . '></object>';
+        return '<object' . $this->attr( $attr ) . ">$content</object>";
 
     }
 

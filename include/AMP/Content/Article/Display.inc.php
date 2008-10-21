@@ -107,19 +107,11 @@ class Article_Display extends AMPDisplay_HTML {
 
     function render_media( ) {
 
-        $media_url  = $this->_article->getMediaUrl();
         $media_html = $this->_article->getMediaHtml();
-        if ( !( $media_html || $media_url )) return false;
+        if ( !$media_html ) return false;
 
         $renderer = AMP_get_renderer( );
-        $output = '';
-        if ( $media_url ) {
-            $output .= $renderer->embed_flash_video( $media_url );
-        }
-        if ( $media_html ) {
-            $output .= $media_html;
-        }
-        return $renderer->div( $output, array( 'class' => 'article_media' )) ;
+        return $renderer->div( $media_html, array( 'class' => 'article_media' )) ;
         
     }
 
