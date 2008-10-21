@@ -15,7 +15,7 @@ class FAQ_List extends AMP_Display_System_List {
     var $name_field = 'question';
     var $_source_object = 'FAQ';
     var $_observers_source = array( 'AMP_System_List_Observer');
-    var $columns  = array( 'edit','name', 'type', 'id', 'status');
+    var $columns  = array('select', 'controls', 'name', 'type', 'id', 'status');
     var $column_headers = array( 'name' => 'Question' );
     var $link_list_preview = AMP_CONTENT_URL_FAQ;
 
