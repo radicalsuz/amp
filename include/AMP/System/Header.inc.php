@@ -18,6 +18,8 @@ class AMPSystem_Header extends AMPContent_Header {
         //'calendar'      => 'system/Connections/popcalendar.js',
         'functions'     => 'scripts/functions.js', 
         'prototype'     => 'scripts/ajax/prototype.js',
+        'jquery'        => 'scripts/jquery/jquery-1.2.6.min.js',
+        'application'   => 'scripts/application.js',
         'scriptaculous' => 'scripts/ajax/scriptaculous.js' );
 
     var $styleSheets = array( 'default'     =>  'system/system_interface.css' );

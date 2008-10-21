@@ -209,7 +209,19 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
     function render_toolbar_trash ( &$toolbar ){
         $tool_name = $toolbar->submitGroup . '[trash]';
         $label = AMP_TEXT_TRASH;
-        $attr['onclick'] = 'return confirmSubmit( "'.AMP_TEXT_LIST_CONFIRM_DELETE_SECTIONS.AMP_TEXT_LIST_CONFIRM_DELETE.'");';
+        $header = &AMP_get_header();
+        $confirm_script = <<<CONFIRM_SCRIPT
+        jq( function() {
+          jq(':submit[name*=amp_content_section_list][name*=trash]').click( function() {
+            var section_names = jq.makeArray( jq('#amp_content_section_list tr.selected').map(function() { 
+              return jq.trim(jq('td:eq(2)', this).text()); 
+            })).join('\\n\\n');
+            return confirmSubmit( "%s\\n\\n" + section_names + "\\n\\n%s" );
+          });
+        } );
+CONFIRM_SCRIPT;
+        $confirm_script = sprintf( $confirm_script, AMP_TEXT_LIST_CONFIRM_DELETE_SECTIONS, AMP_TEXT_LIST_CONFIRM_DELETE );
+        $header->addJavascriptDynamic( $confirm_script, 'trash_button' );
         return $this->_renderer->submit( $tool_name, $label, $attr ) . $this->_renderer->space( );
         
     }
