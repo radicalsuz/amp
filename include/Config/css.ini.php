@@ -63,5 +63,9 @@ container_credit="gallery_image_details"
 image_link="gallery_image_link"
 image_credit_text="byline"
 
+[udm]
+form_container="udm_form"
+list_container="udm_list"
+
 
 ;?>

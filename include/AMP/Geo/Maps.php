@@ -126,17 +126,21 @@ Class Maps {
 		} else {
 			$sql="select id, City, State, Street, Zip".$extra_fields." from ".$this->P['table']." where publish=1 ". $this->P['extra_sql'] ;
 		}
-		
+	    trigger_error( "sql:$sql");	
 		$R= $this->dbcon->CacheExecute($sql)or trigger_error("Error getting city data in build_points function ".$sql.$this->dbcon->ErrorMsg());
 		$x=0;
 		while (!$R->EOF) {
 			if ($this->P['geo_field']  ) {
 				$location = $R->Fields($this->P['geo_field']);
-				list($lat, $lng) = explode(",", $location);
+				trigger_error( "location: $location");
+                list($lat, $lng) = explode(",", $location);
 			} else {
 				$geo = new Geo($this->dbcon);
 				$geo->City = $R->Fields("City");
-				$geo->State = $R->Fields("State");
+				#$geo->State = $R->Fields("State");
+				$geo->State = "CA";
+                $geo->city_fulltext = true;
+                $geo->city_soundex = true;
 				$geo->city_lookup();
 				$lat =$geo->lat;
 				$lng =$geo->long;

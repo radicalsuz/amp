@@ -64,7 +64,11 @@ $intro_id = $userlist->modTemplateID;
 require_once( 'AMP/BaseTemplate.php' );
 if ($intro_id != 1) require_once( 'AMP/BaseModuleIntro.php' );
 
-print $output;
+print '<div id="'.sprintf( AMP_UDM_LIST_CONTAINER, $modin).'">'
+      .$output
+      .'</div>';
+
+// print $output;
 
         
 // Append the footer and clean up.

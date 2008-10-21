@@ -5,6 +5,10 @@ display_max=300
 limit_default=20
 intro_display="ListIntro_Display"
 
+[udm]
+form_container="udm_form_%s"
+list_container="udm_list_%s";
+
 [sectionlist]
 articles=1
 newsroom=2

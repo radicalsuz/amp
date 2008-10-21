@@ -86,7 +86,7 @@ if ( ( !$uid || $auth ) && $udm->submitted ) {
 
 $intro_id = $udm->modTemplateID;
 
-AMP_directDisplay( $udm->output());
+AMP_directDisplay( '<div id="'.sprintf( AMP_UDM_FORM_CONTAINER, $modin).'">'.$udm->output().'</div>');
 require_once( 'AMP/BaseTemplate.php' );
 require_once( 'AMP/BaseModuleIntro.php' );
 
