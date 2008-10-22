@@ -10,6 +10,7 @@ class AMPFormElement_HTMLEditor {
             "'Stylist'",
 			 "'TableOperations'",
             "'SuperClean'",
+            "'InsertAnchor'",
             );
     var $config_location = "/scripts/xinha_config.js";
     var $base_width = 550;
