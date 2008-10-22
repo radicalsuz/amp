@@ -2354,7 +2354,7 @@ function AMP_image_path( $filename, $img_class = AMP_IMAGE_CLASS_OPTIMIZED ) {
 }
 
 function AMP_request_to_include( $request ) {
-    $routes = array(
+  $routes = array(
         '/^articles\/(\d*)/' => 'article.php',
         '/^sections\/(\d*)/' => 'article.php',
         '/^list/' => 'list.php',
@@ -2384,6 +2384,12 @@ function AMP_request_to_vars( $request ) {
     }
     return array( );
 
+}
+
+function AMP_route_for( $route ) {
+    $routes = AMP_lookup('route_for', $route );
+    if( !$routes ) return false;
+    return array( 'owner_id' => key($routes), 'owner_type' => current($routes) );
 }
 
 function AMP_block_frequent_requesters( ) {

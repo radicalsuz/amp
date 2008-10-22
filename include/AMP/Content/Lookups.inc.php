@@ -1859,4 +1859,26 @@ class AMPSystemLookup_ArticleArchivesByMonthByClass extends AMPSystemLookup_Arti
 
 }
 
+class AMPContentLookup_RouteFor extends AMPSystem_Lookup {
+    var $result_field = 'owner_type';
+    var $id_field = 'owner_id';
+    var $datatable = 'route_slugs';
+    function AMPContentLookup_RouteFor( $route_slug ) {
+      $this->__construct( $route_slug );
+    }
+    function __construct( $route_slug ) {
+      $this->criteria = "name = " . AMP_dbcon()->qstr( $route_slug );
+      parent::__construct();
+    }
+}
+
+class AMPContentLookup_ArticleRoutes extends AMPSystem_Lookup {
+    var $result_field = 'owner_id';
+    var $id_field = 'name';
+    var $criteria = 'owner_type = "article"';
+    var $datatable = 'route_slugs';
+    function AMPContentLookup_ArticleRoutes() {
+      $this->__construct();
+    }
+}
 ?>
