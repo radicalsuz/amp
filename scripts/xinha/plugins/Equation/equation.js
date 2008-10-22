@@ -1,3 +1,6 @@
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/Equation/equation.js */
 function Equation(_1){
 this.editor=_1;
 var _2=_1.config;
@@ -8,47 +11,51 @@ _3.buttonPress(_4,id);
 _2.addToolbarElement("equation","inserthorizontalrule",-1);
 mathcolor=_2.Equation.mathcolor;
 mathfontfamily=_2.Equation.mathfontfamily;
-if(!Xinha.is_ie){
-_1.notifyOn("modechange",function(e,_7){
-_3.onModeChange(_7);
-});
-Xinha.prependDom0Event(_1._textArea.form,"submit",function(){
+this.enabled=!Xinha.is_ie;
+if(this.enabled){
+this.onBeforeSubmit=this.onBeforeUnload=function(){
 _3.unParse();
-_3.reParse=true;
-});
+};
 }
 if(typeof AMprocessNode!="function"){
-Xinha._loadback(_editor_url+"plugins/Equation/ASCIIMathML.js",function(){
+Xinha._loadback(Xinha.getPluginDir("Equation")+"/ASCIIMathML.js",function(){
 translate();
 });
 }
 }
-Xinha.Config.prototype.Equation={"mathcolor":"red","mathfontfamily":"serif"};
-Equation._pluginInfo={name:"ASCIIMathML Formula Editor",version:"2.0",developer:"Raimund Meyer",developer_url:"http://rheinaufCMS.de",c_owner:"",sponsor:"Rheinauf",sponsor_url:"http://rheinaufCMS.de",license:"GNU/LGPL"};
-Equation.prototype._lc=function(_8){
-return Xinha._lc(_8,"Equation");
+Xinha.Config.prototype.Equation={"mathcolor":"black","mathfontfamily":"serif"};
+Equation._pluginInfo={name:"ASCIIMathML Formula Editor",version:"2.3 (2008-01-26)",developer:"Raimund Meyer",developer_url:"http://xinha.raimundmeyer.de",c_owner:"",sponsor:"",sponsor_url:"",license:"GNU/LGPL"};
+Equation.prototype._lc=function(_6){
+return Xinha._lc(_6,"Equation");
 };
 Equation.prototype.onGenerate=function(){
 this.parse();
 };
-Equation.prototype.onUpdateToolbar=function(){
-if(!Xinha.is_ie&&this.reParse){
-AMprocessNode(this.editor._doc.body,false);
+Equation.prototype.onKeyPress=function(ev){
+if(this.enabled){
+e=this.editor;
+var _8=e._getFirstAncestor(e.getSelection(),["span"]);
+if(_8&&_8.className=="AM"){
+if(ev.keyCode==8||ev.keyCode==46||ev.charCode){
+Xinha._stopEvent(ev);
+return true;
+}
+}
+}
+return false;
+};
+Equation.prototype.onBeforeMode=function(_9){
+if(this.enabled&&_9=="textmode"){
+this.unParse();
 }
 };
-Equation.prototype.onModeChange=function(_9){
-var _a=this.editor._doc;
-switch(_9.mode){
-case "text":
-this.unParse();
-break;
-case "wysiwyg":
+Equation.prototype.onMode=function(_a){
+if(this.enabled&&_a=="wysiwyg"){
 this.parse();
-break;
 }
 };
 Equation.prototype.parse=function(){
-if(!Xinha.is_ie){
+if(this.enabled){
 var _b=this.editor._doc;
 var _c=_b.getElementsByTagName("span");
 for(var i=0;i<_c.length;i++){
@@ -56,64 +63,83 @@ var _e=_c[i];
 if(_e.className!="AM"){
 continue;
 }
+if(_e.innerHTML.indexOf(this.editor.cc)!=-1){
+_e.innerHTML=_e.innerHTML.replace(this.editor.cc,"");
+_e.parentNode.insertBefore(_b.createTextNode(this.editor.cc),_e);
+}
 _e.title=_e.innerHTML;
-AMprocessNode(_e,false);
+var _f=_e.cloneNode(true);
+try{
+document.adoptNode(_f);
+}
+catch(e){
+}
+AMprocessNode(_f,false);
+try{
+_b.adoptNode(_f);
+}
+catch(e){
+}
+_e.parentNode.replaceChild(_f,_e);
+_f.parentNode.insertBefore(_b.createTextNode(String.fromCharCode(32)),_f);
+_f.parentNode.insertBefore(_b.createTextNode(String.fromCharCode(32)),_f.nextSibling);
 }
 }
 };
 Equation.prototype.unParse=function(){
-var _f=this.editor._doc;
-var _10=_f.getElementsByTagName("span");
-for(var i=0;i<_10.length;i++){
-var _12=_10[i];
-if(_12.className.indexOf("AM")==-1){
+var doc=this.editor._doc;
+var _11=doc.getElementsByTagName("span");
+for(var i=0;i<_11.length;i++){
+var _13=_11[i];
+if(_13.className.indexOf("AM")==-1||_13.getElementsByTagName("math").length==0){
 continue;
 }
-var _13=_12.getAttribute("title");
-_12.innerHTML=_13;
-_12.setAttribute("title",null);
-this.editor.setHTML(this.editor.getHTML());
+var _14=_13.getAttribute("title");
+_13.innerHTML=_14;
+_13.setAttribute("title",null);
 }
 };
 Equation.prototype.buttonPress=function(){
-var _14=this;
-var _15=this.editor;
-var _16={};
-_16["editor"]=_15;
-var _17=_15._getFirstAncestor(_15.getSelection(),["span"]);
-if(_17){
-_16["editedNode"]=_17;
+var _15=this;
+var _16=this.editor;
+var _17={};
+_17["editor"]=_16;
+var _18=_16._getFirstAncestor(_16.getSelection(),["span"]);
+if(_18){
+_17["editedNode"]=_18;
 }
-_15._popupDialog("plugin://Equation/dialog",function(_18){
-_14.insert(_18);
-},_16);
+Dialog(Xinha.getPluginDir("Equation")+"/popups/dialog.html",function(_19){
+_15.insert(_19);
+},_17);
 };
-Equation.prototype.insert=function(_19){
-if(typeof _19["formula"]!="undefined"){
-var _1a=(_19["formula"]!="")?_19["formula"].replace(/^`?(.*)`?$/m,"`$1`"):"";
-if(_19["editedNode"]&&(_19["editedNode"].tagName.toLowerCase()=="span")){
-var _1b=_19["editedNode"];
-if(_1a!=""){
-_1b.innerHTML=_1a;
-_1b.title=_1a;
-}else{
-_1b.parentNode.removeChild(_1b);
+Equation.prototype.insert=function(_1a){
+if(typeof _1a["formula"]!="undefined"){
+var _1b=(_1a["formula"]!="")?_1a["formula"].replace(/^`?(.*)`?$/m,"`$1`"):"";
+if(_1a["editedNode"]&&(_1a["editedNode"].tagName.toLowerCase()=="span")){
+var _1c=_1a["editedNode"];
+if(_1b!=""){
+_1c.innerHTML=_1b;
+if(this.enabled){
+_1c.title=_1b;
 }
 }else{
-if(!_19["editedNode"]&&_1a!=""){
-if(!Xinha.is_ie){
-var _1b=document.createElement("span");
-_1b.className="AM";
-this.editor.insertNodeAtSelection(_1b);
-_1b.innerHTML=_1a;
-_1b.title=_1a;
+_1c.parentNode.removeChild(_1c);
+}
 }else{
-this.editor.insertHTML("<span class=\"AM\" title=\""+_1a+"\">"+_1a+"</span>");
+if(!_1a["editedNode"]&&_1b!=""){
+if(this.enabled){
+var _1c=document.createElement("span");
+_1c.className="AM";
+this.editor.insertNodeAtSelection(_1c);
+_1c.innerHTML=_1b;
+_1c.title=_1b;
+}else{
+this.editor.insertHTML("<span class=\"AM\">"+_1b+"</span>");
 }
 }
 }
-if(!Xinha.is_ie){
-AMprocessNode(this.editor._doc.body,false);
+if(this.enabled){
+this.parse();
 }
 }
 };

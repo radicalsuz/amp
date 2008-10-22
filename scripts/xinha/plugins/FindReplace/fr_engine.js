@@ -1,6 +1,9 @@
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/FindReplace/fr_engine.js */
 var FindReplace=window.opener.FindReplace;
 var editor=FindReplace.editor;
-var is_mo=window.opener.HTMLArea.is_gecko;
+var is_mo=window.opener.Xinha.is_gecko;
 var tosearch="";
 var pater=null;
 var buffer=null;
@@ -8,7 +11,7 @@ var matches=0;
 var replaces=0;
 var fr_spans=new Array();
 function _lc(_1){
-return (window.opener.HTMLArea._lc(_1,"FindReplace"));
+return (window.opener.Xinha._lc(_1,"FindReplace"));
 }
 function execSearch(_2){
 var _3=editor._doc.body.innerHTML;

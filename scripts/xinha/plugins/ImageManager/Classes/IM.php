@@ -25,7 +25,7 @@
 // | Authors: Peter Bowyer <peter@mapledesign.co.uk>                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: IM.php 709 2007-01-30 23:22:04Z ray $
+// $Id:IM.php 937 2008-01-20 23:13:25Z ray $
 //
 // Image Transformation interface using command line ImageMagick
 //
@@ -178,7 +178,11 @@ Class Image_Transform_Driver_IM extends Image_Transform
     function gamma($outputgamma=1.0) {
         $this->command['gamma'] = "-gamma $outputgamma";
     }
-
+	
+	function reduce_colors($number = 256)
+	{
+		 $this->command['colors'] = "-colors $number";
+	}
     /**
      * Save the image file
      *
@@ -213,7 +217,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
     {
         if ($type == '') {
             header('Content-type: image/' . $this->type);
-            passthru(IMAGE_TRANSFORM_LIB_PATH . 'convert ' . implode(' ', $this->command) . " -quality $quality "  . escapeshellarg($this->image) . ' ' . strtoupper($this->type) . ":-");
+            passthru(IMAGE_TRANSFORM_LIB_PATH . '  ' . implode(' ', $this->command) . " -quality $quality "  . escapeshellarg($this->image) . ' ' . strtoupper($this->type) . ":-");
         } else {
             header('Content-type: image/' . $type);
             passthru(IMAGE_TRANSFORM_LIB_PATH . 'convert ' . implode(' ', $this->command) . " -quality $quality "  . escapeshellarg($this->image) . ' ' . strtoupper($type) . ":-");

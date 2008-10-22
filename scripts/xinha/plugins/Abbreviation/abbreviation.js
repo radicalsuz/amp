@@ -1,3 +1,6 @@
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/Abbreviation/abbreviation.js */
 function Abbreviation(_1){
 this.editor=_1;
 var _2=_1.config;
@@ -9,62 +12,54 @@ _2.addToolbarElement("abbreviation","inserthorizontalrule",1);
 }
 Abbreviation._pluginInfo={name:"Abbreviation",version:"1.0",developer:"Udo Schmal",developer_url:"",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de/",c_owner:"Udo Schmal & Schaffrath-NeueMedien",license:"htmlArea"};
 Abbreviation.prototype._lc=function(_5){
-return HTMLArea._lc(_5,"Abbreviation");
+return Xinha._lc(_5,"Abbreviation");
 };
 Abbreviation.prototype.onGenerate=function(){
-var _6="Abbr-style";
-var _7=this.editor._doc.getElementById(_6);
-if(_7==null){
-_7=this.editor._doc.createElement("link");
-_7.id=_6;
-_7.rel="stylesheet";
-_7.href=_editor_url+"plugins/Abbreviation/abbreviation.css";
-this.editor._doc.getElementsByTagName("HEAD")[0].appendChild(_7);
-}
+this.editor.addEditorStylesheet(Xinha.getPluginDir("Abbreviation")+"/abbreviation.css");
 };
-Abbreviation.prototype.buttonPress=function(_8,_9,_a){
-var _b=null;
-var _c=_8.getSelectedHTML();
-var _d=_8._getSelection();
-var _e=_8._createRange(_d);
-var _f=_8._activeElement(_d);
-if(!(_f!=null&&_f.tagName.toLowerCase()=="abbr")){
-_f=_8._getFirstAncestor(_d,"abbr");
+Abbreviation.prototype.buttonPress=function(_6,_7,_8){
+var _9=null;
+var _a=_6.getSelectedHTML();
+var _b=_6._getSelection();
+var _c=_6._createRange(_b);
+var _d=_6._activeElement(_b);
+if(!(_d!=null&&_d.tagName.toLowerCase()=="abbr")){
+_d=_6._getFirstAncestor(_b,"abbr");
 }
-if(_f!=null&&_f.tagName.toLowerCase()=="abbr"){
-_b={title:_f.title,text:_f.innerHTML};
+if(_d!=null&&_d.tagName.toLowerCase()=="abbr"){
+_9={title:_d.title,text:_d.innerHTML};
 }else{
-_b={title:"",text:_c};
+_9={title:"",text:_a};
 }
-_8._popupDialog("plugin://Abbreviation/abbreviation",function(_10){
-if(_10){
-var _11=_10["title"];
-if(_11==""||_11==null){
-if(_f){
-var _12=_f.innerHTML;
-_f.parentNode.removeChild(_f);
-_8.insertHTML(_12);
+_6._popupDialog("plugin://Abbreviation/abbreviation",function(_e){
+if(_e){
+var _f=_e["title"];
+if(_f==""||_f==null){
+if(_d){
+var _10=_d.innerHTML;
+_d.parentNode.removeChild(_d);
+_6.insertHTML(_10);
 }
 return;
 }
 try{
-var doc=_8._doc;
-if(!_f){
-_f=doc.createElement("abbr");
-_f.title=_11;
-_f.innerHTML=_c;
-if(HTMLArea.is_ie){
-_e.pasteHTML(_f.outerHTML);
+var doc=_6._doc;
+if(!_d){
+_d=doc.createElement("abbr");
+_d.title=_f;
+_d.innerHTML=_a;
+if(Xinha.is_ie){
+_c.pasteHTML(_d.outerHTML);
 }else{
-_8.insertNodeAtSelection(_f);
+_6.insertNodeAtSelection(_d);
 }
 }else{
-_f.title=_11;
+_d.title=_f;
 }
 }
 catch(e){
 }
 }
-},_b);
+},_9);
 };
 

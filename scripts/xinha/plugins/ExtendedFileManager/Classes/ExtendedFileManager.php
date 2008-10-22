@@ -16,9 +16,9 @@ require_once '../ImageManager/Classes/Files.php';
 
 /**
  * ExtendedFileManager Class.
- * @author $Author: ray $
- * @author $Author: ray $
- * @version $Id: ExtendedFileManager.php 677 2007-01-19 22:24:36Z ray $
+ * @author $Author:ray $
+ * @author $Author:ray $
+ * @version $Id:ExtendedFileManager.php 957 2008-02-01 22:44:49Z ray $
  */
 class ExtendedFileManager 
 {
@@ -800,7 +800,7 @@ class ExtendedFileManager
 				$src = Files::makeFile($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
 				$file = $_GET['file'];
 				$dest = Files::makeFile($this->getImagesDir(), $_GET['dir']);
-				return  Files::copyFile($src,$dest,$file);
+				return Files::copyFile($src,$dest,$file);
 			break;
 			case 'copyDir':
 				$basePath = $this->getImagesDir();
@@ -809,8 +809,8 @@ class ExtendedFileManager
 				return Files::copyDir($basePath,$src,$dest);
 			break;
 			case 'moveFile':
-				$src = Files::makePath($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
-				$dest = Files::makePath($this->getImagesDir(), $_GET['dir'].$_GET['file']);
+				$src = Files::makeFile($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
+				$dest = Files::makeFile($this->getImagesDir(), $_GET['dir'].$_GET['file']);
 				return Files::rename($src,$dest);
 			break;
 			case 'moveDir':

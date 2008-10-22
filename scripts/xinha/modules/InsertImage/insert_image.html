@@ -1,7 +1,8 @@
 <!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
   <title>Insert Image</title>
 
 <script type="text/javascript" src="../../popups/popup.js"></script>
@@ -25,18 +26,14 @@ function Init() {
   if (param["f_base"]) {
       document.getElementById("f_base").value = param["f_base"];
   }
+  document.getElementById("f_url").value    = param["f_url"] ? param["f_url"] : "";
+  document.getElementById("f_alt").value    = param["f_alt"] ? param["f_alt"] : "";
+  document.getElementById("f_border").value = (typeof param["f_border"]!="undefined") ? param["f_border"] : "";
+  document.getElementById("f_align").value  = param["f_align"] ? param["f_align"] : "";
+  document.getElementById("f_vert").value   = (typeof param["f_vert"]!="undefined") ? param["f_vert"] : "";
+  document.getElementById("f_horiz").value  = (typeof param["f_horiz"]!="undefined") ? param["f_horiz"] : "";
   if (param["f_url"]) {
-	  document.getElementById("f_url").value    = param["f_url"] ? param["f_url"] : "";
-	  document.getElementById("f_alt").value    = param["f_alt"] ? param["f_alt"] : "";
-	  document.getElementById("f_border").value = (typeof param["f_border"]!="undefined") ? param["f_border"] : "";
-	  document.getElementById("f_align").value  = param["f_align"] ? param["f_align"] : "";
-	  document.getElementById("f_vert").value   = (typeof param["f_vert"]!="undefined") ? param["f_vert"] : "";
-	  document.getElementById("f_horiz").value  = (typeof param["f_horiz"]!="undefined") ? param["f_horiz"] : "";
-	  if (param["f_url"]) {
-		  window.ipreview.location.replace(Xinha._resolveRelativeUrl(param.f_base, param.f_url));
-	  }
-  } else {
-      window.onBrowse();
+      window.ipreview.location.replace(Xinha._resolveRelativeUrl(param.f_base, param.f_url));
   }
   document.getElementById("f_url").focus();
 }
@@ -83,10 +80,6 @@ function onPreview() {
   window.ipreview.location.replace(Xinha._resolveRelativeUrl(base, url));
   return false;
 }
-function onBrowse() {
-  window.ipreview.location.replace("/system/imgpreview.php");
-  return false;
-}
 </script>
 
 </head>
@@ -117,8 +110,6 @@ function onBrowse() {
   </tbody>
 </table>
 
-<br />
-
 <fieldset style="float: left; margin-left: 5px;">
 <legend>Layout</legend>
 
@@ -132,7 +123,7 @@ function onBrowse() {
   <option value="right"                        >Right</option>
   <option value="texttop"                      >Texttop</option>
   <option value="absmiddle"                    >Absmiddle</option>
-  <option value="baseline" selected="1"        >Baseline</option>
+  <option value="baseline" selected="selected" >Baseline</option>
   <option value="absbottom"                    >Absbottom</option>
   <option value="bottom"                       >Bottom</option>
   <option value="middle"                       >Middle</option>
@@ -167,15 +158,14 @@ title="Vertical padding" />
 <div class="space"></div>
 
 </fieldset>
-<br style="clear:all"/>
+<div class="space" style="clear:all"></div>
 <div>
 Image Preview:<br />
     <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" 
 	height="200" width="100%" src="../../popups/blank.html"></iframe>
 </div>
 <div id="buttons">
-<button type="button" name="browse" onclick="return onBrowse();">Browse</button><P>
-<button type="button" name="ok" onclick="return onOK();">OK</button>
+<button type="submit" name="ok" onclick="return onOK();">OK</button>
 <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
 </div>
 </form>

@@ -13,10 +13,10 @@
     --  of the file to remove the auto-example-generating code and allow for the
     --  use of the file as a boilerplate.
     --
-    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/testbed.html $
-    --  $LastChangedDate: 2007-01-19 23:24:36 +0100 (Fr, 19 Jan 2007) $
-    --  $LastChangedRevision: 677 $
-    --  $LastChangedBy: ray $
+    --  $HeadURL:http://svn.xinha.webfactional.com/trunk/examples/testbed.html $
+    --  $LastChangedDate:2008-04-12 14:39:04 +0200 (Sa, 12 Apr 2008) $
+    --  $LastChangedRevision:987 $
+    --  $LastChangedBy:ray $
     --------------------------------------------------------------------------->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -35,7 +35,7 @@
   </script>
 
   <!-- Load up the actual editor core -->
-  <script type="text/javascript" src="../htmlarea.js"></script>
+  <script type="text/javascript" src="../XinhaCore.js"></script>
 
   <script type="text/javascript">
     xinha_editors = null;
@@ -107,7 +107,7 @@
        * if you want all the editor objects to use the same set of plugins, OR;
        *
        *   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config);
-       *   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
+       *   xinha_editors['myTextArea'].registerPlugins(['Stylist']);
        *   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
        *
        * if you want to use a different set of plugins for one or more of the
@@ -137,14 +137,14 @@
     }
 
     window.onload   = xinha_init;
-    // window.onunload = Xinha.collectGarbageForIE;
   </script>
 </head>
 
 <body>
 
-  <form action="javascript:var x = document.getElementById('editors_here');alert(x.myTextArea.value);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
-    <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
+  <form action="javascript:void(0);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
+ <div>
+     <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
       &lt;html&gt;
       &lt;head&gt;
         &lt;title&gt;Hello&lt;/title&gt;
@@ -152,8 +152,8 @@
           li { color:red; }
         &lt;/style&gt;
       &lt;/head&gt;
-      &lt;body&gt;
-      &lt;img src="http://xinha.python-hosting.com/trac/logo.jpg" usemap="#m1"&gt;
+      &lt;body&gt;&lt;span style="color:purple"&gt;
+      &lt;img src="../images/xinha_logo.gif" usemap="#m1"&gt;
       &lt;map name="m1"&gt;
       &lt;area shape="rect" coords="137,101,255,124" href="http://www.mydomain.com"&gt;
       &lt;/map&gt;
@@ -162,30 +162,34 @@
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
         Aliquam et tellus vitae justo varius placerat. Suspendisse iaculis
         velit semper dolor. Donec gravida tincidunt mi. Curabitur tristique
-        ante elementum turpis. Aliquam nisl. Nulla posuere neque non
-        tellus. Morbi vel nibh. Cum sociis natoque penatibus et magnis dis
+        ante elementum turpis.  &lt;span style="color:green"&gt;Aliquam &lt;/span&gt; nisl. Nulla posuere neque non
+        tellus. Morbi vel nibh. &lt;font face="Arial"&gt;&lt;font color="#009933"&gt;Cum  sociis natoque&lt;/font&gt;&lt;/font&gt; penatibus et magnis dis
         parturient montes, nascetur ridiculus mus. Nam nec wisi. In wisi.
         Curabitur pharetra bibendum lectus.
       &lt;/p&gt;
 
       &lt;ul&gt;
-        &lt;li&gt; Phasellus et massa sed diam viverra semper.  &lt;/li&gt;
+        &lt;li style="color:green"&gt; Phasellus et massa sed diam viverra semper.  &lt;/li&gt;
         &lt;li&gt; Mauris tincidunt felis in odio.              &lt;/li&gt;
         &lt;li&gt; Nulla placerat nunc ut pede.                 &lt;/li&gt;
         &lt;li&gt; Vivamus ultrices mi sit amet urna.           &lt;/li&gt;
         &lt;li&gt; Quisque sed augue quis nunc laoreet volutpat.&lt;/li&gt;
         &lt;li&gt; Nunc sit amet metus in tortor semper mattis. &lt;/li&gt;
       &lt;/ul&gt;
-      &lt;/body&gt;
+      &lt;/span&gt;&lt;/body&gt;
       &lt;/html&gt;
     </textarea>
 
     <input type="submit" /> <input type="reset" />
+</div>
   </form>
-  <script language="javascript">
+  <script type="text/javascript">
     document.write(document.compatMode);
   </script>
+<div>
   <a href="#" onclick="xinha_editors.myTextArea.hidePanels();">Hide</a>
   <a href="#" onclick="xinha_editors.myTextArea.showPanels();">Show</a>
+</div>
+
 </body>
 </html>

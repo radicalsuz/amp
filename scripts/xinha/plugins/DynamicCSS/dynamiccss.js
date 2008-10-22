@@ -1,3 +1,6 @@
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/DynamicCSS/dynamiccss.js */
 function DynamicCSS(_1,_2){
 this.editor=_1;
 var _3=_1.config;
@@ -19,10 +22,10 @@ if(!cssArray){
 cssArray=new Array();
 }
 for(i=0;i<iframe.styleSheets.length;i++){
-if(iframe.styleSheets[i].title=="table borders"){
+if(iframe.styleSheets[i].title=="XinhaInternalCSS"){
 continue;
 }
-if(HTMLArea.is_gecko){
+if(Xinha.is_gecko){
 try{
 cssArray=DynamicCSS.applyCSSRule(iframe.styleSheets[i].cssRules,cssArray);
 }
@@ -72,9 +75,9 @@ cssName="<"+className+">";
 }else{
 className="none";
 if(tagName=="all"){
-cssName=HTMLArea._lc("Default","DynamicCSS");
+cssName=Xinha._lc("Default","DynamicCSS");
 }else{
-cssName="<"+HTMLArea._lc("Default","DynamicCSS")+">";
+cssName="<"+Xinha._lc("Default","DynamicCSS")+">";
 }
 }
 _c[tagName][className]=cssName;
@@ -91,7 +94,7 @@ return _c;
 };
 DynamicCSS._pluginInfo={name:"DynamicCSS",version:"1.5.2",developer:"Holger Hees",developer_url:"http://www.systemconcept.de/",c_owner:"Holger Hees",sponsor:"System Concept GmbH",sponsor_url:"http://www.systemconcept.de/",license:"htmlArea"};
 DynamicCSS.prototype._lc=function(_d){
-return HTMLArea._lc(_d,"DynamicCSS");
+return Xinha._lc(_d,"DynamicCSS");
 };
 DynamicCSS.prototype.onSelect=function(_e,_f){
 var _10=_e._toolbarObjects[_f.id];
@@ -102,7 +105,7 @@ if(_12!="none"){
 _13.className=_12;
 DynamicCSS.lastClass=_12;
 }else{
-if(HTMLArea.is_gecko){
+if(Xinha.is_gecko){
 _13.removeAttribute("class");
 }else{
 _13.removeAttribute("className");

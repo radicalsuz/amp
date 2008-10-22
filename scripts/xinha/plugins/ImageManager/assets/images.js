@@ -1,12 +1,15 @@
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/ImageManager/assets/images.js */
 function i18n(_1){
-return HTMLArea._lc(_1,"ImageManager");
+return Xinha._lc(_1,"ImageManager");
 }
 function changeDir(_2){
 showMessage("Loading");
-location.href=_backend_url+"__function=images&dir="+_2;
+location.href=_backend_url+"__function=images&dir="+encodeURIComponent(_2);
 }
 function newFolder(_3,_4){
-location.href=_backend_url+"__function=images&dir="+_3+"&newDir="+_4;
+location.href=_backend_url+"__function=images&dir="+encodeURIComponent(_3)+"&newDir="+encodeURIComponent(_4);
 }
 function updateDir(_5){
 var _6=window.top.document.getElementById("dirPath");
@@ -112,4 +115,5 @@ return true;
 return false;
 }
 addEvent(window,"load",init);
+Xinha=window.parent.Xinha;
 
