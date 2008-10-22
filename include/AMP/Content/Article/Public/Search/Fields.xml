@@ -5,7 +5,7 @@
 	</fulltext>
     <section_logic_plus>
 		<label>By Section</label>
-		<type>select</type>
+		<type>hidden</type>
 		<lookup>sectionMapLiveChopped</lookup>
     </section_logic_plus>
     <class>
@@ -15,7 +15,7 @@
 		<lookup>publicClasses</lookup>
     </class>
 	<date>
-		<type>date</type>
+		<type>hidden</type>
 		<label> Date: </label>
 		<options>
 			<addEmptyOption>1</addEmptyOption>
