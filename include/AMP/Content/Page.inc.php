@@ -570,7 +570,7 @@ class AMPContent_Page {
      * @return  mixed       Returns the type of List if the current Page is a list, true if the current list type matches the passed argument, otherwise false 
      */
     function isList( $list_type = null ) {
-        if (!( $this->getSection() && !$this->isArticle() && $this->getClass() && !$this->getIntroText() && !$this->_listType )) $this->_listType = 'section';
+        if ( $this->getSection() && !$this->isArticle() && !$this->getClass() && !$this->getIntroText() && !$this->_listType ) $this->_listType = 'section';
         if (!( isset($this->_listType) && $this->_listType)) return false;
         if (   isset( $list_type )) return ( $this->_listType == $this->getBaseListType( $list_type ));
         return $this->_listType;
