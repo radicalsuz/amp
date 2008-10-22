@@ -1,5 +1,5 @@
 create table if not exists tags (
-	id 				int 			not null auto_increment,
+id 				int 			not null auto_increment,
 	human_name 		varchar(255)	not null,
 	name			varchar(80)		not null,
 	blurb			text			not null,

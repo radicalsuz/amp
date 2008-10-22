@@ -1,5 +1,6 @@
 <?php
 
+require_once( 'AMP/Content/Page.inc.php' );
 require_once( 'AMP/Content/Map/Breadcrumb.inc.php' );
 
 $breadcrumb = &AMP_Breadcrumb_Content::instance();
@@ -18,6 +19,10 @@ if (isset($urlvars['list']) && $urlvars['list']== AMP_CONTENT_LISTTYPE_SECTION )
 }
 if (strpos($_SERVER['PHP_SELF'], 'article.php')===FALSE && isset( $intro_id ) && ($intro_id !== 1)) {
     $breadcrumb->findIntroText( $intro_id );
+}
+$currentPage = & AMPContent_Page::instance();
+if (isset($currentPage ) && $page_section = $currentPage->getSectionId() ) {
+    $breadcrumb->findSection( $page_section );
 }
 if (isset($urlvars['template_section']) && $urlvars['template_section'] ) {
     $breadcrumb->findSection( $urlvars[ 'template_section' ] );
