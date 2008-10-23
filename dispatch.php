@@ -4,6 +4,11 @@ $request = ( isset( $_GET['q_url'] ) && $_GET['q_url'] ) ? $_GET['q_url'] : fals
 require_once( 'AMP/Base/Config.php');
 require_once( 'AMP/Content/Page.inc.php' );
 
+if ( $cached_output = AMP_cached_request( )) {
+    print $cached_output;
+    exit;
+}
+
 if(!$request) { 
   AMP_redirect( AMP_CONTENT_URL_FRONTPAGE ) ;
 };
@@ -17,7 +22,7 @@ if( !$route ) {
 $target_class = ucfirst( $route['target_type']);
 $target = new $target_class( AMP_dbcon(), $route['target_id'] );
 
-if( !( $target && $target->hasData() )) AMP_make_404();
+if( !( $target && $target->hasData() && $target->isDisplayable( ) )) AMP_make_404();
 $display = $target->getDisplay();
 
 $currentPage = & AMPContent_Page::instance();
@@ -41,6 +46,7 @@ if( !isset( $display->pager ) || $display->pager->is_first_page( )) {
 }
 
 $content->add( $display ); 
-print $currentPage->output();
+
+require_once("AMP/BaseFooter.php");
 
 ?>

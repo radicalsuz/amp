@@ -195,7 +195,7 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function getURL_default( ) {
-        return AMP_url_update( AMP_CONTENT_URL_LIST_SECTION, array( "type" => $this->id ));
+        return AMP_route_for(  'section', $this->id );
     }
     
     function getExistingAliases( ){
@@ -414,19 +414,32 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function isLive() {
-        if ( !parent::isLive( )) return false;
+        $draft_sections = AMP_lookup( 'sections_draft' );
+        return !($draft_sections && isset( $draft_sections[$this->id]) );
+    }
 
-        $map = AMPContent_Map::instance( );
-        $ancestors = $map->getAncestors( $this->id );
-        $live_set = AMP_lookup( 'sectionsLive' );
-        foreach( $ancestors as $parent_id => $parent_name ) {
-            if ( !isset( $live_set[ $parent_id ])) {
-            return false;
-
-            }
+    function isDisplayable( ) {
+        if( $this->id == AMP_CONTENT_SECTION_ID_ROOT ) {
+            return true;
         }
+        return( $this->isLive( ) && $this->isAllowed( ) && $this->isAuthorized( ));
+    }
+    function isAuthorized( ) {
+        if ( AMP_Authenticate( 'content') ) return true;
+        $protected_sections = AMPContent_Lookup::instance( 'protectedSections');
+        return !( $protected_sections && isset( $protected_sections[$this->id]));
+    }
 
-        return true;
+    function isAllowed( ) {
+        if( $this->id == AMP_CONTENT_SECTION_ID_ROOT ) {
+            return true;
+        }
+        if( $this->id == AMP_CONTENT_SECTION_ID_TRASH ) {
+            return false;
+        }
+        $allowed_sections = AMP_lookup( 'section_map' );
+        return isset( $allowed_sections[$this->id] );
+
     }
 
     function getStatus( ) {

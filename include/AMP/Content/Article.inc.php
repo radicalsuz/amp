@@ -2,6 +2,7 @@
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
+require_once ( 'AMP/Content/Section.inc.php' );
 require_once ( 'AMP/System/File/Image.php' );
 require_once ( 'AMP/Content/Article/Display.inc.php' );
 require_once ( 'AMP/Content/Config.inc.php');
@@ -127,7 +128,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function getURL_default( ){
-        return AMP_url_update( AMP_CONTENT_URL_ARTICLE, array("id" => $this->id ));
+        return AMP_route_for( 'article', $this->id );
     }
     
     function getContact() {
@@ -319,6 +320,13 @@ class Article extends AMPSystem_Data_Item {
 
     function isLive() {
         return ($this->getData('publish')==AMP_CONTENT_STATUS_LIVE);
+    }
+    function isDisplayable( ) {
+        if( !$this->isLive( )) return false;
+        $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
+        if( array_search( $excluded_classes, $this->getClass( )) !== FALSE ) return false;
+        $section = new Section( AMP_dbcon( ), $this->getSection( ));
+        return $section->isDisplayable( );
     }
 
     function isHtml() {

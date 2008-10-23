@@ -2018,17 +2018,16 @@ function AMP_array_splice( $target, $offset =0, $length = null, $replacement = a
 function AMP_url_update( $url, $attr = array( )) {
     if( AMP_CONTENT_HUMANIZE_URLS ) {
         if( $url == AMP_CONTENT_URL_ARTICLE  && isset($attr['id']) ) {
-          $id = $attr['id'];
-          $routes = AMP_lookup('article_routes');
-          if( !( $routes && isset( $routes[$id] ))) return false;
-          return $routes[$id];
+            $routes = AMP_lookup('article_routes');
+            $id = $attr['id'];
         }
         if( ( $url == AMP_CONTENT_URL_SECTION || $url == AMP_CONTENT_URL_LIST_SECTION ) 
             && ( isset($attr['id']) || isset($attr['type'])) ){
-          $id = isset( $attr['id'] ) ? $attr['id'] : $attr['type'];
-          $routes = AMP_lookup('section_routes');
-          if( !( $routes && isset( $routes[$id] ))) return false;
-          return $routes[$id];
+            $routes = AMP_lookup('section_routes');
+            $id = isset( $attr['id'] ) ? $attr['id'] : $attr['type'];
+        }
+        if ( $routes && $id && isset(  $routes[$id])) {
+            return $routes[$id];
         }
     }
   
