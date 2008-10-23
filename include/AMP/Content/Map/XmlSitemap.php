@@ -12,14 +12,14 @@ class AMP_Content_Map_XmlSitemap{
         "rootAttributes"  => array("xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9"),
         "defaultTagName" => "url"
     );
-var $serializer;
-var $section_keys;
-var $article_keys;
-var $host;
-var $urls = array( 
-            AMP_CONTENT_URL_FRONTPAGE,
-            AMP_CONTENT_URL_RSSFEED_LIST
-          );
+    var $serializer;
+    var $section_keys;
+    var $article_keys;
+    var $host;
+    var $urls = array( 
+        AMP_CONTENT_URL_FRONTPAGE,
+        AMP_CONTENT_URL_RSSFEED_LIST
+    );
 
     function AMP_Content_Map_XmlSitemap( ){
         $this->__construct( );
