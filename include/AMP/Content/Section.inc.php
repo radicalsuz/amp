@@ -195,7 +195,7 @@ class Section extends AMPSystem_Data_Item {
     }
 
     function getURL_default( ) {
-        return AMP_Url_AddVars( AMP_CONTENT_URL_LIST_SECTION, "type=".$this->id );
+        return AMP_url_update( AMP_CONTENT_URL_LIST_SECTION, array( "type" => $this->id ));
     }
     
     function getExistingAliases( ){

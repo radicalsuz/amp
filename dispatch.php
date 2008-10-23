@@ -4,21 +4,25 @@ $request = ( isset( $_GET['q_url'] ) && $_GET['q_url'] ) ? $_GET['q_url'] : fals
 require_once( 'AMP/Base/Config.php');
 require_once( 'AMP/Content/Page.inc.php' );
 
-$route = AMP_route_for( $request );
+if(!$request) { 
+  AMP_redirect( AMP_CONTENT_URL_FRONTPAGE ) ;
+};
+
+$route = AMP_dispatch_for( $request );
 if( !$route ) {
   AMP_make_404();
   exit;
 }
 
-$target_class = ucfirst( $route['owner_type']);
-$target = new $target_class( AMP_dbcon(), $route['owner_id'] );
+$target_class = ucfirst( $route['target_type']);
+$target = new $target_class( AMP_dbcon(), $route['target_id'] );
 
 if( !( $target && $target->hasData() )) AMP_make_404();
 $display = $target->getDisplay();
 
 $currentPage = & AMPContent_Page::instance();
 $page_method = 'set' . $target_class;
-$currentPage->$page_method( $route['owner_id'] );
+$currentPage->$page_method( $route['target_id'] );
 $content = $currentPage->contentManager;
 $intro_id = AMP_CONTENT_INTRO_ID_DEFAULT;
 $currentPage->initLocation();

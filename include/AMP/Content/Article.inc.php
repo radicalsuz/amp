@@ -127,7 +127,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function getURL_default( ){
-        return AMP_Url_AddVars( AMP_CONTENT_URL_ARTICLE, "id=".$this->id );
+        return AMP_url_update( AMP_CONTENT_URL_ARTICLE, array("id" => $this->id ));
     }
     
     function getContact() {

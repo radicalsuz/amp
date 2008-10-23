@@ -75,6 +75,7 @@ rssfeed_external=""
 rssfeed_list=  "rss.php"
 
 search=        "search.php"
+section=       "section.php"
 
 share=         "share.php"
 sitemap=       "sitemap.php"

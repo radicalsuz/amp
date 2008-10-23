@@ -5,6 +5,9 @@ display_max=300
 limit_default=20
 intro_display="ListIntro_Display"
 
+[content]
+humanize_urls=false
+
 [udm]
 form_container="udm_form_%s"
 list_container="udm_list_%s";

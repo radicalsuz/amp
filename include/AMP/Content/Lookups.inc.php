@@ -1859,11 +1859,11 @@ class AMPSystemLookup_ArticleArchivesByMonthByClass extends AMPSystemLookup_Arti
 
 }
 
-class AMPContentLookup_RouteFor extends AMPSystem_Lookup {
+class AMPContentLookup_DispatchFor extends AMPSystem_Lookup {
     var $result_field = 'owner_type';
     var $id_field = 'owner_id';
     var $datatable = 'route_slugs';
-    function AMPContentLookup_RouteFor( $route_slug ) {
+    function AMPContentLookup_DispatchFor( $route_slug ) {
       $this->__construct( $route_slug );
     }
     function __construct( $route_slug ) {
@@ -1874,12 +1874,19 @@ class AMPContentLookup_RouteFor extends AMPSystem_Lookup {
 }
 
 class AMPContentLookup_ArticleRoutes extends AMPSystem_Lookup {
-    var $result_field = 'owner_id';
-    var $id_field = 'name';
+    var $result_field = 'name';
+    var $id_field = 'owner_id';
     var $criteria = 'owner_type = "article"';
     var $datatable = 'route_slugs';
     function AMPContentLookup_ArticleRoutes() {
-      $this->__construct();
+      parent::__construct();
+    }
+ }
+
+class AMPContentLookup_SectionRoutes extends AMPContentLookup_ArticleRoutes {
+    var $criteria = 'owner_type = "section"';
+    function AMPContentLookup_SectionRoutes() {
+      parent::__construct();
     }
 }
 ?>

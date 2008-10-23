@@ -12,6 +12,7 @@
  *
  */
 
+
 require_once("AMP/BaseDB.php");
 
 /**
@@ -21,7 +22,6 @@ if ( $cached_output = AMP_cached_request( )) {
     print $cached_output;
     exit;
 }
-
 
 /**
  *  Initialize the Page

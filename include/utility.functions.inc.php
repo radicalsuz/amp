@@ -2016,6 +2016,22 @@ function AMP_array_splice( $target, $offset =0, $length = null, $replacement = a
 }
 
 function AMP_url_update( $url, $attr = array( )) {
+    if( AMP_CONTENT_HUMANIZE_URLS ) {
+        if( $url == AMP_CONTENT_URL_ARTICLE  && isset($attr['id']) ) {
+          $id = $attr['id'];
+          $routes = AMP_lookup('article_routes');
+          if( !( $routes && isset( $routes[$id] ))) return false;
+          return $routes[$id];
+        }
+        if( ( $url == AMP_CONTENT_URL_SECTION || $url == AMP_CONTENT_URL_LIST_SECTION ) 
+            && ( isset($attr['id']) || isset($attr['type'])) ){
+          $id = isset( $attr['id'] ) ? $attr['id'] : $attr['type'];
+          $routes = AMP_lookup('section_routes');
+          if( !( $routes && isset( $routes[$id] ))) return false;
+          return $routes[$id];
+        }
+    }
+  
 
     if ( empty( $attr ) || !$attr ) return $url;
     $url_segments = split( '\?', $url );
@@ -2386,10 +2402,14 @@ function AMP_request_to_vars( $request ) {
 
 }
 
-function AMP_route_for( $route ) {
-    $routes = AMP_lookup('route_for', $route );
+function AMP_dispatch_for( $route ) {
+    $routes = AMP_lookup('dispatch_for', $route );
     if( !$routes ) return false;
-    return array( 'owner_id' => key($routes), 'owner_type' => current($routes) );
+    return array( 'target_id' => key($routes), 'target_type' => current($routes) );
+}
+
+function AMP_route_for( $type, $id ) {
+  return AMP_url_update( constant( strtoupper("AMP_CONTENT_URL_$type")), array( 'id' => $id ));
 }
 
 function AMP_block_frequent_requesters( ) {
