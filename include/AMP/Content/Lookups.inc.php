@@ -1867,7 +1867,8 @@ class AMPContentLookup_RouteFor extends AMPSystem_Lookup {
       $this->__construct( $route_slug );
     }
     function __construct( $route_slug ) {
-      $this->criteria = "name = " . AMP_dbcon()->qstr( $route_slug );
+      $AMP_dbcon = AMP_dbcon( );
+      $this->criteria = "name = " . $AMP_dbcon->qstr( $route_slug );
       parent::__construct();
     }
 }
