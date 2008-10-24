@@ -39,6 +39,21 @@ class Section_Form extends AMPSystem_Form_XML {
                 );
         if ($this->allow_copy) $this->copy_button();
     }
+    function _initJavascriptActions( ){
+        $header = &AMP_get_header( );
+        $pretty_url_builder = <<<SCRIPT
+            jq( function( ) {
+                console.log( jq( 'form#articletype input[name=route_slug]' ).val( ).length);
+                if( jq( 'form#articletype input[name=route_slug]' ).val( ) === "") {
+                   jq( 'form#articletype input[name=type]').change(  function( ev ) {
+                        var new_val =  jq( this ).val( ).replace( /[\s_]/g,'-').replace( /[^-A-z0-9]/g, '');
+                        jq( 'form#articletype input[name=route_slug]' ).val( new_val );
+                   });
+                }
+            });
+SCRIPT;
+        $header->addJavascriptDynamic( $pretty_url_builder );
+    }
 
     function _send_preview_link_to_bottom( ) {
         //lower preview link
