@@ -7,10 +7,11 @@ intro_display="ListIntro_Display"
 
 [content]
 humanize_urls=false
+activate_forums=false
 
 [udm]
 form_container="udm_form_%s"
-list_container="udm_list_%s";
+list_container="udm_list_%s"
 
 [sectionlist]
 articles=1
