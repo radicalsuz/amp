@@ -261,10 +261,10 @@
     <label>Email "User Submitted Article Email" when a user adds a comment</label>
     <block>comments_block</block>
   </comment_notification>
-  <comment_moderation>
+  <comment_default_status>
     <type>checkbox</type>
-    <label>Hold comments for moderation</label>
+    <label>Automatically publish comments</label>
     <block>comments_block</block>
-  </comment_moderation>
+  </comment_default_status>
 
 </array>

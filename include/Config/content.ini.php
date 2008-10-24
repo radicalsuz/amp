@@ -95,6 +95,7 @@ default="Article_Public_List"
 
 [content comment]
 default_status=1
+notification=0
 
 [content sidebar class]
 default="sidebar_right"

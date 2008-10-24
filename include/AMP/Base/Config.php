@@ -7,6 +7,9 @@ if ( file_exists_incpath( 'AMP/HostConfig.inc.php')) {
     include_once( 'AMP/HostConfig.inc.php');
 }
 
+//custom configuration
+AMP_config_load( 'site' );
+
 //system wide configuration
 require_once( 'AMP/System/Config.inc.php');
 
@@ -34,14 +37,12 @@ require_once( 'AMP/System/User/Config.php');
 
 //module setup
 AMP_config_load( 'tools' );
-//require_once( 'Modules/Config.inc.php');
 
 //db action : initialize lookups
 require_once( 'AMP/Base/Lookups.php');
 
 //content configuration
-AMP_config_load( 'site' );
-AMP_config_load( 'content' );
+AMP_config_load( 'content' ); #NOTE: already loaded by the above require_once( 'AMP/Base/Lookups.php'); -seth
 require_once( 'AMP/Content/Map.inc.php');
 
 //custom includes

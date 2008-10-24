@@ -1,7 +1,7 @@
 <?php
 
 require_once ('AMP/System/Lookups.inc.php');
-require_once ( 'AMP/Content/Config.inc.php');
+AMP_config_load('content');
 
 class AMPContent_Lookup extends AMPSystem_Lookup {
 

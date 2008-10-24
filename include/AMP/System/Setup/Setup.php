@@ -108,8 +108,8 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     );
 
     var $_custom_config = array( 
-            'comment_notification' => 'AMP_SITE_COMMENT_NOTIFICATION',
-            'comment_moderation' => 'AMP_SITE_COMMENT_MODERATION'
+            'comment_notification' => 'AMP_CONTENT_COMMENT_NOTIFICATION',
+            'comment_default_status' => 'AMP_CONTENT_COMMENT_DEFAULT_STATUS'
         );
 
     function AMP_System_Setup ( &$dbcon, $id = AMP_SYSTEM_SETTING_DB_ID ) {
@@ -415,15 +415,8 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     }
 
     function _read_custom_config( ) {
-        $current_config = AMP_config_load( 'site' );
-
-        $current_config['site_comment_moderation'];
-
         foreach( $this->_custom_config as $local_key => $constant ) {
-            $value = $current_config['site_'.$local_key];
-            if( !defined( $constant )) {
-              define($constant, $value);
-            }
+            $value = constant($constant);
             if( $value ) $this->mergeData( array( $local_key => $value ));
         }
     }
