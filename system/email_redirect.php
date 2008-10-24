@@ -6,7 +6,7 @@ $dia_target = ( strtoupper( AMP_MODULE_BLAST ) == 'DIA' )     ? AMP_DIA_URL_LOGI
 
 if ( !( $phplist_target || $dia_target )) {
     include ("header.php");
-    echo "<b>You do not have a email list program defined</b>";
+    echo "<b>You do not have a Democracy In Action account</b>";
     include ("footer.php");
 }
 

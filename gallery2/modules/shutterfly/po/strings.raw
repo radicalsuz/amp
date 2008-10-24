@@ -1,7 +1,0 @@
-# $Id: strings.raw,v 1.11 2005/09/06 02:01:01 mindless Exp $
-
-gettext("Print with Shutterfly")
-gettext("Shutterfly")
-gettext("Shutterfly Photo Printing Module")
-gettext("Commerce")
-gettext("Print on Shutterfly.com")

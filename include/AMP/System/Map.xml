@@ -274,11 +274,13 @@
         <href>system_map.php?id=advocacy</href>
         <child>advocacy</child>
     </item>
+<!--
     <item>
         <label>Email Blast</label>
         <href>email_redirect.php</href>
         <per>BLAST_ADMIN</per>
     </item>
+-->
     <item>
         <label>Directories</label>
         <href>system_map.php?id=directories</href>
@@ -290,11 +292,13 @@
         <child>boards</child>
     </item>
  
+<!--
     <item>
         <label>Volunteer</label>
         <href>userdata_list.php?modin=8</href>
         <per>FORM_VOLUNTEER</per>
     </item>
+-->
     <item>
         <label>Media Sign In</label>
         <href>userdata_list.php?modin=7</href>
@@ -325,11 +329,13 @@
         <href>quiz.php?action=list</href>
         <per>TOOLS_INTROTEXT</per>
     </item>
+<!--
 	<item>
         <label>Forum</label>
         <href>punbb.php</href>
         <per>TOOLS_INTROTEXT</per>
     </item>
+-->
 </tools>
 
 
