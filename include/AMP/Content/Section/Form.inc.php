@@ -43,10 +43,9 @@ class Section_Form extends AMPSystem_Form_XML {
         $header = &AMP_get_header( );
         $pretty_url_builder = <<<SCRIPT
             jq( function( ) {
-                console.log( jq( 'form#articletype input[name=route_slug]' ).val( ).length);
                 if( jq( 'form#articletype input[name=route_slug]' ).val( ) === "") {
                    jq( 'form#articletype input[name=type]').change(  function( ev ) {
-                        var new_val =  jq( this ).val( ).replace( /[\s_]/g,'-').replace( /[^-A-z0-9]/g, '');
+                        var new_val =  jq( this ).val( ).replace( /[\s_]/g,'-').replace( /[^-A-z0-9]/g, '').toLowerCase( );
                         jq( 'form#articletype input[name=route_slug]' ).val( new_val );
                    });
                 }

@@ -87,6 +87,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->_initMediaThumbnailLookup( $header );
         $this->_initTransferMode( $header );
         $this->_initPhotoLookup( $header );
+        $this->_initPrettyUrlCreation( $header );
         $this->HTMLEditorSetup( );
     }
 
@@ -210,6 +211,21 @@ PHOTOCODE_SUPPORT;
         $header->addJavascriptOnload(  $init_script, 'photodata' );
         $header->addJavascriptDynamic(  $support_script, 'photodata_support' );
 
+    }
+    function _initPrettyUrlCreation( &$header ){
+        if( !AMP_CONTENT_HUMANIZE_URLS ) return;
+        $pretty_url_builder = <<<SCRIPT
+            jq( function( ) {
+                console.log( jq( 'form#article input[name=route_slug]' ).val( ).length);
+                if( jq( 'form#article input[name=route_slug]' ).val( ) === "") {
+                   jq( 'form#article textarea[name=title]').change(  function( ev ) {
+                        var new_val =  jq( this ).val( ).replace( /[\s_]/g,'-').replace( /[^-A-z0-9]/g, '').toLowerCase( );
+                        jq( 'form#article input[name=route_slug]' ).val( new_val );
+                   });
+                }
+            });
+SCRIPT;
+        $header->addJavascriptDynamic( $pretty_url_builder );
     }
 
     function _makeNullDate( $data, $fieldname ) {

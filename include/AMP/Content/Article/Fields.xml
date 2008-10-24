@@ -71,6 +71,11 @@
 		<block_trigger>subtitle</block_trigger>
 		<block>title_options</block>
 	</title_options>
+	<route_slug>
+		<type>text</type>
+		<label>Pretty URL &lt;br /&gt;&lt;span class=photocaption&gt;all lowercase. &lt;br /&gt;use only letters, numbers, dashes&lt;br /&gt;must be unique&lt;/span&gt;</label>
+		<block>title_options</block>
+	</route_slug>
     <subtitle>
         <label>Subtitle</label>
         <type>textarea</type>

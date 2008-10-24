@@ -354,10 +354,16 @@ class Article extends AMPSystem_Data_Item {
             $this->mergeData( array( 'url' => $article_url ));
         }
 
-        $current_route = AMP_route_for( 'article', $this->id );
-        if( $current_route && $current_route != $this->getURL_without_pretty_urls( )) {
-            $this->mergeData(  array( 'route_slug' => $current_route ));
+    }
+
+    function _afterRead( ) {
+        if( AMP_CONTENT_HUMANIZE_URLS) {
+            $current_route = AMP_route_for( 'article', $this->id );
+            if( $current_route && $current_route != $this->getURL_without_pretty_urls( )) {
+                $this->mergeData(  array( 'route_slug' => $current_route ));
+            }
         }
+
     }
 
     function _save_create_actions( $data ){
@@ -524,6 +530,7 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function _save_route_slug( ) {
+        if( !AMP_CONTENT_HUMANIZE_URLS) return true;
         $finder = new AMP_Content_RouteSlug( AMP_dbcon( ));
         $slugs = $finder->find( array( 'owner_type' => 'article', 'owner_id' => $this->id));
         $assigned_slug = $this->getData( 'route_slug' );
