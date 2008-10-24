@@ -13,6 +13,37 @@ class ArticleComment extends AMPSystem_Data_Item {
         $this->init( $dbcon, $id );
     }
 
+    function _blankIdAction( ){
+      $this->_notify_admin = true;
+    }
+
+    function _afterSave( ){
+      if($this->_notify_admin && AMP_CONTENT_COMMENT_NOTIFICATION) {
+        require_once( 'AMP/System/Email.inc.php');
+        $emailer = &new AMPSystem_Email( );
+
+        $emailer->setTarget( AMP_CONTENT_COMMENT_NOTIFICATION );
+        $emailer->setSubject( 'New comment' );
+$comment_edit_url = AMP_SITE_URL . 'system/' . $this->get_url_edit();
+$article_url = AMP_url_update(AMP_SITE_URL . AMP_CONTENT_URL_ARTICLE, array('id' => $this->getArticleId()) );
+$status = $this->getStatus();
+        $emailer->setMessage( <<<MESSAGE_BODY
+A user submitted a new comment on the following article:
+
+$article_url
+
+The comment's status is currently: $status
+
+Edit the comment here: 
+
+$comment_edit_url
+MESSAGE_BODY
+);
+
+        $result = $emailer->execute( );
+      }
+    }
+
     function getTimestamp( ){
         if ( !$result = $this->getData( 'date' )) return null;
         return strtotime( $result );

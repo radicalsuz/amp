@@ -257,8 +257,8 @@
     <block>comments_block</block>
   </comments_header>
   <comment_notification>
-    <type>checkbox</type>
-    <label>Email "User Submitted Article Email" when a user adds a comment</label>
+    <type>text</type>
+    <label>Comment notification email</label>
     <block>comments_block</block>
   </comment_notification>
   <comment_default_status>
