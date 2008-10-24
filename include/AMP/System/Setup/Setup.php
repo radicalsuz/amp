@@ -107,6 +107,11 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
     );
 
+    var $_custom_config = array( 
+            'comment_notification' => 'AMP_SITE_COMMENT_NOTIFICATION',
+            'comment_moderation' => 'AMP_SITE_COMMENT_MODERATION'
+        );
+
     function AMP_System_Setup ( &$dbcon, $id = AMP_SYSTEM_SETTING_DB_ID ) {
         $this->init( $dbcon, $id );
         $this->_initExtraSetup( );
@@ -122,18 +127,23 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
             $this->_addAllowedKey( $extra_key );
         }
 
+        foreach( $this->_custom_config as $local_key => $constant ) {
+            $this->_addAllowedKey( $local_key );
+        }
     }
 
     function _afterRead( ){
         $this->_readTemplates( );
         $this->_readPHPlistConfig( );
         $this->_readPunbbConfig( );
+        $this->_read_custom_config( );
     }
 
     function _afterSave( ){
         $this->_updateTemplates( );
         $this->_updatePHPlistConfig( );
         $this->_updatePunbbConfig( );
+        $this->_save_custom_config( );
         $this->_clearCached( );
     }
 
@@ -402,6 +412,35 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
     function get_s3_secret( ) {
         return $this->getData( 's3_secret');
+    }
+
+    function _read_custom_config( ) {
+        $current_config = AMP_config_load( 'site' );
+
+        $current_config['site_comment_moderation'];
+
+        foreach( $this->_custom_config as $local_key => $constant ) {
+            $value = $current_config['site_'.$local_key];
+            if( !defined( $constant )) {
+              define($constant, $value);
+            }
+            if( $value ) $this->mergeData( array( $local_key => $value ));
+        }
+    }
+
+    function _save_custom_config( ) {
+        foreach( $this->_custom_config as $local_key => $constant ) {
+            $new_value = $this->getData( $local_key );
+            //if the constant is defined and doesn't match the new value, redefine it'
+            if( defined( $constant ) && ( constant( $constant ) != $new_value )) {
+                AMP_config_write( $constant, $new_value ); 
+                continue;
+            }
+            //if a value has been defined and no constant exists, write it to the custom folder
+            if( $new_value && !defined( $constant ) ) {
+                AMP_config_write( $constant, $new_value );
+            }
+        }
     }
 }
 

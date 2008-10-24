@@ -250,4 +250,21 @@
 		<label>Key</label>
 		<block>akismet</block>
 	</akismet_key>
+
+  <comments_header>
+    <type>blocktrigger</type>
+    <label>Comment Settings</label>
+    <block>comments_block</block>
+  </comments_header>
+  <comment_notification>
+    <type>checkbox</type>
+    <label>Email "User Submitted Article Email" when a user adds a comment</label>
+    <block>comments_block</block>
+  </comment_notification>
+  <comment_moderation>
+    <type>checkbox</type>
+    <label>Hold comments for moderation</label>
+    <block>comments_block</block>
+  </comment_moderation>
+
 </array>
