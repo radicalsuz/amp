@@ -286,11 +286,13 @@
         <href>system_map.php?id=directories</href>
         <child>directories</child>
     </item>
+<!--
     <item>
         <label>Boards</label>
         <href>system_map.php?id=boards</href>
         <child>boards</child>
     </item>
+-->
  
 <!--
     <item>
@@ -324,12 +326,12 @@
         <href>maps.php?action=list</href>
         <per>TOOLS_INTROTEXT</per>
     </item>
+<!--
     <item>
         <label>Quiz</label>
         <href>quiz.php?action=list</href>
         <per>TOOLS_INTROTEXT</per>
     </item>
-<!--
 	<item>
         <label>Forum</label>
         <href>punbb.php</href>
