@@ -202,6 +202,8 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
     }
 
     function _updatePHPlistConfig( ){
+        return true;
+        /*
         if ( !AMP_hasTable( 'phplist_config')) return true;
         require_once( 'Modules/Blast/Config/Config.php');
         $phplist_config_data = array_combine_key( $this->_keys_phplist_setup, $this->getData( ));
@@ -226,10 +228,13 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
         $admin_settings = &new Blast_Config_Admin( $this->dbcon, PHPLIST_CONFIG_ADMIN_ID );
         $admin_settings->mergeData( $admin_data );
         return $admin_settings->save( );
+        */
     }
 
     function _readPHPlistConfig( ){
-        if ( !AMP_hasTable( 'phplist_config')) return true;
+        return true;
+        #if ( !AMP_hasTable( 'phplist_config')) return true;
+        /*
         require_once( 'Modules/Blast/Config/Config.php');
         $phplist_config_data = array_combine_key( $this->_keys_phplist_setup, $this->getData( ));
         foreach( $this->_keys_phplist_setup as $local_key ){
@@ -248,6 +253,7 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
             $phplist_admin_data[$local_key] = $value;
         }
         $this->mergeData( $phplist_admin_data );
+        */
 
     }
 

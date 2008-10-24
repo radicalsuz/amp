@@ -893,8 +893,8 @@ class AMPSystemLookup_NullDates extends AMPConstant_Lookup {
 
 class AMPSystemLookup_BlastOptions extends AMPConstant_Lookup {
     var $dataset = array( 
-        'DIA' => 'Democracy In Action',
-        'phplist' => 'PHPlist'
+        'DIA' => 'Democracy In Action'
+        //'phplist' => 'PHPlist'
     );
 
     function AMPSystemLookup_BlastOptions( ){

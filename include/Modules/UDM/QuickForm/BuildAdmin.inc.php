@@ -149,7 +149,10 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $modules = $modules_blank_row + FormLookup_IntroTexts::instance( $this->udm->instance );
 
         $lists_blank_row[ '' ] = 'none';
-        $lists = $lists_blank_row + AMPSystem_Lookup::instance( 'lists' );
+        $lists = $lists_blank_row;
+        if( $available_lists = AMP_lookup( 'lists')) {
+            $lists = $lists_blank_row + $available_lists;
+        }
 
         $fields =& $this->fields;
 
@@ -160,11 +163,14 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $fields['core']['publish_form']  = array( 'label' => 'Publish Form',         'type' => 'checkbox' );
         $fields['core']['modidinput']    = array( 'label' => 'Intro Text',           'type' => 'select', 'values' => $modules );
         $fields['core']['modidresponse'] = array( 'label' => 'Response Text',        'type' => 'select', 'values' => $modules );
-        $fields['core']['uselists']      = array( 'label' => 'Use Lists',            'type' => 'checkbox' );
-        $fields['core']['list1']         = array( 'label' => 'List #1',              'type' => 'select', 'values' => $lists );
-        $fields['core']['list2']         = array( 'label' => 'List #2',              'type' => 'select', 'values' => $lists );
-        $fields['core']['list3']         = array( 'label' => 'List #3',              'type' => 'select', 'values' => $lists );
-        $fields['core']['list4']         = array( 'label' => 'List #4',              'type' => 'select', 'values' => $lists );
+
+        if( $available_lists ) {
+            $fields['core']['uselists']      = array( 'label' => 'Use Lists',            'type' => 'checkbox' );
+            $fields['core']['list1']         = array( 'label' => 'List #1',              'type' => 'select', 'values' => $lists );
+            $fields['core']['list2']         = array( 'label' => 'List #2',              'type' => 'select', 'values' => $lists );
+            $fields['core']['list3']         = array( 'label' => 'List #3',              'type' => 'select', 'values' => $lists );
+            $fields['core']['list4']         = array( 'label' => 'List #4',              'type' => 'select', 'values' => $lists );
+        }
         $fields['core']['useemail']      = array( 'label' => 'Use E-Mail',           'type' => 'checkbox' );
         $fields['core']['mailto']        = array( 'label' => 'Mail to',              'type' => 'text' );
         $fields['core']['subject']       = array( 'label' => 'E-mail Subject',       'type' => 'text' );

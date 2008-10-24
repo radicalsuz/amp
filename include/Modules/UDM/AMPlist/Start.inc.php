@@ -25,10 +25,12 @@ class UserDataPlugin_Start_AMPlist extends UserDataPlugin {
             $this->udm->setData( array( 'Email'=>$_GET['email']));
         }
     }
+
     function initPHPlist( &$udm, $plugin_instance ){
-        $save = & $udm->registerPlugin( 'PHPlist', 'Save', $plugin_instance );
-        $read = & $udm->registerPlugin( 'PHPlist', 'Read', $plugin_instance );
+        #$save = & $udm->registerPlugin( 'PHPlist', 'Save', $plugin_instance );
+        #$read = & $udm->registerPlugin( 'PHPlist', 'Read', $plugin_instance );
     }
+
     function initListserve( &$udm, $plugin_instance ){
         $save = & $udm->registerPlugin( 'Listserve', 'Save', $plugin_instance );
     }

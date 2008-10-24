@@ -148,6 +148,7 @@
 		<block>dia</block>
 	</dia_slug>
 
+<!--
     <phplist_header>
         <type>blocktrigger</type>
         <label>PHPlist Settings</label>
@@ -215,6 +216,7 @@
         <label>PHPlist Reply-To Address</label>
 		<block>phplist</block>
     </phplist_message_replyto_address>
+-->
 	<s3_header>
 		<type>blocktrigger</type>
 		<label>Amazon s3 cache settings</label>
