@@ -74,6 +74,9 @@ class Article_Form extends AMPSystem_Form_XML {
             }
 
         }
+        if( !AMP_CONTENT_HUMANIZE_URLS) {
+            unset( $this->fields['route_slug'] );
+        }
 
     }
 

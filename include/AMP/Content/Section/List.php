@@ -222,7 +222,7 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
 CONFIRM_SCRIPT;
         $confirm_script = sprintf( $confirm_script, AMP_TEXT_LIST_CONFIRM_DELETE_SECTIONS, AMP_TEXT_LIST_CONFIRM_DELETE );
         $header->addJavascriptDynamic( $confirm_script, 'trash_button' );
-        return $this->_renderer->submit( $tool_name, $label, $attr ) . $this->_renderer->space( );
+        return $this->_renderer->submit( $tool_name, $label ) . $this->_renderer->space( );
         
     }
 

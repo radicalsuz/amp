@@ -21,6 +21,11 @@ class Section_Form extends AMPSystem_Form_XML {
         }
         $this->_send_preview_link_to_bottom( );
         $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
+        $current_section_id = isset( $_GET['id']) ? intval( $_GET['id'] ) : false ;
+        $this->fields['parent']['lookup']['var'] = $current_section_id;
+        if( !AMP_CONTENT_HUMANIZE_URLS) {
+            unset( $this->fields['route_slug'] );
+        }
     }
 
     

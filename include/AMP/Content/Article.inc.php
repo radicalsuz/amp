@@ -41,6 +41,7 @@ class Article extends AMPSystem_Data_Item {
         $this->_addAllowedKey( 'sections_related' );
         $this->_addAllowedKey( 'url' );
         $this->_addAllowedKey( 'tags' );
+        $this->_addAllowedKey( 'route_slug' );
     }
 
     function &getDisplay() {
@@ -131,6 +132,9 @@ class Article extends AMPSystem_Data_Item {
         return AMP_route_for( 'article', $this->id );
     }
     
+    function getURL_without_pretty_urls( ) {
+        return AMP_url_update_without_pretty_urls(  AMP_CONTENT_URL_ARTICLE, array( 'id' => $this-> id )) ;
+    }
     function getContact() {
         return $this->getData( 'contact' );
     }
@@ -350,6 +354,10 @@ class Article extends AMPSystem_Data_Item {
             $this->mergeData( array( 'url' => $article_url ));
         }
 
+        $current_route = AMP_route_for( 'article', $this->id );
+        if( $current_route && $current_route != $this->getURL_without_pretty_urls( )) {
+            $this->mergeData(  array( 'route_slug' => $current_route ));
+        }
     }
 
     function _save_create_actions( $data ){
@@ -439,6 +447,7 @@ class Article extends AMPSystem_Data_Item {
     function _afterSave( ){
         if ( $this->_save_with_callbacks ) {
             $this->_save_aliases( );
+            $this->_save_route_slug( );
             $this->_save_sections_related( );
             $this->_save_tags( );
         }
@@ -512,6 +521,28 @@ class Article extends AMPSystem_Data_Item {
     function _makeRelatedSectionCriteria( $section_id_array ) {
         if ( empty( $section_id_array ) || !is_array( $section_id_array )) return false;
         return 'typeid in ( '.join( ',', $section_id_array ).' ) and articleid=' . $this->id;
+    }
+
+    function _save_route_slug( ) {
+        $finder = new AMP_Content_RouteSlug( AMP_dbcon( ));
+        $slugs = $finder->find( array( 'owner_type' => 'article', 'owner_id' => $this->id));
+        $assigned_slug = $this->getData( 'route_slug' );
+        if( empty( $slugs )) {
+            if( !$assigned_slug ) return true;
+            $slug = $finder;
+            $slug->mergeData( array( 'owner_type' => 'article', 'owner_id' => $this->id ));
+        } else {
+            $slug = current( $slugs );
+            if( $slug->getName( ) == $assigned_slug ) return true;
+            if( !$assigned_slug ) {
+                $slug->delete( );
+                return $slug->update_routes( );
+            }
+        }
+
+        $slug->mergeData( array( 'name' => $assigned_slug ));
+        $slug->force_valid_slug( );
+        return $slug->save( );
     }
 
     function _save_aliases( ){

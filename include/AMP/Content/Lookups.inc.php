@@ -268,27 +268,22 @@ class AMPContentLookup_SectionParents extends AMPContent_Lookup {
     }
 }
 
-class AMPContentLookup_SectionMapWithoutCurrentSection {
+class AMPContentLookup_SectionMapExcludingSection {
     var $dataset;
 
-    function AMPContentLookup_SectionMapWithoutCurrentSection() {
-        $this->__construct( );
-
+    function AMPContentLookup_SectionMapExcludingSection( $excluded_section_id ) {
+        $this->__construct( $excluded_section_id );
     }
 
-    function __construct( ) {
+    function __construct( $excluded_section_id ) {
         require_once( 'AMP/Content/Map.inc.php');
         $mapsource = &AMPContent_Map::instance( );
-        $this->dataset = $mapsource->selectOptionsWithoutCurrentSection( );
+        $this->dataset = $mapsource->selectOptionsExcludingSection( $excluded_section_id );
     }
     function available( ){
         return false;
     }
 
-    function allow_cache(  ) {
-        return !AMP_Authenticate(  'content' );
-    }
-    
 }
 
 

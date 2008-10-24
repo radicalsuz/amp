@@ -4,6 +4,7 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
 require_once ( 'AMP/Content/Section/Contents/Manager.inc.php' );
 require_once ( 'AMP/Content/Article.inc.php');
+require_once ( 'AMP/Content/RouteSlug/RouteSlug.php');
 
 class Section extends AMPSystem_Data_Item {
 
@@ -28,10 +29,17 @@ class Section extends AMPSystem_Data_Item {
         foreach( $this->_custom_config as $local_key => $constant_pattern ) {
             $this->_addAllowedKey( $local_key );
         }
+        $this->_addAllowedKey( 'route_slug' );
     }
 
     function _afterRead( ) {
         $this->_read_custom_config( );
+        if( AMP_CONTENT_HUMANIZE_URLS) {
+            $current_route = AMP_route_for( 'section', $this->id );
+            if( $current_route && $current_route != $this->getURL_without_pretty_urls( )) {
+                $this->mergeData(  array( 'route_slug' => $current_route ));
+            }
+        }
     }
 
     function _read_custom_config( ) {
@@ -197,6 +205,10 @@ class Section extends AMPSystem_Data_Item {
     function getURL_default( ) {
         return AMP_route_for(  'section', $this->id );
     }
+
+    function getURL_without_pretty_urls( ) {
+        return AMP_url_update_without_pretty_urls(  AMP_CONTENT_URL_SECTION, array( 'id' => $this-> id )) ;
+    }
     
     function getExistingAliases( ){
         if ( !isset( $this->id )) return false;
@@ -286,6 +298,7 @@ class Section extends AMPSystem_Data_Item {
 
     function _afterSave( ){
         $this->_save_custom_config( );
+        $this->_save_route_slug( );
         if ( $this->id != $this->dbcon->Insert_ID( )) return;
         $this->_create_section_header( );
         $this->_create_permission_values( );
@@ -315,6 +328,29 @@ class Section extends AMPSystem_Data_Item {
         }
         */
         
+    }
+
+    function _save_route_slug( ) {
+        if( !AMP_CONTENT_HUMANIZE_URLS) return true;
+        $finder = new AMP_Content_RouteSlug( AMP_dbcon( ));
+        $slugs = $finder->find( array( 'owner_type' => 'section', 'owner_id' => $this->id));
+        $assigned_slug = $this->getData( 'route_slug' );
+        if( empty( $slugs )) {
+            if( !$assigned_slug ) return true;
+            $slug = $finder;
+            $slug->mergeData( array( 'owner_type' => 'section', 'owner_id' => $this->id ));
+        } else {
+            $slug = current( $slugs );
+            if( $slug->getName( ) == $assigned_slug ) return true;
+            if( !$assigned_slug ) {
+                $slug->delete( );
+                return $slug->update_routes( );
+            }
+        }
+
+        $slug->mergeData( array( 'name' => $assigned_slug ));
+        $slug->force_valid_slug( );
+        return $slug->save( );
     }
 
     function _create_permission_values( ) {

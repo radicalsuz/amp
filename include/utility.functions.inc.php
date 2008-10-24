@@ -2017,12 +2017,13 @@ function AMP_array_splice( $target, $offset =0, $length = null, $replacement = a
 
 function AMP_url_update( $url, $attr = array( )) {
     if( AMP_CONTENT_HUMANIZE_URLS ) {
+        $routes = false;
         if( $url == AMP_CONTENT_URL_ARTICLE  && isset($attr['id']) ) {
             $routes = AMP_lookup('article_routes');
             $id = $attr['id'];
         }
         if( ( $url == AMP_CONTENT_URL_SECTION || $url == AMP_CONTENT_URL_LIST_SECTION ) 
-            && ( isset($attr['id']) || isset($attr['type'])) ){
+            && ( isset($attr['id']) || isset($attr['type'])) ) {
             $routes = AMP_lookup('section_routes');
             $id = isset( $attr['id'] ) ? $attr['id'] : $attr['type'];
         }
@@ -2031,6 +2032,10 @@ function AMP_url_update( $url, $attr = array( )) {
         }
     }
   
+    return AMP_url_update_without_pretty_urls( $url, $attr );
+}
+
+function AMP_url_update_without_pretty_urls( $url, $attr = array( ) ) {
 
     if ( empty( $attr ) || !$attr ) return $url;
     $url_segments = split( '\?', $url );

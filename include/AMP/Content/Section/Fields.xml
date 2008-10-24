@@ -22,8 +22,7 @@
 		<type>select</type>
 		<label>Subsection of</label>
         <lookup>
-            <module>content</module>
-            <instance>sectionmapwithoutcurrentsection</instance>
+            <name>section_map_excluding_section</name>
         </lookup>
         <required>1</required>
 	</parent>
@@ -32,6 +31,10 @@
         <size>4</size>
 		<label>Section Order</label>
 	</textorder>
+	<route_slug>
+		<type>text</type>
+		<label>Pretty URL &lt;br /&gt;&lt;span class=photocaption&gt;all lowercase. &lt;br /&gt;use only letters, numbers, dashes&lt;br /&gt;must be unique&lt;/span&gt;</label>
+	</route_slug>
     <date_redirect_header>
         <type>blocktrigger</type>
         <label>Date and Redirect</label>
