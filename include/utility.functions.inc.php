@@ -931,6 +931,9 @@ function AMP_is_cacheable_url( ) {
         //did the flash display a value on this page
         && ( ! defined( 'AMP_SYSTEM_FLASH_OUTPUT')) )
 
+        //not in preview mode
+        && ( ! ( defined( 'AMP_DISPLAYMODE_PREVIEW') && AMP_DISPLAYMODE_PREVIEW ) )
+
         //is the cache active
         && ( $cache ) 
         
@@ -939,6 +942,7 @@ function AMP_is_cacheable_url( ) {
 
         //is the user viewing protected content
         && ( !AMP_Authenticate( 'content' ))
+        && ( !AMP_Authenticate( 'admin' ))
         && ( !$registry->getEntry( AMP_REGISTRY_CONTENT_SECURE ))
         
         ; 
@@ -974,9 +978,10 @@ function AMP_assert_var( $varname ) {
 }
 
 function AMP_cached_request( $timeout = null  ){
+    if ( AMP_DISPLAYMODE_CACHE_OFF ) return false;
+
     //signal that the current request is cacheable
     //because it has requested a cached copy of itself
-    if ( AMP_DISPLAYMODE_CACHE_OFF ) return false;
     if ( !defined( 'AMP_CONTENT_PAGE_CACHE_ALLOWED')) define( 'AMP_CONTENT_PAGE_CACHE_ALLOWED', true );
 
     if ( !( $cache = &AMP_get_cache( ) && AMP_is_cacheable_url( )) ) return false; 
@@ -2412,8 +2417,17 @@ function AMP_dispatch_for( $route ) {
     return array( 'target_id' => key($routes), 'target_type' => current($routes) );
 }
 
-function AMP_route_for( $type, $id ) {
-  return AMP_url_update( constant( strtoupper("AMP_CONTENT_URL_$type")), array( 'id' => $id ));
+function AMP_route_for( $type, $id, $options = array( ) ) {
+    $route = AMP_url_update( constant( strtoupper("AMP_CONTENT_URL_$type")), array( 'id' => $id ));
+    if( empty( $options )) {
+        return $route;
+    }
+    if( isset( $options['preview']) && $options['preview'] ) {
+        if( strpos( $route,'.php')) {
+            return AMP_url_add_vars( AMP_SITE_URL .$route, array( 'preview=1' ));
+        }
+    }
+    return $route;
 }
 
 function AMP_block_frequent_requesters( ) {

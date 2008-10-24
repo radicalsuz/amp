@@ -250,7 +250,15 @@ class AMPContent_Manager {
      * @since  3.5.9
      * @return void
      */
-    function add( &$display, $display_key = null ){
+    function add( &$display_value, $display_key = null ){
+        if( !$display_value ) $display_value = '';
+        if( is_string( $display_value )) {
+            require_once( 'AMP/Content/Buffer.php');
+            $display = new AMP_Content_Buffer( );
+            $display->add( $display_value );
+        } else {
+            $display = & $display_value;
+        }
         return $this->addDisplay( $display, $display_key );
     }
 

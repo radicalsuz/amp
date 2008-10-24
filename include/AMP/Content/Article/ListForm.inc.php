@@ -282,5 +282,10 @@ class Article_ListForm extends AMP_System_List_Form {
         return $toolbar->add_panel( 'request_revision', $panel_contents );
     }
 
+    function _HTML_previewLink( $id ) {
+        if ( !isset( $this->previewlink )) return false;
+        return  '<a href="' . AMP_route_for( 'article', $id, array( 'preview' => 1 )) .'" target="_blank" title="'.AMP_TEXT_PREVIEW_ITEM.'">' .
+                '<img src="' . AMP_SYSTEM_ICON_PREVIEW . '" width="16" height="16" border=0></a>';
+    }
 }
 ?>

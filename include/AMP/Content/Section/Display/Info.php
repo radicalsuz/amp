@@ -72,16 +72,23 @@ class AMP_Content_Section_Display_Info {
     function _renderPreviewLink( ) {
         return  
             $this->_renderer->link( 
-                    AMP_URL_AddVars( AMP_SITE_URL . $this->_section->getURL_default( ), array( 'preview=1', 'cache=0' ) ),
+                    $this->_preview_url( ),
                     $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'width' => '16', 'height' => '16', 'border' =>'0', 'align' => 'right' )),
                     array( 'target' => 'blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
                 );
     }
 
+    function _preview_url( ) {
+        if( AMP_CONTENT_HUMANIZE_URLS ) {
+            return AMP_route_for( 'section', $this->_section->id ),
+        } else {
+            return AMP_URL_AddVars( AMP_SITE_URL . $this->_section->getURL_default( ), array( 'preview=1', 'cache=0' ) ),
+        }
+    }
+
     function _renderItemId( ){
-        $section_url = AMP_Url_AddVars( AMP_SITE_URL . $this->_section->getURL_default( ), array( 'preview=1', 'cache=0' ));
         return $this->_renderer->inSpan( AMP_TEXT_ID . ': ' . $this->_section->id ) . $this->_renderer->space( 2 )
-                . $this->_renderer->link( $section_url, '[ ' . ucfirst( AMP_TEXT_VIEW ) . ' ]', array( 'target' => 'blank') )
+                . $this->_renderer->link( $this->_preview_url( ), '[ ' . ucfirst( AMP_TEXT_VIEW ) . ' ]', array( 'target' => 'blank') )
                 . $this->_renderer->newline( );
     }
 

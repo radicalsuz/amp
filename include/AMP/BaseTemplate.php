@@ -66,7 +66,9 @@ if ( $intro_id == AMP_CONTENT_INTRO_ID_DEFAULT ) {
      * Activate Preview Mode if requested
      * TODO: Preview mode should only be available to authenticated admin users
      */
-    define( 'AMP_DISPLAYMODE_PREVIEW', ( isset( $_GET['preview'] ) && $_GET['preview'] ) );
+    if( !defined( 'AMP_DISPLAYMODE_PREVIEW')) {
+        define( 'AMP_DISPLAYMODE_PREVIEW', ( isset( $_GET['preview'] ) && $_GET['preview'] ) );
+    }
 
 } else {
 

@@ -99,6 +99,15 @@ class AMP_Content_Section_List extends AMP_Display_System_List {
 
     }
 
+    function render_preview( $source ) {
+        return $this->_renderer->link( 
+            AMP_route_for( 'section', $source->id, array( 'preview' => true ) ),
+            $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'class' => 'icon')),
+            array( 'target' => '_blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
+        );
+
+    }
+
     function _renderBlock( $output ) {
         //$sortable_script = 'Sortable.create( "'.$this->list_id.'", { tag: "tr", only: "list_row", scroll: window  });';
         return 

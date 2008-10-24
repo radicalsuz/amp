@@ -36,6 +36,13 @@ class Article_List extends AMP_Display_System_List {
         return $user_names[$editor_id];
     }
 
+    function render_preview( $source ) {
+        return $this->_renderer->link( 
+            AMP_route_for( 'article', $source->id, array( 'preview' => true ) ),
+            $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'class' => 'icon')),
+            array( 'target' => '_blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
+        );
+    }
 }
 
 

@@ -50,7 +50,8 @@ class ArticleDisplay_Info extends Article_Display {
     function _renderPreviewLink( ) {
         return  
             $this->_renderer->link( 
-                    AMP_URL_AddVars( AMP_SITE_URL . $this->_article->getURL_default( ), 'preview=1', 'cache=0' ),
+                    AMP_route_for( 'article', $this->_article->id, array( 'preview' => true ) ),
+                    #AMP_URL_AddVars( AMP_SITE_URL . $this->_article->getURL_default( ), 'preview=1', 'cache=0' ),
                     $this->_renderer->image( AMP_SYSTEM_ICON_PREVIEW, array( 'width' => '16', 'height' => '16', 'border' =>'0', 'align' => 'right' )),
                     array( 'target' => 'blank', 'title' => AMP_TEXT_PREVIEW_ITEM )
                 );
