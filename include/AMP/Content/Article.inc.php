@@ -2,7 +2,6 @@
 
 require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
-require_once ( 'AMP/Content/Section.inc.php' );
 require_once ( 'AMP/System/File/Image.php' );
 require_once ( 'AMP/Content/Article/Display.inc.php' );
 require_once ( 'AMP/Content/Config.inc.php');
@@ -329,6 +328,8 @@ class Article extends AMPSystem_Data_Item {
         if( !$this->isLive( )) return false;
         $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
         if( array_search( $excluded_classes, $this->getClass( )) !== FALSE ) return false;
+
+		require_once ( 'AMP/Content/Section.inc.php' );
         $section = new Section( AMP_dbcon( ), $this->getSection( ));
         return $section->isDisplayable( );
     }

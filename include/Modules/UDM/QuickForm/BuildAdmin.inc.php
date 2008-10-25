@@ -150,7 +150,7 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
 
         $lists_blank_row[ '' ] = 'none';
         $lists = $lists_blank_row;
-        if( $available_lists = AMP_lookup( 'lists')) {
+        if( $available_lists = AMP_lookup( 'lists' )) {
             $lists = $lists_blank_row + $available_lists;
         }
 
@@ -164,8 +164,8 @@ class UserDataPlugin_BuildAdmin_QuickForm extends UserDataPlugin {
         $fields['core']['modidinput']    = array( 'label' => 'Intro Text',           'type' => 'select', 'values' => $modules );
         $fields['core']['modidresponse'] = array( 'label' => 'Response Text',        'type' => 'select', 'values' => $modules );
 
+		$fields['core']['uselists']      = array( 'label' => 'Use Lists',            'type' => 'checkbox' );
         if( $available_lists ) {
-            $fields['core']['uselists']      = array( 'label' => 'Use Lists',            'type' => 'checkbox' );
             $fields['core']['list1']         = array( 'label' => 'List #1',              'type' => 'select', 'values' => $lists );
             $fields['core']['list2']         = array( 'label' => 'List #2',              'type' => 'select', 'values' => $lists );
             $fields['core']['list3']         = array( 'label' => 'List #3',              'type' => 'select', 'values' => $lists );
