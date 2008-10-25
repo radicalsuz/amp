@@ -268,5 +268,10 @@
     <label>Automatically publish comments</label>
     <block>comments_block</block>
   </comment_default_status>
+  <trackbacks_enabled>
+    <type>checkbox</type>
+    <label>Enable trackbacks</label>
+    <block>comments_block</block>
+  </trackbacks_enabled>
 
 </array>

@@ -109,7 +109,8 @@ class AMP_System_Setup extends AMPSystem_Data_Item {
 
     var $_custom_config = array( 
             'comment_notification' => 'AMP_CONTENT_COMMENT_NOTIFICATION',
-            'comment_default_status' => 'AMP_CONTENT_COMMENT_DEFAULT_STATUS'
+            'comment_default_status' => 'AMP_CONTENT_COMMENT_DEFAULT_STATUS',
+            'trackbacks_enabled' => 'AMP_CONTENT_TRACKBACKS_ENABLED'
         );
 
     function AMP_System_Setup ( &$dbcon, $id = AMP_SYSTEM_SETTING_DB_ID ) {

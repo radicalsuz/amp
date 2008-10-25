@@ -87,6 +87,8 @@ tag=           "tag.php"
 
 tell_a_friend= "mailto2.php"
 
+trackbacks=    "article_trackback.php"
+
 trainer_add=   "form.php?id=5"
 trainer_list=  "display.php?modin=5"
 

@@ -90,6 +90,7 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
     function _RDF_trackbacks( $article_id ){
         if ( !AMP_CONTENT_TRACKBACKS_ENABLED ) return false;
         require_once( 'AMP/Content/Article.inc.php');
+        AMP_config_load( 'urls' );
         $article = &new Article( $this->comment_set->dbcon, $article_id );
         return
             '<!--
@@ -98,10 +99,10 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
                      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
 
             <rdf:Description
-                rdf:about="'.$article->getURL( ) .'"
-                dc:identifier="'.$article->getURL( ).'"
+                rdf:about="'.AMP_SITE_URL.$article->getURL( ) .'"
+                dc:identifier="'.AMP_SITE_URL.$article->getURL( ).'"
                 dc:title="'.$article->getTitle( ).'"
-                trackback:ping="' . AMP_Url_AddVars( AMP_CONTENT_URL_TRACKBACKS, 'id='.$article_id) . '" />
+                trackback:ping="' . AMP_Url_AddVars( AMP_SITE_URL.AMP_CONTENT_URL_TRACKBACKS, 'id='.$article_id) . '" />
             </rdf:RDF>
             -->';
     }

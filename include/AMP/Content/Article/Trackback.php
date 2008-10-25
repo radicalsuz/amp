@@ -7,15 +7,14 @@ define( 'AMP_TEXT_ERROR_CONTENT_TRACKBACK_CLOSED',
 define( 'AMP_TEXT_ERROR_CONTENT_TRACKBACK_EXISTS',
 		    'We already have a ping from that URI for this post.');
 
-require_once( 'AMP/System/Data/Item.inc.php');
-require_once( 'AMP/System/Data/Set.inc.php');
+require_once( 'AMP/Content/Article/Comment/ArticleComment.php');
 
 
-class ArticleTrackback extends AMPSystem_Data_Item {
+class ArticleTrackback extends ArticleComment {
     var $datatable = 'comments';
     var $_response;
     var $_incoming_charset = 'ASCII, UTF-8, ISO-8859-1, JIS, EUC-JP, SJIS' ;
-    var $_incoming_tags = array( 'url', 'title', 'excerpt', 'blog_name', 'charset');
+    var $_incoming_tags = array( 'url', 'title', 'excerpt', 'blog_name');
 
     function ArticleTrackback( &$dbcon, $id =null ){
         $this->init( $dbcon, $id );
@@ -48,9 +47,18 @@ class ArticleTrackback extends AMPSystem_Data_Item {
 
     function setBody( $body ){
         if ( !$body ) return false;
-		$body_text = AMP_trimText( $body, 255, false );
-		if ($title = $this->getTitle()) $body_text = $title . "\n" . $body_text;
+        $body_text = AMP_trimText( $body, 255, false );
         return $this->mergeData( array( 'comment' => $body_text ));
+    }
+
+    function _save_create_actions($data) {
+      $akismet = $this->to_akismet(  );
+      if( $akismet ) {
+        $data['spam'] = $akismet->isSpam(  ) ? 1 : 0;
+      }
+
+      $data['comment'] = $this->getTitle() . "\n" . $this->getBody();
+      return $data;
     }
 
     function setAuthorName( $author_name ){
@@ -168,6 +176,7 @@ class ArticleTrackback extends AMPSystem_Data_Item {
 
 }
 
+require_once( 'AMP/System/Data/Set.inc.php');
 class ArticleTrackbackSet extends AMPSystem_Data_Set {
     var $datatable = 'comments';
     

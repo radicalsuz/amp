@@ -8,6 +8,7 @@ class ArticleComment extends AMPSystem_Data_Item {
     var $name_field = "comment";
     var $_sort_auto = false;
     var $_class_name = 'ArticleComment';
+    var $_notify_admin = false;
 
     function ArticleComment ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );
