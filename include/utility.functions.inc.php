@@ -1934,6 +1934,8 @@ function AMP_flush_apache_cache_folders() {
 	system($flush_command);
 	$flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "section";
 	system($flush_command);
+	$flush_command = "rm -rf ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "pretty_url";
+	system($flush_command);
 	$flush_command = "rm  ". AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . "index.html";
 	system($flush_command);
 }
@@ -2298,7 +2300,8 @@ function AMP_cache_this_request( $finalPageHtml ) {
         $section_okay = ( ( count( $url_values ) == 2) && isset( $url_values['list'] ) && isset( $url_values['type'] ));
         $class_okay =   ( ( count( $url_values ) == 2) && isset( $url_values['list'] ) && isset( $url_values['class'] ));
         $article_okay = ( ( count( $url_values ) == 1) && isset( $url_values['id'] ));
-        if ( !( $section_okay || $article_okay || $class_okay ) ) {
+        $pretty_url_okay = ( ( count( $url_values ) == 1) && isset( $url_values['q_url'] ));
+        if ( !( $section_okay || $article_okay || $class_okay || $pretty_url_okay ) ) {
             //don't cache pages with any funny vars on them
             return;
         }
@@ -2309,18 +2312,22 @@ function AMP_cache_this_request( $finalPageHtml ) {
 
     if ( $currentPage->isArticle()) {
         $cache_folder = AMP_pathFlip(AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . 'article');
-        AMP_mkdir($cache_folder );
         $cache_file = $cache_folder . DIRECTORY_SEPARATOR . $currentPage->getArticleId(). '.html'; 
     }
     if ( $currentPage->isList('type') ) {
         $cache_folder = AMP_pathFlip(AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . 'section') ;
-        AMP_mkdir($cache_folder );
         $cache_file = $cache_folder . DIRECTORY_SEPARATOR . $currentPage->getSectionId(). '.html'; 
     }
     if ( $currentPage->isList('index' ) ) {
         $cache_folder = AMP_pathFlip( AMP_SYSTEM_CACHE_PATH );
-        AMP_mkdir( $cache_folder );
         $cache_file = $cache_folder . DIRECTORY_SEPARATOR . 'index.html'; 
+    }
+    if ( isset( $_GET['q_url']) && $_GET['q_url'] ) {
+        $cache_folder = AMP_pathFlip(AMP_SYSTEM_CACHE_PATH . DIRECTORY_SEPARATOR . 'pretty_url');
+        $cache_file = $cache_folder . DIRECTORY_SEPARATOR . $_GET['q_url'] . '.html'; 
+    }
+    if ( $cache_folder ) {
+        AMP_mkdir($cache_folder );
     }
     if ($cache_file && !file_exists($cache_file) ) {
         $cache_out = fopen( $cache_file, 'w' );
