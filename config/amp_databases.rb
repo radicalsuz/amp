@@ -51,7 +51,9 @@ class AmpDatabase
   def self.valid?(db_name)
     dbcon = new_connection
     dbcon.query("use " + db_name)
-    dbcon.query("show tables like 'articlereltype'").num_rows > 0
+    result = dbcon.query("show tables like 'articlereltype'").num_rows > 0
+	dbcon.close
+	result
   end
 
   def valid?
