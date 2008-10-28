@@ -327,7 +327,7 @@ class Article extends AMPSystem_Data_Item {
     function isDisplayable( ) {
         if( !$this->isLive( )) return false;
         $excluded_classes = AMP_lookup( 'excluded_classes_for_display' );
-        if( array_search( $excluded_classes, $this->getClass( )) !== FALSE ) return false;
+        if( array_search( $this->getClass( ), $excluded_classes ) !== FALSE ) return false;
 
 		require_once ( 'AMP/Content/Section.inc.php' );
         $section = new Section( AMP_dbcon( ), $this->getSection( ));

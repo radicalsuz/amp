@@ -2,13 +2,27 @@
 
 $request = ( isset( $_GET['q_url'] ) && $_GET['q_url'] ) ? $_GET['q_url'] : false;
 require_once( 'AMP/Base/Config.php');
-require_once( 'AMP/Content/Page.inc.php' );
+require_once( 'AMP/Dispatcher.php' );
 
 if ( $cached_output = AMP_cached_request( )) {
     print $cached_output;
     exit;
 }
 
+if( $request && ( $controller = AMP_Dispatcher::respond( $request ))) {
+    $controller->execute( );
+} else {
+    AMP_make_404();
+    exit;
+}
+require_once("AMP/BaseFooter.php");
+
+//add the section header
+/*
+$content->add( $display ); 
+ */
+
+/*
 if( $request ) $route = AMP_dispatch_for( $request );
 if( !( $request && $route )) {
   AMP_make_404();
@@ -28,18 +42,7 @@ $content = & $currentPage->contentManager;
 $page_method = 'set' . $target_class;
 $currentPage->$page_method( $route['target_id'] );
 $currentPage->initLocation();
+ */
 
-//add the section header
-if( !isset( $display->pager ) || $display->pager->is_first_page( )) {
-    if( method_exists( $display, 'render_intro')) {
-        $content->add( $display->render_intro( ), AMP_CONTENT_DISPLAY_KEY_INTRO ) ;
-    } else {
-        $content->add( $currentPage->getListDisplayIntro( ), AMP_CONTENT_DISPLAY_KEY_INTRO );
-    }
-}
-
-$content->add( $display ); 
-
-require_once("AMP/BaseFooter.php");
 
 ?>

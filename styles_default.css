@@ -379,6 +379,7 @@ div.form_header, span.form_header {
 	padding: .5em;
 	margin: .25em;
     clear: both;
+	display: block;
 }
 
 form .row {
@@ -551,6 +552,8 @@ ol.comments_list li.list_item p {
 .map_block {
 	margin: 0 1em 3em 1em;  
 }
+.map_block .list_item { width: auto; padding: 2px 2px 2px 2px; }
+
 .map_2 {
 	margin-left: 2em;
 }
