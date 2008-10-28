@@ -95,7 +95,7 @@ namespace :amp do
       @updates ||= Dir.new( MIGRATIONS_PATH ).entries.select{ |f| Regexp.new( "^#{version}" ).match f }
     end
     def one_time_sql_updates
-      @updates ||= Dir.new( MIGRATIONS_PATH ).entries.select{ |f| Regexp.new( "one_time_update_#{version}" ).match f }
+      @one_time_updates ||= Dir.new( MIGRATIONS_PATH ).entries.select{ |f| Regexp.new( "one_time_update_#{version}" ).match f }
     end
     def version
       version = ENV['VERSION'] || Dir.new( MIGRATIONS_PATH ).entries.select{ |f| f =~ /^\d\.\d{1,2}/ }.max[ /[\d\.]+/, 0 ]

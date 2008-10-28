@@ -20,6 +20,10 @@ class AmpDatabase
   end
 
   def self.new_connection( db_name = nil )
+	if !(@connection_warning || ENV['MYSQL_HOST'])
+		puts "this script runs against localhost unless MYSQL_HOST is specified" 
+	    @connection_warning = true	
+	end
     @mysql_host ||= ENV['MYSQL_HOST'] || 'localhost'
     @mysql_user ||= ENV['MYSQL_USER'] || 'root'
     unless @mysql_pass
