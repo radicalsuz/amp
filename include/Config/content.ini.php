@@ -21,7 +21,7 @@ sections_and_content=3
 articles_and_sections=6
 articles_grouped=2
 
-[next sectionlist]
+[text sectionlist]
 default="Articles"
 articles="Articles"
 sections="Sections"
