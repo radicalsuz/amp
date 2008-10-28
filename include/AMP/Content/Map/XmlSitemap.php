@@ -32,6 +32,7 @@ class AMP_Content_Map_XmlSitemap{
         $this->section_keys = $this->getSectionKeys( );
         
         $this->host = 'http://'.$_SERVER['SERVER_NAME'].'/';
+        #$this->host = AMP_SITE_URL;
     }
     
     function getArticleKeys( ){
