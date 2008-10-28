@@ -82,7 +82,7 @@ class AMP_Content_Section_Display_Info {
         if( AMP_CONTENT_HUMANIZE_URLS ) {
             return AMP_route_for( 'section', $this->_section->id );
         } else {
-            return AMP_URL_AddVars( AMP_SITE_URL . $this->_section->getURL_default( ), array( 'preview=1', 'cache=0' ) ),
+            return AMP_URL_AddVars( AMP_SITE_URL . $this->_section->getURL_default( ), array( 'preview=1', 'cache=0' ) );
         }
     }
 
