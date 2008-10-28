@@ -5,6 +5,7 @@ require_once ( 'AMP/Content/Image.inc.php' );
 require_once ( 'AMP/System/File/Image.php' );
 require_once ( 'AMP/Content/Article/Display.inc.php' );
 require_once ( 'AMP/Content/Config.inc.php');
+require_once ( 'AMP/Content/Article/Public/Includes.php');
 
 /**
  * Article 

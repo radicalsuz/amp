@@ -1,4 +1,5 @@
 <?php
+require_once( 'AMP/Content/Article/Public/Detail.php');
 
 class Article_Public_Detail_Pressrelease extends Article_Public_Detail {
 

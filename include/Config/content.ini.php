@@ -13,20 +13,29 @@ activate_forums=false
 form_container="udm_form_%s"
 list_container="udm_list_%s"
 
+
 [sectionlist]
 articles=1
-newsroom=2
-subsections=5
-articles_by_subsection=3
-subsections_plus_articles=6
-articles_aggregator=7
+sections=5
+sections_and_content=3
+articles_and_sections=6
+articles_grouped=2
+
+[next sectionlist]
+default="Articles"
+articles="Articles"
+sections="Sections"
+sections_and_content="Sections and their Contents"
+articles_and_sections="Articles and Sections"
+articles_grouped="Articles Grouped By Tag/Class"
 
 [section display]
-default="ArticleSet_Display"
-articles="ArticleSet_Display"
-subsections="SectionSet_Display"
-articles_aggregator="ArticleSet_Display"
-grouped="Article_Public_List"
+default="Article_Public_List"
+articles="Article_Public_List"
+sections="Section_Public_List"
+articles_grouped="Article_Public_List_Grouped"
+sections_and_content="Section_Public_List_Contents"
+articles_and_sections="Article_Public_List_Sections"
 
 [content section listsort article]
 alpha="title"
@@ -35,7 +44,7 @@ newest="date DESC, id DESC"
 ordered="if ( !isnull( pageorder ) and pageorder, pageorder, 9999999 ), if ( date != '0000-00-00', date, '2050-12-31') DESC, id DESC"
 
 [content article search map]
-list_prefix="legacy"
+list_prefix="standard"
 
 [content section listsort section]
 alpha="type"
@@ -44,9 +53,9 @@ newest="date2 DESC, id DESC"
 ordered="if ( !isnull( textorder ) and textorder, textorder, 9999999 ), if ( date2 != '0000-00-00', date2, '2050-12-31') DESC, id DESC"
 
 [content classlist display]
-default="ContentClass_Display"
-blog="ContentClass_Display_Blog"
-frontpage="ContentClass_Display_FrontPage"
+default="Article_Public_List"
+blog="Article_Public_List_Blog"
+frontpage="Article_Public_List_Frontpage"
 
 [content status]
 live=1
@@ -85,11 +94,14 @@ blurb_length_default=750
 blurb_length_max=9000
 
 [article display]
-default="Article_Display"
-frontpage="ArticleDisplay_FrontPage"
-news="ArticleDisplay_News"
-pressrelease="ArticleDisplay_PressRelease"
-blog="ArticleDisplay_Blog"
+default="Article_Public_Detail"
+frontpage="Article_Public_Detail_FrontPage"
+news="Article_Public_Detail_News"
+pressrelease="Article_Public_Detail_PressRelease"
+blog="Article_Public_Detail_Blog"
+
+[content workflow]
+enabled=1
 
 [content tag display]
 default="Article_Public_List"
@@ -174,6 +186,9 @@ customformat=false
 [module id]
 content=19
 
+[module share]
+logging=true
+
 [content section id]
 tool_pages=2
 trash=2
@@ -229,9 +244,6 @@ sectionheader=8
 usersubmitted=9
 frontpage=2
 
-[content workflow]
-enabled=0
-
 [content date]
 format="F jS, Y"
 
@@ -241,7 +253,7 @@ doc="render_document"
 sidebar="render_sidebar"
 
 [render article]
-photocredit=false
+photocredit=true
 
 [render display class]
 publicpage="Article_Public_Detail_Page"

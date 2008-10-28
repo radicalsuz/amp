@@ -4,6 +4,7 @@ require_once ( 'AMP/System/Data/Item.inc.php' );
 require_once ( 'AMP/Content/Image.inc.php' );
 require_once ( 'AMP/Content/Section/Contents/Manager.inc.php' );
 require_once ( 'AMP/Content/Article.inc.php');
+require_once ( 'AMP/Content/Section/Public/Includes.php');
 require_once ( 'AMP/Content/RouteSlug/RouteSlug.php');
 
 class Section extends AMPSystem_Data_Item {
