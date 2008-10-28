@@ -12,7 +12,7 @@ set :deploy_via, :remote_cache
 set :current_dir, "../public_html"
 set :use_sudo, false
 
-role(:app,  "gertie.radicaldesigns.org", "sft.slice.radicaldesigns.org",  "sadie.radicaldesigns.org", "grace.radicaldesigns.org" )
+role(:app,  "gertie.radicaldesigns.org", "sft.slice.radicaldesigns.org",  "sadie.radicaldesigns.org", "grace.radicaldesigns.org", "cindy.radicaldesigns.org" )
 
 role :db,   "gertie.radicaldesigns.org"
 #role :db,  "sadie.radicaldesigns.org", :primary => true
