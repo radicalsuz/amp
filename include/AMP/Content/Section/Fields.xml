@@ -22,7 +22,7 @@
 		<type>select</type>
 		<label>Subsection of</label>
         <lookup>
-            <name>section_map_excluding_section</name>
+            <name>section_map</name>
         </lookup>
         <required>1</required>
 	</parent>

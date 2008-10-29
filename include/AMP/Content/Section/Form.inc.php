@@ -23,6 +23,7 @@ class Section_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'date2', '_makeDbDateTime', 'get' );
         $current_section_id = isset( $_GET['id']) ? intval( $_GET['id'] ) : false ;
         $this->fields['parent']['lookup']['var'] = $current_section_id;
+        $this->fields['parent']['lookup']['name'] = 'section_map_excluding_section'
         if( !AMP_CONTENT_HUMANIZE_URLS) {
             unset( $this->fields['route_slug'] );
         }
