@@ -8,11 +8,17 @@ subsections=5
 articles_by_subsection=3
 subsections_plus_articles=6
 articles_aggregator=7
+sections=false
+sections_and_content=false
+articles_grouped=false
+articles_and_sections=false
 
 [section display]
 default="ArticleSet_Display"
 articles="ArticleSet_Display"
 subsections="SectionSet_Display"
+subsections_plus_articles ="SectionContentDisplay_SubsectionsPlusArticles"
+articles_by_subsection="SectionContentDisplay_ArticlesBySubsection"
 articles_aggregator="ArticleSet_Display"
 grouped="Article_Public_List"
 

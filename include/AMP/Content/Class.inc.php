@@ -100,8 +100,10 @@ class ContentClass extends AMPSystem_Data_Item {
     */
 
     function &getDisplay() {
-        include_once( 'AMP/Content/Class/Display_Blog.inc.php');
-        include_once( 'AMP/Content/Class/Display_FrontPage.inc.php');
+        #include_once( 'AMP/Content/Class/Display_Blog.inc.php');
+        #include_once( 'AMP/Content/Class/Display_FrontPage.inc.php');
+        include_once( 'AMP/Content/Article/Public/List/Frontpage.php');
+        include_once( 'AMP/Content/Article/Public/List/Blog.php');
 
         $displays = AMP_lookup( 'class_displays');
         $display_class = isset( $displays[$this->id] ) ? $displays[ $this->id ] : AMP_CONTENT_CLASSLIST_DISPLAY_DEFAULT;
