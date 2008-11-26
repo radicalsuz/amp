@@ -1824,7 +1824,7 @@ function AMP_absolute_urls( $html ) {
     $url = AMP_SITE_URL;
 
     $pattern = '/(href|src|background|action)\s?=\s?["\']((?!http)[]\w\d\.\/?=&[+% -]*)["\']/i';
-    $replace = '$1="'.$url.'/$2"';
+    $replace = '$1="'.$url.'$2"';
     $data =  preg_replace($pattern, $replace, $html);
     /*
 
