@@ -886,6 +886,21 @@ class UserData {
             $this->fields['publish']=$publish_field;
         }
 
+        //override from custom folder
+        $override_file_name ='form'.$this->instance.'.xml';
+        $override_fields = false;
+        $cache_key = AMP_CACHE_TOKEN_XML_DATA . $override_file_name;
+        if ( !( $override_fields = &AMP_cache_get( $cache_key ))) {
+            if ( file_exists_incpath( $override_file_name )) {
+                require( 'AMP/System/XMLEngine.inc.php');
+                $fieldsource = & new AMPSystem_XMLEngine( $override_file_name );
+                $override_fields = $fieldsource->readData() ;
+            }
+        }
+        if( $override_fields ) {
+            $this->fields = array_merge( $this->fields, $override_fields );
+            AMP_cache_set( $cache_key, $override_fields );
+        }
         return true;
 
     }
