@@ -324,6 +324,11 @@ class AMP_Renderer_HTML extends AMPDisplay_HTML {
         return AMP_buildSelect( $name, $options, $value, $this->makeAttributes( $attr_set ));
     }
 
+    function multiselect( $name, $value = null, $options = array( ), $attr_set = array( )) {
+        return AMP_buildSelect( $name, $options, $value, $this->makeAttributes( $attr_set ));
+    }
+
+
     function form( $content, $attr_set = array( ) ) {
         return $this->tag( 'form', $content, $attr_set );
     }

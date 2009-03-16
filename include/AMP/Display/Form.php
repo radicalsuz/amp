@@ -281,7 +281,16 @@ class AMP_Display_Form {
                 ), $name );
     }
 
-    function render_field_select( $name, $field_def ) {
+    function render_field_multiselect( $name, $field_def ) {
+        $options = $this->render_select_options( $name, $this->discover_options( $field_def ) );
+        return 
+            $this->format_field( 
+              $this->render_label( $name, $this->get_field_def( $name, 'label' ) )
+            . $this->format_element( 
+                $this->_renderer->multiselect( $name, $this->get( $name ), $options, $this->get_field_def( $name, 'attr') )
+                ), $name );
+    }
+    function discover_options( $field_def ) {
         $options = array( );
         if ( isset( $field_def['lookup']) && $field_def['lookup']) {
             $options = AMP_evalLookup( $field_def['lookup']);
@@ -297,7 +306,11 @@ class AMP_Display_Form {
                 }
             }
         }
-        $options = $this->render_select_options( $name, $options );
+        return $options;
+    }
+
+    function render_field_select( $name, $field_def ) {
+        $options = $this->render_select_options( $name, $this->discover_options( $field_def ) );
 
         return 
             $this->format_field( 
