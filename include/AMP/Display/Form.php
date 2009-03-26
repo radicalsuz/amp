@@ -97,6 +97,7 @@ class AMP_Display_Form {
     function _after_add_fields( ) {
         $this->_init_default_values( );
         $this->_init_spam_check(  );
+        $this->_init_request(  );
     }
 
     function _init_spam_check(  ) {
@@ -125,8 +126,6 @@ class AMP_Display_Form {
         if ( !empty( $this->_request_vars)) {
             $this->_request_values_clean = $this->clean( $this->_request_vars );
         }
-        
-
     }
 
     function _init_fields( ) {
@@ -151,7 +150,6 @@ class AMP_Display_Form {
             return $this->add_xml_fields( file_get_contents( $override_xml_file , 1 ));
         }
         return $this->add_xml_fields( $xml );
-
     }
 
     function add_xml_fields( $xml ) {
@@ -282,7 +280,7 @@ class AMP_Display_Form {
     }
 
     function render_field_multiselect( $name, $field_def ) {
-        $options = $this->render_select_options( $name, $this->discover_options( $field_def ) );
+        $options = $this->discover_options( $field_def );
         return 
             $this->format_field( 
               $this->render_label( $name, $this->get_field_def( $name, 'label' ) )

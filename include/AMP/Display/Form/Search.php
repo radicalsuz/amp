@@ -54,12 +54,17 @@ class AMP_Display_Form_Search extends AMP_Display_Form {
             if (!isset( $this->_fields[ $ukey ] )) continue;
             if ( $uvalue==="" ) continue;
             if ( ($this->_fields[$ukey]['type']=='text') && ($uvalue == $this->_fields[$ukey]['label'])) continue;
-            if ( ($this->_fields[$ukey]['type']=='date') && is_array( $uvalue )
-                  && isset( $uvalue['M']) && isset( $uvalue['d']) && isset( $uvalue['Y'])
-                  && $uvalue['M'] && $uvalue['d'] && $uvalue['Y'] ) {
-                $search_values[ $ukey ] =  mktime(0,0,0, $uvalue['M'], $uvalue['d'], $uvalue['Y']);
-                continue;
+            if ( ($this->_fields[$ukey]['type']=='text') && ($uvalue == $this->_fields[$ukey]['default'])) continue;
+            if ( ($this->_fields[$ukey]['type']=='date') && is_array( $uvalue )) {
+            	if ( isset( $uvalue['Y']) && $uvalue['Y'] ) {
+					$search_values[ $ukey ] =  $uvalue;
+				} 
+				continue;
             }
+			if ( is_array( $uvalue ) && $this->_fields[$ukey]['type']!='date') {
+				$search_values[ $ukey ] = join(',', $uvalue );
+				continue;
+			}
             
             $search_values[ $ukey ] = strip_tags( $uvalue );
         }
