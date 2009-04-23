@@ -785,6 +785,12 @@ class Article extends AMPSystem_Data_Item {
         return 'id in( ' . join( ',', array_keys( $tagged_articles )) . ')';
     }
 
+    function makeCriteriaTagSets( $tagsets ) {
+        $tagset_criteria = array_map( array( $this, 'makeCriteriaTag'), $tagsets );
+        $tagset_criteria_text  = join( " AND ", $tagset_criteria );
+        return "( $tagset_criteria_text )";
+    }
+
     function makeCriteriaFrontpage( $value ) {
         if ( !$value ) return false;
         return 'fplink=1';
