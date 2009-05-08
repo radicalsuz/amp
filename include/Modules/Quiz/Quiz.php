@@ -42,7 +42,9 @@ class Quiz {
         if( !isset( $id )) {
             $id = 1;
         }
-        $sql = 'select * from quiz where id = '. $this->dbcon->qstr( $this->id );
+       # $sql = 'select * from quiz where id = '. $this->dbcon->qstr( $this->id ) ; 
+		$sql = 'select * from quiz where id = '. $this->dbcon->qstr( $this->id ) .' and section = '. $this->dbcon->qstr( $this->section );
+
 
 		$this->q = $this->dbcon->CacheExecute($sql);# or DIE($this->dbcon->ErrorMsg());
         if(  $this->q ) {
@@ -56,6 +58,7 @@ class Quiz {
 		$o .= '<form action="quiz.php" method="post">';
 		#$o .= '<input type="hidden" name="quiz" value="'.$this->id.'">';
 		$o .= '<input type="hidden" name="question_id" value="'.$this->id.'">';
+		$o .= '<input type="hidden" name="section_id" value="'.$this->section.'">';
 		$o .= '<table>';
 		$o .= $this->build_questions(); 
 		$o .= '</table>';
@@ -98,14 +101,16 @@ class Quiz {
 	}
 	
 	function show_next_question() {
-		$ct = $this->dbcon->CacheExecute("select count(id) qty from quiz where publish =1 ");# or DIE($this->dbcon->ErrorMsg());
+		$section = $this->section;
+		$questionid = $this->id;
+		$ct = $this->dbcon->CacheExecute("select count(id) qty from quiz where publish =1 and  section = $section and id > $questionid");# or DIE($this->dbcon->ErrorMsg());
         if ( !$ct ){
             return '';
         }
 
 		$count =  $ct->Fields("qty");
-		if ($this->id <= ($count-1)) {
-			$o = '<p><a href="quiz.php?question_id='.($this->id + 1).'">Next Question</a></p>';
+		if ($count != 0 ) {
+			$o = '<p><a href="quiz.php?question_id='.($this->id + 1).'&section_id='.($this->section).'">Next Question</a></p>';
 		} else {
 			$o = '<br><br><h3><b>Thank you for taking our quiz!<br><br>Learn more by taking a look around our website</h3>';
 		}
