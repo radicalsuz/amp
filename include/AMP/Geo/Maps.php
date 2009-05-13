@@ -137,8 +137,8 @@ Class Maps {
 			} else {
 				$geo = new Geo($this->dbcon);
 				$geo->City = $R->Fields("City");
-				#$geo->State = $R->Fields("State");
-				$geo->State = "CA";
+				$geo->State = $R->Fields("State");
+				#$geo->State = "CA";
                 $geo->city_fulltext = true;
                 $geo->city_soundex = true;
 				$geo->city_lookup();
