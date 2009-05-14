@@ -17,7 +17,7 @@
 	<header2>
 		<type>textarea</type>
 		<label>HTML Template</label>
-        <size>80:65</size>
+        <size>40:100</size>
 	</header2>
     <!--
 	<header3>
@@ -128,7 +128,7 @@
 	<extra_header>
 		<type>textarea</type>
 		<label>Extra Headers</label>
-        <size>6:65</size>
+        <size>30:65</size>
 	</extra_header>
 
 </array>
