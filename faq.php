@@ -19,8 +19,19 @@ include("AMP/BaseTemplate.php");
 include("AMP/BaseModuleIntro.php");  
 include_once("AMP/System/Email.inc.php");
 
- 
-if (isset($_REQUEST["MM_insert"])){
+$captcha_valid = false;
+$captcha_message = '';
+if (isset($_POST['MM_insert'])&&$_POST['MM_insert']) {
+    require_once( 'AMP/Form/Element/Captcha.inc.php');
+    $captcha_demo = &new PhpCaptcha( array( ) );
+    $captcha_valid = $captcha_demo->Validate( $_POST['captcha']);
+    if ( !$captcha_valid ) {
+        $_REQUEST['kill_insert'] = 'captcha';
+		$_GET['showask'] = '1';
+        $captcha_message = AMP_TEXT_ERROR_FORM_CAPTCHA_FAILED;
+    }
+}
+if (isset($_REQUEST["MM_insert"]) && $_REQUEST["MM_insert"] && $captcha_valid ){
 
 	$MM_editTable  = "faq";
    	$MM_editRedirectUrl = "faq.php";
@@ -77,8 +88,25 @@ if ($_GET["showask"] == (1)) { ?>
                 <tr> 
                   <td class="form"><b>E-mail</b></td><td> 
                     <input type="text" name="email" size="40">
+                    </div>
+                  </div>
                   </td>
                 </tr>
+                <tr> 
+                  <td class="form"></td><td> 
+                   <br />
+<div align="left"> 
+                  First, enter the code from the image below 
+                        <span class='red'><font color = 'red'><?php print $GLOBALS['captcha_message']; ?></font></span><BR />
+                        <img src='<?php print AMP_url_add_vars( AMP_CONTENT_URL_CAPTCHA, array( 'key=' . AMP_SYSTEM_UNIQUE_VISITOR_ID ));?>'/>
+					 <div align="left"> 
+                  <p>
+                      <input name="captcha" type="text" id="captcha" size="8"/>
+                      <input name='AMP_SYSTEM_UNIQUE_VISITOR_ID' type='hidden' value='<?php print AMP_SYSTEM_UNIQUE_VISITOR_ID; ?>'/>
+                    </p>
+                  </td>
+                </tr>
+ 
                 <tr> 
                   <td class="form"> 
                     <input type="submit" name="Submit" value="Submit">
