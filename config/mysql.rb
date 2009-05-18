@@ -14,7 +14,7 @@ class Mysql
   MAX_PACKET_LENGTH = 256*256*256-1
   MAX_ALLOWED_PACKET = 1024*1024*1024
 
-  if !File.exist("/tmp/mysql.sock")
+  if !File.exist?("/tmp/mysql.sock")
 	  MYSQL_UNIX_ADDR = "/var/run/mysqld/mysqld.sock"
   else
 	  MYSQL_UNIX_ADDR = "/tmp/mysql.sock"

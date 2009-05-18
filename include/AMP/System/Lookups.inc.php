@@ -72,8 +72,12 @@ class AMPSystem_Lookup {
     var $basetype = 'AMPSystem';
 
     function AMPSystem_Lookup() {
-        $this->init();
+        $this->__construct();
     }
+
+	function __construct() {
+        $this->init();
+	}	
 
     function init() {
         $factory = & AMPSystem_LookupFactory::instance();

@@ -13,15 +13,12 @@ namespace :amp do
 	  db.update sql
 	  
 	  # remove non-alpha-numeric characters from route slug
-	  AmpDatabase.find.each do |db_name, db|
 		items = db.matches "select * from route_slugs where name REGEXP '[^-A-Z0-9a-z]'"
 		items.each do |item|
 		  db.update "UPDATE route_slugs set name='#{item['name'].gsub(/[^-A-Z0-9a-z]/, '')}' where id=#{item['id']}"
 		end
-	  end
 
 	  # de-dup route slugs with same name by appending a number to end of name
-	  AmpDatabase.find.each do |db_name, db|
 		items = db.matches "select count(id) as quantity, name from route_slugs group by name having quantity > 1"
 		items.each do |item|
 		  multi_name_record = db.matches "select * from route_slugs where name = '#{item['name']}'"
@@ -30,7 +27,6 @@ namespace :amp do
 			db.update "update route_slugs set name='#{record['name'] + '-' + i.to_s}' where id = #{record['id']}"
 		  end
 		end
-	  end
 	end
 	desc "drop existing pretty urls"
 	task :clear do

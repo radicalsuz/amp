@@ -1,5 +1,5 @@
 <?php
-require_once( 'AMP/System/Introtext.inc.php');
+require_once( 'AMP/System/IntroText.inc.php');
 require_once( 'AMP/System/UserData.php');
 require_once( 'Modules/WebAction/WebAction.php');
 require_once( 'Modules/WebAction/Target/Target.php');
