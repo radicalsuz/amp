@@ -211,7 +211,7 @@ class AMPSystem_Lookup {
 }
 
 class AMPSystemLookup_Lookups {
-    var $_include_modules = array( 'schedule', 'form', 'calendar', 'voterGuide' );
+    var $_include_modules = array( 'schedule', 'form', 'calendar' );
     var $dataset;
 
     function AMPSystemLookup_Lookups( ){

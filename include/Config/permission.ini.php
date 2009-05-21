@@ -113,7 +113,4 @@ access=9
 admin=54
 added_content=98
 
-[voterguide]
-access=252
-publish=253
 ;?>
