@@ -360,6 +360,7 @@ class Article extends AMPSystem_Data_Item {
 
     function _afterRead( ) {
         if( AMP_CONTENT_HUMANIZE_URLS) {
+			AMP_lookup_clear_cached('article_routes');
             $current_route = AMP_route_for( 'article', $this->id );
             if( $current_route && $current_route != $this->getURL_without_pretty_urls( )) {
                 $this->mergeData(  array( 'route_slug' => $current_route ));

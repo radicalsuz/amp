@@ -29,7 +29,7 @@ class AMPSystem_LookupFactory {
             trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, get_class( $lookup ), 'result_field' ));
             return false;
         }
-        if ( ! ($data = $this->dbcon->CacheGetAssoc( $this->assembleSQL( $lookup ) ))) {
+        if ( ! ($data = $this->dbcon->GetAssoc( $this->assembleSQL( $lookup ) ))) {
             if ($dbError = $this->dbcon->ErrorMsg()) 
                 trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_SQL_FAILED, get_class($lookup), $dbError ) );
             return false;
