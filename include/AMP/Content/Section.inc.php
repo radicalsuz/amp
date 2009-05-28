@@ -336,20 +336,21 @@ class Section extends AMPSystem_Data_Item {
         $finder = new AMP_Content_RouteSlug( AMP_dbcon( ));
         $slugs = $finder->find( array( 'owner_type' => 'section', 'owner_id' => $this->id));
         $assigned_slug = $this->getData( 'route_slug' );
-        if( empty( $slugs )) {
-            if( !$assigned_slug ) return true;
-            $slug = $finder;
-            $slug->mergeData( array( 'owner_type' => 'section', 'owner_id' => $this->id ));
-        } else {
-            $slug = current( $slugs );
-            if( $slug->getName( ) == $assigned_slug ) return true;
-            if( !$assigned_slug ) {
-                $slug->delete( );
-                return $slug->update_routes( );
-            }
+        if( empty( $slugs ) && !$assigned_slug ) return true;
+		$slug_exists = false;
+
+		foreach($slugs as $slug) {
+            if( $slug->getName( ) == $assigned_slug ) {
+				$slug_exists = true;
+				continue;
+			}
+			$slug->delete( );
         }
 
-        $slug->mergeData( array( 'name' => $assigned_slug ));
+		if ($slug_exists) return true;
+
+		$slug = $finder;
+		$slug->mergeData( array( 'owner_type' => 'section', 'owner_id' => $this->id, 'name' => $assigned_slug ));
         $slug->force_valid_slug( );
         return $slug->save( );
     }

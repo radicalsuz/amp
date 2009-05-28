@@ -360,7 +360,6 @@ class Article extends AMPSystem_Data_Item {
 
     function _afterRead( ) {
         if( AMP_CONTENT_HUMANIZE_URLS) {
-			AMP_lookup_clear_cached('article_routes');
             $current_route = AMP_route_for( 'article', $this->id );
             if( $current_route && $current_route != $this->getURL_without_pretty_urls( )) {
                 $this->mergeData(  array( 'route_slug' => $current_route ));
@@ -537,20 +536,22 @@ class Article extends AMPSystem_Data_Item {
         $finder = new AMP_Content_RouteSlug( AMP_dbcon( ));
         $slugs = $finder->find( array( 'owner_type' => 'article', 'owner_id' => $this->id));
         $assigned_slug = $this->getData( 'route_slug' );
-        if( empty( $slugs )) {
-            if( !$assigned_slug ) return true;
-            $slug = $finder;
-            $slug->mergeData( array( 'owner_type' => 'article', 'owner_id' => $this->id ));
-        } else {
-            $slug = current( $slugs );
-            if( $slug->getName( ) == $assigned_slug ) return true;
-            if( !$assigned_slug ) {
-                $slug->delete( );
-                return $slug->update_routes( );
-            }
+        if( empty( $slugs ) && !$assigned_slug ) return true;
+		$slug_exists = false;
+
+		foreach($slugs as $slug) {
+            if( $slug->getName( ) == $assigned_slug ) {
+				$slug_exists = true;
+				continue;
+			}
+
+			$slug->delete( );
         }
 
-        $slug->mergeData( array( 'name' => $assigned_slug ));
+		if($slug_exists) return true;
+
+		$slug = $finder;
+        $slug->mergeData( array( 'name' => $assigned_slug, 'owner_type' => 'article', 'owner_id' => $this->id ));
         $slug->force_valid_slug( );
         return $slug->save( );
     }
