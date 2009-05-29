@@ -46,6 +46,12 @@ class AMP_Content_RouteSlug extends AMPSystem_Data_Item {
         AMP_lookup_clear_cached( 'section_routes');
         AMP_lookup_clear_cached( 'dispatch_for');
     }
+
+    function getOwner() {
+        $owner_class = ucfirst($this->getData('owner_type'));
+        require_once('AMP/Content/'.$owner_class .'.inc.php');
+        return new $owner_class( AMP_dbcon(), $this->getData('owner_id') );
+    }
 }
 
 ?>

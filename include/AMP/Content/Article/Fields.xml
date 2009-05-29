@@ -76,6 +76,13 @@
 		<label>Pretty URL &lt;br /&gt;&lt;span class=photocaption&gt;all lowercase. &lt;br /&gt;use only letters, numbers, dashes&lt;br /&gt;must be unique&lt;/span&gt;</label>
 		<block>title_options</block>
 	</route_slug>
+    <route_slug_grabber>
+        <type>static</type>
+        <default>
+			&lt;div id=&quot;route_slug_details&quot;&gt;&lt;/div&gt;
+		</default>
+		<block>title_options</block>
+	</route_slug_grabber>
     <subtitle>
         <label>Subtitle</label>
         <type>textarea</type>

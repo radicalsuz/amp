@@ -970,11 +970,11 @@ function AMP_cached_image_request( ) {
 
 }
 
-function AMP_assert_var( $varname ) {
-    if ( !isset( $_REQUEST['varname'])) {
+function AMP_params( $varname ) {
+    if ( !isset( $_REQUEST[$varname])) {
         return false;
     }
-    return $_REQUEST['varname'];
+    return $_REQUEST[$varname];
 }
 
 function AMP_cached_request( $timeout = null  ){
@@ -2452,6 +2452,12 @@ function AMP_block_frequent_requesters( ) {
 function &AMP_dbcon( ) {
     $dbcon = &AMP_Registry::getDbcon( );
     return $dbcon;
+}
+
+function AMP_to_json( $value ) {
+    require_once('JSON/JSON.php');
+    $service = new Services_JSON();
+    return $service->encode($value);
 }
 
 ?>

@@ -137,7 +137,7 @@ EVENTCODE
 
     function _initPhotoLookup( $header ) {
         $init_script = <<<PHOTOCODE
-		Event.observe( document.forms['article'].elements['picture'], 'change', function( ) {
+        Event.observe( document.forms['article'].elements['picture'], 'change', function( ) {
     var picture_filename = document.forms['article'].elements['picture'].value;
     var photo_data = photo_data_maker( );
 
@@ -215,17 +215,34 @@ PHOTOCODE_SUPPORT;
     function _initPrettyUrlCreation( &$header ){
         if( !AMP_CONTENT_HUMANIZE_URLS ) return;
         $pretty_url_builder = <<<SCRIPT
-            jq( function( ) {
-                console.log( jq( 'form#article input[name=route_slug]' ).val( ).length);
                 if( jq( 'form#article input[name=route_slug]' ).val( ) === "") {
                    jq( 'form#article textarea[name=title]').change(  function( ev ) {
                         var new_val =  jq( this ).val( ).replace( /[\s_]/g,'-').replace( /[^-A-z0-9]/g, '').toLowerCase( );
                         jq( 'form#article input[name=route_slug]' ).val( new_val );
                    });
                 }
+SCRIPT;
+        $conflict_checker = <<<SCRIPT
+               jq( 'form#article input[name=route_slug]').change(  function( ev ) {
+                    jq.getJSON('/system/route_slug_ajax.php?slug_name=' + jq( this ).val() + '&ignore[0][owner_type]=%s&ignore[0][owner_id]=%s', function( result ) {
+                        jq( '#route_slug_details' ).html( "allowed url: %s" + result.clean_url );
+                        if ( result.conflicts.length > 0 ) {
+                            jq('#route_slug_details').append( "<br/>conflicts: " );
+                            jq.each( result.conflicts, function() {
+                                jq('#route_slug_details').append( "<a href='" + this.owner_edit_url + "'>" + this.owner_type + " #"+ this.owner_id + "</a>" );
+                            } );
+                        }
+                    } );
+               });
+SCRIPT;
+        $page_load_wrapper = <<<SCRIPT
+            jq( function( ) {
+                %s
             });
 SCRIPT;
-        $header->addJavascriptDynamic( $pretty_url_builder );
+        $values = $this->getValues();
+        $conflict_check = sprintf( $conflict_checker, 'article',  $values['id'], AMP_SITE_URL );
+        $header->addJavascriptDynamic( sprintf( $page_load_wrapper, $pretty_url_builder . $conflict_check ));
     }
 
     function _makeNullDate( $data, $fieldname ) {
@@ -237,12 +254,12 @@ SCRIPT;
         $editor->height = '600';
     }
 
-	/*
+    /*
     function execute( ){
         $value = parent::execute( );
         return $value;
     }
-	 */
+     */
 
     function _initTabDisplay( &$header ){
         $header->addJavaScript( 'scripts/tabs.js', 'tabs');
