@@ -73,9 +73,14 @@
 	</title_options>
 	<route_slug>
 		<type>text</type>
-		<label>Pretty URL &lt;br /&gt;&lt;span class=photocaption&gt;all lowercase. &lt;br /&gt;use only letters, numbers, dashes&lt;br /&gt;must be unique&lt;/span&gt;</label>
+		<label>&lt;input type=submit id=manual_route_check value=Check&gt;Pretty URL</label>
 		<block>title_options</block>
 	</route_slug>
+    <route_slug_info>
+		<type>static</type>
+		<default>&lt;span class=photocaption&gt;All lowercase. Use only letters, numbers, dashes. Must be unique&lt;/span&gt;</default>
+		<block>title_options</block>
+    </route_slug_info>
     <route_slug_grabber>
         <type>static</type>
         <default>

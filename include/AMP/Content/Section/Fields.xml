@@ -33,8 +33,18 @@
 	</textorder>
 	<route_slug>
 		<type>text</type>
-		<label>Pretty URL &lt;br /&gt;&lt;span class=photocaption&gt;all lowercase. &lt;br /&gt;use only letters, numbers, dashes&lt;br /&gt;must be unique&lt;/span&gt;</label>
+		<label>&lt;input type=submit id=manual_route_check value=Check&gt;Pretty URL</label>
 	</route_slug>
+    <route_slug_info>
+		<type>static</type>
+		<default>&lt;span class=photocaption&gt;All lowercase. Use only letters, numbers, dashes. Must be unique&lt;/span&gt;</default>
+    </route_slug_info>
+    <route_slug_grabber>
+        <type>static</type>
+        <default>
+			&lt;div id=&quot;route_slug_details&quot;&gt;&lt;/div&gt;
+		</default>
+    </route_slug_grabber>
     <date_redirect_header>
         <type>blocktrigger</type>
         <label>Date and Redirect</label>

@@ -26,6 +26,7 @@ class Section_Form extends AMPSystem_Form_XML {
         $this->fields['parent']['lookup']['name'] = 'section_map_excluding_section';
         if( !AMP_CONTENT_HUMANIZE_URLS) {
             unset( $this->fields['route_slug'] );
+            unset( $this->fields['route_slug_info'] );
         }
     }
 
@@ -42,18 +43,49 @@ class Section_Form extends AMPSystem_Form_XML {
     }
     function _initJavascriptActions( ){
         $header = &AMP_get_header( );
+        $this->_initPrettyUrlCreation( $header );
+	}
+
+    function _initPrettyUrlCreation( &$header ){
+        if( !AMP_CONTENT_HUMANIZE_URLS ) return;
         $pretty_url_builder = <<<SCRIPT
-            jq( function( ) {
                 if( jq( 'form#articletype input[name=route_slug]' ).val( ) === "") {
-                   jq( 'form#articletype input[name=type]').change(  function( ev ) {
+                   jq( 'form#articletype textarea[name=title]').change(  function( ev ) {
                         var new_val =  jq( this ).val( ).replace( /[\s_]/g,'-').replace( /[^-A-z0-9]/g, '').toLowerCase( );
                         jq( 'form#articletype input[name=route_slug]' ).val( new_val );
                    });
                 }
+SCRIPT;
+        $conflict_checker = <<<SCRIPT
+               jq( 'form#articletype input[name=route_slug]').change( check_route_ajax );  
+               jq( '#manual_route_check').click( check_route_ajax );  
+			   function check_route_ajax( ev ) {
+                    var system_domain = '%s';
+					var target = jq( 'form#articletype input[name=route_slug]' );
+                    jq.getJSON('/system/route_slug_ajax.php?slug_name=' + jq( target ).val() + '&ignore[0][owner_type]=%s&ignore[0][owner_id]=%s', function( result ) {
+                        if ( result.conflicts !== undefined && result.conflicts.length == 0 ) {
+                            jq( '#route_slug_details' ).html( "URL: " + system_domain + result.clean_url );
+                        } else {
+                            jq('#route_slug_details').html( "Warning: ");
+                            jq.each( result.conflicts, function() {
+                                jq('#route_slug_details').append( "This pretty url is already in use on <a href='" + this.owner_edit_url + "'>" + this.owner_type + " #"+ this.owner_id + "</a>" );
+                            } );
+                            jq('#route_slug_details').append( "<br/>Suggested Available URL: " + system_domain + result.clean_url );
+                        }
+                    } );
+					return false;
+               }
+SCRIPT;
+        $page_load_wrapper = <<<SCRIPT
+            jq( function( ) {
+                %s
             });
 SCRIPT;
-        $header->addJavascriptDynamic( $pretty_url_builder );
+        $values = $this->getValues();
+        $conflict_check = sprintf( $conflict_checker, AMP_SITE_URL, 'section',  $values['id'] );
+        $header->addJavascriptDynamic( sprintf( $page_load_wrapper, $pretty_url_builder . $conflict_check ));
     }
+
 
     function _send_preview_link_to_bottom( ) {
         //lower preview link
