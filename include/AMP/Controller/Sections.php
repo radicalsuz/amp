@@ -15,14 +15,15 @@ class AMP_Controller_Sections extends AMP_Controller {
     }
 
     function _render_section_header( $display ) {
+        if ( isset( $display->api_version ) && $display->api_version == 2 ) return;
 		$this->_page = &AMPContent_Page::instance();
-        if( !isset( $display->pager ) || $display->pager->is_first_page( )) {
-            if( method_exists( $display, 'render_intro')) {
-                $this->_render_intro( $display->render_intro( ) );
-            } else {
-                $this->_render_intro( $this->_page->getListDisplayIntro( ) );
-            }
-        }
+		if( !isset( $display->pager ) || $display->pager->is_first_page( )) {
+			if( method_exists( $display, 'render_intro')) {
+				$this->_render_intro( $display->render_intro( ) );
+			} else {
+				$this->_render_intro( $this->_page->getListDisplayIntro( ) );
+			}
+		}
 
     }
 
