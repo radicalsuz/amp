@@ -266,8 +266,10 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function allowsComments() {
-        if ( $this->getClass( ) == AMP_CONTENT_CLASS_BLOG ) return true;
-        return $this->getData( 'comments' );
+        #if ( $this->getClass( ) == AMP_CONTENT_CLASS_BLOG ) return true;
+        if( !( $comments_flag = $this->getData( 'comments' ))) return false;
+        if( !( $comments_expiration = AMP_verifyDateValue( $this->getData( 'comments_allowed_until')))) return true;
+        return ( $comments_expiration > date( "Y-m-d", time( )));
     }
 
     function &getComments() {
@@ -375,6 +377,11 @@ class Article extends AMPSystem_Data_Item {
         if ( !( isset( $data['enteredby']) && $data['enteredby'])){
             $data['enteredby'] = AMP_SYSTEM_USER_ID ;
         }
+        if ( isset( $data['class']) && $data['class'] == AMP_CONTENT_CLASS_BLOG ){
+            $data['comments'] = 1;
+            $data['comments_allowed_until'] = date( "Y-m-d", time( ) + ( 3600 * 24 * 90 ));
+
+        }
         return $data;
 
     }
@@ -474,7 +481,6 @@ class Article extends AMPSystem_Data_Item {
             $deleted_items = array( );
             $new_items = $sections_related;
         }
-        trigger_error( count( $deleted_items) . ' deleted and ' . count( $new_items ) . ' new items');
         if ( empty( $deleted_items ) && empty( $new_items )) return false;
 
         require_once( 'AMP/Content/Section/RelatedSet.inc.php');
@@ -539,16 +545,19 @@ class Article extends AMPSystem_Data_Item {
         if( empty( $slugs ) && !$assigned_slug ) return true;
 		$slug_exists = false;
 
-		foreach($slugs as $slug) {
-            if( $slug->getName( ) == $assigned_slug ) {
-				$slug_exists = true;
-				continue;
-			}
+        if( $slugs ) {
+            foreach($slugs as $slug) {
+                if( $slug->getName( ) == $assigned_slug ) {
+                    $slug_exists = true;
+                    continue;
+                }
 
-			$slug->delete( );
+                $slug->delete( );
+            }
+
+            if($slug_exists) return true;
+
         }
-
-		if($slug_exists) return true;
 
 		$slug = $finder;
         $slug->mergeData( array( 'name' => $assigned_slug, 'owner_type' => 'article', 'owner_id' => $this->id ));

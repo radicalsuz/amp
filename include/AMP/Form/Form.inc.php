@@ -399,13 +399,13 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         if ( !is_array( $data[$fieldname])) return false;
         $value = $data[ $fieldname ];
 
-        $month  = isset($value['M'])? $value['M']:(isset($value['m'])?$value['m']:0);
-        $day    = isset($value['D'])? $value['D']:(isset($value['d'])?$value['d']:false);
-        $year   = isset($value['Y'])? $value['Y']:(isset($value['y'])?$value['y']:0);
-        $hour   = isset($value['H'])? $value['H']:0;
-        $hour   = isset($value['h'])? $value['h']:$hour;
-        $minute = isset($value['i'])? $value['i']:0;
-        $second = isset($value['s'])? $value['s']:0;
+        $month  = isset($value['M'])&&$value['M']? $value['M']:(isset($value['m'])&&$value['m']?$value['m']:0);
+        $day    = isset($value['D'])&&$value['D']? $value['D']:(isset($value['d'])&&$value['d']?$value['d']:false);
+        $year   = isset($value['Y'])&&$value['Y']? $value['Y']:(isset($value['y'])&&$value['y']?$value['y']:0);
+        $hour   = isset($value['H'])&&$value['H']? $value['H']:0;
+        $hour   = isset($value['h'])&&$value['h']? $value['h']:$hour;
+        $minute = isset($value['i'])&&$value['i']? $value['i']:0;
+        $second = isset($value['s'])&&$value['s']? $value['s']:0;
 
 		if ( isset( $value['a']) && ( $value['a'] == 'pm')) $hour+=12;
         $time_stamped = mktime($hour,$minute,$second,$month,$day,$year);

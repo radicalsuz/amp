@@ -44,6 +44,9 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->addTranslation( 'date',         '_makeDbDateTime',   'get');
         $this->addTranslation( 'date',         '_makeNullDate',   'set');
 
+        $this->addTranslation( 'comments_allowed_until',         '_makeDbDateTime',   'get');
+        $this->addTranslation( 'comments_allowed_until',         '_makeNullDate',   'set');
+
         $this->addTranslation( 'sections_related',   '_getRelatedSections', 'set');
         $this->addTranslation( 'sections_related',   '_getMultiSelectBlanks', 'get');
 
@@ -249,11 +252,12 @@ SCRIPT;
             });
 SCRIPT;
         $values = $this->getValues();
-        $conflict_check = sprintf( $conflict_checker, AMP_SITE_URL, 'article',  $values['id'] );
+        $conflict_check = sprintf( $conflict_checker, AMP_SITE_URL, 'article',  ( isset( $values['id']) ? $values['id'] :'') );
         $header->addJavascriptDynamic( sprintf( $page_load_wrapper, $pretty_url_builder . $conflict_check ));
     }
 
     function _makeNullDate( $data, $fieldname ) {
+        if( !isset( $data[$fieldname])) return '';
         if ( AMP_verifyDateValue( $data[$fieldname]) ) return $data[$fieldname];
         return '';
     }

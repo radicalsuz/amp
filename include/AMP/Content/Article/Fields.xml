@@ -572,6 +572,13 @@
         <type>checkbox</type>
         <label>Allow User Comments</label>
      </comments>
+     <comments_allowed_until>
+        <type>date</type>
+        <label>Commenting Expires</label>
+        <options>
+            <addEmptyOption>true</addEmptyOption>
+        </options>
+     </comments_allowed_until>
      <comment_list_header>
         <type>blocktrigger</type>
         <label>View User Comments</label>

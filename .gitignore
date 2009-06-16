@@ -1,1 +1,2 @@
 .htaccess
+include/AMP/HostConfig.inc.php
