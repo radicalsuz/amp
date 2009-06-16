@@ -49,7 +49,6 @@ define( 'AMP_PERMISSION_OBJECT_TAG_ITEM',           'AMP_Content_Tag_Item' );
 define( 'AMP_PERMISSION_OBJECT_TEMPLATE',           'AMPContent_Template' );
 define( 'AMP_PERMISSION_OBJECT_TOOL',               'AMPSystem_Tool' );
 define( 'AMP_PERMISSION_OBJECT_USER',               'AMPSystem_User' );
-define( 'AMP_PERMISSION_OBJECT_VOTERGUIDE',         'VoterGuide' );
 define( 'AMP_PERMISSION_OBJECT_WEBACTION',          'WebAction' );
 
 ?>

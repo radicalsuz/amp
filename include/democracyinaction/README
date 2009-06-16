@@ -1,0 +1,7 @@
+a php client library for the Democracy In Action API
+
+api docs:
+http://dev.salsacommons.org/o/8001/p/salsa/commons/dev/docs/api/
+
+requires:
+php with libcurl bindings installed
