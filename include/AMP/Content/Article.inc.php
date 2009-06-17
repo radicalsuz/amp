@@ -267,9 +267,14 @@ class Article extends AMPSystem_Data_Item {
 
     function allowsComments() {
         #if ( $this->getClass( ) == AMP_CONTENT_CLASS_BLOG ) return true;
-        if( !( $comments_flag = $this->getData( 'comments' ))) return false;
+        return $this->getData( 'comments' );
+    }
+
+    function acceptingNewComments( ) {
+        if( !$this->allowsComments( )) return false;
         if( !( $comments_expiration = AMP_verifyDateValue( $this->getData( 'comments_allowed_until')))) return true;
         return ( $comments_expiration > date( "Y-m-d", time( )));
+
     }
 
     function &getComments() {

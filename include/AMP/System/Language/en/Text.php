@@ -226,6 +226,7 @@ define( 'AMP_TEXT_YOUR_COMMENT', 'Your Comment' );
 define( 'AMP_TEXT_COMMENT', 'comment' );
 define( 'AMP_TEXT_ADD_A_COMMENT', 'Add a Comment' );
 if ( !defined( 'AMP_TEXT_NO_COMMENTS')) define( 'AMP_TEXT_NO_COMMENTS', 'no comments' );
+if ( !defined( 'AMP_TEXT_COMMENTS_CLOSED')) define( 'AMP_TEXT_COMMENTS_CLOSED', 'Comments are now closed for this item.' );
 
 /**
  * DIA related 

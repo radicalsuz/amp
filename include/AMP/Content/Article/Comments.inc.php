@@ -58,7 +58,12 @@ class ArticleCommentSet_Display extends AMPDisplay_HTML {
 
     function execute() {
         $output = '<hr><p class="subtitle"><a name="comments"></a>Comments</p>';
-        $output .= $this->_HTML_addCommentLink( $this->comment_set->getArticleId() );
+        $article = new Article( AMP_dbcon( ), $this->comment_set->getArticleId( ));
+        if ( $article && $article->acceptingNewComments( )) {
+            $output .= $this->_HTML_addCommentLink( $this->comment_set->getArticleId() );
+        } else {
+            $output .= "<p>" . AMP_TEXT_COMMENTS_CLOSED . "</p>";
+        }
         if ( AMP_CONTENT_TRACKBACKS_ENABLED ) {
             $output .= '  |  '. $this->_HTML_trackback($this->comment_set->getArticleId());
         }

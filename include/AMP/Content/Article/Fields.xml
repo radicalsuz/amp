@@ -570,11 +570,11 @@
      </comments_header>
      <comments>
         <type>checkbox</type>
-        <label>Allow User Comments</label>
+        <label>Display User Comments</label>
      </comments>
      <comments_allowed_until>
         <type>date</type>
-        <label>Commenting Expires</label>
+        <label>Allow Commenting Until</label>
         <options>
             <addEmptyOption>true</addEmptyOption>
         </options>

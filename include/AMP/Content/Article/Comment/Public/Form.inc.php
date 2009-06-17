@@ -45,6 +45,19 @@ class Article_Comment_Public_Form extends AMPSystem_Form_XML {
         return $akismet->isSpam(  );
     }
 
+    function validate(  ) {
+        $base = parent::validate(  );
+        return $base && $this->is_article_commentable( );
+    }
+
+    function is_article_commentable( ) {
+        $comment_data = $this->getValues(  );
+        if( !( isset( $comment_data['articleid']) && $comment_data['articleid'] )) return true;
+        require_once( 'AMP/Content/Article.inc.php');
+        $article =  new Article( AMP_dbcon( ), $comment_data['articleid']);
+        return $article->acceptingNewComments( );
+    }
+
     /*
     function validate(  ) {
         $base = parent::validate(  );
