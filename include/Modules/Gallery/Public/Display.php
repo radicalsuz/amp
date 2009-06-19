@@ -78,7 +78,7 @@ class Gallery_Public_Display extends AMP_Display_List {
         if( !$imageRef ) return false;
 
         $this->_image_count++;
-        $image_height = $imageRef->getHeight( );
+        $image_height = $imageRef->height;
         $this->_height_total += $image_height;
         $this->_height_avg = $this->_height_total / $this->_image_count;
         if ( $this->_height_max < $image_height && !( $image_height > ( $this->_height_avg * 2))) {
@@ -87,7 +87,8 @@ class Gallery_Public_Display extends AMP_Display_List {
 
         $image = $this->_renderer->link( 
                                          //$imageRef->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
-                                         $imageRef->get_url_size( 0, $image_height > 600 ? 600 : 0),
+                                         //$imageRef->get_url_size( 0, $image_height > 600 ? 600 : 0),
+                                         AMP_image_url( $imageRef->getName( ), AMP_IMAGE_CLASS_ORIGINAL, array( 'height' => ( $image_height > 600 ? 600 : 0 ))),
                                          $this->_renderer->image( 
                                                     $imageRef->getURL( ), 
                                                             array(  

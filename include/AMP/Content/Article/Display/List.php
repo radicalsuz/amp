@@ -116,7 +116,7 @@ class AMP_Content_Article_Display_List extends AMP_Display_List {
         if ( !method_exists( $source, 'getImageRef')) return false;
         $image = $source->getImageRef( );
         if ( !$image ) return false;
-        return $this->_renderer->image( $image->getURL( $this->_list_image_class ), $this->_thumb_attr ) ;
+        return $this->_renderer->image( AMP_image_url( $image->getName( ), $this->_list_image_class ), $this->_thumb_attr ) ;
     }
 
     function render_media( &$source ) {
@@ -165,9 +165,10 @@ class AMP_Content_Article_Display_List extends AMP_Display_List {
 
         if ( AMP_ICON_COLUMN_FOOTER ) {
             require_once( "AMP/Content/Image.inc.php");
-            $image = new Content_Image( AMP_ICON_COLUMN_FOOTER );
+            #$image = new Content_Image( AMP_ICON_COLUMN_FOOTER );
             $icon_value = $this->_renderer->image(
-                        $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
+                        AMP_image_url( AMP_ICON_COLUMN_FOOTER, AMP_IMAGE_CLASS_ORIGINAL ),
+                        #$image->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
                         array( 'align' => 'right', 'border' => '0'));
 
         } else {

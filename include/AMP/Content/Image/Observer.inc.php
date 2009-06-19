@@ -13,9 +13,8 @@ class AMP_Content_Image_Observer extends AMP_System_Observer {
 
     function onDelete( &$source ){
         //delete all versions
-        $imageRef = &new Content_Image( $source->getName( ));
-        foreach( $imageRef->getImageClasses( ) as $current_class ){
-            $fullpath = $imageRef->getPath( $current_class );
+        foreach( AMP_lookup('image_classes' ) as $current_class ){
+            $fullpath = AMP_image_path( $source->getName( ), $current_class )
             if ( !file_exists( $fullpath )) continue;
             unlink( $fullpath );
         }
@@ -40,8 +39,7 @@ class AMP_Content_Image_Observer extends AMP_System_Observer {
     }
 
     function _update_image_cache_delete( $image_name ){
-        $content_imageRef = &new Content_Image( $image_name );
-        $imageRef = &new AMP_System_File_Image( $content_imageRef->getPath( AMP_IMAGE_CLASS_ORIGINAL ));
+        $imageRef = &new AMP_System_File_Image( AMP_image_path( $image_name, AMP_IMAGE_CLASS_ORIGINAL ));
         $image_cache_key = $imageRef->getCacheKeySearch( );
         $image_cache = &AMP_cache_get( $image_cache_key );
 

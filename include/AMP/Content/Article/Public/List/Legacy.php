@@ -44,10 +44,10 @@ class Article_Public_List_Legacy extends Article_Public_List {
     }
 
     function render_image( $source ) {
-		$image = $source->getImageRef();
+		$image = $source->getImageFile();
 		if ( !$image) return false; 
 
-        return $this->_renderer->image($image->getURL(AMP_IMAGE_CLASS_THUMB), $this->_thumb_attr );
+        return $this->_renderer->image( AMP_image_url( $image->getName(), AMP_IMAGE_CLASS_THUMB), $this->_thumb_attr );
     }
 
     function render_blurb( $source ) {

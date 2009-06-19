@@ -77,11 +77,10 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         unset( $crop_values['id']);
         $real_sizes = &$this->_resize_ratio( $crop_values, $this->_form_crop->getDisplayRatio( ) );
 
-        $target_image = &new Content_Image( $this->_model->getName( ) );
         if ( $crop_target == 'thumb' ){
-            $result = $this->_commit_crop_thumbnail( $target_image, $real_sizes );
+            $result = $this->_commit_crop_thumbnail( $real_sizes );
         } elseif ( $crop_target == 'all' ){
-            $result = $this->_commit_crop_original( $target_image, $real_sizes );
+            $result = $this->_commit_crop_original( $real_sizes );
         }
 
 		$this->_display->add( $this->_map->getComponent('list'));
@@ -90,8 +89,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
     }
 
-    function _commit_crop_original( &$target_image, $real_sizes ){
-        $target_path  = $target_image->getPath( AMP_IMAGE_CLASS_ORIGINAL );
+    function _commit_crop_original( $real_sizes ){
+        $target_path  = AMP_image_path( $this->_model->getName( ), AMP_IMAGE_CLASS_ORIGINAL );
         $new_image = &$this->_model->crop( $real_sizes['start_x'], $real_sizes['start_y'], $real_sizes['start_x'] + $real_sizes['width'], $real_sizes['start_y'] + $real_sizes['height']);
         if ( !$new_image ) return $this->_commit_crop_failure( );
 
@@ -106,7 +105,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         }
         $renderer = &new AMPDisplay_HTML( );
 		$this->message( 
-                $renderer->image( $target_image->getURL( AMP_IMAGE_CLASS_ORIGINAL ), array('border'=>1 )) 
+                $renderer->image( AMP_image_url( $this->_model->getName( ), AMP_IMAGE_CLASS_ORIGINAL ), array('border'=>1 )) 
                 . $renderer->newline( 2 )
                 . sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $cropped_image->getName()),
                 $this->_unique_action_key( ),
@@ -116,8 +115,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
     }
 
-    function _commit_crop_thumbnail ( &$target_image, $real_sizes ){
-        $target_path  = $target_image->getPath( AMP_IMAGE_CLASS_CROP );
+    function _commit_crop_thumbnail ( $real_sizes ){
+        $target_path  = AMP_image_path( $this->_model->getName( ), AMP_IMAGE_CLASS_CROP );
 		AMP_mkDir( substr( $target_path, 0, strlen( $target_path ) - strlen( $this->_model->getName() - 1)));
         $new_image = &$this->_model->crop( $real_sizes['start_x'], $real_sizes['start_y'], $real_sizes['start_x'] + $real_sizes['width'], $real_sizes['start_y'] + $real_sizes['height']);
         if ( !$new_image ) return $this->_commit_crop_failure( );
@@ -128,9 +127,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         if ( !$cropped_image->width ) return $this->_commit_crop_failure( );
         
 
-        $target_path = $target_image->getPath( AMP_IMAGE_CLASS_THUMB );
+        $target_path = AMP_image_path( $this->_model->getName( ), AMP_IMAGE_CLASS_THUMB );
 
-        //$thumb_ratio =  $cropped_image->width / AMP_IMAGE_WIDTH_THUMB;
         $thumb_ratio =  AMP_IMAGE_WIDTH_THUMB / $cropped_image->width;
         $thumb_sizes = $this->_resize_ratio( 
                             array( 'height' => $cropped_image->height,
@@ -142,7 +140,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $cropped_image->write_image_resource( $thumb_image, $target_path );
         $renderer = &new AMPDisplay_HTML( );
 		$this->message( 
-                $renderer->image( $target_image->getURL( AMP_IMAGE_CLASS_CROP ), array('border'=>1 )) 
+                $renderer->image( AMP_image_url( $this->_model->getName( ), AMP_IMAGE_CLASS_CROP ), array('border'=>1 )) 
                 . $renderer->newline( 2 )
                 . sprintf( AMP_TEXT_DATA_SAVE_SUCCESS, $cropped_image->getName() . $renderer->space() . AMP_TEXT_CROP ), 
                 $this->_unique_action_key( ),
@@ -161,7 +159,6 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
     function _resize_ratio( $original_sizes, $ratio ){
         $result_sizes = array( );
         foreach( $original_sizes as $key => $size ){
-            //$result_sizes[$key] = ceil( $size / $ratio );
             $result_sizes[$key] = ceil( $size * $ratio );
         }
         return $result_sizes;
@@ -221,8 +218,6 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $this->_model->setFile( AMP_image_path( $image_name , AMP_IMAGE_CLASS_ORIGINAL));
         $buffer = new AMP_Content_Buffer( );
         $buffer->add( $this->_model->display->render_proofsheet( $this->_model ));
-        #$uploaded_image = &new ContentImage_Display_allVersions( $image_name );
-        #$this->_display->add( $uploaded_image );
         $this->_display->add( $buffer );
         $this->_file_name_affected = $image_name;
         $this->_update_image_cache_add( $image_name );
@@ -237,11 +232,6 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         }
         $data = $this->_model->getData( );
         $this->_form->setValues( $this->_model->getData( ));
-        /*
-        if( $db_image->hasData( )) {
-            $this->_form->setValues( $db_image->getData( ));
-        }
-        */
 		$this->_display->add( $this->_form, 'form' ); 
 		return true;
     }

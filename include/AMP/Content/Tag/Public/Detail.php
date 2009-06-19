@@ -31,7 +31,7 @@ class AMP_Content_Tag_Public_Detail extends AMP_Display_Detail {
 
     function render_image( $source ) {
         if ( !( $image = $source->getImageRef( ))) return false;
-        $image_url = AMP_Url_AddVars( 
+        $image_url = AMP_url_add_vars( 
                         AMP_CONTENT_URL_IMAGE, 
                             array(  'filename=' . $image->getName( ), 
                                     'class=' . AMP_IMAGE_CLASS_THUMB, 

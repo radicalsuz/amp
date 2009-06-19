@@ -11,7 +11,6 @@ require_once( 'AMP/System/Form/XML.inc.php' );
  * Based on 1 2 Crop Image script by Roel Meurders <scripts@roelmeurders.com>
  * which itself has long credits for Thomas Brattli's work showcased on DHTMLCentral.com'
  * 
- * @uses Content_Image
  * @package 
  * @version 3.5.8
  * @copyright 2006 Radical Designs
@@ -46,12 +45,7 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
         'elements'=> array(
             'crop' => array(
                 'type' => 'submit',
-                'label' => 'Crop',
-                /*
-                'attr' => array ( 
-                    'onclick' => 
-                //    "return window.cropper.Check('def', 'AMP_Content_Image_Crop_Form');" ),
-                    */
+                'label' => 'Crop'
                 ),
             'cancel' => array(
                 'type' => 'submit',
@@ -83,13 +77,11 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
         }
         if ( $this->_image->height > $this->_image->width ){
             $this->setDisplayHeight( $this->_display_height_limit );
-            //$this->_display_ratio = $this->_display_height / $this->_image->height;
             $this->_display_ratio = $this->_image->height / $this->_display_height;
             $this->setDisplayWidth(     $this->_image->width * 
                                     (   $this->_display_height / $this->_image->height )) ;
         } else {
             $this->setDisplayWidth( $this->_display_width_limit );
-            //$this->_display_ratio = $this->_display_width / $this->_image->width;
             $this->_display_ratio = $this->_image->width / $this->_display_width;
             $this->setDisplayHeight( $this->_image->height *
                                    ( $this->_display_width / $this->_image->width ));
@@ -108,7 +100,6 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
     function adjustFields( $fields ){
         $interface_html = $this->renderInterface( );
         $fields['crop_interface']['default'] = $interface_html ;
-        //$fields['crop_interface_options']['default'] = $this->_renderOptions( );
         return $fields;
     }
 
@@ -124,10 +115,7 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
 
     function _initJavascriptActions( ){
         $header = & AMP_getHeader( );
-        //$header->addJavascriptOnLoad( 'window.cropper = new CropInterface( "cropDiv" );' );
-        //$header->addJavascriptOnLoad( 'window.cropper.setImage( "image_to_crop", "'. $this->_image->getName( ).'" );' );
         $header->addJavaScript( $this->_script_file, 'crop' );
-        $this->declareCSS( );
 
         // this code applies to non-implemented cropper based on prototype
         $header->addJavaScriptDynamic( $this->_scriptEndCrop( ), 'crop_value_commit' );
@@ -135,34 +123,10 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
     }
 
 
-    function declareCSS( ){
-        /*
-        $css = "body{font-family:arial,helvetica; font-size:12px}\n";
-        $css .= "#cropDiv{  \n"
-                ."   position:absolute;\n"
-                ."   left:". $this->_window_x ."px; top:".$this->_window_y."px; \n"
-                ."   width:" . intval( $this->_crop_width /$this->_display_ratio )."px;\n"
-                ."   height:" . intval( $this->_crop_height / $this->_display_ratio )."px;\n "
-                ."   z-index:2; \n"
-                ."   background-image: url(".AMP_SYSTEM_URL_SYSTEM_IMAGES.AMP_ICON_SPACER.");\n"
-                ."}\n";
-                */
-        //$page_header = &AMP_getHeader( );
-//        $page_header->addStylesheetDynamic( $css, 'cropper');
-
-    // this code applies to non-implemented cropper based on prototype
-        //$page_header = &AMP_getHeader( );
-        #$page_header->addStylesheet( '/cropper.css', 'cropper');
-
-    }
-
     function renderInterface( ){
         $output =   $this->_renderer->inDiv(  
                     $this->_renderer->image( $this->_displayImageURL( ), array( 'id' => 'image_to_crop', 'name' => 'image_to_crop' ))
                     );
-        #$output .= $this->_renderCropDiv( );
-        #$output .= $this->_renderer->newline( 2 );
-        #$output .= $this->_renderControls( );
         return $output;
     }
 
@@ -217,8 +181,6 @@ class AMP_Content_Image_Crop_Form extends AMPSystem_Form_XML {
 
     // this function applies to non-implemented cropper based on prototype
     function _scriptInit(){
-                        //minWidth: ". $this->_crop_width . ", 
-                        //minHeight: ". $this->_crop_height . ", 
         return
         "Event.observe( window, 'load', function() { 
                 new Cropper.Img( 

@@ -38,7 +38,7 @@ class AMP_Content_Tag_Item_Public_List extends AMP_Display_List {
         $image = $source->getImageRef( );
         $icon = $this->_makeIcon( $image );
         $height = $image ?
-                    $height = round( $image->getHeight( ) * ( $this->_image_width / $image->getWidth( ) ))
+                    $height = round( $image->height * ( $this->_image_width / $image->width ))
                     : 0;
         
         $name = $source->getItemName( );

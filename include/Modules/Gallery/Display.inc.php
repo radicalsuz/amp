@@ -164,7 +164,7 @@ class Gallery_DisplaySingle extends Gallery_Display {
         return $this->_HTML_inDiv( $result, array( 'class' => 'gallerycon') );
     }
     function _HTML_fullImageLink( &$image ){
-        return $this->_HTML_link( $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $this->_full_image_link_text );
+        return $this->_HTML_link( AMP_image_url( $image->getName(), AMP_IMAGE_CLASS_ORIGINAL ), $this->_full_image_link_text );
 
     }
     function _HTML_listItemSource( $source ){

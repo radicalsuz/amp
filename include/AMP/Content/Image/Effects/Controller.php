@@ -26,9 +26,9 @@ class AMP_Content_Image_Effects_Controller {
     function read_request( ){
         if ( !( isset( $_REQUEST['filename'] ) && $image_file = $_REQUEST['filename'] )) return; 
         $image_class = ( isset( $_REQUEST['image_class'] ) && $_REQUEST['image_class'] ) ? $_REQUEST['image_class'] : AMP_IMAGE_CLASS_ORIGINAL;
-        $image_ref_content = &new Content_Image( $image_file );
-        if ( !( file_exists( $image_ref_content->getPath( $image_class )))) return; 
-        $this->set_file( $image_ref_content->getPath( $image_class ));
+        $image_path = AMP_image_path( $image_file, $image_class );
+        if ( !( file_exists( $image_path ))) return; 
+        $this->set_file( $image_path );
         
         $action = ( isset( $_REQUEST['action']) && $_REQUEST['action']) ? $_REQUEST['action'] : $this->_default_action;
 

@@ -87,7 +87,7 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
     function &getImageRef( ){
         if (! ($img_path = $this->getImageFileName())) return false;
         require_once( 'AMP/Content/Image.inc.php');
-        $image = &new Content_Image();
+        $image = &new Content_Image( $img_path );
         return $image;
     }
 

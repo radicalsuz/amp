@@ -1,5 +1,8 @@
 <?php
 require_once( 'AMP/Content/Config.inc.php');
+# This class is deprecated as of AMP 3.9
+# Please use AMP_Content_Image from AMP/Content/Image/Image.php 
+# or AMP_System_File_Image from AMP/System/File/Image.php instead
 
 class Content_Image {
 

@@ -76,7 +76,7 @@ class Section_Public_List extends AMP_Display_List {
     function render_image( &$source ) {
 		$image = $source->getImageRef();
 		if ( !$image) return false; 
-        $img_output = $this->_renderer->image($image->getURL(AMP_IMAGE_CLASS_THUMB));
+        $img_output = $this->_renderer->image(AMP_image_url( $image->getName(), AMP_IMAGE_CLASS_THUMB));
 
         $url = $this->url_for( $source ) ;
         if ( !$url ) {

@@ -42,12 +42,14 @@ class ArticleDisplay_FrontPage extends Article_Display {
                 $this->_HTML_end();
     }
 
+    /*
     function _HTML_imageBlock( &$image ) {
         if (!$image) return false;
         #$image->setStyleAttrs( array( 'border' => '1', 'style' => 'border-color:#000000' ));
         $image->setStyleAttrs( array( 'class' => $this->_css_class_image ));
         return parent::_HTML_imageBlock( $image );
     }
+     */
         
 
     function _HTML_title( $base_title ) {

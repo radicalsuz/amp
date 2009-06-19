@@ -223,7 +223,7 @@ class AMPContent_DisplayList_HTML extends AMPDisplay_HTML {
                 $this->_thumb_attr = array_merge( $this->_thumb_attr, $thumb_attr );
             }
         }
-        return $this->_HTML_image( $image->getURL( $this->_list_image_class ), $this->_thumb_attr ) ;
+        return $this->_HTML_image( AMP_image_url( $image->getName(),  $this->_list_image_class ), $this->_thumb_attr ) ;
     }
 
     function _HTML_media_thumbnail( $url ) {

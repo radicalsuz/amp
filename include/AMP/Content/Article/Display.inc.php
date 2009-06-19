@@ -16,6 +16,7 @@ class Article_Display extends AMPDisplay_HTML {
     var $_css_class_date = "date";
     var $_css_class_label = "bodygreystrong";
     var $_css_class_subheading = "bodygrey";
+    var $_css_class_image = "img_main";
 
     function Article_Display( &$article ) {
         $this->init( $article );
@@ -72,7 +73,7 @@ class Article_Display extends AMPDisplay_HTML {
 
     function _addImage( $body ) {
         $image = $this->_article->getImageRef();
-        if (!$image || !$image->display_in_body( )) return $body;
+        if (!$image || !$this->_article->display_image_in_body( )) return $body;
         return $this->_HTML_imageBlock( $image ) . $body;
     }
 
@@ -192,12 +193,18 @@ class Article_Display extends AMPDisplay_HTML {
     }
 
     function _HTML_imageBlock( &$image ) {
-	    $output  = '<table width="' . $image->getWidth(). '" border="0" align="'.$image->getAlignment().'"';
-	    $output .= ' cellpadding="0" cellspacing="0"><tr><td>' . "\n";
-	    $output .=  '<a href="'. $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ).'" target="_blank"> <img src="' . $image->getURL( $image->getImageClass() ) 
-                    . '" alt="' . $image->getAltTag(). '"'. $this->_HTML_makeAttributes( $image->getStyleAttrs() ) . '></a>';
+        $image_attributes = $this->_article->getImageData( );
+        $align = $image_attributes['align'];
+        if( !$align ) $align = AMP_IMAGE_DEFAULT_ALIGNMENT;
+        $style_attributes = array( 'align' => $align, 'class' => $this->_css_class_image );
 
-	    $output .= '</td></tr>' . $this->_HTML_photoCaption( $image->getCaption(), $image->getWidth() );
+	    $output  = '<table width="' . $image->width . '" border="0" align="'.$align.'"';
+	    $output .= ' cellpadding="0" cellspacing="0"><tr><td>' . "\n";
+        $output .=  '<a href="'. AMP_image_url( $image->getName( ), AMP_IMAGE_CLASS_ORIGINAL ).'" target="_blank">'
+                    . ' <img src="' . AMP_image_url( $image->getName( ), $image_attributes['image_size'] )
+                    . '" alt="' . $image_attributes['alt'] . '"'. $this->_HTML_makeAttributes( $style_attributes ) . '></a>';
+
+	    $output .= '</td></tr>' . $this->_HTML_photoCaption( $image_attributes['caption'], $image->width );
         return $output . '</table>';
     }
         

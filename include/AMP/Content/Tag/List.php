@@ -29,8 +29,8 @@ class AMP_Content_Tag_List extends AMP_System_List_Form {
         require_once( 'AMP/Content/Image.inc.php');
         $img = $source->getImageRef( );
         if ( !$img ) return false;
-        return $this->_HTML_link(   $img->getURL( AMP_IMAGE_CLASS_ORIGINAL ), 
-                                    $this->_HTML_image($img->getURL( AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ), 
+        return $this->_HTML_link(   AMP_image_url( $img->getName(), AMP_IMAGE_CLASS_ORIGINAL ), 
+                                    $this->_HTML_image( AMP_image_url( $img->getName(), AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ), 
                                     array( 'target' => 'blank' )
                                 );
     }

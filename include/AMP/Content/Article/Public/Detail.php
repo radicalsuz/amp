@@ -110,34 +110,14 @@ class Article_Public_Detail extends AMP_Display_Detail {
         $image = &$source->getImageFile( );
         if (!$image || !$source->display_image_in_body( )) return false;
         return $image->display->execute( );
-        /*
-        $image = $source->getImageRef();
-        if (!$image || !$image->display_in_body( )) return false;
-        $attributes = $image->attributes( );
-        $float_type = $attributes['align'];
-        unset( $attributes['align']);
-        $container_css = $float_type ? AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . ' ' . AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE . '-' . $float_type : AMP_CONTENT_CSS_CLASS_ARTICLE_IMAGE;
-        $container_attr = array( 'class' => $container_css );
-        if ( $width = $image->getWidth( )) $container_attr['style'] = "width: {$width}px";
-
-        return $this->_renderer->div( 
-            $this->_renderer->link( 
-                $image->getURL( AMP_IMAGE_CLASS_ORIGINAL ),
-                $this->_renderer->image( $image->getURL( $image->getImageClass( )), $image->attributes( )),
-                array( 'target' => '_blank', 'class' => 'image-link'))
-            . $this->render_credit( $source )
-            . $this->render_caption( $image ),
-            $container_attr
-        );
-        */
         
     }
 
     function render_credit( &$source ) {
         if ( !AMP_RENDER_ARTICLE_PHOTOCREDIT ) return false;
-        require_once( 'AMP/System/File/Image.php' );
-        $image = $source->getImageRef( );
-        $full_image = new AMP_System_File_Image( $image->getPath( AMP_IMAGE_CLASS_OPTIMIZED ));
+        #require_once( 'AMP/System/File/Image.php' );
+        $full_image = $source->getImageRef( );
+        #$full_image = new AMP_System_File_Image( $image->getPath( AMP_IMAGE_CLASS_OPTIMIZED ));
         $credit = $full_image->getData( 'author');
         $license = $full_image->getData( 'license');
         if ( !$credit ) return false;

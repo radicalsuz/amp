@@ -96,7 +96,7 @@ class AMP_Display_Detail {
     }
 
     function _renderImage( $image ) {
-        $image_url = $image->getURL( );
+        $image_url = AMP_image_url( $image->getName( ));
         return $this->_renderer->image( $image_url, $this->_image_attr )
                     . $this->_renderer->newline( );
 

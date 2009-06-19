@@ -64,7 +64,7 @@ class AMP_Content_Image_List extends AMP_System_List_Form {
     function _makeThumb( &$source, $column_name ) {
         require_once( 'AMP/Content/Image.inc.php');
         $img = &new Content_Image( $source->getName( ));
-        return $this->_HTML_link( $img->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $this->_HTML_image($img->getURL( AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ), array( 'target' => 'blank' ));
+        return $this->_HTML_link( $img->getURL( AMP_IMAGE_CLASS_ORIGINAL ), $this->_HTML_image(AMP_image_url( $source->getName( ), AMP_IMAGE_CLASS_THUMB ), $this->_thumb_attr ), array( 'target' => 'blank' ));
     }
 
     function _dbEdit( $source, $column_name ) {

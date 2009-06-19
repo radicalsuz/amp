@@ -33,7 +33,6 @@ class AMP_Content_Image_List_Request extends AMP_System_List_Request {
         if ( empty( $new_sizes )) return false;
 
         $this->_saveNewWidthSettings( $new_sizes );
-        require_once( 'AMP/Content/Image.inc.php');
 
         foreach( $target_set as $target ){
             $this->resize( $target, $new_sizes );
@@ -53,25 +52,28 @@ class AMP_Content_Image_List_Request extends AMP_System_List_Request {
     function resize( &$target, $widths ){
         set_time_limit( 30 );
         trigger_error( sprintf( AMP_TEXT_ACTION_NOTICE, AMP_TEXT_RECALCULATE, $target->getName( ) ));
-        $content_image = &new Content_Image( $target->getName() );
+        #$content_image = &new Content_Image( $target->getName() );
+        $crop_path = AMP_image_path( $target->getName( ), AMP_IMAGE_CLASS_CROP );
+        $thumb_path = AMP_image_path( $target->getName( ), AMP_IMAGE_CLASS_THUMB );
+        $pic_path = AMP_image_path( $target->getName( ));
         $action_flag = false;
         if ( isset( $widths['thumb'])) {
-            if ( file_exists( $content_image->getPath( AMP_IMAGE_CLASS_CROP ))) {
-                $crop_target = &new AMP_System_File_Image( $content_image->getPath( AMP_IMAGE_CLASS_CROP ));
+            if ( file_exists( $crop_path )) {
+                $crop_target = &new AMP_System_File_Image( $crop_path );
             } else {
                 $crop_target = &$target;
             }
-            if ( $this->_rewriteVersion( $crop_target, $widths['thumb'], $content_image->getPath( AMP_IMAGE_CLASS_THUMB ))) {
+            if ( $this->_rewriteVersion( $crop_target, $widths['thumb'], $thumb_path )) {
                 $action_flag = true;
             }
         }
         if ( isset( $widths['tall']) && ( $target->height >= $target->width )) {
-            if ( $this->_rewriteVersion( $target, $widths['tall'], $content_image->getPath( AMP_IMAGE_CLASS_OPTIMIZED ))) {
+            if ( $this->_rewriteVersion( $target, $widths['tall'], $pic_path )) {
                 $action_flag = true;
             }
         }
         if ( isset( $widths['wide']) && ( $target->width > $target->height )) {
-            if ( $this->_rewriteVersion( $target, $widths['wide'], $content_image->getPath( AMP_IMAGE_CLASS_OPTIMIZED ))) {
+            if ( $this->_rewriteVersion( $target, $widths['wide'], $pic_path )) {
                 $action_flag = true;
             }
         }

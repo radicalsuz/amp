@@ -6,7 +6,7 @@ class ContentImage_Resize {
 
     var $_image_ref;
     var $_crop_ref;
-    var $_content_image_controller;
+    var $_paths = array( );
 
     var $versions = array();
     var $_version_keys = array( AMP_IMAGE_CLASS_ORIGINAL, AMP_IMAGE_CLASS_OPTIMIZED, AMP_IMAGE_CLASS_THUMB );
@@ -43,13 +43,13 @@ class ContentImage_Resize {
     }
 
     function makeVersionOriginal( ){
-        $target_path = $this->_content_image_controller->getPath( AMP_IMAGE_CLASS_ORIGINAL );
+        $target_path = $this->_paths[AMP_IMAGE_CLASS_ORIGINAL];
 		if ($target_path == $this->_image_ref->getPath()) return;
         return $this->makeVersion( AMP_IMAGE_CLASS_ORIGINAL );
     }
 
     function makeVersion( $version_class, $save = true  ){
-        $target_path = $this->_content_image_controller->getPath( $version_class );
+        $target_path = $this->_paths[$version_class];
         $source = $this->_getVersionSource( $version_class );
 
         $new_height = $source->height * ( $this->_widths[ $version_class ] / $source->width );
@@ -85,7 +85,13 @@ class ContentImage_Resize {
             return false;
 
         }
-        $this->_content_image_controller = &new Content_Image( $image_ref->getName( ));
+        $this->_paths = array( 
+            AMP_IMAGE_CLASS_OPTIMIZED   => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_OPTIMIZED ),  
+            AMP_IMAGE_CLASS_THUMB       => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_THUMB ),  
+            AMP_IMAGE_CLASS_ORIGINAL    => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_ORIGINAL ),  
+            AMP_IMAGE_CLASS_CROP        => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_CROP ),  
+            );
+        
         $this->_image_ref = &$image_ref;
         $this->_initCrop( );
         $this->_setWidths( );
@@ -93,7 +99,7 @@ class ContentImage_Resize {
     }
 
     function _initCrop( ) {
-        $crop_path = $this->_content_image_controller->getPath( AMP_IMAGE_CLASS_CROP );
+        $crop_path = $this->_paths[AMP_IMAGE_CLASS_CROP]
         if ( !file_exists( $crop_path )) return false;
         $this->_crop_ref = &new AMP_System_File_Image( $crop_path );
     }

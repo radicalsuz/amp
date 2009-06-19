@@ -222,10 +222,10 @@ class Article_Public_List extends AMP_Display_List {
 	}
 
     function render_image( &$source ) {
-		$image = $source->getImageRef();
+		$image = $source->getImageFile();
 		if ( !$image) return $this->render_image_media_thumbnail( $source ); 
 
-        $img_output = $this->_renderer->image($image->getURL(AMP_IMAGE_CLASS_THUMB));
+        $img_output = $this->_renderer->image( AMP_image_url( $image->getName(), AMP_IMAGE_CLASS_THUMB));
 
         $url = $this->url_for( $source ) ;
         if ( !$url ) {

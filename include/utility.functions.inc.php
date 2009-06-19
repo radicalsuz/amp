@@ -2385,6 +2385,14 @@ function AMP_image_path( $filename, $img_class = AMP_IMAGE_CLASS_OPTIMIZED ) {
     return AMP_LOCAL_PATH . AMP_IMAGE_PATH . $img_class . DIRECTORY_SEPARATOR . $filename;
 }
 
+function AMP_image_url( $filename, $img_class = AMP_IMAGE_CLASS_OPTIMIZED, $options = array( ) ) {
+    if ( isset( $options['height']) && $options['height']) {
+        return AMP_url_add_vars( AMP_CONTENT_URL_IMAGE_VIEW, array( 'filename' => $filename, 'class' => $img_class, 'action' => 'resize', 'height' => $options['height']) );
+    }
+
+    return AMP_CONTENT_URL_IMAGES . $img_class . DIRECTORY_SEPARATOR . $filename;
+}
+
 function AMP_request_to_include( $request ) {
   $routes = array(
         '/^articles\/(\d*)/' => 'article.php',

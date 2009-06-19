@@ -1,7 +1,7 @@
 <?php
 
 require_once( 'AMP/Content/Article/DocumentLink.inc.php');
-require_once( 'AMP/Content/Image.inc.php');
+require_once( 'AMP/System/File/Image.php');
 
 
 class ImageLink extends DocumentLink {
@@ -19,7 +19,7 @@ class ImageLink extends DocumentLink {
         if ( $this->verifyFileType( )){
             if ( 'img' != $this->getFileType( )) return false;
         }
-        $this->_image = &new Content_Image( $filename );
+        $this->_image = &new AMP_System_File_Image( $this->getPath( ));
 
     }
 
@@ -27,13 +27,16 @@ class ImageLink extends DocumentLink {
         if ( $this->getFileName() && !isset( $this->_image) ) $this->_default_display = 'ArticleDocumentLink_Display';
         return parent::display( $display_type );
     }
+
     function getURL( $image_class = AMP_IMAGE_CLASS_ORIGINAL ) {
         if ( !isset( $this->_image)) return false;
-        return $this->_image->getURL( $image_class );
+        return AMP_image_url( $this->_image->getName( ),  $image_class );
     }
+
     function setImageId( $id ){
         $this->_image_id = $id;
     }
+
     function getImageId( ){
         if ( !isset( $this->_image_id)) return false;
         return $this->_image_id;
