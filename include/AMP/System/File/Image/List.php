@@ -66,7 +66,7 @@ class AMP_System_File_Image_List extends AMP_System_File_List {
 
     function render_toolbar_move( &$toolbar ) {
         $folder_options = AMP_lookup( 'image_folders' );
-        $folder_options = array( '' => sprintf( AMP_TEXT_SELECT, AMP_TEXT_FOLDER )) + $folder_options;
+        $folder_options = array( '' => sprintf( AMP_TEXT_SELECT, AMP_TEXT_FOLDER ), DIRECTORY_SEPARATOR => "Default Folder") + $folder_options;
         $panel_contents = $this->_renderer->select( 'folder_name', null, $folder_options, array( 'class' => 'searchform_element') ) 
             . $this->_renderer->space( 2 )
             . "New Folder:"
@@ -118,7 +118,9 @@ class AMP_System_File_Image_List extends AMP_System_File_List {
         }
         AMP_lookup_clear_cached( 'images');
         AMP_lookup_clear_cached( 'db_images');
+        AMP_lookup_clear_cached( 'gallery_images');
         ampredirect( $_SERVER['REQUEST_URI']);
     }
+
 }
 ?>

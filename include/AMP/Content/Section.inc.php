@@ -15,6 +15,7 @@ class Section extends AMPSystem_Data_Item {
     var $_class_name = 'Section';
     var $_field_status = 'usenav';
     var $display;
+    var $_exact_value_fields = array( 'image2', 'flash');
 
     var $_custom_config = array( 
             'search_custom' => 'AMP_RENDER_SEARCH_LIST_SECTION_%s',

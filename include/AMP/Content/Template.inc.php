@@ -13,7 +13,7 @@
 require_once( 'AMP/System/Data/Item.inc.php' );
 require_once( 'AMP/Content/Nav/Manager.inc.php' );
 
-class AMPContent_Template extends AMPSystem_Data_Item {
+class AMP_Content_Template extends AMPSystem_Data_Item {
 
 	//var $_nav_positions = array('left' => 'l', 'right' => 'r');
 	var $_nav_positions = array();
@@ -25,9 +25,14 @@ class AMPContent_Template extends AMPSystem_Data_Item {
     var $name_field = 'name';
 	var $_class_name = 'AMPContent_Template';
 
-	function AMPContent_Template( &$dbcon, $id = null) {
+	function AMP_Content_Template( &$dbcon, $id = null) {
+        $this->__construct( $dbcon, $id );
+    }
+
+    function __construct( $dbcon, $id = null ) {
         $this->init( $dbcon, $id );
         $this->_assignNavHtml();
+
     }
 
     function _after_init( ) {
@@ -145,6 +150,16 @@ class AMPContent_Template extends AMPSystem_Data_Item {
 		}
 	}
 
+    function makeCriteriaImageInBody( $image_filename ) {
+        $image_conditions= array( );
+        $condition = "header2 like %s";
+        foreach( AMP_lookup( 'image_classes') as $image_class ) {
+            $image_conditions[] = sprintf( $condition, $this->dbcon->qstr( '%' . AMP_image_url( $image_filename, $image_class ) . '%'));
+        }
+        return join( ' OR ', $image_conditions );
+
+    }
+
     ###################################
     ### legacy compatibility method ###
     ###################################
@@ -165,5 +180,12 @@ class AMPContent_Template extends AMPSystem_Data_Item {
         $GLOBALS = array_merge( $GLOBALS, $layout );
         if ($return_layout) return $layout;
     }
+}
+
+class AMPContent_Template extends AMP_Content_Template {
+    function AMPContent_Template( $dbcon, $id = null ) {
+        $this->__construct( $dbcon, $id );
+    }
+
 }
 ?>

@@ -229,18 +229,6 @@
 		<label>Image for Banner</label>
         <block>images</block>
 	</flash>
-    <!-- no clue if these are still being used
-	<image>
-		<type>imagepicker</type>
-		<label>Image for display in sidebar listings</label>
-        <block>images</block>
-	</image>
-	<useimage>
-		<type>checkbox</type>
-		<label>Use this image</label>
-        <block>images</block>
-	</useimage> 
-    -->
     <template_css_header>
         <type>blocktrigger</type>
         <label>Template, CSS, Layout</label>
@@ -269,11 +257,5 @@
         <label>Custom List Item Layout function</label>
         <block>template_css</block>
     </item_custom_method>
-    <!--
-	<imgcap>
-		<type>textarea</type>
-		<label>Custom Data</label>
-	</imgcap>
-    -->
 
 </array>

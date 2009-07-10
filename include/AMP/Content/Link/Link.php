@@ -7,6 +7,7 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
     var $datatable = "links";
     var $name_field = "linkname";
     var $_class_name = 'AMP_Content_Link';
+    var $_exact_value_fields( 'pic');
 
     function AMP_Content_Link ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );

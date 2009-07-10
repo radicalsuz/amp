@@ -752,6 +752,14 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     }
 
 
+    function update_all( $action, $criteria = array( )){
+        if( !is_array( $action )) {
+            $action = array( $action );
+        }
+        $search = &$this->getSearchSource( );
+        return $search->updateData( $action, $this->makeCriteria( $criteria ) );
+    }
+
 
 }
 ?>

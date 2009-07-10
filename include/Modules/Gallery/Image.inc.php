@@ -7,6 +7,7 @@ class GalleryImage extends AMPSystem_Data_Item {
     var $name_field  = 'img';
     var $_class_name = 'GalleryImage';
     var $_sort_auto = false;
+    var $_exact_value_fields = array( 'img' );
 
 
     function GalleryImage( &$dbcon, $id = null ){

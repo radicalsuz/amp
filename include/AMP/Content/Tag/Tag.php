@@ -8,6 +8,7 @@ class AMP_Content_Tag extends AMPSystem_Data_Item {
     var $_class_name = 'AMP_Content_Tag';
     //var $_contents_criteria = array( );
     //var $_contents_class = 'ArticleSet';
+    var $_exact_value_fields = array( 'image' );
     
     function AMP_Content_Tag( &$dbcon, $id = null ){
         $this->__construct( $dbcon, $id );

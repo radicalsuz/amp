@@ -1905,4 +1905,51 @@ class AMPContentLookup_ImageFolders extends AMPSystem_Lookup {
     }
 
 }
+
+class AMPSystemLookup_UserdataImageFields extends AMPSystem_Lookup {
+
+    function AMPSystemLookup_UserdataImageFields( ) {
+        $this->__construct( );
+    }
+
+    function __construct( ) {
+        $type_fields = array( );
+        $field_names = AMP_get_column_names( 'userdata_fields');
+        foreach( $field_names as $field_name ) {
+            if( strpos( $field_name, 'type_' ) === 0 ) {
+                $type_fields = $field_name;
+            }
+        }
+
+        $image_pickers = array( );
+        foreach( $type_fields as $type_field ) {
+            $matches = AMP_lookup( 'userdata_images_by_field');
+            if( !$matches ) continue;
+
+            foreach( $matches as $match_id => $match_type ) {
+                $image_pickers[] = array( 'fieldname' => substr( $type_field, 5), 'modin' => $match_id );
+            }
+
+
+
+        }
+        $this->dataset = $image_pickers;
+    }
+
+
+
+}
+
+class AMPSystemLookup_UserdataImagesByField extends AMPSystem_Lookup {
+    var $datatable = "userdata_fields";
+
+    function AMPSystemLookup_UserdataImagesByField( $field_name ) {
+        $this->__construct( $field_name );
+    }
+
+    function __construct( $field_name ) {
+        $this->_criteria = "$field_name = 'imagepicker'";
+        $this->result_field = $field_name;
+    }
+}
 ?>

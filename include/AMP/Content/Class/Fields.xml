@@ -26,10 +26,12 @@
 		</lookup>
 		<label>Header Article</label>
 	</url>
+    <!--
 	<flash>
 		<type>imagepicker</type>
 		<label>Image for Banner</label>
 	</flash>
+    -->
 	<up>
 		<type>text</type>
         <size>4</size>

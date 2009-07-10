@@ -30,6 +30,7 @@ class AMP_System_List_Toolbar {
         foreach( $this->_actions as $action ) {
             $output .= $this->renderAction( $action );
         }
+        $this->init_javascript( );
         $renderer = AMP_get_renderer( );
         return    
             $renderer->div( 
@@ -38,6 +39,17 @@ class AMP_System_List_Toolbar {
                 . $this->renderToolbarEnd( )
                 , array( 'class' => 'toolbar' )
                 );
+    }
+
+    function init_javascript( ) {
+        $header = &AMP_get_header( );
+        $block_form_submit = <<<SCRIPT
+jq = jQuery.noConflict( );
+jq( '.list_block form').keypress(  function( ev ) {
+    if( ev.keyCode == 13 ) { return false; }
+});
+SCRIPT;
+        $header->addJavascriptOnload( $block_form_submit );
     }
 
     function execute( ){

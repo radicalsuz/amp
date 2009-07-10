@@ -6,6 +6,7 @@ class Gallery extends AMPSystem_Data_Item {
     var $datatable   = 'gallerytype';
     var $name_field  = 'galleryname';
     var $_class_name = 'Gallery';
+    var $_exact_value_fields = array( 'img');
 
     var $_display;
 
