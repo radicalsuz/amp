@@ -117,6 +117,14 @@ class AMP_System_File_Image extends AMP_System_File {
         return $result;
     }
 
+    function version() {
+        require( 'AMP/Content/Image/Resize.inc.php');
+        $resizer = new AMP_Content_Image_Resize( AMP_image_path( $this->getName( ), AMP_IMAGE_CLASS_ORIGINAL ));
+        $resizer->execute( );
+        return true;
+
+    }
+
     function &crop( $start_x, $start_y, $end_x, $end_y ){
         $create_method = $this->_get_action_method( 'create');
         $copy_method = $this->_get_action_method( 'copy' );
@@ -283,6 +291,33 @@ class AMP_System_File_Image extends AMP_System_File {
             }
         }
         return $metadata;
+
+    }
+
+    function move( $folder_name, $new_folder_name = null ) {
+        if( $new_folder_name ) {
+            if( !AMP_add_image_subfolder( $new_folder_name )) return false;
+            $folder_name = $new_folder_name;
+        }
+
+        foreach( AMP_lookup( 'image_classes') as $image_class => $image_class_name ) {
+            if( !file_exists( AMP_image_path( $this->getName( ), $image_class ))) continue;
+            rename( AMP_image_path( $this->getName( ), $image_class), 
+                    AMP_image_path( $folder_name 
+                                    . DIRECTORY_SEPARATOR  
+                                    . basename( $this->getName( )), $image_class )
+                );
+
+        }
+
+        //save new location to database
+        $this->_init_attributes( );
+        if( $this->db_metadata ) {
+            $this->db_metadata->mergeData( array( 'folder' => $folder_name ));
+            $this->db_metadata->save( );
+        }
+        return true;
+
 
     }
 

@@ -135,6 +135,7 @@ class AMP_System_File {
         $pattern = isset( $criteria['pattern']) && $criteria['pattern'] ? $criteria['pattern'] : '*';
         if ( $path && ( substr( $path, -1 ) !== DIRECTORY_SEPARATOR )) $path .= DIRECTORY_SEPARATOR;
         $path = $this->add_subfolders_glob_to_path( $path );
+        trigger_error( $path.$pattern );
 
         return $path . $pattern;
 

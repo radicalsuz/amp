@@ -127,8 +127,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
     function _commit_crop_thumbnail ( $real_sizes ){
         $target_path  = AMP_image_path( $this->_model->getName( ), AMP_IMAGE_CLASS_CROP );
-		#AMP_mkDir( substr( $target_path, 0, strlen( $target_path ) - strlen( $this->_model->getName() - 1)));
-		AMP_mkDir( dirname( $target_path ));
+		#AMP_mkdir( substr( $target_path, 0, strlen( $target_path ) - strlen( $this->_model->getName() - 1)));
+		AMP_mkdir( dirname( $target_path ));
         $new_image = &$this->_model->crop( $real_sizes['start_x'], $real_sizes['start_y'], $real_sizes['start_x'] + $real_sizes['width'], $real_sizes['start_y'] + $real_sizes['height']);
         if ( !$new_image ) return $this->_commit_crop_failure( );
 

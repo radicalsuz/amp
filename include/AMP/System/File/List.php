@@ -17,7 +17,10 @@ class AMP_System_File_List extends AMP_Display_System_List {
         $this->__construct( $source, $criteria, $limit );
     }
 
-    function _search_path( ) {
+    function _search_path( $folder = null) {
+        if( $folder ) {
+            return AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_DOCUMENT_PATH . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR;
+        }
         return AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_CONTENT_DOCUMENT_PATH . DIRECTORY_SEPARATOR;
     }
 
@@ -47,6 +50,13 @@ class AMP_System_File_List extends AMP_Display_System_List {
         $source = $list_source->find( $this->_source_criteria, $this->_source_object );
         $this->set_source( $source );
 
+    }
+
+    function _init_criteria( ) {
+        if( isset( $this->_source_criteria['folder']) && $this->_source_criteria['folder']) {
+            $this->_source_criteria['path']  = $this->_search_path( $this->_source_criteria['folder']);
+            unset( $this->_source_criteria['folder']);
+        }
     }
 
     function _init_sort_glob( &$source )  {

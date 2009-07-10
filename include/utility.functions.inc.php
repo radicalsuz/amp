@@ -2481,4 +2481,23 @@ function AMP_to_json( $value ) {
     return $service->encode($value);
 }
 
+function AMP_add_image_subfolder( $folder_name ) {
+    $ok = false;
+    foreach( AMP_lookup( 'image_classes') as $image_class => $image_class_name ) {
+        $class_folder = AMP_LOCAL_PATH . AMP_IMAGE_PATH . $image_class. DIRECTORY_SEPARATOR . $folder_name;
+        $ok = AMP_mkdir( $class_folder );
+        if( !$ok ) {
+            trigger_error( 'Unable to create folder' . $class_folder );
+            break;
+        }
+    }
+
+    if ( $ok ) {
+        AMP_lookup_clear_cached( 'image_folders');
+        return $folder_name;
+    }
+    return false;
+
+}
+
 ?>

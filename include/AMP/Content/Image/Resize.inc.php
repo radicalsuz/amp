@@ -2,7 +2,7 @@
 require_once( 'AMP/Content/Image.inc.php' );
 require_once( 'AMP/System/File/Image.php');
 
-class ContentImage_Resize {
+class AMP_Content_Image_Resize {
 
     var $_image_ref;
     var $_crop_ref;
@@ -16,7 +16,11 @@ class ContentImage_Resize {
     var $_widths = array( AMP_IMAGE_CLASS_THUMB => AMP_IMAGE_WIDTH_THUMB );
     var $_errors=array();
 
-    function ContentImage_Resize ($filename=null) {
+    function AMP_Content_Image_Resize ($filename=null) {
+        $this->__construct( $filename );
+    }
+
+    function __construct( $filename=null ) {
         if (isset( $filename )) $this->setImageFile( $filename );
     }
 
@@ -152,6 +156,13 @@ class ContentImage_Resize {
 
     function getErrors() {
         return $this->_errors;
+    }
+
+}
+
+class ContentImage_Resize extends AMP_Content_Image_Resize {
+    function ContentImage_Resize ($filename=null) {
+        $this->__construct( $filename );
     }
 
 }

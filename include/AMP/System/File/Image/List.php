@@ -14,10 +14,11 @@ class AMP_System_File_Image_List extends AMP_System_File_List {
     var $column_headers = array( 'name' => 'Filename', 'time' => 'Date Uploaded');
     var $_source_object = 'AMP_System_File_Image';
 
-    var $_actions = array( 'delete', 'gallery', 'recalculate');
+    var $_actions = array( 'delete', 'move', 'gallery', 'version', 'recalculate');
     var $_action_args = array( 
         'gallery' => array( 'gallery_id' ),
-        'recalculate' => array( 'image_width_thumb', 'image_width_tall', 'image_width_wide' )
+        'recalculate' => array( 'image_width_thumb', 'image_width_tall', 'image_width_wide' ),
+        'move' => array( 'folder_name', 'new_folder_name' )
         );
     var $_actions_global = array( 'recalculate' );
     var $_request_class = 'AMP_Content_Image_List_Request';
@@ -28,7 +29,11 @@ class AMP_System_File_Image_List extends AMP_System_File_List {
         $this->__construct( $source, $criteria, $limit );
     }
 
-    function _search_path( ) {
+    function _search_path( $folder = null) {
+        if( $folder ) {
+            return AMP_LOCAL_PATH . AMP_IMAGE_PATH . AMP_IMAGE_CLASS_ORIGINAL . DIRECTORY_SEPARATOR  . $folder . DIRECTORY_SEPARATOR; 
+        }
+
         return AMP_LOCAL_PATH . AMP_IMAGE_PATH . AMP_IMAGE_CLASS_ORIGINAL . DIRECTORY_SEPARATOR ; 
     }
 
@@ -57,6 +62,16 @@ class AMP_System_File_Image_List extends AMP_System_File_List {
         $panel_contents = $this->_renderer->select( 'gallery_id', null, $gallery_options, array( 'class' => 'searchform_element') ) ;
         return $toolbar->add_panel( 'gallery', $panel_contents );
 
+    }
+
+    function render_toolbar_move( &$toolbar ) {
+        $folder_options = AMP_lookup( 'image_folders' );
+        $folder_options = array( '' => sprintf( AMP_TEXT_SELECT, AMP_TEXT_FOLDER )) + $folder_options;
+        $panel_contents = $this->_renderer->select( 'folder_name', null, $folder_options, array( 'class' => 'searchform_element') ) 
+            . $this->_renderer->space( 2 )
+            . "New Folder:"
+            . $this->_renderer->input( 'new_folder_name', "", array( 'class' => 'searchform_element' ));
+        return $toolbar->add_panel( 'move', $panel_contents );
     }
 
     function render_toolbar_recalculate( &$toolbar ) {
@@ -96,5 +111,14 @@ class AMP_System_File_Image_List extends AMP_System_File_List {
             );
     }
 
+    function _after_request( ) {
+        if (( $this->_request->getPerformedAction( ) != 'delete') 
+             && ( $this->_request->getPerformedAction( ) != 'move' )) {
+            return;
+        }
+        AMP_lookup_clear_cached( 'images');
+        AMP_lookup_clear_cached( 'db_images');
+        ampredirect( $_SERVER['REQUEST_URI']);
+    }
 }
 ?>

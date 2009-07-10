@@ -58,6 +58,11 @@ class AMP_System_File_Image_Form extends AMP_System_File_Form {
 
     function _verify_folder( $data, $column ) {
         if( !( isset( $data['new_folder']) && $data['new_folder'])) return $data['folder'];
+        if( AMP_add_image_subfolder( $data['new_folder'])) {
+            return $data['new_folder'];
+        }
+        return $data['folder'];
+        /*
         $ok = false;
         foreach( AMP_lookup( 'image_classes') as $image_class => $image_class_name ) {
             $class_folder = AMP_LOCAL_PATH . AMP_IMAGE_PATH . $image_class. DIRECTORY_SEPARATOR . $data['new_folder'];
@@ -74,6 +79,7 @@ class AMP_System_File_Image_Form extends AMP_System_File_Form {
         }
 
         return $data['folder'];
+         */
 
     }
 

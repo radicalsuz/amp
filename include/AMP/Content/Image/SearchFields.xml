@@ -3,4 +3,9 @@
         <label>Image Filename (use * as wildcard)</label>
         <type>text</type>
     </pattern>
+    <folder>
+        <label>Select Folder</label>
+        <type>select</type>
+        <lookup>image_folders</lookup>
+    </folder>
 </array>
