@@ -1884,4 +1884,25 @@ class AMPContentLookup_SectionRoutes extends AMPContentLookup_ArticleRoutes {
       parent::__construct();
     }
 }
+
+class AMPContentLookup_ImageFolders extends AMPSystem_Lookup {
+    function AMPContentLookup_ImageFolders( ){
+        $this->__construct( );
+    }
+
+    function __construct( ) {
+        $folders = array( );
+        $original_folder = AMP_pathFlip( AMP_LOCAL_PATH . AMP_IMAGE_PATH . AMP_IMAGE_CLASS_ORIGINAL );
+        $original_dir = opendir( $original_folder );
+
+        while( $filename = readdir( $original_dir )) {
+           if ( !( strpos( $filename, '.') === FALSE )) continue; 
+           if ( !is_dir( $original_folder . DIRECTORY_SEPARATOR . $filename )) continue;
+           $folders[$filename] = $filename;
+        }
+
+        $this->dataset = $folders;
+    }
+
+}
 ?>

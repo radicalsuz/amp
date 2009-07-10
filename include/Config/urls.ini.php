@@ -50,7 +50,7 @@ groups=        "groups.php"
 icons=         "/img/"
 
 image=         "image.php"
-images=        "img/"
+images=        "/img/"
 
 index=         "index.php"
 

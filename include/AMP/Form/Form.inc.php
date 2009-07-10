@@ -364,7 +364,7 @@ foreach( $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] as $type => $def ) {
         if (!$upLoader->execute( $_FILES[ $filefield ][ 'tmp_name' ] )) return false;
 
         require_once( 'AMP/Content/Image/Resize.inc.php');
-        $reSizer=&new ContentImage_Resize();
+        $reSizer = &new ContentImage_Resize();
         if ( $reSizer->setImageFile( $upLoader->getTargetPath( ))) {
             $reSizer->execute( );
             AMP_lookup_clear_cached( 'images');

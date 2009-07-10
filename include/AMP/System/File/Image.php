@@ -45,6 +45,10 @@ class AMP_System_File_Image extends AMP_System_File {
 
     function set_size( ) {
         if ( !isset( $this->_mimetype ) || array_search( $this->_mimetype, array_keys( $this->_read_methods )) === FALSE ) return false;
+        if( $this->getName( ) == 'pic') {
+            print AMPbacktrace( );
+            exit;
+        }
         $size_data = getimagesize( $this->getPath( ) ); 
         $this->width = $size_data[0];
         $this->height = $size_data[1];
@@ -200,7 +204,7 @@ class AMP_System_File_Image extends AMP_System_File {
 
     function db_id( ) {
         $db_images = AMP_lookup( 'db_images');
-        $name=$this->getName( );
+        $name = $this->getName( );
         if ( !( $db_images && $name )) return false;
         return array_search( $name, $db_images );
     }

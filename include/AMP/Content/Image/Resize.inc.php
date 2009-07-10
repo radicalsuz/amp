@@ -83,14 +83,15 @@ class ContentImage_Resize {
         if ( array_search( $image_ref->get_mimetype( ), $this->_allowed_mimetypes ) === FALSE ) {
             $this->addError( AMP_TEXT_ERROR_IMAGE_NOT_ALLOWED );
             return false;
-
         }
+
         $this->_paths = array( 
-            AMP_IMAGE_CLASS_OPTIMIZED   => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_OPTIMIZED ),  
+            AMP_IMAGE_CLASS_OPTIMIZED   => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_OPTIMIZED),
             AMP_IMAGE_CLASS_THUMB       => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_THUMB ),  
             AMP_IMAGE_CLASS_ORIGINAL    => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_ORIGINAL ),  
             AMP_IMAGE_CLASS_CROP        => AMP_image_path( $image_ref->getName( ), AMP_IMAGE_CLASS_CROP ),  
             );
+        $image_ref->getFilename( );
         
         $this->_image_ref = &$image_ref;
         $this->_initCrop( );
@@ -99,7 +100,7 @@ class ContentImage_Resize {
     }
 
     function _initCrop( ) {
-        $crop_path = $this->_paths[AMP_IMAGE_CLASS_CROP]
+        $crop_path = $this->_paths[AMP_IMAGE_CLASS_CROP];
         if ( !file_exists( $crop_path )) return false;
         $this->_crop_ref = &new AMP_System_File_Image( $crop_path );
     }

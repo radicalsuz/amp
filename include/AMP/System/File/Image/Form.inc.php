@@ -13,7 +13,9 @@ class AMP_System_File_Image_Form extends AMP_System_File_Form {
         $this->addTranslation( 'name_display', '_showThumbNail', 'set');
         $this->addTranslation( 'linked_articles_display', 'render_articles', 'set');
         $this->addTranslation( 'linked_galleries_display', 'render_galleries', 'set');
+
         //manually register the manageUpload plugin so it run BEFORE _name_as_image
+        $this->addTranslation( 'folder', '_verify_folder', 'get');
         $this->addTranslation( 'image', '_manageUpload', 'get');
         $this->addTranslation( 'image', '_name_as_image', 'get');
         $filename = ( isset( $_REQUEST['file']) && $_REQUEST['file']) ? $_REQUEST['file'] : false;
@@ -22,7 +24,12 @@ class AMP_System_File_Image_Form extends AMP_System_File_Form {
     }
 
     function _after_init( ){
-        //register name_as_image here so it runs after manageUpload
+
+    }
+
+    function drop_uneditable_fields( ) {
+        $this->dropField( 'folder');
+        $this->dropField( 'new_folder');
 
     }
 
@@ -32,11 +39,42 @@ class AMP_System_File_Image_Form extends AMP_System_File_Form {
         return ( isset( $data['name']) && $data['name'] ) ? $data['name'] : false;
     }
 
-    function _initUploader( $data, $filefield, &$upLoader ){
-        $upLoader->setFolder( 'img/original');
+    function _initUploader( $data, $filefield, &$uploader ){
         if ( isset( $data['filename']) && $data['filename']){
-            $upLoader->setTargetFileName( $data['filename']);
+            $uploader->setTargetFileName( $data['filename']);
         }
+
+        $folder_name = isset( $data['folder']) && $data['folder'] ? $data['folder'] : false;
+        if( !$folder_name ) {
+            $folder_name = isset( $data['new_folder']) && $data['new_folder'] ? $data['new_folder'] : false;
+        }
+        if( !$folder_name ) {
+            $uploader->setFolder( 'img/original');
+            return;
+        }
+
+        $uploader->setFolder( AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL . DIRECTORY_SEPARATOR . $folder_name );
+    }
+
+    function _verify_folder( $data, $column ) {
+        if( !( isset( $data['new_folder']) && $data['new_folder'])) return $data['folder'];
+        $ok = false;
+        foreach( AMP_lookup( 'image_classes') as $image_class => $image_class_name ) {
+            $class_folder = AMP_LOCAL_PATH . AMP_IMAGE_PATH . $image_class. DIRECTORY_SEPARATOR . $data['new_folder'];
+            $ok = AMP_mkdir( $class_folder );
+            if( !$ok ) {
+                trigger_error( 'Unable to create folder' . $class_folder );
+                break;
+            }
+        }
+
+        if ( $ok ) {
+            AMP_lookup_clear_cached( 'image_folders');
+            return $data['new_folder'];
+        }
+
+        return $data['folder'];
+
     }
 
     function setValues( $data ) {

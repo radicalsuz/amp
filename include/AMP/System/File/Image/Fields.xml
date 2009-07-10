@@ -16,6 +16,15 @@
     <name>
         <type>hidden</type>
     </name>
+    <folder>
+        <type>select</type>
+        <lookup>image_folders</lookup>
+        <label>Use Folder</label>
+    </folder>
+    <new_folder>
+        <type>text</type>
+        <label>New Folder</label>
+    </new_folder>
     <image_detail_header>
         <type>blocktrigger</type>
         <label>Image Details ( optional )</label>

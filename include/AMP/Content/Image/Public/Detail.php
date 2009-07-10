@@ -86,7 +86,7 @@ STYLESHEET;
     }
 
     function get_source_version( $source, $class ) {
-        if ( $this->source_class( $source_class ) == $class ) return $source;
+        if ( $this->source_class( $source ) == $class ) return $source;
         return new AMP_System_File_Image( AMP_image_path( $source->getName( ), $class ));
     }
 

@@ -15,9 +15,14 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $result = parent::_init_model( $model );
 
         if( !isset( $this->_model_id )) return $result; 
+        if( is_numeric( $this->_model_id )) {
+            $this->_model->read( $this->_model_id );
+        } else {
+            $file_name = ( AMP_LOCAL_PATH . '/' . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL . '/' . $this->_model_id );
+            $this->_model->setFile( $file_name );
 
-        $file_name = ( AMP_LOCAL_PATH . '/' . AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL . '/' . $this->_model_id );
-        $this->_model->setFile( $file_name );
+        }
+
 
         $crop_form = &$this->_map->getComponent( 'crop', $this->_model );
         if ( !$crop_form ) return $result;
@@ -31,8 +36,13 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
     }
 
     function commit_add( ) {
-        $filename = $this->assert_var( 'file');
+        if( AMP_params( 'action') == 'review') {
+            return parent::commit_add( );
+        }
+
+        $filename = AMP_params( 'file');
         $this->_model->setFile( AMP_image_path( $filename ));
+
         if( $this->_model->db_id( )) {
             ampredirect( AMP_url_update( $_SERVER['REQUEST_URI'], array( 'action' => 'edit', 'file' => '', 'id' => $this->_model->db_id( ) )));
             return true;
@@ -117,7 +127,8 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
     function _commit_crop_thumbnail ( $real_sizes ){
         $target_path  = AMP_image_path( $this->_model->getName( ), AMP_IMAGE_CLASS_CROP );
-		AMP_mkDir( substr( $target_path, 0, strlen( $target_path ) - strlen( $this->_model->getName() - 1)));
+		#AMP_mkDir( substr( $target_path, 0, strlen( $target_path ) - strlen( $this->_model->getName() - 1)));
+		AMP_mkDir( dirname( $target_path ));
         $new_image = &$this->_model->crop( $real_sizes['start_x'], $real_sizes['start_y'], $real_sizes['start_x'] + $real_sizes['width'], $real_sizes['start_y'] + $real_sizes['height']);
         if ( !$new_image ) return $this->_commit_crop_failure( );
 
@@ -173,7 +184,13 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $db_data = $data;
         if ( !( isset( $data['id']) && $data['id'])) {
             //create new db record
-            $db_data['name']    = $data['image'];
+            if( isset( $data['folder']) && $data['folder']) {
+                $db_data['name']    = $data['folder'] . DIRECTORY_SEPARATOR . $data['image'];
+                $db_data['folder']  = $data['folder'];
+            } else {
+                $db_data['name']    = $data['image'];
+
+            }
             $db_data['publish'] = AMP_CONTENT_STATUS_LIVE;
             $db_data['created_at'] = date( "Y-m-d h:i:s" );
             $db_data['created_by'] = AMP_SYSTEM_USER_ID;
@@ -199,7 +216,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
 
     }
 
-    function _commit_save_actions( $values ){
+    function _commit_save_actions( $values ) {
         $db_images = AMP_lookup( 'db_images');
         if( isset( $this->_model_id ) && isset( $db_images[$this->_model_id])) {
             $image_name = $this->_file_name_affected = $db_images[$this->_model_id];
@@ -207,6 +224,10 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
             return false;
         } else {
             $image_name = $this->_file_name_affected = $values['image'];
+            if( isset( $values['folder']) && $values['folder']) {
+                $image_name = $this->_file_name_affected = $values['folder'] . DIRECTORY_SEPARATOR . $values['image'];
+                
+            }
         }
 
         $values['img'] = $image_name;
@@ -221,6 +242,19 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         $this->_display->add( $buffer );
         $this->_file_name_affected = $image_name;
         $this->_update_image_cache_add( $image_name );
+        ampredirect( AMP_url_update( AMP_SYSTEM_URL_IMAGES, array( 'action' => 'review', 'review_file' => $image_name )));
+    }
+
+    function commit_review( ) {
+        if( !AMP_params( 'review_file') ) return $this->commit_add( );
+        $image_name = AMP_params( 'review_file' );
+
+        require_once( 'AMP/Content/Image/Display.inc.php');
+        $this->_model->setFile( AMP_image_path( $image_name , AMP_IMAGE_CLASS_ORIGINAL));
+        $buffer = new AMP_Content_Buffer( );
+        $buffer->add( $this->_model->display->render_proofsheet( $this->_model ));
+        $this->_display->add( $buffer );
+        return $this->commit_add( );
     }
 
     function commit_edit( ) {
@@ -232,6 +266,7 @@ class AMP_System_File_Image_Controller extends AMP_System_File_Controller {
         }
         $data = $this->_model->getData( );
         $this->_form->setValues( $this->_model->getData( ));
+        $this->_form->drop_uneditable_fields( );
 		$this->_display->add( $this->_form, 'form' ); 
 		return true;
     }

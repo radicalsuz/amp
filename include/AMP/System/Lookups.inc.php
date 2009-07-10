@@ -84,7 +84,7 @@ class AMPSystem_Lookup {
         $this->dataset = $factory->readData( $this );
     }
 
-    function &instance( $type, $instance_var = null, $lookup_baseclass="AMPSystemLookup" ) {
+    function &instance( $type, $instance_var = null, $lookup_baseclass="AMPSystemLookup", $clear_existing = false ) {
         static $lookup_set = false;
         static $cache = false;
         
@@ -93,29 +93,18 @@ class AMPSystem_Lookup {
             $cache = AMP_get_cache( );
         }
 
-        /*
-        if (!$lookup_set) {
-            $lookup_set = AMP_cache_get( AMP_CACHE_TOKEN_LOOKUP . 'Master__' . AMP_SYSTEM_USER_ID ); 
-            if ( !$lookup_set ) {
-                $lookup_set = array( );
-            }
-        }
-        */
         $req_class = $lookup_baseclass . '_' . ucfirst( $type );
         if ( !class_exists( $req_class ) ){
             trigger_error( sprintf( AMP_TEXT_ERROR_LOOKUP_NOT_FOUND, $req_class) );
             return $empty_value;
         }
         if ( !isset( $instance_var )) {
+            if ( $clear_existing ) {
+                unset( $lookup_set[$type] );
+                return $empty_value;
+            }
             //standard lookup
-            if (!isset($lookup_set[$type])) {
-                /*
-                $lookup_cache_key_base = AMP_CACHE_TOKEN_LOOKUP . ( $type );
-                $lookup_cache_key = $lookup_cache_key_base;
-                if ( defined( 'AMP_SYSTEM_USER_ID')) {
-                    $lookup_cache_key = AMP_System_Cache::identify( $lookup_cache_key_base, AMP_SYSTEM_USER_ID );
-                }
-                */
+            if ( !isset($lookup_set[$type])) {
                 $lookup_cache_key = AMPSystem_Lookup::cache_key( $type, $instance_var );
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
                 if ( !( $cached_lookup && (!method_exists($cached_lookup,'allow_cache') || $cached_lookup->allow_cache( ))) ) {
@@ -132,15 +121,11 @@ class AMPSystem_Lookup {
             if ( !isset( $lookup_set[$type])) {
                 $lookup_set[$type] = array( );
             }
-            if ( !isset( $lookup_set[$type][$instance_var])) {
-                /*
-                $lookup_cache_key = AMP_CACHE_TOKEN_LOOKUP . ( $type );
-                if ( defined( 'AMP_SYSTEM_USER_ID')) {
-                    $lookup_cache_key = AMP_System_Cache::identify( AMP_CACHE_TOKEN_LOOKUP . ( $type ), AMP_SYSTEM_USER_ID );
-                }
-                $lookup_cache_key = AMP_System_Cache::identify( $lookup_cache_key . 'K', $instance_var );
-                $cached_lookup = AMP_cache_get( $lookup_cache_key );
-                */
+            if ( $clear_existing ) {
+                unset( $lookup_set[$type][$instance_var] );
+                return $empty_value;
+            }
+            if ( !isset( $lookup_set[$type][$instance_var] )) {
                 $lookup_cache_key = AMPSystem_Lookup::cache_key( $type, $instance_var );
                 $cached_lookup = AMP_cache_get( $lookup_cache_key );
                 if ( !$cached_lookup ) {

@@ -1210,8 +1210,7 @@ if ( !function_exists( 'AMP_mkdir')) {
         $parent_path = join( DIRECTORY_SEPARATOR, $dir_set );
 
         if ( AMP_mkdir( $parent_path )){
-            mkdir( $new_path );
-            return true;
+            return mkdir( $new_path );
         }
         return false;
     }
@@ -1760,9 +1759,23 @@ function AMP_lookup( $lookup_type, $lookup_var = null ) {
 }
 
 function AMP_lookup_clear_cached( $type, $instance_var = null ) {
+    //delete from memcache
     require_once( "AMP/System/Lookups.inc.php");
     $key = AMPSystem_Lookup::cache_key( $type, $instance_var );
     AMP_cache_delete( $key );
+
+    //clear existing in-memory copy
+    /*
+    $lookup_types = array( 'AMPSystem_Lookup' => 'AMPSystemLookup_', 
+                            'AMPContent_Lookup' => 'AMPContentLookup_', 
+                            'FormLookup' => 'FormLookup_');
+    $instance = AMP_to_camelcase( $lookup_type );
+    $value = false;
+    foreach( $lookup_types as $base_type => $prefix ) {
+        if ( !class_exists( $prefix . ucfirst( $instance ))) continue;
+        call_user_func_array( array( $base_type, 'instance'), array( $instance, $lookup_var, str_replace( '_', '', $prefix), true ));
+    }
+     */
 }
 
 function AMP_permission_update( ) {

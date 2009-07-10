@@ -17,6 +17,8 @@ class AMP_System_File {
     var $_observers = array( );
     var $id;
     var $_class_name = 'AMP_System_File';
+    var $_parent_folder;
+    var $_special_parent_folders = array( "img/original", "img/pic", "img/crop", "img/thumb", "downloads"  );
 
     var $_mimetype;
 
@@ -37,7 +39,10 @@ class AMP_System_File {
         $this->_path = $file_path;
         $this->_basename = basename( $file_path );
         $this->_extension = $this->findExtension( $file_path );
-        $this->id = &$this->_basename;
+        $folders = split( DIRECTORY_SEPARATOR, dirname( $file_path ) );
+        $this->_parent_folder = array_pop( $folders );
+
+        $this->id = &$this->getName( );
     }
 
     function findExtension( $file_path ){
@@ -55,7 +60,30 @@ class AMP_System_File {
     }
 
     function getName( ){
+        if( $this->inSpecialSubfolder( )) {
+            return $this->_parent_folder . DIRECTORY_SEPARATOR . $this->_basename;
+        }
+
         return $this->_basename;
+    }
+
+    function inSpecialFolder( ) {
+        return preg_match( "/(" . str_replace( "/", "\/", join( "|", $this->_special_parent_folders)). ")/", $this->_path );
+    }
+
+    function inSpecialSubfolder( ) {
+        if ( !$this->inSpecialFolder( )) return false;
+        return !preg_match( "/(" . str_replace( "/", "\/", join( "|", $this->_special_parent_folders)). ")$/", dirname( $this->_path ) );
+
+    }
+
+    function getFilename( ) {
+        return $this->_basename;
+
+    }
+
+    function getSubfolder( ) {
+        return $this->_parent_folder;
     }
 
     function getExtension( ){
@@ -106,8 +134,24 @@ class AMP_System_File {
         $path = isset( $criteria['path']) && $criteria['path'] ? $criteria['path'] : false;
         $pattern = isset( $criteria['pattern']) && $criteria['pattern'] ? $criteria['pattern'] : '*';
         if ( $path && ( substr( $path, -1 ) !== DIRECTORY_SEPARATOR )) $path .= DIRECTORY_SEPARATOR;
+        $path = $this->add_subfolders_glob_to_path( $path );
+
         return $path . $pattern;
 
+    }
+
+    function add_subfolders_glob_to_path( $path ) {
+        $subfolders =  array_map( "basename", glob( $path . "*", GLOB_ONLYDIR ) );
+        if( !empty( $subfolders )) {
+            $subfolders = array_map( array( $this, "append_slash" ), $subfolders );
+            array_push( $subfolders, "");
+            $path .= "{".join( ",", $subfolders ) . "}";
+        }
+        return $path;
+    }
+
+    function append_slash( $value ) {
+        return $value . DIRECTORY_SEPARATOR;
     }
 
     function assign_criteria( $criteria = array( )) {
@@ -138,8 +182,7 @@ class AMP_System_File {
         $dir_contents = $this->_search_limit ? false : AMP_cache_get( $folder_cache_key );
         if ( !$dir_contents ) {
 
-            #while( $file_name = readdir( $folder )){
-            $files = $this->sort_glob( glob( $complete_path ));
+            $files = $this->sort_glob( glob( $this->create_glob_expression( array( 'path' => $folder_path, 'pattern' => $filename_pattern )), GLOB_BRACE ));
             foreach( $files as $file_name ) {
                 if (!is_file( $file_name )) continue; 
     
@@ -200,8 +243,9 @@ class AMP_System_File {
 
     function NoLimitRecordCount( ){
         #return count( glob( $this->create_glob_expression( $this->_source_criteria )));
-        $set = ( glob( $this->create_glob_expression( $this->_source_criteria )));
+        $set = ( glob( $this->create_glob_expression( $this->_source_criteria ), GLOB_BRACE));
         $file_set = array_filter( $set, 'is_file' );
+        $dir_set = array_filter( $set, 'is_dir' );
         $value = count( $file_set );
         return $value;
     }
@@ -272,7 +316,7 @@ class AMP_System_File {
     }
 
     function get_index( $property ) {
-        $set = ( glob( $this->create_glob_expression( $this->_source_criteria )));
+        $set = ( glob( $this->create_glob_expression( $this->_source_criteria ), GLOB_BRACE ));
         if( !$set ) return array( );
         $file_set = array_filter( $set, 'is_file' );
         $file_set = $this->sort_glob( $file_set );

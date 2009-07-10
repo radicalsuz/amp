@@ -14,7 +14,7 @@ class AMP_Content_Image_Observer extends AMP_System_Observer {
     function onDelete( &$source ){
         //delete all versions
         foreach( AMP_lookup('image_classes' ) as $current_class ){
-            $fullpath = AMP_image_path( $source->getName( ), $current_class )
+            $fullpath = AMP_image_path( $source->getName( ), $current_class );
             if ( !file_exists( $fullpath )) continue;
             unlink( $fullpath );
         }

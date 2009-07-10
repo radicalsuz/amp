@@ -29,7 +29,7 @@ class AMP_System_File_Image_List extends AMP_System_File_List {
     }
 
     function _search_path( ) {
-        return AMP_LOCAL_PATH . DIRECTORY_SEPARATOR . AMP_IMAGE_PATH . DIRECTORY_SEPARATOR . AMP_IMAGE_CLASS_ORIGINAL . DIRECTORY_SEPARATOR;
+        return AMP_LOCAL_PATH . AMP_IMAGE_PATH . AMP_IMAGE_CLASS_ORIGINAL . DIRECTORY_SEPARATOR ; 
     }
 
 

@@ -47,7 +47,6 @@ class AMP_System_File_List extends AMP_Display_System_List {
         $source = $list_source->find( $this->_source_criteria, $this->_source_object );
         $this->set_source( $source );
 
-
     }
 
     function _init_sort_glob( &$source )  {
