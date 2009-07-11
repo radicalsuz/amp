@@ -12,7 +12,8 @@ if ( $cached_output = AMP_cached_request( )) {
 if( $request && ( $controller = AMP_Dispatcher::respond( $request ))) {
     $controller->execute( );
 } else {
-    AMP_make_404();
+
+    include( '404.php');
     exit;
 }
 require_once("AMP/BaseFooter.php");
