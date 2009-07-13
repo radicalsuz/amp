@@ -388,11 +388,22 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
      * @return void
      */
     function find( $criteria = null, $class_name = null  ) {
+        if( $class_name ) {
+            $finder = new $class_name( AMP_dbcon( ));
+        } elseif( !isset( $this )) {
+            $context = debug_backtrace( );
+            trigger_error( 'class name not included for call to '.__FUNCTION__.' on '.$debug_backtrace[0]['class']);
+            return false;
+        } else {
+            $finder = $this;
+        }
+
         $order_by = isset( $criteria['sort']) && $criteria['sort'] ? $criteria['sort'] : false;
         $source_limit = isset( $criteria['limit']) && $criteria['limit'] ? $criteria['limit'] : false;
         $source_offset = isset( $criteria['offset']) && $criteria['offset'] ? $criteria['offset'] : false;
+
         if ( $order_by || $source_limit || $source_offset ) {
-            $source = &$this->_getSearchSource( );
+            $source = &$finder->_getSearchSource( );
             if( $order_by ) {
                 $source->setSort( $order_by );
             }
@@ -403,7 +414,7 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
                 $source->setOffset( $source_offset );
             }
         }
-        return $this->search( $this->makeCriteria( $criteria ), $class_name );
+        return $finder->search( $finder->makeCriteria( $criteria ), $class_name );
     }
 
     function &getSearchSource( $criteria = null ){
@@ -726,6 +737,20 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
     function getListNameSuffix( ) {
         return false;
     }
+
+    function create( $attributes = array( ), $class_name = null ) {
+        if( !$class_name ) {
+            $context = debug_backtrace( );
+            trigger_error( 'class name not included for call to '.__FUNCTION__.' on '.$debug_backtrace[0]['class']);
+            return false;
+        }
+
+        $item = new $class_name( AMP_dbcon( ));
+        $item->setDefaults( );
+        $item->mergeData( $attributes );
+        return $item;
+    }
+
 
 
 }
