@@ -41,6 +41,7 @@ if ( $showForm ) {
   $email_maker->setRecipient( AMP_SITE_EMAIL_CONTACT );
   $email_maker->setMessage( $data['message'] );
   $email_maker->setSender( $data['sender_email'] );
+  $email_maker->setSenderName( false );
   $email_maker->setSubject( $data['subject'] );
   $email_maker->execute( );
 

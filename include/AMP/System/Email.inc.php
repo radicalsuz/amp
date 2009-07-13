@@ -50,7 +50,7 @@ class AMPSystem_Email {
 
     function getSenderName() {
         if (!isset($this->_senderName)) return false;
-        return $this->_senderName;
+        return str_replace( ',', '', $this->_senderName);
     }
 
     function getSender() {
