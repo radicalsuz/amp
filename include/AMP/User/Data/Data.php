@@ -14,7 +14,7 @@ class AMP_User_Data extends AMP_User_Profile {
         foreach( $image_fields as $image_field_desc ) {
             $user_data->update_all( 
                 $image_field_desc['fieldname'] . "=" . $user_data->qstr( $new_name ),
-                $user_data->makeCriteria( 'modin' => $image_field_desc['modin'] )  . " AND " . $user_data->_makeCriteriaEquals( $image_field_desc['fieldname'], $existing_name )
+                $user_data->makeCriteria( array( 'modin' => $image_field_desc['modin'] ))  . " AND " . $user_data->_makeCriteriaEquals( $image_field_desc['fieldname'], $existing_name )
             );
         }
 

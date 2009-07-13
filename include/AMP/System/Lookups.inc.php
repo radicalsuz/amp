@@ -1181,7 +1181,7 @@ class AMPSystemLookup_Images extends AMPSystem_Lookup {
     }
 
     function __construct( ) {
-        $this->dataset = AMPfile_list( 'img/thumb' );
+        $this->dataset = AMPfile_list( 'img/thumb', null, true );
     }
 }
 

@@ -599,7 +599,7 @@ function &array_find_element( $key, $data ) {
 }
 
 if (!function_exists('AMPfile_list')) {
-		function AMPfile_list($file,$ext=NULL) { 
+		function AMPfile_list($file, $ext=null, $recursive=false) { 
             if (( strpos( $file, AMP_LOCAL_PATH ) === FALSE )
                 && ( substr( $file, 0, 1 ) != DIRECTORY_SEPARATOR )) {
                 $dir_name= AMP_LOCAL_PATH.DIRECTORY_SEPARATOR.$file;  
@@ -614,7 +614,17 @@ if (!function_exists('AMPfile_list')) {
             $basename = basename($dir_name);
             $fileArr = array();
             while ($file_name = readdir($dir)) {
-                if ( is_dir( $dir_name . DIRECTORY_SEPARATOR . $file_name )) continue; 
+                if ( is_dir( $dir_name . DIRECTORY_SEPARATOR . $file_name )) {
+                    if( !$recursive || substr( $file_name, 0, 1) =='.' ) continue;
+                    $subdir_results = AMPfile_list( $dir_name . DIRECTORY_SEPARATOR . $file_name, $ext, $recursive );
+                    if( $subdir_results ) {
+                        foreach( $subdir_results as $result_key => $result_name ) {
+                            if( !$result_key ) continue;
+                            $fileArr[$file_name.DIRECTORY_SEPARATOR.$result_name] = $file_name . DIRECTORY_SEPARATOR . $result_name;
+                        }
+                    }
+                    continue;
+                }
                 
                 if ( isset( $ext) && $ext ) {
                     $file_ext = false;
@@ -625,6 +635,7 @@ if (!function_exists('AMPfile_list')) {
                 }
                 $fileArr[$file_name] = $file_name;
             }	
+
             //uksort($fileArr, "strnatcasecmp");
             natcasesort( $fileArr );
             $final_list = array( '' => 'Select') + $fileArr;
