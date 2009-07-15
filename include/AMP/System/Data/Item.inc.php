@@ -757,7 +757,13 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             $action = array( $action );
         }
         $search = &$this->getSearchSource( );
-        $scope = join( ' AND ', $this->makeCriteria( $criteria )) ;
+
+        if( is_array( $criteria )) {
+            $scope = join( ' AND ', $this->makeCriteria( $criteria )) ;
+        } else {
+            $scope = $criteria;
+        }
+
         return $search->updateData( $action, $scope );
     }
 

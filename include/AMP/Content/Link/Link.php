@@ -48,6 +48,7 @@ class AMP_Content_Link extends AMPSystem_Data_Item {
     }
 
     function _saveRelatedLinks( $link_values ){
+        if( !$link_values ) return true;
         foreach( $link_values as $section_id ){
             $set = &$this->_getReltypeSource( );
             $set->insertData( array( 'linkid' => $this->id, 'typeid' => $section_id ));

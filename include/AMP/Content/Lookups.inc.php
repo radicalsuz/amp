@@ -1917,13 +1917,13 @@ class AMPSystemLookup_UserdataImageFields extends AMPSystem_Lookup {
         $field_names = AMP_get_column_names( 'userdata_fields');
         foreach( $field_names as $field_name ) {
             if( strpos( $field_name, 'type_' ) === 0 ) {
-                $type_fields = $field_name;
+                $type_fields[] = $field_name;
             }
         }
 
         $image_pickers = array( );
         foreach( $type_fields as $type_field ) {
-            $matches = AMP_lookup( 'userdata_images_by_field');
+            $matches = AMP_lookup( 'userdata_images_by_field', $type_field );
             if( !$matches ) continue;
 
             foreach( $matches as $match_id => $match_type ) {
@@ -1948,8 +1948,9 @@ class AMPSystemLookup_UserdataImagesByField extends AMPSystem_Lookup {
     }
 
     function __construct( $field_name ) {
-        $this->_criteria = "$field_name = 'imagepicker'";
+        $this->criteria = "$field_name = 'imagepicker'";
         $this->result_field = $field_name;
+        $this->init( );
     }
 }
 ?>
