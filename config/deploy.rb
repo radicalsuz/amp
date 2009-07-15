@@ -1,5 +1,5 @@
+require 'capistrano/ext/multistage'
 set :application, "amp"
-set :repository,  "https://svn.radicaldesigns.org/amp/trunk"
 
 set :user, "amp"
 
@@ -7,12 +7,10 @@ set :user, "amp"
 # servers (which is the default), you can specify the actual location
 # via the :deploy_to variable:
 # set :deploy_to, "/var/www/#{application}"
-set :deploy_to, "/home/#{application}/source"
 set :deploy_via, :remote_cache
-set :current_dir, "../public_html"
 set :use_sudo, false
 
-role(:app,  "gertie.radicaldesigns.org", "sft.slice.radicaldesigns.org",  "sadie.radicaldesigns.org", "grace.radicaldesigns.org", "cindy.radicaldesigns.org" )
+role(:app,  "gertie.radicaldesigns.org", "sft.slice.radicaldesigns.org",  "sadie.radicaldesigns.org", "grace.radicaldesigns.org", "cindy.radicaldesigns.org", "gtd.radicaldesigns.org", "codepink.slice.radicaldesigns.org )
 
 role :db,   "gertie.radicaldesigns.org"
 #role :db,  "sadie.radicaldesigns.org", :primary => true
