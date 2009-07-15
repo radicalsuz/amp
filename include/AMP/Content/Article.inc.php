@@ -1107,8 +1107,8 @@ class Article extends AMPSystem_Data_Item {
     function makeCriteriaImageInBody( $image_filename ) {
         $image_conditions= array( );
         $condition = "test like %s";
-        foreach( AMP_lookup( 'image_classes') as $image_class ) {
-            $image_conditions[] = sprintf( $condition, $this->dbcon->qstr( '%' . AMP_image_url( $image_filename, $image_class ) . '%'));
+        foreach( AMP_lookup( 'image_classes') as $image_dir => $image_class ) {
+            $image_conditions[] = sprintf( $condition, $this->dbcon->qstr( '%' . AMP_image_url( $image_filename, $image_dir ) . '%'));
         }
         return join( ' OR ', $image_conditions );
 

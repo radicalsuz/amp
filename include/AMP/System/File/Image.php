@@ -299,6 +299,11 @@ class AMP_System_File_Image extends AMP_System_File {
             if( !AMP_add_image_subfolder( $create_folder_name )) return false;
             $folder_name = $create_folder_name;
         }
+        if( !$folder_name ) return false;
+        if( file_exists( AMP_image_path( $this->getNameForFolder( $folder_name )))) {
+            AMP_flashMessage( sprintf( AMP_TEXT_ERROR_FILE_EXISTS, $this->getNameForFolder( $folder_name )));
+            return false;
+        }
 
         foreach( AMP_lookup( 'image_classes') as $image_class => $image_class_name ) {
             if( !file_exists( AMP_image_path( $this->getName( ), $image_class ))) continue;
@@ -320,6 +325,9 @@ class AMP_System_File_Image extends AMP_System_File {
     }
 
     function getNameForFolder( $folder_name ) {
+        if( !$folder_name || $folder_name == DIRECTORY_SEPARATOR ) {
+            return $this->getFilename( );
+        }
         return $folder_name . DIRECTORY_SEPARATOR . $this->getFilename( );
     }
 
@@ -339,7 +347,7 @@ class AMP_System_File_Image extends AMP_System_File {
         require_once( 'AMP/Content/Link/Link.php' );
         require_once( 'AMP/User/Data/Data.php');
 
-        $this->update_associated_items( 'Section', 'image', $new_folder_name );
+        $this->update_associated_items( 'Section', 'image2', $new_folder_name );
         $this->update_associated_items( 'Section', 'flash', $new_folder_name );
         $this->update_associated_items( 'Article', 'image', $new_folder_name );
         $this->update_associated_items( 'Gallery', 'img',   $new_folder_name );
@@ -362,53 +370,12 @@ class AMP_System_File_Image extends AMP_System_File {
 
         return true;
         
-        /*
-        $gallery_images = GalleryImage::find( array( 'img' => $this->getName( ), 'GalleryImage' );
-        foreach( $gallery_images as $image ) {
-            $image->mergeData( 'img' => $this->getNameForFolder( $new_folder_name ) );
-            $image->save( );
-        }
-         */
-
-        /*
-        $articles = Article::find( array( 'image' => $this->getName( ), 'Article'));
-        foreach( $articles as $article ) {
-            $article->mergeData( array( 'image' => $this->getNameForFolder( $new_folder_name )));
-            $article->save( );
-        }
-         */
-
-        //section banners
-        /*
-        $sections = Section::find( array( 'image' => $this->getName( ), 'Section'));
-        foreach( $sections as $section ) {
-            $section->mergeData( array( 'image' => $this->getNameForFolder( $new_folder_name )));
-            $section->save( );
-        }
-        
-        $sections = Section::find( array( 'flash' => $this->getName( ), 'Section'));
-        foreach( $sections as $section ) {
-            $section->mergeData( array( 'flash' => $this->getNameForFolder( $new_folder_name )));
-            $section->save( );
-        }
-         */
-        
-        //gallerytype thumb
-        /*
-        $galleries = Gallery::find( array( 'img' => $this->getName( )), 'Gallery');
-        foreach( $galleries as $gallery ) {
-            $gallery->mergeData( array( 'img' => $this->getName( )));
-            $gallery->save( );
-        }
-         */
-
-
     }
 
     function update_associated_items( $class_name, $var_name, $folder_name ) {
         $items = call_user_func_array( array( $class_name, 'find' ), array( array( $var_name => $this->getName( )), $class_name ));
         if ( !$items ) {
-            trigger_error( 'no matching ' . $class_name . ' found for ' . $this->getName( ));
+            return;
              
         }
         foreach( $items as $item ) {

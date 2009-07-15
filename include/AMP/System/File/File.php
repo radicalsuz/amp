@@ -298,7 +298,7 @@ class AMP_System_File {
     function delete( ){
         $result = unlink( $this->getPath( ));
         $this->notify( 'delete');
-        return $result;
+        return true;
     }
 
     function notify( $action ){
@@ -320,11 +320,21 @@ class AMP_System_File {
         if( !$set ) return array( );
         $file_set = array_filter( $set, 'is_file' );
         $file_set = $this->sort_glob( $file_set );
-        if ( $property == 'name' ) return array_map( 'basename', $file_set );
+        if ( $property == 'name' ) return array_map( array( $this, 'name_with_special_subfolder' ), $file_set );
         if ( $property == 'time') {
             $format = array_fill( 0, count( $file_set), AMP_CONTENT_DATE_FORMAT );
             return array_map( 'date', $format, array_map( 'filemtime', $file_set ));
         }
+    }
+
+    function name_with_special_subfolder( $path ) {
+        $image_folders = AMP_lookup( 'image_folders');
+        if( empty( $image_folders )) return basename( $path );
+        if( in_array( basename( dirname( $path )), $image_folders )) {
+            return basename( dirname( $path )) . DIRECTORY_SEPARATOR . basename( $path );
+        }
+        return basename( $path );
+
     }
 
     function get_select_from_sort( $sort_property ) {
