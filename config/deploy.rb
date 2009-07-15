@@ -10,7 +10,7 @@ set :user, "amp"
 set :deploy_via, :remote_cache
 set :use_sudo, false
 
-role(:app,  "gertie.radicaldesigns.org", "sft.slice.radicaldesigns.org",  "sadie.radicaldesigns.org", "grace.radicaldesigns.org", "cindy.radicaldesigns.org", "gtd.radicaldesigns.org", "codepink.slice.radicaldesigns.org )
+role(:app,  "gertie.radicaldesigns.org", "sft.slice.radicaldesigns.org",  "sadie.radicaldesigns.org", "grace.radicaldesigns.org", "cindy.radicaldesigns.org", "gtd.radicaldesigns.org", "codepink.slice.radicaldesigns.org" )
 
 role :db,   "gertie.radicaldesigns.org"
 #role :db,  "sadie.radicaldesigns.org", :primary => true
