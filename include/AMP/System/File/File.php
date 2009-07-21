@@ -42,7 +42,7 @@ class AMP_System_File {
         $folders = split( DIRECTORY_SEPARATOR, dirname( $file_path ) );
         $this->_parent_folder = array_pop( $folders );
 
-        $this->id = &$this->getName( );
+        $this->id = $this->getName( );
     }
 
     function findExtension( $file_path ){

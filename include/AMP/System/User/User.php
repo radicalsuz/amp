@@ -53,6 +53,7 @@ class AMPSystem_User extends AMPSystem_Data_Item {
 
     function readUsername( $username ){
         $names = AMP_lookup( 'users');
+        if( !$names ) return false;
         $key = array_keys( $names, $username );
         if ( $key = array_search( $username, $names ) ) {
             $this->readData( $key );

@@ -436,7 +436,7 @@ class AMP_Display_List {
         $this->update_pager( $list_sql_source );
 
         //source created as array of values
-        $source = $list_source->find( $this->_source_criteria, $this->_source_object );
+        $source = $list_source->find( $this->_source_criteria );
         $this->set_source( $source );
 
 

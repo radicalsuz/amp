@@ -8,8 +8,8 @@ class Article_Public_List_Grouped extends Article_Public_List {
     var $_pager_active = true;
     var $_pager_limit = 20;
 
-    function Article_Public_List_Grouped( &$source, $criteria = array( ), $limit = null ) {
-        $this->__construct( null, $criteria, $limit );
+    function Article_Public_List_Grouped( $container  = false, $criteria = array( ), $limit = null ) {
+        $this->__construct( $container, $criteria, $limit );
     }
 
     function _init_criteria( ) {
@@ -73,9 +73,11 @@ class Article_Public_List_Grouped extends Article_Public_List {
     }
 
     function _init_group_displays( ) {
-        $list_class = AMP_SECTION_DISPLAY_GROUPED;
-        if ( !class_exists( $list_class )) {
+        $list_class = defined( 'AMP_SECTION_DISPLAY_GROUPED') ? AMP_SECTION_DISPLAY_GROUPED : false;
+        if ( $list_class && !class_exists( $list_class )) {
             trigger_error( sprintf( AMP_TEXT_ERROR_NOT_DEFINED, 'AMP', $list_class ));
+        }
+        if ( !( $list_class && class_exists( $list_class ))) {
             $list_class = AMP_SECTION_DISPLAY_DEFAULT;
         }
         $this->_grouped_list_class = $list_class;
