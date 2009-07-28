@@ -81,6 +81,10 @@ class Article_Form extends AMPSystem_Form_XML {
             unset( $this->fields['route_slug'] );
             unset( $this->fields['route_slug_info'] );
         }
+        if( !AMP_lookup( 'image_folders')) {
+            unset( $this->fields['image_folder'] );
+        }
+
 
     }
 

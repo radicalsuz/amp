@@ -34,6 +34,7 @@
                 elements.each(function() {
                     if (!$.belowthefold(this, settings) &&
 						!$.abovethetopfold(this, settings) &&
+						$(this).is(":visible") &&
                         !$.rightoffold(this, settings)) {
                             $(this).trigger("appear");
                     } 
@@ -69,14 +70,13 @@
                          || $.rightoffold(self, settings)) {
                 if (settings.placeholder) {
                     $(self).attr("src", settings.placeholder);      
-                    $(self).addClass('lazyload-empty');
                 } else {
-                    $(self).removeAttr("src");
+                    //$(self).removeAttr("src");
                 }
                 self.loaded = false;
             } else {
-				if( $(self).attr('src') === undefined ) {
-				  $(self).attr("src", $(self).attr("original"));
+				if( $(self).attr('src') !== $(self).attr('original')) {
+				  $(self).attr("src", $(self).attr("original")).removeClass('lazyload-empty');
 				}
                 self.loaded = true;
             }
