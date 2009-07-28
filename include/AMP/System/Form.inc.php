@@ -181,6 +181,11 @@ class AMPSystem_Form extends AMPForm {
         $this->_configHTMLEditor( $editor );
     }
 
+    function _selectAddNull( $valueset, $name ) {
+        if (!is_array($valueset)) return false;
+        return array('' => 'None') + $valueset;
+    }
+
     function _configHTMLEditor( &$editor ){
         //interface
     }

@@ -337,7 +337,14 @@
     <picture>
         <type>imagepicker</type>
         <label>Image Filename</label>
+		<attr><id>picture_selector</id></attr>
     </picture>
+    <image_folder>
+        <type>select</type>
+		<label>Select which folder of &lt;br/&gt;images you would like to view</label>
+		<lookup>image_folders</lookup>
+		<attr><id>image_folder_search</id></attr>
+    </image_folder>
     <image_data>
         <type>static</type>
         <default>&lt;div id=&quot;picture_data&quot;&gt;&lt;/div&gt;</default>

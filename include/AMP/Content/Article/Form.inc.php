@@ -91,6 +91,7 @@ class Article_Form extends AMPSystem_Form_XML {
         $this->_initMediaThumbnailLookup( $header );
         $this->_initTransferMode( $header );
         $this->_initPhotoLookup( $header );
+        $this->_initPhotoSearch( $header );
         $this->_initPrettyUrlCreation( $header );
         $this->HTMLEditorSetup( );
     }
@@ -216,6 +217,28 @@ PHOTOCODE_SUPPORT;
         $header->addJavascriptDynamic(  $support_script, 'photodata_support' );
 
     }
+
+    function _initPhotoSearch( &$header ) {
+        $init_script = <<<PHOTO_SEARCH
+jq( '#image_folder_search').val( '' );
+jq( '#image_folder_search').change(  function ( ) {
+    if( jq( this ).val( ) == "") {
+        jq( '#picture_selector option').show( );
+
+    } else {
+        jq( '#picture_selector option').hide( );
+        jq( '#picture_selector option[value^="'+jq(this).val( ) +'/"]').show( );
+        jq( '#picture_selector option[value^="'+jq('#picture_selector').val( ) +'"]').show( );
+    }
+    new Effect.Highlight( jq( '#picture_selector' ).parent( 'td').parent( 'tr')[0] );
+
+});
+PHOTO_SEARCH;
+        $header->addJavascriptOnload(  $init_script, 'photo_search' );
+    }
+
+
+
     function _initPrettyUrlCreation( &$header ){
         if( !AMP_CONTENT_HUMANIZE_URLS ) return;
         $pretty_url_builder = <<<SCRIPT
@@ -286,7 +309,7 @@ SCRIPT;
 
     function _selectAddNull( $valueset, $name ) {
         $required_selects = array( 'section', 'new_section_parent');
-        $status_selects = array( 'publish' );
+        $status_selects = array( 'publish', 'class' );
 
         if ( array_search( $name, $status_selects) !== FALSE ) return $valueset;
         if ( array_search( $name, $required_selects ) === FALSE ) return parent::_selectAddNull( $valueset, $name );

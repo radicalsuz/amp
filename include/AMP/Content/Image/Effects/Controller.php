@@ -12,6 +12,7 @@ class AMP_Content_Image_Effects_Controller {
         'resize' => array(  'height' , 'width' ));
     var $_default_action;
     var $_image_sizes;
+    var $_keep_proportions;
 
     var $_cache;
 
@@ -31,6 +32,7 @@ class AMP_Content_Image_Effects_Controller {
         $this->set_file( $image_path );
         
         $action = ( isset( $_REQUEST['action']) && $_REQUEST['action']) ? $_REQUEST['action'] : $this->_default_action;
+        $this->_keep_proportions = ( isset( $_REQUEST['keep_proportions']) && $_REQUEST['keep_proportions']) ;
 
         //validate request
         if ( !( AMP_local_request( )
@@ -61,9 +63,20 @@ class AMP_Content_Image_Effects_Controller {
         }
 
         if ( $action == 'resize' ){
+            if ( $this->_keep_proportions ) {
+                if( $clear_values['height'] && $clear_values['width']) {
+                    $requested_proportion = $clear_values['height'] / $clear_values['width'];
+                    if( ( $this->_image_ref->height / $clear_values['height']) > ( $this->_image_ref->width / $clear_values['width'])) {
+                        $clear_values['width'] = false;
+                    } else {
+                        $clear_values['height'] = false;
+                    }
+                }
+            }
             if ( !$clear_values['width'] && $clear_values['height']) $clear_values['width'] = $this->_image_ref->width * ( $clear_values['height'] / $this->_image_ref->height );
             if ( !$clear_values['height'] && $clear_values['width']) $clear_values['height'] = $this->_image_ref->height * ( $clear_values['width'] / $this->_image_ref->width );
         }
+
 
         if ( isset( $clear_values['height']) && !$clear_values['height'])  $clear_values['height'] = $this->_image_ref->height;
         if ( isset( $clear_values['width'])  && !$clear_values['width'])   $clear_values['width']  = $this->_image_ref->width;
