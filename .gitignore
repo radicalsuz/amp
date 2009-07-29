@@ -1,2 +1,4 @@
 .htaccess
 include/AMP/HostConfig.inc.php
+*swp
+*swo

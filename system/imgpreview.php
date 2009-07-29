@@ -42,9 +42,8 @@
         text-decoration: none;
         font-family: "Helvetica, Geneva, Arial, sans-serif";
     }
-    #image_search_form p {
-        display: inline;
-        margin-bottom: 10px
+    #image_search_form {
+        margin-bottom: 20px
     }
     #image_search_form label {
         margin-right: 10px;
@@ -67,16 +66,16 @@ require_once( 'AMP/Renderer/HTML.php');
 $renderer = new AMP_Renderer_HTML( );
 $folders = AMP_lookup( 'image_folders');
 print "<form method='GET' action='/system/imgpreview.php' id='image_search_form'>\n";
-if( $folders ) {
-    print "<p>";
-    print $renderer->label( 'image_folder', "Show Only Folder" );
-    print $renderer->select( 'image_folder', null, array( '' => 'None') + $folders, array( 'id' => 'search_image_folder') );
-    print "</p>";
-}
 print "<p>";
 print $renderer->label( 'image_filename', "Search in file names" );
 print $renderer->input( 'image_filename', null, array( 'id' => 'search_image_filename') );
 print "</p>";
+if( $folders ) {
+    print "<p>";
+    print $renderer->label( 'image_folder', "Show images in folder" );
+    print $renderer->select( 'image_folder', null, array( '' => 'None') + $folders, array( 'id' => 'search_image_folder') );
+    print "</p>";
+}
 print "\n</form>";
 
 
@@ -114,7 +113,7 @@ foreach ($filelist as $picfile) {
         $('document').ready( 
             function( ) {
                 jq( 'img[src=""]').attr( 'src', '/img/spacer.gif').addClass( 'lazyload-empty');
-                jq( 'img' ).lazyload();
+                jq( 'img' ).lazyload( { threshold: 200 });
                 jq( '.imgthumb a' ).click( function( ) {
                     setImage( $( this ).attr( 'href'));
                     return false;

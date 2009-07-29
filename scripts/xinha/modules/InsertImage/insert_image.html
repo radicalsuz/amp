@@ -18,7 +18,7 @@ function i18n(str) {
 
 function Init() {
   __dlg_translate('Xinha');
-  __dlg_init(null,{width:410,height:400});
+  __dlg_init(null,{width:510,height:400});
   // Make sure the translated string appears in the drop down. (for gecko)
   document.getElementById("f_align").selectedIndex = 1;
   document.getElementById("f_align").selectedIndex = 5;
@@ -34,8 +34,9 @@ function Init() {
     document.getElementById("f_vert").value   = (typeof param["f_vert"]!="undefined") ? param["f_vert"] : "";
     document.getElementById("f_horiz").value  = (typeof param["f_horiz"]!="undefined") ? param["f_horiz"] : "";
     if (param["f_url"]) {
-        window.ipreview.location.replace(Xinha._resolveRelativeUrl(param.f_base, param.f_url));
+        window.ipreview.location.replace( param.f_url );
     }
+    updateVersion();
   } else {
     window.onBrowse();
   }
@@ -81,14 +82,44 @@ function onPreview() {
     f_url.focus();
     return false;
   }
-  window.ipreview.location.replace(Xinha._resolveRelativeUrl(base.replace(/\/system$/,''), url));
+  updateVersion();
+  window.ipreview.location.replace(url);
   return false;
+}
+function updateVersion() {
+    if( jq("input[name=image_version]:checked").val() == 'pic') {
+        if(jq("#f_url").val().match(/^\/img\/pic/)) {
+            return;
+        }
+        if(jq("#f_url").val().match(/^\/img\/thumb/)) {
+            jq("input[name=image_version][value=thumb]").attr('checked', 'checked' );
+            return;
+        }
+        if(jq("#f_url").val().match(/^\/img\/original/)) {
+            jq("input[name=image_version][value=original]").attr('checked', 'checked' );
+            return;
+        }
+    } else {
+        var img_version = jq("input[name=image_version]:checked").val();
+        jq("#f_url").val( jq( "#f_url").val().replace( /\/img\/(thumb|original|pic)(\/.*)/, 
+            function( match, version, filename ) {
+                return "/img/" + img_version + filename;
+            } ));
+    }
 }
 function onBrowse() {
   window.ipreview.location.replace("/system/imgpreview.php");
   return false;
 }
 </script>
+<style>
+    .image_versions p {
+        display: inline;
+        margin-right 25px;
+    }
+    .image_versions label {
+    }
+</style>
 
 </head>
 
@@ -107,6 +138,23 @@ function onBrowse() {
       title="Enter the image URL here" />
       <button name="preview" onclick="return onPreview();"
       title="Preview the image in a new window">Preview</button>
+    </td>
+  </tr>
+  <tr>
+    <td style="width: 7em; text-align: right">Image Version:</td>
+    <td class="image_versions">
+        <p>
+        <input type="radio" name="image_version" value="thumb" id="image_version_thumb"/>
+        <label for="image_version_thumb">Thumbnail</label>
+        </p>
+        <p>
+        <input type="radio" name="image_version" value="pic" id="image_version_pic"/>
+        <label for="image_version_pic">Optimized</label>
+        </p>
+        <p>
+        <input type="radio" name="image_version" value="original" id="image_version_original"/>
+        <label for="image_version_original">Original</label>
+        </p>
     </td>
   </tr>
   <tr>
@@ -170,7 +218,7 @@ title="Vertical padding" />
 <div>
 Image Preview:<br />
     <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" 
-	height="200" width="100%" src="../../popups/blank.html"></iframe>
+    height="400px" width="100%" src="../../popups/blank.html"></iframe>
 </div>
 <div id="buttons">
 <button type="submit" name="browse" onclick="return onBrowse();">Browse</button>
@@ -178,5 +226,20 @@ Image Preview:<br />
 <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
 </div>
 </form>
+<script type="text/javascript" src="/scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript">
+    jq = jQuery.noConflict();
+    $ = jq;
+    jq(document).ready( function() {
+            jq("input[name=image_version]").click(
+                function() {
+                    var current_image = jq("#f_url").val();
+                    var radio_self = this;
+                    jq("#f_url").val( current_image.replace( /^\/img\/(pic|original|thumb)(\/.*)/, function( match, start_dir, filename ) { return "/img/" + jq(radio_self).val() + filename } ))
+                }
+            );
+            jq("#image_version_pic").attr('checked', 'checked');
+    });
+</script>
 </body>
 </html>
