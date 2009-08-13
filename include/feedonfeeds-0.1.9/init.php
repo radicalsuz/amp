@@ -593,9 +593,6 @@ function fof_update_feed($url)
       }
 
       $dcdate = mysql_escape_string($item['dc']['date']);
-      if( !$dcdate && isset( $item['pubDate'])) {
-          $dcdate = mysql_escape_string( strftime( '%Y-%m-%d', strtotime( $item['pubDate'])));
-      }
       $dccreator = mysql_escape_string($item['dc']['creator']);
       $dcsubject = mysql_escape_string($item['dc']['subject']);
 
