@@ -568,8 +568,13 @@ function fof_update_feed($url)
             $dccreator = mysql_escape_string($item['dc']['creator']);
             $dcsubject = mysql_escape_string($item['dc']['subject']);
         } else {
-            $dcdate=strtotime(mysql_escape_string($item['pubdate']));
-            $dcdate=date("Y-m-d", $dcdate);
+            #$dcdate=strtotime(mysql_escape_string($item['pubdate']));
+            #$dcdate=date("Y-m-d", $dcdate);
+            $pubdate = isset( $item['pubdate']) ? $item['pubdate'] : (  isset( $item['pubDate']) ? $item['pubDate'] : false );
+            if( $pubdate ) {
+                $dcdate=strtotime(mysql_escape_string($pubdate));
+                $dcdate=date("Y-m-d", $dcdate);
+            }
             $dccreator = mysql_escape_string($item['author']);
             $dcsubject = mysql_escape_string($item['category']);
         }

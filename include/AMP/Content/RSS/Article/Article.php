@@ -7,6 +7,7 @@ class RSS_Article extends AMPSystem_Data_Item {
     var $datatable = "px_items";
     var $name_field = "title";
     var $_exact_value_fields = array( 'feed_id');
+    var $_class_name = "RSS_Article";
 
     function RSS_Article ( &$dbcon, $id = null ) {
         $this->init( $dbcon, $id );

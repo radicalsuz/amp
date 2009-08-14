@@ -371,6 +371,9 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
             trigger_error( sprintf( AMP_TEXT_ERROR_NO_CLASS_NAME_DEFINED, get_class( $this )) );
         }
         if ( !isset( $class_name )) $class_name = $this->_class_name;
+        if ( !$class_name && !isset( $this->_class_name )) {
+            trigger_error( "No _class_name assigned for class " . get_class( $this ) . ". search failed");
+        }
         $result_set = $data_set->instantiateItems( $data_set->getArray( ), $class_name );
         if ( empty( $result_set )) return $result_set;
 
