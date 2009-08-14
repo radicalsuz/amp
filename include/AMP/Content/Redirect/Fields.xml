@@ -11,6 +11,12 @@
 		<label>Alias</label>
 		<required>1</required>
 	</old>
+    <route_slug_grabber>
+        <type>static</type>
+        <default>
+			&lt;div id=&quot;route_slug_details&quot;&gt;&lt;/div&gt;
+		</default>
+	</route_slug_grabber>
 	<new>
 		<type>text</type>
 		<label>Target Page</label>
