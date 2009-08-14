@@ -170,11 +170,16 @@ class AMPSystem_Data_Item extends AMPSystem_Data {
 
     function delete( ){
         if ( !isset( $this->id )) return false;
+        $this->before_delete( );
         if ( !$this->deleteData( $this->id )) return false;
 
         $this->notify( 'delete', $this->id );
         return true;
         
+    }
+
+    function before_delete( ) {
+
     }
 
     function _assembleSqlByID( $id ) {

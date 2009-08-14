@@ -600,6 +600,9 @@ class AMP_System_Component_Controller_Standard extends AMP_System_Component_Cont
     function commit_delete( ){
         if ( !$this->_model_id ) return $this->_commit_fail( );
         $this->notify( 'beforeDelete' );
+        if ( method_exists( $this->_model, 'before_delete')) {
+            $this->_model->before_delete( );
+        }
 
         $name = $this->_form->getItemName( );
         if ( !$name ) $name = AMP_TEXT_ITEM_NAME;

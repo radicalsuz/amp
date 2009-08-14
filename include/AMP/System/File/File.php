@@ -295,7 +295,12 @@ class AMP_System_File {
         uksort( $file_set, "strnatcasecmp" );
     }
 
+    function before_delete( ) {
+
+    }
+
     function delete( ){
+        $this->before_delete( );
         $result = unlink( $this->getPath( ));
         $this->notify( 'delete');
         return true;

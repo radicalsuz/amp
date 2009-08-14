@@ -721,6 +721,11 @@ class Article extends AMPSystem_Data_Item {
     }
 
     function drop_all_relations( $article_id ) {
+        require_once( 'AMP/Content/RouteSlug/RouteSlug.php');
+        $rs = new AMP_Content_RouteSlug( $this->dbcon );
+        $routes = $rs->getSearchSource( );
+        $routes->deleteData( implode( ' AND ', $rs->makeCriteria( array( 'owner_type' => 'article', 'owner_id' => $this->id ))));
+
         require_once( 'AMP/Content/Section/RelatedSet.inc.php');
         $related_section_set = new SectionRelatedSet( AMP_Registry::getDbcon( ) );
         return $related_section_set->deleteData( 'articleid=' . $article_id );
@@ -1039,6 +1044,10 @@ class Article extends AMPSystem_Data_Item {
 
     function getMediaHtml( ) {
         return $this->getData( 'media_html');
+    }
+
+    function before_delete( ) {
+        $this->drop_all_relations( $this->id );
     }
 
     function getMediaThumbnailUrl( ) {
