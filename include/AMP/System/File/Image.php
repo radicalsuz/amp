@@ -235,8 +235,9 @@ class AMP_System_File_Image extends AMP_System_File {
         }
         
         $image_classes = AMP_lookup( 'image_classes');
-        foreach( $image_classes as $class ) {
+        foreach( $image_classes as $class => $class_desc ) {
             $path = AMP_image_path( $this->getName( ), $class );
+            # delete of current copy handled by parent class below
             if ( $path == $this->getPath( )) continue;
             if( file_exists( $path )) unlink( $path );
         }
