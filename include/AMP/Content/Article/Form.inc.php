@@ -80,6 +80,13 @@ class Article_Form extends AMPSystem_Form_XML {
         if( !AMP_CONTENT_HUMANIZE_URLS) {
             unset( $this->fields['route_slug'] );
             unset( $this->fields['route_slug_info'] );
+        } else {
+            #alias feature duplicates pretty urls
+            unset( $this->fields['alias_header']);
+            unset( $this->fields['new_alias_name_header']);
+            unset( $this->fields['new_alias_name_footer']);
+            unset( $this->fields['new_alias_name']);
+
         }
         if( !AMP_lookup( 'image_folders')) {
             unset( $this->fields['image_folder'] );
