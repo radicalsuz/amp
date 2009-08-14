@@ -48,12 +48,12 @@ class AMP_System_File_Image_Form extends AMP_System_File_Form {
         if( !$folder_name ) {
             $folder_name = isset( $data['new_folder']) && $data['new_folder'] ? $data['new_folder'] : false;
         }
-        if( !$folder_name ) {
+        if( $folder_name ) {
+            $uploader->setFolder( 'img/original/'. $folder_name );
+        }else {
             $uploader->setFolder( 'img/original');
-            return;
         }
 
-        $uploader->setFolder( AMP_CONTENT_URL_IMAGES . AMP_IMAGE_CLASS_ORIGINAL . DIRECTORY_SEPARATOR . $folder_name );
     }
 
     function _verify_folder( $data, $column ) {
