@@ -2127,7 +2127,7 @@ function AMP_from_camelcase( $value ) {
 
 function AMP_underscore( $value ) {
     $start = AMP_from_camelcase( $value );
-    return preg_replace(  '/_+/', '_', preg_replace( '/[^A-z0-9]/', '_', $value ));
+    return strtolower( preg_replace(  '/_+/', '_', preg_replace( '/[^A-z0-9]/', '_', $value )));
 }
 
 
