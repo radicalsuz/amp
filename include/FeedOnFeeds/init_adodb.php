@@ -572,7 +572,7 @@ function fof_update_feed($url)
             #$dcdate=date("Y-m-d", $dcdate);
             $pubdate = isset( $item['pubdate']) ? $item['pubdate'] : (  isset( $item['pubDate']) ? $item['pubDate'] : false );
             if( $pubdate ) {
-                $dcdate=strtotime(mysql_escape_string($pubdate));
+                $dcdate=strtotime(mysql_escape_string(preg_replace( '/GMT.*/', '', $pubdate)));
                 $dcdate=date("Y-m-d", $dcdate);
             }
             $dccreator = mysql_escape_string($item['author']);
