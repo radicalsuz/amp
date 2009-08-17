@@ -347,7 +347,7 @@ class UserDataPlugin_DisplayHTML_Output extends UserDataPlugin {
         //show normal headers
         if ($this->$current_sub != trim($dataitem[$header_field])) {
             $this->$current_sub = trim($dataitem[$header_field]);
-            $output = '<span class="list_subheader'.$textlevel.'">' . $this->$current_sub.'</span><BR>';
+            $output = '<a name="'.AMP_underscore($this->$current_sub).'"></a><span class="list_subheader'.$textlevel.'">' . $this->$current_sub.'</span><BR>';
         }
         # return $output;
         $level = $level - 1;
