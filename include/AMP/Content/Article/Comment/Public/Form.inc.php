@@ -35,6 +35,8 @@ class Article_Comment_Public_Form extends AMPSystem_Form_XML {
     }
 
     function _spamchecker( $data, $fieldname ) {
+	if (preg_match("/<\/?(script|object|embed)>/", $data['comment'])) return true;
+
         if( !AKISMET_KEY ) return false;
 
         $comment_frame = new ArticleComment( AMP_Registry::getDbcon(  ) );
@@ -44,7 +46,6 @@ class Article_Comment_Public_Form extends AMPSystem_Form_XML {
         if ( !$akismet ) return false;
         return $akismet->isSpam(  );
 
-	if (preg_match("/<\/?(script|object|embed)>/", $data['comment'])) return true;
     }
 
     function validate(  ) {
